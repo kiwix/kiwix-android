@@ -124,6 +124,14 @@
           android:host="search"
           android:scheme="kiwix" />
       </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="zim" />
+      </intent-filter>
       <intent-filter android:label="@string/app_search_string">
         <action android:name="android.intent.action.PROCESS_TEXT" />
 

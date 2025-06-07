@@ -300,6 +300,23 @@ class KiwixMainActivity : CoreMainActivity() {
           }, OPENING_ZIM_FILE_DELAY)
         }
 
+        "zim" -> {
+          val zimId = it.host
+          val page = it.encodedPath?.removePrefix("/") ?: ""
+          if (zimId != null && page.isNotEmpty()) {
+            lifecycleScope.launch {
+              newBookDao.bookById(zimId)?.let { entity ->
+                Handler(Looper.getMainLooper()).postDelayed({
+                  openPage(page, entity.zimReaderSource)
+                  clearIntentDataAndAction()
+                }, OPENING_ZIM_FILE_DELAY)
+              } ?: toast(R.string.cannot_open_file)
+            }
+          } else {
+            toast(R.string.cannot_open_file)
+          }
+        }
+
         else -> toast(R.string.cannot_open_file)
       }
     }

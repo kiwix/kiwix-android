@@ -96,6 +96,12 @@ By default, `ABI` splitting is disabled. In newer Gradle versions, when uploadin
 However, if you need to generate separate APKs for different ABIs, you can enable `ABI` splitting by setting the `APK_BUILD="true"` environment variable.
 This variable should only be set when building an APK. If you set this variable and attempt to generate a `.aab` file, the build will fail due to Gradle's new enhancements.
 
+## Deep links
+
+Kiwix can open URLs in the form `zim://<archive-id>/<article-path>` when the
+referenced archive is already present on the device. Tapping such a link in
+another app jumps straight to the requested page in Kiwix.
+
 ## Libraries Used
 
 - 📚 [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix library.
