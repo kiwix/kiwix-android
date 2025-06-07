@@ -71,7 +71,7 @@ class Repository @Inject internal constructor(
           // Split languages if there are multiple, otherwise return the single book. Bug fix #3892
           if (bookOnDisk.book.language.contains(',')) {
             bookOnDisk.book.language.split(',').map { lang ->
-              bookOnDisk.copy(book = bookOnDisk.book.copy(language = lang.trim()))
+              bookOnDisk.copy(book = bookOnDisk.book.copy(_language = lang.trim()))
             }
           } else {
             listOf(bookOnDisk)

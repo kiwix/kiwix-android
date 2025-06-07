@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.sharedFunctions.book
+import org.kiwix.sharedFunctions.libkiwixBook
 import org.kiwix.sharedFunctions.bookOnDisk
 import java.io.File
 
@@ -85,7 +85,7 @@ class StorageObserverTest {
   @Test
   fun `zim files are read by the file reader`() = runTest {
     val expectedBook =
-      book(
+      libkiwixBook(
         "id", "title", "1", "favicon", "creator", "publisher", "date",
         "description", "language"
       )

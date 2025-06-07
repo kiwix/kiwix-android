@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,18 +32,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
@@ -53,7 +53,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
-import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
@@ -116,7 +116,7 @@ private fun BookContent(
     if (selectionMode == SelectionMode.MULTI) {
       BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
     }
-    BookIcon(Base64String(bookOnDisk.book.favicon).toPainter())
+    BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
     BookDetails(Modifier.weight(1f), bookOnDisk)
   }
 }
@@ -142,14 +142,23 @@ private fun BookCheckbox(
 }
 
 @Composable
-fun BookIcon(painter: Painter) {
-  Icon(
-    painter = painter,
-    contentDescription = stringResource(R.string.fav_icon),
-    modifier = Modifier
-      .size(BOOK_ICON_SIZE),
-    tint = Color.Unspecified
-  )
+fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
+  val modifier = Modifier.size(BOOK_ICON_SIZE)
+  if (isOnlineLibrary) {
+    AsyncImage(
+      model = iconSource,
+      contentDescription = stringResource(R.string.fav_icon),
+      modifier = modifier,
+      placeholder = painterResource(R.drawable.default_zim_file_icon),
+      error = painterResource(R.drawable.default_zim_file_icon),
+    )
+  } else {
+    Image(
+      painter = Base64String(iconSource).toPainter(),
+      contentDescription = stringResource(R.string.fav_icon),
+      modifier = modifier
+    )
+  }
 }
 
 @Composable
@@ -164,7 +173,7 @@ private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk) {
     ) {
       BookDate(bookOnDisk.book.date)
       Spacer(modifier = Modifier.width(EIGHT_DP))
-      BookSize(KiloByte(bookOnDisk.book.size).humanReadable)
+      BookSize(Byte(bookOnDisk.book.size).humanReadable)
       Spacer(modifier = Modifier.width(EIGHT_DP))
       BookArticleCount(
         ArticleCount(bookOnDisk.book.articleCount.orEmpty())

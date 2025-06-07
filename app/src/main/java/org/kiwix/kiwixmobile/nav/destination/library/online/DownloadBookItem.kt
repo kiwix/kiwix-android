@@ -44,7 +44,6 @@ import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -104,7 +103,7 @@ private fun DownloadBookContent(
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    BookIcon(item.favIcon.toPainter())
+    BookIcon(item.favIconUrl, isOnlineLibrary = true)
     Column(
       modifier = Modifier
         .weight(1f)

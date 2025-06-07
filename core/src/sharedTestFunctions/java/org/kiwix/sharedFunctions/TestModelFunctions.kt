@@ -22,14 +22,12 @@ import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
-import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
@@ -38,11 +36,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import java.io.File
-import java.util.LinkedList
 
 fun bookOnDisk(
   databaseId: Long = 0L,
-  book: Book = book(),
+  book: LibkiwixBook = libkiwixBook(),
   zimReaderSource: ZimReaderSource = ZimReaderSource(File(""))
 ) = BookOnDisk(databaseId, book, File(""), zimReaderSource)
 
@@ -56,7 +53,7 @@ fun downloadModel(
   status: Status = NONE,
   error: Error = Error.NONE,
   progress: Int = 1,
-  book: Book = book()
+  book: LibkiwixBook = libkiwixBook()
 ) = DownloadModel(
   databaseId, downloadId, file, etaInMilliSeconds, bytesDownloaded, totalSizeOfDownload,
   status, error, progress, book
@@ -64,7 +61,7 @@ fun downloadModel(
 
 fun downloadItem(
   downloadId: Long = 1L,
-  favIcon: Base64String = Base64String("favIcon"),
+  favIcon: String = "favIcon",
   title: String = "title",
   description: String = "description",
   bytesDownloaded: Long = 1L,
@@ -135,7 +132,7 @@ fun url(
   this.value = value
 }
 
-fun book(
+fun libkiwixBook(
   id: String = "id",
   title: String = "title",
   description: String = "description",
@@ -150,7 +147,7 @@ fun book(
   name: String = "name",
   favIcon: String = "favIcon",
   file: File = File("")
-) = Book().apply {
+) = LibkiwixBook().apply {
   this.id = id
   this.title = title
   this.description = description
@@ -166,11 +163,6 @@ fun book(
   bookName = name
   favicon = favIcon
 }
-
-fun libraryNetworkEntity(books: List<Book> = emptyList()) =
-  LibraryNetworkEntity().apply {
-    book = LinkedList(books)
-  }
 
 fun recentSearchEntity(
   id: Long = 0L,

@@ -38,7 +38,7 @@ value class Base64String(private val encodedString: String?) {
           BitmapFactory.decodeByteArray(it, 0, it.size)
         }
     }
-  } catch (illegalArgumentException: IllegalArgumentException) {
+  } catch (_: IllegalArgumentException) {
     null
   }
 }

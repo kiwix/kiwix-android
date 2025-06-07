@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.R
 
 data class DownloadItem(
   val downloadId: Long,
-  val favIcon: Base64String,
+  val favIconUrl: String,
   val title: String,
   val description: String?,
   val bytesDownloaded: Long,
@@ -47,7 +47,7 @@ data class DownloadItem(
 
   constructor(downloadModel: DownloadModel) : this(
     downloadModel.downloadId,
-    Base64String(downloadModel.book.favicon),
+    downloadModel.book.favicon,
     downloadModel.book.title,
     downloadModel.book.description,
     downloadModel.bytesDownloaded,

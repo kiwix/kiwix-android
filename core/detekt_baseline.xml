@@ -21,7 +21,7 @@
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
     <ID>MagicNumber:FileUtils.kt$FileUtils$3</ID>
     <ID>MagicNumber:JNIInitialiser.kt$JNIInitialiser$1024</ID>
-    <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>
+    <ID>MagicNumber:Byte.kt$Byte$1024.0</ID>
     <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
     <ID>MagicNumber:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$100</ID>
     <ID>MagicNumber:SearchResultGenerator.kt$ZimSearchResultGenerator$200</ID>
@@ -42,7 +42,7 @@
     <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$// Amazingly file.canWrite() does not always return the correct value private fun canWrite(file: File): Boolean</ID>
     <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:BooksOnDiskListItem.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:KiloByte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:Byte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
@@ -50,6 +50,7 @@
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:OnlineLibraryManager.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File></ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic suspend fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic suspend fun hasPart(file: File): Boolean</ID>

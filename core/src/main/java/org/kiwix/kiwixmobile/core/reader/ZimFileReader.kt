@@ -28,7 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -377,7 +377,7 @@ class ZimFileReader constructor(
 
   @Suppress("ExplicitThis") // this@ZimFileReader.name is required
   fun toBook() =
-    Book().apply {
+    LibkiwixBook().apply {
       title = this@ZimFileReader.title
       id = this@ZimFileReader.id
       size = "$fileSize"

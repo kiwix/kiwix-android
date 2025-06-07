@@ -17,10 +17,10 @@
  */
 package org.kiwix.kiwixmobile.core.downloader
 
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 
 interface Downloader {
-  fun download(book: LibraryNetworkEntity.Book)
+  fun download(book: LibkiwixBook)
   fun cancelDownload(downloadId: Long)
   fun retryDownload(downloadId: Long)
   fun pauseResumeDownload(downloadId: Long, isPause: Boolean)

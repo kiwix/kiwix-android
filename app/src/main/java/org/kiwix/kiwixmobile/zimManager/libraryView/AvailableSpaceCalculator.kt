@@ -19,12 +19,11 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView
 
 import eu.mhutti1.utils.storage.Bytes
-import eu.mhutti1.utils.storage.KB
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
@@ -42,13 +41,13 @@ class AvailableSpaceCalculator @Inject constructor(
       .map { downloads -> downloads.sumOf(DownloadModel::bytesRemaining) }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
       .first()
-    if (bookItem.book.size.toLong() * KB < trueAvailableBytes) {
+    if (bookItem.book.size.toLong() < trueAvailableBytes) {
       successAction.invoke(bookItem)
     } else {
       failureAction.invoke(Bytes(trueAvailableBytes).humanReadable)
     }
   }
 
-  suspend fun hasAvailableSpaceForBook(book: Book) =
-    book.size.toLong() * KB < storageCalculator.availableBytes()
+  suspend fun hasAvailableSpaceForBook(book: LibkiwixBook) =
+    book.size.toLong() < storageCalculator.availableBytes()
 }

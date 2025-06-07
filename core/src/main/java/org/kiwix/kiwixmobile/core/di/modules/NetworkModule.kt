@@ -38,7 +38,7 @@ const val CONNECTION_TIMEOUT = 10L
 const val READ_TIMEOUT = 300L
 const val CALL_TIMEOUT = 300L
 const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
-const val KIWIX_DOWNLOAD_URL = "https://mirror.download.kiwix.org/"
+const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/"
 
 @Module
 class NetworkModule {
@@ -59,5 +59,5 @@ class NetworkModule {
   }
 
   @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    ServiceCreator.newHackListService(okHttpClient, KIWIX_DOWNLOAD_URL)
+    ServiceCreator.newHackListService(okHttpClient, KIWIX_OPDS_LIBRARY_URL)
 }

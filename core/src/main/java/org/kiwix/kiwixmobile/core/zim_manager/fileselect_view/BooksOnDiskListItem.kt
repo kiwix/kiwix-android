@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
@@ -44,7 +44,7 @@ sealed class BooksOnDiskListItem {
 
   data class BookOnDisk constructor(
     val databaseId: Long = 0L,
-    val book: LibraryNetworkEntity.Book,
+    val book: LibkiwixBook,
     val file: File = File(""),
     val zimReaderSource: ZimReaderSource,
     val tags: List<KiwixTag> = KiwixTag.Companion.from(book.tags),

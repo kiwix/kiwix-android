@@ -127,7 +127,7 @@ class DownloadRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
-        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0].performClick()
+        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[1].performClick()
       }
     })
   }

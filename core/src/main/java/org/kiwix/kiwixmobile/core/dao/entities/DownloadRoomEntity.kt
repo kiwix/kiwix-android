@@ -20,12 +20,12 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import io.objectbox.annotation.Convert
-import io.objectbox.converter.PropertyConverter
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import io.objectbox.annotation.Convert
+import io.objectbox.converter.PropertyConverter
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 
 @Entity
 data class DownloadRoomEntity(
@@ -56,7 +56,7 @@ data class DownloadRoomEntity(
   val favIcon: String,
   val tags: String? = null
 ) {
-  constructor(downloadId: Long, book: Book) : this(
+  constructor(downloadId: Long, book: LibkiwixBook) : this(
     downloadId = downloadId,
     bookId = book.id,
     title = book.title,
@@ -75,7 +75,7 @@ data class DownloadRoomEntity(
   )
 
   fun toBook() =
-    Book().apply {
+    LibkiwixBook().apply {
       id = bookId
       title = this@DownloadRoomEntity.title
       description = this@DownloadRoomEntity.description

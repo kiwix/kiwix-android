@@ -40,13 +40,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.bookOnDiskEntity
+import org.kiwix.sharedFunctions.libkiwixBook
 import java.io.File
 import java.util.concurrent.Callable
 
@@ -131,9 +131,9 @@ internal class NewBookDaoTest {
     fun `insert transaction adds books to the box that have distinct ids`() {
       val slot: CapturingSlot<Callable<Unit>> = slot()
       every { box.store.callInTx(capture(slot)) } returns Unit
-      val distinctBook: BookOnDisk = bookOnDisk(databaseId = 0, book = book(id = "same"))
+      val distinctBook: BookOnDisk = bookOnDisk(databaseId = 0, book = libkiwixBook(id = "same"))
       newBookDao.insert(
-        listOf(distinctBook, bookOnDisk(databaseId = 1, book = book(id = "same")))
+        listOf(distinctBook, bookOnDisk(databaseId = 1, book = libkiwixBook(id = "same")))
       )
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
@@ -216,7 +216,7 @@ internal class NewBookDaoTest {
 
   @Test
   fun migrationInsert() {
-    val book: LibraryNetworkEntity.Book = book()
+    val book: LibkiwixBook = libkiwixBook()
     val slot: CapturingSlot<Callable<Unit>> = slot()
     every { box.store.callInTx(capture(slot)) } returns Unit
     newBookDao.migrationInsert(listOf(book))

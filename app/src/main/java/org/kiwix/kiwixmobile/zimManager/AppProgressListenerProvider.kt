@@ -22,18 +22,18 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.NINE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 
 class AppProgressListenerProvider(
   private val zimManageViewModel: ZimManageViewModel
 ) : OnlineLibraryProgressListener {
-  @Suppress("MagicNumber")
   override fun onProgress(bytesRead: Long, contentLength: Long) {
     val progress =
       if (contentLength == DEFAULT_INT_VALUE.toLong()) {
         ZERO
       } else {
-        (bytesRead * 3 * HUNDERED / contentLength).coerceAtMost(HUNDERED.toLong())
+        (bytesRead * NINE * HUNDERED / contentLength).coerceAtMost(HUNDERED.toLong())
       }
     zimManageViewModel.downloadProgress.postValue(
       zimManageViewModel.context.getString(

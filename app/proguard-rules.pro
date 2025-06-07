@@ -55,13 +55,6 @@
     <init>(...);
 }
 
-## keep everything in LibraryNetworkEntity.kt
--keep class org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity { *; }
--keep class org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity$* { *; }
--keepclassmembers class org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity$* {
-    <init>(...);
-}
-
 -keep class javax.xml.stream.** { *; }
 -dontwarn javax.xml.stream.Location
 -dontwarn javax.xml.stream.XMLEventReader

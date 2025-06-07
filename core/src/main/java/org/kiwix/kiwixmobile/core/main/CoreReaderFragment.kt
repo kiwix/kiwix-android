@@ -340,6 +340,7 @@ abstract class CoreReaderFragment :
   private val navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
+  private var libkiwixBook: Book? = null
   private var readerLifeCycleScope: CoroutineScope? = null
 
   val coreReaderLifeCycleScope: CoroutineScope?
@@ -2038,9 +2039,7 @@ abstract class CoreReaderFragment :
       lifecycleScope.launch {
         getCurrentWebView()?.url?.let { articleUrl ->
           zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-            val libKiwixBook = Book().apply {
-              update(zimFileReader.jniKiwixReader)
-            }
+            val libKiwixBook = getLibkiwixBook(zimFileReader)
             if (isBookmarked) {
               repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
               snackBarRoot?.snack(R.string.bookmark_removed)
@@ -2069,6 +2068,19 @@ abstract class CoreReaderFragment :
       // we have an issue with split zim files, see #3827
       requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
     }
+  }
+
+  /**
+   * Returns the libkiwix book evertime when user saves or remove the bookmark.
+   * the object will be created once to avoid creating it multiple times.
+   */
+  private fun getLibkiwixBook(zimFileReader: ZimFileReader): Book {
+    libkiwixBook?.let { return it }
+    val book = Book().apply {
+      update(zimFileReader.jniKiwixReader)
+    }
+    libkiwixBook = book
+    return book
   }
 
   override fun onResume() {

@@ -22,7 +22,7 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
@@ -70,7 +70,7 @@ data class BookOnDiskEntity(
     bookOnDisk.book.tags
   )
 
-  fun toBook() = Book().apply {
+  fun toBook() = LibkiwixBook().apply {
     id = bookId
     title = this@BookOnDiskEntity.title
     description = this@BookOnDiskEntity.description

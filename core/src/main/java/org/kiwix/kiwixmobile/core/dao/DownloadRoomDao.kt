@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import android.util.Base64
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -25,16 +26,20 @@ import androidx.room.Query
 import androidx.room.Update
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Status.COMPLETED
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
 @Dao
@@ -53,14 +58,36 @@ abstract class DownloadRoomDao {
 
   fun allDownloads() = getAllDownloads().map { it.map(::DownloadModel) }
 
-  private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<DownloadRoomEntity>) {
+  @Suppress("InjectDispatcher")
+  private suspend fun moveCompletedToBooksOnDiskDao(downloadEntities: List<DownloadRoomEntity>) {
     downloadEntities.filter { it.status == COMPLETED }
       .takeIf(List<DownloadRoomEntity>::isNotEmpty)
-      ?.let {
-        deleteDownloadsList(it)
-        newBookDao.insert(it.map(BooksOnDiskListItem::BookOnDisk))
+      ?.let { completedDownloads ->
+        deleteDownloadsList(completedDownloads)
+        // We now use the OPDS stream instead of the custom library.xml handling.
+        // In the OPDS stream, the favicon is a URL instead of a Base64 string.
+        // So when a download is completed, we extract the illustration directly from the archive.
+        val booksOnDisk = completedDownloads.map { download ->
+          val archive = withContext(Dispatchers.IO) {
+            Archive(download.file)
+          }
+          val favicon = getOnlineBookFaviconForOfflineUsages(archive).orEmpty()
+          val updatedEntity = download.copy(favIcon = favicon)
+          BooksOnDiskListItem.BookOnDisk(updatedEntity)
+        }
+        newBookDao.insert(booksOnDisk)
       }
   }
+
+  private fun getOnlineBookFaviconForOfflineUsages(archive: Archive): String? =
+    if (archive.hasIllustration(ILLUSTRATION_SIZE)) {
+      Base64.encodeToString(
+        archive.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
+        Base64.DEFAULT
+      )
+    } else {
+      null
+    }
 
   fun update(download: Download) {
     getEntityForDownloadId(download.id.toLong())?.let { downloadRoomEntity ->
@@ -100,7 +127,7 @@ abstract class DownloadRoomDao {
 
   fun addIfDoesNotExist(
     url: String,
-    book: LibraryNetworkEntity.Book,
+    book: LibkiwixBook,
     downloadRequester: DownloadRequester
   ) {
     if (doesNotAlreadyExist(book)) {
@@ -113,6 +140,6 @@ abstract class DownloadRoomDao {
     }
   }
 
-  private fun doesNotAlreadyExist(book: LibraryNetworkEntity.Book) =
+  private fun doesNotAlreadyExist(book: LibkiwixBook) =
     count(book.id) == 0
 }

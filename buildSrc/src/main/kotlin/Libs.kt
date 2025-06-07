@@ -66,6 +66,12 @@ object Libs {
   /**
    * https://github.com/square/retrofit
    */
+  const val converter_scalars: String = "com.squareup.retrofit2:converter-scalars:" +
+    Versions.com_squareup_retrofit2
+
+  /**
+   * https://github.com/square/retrofit
+   */
   const val converter_simplexml: String = "com.squareup.retrofit2:converter-simplexml:" +
     Versions.com_squareup_retrofit2
 
@@ -363,4 +369,7 @@ object Libs {
 
   const val COMPOSE_LIVE_DATA =
     "androidx.compose.runtime:runtime-livedata:${Versions.COMPOSE_VERSION}"
+
+  const val COIL3_COMPOSE = "io.coil-kt.coil3:coil-compose:${Versions.COIL_COMPOSE}"
+  const val COIL3_OKHTTP_COMPOSE = "io.coil-kt.coil3:coil-network-okhttp:${Versions.COIL_COMPOSE}"
 }
