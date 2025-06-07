@@ -202,6 +202,8 @@
   <string name="welcome_to_the_family">This message appears in the introduction screen, to welcome the user.</string>
   <string name="save_books_offline">* This message appears on the introduction screen, to introduce the app features.\n* They can save the books offline.</string>
   <string name="download_books_message">* This message appears on the introduction screen, to introduce the app features.\n* They can download the books and read them wherever they are whether they have internet or not.</string>
+  <string name="save_books_in_desired_storage">* This message appears on the introduction screen, to introduce the app features.</string>
+  <string name="storage_location_hint">* This message appears on the introduction screen, to introduce the app features.</string>
   <string name="unable_to_add_to_bookmarks">This is used in the toast, to inform the user that there is an error in adding the bookmark.</string>
   <string name="go_to_previous_page">* This is used in a content description of the image view.\n* By clicking on this image user navigates to the previously opened page.</string>
   <string name="go_to_next_page">* This is used in a content description of the image view.\n* By clicking on this image user navigates to the next opened page.</string>

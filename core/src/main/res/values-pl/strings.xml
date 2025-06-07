@@ -164,8 +164,8 @@
   <string name="pref_free_storage">%s wolne</string>
   <string name="choose_storage_to_download_book">Wybierz miejsce przechowywania, aby pobrać książkę</string>
   <string name="delete_zim_failed">Niestety nie udało się usunąć niektórych plików. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
-  <string name="tts_pause">pauza</string>
-  <string name="tts_resume">Podsumuj</string>
+  <string name="tts_pause">wstrzymaj</string>
+  <string name="tts_resume">wznów</string>
   <string name="stop">stop</string>
   <string name="notification_pause_button_text">Wstrzymaj</string>
   <string name="notification_resume_button_text">Wznów</string>
@@ -215,11 +215,11 @@
   <string name="articleCount">%s artykułów</string>
   <string name="get_started">Rozpocznij</string>
   <string name="download_books">Pobierz książki</string>
-  <string name="humankind_knowledge">Wiedza ludzka w twoim telefonie.</string>
+  <string name="humankind_knowledge">Wiedza ludzkości, na Twoim telefonie.</string>
   <string name="welcome_to_the_family">Witamy w rodzinie</string>
   <string name="save_books_offline">Zapisz książki offline</string>
   <string name="download_books_message">Pobierz książki i czytaj gdziekolwiek jesteś.</string>
-  <string name="save_books_in_desired_storage">Zapisz książki w wybranym miejscu w pamięci urządzenia</string>
+  <string name="save_books_in_desired_storage">Zapisuj książki w wybranym miejscu na urządzeniu</string>
   <string name="storage_location_hint">W Ustawieniach możesz wybrać pamięć wewnętrzną lub kartę SD jako preferowane miejsce do przechowywania pobranych plików ZIM.</string>
   <string name="unable_to_add_to_bookmarks">Nie można dodać do zakładek</string>
   <string name="go_to_previous_page">Przejdź do poprzedniej strony</string>
@@ -230,7 +230,7 @@
   <string name="expand">Rozwiń</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Wyświetl historię ze wszystkich książek</string>
-  <string name="search_history">Historia wyszukiwania</string>
+  <string name="search_history">Szukaj w historii</string>
   <string name="selected_items">%1$d wybrane</string>
   <string name="bookmarks_from_current_book">Wyświetl zakładki ze wszystkich książek</string>
   <string name="search_bookmarks">Szukaj zakładek</string>
@@ -284,7 +284,7 @@
   <string name="error_during_transfer">Wystąpił błąd podczas przesyłania</string>
   <string name="error_transferring">Błąd podczas przesyłania pliku %s</string>
   <string name="get_content_from_nearby_device">Pobierz zawartość z sąsiedniego urządzenia</string>
-  <string name="search_for_peers">Szukaj Pirów</string>
+  <string name="search_for_peers">Szukaj Urządzeń</string>
   <string name="your_device">Twoje urządzenie:</string>
   <string name="device_name">Nazwa urządzenia</string>
   <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
@@ -335,6 +335,7 @@
   <string name="tabs_restored">Zakładki przywrócone</string>
   <string name="open_drawer">Otwórz szufladę</string>
   <string name="close_drawer">Zamknij szufladę</string>
+  <string name="verify_zim_chunks_dialog_message">Możesz je zweryfikować w folderze „Android/media/org.kiwix…/”.\nPo wykonaniu tej czynności odśwież ekran biblioteki, przesuwając palcem w dół. Podzielony plik ZIM pojawi się w bibliotece.</string>
   <string name="how_to_update_content">Jak zaktualizować zawartość?</string>
   <string name="update_content_description">Aby zaktualizować zawartość (plik ZIM), musisz pobrać najnowszą pełną wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
   <string name="all_files_permission_needed">Wymagane uprawnienia do wszystkich plików</string>
@@ -343,9 +344,25 @@
   <string name="not_allowed">Niedozwolony</string>
   <string name="system_unable_to_grant_permission_message">System nie może udzielić pozwolenia!</string>
   <string name="allow">Zezwól</string>
+  <string name="swipe_down_for_library">Przesuń w dół, aby pobrać bibliotekę</string>
+  <string name="reaching_remote_library">Łączenie ze zdalną biblioteką</string>
+  <string name="parsing_remote_library">Analiza zdalnej biblioteki</string>
+  <string name="starting_downloading_remote_library">Rozpoczynanie pobierania biblioteki</string>
+  <string name="downloading_library">Pobieranie biblioteki \n%s</string>
+  <string name="no_notes">Brak notatek</string>
+  <string name="search_notes">Szukaj notatek</string>
+  <string name="choose_your_action">Wybierz co chcesz zrobić</string>
+  <string name="open_note">Otwórz notatkę</string>
+  <string name="open_article">Otwórz artykuł</string>
   <string name="delete_selected_notes">Usunąć wybrane notatki?</string>
   <string name="download_tts_language_title">Pobierz ten język, aby korzystać z funkcji czytania na głos</string>
   <string name="external_link_copied_message">Link zewnętrzny został skopiowany do schowka</string>
   <string name="read_aloud_service_channel_name">Kanał Usługi Czytaj na głos</string>
+  <string name="read_aloud_running">Czytanie na Głos jest uruchomione</string>
   <string name="go_to_settings_label">Przejdź do ustawień</string>
+  <string name="click_nearby_devices_message">Kliknij tutaj, aby wyszukać urządzenia w pobliżu.</string>
+  <string name="your_device_name_message">Tutaj pojawi się nazwa Twojego urządzenia.</string>
+  <string name="nearby_devices_list_message">Tutaj znajdziesz listę pobliskich urządzeń. Naciśnij nazwę danego urządzenia, aby rozpocząć transfer plików.</string>
+  <string name="transfer_zim_files_list_message">Tutaj znajdziesz listę plików ZIM których możesz przesłać.</string>
+  <string name="toolbar_back_button_content_description">Przejdź do poprzedniej strony</string>
 </resources>

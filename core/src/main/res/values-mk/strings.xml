@@ -162,6 +162,7 @@
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да го прекинам преземањето?</string>
   <string name="confirm_stop_download_msg">Дали сте сигурни дека сакате да го запрете преземањево?</string>
+  <string name="change_storage">Смени</string>
   <string name="tts_not_enabled">Читањето на глас не е овозможено за оваа ZIM-податотека</string>
   <string name="texttospeech_initialization_failed">Не успеав да го покренам „Прочитај на глас“. Обидете се повторно.</string>
   <string name="texttospeech_error">Се јави неочекувана грешка во „Прочитај на глас“. Обидете се повторно.</string>
