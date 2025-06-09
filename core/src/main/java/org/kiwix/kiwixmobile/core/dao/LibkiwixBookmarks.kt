@@ -33,6 +33,8 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_LIBRARY
+import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_MANAGER
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
@@ -53,11 +55,12 @@ import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import javax.inject.Inject
+import javax.inject.Named
 
 class LibkiwixBookmarks @Inject constructor(
-  val library: Library,
-  manager: Manager,
-  val sharedPreferenceUtil: SharedPreferenceUtil,
+  @Named(BOOKMARK_LIBRARY) private val library: Library,
+  @Named(BOOKMARK_MANAGER) private val manager: Manager,
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val bookDao: NewBookDao,
   private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
@@ -69,16 +72,14 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
 
-  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  @Suppress("InjectDispatcher")
   private val bookmarkListFlow: MutableStateFlow<List<LibkiwixBookmarkItem>> by lazy {
     MutableStateFlow<List<LibkiwixBookmarkItem>>(emptyList()).also { flow ->
       CoroutineScope(Dispatchers.IO).launch {
-        try {
+        runCatching {
           val bookmarks = getBookmarksList()
           flow.emit(bookmarks)
-        } catch (e: Exception) {
-          e.printStackTrace()
-        }
+        }.onFailure { it.printStackTrace() }
       }
     }
   }

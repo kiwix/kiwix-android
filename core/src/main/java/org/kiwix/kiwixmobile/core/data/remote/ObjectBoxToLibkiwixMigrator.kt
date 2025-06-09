@@ -24,7 +24,9 @@ import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -43,12 +45,42 @@ class ObjectBoxToLibkiwixMigrator {
 
   @Inject
   lateinit var libkiwixBookmarks: LibkiwixBookmarks
+
+  @Inject
+  lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
   private val migrationMutex = Mutex()
 
-  suspend fun migrateBookmarksToLibkiwix() {
+  suspend fun migrateObjectBoxDataToLibkiwix() {
     CoreApp.coreComponent.inject(this)
-    migrateBookMarks(boxStore.boxFor())
+    if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
+      migrateBookMarks(boxStore.boxFor())
+    }
+    if (!sharedPreferenceUtil.prefIsBookOnDiskMigrated) {
+      migrateLocalBooks(boxStore.boxFor())
+    }
     // TODO we will migrate here for other entities
+  }
+
+  suspend fun migrateLocalBooks(box: Box<BookOnDiskEntity>) {
+    val bookOnDiskList = box.all
+    migrationMutex.withLock {
+      runCatching {
+        val libkiwixBooks = bookOnDiskList.map {
+          val archive = Archive(it.file.path)
+          Book().apply {
+            update(archive)
+          }
+        }
+        libkiwixBookOnDisk.insert(libkiwixBooks)
+      }.onFailure {
+        Log.e(
+          "MIGRATING_BOOK_ON_DISK",
+          "there is an error while migrating the bookOnDisk \n" +
+            "Original exception is = $it"
+        )
+      }
+    }
+    sharedPreferenceUtil.putPrefBookOnDiskMigrated(true)
   }
 
   suspend fun migrateBookMarks(box: Box<BookmarkEntity>) {

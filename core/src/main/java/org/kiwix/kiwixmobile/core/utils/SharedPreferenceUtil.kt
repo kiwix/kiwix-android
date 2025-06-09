@@ -114,6 +114,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsAppDirectoryMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
 
+  val prefIsBookOnDiskMigrated: Boolean
+    get() = sharedPreferences.getBoolean(PREF_BOOK_ON_DISK_MIGRATED, false)
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -162,6 +165,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefAppDirectoryMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, isMigrated) }
+
+  fun putPrefBookOnDiskMigrated(isMigrated: Boolean) =
+    sharedPreferences.edit { putBoolean(PREF_BOOK_ON_DISK_MIGRATED, isMigrated) }
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
@@ -345,6 +351,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_HISTORY_MIGRATED = "pref_history_migrated"
     const val PREF_NOTES_MIGRATED = "pref_notes_migrated"
     const val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED = "pref_app_directory_to_public_migrated"
+    const val PREF_BOOK_ON_DISK_MIGRATED = "pref_book_on_disk_migrated"
     const val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG = "pref_show_copy_move_storage_dialog"
     private const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
     const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =

@@ -121,9 +121,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
-      Thread.setDefaultUncaughtExceptionHandler {
-          paramThread: Thread?,
-          paramThrowable: Throwable? ->
+      Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?,
+        paramThrowable: Throwable? ->
         val intent = Intent(appContext, ErrorActivity::class.java)
         val extras = Bundle()
         extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
@@ -137,11 +136,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
 
     setMainActivityToCoreApp()
-    if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
-      // run the migration on background thread to avoid any UI related issues.
-      CoroutineScope(Dispatchers.IO).launch {
-        objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
-      }
+    // run the migration on background thread to avoid any UI related issues.
+    CoroutineScope(Dispatchers.IO).launch {
+      objectBoxToLibkiwixMigrator.migrateObjectBoxDataToLibkiwix()
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {

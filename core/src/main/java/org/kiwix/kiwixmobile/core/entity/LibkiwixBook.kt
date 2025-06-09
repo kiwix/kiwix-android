@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.entity
 
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.libkiwix.Book
 import java.io.File
 
@@ -43,6 +44,7 @@ data class LibkiwixBook(
   private var _bookName: String? = null,
   private var _favicon: String = "",
   private var _tags: String? = null,
+  private var _path: String? = "",
   var searchMatches: Int = 0,
   var file: File? = null
 ) {
@@ -129,6 +131,15 @@ data class LibkiwixBook(
     set(tags) {
       _tags = tags
     }
+
+  var path: String?
+    get() = _path ?: nativeBook?.path
+    set(path) {
+      _path = path
+    }
+
+  val zimReaderSource: ZimReaderSource
+    get() = ZimReaderSource(File(path.orEmpty()))
 
   // Two books are equal if their ids match
   override fun equals(other: Any?): Boolean {

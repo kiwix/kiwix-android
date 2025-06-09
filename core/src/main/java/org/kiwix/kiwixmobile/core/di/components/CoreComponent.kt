@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -99,6 +100,7 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun objectBoxToLibkiwixMigrator(): ObjectBoxToLibkiwixMigrator
   fun libkiwixBookmarks(): LibkiwixBookmarks
+  fun libkiwixBooks(): LibkiwixBookOnDisk
   fun recentSearchRoomDao(): RecentSearchRoomDao
   fun historyRoomDao(): HistoryRoomDao
   fun webViewHistoryRoomDao(): WebViewHistoryRoomDao

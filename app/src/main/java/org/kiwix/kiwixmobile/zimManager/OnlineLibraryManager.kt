@@ -16,13 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager
+package org.kiwix.kiwixmobile.zimManager
 
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 
-class OnlineLibraryManager(val library: Library, val manager: Manager) {
+class OnlineLibraryManager(private val library: Library, private val manager: Manager) {
   suspend fun parseOPDSStream(content: String?, urlHost: String): Boolean =
     runCatching {
       manager.readOpds(content, urlHost)

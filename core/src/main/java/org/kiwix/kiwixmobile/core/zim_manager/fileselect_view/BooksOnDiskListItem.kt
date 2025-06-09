@@ -54,6 +54,10 @@ sealed class BooksOnDiskListItem {
       book.language.convertToLocal()
     }
 
+    @Deprecated(
+      "Now we are using the libkiwix to store and retrieve the local " +
+        "books so this constructor is no longer used."
+    )
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
       databaseId = bookOnDiskEntity.id,
       file = bookOnDiskEntity.file,
@@ -69,6 +73,11 @@ sealed class BooksOnDiskListItem {
     constructor(zimFileReader: ZimFileReader) : this(
       book = zimFileReader.toBook(),
       zimReaderSource = zimFileReader.zimReaderSource
+    )
+
+    constructor(libkiwixBook: LibkiwixBook) : this(
+      book = libkiwixBook,
+      zimReaderSource = libkiwixBook.zimReaderSource
     )
   }
 }
