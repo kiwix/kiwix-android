@@ -42,6 +42,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
@@ -50,7 +51,7 @@ import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
@@ -67,7 +68,6 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
 import javax.inject.Inject
 
-const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
@@ -100,7 +100,7 @@ class KiwixMainActivity : CoreMainActivity() {
     activityKiwixMainBinding.navHostFragment
   }
 
-  @Inject lateinit var newBookDao: NewBookDao
+  @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
@@ -323,16 +323,14 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleNotificationIntent(intent: Intent) {
     if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
-      Handler(Looper.getMainLooper()).postDelayed(
-        {
-          intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
-            newBookDao.bookMatching(it)?.let { bookOnDiskEntity ->
-              openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
-            }
+      lifecycleScope.launch {
+        delay(OPENING_ZIM_FILE_DELAY)
+        intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
+          libkiwixBookOnDisk.bookMatching(it)?.let { bookOnDiskEntity ->
+            openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
           }
-        },
-        OPENING_ZIM_FILE_DELAY
-      )
+        }
+      }
     }
   }
 

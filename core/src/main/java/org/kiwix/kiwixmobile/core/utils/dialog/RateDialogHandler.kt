@@ -26,7 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -41,7 +41,7 @@ const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val newBookDao: NewBookDao
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk
 ) {
   private var alertDialogShower: AlertDialogShower? = null
   private var visitCounterPref: RateAppCounter? = null
@@ -94,7 +94,7 @@ class RateDialogHandler @Inject constructor(
     // If it is a custom app, return true since custom apps always have the ZIM file.
     if (activity.isCustomApp()) return true
     // For Kiwix app, check if there are ZIM files available in the library.
-    return newBookDao.getBooks().isNotEmpty()
+    return libkiwixBookOnDisk.getBooks().isNotEmpty()
   }
 
   @Suppress("MagicNumber")

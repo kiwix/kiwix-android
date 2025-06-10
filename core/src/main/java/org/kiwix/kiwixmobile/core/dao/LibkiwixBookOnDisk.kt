@@ -140,6 +140,7 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   suspend fun getBooks() = getBooksList().map(::BookOnDisk)
 
+  @Suppress("InjectDispatcher")
   suspend fun insert(libkiwixBooks: List<Book>) {
     withContext(Dispatchers.IO) {
       val existingBookIds = library.booksIds.toSet()
@@ -152,8 +153,7 @@ class LibkiwixBookOnDisk @Inject constructor(
       }
       newBooks.forEach { book ->
         runCatching {
-          library.addBook(book)
-          Log.d(TAG, "Added book to library: ${book.title}, ID=${book.id}")
+          addBookToLibraryIfNotExist(book)
         }.onFailure {
           Log.e(TAG, "Failed to add book: ${book.title} - ${it.message}")
         }
@@ -216,11 +216,18 @@ class LibkiwixBookOnDisk @Inject constructor(
     updateLocalBooksFlow()
   }
 
-  fun delete(bookId: String) {
+  suspend fun delete(bookId: String) {
     runCatching {
       library.removeBookById(bookId)
+      writeBookMarksAndSaveLibraryToFile()
+      updateLocalBooksFlow()
     }.onFailure { it.printStackTrace() }
   }
+
+  suspend fun bookMatching(downloadTitle: String) =
+    getBooks().firstOrNull {
+      it.zimReaderSource.toDatabase().endsWith(downloadTitle, true)
+    }
 
   /**
    * Asynchronously writes the library data to their respective file in a background thread

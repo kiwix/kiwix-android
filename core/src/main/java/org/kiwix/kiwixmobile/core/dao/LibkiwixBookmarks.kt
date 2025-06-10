@@ -61,7 +61,7 @@ class LibkiwixBookmarks @Inject constructor(
   @Named(BOOKMARK_LIBRARY) private val library: Library,
   @Named(BOOKMARK_MANAGER) private val manager: Manager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val bookDao: NewBookDao,
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
   /**
@@ -445,7 +445,7 @@ class LibkiwixBookmarks @Inject constructor(
       readBookmarkFile(bookmarkFile.canonicalPath)
     }
     // Add the ZIM files to the library for validating the bookmarks.
-    bookDao.getBooks().forEach {
+    libkiwixBookOnDisk.getBooks().forEach {
       addBookToLibrary(file = it.zimReaderSource.file)
     }
     // Save the imported bookmarks to the current library.

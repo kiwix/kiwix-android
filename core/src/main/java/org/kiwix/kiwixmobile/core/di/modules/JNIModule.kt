@@ -20,9 +20,8 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.libkiwix.JNIKiwix
@@ -44,8 +43,9 @@ class JNIModule {
   @Provides
   @Singleton
   @Named(BOOKMARK_MANAGER)
-  fun providesBookmarkManager(@Named(BOOKMARK_LIBRARY) library: Library): Manager =
-    Manager(library)
+  fun providesBookmarkManager(
+    @Named(BOOKMARK_LIBRARY) library: Library
+  ): Manager = Manager(library)
 
   @Provides
   @Singleton
@@ -53,10 +53,16 @@ class JNIModule {
     @Named(BOOKMARK_LIBRARY) library: Library,
     @Named(BOOKMARK_MANAGER) manager: Manager,
     sharedPreferenceUtil: SharedPreferenceUtil,
-    bookDao: NewBookDao,
+    libkiwixBookOnDisk: LibkiwixBookOnDisk,
     zimReaderContainer: ZimReaderContainer
   ): LibkiwixBookmarks =
-    LibkiwixBookmarks(library, manager, sharedPreferenceUtil, bookDao, zimReaderContainer)
+    LibkiwixBookmarks(
+      library,
+      manager,
+      sharedPreferenceUtil,
+      libkiwixBookOnDisk,
+      zimReaderContainer
+    )
 
   @Provides
   @Singleton
@@ -66,8 +72,9 @@ class JNIModule {
   @Provides
   @Singleton
   @Named(LOCAL_BOOKS_MANAGER)
-  fun providesLocalBooksManager(@Named(LOCAL_BOOKS_LIBRARY) library: Library): Manager =
-    Manager(library)
+  fun providesLocalBooksManager(
+    @Named(LOCAL_BOOKS_LIBRARY) library: Library
+  ): Manager = Manager(library)
 
   @Provides
   @Singleton

@@ -30,14 +30,14 @@ import java.util.Locale
 
 sealed class BooksOnDiskListItem {
   var isSelected: Boolean = false
-  abstract val id: Long
+  abstract val id: String
 
   data class LanguageItem constructor(
-    override val id: Long,
+    override val id: String,
     val text: String
   ) : BooksOnDiskListItem() {
     constructor(locale: Locale) : this(
-      locale.language.hashCode().toLong(),
+      locale.language,
       locale.getDisplayLanguage(locale)
     )
   }
@@ -48,7 +48,7 @@ sealed class BooksOnDiskListItem {
     val file: File = File(""),
     val zimReaderSource: ZimReaderSource,
     val tags: List<KiwixTag> = KiwixTag.Companion.from(book.tags),
-    override val id: Long = databaseId
+    override val id: String = book.id
   ) : BooksOnDiskListItem() {
     val locale: Locale by lazy {
       book.language.convertToLocal()

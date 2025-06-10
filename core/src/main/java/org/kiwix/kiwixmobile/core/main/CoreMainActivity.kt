@@ -121,8 +121,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
-      Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?,
-        paramThrowable: Throwable? ->
+      Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?, paramThrowable: Throwable? ->
         val intent = Intent(appContext, ErrorActivity::class.java)
         val extras = Bundle()
         extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)

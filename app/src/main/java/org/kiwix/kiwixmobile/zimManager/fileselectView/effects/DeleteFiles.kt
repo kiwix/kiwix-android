@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -42,7 +42,7 @@ data class DeleteFiles(
   private val dialogShower: DialogShower
 ) :
   SideEffect<Unit> {
-  @Inject lateinit var newBookDao: NewBookDao
+  @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
@@ -89,7 +89,7 @@ data class DeleteFiles(
     if (file?.isFileExist() == true) {
       return false
     }
-    newBookDao.delete(book.databaseId)
+    libkiwixBookOnDisk.delete(book.book.id)
     return true
   }
 }

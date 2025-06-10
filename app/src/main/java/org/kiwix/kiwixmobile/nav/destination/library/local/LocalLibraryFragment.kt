@@ -108,6 +108,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
+import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -488,10 +489,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       CoroutineScope(Dispatchers.IO).launch {
         zimReaderFactory.create(ZimReaderSource(file))
           ?.let { zimFileReader ->
-            BookOnDisk(zimFileReader).also {
-              mainRepositoryActions.saveBook(it)
-              zimFileReader.dispose()
-            }
+            val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+            mainRepositoryActions.saveBook(book)
+            zimFileReader.dispose()
           }
       }
       activity?.navigate(

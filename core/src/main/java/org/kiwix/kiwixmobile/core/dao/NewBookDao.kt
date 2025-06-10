@@ -36,6 +36,7 @@ import javax.inject.Inject
 
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   @OptIn(ExperimentalCoroutinesApi::class)
+  @Suppress("Deprecation")
   fun books(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
     box.asFlow()
       .mapLatest { booksList ->
@@ -71,6 +72,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
       .map { it.map(::BookOnDisk) }
       .flowOn(dispatcher)
 
+  @Suppress("Deprecation")
   suspend fun getBooks() =
     box.all.map { bookOnDiskEntity ->
       bookOnDiskEntity.file.let { file ->
@@ -98,6 +100,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     }
   }
 
+  @Suppress("Deprecation")
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
       inValues(

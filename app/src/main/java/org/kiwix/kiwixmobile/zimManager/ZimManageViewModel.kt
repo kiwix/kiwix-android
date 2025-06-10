@@ -66,7 +66,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -120,6 +120,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
+import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import java.util.Locale
@@ -135,7 +136,7 @@ const val FOUR = 4
 @Suppress("LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
-  private val bookDao: NewBookDao,
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val languageDao: NewLanguagesDao,
   private val storageObserver: StorageObserver,
   private var kiwixService: KiwixService,
@@ -318,7 +319,7 @@ class ZimManageViewModel @Inject constructor(
   private fun scanBooksFromStorage(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
     checkFileSystemForBooksOnRequest(books())
       .catch { it.printStackTrace() }
-      .onEach { books -> bookDao.insert(books) }
+      .onEach { books -> libkiwixBookOnDisk.insert(books) }
       .flowOn(dispatcher)
       .launchIn(viewModelScope)
 
@@ -480,7 +481,7 @@ class ZimManageViewModel @Inject constructor(
   @Suppress("UNCHECKED_CAST")
   @OptIn(FlowPreview::class)
   private fun updateLibraryItems(
-    booksFromDao: Flow<List<BookOnDisk>>,
+    localBooksFromLibkiwix: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
     library: MutableSharedFlow<List<LibkiwixBook>>,
     languages: Flow<List<Language>>,
@@ -495,14 +496,14 @@ class ZimManageViewModel @Inject constructor(
     )
 
     combine(
-      booksFromDao,
+      localBooksFromLibkiwix,
       downloads,
       languages.filter { it.isNotEmpty() },
       library,
       requestFilteringFlow,
       fat32Checker.fileSystemStates
     ) { args ->
-      val books = args[ZERO] as List<BookOnDisk>
+      val books = args[ZERO] as List<Book>
       val activeDownloads = args[ONE] as List<DownloadModel>
       val languageList = args[TWO] as List<Language>
       val libraryNetworkEntity = args[THREE] as List<LibkiwixBook>
@@ -604,7 +605,7 @@ class ZimManageViewModel @Inject constructor(
 
   @Suppress("UnsafeCallOnNullableType")
   private fun combineLibrarySources(
-    booksOnFileSystem: List<BookOnDisk>,
+    booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
     allLanguages: List<Language>,
     onlineBooks: List<LibkiwixBook>,
@@ -614,7 +615,7 @@ class ZimManageViewModel @Inject constructor(
     val activeLanguageCodes =
       allLanguages.filter(Language::active)
         .map(Language::languageCode)
-    val allBooks = onlineBooks - booksOnFileSystem.map(BookOnDisk::book).toSet()
+    val allBooks = onlineBooks - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
     val downloadingBooks =
       activeDownloads.mapNotNull { download ->
         allBooks.firstOrNull { it.id == download.book.id }
@@ -686,8 +687,8 @@ class ZimManageViewModel @Inject constructor(
 
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun checkFileSystemForBooksOnRequest(
-    booksFromDao: Flow<List<BookOnDisk>>
-  ): Flow<List<BookOnDisk>> = requestFileSystemCheck
+    booksFromDao: Flow<List<Book>>
+  ): Flow<List<Book>> = requestFileSystemCheck
     .flatMapLatest {
       // Initial progress
       deviceListScanningProgress.postValue(DEFAULT_PROGRESS)
@@ -708,25 +709,28 @@ class ZimManageViewModel @Inject constructor(
       deviceListScanningProgress.postValue(MAX_PROGRESS)
     }
     .filter { it.isNotEmpty() }
-    .map { books -> books.distinctBy { it.book.id } }
+    .map { books -> books.distinctBy { it.id } }
 
-  private fun books() =
-    bookDao.books()
-      .map { it.sortedBy { book -> book.book.title } }
+  private fun books(): Flow<List<Book>> =
+    libkiwixBookOnDisk.books().map { bookOnDiskList ->
+      bookOnDiskList
+        .sortedBy { it.book.title }
+        .mapNotNull { it.book.nativeBook }
+    }
 
   private fun booksFromStorageNotIn(
-    booksFromDao: Flow<List<BookOnDisk>>,
+    localBooksFromLibkiwix: Flow<List<Book>>,
     scanningProgressListener: ScanningProgressListener
-  ): Flow<List<BookOnDisk>> = flow {
+  ): Flow<List<Book>> = flow {
     val scannedBooks = storageObserver.getBooksOnFileSystem(scanningProgressListener).first()
-    val daoBookIds = booksFromDao.first().map { it.book.id }
+    val daoBookIds = localBooksFromLibkiwix.first().map { it.id }
     emit(removeBooksAlreadyInDao(scannedBooks, daoBookIds))
   }
 
   private fun removeBooksAlreadyInDao(
-    booksFromFileSystem: Collection<BookOnDisk>,
+    booksFromFileSystem: Collection<Book>,
     idsInDao: List<String>
-  ) = booksFromFileSystem.filterNot { idsInDao.contains(it.book.id) }
+  ) = booksFromFileSystem.filterNot { idsInDao.contains(it.id) }
 
   private fun updateBookItems() =
     dataSource.booksOnDiskAsListItems()

@@ -24,8 +24,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.LanguageItem
+import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,7 +51,7 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject internal constructor(
-  private val bookDao: NewBookDao,
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyRoomDao: HistoryRoomDao,
   private val webViewHistoryRoomDao: WebViewHistoryRoomDao,
@@ -65,7 +66,7 @@ class Repository @Inject internal constructor(
 
   @Suppress("InjectDispatcher")
   override fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>> =
-    bookDao.books()
+    libkiwixBookOnDisk.books()
       .map { books ->
         books.flatMap { bookOnDisk ->
           // Split languages if there are multiple, otherwise return the single book. Bug fix #3892
@@ -89,13 +90,13 @@ class Repository @Inject internal constructor(
       .flowOn(Dispatchers.IO)
 
   @Suppress("InjectDispatcher")
-  override suspend fun saveBooks(books: List<BookOnDisk>) = withContext(Dispatchers.IO) {
-    bookDao.insert(books)
+  override suspend fun saveBooks(books: List<Book>) = withContext(Dispatchers.IO) {
+    libkiwixBookOnDisk.insert(books)
   }
 
   @Suppress("InjectDispatcher")
-  override suspend fun saveBook(book: BookOnDisk) = withContext(Dispatchers.IO) {
-    bookDao.insert(listOf(book))
+  override suspend fun saveBook(book: Book) = withContext(Dispatchers.IO) {
+    libkiwixBookOnDisk.insert(listOf(book))
   }
 
   @Suppress("InjectDispatcher")
