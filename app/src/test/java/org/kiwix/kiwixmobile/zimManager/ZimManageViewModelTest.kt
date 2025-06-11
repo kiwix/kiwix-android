@@ -28,6 +28,7 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -41,9 +42,9 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.withTimeout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
@@ -129,8 +130,8 @@ class ZimManageViewModelTest {
 
   @AfterAll
   fun teardown() {
-    Dispatchers.resetMain()
     viewModel.onClearedExposed()
+    Dispatchers.resetMain()
   }
 
   @BeforeEach
@@ -236,24 +237,24 @@ class ZimManageViewModelTest {
     @Test
     fun `books found on filesystem are filtered by books already in db`() = runTest {
       every { application.getString(any()) } returns ""
-      val expectedBook = libkiwixBook("1")
-      val bookToRemove = libkiwixBook("2")
+      val expectedBook = bookOnDisk(1L, libkiwixBook("1", nativeBook = BookTestWrapper("1")))
+      val bookToRemove = bookOnDisk(1L, libkiwixBook("2", nativeBook = BookTestWrapper("2")))
       advanceUntilIdle()
       viewModel.requestFileSystemCheck.emit(Unit)
       advanceUntilIdle()
-      // books.emit(listOf(bookToRemove))
-      // advanceUntilIdle()
-      // booksOnFileSystem.emit(
-      //   listOf(
-      //     expectedBook,
-      //     expectedBook,
-      //     bookToRemove
-      //   )
-      // )
-      // advanceUntilIdle()
-      // coVerify {
-      //   libkiwixBookOnDisk.insert(listOf(expectedBook.book))
-      // }
+      books.emit(listOf(bookToRemove))
+      advanceUntilIdle()
+      booksOnFileSystem.emit(
+        listOfNotNull(
+          expectedBook.book.nativeBook,
+          expectedBook.book.nativeBook,
+          bookToRemove.book.nativeBook
+        )
+      )
+      advanceUntilIdle()
+      coVerify(timeout = 500) {
+        libkiwixBookOnDisk.insert(listOfNotNull(expectedBook.book.nativeBook))
+      }
     }
   }
 
@@ -358,7 +359,7 @@ class ZimManageViewModelTest {
           language(isActive = true, occurencesOfLanguage = 1)
         )
         advanceUntilIdle()
-        verify {
+        verify(timeout = 500) {
           newLanguagesDao.insert(
             listOf(
               dbLanguage.copy(occurencesOfLanguage = 2),
@@ -384,9 +385,9 @@ class ZimManageViewModelTest {
       every { application.getString(any(), any()) } returns ""
       every { defaultLanguageProvider.provide() } returns defaultLanguage
       viewModel.networkLibrary.emit(networkBooks)
-      runCurrent()
+      advanceUntilIdle()
       languages.value = dbBooks
-      runCurrent()
+      advanceUntilIdle()
       networkStates.value = CONNECTED
       advanceUntilIdle()
     }
@@ -475,13 +476,21 @@ class ZimManageViewModelTest {
         viewModel.networkLibrary.emit(listOf(bookOver4Gb))
       },
       assert = {
-        skipItems(1)
-        assertThat(awaitItem()).isEqualTo(
-          listOf(
-            LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
-            LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
-          )
-        )
+        withTimeout(5000) {
+          while (true) {
+            val item = awaitItem()
+            val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+            if (bookItem?.fileSystemState == CannotWrite4GbFile) {
+              assertThat(item).isEqualTo(
+                listOf(
+                  LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
+                  LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
+                )
+              )
+              break
+            }
+          }
+        }
       }
     )
   }
@@ -609,4 +618,10 @@ suspend fun <T> TestScope.testFlow(
     }
   }
   job.join()
+}
+
+class BookTestWrapper(private val id: String) : Book(0L) {
+  override fun getId(): String = id
+  override fun equals(other: Any?): Boolean = other is BookTestWrapper && getId() == other.getId()
+  override fun hashCode(): Int = getId().hashCode()
 }

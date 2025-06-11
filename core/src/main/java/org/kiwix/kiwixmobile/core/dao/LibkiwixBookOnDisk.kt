@@ -205,7 +205,7 @@ class LibkiwixBookOnDisk @Inject constructor(
   private suspend fun isInTrashFolder(filePath: String) =
     Regex("/\\.Trash/").containsMatchIn(filePath)
 
-  private suspend fun delete(books: List<LibkiwixBook>) {
+  suspend fun delete(books: List<LibkiwixBook>) {
     runCatching {
       books.forEach {
         library.removeBookById(it.id)

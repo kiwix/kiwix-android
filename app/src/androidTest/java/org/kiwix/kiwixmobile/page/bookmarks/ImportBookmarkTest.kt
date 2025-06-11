@@ -40,9 +40,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -63,7 +62,7 @@ class ImportBookmarkTest : BaseActivityTest() {
   private var boxStore: BoxStore? = null
   private val library = Library()
   private val manager = Manager(library)
-  private lateinit var newBookDao: NewBookDao
+  private lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
   private lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
   private val bookmarkXmlData =
@@ -138,13 +137,14 @@ class ImportBookmarkTest : BaseActivityTest() {
         }
       }
     boxStore = DatabaseModule.boxStore
-    newBookDao = NewBookDao(boxStore!!.boxFor(BookOnDiskEntity::class.java))
+    val sharedPreferenceUtils = SharedPreferenceUtil(context)
+    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, sharedPreferenceUtils)
     libkiwixBookmarks =
       LibkiwixBookmarks(
         library,
         manager,
-        SharedPreferenceUtil(context),
-        newBookDao,
+        sharedPreferenceUtils,
+        libkiwixBookOnDisk,
         null
       )
   }

@@ -29,7 +29,7 @@ import java.io.File
  */
 @Suppress("ConstructorParameterNaming")
 data class LibkiwixBook(
-  val nativeBook: Book? = null,
+  var nativeBook: Book? = null,
   private var _id: String = "",
   private var _title: String = "",
   private var _description: String? = null,

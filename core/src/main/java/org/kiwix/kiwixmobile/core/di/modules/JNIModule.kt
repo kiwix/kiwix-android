@@ -20,10 +20,12 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
@@ -83,6 +85,14 @@ class JNIModule {
     @Named(LOCAL_BOOKS_MANAGER) manager: Manager,
     sharedPreferenceUtil: SharedPreferenceUtil,
   ): LibkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, sharedPreferenceUtil)
+
+  /**
+   * We are not making this singleton because we need multiple objects of this.
+   */
+  @Provides
+  fun provideBookFactory(): LibkiwixBookFactory = object : LibkiwixBookFactory {
+    override fun create(): Book = Book()
+  }
 }
 
 const val BOOKMARK_LIBRARY = "bookmarkLibrary"

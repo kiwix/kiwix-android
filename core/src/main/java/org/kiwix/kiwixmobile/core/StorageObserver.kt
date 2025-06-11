@@ -39,7 +39,8 @@ class StorageObserver @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val fileSearch: FileSearch,
   private val zimReaderFactory: ZimFileReader.Factory,
-  private val libkiwixBookmarks: LibkiwixBookmarks
+  private val libkiwixBookmarks: LibkiwixBookmarks,
+  private val libkiwixBookFactory: LibkiwixBookFactory
 ) {
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener,
@@ -64,7 +65,7 @@ class StorageObserver @Inject constructor(
   private suspend fun convertToLibkiwixBook(file: File) =
     zimReaderFactory.create(ZimReaderSource(file))
       ?.let { zimFileReader ->
-        Book().apply {
+        libkiwixBookFactory.create().apply {
           update(zimFileReader.jniKiwixReader)
         }.also {
           // add the book to libkiwix library to validate the imported bookmarks
@@ -72,4 +73,8 @@ class StorageObserver @Inject constructor(
           zimFileReader.dispose()
         }
       }
+}
+
+interface LibkiwixBookFactory {
+  fun create(): Book
 }
