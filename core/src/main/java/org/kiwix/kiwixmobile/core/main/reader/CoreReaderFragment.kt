@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.core.main.reader
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
@@ -131,13 +131,33 @@ import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog
+import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
+import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
+import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
+import org.kiwix.kiwixmobile.core.main.DocumentParser
 import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
+import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.OnSwipeTouchListener
+import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
+import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
+import org.kiwix.kiwixmobile.core.main.TabsAdapter
+import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
+import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
@@ -824,9 +844,9 @@ abstract class CoreReaderFragment :
     // the unwanted blank space caused by the toolbar.
     setTopMarginToWebViews(-requireActivity().getToolbarHeight())
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    bottomToolbar?.visibility = View.GONE
-    contentFrame?.visibility = View.GONE
-    progressBar?.visibility = View.GONE
+    bottomToolbar?.visibility = GONE
+    contentFrame?.visibility = GONE
+    progressBar?.visibility = GONE
     backToTopButton?.hide()
     setTabSwitcherVisibility(VISIBLE)
     startAnimation(tabSwitcherRoot, R.anim.slide_down)
@@ -906,10 +926,10 @@ abstract class CoreReaderFragment :
     )
     tabSwitcherRoot?.let {
       if (it.isVisible) {
-        setTabSwitcherVisibility(View.GONE)
+        setTabSwitcherVisibility(GONE)
         startAnimation(it, R.anim.slide_up)
-        progressBar?.visibility = View.VISIBLE
-        contentFrame?.visibility = View.VISIBLE
+        progressBar?.visibility = VISIBLE
+        contentFrame?.visibility = VISIBLE
       }
     }
     progressBar?.hide()
@@ -1058,7 +1078,7 @@ abstract class CoreReaderFragment :
   @Suppress("ReturnCount", "NestedBlockDepth")
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     when {
-      tabSwitcherRoot?.visibility == View.VISIBLE -> {
+      tabSwitcherRoot?.visibility == VISIBLE -> {
         selectTab(
           if (currentWebViewIndex < webViewList.size) {
             currentWebViewIndex
@@ -1168,7 +1188,7 @@ abstract class CoreReaderFragment :
             override fun onSpeakingStarted() {
               requireActivity().runOnUiThread {
                 mainMenu?.onTextToSpeechStartedTalking()
-                ttsControls?.visibility = View.VISIBLE
+                ttsControls?.visibility = VISIBLE
                 setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
               }
             }
@@ -1176,7 +1196,7 @@ abstract class CoreReaderFragment :
             override fun onSpeakingEnded() {
               requireActivity().runOnUiThread {
                 mainMenu?.onTextToSpeechStoppedTalking()
-                ttsControls?.visibility = View.GONE
+                ttsControls?.visibility = GONE
                 pauseTTSButton?.setText(R.string.tts_pause)
                 setActionAndStartTTSService(ACTION_STOP_TTS)
               }
@@ -1469,15 +1489,15 @@ abstract class CoreReaderFragment :
 
   private fun reopenBook() {
     hideNoBookOpenViews()
-    contentFrame?.visibility = View.VISIBLE
+    contentFrame?.visibility = VISIBLE
     mainMenu?.showBookSpecificMenuItems()
   }
 
   protected fun exitBook(shouldCloseZimBook: Boolean = true) {
     showNoBookOpenViews()
-    bottomToolbar?.visibility = View.GONE
+    bottomToolbar?.visibility = GONE
     actionBar?.title = getString(R.string.reader)
-    contentFrame?.visibility = View.GONE
+    contentFrame?.visibility = GONE
     hideProgressBar()
     mainMenu?.hideBookSpecificMenuItems()
     if (shouldCloseZimBook) {
@@ -1501,7 +1521,7 @@ abstract class CoreReaderFragment :
 
   protected fun hideProgressBar() {
     progressBar?.apply {
-      visibility = View.GONE
+      visibility = GONE
       hide()
     }
   }
@@ -1511,7 +1531,7 @@ abstract class CoreReaderFragment :
       reopenBook()
     }
     tempWebViewForUndo?.let {
-      if (tabSwitcherRoot?.visibility == View.GONE) {
+      if (tabSwitcherRoot?.visibility == GONE) {
         // Remove the top margin from the webView when the tabSwitcher is not visible.
         // We have added this margin in `TabsAdapter` to not show the top margin in tabs.
         // `tempWebViewForUndo` saved with that margin so before showing it to the `contentFrame`
@@ -1610,7 +1630,7 @@ abstract class CoreReaderFragment :
     if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
       ttsControls?.let { ttsControls ->
         when (ttsControls.visibility) {
-          View.GONE -> {
+          GONE -> {
             if (isBackToTopEnabled) {
               backToTopButton?.hide()
             }
@@ -1622,7 +1642,7 @@ abstract class CoreReaderFragment :
             }
           }
 
-          View.VISIBLE -> {
+          VISIBLE -> {
             if (isBackToTopEnabled) {
               backToTopButton?.show()
             }
@@ -1663,14 +1683,14 @@ abstract class CoreReaderFragment :
   }
 
   override fun onHomeMenuClicked() {
-    if (tabSwitcherRoot?.visibility == View.VISIBLE) {
+    if (tabSwitcherRoot?.visibility == VISIBLE) {
       hideTabSwitcher()
     }
     createNewTab()
   }
 
   override fun onTabMenuClicked() {
-    if (tabSwitcherRoot?.visibility == View.VISIBLE) {
+    if (tabSwitcherRoot?.visibility == VISIBLE) {
       hideTabSwitcher()
       selectTab(currentWebViewIndex)
     } else {
@@ -1751,9 +1771,9 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
     (requireActivity() as CoreMainActivity).disableDrawer(false)
-    toolbarContainer?.visibility = View.GONE
-    bottomToolbar?.visibility = View.GONE
-    exitFullscreenButton?.visibility = View.VISIBLE
+    toolbarContainer?.visibility = GONE
+    bottomToolbar?.visibility = GONE
+    exitFullscreenButton?.visibility = VISIBLE
     exitFullscreenButton?.background?.alpha = 153
     val window = requireActivity().window
     window.decorView.showFullScreenMode(window)
@@ -1769,9 +1789,9 @@ abstract class CoreReaderFragment :
     toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
-    toolbarContainer?.visibility = View.VISIBLE
+    toolbarContainer?.visibility = VISIBLE
     updateBottomToolbarVisibility()
-    exitFullscreenButton?.visibility = View.GONE
+    exitFullscreenButton?.visibility = GONE
     exitFullscreenButton?.background?.alpha = 255
     val window = requireActivity().window
     window.decorView.closeFullScreenMode(window)
@@ -1801,7 +1821,7 @@ abstract class CoreReaderFragment :
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
         hideNoBookOpenViews()
-        contentFrame?.visibility = View.VISIBLE
+        contentFrame?.visibility = VISIBLE
         openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
@@ -2014,13 +2034,13 @@ abstract class CoreReaderFragment :
 
   // opens home screen when user closes all tabs
   protected fun showNoBookOpenViews() {
-    noOpenBookButton?.visibility = View.VISIBLE
-    noOpenBookText?.visibility = View.VISIBLE
+    noOpenBookButton?.visibility = VISIBLE
+    noOpenBookText?.visibility = VISIBLE
   }
 
   private fun hideNoBookOpenViews() {
-    noOpenBookButton?.visibility = View.GONE
-    noOpenBookText?.visibility = View.GONE
+    noOpenBookButton?.visibility = GONE
+    noOpenBookText?.visibility = GONE
   }
 
   @Suppress("MagicNumber")
@@ -2101,7 +2121,7 @@ abstract class CoreReaderFragment :
       FrameLayout.LayoutParams.WRAP_CONTENT
     ).apply {
       val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
-        org.kiwix.kiwixmobile.core.R.dimen.activity_horizontal_margin
+        R.dimen.activity_horizontal_margin
       )
       setMargins(
         rightAndLeftMargin,
@@ -2188,11 +2208,11 @@ abstract class CoreReaderFragment :
   private fun updateBottomToolbarVisibility() {
     bottomToolbar?.let {
       if (urlIsValid() &&
-        tabSwitcherRoot?.visibility != View.VISIBLE && !isInFullScreenMode()
+        tabSwitcherRoot?.visibility != VISIBLE && !isInFullScreenMode()
       ) {
-        it.visibility = View.VISIBLE
+        it.visibility = VISIBLE
       } else {
-        it.visibility = View.GONE
+        it.visibility = GONE
       }
     }
   }
@@ -2332,7 +2352,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun contentUrl(articleUrl: String?): String =
-    "${ZimFileReader.CONTENT_PREFIX}$articleUrl".toUri().toString()
+    "${CONTENT_PREFIX}$articleUrl".toUri().toString()
 
   private fun redirectOrOriginal(contentUrl: String): String {
     zimReaderContainer?.let {
@@ -2722,13 +2742,13 @@ abstract class CoreReaderFragment :
         if (it > 200) {
           if (
             (backToTopButton?.isGone == true || backToTopButton?.isInvisible == true) &&
-            ttsControls?.visibility == View.GONE
+            ttsControls?.visibility == GONE
           ) {
             backToTopButton?.show()
           }
         } else {
           backToTopButton?.isVisible
-          if (backToTopButton?.visibility == View.VISIBLE) {
+          if (backToTopButton?.visibility == VISIBLE) {
             backToTopButton?.hide()
           }
         }
@@ -2739,7 +2759,7 @@ abstract class CoreReaderFragment :
   override fun webViewLongClick(url: String) {
     var handleEvent = false
     when {
-      url.startsWith(ZimFileReader.CONTENT_PREFIX) -> {
+      url.startsWith(CONTENT_PREFIX) -> {
         // This is my web site, so do not override; let my WebView load the page
         handleEvent = true
       }

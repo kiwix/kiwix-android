@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -78,7 +79,6 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
 const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
 const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
-const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTestingTag"
 const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
