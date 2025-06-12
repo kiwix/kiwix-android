@@ -179,5 +179,9 @@ object ComposeDimens {
   // Settings screen dimes
   val STORAGE_LOADING_PROGRESS_BAR_SIZE = 40.dp
   val CATEGORY_TITLE_TEXT_SIZE = 14.sp
-  val PREFERENCE_TITLE_TEXT_SIZE = 18.sp
+
+  // Reader screen dimes
+  val READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT = 48.dp
+  val READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE = 30.dp
+  const val TTS_BUTTONS_CONTROL_ALPHA = 0.6f
 }

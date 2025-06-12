@@ -50,11 +50,11 @@ import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromSearchScreen
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource

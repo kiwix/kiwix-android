@@ -37,9 +37,9 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils

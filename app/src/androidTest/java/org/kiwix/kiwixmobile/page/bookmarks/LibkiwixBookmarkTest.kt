@@ -41,7 +41,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
