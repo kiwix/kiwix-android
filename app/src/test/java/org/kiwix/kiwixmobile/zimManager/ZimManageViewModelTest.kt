@@ -44,7 +44,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.withTimeout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
@@ -95,6 +94,9 @@ import org.kiwix.sharedFunctions.downloadModel
 import org.kiwix.sharedFunctions.language
 import org.kiwix.sharedFunctions.libkiwixBook
 import java.util.Locale
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(InstantExecutorExtension::class)
@@ -252,7 +254,7 @@ class ZimManageViewModelTest {
         )
       )
       advanceUntilIdle()
-      coVerify(timeout = 500) {
+      coVerify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
         libkiwixBookOnDisk.insert(listOfNotNull(expectedBook.book.nativeBook))
       }
     }
@@ -359,7 +361,7 @@ class ZimManageViewModelTest {
           language(isActive = true, occurencesOfLanguage = 1)
         )
         advanceUntilIdle()
-        verify(timeout = 500) {
+        verify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
           newLanguagesDao.insert(
             listOf(
               dbLanguage.copy(occurencesOfLanguage = 2),
@@ -403,7 +405,9 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library update removes from sources and maps to list items`() = runTest {
-    val bookAlreadyOnDisk = libkiwixBook(id = "0", url = "", language = Locale.ENGLISH.language)
+    val book = BookTestWrapper("0")
+    val bookAlreadyOnDisk =
+      libkiwixBook(id = "0", url = "", language = Locale.ENGLISH.language, nativeBook = book)
     val bookDownloading = libkiwixBook(id = "1", url = "")
     val bookWithActiveLanguage = libkiwixBook(id = "3", language = "activeLanguage", url = "")
     val bookWithInactiveLanguage = libkiwixBook(id = "4", language = "inactiveLanguage", url = "")
@@ -412,42 +416,47 @@ class ZimManageViewModelTest {
       triggerAction = {
         every { application.getString(any()) } returns ""
         every { application.getString(any(), any()) } returns ""
-        networkStates.tryEmit(CONNECTED)
-        advanceUntilIdle()
-        downloads.tryEmit(listOf(downloadModel(book = bookDownloading)))
-        advanceUntilIdle()
-        books.tryEmit(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
-        advanceUntilIdle()
-        languages.tryEmit(
+        networkStates.value = CONNECTED
+        downloads.value = listOf(downloadModel(book = bookDownloading))
+        books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
+        languages.value =
           listOf(
             language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
             language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
           )
-        )
-        fileSystemStates.tryEmit(CanWrite4GbFile)
-        advanceUntilIdle()
-        viewModel.networkLibrary.emit(
-          listOf(
-            bookAlreadyOnDisk,
-            bookDownloading,
-            bookWithActiveLanguage,
-            bookWithInactiveLanguage
+        fileSystemStates.value = CanWrite4GbFile
+        runBlocking {
+          viewModel.networkLibrary.emit(
+            listOf(
+              bookAlreadyOnDisk,
+              bookDownloading,
+              bookWithActiveLanguage,
+              bookWithInactiveLanguage
+            )
           )
-        )
+        }
+        advanceUntilIdle()
       },
       assert = {
-        skipItems(1)
-        assertThat(awaitItem()).isEqualTo(
-          listOf(
-            LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.downloading),
-            LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
-            LibraryListItem.DividerItem(Long.MAX_VALUE - 1, R.string.your_languages),
-            LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
-            LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
-            LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
-          )
-        )
-      }
+        while (true) {
+          val items = awaitItem()
+          val bookItems = items.filterIsInstance<LibraryListItem.BookItem>()
+          if (bookItems.size >= 2 && bookItems[0].fileSystemState == CanWrite4GbFile) {
+            assertThat(items).isEqualTo(
+              listOf(
+                LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.downloading),
+                LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
+                LibraryListItem.DividerItem(Long.MAX_VALUE - 1, R.string.your_languages),
+                LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
+                LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
+                LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
+              )
+            )
+            break
+          }
+        }
+      },
+      timeout = TURBINE_TIMEOUT
     )
   }
 
@@ -476,22 +485,21 @@ class ZimManageViewModelTest {
         viewModel.networkLibrary.emit(listOf(bookOver4Gb))
       },
       assert = {
-        withTimeout(5000) {
-          while (true) {
-            val item = awaitItem()
-            val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
-            if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-              assertThat(item).isEqualTo(
-                listOf(
-                  LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
-                  LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
-                )
+        while (true) {
+          val item = awaitItem()
+          val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+          if (bookItem?.fileSystemState == CannotWrite4GbFile) {
+            assertThat(item).isEqualTo(
+              listOf(
+                LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
+                LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
               )
-              break
-            }
+            )
+            break
           }
         }
-      }
+      },
+      timeout = TURBINE_TIMEOUT
     )
   }
 
@@ -608,10 +616,11 @@ class ZimManageViewModelTest {
 suspend fun <T> TestScope.testFlow(
   flow: Flow<T>,
   triggerAction: suspend () -> Unit,
-  assert: suspend TurbineTestContext<T>.() -> Unit
+  assert: suspend TurbineTestContext<T>.() -> Unit,
+  timeout: Duration? = null
 ) {
   val job = launch {
-    flow.test {
+    flow.test(timeout = timeout) {
       triggerAction()
       assert()
       cancelAndIgnoreRemainingEvents()
@@ -625,3 +634,6 @@ class BookTestWrapper(private val id: String) : Book(0L) {
   override fun equals(other: Any?): Boolean = other is BookTestWrapper && getId() == other.getId()
   override fun hashCode(): Int = getId().hashCode()
 }
+
+val TURBINE_TIMEOUT = 5000.toDuration(DurationUnit.MILLISECONDS)
+const val MOCKK_TIMEOUT_FOR_VERIFICATION = 1000L

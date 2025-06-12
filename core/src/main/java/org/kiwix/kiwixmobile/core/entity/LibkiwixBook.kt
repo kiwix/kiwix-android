@@ -142,14 +142,7 @@ data class LibkiwixBook(
     get() = ZimReaderSource(File(path.orEmpty()))
 
   // Two books are equal if their ids match
-  override fun equals(other: Any?): Boolean {
-    if (other is LibkiwixBook) {
-      if (other.id == id) {
-        return true
-      }
-    }
-    return false
-  }
+  override fun equals(other: Any?): Boolean = other is LibkiwixBook && other.id == id
 
   // Only use the book's id to generate a hash code
   override fun hashCode(): Int = id.hashCode()
