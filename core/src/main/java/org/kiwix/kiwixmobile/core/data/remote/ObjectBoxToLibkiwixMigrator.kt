@@ -24,11 +24,15 @@ import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
 import java.io.File
@@ -43,12 +47,52 @@ class ObjectBoxToLibkiwixMigrator {
 
   @Inject
   lateinit var libkiwixBookmarks: LibkiwixBookmarks
+
+  @Inject
+  lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
   private val migrationMutex = Mutex()
 
-  suspend fun migrateBookmarksToLibkiwix() {
+  suspend fun migrateObjectBoxDataToLibkiwix() {
     CoreApp.coreComponent.inject(this)
-    migrateBookMarks(boxStore.boxFor())
+    if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
+      migrateBookMarks(boxStore.boxFor())
+    }
+    if (!sharedPreferenceUtil.prefIsBookOnDiskMigrated) {
+      migrateLocalBooks(boxStore.boxFor())
+    }
     // TODO we will migrate here for other entities
+  }
+
+  @Suppress("Deprecation")
+  suspend fun migrateLocalBooks(box: Box<BookOnDiskEntity>) {
+    val bookOnDiskList = box.all.map { bookOnDiskEntity ->
+      bookOnDiskEntity.file.let { file ->
+        // set zimReaderSource for previously saved books(before we introduced the zimReaderSource)
+        val zimReaderSource = ZimReaderSource(file)
+        if (zimReaderSource.canOpenInLibkiwix()) {
+          bookOnDiskEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      BookOnDisk(bookOnDiskEntity)
+    }
+    migrationMutex.withLock {
+      runCatching {
+        val libkiwixBooks = bookOnDiskList.map {
+          val archive = Archive(it.zimReaderSource.toDatabase())
+          Book().apply {
+            update(archive)
+          }
+        }
+        libkiwixBookOnDisk.insert(libkiwixBooks)
+      }.onFailure {
+        Log.e(
+          "MIGRATING_BOOK_ON_DISK",
+          "there is an error while migrating the bookOnDisk \n" +
+            "Original exception is = $it"
+        )
+      }
+    }
+    sharedPreferenceUtil.putPrefBookOnDiskMigrated(true)
   }
 
   suspend fun migrateBookMarks(box: Box<BookmarkEntity>) {

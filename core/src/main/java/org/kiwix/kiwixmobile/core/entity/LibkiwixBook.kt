@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.entity
 
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.libkiwix.Book
 import java.io.File
 
@@ -28,7 +29,7 @@ import java.io.File
  */
 @Suppress("ConstructorParameterNaming")
 data class LibkiwixBook(
-  private val nativeBook: Book? = null,
+  var nativeBook: Book? = null,
   private var _id: String = "",
   private var _title: String = "",
   private var _description: String? = null,
@@ -43,6 +44,7 @@ data class LibkiwixBook(
   private var _bookName: String? = null,
   private var _favicon: String = "",
   private var _tags: String? = null,
+  private var _path: String? = null,
   var searchMatches: Int = 0,
   var file: File? = null
 ) {
@@ -130,15 +132,17 @@ data class LibkiwixBook(
       _tags = tags
     }
 
-  // Two books are equal if their ids match
-  override fun equals(other: Any?): Boolean {
-    if (other is LibkiwixBook) {
-      if (other.id == id) {
-        return true
-      }
+  var path: String?
+    get() = _path ?: nativeBook?.path
+    set(path) {
+      _path = path
     }
-    return false
-  }
+
+  val zimReaderSource: ZimReaderSource
+    get() = ZimReaderSource(File(path.orEmpty()))
+
+  // Two books are equal if their ids match
+  override fun equals(other: Any?): Boolean = other is LibkiwixBook && other.id == id
 
   // Only use the book's id to generate a hash code
   override fun hashCode(): Int = id.hashCode()

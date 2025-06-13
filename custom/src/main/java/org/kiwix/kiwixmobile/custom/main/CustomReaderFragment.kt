@@ -45,10 +45,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -228,8 +228,8 @@ class CustomReaderFragment : CoreReaderFragment() {
                 // it means we have created zimFileReader with a fileDescriptor,
                 // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
                 val file = it.file ?: createDemoFile()
-                val bookOnDisk = BookOnDisk(zimFileReader)
-                repositoryActions?.saveBook(bookOnDisk)
+                val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+                repositoryActions?.saveBook(book)
               }
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.

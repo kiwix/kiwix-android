@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
-import android.util.Base64
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -37,15 +36,14 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
 @Dao
 abstract class DownloadRoomDao {
   @Inject
-  lateinit var newBookDao: NewBookDao
+  lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
   @Query("SELECT * FROM DownloadRoomEntity")
   abstract fun getAllDownloads(): Flow<List<DownloadRoomEntity>>
@@ -71,23 +69,11 @@ abstract class DownloadRoomDao {
           val archive = withContext(Dispatchers.IO) {
             Archive(download.file)
           }
-          val favicon = getOnlineBookFaviconForOfflineUsages(archive).orEmpty()
-          val updatedEntity = download.copy(favIcon = favicon)
-          BooksOnDiskListItem.BookOnDisk(updatedEntity)
+          Book().apply { update(archive) }
         }
-        newBookDao.insert(booksOnDisk)
+        libkiwixBookOnDisk.insert(booksOnDisk)
       }
   }
-
-  private fun getOnlineBookFaviconForOfflineUsages(archive: Archive): String? =
-    if (archive.hasIllustration(ILLUSTRATION_SIZE)) {
-      Base64.encodeToString(
-        archive.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
-        Base64.DEFAULT
-      )
-    } else {
-      null
-    }
 
   fun update(download: Download) {
     getEntityForDownloadId(download.id.toLong())?.let { downloadRoomEntity ->

@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryIt
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 
 private const val TAG = "MainPresenter"
@@ -84,7 +84,7 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
     }
   }
 
-  suspend fun saveBook(book: BookOnDisk) {
+  suspend fun saveBook(book: Book) {
     runCatching {
       dataSource.saveBook(book)
     }.onFailure {

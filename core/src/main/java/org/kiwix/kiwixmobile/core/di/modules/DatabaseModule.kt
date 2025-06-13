@@ -24,6 +24,7 @@ import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.core.dao.FlowBuilder
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -95,8 +96,8 @@ open class DatabaseModule {
 
   @Singleton
   @Provides
-  fun provideDownloadRoomDao(db: KiwixRoomDatabase, newBookDao: NewBookDao) =
+  fun provideDownloadRoomDao(db: KiwixRoomDatabase, libkiwixBookOnDisk: LibkiwixBookOnDisk) =
     db.downloadRoomDao().also {
-      it.newBookDao = newBookDao
+      it.libkiwixBookOnDisk = libkiwixBookOnDisk
     }
 }

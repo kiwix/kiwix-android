@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.libkiwix.Book
 import java.io.File
 
 fun bookOnDisk(
@@ -146,8 +147,11 @@ fun libkiwixBook(
   size: String = "1024",
   name: String = "name",
   favIcon: String = "favIcon",
-  file: File = File("")
+  file: File = File(""),
+  nativeBook: Book? = null,
+  tags: String? = ""
 ) = LibkiwixBook().apply {
+  this.nativeBook = nativeBook
   this.id = id
   this.title = title
   this.description = description
@@ -162,6 +166,7 @@ fun libkiwixBook(
   this.file = file
   bookName = name
   favicon = favIcon
+  this.tags = tags
 }
 
 fun recentSearchEntity(

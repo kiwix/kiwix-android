@@ -38,7 +38,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInform
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
@@ -55,7 +55,7 @@ private const val ZERO = 0
 
 open class ErrorActivity : BaseActivity() {
   @Inject
-  lateinit var bookDao: NewBookDao
+  lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
@@ -253,7 +253,7 @@ open class ErrorActivity : BaseActivity() {
 
   private suspend fun zimFiles(): String {
     val allZimFiles =
-      bookDao.getBooks().joinToString {
+      libkiwixBookOnDisk.getBooks().joinToString {
         """
         ${it.book.title}:
         Articles: [${it.book.articleCount}]
@@ -302,7 +302,7 @@ open class ErrorActivity : BaseActivity() {
   private fun safeContains(extras: Bundle): Boolean {
     return try {
       extras.containsKey(EXCEPTION_KEY)
-    } catch (ignore: RuntimeException) {
+    } catch (_: RuntimeException) {
       false
     }
   }
@@ -334,7 +334,7 @@ open class ErrorActivity : BaseActivity() {
       StringWriter().apply {
         exception.printStackTrace(PrintWriter(this))
       }.toString()
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // Some exceptions thrown by coroutines do not have a stack trace.
       // These exceptions contain the full error message in the exception object itself.
       // To handle these cases, log the full exception message as it contains the

@@ -20,13 +20,16 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -36,20 +39,63 @@ class JNIModule {
 
   @Provides
   @Singleton
-  fun provideLibrary(): Library = Library()
+  @Named(BOOKMARK_LIBRARY)
+  fun provideBookmarkLibrary(): Library = Library()
 
   @Provides
   @Singleton
-  fun providesManager(library: Library): Manager = Manager(library)
+  @Named(BOOKMARK_MANAGER)
+  fun providesBookmarkManager(
+    @Named(BOOKMARK_LIBRARY) library: Library
+  ): Manager = Manager(library)
 
   @Provides
   @Singleton
   fun providesLibkiwixBookmarks(
-    library: Library,
-    manager: Manager,
+    @Named(BOOKMARK_LIBRARY) library: Library,
+    @Named(BOOKMARK_MANAGER) manager: Manager,
     sharedPreferenceUtil: SharedPreferenceUtil,
-    bookDao: NewBookDao,
+    libkiwixBookOnDisk: LibkiwixBookOnDisk,
     zimReaderContainer: ZimReaderContainer
   ): LibkiwixBookmarks =
-    LibkiwixBookmarks(library, manager, sharedPreferenceUtil, bookDao, zimReaderContainer)
+    LibkiwixBookmarks(
+      library,
+      manager,
+      sharedPreferenceUtil,
+      libkiwixBookOnDisk,
+      zimReaderContainer
+    )
+
+  @Provides
+  @Singleton
+  @Named(LOCAL_BOOKS_LIBRARY)
+  fun provideLocalBooksLibrary(): Library = Library()
+
+  @Provides
+  @Singleton
+  @Named(LOCAL_BOOKS_MANAGER)
+  fun providesLocalBooksManager(
+    @Named(LOCAL_BOOKS_LIBRARY) library: Library
+  ): Manager = Manager(library)
+
+  @Provides
+  @Singleton
+  fun providesLibkiwixBooks(
+    @Named(LOCAL_BOOKS_LIBRARY) library: Library,
+    @Named(LOCAL_BOOKS_MANAGER) manager: Manager,
+    sharedPreferenceUtil: SharedPreferenceUtil,
+  ): LibkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, sharedPreferenceUtil)
+
+  /**
+   * We are not making this singleton because we need multiple objects of this.
+   */
+  @Provides
+  fun provideBookFactory(): LibkiwixBookFactory = object : LibkiwixBookFactory {
+    override fun create(): Book = Book()
+  }
 }
+
+const val BOOKMARK_LIBRARY = "bookmarkLibrary"
+const val BOOKMARK_MANAGER = "bookmarkManager"
+const val LOCAL_BOOKS_LIBRARY = "localBooksLibrary"
+const val LOCAL_BOOKS_MANAGER = "localBooksManager"

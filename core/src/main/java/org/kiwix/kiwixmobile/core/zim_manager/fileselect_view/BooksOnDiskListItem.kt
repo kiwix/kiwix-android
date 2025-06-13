@@ -30,14 +30,14 @@ import java.util.Locale
 
 sealed class BooksOnDiskListItem {
   var isSelected: Boolean = false
-  abstract val id: Long
+  abstract val id: String
 
   data class LanguageItem constructor(
-    override val id: Long,
+    override val id: String,
     val text: String
   ) : BooksOnDiskListItem() {
     constructor(locale: Locale) : this(
-      locale.language.hashCode().toLong(),
+      locale.language,
       locale.getDisplayLanguage(locale)
     )
   }
@@ -48,12 +48,16 @@ sealed class BooksOnDiskListItem {
     val file: File = File(""),
     val zimReaderSource: ZimReaderSource,
     val tags: List<KiwixTag> = KiwixTag.Companion.from(book.tags),
-    override val id: Long = databaseId
+    override val id: String = book.id
   ) : BooksOnDiskListItem() {
     val locale: Locale by lazy {
       book.language.convertToLocal()
     }
 
+    @Deprecated(
+      "Now we are using the libkiwix to store and retrieve the local " +
+        "books so this constructor is no longer used."
+    )
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
       databaseId = bookOnDiskEntity.id,
       file = bookOnDiskEntity.file,
@@ -69,6 +73,11 @@ sealed class BooksOnDiskListItem {
     constructor(zimFileReader: ZimFileReader) : this(
       book = zimFileReader.toBook(),
       zimReaderSource = zimFileReader.zimReaderSource
+    )
+
+    constructor(libkiwixBook: LibkiwixBook) : this(
+      book = libkiwixBook,
+      zimReaderSource = libkiwixBook.zimReaderSource
     )
   }
 }

@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import javax.inject.Inject
@@ -30,7 +30,7 @@ const val THREE_MONTHS_IN_MILLISECONDS = 90 * 24 * 60 * 60 * 1000L
 class DonationDialogHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val newBookDao: NewBookDao
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk
 ) {
   private var showDonationDialogCallback: ShowDonationDialogCallback? = null
 
@@ -74,7 +74,7 @@ class DonationDialogHandler @Inject constructor(
   }
 
   suspend fun isZimFilesAvailableInLibrary(): Boolean =
-    if (activity.isCustomApp()) true else newBookDao.getBooks().isNotEmpty()
+    if (activity.isCustomApp()) true else libkiwixBookOnDisk.getBooks().isNotEmpty()
 
   fun updateLastDonationPopupShownTime() {
     sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()

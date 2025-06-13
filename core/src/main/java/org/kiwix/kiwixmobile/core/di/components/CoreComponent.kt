@@ -25,10 +25,12 @@ import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -84,6 +86,7 @@ interface CoreComponent {
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
+  fun libkiwixBookFactory(): LibkiwixBookFactory
   fun storageObserver(): StorageObserver
   fun kiwixService(): KiwixService
   fun application(): Application
@@ -99,6 +102,7 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun objectBoxToLibkiwixMigrator(): ObjectBoxToLibkiwixMigrator
   fun libkiwixBookmarks(): LibkiwixBookmarks
+  fun libkiwixBooks(): LibkiwixBookOnDisk
   fun recentSearchRoomDao(): RecentSearchRoomDao
   fun historyRoomDao(): HistoryRoomDao
   fun webViewHistoryRoomDao(): WebViewHistoryRoomDao

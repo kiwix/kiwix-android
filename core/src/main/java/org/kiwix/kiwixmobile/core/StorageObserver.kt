@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.libkiwix.Book
 import java.io.File
 import javax.inject.Inject
 
@@ -39,16 +39,17 @@ class StorageObserver @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val fileSearch: FileSearch,
   private val zimReaderFactory: ZimFileReader.Factory,
-  private val libkiwixBookmarks: LibkiwixBookmarks
+  private val libkiwixBookmarks: LibkiwixBookmarks,
+  private val libkiwixBookFactory: LibkiwixBookFactory
 ) {
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ): Flow<List<BookOnDisk>> = flow {
+  ): Flow<List<Book>> = flow {
     val files = scanFiles(scanningProgressListener).first()
     val downloads = downloadRoomDao.downloads().first()
     val result = toFilesThatAreNotDownloading(files, downloads)
-      .mapNotNull { convertToBookOnDisk(it) }
+      .mapNotNull { convertToLibkiwixBook(it) }
     emit(result)
   }.flowOn(dispatcher)
 
@@ -61,13 +62,19 @@ class StorageObserver @Inject constructor(
   private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
     downloads.none { file.absolutePath.endsWith(it.fileNameFromUrl) }
 
-  private suspend fun convertToBookOnDisk(file: File) =
+  private suspend fun convertToLibkiwixBook(file: File) =
     zimReaderFactory.create(ZimReaderSource(file))
       ?.let { zimFileReader ->
-        BookOnDisk(zimFileReader).also {
+        libkiwixBookFactory.create().apply {
+          update(zimFileReader.jniKiwixReader)
+        }.also {
           // add the book to libkiwix library to validate the imported bookmarks
           libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
           zimFileReader.dispose()
         }
       }
+}
+
+interface LibkiwixBookFactory {
+  fun create(): Book
 }
