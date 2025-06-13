@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.core.main.reader
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
@@ -67,6 +67,11 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -111,6 +116,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -125,19 +131,39 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
-import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog
+import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
+import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
+import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
+import org.kiwix.kiwixmobile.core.main.DocumentParser
 import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
+import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.OnSwipeTouchListener
+import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
+import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
+import org.kiwix.kiwixmobile.core.main.TabsAdapter
+import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
+import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.main.WebViewProvider
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
@@ -154,6 +180,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
@@ -173,6 +201,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
@@ -341,6 +370,38 @@ abstract class CoreReaderFragment :
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
+
+  private var composeView: ComposeView? = null
+  protected val readerScreenState = mutableStateOf(
+    ReaderScreenState(
+      snackBarHostState = SnackbarHostState(),
+      isNoBookOpenInReader = false,
+      onOpenLibraryButtonClicked = {},
+      pageLoadingItem = false to ZERO,
+      shouldShowDonationPopup = false,
+      // TODO set in onViewCreated.
+      fullScreenItem = false to null,
+      showBackToTopButton = false,
+      backToTopButtonClick = { backToTop() },
+      showFullscreenButton = false,
+      onExitFullscreenClick = { closeFullScreen() },
+      showTtsControls = false,
+      onPauseTtsClick = { pauseTts() },
+      pauseTtsButtonText = "",
+      onStopTtsClick = { stopTts() },
+      kiwixWebViewList = webViewList,
+      bookmarkButtonItem = Triple(
+        { toggleBookmark() },
+        { goToBookmarks() },
+        IconItem.Drawable(R.drawable.ic_bookmark_border_24dp)
+      ),
+      previousPageButtonItem = { goBack() } to { showBackwardHistory() },
+      onHomeButtonClick = { openMainPage() },
+      nextPageButtonItem = { goForward() } to { showForwardHistory() },
+      onTocClick = { openToc() },
+      onCloseAllTabs = { closeAllTabs() }
+    )
+  )
   private var readerLifeCycleScope: CoroutineScope? = null
 
   val coreReaderLifeCycleScope: CoroutineScope?
@@ -429,11 +490,28 @@ abstract class CoreReaderFragment :
   }
 
   @SuppressLint("ClickableViewAccessibility")
+  @Suppress("LongMethod")
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    composeView?.apply {
+      setContent {
+        ReaderScreen(
+          state = readerScreenState.value,
+          actionMenuItems = emptyList(),
+          navigationIcon = {
+            NavigationIcon(
+              iconItem = IconItem.Vector(Icons.Filled.Menu),
+              contentDescription = string.open_drawer,
+              onClick = { navigationIconClick() }
+            )
+          }
+        )
+        DialogHost(alertDialogShower as AlertDialogShower)
+      }
+    }
     addAlertDialogToDialogHost()
     setupMenu()
     donationDialogHandler?.setDonationDialogCallBack(this)
@@ -535,10 +613,21 @@ abstract class CoreReaderFragment :
     handleClicks()
   }
 
+  private fun navigationIconClick() {
+    // Manually handle the navigation open/close.
+    // Since currently we are using the view based navigation drawer in other screens.
+    // Once we fully migrate to jetpack compose we will refactor this code to use the
+    // compose navigation.
+    // TODO Replace with compose based navigation when migration is done.
+    val activity = activity as CoreMainActivity
+    if (activity.navigationDrawerIsOpen()) {
+      activity.closeNavigationDrawer()
+    } else {
+      activity.openNavigationDrawer()
+    }
+  }
+
   private fun addAlertDialogToDialogHost() {
-    fragmentReaderBinding?.root?.addView(
-      requireContext().getDialogHostComposeView(alertDialogShower as AlertDialogShower)
-    )
     externalLinkOpener?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
     unsupportedMimeTypeHandler?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
@@ -684,9 +773,8 @@ abstract class CoreReaderFragment :
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    fragmentReaderBinding = FragmentReaderBinding.inflate(inflater, container, false)
-    return fragmentReaderBinding?.root
+  ): View? = ComposeView(requireContext()).also {
+    composeView = it
   }
 
   private fun handleIntentExtras(intent: Intent) {
@@ -824,9 +912,9 @@ abstract class CoreReaderFragment :
     // the unwanted blank space caused by the toolbar.
     setTopMarginToWebViews(-requireActivity().getToolbarHeight())
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    bottomToolbar?.visibility = View.GONE
-    contentFrame?.visibility = View.GONE
-    progressBar?.visibility = View.GONE
+    bottomToolbar?.visibility = GONE
+    contentFrame?.visibility = GONE
+    progressBar?.visibility = GONE
     backToTopButton?.hide()
     setTabSwitcherVisibility(VISIBLE)
     startAnimation(tabSwitcherRoot, R.anim.slide_down)
@@ -906,10 +994,10 @@ abstract class CoreReaderFragment :
     )
     tabSwitcherRoot?.let {
       if (it.isVisible) {
-        setTabSwitcherVisibility(View.GONE)
+        setTabSwitcherVisibility(GONE)
         startAnimation(it, R.anim.slide_up)
-        progressBar?.visibility = View.VISIBLE
-        contentFrame?.visibility = View.VISIBLE
+        progressBar?.visibility = VISIBLE
+        contentFrame?.visibility = VISIBLE
       }
     }
     progressBar?.hide()
@@ -1058,7 +1146,7 @@ abstract class CoreReaderFragment :
   @Suppress("ReturnCount", "NestedBlockDepth")
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     when {
-      tabSwitcherRoot?.visibility == View.VISIBLE -> {
+      tabSwitcherRoot?.visibility == VISIBLE -> {
         selectTab(
           if (currentWebViewIndex < webViewList.size) {
             currentWebViewIndex
@@ -1168,7 +1256,7 @@ abstract class CoreReaderFragment :
             override fun onSpeakingStarted() {
               requireActivity().runOnUiThread {
                 mainMenu?.onTextToSpeechStartedTalking()
-                ttsControls?.visibility = View.VISIBLE
+                ttsControls?.visibility = VISIBLE
                 setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
               }
             }
@@ -1176,7 +1264,7 @@ abstract class CoreReaderFragment :
             override fun onSpeakingEnded() {
               requireActivity().runOnUiThread {
                 mainMenu?.onTextToSpeechStoppedTalking()
-                ttsControls?.visibility = View.GONE
+                ttsControls?.visibility = GONE
                 pauseTTSButton?.setText(R.string.tts_pause)
                 setActionAndStartTTSService(ACTION_STOP_TTS)
               }
@@ -1231,11 +1319,15 @@ abstract class CoreReaderFragment :
     tts?.currentTTSTask?.let {
       if (it.paused) {
         tts?.pauseOrResume()
-        pauseTTSButton?.setText(R.string.tts_pause)
+        readerScreenState.update {
+          copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
+        }
         setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
       } else {
         tts?.pauseOrResume()
-        pauseTTSButton?.setText(R.string.tts_resume)
+        readerScreenState.update {
+          copy(pauseTtsButtonText = context?.getString(R.string.tts_resume).orEmpty())
+        }
         setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
       }
     }
@@ -1301,6 +1393,8 @@ abstract class CoreReaderFragment :
     storagePermissionForNotesLauncher = null
     donationDialogHandler?.setDonationDialogCallBack(null)
     donationDialogHandler = null
+    composeView?.disposeComposition()
+    composeView = null
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -1469,15 +1563,15 @@ abstract class CoreReaderFragment :
 
   private fun reopenBook() {
     hideNoBookOpenViews()
-    contentFrame?.visibility = View.VISIBLE
+    contentFrame?.visibility = VISIBLE
     mainMenu?.showBookSpecificMenuItems()
   }
 
   protected fun exitBook(shouldCloseZimBook: Boolean = true) {
     showNoBookOpenViews()
-    bottomToolbar?.visibility = View.GONE
+    bottomToolbar?.visibility = GONE
     actionBar?.title = getString(R.string.reader)
-    contentFrame?.visibility = View.GONE
+    contentFrame?.visibility = GONE
     hideProgressBar()
     mainMenu?.hideBookSpecificMenuItems()
     if (shouldCloseZimBook) {
@@ -1501,7 +1595,7 @@ abstract class CoreReaderFragment :
 
   protected fun hideProgressBar() {
     progressBar?.apply {
-      visibility = View.GONE
+      visibility = GONE
       hide()
     }
   }
@@ -1511,7 +1605,7 @@ abstract class CoreReaderFragment :
       reopenBook()
     }
     tempWebViewForUndo?.let {
-      if (tabSwitcherRoot?.visibility == View.GONE) {
+      if (tabSwitcherRoot?.visibility == GONE) {
         // Remove the top margin from the webView when the tabSwitcher is not visible.
         // We have added this margin in `TabsAdapter` to not show the top margin in tabs.
         // `tempWebViewForUndo` saved with that margin so before showing it to the `contentFrame`
@@ -1610,7 +1704,7 @@ abstract class CoreReaderFragment :
     if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
       ttsControls?.let { ttsControls ->
         when (ttsControls.visibility) {
-          View.GONE -> {
+          GONE -> {
             if (isBackToTopEnabled) {
               backToTopButton?.hide()
             }
@@ -1622,7 +1716,7 @@ abstract class CoreReaderFragment :
             }
           }
 
-          View.VISIBLE -> {
+          VISIBLE -> {
             if (isBackToTopEnabled) {
               backToTopButton?.show()
             }
@@ -1663,14 +1757,14 @@ abstract class CoreReaderFragment :
   }
 
   override fun onHomeMenuClicked() {
-    if (tabSwitcherRoot?.visibility == View.VISIBLE) {
+    if (tabSwitcherRoot?.visibility == VISIBLE) {
       hideTabSwitcher()
     }
     createNewTab()
   }
 
   override fun onTabMenuClicked() {
-    if (tabSwitcherRoot?.visibility == View.VISIBLE) {
+    if (tabSwitcherRoot?.visibility == VISIBLE) {
       hideTabSwitcher()
       selectTab(currentWebViewIndex)
     } else {
@@ -1751,9 +1845,9 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
     (requireActivity() as CoreMainActivity).disableDrawer(false)
-    toolbarContainer?.visibility = View.GONE
-    bottomToolbar?.visibility = View.GONE
-    exitFullscreenButton?.visibility = View.VISIBLE
+    toolbarContainer?.visibility = GONE
+    bottomToolbar?.visibility = GONE
+    exitFullscreenButton?.visibility = VISIBLE
     exitFullscreenButton?.background?.alpha = 153
     val window = requireActivity().window
     window.decorView.showFullScreenMode(window)
@@ -1769,9 +1863,9 @@ abstract class CoreReaderFragment :
     toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
-    toolbarContainer?.visibility = View.VISIBLE
+    toolbarContainer?.visibility = VISIBLE
     updateBottomToolbarVisibility()
-    exitFullscreenButton?.visibility = View.GONE
+    exitFullscreenButton?.visibility = GONE
     exitFullscreenButton?.background?.alpha = 255
     val window = requireActivity().window
     window.decorView.closeFullScreenMode(window)
@@ -1801,7 +1895,7 @@ abstract class CoreReaderFragment :
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
         hideNoBookOpenViews()
-        contentFrame?.visibility = View.VISIBLE
+        contentFrame?.visibility = VISIBLE
         openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
@@ -1907,13 +2001,22 @@ abstract class CoreReaderFragment :
         List<String?>::contains
       ).collect { isBookmarked ->
         this@CoreReaderFragment.isBookmarked = isBookmarked
-        bottomToolbarBookmark?.setImageResource(
-          if (isBookmarked) R.drawable.ic_bookmark_24dp else R.drawable.ic_bookmark_border_24dp
-        )
+        readerScreenState.update {
+          copy(
+            bookmarkButtonItem = bookmarkButtonItem.copy(third = getBookMarkButtonIcon(isBookmarked))
+          )
+        }
       }
     }
     updateUrlFlow()
   }
+
+  private fun getBookMarkButtonIcon(isBookmarked: Boolean) =
+    if (isBookmarked) {
+      IconItem.Drawable(R.drawable.ic_bookmark_24dp)
+    } else {
+      IconItem.Drawable(R.drawable.ic_bookmark_border_24dp)
+    }
 
   private fun safelyCancelBookmarkJob() {
     bookmarkingJob?.cancel()
@@ -2014,13 +2117,13 @@ abstract class CoreReaderFragment :
 
   // opens home screen when user closes all tabs
   protected fun showNoBookOpenViews() {
-    noOpenBookButton?.visibility = View.VISIBLE
-    noOpenBookText?.visibility = View.VISIBLE
+    noOpenBookButton?.visibility = VISIBLE
+    noOpenBookText?.visibility = VISIBLE
   }
 
   private fun hideNoBookOpenViews() {
-    noOpenBookButton?.visibility = View.GONE
-    noOpenBookText?.visibility = View.GONE
+    noOpenBookButton?.visibility = GONE
+    noOpenBookText?.visibility = GONE
   }
 
   @Suppress("MagicNumber")
@@ -2101,7 +2204,7 @@ abstract class CoreReaderFragment :
       FrameLayout.LayoutParams.WRAP_CONTENT
     ).apply {
       val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
-        org.kiwix.kiwixmobile.core.R.dimen.activity_horizontal_margin
+        R.dimen.activity_horizontal_margin
       )
       setMargins(
         rightAndLeftMargin,
@@ -2188,11 +2291,11 @@ abstract class CoreReaderFragment :
   private fun updateBottomToolbarVisibility() {
     bottomToolbar?.let {
       if (urlIsValid() &&
-        tabSwitcherRoot?.visibility != View.VISIBLE && !isInFullScreenMode()
+        tabSwitcherRoot?.visibility != VISIBLE && !isInFullScreenMode()
       ) {
-        it.visibility = View.VISIBLE
+        it.visibility = VISIBLE
       } else {
-        it.visibility = View.GONE
+        it.visibility = GONE
       }
     }
   }
@@ -2332,7 +2435,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun contentUrl(articleUrl: String?): String =
-    "${ZimFileReader.CONTENT_PREFIX}$articleUrl".toUri().toString()
+    "${CONTENT_PREFIX}$articleUrl".toUri().toString()
 
   private fun redirectOrOriginal(contentUrl: String): String {
     zimReaderContainer?.let {
@@ -2722,13 +2825,13 @@ abstract class CoreReaderFragment :
         if (it > 200) {
           if (
             (backToTopButton?.isGone == true || backToTopButton?.isInvisible == true) &&
-            ttsControls?.visibility == View.GONE
+            ttsControls?.visibility == GONE
           ) {
             backToTopButton?.show()
           }
         } else {
           backToTopButton?.isVisible
-          if (backToTopButton?.visibility == View.VISIBLE) {
+          if (backToTopButton?.visibility == VISIBLE) {
             backToTopButton?.hide()
           }
         }
@@ -2739,7 +2842,7 @@ abstract class CoreReaderFragment :
   override fun webViewLongClick(url: String) {
     var handleEvent = false
     when {
-      url.startsWith(ZimFileReader.CONTENT_PREFIX) -> {
+      url.startsWith(CONTENT_PREFIX) -> {
         // This is my web site, so do not override; let my WebView load the page
         handleEvent = true
       }
