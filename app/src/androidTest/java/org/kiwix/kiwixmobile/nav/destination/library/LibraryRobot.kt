@@ -31,12 +31,12 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.nav.destination.library.local.BOOK_LIST_TESTING_TAG
-import org.kiwix.kiwixmobile.nav.destination.library.local.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils

@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.core.main.reader
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.platform.ComposeView
+import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 
 /**
  * Represents the UI state for the Reader Screen.
@@ -59,7 +61,7 @@ data class ReaderScreenState(
    *  - [Boolean]: Whether to show/hide full screen mode.
    *  - [ComposeView]: full screen view.
    */
-  val fullScreenItem: Pair<Boolean, ComposeView>,
+  val fullScreenItem: Pair<Boolean, ComposeView?>,
   /**
    * Manages the showing of "BackToTop" fab button.
    */
@@ -72,5 +74,47 @@ data class ReaderScreenState(
   val onExitFullscreenClick: () -> Unit = {},
   val showTtsControls: Boolean = false,
   val onPauseTtsClick: () -> Unit = {},
+  /**
+   * Manages the showing of TTS button text(Pause/Resume).
+   */
+  val pauseTtsButtonText: String,
   val onStopTtsClick: () -> Unit = {},
+  /**
+   * To show in the tabs view.
+   */
+  val kiwixWebViewList: List<KiwixWebView>,
+  /**
+   * Handles the (UI, and clicks) for bookmark button in reader bottom toolbar.
+   *
+   * A [Triple] containing:
+   *  - [Unit]: Handles the normal click of button.
+   *  - [Unit]: Handles the long click of button.
+   *  - [Drawable]: Handles the Icon of button.
+   */
+  val bookmarkButtonItem: Triple<() -> Unit, () -> Unit, Drawable>,
+  /**
+   * Handles the clicks of previous page button in reader bottom toolbar.
+   *
+   * A [Pair] containing:
+   *  - [Unit]: Handles the normal click of button(For going to previous page).
+   *  - [Unit]: Handles the long click of button(For showing the previous pages history).
+   */
+  val previousPageButtonItem: Pair<() -> Unit, () -> Unit>,
+  /**
+   * Handles the click to open home page of ZIM file button click in reader bottom toolbar.
+   */
+  val onHomeButtonClick: () -> Unit,
+  /**
+   * Handles the clicks of next page button in reader bottom toolbar.
+   *
+   * A [Pair] containing:
+   *  - [Unit]: Handles the normal click of button(For going to next page).
+   *  - [Unit]: Handles the long click of button(For showing the next pages history).
+   */
+  val nextPageButtonItem: Pair<() -> Unit, () -> Unit>,
+  /**
+   * Handles the click to open right sidebar button click in reader bottom toolbar.
+   */
+  val onTocClick: () -> Unit,
+  val onCloseAllTabs: () -> Unit
 )

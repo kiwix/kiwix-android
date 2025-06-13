@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerV
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
@@ -79,10 +80,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onViewCreated(view, savedInstanceState)
 
     val activity = activity as CoreMainActivity
-    noOpenBookButton?.setOnClickListener {
-      activity.navigate(
-        KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
-      )
+    readerScreenState.update {
+      copy(onOpenLibraryButtonClicked = {
+        activity.navigate(
+          KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
+        )
+      })
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar?.let { activity.setupDrawerToggle(it, true) }
