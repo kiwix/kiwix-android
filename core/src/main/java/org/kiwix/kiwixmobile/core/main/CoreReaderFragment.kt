@@ -570,7 +570,7 @@ abstract class CoreReaderFragment :
         tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
         snackBarRoot = findViewById(R.id.snackbar_root)
         bottomToolbarToc = findViewById(R.id.bottom_toolbar_toc)
-        donationLayout = findViewById(R.id.donation_layout)
+        donationLayout = findViewById(R.id.compose_view)
       }
     }
   }
