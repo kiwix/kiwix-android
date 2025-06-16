@@ -495,4 +495,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val readerFragmentResId: Int
   abstract fun createApplicationShortcuts()
   abstract fun setDialogHostToActivity(alertDialogShower: AlertDialogShower)
+
+  /**
+   * This is for showing and hiding the bottomNavigationView when user scroll the screen.
+   * We are making this abstract so that it can be easily used from the reader screen.
+   * Since we do not have the bottomNavigationView in custom apps. So doing this way both apps will
+   * provide there own implementation.
+   *
+   * TODO we will remove this once we will migrate mainActivity to the compose.
+   */
+  abstract fun toggleBottomNavigation(isVisible: Boolean)
 }

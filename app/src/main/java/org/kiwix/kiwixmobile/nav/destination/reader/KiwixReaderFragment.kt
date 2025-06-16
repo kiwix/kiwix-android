@@ -27,11 +27,11 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
@@ -51,12 +51,12 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
+import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
-import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
@@ -253,6 +253,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     exitBook()
   }
 
+  override fun getBottomNavigationView(): BottomNavigationView? =
+    requireActivity().findViewById(R.id.bottom_nav_view)
+
   /**
    * Restores the view state based on the provided webViewHistoryItemList data and restore origin.
    *
@@ -291,7 +294,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
             }
             restoreTabs(webViewHistoryItemList, currentTab, onComplete)
           } else {
-            getCurrentWebView()?.snack(string.zim_not_opened)
+            readerScreenState.value.snackBarHostState.snack(
+              requireActivity().getString(string.zim_not_opened),
+              lifecycleScope = lifecycleScope
+            )
             exitBook() // hide the options for zim file to avoid unexpected UI behavior
           }
         }
@@ -305,16 +311,17 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   @Throws(IllegalArgumentException::class)
   override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
-    requireNotNull(activityMainRoot)
+    // requireNotNull(activityMainRoot)
     return ToolbarScrollingKiwixWebView(
       requireContext(),
       this,
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
-      activityMainRoot as ViewGroup,
-      requireNotNull(videoView),
+      null,
+      // requireNotNull(videoView),
+      null,
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      requireNotNull(toolbarContainer),
-      requireNotNull(bottomToolbar),
+      // requireNotNull(toolbarContainer),
+      // requireNotNull(bottomToolbar),
       sharedPreferenceUtil = requireNotNull(sharedPreferenceUtil),
       parentNavigationBar = requireActivity().findViewById(R.id.bottom_nav_view)
     )

@@ -84,6 +84,10 @@ data class ReaderScreenState(
    */
   val kiwixWebViewList: List<KiwixWebView>,
   /**
+   * Manages the showing of current selected webView.
+   */
+  val selectedWebView: KiwixWebView?,
+  /**
    * Handles the (UI, and clicks) for bookmark button in reader bottom toolbar.
    *
    * A [Triple] containing:
@@ -95,11 +99,12 @@ data class ReaderScreenState(
   /**
    * Handles the clicks of previous page button in reader bottom toolbar.
    *
-   * A [Pair] containing:
+   * A [Triple] containing:
    *  - [Unit]: Handles the normal click of button(For going to previous page).
    *  - [Unit]: Handles the long click of button(For showing the previous pages history).
+   *  - [Boolean]: Handles the button should enable or not.
    */
-  val previousPageButtonItem: Pair<() -> Unit, () -> Unit>,
+  val previousPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   /**
    * Handles the click to open home page of ZIM file button click in reader bottom toolbar.
    */
@@ -110,11 +115,21 @@ data class ReaderScreenState(
    * A [Pair] containing:
    *  - [Unit]: Handles the normal click of button(For going to next page).
    *  - [Unit]: Handles the long click of button(For showing the next pages history).
+   *  - [Boolean]: Handles the button should enable or not.
    */
-  val nextPageButtonItem: Pair<() -> Unit, () -> Unit>,
+  val nextPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   /**
    * Handles the click to open right sidebar button click in reader bottom toolbar.
    */
   val onTocClick: () -> Unit,
-  val onCloseAllTabs: () -> Unit
+  val onCloseAllTabs: () -> Unit,
+  /**
+   * Stores the height of the bottom navigation bar in pixels.
+   */
+  val bottomNavigationHeight: Int,
+  /**
+   * Manages the showing of Reader's [BottomAppBarOfReaderScreen].
+   */
+  val shouldShowBottomAppBar: Boolean,
+  val readerScreenTitle: String
 )

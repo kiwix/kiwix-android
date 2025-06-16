@@ -36,13 +36,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -54,23 +57,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -78,6 +89,8 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.ui.components.ScrollDirection
+import org.kiwix.kiwixmobile.core.ui.components.rememberLazyListScrollListener
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
@@ -103,14 +116,29 @@ const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTe
 @Composable
 fun ReaderScreen(
   state: ReaderScreenState,
+  listState: LazyListState,
   actionMenuItems: List<ActionMenuItem>,
   navigationIcon: @Composable () -> Unit
 ) {
+  val (bottomNavHeight, lazyListState) =
+    rememberScrollBehavior(state.bottomNavigationHeight, listState)
+  val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixDialogTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
-      topBar = { KiwixAppBar(R.string.note, navigationIcon, actionMenuItems) },
-      floatingActionButton = { BackToTopFab(state) }
+      topBar = {
+        KiwixAppBar(
+          state.readerScreenTitle,
+          navigationIcon,
+          actionMenuItems,
+          scrollBehavior
+        )
+      },
+      floatingActionButton = { BackToTopFab(state) },
+      modifier = Modifier
+        .systemBarsPadding()
+        .nestedScroll(scrollBehavior.nestedScrollConnection)
+        .padding(bottom = bottomNavHeight.value)
     ) { paddingValues ->
       Box(
         modifier = Modifier
@@ -120,15 +148,16 @@ fun ReaderScreen(
         if (state.isNoBookOpenInReader) {
           NoBookOpenView(state.onOpenLibraryButtonClicked)
         } else {
+          ShowZIMFileContent(state)
           ShowProgressBarIfZIMFilePageIsLoading(state)
-          ShowZIMFileContent(state.kiwixWebViewList)
           TtsControls(state)
           BottomAppBarOfReaderScreen(
             state.bookmarkButtonItem,
             state.previousPageButtonItem,
             state.onHomeButtonClick,
             state.nextPageButtonItem,
-            state.onTocClick
+            state.onTocClick,
+            state.shouldShowBottomAppBar
           )
           ShowFullScreenView(state)
         }
@@ -139,9 +168,14 @@ fun ReaderScreen(
 }
 
 @Composable
-private fun ShowZIMFileContent(kiwixWebViewList: List<KiwixWebView>) {
-  if (kiwixWebViewList.isNotEmpty()) {
-    AndroidView({ kiwixWebViewList[0] }, modifier = Modifier.fillMaxSize())
+private fun ShowZIMFileContent(state: ReaderScreenState) {
+  state.selectedWebView?.let { selectedWebView ->
+    key(selectedWebView) {
+      AndroidView(
+        factory = { selectedWebView },
+        modifier = Modifier.fillMaxSize()
+      )
+    }
   }
 }
 
@@ -158,7 +192,7 @@ private fun BoxScope.ShowProgressBarIfZIMFilePageIsLoading(state: ReaderScreenSt
     ContentLoadingProgressBar(
       modifier = Modifier
         .testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
-        .align(Alignment.CenterEnd),
+        .align(Alignment.TopCenter),
       progressBarStyle = ProgressBarStyle.HORIZONTAL,
       progress = state.pageLoadingItem.second
     )
@@ -240,17 +274,22 @@ private fun BackToTopFab(state: ReaderScreenState) {
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomAppBarOfReaderScreen(
+private fun BoxScope.BottomAppBarOfReaderScreen(
   bookmarkButtonItem: Triple<() -> Unit, () -> Unit, Drawable>,
-  previousPageButtonItem: Pair<() -> Unit, () -> Unit>,
+  previousPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   onHomeButtonClick: () -> Unit,
-  nextPageButtonItem: Pair<() -> Unit, () -> Unit>,
-  onTocClick: () -> Unit
+  nextPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
+  onTocClick: () -> Unit,
+  shouldShowBottomAppBar: Boolean
 ) {
+  if (!shouldShowBottomAppBar) return
   BottomAppBar(
     containerColor = Black,
-    contentColor = White
+    contentColor = White,
+    modifier = Modifier.align(Alignment.BottomCenter),
+    scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   ) {
     Row(
       modifier = Modifier
@@ -271,6 +310,7 @@ private fun BottomAppBarOfReaderScreen(
         onClick = previousPageButtonItem.first,
         onLongClick = previousPageButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_left_24dp),
+        shouldEnable = previousPageButtonItem.third,
         contentDescription = stringResource(R.string.go_to_previous_page)
       )
       // Home Icon(to open the home page of ZIM file)
@@ -284,6 +324,7 @@ private fun BottomAppBarOfReaderScreen(
         onClick = nextPageButtonItem.first,
         onLongClick = nextPageButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_right_24dp),
+        shouldEnable = nextPageButtonItem.third,
         contentDescription = stringResource(R.string.go_to_next_page)
       )
       // Toggle Icon(to open the table of content in right side bar)
@@ -301,11 +342,13 @@ private fun BottomAppBarButtonIcon(
   onClick: () -> Unit,
   onLongClick: (() -> Unit)? = null,
   buttonIcon: IconItem,
+  shouldEnable: Boolean = true,
   contentDescription: String
 ) {
   IconButton(
     onClick = onClick,
-    modifier = Modifier.combinedClickable(onClick = onClick, onLongClick = onLongClick)
+    modifier = Modifier.combinedClickable(onClick = onClick, onLongClick = onLongClick),
+    enabled = shouldEnable
   ) {
     Icon(
       buttonIcon.toPainter(),
@@ -453,4 +496,31 @@ fun TabItemView(
       }
     }
   }
+}
+
+@Composable
+fun rememberScrollBehavior(
+  bottomNavigationHeight: Int,
+  listState: LazyListState,
+): Pair<MutableState<Dp>, LazyListState> {
+  val bottomNavHeightInDp = with(LocalDensity.current) { bottomNavigationHeight.toDp() }
+  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
+  val lazyListState = rememberLazyListScrollListener(
+    lazyListState = listState,
+    onScrollChanged = { direction ->
+      when (direction) {
+        ScrollDirection.SCROLL_UP -> {
+          bottomNavHeight.value = bottomNavHeightInDp
+        }
+
+        ScrollDirection.SCROLL_DOWN -> {
+          bottomNavHeight.value = ZERO.dp
+        }
+
+        ScrollDirection.IDLE -> {}
+      }
+    }
+  )
+
+  return bottomNavHeight to lazyListState
 }

@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -29,6 +28,10 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -67,7 +70,7 @@ const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixAppBar(
-  @StringRes titleId: Int,
+  title: String,
   navigationIcon: @Composable () -> Unit,
   actionMenuItems: List<ActionMenuItem> = emptyList(),
   topAppBarScrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
@@ -76,7 +79,7 @@ fun KiwixAppBar(
 ) {
   KiwixTheme {
     TopAppBar(
-      title = { AppBarTitleSection(titleId, searchBar) },
+      title = { AppBarTitleSection(title, searchBar) },
       navigationIcon = navigationIcon,
       actions = { ActionMenu(actionMenuItems) },
       scrollBehavior = topAppBarScrollBehavior,
@@ -95,7 +98,7 @@ fun KiwixAppBar(
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 private fun AppBarTitleSection(
-  @StringRes titleId: Int,
+  title: String,
   searchBar: (@Composable () -> Unit)? = null
 ) {
   Box(
@@ -107,14 +110,14 @@ private fun AppBarTitleSection(
     searchBar?.let {
       it()
     } ?: run {
-      AppBarTitle(titleId)
+      AppBarTitle(title)
     }
   }
 }
 
 @Composable
 private fun AppBarTitle(
-  @StringRes titleId: Int
+  title: String
 ) {
   val appBarTitleColor = if (isSystemInDarkTheme()) {
     MineShaftGray350
@@ -122,7 +125,7 @@ private fun AppBarTitle(
     White
   }
   Text(
-    text = stringResource(titleId),
+    text = title,
     color = appBarTitleColor,
     style = MaterialTheme.typography.titleMedium,
     overflow = TextOverflow.Ellipsis,
@@ -132,10 +135,14 @@ private fun AppBarTitle(
   )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
+  var overflowExpanded by remember { mutableStateOf(false) }
+
   Row {
-    actionMenuItems.forEach { menuItem ->
+    val (mainActions, overflowActions) = actionMenuItems.partition { !it.isInOverflow }
+    mainActions.forEach { menuItem ->
       val modifier = menuItem.modifier.testTag(menuItem.testingTag)
       // If icon is not null show the icon.
       menuItem.icon?.let {
@@ -158,12 +165,38 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
           modifier = modifier
         ) {
           Text(
-            text = stringResource(id = menuItem.iconButtonText).uppercase(),
+            text = menuItem.iconButtonText.uppercase(),
             color = if (menuItem.isEnabled) Color.White else Color.Gray,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
           )
         }
+      }
+    }
+    if (overflowActions.isNotEmpty()) {
+      IconButton(onClick = { overflowExpanded = true }) {
+        Icon(
+          imageVector = Icons.Default.MoreVert,
+          contentDescription = null,
+          tint = White
+        )
+      }
+    }
+    DropdownMenu(
+      expanded = overflowExpanded,
+      onDismissRequest = { overflowExpanded = false }
+    ) {
+      overflowActions.forEach { menuItem ->
+        DropdownMenuItem(
+          text = {
+            Text(text = menuItem.iconButtonText)
+          },
+          onClick = {
+            overflowExpanded = false
+            menuItem.onClick()
+          },
+          enabled = menuItem.isEnabled
+        )
       }
     }
   }

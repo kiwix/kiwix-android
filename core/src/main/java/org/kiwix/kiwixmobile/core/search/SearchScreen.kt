@@ -87,7 +87,7 @@ fun SearchScreen(
     Scaffold(
       topBar = {
         KiwixAppBar(
-          titleId = R.string.empty_string,
+          title = stringResource(R.string.empty_string),
           navigationIcon = searchScreenState.navigationIcon,
           actionMenuItems = actionMenuItemList,
           searchBar = {

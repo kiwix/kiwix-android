@@ -31,6 +31,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -38,7 +39,7 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.MainMenu
+import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -156,6 +157,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun restoreViewStateOnInvalidWebViewHistory() {
     openHomeScreen()
   }
+
+  // Since custom apps do not have the bottomNavigationView, so returning null.
+  override fun getBottomNavigationView(): BottomNavigationView? = null
 
   /**
    * Restores the view state when the webViewHistory data is valid.
@@ -304,19 +308,13 @@ class CustomReaderFragment : CoreReaderFragment() {
    * provided configuration. It takes into account whether read aloud and tabs are enabled or disabled
    * and creates the menu accordingly.
    */
-  override fun createMainMenu(menu: Menu?): MainMenu? {
-    return menu?.let {
-      menuFactory?.create(
-        it,
-        webViewList,
-        urlIsValid(),
-        this,
-        BuildConfig.DISABLE_READ_ALOUD,
-        BuildConfig.DISABLE_TABS,
-        BuildConfig.DISABLE_TITLE
-      )
-    }
-  }
+  override fun createMainMenu(menu: Menu?): ReaderMenuState? =
+    ReaderMenuState(
+      this,
+      disableReadAloud = BuildConfig.DISABLE_READ_ALOUD,
+      disableTabs = BuildConfig.DISABLE_TABS,
+      disableSearch = BuildConfig.DISABLE_TITLE
+    )
 
   /**
    * Overrides the method to control the functionality of showing the "Open In New Tab" dialog.

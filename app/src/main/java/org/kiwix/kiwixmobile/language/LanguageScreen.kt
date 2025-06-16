@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
@@ -70,7 +71,7 @@ fun LanguageScreen(
   }
   Scaffold(topBar = {
     KiwixAppBar(
-      titleId = R.string.select_languages,
+      title = stringResource(R.string.select_languages),
       navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItemList,
       searchBar = if (isSearchActive) {

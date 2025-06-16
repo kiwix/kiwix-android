@@ -60,7 +60,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   private val callback: WebViewCallback,
   attrs: AttributeSet,
   private var nonVideoView: ViewGroup?,
-  videoView: ViewGroup,
+  videoView: ViewGroup?,
   private val webViewClient: CoreWebViewClient,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : VideoEnabledWebView(context, attrs) {

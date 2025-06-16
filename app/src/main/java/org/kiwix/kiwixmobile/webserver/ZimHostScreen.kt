@@ -87,7 +87,7 @@ fun ZimHostScreen(
 ) {
   KiwixTheme {
     Scaffold(topBar = {
-      KiwixAppBar(R.string.menu_wifi_hotspot, navigationIcon)
+      KiwixAppBar(stringResource(R.string.menu_wifi_hotspot), navigationIcon)
     }) { contentPadding ->
       Column(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
         Row(

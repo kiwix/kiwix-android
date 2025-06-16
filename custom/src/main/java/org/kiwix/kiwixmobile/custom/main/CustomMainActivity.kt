@@ -215,6 +215,10 @@ class CustomMainActivity : CoreMainActivity() {
     activityCustomMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
   }
 
+  override fun toggleBottomNavigation(isVisible: Boolean) {
+    // Do nothing as we do not have the bottomNavigationView in custom apps.
+  }
+
   // Outdated shortcut id(new_tab)
   // Remove if the application has the outdated shortcut.
   private fun removeOutdatedIdShortcuts() {

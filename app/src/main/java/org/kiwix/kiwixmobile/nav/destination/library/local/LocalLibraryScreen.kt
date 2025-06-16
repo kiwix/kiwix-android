@@ -38,32 +38,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.rememberScrollBehavior
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
-import org.kiwix.kiwixmobile.core.ui.components.ScrollDirection
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
-import org.kiwix.kiwixmobile.core.ui.components.rememberLazyListScrollListener
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
@@ -102,7 +94,12 @@ fun LocalLibraryScreen(
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
       topBar = {
-        KiwixAppBar(R.string.library, navigationIcon, state.actionMenuItems, scrollBehavior)
+        KiwixAppBar(
+          stringResource(R.string.library),
+          navigationIcon,
+          state.actionMenuItems,
+          scrollBehavior
+        )
       },
       floatingActionButton = { SelectFileButton(fabButtonClick) },
       modifier = Modifier
@@ -139,33 +136,6 @@ fun LocalLibraryScreen(
       }
     }
   }
-}
-
-@Composable
-fun rememberScrollBehavior(
-  bottomNavigationHeight: Int,
-  listState: LazyListState,
-): Pair<MutableState<Dp>, LazyListState> {
-  val bottomNavHeightInDp = with(LocalDensity.current) { bottomNavigationHeight.toDp() }
-  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
-  val lazyListState = rememberLazyListScrollListener(
-    lazyListState = listState,
-    onScrollChanged = { direction ->
-      when (direction) {
-        ScrollDirection.SCROLL_UP -> {
-          bottomNavHeight.value = bottomNavHeightInDp
-        }
-
-        ScrollDirection.SCROLL_DOWN -> {
-          bottomNavHeight.value = ZERO.dp
-        }
-
-        ScrollDirection.IDLE -> {}
-      }
-    }
-  )
-
-  return bottomNavHeight to lazyListState
 }
 
 @Composable
