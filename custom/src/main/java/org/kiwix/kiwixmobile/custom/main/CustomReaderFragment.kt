@@ -308,9 +308,10 @@ class CustomReaderFragment : CoreReaderFragment() {
    * provided configuration. It takes into account whether read aloud and tabs are enabled or disabled
    * and creates the menu accordingly.
    */
-  override fun createMainMenu(menu: Menu?): ReaderMenuState? =
+  override fun createMainMenu(): ReaderMenuState =
     ReaderMenuState(
       this,
+      isUrlValidInitially = urlIsValid(),
       disableReadAloud = BuildConfig.DISABLE_READ_ALOUD,
       disableTabs = BuildConfig.DISABLE_TABS,
       disableSearch = BuildConfig.DISABLE_TITLE

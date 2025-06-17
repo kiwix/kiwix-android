@@ -18,16 +18,39 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.Black
+import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_CORNER_RADIUS
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 
 const val READ_ALOUD_MENU_ITEM_TESTING_TAG = "readAloudMenuItemTestingTag"
 const val TAKE_NOTE_MENU_ITEM_TESTING_TAG = "takeNoteMenuItemTestingTag"
@@ -38,6 +61,7 @@ const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 @Stable
 class ReaderMenuState(
   private val menuClickListener: MenuClickListener,
+  private val isUrlValidInitially: Boolean,
   private val disableReadAloud: Boolean = false,
   private val disableTabs: Boolean = false,
   private val disableSearch: Boolean = false
@@ -52,50 +76,105 @@ class ReaderMenuState(
     fun onSearchMenuClickedMenuClicked()
   }
 
+  val menuItems = mutableStateListOf<ActionMenuItem>()
+
+  private val menuItemVisibility = mutableMapOf<MenuItemType, Boolean>().apply {
+    put(MenuItemType.Search, true)
+    put(MenuItemType.TabSwitcher, true)
+    put(MenuItemType.AddNote, true)
+    put(MenuItemType.RandomArticle, true)
+    put(MenuItemType.Fullscreen, true)
+    put(MenuItemType.ReadAloud, true)
+  }
+
   var isInTabSwitcher by mutableStateOf(false)
     private set
 
-  var isReadingAloud by mutableStateOf(false)
-    private set
+  private var isReadingAloud by mutableStateOf(false)
 
-  var webViewCount by mutableStateOf(0)
-  var urlIsValid by mutableStateOf(false)
-  var zimFileReaderAvailable by mutableStateOf(false)
+  private var webViewCount by mutableStateOf(0)
+  private var urlIsValid by mutableStateOf(false)
 
-  fun onTabsChanged(count: Int) {
+  fun updateTabIcon(count: Int) {
     webViewCount = count
+    updateMenuItems()
   }
 
-  fun onUrlValidityChanged(valid: Boolean) {
+  init {
+    showWebViewOptions(isUrlValidInitially)
+  }
+
+  fun showWebViewOptions(valid: Boolean) {
+    isInTabSwitcher = false
     urlIsValid = valid
+    setVisibility(
+      urlIsValid,
+      MenuItemType.RandomArticle,
+      MenuItemType.Search,
+      MenuItemType.ReadAloud,
+      MenuItemType.Fullscreen,
+      MenuItemType.AddNote,
+      MenuItemType.TabSwitcher
+    )
   }
 
-  fun onZimFileReaderAvailable(available: Boolean) {
-    zimFileReaderAvailable = available
+  fun onFileOpened(urlIsValid: Boolean) {
+    showWebViewOptions(urlIsValid)
   }
 
   fun onTextToSpeechStarted() {
     isReadingAloud = true
+    updateMenuItems()
   }
 
   fun onTextToSpeechStopped() {
     isReadingAloud = false
+    updateMenuItems()
   }
 
-  fun exitTabSwitcher() {
-    isInTabSwitcher = false
+  fun hideBookSpecificMenuItems() {
+    setVisibility(
+      false,
+      MenuItemType.Search,
+      MenuItemType.TabSwitcher,
+      MenuItemType.RandomArticle,
+      MenuItemType.AddNote,
+      MenuItemType.ReadAloud
+    )
   }
 
-  @Suppress("LongMethod", "MagicNumber")
-  fun getActionMenuItems(): List<ActionMenuItem> {
-    if (isInTabSwitcher) {
-      return emptyList()
-    }
+  fun showBookSpecificMenuItems() {
+    setVisibility(
+      true,
+      MenuItemType.Search,
+      MenuItemType.TabSwitcher,
+      MenuItemType.RandomArticle,
+      MenuItemType.AddNote,
+      MenuItemType.ReadAloud
+    )
+  }
 
-    val list = mutableListOf<ActionMenuItem>()
+  fun showTabSwitcherOptions() {
+    isInTabSwitcher = true
+    setVisibility(
+      false,
+      MenuItemType.RandomArticle,
+      MenuItemType.ReadAloud,
+      MenuItemType.AddNote,
+      MenuItemType.Fullscreen
+    )
+  }
 
-    if (!disableSearch && urlIsValid) {
-      list += ActionMenuItem(
+  private fun updateMenuItems() {
+    menuItems.clear()
+    addSearchMenuItem()
+    addTabMenuItem()
+    addReaderMenuItems()
+  }
+
+  private fun addSearchMenuItem() {
+    if (menuItemVisibility[MenuItemType.Search] == true && !disableSearch && urlIsValid) {
+      menuItems += ActionMenuItem(
         icon = IconItem.Drawable(R.drawable.action_search),
         contentDescription = R.string.search_label,
         onClick = { menuClickListener.onSearchMenuClickedMenuClicked() },
@@ -103,11 +182,13 @@ class ReaderMenuState(
         testingTag = SEARCH_ICON_TESTING_TAG
       )
     }
+  }
 
-    if (!disableTabs) {
+  private fun addTabMenuItem() {
+    if (!disableTabs && urlIsValid) {
       val tabLabel = if (webViewCount > 99) ":D" else "$webViewCount"
-      list += ActionMenuItem(
-        icon = IconItem.Vector(Icons.Default.Add),
+      menuItems += ActionMenuItem(
+        icon = null,
         contentDescription = R.string.switch_tabs,
         onClick = {
           isInTabSwitcher = true
@@ -115,42 +196,102 @@ class ReaderMenuState(
         },
         isInOverflow = false,
         iconButtonText = tabLabel,
-        testingTag = TAB_MENU_ITEM_TESTING_TAG
+        testingTag = TAB_MENU_ITEM_TESTING_TAG,
+        customView = { TabSwitcherBadge(tabLabel = tabLabel) }
       )
     }
+  }
 
-    if (urlIsValid) {
-      list += listOf(
-        ActionMenuItem(
-          icon = IconItem.Drawable(R.drawable.ic_add_note),
-          contentDescription = R.string.take_notes,
-          onClick = { menuClickListener.onAddNoteMenuClicked() },
-          testingTag = TAKE_NOTE_MENU_ITEM_TESTING_TAG
-        ),
-        ActionMenuItem(
-          contentDescription = R.string.menu_random_article,
-          onClick = { menuClickListener.onRandomArticleMenuClicked() },
-          testingTag = RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG
-        ),
-        ActionMenuItem(
-          contentDescription = R.string.menu_full_screen,
-          onClick = { menuClickListener.onFullscreenMenuClicked() },
-          testingTag = FULL_SCREEN_MENU_ITEM_TESTING_TAG
-        )
-      )
-
-      if (!disableReadAloud) {
-        list += ActionMenuItem(
-          contentDescription = if (isReadingAloud) R.string.menu_read_aloud_stop else R.string.menu_read_aloud,
-          onClick = {
-            isReadingAloud = !isReadingAloud
-            menuClickListener.onReadAloudMenuClicked()
-          },
-          testingTag = READ_ALOUD_MENU_ITEM_TESTING_TAG
+  @Composable
+  fun TabSwitcherBadge(tabLabel: String, modifier: Modifier = Modifier) {
+    Box(
+      modifier = modifier
+        .size(MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
+        .padding(TWELVE_DP),
+      contentAlignment = Alignment.Center
+    ) {
+      Box(
+        modifier = modifier
+          .clip(RoundedCornerShape(TAB_SWITCHER_CORNER_RADIUS))
+          .background(Black)
+          .border(ONE_DP, White, RoundedCornerShape(TAB_SWITCHER_CORNER_RADIUS))
+          .padding(horizontal = SIX_DP, vertical = TWO_DP)
+          .defaultMinSize(minWidth = TWENTY_DP, minHeight = TWENTY_DP),
+        contentAlignment = Alignment.Center
+      ) {
+        Text(
+          text = tabLabel,
+          color = White,
+          fontWeight = FontWeight.Bold,
+          fontSize = TAB_SWITCHER_TEXT_SIZE,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis
         )
       }
     }
-
-    return list
   }
+
+  private fun addReaderMenuItems() {
+    if (!urlIsValid) return
+
+    if (menuItemVisibility[MenuItemType.Search] == true) {
+      menuItems += ActionMenuItem(
+        icon = IconItem.Drawable(R.drawable.ic_add_note),
+        contentDescription = R.string.take_notes,
+        onClick = { menuClickListener.onAddNoteMenuClicked() },
+        testingTag = TAKE_NOTE_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+
+    if (menuItemVisibility[MenuItemType.RandomArticle] == true) {
+      menuItems += ActionMenuItem(
+        contentDescription = R.string.menu_random_article,
+        onClick = { menuClickListener.onRandomArticleMenuClicked() },
+        testingTag = RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+
+    if (menuItemVisibility[MenuItemType.Fullscreen] == true) {
+      menuItems += ActionMenuItem(
+        contentDescription = R.string.menu_full_screen,
+        onClick = { menuClickListener.onFullscreenMenuClicked() },
+        testingTag = FULL_SCREEN_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+
+    if (menuItemVisibility[MenuItemType.ReadAloud] == true && !disableReadAloud) {
+      menuItems += ActionMenuItem(
+        contentDescription = if (isReadingAloud) R.string.menu_read_aloud_stop else R.string.menu_read_aloud,
+        onClick = {
+          isReadingAloud = !isReadingAloud
+          menuClickListener.onReadAloudMenuClicked()
+        },
+        testingTag = READ_ALOUD_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+  }
+
+  private fun setVisibility(visible: Boolean, vararg types: MenuItemType) {
+    types.forEach {
+      if (it == MenuItemType.Search && disableSearch) {
+        menuItemVisibility[it] = false
+      } else {
+        menuItemVisibility[it] = visible
+      }
+    }
+    updateMenuItems()
+  }
+}
+
+enum class MenuItemType {
+  Search,
+  TabSwitcher,
+  AddNote,
+  RandomArticle,
+  Fullscreen,
+  ReadAloud
 }

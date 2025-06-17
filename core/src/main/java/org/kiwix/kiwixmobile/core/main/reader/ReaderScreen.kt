@@ -150,15 +150,19 @@ fun ReaderScreen(
         } else {
           ShowZIMFileContent(state)
           ShowProgressBarIfZIMFilePageIsLoading(state)
-          TtsControls(state)
-          BottomAppBarOfReaderScreen(
-            state.bookmarkButtonItem,
-            state.previousPageButtonItem,
-            state.onHomeButtonClick,
-            state.nextPageButtonItem,
-            state.onTocClick,
-            state.shouldShowBottomAppBar
-          )
+          Column(
+            modifier = Modifier.align(Alignment.BottomCenter)
+          ) {
+            TtsControls(state)
+            BottomAppBarOfReaderScreen(
+              state.bookmarkButtonItem,
+              state.previousPageButtonItem,
+              state.onHomeButtonClick,
+              state.nextPageButtonItem,
+              state.onTocClick,
+              state.shouldShowBottomAppBar
+            )
+          }
           ShowFullScreenView(state)
         }
         ShowDonationLayout(state)
@@ -225,9 +229,9 @@ private fun NoBookOpenView(
 }
 
 @Composable
-private fun BoxScope.TtsControls(state: ReaderScreenState) {
+private fun TtsControls(state: ReaderScreenState) {
   if (state.showTtsControls) {
-    Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+    Row {
       Button(
         onClick = state.onPauseTtsClick,
         modifier = Modifier
@@ -235,7 +239,7 @@ private fun BoxScope.TtsControls(state: ReaderScreenState) {
           .alpha(TTS_BUTTONS_CONTROL_ALPHA)
       ) {
         Text(
-          text = state.pauseTtsButtonText,
+          text = state.pauseTtsButtonText.uppercase(),
           fontWeight = FontWeight.Bold
         )
       }
@@ -247,7 +251,7 @@ private fun BoxScope.TtsControls(state: ReaderScreenState) {
           .alpha(TTS_BUTTONS_CONTROL_ALPHA)
       ) {
         Text(
-          text = stringResource(R.string.stop),
+          text = stringResource(R.string.stop).uppercase(),
           fontWeight = FontWeight.Bold
         )
       }
@@ -276,7 +280,7 @@ private fun BackToTopFab(state: ReaderScreenState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BoxScope.BottomAppBarOfReaderScreen(
+private fun BottomAppBarOfReaderScreen(
   bookmarkButtonItem: Triple<() -> Unit, () -> Unit, Drawable>,
   previousPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   onHomeButtonClick: () -> Unit,
@@ -288,7 +292,6 @@ private fun BoxScope.BottomAppBarOfReaderScreen(
   BottomAppBar(
     containerColor = Black,
     contentColor = White,
-    modifier = Modifier.align(Alignment.BottomCenter),
     scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   ) {
     Row(

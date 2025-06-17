@@ -74,6 +74,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
@@ -106,6 +107,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -368,6 +370,7 @@ abstract class CoreReaderFragment :
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
 
+  protected var readerMenuState: ReaderMenuState? = null
   private var composeView: ComposeView? = null
   protected val readerScreenState = mutableStateOf(
     ReaderScreenState(
@@ -384,7 +387,7 @@ abstract class CoreReaderFragment :
       onExitFullscreenClick = { closeFullScreen() },
       showTtsControls = false,
       onPauseTtsClick = { pauseTts() },
-      pauseTtsButtonText = "",
+      pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty(),
       onStopTtsClick = { stopTts() },
       kiwixWebViewList = webViewList,
       bookmarkButtonItem = Triple(
@@ -497,12 +500,20 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    readerMenuState = createMainMenu()
     composeView?.apply {
       setContent {
         val lazyListState = rememberLazyListState()
         val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
         LaunchedEffect(isBottomNavVisible) {
           (requireActivity() as CoreMainActivity).toggleBottomNavigation(isBottomNavVisible)
+        }
+        LaunchedEffect(Unit) {
+          snapshotFlow { webViewList.size }
+            .distinctUntilChanged()
+            .collect { size ->
+              updateTabIcon(size)
+            }
         }
         LaunchedEffect(Unit) {
           readerScreenState.update {
@@ -514,7 +525,7 @@ abstract class CoreReaderFragment :
         }
         ReaderScreen(
           state = readerScreenState.value,
-          actionMenuItems = emptyList(),
+          actionMenuItems = readerMenuState?.menuItems.orEmpty(),
           navigationIcon = {
             NavigationIcon(
               iconItem = IconItem.Vector(Icons.Filled.Menu),
@@ -806,7 +817,7 @@ abstract class CoreReaderFragment :
   }
 
   private val isInTabSwitcher: Boolean
-    get() = mainMenu?.isInTabSwitcher() == true
+    get() = readerMenuState?.isInTabSwitcher == true
 
   private fun setupDocumentParser() {
     documentParser = DocumentParser(object : SectionsListener {
@@ -865,7 +876,7 @@ abstract class CoreReaderFragment :
       ).apply {
         registerAdapterDataObserver(object : AdapterDataObserver() {
           override fun onChanged() {
-            mainMenu?.updateTabIcon(itemCount)
+            readerMenuState?.updateTabIcon(itemCount)
           }
         })
       }
@@ -948,7 +959,7 @@ abstract class CoreReaderFragment :
       // reflected correctly.
       tabsAdapter.notifyDataSetChanged()
     }
-    mainMenu?.showTabSwitcherOptions()
+    readerMenuState?.showTabSwitcherOptions()
   }
 
   /**
@@ -1019,7 +1030,7 @@ abstract class CoreReaderFragment :
     }
     progressBar?.hide()
     selectTab(currentWebViewIndex)
-    mainMenu?.showWebViewOptions(urlIsValid())
+    readerMenuState?.showWebViewOptions(urlIsValid())
     // Reset the top margin of web views to 0 to remove any previously set margin
     // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
     setTopMarginToWebViews(0)
@@ -1267,17 +1278,21 @@ abstract class CoreReaderFragment :
           object : OnSpeakingListener {
             override fun onSpeakingStarted() {
               requireActivity().runOnUiThread {
-                mainMenu?.onTextToSpeechStartedTalking()
-                ttsControls?.visibility = VISIBLE
+                readerMenuState?.onTextToSpeechStarted()
+                readerScreenState.update { copy(showTtsControls = true) }
                 setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
               }
             }
 
             override fun onSpeakingEnded() {
               requireActivity().runOnUiThread {
-                mainMenu?.onTextToSpeechStoppedTalking()
-                ttsControls?.visibility = GONE
-                pauseTTSButton?.setText(R.string.tts_pause)
+                readerMenuState?.onTextToSpeechStopped()
+                readerScreenState.update {
+                  copy(
+                    showTtsControls = false,
+                    pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty()
+                  )
+                }
                 setActionAndStartTTSService(ACTION_STOP_TTS)
               }
             }
@@ -1293,12 +1308,16 @@ abstract class CoreReaderFragment :
               when (focusChange) {
                 AudioManager.AUDIOFOCUS_LOSS -> {
                   if (tts?.currentTTSTask?.paused == false) tts?.pauseOrResume()
-                  pauseTTSButton?.setText(R.string.tts_resume)
+                  readerScreenState.update {
+                    copy(pauseTtsButtonText = context?.getString(R.string.tts_resume).orEmpty())
+                  }
                   setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
                 }
 
                 AudioManager.AUDIOFOCUS_GAIN -> {
-                  pauseTTSButton?.setText(R.string.tts_pause)
+                  readerScreenState.update {
+                    copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
+                  }
                   setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
                 }
               }
@@ -1543,6 +1562,10 @@ abstract class CoreReaderFragment :
     return webView
   }
 
+  private fun updateTabIcon(size: Int) {
+    readerMenuState?.updateTabIcon(size)
+  }
+
   private fun closeTab(index: Int) {
     if (currentTtsWebViewIndex == index) {
       onReadAloudStop()
@@ -1579,7 +1602,7 @@ abstract class CoreReaderFragment :
   private fun reopenBook() {
     hideNoBookOpenViews()
     contentFrame?.visibility = VISIBLE
-    mainMenu?.showBookSpecificMenuItems()
+    readerMenuState?.showBookSpecificMenuItems()
   }
 
   protected fun exitBook(shouldCloseZimBook: Boolean = true) {
@@ -1592,7 +1615,7 @@ abstract class CoreReaderFragment :
     }
     contentFrame?.visibility = GONE
     hideProgressBar()
-    mainMenu?.hideBookSpecificMenuItems()
+    readerMenuState?.hideBookSpecificMenuItems()
     if (shouldCloseZimBook) {
       closeZimBook()
     }
@@ -1702,28 +1725,26 @@ abstract class CoreReaderFragment :
   @Suppress("NestedBlockDepth")
   override fun onReadAloudMenuClicked() {
     if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-      ttsControls?.let { ttsControls ->
-        when (ttsControls.visibility) {
-          GONE -> {
-            if (isBackToTopEnabled) {
-              backToTopButton?.hide()
-            }
-            if (tts?.isInitialized == false) {
-              isReadSelection = false
-              tts?.initializeTTS()
-            } else {
-              startReadAloud()
-            }
-          }
-
-          VISIBLE -> {
-            if (isBackToTopEnabled) {
-              backToTopButton?.show()
-            }
-            tts?.stop()
-          }
-
-          else -> {}
+      if (readerScreenState.value.showTtsControls) {
+        // currently TTS is running
+        if (isBackToTopEnabled) {
+          readerScreenState.update { copy(showBackToTopButton = true) }
+          backToTopButton?.show()
+        }
+        tts?.stop()
+      } else {
+        // TTS is not running.
+        if (isBackToTopEnabled) {
+          readerScreenState.update { copy(showBackToTopButton = false) }
+        }
+        readerScreenState.update {
+          copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
+        }
+        if (tts?.isInitialized == false) {
+          isReadSelection = false
+          tts?.initializeTTS()
+        } else {
+          startReadAloud()
         }
       }
     } else {
@@ -1945,7 +1966,7 @@ abstract class CoreReaderFragment :
         if (!isFromManageExternalLaunch) {
           openArticle(UNINITIALISER_ADDRESS)
         }
-        mainMenu?.onFileOpened(urlIsValid())
+        readerMenuState?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
         // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
@@ -2558,9 +2579,10 @@ abstract class CoreReaderFragment :
    * WARNING: If modifying this method, ensure thorough testing with custom apps
    * to verify proper functionality.
    */
-  protected open fun createMainMenu(menu: Menu?): ReaderMenuState? =
+  protected open fun createMainMenu(): ReaderMenuState =
     ReaderMenuState(
       this,
+      isUrlValidInitially = urlIsValid(),
       disableReadAloud = false,
       disableTabs = false,
       disableSearch = false
@@ -2799,6 +2821,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun webViewTitleUpdated(title: String) {
+    updateTabIcon(webViewList.size)
     tabsAdapter?.notifyDataSetChanged()
   }
 

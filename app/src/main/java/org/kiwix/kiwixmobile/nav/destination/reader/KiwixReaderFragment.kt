@@ -197,7 +197,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         progressBar?.progress = 0
         contentFrame?.visibility = View.VISIBLE
       }
-      mainMenu?.showWebViewOptions(true)
+      readerMenuState?.showWebViewOptions(true)
       if (webViewList.isEmpty()) {
         exitBook(shouldCloseZimBook)
       } else {
@@ -231,7 +231,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
     if (zimReaderContainer?.zimFileReader == null) {
-      mainMenu?.hideBookSpecificMenuItems()
+      readerMenuState?.hideBookSpecificMenuItems()
     }
   }
 

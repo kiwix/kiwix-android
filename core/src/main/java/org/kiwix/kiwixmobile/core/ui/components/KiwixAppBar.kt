@@ -18,8 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -135,44 +137,13 @@ private fun AppBarTitle(
   )
 }
 
-@Suppress("LongMethod")
 @Composable
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
   var overflowExpanded by remember { mutableStateOf(false) }
 
   Row {
     val (mainActions, overflowActions) = actionMenuItems.partition { !it.isInOverflow }
-    mainActions.forEach { menuItem ->
-      val modifier = menuItem.modifier.testTag(menuItem.testingTag)
-      // If icon is not null show the icon.
-      menuItem.icon?.let {
-        IconButton(
-          enabled = menuItem.isEnabled,
-          onClick = menuItem.onClick,
-          modifier = modifier
-        ) {
-          Icon(
-            painter = it.toPainter(),
-            contentDescription = stringResource(menuItem.contentDescription),
-            tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
-          )
-        }
-      } ?: run {
-        // Else show the textView button in menuItem.
-        TextButton(
-          enabled = menuItem.isEnabled,
-          onClick = menuItem.onClick,
-          modifier = modifier
-        ) {
-          Text(
-            text = menuItem.iconButtonText.uppercase(),
-            color = if (menuItem.isEnabled) Color.White else Color.Gray,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-          )
-        }
-      }
-    }
+    MainMenuItems(mainActions)
     if (overflowActions.isNotEmpty()) {
       IconButton(onClick = { overflowExpanded = true }) {
         Icon(
@@ -182,22 +153,77 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
         )
       }
     }
-    DropdownMenu(
-      expanded = overflowExpanded,
-      onDismissRequest = { overflowExpanded = false }
-    ) {
-      overflowActions.forEach { menuItem ->
-        DropdownMenuItem(
-          text = {
-            Text(text = menuItem.iconButtonText)
-          },
-          onClick = {
-            overflowExpanded = false
-            menuItem.onClick()
-          },
-          enabled = menuItem.isEnabled
-        )
+    OverflowMenuItems(overflowExpanded, overflowActions) { overflowExpanded = false }
+  }
+}
+
+@Composable
+private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
+  mainActions.forEach { menuItem ->
+    val modifier = menuItem.modifier.testTag(menuItem.testingTag)
+
+    menuItem.customView?.let { customComposable ->
+      Box(modifier = modifier.clickable(enabled = menuItem.isEnabled) { menuItem.onClick() }) {
+        customComposable()
       }
+    } ?: run {
+      menuItem.icon?.let { iconItem ->
+        IconButton(
+          enabled = menuItem.isEnabled,
+          onClick = menuItem.onClick,
+          modifier = modifier
+        ) {
+          Icon(
+            painter = iconItem.toPainter(),
+            contentDescription = stringResource(menuItem.contentDescription),
+            tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
+          )
+        }
+      } ?: run {
+        TextButton(
+          enabled = menuItem.isEnabled,
+          onClick = menuItem.onClick,
+          modifier = modifier
+        ) {
+          Text(
+            text = menuItem.iconButtonText.uppercase(),
+            color = if (menuItem.isEnabled) Color.White else Color.Gray,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun OverflowMenuItems(
+  overflowExpanded: Boolean,
+  overflowActions: List<ActionMenuItem>,
+  onDismiss: () -> Unit
+) {
+  DropdownMenu(
+    expanded = overflowExpanded,
+    onDismissRequest = onDismiss
+  ) {
+    overflowActions.forEachIndexed { index, menuItem ->
+      DropdownMenuItem(
+        text = {
+          Column {
+            Text(
+              text = menuItem.iconButtonText.ifEmpty {
+                stringResource(id = menuItem.contentDescription)
+              }
+            )
+          }
+        },
+        onClick = {
+          onDismiss()
+          menuItem.onClick()
+        },
+        enabled = menuItem.isEnabled
+      )
     }
   }
 }
