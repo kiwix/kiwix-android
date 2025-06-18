@@ -57,8 +57,8 @@
       android:background="@android:color/black"
       android:visibility="invisible" />
 
-    <FrameLayout
-      android:id="@+id/donation_layout"
+    <androidx.compose.ui.platform.ComposeView
+      android:id="@+id/compose_view"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"

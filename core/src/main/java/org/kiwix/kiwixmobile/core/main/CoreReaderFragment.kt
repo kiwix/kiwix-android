@@ -40,8 +40,6 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.view.ActionMode
-import android.view.Gravity.BOTTOM
-import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -67,6 +65,7 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -138,6 +137,7 @@ import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
+import org.kiwix.kiwixmobile.core.main.composable.DonationLayout
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
@@ -332,7 +332,7 @@ abstract class CoreReaderFragment :
   private var tableDrawerAdapter: TableDrawerAdapter? = null
   private var tableDrawerRight: RecyclerView? = null
   private var tabCallback: ItemTouchHelper.Callback? = null
-  private var donationLayout: FrameLayout? = null
+  private var donationLayout: ComposeView? = null
   private var bookmarkingJob: Job? = null
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
@@ -570,7 +570,7 @@ abstract class CoreReaderFragment :
         tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
         snackBarRoot = findViewById(R.id.snackbar_root)
         bottomToolbarToc = findViewById(R.id.bottom_toolbar_toc)
-        donationLayout = findViewById(R.id.donation_layout)
+        donationLayout = findViewById(R.id.compose_view)
       }
     }
   }
@@ -686,7 +686,26 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ): View? {
     fragmentReaderBinding = FragmentReaderBinding.inflate(inflater, container, false)
-    return fragmentReaderBinding?.root
+    val view = fragmentReaderBinding?.root
+    donationLayout = view?.findViewById<ComposeView>(R.id.compose_view)
+    donationLayout?.apply {
+      setContent {
+        DonationLayout(
+          appName = (requireActivity() as CoreMainActivity).appName,
+          onDonateButtonClick = {
+            donationDialogHandler?.updateLastDonationPopupShownTime()
+            setDonationLayoutVisibility(GONE)
+            openKiwixSupportUrl()
+          },
+          onLaterButtonClick = {
+            donationDialogHandler?.donateLater()
+            setDonationLayoutVisibility(GONE)
+          },
+          bottomPaddingValues = getBottomMarginForDonationPopup()
+        )
+      }
+    }
+    return view
   }
 
   private fun handleIntentExtras(intent: Intent) {
@@ -2095,46 +2114,8 @@ abstract class CoreReaderFragment :
 
   @Suppress("InflateParams", "MagicNumber")
   protected open fun showDonationLayout() {
-    val donationCardView = layoutInflater.inflate(R.layout.layout_donation_bottom_sheet, null)
-    val layoutParams = FrameLayout.LayoutParams(
-      getDonationPopupWidth(),
-      FrameLayout.LayoutParams.WRAP_CONTENT
-    ).apply {
-      val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
-        org.kiwix.kiwixmobile.core.R.dimen.activity_horizontal_margin
-      )
-      setMargins(
-        rightAndLeftMargin,
-        0,
-        rightAndLeftMargin,
-        getBottomMarginForDonationPopup()
-      )
-      gravity = BOTTOM or CENTER_HORIZONTAL
-    }
-
-    donationCardView.layoutParams = layoutParams
     donationLayout?.apply {
-      removeAllViews()
-      addView(donationCardView)
       setDonationLayoutVisibility(VISIBLE)
-    }
-    donationCardView.findViewById<TextView>(R.id.descriptionText).apply {
-      text = getString(
-        R.string.donation_dialog_description,
-        (requireActivity() as CoreMainActivity).appName
-      )
-    }
-    val donateButton: TextView = donationCardView.findViewById(R.id.donateButton)
-    donateButton.setOnClickListener {
-      donationDialogHandler?.updateLastDonationPopupShownTime()
-      setDonationLayoutVisibility(GONE)
-      openKiwixSupportUrl()
-    }
-
-    val laterButton: TextView = donationCardView.findViewById(R.id.laterButton)
-    laterButton.setOnClickListener {
-      donationDialogHandler?.donateLater()
-      setDonationLayoutVisibility(GONE)
     }
   }
 
