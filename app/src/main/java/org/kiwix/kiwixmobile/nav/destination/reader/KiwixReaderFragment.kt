@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -207,6 +208,26 @@ class KiwixReaderFragment : CoreReaderFragment() {
         setTopMarginToWebViews(0)
         selectTab(currentWebViewIndex)
       }
+    }
+    actionBar?.setDisplayShowTitleEnabled(true)
+    toolbar?.let { activity?.setupDrawerToggle(it, true) }
+    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    if (webViewList.isEmpty()) {
+      readerMenuState?.hideTabSwitcher()
+      exitBook(shouldCloseZimBook)
+    } else {
+      // Reset the top margin of web views to 0 to remove any previously set margin
+      // This ensures that the web views are displayed without any additional
+      // top margin for kiwix main app.
+      // setTopMarginToWebViews(0)
+      readerScreenState.update {
+        copy(
+          shouldShowBottomAppBar = true,
+          pageLoadingItem = false to ZERO,
+        )
+      }
+      readerMenuState?.showWebViewOptions(urlIsValid())
+      selectTab(currentWebViewIndex)
     }
   }
 

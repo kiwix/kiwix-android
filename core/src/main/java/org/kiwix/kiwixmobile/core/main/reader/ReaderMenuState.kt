@@ -46,7 +46,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_CORNER_RADIUS
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_ICON_CORNER_RADIUS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
@@ -105,7 +105,7 @@ class ReaderMenuState(
   }
 
   fun showWebViewOptions(valid: Boolean) {
-    isInTabSwitcher = false
+    hideTabSwitcher()
     urlIsValid = valid
     setVisibility(
       urlIsValid,
@@ -165,6 +165,10 @@ class ReaderMenuState(
     )
   }
 
+  fun hideTabSwitcher() {
+    isInTabSwitcher = false
+  }
+
   private fun updateMenuItems() {
     menuItems.clear()
     addSearchMenuItem()
@@ -185,15 +189,12 @@ class ReaderMenuState(
   }
 
   private fun addTabMenuItem() {
-    if (!disableTabs && urlIsValid) {
+    if (!disableTabs && urlIsValid && webViewCount > 0) {
       val tabLabel = if (webViewCount > 99) ":D" else "$webViewCount"
       menuItems += ActionMenuItem(
         icon = null,
         contentDescription = R.string.switch_tabs,
-        onClick = {
-          isInTabSwitcher = true
-          menuClickListener.onTabMenuClicked()
-        },
+        onClick = { menuClickListener.onTabMenuClicked() },
         isInOverflow = false,
         iconButtonText = tabLabel,
         testingTag = TAB_MENU_ITEM_TESTING_TAG,
@@ -212,9 +213,9 @@ class ReaderMenuState(
     ) {
       Box(
         modifier = modifier
-          .clip(RoundedCornerShape(TAB_SWITCHER_CORNER_RADIUS))
+          .clip(RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
           .background(Black)
-          .border(ONE_DP, White, RoundedCornerShape(TAB_SWITCHER_CORNER_RADIUS))
+          .border(ONE_DP, White, RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
           .padding(horizontal = SIX_DP, vertical = TWO_DP)
           .defaultMinSize(minWidth = TWENTY_DP, minHeight = TWENTY_DP),
         contentAlignment = Alignment.Center
@@ -232,9 +233,7 @@ class ReaderMenuState(
   }
 
   private fun addReaderMenuItems() {
-    if (!urlIsValid) return
-
-    if (menuItemVisibility[MenuItemType.Search] == true) {
+    if (menuItemVisibility[MenuItemType.AddNote] == true) {
       menuItems += ActionMenuItem(
         icon = IconItem.Drawable(R.drawable.ic_add_note),
         contentDescription = R.string.take_notes,

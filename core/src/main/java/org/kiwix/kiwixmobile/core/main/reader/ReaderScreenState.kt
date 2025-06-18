@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main.reader
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.platform.ComposeView
+import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 
@@ -80,9 +81,17 @@ data class ReaderScreenState(
   val pauseTtsButtonText: String,
   val onStopTtsClick: () -> Unit = {},
   /**
+   * Holds the current selected webView position.
+   */
+  val currentWebViewPosition: Int,
+  /**
    * To show in the tabs view.
    */
   val kiwixWebViewList: List<KiwixWebView>,
+  /**
+   * To show/hide tab switcher.
+   */
+  val showTabSwitcher: Boolean,
   /**
    * Manages the showing of current selected webView.
    */
@@ -131,5 +140,10 @@ data class ReaderScreenState(
    * Manages the showing of Reader's [BottomAppBarOfReaderScreen].
    */
   val shouldShowBottomAppBar: Boolean,
-  val readerScreenTitle: String
+  val readerScreenTitle: String,
+  val darkModeViewPainter: DarkModeViewPainter?,
+  /**
+   * Manages the click event on tabs.
+   */
+  val onTabClickListener: TabClickListener,
 )

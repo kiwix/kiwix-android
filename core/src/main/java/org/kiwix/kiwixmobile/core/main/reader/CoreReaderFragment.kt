@@ -72,8 +72,10 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -184,7 +186,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
-import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
@@ -291,7 +292,7 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var painter: DarkModeViewPainter? = null
-  protected var currentWebViewIndex = 0
+  protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
   protected var actionBar: ActionBar? = null
   protected var mainMenu: MainMenu? = null
@@ -403,7 +404,23 @@ abstract class CoreReaderFragment :
       bottomNavigationHeight = ZERO,
       shouldShowBottomAppBar = true,
       selectedWebView = null,
-      readerScreenTitle = ""
+      readerScreenTitle = "",
+      showTabSwitcher = false,
+      darkModeViewPainter = null,
+      currentWebViewPosition = ZERO,
+      onTabClickListener = object : TabClickListener {
+        override fun onSelectTab(position: Int) {
+          hideTabSwitcher()
+          selectTab(position)
+
+          // Bug Fix #592
+          updateBottomToolbarArrowsAlpha()
+        }
+
+        override fun onCloseTab(position: Int) {
+          closeTab(position)
+        }
+      }
     )
   )
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -506,7 +523,7 @@ abstract class CoreReaderFragment :
         val lazyListState = rememberLazyListState()
         val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
         LaunchedEffect(isBottomNavVisible) {
-          (requireActivity() as CoreMainActivity).toggleBottomNavigation(isBottomNavVisible)
+          (activity as? CoreMainActivity)?.toggleBottomNavigation(isBottomNavVisible)
         }
         LaunchedEffect(Unit) {
           snapshotFlow { webViewList.size }
@@ -515,11 +532,14 @@ abstract class CoreReaderFragment :
               updateTabIcon(size)
             }
         }
-        LaunchedEffect(Unit) {
+        LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
           readerScreenState.update {
             copy(
               bottomNavigationHeight = getBottomNavigationHeight(),
-              readerScreenTitle = context.getString(R.string.reader)
+              readerScreenTitle = context.getString(R.string.reader),
+              darkModeViewPainter = darkModeViewPainter,
+              currentWebViewPosition = currentWebViewIndex,
+              showTabSwitcher = readerMenuState?.isInTabSwitcher == true
             )
           }
         }
@@ -528,8 +548,8 @@ abstract class CoreReaderFragment :
           actionMenuItems = readerMenuState?.menuItems.orEmpty(),
           navigationIcon = {
             NavigationIcon(
-              iconItem = IconItem.Vector(Icons.Filled.Menu),
-              contentDescription = string.open_drawer,
+              iconItem = navigationIcon(),
+              contentDescription = navigationIconContentDescription(),
               onClick = { navigationIconClick() }
             )
           },
@@ -640,18 +660,35 @@ abstract class CoreReaderFragment :
 
   private fun getBottomNavigationHeight(): Int = getBottomNavigationView()?.measuredHeight ?: ZERO
 
-  private fun navigationIconClick() {
-    // Manually handle the navigation open/close.
-    // Since currently we are using the view based navigation drawer in other screens.
-    // Once we fully migrate to jetpack compose we will refactor this code to use the
-    // compose navigation.
-    // TODO Replace with compose based navigation when migration is done.
-    val activity = activity as CoreMainActivity
-    if (activity.navigationDrawerIsOpen()) {
-      activity.closeNavigationDrawer()
+  private fun navigationIconContentDescription() =
+    if (readerMenuState?.isInTabSwitcher == true) {
+      R.string.search_open_in_new_tab
     } else {
-      activity.openNavigationDrawer()
+      string.open_drawer
     }
+
+  private fun navigationIconClick() {
+    if (readerMenuState?.isInTabSwitcher == true) {
+      onHomeMenuClicked()
+    } else {
+      // Manually handle the navigation open/close.
+      // Since currently we are using the view based navigation drawer in other screens.
+      // Once we fully migrate to jetpack compose we will refactor this code to use the
+      // compose navigation.
+      // TODO Replace with compose based navigation when migration is done.
+      val activity = activity as CoreMainActivity
+      if (activity.navigationDrawerIsOpen()) {
+        activity.closeNavigationDrawer()
+      } else {
+        activity.openNavigationDrawer()
+      }
+    }
+  }
+
+  private fun navigationIcon() = if (readerMenuState?.isInTabSwitcher == true) {
+    IconItem.Drawable(R.drawable.ic_round_add_white_36dp)
+  } else {
+    IconItem.Vector(Icons.Filled.Menu)
   }
 
   private fun addAlertDialogToDialogHost() {
@@ -936,10 +973,14 @@ abstract class CoreReaderFragment :
     setIsCloseAllTabButtonClickable(true)
     // Set a negative top margin to the web views to remove
     // the unwanted blank space caused by the toolbar.
-    setTopMarginToWebViews(-requireActivity().getToolbarHeight())
+    // setTopMarginToWebViews(-requireActivity().getToolbarHeight())
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     readerScreenState.update {
-      copy(shouldShowBottomAppBar = false)
+      copy(
+        shouldShowBottomAppBar = false,
+        pageLoadingItem = false to ZERO,
+        readerScreenTitle = ""
+      )
     }
     contentFrame?.visibility = GONE
     progressBar?.visibility = GONE
@@ -1030,10 +1071,16 @@ abstract class CoreReaderFragment :
     }
     progressBar?.hide()
     selectTab(currentWebViewIndex)
+    readerScreenState.update {
+      copy(
+        shouldShowBottomAppBar = true,
+        pageLoadingItem = false to ZERO,
+      )
+    }
     readerMenuState?.showWebViewOptions(urlIsValid())
     // Reset the top margin of web views to 0 to remove any previously set margin
     // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
-    setTopMarginToWebViews(0)
+    // setTopMarginToWebViews(0)
   }
 
   /**
@@ -1587,11 +1634,10 @@ abstract class CoreReaderFragment :
     readerScreenState.value.snackBarHostState.snack(
       requireActivity().getString(R.string.tab_closed),
       actionLabel = requireActivity().getString(R.string.undo),
-      snackbarDuration = SnackbarDuration.Long,
       actionClick = { restoreDeletedTab(index) },
       lifecycleScope = lifecycleScope,
       snackBarResult = { result ->
-        if (result != SnackbarResult.Dismissed && webViewList.isEmpty() && isAdded) {
+        if (result == SnackbarResult.Dismissed && webViewList.isEmpty() && isAdded) {
           closeZimBook()
         }
       }
@@ -1610,7 +1656,7 @@ abstract class CoreReaderFragment :
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = false,
-        readerScreenTitle = requireActivity().getString(R.string.reader)
+        readerScreenTitle = context?.getString(R.string.reader).orEmpty()
       )
     }
     contentFrame?.visibility = GONE
@@ -1657,7 +1703,7 @@ abstract class CoreReaderFragment :
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       readerScreenState.value.snackBarHostState.snack(
-        requireActivity().getString(R.string.tab_restored),
+        context?.getString(R.string.tab_restored).orEmpty(),
         lifecycleScope = lifecycleScope
       )
       setUpWithTextToSpeech(it)
@@ -1778,16 +1824,15 @@ abstract class CoreReaderFragment :
   }
 
   override fun onHomeMenuClicked() {
-    if (tabSwitcherRoot?.visibility == VISIBLE) {
+    if (readerScreenState.value.showTabSwitcher) {
       hideTabSwitcher()
     }
     createNewTab()
   }
 
   override fun onTabMenuClicked() {
-    if (tabSwitcherRoot?.visibility == VISIBLE) {
+    if (readerScreenState.value.showTabSwitcher) {
       hideTabSwitcher()
-      selectTab(currentWebViewIndex)
     } else {
       showTabSwitcher()
     }
@@ -2062,8 +2107,8 @@ abstract class CoreReaderFragment :
           }
         } else {
           readerScreenState.value.snackBarHostState.snack(
-            requireActivity().getString(R.string.request_storage),
-            actionLabel = requireActivity().getString(R.string.menu_settings),
+            context?.getString(R.string.request_storage).orEmpty(),
+            context?.getString(R.string.menu_settings),
             snackbarDuration = SnackbarDuration.Long,
             actionClick = {
               val intent = Intent()
@@ -2100,13 +2145,12 @@ abstract class CoreReaderFragment :
     tabsAdapter?.notifyDataSetChanged()
     openHomeScreen()
     readerScreenState.value.snackBarHostState.snack(
-      requireActivity().getString(R.string.tabs_closed),
-      actionLabel = requireActivity().getString(R.string.undo),
-      snackbarDuration = SnackbarDuration.Long,
+      context?.getString(R.string.tabs_closed).orEmpty(),
+      context?.getString(R.string.undo),
       actionClick = { restoreDeletedTabs() },
       lifecycleScope = lifecycleScope,
       snackBarResult = { result ->
-        if (result != SnackbarResult.Dismissed && webViewList.isEmpty() && isAdded) {
+        if (result == SnackbarResult.Dismissed && webViewList.isEmpty() && isAdded) {
           closeZimBook()
         }
       }
@@ -2122,7 +2166,7 @@ abstract class CoreReaderFragment :
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       readerScreenState.value.snackBarHostState.snack(
-        requireActivity().getString(R.string.tabs_restored),
+        context?.getString(R.string.tabs_restored).orEmpty(),
         lifecycleScope = lifecycleScope
       )
       reopenBook()
@@ -2162,7 +2206,7 @@ abstract class CoreReaderFragment :
             if (isBookmarked) {
               repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
               readerScreenState.value.snackBarHostState.snack(
-                requireActivity().getString(R.string.bookmark_removed),
+                context?.getString(R.string.bookmark_removed).orEmpty(),
                 lifecycleScope = lifecycleScope
               )
             } else {
@@ -2171,9 +2215,9 @@ abstract class CoreReaderFragment :
                   LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
                 )
                 readerScreenState.value.snackBarHostState.snack(
-                  requireActivity().getString(R.string.bookmark_added),
+                  context?.getString(R.string.bookmark_added).orEmpty(),
                   lifecycleScope = lifecycleScope,
-                  actionLabel = requireActivity().getString(R.string.open),
+                  actionLabel = context?.getString(R.string.open),
                   actionClick = { goToBookmarks() }
                 )
               }
@@ -2890,9 +2934,9 @@ abstract class CoreReaderFragment :
         if (isOpenNewTabInBackground) {
           newTabInBackground(url)
           readerScreenState.value.snackBarHostState.snack(
-            message = requireActivity().getString(R.string.new_tab_snack_bar),
+            message = context?.getString(R.string.new_tab_snack_bar).orEmpty(),
             lifecycleScope = lifecycleScope,
-            actionLabel = requireActivity().getString(R.string.open),
+            actionLabel = context?.getString(R.string.open),
             actionClick = {
               if (webViewList.size > 1) {
                 selectTab(webViewList.size - 1)

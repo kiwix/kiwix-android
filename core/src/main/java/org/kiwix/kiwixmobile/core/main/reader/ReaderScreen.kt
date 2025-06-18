@@ -18,8 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -30,7 +34,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,10 +41,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
@@ -58,19 +61,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -80,7 +88,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -99,6 +109,8 @@ import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
@@ -127,11 +139,11 @@ fun ReaderScreen(
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
       topBar = {
-        KiwixAppBar(
-          state.readerScreenTitle,
-          navigationIcon,
+        ReaderTopBar(
+          state,
           actionMenuItems,
-          scrollBehavior
+          scrollBehavior,
+          navigationIcon
         )
       },
       floatingActionButton = { BackToTopFab(state) },
@@ -140,34 +152,63 @@ fun ReaderScreen(
         .nestedScroll(scrollBehavior.nestedScrollConnection)
         .padding(bottom = bottomNavHeight.value)
     ) { paddingValues ->
-      Box(
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(paddingValues)
-      ) {
-        if (state.isNoBookOpenInReader) {
-          NoBookOpenView(state.onOpenLibraryButtonClicked)
-        } else {
-          ShowZIMFileContent(state)
-          ShowProgressBarIfZIMFilePageIsLoading(state)
-          Column(
-            modifier = Modifier.align(Alignment.BottomCenter)
-          ) {
-            TtsControls(state)
-            BottomAppBarOfReaderScreen(
-              state.bookmarkButtonItem,
-              state.previousPageButtonItem,
-              state.onHomeButtonClick,
-              state.nextPageButtonItem,
-              state.onTocClick,
-              state.shouldShowBottomAppBar
-            )
-          }
-          ShowFullScreenView(state)
+      ReaderContentLayout(state, Modifier.padding(paddingValues))
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("ComposableLambdaParameterNaming")
+@Composable
+private fun ReaderTopBar(
+  state: ReaderScreenState,
+  actionMenuItems: List<ActionMenuItem>,
+  scrollBehavior: TopAppBarScrollBehavior,
+  navigationIcon: @Composable () -> Unit,
+) {
+  if (!state.fullScreenItem.first) {
+    KiwixAppBar(
+      title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
+      navigationIcon = navigationIcon,
+      actionMenuItems = actionMenuItems,
+      topAppBarScrollBehavior = scrollBehavior
+    )
+  }
+}
+
+@Composable
+private fun ReaderContentLayout(state: ReaderScreenState, modifier: Modifier = Modifier) {
+  Box(modifier = modifier.fillMaxSize()) {
+    when {
+      state.showTabSwitcher -> TabSwitcherView(
+        state.kiwixWebViewList,
+        state.currentWebViewPosition,
+        state.onTabClickListener,
+        state.onCloseAllTabs,
+        state.darkModeViewPainter
+      )
+
+      state.isNoBookOpenInReader -> NoBookOpenView(state.onOpenLibraryButtonClicked)
+
+      else -> {
+        ShowZIMFileContent(state)
+        ShowProgressBarIfZIMFilePageIsLoading(state)
+        Column(Modifier.align(Alignment.BottomCenter)) {
+          TtsControls(state)
+          BottomAppBarOfReaderScreen(
+            state.bookmarkButtonItem,
+            state.previousPageButtonItem,
+            state.onHomeButtonClick,
+            state.nextPageButtonItem,
+            state.onTocClick,
+            state.shouldShowBottomAppBar
+          )
         }
-        ShowDonationLayout(state)
+        ShowFullScreenView(state)
       }
     }
+
+    ShowDonationLayout(state)
   }
 }
 
@@ -378,11 +419,11 @@ private fun BoxScope.ShowDonationLayout(state: ReaderScreenState) {
 fun TabSwitcherView(
   webViews: List<KiwixWebView>,
   selectedIndex: Int,
-  onSelectTab: (Int) -> Unit,
-  onCloseTab: (Int) -> Unit,
+  onTabClickListener: TabClickListener,
   onCloseAllTabs: () -> Unit,
-  painter: DarkModeViewPainter
+  painter: DarkModeViewPainter?
 ) {
+  val state = rememberLazyListState()
   Box(modifier = Modifier.fillMaxSize()) {
     LazyRow(
       modifier = Modifier
@@ -390,7 +431,8 @@ fun TabSwitcherView(
         .align(Alignment.TopCenter)
         .padding(top = SIXTEEN_DP),
       contentPadding = PaddingValues(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
-      horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
+      horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
+      state = state
     ) {
       itemsIndexed(webViews, key = { _, item -> item.hashCode() }) { index, webView ->
         val context = LocalContext.current
@@ -401,18 +443,21 @@ fun TabSwitcherView(
 
         LaunchedEffect(webView) {
           if (title != context.getString(R.string.menu_home)) {
-            painter.update(webView)
+            painter?.update(webView)
           }
         }
 
         TabItemView(
+          index = index,
           title = title,
           isSelected = index == selectedIndex,
           webView = webView,
-          onSelectTab = { onSelectTab(index) },
-          onCloseTab = { onCloseTab(index) }
+          onTabClickListener = onTabClickListener,
         )
       }
+    }
+    LaunchedEffect(Unit) {
+      state.animateScrollToItem(selectedIndex)
     }
     CloseAllTabButton(onCloseAllTabs)
   }
@@ -420,14 +465,54 @@ fun TabSwitcherView(
 
 @Composable
 private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
+  var isAnimating by remember { mutableStateOf(false) }
+  var isDone by remember { mutableStateOf(false) }
+
+  // Animate rotation from 0f to 360f
+  val rotation by animateFloatAsState(
+    targetValue = if (isAnimating) 360f else 0f,
+    animationSpec = tween(durationMillis = 600),
+    finishedListener = {
+      isDone = true
+      isAnimating = false
+    }
+  )
+
+  // ⏳ Auto-reset to close icon after delay
+  LaunchedEffect(isDone) {
+    if (isDone) {
+      delay(CLOSE_TAB_ICON_ANIMATION_TIMEOUT)
+      isDone = false
+    }
+  }
+
   FloatingActionButton(
-    onClick = onCloseAllTabs,
+    onClick = {
+      isAnimating = true
+      onCloseAllTabs()
+    },
     modifier = Modifier
       .align(Alignment.BottomCenter)
       .padding(bottom = CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING)
+      .graphicsLayer {
+        rotationZ = rotation
+      }
+      .clickable(
+        enabled = !isAnimating,
+        onClick = {
+          isAnimating = true
+          onCloseAllTabs()
+        }
+      ),
   ) {
     Icon(
-      painter = painterResource(R.drawable.ic_close_black_24dp),
+      painter = painterResource(
+        id = if (isDone) {
+          R.drawable.ic_done_white_24dp
+        } else {
+          R.drawable.ic_close_black_24dp
+        }
+      ),
       contentDescription = stringResource(R.string.close_all_tabs)
     )
   }
@@ -436,69 +521,118 @@ private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
 @Suppress("MagicNumber")
 @Composable
 fun TabItemView(
+  index: Int,
   title: String,
   isSelected: Boolean,
   webView: KiwixWebView,
   modifier: Modifier = Modifier,
-  onSelectTab: () -> Unit,
-  onCloseTab: () -> Unit
+  onTabClickListener: TabClickListener
 ) {
   val cardElevation = if (isSelected) EIGHT_DP else TWO_DP
   val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-
+  val (cardWidth, cardHeight) = getTabCardSize(toolbarHeightDp = 56.dp)
   Box(modifier = modifier) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier = Modifier
         .padding(horizontal = EIGHT_DP, vertical = FOUR_DP)
-        .widthIn(min = 200.dp)
+        .width(cardWidth)
     ) {
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = FOUR_DP),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(
-          text = title,
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
-          modifier = Modifier
-            .weight(1f)
-            .padding(end = EIGHT_DP),
-          style = MaterialTheme.typography.labelLarge
-        )
-        IconButton(onClick = onCloseTab) {
-          Icon(
-            painter = painterResource(id = R.drawable.ic_clear_white_24dp),
-            contentDescription = stringResource(R.string.close_tab)
-          )
-        }
-      }
-
-      // Card with WebView (non-interactive with overlay)
-      Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = cardElevation),
-        border = BorderStroke(ONE_DP, borderColor),
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier
-          .fillMaxWidth()
-          .aspectRatio(1.6f) // approximate height logic
-          .clickable { onSelectTab() }
-      ) {
-        AndroidView(
-          factory = { context ->
-            // Detach if needed to avoid WebView already has a parent issue
-            (webView.parent as? ViewGroup)?.removeView(webView)
-            FrameLayout(context).apply {
-              addView(webView)
-            }
-          },
-          modifier = Modifier.fillMaxSize()
-        )
-      }
+      TabItemHeader(title, index, onTabClickListener)
+      TabItemCard(
+        webView,
+        cardWidth,
+        cardHeight,
+        onTabClickListener,
+        borderColor,
+        cardElevation,
+        index
+      )
     }
   }
+}
+
+@Composable
+private fun TabItemHeader(
+  title: String,
+  index: Int,
+  onTabClickListener: TabClickListener
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = FOUR_DP),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = title,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
+      modifier = Modifier
+        .padding(end = FOUR_DP)
+        .weight(1f),
+      style = MaterialTheme.typography.labelSmall
+    )
+    IconButton(
+      onClick = { onTabClickListener.onCloseTab(index) },
+      modifier = Modifier.size(CLOSE_TAB_ICON_SIZE)
+    ) {
+      Icon(
+        painter = painterResource(id = R.drawable.ic_clear_white_24dp),
+        contentDescription = stringResource(R.string.close_tab)
+      )
+    }
+  }
+}
+
+@Composable
+private fun TabItemCard(
+  webView: KiwixWebView,
+  cardWidth: Dp,
+  cardHeight: Dp,
+  onTabClickListener: TabClickListener,
+  borderColor: Color,
+  elevation: Dp,
+  index: Int
+) {
+  Card(
+    elevation = CardDefaults.cardElevation(defaultElevation = elevation),
+    border = BorderStroke(ONE_DP, borderColor),
+    shape = MaterialTheme.shapes.extraSmall,
+    modifier = Modifier
+      .width(cardWidth)
+      .height(cardHeight)
+      .clickable { onTabClickListener.onSelectTab(index) }
+  ) {
+    AndroidView(
+      factory = { context ->
+        FrameLayout(context).apply {
+          (webView.parent as? ViewGroup)?.removeView(webView)
+          addView(webView)
+          val clickableView = View(context).apply {
+            layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            setOnClickListener { onTabClickListener.onSelectTab(index) }
+          }
+          addView(clickableView)
+        }
+      },
+      modifier = Modifier.fillMaxSize()
+    )
+  }
+}
+
+@Composable
+fun getTabCardSize(toolbarHeightDp: Dp): Pair<Dp, Dp> {
+  val windowSize = LocalWindowInfo.current.containerSize
+  val density = LocalDensity.current
+
+  val screenWidth = with(density) { windowSize.width.toDp() }
+  val screenHeight = with(density) { windowSize.height.toDp() }
+
+  val cardWidth = screenWidth / 2
+  val cardHeight = ((screenHeight - toolbarHeightDp) / 2).coerceAtLeast(HUNDERED.dp)
+
+  return cardWidth to cardHeight
 }
 
 @Composable
@@ -526,4 +660,9 @@ fun rememberScrollBehavior(
   )
 
   return bottomNavHeight to lazyListState
+}
+
+interface TabClickListener {
+  fun onSelectTab(position: Int)
+  fun onCloseTab(position: Int)
 }
