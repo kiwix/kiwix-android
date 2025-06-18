@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 @Suppress("all")
 @Composable
 fun DonationLayout(
+  appName: String,
   onDonateButtonClick: () -> Unit,
   onLaterButtonClick: () -> Unit,
   bottomPaddingValues: Int
@@ -62,6 +63,7 @@ fun DonationLayout(
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     DonationDialogComposable(
+      appName,
       onDonateButtonClick,
       onLaterButtonClick
     )
@@ -71,6 +73,7 @@ fun DonationLayout(
 @Suppress("all")
 @Composable
 fun DonationDialogComposable(
+  appName: String,
   onDonateButtonClick: () -> Unit,
   onLaterButtonClick: () -> Unit
 ) {
@@ -87,7 +90,11 @@ fun DonationDialogComposable(
   ) {
     Column(
       modifier = Modifier
-        .padding(ComposeDimens.SIXTEEN_DP)
+        .padding(
+          start = ComposeDimens.SIXTEEN_DP,
+          end = ComposeDimens.SIXTEEN_DP,
+          top = ComposeDimens.SIXTEEN_DP
+        )
     ) {
       Row(
         modifier = Modifier.fillMaxWidth(),
@@ -107,7 +114,10 @@ fun DonationDialogComposable(
             fontSize = ComposeDimens.SMALL_TITLE_TEXT_SIZE
           )
           Text(
-            text = stringResource(id = R.string.donation_dialog_description),
+            text = stringResource(
+              R.string.donation_dialog_description,
+              appName
+            ),
             fontSize = 14.sp,
             color = dimHighlightedTextLight,
             modifier = Modifier.padding(top = ComposeDimens.FOUR_DP)
@@ -116,8 +126,7 @@ fun DonationDialogComposable(
       }
       Row(
         modifier = Modifier
-          .fillMaxWidth()
-          .padding(top = ComposeDimens.EIGHT_DP),
+          .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
       ) {
         Spacer(modifier = Modifier.weight(1f))
@@ -141,8 +150,7 @@ fun DonationDialogButton(
   @StringRes buttonText: Int
 ) {
   TextButton(
-    onClick = onButtonClick,
-    modifier = Modifier.padding(horizontal = ComposeDimens.SIXTEEN_DP)
+    onClick = onButtonClick
   ) {
     Text(
       text = stringResource(buttonText),
@@ -154,8 +162,10 @@ fun DonationDialogButton(
 @Preview()
 @Composable
 fun DonationDialogComposablePreview() {
-  DonationDialogComposable(
+  DonationLayout(
+    appName = "kiwix",
     onDonateButtonClick = {},
-    onLaterButtonClick = {}
+    onLaterButtonClick = {},
+    bottomPaddingValues = 0,
   )
 }

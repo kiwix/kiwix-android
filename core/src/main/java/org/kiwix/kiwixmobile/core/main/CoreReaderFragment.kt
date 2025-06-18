@@ -691,6 +691,7 @@ abstract class CoreReaderFragment :
     donationLayout?.apply {
       setContent {
         DonationLayout(
+          appName = (requireActivity() as CoreMainActivity).appName,
           onDonateButtonClick = {
             donationDialogHandler?.updateLastDonationPopupShownTime()
             setDonationLayoutVisibility(GONE)

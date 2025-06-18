@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import javax.inject.Inject
 
-const val THREE_MONTHS_IN_MILLISECONDS = 0
+const val THREE_MONTHS_IN_MILLISECONDS = 90 * 24 * 60 * 60 * 1000L
 
 class DonationDialogHandler @Inject constructor(
   private val activity: Activity,
