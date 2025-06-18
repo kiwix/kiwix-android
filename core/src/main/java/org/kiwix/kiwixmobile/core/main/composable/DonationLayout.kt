@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main.composable
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
+import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.ui.theme.dimHighlightedTextLight
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 @Suppress("all")
 @Composable
@@ -53,7 +58,8 @@ fun DonationLayout(
   Column(
     modifier = Modifier
       .padding(bottom = bottomPaddingValues.dp),
-    verticalArrangement = Arrangement.Bottom
+    verticalArrangement = Arrangement.Bottom,
+    horizontalAlignment = Alignment.CenterHorizontally
   ) {
     DonationDialogComposable(
       onDonateButtonClick,
@@ -72,16 +78,16 @@ fun DonationDialogComposable(
     modifier = Modifier
       .fillMaxWidth()
       .wrapContentHeight()
-      .padding(all = 16.dp),
+      .padding(all = ComposeDimens.SIXTEEN_DP),
     shape = MaterialTheme.shapes.medium,
-    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+    elevation = CardDefaults.cardElevation(defaultElevation = ComposeDimens.SIX_DP),
     colors = CardDefaults.cardColors(
-      containerColor = MaterialTheme.colorScheme.background
+      containerColor = White
     )
   ) {
     Column(
       modifier = Modifier
-        .padding(16.dp)
+        .padding(ComposeDimens.SIXTEEN_DP)
     ) {
       Row(
         modifier = Modifier.fillMaxWidth(),
@@ -91,47 +97,57 @@ fun DonationDialogComposable(
           painter = painterResource(id = R.drawable.ic_donation_icon),
           contentDescription = stringResource(id = R.string.donation_dialog_title),
           modifier = Modifier
-            .size(50.dp)
+            .size(ComposeDimens.FIFTY_DP)
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(ComposeDimens.TWELVE_DP))
         Column {
           Text(
             text = stringResource(id = R.string.donation_dialog_title),
             style = MaterialTheme.typography.titleMedium,
-            fontSize = 16.sp
+            fontSize = ComposeDimens.SMALL_TITLE_TEXT_SIZE
           )
           Text(
             text = stringResource(id = R.string.donation_dialog_description),
             fontSize = 14.sp,
-            modifier = Modifier.padding(top = 4.dp)
+            color = dimHighlightedTextLight,
+            modifier = Modifier.padding(top = ComposeDimens.FOUR_DP)
           )
         }
       }
       Row(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(top = 8.dp),
+          .padding(top = ComposeDimens.EIGHT_DP),
         verticalAlignment = Alignment.CenterVertically
       ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        TextButton(
-          onClick = onLaterButtonClick,
-          modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-          Text(
-            text = stringResource(id = R.string.rate_dialog_neutral)
-          )
-        }
-        TextButton(
-          onClick = onDonateButtonClick
-        ) {
-          Text(
-            text = stringResource(id = R.string.make_donation)
-          )
-        }
+        DonationDialogButton(
+          onButtonClick = onLaterButtonClick,
+          buttonText = R.string.rate_dialog_neutral
+        )
+        DonationDialogButton(
+          onButtonClick = onDonateButtonClick,
+          buttonText = R.string.make_donation
+        )
       }
     }
+  }
+}
+
+@Composable
+fun DonationDialogButton(
+  onButtonClick: () -> Unit,
+  @StringRes buttonText: Int
+) {
+  TextButton(
+    onClick = onButtonClick,
+    modifier = Modifier.padding(horizontal = ComposeDimens.SIXTEEN_DP)
+  ) {
+    Text(
+      text = stringResource(buttonText),
+      color = DenimBlue800
+    )
   }
 }
 
