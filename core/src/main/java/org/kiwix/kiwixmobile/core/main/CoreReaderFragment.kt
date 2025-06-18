@@ -46,6 +46,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -686,11 +687,21 @@ abstract class CoreReaderFragment :
   ): View? {
     fragmentReaderBinding = FragmentReaderBinding.inflate(inflater, container, false)
     val view = fragmentReaderBinding?.root
-    val composeView = view?.findViewById<ComposeView>(R.id.compose_view)
-    composeView?.apply {
+    donationLayout = view?.findViewById<ComposeView>(R.id.compose_view)
+    donationLayout?.apply {
       setContent {
-        // In Compose world
-        DonationLayout()
+        DonationLayout(
+          onDonateButtonClick = {
+            donationDialogHandler?.updateLastDonationPopupShownTime()
+            setDonationLayoutVisibility(GONE)
+            openKiwixSupportUrl()
+          },
+          onLaterButtonClick = {
+            donationDialogHandler?.donateLater()
+            setDonationLayoutVisibility(GONE)
+          },
+          bottomPaddingValues = getBottomMarginForDonationPopup()
+        )
       }
     }
     return view
@@ -2102,26 +2113,9 @@ abstract class CoreReaderFragment :
 
   @Suppress("InflateParams", "MagicNumber")
   protected open fun showDonationLayout() {
-    /*val layoutParams = FrameLayout.LayoutParams(
-      getDonationPopupWidth(),
-      FrameLayout.LayoutParams.WRAP_CONTENT
-    ).apply {
-      val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
-        org.kiwix.kiwixmobile.core.R.dimen.activity_horizontal_margin
-      )
-      setMargins(
-        rightAndLeftMargin,
-        0,
-        rightAndLeftMargin,
-        getBottomMarginForDonationPopup()
-      )
-      gravity = BOTTOM or CENTER_HORIZONTAL
-    }
-    donationLayout?.layoutParams = layoutParams
     donationLayout?.apply {
-      removeAllViews()
       setDonationLayoutVisibility(VISIBLE)
-    }*/
+    }
   }
 
   private fun getDonationPopupWidth(): Int {
