@@ -25,6 +25,7 @@ import android.widget.FrameLayout
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -54,14 +56,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -73,6 +77,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -106,8 +111,10 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -115,8 +122,11 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
@@ -166,7 +176,7 @@ private fun ReaderTopBar(
   scrollBehavior: TopAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit,
 ) {
-  if (!state.fullScreenItem.first) {
+  if (!state.shouldShowFullScreenMode) {
     KiwixAppBar(
       title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
       navigationIcon = navigationIcon,
@@ -205,10 +215,37 @@ private fun ReaderContentLayout(state: ReaderScreenState, modifier: Modifier = M
           )
         }
         ShowFullScreenView(state)
+        CloseFullScreenImageButton(
+          state.shouldShowFullScreenMode,
+          state.onExitFullscreenClick
+        )
       }
     }
 
     ShowDonationLayout(state)
+  }
+}
+
+@Composable
+private fun BoxScope.CloseFullScreenImageButton(
+  shouldShowFullScreenMode: Boolean,
+  onExitFullScreen: () -> Unit
+) {
+  if (shouldShowFullScreenMode) {
+    IconButton(
+      onClick = onExitFullScreen,
+      modifier = Modifier
+        .align(Alignment.TopEnd)
+        .padding(SEVEN_DP)
+        .minimumInteractiveComponentSize()
+        .background(MaterialTheme.colorScheme.onSurface)
+    ) {
+      Icon(
+        painter = IconItem.Drawable(R.drawable.fullscreen_exit).toPainter(),
+        contentDescription = stringResource(id = R.string.menu_exit_full_screen),
+        tint = MaterialTheme.colorScheme.surface
+      )
+    }
   }
 }
 
@@ -303,12 +340,12 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
-    FloatingActionButton(
+    SmallFloatingActionButton(
       onClick = state.backToTopButtonClick,
-      modifier = Modifier,
+      modifier = Modifier.padding(bottom = BACK_TO_TOP_BUTTON_BOTTOM_MARGIN),
       containerColor = MaterialTheme.colorScheme.primary,
       contentColor = MaterialTheme.colorScheme.onPrimary,
-      shape = FloatingActionButtonDefaults.smallShape
+      shape = CircleShape
     ) {
       Icon(
         painter = Drawable(R.drawable.action_find_previous).toPainter(),
@@ -389,15 +426,26 @@ private fun BottomAppBarButtonIcon(
   shouldEnable: Boolean = true,
   contentDescription: String
 ) {
-  IconButton(
-    onClick = onClick,
-    modifier = Modifier.combinedClickable(onClick = onClick, onLongClick = onLongClick),
-    enabled = shouldEnable
+  Box(
+    modifier = Modifier
+      .size(READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE + TEN_DP)
+      .clip(CircleShape)
+      .combinedClickable(
+        onClick = onClick,
+        onLongClick = onLongClick,
+        enabled = shouldEnable
+      ),
+    contentAlignment = Alignment.Center
   ) {
     Icon(
       buttonIcon.toPainter(),
       contentDescription,
-      modifier = Modifier.size(READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE)
+      modifier = Modifier.size(READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE),
+      tint = if (shouldEnable) {
+        LocalContentColor.current
+      } else {
+        LocalContentColor.current.copy(alpha = READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA)
+      }
     )
   }
 }
@@ -504,6 +552,8 @@ private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
           onCloseAllTabs()
         }
       ),
+    containerColor = DenimBlue800,
+    contentColor = White
   ) {
     Icon(
       painter = painterResource(

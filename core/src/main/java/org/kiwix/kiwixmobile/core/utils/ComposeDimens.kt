@@ -48,6 +48,7 @@ object ComposeDimens {
   val TWELVE_DP = 12.dp
   val TEN_DP = 10.dp
   val EIGHT_DP = 8.dp
+  val SEVEN_DP = 7.dp
   val SIX_DP = 6.dp
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
@@ -189,4 +190,6 @@ object ComposeDimens {
   const val TAB_SWITCHER_ICON_CORNER_RADIUS = 10
   val CLOSE_TAB_ICON_SIZE = 20.dp
   const val CLOSE_TAB_ICON_ANIMATION_TIMEOUT = 1200L
+  val BACK_TO_TOP_BUTTON_BOTTOM_MARGIN = 80.dp
+  const val READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA = 0.38f
 }

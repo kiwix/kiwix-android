@@ -52,10 +52,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
-import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -79,16 +76,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Group
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
-import androidx.core.view.isGone
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -96,10 +89,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -134,8 +125,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
-import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -185,7 +174,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
@@ -237,23 +225,15 @@ abstract class CoreReaderFragment :
   private var fragmentReaderBinding: FragmentReaderBinding? = null
 
   var toolbar: Toolbar? = null
-  var toolbarContainer: AppBarLayout? = null
-  var progressBar: ContentLoadingProgressBar? = null
 
   var drawerLayout: DrawerLayout? = null
   protected var tableDrawerRightContainer: NavigationView? = null
 
   var contentFrame: FrameLayout? = null
 
-  var bottomToolbar: BottomAppBar? = null
-
   var tabSwitcherRoot: View? = null
 
-  var closeAllTabsButton: FloatingActionButton? = null
-
   var videoView: ViewGroup? = null
-
-  var noOpenBookButton: Button? = null
 
   var activityMainRoot: View? = null
 
@@ -272,10 +252,6 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var darkModeConfig: DarkModeConfig? = null
-
-  @JvmField
-  @Inject
-  var menuFactory: MainMenu.Factory? = null
 
   @JvmField
   @Inject
@@ -299,29 +275,7 @@ abstract class CoreReaderFragment :
 
   var toolbarWithSearchPlaceholder: ConstraintLayout? = null
 
-  var backToTopButton: FloatingActionButton? = null
-
-  private var stopTTSButton: Button? = null
-
-  var pauseTTSButton: Button? = null
-
-  var ttsControls: Group? = null
-
-  private var exitFullscreenButton: ImageButton? = null
-
-  private var bottomToolbarBookmark: ImageView? = null
-
-  private var bottomToolbarArrowBack: ImageView? = null
-
-  private var bottomToolbarArrowForward: ImageView? = null
-
-  private var bottomToolbarHome: ImageView? = null
-
   private var tabRecyclerView: RecyclerView? = null
-
-  private var noOpenBookText: TextView? = null
-  private var bottomToolbarToc: ImageView? = null
-
   private var isFirstTimeMainPageLoaded = true
   private var isFromManageExternalLaunch = false
   private val savingTabsMutex = Mutex()
@@ -384,7 +338,6 @@ abstract class CoreReaderFragment :
       fullScreenItem = false to null,
       showBackToTopButton = false,
       backToTopButtonClick = { backToTop() },
-      showFullscreenButton = false,
       onExitFullscreenClick = { closeFullScreen() },
       showTtsControls = false,
       onPauseTtsClick = { pauseTts() },
@@ -420,7 +373,8 @@ abstract class CoreReaderFragment :
         override fun onCloseTab(position: Int) {
           closeTab(position)
         }
-      }
+      },
+      shouldShowFullScreenMode = false
     )
   )
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -699,29 +653,13 @@ abstract class CoreReaderFragment :
   private fun prepareViews() {
     fragmentReaderBinding?.let { readerBinding ->
       videoView = readerBinding.fullscreenVideoContainer
-      noOpenBookButton = readerBinding.goToLibraryButtonNoOpenBook
-      noOpenBookText = readerBinding.noOpenBookText
       with(readerBinding.root) {
         activityMainRoot = findViewById(R.id.activity_main_root)
         contentFrame = findViewById(R.id.activity_main_content_frame)
         toolbar = findViewById(R.id.toolbar)
-        toolbarContainer = findViewById(R.id.fragment_main_app_bar)
-        progressBar = findViewById(R.id.main_fragment_progress_view)
-        bottomToolbar = findViewById(R.id.bottom_toolbar)
         tabSwitcherRoot = findViewById(R.id.activity_main_tab_switcher)
-        closeAllTabsButton = findViewById(R.id.tab_switcher_close_all_tabs)
         toolbarWithSearchPlaceholder = findViewById(R.id.toolbarWithSearchPlaceholder)
-        backToTopButton = findViewById(R.id.activity_main_back_to_top_fab)
-        stopTTSButton = findViewById(R.id.activity_main_button_stop_tts)
-        pauseTTSButton = findViewById(R.id.activity_main_button_pause_tts)
-        ttsControls = findViewById(R.id.activity_main_tts_controls)
-        exitFullscreenButton = findViewById(R.id.activity_main_fullscreen_button)
-        bottomToolbarBookmark = findViewById(R.id.bottom_toolbar_bookmark)
-        bottomToolbarArrowBack = findViewById(R.id.bottom_toolbar_arrow_back)
-        bottomToolbarArrowForward = findViewById(R.id.bottom_toolbar_arrow_forward)
-        bottomToolbarHome = findViewById(R.id.bottom_toolbar_home)
         tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
-        bottomToolbarToc = findViewById(R.id.bottom_toolbar_toc)
         donationLayout = findViewById(R.id.donation_layout)
       }
     }
@@ -730,53 +668,6 @@ abstract class CoreReaderFragment :
   private fun handleClicks() {
     toolbarWithSearchPlaceholder?.setOnClickListener {
       openSearch(searchString = "", isOpenedFromTabView = false, false)
-    }
-    backToTopButton?.setOnClickListener {
-      backToTop()
-    }
-    stopTTSButton?.setOnClickListener {
-      stopTts()
-    }
-    pauseTTSButton?.setOnClickListener {
-      pauseTts()
-    }
-    exitFullscreenButton?.setOnClickListener {
-      closeFullScreen()
-    }
-    bottomToolbarBookmark?.apply {
-      setOnClickListener {
-        toggleBookmark()
-      }
-      setOnLongClickListener {
-        goToBookmarks()
-      }
-    }
-    bottomToolbarArrowBack?.apply {
-      setOnClickListener {
-        goBack()
-      }
-      setOnLongClickListener {
-        showBackwardHistory()
-        true
-      }
-    }
-    bottomToolbarArrowForward?.apply {
-      setOnClickListener {
-        goForward()
-      }
-      setOnLongClickListener {
-        showForwardHistory()
-        true
-      }
-    }
-    bottomToolbarToc?.setOnClickListener {
-      openToc()
-    }
-    closeAllTabsButton?.setOnClickListener {
-      closeAllTabs()
-    }
-    bottomToolbarHome?.setOnClickListener {
-      openMainPage()
     }
   }
 
@@ -820,7 +711,7 @@ abstract class CoreReaderFragment :
       }
 
       override fun onFinish() {
-        backToTopButton?.hide()
+        hideBackToTopButton()
       }
     }
   }
@@ -956,21 +847,6 @@ abstract class CoreReaderFragment :
 
   private fun showTabSwitcher() {
     (requireActivity() as CoreMainActivity).disableDrawer()
-    actionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      setHomeAsUpIndicator(
-        ContextCompat.getDrawable(requireActivity(), R.drawable.ic_round_add_white_36dp)
-      )
-      // set the contentDescription to UpIndicator icon.
-      toolbar?.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-        getString(R.string.search_open_in_new_tab)
-      )
-      setDisplayShowTitleEnabled(false)
-    }
-    closeAllTabsButton?.setToolTipWithContentDescription(
-      resources.getString(R.string.close_all_tabs)
-    )
-    setIsCloseAllTabButtonClickable(true)
     // Set a negative top margin to the web views to remove
     // the unwanted blank space caused by the toolbar.
     // setTopMarginToWebViews(-requireActivity().getToolbarHeight())
@@ -979,13 +855,10 @@ abstract class CoreReaderFragment :
       copy(
         shouldShowBottomAppBar = false,
         pageLoadingItem = false to ZERO,
-        readerScreenTitle = ""
+        readerScreenTitle = "",
+        showBackToTopButton = false
       )
     }
-    contentFrame?.visibility = GONE
-    progressBar?.visibility = GONE
-    backToTopButton?.hide()
-    setTabSwitcherVisibility(VISIBLE)
     startAnimation(tabSwitcherRoot, R.anim.slide_down)
     tabsAdapter?.let { tabsAdapter ->
       tabRecyclerView?.let { recyclerView ->
@@ -1053,23 +926,8 @@ abstract class CoreReaderFragment :
    *          as closing the ZIM book would require reloading the ZIM file, which can be a resource-intensive operation.
    */
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
-    actionBar?.apply {
-      setDisplayShowTitleEnabled(true)
-    }
     toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    closeAllTabsButton?.setImageDrawable(
-      ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
-    )
-    tabSwitcherRoot?.let {
-      if (it.isVisible) {
-        setTabSwitcherVisibility(GONE)
-        startAnimation(it, R.anim.slide_up)
-        progressBar?.visibility = VISIBLE
-        contentFrame?.visibility = VISIBLE
-      }
-    }
-    progressBar?.hide()
     selectTab(currentWebViewIndex)
     readerScreenState.update {
       copy(
@@ -1477,32 +1335,16 @@ abstract class CoreReaderFragment :
   @SuppressLint("ClickableViewAccessibility")
   private fun unBindViewsAndBinding() {
     activityMainRoot = null
-    noOpenBookButton = null
     toolbarWithSearchPlaceholder = null
-    backToTopButton = null
-    stopTTSButton = null
-    pauseTTSButton = null
-    ttsControls = null
-    exitFullscreenButton = null
-    bottomToolbarBookmark = null
-    bottomToolbarArrowBack = null
-    bottomToolbarArrowForward = null
-    bottomToolbarHome = null
     tabRecyclerView = null
-    noOpenBookText = null
-    bottomToolbarToc = null
-    bottomToolbar = null
     tabSwitcherRoot = null
     videoView = null
     contentFrame = null
-    toolbarContainer = null
     compatCallback?.finish()
     compatCallback = null
     toolbar?.setOnTouchListener(null)
     toolbar = null
-    progressBar = null
     drawerLayout = null
-    closeAllTabsButton = null
     tableDrawerRightContainer = null
     fragmentReaderBinding?.root?.removeAllViews()
     fragmentReaderBinding = null
@@ -1627,18 +1469,17 @@ abstract class CoreReaderFragment :
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
       currentWebViewIndex--
     }
-    tabsAdapter?.apply {
-      notifyItemRemoved(index)
-      notifyDataSetChanged()
-    }
     readerScreenState.value.snackBarHostState.snack(
       requireActivity().getString(R.string.tab_closed),
       actionLabel = requireActivity().getString(R.string.undo),
       actionClick = { restoreDeletedTab(index) },
       lifecycleScope = lifecycleScope,
       snackBarResult = { result ->
-        if (result == SnackbarResult.Dismissed && webViewList.isEmpty() && isAdded) {
-          closeZimBook()
+        if (result == SnackbarResult.Dismissed && isAdded) {
+          saveTabStates()
+          if (webViewList.isEmpty()) {
+            closeZimBook()
+          }
         }
       }
     )
@@ -1774,14 +1615,13 @@ abstract class CoreReaderFragment :
       if (readerScreenState.value.showTtsControls) {
         // currently TTS is running
         if (isBackToTopEnabled) {
-          readerScreenState.update { copy(showBackToTopButton = true) }
-          backToTopButton?.show()
+          showBackToTopButton()
         }
         tts?.stop()
       } else {
         // TTS is not running.
         if (isBackToTopEnabled) {
-          readerScreenState.update { copy(showBackToTopButton = false) }
+          hideBackToTopButton()
         }
         readerScreenState.update {
           copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
@@ -1911,12 +1751,12 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
     (requireActivity() as CoreMainActivity).disableDrawer(false)
-    toolbarContainer?.visibility = GONE
     readerScreenState.update {
-      copy(shouldShowBottomAppBar = false)
+      copy(
+        shouldShowBottomAppBar = false,
+        shouldShowFullScreenMode = true
+      )
     }
-    exitFullscreenButton?.visibility = VISIBLE
-    exitFullscreenButton?.background?.alpha = 153
     val window = requireActivity().window
     window.decorView.showFullScreenMode(window)
     getCurrentWebView()?.apply {
@@ -1931,10 +1771,13 @@ abstract class CoreReaderFragment :
     toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
-    toolbarContainer?.visibility = VISIBLE
+    readerScreenState.update {
+      copy(
+        shouldShowBottomAppBar = true,
+        shouldShowFullScreenMode = false
+      )
+    }
     updateBottomToolbarVisibility()
-    exitFullscreenButton?.visibility = GONE
-    exitFullscreenButton?.background?.alpha = 255
     val window = requireActivity().window
     window.decorView.closeFullScreenMode(window)
     getCurrentWebView()?.requestLayout()
@@ -2132,17 +1975,12 @@ abstract class CoreReaderFragment :
 
   private fun closeAllTabs() {
     onReadAloudStop()
-    closeAllTabsButton?.apply {
-      rotate()
-      setIsCloseAllTabButtonClickable(false)
-    }
     tempZimSourceForUndo = zimReaderContainer?.zimReaderSource
     tempWebViewListForUndo.apply {
       clear()
       addAll(webViewList)
     }
     webViewList.clear()
-    tabsAdapter?.notifyDataSetChanged()
     openHomeScreen()
     readerScreenState.value.snackBarHostState.snack(
       context?.getString(R.string.tabs_closed).orEmpty(),
@@ -2150,15 +1988,14 @@ abstract class CoreReaderFragment :
       actionClick = { restoreDeletedTabs() },
       lifecycleScope = lifecycleScope,
       snackBarResult = { result ->
-        if (result == SnackbarResult.Dismissed && webViewList.isEmpty() && isAdded) {
-          closeZimBook()
+        if (result == SnackbarResult.Dismissed && isAdded) {
+          saveTabStates()
+          if (webViewList.isEmpty()) {
+            closeZimBook()
+          }
         }
       }
     )
-  }
-
-  private fun setIsCloseAllTabButtonClickable(isClickable: Boolean) {
-    closeAllTabsButton?.isClickable = isClickable
   }
 
   private fun restoreDeletedTabs() {
@@ -2652,10 +2489,18 @@ abstract class CoreReaderFragment :
     isBackToTopEnabled = sharedPreferenceUtil?.prefBackToTop == true
     isOpenNewTabInBackground = sharedPreferenceUtil?.prefNewTabBackground == true
     if (!isBackToTopEnabled) {
-      backToTopButton?.hide()
+      hideBackToTopButton()
     }
     openFullScreenIfEnabled()
     updateNightMode()
+  }
+
+  private fun showBackToTopButton() {
+    readerScreenState.update { copy(showBackToTopButton = true) }
+  }
+
+  private fun hideBackToTopButton() {
+    readerScreenState.update { copy(showBackToTopButton = false) }
   }
 
   /**
@@ -2869,28 +2714,18 @@ abstract class CoreReaderFragment :
     tabsAdapter?.notifyDataSetChanged()
   }
 
-  @Suppress("NestedBlockDepth", "MagicNumber")
+  @Suppress("MagicNumber")
   override fun webViewPageChanged(page: Int, maxPages: Int) {
-    if (isBackToTopEnabled) {
-      hideBackToTopTimer?.apply {
-        cancel()
-        start()
-      }
-      getCurrentWebView()?.scrollY?.let {
-        if (it > 200) {
-          if (
-            (backToTopButton?.isGone == true || backToTopButton?.isInvisible == true) &&
-            ttsControls?.visibility == GONE
-          ) {
-            backToTopButton?.show()
-          }
-        } else {
-          backToTopButton?.isVisible
-          if (backToTopButton?.visibility == VISIBLE) {
-            backToTopButton?.hide()
-          }
-        }
-      }
+    if (!isBackToTopEnabled) return
+    hideBackToTopTimer?.apply {
+      cancel()
+      start()
+    }
+    val scrollY = getCurrentWebView()?.scrollY ?: return
+    if (scrollY > 200 && !readerScreenState.value.showTtsControls) {
+      showBackToTopButton()
+    } else {
+      hideBackToTopButton()
     }
   }
 

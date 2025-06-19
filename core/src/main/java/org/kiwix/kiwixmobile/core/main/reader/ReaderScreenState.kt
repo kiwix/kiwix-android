@@ -56,13 +56,17 @@ data class ReaderScreenState(
    */
   val shouldShowDonationPopup: Boolean,
   /**
-   * Manages the showing of "Full screen view".
+   * Manages the showing of "Full screen view" of webView's video.
    *
    * A [Pair] containing:
    *  - [Boolean]: Whether to show/hide full screen mode.
    *  - [ComposeView]: full screen view.
    */
   val fullScreenItem: Pair<Boolean, ComposeView?>,
+  /**
+   * Manages the showing of "Full screen mode".
+   */
+  val shouldShowFullScreenMode: Boolean,
   /**
    * Manages the showing of "BackToTop" fab button.
    */
@@ -71,7 +75,6 @@ data class ReaderScreenState(
    * Handles the click of "BackToTop" fab button.
    */
   val backToTopButtonClick: () -> Unit,
-  val showFullscreenButton: Boolean = false,
   val onExitFullscreenClick: () -> Unit = {},
   val showTtsControls: Boolean = false,
   val onPauseTtsClick: () -> Unit = {},

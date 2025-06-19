@@ -29,15 +29,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
-import org.kiwix.kiwixmobile.core.R.anim
-import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
@@ -47,7 +44,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggl
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
-import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -184,32 +180,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
    * @see closeAllTabs
    */
   override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
-    actionBar?.let { actionBar ->
-      actionBar.setDisplayShowTitleEnabled(true)
-      toolbar?.let { activity?.setupDrawerToggle(it, true) }
-
-      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
-      closeAllTabsButton?.setImageDrawableCompat(drawable.ic_close_black_24dp)
-      if (tabSwitcherRoot?.isVisible == true) {
-        tabSwitcherRoot?.visibility = GONE
-        startAnimation(tabSwitcherRoot, anim.slide_up)
-        progressBar?.visibility = View.GONE
-        progressBar?.progress = 0
-        contentFrame?.visibility = View.VISIBLE
-      }
-      readerMenuState?.showWebViewOptions(true)
-      if (webViewList.isEmpty()) {
-        exitBook(shouldCloseZimBook)
-      } else {
-        // Reset the top margin of web views to 0 to remove any previously set margin
-        // This ensures that the web views are displayed without any additional
-        // top margin for kiwix main app.
-        setTopMarginToWebViews(0)
-        selectTab(currentWebViewIndex)
-      }
-    }
-    actionBar?.setDisplayShowTitleEnabled(true)
     toolbar?.let { activity?.setupDrawerToggle(it, true) }
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (webViewList.isEmpty()) {
