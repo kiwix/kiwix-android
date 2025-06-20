@@ -75,7 +75,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.ComposeView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -174,6 +173,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
@@ -233,8 +233,6 @@ abstract class CoreReaderFragment :
 
   var tabSwitcherRoot: View? = null
 
-  var videoView: ViewGroup? = null
-
   var activityMainRoot: View? = null
 
   @JvmField
@@ -272,8 +270,6 @@ abstract class CoreReaderFragment :
   private var currentTtsWebViewIndex = 0
   protected var actionBar: ActionBar? = null
   protected var mainMenu: MainMenu? = null
-
-  var toolbarWithSearchPlaceholder: ConstraintLayout? = null
 
   private var tabRecyclerView: RecyclerView? = null
   private var isFirstTimeMainPageLoaded = true
@@ -374,7 +370,10 @@ abstract class CoreReaderFragment :
           closeTab(position)
         }
       },
-      shouldShowFullScreenMode = false
+      shouldShowFullScreenMode = false,
+      searchPlaceHolderItemForCustomApps = false to {
+        openSearch(searchString = "", isOpenedFromTabView = false, false)
+      }
     )
   )
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -486,12 +485,19 @@ abstract class CoreReaderFragment :
               updateTabIcon(size)
             }
         }
-        LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
+        LaunchedEffect(Unit) {
           readerScreenState.update {
             copy(
               bottomNavigationHeight = getBottomNavigationHeight(),
               readerScreenTitle = context.getString(R.string.reader),
               darkModeViewPainter = darkModeViewPainter,
+              fullScreenItem = fullScreenItem.first to getVideoView()
+            )
+          }
+        }
+        LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
+          readerScreenState.update {
+            copy(
               currentWebViewPosition = currentWebViewIndex,
               showTabSwitcher = readerMenuState?.isInTabSwitcher == true
             )
@@ -504,7 +510,8 @@ abstract class CoreReaderFragment :
             NavigationIcon(
               iconItem = navigationIcon(),
               contentDescription = navigationIconContentDescription(),
-              onClick = { navigationIconClick() }
+              onClick = { navigationIconClick() },
+              iconTint = navigationIconTint()
             )
           },
           listState = lazyListState
@@ -609,7 +616,15 @@ abstract class CoreReaderFragment :
       viewLifecycleOwner,
       Observer(::storeSearchItem)
     )
-    handleClicks()
+  }
+
+  private fun getVideoView() = context?.let {
+    FrameLayout(it).apply {
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+      )
+    }
   }
 
   private fun getBottomNavigationHeight(): Int = getBottomNavigationView()?.measuredHeight ?: ZERO
@@ -639,7 +654,25 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun navigationIcon() = if (readerMenuState?.isInTabSwitcher == true) {
+  /**
+   * Returns the tint color to be applied to the navigation icon.
+   *
+   * Subclasses (e.g., CustomReaderFragment) can override this method to provide custom behavior,
+   * such as setting a colored app icon in place of the default hamburger icon when configured.
+   *
+   * By default, this returns [White], which is appropriate for vector icons that rely on tinting.
+   */
+  open fun navigationIconTint() = White
+
+  /**
+   * Provides the navigationIcon based on condition.
+   * Subclasses like CustomReaderFragment override this method to provide custom
+   * behavior, such as set the app icon on hamburger when configure to not show the title.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open fun navigationIcon() = if (readerMenuState?.isInTabSwitcher == true) {
     IconItem.Drawable(R.drawable.ic_round_add_white_36dp)
   } else {
     IconItem.Vector(Icons.Filled.Menu)
@@ -652,22 +685,14 @@ abstract class CoreReaderFragment :
 
   private fun prepareViews() {
     fragmentReaderBinding?.let { readerBinding ->
-      videoView = readerBinding.fullscreenVideoContainer
       with(readerBinding.root) {
         activityMainRoot = findViewById(R.id.activity_main_root)
         contentFrame = findViewById(R.id.activity_main_content_frame)
         toolbar = findViewById(R.id.toolbar)
         tabSwitcherRoot = findViewById(R.id.activity_main_tab_switcher)
-        toolbarWithSearchPlaceholder = findViewById(R.id.toolbarWithSearchPlaceholder)
         tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
         donationLayout = findViewById(R.id.donation_layout)
       }
-    }
-  }
-
-  private fun handleClicks() {
-    toolbarWithSearchPlaceholder?.setOnClickListener {
-      openSearch(searchString = "", isOpenedFromTabView = false, false)
     }
   }
 
@@ -859,34 +884,30 @@ abstract class CoreReaderFragment :
         showBackToTopButton = false
       )
     }
+    showSearchPlaceHolderInToolbar(true)
     startAnimation(tabSwitcherRoot, R.anim.slide_down)
-    tabsAdapter?.let { tabsAdapter ->
-      tabRecyclerView?.let { recyclerView ->
-        if (tabsAdapter.selected < webViewList.size &&
-          recyclerView.layoutManager != null
-        ) {
-          recyclerView.layoutManager?.scrollToPosition(tabsAdapter.selected)
-        }
-      }
-      // Notify the tabs adapter to update the UI when the tab switcher is shown
-      // This ensures that any changes made to the adapter's data or views are
-      // reflected correctly.
-      tabsAdapter.notifyDataSetChanged()
-    }
     readerMenuState?.showTabSwitcherOptions()
   }
 
   /**
-   * Sets the tabs switcher visibility, controlling the visibility of the tab.
-   * Subclasses, like CustomReaderFragment, override this method to provide custom
-   * behavior, such as hiding the placeholder in the toolbar when a custom app is configured
-   * not to show the title. This is necessary because the same toolbar is used for displaying tabs.
+   * Controls the visibility of the search placeholder in the toolbar.
    *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
+   * Subclasses (e.g., CustomReaderFragment) can override this method to customize behavior,
+   * such as showing a search placeholder instead of the title when the app is configured to
+   * hide the title. This is important because the same toolbar is shared with the tab display.
+   *
+   * NOTE: This method sets `showSearchPlaceHolderForCustomApps` to `false` by default.
+   * Subclasses must explicitly handle the `true` case if needed.
+   *
+   * ⚠️ When modifying this method, thoroughly test with custom app configurations to
+   * ensure correct toolbar behavior.
    */
-  open fun setTabSwitcherVisibility(visibility: Int) {
-    tabSwitcherRoot?.visibility = visibility
+  open fun showSearchPlaceHolderInToolbar(isTabSwitcherShowing: Boolean) {
+    readerScreenState.update {
+      copy(
+        searchPlaceHolderItemForCustomApps = searchPlaceHolderItemForCustomApps.copy(first = false)
+      )
+    }
   }
 
   /**
@@ -926,7 +947,7 @@ abstract class CoreReaderFragment :
    *          as closing the ZIM book would require reloading the ZIM file, which can be a resource-intensive operation.
    */
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
-    toolbar?.let(::setUpDrawerToggle)
+    setUpDrawerToggle()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     selectTab(currentWebViewIndex)
     readerScreenState.update {
@@ -935,24 +956,15 @@ abstract class CoreReaderFragment :
         pageLoadingItem = false to ZERO,
       )
     }
+    showSearchPlaceHolderInToolbar(false)
     readerMenuState?.showWebViewOptions(urlIsValid())
     // Reset the top margin of web views to 0 to remove any previously set margin
     // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
     // setTopMarginToWebViews(0)
   }
 
-  /**
-   * Sets the drawer toggle, controlling the toolbar.
-   * Subclasses like CustomReaderFragment override this method to provide custom
-   * behavior, such as set the app icon on hamburger when configure to not show the title.
-   *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
-   */
-  open fun setUpDrawerToggle(toolbar: Toolbar) {
-    toolbar.let {
-      (requireActivity() as CoreMainActivity).setupDrawerToggle(it, true)
-    }
+  open fun setUpDrawerToggle() {
+    (requireActivity() as CoreMainActivity).setupDrawerToggle(true)
   }
 
   /**
@@ -1335,10 +1347,8 @@ abstract class CoreReaderFragment :
   @SuppressLint("ClickableViewAccessibility")
   private fun unBindViewsAndBinding() {
     activityMainRoot = null
-    toolbarWithSearchPlaceholder = null
     tabRecyclerView = null
     tabSwitcherRoot = null
-    videoView = null
     contentFrame = null
     compatCallback?.finish()
     compatCallback = null
@@ -1402,14 +1412,12 @@ abstract class CoreReaderFragment :
 
   @Throws(IllegalArgumentException::class)
   protected open fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
-    // requireNotNull(activityMainRoot)
     return ToolbarScrollingKiwixWebView(
       requireActivity(),
       this,
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
       null,
-      // requireNotNull(readerScreenState.value.fullScreenItem.second),
-      null,
+      requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
       // requireNotNull(toolbarContainer),
       // requireNotNull(bottomToolbar),
@@ -1446,7 +1454,6 @@ abstract class CoreReaderFragment :
       if (selectTab) {
         selectTab(webViewList.size - 1)
       }
-      tabsAdapter?.notifyDataSetChanged()
     }
     return webView
   }
@@ -1739,10 +1746,18 @@ abstract class CoreReaderFragment :
    */
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
     if (isFullScreen) {
+      readerScreenState.update {
+        copy(
+          fullScreenItem = fullScreenItem.copy(first = true),
+          shouldShowBottomAppBar = false
+        )
+      }
       (requireActivity() as CoreMainActivity).disableDrawer(false)
     } else {
+      readerScreenState.update { copy(fullScreenItem = fullScreenItem.copy(first = false)) }
       if (!isInFullScreenMode()) {
-        toolbar?.let(::setUpDrawerToggle)
+        readerScreenState.update { copy(shouldShowBottomAppBar = true) }
+        setUpDrawerToggle()
         setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
       }
     }
@@ -1768,7 +1783,7 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   open fun closeFullScreen() {
-    toolbar?.let(::setUpDrawerToggle)
+    setUpDrawerToggle()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
     readerScreenState.update {
@@ -2187,10 +2202,8 @@ abstract class CoreReaderFragment :
   protected fun isInFullScreenMode(): Boolean = sharedPreferenceUtil?.prefFullScreen == true
 
   private fun updateBottomToolbarVisibility() {
-    // TODO refactroe this code once we integrate the tabSwitcher
-    // tabSwitcherRoot?.visibility != VISIBLE && !isInFullScreenMode()
     readerScreenState.update {
-      copy(shouldShowBottomAppBar = !isInFullScreenMode())
+      copy(shouldShowBottomAppBar = !showTabSwitcher && !isInFullScreenMode())
     }
   }
 
@@ -2861,11 +2874,7 @@ abstract class CoreReaderFragment :
     try {
       isFromManageExternalLaunch = true
       currentWebViewIndex = 0
-      tabsAdapter?.apply {
-        webViewList.removeAt(0)
-        notifyItemRemoved(0)
-        notifyDataSetChanged()
-      }
+      webViewList.removeFirstOrNull()
       webViewHistoryItemList.forEach { webViewHistoryItem ->
         newTab("", shouldLoadUrl = false)?.let {
           restoreTabState(it, webViewHistoryItem)

@@ -27,7 +27,6 @@ import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
@@ -59,9 +58,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServ
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
-import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
-import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
@@ -271,15 +268,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onSupportNavigateUp(): Boolean =
     navController.navigateUp() || super.onSupportNavigateUp()
 
-  open fun setupDrawerToggle(toolbar: Toolbar, shouldEnableRightDrawer: Boolean = false) {
+  open fun setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) {
     // Set the initial contentDescription to the hamburger icon.
     // This method is called from various locations after modifying the navigationIcon.
     // For example, we previously changed this icon/contentDescription to the "+" button
     // when opening the tabSwitcher. After closing the tabSwitcher, we reset the
     // contentDescription to the default hamburger icon.
-    toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-      getString(R.string.open_drawer)
-    )
+    // Todo we will refactore this when migrating the CoreMainActivity.
+    // toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+    //   getString(R.string.open_drawer)
+    // )
     drawerToggle =
       ActionBarDrawerToggle(
         this,

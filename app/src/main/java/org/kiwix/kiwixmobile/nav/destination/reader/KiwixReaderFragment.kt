@@ -85,7 +85,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       })
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar?.let { activity.setupDrawerToggle(it, true) }
+    activity.setupDrawerToggle(true)
     openPageInBookFromNavigationArguments()
   }
 
@@ -180,7 +180,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
    * @see closeAllTabs
    */
   override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
-    toolbar?.let { activity?.setupDrawerToggle(it, true) }
+    activity?.setupDrawerToggle(true)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (webViewList.isEmpty()) {
       readerMenuState?.hideTabSwitcher()
@@ -302,14 +302,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   @Throws(IllegalArgumentException::class)
   override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
-    // requireNotNull(activityMainRoot)
     return ToolbarScrollingKiwixWebView(
       requireContext(),
       this,
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
       null,
-      // requireNotNull(videoView),
-      null,
+      requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
       // requireNotNull(toolbarContainer),
       // requireNotNull(bottomToolbar),

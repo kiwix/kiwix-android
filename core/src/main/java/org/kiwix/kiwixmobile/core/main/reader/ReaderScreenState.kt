@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import android.widget.FrameLayout
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.ui.platform.ComposeView
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
@@ -60,9 +60,9 @@ data class ReaderScreenState(
    *
    * A [Pair] containing:
    *  - [Boolean]: Whether to show/hide full screen mode.
-   *  - [ComposeView]: full screen view.
+   *  - [FrameLayout]: full screen view.
    */
-  val fullScreenItem: Pair<Boolean, ComposeView?>,
+  val fullScreenItem: Pair<Boolean, FrameLayout?>,
   /**
    * Manages the showing of "Full screen mode".
    */
@@ -124,7 +124,7 @@ data class ReaderScreenState(
   /**
    * Handles the clicks of next page button in reader bottom toolbar.
    *
-   * A [Pair] containing:
+   * A [Triple] containing:
    *  - [Unit]: Handles the normal click of button(For going to next page).
    *  - [Unit]: Handles the long click of button(For showing the next pages history).
    *  - [Boolean]: Handles the button should enable or not.
@@ -149,4 +149,8 @@ data class ReaderScreenState(
    * Manages the click event on tabs.
    */
   val onTabClickListener: TabClickListener,
+  /**
+   * Manages the showing/hiding of search placeholder in toolbar for custom apps.
+   */
+  val searchPlaceHolderItemForCustomApps: Pair<Boolean, () -> Unit>
 )

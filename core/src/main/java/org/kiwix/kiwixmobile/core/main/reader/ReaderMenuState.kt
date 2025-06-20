@@ -167,6 +167,7 @@ class ReaderMenuState(
 
   fun hideTabSwitcher() {
     isInTabSwitcher = false
+    updateMenuItems()
   }
 
   private fun updateMenuItems() {

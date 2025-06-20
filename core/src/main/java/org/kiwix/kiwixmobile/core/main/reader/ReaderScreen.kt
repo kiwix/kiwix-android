@@ -26,6 +26,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -85,6 +87,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -119,14 +122,17 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTO
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
@@ -176,12 +182,14 @@ private fun ReaderTopBar(
   scrollBehavior: TopAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit,
 ) {
-  if (!state.shouldShowFullScreenMode) {
+  if (!state.shouldShowFullScreenMode && !state.fullScreenItem.first) {
     KiwixAppBar(
       title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
       navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItems,
-      topAppBarScrollBehavior = scrollBehavior
+      topAppBarScrollBehavior = scrollBehavior,
+      searchBar =
+        searchPlaceHolderIfActive(state.searchPlaceHolderItemForCustomApps)
     )
   }
 }
@@ -199,6 +207,7 @@ private fun ReaderContentLayout(state: ReaderScreenState, modifier: Modifier = M
       )
 
       state.isNoBookOpenInReader -> NoBookOpenView(state.onOpenLibraryButtonClicked)
+      state.fullScreenItem.first -> ShowFullScreenView(state)
 
       else -> {
         ShowZIMFileContent(state)
@@ -214,7 +223,6 @@ private fun ReaderContentLayout(state: ReaderScreenState, modifier: Modifier = M
             state.shouldShowBottomAppBar
           )
         }
-        ShowFullScreenView(state)
         CloseFullScreenImageButton(
           state.shouldShowFullScreenMode,
           state.onExitFullscreenClick
@@ -223,6 +231,53 @@ private fun ReaderContentLayout(state: ReaderScreenState, modifier: Modifier = M
     }
 
     ShowDonationLayout(state)
+  }
+}
+
+@Composable
+private fun searchPlaceHolderIfActive(
+  searchPlaceHolderItemForCustomApps: Pair<Boolean, () -> Unit>
+): (@Composable () -> Unit)? = if (searchPlaceHolderItemForCustomApps.first) {
+  {
+    SearchPlaceholder(
+      stringResource(R.string.search_label),
+      searchPlaceHolderItemForCustomApps.second
+    )
+  }
+} else {
+  null
+}
+
+@Composable
+fun SearchPlaceholder(hint: String, searchPlaceHolderClick: () -> Unit) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(
+        color = Color.Transparent,
+        shape = RoundedCornerShape(THREE_DP)
+      )
+      .border(
+        width = 1.5.dp,
+        color = colorResource(id = R.color.alabaster_white),
+        shape = RoundedCornerShape(THREE_DP)
+      )
+      .padding(horizontal = FIVE_DP, vertical = FIVE_DP)
+      .clickable(onClick = searchPlaceHolderClick),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = hint,
+      color = Color.Gray,
+      modifier = Modifier.weight(1f),
+      fontSize = SEARCH_PLACEHOLDER_TEXT_SIZE
+    )
+    Spacer(modifier = Modifier.width(TEN_DP))
+    Icon(
+      painter = IconItem.Drawable(R.drawable.action_search).toPainter(),
+      contentDescription = null,
+      tint = White
+    )
   }
 }
 
@@ -254,7 +309,14 @@ private fun ShowZIMFileContent(state: ReaderScreenState) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
       AndroidView(
-        factory = { selectedWebView },
+        factory = { context ->
+          // Create a new container and add the WebView to it
+          FrameLayout(context).apply {
+            // Ensure the WebView has no parent before adding
+            (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
+            addView(selectedWebView)
+          }
+        },
         modifier = Modifier.fillMaxSize()
       )
     }
@@ -263,8 +325,8 @@ private fun ShowZIMFileContent(state: ReaderScreenState) {
 
 @Composable
 private fun ShowFullScreenView(state: ReaderScreenState) {
-  if (state.fullScreenItem.first) {
-    state.fullScreenItem.second
+  state.fullScreenItem.second?.let { videoView ->
+    AndroidView(factory = { videoView })
   }
 }
 
