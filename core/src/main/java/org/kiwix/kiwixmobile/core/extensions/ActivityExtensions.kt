@@ -33,7 +33,6 @@ import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -101,8 +100,8 @@ object ActivityExtensions {
   val Activity.cachedComponent: CoreActivityComponent
     get() = coreMainActivity.cachedComponent
 
-  fun Activity.setupDrawerToggle(toolbar: Toolbar, shouldEnableRightDrawer: Boolean = false) =
-    coreMainActivity.setupDrawerToggle(toolbar, shouldEnableRightDrawer)
+  fun Activity.setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) =
+    coreMainActivity.setupDrawerToggle(shouldEnableRightDrawer)
 
   fun Activity.navigate(fragmentId: Int) {
     coreMainActivity.navigate(fragmentId)

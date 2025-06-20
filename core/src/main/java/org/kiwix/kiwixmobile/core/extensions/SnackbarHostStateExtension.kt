@@ -30,7 +30,8 @@ fun SnackbarHostState.snack(
   actionClick: (() -> Unit)? = null,
   // Default duration is 4 seconds.
   snackbarDuration: SnackbarDuration = SnackbarDuration.Short,
-  lifecycleScope: CoroutineScope
+  lifecycleScope: CoroutineScope,
+  snackBarResult: (SnackbarResult) -> Unit = {}
 ) {
   lifecycleScope.launch {
     val result = showSnackbar(
@@ -41,5 +42,6 @@ fun SnackbarHostState.snack(
     if (result == SnackbarResult.ActionPerformed) {
       actionClick?.invoke()
     }
+    snackBarResult.invoke(result)
   }
 }

@@ -113,7 +113,7 @@ fun LocalFileTransferScreen(
     Scaffold(
       topBar = {
         KiwixAppBar(
-          titleId = toolbarTitle,
+          title = stringResource(toolbarTitle),
           actionMenuItems = actionMenuItems.map {
             it.copy(
               modifier =

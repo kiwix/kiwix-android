@@ -72,7 +72,7 @@ fun AddNoteDialogScreen(
   KiwixDialogTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
-      topBar = { KiwixAppBar(R.string.note, navigationIcon, actionMenuItems) }
+      topBar = { KiwixAppBar(stringResource(R.string.note), navigationIcon, actionMenuItems) }
     ) { paddingValues ->
       Column(
         modifier = Modifier

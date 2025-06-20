@@ -88,7 +88,7 @@ fun PageScreen(
       topBar = {
         Column {
           KiwixAppBar(
-            titleId = state.screenTitle,
+            title = stringResource(state.screenTitle),
             navigationIcon = navigationIcon,
             actionMenuItems = actionMenuItems,
             searchBar = searchBarIfActive(state)

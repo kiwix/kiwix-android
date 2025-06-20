@@ -233,7 +233,7 @@ class KiwixMainActivity : CoreMainActivity() {
    *
    * TODO Remove this once we migrate to compose.
    */
-  fun toggleBottomNavigation(isVisible: Boolean) {
+  override fun toggleBottomNavigation(isVisible: Boolean) {
     activityKiwixMainBinding.bottomNavView.animate()
       ?.translationY(
         if (isVisible) {

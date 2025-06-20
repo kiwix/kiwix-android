@@ -117,7 +117,7 @@ fun SettingsScreen(
     Scaffold(
       topBar = {
         KiwixAppBar(
-          titleId = R.string.menu_settings,
+          title = stringResource(R.string.menu_settings),
           navigationIcon = navigationIcon
         )
       }

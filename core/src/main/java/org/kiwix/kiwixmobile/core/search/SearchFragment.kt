@@ -260,7 +260,7 @@ class SearchFragment : BaseFragment() {
           searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
         },
         testingTag = FIND_IN_PAGE_TESTING_TAG,
-        iconButtonText = R.string.menu_search_in_text,
+        iconButtonText = requireActivity().getString(R.string.menu_search_in_text),
         isEnabled = findInPageMenuItem.value.first
       )
     } else {
