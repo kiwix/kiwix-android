@@ -62,7 +62,6 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarDuration
@@ -171,7 +170,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
@@ -320,6 +318,8 @@ abstract class CoreReaderFragment :
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
+  val toolbarOffsetY = mutableStateOf(0f)
+  val bottomAppBarOffsetY = mutableStateOf(0f)
 
   protected var readerMenuState: ReaderMenuState? = null
   private var composeView: ComposeView? = null
@@ -348,7 +348,7 @@ abstract class CoreReaderFragment :
       previousPageButtonItem = Triple({ goBack() }, { showBackwardHistory() }, false),
       onHomeButtonClick = { openMainPage() },
       nextPageButtonItem = Triple({ goForward() }, { showForwardHistory() }, false),
-      onTocClick = { openToc() },
+      tocButtonItem = false to { },
       onCloseAllTabs = { closeAllTabs() },
       bottomNavigationHeight = ZERO,
       shouldShowBottomAppBar = true,
@@ -473,11 +473,6 @@ abstract class CoreReaderFragment :
     readerMenuState = createMainMenu()
     composeView?.apply {
       setContent {
-        val lazyListState = rememberLazyListState()
-        val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
-        LaunchedEffect(isBottomNavVisible) {
-          (activity as? CoreMainActivity)?.toggleBottomNavigation(isBottomNavVisible)
-        }
         LaunchedEffect(Unit) {
           snapshotFlow { webViewList.size }
             .distinctUntilChanged()
@@ -491,7 +486,8 @@ abstract class CoreReaderFragment :
               bottomNavigationHeight = getBottomNavigationHeight(),
               readerScreenTitle = context.getString(R.string.reader),
               darkModeViewPainter = darkModeViewPainter,
-              fullScreenItem = fullScreenItem.first to getVideoView()
+              fullScreenItem = fullScreenItem.first to getVideoView(),
+              tocButtonItem = getTocButtonStateAndAction()
             )
           }
         }
@@ -514,7 +510,8 @@ abstract class CoreReaderFragment :
               iconTint = navigationIconTint()
             )
           },
-          listState = lazyListState
+          toolbarOffsetY = toolbarOffsetY,
+          bottomAppBarOffsetY = bottomAppBarOffsetY
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -628,6 +625,20 @@ abstract class CoreReaderFragment :
   }
 
   private fun getBottomNavigationHeight(): Int = getBottomNavigationView()?.measuredHeight ?: ZERO
+
+  /**
+   * Provides the visibility state and click action for the TOC (Table of Contents) button
+   * shown in the reader's bottom app bar.
+   *
+   * @return A [Pair] containing:
+   *  - [Boolean]: Indicates whether the TOC button should be enabled (e.g., can be disabled
+   *               in certain custom app configurations where the sidebar is turned off).
+   *  - [() -> Unit]: The action to perform when the TOC button is clicked.
+   *
+   * Note: If modifying this method, ensure it is thoroughly tested in custom app variants
+   * where sidebar behavior may differ.
+   */
+  open fun getTocButtonStateAndAction(): Pair<Boolean, () -> Unit> = true to { openToc() }
 
   private fun navigationIconContentDescription() =
     if (readerMenuState?.isInTabSwitcher == true) {
@@ -949,7 +960,6 @@ abstract class CoreReaderFragment :
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     setUpDrawerToggle()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    selectTab(currentWebViewIndex)
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = true,
@@ -958,6 +968,7 @@ abstract class CoreReaderFragment :
     }
     showSearchPlaceHolderInToolbar(false)
     readerMenuState?.showWebViewOptions(urlIsValid())
+    selectTab(currentWebViewIndex)
     // Reset the top margin of web views to 0 to remove any previously set margin
     // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
     // setTopMarginToWebViews(0)
@@ -1077,7 +1088,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun openToc() {
+  protected fun openToc() {
     drawerLayout?.openDrawer(GravityCompat.END)
   }
 
@@ -1413,14 +1424,13 @@ abstract class CoreReaderFragment :
   @Throws(IllegalArgumentException::class)
   protected open fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
     return ToolbarScrollingKiwixWebView(
-      requireActivity(),
+      requireContext(),
       this,
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
-      null,
       requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      // requireNotNull(toolbarContainer),
-      // requireNotNull(bottomToolbar),
+      onToolbarOffsetChanged = { offsetY -> toolbarOffsetY.value = offsetY },
+      onBottomAppBarOffsetChanged = { bottomOffsetY -> bottomAppBarOffsetY.value = bottomOffsetY },
       requireNotNull(sharedPreferenceUtil)
     )
   }
@@ -1821,7 +1831,6 @@ abstract class CoreReaderFragment :
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
         hideNoBookOpenViews()
-        contentFrame?.visibility = VISIBLE
         openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
@@ -2203,7 +2212,7 @@ abstract class CoreReaderFragment :
 
   private fun updateBottomToolbarVisibility() {
     readerScreenState.update {
-      copy(shouldShowBottomAppBar = !showTabSwitcher && !isInFullScreenMode())
+      copy(shouldShowBottomAppBar = readerMenuState?.isInTabSwitcher == false && !isInFullScreenMode())
     }
   }
 
@@ -2882,6 +2891,7 @@ abstract class CoreReaderFragment :
       }
       selectTab(currentTab)
       onComplete.invoke()
+      readerMenuState?.showWebViewOptions(urlIsValid())
     } catch (ignore: Exception) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", ignore)
       activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)

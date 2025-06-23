@@ -87,11 +87,20 @@ fun ZimHostScreen(
 ) {
   KiwixTheme {
     Scaffold(topBar = {
-      KiwixAppBar(stringResource(R.string.menu_wifi_hotspot), navigationIcon)
+      KiwixAppBar(
+        title = stringResource(R.string.menu_wifi_hotspot),
+        navigationIcon = navigationIcon
+      )
     }) { contentPadding ->
-      Column(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .padding(contentPadding)
+      ) {
         Row(
-          modifier = Modifier.fillMaxWidth().padding(horizontal = SIXTEEN_DP),
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = SIXTEEN_DP),
           verticalAlignment = Alignment.CenterVertically
         ) {
           ServerIpText(serverIpText, Modifier.weight(1f), LocalContext.current)

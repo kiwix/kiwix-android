@@ -72,6 +72,7 @@ const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixAppBar(
+  modifier: Modifier = Modifier,
   title: String,
   navigationIcon: @Composable () -> Unit,
   actionMenuItems: List<ActionMenuItem> = emptyList(),
@@ -92,7 +93,8 @@ fun KiwixAppBar(
       // Edge-to-Edge mode is already enabled in our application,
       // so we don't need to apply additional top insets.
       // This prevents unwanted extra margin at the top.
-      windowInsets = WindowInsets.statusBars.only(WindowInsetsSides.Horizontal)
+      windowInsets = WindowInsets.statusBars.only(WindowInsetsSides.Horizontal),
+      modifier = modifier
     )
   }
 }

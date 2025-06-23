@@ -70,7 +70,13 @@ fun NavigationHistoryDialogScreen(
 ) {
   KiwixDialogTheme {
     Scaffold(
-      topBar = { KiwixAppBar(stringResource(titleId), navigationIcon, actionMenuItems) }
+      topBar = {
+        KiwixAppBar(
+          title = stringResource(titleId),
+          navigationIcon = navigationIcon,
+          actionMenuItems = actionMenuItems
+        )
+      }
     ) { paddingValues ->
       Box(
         modifier = Modifier

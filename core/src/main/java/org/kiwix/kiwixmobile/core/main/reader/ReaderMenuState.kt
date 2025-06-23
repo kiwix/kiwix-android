@@ -61,7 +61,7 @@ const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 @Stable
 class ReaderMenuState(
   private val menuClickListener: MenuClickListener,
-  private val isUrlValidInitially: Boolean,
+  isUrlValidInitially: Boolean,
   private val disableReadAloud: Boolean = false,
   private val disableTabs: Boolean = false,
   private val disableSearch: Boolean = false

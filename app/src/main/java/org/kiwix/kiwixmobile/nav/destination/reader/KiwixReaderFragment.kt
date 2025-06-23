@@ -211,12 +211,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun onPause() {
-    super.onPause()
-    // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
-    // this resets the margin to zero, before fragment navigation.
-    setBottomMarginToNavHostContainer(0)
-  }
+  // override fun onPause() {
+  //   super.onPause()
+  //   // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
+  //   // this resets the margin to zero, before fragment navigation.
+  //   setBottomMarginToNavHostContainer(ZERO)
+  // }
 
   @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -233,7 +233,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    setFragmentContainerBottomMarginToSizeOfNavBar()
     if (isFullScreenVideo || isInFullScreenMode()) {
       hideNavBar()
     }
@@ -306,11 +305,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
       requireContext(),
       this,
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
-      null,
       requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      // requireNotNull(toolbarContainer),
-      // requireNotNull(bottomToolbar),
+      onToolbarOffsetChanged = { offsetY -> toolbarOffsetY.value = offsetY },
+      onBottomAppBarOffsetChanged = { bottomOffsetY -> bottomAppBarOffsetY.value = bottomOffsetY },
       sharedPreferenceUtil = requireNotNull(sharedPreferenceUtil),
       parentNavigationBar = requireActivity().findViewById(R.id.bottom_nav_view)
     )

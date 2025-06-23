@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -78,12 +77,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
     if (isAdded) {
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-      if (BuildConfig.DISABLE_SIDEBAR) {
-        val toolbarToc =
-          activity?.findViewById<ImageView>(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar_toc)
-        toolbarToc?.isEnabled = false
-        // TODO refactor this with compose UI.
-      }
       with(activity as AppCompatActivity) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setUpDrawerToggle()
@@ -97,6 +90,20 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
     }
   }
+
+  /**
+   * Returns the TOC (Table of Contents) button's enabled state and click action.
+   *
+   * In this custom app variant, the TOC button is disabled if [BuildConfig.DISABLE_SIDEBAR] is `true`.
+   * This is typically used when the sidebar functionality is intentionally turned off.
+   *
+   * @return A [Pair] containing:
+   *  - [Boolean]: `true` if the TOC button should be enabled (i.e., sidebar is allowed),
+   *               `false` if it should be disabled (i.e., [DISABLE_SIDEBAR] is `true`).
+   *  - [() -> Unit]: Action to execute when the button is clicked. This will only be invoked if enabled.
+   */
+  override fun getTocButtonStateAndAction(): Pair<Boolean, () -> Unit> =
+    !BuildConfig.DISABLE_SIDEBAR to { openToc() }
 
   /**
    * Returns the tint color for the navigation icon.

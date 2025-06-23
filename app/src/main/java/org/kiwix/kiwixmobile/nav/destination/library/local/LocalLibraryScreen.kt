@@ -95,10 +95,10 @@ fun LocalLibraryScreen(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
       topBar = {
         KiwixAppBar(
-          stringResource(R.string.library),
-          navigationIcon,
-          state.actionMenuItems,
-          scrollBehavior
+          title = stringResource(R.string.library),
+          navigationIcon = navigationIcon,
+          actionMenuItems = state.actionMenuItems,
+          topAppBarScrollBehavior = scrollBehavior
         )
       },
       floatingActionButton = { SelectFileButton(fabButtonClick) },

@@ -23,8 +23,12 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.COMPOSE_BOTTOM_APP_BAR_DEFAULT_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.COMPOSE_TOOLBAR_DEFAULT_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.dpToPx
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import kotlin.math.max
+import kotlin.math.min
 
 @SuppressLint("ViewConstructor")
 @Suppress("UnusedPrivateProperty")
@@ -32,26 +36,70 @@ class ToolbarScrollingKiwixWebView @JvmOverloads constructor(
   context: Context,
   callback: WebViewCallback,
   attrs: AttributeSet,
-  nonVideoView: ViewGroup?,
   videoView: ViewGroup?,
   webViewClient: CoreWebViewClient,
+  private val onToolbarOffsetChanged: ((Float) -> Unit)? = null,
+  private val onBottomAppBarOffsetChanged: ((Float) -> Unit)? = null,
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val parentNavigationBar: View? = null
 ) : KiwixWebView(
     context,
     callback,
     attrs,
-    nonVideoView,
     videoView,
     webViewClient,
     sharedPreferenceUtil
   ) {
-  private val toolbarHeight = context.getToolbarHeight()
+  private val toolbarHeight = context.dpToPx(COMPOSE_TOOLBAR_DEFAULT_HEIGHT)
+  private val bottomAppBarHeightPx = context.dpToPx(COMPOSE_BOTTOM_APP_BAR_DEFAULT_HEIGHT)
 
   private var startY = 0f
+  private var currentOffset = 0f
 
   init {
     fixInitalScrollingIssue()
+  }
+
+  /**
+   * Adjusts the internal offset of the WebView based on scroll delta.
+   *
+   * Positive scrollDelta = user scrolling down (hide UI)
+   * Negative scrollDelta = user scrolling up (show UI)
+   */
+
+  private fun moveToolbar(scrollDelta: Int): Boolean {
+    val newOffset = when {
+      scrollDelta > 0 -> max(-toolbarHeight.toFloat(), currentOffset - scrollDelta)
+      else -> min(0f, currentOffset - scrollDelta)
+    }
+
+    if (newOffset != currentOffset) {
+      currentOffset = newOffset
+      notifyOffsetChanged(newOffset)
+      return true
+    }
+
+    return false
+  }
+
+  /**
+   * Notifies Compose UI about toolbar offset.
+   */
+  private fun notifyOffsetChanged(offset: Float) {
+    onToolbarOffsetChanged?.invoke(offset)
+
+    // Compute offset for bottomAppBar using height ratio
+    val bottomOffset = offset * -1 * (bottomAppBarHeightPx.toFloat() / toolbarHeight)
+    onBottomAppBarOffsetChanged?.invoke(bottomOffset)
+
+    // Optional: Animate parent navigation bar (if still using it)
+    parentNavigationBar?.let { view ->
+      val offsetFactor = view.height / toolbarHeight.toFloat()
+      view.translationY = offset * -1 * offsetFactor
+    }
+
+    // Adjust WebView position to prevent layout jump
+    this.translationY = offset
   }
 
   /**
@@ -62,68 +110,27 @@ class ToolbarScrollingKiwixWebView @JvmOverloads constructor(
     moveToolbar(0)
   }
 
-  @Suppress("FunctionOnlyReturningConstant", "UnusedParameter")
-  private fun moveToolbar(scrollDelta: Int): Boolean {
-    // val originalTranslation = toolbarView.translationY
-    // val newTranslation =
-    //   if (scrollDelta > 0) {
-    //     // scroll down
-    //     max(-toolbarHeight.toFloat(), originalTranslation - scrollDelta)
-    //   } else {
-    //     // scroll up
-    //     min(0f, originalTranslation - scrollDelta)
-    //   }
-    //
-    // toolbarView.translationY = newTranslation
-    // bottomBarView.translationY =
-    //   newTranslation * -1 * (bottomBarView.height / toolbarHeight.toFloat())
-    // parentNavigationBar?.let {
-    //   it.translationY = newTranslation * -1 * (it.height / toolbarHeight.toFloat())
-    // }
-    // this.translationY = newTranslation + toolbarHeight
-    // return toolbarHeight + newTranslation != 0f && newTranslation != 0f
-    return false
-  }
-
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    // val transY = toolbarView.translationY.toInt()
-    // when (event.actionMasked) {
-    //   MotionEvent.ACTION_DOWN -> startY = event.rawY
-    //   MotionEvent.ACTION_MOVE -> {
-    //     // If we are in fullscreen don't scroll bar
-    //     if (sharedPreferenceUtil.prefFullScreen) {
-    //       return super.onTouchEvent(event)
-    //     }
-    //     // Filter out zooms since we don't want to affect the toolbar when zooming
-    //     if (event.pointerCount == 1) {
-    //       val diffY = (event.rawY - startY).toInt()
-    //       startY = event.rawY
-    //       if (moveToolbar(-diffY)) {
-    //         event.offsetLocation(0f, -diffY.toFloat())
-    //         return super.onTouchEvent(event)
-    //       }
-    //     }
-    //   }
-    //   // If the toolbar is half-visible,
-    //   // either open or close it entirely depending on how far it is visible
-    //   MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
-    //     if (transY != 0 && transY > -toolbarHeight) {
-    //       if (transY > -toolbarHeight / 2) {
-    //         ensureToolbarDisplayed()
-    //       } else {
-    //         ensureToolbarHidden()
-    //       }
-    //     }
-    // }
+    if (sharedPreferenceUtil.prefFullScreen) return super.onTouchEvent(event)
+
+    when (event.actionMasked) {
+      MotionEvent.ACTION_DOWN -> {
+        startY = event.rawY
+      }
+
+      MotionEvent.ACTION_MOVE -> {
+        if (event.pointerCount == 1) {
+          val diffY = (event.rawY - startY).toInt()
+          startY = event.rawY
+          if (moveToolbar(-diffY)) {
+            event.offsetLocation(0f, -diffY.toFloat())
+            return super.onTouchEvent(event)
+          }
+        }
+      }
+    }
+
     return super.onTouchEvent(event)
-  }
-
-  private fun ensureToolbarDisplayed() {
-    moveToolbar(-toolbarHeight)
-  }
-
-  private fun ensureToolbarHidden() {
-    moveToolbar(toolbarHeight)
   }
 }

@@ -132,8 +132,12 @@ data class ReaderScreenState(
   val nextPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   /**
    * Handles the click to open right sidebar button click in reader bottom toolbar.
+   *
+   * A [Pair] containing:
+   *  - [Boolean]: Handles the button should enable or not(Specially for custom apps).
+   *  - [Unit]: Handles the click of button.
    */
-  val onTocClick: () -> Unit,
+  val tocButtonItem: Pair<Boolean, () -> Unit>,
   val onCloseAllTabs: () -> Unit,
   /**
    * Stores the height of the bottom navigation bar in pixels.

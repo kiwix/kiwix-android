@@ -59,7 +59,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   context: Context,
   private val callback: WebViewCallback,
   attrs: AttributeSet,
-  private var nonVideoView: ViewGroup?,
   videoView: ViewGroup?,
   private val webViewClient: CoreWebViewClient,
   val sharedPreferenceUtil: SharedPreferenceUtil
@@ -102,7 +101,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     clearCache(true)
     setWebViewClient(webViewClient)
     webChromeClient =
-      KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
+      KiwixWebChromeClient(callback, videoView, this).apply {
         setOnToggledFullscreen(
           object : ToggledFullscreenCallback {
             override fun toggledFullscreen(fullscreen: Boolean) {
@@ -154,7 +153,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    nonVideoView = null
     textZoomJob?.cancel()
     textZoomJob = null
   }
