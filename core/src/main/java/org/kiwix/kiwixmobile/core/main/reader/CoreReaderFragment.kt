@@ -148,7 +148,6 @@ import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.main.TabsAdapter
-import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
@@ -226,9 +225,6 @@ abstract class CoreReaderFragment :
 
   var drawerLayout: DrawerLayout? = null
   protected var tableDrawerRightContainer: NavigationView? = null
-
-  var contentFrame: FrameLayout? = null
-
   var tabSwitcherRoot: View? = null
 
   var activityMainRoot: View? = null
@@ -318,8 +314,6 @@ abstract class CoreReaderFragment :
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
-  val toolbarOffsetY = mutableStateOf(0f)
-  val bottomAppBarOffsetY = mutableStateOf(0f)
 
   protected var readerMenuState: ReaderMenuState? = null
   private var composeView: ComposeView? = null
@@ -502,6 +496,9 @@ abstract class CoreReaderFragment :
         ReaderScreen(
           state = readerScreenState.value,
           actionMenuItems = readerMenuState?.menuItems.orEmpty(),
+          onBottomScrollOffsetChanged = { offset ->
+            updateNavigationBarHeight(offset)
+          },
           navigationIcon = {
             NavigationIcon(
               iconItem = navigationIcon(),
@@ -509,9 +506,7 @@ abstract class CoreReaderFragment :
               onClick = { navigationIconClick() },
               iconTint = navigationIconTint()
             )
-          },
-          toolbarOffsetY = toolbarOffsetY,
-          bottomAppBarOffsetY = bottomAppBarOffsetY
+          }
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -615,6 +610,17 @@ abstract class CoreReaderFragment :
     )
   }
 
+  /**
+   * This method is for hiding the KiwixMainActivity bottomNavigationView.
+   * In custom apps we do not have the bottomnavigationView so that's why this method is empty here.
+   *
+   * See the implementation in KiwixReaderFragment.
+   * TODO refactore this when migrating the KiwixMainActivity in compose.
+   */
+  open fun updateNavigationBarHeight(toolbarOffset: Float) {
+    // Do nothing since in custom apps we do not have the bottomNavigationView.
+  }
+
   private fun getVideoView() = context?.let {
     FrameLayout(it).apply {
       layoutParams = ViewGroup.LayoutParams(
@@ -698,7 +704,6 @@ abstract class CoreReaderFragment :
     fragmentReaderBinding?.let { readerBinding ->
       with(readerBinding.root) {
         activityMainRoot = findViewById(R.id.activity_main_root)
-        contentFrame = findViewById(R.id.activity_main_content_frame)
         toolbar = findViewById(R.id.toolbar)
         tabSwitcherRoot = findViewById(R.id.activity_main_tab_switcher)
         tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
@@ -921,29 +926,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  /**
-   * Sets a top margin to the web views.
-   *
-   * @param topMargin The top margin to be applied to the web views.
-   *                  Use 0 to remove the margin.
-   */
-  protected open fun setTopMarginToWebViews(topMargin: Int) {
-    for (webView in webViewList) {
-      if (webView.parent == null) {
-        // Ensure that the web view has a parent before modifying its layout parameters
-        // This check is necessary to prevent adding the margin when the web view is not attached to a layout
-        // Adding the margin without a parent can cause unintended layout issues or empty
-        // space on top of the webView in the tabs adapter.
-        val frameLayout = FrameLayout(requireActivity())
-        // Add the web view to the frame layout
-        frameLayout.addView(webView)
-      }
-      val layoutParams = webView.layoutParams as FrameLayout.LayoutParams?
-      layoutParams?.topMargin = topMargin
-      webView.requestLayout()
-    }
-  }
-
   protected fun startAnimation(
     view: View?,
     @AnimRes anim: Int
@@ -969,9 +951,6 @@ abstract class CoreReaderFragment :
     showSearchPlaceHolderInToolbar(false)
     readerMenuState?.showWebViewOptions(urlIsValid())
     selectTab(currentWebViewIndex)
-    // Reset the top margin of web views to 0 to remove any previously set margin
-    // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
-    // setTopMarginToWebViews(0)
   }
 
   open fun setUpDrawerToggle() {
@@ -1360,7 +1339,6 @@ abstract class CoreReaderFragment :
     activityMainRoot = null
     tabRecyclerView = null
     tabSwitcherRoot = null
-    contentFrame = null
     compatCallback?.finish()
     compatCallback = null
     toolbar?.setOnTouchListener(null)
@@ -1422,15 +1400,13 @@ abstract class CoreReaderFragment :
   }
 
   @Throws(IllegalArgumentException::class)
-  protected open fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
-    return ToolbarScrollingKiwixWebView(
+  protected open fun createWebView(attrs: AttributeSet?): KiwixWebView? {
+    return KiwixWebView(
       requireContext(),
       this,
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
       requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      onToolbarOffsetChanged = { offsetY -> toolbarOffsetY.value = offsetY },
-      onBottomAppBarOffsetChanged = { bottomOffsetY -> bottomAppBarOffsetY.value = bottomOffsetY },
       requireNotNull(sharedPreferenceUtil)
     )
   }
@@ -1505,7 +1481,6 @@ abstract class CoreReaderFragment :
 
   private fun reopenBook() {
     hideNoBookOpenViews()
-    contentFrame?.visibility = VISIBLE
     readerMenuState?.showBookSpecificMenuItems()
   }
 
@@ -1517,7 +1492,6 @@ abstract class CoreReaderFragment :
         readerScreenTitle = context?.getString(R.string.reader).orEmpty()
       )
     }
-    contentFrame?.visibility = GONE
     hideProgressBar()
     readerMenuState?.hideBookSpecificMenuItems()
     if (shouldCloseZimBook) {
@@ -1796,16 +1770,16 @@ abstract class CoreReaderFragment :
     setUpDrawerToggle()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
+    updateBottomToolbarVisibility()
+    val window = requireActivity().window
+    window.decorView.closeFullScreenMode(window)
+    getCurrentWebView()?.requestLayout()
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = true,
         shouldShowFullScreenMode = false
       )
     }
-    updateBottomToolbarVisibility()
-    val window = requireActivity().window
-    window.decorView.closeFullScreenMode(window)
-    getCurrentWebView()?.requestLayout()
   }
 
   override fun openExternalUrl(intent: Intent) {

@@ -22,9 +22,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,11 +42,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -56,6 +59,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -97,9 +101,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
@@ -149,12 +153,15 @@ const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTe
 fun ReaderScreen(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  toolbarOffsetY: MutableState<Float>,
-  bottomAppBarOffsetY: MutableState<Float>,
+  onBottomScrollOffsetChanged: (Float) -> Unit,
   navigationIcon: @Composable () -> Unit
 ) {
   val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+  val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+  LaunchedEffect(bottomAppBarScrollBehavior.state.heightOffset) {
+    onBottomScrollOffsetChanged(scrollBehavior.state.heightOffset)
+  }
   KiwixDialogTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
@@ -162,7 +169,6 @@ fun ReaderScreen(
         ReaderTopBar(
           state,
           actionMenuItems,
-          toolbarOffsetY,
           scrollBehavior,
           navigationIcon
         )
@@ -171,12 +177,13 @@ fun ReaderScreen(
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
+        .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
         .padding(bottom = bottomNavHeightInDp)
     ) { paddingValues ->
       ReaderContentLayout(
         state,
         Modifier.padding(paddingValues),
-        bottomAppBarOffsetY
+        bottomAppBarScrollBehavior
       )
     }
   }
@@ -188,69 +195,87 @@ fun ReaderScreen(
 private fun ReaderTopBar(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  toolbarOffsetY: MutableState<Float>,
   scrollBehavior: TopAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit,
 ) {
   if (!state.shouldShowFullScreenMode && !state.fullScreenItem.first) {
-    val animatedOffsetY by animateDpAsState(
-      targetValue = with(LocalDensity.current) { toolbarOffsetY.value.toDp() },
-      label = "ToolbarScrollOffset"
-    )
     KiwixAppBar(
       title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
       navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItems,
       topAppBarScrollBehavior = scrollBehavior,
       searchBar =
-        searchPlaceHolderIfActive(state.searchPlaceHolderItemForCustomApps),
-      modifier = Modifier.offset { IntOffset(x = ZERO, y = animatedOffsetY.roundToPx()) }
+        searchPlaceHolderIfActive(state.searchPlaceHolderItemForCustomApps)
     )
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReaderContentLayout(
   state: ReaderScreenState,
   modifier: Modifier = Modifier,
-  bottomAppBarOffsetY: MutableState<Float>
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
 ) {
   Box(modifier = modifier.fillMaxSize()) {
-    when {
-      state.showTabSwitcher -> TabSwitcherView(
-        state.kiwixWebViewList,
-        state.currentWebViewPosition,
-        state.onTabClickListener,
-        state.onCloseAllTabs,
-        state.darkModeViewPainter
-      )
+    TabSwitcherAnimated(state)
+    if (!state.showTabSwitcher) {
+      when {
+        state.isNoBookOpenInReader -> NoBookOpenView(state.onOpenLibraryButtonClicked)
+        state.fullScreenItem.first -> ShowFullScreenView(state)
 
-      state.isNoBookOpenInReader -> NoBookOpenView(state.onOpenLibraryButtonClicked)
-      state.fullScreenItem.first -> ShowFullScreenView(state)
-
-      else -> {
-        ShowZIMFileContent(state, bottomAppBarOffsetY)
-        ShowProgressBarIfZIMFilePageIsLoading(state)
-        Column(Modifier.align(Alignment.BottomCenter)) {
-          TtsControls(state)
-          BottomAppBarOfReaderScreen(
-            state.bookmarkButtonItem,
-            state.previousPageButtonItem,
-            state.onHomeButtonClick,
-            state.nextPageButtonItem,
-            state.tocButtonItem,
-            state.shouldShowBottomAppBar,
-            bottomAppBarOffsetY
+        else -> {
+          ShowZIMFileContent(state)
+          ShowProgressBarIfZIMFilePageIsLoading(state)
+          Column(Modifier.align(Alignment.BottomCenter)) {
+            TtsControls(state)
+            BottomAppBarOfReaderScreen(
+              state.bookmarkButtonItem,
+              state.previousPageButtonItem,
+              state.onHomeButtonClick,
+              state.nextPageButtonItem,
+              state.tocButtonItem,
+              state.shouldShowBottomAppBar,
+              bottomAppBarScrollBehavior
+            )
+          }
+          CloseFullScreenImageButton(
+            state.shouldShowFullScreenMode,
+            state.onExitFullscreenClick
           )
         }
-        CloseFullScreenImageButton(
-          state.shouldShowFullScreenMode,
-          state.onExitFullscreenClick
-        )
       }
+      ShowDonationLayout(state)
     }
+  }
+}
 
-    ShowDonationLayout(state)
+@Composable
+private fun TabSwitcherAnimated(state: ReaderScreenState) {
+  val transitionSpec = remember {
+    slideInVertically(
+      initialOffsetY = { -it },
+      animationSpec = tween(durationMillis = 300)
+    ) + fadeIn() togetherWith
+      slideOutVertically(
+        targetOffsetY = { -it },
+        animationSpec = tween(durationMillis = 300)
+      ) + fadeOut()
+  }
+
+  AnimatedVisibility(
+    visible = state.showTabSwitcher,
+    enter = transitionSpec.targetContentEnter,
+    exit = transitionSpec.initialContentExit,
+    modifier = Modifier.zIndex(1f),
+  ) {
+    TabSwitcherView(
+      state.kiwixWebViewList,
+      state.currentWebViewPosition,
+      state.onTabClickListener,
+      state.onCloseAllTabs,
+      state.darkModeViewPainter
+    )
   }
 }
 
@@ -325,15 +350,7 @@ private fun BoxScope.CloseFullScreenImageButton(
 }
 
 @Composable
-private fun ShowZIMFileContent(
-  state: ReaderScreenState,
-  bottomAppBarOffsetY: MutableState<Float>
-) {
-  val density = LocalDensity.current
-
-  val bottomNavHeightDp = with(density) { state.bottomNavigationHeight.toDp() }
-  val bottomAppBarOffsetDp = with(density) { -bottomAppBarOffsetY.value.toDp() }
-  val totalBottomPadding = (bottomNavHeightDp + bottomAppBarOffsetDp).coerceAtLeast(ZERO.dp)
+private fun ShowZIMFileContent(state: ReaderScreenState) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
       AndroidView(
@@ -346,10 +363,10 @@ private fun ShowZIMFileContent(
           }
         },
         modifier = Modifier
-          .fillMaxWidth()
-          .fillMaxHeight()
-          .padding(bottom = totalBottomPadding)
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
       )
+      // TODO handle the unnecessary vertical scroll when webView page chnaged.
     }
   }
 }
@@ -458,18 +475,13 @@ private fun BottomAppBarOfReaderScreen(
   nextPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   tocButtonItem: Pair<Boolean, () -> Unit>,
   shouldShowBottomAppBar: Boolean,
-  bottomAppBarOffsetY: MutableState<Float>
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
 ) {
   if (!shouldShowBottomAppBar) return
-  val animatedOffsetY by animateDpAsState(
-    targetValue = with(LocalDensity.current) { bottomAppBarOffsetY.value.toDp() },
-    label = "BottomAppBarOffset"
-  )
   BottomAppBar(
     containerColor = Black,
     contentColor = White,
-    scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior(),
-    modifier = Modifier.offset { IntOffset(ZERO, animatedOffsetY.roundToPx()) }
+    scrollBehavior = bottomAppBarScrollBehavior,
   ) {
     Row(
       modifier = Modifier

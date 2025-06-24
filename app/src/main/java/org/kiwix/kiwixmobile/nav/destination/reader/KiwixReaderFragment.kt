@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -48,8 +47,6 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
-import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
@@ -57,6 +54,7 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -299,19 +297,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  @Throws(IllegalArgumentException::class)
-  override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
-    return ToolbarScrollingKiwixWebView(
-      requireContext(),
-      this,
-      attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
-      requireNotNull(readerScreenState.value.fullScreenItem.second),
-      CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      onToolbarOffsetChanged = { offsetY -> toolbarOffsetY.value = offsetY },
-      onBottomAppBarOffsetChanged = { bottomOffsetY -> bottomAppBarOffsetY.value = bottomOffsetY },
-      sharedPreferenceUtil = requireNotNull(sharedPreferenceUtil),
-      parentNavigationBar = requireActivity().findViewById(R.id.bottom_nav_view)
-    )
+  override fun updateNavigationBarHeight(toolbarOffset: Float) {
+    // if no  activity exist simply return.
+    if (activity == null) return
+    activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_view)?.let { view ->
+      val toolbarHeightPx = activity?.getToolbarHeight() ?: 0f
+      val offsetFactor = view.height / toolbarHeightPx.toFloat()
+      view.translationY = -1 * toolbarOffset * offsetFactor
+    }
   }
 
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
