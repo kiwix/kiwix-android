@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.reader
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
@@ -63,6 +65,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -136,10 +141,10 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     openKiwixReaderFragmentWithFile(zimFile)
     reader {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
-      clickOnTabIcon()
-      clickOnClosedAllTabsButton()
-      clickOnUndoButton()
-      assertTabRestored()
+      clickOnTabIcon(composeTestRule)
+      clickOnClosedAllTabsButton(composeTestRule)
+      clickOnUndoButton(composeTestRule)
+      assertTabRestored(composeTestRule)
       pressBack()
       checkZimFileLoadedSuccessful(R.id.readerFragment)
     }
@@ -171,6 +176,8 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     openKiwixReaderFragmentWithFile(downloadingZimFile)
     reader {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
+      clickOnTabIcon(composeTestRule)
+      clickOnTabIcon(composeTestRule)
       // test the whole welcome page is loaded or not
       assertArticleLoaded("Hydrogène")
       assertArticleLoaded("Automobile")

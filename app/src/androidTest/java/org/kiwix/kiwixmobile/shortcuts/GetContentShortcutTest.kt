@@ -128,7 +128,7 @@ class GetContentShortcutTest {
     onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
     topLevel {
       clickReaderOnBottomNav {
-        assertReaderScreenDisplayed()
+        assertReaderScreenDisplayed(composeTestRule)
       }
       clickDownloadOnBottomNav {
         onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }

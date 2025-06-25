@@ -27,7 +27,6 @@ import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Canvas
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
@@ -44,24 +43,18 @@ import android.view.Gravity.BOTTOM
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.AnimRes
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarDuration
@@ -83,10 +76,8 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -114,14 +105,12 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.databinding.FragmentReaderBinding
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -140,14 +129,11 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
-import org.kiwix.kiwixmobile.core.main.OnSwipeTouchListener
 import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
-import org.kiwix.kiwixmobile.core.main.TabsAdapter
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
@@ -202,10 +188,10 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
-import kotlin.math.abs
 import kotlin.math.max
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
+const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
 @Suppress("LargeClass")
 abstract class CoreReaderFragment :
@@ -219,15 +205,9 @@ abstract class CoreReaderFragment :
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
-  private var fragmentReaderBinding: FragmentReaderBinding? = null
-
-  var toolbar: Toolbar? = null
 
   var drawerLayout: DrawerLayout? = null
   protected var tableDrawerRightContainer: NavigationView? = null
-  var tabSwitcherRoot: View? = null
-
-  var activityMainRoot: View? = null
 
   @JvmField
   @Inject
@@ -262,10 +242,6 @@ abstract class CoreReaderFragment :
   var painter: DarkModeViewPainter? = null
   protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
-  protected var actionBar: ActionBar? = null
-  protected var mainMenu: MainMenu? = null
-
-  private var tabRecyclerView: RecyclerView? = null
   private var isFirstTimeMainPageLoaded = true
   private var isFromManageExternalLaunch = false
   private val savingTabsMutex = Mutex()
@@ -295,7 +271,6 @@ abstract class CoreReaderFragment :
   private var documentParser: DocumentParser? = null
   private var tts: KiwixTextToSpeech? = null
   private var compatCallback: CompatFindActionModeCallback? = null
-  private var tabsAdapter: TabsAdapter? = null
   private var zimReaderSource: ZimReaderSource? = null
   private var actionMode: ActionMode? = null
   private var tempWebViewForUndo: KiwixWebView? = null
@@ -304,7 +279,6 @@ abstract class CoreReaderFragment :
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
   private var tableDrawerRight: RecyclerView? = null
-  private var tabCallback: ItemTouchHelper.Callback? = null
   private var donationLayout: FrameLayout? = null
   private var bookmarkingJob: Job? = null
   private var isBookmarked = false
@@ -517,53 +491,13 @@ abstract class CoreReaderFragment :
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
     }
-    prepareViews()
     handleLocaleCheck()
-    activity?.setSupportActionBar(toolbar)
-    actionBar = activity?.supportActionBar
     initHideBackToTopTimer()
-    initTabCallback()
-    toolbar?.setOnTouchListener(
-      object : OnSwipeTouchListener(requireActivity()) {
-        @SuppressLint("SyntheticAccessor")
-        override fun onSwipeBottom() {
-          showTabSwitcher()
-        }
-
-        override fun onSwipeLeft() {
-          if (currentWebViewIndex < webViewList.size - 1) {
-            val current: View? = getCurrentWebView()
-            startAnimation(current, R.anim.transition_left)
-            selectTab(currentWebViewIndex + 1)
-          }
-        }
-
-        override fun onSwipeRight() {
-          if (currentWebViewIndex > 0) {
-            val current: View? = getCurrentWebView()
-            startAnimation(current, R.anim.transition_right)
-            selectTab(currentWebViewIndex - 1)
-          }
-        }
-
-        override fun onTap(e: MotionEvent?) {
-          e?.let {
-            val titleTextView = toolbar?.findFirstTextView() ?: return@onTap
-            titleTextView.let {
-              // only initiate search if it is on the reader screen
-              mainMenu?.tryExpandSearch(zimReaderContainer?.zimFileReader)
-            }
-          }
-        }
-      }
-    )
     loadDrawerViews()
     tableDrawerRight =
       tableDrawerRightContainer?.getHeaderView(0)?.findViewById(R.id.right_drawer_list)
     addFileReader()
-    setupTabsAdapter()
     setTableDrawerInfo()
-    setTabListener()
     activity?.let {
       compatCallback = CompatFindActionModeCallback(it)
     }
@@ -572,13 +506,6 @@ abstract class CoreReaderFragment :
     loadPrefs()
     updateTitle()
     handleIntentExtras(requireActivity().intent)
-    tabRecyclerView?.let {
-      it.adapter = tabsAdapter
-      tabCallback?.let { callBack ->
-        ItemTouchHelper(callBack).attachToRecyclerView(it)
-      }
-    }
-
     // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
     // when "Don't keep activities" is on.
     if (savedInstanceState == null) {
@@ -700,50 +627,6 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
-  private fun prepareViews() {
-    fragmentReaderBinding?.let { readerBinding ->
-      with(readerBinding.root) {
-        activityMainRoot = findViewById(R.id.activity_main_root)
-        toolbar = findViewById(R.id.toolbar)
-        tabSwitcherRoot = findViewById(R.id.activity_main_tab_switcher)
-        tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
-        donationLayout = findViewById(R.id.donation_layout)
-      }
-    }
-  }
-
-  private fun initTabCallback() {
-    tabCallback = object : ItemTouchHelper.Callback() {
-      override fun getMovementFlags(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder
-      ): Int = makeMovementFlags(0, ItemTouchHelper.UP or ItemTouchHelper.DOWN)
-
-      override fun onChildDraw(
-        c: Canvas,
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        dX: Float,
-        dY: Float,
-        actionState: Int,
-        isCurrentlyActive: Boolean
-      ) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-        viewHolder.itemView.alpha = 1 - abs(dY) / viewHolder.itemView.measuredHeight
-      }
-
-      override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
-      ): Boolean = false
-
-      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        closeTab(viewHolder.adapterPosition)
-      }
-    }
-  }
-
   @Suppress("MagicNumber")
   private fun initHideBackToTopTimer() {
     hideBackToTopTimer = object : CountDownTimer(1200, 1200) {
@@ -811,44 +694,12 @@ abstract class CoreReaderFragment :
     })
   }
 
-  private fun setTabListener() {
-    tabsAdapter?.setTabClickListener(object : TabsAdapter.TabClickListener {
-      override fun onSelectTab(view: View, position: Int) {
-        hideTabSwitcher()
-        selectTab(position)
-
-        // Bug Fix #592
-        updateBottomToolbarArrowsAlpha()
-      }
-
-      override fun onCloseTab(view: View, position: Int) {
-        closeTab(position)
-      }
-    })
-  }
-
   private fun setTableDrawerInfo() {
     tableDrawerRight?.apply {
       layoutManager = LinearLayoutManager(requireActivity())
       tableDrawerAdapter = setupTableDrawerAdapter()
       adapter = tableDrawerAdapter
       tableDrawerAdapter?.notifyDataSetChanged()
-    }
-  }
-
-  private fun setupTabsAdapter() {
-    tabsAdapter = painter?.let {
-      TabsAdapter(
-        requireActivity() as AppCompatActivity,
-        webViewList,
-        it
-      ).apply {
-        registerAdapterDataObserver(object : AdapterDataObserver() {
-          override fun onChanged() {
-            readerMenuState?.updateTabIcon(itemCount)
-          }
-        })
-      }
     }
   }
 
@@ -901,7 +752,6 @@ abstract class CoreReaderFragment :
       )
     }
     showSearchPlaceHolderInToolbar(true)
-    startAnimation(tabSwitcherRoot, R.anim.slide_down)
     readerMenuState?.showTabSwitcherOptions()
   }
 
@@ -924,13 +774,6 @@ abstract class CoreReaderFragment :
         searchPlaceHolderItemForCustomApps = searchPlaceHolderItemForCustomApps.copy(first = false)
       )
     }
-  }
-
-  protected fun startAnimation(
-    view: View?,
-    @AnimRes anim: Int
-  ) {
-    view?.startAnimation(AnimationUtils.loadAnimation(view.context, anim))
   }
 
   /**
@@ -1074,7 +917,7 @@ abstract class CoreReaderFragment :
   @Suppress("ReturnCount", "NestedBlockDepth")
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     when {
-      tabSwitcherRoot?.visibility == VISIBLE -> {
+      readerScreenState.value.showTabSwitcher -> {
         selectTab(
           if (currentWebViewIndex < webViewList.size) {
             currentWebViewIndex
@@ -1300,16 +1143,11 @@ abstract class CoreReaderFragment :
     }
     safelyCancelBookmarkJob()
     unBindViewsAndBinding()
-    tabCallback = null
     hideBackToTopTimer?.cancel()
     hideBackToTopTimer = null
     stopOngoingLoadingAndClearWebViewList()
-    actionBar = null
-    mainMenu = null
-    tabRecyclerView?.adapter = null
     tableDrawerRight?.adapter = null
     tableDrawerAdapter = null
-    tabsAdapter = null
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
     deleteCachedFiles(requireActivity())
@@ -1336,17 +1174,10 @@ abstract class CoreReaderFragment :
 
   @SuppressLint("ClickableViewAccessibility")
   private fun unBindViewsAndBinding() {
-    activityMainRoot = null
-    tabRecyclerView = null
-    tabSwitcherRoot = null
     compatCallback?.finish()
     compatCallback = null
-    toolbar?.setOnTouchListener(null)
-    toolbar = null
     drawerLayout = null
     tableDrawerRightContainer = null
-    fragmentReaderBinding?.root?.removeAllViews()
-    fragmentReaderBinding = null
     donationLayout?.removeAllViews()
     donationLayout = null
   }
@@ -1522,18 +1353,7 @@ abstract class CoreReaderFragment :
       reopenBook()
     }
     tempWebViewForUndo?.let {
-      if (tabSwitcherRoot?.visibility == GONE) {
-        // Remove the top margin from the webView when the tabSwitcher is not visible.
-        // We have added this margin in `TabsAdapter` to not show the top margin in tabs.
-        // `tempWebViewForUndo` saved with that margin so before showing it to the `contentFrame`
-        // We need to set full width and height for properly showing the content of webView.
-        it.layoutParams = LinearLayout.LayoutParams(
-          LinearLayout.LayoutParams.MATCH_PARENT,
-          LinearLayout.LayoutParams.MATCH_PARENT
-        )
-      }
       webViewList.add(index, it)
-      tabsAdapter?.notifyDataSetChanged()
       readerScreenState.value.snackBarHostState.snack(
         context?.getString(R.string.tab_restored).orEmpty(),
         lifecycleScope = lifecycleScope
@@ -1555,7 +1375,6 @@ abstract class CoreReaderFragment :
     currentWebViewIndex = position
     val webView = safelyGetWebView(position) ?: return
     safelyAddWebView(webView)
-    tabsAdapter?.selected = currentWebViewIndex
     updateBottomToolbarVisibility()
     loadPrefs()
     updateUrlFlow()
@@ -1999,7 +1818,6 @@ abstract class CoreReaderFragment :
   private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
       webViewList.addAll(tempWebViewListForUndo)
-      tabsAdapter?.notifyDataSetChanged()
       readerScreenState.value.snackBarHostState.snack(
         context?.getString(R.string.tabs_restored).orEmpty(),
         lifecycleScope = lifecycleScope
@@ -2397,10 +2215,8 @@ abstract class CoreReaderFragment :
 
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
-    // Forcing redraw of RecyclerView children so that the tabs are properly oriented on rotation
-    tabRecyclerView?.adapter = tabsAdapter
     // force redraw of donation layout if it is showing.
-    if (donationLayout?.isVisible == true) {
+    if (readerScreenState.value.shouldShowDonationPopup) {
       showDonationLayout()
     }
   }
@@ -2647,7 +2463,6 @@ abstract class CoreReaderFragment :
         return
       }
       updateTableOfContents()
-      tabsAdapter?.notifyDataSetChanged()
       updateBottomToolbarArrowsAlpha()
       val zimFileReader = zimReaderContainer?.zimFileReader
       if (hasValidFileAndUrl(getCurrentWebView()?.url, zimFileReader)) {
@@ -2681,13 +2496,19 @@ abstract class CoreReaderFragment :
   private fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?): Boolean =
     url != null && zimFileReader != null
 
-  override fun webViewFailedLoading(url: String) {
+  override fun webViewFailedLoading(failingUrl: String) {
     if (isAdded) {
       // If a URL fails to load, update the bookmark toggle.
       // This fixes the scenario where the previous page is bookmarked and the next
       // page fails to load, ensuring the bookmark toggle is unset correctly.
       updateUrlFlow()
-      Log.d(TAG_KIWIX, String.format(getString(R.string.error_article_url_not_found), url))
+      Log.d(
+        TAG_KIWIX,
+        String.format(
+          getString(R.string.error_article_url_not_found),
+          failingUrl
+        )
+      )
     }
   }
 
@@ -2707,7 +2528,6 @@ abstract class CoreReaderFragment :
 
   override fun webViewTitleUpdated(title: String) {
     updateTabIcon(webViewList.size)
-    tabsAdapter?.notifyDataSetChanged()
   }
 
   @Suppress("MagicNumber")

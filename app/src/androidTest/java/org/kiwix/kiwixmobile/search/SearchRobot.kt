@@ -27,9 +27,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
@@ -38,7 +35,7 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
@@ -122,12 +119,16 @@ class SearchRobot : BaseRobot() {
     composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
   }
 
-  private fun openSearchScreen() {
-    testFlakyView({ onView(withId(R.id.menu_search)).perform(click()) })
+  private fun openSearchScreen(composeTestRule: ComposeContentTestRule) {
+    testFlakyView(
+      {
+        composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+      }
+    )
   }
 
   fun searchAndClickOnArticle(searchString: String, composeTestRule: ComposeContentTestRule) {
-    openSearchScreen()
+    openSearchScreen(composeTestRule)
     searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)
     clickOnSearchItemInSearchList(composeTestRule)
     checkZimFileSearchSuccessful(org.kiwix.kiwixmobile.R.id.readerFragment)

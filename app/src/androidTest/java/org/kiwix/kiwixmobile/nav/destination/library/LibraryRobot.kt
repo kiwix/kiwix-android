@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
 
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
@@ -102,8 +103,8 @@ class LibraryRobot : BaseRobot() {
   }
 
   fun waitUntilZimFilesRefreshing(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
+      composeTestRule.waitUntilTimeout()
       composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
         .assertIsNotDisplayed()
     })

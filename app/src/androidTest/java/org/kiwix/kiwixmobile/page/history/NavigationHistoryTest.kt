@@ -147,14 +147,14 @@ class NavigationHistoryTest : BaseActivityTest() {
     }
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     navigationHistory {
-      closeTabSwitcherIfVisible()
+      closeTabSwitcherIfVisible(composeTestRule)
       checkZimFileLoadedSuccessful(R.id.readerFragment)
       clickOnAndroidArticle()
-      longClickOnBackwardButton()
+      longClickOnBackwardButton(composeTestRule)
       assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
       pressBack()
-      clickOnBackwardButton()
-      longClickOnForwardButton()
+      clickOnBackwardButton(composeTestRule)
+      longClickOnForwardButton(composeTestRule)
       assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
       clickOnDeleteHistory(composeTestRule)
       assertDeleteDialogDisplayed(composeTestRule)

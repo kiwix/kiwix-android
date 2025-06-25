@@ -89,7 +89,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -97,6 +96,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -146,6 +147,10 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
 const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTestingTag"
+const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
+const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
+const val CLOSE_ALL_TABS_BUTTON_TESTING_TAG = "closeAllTabsButtonTestingTag"
+const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -157,10 +162,10 @@ fun ReaderScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
-  val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+  val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   LaunchedEffect(bottomAppBarScrollBehavior.state.heightOffset) {
-    onBottomScrollOffsetChanged(scrollBehavior.state.heightOffset)
+    onBottomScrollOffsetChanged(bottomAppBarScrollBehavior.state.heightOffset)
   }
   KiwixDialogTheme {
     Scaffold(
@@ -169,21 +174,21 @@ fun ReaderScreen(
         ReaderTopBar(
           state,
           actionMenuItems,
-          scrollBehavior,
+          topAppBarScrollBehavior,
           navigationIcon
         )
       },
       floatingActionButton = { BackToTopFab(state) },
       modifier = Modifier
         .systemBarsPadding()
-        .nestedScroll(scrollBehavior.nestedScrollConnection)
-        .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
         .padding(bottom = bottomNavHeightInDp)
+        .semantics { testTag = READER_SCREEN_TESTING_TAG }
     ) { paddingValues ->
       ReaderContentLayout(
         state,
         Modifier.padding(paddingValues),
-        bottomAppBarScrollBehavior
+        bottomAppBarScrollBehavior,
+        topAppBarScrollBehavior
       )
     }
   }
@@ -195,7 +200,7 @@ fun ReaderScreen(
 private fun ReaderTopBar(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  scrollBehavior: TopAppBarScrollBehavior,
+  topAppBarScrollBehavior: TopAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit,
 ) {
   if (!state.shouldShowFullScreenMode && !state.fullScreenItem.first) {
@@ -203,7 +208,7 @@ private fun ReaderTopBar(
       title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
       navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItems,
-      topAppBarScrollBehavior = scrollBehavior,
+      topAppBarScrollBehavior = topAppBarScrollBehavior,
       searchBar =
         searchPlaceHolderIfActive(state.searchPlaceHolderItemForCustomApps)
     )
@@ -215,7 +220,8 @@ private fun ReaderTopBar(
 private fun ReaderContentLayout(
   state: ReaderScreenState,
   modifier: Modifier = Modifier,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
+  topAppBarScrollBehavior: TopAppBarScrollBehavior
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state)
@@ -225,7 +231,7 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(state)
+          ShowZIMFileContent(state, bottomAppBarScrollBehavior, topAppBarScrollBehavior)
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
@@ -255,11 +261,11 @@ private fun TabSwitcherAnimated(state: ReaderScreenState) {
   val transitionSpec = remember {
     slideInVertically(
       initialOffsetY = { -it },
-      animationSpec = tween(durationMillis = 300)
+      animationSpec = tween(durationMillis = HIDE_TAB_SWITCHER_DELAY.toInt())
     ) + fadeIn() togetherWith
       slideOutVertically(
         targetOffsetY = { -it },
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = HIDE_TAB_SWITCHER_DELAY.toInt())
       ) + fadeOut()
   }
 
@@ -267,7 +273,9 @@ private fun TabSwitcherAnimated(state: ReaderScreenState) {
     visible = state.showTabSwitcher,
     enter = transitionSpec.targetContentEnter,
     exit = transitionSpec.initialContentExit,
-    modifier = Modifier.zIndex(1f),
+    modifier = Modifier
+      .zIndex(1f)
+      .semantics { testTag = TAB_SWITCHER_VIEW_TESTING_TAG },
   ) {
     TabSwitcherView(
       state.kiwixWebViewList,
@@ -349,8 +357,13 @@ private fun BoxScope.CloseFullScreenImageButton(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowZIMFileContent(state: ReaderScreenState) {
+private fun ShowZIMFileContent(
+  state: ReaderScreenState,
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
+  topAppBarScrollBehavior: TopAppBarScrollBehavior
+) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
       AndroidView(
@@ -359,14 +372,23 @@ private fun ShowZIMFileContent(state: ReaderScreenState) {
           FrameLayout(context).apply {
             // Ensure the WebView has no parent before adding
             (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
+            selectedWebView.setOnScrollChangeListener(null)
+            selectedWebView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+              val deltaY = (scrollY - oldScrollY).toFloat()
+              if (deltaY == 0f) return@setOnScrollChangeListener
+              // SAFELY drive top and bottom app bars
+              topAppBarScrollBehavior.state.heightOffset -= deltaY
+              bottomAppBarScrollBehavior.state.heightOffset -= deltaY
+            }
+            selectedWebView.layoutParams = FrameLayout.LayoutParams(
+              FrameLayout.LayoutParams.MATCH_PARENT,
+              FrameLayout.LayoutParams.MATCH_PARENT
+            )
             addView(selectedWebView)
           }
         },
-        modifier = Modifier
-          .fillMaxSize()
-          .verticalScroll(rememberScrollState())
+        modifier = Modifier.fillMaxSize()
       )
-      // TODO handle the unnecessary vertical scroll when webView page chnaged.
     }
   }
 }
@@ -657,6 +679,7 @@ private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
       .graphicsLayer {
         rotationZ = rotation
       }
+      .semantics { testTag = CLOSE_ALL_TABS_BUTTON_TESTING_TAG }
       .clickable(
         enabled = !isAnimating,
         onClick = {
@@ -732,7 +755,8 @@ private fun TabItemHeader(
       overflow = TextOverflow.Ellipsis,
       modifier = Modifier
         .padding(end = FOUR_DP)
-        .weight(1f),
+        .weight(1f)
+        .semantics { testTag = TAB_TITLE_TESTING_TAG },
       style = MaterialTheme.typography.labelSmall
     )
     IconButton(
