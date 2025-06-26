@@ -23,16 +23,14 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.core.view.GravityCompat
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web
@@ -51,6 +49,7 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.custom.R.id
+import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
@@ -147,11 +146,14 @@ class SearchRobot {
     })
   }
 
-  fun clickOnHomeButton() {
-    testFlakyView({
-      Espresso.onView(ViewMatchers.withId(R.id.bottom_toolbar_home))
-        .perform(ViewActions.click())
-    })
+  fun clickOnHomeButton(
+    composeTestRule: ComposeContentTestRule,
+    customMainActivity: CustomMainActivity
+  ) {
+    composeTestRule.apply {
+      onNodeWithContentDescription(customMainActivity.getString(R.string.menu_home))
+        .performClick()
+    }
   }
 
   fun clickOnAFoolForYouArticle() {

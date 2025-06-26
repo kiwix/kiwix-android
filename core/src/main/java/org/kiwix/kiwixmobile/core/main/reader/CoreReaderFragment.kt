@@ -72,13 +72,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineDispatcher
@@ -1972,9 +1970,7 @@ abstract class CoreReaderFragment :
     var bottomMargin = requireActivity().resources.getDimensionPixelSize(
       R.dimen.donation_popup_bottom_margin
     )
-    val bottomAppBar = requireActivity()
-      .findViewById<BottomAppBar>(R.id.bottom_toolbar)
-    if (bottomAppBar.isVisible) {
+    if (readerScreenState.value.shouldShowBottomAppBar) {
       // if bottomAppBar is visible then add the height of the bottomAppBar.
       bottomMargin +=
         requireActivity().resources.getDimensionPixelSize(
