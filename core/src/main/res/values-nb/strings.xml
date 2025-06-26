@@ -23,14 +23,17 @@
   <string name="menu_support_kiwix">Støtt Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Støtt %s</string>
   <string name="menu_about_app">Om %s-appen</string>
+  <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Lagre medier som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret medier som %s i din bildemappe.</string>
   <string name="search_label">Søk</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
+  <string name="hotspot_failed_title">Kunne ikke starte hotspot</string>
   <string name="go_to_wifi_settings_label">Gå til WIFI-innstillinger</string>
   <string name="connection_refused">Tilkobling avvist.</string>
+  <string name="hotspot_running">Aktiv Hotspot</string>
   <string name="no_books_selected_toast_message">Velg bøker først</string>
   <string name="server_failed_toast_message">Kunne ikke starte tjener.</string>
   <string name="server_started_successfully_toast_message">Tjeneren startet vellykket.</string>
