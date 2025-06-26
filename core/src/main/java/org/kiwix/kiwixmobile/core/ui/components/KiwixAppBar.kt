@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
+const val OVERFLOW_MENU_BUTTON_TESTING_TAG = "overflowMenuButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -147,7 +148,10 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
     val (mainActions, overflowActions) = actionMenuItems.partition { !it.isInOverflow }
     MainMenuItems(mainActions)
     if (overflowActions.isNotEmpty()) {
-      IconButton(onClick = { overflowExpanded = true }) {
+      IconButton(
+        onClick = { overflowExpanded = true },
+        modifier = Modifier.testTag(OVERFLOW_MENU_BUTTON_TESTING_TAG)
+      ) {
         Icon(
           imageVector = Icons.Default.MoreVert,
           contentDescription = null,
@@ -224,7 +228,8 @@ private fun OverflowMenuItems(
           onDismiss()
           menuItem.onClick()
         },
-        enabled = menuItem.isEnabled
+        enabled = menuItem.isEnabled,
+        modifier = Modifier.testTag(menuItem.testingTag)
       )
     }
   }

@@ -236,7 +236,6 @@ class ReaderMenuState(
   private fun addReaderMenuItems() {
     if (menuItemVisibility[MenuItemType.AddNote] == true) {
       menuItems += ActionMenuItem(
-        icon = IconItem.Drawable(R.drawable.ic_add_note),
         contentDescription = R.string.take_notes,
         onClick = { menuClickListener.onAddNoteMenuClicked() },
         testingTag = TAKE_NOTE_MENU_ITEM_TESTING_TAG,

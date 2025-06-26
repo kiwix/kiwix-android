@@ -18,18 +18,19 @@
 
 package org.kiwix.kiwixmobile.note
 
-import android.content.Context
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -37,21 +38,23 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.TAKE_NOTE_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.OVERFLOW_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun note(func: NoteRobot.() -> Unit) = NoteRobot().apply(func)
@@ -75,12 +78,13 @@ class NoteRobot : BaseRobot() {
     }
   }
 
-  fun clickOnNoteMenuItem(context: Context) {
-    // wait a bit to properly load the readerFragment and setting up the
-    // overFlowOptionMenu so that we can easily click on it.
-    pauseForBetterTestPerformance()
-    openActionBarOverflowOrOptionsMenu(context)
-    clickOn(TextId(R.string.take_notes))
+  fun clickOnNoteMenuItem(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
+      waitUntilTimeout()
+      onNodeWithTag(TAKE_NOTE_MENU_ITEM_TESTING_TAG).performClick()
+    }
   }
 
   fun assertNoteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -88,9 +92,12 @@ class NoteRobot : BaseRobot() {
       composeTestRule.waitForIdle()
       composeTestRule.waitUntil(
         TestUtils.TEST_PAUSE_MS.toLong()
-      ) { composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG).isDisplayed() }
-      composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
-        .assertTextEquals(context.getString(R.string.note))
+      ) {
+        composeTestRule.onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+          .filter(hasText(context.getString(R.string.note)))
+          .onFirst()
+          .isDisplayed()
+      }
     })
   }
 

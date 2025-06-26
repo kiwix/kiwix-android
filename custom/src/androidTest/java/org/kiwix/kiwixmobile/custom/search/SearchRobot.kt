@@ -47,6 +47,7 @@ import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDr
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.hamcrest.CoreMatchers.containsString
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.custom.R.id
@@ -109,17 +110,18 @@ class SearchRobot {
     composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG).performTextClearance()
   }
 
-  private fun openSearchScreen() {
-    testFlakyView({
-      Espresso.onView(ViewMatchers.withId(R.id.menu_search))
-        .perform(ViewActions.click())
-    })
+  private fun openSearchScreen(composeTestRule: ComposeContentTestRule) {
+    testFlakyView(
+      {
+        composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+      }
+    )
   }
 
   fun searchAndClickOnArticle(searchString: String, composeTestRule: ComposeContentTestRule) {
     // wait a bit to properly load the ZIM file in the reader
     composeTestRule.waitUntilTimeout()
-    openSearchScreen()
+    openSearchScreen(composeTestRule)
     // Wait a bit to properly visible the search screen.
     composeTestRule.waitUntilTimeout()
     searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)

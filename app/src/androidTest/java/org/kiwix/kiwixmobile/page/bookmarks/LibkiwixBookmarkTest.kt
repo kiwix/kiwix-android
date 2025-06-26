@@ -52,6 +52,8 @@ import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import java.io.File
@@ -126,24 +128,25 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     }
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
-      longClickOnSaveBookmarkImage()
+      longClickOnSaveBookmarkImage(composeTestRule)
       clickOnTrashIcon(composeTestRule)
       assertDeleteBookmarksDialogDisplayed(composeTestRule)
       clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
       // Test saving bookmark
-      clickOnSaveBookmarkImage()
+      clickOnSaveBookmarkImage(composeTestRule)
       openBookmarkScreen()
       assertBookmarkSaved(composeTestRule)
       pressBack()
       // Test removing bookmark
-      clickOnSaveBookmarkImage()
-      longClickOnSaveBookmarkImage()
+      composeTestRule.waitUntilTimeout()
+      clickOnSaveBookmarkImage(composeTestRule)
+      longClickOnSaveBookmarkImage(composeTestRule, TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       assertBookmarkRemoved(composeTestRule)
       pressBack()
       // Save the bookmark to test whether it remains saved after the application restarts or not.
-      clickOnSaveBookmarkImage()
+      clickOnSaveBookmarkImage(composeTestRule)
     }
   }
 
@@ -167,13 +170,14 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     }
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
-      longClickOnSaveBookmarkImage()
+      longClickOnSaveBookmarkImage(composeTestRule)
       clickOnTrashIcon(composeTestRule)
       assertDeleteBookmarksDialogDisplayed(composeTestRule)
       clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
     }
+    composeTestRule.waitUntilTimeout()
     val navHostFragment: NavHostFragment =
       kiwixMainActivity.supportFragmentManager
         .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
