@@ -10,6 +10,7 @@
 * Mirin
 * MohitMali
 * Robin van der Vliet
+* Stefangrotz
 -->
 <resources>
   <string name="menu_help">Helpo</string>
@@ -94,7 +95,7 @@
   <string name="no_network_connection">Reta konekto mankas</string>
   <string name="help_2">Kion faras Kiwix?</string>
   <string name="help_3">Kiwix estas senkonekta legilo de enhavo. Ĝi estas simila al TTT-legilo, sed anstataŭ legi retpaĝojn konektite, ĝi legas enhavon en ZIM-dosiero.</string>
-  <string name="help_4">Kiwix estis originale farita por senkonekta legado de Vikipedio, sed ĝi povas legi alian enhavon.</string>
+  <string name="help_4">Kiwix estis originale farita por eksterreta legado de Vikipedio, sed ĝi povas legi alian enhavon.</string>
   <string name="help_5">Kie estas la enhavo?</string>
   <string name="help_6">La Kiwix-retejo gastigas nian enhavon.</string>
   <string name="help_7">Ili estas haveblaj kiel ZIM-dosieroj. Jen multe da ili:</string>
