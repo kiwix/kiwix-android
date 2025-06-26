@@ -73,7 +73,7 @@ fun HelpScreen(
   KiwixTheme {
     Scaffold(
       topBar = {
-        KiwixAppBar(R.string.menu_help, navigationIcon)
+        KiwixAppBar(title = stringResource(R.string.menu_help), navigationIcon = navigationIcon)
       }
     ) { innerPadding ->
       Column(modifier = Modifier.padding(innerPadding)) {

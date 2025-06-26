@@ -133,7 +133,7 @@ class NoteFragmentTest : BaseActivityTest() {
     loadZimFileInReader("testzim.zim")
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     note {
-      clickOnNoteMenuItem(context)
+      clickOnNoteMenuItem(composeTestRule)
       assertNoteDialogDisplayed(composeTestRule)
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
@@ -180,7 +180,7 @@ class NoteFragmentTest : BaseActivityTest() {
     loadZimFileInReader("testzim.zim")
     note {
       assertHomePageIsLoadedOfTestZimFile()
-      clickOnNoteMenuItem(context)
+      clickOnNoteMenuItem(composeTestRule)
       assertNoteDialogDisplayed(composeTestRule)
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
@@ -203,7 +203,7 @@ class NoteFragmentTest : BaseActivityTest() {
       deletePreviouslySavedNotes()
       loadZimFileInReader("testzim.zim")
       note {
-        clickOnNoteMenuItem(context)
+        clickOnNoteMenuItem(composeTestRule)
         assertNoteDialogDisplayed(composeTestRule)
         writeDemoNote(composeTestRule)
         saveNote(composeTestRule)
@@ -226,7 +226,7 @@ class NoteFragmentTest : BaseActivityTest() {
     loadZimFileInReader("testzim.zim")
     // Save a note.
     note {
-      clickOnNoteMenuItem(context)
+      clickOnNoteMenuItem(composeTestRule)
       assertNoteDialogDisplayed(composeTestRule)
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
@@ -236,7 +236,7 @@ class NoteFragmentTest : BaseActivityTest() {
     deletePreviouslySavedNotes()
     // Test the note file is deleted or not.
     note {
-      clickOnNoteMenuItem(context)
+      clickOnNoteMenuItem(composeTestRule)
       assertNoteDialogDisplayed(composeTestRule)
       assertNotDoesNotExist(composeTestRule)
       pressBack()

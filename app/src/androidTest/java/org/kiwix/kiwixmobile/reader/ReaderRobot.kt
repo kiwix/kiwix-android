@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.reader
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
@@ -29,11 +31,13 @@ import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.TAB_MENU_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.TAB_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyPrinting(func)
 
@@ -45,30 +49,43 @@ class ReaderRobot : BaseRobot() {
     isVisible(ViewId(readerFragment))
   }
 
-  fun clickOnTabIcon() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ onView(withId(R.id.ic_tab_switcher_text)).perform(click()) })
+  fun clickOnTabIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      testFlakyView({
+        onNodeWithTag(TAB_MENU_ITEM_TESTING_TAG).performClick()
+      })
+    }
   }
 
-  fun clickOnClosedAllTabsButton() {
-    pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.tab_switcher_close_all_tabs))
+  fun clickOnClosedAllTabsButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      testFlakyView({
+        onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG).performClick()
+      })
+    }
   }
 
-  fun clickOnUndoButton() {
+  fun clickOnUndoButton(composeTestRule: ComposeContentTestRule) {
     try {
-      onView(withText("UNDO")).perform(click())
-    } catch (runtimeException: RuntimeException) {
+      composeTestRule.apply {
+        onNodeWithText("UNDO", useUnmergedTree = true)
+          .performClick()
+      }
+    } catch (_: AssertionError) {
       if (retryCountForClickOnUndoButton > 0) {
         retryCountForClickOnUndoButton--
-        clickOnUndoButton()
+        clickOnUndoButton(composeTestRule)
       }
     }
   }
 
-  fun assertTabRestored() {
-    pauseForBetterTestPerformance()
-    isVisible(Text("Test Zim"))
+  fun assertTabRestored(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onAllNodesWithTag(TAB_TITLE_TESTING_TAG)[0].assertTextEquals("Test Zim")
+    }
   }
 
   private fun pauseForBetterTestPerformance() {

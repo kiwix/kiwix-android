@@ -17,19 +17,12 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
-import android.app.Activity
-import android.view.Menu
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.main.MainMenu.Factory
-import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 
@@ -44,33 +37,5 @@ abstract class ActivityModule {
     @ActivityScope
     fun providesMainPresenter(dataSource: DataSource): MainRepositoryActions =
       MainRepositoryActions(dataSource)
-
-    @Provides
-    @ActivityScope
-    fun providesMainMenuFactory(
-      activity: Activity,
-      zimReaderContainer: ZimReaderContainer
-    ): MainMenu.Factory = object : Factory {
-      override fun create(
-        menu: Menu,
-        webViews: MutableList<KiwixWebView>,
-        urlIsValid: Boolean,
-        menuClickListener: MenuClickListener,
-        disableReadAloud: Boolean,
-        disableTabs: Boolean,
-        disableSearch: Boolean
-      ): MainMenu =
-        MainMenu(
-          activity,
-          zimReaderContainer.zimFileReader,
-          menu,
-          webViews,
-          urlIsValid,
-          disableReadAloud,
-          disableTabs,
-          disableSearch,
-          menuClickListener
-        )
-    }
   }
 }

@@ -23,10 +23,9 @@ import org.kiwix.videowebview.VideoEnabledWebChromeClient
 
 class KiwixWebChromeClient(
   private val callback: WebViewCallback,
-  nonVideoView: ViewGroup?,
   videoView: ViewGroup?,
   webView: KiwixWebView?
-) : VideoEnabledWebChromeClient(nonVideoView, videoView, null, webView) {
+) : VideoEnabledWebChromeClient(videoView, null, webView) {
   override fun onProgressChanged(view: WebView, progress: Int) {
     callback.webViewProgressChanged(progress, view)
   }

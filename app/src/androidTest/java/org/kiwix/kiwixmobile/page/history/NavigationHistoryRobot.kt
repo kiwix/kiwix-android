@@ -20,11 +20,13 @@ package org.kiwix.kiwixmobile.page.history
 import android.util.Log
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
@@ -36,11 +38,13 @@ import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.reader.TAB_SWITCHER_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
   NavigationHistoryRobot().applyWithViewHierarchyPrinting(func)
@@ -55,12 +59,14 @@ class NavigationHistoryRobot : BaseRobot() {
     isVisible(ViewId(readerFragment))
   }
 
-  fun closeTabSwitcherIfVisible() {
+  fun closeTabSwitcherIfVisible(composeTestRule: ComposeContentTestRule) {
     try {
-      pauseForBetterTestPerformance()
-      isVisible(ViewId(R.id.tab_switcher_close_all_tabs))
-      pressBack()
-    } catch (_: Exception) {
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(TAB_SWITCHER_VIEW_TESTING_TAG).assertExists()
+        pressBack()
+      }
+    } catch (_: AssertionError) {
       Log.i(
         "NAVIGATION_HISTORY_TEST",
         "Couldn't found tab switcher, probably it is not visible"
@@ -91,14 +97,24 @@ class NavigationHistoryRobot : BaseRobot() {
       )
   }
 
-  fun longClickOnBackwardButton() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ onView(withId(R.id.bottom_toolbar_arrow_back)).perform(longClick()) })
+  fun longClickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      testFlakyView({
+        onNodeWithContentDescription(context.getString(R.string.go_to_previous_page))
+          .performTouchInput { longClick() }
+      })
+    }
   }
 
-  fun longClickOnForwardButton() {
-    pauseForBetterTestPerformance()
-    longClickOn(ViewId(R.id.bottom_toolbar_arrow_forward))
+  fun longClickOnForwardButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      testFlakyView({
+        onNodeWithContentDescription(context.getString(R.string.go_to_next_page))
+          .performTouchInput { longClick() }
+      })
+    }
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -117,9 +133,12 @@ class NavigationHistoryRobot : BaseRobot() {
     }
   }
 
-  fun clickOnBackwardButton() {
-    pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.bottom_toolbar_arrow_back))
+  fun clickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithContentDescription(context.getString(R.string.go_to_previous_page))
+        .performClick()
+    }
   }
 
   fun assertForwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {

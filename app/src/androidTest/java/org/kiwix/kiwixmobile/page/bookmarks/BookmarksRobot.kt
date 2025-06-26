@@ -23,19 +23,19 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
@@ -45,9 +45,10 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
-import java.util.concurrent.TimeUnit
 
 fun bookmarks(func: BookmarksRobot.() -> Unit) =
   BookmarksRobot().applyWithViewHierarchyPrinting(func)
@@ -100,15 +101,26 @@ class BookmarksRobot : BaseRobot() {
     }
   }
 
-  fun clickOnSaveBookmarkImage() {
-    pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.bottom_toolbar_bookmark))
+  fun clickOnSaveBookmarkImage(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithContentDescription(context.getString(R.string.bookmarks))
+        .performClick()
+    }
   }
 
-  fun longClickOnSaveBookmarkImage() {
-    // wait for disappearing the snack-bar after removing the bookmark
-    BaristaSleepInteractions.sleep(5L, TimeUnit.SECONDS)
-    testFlakyView({ onView(withId(R.id.bottom_toolbar_bookmark)).perform(longClick()) })
+  fun longClickOnSaveBookmarkImage(
+    composeTestRule: ComposeContentTestRule,
+    timeout: Long = TEST_PAUSE_MS.toLong()
+  ) {
+    composeTestRule.apply {
+      // wait for disappearing the snack-bar after removing the bookmark
+      waitUntilTimeout(timeout)
+      onNodeWithContentDescription(context.getString(R.string.bookmarks))
+        .performTouchInput {
+          longClick()
+        }
+    }
   }
 
   fun assertBookmarkSaved(composeTestRule: ComposeContentTestRule) {

@@ -23,8 +23,7 @@
   <fragment
     android:id="@+id/readerFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
-    android:label="Reader"
-    tools:layout="@layout/fragment_reader">
+    android:label="Reader">
     <argument
       android:name="zimFileUri"
       android:defaultValue=""

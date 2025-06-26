@@ -18,9 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -29,6 +30,10 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -63,11 +68,13 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
+const val OVERFLOW_MENU_BUTTON_TESTING_TAG = "overflowMenuButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixAppBar(
-  @StringRes titleId: Int,
+  modifier: Modifier = Modifier,
+  title: String,
   navigationIcon: @Composable () -> Unit,
   actionMenuItems: List<ActionMenuItem> = emptyList(),
   topAppBarScrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
@@ -76,7 +83,7 @@ fun KiwixAppBar(
 ) {
   KiwixTheme {
     TopAppBar(
-      title = { AppBarTitleSection(titleId, searchBar) },
+      title = { AppBarTitleSection(title, searchBar) },
       navigationIcon = navigationIcon,
       actions = { ActionMenu(actionMenuItems) },
       scrollBehavior = topAppBarScrollBehavior,
@@ -87,7 +94,8 @@ fun KiwixAppBar(
       // Edge-to-Edge mode is already enabled in our application,
       // so we don't need to apply additional top insets.
       // This prevents unwanted extra margin at the top.
-      windowInsets = WindowInsets.statusBars.only(WindowInsetsSides.Horizontal)
+      windowInsets = WindowInsets.statusBars.only(WindowInsetsSides.Horizontal),
+      modifier = modifier
     )
   }
 }
@@ -95,7 +103,7 @@ fun KiwixAppBar(
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 private fun AppBarTitleSection(
-  @StringRes titleId: Int,
+  title: String,
   searchBar: (@Composable () -> Unit)? = null
 ) {
   Box(
@@ -107,14 +115,14 @@ private fun AppBarTitleSection(
     searchBar?.let {
       it()
     } ?: run {
-      AppBarTitle(titleId)
+      AppBarTitle(title)
     }
   }
 }
 
 @Composable
 private fun AppBarTitle(
-  @StringRes titleId: Int
+  title: String
 ) {
   val appBarTitleColor = if (isSystemInDarkTheme()) {
     MineShaftGray350
@@ -122,7 +130,7 @@ private fun AppBarTitle(
     White
   }
   Text(
-    text = stringResource(titleId),
+    text = title,
     color = appBarTitleColor,
     style = MaterialTheme.typography.titleMedium,
     overflow = TextOverflow.Ellipsis,
@@ -134,37 +142,95 @@ private fun AppBarTitle(
 
 @Composable
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
+  var overflowExpanded by remember { mutableStateOf(false) }
+
   Row {
-    actionMenuItems.forEach { menuItem ->
-      val modifier = menuItem.modifier.testTag(menuItem.testingTag)
-      // If icon is not null show the icon.
-      menuItem.icon?.let {
+    val (mainActions, overflowActions) = actionMenuItems.partition { !it.isInOverflow }
+    MainMenuItems(mainActions)
+    if (overflowActions.isNotEmpty()) {
+      IconButton(
+        onClick = { overflowExpanded = true },
+        modifier = Modifier.testTag(OVERFLOW_MENU_BUTTON_TESTING_TAG)
+      ) {
+        Icon(
+          imageVector = Icons.Default.MoreVert,
+          contentDescription = null,
+          tint = White
+        )
+      }
+    }
+    OverflowMenuItems(overflowExpanded, overflowActions) { overflowExpanded = false }
+  }
+}
+
+@Composable
+private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
+  mainActions.forEach { menuItem ->
+    val modifier = menuItem.modifier.testTag(menuItem.testingTag)
+
+    menuItem.customView?.let { customComposable ->
+      Box(modifier = modifier.clickable(enabled = menuItem.isEnabled) { menuItem.onClick() }) {
+        customComposable()
+      }
+    } ?: run {
+      menuItem.icon?.let { iconItem ->
         IconButton(
           enabled = menuItem.isEnabled,
           onClick = menuItem.onClick,
           modifier = modifier
         ) {
           Icon(
-            painter = it.toPainter(),
+            painter = iconItem.toPainter(),
             contentDescription = stringResource(menuItem.contentDescription),
             tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
           )
         }
       } ?: run {
-        // Else show the textView button in menuItem.
         TextButton(
           enabled = menuItem.isEnabled,
           onClick = menuItem.onClick,
           modifier = modifier
         ) {
           Text(
-            text = stringResource(id = menuItem.iconButtonText).uppercase(),
+            text = menuItem.iconButtonText.uppercase(),
             color = if (menuItem.isEnabled) Color.White else Color.Gray,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+            overflow = TextOverflow.Ellipsis
           )
         }
       }
+    }
+  }
+}
+
+@Composable
+private fun OverflowMenuItems(
+  overflowExpanded: Boolean,
+  overflowActions: List<ActionMenuItem>,
+  onDismiss: () -> Unit
+) {
+  DropdownMenu(
+    expanded = overflowExpanded,
+    onDismissRequest = onDismiss
+  ) {
+    overflowActions.forEachIndexed { index, menuItem ->
+      DropdownMenuItem(
+        text = {
+          Column {
+            Text(
+              text = menuItem.iconButtonText.ifEmpty {
+                stringResource(id = menuItem.contentDescription)
+              }
+            )
+          }
+        },
+        onClick = {
+          onDismiss()
+          menuItem.onClick()
+        },
+        enabled = menuItem.isEnabled,
+        modifier = Modifier.testTag(menuItem.testingTag)
+      )
     }
   }
 }

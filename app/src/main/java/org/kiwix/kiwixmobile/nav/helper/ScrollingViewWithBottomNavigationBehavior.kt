@@ -26,7 +26,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.kiwix.kiwixmobile.R
 
 /**
  * Inspired by James @ https://stackoverflow.com/users/165783/james
@@ -62,8 +61,7 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
     navigationBar: BottomNavigationView,
     coordinatorLayout: CoordinatorLayout
   ): Boolean {
-    val readerBottomAppBar: BottomAppBar? =
-      fragmentContainer.findViewById(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar)
+    val readerBottomAppBar: BottomAppBar? = null
     if (readerBottomAppBar != null) {
       val newBottomMargin = calculateNewBottomMargin(navigationBar, coordinatorLayout)
       if (newBottomMargin != bottomMargin) {

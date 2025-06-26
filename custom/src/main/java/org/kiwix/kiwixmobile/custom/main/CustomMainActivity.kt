@@ -22,7 +22,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -102,8 +101,8 @@ class CustomMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun setupDrawerToggle(toolbar: Toolbar, shouldEnableRightDrawer: Boolean) {
-    super.setupDrawerToggle(toolbar, shouldEnableRightDrawer)
+  override fun setupDrawerToggle(shouldEnableRightDrawer: Boolean) {
+    super.setupDrawerToggle(shouldEnableRightDrawer)
     activityCustomMainBinding.drawerNavView.apply {
       /**
        * Hide the 'ZimHostFragment' option from the navigation menu
@@ -213,6 +212,10 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
     activityCustomMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
+  }
+
+  override fun toggleBottomNavigation(isVisible: Boolean) {
+    // Do nothing as we do not have the bottomNavigationView in custom apps.
   }
 
   // Outdated shortcut id(new_tab)

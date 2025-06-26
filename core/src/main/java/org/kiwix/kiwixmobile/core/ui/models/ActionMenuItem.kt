@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.core.ui.models
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.White
 
 data class ActionMenuItem(
@@ -30,7 +30,9 @@ data class ActionMenuItem(
   val onClick: () -> Unit,
   val iconTint: Color = White,
   val isEnabled: Boolean = true,
-  @StringRes val iconButtonText: Int = R.string.empty_string,
+  val iconButtonText: String = "",
   val testingTag: String,
-  val modifier: Modifier = Modifier
+  val modifier: Modifier = Modifier,
+  val isInOverflow: Boolean = false,
+  val customView: (@Composable () -> Unit)? = null
 )

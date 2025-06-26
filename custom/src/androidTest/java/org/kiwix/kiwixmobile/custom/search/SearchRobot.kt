@@ -23,16 +23,14 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.core.view.GravityCompat
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web
@@ -47,9 +45,11 @@ import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDr
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.hamcrest.CoreMatchers.containsString
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.custom.R.id
+import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
@@ -109,17 +109,18 @@ class SearchRobot {
     composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG).performTextClearance()
   }
 
-  private fun openSearchScreen() {
-    testFlakyView({
-      Espresso.onView(ViewMatchers.withId(R.id.menu_search))
-        .perform(ViewActions.click())
-    })
+  private fun openSearchScreen(composeTestRule: ComposeContentTestRule) {
+    testFlakyView(
+      {
+        composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+      }
+    )
   }
 
   fun searchAndClickOnArticle(searchString: String, composeTestRule: ComposeContentTestRule) {
     // wait a bit to properly load the ZIM file in the reader
     composeTestRule.waitUntilTimeout()
-    openSearchScreen()
+    openSearchScreen(composeTestRule)
     // Wait a bit to properly visible the search screen.
     composeTestRule.waitUntilTimeout()
     searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)
@@ -145,11 +146,14 @@ class SearchRobot {
     })
   }
 
-  fun clickOnHomeButton() {
-    testFlakyView({
-      Espresso.onView(ViewMatchers.withId(R.id.bottom_toolbar_home))
-        .perform(ViewActions.click())
-    })
+  fun clickOnHomeButton(
+    composeTestRule: ComposeContentTestRule,
+    customMainActivity: CustomMainActivity
+  ) {
+    composeTestRule.apply {
+      onNodeWithContentDescription(customMainActivity.getString(R.string.menu_home))
+        .performClick()
+    }
   }
 
   fun clickOnAFoolForYouArticle() {

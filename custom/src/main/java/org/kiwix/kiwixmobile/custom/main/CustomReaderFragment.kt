@@ -23,25 +23,26 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
-import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin
+import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
@@ -76,14 +77,9 @@ class CustomReaderFragment : CoreReaderFragment() {
 
     if (isAdded) {
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-      if (BuildConfig.DISABLE_SIDEBAR) {
-        val toolbarToc =
-          activity?.findViewById<ImageView>(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar_toc)
-        toolbarToc?.isEnabled = false
-      }
       with(activity as AppCompatActivity) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar?.let(::setUpDrawerToggle)
+        setUpDrawerToggle()
       }
       loadPageFromNavigationArguments()
       if (BuildConfig.DISABLE_EXTERNAL_LINK) {
@@ -96,25 +92,47 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   /**
-   * Overrides the method to configure the hamburger icon. When the "setting title" is disabled
-   * in a custom app, this function set the app logo on hamburger.
+   * Returns the TOC (Table of Contents) button's enabled state and click action.
+   *
+   * In this custom app variant, the TOC button is disabled if [BuildConfig.DISABLE_SIDEBAR] is `true`.
+   * This is typically used when the sidebar functionality is intentionally turned off.
+   *
+   * @return A [Pair] containing:
+   *  - [Boolean]: `true` if the TOC button should be enabled (i.e., sidebar is allowed),
+   *               `false` if it should be disabled (i.e., [DISABLE_SIDEBAR] is `true`).
+   *  - [() -> Unit]: Action to execute when the button is clicked. This will only be invoked if enabled.
    */
-  override fun setUpDrawerToggle(toolbar: Toolbar) {
-    super.setUpDrawerToggle(toolbar)
+  override fun getTocButtonStateAndAction(): Pair<Boolean, () -> Unit> =
+    !BuildConfig.DISABLE_SIDEBAR to { openToc() }
+
+  /**
+   * Returns the tint color for the navigation icon.
+   *
+   * If the custom app is configured to show the app icon in place of the hamburger icon
+   * (i.e., [BuildConfig.DISABLE_TITLE] is true), the tint is set to [Color.Unspecified] to preserve
+   * the original colors of the image.
+   *
+   * Otherwise, [White] is used as the default tint, which is suitable for vector icons.
+   */
+  override fun navigationIconTint(): Color =
     if (BuildConfig.DISABLE_TITLE) {
+      Color.Unspecified
+    } else {
+      White
+    }
+
+  override fun navigationIcon(): IconItem = when {
+    readerMenuState?.isInTabSwitcher == true -> {
+      IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_round_add_white_36dp)
+    }
+
+    BuildConfig.DISABLE_TITLE -> {
       // if the title is disable then set the app logo to hamburger icon,
       // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
-      val iconSize =
-        resources.getDimensionPixelSize(dimen.hamburger_icon_size)
-      requireActivity().getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)
-        ?.let { drawable ->
-          super.toolbar?.apply {
-            navigationIcon = drawable
-            // remove the default margin between hamburger and placeholder
-            contentInsetStartWithNavigation = 0
-          }
-        }
+      IconItem.MipmapImage(R.mipmap.ic_launcher)
     }
+
+    else -> IconItem.Vector(Icons.Filled.Menu)
   }
 
   /**
@@ -122,17 +140,16 @@ class CustomReaderFragment : CoreReaderFragment() {
    * When the "setting title" is disabled/enabled in a custom app,
    * this function set the visibility of placeholder in toolbar when showing the tabs.
    */
-  override fun setTabSwitcherVisibility(visibility: Int) {
+  override fun showSearchPlaceHolderInToolbar(isTabSwitcherShowing: Boolean) {
     if (BuildConfig.DISABLE_TITLE) {
       // If custom apps are configured to show the placeholder,
       // and if tabs are visible, hide the placeholder.
       // If tabs are hidden, show the placeholder.
-      updateToolbarSearchPlaceholderVisibility(if (visibility == VISIBLE) GONE else VISIBLE)
+      updateToolbarSearchPlaceholderVisibility(!isTabSwitcherShowing)
     } else {
       // Permanently hide the placeholder if the custom app is not configured to show it.
-      updateToolbarSearchPlaceholderVisibility(GONE)
+      updateToolbarSearchPlaceholderVisibility(false)
     }
-    super.setTabSwitcherVisibility(visibility)
   }
 
   private fun loadPageFromNavigationArguments() {
@@ -156,6 +173,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun restoreViewStateOnInvalidWebViewHistory() {
     openHomeScreen()
   }
+
+  // Since custom apps do not have the bottomNavigationView, so returning null.
+  override fun getBottomNavigationView(): BottomNavigationView? = null
 
   /**
    * Restores the view state when the webViewHistory data is valid.
@@ -304,19 +324,14 @@ class CustomReaderFragment : CoreReaderFragment() {
    * provided configuration. It takes into account whether read aloud and tabs are enabled or disabled
    * and creates the menu accordingly.
    */
-  override fun createMainMenu(menu: Menu?): MainMenu? {
-    return menu?.let {
-      menuFactory?.create(
-        it,
-        webViewList,
-        urlIsValid(),
-        this,
-        BuildConfig.DISABLE_READ_ALOUD,
-        BuildConfig.DISABLE_TABS,
-        BuildConfig.DISABLE_TITLE
-      )
-    }
-  }
+  override fun createMainMenu(): ReaderMenuState =
+    ReaderMenuState(
+      this,
+      isUrlValidInitially = urlIsValid(),
+      disableReadAloud = BuildConfig.DISABLE_READ_ALOUD,
+      disableTabs = BuildConfig.DISABLE_TABS,
+      disableSearch = BuildConfig.DISABLE_TITLE
+    )
 
   /**
    * Overrides the method to control the functionality of showing the "Open In New Tab" dialog.
@@ -347,21 +362,23 @@ class CustomReaderFragment : CoreReaderFragment() {
    */
   override fun updateTitle() {
     if (BuildConfig.DISABLE_TITLE) {
-      // Set an empty title for the toolbar because we are handling the toolbar click on behalf of this title.
       // Since we have increased the zone for triggering search suggestions (see https://github.com/kiwix/kiwix-android/pull/3566),
       // we need to set this title for handling the toolbar click,
       // even if it is empty. If we do not set up this title,
       // the search screen will open if the user clicks on the toolbar from the tabs screen.
-      actionBar?.title = " "
-      updateToolbarSearchPlaceholderVisibility(VISIBLE)
+      updateToolbarSearchPlaceholderVisibility(true)
     } else {
-      updateToolbarSearchPlaceholderVisibility(GONE)
+      updateToolbarSearchPlaceholderVisibility(false)
       super.updateTitle()
     }
   }
 
-  private fun updateToolbarSearchPlaceholderVisibility(visibility: Int) {
-    toolbarWithSearchPlaceholder?.visibility = visibility
+  private fun updateToolbarSearchPlaceholderVisibility(show: Boolean) {
+    readerScreenState.update {
+      copy(
+        searchPlaceHolderItemForCustomApps = searchPlaceHolderItemForCustomApps.copy(first = show)
+      )
+    }
   }
 
   override fun createNewTab() {
