@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import android.content.res.Configuration
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -89,6 +90,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -130,9 +132,11 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DONATION_LAYOUT_MAXIMUM_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
@@ -235,6 +239,7 @@ private fun ReaderContentLayout(
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
+            ShowDonationLayout(state)
             BottomAppBarOfReaderScreen(
               state.bookmarkButtonItem,
               state.previousPageButtonItem,
@@ -251,7 +256,6 @@ private fun ReaderContentLayout(
           )
         }
       }
-      ShowDonationLayout(state)
     }
   }
 }
@@ -585,15 +589,39 @@ private fun BottomAppBarButtonIcon(
 }
 
 @Composable
-private fun BoxScope.ShowDonationLayout(state: ReaderScreenState) {
+private fun ShowDonationLayout(state: ReaderScreenState) {
   if (state.shouldShowDonationPopup) {
+    val popupWidth = getDonationPopupWidth()
     Box(
       modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .fillMaxWidth()
+        .then(
+          if (popupWidth != Dp.Unspecified) {
+            Modifier.width(popupWidth)
+          } else {
+            Modifier.fillMaxWidth()
+          }
+        )
+        .padding(horizontal = SIXTEEN_DP)
     ) {
-      // TODO create donation popup layout.
+      DonationLayout(
+        state.appName,
+        state.donateButtonClick,
+        state.laterButtonClick
+      )
     }
+  }
+}
+
+@Composable
+private fun getDonationPopupWidth(): Dp {
+  val configuration = LocalWindowInfo.current
+  val screenWidth = configuration.containerSize.width.dp
+  val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+  return if (screenWidth > DONATION_LAYOUT_MAXIMUM_WIDTH || isLandscape) {
+    DONATION_LAYOUT_MAXIMUM_WIDTH
+  } else {
+    Dp.Unspecified
   }
 }
 
@@ -703,7 +731,6 @@ private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
   }
 }
 
-@Suppress("MagicNumber")
 @Composable
 fun TabItemView(
   index: Int,
@@ -715,7 +742,7 @@ fun TabItemView(
 ) {
   val cardElevation = if (isSelected) EIGHT_DP else TWO_DP
   val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-  val (cardWidth, cardHeight) = getTabCardSize(toolbarHeightDp = 56.dp)
+  val (cardWidth, cardHeight) = getTabCardSize(toolbarHeightDp = KIWIX_TOOLBAR_HEIGHT)
   Box(modifier = modifier) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
