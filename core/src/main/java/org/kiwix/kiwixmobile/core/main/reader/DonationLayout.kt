@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,14 +38,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
-import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.ui.theme.dimHighlightedTextLight
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DONATION_LAYOUT_MAXIMUM_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 @Composable
 fun DonationLayout(
@@ -52,11 +56,21 @@ fun DonationLayout(
   onDonateButtonClick: () -> Unit,
   onLaterButtonClick: () -> Unit
 ) {
+  val donationLayoutWidth = getDonationLayoutWidth()
   Column(
     verticalArrangement = Arrangement.Bottom,
-    horizontalAlignment = Alignment.CenterHorizontally
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = Modifier
+      .then(
+        if (donationLayoutWidth != Dp.Unspecified) {
+          Modifier.width(donationLayoutWidth)
+        } else {
+          Modifier.fillMaxWidth()
+        }
+      )
+      .padding(horizontal = SIXTEEN_DP),
   ) {
-    DonationDialogComposable(
+    DonationDialogCard(
       appName,
       onDonateButtonClick,
       onLaterButtonClick
@@ -65,7 +79,7 @@ fun DonationLayout(
 }
 
 @Composable
-fun DonationDialogComposable(
+fun DonationDialogCard(
   appName: String,
   onDonateButtonClick: () -> Unit,
   onLaterButtonClick: () -> Unit
@@ -74,54 +88,62 @@ fun DonationDialogComposable(
     modifier = Modifier
       .fillMaxWidth()
       .wrapContentHeight()
-      .padding(all = ComposeDimens.SIXTEEN_DP),
+      .padding(ComposeDimens.SIXTEEN_DP),
     shape = MaterialTheme.shapes.medium,
     elevation = CardDefaults.cardElevation(defaultElevation = ComposeDimens.SIX_DP),
-    colors = CardDefaults.cardColors(
-      containerColor = White
-    )
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
   ) {
     Column(
       modifier = Modifier
-        .padding(
-          start = ComposeDimens.SIXTEEN_DP,
-          end = ComposeDimens.SIXTEEN_DP,
-          top = ComposeDimens.SIXTEEN_DP
-        )
+        .padding(horizontal = ComposeDimens.SIXTEEN_DP)
+        .padding(top = ComposeDimens.SIXTEEN_DP)
     ) {
-      Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top
-      ) {
-        Image(
-          painter = painterResource(id = R.drawable.ic_donation_icon),
-          contentDescription = stringResource(id = R.string.donation_dialog_title),
-          modifier = Modifier
-            .size(ComposeDimens.FIFTY_DP)
-        )
-        Spacer(modifier = Modifier.width(ComposeDimens.TWELVE_DP))
-        Column {
-          DonationDialogHeadingText()
-          DonationDialogSubHeadingText(appName = appName)
-        }
-      }
-      Row(
-        modifier = Modifier
-          .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Spacer(modifier = Modifier.weight(1f))
-
-        DonationDialogButton(
-          onButtonClick = onLaterButtonClick,
-          buttonText = R.string.rate_dialog_neutral
-        )
-        DonationDialogButton(
-          onButtonClick = onDonateButtonClick,
-          buttonText = R.string.make_donation
-        )
-      }
+      DonationDialogContent(appName)
+      DonationDialogButtons(onDonateButtonClick, onLaterButtonClick)
     }
+  }
+}
+
+@Composable
+private fun DonationDialogContent(appName: String) {
+  Row(
+    modifier = Modifier.fillMaxWidth(),
+    verticalAlignment = Alignment.Top
+  ) {
+    Image(
+      painter = painterResource(id = R.drawable.ic_donation_icon),
+      contentDescription = stringResource(id = R.string.donation_dialog_title),
+      modifier = Modifier
+        .size(ComposeDimens.FIFTY_DP)
+    )
+    Spacer(modifier = Modifier.width(ComposeDimens.TWELVE_DP))
+    Column {
+      DonationDialogHeadingText()
+      DonationDialogSubHeadingText(appName = appName)
+    }
+  }
+}
+
+@Composable
+private fun DonationDialogButtons(
+  onDonateButtonClick: () -> Unit,
+  onLaterButtonClick: () -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Spacer(modifier = Modifier.weight(1f))
+
+    DonationDialogButton(
+      onButtonClick = onLaterButtonClick,
+      buttonText = R.string.rate_dialog_neutral
+    )
+    DonationDialogButton(
+      onButtonClick = onDonateButtonClick,
+      buttonText = R.string.make_donation
+    )
   }
 }
 
@@ -157,17 +179,20 @@ fun DonationDialogSubHeadingText(appName: String) {
       appName
     ),
     fontSize = ComposeDimens.FOURTEEN_SP,
-    color = dimHighlightedTextLight,
+    color = MaterialTheme.colorScheme.onTertiary,
     modifier = Modifier.padding(top = ComposeDimens.FOUR_DP)
   )
 }
 
-@Preview()
 @Composable
-fun DonationDialogComposablePreview() {
-  DonationLayout(
-    appName = "kiwix",
-    onDonateButtonClick = {},
-    onLaterButtonClick = {}
-  )
+private fun getDonationLayoutWidth(): Dp {
+  val configuration = LocalWindowInfo.current
+  val screenWidth = configuration.containerSize.width.dp
+  val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+  return if (screenWidth > DONATION_LAYOUT_MAXIMUM_WIDTH || isLandscape) {
+    DONATION_LAYOUT_MAXIMUM_WIDTH
+  } else {
+    Dp.Unspecified
+  }
 }

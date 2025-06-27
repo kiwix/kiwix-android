@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
-import android.content.res.Configuration
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -90,7 +89,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -132,7 +130,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DONATION_LAYOUT_MAXIMUM_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -591,37 +588,13 @@ private fun BottomAppBarButtonIcon(
 @Composable
 private fun ShowDonationLayout(state: ReaderScreenState) {
   if (state.shouldShowDonationPopup) {
-    val popupWidth = getDonationPopupWidth()
-    Box(
-      modifier = Modifier
-        .then(
-          if (popupWidth != Dp.Unspecified) {
-            Modifier.width(popupWidth)
-          } else {
-            Modifier.fillMaxWidth()
-          }
-        )
-        .padding(horizontal = SIXTEEN_DP)
-    ) {
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
       DonationLayout(
         state.appName,
         state.donateButtonClick,
         state.laterButtonClick
       )
     }
-  }
-}
-
-@Composable
-private fun getDonationPopupWidth(): Dp {
-  val configuration = LocalWindowInfo.current
-  val screenWidth = configuration.containerSize.width.dp
-  val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-  return if (screenWidth > DONATION_LAYOUT_MAXIMUM_WIDTH || isLandscape) {
-    DONATION_LAYOUT_MAXIMUM_WIDTH
-  } else {
-    Dp.Unspecified
   }
 }
 
