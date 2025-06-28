@@ -154,7 +154,7 @@ class DonationDialogHandlerTest {
     }
 
   @Test
-  fun `test should show popup if later clicked time is less than three months`() =
+  fun `test should not show popup if later clicked time is less than three months`() =
     runTest {
       donationDialogHandler = spyk(donationDialogHandler)
       val currentMilliSeconds = System.currentTimeMillis()

@@ -40,15 +40,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DONATION_LAYOUT_MAXIMUM_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+
+const val DONATION_LAYOUT_TESTING_TAG = "donationLayoutTestingTag"
 
 @Composable
 fun DonationLayout(
@@ -70,7 +72,7 @@ fun DonationLayout(
       )
       .padding(horizontal = SIXTEEN_DP),
   ) {
-    DonationDialogCard(
+    DonationLayoutCard(
       appName,
       onDonateButtonClick,
       onLaterButtonClick
@@ -79,7 +81,7 @@ fun DonationLayout(
 }
 
 @Composable
-fun DonationDialogCard(
+fun DonationLayoutCard(
   appName: String,
   onDonateButtonClick: () -> Unit,
   onLaterButtonClick: () -> Unit
@@ -88,7 +90,8 @@ fun DonationDialogCard(
     modifier = Modifier
       .fillMaxWidth()
       .wrapContentHeight()
-      .padding(ComposeDimens.SIXTEEN_DP),
+      .padding(ComposeDimens.SIXTEEN_DP)
+      .testTag(DONATION_LAYOUT_TESTING_TAG),
     shape = MaterialTheme.shapes.medium,
     elevation = CardDefaults.cardElevation(defaultElevation = ComposeDimens.SIX_DP),
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
@@ -152,12 +155,10 @@ fun DonationDialogButton(
   onButtonClick: () -> Unit,
   @StringRes buttonText: Int
 ) {
-  TextButton(
-    onClick = onButtonClick
-  ) {
+  TextButton(onClick = onButtonClick) {
     Text(
       text = stringResource(buttonText),
-      color = DenimBlue800
+      color = MaterialTheme.colorScheme.primary
     )
   }
 }
