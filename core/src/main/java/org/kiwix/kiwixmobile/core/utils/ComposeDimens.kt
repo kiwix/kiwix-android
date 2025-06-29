@@ -37,6 +37,7 @@ object ComposeDimens {
 
   // KiwixAppBar(Toolbar) dimens
   val ACTION_MENU_TEXTVIEW_BUTTON_PADDING = 13.dp
+  val KIWIX_TOOLBAR_HEIGHT = 56.dp
 
   // Padding & Margins
   val SIXTY_DP = 60.dp
@@ -193,4 +194,5 @@ object ComposeDimens {
   val BACK_TO_TOP_BUTTON_BOTTOM_MARGIN = 80.dp
   const val READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA = 0.38f
   val SEARCH_PLACEHOLDER_TEXT_SIZE = 12.sp
+  val DONATION_LAYOUT_MAXIMUM_WIDTH = 400.dp
 }

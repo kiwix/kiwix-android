@@ -39,18 +39,13 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.view.ActionMode
-import android.view.Gravity.BOTTOM
-import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import android.widget.FrameLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -106,7 +101,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
@@ -155,7 +149,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -277,7 +270,6 @@ abstract class CoreReaderFragment :
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
   private var tableDrawerRight: RecyclerView? = null
-  private var donationLayout: FrameLayout? = null
   private var bookmarkingJob: Job? = null
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
@@ -339,7 +331,10 @@ abstract class CoreReaderFragment :
       shouldShowFullScreenMode = false,
       searchPlaceHolderItemForCustomApps = false to {
         openSearch(searchString = "", isOpenedFromTabView = false, false)
-      }
+      },
+      appName = "",
+      donateButtonClick = {},
+      laterButtonClick = {}
     )
   )
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -453,7 +448,17 @@ abstract class CoreReaderFragment :
               readerScreenTitle = context.getString(R.string.reader),
               darkModeViewPainter = darkModeViewPainter,
               fullScreenItem = fullScreenItem.first to getVideoView(),
-              tocButtonItem = getTocButtonStateAndAction()
+              tocButtonItem = getTocButtonStateAndAction(),
+              appName = (requireActivity() as CoreMainActivity).appName,
+              donateButtonClick = {
+                donationDialogHandler?.updateLastDonationPopupShownTime()
+                openKiwixSupportUrl()
+                readerScreenState.update { copy(shouldShowDonationPopup = false) }
+              },
+              laterButtonClick = {
+                donationDialogHandler?.donateLater()
+                readerScreenState.update { copy(shouldShowDonationPopup = false) }
+              }
             )
           }
         }
@@ -1176,8 +1181,6 @@ abstract class CoreReaderFragment :
     compatCallback = null
     drawerLayout = null
     tableDrawerRightContainer = null
-    donationLayout?.removeAllViews()
-    donationLayout = null
   }
 
   private fun updateTableOfContents() {
@@ -1908,86 +1911,12 @@ abstract class CoreReaderFragment :
     lifecycleScope.launch { donationDialogHandler?.attemptToShowDonationPopup() }
   }
 
-  @Suppress("InflateParams", "MagicNumber")
   protected open fun showDonationLayout() {
-    val donationCardView = layoutInflater.inflate(R.layout.layout_donation_bottom_sheet, null)
-    val layoutParams = FrameLayout.LayoutParams(
-      getDonationPopupWidth(),
-      FrameLayout.LayoutParams.WRAP_CONTENT
-    ).apply {
-      val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
-        R.dimen.activity_horizontal_margin
-      )
-      setMargins(
-        rightAndLeftMargin,
-        0,
-        rightAndLeftMargin,
-        getBottomMarginForDonationPopup()
-      )
-      gravity = BOTTOM or CENTER_HORIZONTAL
-    }
-
-    donationCardView.layoutParams = layoutParams
-    donationLayout?.apply {
-      removeAllViews()
-      addView(donationCardView)
-      setDonationLayoutVisibility(VISIBLE)
-    }
-    donationCardView.findViewById<TextView>(R.id.descriptionText).apply {
-      text = getString(
-        R.string.donation_dialog_description,
-        (requireActivity() as CoreMainActivity).appName
-      )
-    }
-    val donateButton: TextView = donationCardView.findViewById(R.id.donateButton)
-    donateButton.setOnClickListener {
-      donationDialogHandler?.updateLastDonationPopupShownTime()
-      setDonationLayoutVisibility(GONE)
-      openKiwixSupportUrl()
-    }
-
-    val laterButton: TextView = donationCardView.findViewById(R.id.laterButton)
-    laterButton.setOnClickListener {
-      donationDialogHandler?.donateLater()
-      setDonationLayoutVisibility(GONE)
-    }
-  }
-
-  private fun getDonationPopupWidth(): Int {
-    val deviceWidth = requireActivity().getWindowWidth()
-    val maximumDonationLayoutWidth =
-      requireActivity().resources.getDimensionPixelSize(R.dimen.maximum_donation_popup_width)
-    return when {
-      deviceWidth > maximumDonationLayoutWidth || requireActivity().isLandScapeMode() -> {
-        maximumDonationLayoutWidth
-      }
-
-      else -> FrameLayout.LayoutParams.MATCH_PARENT
-    }
-  }
-
-  private fun getBottomMarginForDonationPopup(): Int {
-    var bottomMargin = requireActivity().resources.getDimensionPixelSize(
-      R.dimen.donation_popup_bottom_margin
-    )
-    if (readerScreenState.value.shouldShowBottomAppBar) {
-      // if bottomAppBar is visible then add the height of the bottomAppBar.
-      bottomMargin +=
-        requireActivity().resources.getDimensionPixelSize(
-          R.dimen.material_minimum_height_and_width
-        )
-      bottomMargin += requireActivity().resources.getDimensionPixelSize(R.dimen.card_margin)
-    }
-
-    return bottomMargin
+    readerScreenState.update { copy(shouldShowDonationPopup = true) }
   }
 
   protected open fun openKiwixSupportUrl() {
     (requireActivity() as CoreMainActivity).openSupportKiwixExternalLink()
-  }
-
-  private fun setDonationLayoutVisibility(visibility: Int) {
-    donationLayout?.visibility = visibility
   }
 
   private fun openFullScreenIfEnabled() {

@@ -156,5 +156,17 @@ data class ReaderScreenState(
   /**
    * Manages the showing/hiding of search placeholder in toolbar for custom apps.
    */
-  val searchPlaceHolderItemForCustomApps: Pair<Boolean, () -> Unit>
+  val searchPlaceHolderItemForCustomApps: Pair<Boolean, () -> Unit>,
+  /**
+   * Manages the showing of application name in donation layout.
+   */
+  val appName: String,
+  /**
+   * Handles the click when user clicks on "Make a donation" button.
+   */
+  val donateButtonClick: () -> Unit,
+  /**
+   * Handles the click when user clicks on "Later" button in donation layout.
+   */
+  val laterButtonClick: () -> Unit
 )

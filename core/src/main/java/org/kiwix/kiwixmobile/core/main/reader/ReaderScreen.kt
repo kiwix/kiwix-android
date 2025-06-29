@@ -133,6 +133,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
@@ -235,6 +236,7 @@ private fun ReaderContentLayout(
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
+            ShowDonationLayout(state)
             BottomAppBarOfReaderScreen(
               state.bookmarkButtonItem,
               state.previousPageButtonItem,
@@ -251,7 +253,6 @@ private fun ReaderContentLayout(
           )
         }
       }
-      ShowDonationLayout(state)
     }
   }
 }
@@ -585,14 +586,14 @@ private fun BottomAppBarButtonIcon(
 }
 
 @Composable
-private fun BoxScope.ShowDonationLayout(state: ReaderScreenState) {
+private fun ShowDonationLayout(state: ReaderScreenState) {
   if (state.shouldShowDonationPopup) {
-    Box(
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .fillMaxWidth()
-    ) {
-      // TODO create donation popup layout.
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
+      DonationLayout(
+        state.appName,
+        state.donateButtonClick,
+        state.laterButtonClick
+      )
     }
   }
 }
@@ -703,7 +704,6 @@ private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
   }
 }
 
-@Suppress("MagicNumber")
 @Composable
 fun TabItemView(
   index: Int,
@@ -715,7 +715,7 @@ fun TabItemView(
 ) {
   val cardElevation = if (isSelected) EIGHT_DP else TWO_DP
   val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-  val (cardWidth, cardHeight) = getTabCardSize(toolbarHeightDp = 56.dp)
+  val (cardWidth, cardHeight) = getTabCardSize(toolbarHeightDp = KIWIX_TOOLBAR_HEIGHT)
   Box(modifier = modifier) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
