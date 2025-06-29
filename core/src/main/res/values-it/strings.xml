@@ -15,6 +15,7 @@
 * Mpayansilva
 * Nivit
 * Purodha
+* Wheelygay
 -->
 <resources>
   <string name="menu_help">Aiuto</string>
@@ -147,10 +148,13 @@
   <string name="help_11">I file ZIM scaricati all’interno dell’app vengono salvati nella memoria esterna in una cartella chiamata Kiwix.</string>
   <string name="pref_storage">Spazio di archiviazione</string>
   <string name="pref_current_folder">Cartella attuale</string>
+  <string name="pref_storage_used">%s utilizzato</string>
   <string name="delete_zim_failed">Non siamo stati in grado di eliminare alcuni file. Dovresti provare ad usare un gestore di file.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">riprendi</string>
   <string name="stop">interrompi</string>
+  <string name="notification_pause_button_text">Pausa</string>
+  <string name="notification_resume_button_text">Riprendi</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Esterno</string>
   <string name="yes">Sì</string>
@@ -180,6 +184,7 @@
   <string name="do_not_ask_anymore">Non chiedere più</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
+  <string name="downloading">Download in corso:</string>
   <string name="no_items_msg">Nessun elemento disponibile</string>
   <string name="crash_title">Oops… questo è imbarazzante</string>
   <string name="crash_description">Sembra che si sia verificato un arresto anomalo.\n\nTi dispiacerebbe aiutarci a risolvere questo problema inviandoci le seguenti informazioni?</string>
@@ -336,5 +341,7 @@
   <string name="go_to_settings_label">Vai alle impostazioni</string>
   <string name="donation_dialog_title">Dona oggi</string>
   <string name="make_donation">Fai una donazione</string>
+  <string name="downloading_state">Download in corso</string>
+  <string name="download_failed_state">Non riuscito</string>
   <string name="searchview_description_clear">Pulisci query</string>
 </resources>
