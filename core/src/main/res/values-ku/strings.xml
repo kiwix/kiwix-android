@@ -192,7 +192,7 @@
   <string name="select_languages">Zimanan bibijêre</string>
   <string name="save_languages">Zimanan qeyd bike</string>
   <string name="expand">Berfireh bike</string>
-  <string name="history">Dîrok</string>
+  <string name="history">Tarîx</string>
   <string name="history_from_current_book">Dîrokê Bibîne Ji Hemû Kitêban</string>
   <string name="search_history">Dîroka lêgerînê</string>
   <string name="selected_items">%1$d bîjartî ye</string>
@@ -261,7 +261,7 @@
   <string name="go_to_settings">Here Mîhengên Hotspotê</string>
   <string name="no_results">Encam tine</string>
   <string name="no_bookmarks">Bijare Tune ne</string>
-  <string name="no_history">Dîrok tine</string>
+  <string name="no_history">Tarîx tine</string>
   <string name="device_default">Cîhaza Standard</string>
   <string name="delete_history">Dixwazî Hemû Dîrokê Jê Bibî?</string>
   <string name="delete_selected_history">Dixwazî Dîroka Bijartî Jê Bibî?</string>
