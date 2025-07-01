@@ -28,6 +28,7 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -53,8 +54,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -103,7 +104,7 @@ import kotlin.time.toDuration
 class ZimManageViewModelTest {
   private val downloadRoomDao: DownloadRoomDao = mockk()
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk()
-  private val newLanguagesDao: NewLanguagesDao = mockk()
+  private val languageRoomDao: LanguageRoomDao = mockk()
   private val storageObserver: StorageObserver = mockk()
   private val kiwixService: KiwixService = mockk()
   private val application: Application = mockk()
@@ -129,6 +130,7 @@ class ZimManageViewModelTest {
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
   private val testDispatcher = StandardTestDispatcher()
+  private val onlineLibraryManager = mockk<OnlineLibraryManager>()
 
   @AfterAll
   fun teardown() {
@@ -150,7 +152,7 @@ class ZimManageViewModelTest {
         any<ScanningProgressListener>()
       )
     } returns booksOnFileSystem
-    every { newLanguagesDao.languages() } returns languages
+    every { languageRoomDao.languages() } returns languages
     every { fat32Checker.fileSystemStates } returns fileSystemStates
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -176,7 +178,7 @@ class ZimManageViewModelTest {
       ZimManageViewModel(
         downloadRoomDao,
         libkiwixBookOnDisk,
-        newLanguagesDao,
+        languageRoomDao,
         storageObserver,
         kiwixService,
         application,
@@ -186,7 +188,8 @@ class ZimManageViewModelTest {
         defaultLanguageProvider,
         dataSource,
         connectivityManager,
-        sharedPreferenceUtil
+        sharedPreferenceUtil,
+        onlineLibraryManager
       ).apply {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)
@@ -279,7 +282,7 @@ class ZimManageViewModelTest {
         expectedLanguage
       )
       advanceUntilIdle()
-      verify { newLanguagesDao.insert(listOf(expectedLanguage)) }
+      verify { languageRoomDao.insert(listOf(expectedLanguage)) }
     }
 
     @Test
@@ -298,7 +301,7 @@ class ZimManageViewModelTest {
         ),
         language(isActive = true, occurencesOfLanguage = 1)
       )
-      verify { newLanguagesDao.insert(any()) }
+      verify { languageRoomDao.insert(any()) }
     }
 
     @Test
@@ -323,7 +326,7 @@ class ZimManageViewModelTest {
           defaultLanguage
         )
         verify {
-          newLanguagesDao.insert(
+          languageRoomDao.insert(
             listOf(
               defaultLanguage.copy(occurencesOfLanguage = 2),
               Language(
@@ -362,7 +365,7 @@ class ZimManageViewModelTest {
         )
         advanceUntilIdle()
         verify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
-          newLanguagesDao.insert(
+          languageRoomDao.insert(
             listOf(
               dbLanguage.copy(occurencesOfLanguage = 2),
               Language(
@@ -386,6 +389,7 @@ class ZimManageViewModelTest {
       every { application.getString(any()) } returns ""
       every { application.getString(any(), any()) } returns ""
       every { defaultLanguageProvider.provide() } returns defaultLanguage
+      coEvery { onlineLibraryManager.getOnlineBooksLanguage() } returns networkBooks.map { it.language }
       viewModel.networkLibrary.emit(networkBooks)
       advanceUntilIdle()
       languages.value = dbBooks

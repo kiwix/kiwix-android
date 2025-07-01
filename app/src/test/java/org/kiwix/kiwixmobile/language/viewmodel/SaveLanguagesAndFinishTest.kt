@@ -27,13 +27,13 @@ import io.mockk.verify
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 class SaveLanguagesAndFinishTest {
   @Test
   fun `invoke saves and finishes`() = runTest {
-    val languageDao = mockk<NewLanguagesDao>()
+    val languageDao = mockk<LanguageRoomDao>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
     val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()

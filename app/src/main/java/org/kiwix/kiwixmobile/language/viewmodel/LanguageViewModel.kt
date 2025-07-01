@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
@@ -41,7 +41,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
-  private val languageDao: NewLanguagesDao
+  private val languageRoomDao: LanguageRoomDao
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
@@ -63,7 +63,7 @@ class LanguageViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun observeLanguages() =
-    languageDao.languages()
+    languageRoomDao.languages()
       .filter { it.isNotEmpty() }
       .onEach { languages -> actions.tryEmit(UpdateLanguages(languages)) }
       .launchIn(viewModelScope)
@@ -112,7 +112,7 @@ class LanguageViewModel @Inject constructor(
     effects.tryEmit(
       SaveLanguagesAndFinish(
         currentState.items,
-        languageDao,
+        languageRoomDao,
         viewModelScope
       )
     )

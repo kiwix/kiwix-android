@@ -23,20 +23,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 @Suppress("InjectDispatcher")
 data class SaveLanguagesAndFinish(
   private val languages: List<Language>,
-  private val languageDao: NewLanguagesDao,
+  private val languageRoomDao: LanguageRoomDao,
   private val lifecycleScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
       runCatching {
         withContext(Dispatchers.IO) {
-          languageDao.insert(languages)
+          languageRoomDao.insert(languages)
         }
         activity.onBackPressedDispatcher.onBackPressed()
       }.onFailure {

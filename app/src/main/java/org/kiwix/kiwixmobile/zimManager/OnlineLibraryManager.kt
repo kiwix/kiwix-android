@@ -19,10 +19,17 @@
 package org.kiwix.kiwixmobile.zimManager
 
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.di.modules.ONLINE_BOOKS_LIBRARY
+import org.kiwix.kiwixmobile.di.modules.ONLINE_BOOKS_MANAGER
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import javax.inject.Inject
+import javax.inject.Named
 
-class OnlineLibraryManager(private val library: Library, private val manager: Manager) {
+class OnlineLibraryManager @Inject constructor(
+  @Named(ONLINE_BOOKS_LIBRARY) private val library: Library,
+  @Named(ONLINE_BOOKS_MANAGER) private val manager: Manager,
+) {
   suspend fun parseOPDSStream(content: String?, urlHost: String): Boolean =
     runCatching {
       manager.readOpds(content, urlHost)
@@ -39,5 +46,13 @@ class OnlineLibraryManager(private val library: Library, private val manager: Ma
       }
     }.onFailure { it.printStackTrace() }
     return onlineBooksList
+  }
+
+  suspend fun getOnlineBooksLanguage(): List<String> {
+    return runCatching {
+      library.booksLanguages.distinct()
+    }.onFailure {
+      it.printStackTrace()
+    }.getOrDefault(emptyList())
   }
 }

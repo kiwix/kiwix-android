@@ -28,7 +28,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
@@ -46,7 +46,7 @@ fun languageItem(language: Language = language()) =
 
 @ExtendWith(InstantExecutorExtension::class)
 class LanguageViewModelTest {
-  private val newLanguagesDao: NewLanguagesDao = mockk()
+  private val languageRoomDao: LanguageRoomDao = mockk()
   private lateinit var languageViewModel: LanguageViewModel
   private lateinit var languages: MutableStateFlow<List<Language>>
 
@@ -54,9 +54,9 @@ class LanguageViewModelTest {
   fun init() {
     clearAllMocks()
     languages = MutableStateFlow(emptyList())
-    every { newLanguagesDao.languages() } returns languages
+    every { languageRoomDao.languages() } returns languages
     languageViewModel =
-      LanguageViewModel(newLanguagesDao)
+      LanguageViewModel(languageRoomDao)
   }
 
   @Test
@@ -183,7 +183,7 @@ class LanguageViewModelTest {
         assertThat(awaitItem()).isEqualTo(
           SaveLanguagesAndFinish(
             languages,
-            newLanguagesDao,
+            languageRoomDao,
             languageViewModel.viewModelScope
           )
         )

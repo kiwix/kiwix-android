@@ -24,9 +24,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
@@ -56,7 +56,7 @@ class Repository @Inject internal constructor(
   private val historyRoomDao: HistoryRoomDao,
   private val webViewHistoryRoomDao: WebViewHistoryRoomDao,
   private val notesRoomDao: NotesRoomDao,
-  private val languageDao: NewLanguagesDao,
+  private val languageRoomDao: LanguageRoomDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {
@@ -102,7 +102,7 @@ class Repository @Inject internal constructor(
   @Suppress("InjectDispatcher")
   override suspend fun saveLanguages(languages: List<Language>) =
     withContext(Dispatchers.IO) {
-      languageDao.insert(languages)
+      languageRoomDao.insert(languages)
     }
 
   @Suppress("InjectDispatcher")

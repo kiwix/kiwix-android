@@ -66,8 +66,8 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_NETWORK_PATH
@@ -89,6 +89,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
@@ -121,8 +122,6 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.Book
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
-import org.kiwix.libkiwix.Library
-import org.kiwix.libkiwix.Manager
 import java.util.Locale
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
@@ -137,7 +136,7 @@ const val FOUR = 4
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  private val languageDao: NewLanguagesDao,
+  private val languageRoomDao: LanguageRoomDao,
   private val storageObserver: StorageObserver,
   private var kiwixService: KiwixService,
   val context: Application,
@@ -148,6 +147,7 @@ class ZimManageViewModel @Inject constructor(
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val onlineLibraryManager: OnlineLibraryManager
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -160,12 +160,6 @@ class ZimManageViewModel @Inject constructor(
     object UserClickedDownloadBooksButton : FileSelectActions()
   }
 
-  private val library by lazy { Library() }
-  private val manager by lazy { Manager(library) }
-
-  private val onlineLibraryManager by lazy {
-    OnlineLibraryManager(library, manager)
-  }
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   private val _libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
@@ -294,7 +288,7 @@ class ZimManageViewModel @Inject constructor(
   private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
-    val languages = languageDao.languages()
+    val languages = languageRoomDao.languages()
     coroutineJobs.apply {
       add(scanBooksFromStorage(dispatcher))
       add(updateBookItems())
@@ -541,11 +535,11 @@ class ZimManageViewModel @Inject constructor(
       .filter { it.isNotEmpty() }
       .distinctUntilChanged()
       .catch { it.printStackTrace() }
-      .onEach { languageDao.insert(it) }
+      .onEach { languageRoomDao.insert(it) }
       .flowOn(dispatcher)
       .launchIn(viewModelScope)
 
-  private fun combineToLanguageList(
+  private suspend fun combineToLanguageList(
     booksFromNetwork: List<LibkiwixBook>,
     allLanguages: List<Language>
   ) = when {
@@ -579,19 +573,28 @@ class ZimManageViewModel @Inject constructor(
   private fun <K> MutableMap<K, Int>.increment(key: K) =
     apply { set(key, getOrElse(key) { 0 } + 1) }
 
-  private fun fromLocalesWithNetworkMatchesSetActiveBy(
+  private suspend fun fromLocalesWithNetworkMatchesSetActiveBy(
     networkLanguageCounts: MutableMap<String, Int>,
     listToActivateBy: List<Language>
-  ) = Locale.getISOLanguages()
-    .map { it.convertToLocal() }
-    .filter { networkLanguageCounts.containsKey(it.isO3Language) }
-    .map { locale ->
-      Language(
-        locale.isO3Language,
-        languageIsActive(listToActivateBy, locale),
-        networkLanguageCounts.getOrElse(locale.isO3Language) { 0 }
-      )
+  ) = onlineLibraryManager.getOnlineBooksLanguage()
+    .mapNotNull { code ->
+      runCatching {
+        val locale = code.convertToLocal()
+        val o3 = locale.isO3Language
+        if (networkLanguageCounts.containsKey(o3)) {
+          Language(
+            o3,
+            languageIsActive(listToActivateBy, locale),
+            networkLanguageCounts.getOrElse(o3) { 0 }
+          )
+        } else {
+          null
+        }
+      }.onFailure {
+        Log.w(TAG_KIWIX, "Unsupported locale code: $code", it)
+      }.getOrNull()
     }
+    .distinctBy { it.language }
 
   private fun defaultLanguage() =
     listOf(
