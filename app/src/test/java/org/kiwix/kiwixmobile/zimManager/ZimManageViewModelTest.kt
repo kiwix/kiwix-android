@@ -167,6 +167,7 @@ class ZimManageViewModelTest {
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
     every { sharedPreferenceUtil.prefWifiOnly } returns true
+    coEvery { onlineLibraryManager.getOnlineBooksLanguage() } returns listOf("eng")
     downloads.value = emptyList()
     booksOnFileSystem.value = emptyList()
     books.value = emptyList()
