@@ -29,8 +29,10 @@ import retrofit2.http.GET
 import retrofit2.http.Url
 
 interface KiwixService {
-  @GET(OPDS_LIBRARY_NETWORK_PATH)
-  suspend fun getLibrary(): Response<String>
+  @GET
+  suspend fun getLibraryPage(
+    @Url url: String
+  ): Response<String>
 
   @GET
   suspend fun getMetaLinks(
@@ -52,8 +54,7 @@ interface KiwixService {
   }
 
   companion object {
-    // To fetch the full OPDS catalog.
-    // TODO we will change this to pagination later once we migrate to OPDS properly.
-    const val OPDS_LIBRARY_NETWORK_PATH = "v2/entries?count=-1"
+    const val OPDS_LIBRARY_ENDPOINT = "v2/entries"
+    const val ITEMS_PER_PAGE = 50
   }
 }

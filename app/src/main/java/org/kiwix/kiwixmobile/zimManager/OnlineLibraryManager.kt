@@ -18,11 +18,18 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.di.modules.ONLINE_BOOKS_LIBRARY
 import org.kiwix.kiwixmobile.di.modules.ONLINE_BOOKS_MANAGER
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.StringReader
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -30,23 +37,26 @@ class OnlineLibraryManager @Inject constructor(
   @Named(ONLINE_BOOKS_LIBRARY) private val library: Library,
   @Named(ONLINE_BOOKS_MANAGER) private val manager: Manager,
 ) {
-  suspend fun parseOPDSStream(content: String?, urlHost: String): Boolean =
-    runCatching {
-      manager.readOpds(content, urlHost)
-    }.onFailure {
-      it.printStackTrace()
-    }.isSuccess
 
-  suspend fun getOnlineBooks(): List<LibkiwixBook> {
-    val onlineBooksList = arrayListOf<LibkiwixBook>()
+  var totalResult = 0
+  suspend fun parseOPDSStreamAndGetBooks(
+    content: String?,
+    urlHost: String
+  ): ArrayList<LibkiwixBook>? =
     runCatching {
-      library.booksIds.forEach { bookId ->
-        val book = library.getBookById(bookId)
+      content?.let { totalResult = extractTotalResults(it) }
+      val onlineBooksList = arrayListOf<LibkiwixBook>()
+      val tempLibrary = Library()
+      val tempManager = Manager(tempLibrary)
+      tempManager.readOpds(content, urlHost)
+      tempLibrary.booksIds.forEach { bookId ->
+        val book = tempLibrary.getBookById(bookId)
         onlineBooksList.add(LibkiwixBook(book))
       }
-    }.onFailure { it.printStackTrace() }
-    return onlineBooksList
-  }
+      onlineBooksList
+    }.onFailure {
+      it.printStackTrace()
+    }.getOrNull()
 
   suspend fun getOnlineBooksLanguage(): List<String> {
     return runCatching {
@@ -54,5 +64,76 @@ class OnlineLibraryManager @Inject constructor(
     }.onFailure {
       it.printStackTrace()
     }.getOrDefault(emptyList())
+  }
+
+  /**
+   * Builds the URL for fetching the OPDS library entries with pagination and optional filters.
+   *
+   * @param baseUrl The base URL of the Kiwix library server (e.g., "https://opds.library.kiwix.org/").
+   * @param start The index from which to start fetching entries (default is 0).
+   * @param count The number of entries to fetch per page (default is 50).
+   * @param query Optional search query for filtering results by text.
+   * @param lang Optional language code filter (e.g., "en", "ita").
+   * @param category Optional category filter (e.g., "wikipedia", "books").
+   * @return A full URL string with query parameters applied.
+   *
+   * Example:
+   * buildLibraryUrl("https://library.kiwix.org", start = 100, count = 50, lang = "en")
+   * returns: "https://library.kiwix.org/v2/entries?start=100&count=50&lang=en"
+   */
+  fun buildLibraryUrl(
+    baseUrl: String,
+    start: Int = 0,
+    count: Int = 50,
+    query: String? = null,
+    lang: String? = null,
+    category: String? = null
+  ): String {
+    val params = mutableListOf("start=$start", "count=$count")
+    query?.takeIf { it.isNotBlank() }?.let { params += "q=$it" }
+    lang?.takeIf { it.isNotBlank() }?.let { params += "lang=$it" }
+    category?.takeIf { it.isNotBlank() }?.let { params += "category=$it" }
+
+    return "$baseUrl/$OPDS_LIBRARY_ENDPOINT?${params.joinToString("&")}"
+  }
+
+  /**
+   * Calculates the total number of pages needed for pagination.
+   *
+   * @param totalResults Total number of items available (e.g., 3408).
+   * @param pageSize Number of items per page (e.g., 50).
+   * @return The total number of pages required to show all items.
+   *
+   * Example:
+   * calculateTotalPages(3408, 50) returns 69
+   */
+  fun calculateTotalPages(totalResults: Int, pageSize: Int): Int =
+    (totalResults + pageSize - 1) / pageSize
+
+  /**
+   * Calculates the starting index (offset) for a given page number.
+   *
+   * @param pageIndex The page number starting from 0 (e.g., pageIndex = 2 means page 3).
+   * @param pageSize Number of items per page (e.g., 50).
+   * @return The offset index to be used in a paginated request (e.g., start=100).
+   *
+   * Example:
+   * getStartOffset(2, 50) returns 100
+   */
+  fun getStartOffset(pageIndex: Int, pageSize: Int): Int = pageIndex * pageSize
+
+  private suspend fun extractTotalResults(xml: String): Int = withContext(Dispatchers.IO) {
+    val factory = XmlPullParserFactory.newInstance()
+    val parser = factory.newPullParser()
+    parser.setInput(StringReader(xml))
+
+    var eventType = parser.eventType
+    while (eventType != XmlPullParser.END_DOCUMENT) {
+      if (eventType == XmlPullParser.START_TAG && parser.name == "totalResults") {
+        return@withContext parser.nextText().toIntOrNull() ?: ZERO
+      }
+      eventType = parser.next()
+    }
+    return@withContext ZERO
   }
 }

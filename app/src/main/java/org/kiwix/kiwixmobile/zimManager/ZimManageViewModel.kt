@@ -70,7 +70,8 @@ import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_NETWORK_PATH
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
@@ -254,7 +255,7 @@ class ZimManageViewModel @Inject constructor(
   private fun getContentLengthOfLibraryXmlFile(): Long {
     val headRequest =
       Request.Builder()
-        .url("$KIWIX_OPDS_LIBRARY_URL$OPDS_LIBRARY_NETWORK_PATH")
+        .url("$KIWIX_OPDS_LIBRARY_URL$OPDS_LIBRARY_ENDPOINT?count=$ITEMS_PER_PAGE")
         .head()
         .header("Accept-Encoding", "identity")
         .build()
@@ -447,18 +448,22 @@ class ZimManageViewModel @Inject constructor(
     kiwixService: KiwixService
   ): Flow<List<LibkiwixBook>> = flow {
     downloadProgress.postValue(context.getString(R.string.starting_downloading_remote_library))
-    val response = kiwixService.getLibrary()
+    // TODO get the filter from online library and pass it here to get the online content based on filters.
+    val buildUrl = onlineLibraryManager.buildLibraryUrl(
+      KIWIX_OPDS_LIBRARY_URL,
+    )
+    val response = kiwixService.getLibraryPage(buildUrl)
     val resolvedUrl = response.raw().networkResponse?.request?.url
       ?: response.raw().request.url
     val baseHostUrl = "${resolvedUrl.scheme}://${resolvedUrl.host}"
     downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
     val libraryXml = response.body()
-    val isLibraryParsed = onlineLibraryManager.parseOPDSStream(libraryXml, baseHostUrl)
+    val onlineBooks = onlineLibraryManager.parseOPDSStreamAndGetBooks(libraryXml, baseHostUrl)
     emit(
-      if (isLibraryParsed) {
-        onlineLibraryManager.getOnlineBooks()
-      } else {
+      if (onlineBooks.isNullOrEmpty()) {
         emptyList()
+      } else {
+        onlineBooks
       }
     )
   }
