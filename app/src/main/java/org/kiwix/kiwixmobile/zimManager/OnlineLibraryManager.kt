@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zimManager
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -44,7 +45,8 @@ class OnlineLibraryManager @Inject constructor(
     urlHost: String
   ): ArrayList<LibkiwixBook>? =
     runCatching {
-      content?.let { totalResult = extractTotalResults(it) }
+      if (content == null) return null
+      totalResult = extractTotalResults(content)
       val onlineBooksList = arrayListOf<LibkiwixBook>()
       val tempLibrary = Library()
       val tempManager = Manager(tempLibrary)
@@ -83,8 +85,8 @@ class OnlineLibraryManager @Inject constructor(
    */
   fun buildLibraryUrl(
     baseUrl: String,
-    start: Int = 0,
-    count: Int = 50,
+    start: Int,
+    count: Int,
     query: String? = null,
     lang: String? = null,
     category: String? = null

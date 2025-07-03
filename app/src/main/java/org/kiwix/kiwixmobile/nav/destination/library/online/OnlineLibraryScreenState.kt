@@ -99,5 +99,13 @@ data class OnlineLibraryScreenState(
   /**
    * Triggers when clear button clicked.
    */
-  val clearSearchButtonClickListener: () -> Unit
+  val clearSearchButtonClickListener: () -> Unit,
+  /**
+   * Triggers when user at the end of the online content.
+   */
+  val onLoadMore: (Int) -> Unit,
+  /**
+   * Manages the showing of progressBar at the end of book list when more items is loading.
+   */
+  val isLoadingMoreItem: Boolean
 )
