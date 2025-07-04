@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 sealed class State {
+  data class Error(val errorMessage: String) : State()
   object Loading : State()
   object Saving : State()
   data class Content(

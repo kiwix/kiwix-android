@@ -68,7 +68,6 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -139,7 +138,6 @@ const val FOUR = 4
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  private val languageRoomDao: LanguageRoomDao,
   private val storageObserver: StorageObserver,
   private var kiwixService: KiwixService,
   val context: Application,
@@ -164,9 +162,9 @@ class ZimManageViewModel @Inject constructor(
   }
 
   data class OnlineLibraryRequest(
-    val query: String?,
-    val category: String?,
-    val lang: String?,
+    val query: String? = null,
+    val category: String? = null,
+    val lang: String? = null,
     val isLoadMoreItem: Boolean,
     val page: Int
   )
@@ -327,16 +325,17 @@ class ZimManageViewModel @Inject constructor(
   private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
-    val languages = languageRoomDao.languages()
+    val selectedLanguage = sharedPreferenceUtil.onlineContentLanguage
     coroutineJobs.apply {
       add(scanBooksFromStorage(dispatcher))
       add(updateBookItems())
       add(fileSelectActions())
-      add(updateLibraryItems(booksFromDao, downloads, networkLibrary, languages))
-      add(updateLanguagesInDao(networkLibrary, languages))
+      add(updateLibraryItems(booksFromDao, downloads, networkLibrary, selectedLanguage))
+      // add(updateLanguagesInDao(networkLibrary, selectedLanguage))
       add(updateNetworkStates())
       add(requestsAndConnectivityChangesToLibraryRequests(networkLibrary))
       add(onlineLibraryRequest())
+      add(observeLanguageChanges())
     }
   }
 
@@ -349,6 +348,16 @@ class ZimManageViewModel @Inject constructor(
     appProgressListener = null
     super.onCleared()
   }
+
+  private fun observeLanguageChanges(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+    sharedPreferenceUtil.onlineContentLanguage
+      .onEach {
+        updateOnlineLibraryFilters(
+          OnlineLibraryRequest(lang = it, page = ZERO, isLoadMoreItem = false)
+        )
+      }
+      .flowOn(dispatcher)
+      .launchIn(viewModelScope)
 
   fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
     onlineLibraryRequest.update { current ->
@@ -589,7 +598,7 @@ class ZimManageViewModel @Inject constructor(
     localBooksFromLibkiwix: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
     library: MutableStateFlow<List<LibkiwixBook>>,
-    languages: Flow<List<Language>>,
+    languages: StateFlow<String>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = viewModelScope.launch(dispatcher) {
     val requestFilteringFlow = merge(
@@ -632,23 +641,25 @@ class ZimManageViewModel @Inject constructor(
       .collect { _libraryItems.emit(it) }
   }
 
-  private fun updateLanguagesInDao(
-    library: MutableStateFlow<List<LibkiwixBook>>,
-    languages: Flow<List<Language>>,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ) =
-    combine(
-      library,
-      languages
-    ) { books, existingLanguages ->
-      combineToLanguageList(books, existingLanguages)
-    }.map { it.sortedBy(Language::language) }
-      .filter { it.isNotEmpty() }
-      .distinctUntilChanged()
-      .catch { it.printStackTrace() }
-      .onEach { languageRoomDao.insert(it) }
-      .flowOn(dispatcher)
-      .launchIn(viewModelScope)
+  // private fun updateLanguagesInDao(
+  //   library: MutableStateFlow<List<LibkiwixBook>>,
+  //   languages: StateFlow<String>,
+  //   dispatcher: CoroutineDispatcher = Dispatchers.IO
+  // ) =
+  //   combine(
+  //     library,
+  //     languages
+  //   ) { books, existingLanguages ->
+  //     combineToLanguageList(books, existingLanguages)
+  //   }.map { it.sortedBy(Language::language) }
+  //     .filter { it.isNotEmpty() }
+  //     .distinctUntilChanged()
+  //     .catch { it.printStackTrace() }
+  //     .onEach {
+  //       // languageRoomDao.insert(it)
+  //     }
+  //     .flowOn(dispatcher)
+  //     .launchIn(viewModelScope)
 
   private suspend fun combineToLanguageList(
     booksFromNetwork: List<LibkiwixBook>,

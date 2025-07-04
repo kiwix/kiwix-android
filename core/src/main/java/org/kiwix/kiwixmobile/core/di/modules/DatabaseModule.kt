@@ -100,8 +100,4 @@ open class DatabaseModule {
     db.downloadRoomDao().also {
       it.libkiwixBookOnDisk = libkiwixBookOnDisk
     }
-
-  @Singleton
-  @Provides
-  fun provideLanguageRoomDao(db: KiwixRoomDatabase) = db.languageRoomDao()
 }

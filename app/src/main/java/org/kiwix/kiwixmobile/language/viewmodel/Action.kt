@@ -25,5 +25,6 @@ sealed class Action {
   data class UpdateLanguages(val languages: List<Language>) : Action()
   data class Filter(val filter: String) : Action()
   data class Select(val language: LanguageItem) : Action()
+  data class Error(val errorMessage: String) : Action()
   object SaveAll : Action()
 }

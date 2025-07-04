@@ -23,7 +23,6 @@ import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
-import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
@@ -49,9 +48,6 @@ class ObjectBoxToRoomMigrator {
     }
     if (!sharedPreferenceUtil.prefIsNotesMigrated) {
       migrateNotes(boxStore.boxFor())
-    }
-    if (!sharedPreferenceUtil.prefLanguageListMigrated) {
-      migrateLanguages(boxStore.boxFor())
     }
     // TODO we will migrate here for other entities
   }
@@ -90,13 +86,5 @@ class ObjectBoxToRoomMigrator {
       box.remove(notesEntity.id)
     }
     sharedPreferenceUtil.putPrefNotesMigrated(true)
-  }
-
-  suspend fun migrateLanguages(box: Box<LanguageEntity>) {
-    kiwixRoomDatabase.languageRoomDao()
-      .insert(
-        box.all.map { it.toLanguageModel() }
-      )
-    sharedPreferenceUtil.putPrefLanguageListMigrated(true)
   }
 }

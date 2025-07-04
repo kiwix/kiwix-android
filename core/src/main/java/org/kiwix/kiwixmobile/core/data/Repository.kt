@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
-import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
@@ -37,7 +36,6 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.LanguageItem
@@ -56,7 +54,6 @@ class Repository @Inject internal constructor(
   private val historyRoomDao: HistoryRoomDao,
   private val webViewHistoryRoomDao: WebViewHistoryRoomDao,
   private val notesRoomDao: NotesRoomDao,
-  private val languageRoomDao: LanguageRoomDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {
@@ -98,12 +95,6 @@ class Repository @Inject internal constructor(
   override suspend fun saveBook(book: Book) = withContext(Dispatchers.IO) {
     libkiwixBookOnDisk.insert(listOf(book))
   }
-
-  @Suppress("InjectDispatcher")
-  override suspend fun saveLanguages(languages: List<Language>) =
-    withContext(Dispatchers.IO) {
-      languageRoomDao.insert(languages)
-    }
 
   @Suppress("InjectDispatcher")
   override suspend fun saveHistory(history: HistoryItem) = withContext(Dispatchers.IO) {

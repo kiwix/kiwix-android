@@ -39,6 +39,9 @@ interface KiwixService {
     @Url url: String
   ): MetaLinkNetworkEntity?
 
+  @GET("catalog/v2/languages")
+  suspend fun getLanguages(): LanguageFeed
+
   /******** Helper class that sets up new services  */
   object ServiceCreator {
     @Suppress("DEPRECATION")

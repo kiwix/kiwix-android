@@ -18,19 +18,40 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.KIWIX_LANGUAGE_URL
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
@@ -38,10 +59,14 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
-  private val languageRoomDao: LanguageRoomDao
+  private val context: Application,
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private var kiwixService: KiwixService,
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
@@ -49,6 +74,7 @@ class LanguageViewModel @Inject constructor(
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
+    context.registerReceiver(connectivityBroadcastReceiver)
     coroutineJobs.apply {
       add(observeActions())
       add(observeLanguages())
@@ -62,17 +88,64 @@ class LanguageViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private fun observeLanguages() =
-    languageRoomDao.languages()
-      .filter { it.isNotEmpty() }
-      .onEach { languages -> actions.tryEmit(UpdateLanguages(languages)) }
-      .launchIn(viewModelScope)
+  private suspend fun fetchLanguages(): List<Language>? =
+    runCatching {
+      kiwixService =
+        KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+      val feed = kiwixService.getLanguages()
+      buildList {
+        // Add default item to show all language.
+        add(
+          Language(
+            languageCode = "",
+            active = sharedPreferenceUtil.selectedOnlineContentLanguage.isEmpty(),
+            occurrencesOfLanguage = 0,
+            id = 0L
+          )
+        )
+
+        // Add the rest of the fetched languages
+        feed.entries.orEmpty().mapIndexedNotNull { index, languageEntry ->
+          runCatching {
+            Language(
+              languageCode = languageEntry.languageCode,
+              active = sharedPreferenceUtil.selectedOnlineContentLanguage == languageEntry.languageCode,
+              occurrencesOfLanguage = languageEntry.count,
+              id = (index + 1).toLong()
+            )
+          }.onFailure {
+            Log.w(TAG_KIWIX, "Unsupported locale code: ${languageEntry.languageCode}", it)
+          }.getOrNull()
+        }.forEach { add(it) }
+      }
+    }.onFailure { it.printStackTrace() }.getOrNull()
+
+  private fun observeLanguages() = viewModelScope.launch {
+    state.value = Loading
+    if (connectivityBroadcastReceiver.networkStates.value == NetworkState.NOT_CONNECTED) {
+      actions.emit(Error(context.getString(R.string.no_network_connection)))
+      return@launch
+    }
+    try {
+      val languages = fetchLanguages()
+      if (languages?.isNotEmpty() == true) {
+        actions.emit(UpdateLanguages(languages))
+      } else {
+        Log.w("LanguageViewModel", "Fetched empty language list.")
+        actions.emit(Error(context.getString(R.string.no_language_available)))
+      }
+    } catch (e: Exception) {
+      Log.e("LanguageViewModel", "Error fetching languages", e)
+      actions.emit(Error(context.getString(R.string.no_language_available)))
+    }
+  }
 
   override fun onCleared() {
     coroutineJobs.forEach {
       it.cancel()
     }
     coroutineJobs.clear()
+    context.unregisterReceiver(connectivityBroadcastReceiver)
     super.onCleared()
   }
 
@@ -81,6 +154,8 @@ class LanguageViewModel @Inject constructor(
     currentState: State
   ): State {
     return when (action) {
+      is Error -> State.Error(action.errorMessage)
+
       is UpdateLanguages ->
         when (currentState) {
           Loading -> Content(action.languages)
@@ -111,8 +186,8 @@ class LanguageViewModel @Inject constructor(
   private fun saveAll(currentState: Content): State {
     effects.tryEmit(
       SaveLanguagesAndFinish(
-        currentState.items,
-        languageRoomDao,
+        currentState.items.first(),
+        sharedPreferenceUtil,
         viewModelScope
       )
     )
@@ -128,4 +203,18 @@ class LanguageViewModel @Inject constructor(
     filter: String,
     currentState: Content
   ) = currentState.updateFilter(filter)
+
+  private fun getOkHttpClient() = OkHttpClient().newBuilder()
+    .followRedirects(true)
+    .followSslRedirects(true)
+    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+    .readTimeout(READ_TIMEOUT, SECONDS)
+    .callTimeout(CALL_TIMEOUT, SECONDS)
+    .addNetworkInterceptor(
+      HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) BASIC else NONE
+      }
+    )
+    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+    .build()
 }

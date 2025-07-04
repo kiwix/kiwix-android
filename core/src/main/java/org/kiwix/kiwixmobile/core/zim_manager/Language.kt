@@ -51,8 +51,9 @@ data class Language constructor(
   constructor(
     languageCode: String,
     active: Boolean,
-    occurrencesOfLanguage: Int
-  ) : this(languageCode.convertToLocal(), active, occurrencesOfLanguage)
+    occurrencesOfLanguage: Int,
+    id: Long = 0
+  ) : this(languageCode.convertToLocal(), active, occurrencesOfLanguage, id)
 
   override fun equals(other: Any?): Boolean =
     (other as Language).language == language && other.active == active

@@ -210,6 +210,7 @@
   <string name="table_of_contents">Table of contents</string>
   <string name="select_languages" tools:keep="@string/select_languages">Select languages</string>
   <string name="save_languages" tools:keep="@string/save_languages">Save languages</string>
+  <string name="no_language_available" tools:keep="@string/no_language_available">No languages available</string>
   <string name="expand">Expand</string>
   <string name="history">History</string>
   <string name="history_from_current_book">View History From All Books</string>

@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.libkiwix.Book
 
@@ -34,7 +33,6 @@ interface DataSource {
   fun getLanguageCategorizedBooks(): Flow<List<BooksOnDiskListItem>>
   suspend fun saveBook(book: Book)
   suspend fun saveBooks(book: List<Book>)
-  suspend fun saveLanguages(languages: List<Language>)
   suspend fun saveHistory(history: HistoryItem)
   suspend fun deleteHistory(historyList: List<HistoryListItem>)
   suspend fun clearHistory()
