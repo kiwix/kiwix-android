@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_LANGUAGE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -53,7 +54,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
@@ -93,30 +94,32 @@ class LanguageViewModel @Inject constructor(
       kiwixService =
         KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
       val feed = kiwixService.getLanguages()
+      var allBooksCount = ZERO
+
+      val languages = feed.entries.orEmpty().mapIndexedNotNull { index, entry ->
+        allBooksCount += entry.count
+        runCatching {
+          Language(
+            languageCode = entry.languageCode,
+            active = sharedPreferenceUtil.selectedOnlineContentLanguage == entry.languageCode,
+            occurrencesOfLanguage = entry.count,
+            id = (index + 1).toLong()
+          )
+        }.onFailure {
+          Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", it)
+        }.getOrNull()
+      }
+
       buildList {
-        // Add default item to show all language.
         add(
           Language(
             languageCode = "",
             active = sharedPreferenceUtil.selectedOnlineContentLanguage.isEmpty(),
-            occurrencesOfLanguage = 0,
+            occurrencesOfLanguage = allBooksCount,
             id = 0L
           )
         )
-
-        // Add the rest of the fetched languages
-        feed.entries.orEmpty().mapIndexedNotNull { index, languageEntry ->
-          runCatching {
-            Language(
-              languageCode = languageEntry.languageCode,
-              active = sharedPreferenceUtil.selectedOnlineContentLanguage == languageEntry.languageCode,
-              occurrencesOfLanguage = languageEntry.count,
-              id = (index + 1).toLong()
-            )
-          }.onFailure {
-            Log.w(TAG_KIWIX, "Unsupported locale code: ${languageEntry.languageCode}", it)
-          }.getOrNull()
-        }.forEach { add(it) }
+        addAll(languages)
       }
     }.onFailure { it.printStackTrace() }.getOrNull()
 
@@ -175,18 +178,19 @@ class LanguageViewModel @Inject constructor(
           else -> currentState
         }
 
-      SaveAll ->
+      Save ->
         when (currentState) {
-          is Content -> saveAll(currentState)
+          is Content -> save(currentState)
           else -> currentState
         }
     }
   }
 
-  private fun saveAll(currentState: Content): State {
+  private fun save(currentState: Content): State {
+    val selectedLanguage = currentState.items.first { it.active }
     effects.tryEmit(
       SaveLanguagesAndFinish(
-        currentState.items.first(),
+        selectedLanguage,
         sharedPreferenceUtil,
         viewModelScope
       )

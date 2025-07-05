@@ -38,7 +38,7 @@ sealed class State {
   ) : State() {
     fun select(languageItem: LanguageItem) =
       Content(
-        items.map { if (it.id == languageItem.id) it.copy(active = !it.active) else it },
+        items.map { it.copy(active = it.id == languageItem.id) },
         filter
       )
 

@@ -362,9 +362,9 @@ class ZimManageViewModel @Inject constructor(
   fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
     onlineLibraryRequest.update { current ->
       current.copy(
-        query = newRequest.query.takeUnless { it.isNullOrEmpty() } ?: current.query,
-        category = newRequest.category.takeUnless { it.isNullOrEmpty() } ?: current.category,
-        lang = newRequest.lang.takeUnless { it.isNullOrEmpty() } ?: current.lang,
+        query = newRequest.query ?: current.query,
+        category = newRequest.category ?: current.category,
+        lang = newRequest.lang ?: current.lang,
         page = newRequest.page,
         isLoadMoreItem = newRequest.isLoadMoreItem
       )

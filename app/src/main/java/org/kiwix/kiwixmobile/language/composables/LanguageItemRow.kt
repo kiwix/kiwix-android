@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -62,20 +63,20 @@ fun LanguageItemRow(
       },
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Checkbox(
+    RadioButton(
       modifier = Modifier
         .padding(ComposeDimens.SIXTEEN_DP)
         .semantics {
           testTag = "$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG${language.language}"
         },
-      checked = language.active,
-      onCheckedChange = {
+      selected = language.active,
+      onClick = {
         onCheckedChange(item)
       }
     )
     Column {
       Text(
-        text = language.language,
+        text = language.language.ifEmpty { context.getString(R.string.all_languages) },
         style = MaterialTheme.typography.bodyLarge
       )
       Text(

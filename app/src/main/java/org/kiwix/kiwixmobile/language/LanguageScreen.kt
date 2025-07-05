@@ -77,7 +77,7 @@ fun LanguageScreen(
   }
   Scaffold(topBar = {
     KiwixAppBar(
-      title = stringResource(R.string.select_languages),
+      title = stringResource(R.string.select_language),
       navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItemList,
       searchBar = if (isSearchActive) {
