@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 sealed class State {
+  data class Error(val errorMessage: String) : State()
   object Loading : State()
   object Saving : State()
   data class Content(
@@ -37,7 +38,7 @@ sealed class State {
   ) : State() {
     fun select(languageItem: LanguageItem) =
       Content(
-        items.map { if (it.id == languageItem.id) it.copy(active = !it.active) else it },
+        items.map { it.copy(active = it.id == languageItem.id) },
         filter
       )
 

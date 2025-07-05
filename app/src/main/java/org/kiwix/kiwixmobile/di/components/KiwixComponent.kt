@@ -22,17 +22,20 @@ import dagger.Component
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
+import org.kiwix.kiwixmobile.di.modules.JNIModule
 import org.kiwix.kiwixmobile.di.modules.KiwixModule
 import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
 
 @KiwixScope
 @Component(
   dependencies = [CoreComponent::class],
-  modules = [KiwixViewModelModule::class, KiwixModule::class]
+  modules = [KiwixViewModelModule::class, KiwixModule::class, JNIModule::class]
 )
 interface KiwixComponent {
   fun activityComponentBuilder(): KiwixActivityComponent.Builder
   fun serviceComponent(): Builder
   fun inject(storageSelectDialog: StorageSelectDialog)
+  fun providesOnlineLibraryManager(): OnlineLibraryManager
 }

@@ -60,6 +60,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefWifiOnly: Boolean
     get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
 
+  private val _onlineContentLanguage = MutableStateFlow("")
+  val onlineContentLanguage = _onlineContentLanguage.asStateFlow()
+
   val prefIsFirstRun: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
 
@@ -302,6 +305,18 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       }
     }
 
+  var selectedOnlineContentLanguage: String
+    get() = sharedPreferences.getString(SELECTED_ONLINE_CONTENT_LANGUAGE, "").orEmpty()
+    set(selectedOnlineContentLanguage) {
+      sharedPreferences.edit {
+        putString(
+          SELECTED_ONLINE_CONTENT_LANGUAGE,
+          selectedOnlineContentLanguage
+        )
+      }
+      _onlineContentLanguage.tryEmit(selectedOnlineContentLanguage)
+    }
+
   fun getPublicDirectoryPath(path: String): String =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       path
@@ -356,5 +371,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
     const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
       "pref_last_donation_shown_in_milliseconds"
+    private const val SELECTED_ONLINE_CONTENT_LANGUAGE = "selectedOnlineContentLanguage"
   }
 }

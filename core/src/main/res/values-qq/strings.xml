@@ -208,7 +208,7 @@
   <string name="go_to_previous_page">* This is used in a content description of the image view.\n* By clicking on this image user navigates to the previously opened page.</string>
   <string name="go_to_next_page">* This is used in a content description of the image view.\n* By clicking on this image user navigates to the next opened page.</string>
   <string name="table_of_contents">* This is used as a content description of the image button.\n* By clicking on this button, a navigation drawer opens that contains a list of contents currently available on the opened page.</string>
-  <string name="select_languages">It is shown as the title of the language selection screen.</string>
+  <string name="select_language">It is shown as the title of the language selection screen.</string>
   <string name="save_languages">It is the title of the menu item which saves the selected languages.</string>
   <string name="expand">{{Identical|Expand}}</string>
   <string name="history">{{Identical|History}}</string>

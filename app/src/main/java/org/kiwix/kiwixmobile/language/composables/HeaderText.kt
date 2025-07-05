@@ -34,7 +34,7 @@ fun HeaderText(
 ) {
   Text(
     text = when (item.id) {
-      LanguageListItem.HeaderItem.SELECTED -> stringResource(R.string.your_languages)
+      LanguageListItem.HeaderItem.SELECTED -> stringResource(R.string.your_language)
       LanguageListItem.HeaderItem.OTHER -> stringResource(R.string.other_languages)
       else -> ""
     },

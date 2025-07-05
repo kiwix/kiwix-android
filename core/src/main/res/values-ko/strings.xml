@@ -223,7 +223,6 @@
   <string name="go_to_previous_page">이전 페이지로 이동</string>
   <string name="go_to_next_page">다음 페이지로 이동</string>
   <string name="table_of_contents">목차</string>
-  <string name="select_languages">언어 선택</string>
   <string name="save_languages">언어 저장</string>
   <string name="expand">펼치기</string>
   <string name="history">역사</string>

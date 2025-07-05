@@ -35,6 +35,7 @@ import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -44,6 +45,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
+import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
@@ -52,6 +54,7 @@ import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
@@ -212,10 +215,13 @@ class ObjectBoxToRoomMigratorTest {
 
   private suspend fun <T> clearRoomAndBoxStoreDatabases(box: Box<T>) {
     // delete history for testing other edge cases
-    kiwixRoomDatabase.recentSearchRoomDao().deleteSearchHistory()
-    kiwixRoomDatabase.historyRoomDao().deleteAllHistory()
-    kiwixRoomDatabase.notesRoomDao()
-      .deletePages(kiwixRoomDatabase.notesRoomDao().notes().first())
+    with(kiwixRoomDatabase) {
+      recentSearchRoomDao().deleteSearchHistory()
+      historyRoomDao().deleteAllHistory()
+      notesRoomDao()
+        .deletePages(kiwixRoomDatabase.notesRoomDao().notes().first())
+      languageRoomDao().deleteAllLanguages()
+    }
     box.removeAll()
   }
 
@@ -469,5 +475,54 @@ class ObjectBoxToRoomMigratorTest {
         "Migration took too long: $migrationTime ms",
         migrationTime < migrationMaxTime
       )
+    }
+
+  @Test
+  fun migrateLanguages_shouldInsertDataIntoRoomDatabase() =
+    runBlocking {
+      val box = boxStore.boxFor(LanguageEntity::class.java)
+      // clear both databases for history to test more edge cases
+      clearRoomAndBoxStoreDatabases(box)
+
+      val language = Language("eng", true, 10)
+      val language1 = Language("fr", false, 1)
+
+      // insert into object box
+      box.put(LanguageEntity(language))
+      // migrate data into room database
+      objectBoxToRoomMigrator.migrateLanguages(box)
+      // check if data successfully migrated to room
+      var actualDataAfterMigration = kiwixRoomDatabase.languageRoomDao().languages().first()
+      assertEquals(actualDataAfterMigration.size, 1)
+      assertEquals(actualDataAfterMigration[0].language, language.language)
+      assertEquals(actualDataAfterMigration[0].occurencesOfLanguage, language.occurencesOfLanguage)
+      assertEquals(actualDataAfterMigration[0].active, language.active)
+
+      // clear both databases to test more edge cases
+      clearRoomAndBoxStoreDatabases(box)
+
+      // Migrate data from empty ObjectBox database
+      objectBoxToRoomMigrator.migrateLanguages(box)
+      val actualData = kiwixRoomDatabase.languageRoomDao().languages().first()
+      assertTrue(actualData.isEmpty())
+
+      // Test if data successfully migrated to Room and existing data is deleted.
+      kiwixRoomDatabase.languageRoomDao().insert(listOf(language))
+      box.put(LanguageEntity(language1))
+      objectBoxToRoomMigrator.migrateLanguages(box)
+
+      actualDataAfterMigration = kiwixRoomDatabase.languageRoomDao().languages().first()
+      assertEquals(1, actualDataAfterMigration.size)
+      val existingItem =
+        actualDataAfterMigration.find {
+          it.active == language.active && it.language == language.language
+        }
+      Assert.assertNull(existingItem)
+      val newItem =
+        actualDataAfterMigration.find {
+          it.active == language1.active && it.language == language1.language
+        }
+      assertNotNull(newItem)
+      clearRoomAndBoxStoreDatabases(box)
     }
 }

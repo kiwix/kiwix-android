@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
@@ -76,6 +77,7 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -89,11 +91,13 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
@@ -138,9 +142,35 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         isSearchActive = false,
         searchText = "",
         searchValueChangedListener = { onSearchValueChanged(it) },
-        clearSearchButtonClickListener = { onSearchClear() }
+        clearSearchButtonClickListener = { onSearchClear() },
+        onLoadMore = { totalItemShowingCount ->
+          loadMoreBooksFromNetwork(totalItemShowingCount)
+        },
+        isLoadingMoreItem = false
       )
     )
+  }
+
+  private fun loadMoreBooksFromNetwork(totalItemShowingCount: Int) {
+    val totalResults = zimManageViewModel.onlineLibraryManager.totalResult
+    val totalPages =
+      zimManageViewModel.onlineLibraryManager.calculateTotalPages(
+        totalResults,
+        ITEMS_PER_PAGE
+      )
+    val currentPage = totalItemShowingCount / ITEMS_PER_PAGE
+    val nextPage = currentPage + ONE
+
+    if (nextPage < totalPages) {
+      zimManageViewModel.updateOnlineLibraryFilters(
+        zimManageViewModel.onlineLibraryRequest.value.copy(
+          page = nextPage,
+          isLoadMoreItem = true
+        )
+      )
+    } else {
+      Log.d("OnlineLibrary", "All pages loaded")
+    }
   }
 
   private fun onSearchClear() {
@@ -250,8 +280,16 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
     observeViewModelData()
     showPreviouslySearchedTextInSearchView()
-    startDownloadingLibrary()
+    startDownloadingLibrary(getOnlineLibraryRequest())
   }
+
+  private fun getOnlineLibraryRequest(): OnlineLibraryRequest = OnlineLibraryRequest(
+    null,
+    null,
+    null,
+    false,
+    1
+  )
 
   private fun observeViewModelData() {
     zimManageViewModel.apply {
@@ -265,12 +303,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         }
       // Observe when online library downloading.
       onlineLibraryDownloading
-        .onEach {
-          if (it) {
+        .onEach { (initialLibraryDownloading, loadingMoreItem) ->
+          if (initialLibraryDownloading) {
             showProgressBarOfFetchingOnlineLibrary()
           } else {
             hideProgressBarOfFetchingOnlineLibrary()
           }
+          onlineLibraryScreenState.value.update { copy(isLoadingMoreItem = loadingMoreItem) }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
       // Observe when library list refreshing e.g. applying filters.
       libraryListIsRefreshing.observe(
@@ -369,7 +408,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         // User allowed downloading over mobile data.
         // Since the download flow now triggers only when appropriate,
         // we start the library download explicitly after updating the preference.
-        startDownloadingLibrary(true)
+        startDownloadingLibrary(getOnlineLibraryRequest())
       },
       {
         context.toast(
@@ -456,18 +495,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       NetworkState.CONNECTED -> {
         when {
           NetworkUtils.isWiFi(requireContext()) -> {
-            if (!zimManageViewModel.isOnlineLibraryDownloading) {
-              refreshFragment(false)
-            }
+            refreshFragment(false)
           }
 
           noWifiWithWifiOnlyPreferenceSet -> {
             hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
           }
 
-          onlineLibraryScreenState.value.value.onlineLibraryList.isNullOrEmpty() &&
-            !zimManageViewModel.isOnlineLibraryDownloading -> {
-            startDownloadingLibrary(true)
+          onlineLibraryScreenState.value.value.onlineLibraryList.isNullOrEmpty() -> {
+            startDownloadingLibrary(getOnlineLibraryRequest())
             showProgressBarOfFetchingOnlineLibrary()
           }
         }
@@ -525,15 +561,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (isNotConnected) {
       showNoInternetConnectionError()
     } else {
-      startDownloadingLibrary(isExplicitRefresh)
+      startDownloadingLibrary(getOnlineLibraryRequest())
       if (isExplicitRefresh) {
         showRecyclerviewAndHideSwipeDownForLibraryErrorText()
       }
     }
   }
 
-  private fun startDownloadingLibrary(isExplicitRefresh: Boolean = false) {
-    zimManageViewModel.requestOnlineLibraryIfNeeded(isExplicitRefresh)
+  private fun startDownloadingLibrary(onlineLibraryRequest: OnlineLibraryRequest) {
+    zimManageViewModel.updateOnlineLibraryFilters(onlineLibraryRequest)
   }
 
   private fun downloadFile() {
