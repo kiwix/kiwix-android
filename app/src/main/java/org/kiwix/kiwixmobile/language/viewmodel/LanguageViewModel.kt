@@ -125,20 +125,30 @@ class LanguageViewModel @Inject constructor(
 
   private fun observeLanguages() = viewModelScope.launch {
     state.value = Loading
-    if (connectivityBroadcastReceiver.networkStates.value == NetworkState.NOT_CONNECTED) {
-      actions.emit(Error(context.getString(R.string.no_network_connection)))
+
+    val cachedLanguageList = sharedPreferenceUtil.getCachedLanguageList()
+    val isOnline = connectivityBroadcastReceiver.networkStates.value != NetworkState.NOT_CONNECTED
+
+    if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
+      actions.emit(UpdateLanguages(cachedLanguageList))
       return@launch
     }
-    try {
-      val languages = fetchLanguages()
-      if (languages?.isNotEmpty() == true) {
-        actions.emit(UpdateLanguages(languages))
-      } else {
-        Log.w("LanguageViewModel", "Fetched empty language list.")
-        actions.emit(Error(context.getString(R.string.no_language_available)))
-      }
-    } catch (e: Exception) {
-      Log.e("LanguageViewModel", "Error fetching languages", e)
+
+    if (isOnline) {
+      runCatching {
+        val fetched = fetchLanguages()
+        if (!fetched.isNullOrEmpty()) {
+          sharedPreferenceUtil.saveLanguageList(fetched)
+          LanguageSessionCache.hasFetched = true
+          actions.emit(UpdateLanguages(fetched))
+          return@launch
+        }
+      }.onFailure { it.printStackTrace() }
+    }
+
+    if (!cachedLanguageList.isNullOrEmpty()) {
+      actions.emit(UpdateLanguages(cachedLanguageList))
+    } else {
       actions.emit(Error(context.getString(R.string.no_language_available)))
     }
   }
@@ -221,4 +231,8 @@ class LanguageViewModel @Inject constructor(
     )
     .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
     .build()
+}
+
+object LanguageSessionCache {
+  var hasFetched: Boolean = false
 }

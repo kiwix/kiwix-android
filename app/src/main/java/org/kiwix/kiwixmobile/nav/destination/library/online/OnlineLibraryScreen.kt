@@ -219,7 +219,7 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
         val layoutInfo = lazyListState.layoutInfo
         val totalItems = layoutInfo.totalItemsCount
         val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
-        (totalItems > ZERO && lastVisibleItemIndex >= (totalItems - FIVE)) to totalItems
+        (totalItems > ZERO && lastVisibleItemIndex >= totalItems.minus(FIVE)) to totalItems
       }.value
     }
       .distinctUntilChanged()

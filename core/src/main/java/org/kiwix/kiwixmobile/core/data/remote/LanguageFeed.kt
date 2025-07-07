@@ -45,4 +45,3 @@ class LanguageEntry {
   @Namespace(prefix = "thr", reference = "http://purl.org/syndication/thread/1.0")
   var count: Int = ZERO
 }
-

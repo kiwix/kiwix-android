@@ -18,9 +18,9 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -34,11 +34,11 @@ import java.io.StringReader
 import javax.inject.Inject
 import javax.inject.Named
 
+@Suppress("UnusedPrivateProperty")
 class OnlineLibraryManager @Inject constructor(
   @Named(ONLINE_BOOKS_LIBRARY) private val library: Library,
   @Named(ONLINE_BOOKS_MANAGER) private val manager: Manager,
 ) {
-
   var totalResult = 0
   suspend fun parseOPDSStreamAndGetBooks(
     content: String?,
@@ -124,7 +124,10 @@ class OnlineLibraryManager @Inject constructor(
    */
   fun getStartOffset(pageIndex: Int, pageSize: Int): Int = pageIndex * pageSize
 
-  private suspend fun extractTotalResults(xml: String): Int = withContext(Dispatchers.IO) {
+  private suspend fun extractTotalResults(
+    xml: String,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): Int = withContext(dispatcher) {
     val factory = XmlPullParserFactory.newInstance()
     val parser = factory.newPullParser()
     parser.setInput(StringReader(xml))
