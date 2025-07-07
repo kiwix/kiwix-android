@@ -254,7 +254,7 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
       .padding(top = SIXTEEN_DP, bottom = EIGHT_DP)
   ) {
     Text(
-      text = stringResource(dividerItem.stringId),
+      text = dividerItem.sectionTitle,
       textAlign = TextAlign.Center,
       style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
     )

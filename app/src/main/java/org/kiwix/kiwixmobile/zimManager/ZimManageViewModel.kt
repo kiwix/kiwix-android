@@ -49,7 +49,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.take
@@ -79,22 +78,18 @@ import org.kiwix.kiwixmobile.core.di.modules.KIWIX_OPDS_LIBRARY_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
@@ -123,7 +118,6 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.Divi
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
 import retrofit2.Response
-import java.util.Locale
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
@@ -133,7 +127,7 @@ const val MAX_PROGRESS = 100
 const val THREE = 3
 const val FOUR = 4
 
-@Suppress("LongParameterList", "LargeClass")
+@Suppress("LongParameterList", "LargeClass", "UnusedPrivateProperty")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -180,6 +174,8 @@ class ZimManageViewModel @Inject constructor(
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
+
+  private var onlineLibraryFetchingJob: Job? = null
 
   /**
    * Manages the showing of downloading online library progress,
@@ -324,17 +320,16 @@ class ZimManageViewModel @Inject constructor(
   private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
-    val selectedLanguage = sharedPreferenceUtil.onlineContentLanguage
     coroutineJobs.apply {
       add(scanBooksFromStorage(dispatcher))
       add(updateBookItems())
       add(fileSelectActions())
-      add(updateLibraryItems(booksFromDao, downloads, networkLibrary, selectedLanguage))
-      // add(updateLanguagesInDao(networkLibrary, selectedLanguage))
+      add(updateLibraryItems(booksFromDao, downloads, networkLibrary))
       add(updateNetworkStates())
       add(requestsAndConnectivityChangesToLibraryRequests(networkLibrary))
       add(onlineLibraryRequest())
       add(observeLanguageChanges())
+      add(observeSearch())
     }
   }
 
@@ -347,6 +342,19 @@ class ZimManageViewModel @Inject constructor(
     appProgressListener = null
     super.onCleared()
   }
+
+  @OptIn(FlowPreview::class)
+  private fun observeSearch(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+    requestFiltering
+      .onEach {
+        libraryListIsRefreshing.postValue(true)
+        updateOnlineLibraryFilters(
+          OnlineLibraryRequest(query = it, page = ONE, isLoadMoreItem = false)
+        )
+      }
+      .debounce(500)
+      .flowOn(dispatcher)
+      .launchIn(viewModelScope)
 
   private fun observeLanguageChanges(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
     sharedPreferenceUtil.onlineContentLanguage
@@ -470,34 +478,40 @@ class ZimManageViewModel @Inject constructor(
   private fun requestsAndConnectivityChangesToLibraryRequests(
     library: MutableStateFlow<List<LibkiwixBook>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ) = requestDownloadLibrary.flatMapConcat { onlineLibraryRequest ->
-    connectivityBroadcastReceiver.networkStates
-      .filter { networkState -> networkState == CONNECTED }
-      .take(1)
-      .flatMapConcat {
-        updateDownloadState(onlineLibraryRequest.isLoadMoreItem.not())
-        shouldProceedWithDownload(onlineLibraryRequest)
-          .flatMapConcat { kiwixService ->
-            downloadLibraryFlow(kiwixService, onlineLibraryRequest)
+  ) = requestDownloadLibrary.onEach { onlineLibraryRequest ->
+    // Cancel any previous ongoing job
+    onlineLibraryFetchingJob?.cancel()
+
+    // Launch new job
+    onlineLibraryFetchingJob = viewModelScope.launch(dispatcher) {
+      connectivityBroadcastReceiver.networkStates
+        .filter { it == CONNECTED }
+        .take(1)
+        .flatMapConcat {
+          updateDownloadState(!onlineLibraryRequest.isLoadMoreItem)
+          shouldProceedWithDownload(onlineLibraryRequest)
+            .flatMapConcat { kiwixService ->
+              downloadLibraryFlow(kiwixService, onlineLibraryRequest)
+            }
+        }
+        .filterNotNull()
+        .catch {
+          it.printStackTrace()
+          resetDownloadState()
+          if (library.value.isEmpty()) {
+            library.emit(emptyList())
           }
-      }
-  }
-    .filterNotNull()
-    .catch {
-      it.printStackTrace().also {
-        resetDownloadState()
-        library.emit(emptyList())
-      }
+        }
+        .collect { result ->
+          library.value = if (result.onlineLibraryRequest.isLoadMoreItem) {
+            library.value + result.books
+          } else {
+            result.books
+          }
+          resetDownloadState()
+        }
     }
-    .onEach { result ->
-      networkLibrary.value = if (result.onlineLibraryRequest.isLoadMoreItem) {
-        networkLibrary.value + result.books
-      } else {
-        result.books
-      }
-      resetDownloadState()
-    }
-    .flowOn(dispatcher)
+  }.flowOn(dispatcher)
     .launchIn(viewModelScope)
 
   private fun shouldProceedWithDownload(onlineLibraryRequest: OnlineLibraryRequest): Flow<KiwixService> {
@@ -597,37 +611,22 @@ class ZimManageViewModel @Inject constructor(
     localBooksFromLibkiwix: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
     library: MutableStateFlow<List<LibkiwixBook>>,
-    languages: StateFlow<String>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = viewModelScope.launch(dispatcher) {
-    val requestFilteringFlow = merge(
-      flowOf(""),
-      requestFiltering
-        .onEach { libraryListIsRefreshing.postValue(true) }
-        .debounce(500)
-        .flowOn(dispatcher)
-    )
-
     combine(
       localBooksFromLibkiwix,
       downloads,
-      languages.filter { it.isNotEmpty() },
       library,
-      requestFilteringFlow,
       fat32Checker.fileSystemStates
     ) { args ->
       val books = args[ZERO] as List<Book>
       val activeDownloads = args[ONE] as List<DownloadModel>
-      val languageList = args[TWO] as List<Language>
-      val libraryNetworkEntity = args[THREE] as List<LibkiwixBook>
-      val filter = args[FOUR] as String
-      val fileSystemState = args[FIVE] as FileSystemState
+      val libraryNetworkEntity = args[TWO] as List<LibkiwixBook>
+      val fileSystemState = args[THREE] as FileSystemState
       combineLibrarySources(
         booksOnFileSystem = books,
         activeDownloads = activeDownloads,
-        allLanguages = languageList,
         onlineBooks = libraryNetworkEntity,
-        filter = filter,
         fileSystemState = fileSystemState
       )
     }
@@ -640,138 +639,41 @@ class ZimManageViewModel @Inject constructor(
       .collect { _libraryItems.emit(it) }
   }
 
-  // private fun updateLanguagesInDao(
-  //   library: MutableStateFlow<List<LibkiwixBook>>,
-  //   languages: StateFlow<String>,
-  //   dispatcher: CoroutineDispatcher = Dispatchers.IO
-  // ) =
-  //   combine(
-  //     library,
-  //     languages
-  //   ) { books, existingLanguages ->
-  //     combineToLanguageList(books, existingLanguages)
-  //   }.map { it.sortedBy(Language::language) }
-  //     .filter { it.isNotEmpty() }
-  //     .distinctUntilChanged()
-  //     .catch { it.printStackTrace() }
-  //     .onEach {
-  //       // languageRoomDao.insert(it)
-  //     }
-  //     .flowOn(dispatcher)
-  //     .launchIn(viewModelScope)
-
-  private suspend fun combineToLanguageList(
-    booksFromNetwork: List<LibkiwixBook>,
-    allLanguages: List<Language>
-  ) = when {
-    booksFromNetwork.isEmpty() -> {
-      if (allLanguages.isEmpty()) {
-        defaultLanguage()
-      } else {
-        emptyList()
-      }
-    }
-
-    allLanguages.isEmpty() ->
-      fromLocalesWithNetworkMatchesSetActiveBy(
-        networkLanguageCounts(booksFromNetwork),
-        defaultLanguage()
-      )
-
-    else ->
-      fromLocalesWithNetworkMatchesSetActiveBy(
-        networkLanguageCounts(booksFromNetwork),
-        allLanguages
-      )
-  }
-
-  private fun networkLanguageCounts(booksFromNetwork: List<LibkiwixBook>) =
-    booksFromNetwork.map { it.language }
-      .fold(
-        mutableMapOf<String, Int>()
-      ) { acc, language -> acc.increment(language) }
-
-  private fun <K> MutableMap<K, Int>.increment(key: K) =
-    apply { set(key, getOrElse(key) { 0 } + 1) }
-
-  private suspend fun fromLocalesWithNetworkMatchesSetActiveBy(
-    networkLanguageCounts: MutableMap<String, Int>,
-    listToActivateBy: List<Language>
-  ) = onlineLibraryManager.getOnlineBooksLanguage()
-    .mapNotNull { code ->
-      runCatching {
-        val locale = code.convertToLocal()
-        val o3 = locale.isO3Language
-        if (networkLanguageCounts.containsKey(o3)) {
-          Language(
-            o3,
-            languageIsActive(listToActivateBy, locale),
-            networkLanguageCounts.getOrElse(o3) { 0 }
-          )
-        } else {
-          null
-        }
-      }.onFailure {
-        Log.w(TAG_KIWIX, "Unsupported locale code: $code", it)
-      }.getOrNull()
-    }
-    .distinctBy { it.language }
-
-  private fun defaultLanguage() =
-    listOf(
-      defaultLanguageProvider.provide()
-    )
-
-  private fun languageIsActive(
-    allLanguages: List<Language>,
-    locale: Locale
-  ) = allLanguages.firstOrNull { it.languageCode == locale.isO3Language }?.active == true
-
   @Suppress("UnsafeCallOnNullableType")
   private fun combineLibrarySources(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
-    allLanguages: List<Language>,
     onlineBooks: List<LibkiwixBook>,
-    filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
-    val activeLanguageCodes =
-      allLanguages.filter(Language::active)
-        .map(Language::languageCode)
     val allBooks = onlineBooks - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
     val downloadingBooks =
       activeDownloads.mapNotNull { download ->
         allBooks.firstOrNull { it.id == download.book.id }
       }
-    val booksUnfilteredByLanguage =
-      applySearchFilter(
-        allBooks - downloadingBooks.toSet(),
-        filter
-      )
-
-    val booksWithActiveLanguages =
-      booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) }
-    val booksWithoutActiveLanguages = booksUnfilteredByLanguage - booksWithActiveLanguages.toSet()
+    val filteredBooks = allBooks - downloadingBooks.toSet()
+    val selectedLanguage = sharedPreferenceUtil.selectedOnlineContentLanguage
+    val onlineLibrarySectionTitle =
+      if (selectedLanguage.isBlank()) {
+        context.getString(R.string.all_languages)
+      } else {
+        context.getString(
+          R.string.your_language,
+          selectedLanguage.convertToLocal().displayLanguage
+        )
+      }
     return createLibrarySection(
       downloadingBooks,
       activeDownloads,
       fileSystemState,
-      R.string.downloading,
+      context.getString(R.string.downloading),
       Long.MAX_VALUE
     ) +
       createLibrarySection(
-        booksWithActiveLanguages,
+        filteredBooks,
         emptyList(),
         fileSystemState,
-        R.string.your_languages,
-        Long.MAX_VALUE - 1
-      ) +
-      createLibrarySection(
-        booksWithoutActiveLanguages,
-        emptyList(),
-        fileSystemState,
-        R.string.other_languages,
+        onlineLibrarySectionTitle,
         Long.MIN_VALUE
       )
   }
@@ -780,25 +682,15 @@ class ZimManageViewModel @Inject constructor(
     books: List<LibkiwixBook>,
     activeDownloads: List<DownloadModel>,
     fileSystemState: FileSystemState,
-    sectionStringId: Int,
+    sectionTitle: String,
     sectionId: Long
   ) =
     if (books.isNotEmpty()) {
-      listOf(DividerItem(sectionId, sectionStringId)) +
+      listOf(DividerItem(sectionId, sectionTitle)) +
         books.asLibraryItems(activeDownloads, fileSystemState)
     } else {
       emptyList()
     }
-
-  private fun applySearchFilter(
-    unDownloadedBooks: List<LibkiwixBook>,
-    filter: String
-  ) = if (filter.isEmpty()) {
-    unDownloadedBooks
-  } else {
-    unDownloadedBooks.iterator().forEach { it.calculateSearchMatches(filter, bookUtils) }
-    unDownloadedBooks.filter { it.searchMatches > 0 }
-  }
 
   private fun List<LibkiwixBook>.asLibraryItems(
     activeDownloads: List<DownloadModel>,
