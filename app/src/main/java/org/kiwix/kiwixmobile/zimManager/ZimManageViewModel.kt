@@ -84,7 +84,6 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
-import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -127,7 +126,7 @@ const val MAX_PROGRESS = 100
 const val THREE = 3
 const val FOUR = 4
 
-@Suppress("LongParameterList", "LargeClass", "UnusedPrivateProperty")
+@Suppress("LargeClass", "UnusedPrivateProperty")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -135,9 +134,7 @@ class ZimManageViewModel @Inject constructor(
   private var kiwixService: KiwixService,
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  private val bookUtils: BookUtils,
   private val fat32Checker: Fat32Checker,
-  private val defaultLanguageProvider: DefaultLanguageProvider,
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,

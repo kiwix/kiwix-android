@@ -18,20 +18,34 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
+import android.app.Application
+import android.os.Build
 import androidx.lifecycle.viewModelScope
+import io.mockk.Runs
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.LanguageEntry
+import org.kiwix.kiwixmobile.core.data.remote.LanguageFeed
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
@@ -45,17 +59,65 @@ fun languageItem(language: Language = language()) =
 
 @ExtendWith(InstantExecutorExtension::class)
 class LanguageViewModelTest {
-  private val languageRoomDao: LanguageRoomDao = mockk()
+  private val application: Application = mockk()
+  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixService: KiwixService = mockk()
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
   private lateinit var languageViewModel: LanguageViewModel
-  private lateinit var languages: MutableStateFlow<List<Language>>
+  private var languages: MutableStateFlow<List<Language>?> = MutableStateFlow(null)
 
   @BeforeEach
   fun init() {
     clearAllMocks()
-    languages = MutableStateFlow(emptyList())
-    every { languageRoomDao.languages() } returns languages
+    every { application.getString(any()) } returns ""
+    every { connectivityBroadcastReceiver.action } returns "test"
+    every { connectivityBroadcastReceiver.networkStates } returns networkStates
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      every { application.registerReceiver(any(), any(), any()) } returns mockk()
+    } else {
+      @Suppress("UnspecifiedRegisterReceiverFlag")
+      every { application.registerReceiver(any(), any()) } returns mockk()
+    }
+    languages.value = null
+    networkStates.value = NetworkState.CONNECTED
+    LanguageSessionCache.hasFetched = true
+    every { sharedPreferenceUtil.getCachedLanguageList() } returns languages.value
+    every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns "eng"
     languageViewModel =
-      LanguageViewModel(languageRoomDao)
+      LanguageViewModel(
+        application,
+        sharedPreferenceUtil,
+        kiwixService,
+        connectivityBroadcastReceiver
+      )
+    runBlocking { languageViewModel.state.emit(Loading) }
+  }
+
+  @Nested
+  inner class Context {
+    @Test
+    fun `registers broadcastReceiver in init`() {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        verify {
+          application.registerReceiver(connectivityBroadcastReceiver, any(), any())
+        }
+      } else {
+        @Suppress("UnspecifiedRegisterReceiverFlag")
+        verify {
+          application.registerReceiver(connectivityBroadcastReceiver, any())
+        }
+      }
+    }
+
+    @Test
+    fun `unregisters broadcastReceiver in onCleared`() {
+      every { application.unregisterReceiver(any()) } returns mockk()
+      languageViewModel.onClearedExposed()
+      verify {
+        application.unregisterReceiver(connectivityBroadcastReceiver)
+      }
+    }
   }
 
   @Test
@@ -77,19 +139,60 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `a languages emission sends update action`() = runTest {
-    val expectedList = listOf(language())
+  fun `observeLanguages uses network when no cache and online`() = runTest {
+    every { application.getString(any()) } returns ""
+    val fetchedLanguages = listOf(language(languageCode = "eng"))
+    LanguageSessionCache.hasFetched = false
+    languages.value = emptyList()
+
+    every { sharedPreferenceUtil.getCachedLanguageList() } returns null
+    coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply {
+      entries = fetchedLanguages.map {
+        LanguageEntry().apply {
+          languageCode = it.languageCode
+          count = 1
+          title = "English"
+        }
+      }
+    }
+    every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns ""
+    every { sharedPreferenceUtil.saveLanguageList(any()) } just Runs
+
     testFlow(
       languageViewModel.actions,
-      triggerAction = { languages.emit(expectedList) },
+      triggerAction = {},
       assert = {
-        assertThat(awaitItem()).isEqualTo(UpdateLanguages(expectedList))
+        val result = awaitItem()
+        assertThat(result).isInstanceOf(UpdateLanguages::class.java)
+        verify { sharedPreferenceUtil.saveLanguageList(any()) }
+      }
+    )
+  }
+
+  @Test
+  fun `Save uses active language`() = runTest {
+    every { application.getString(any()) } returns ""
+    val activeLanguage = language(languageCode = "eng").copy(active = true)
+    val inactiveLanguage = language(languageCode = "fr").copy(active = false)
+
+    val contentState = Content(listOf(activeLanguage, inactiveLanguage))
+    languageViewModel.state.value = contentState
+
+    testFlow(
+      languageViewModel.effects,
+      triggerAction = {
+        languageViewModel.actions.emit(Save)
+      },
+      assert = {
+        val effect = awaitItem() as SaveLanguagesAndFinish
+        assertThat(effect.languages).isEqualTo(activeLanguage)
       }
     )
   }
 
   @Test
   fun `UpdateLanguages Action changes state to Content when Loading`() = runTest {
+    every { application.getString(any()) } returns ""
     testFlow(
       languageViewModel.state,
       triggerAction = { languageViewModel.actions.emit(UpdateLanguages(listOf())) },
@@ -117,6 +220,8 @@ class LanguageViewModelTest {
 
   @Test
   fun `Filter Action updates Content state `() = runTest {
+    every { application.getString(any()) } returns ""
+    languages.value = listOf()
     testFlow(
       languageViewModel.state,
       triggerAction = {
@@ -133,6 +238,7 @@ class LanguageViewModelTest {
 
   @Test
   fun `Filter Action has no effect on other states`() = runTest {
+    every { application.getString(any()) } returns ""
     testFlow(
       languageViewModel.state,
       triggerAction = { languageViewModel.actions.emit(Filter("")) },
@@ -144,10 +250,12 @@ class LanguageViewModelTest {
 
   @Test
   fun `Select Action updates Content state`() = runTest {
+    val languageList = listOf(language())
+    languages.value = languageList
     testFlow(
       languageViewModel.state,
       triggerAction = {
-        languageViewModel.actions.emit(UpdateLanguages(listOf(language())))
+        languageViewModel.actions.emit(UpdateLanguages(languageList))
         languageViewModel.actions.emit(Select(languageItem()))
       },
       assert = {
@@ -170,19 +278,22 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `SaveAll changes Content to Saving with SideEffect SaveLanguagesAndFinish`() = runTest {
-    val languages = listOf<Language>()
+  fun `Save changes Content to Saving with SideEffect SaveLanguagesAndFinish`() = runTest {
+    every { application.getString(any()) } returns ""
+    val languages = arrayListOf<Language>().apply {
+      add(Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1))
+    }
     testFlow(
       flow = languageViewModel.effects,
       triggerAction = {
         languageViewModel.actions.emit(UpdateLanguages(languages))
-        languageViewModel.actions.emit(SaveAll)
+        languageViewModel.actions.emit(Save)
       },
       assert = {
         assertThat(awaitItem()).isEqualTo(
           SaveLanguagesAndFinish(
-            languages,
-            languageRoomDao,
+            languages.first(),
+            sharedPreferenceUtil,
             languageViewModel.viewModelScope
           )
         )
@@ -194,10 +305,11 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `SaveAll has no effect on other states`() = runTest {
+  fun `Save has no effect on other states`() = runTest {
+    languageViewModel.state.emit(Loading)
     testFlow(
       languageViewModel.state,
-      triggerAction = { languageViewModel.actions.emit(SaveAll) },
+      triggerAction = { languageViewModel.actions.emit(Save) },
       { assertThat(awaitItem()).isEqualTo(Loading) }
     )
   }

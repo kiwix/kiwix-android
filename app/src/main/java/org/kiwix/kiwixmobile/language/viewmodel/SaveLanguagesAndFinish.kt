@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 @Suppress("InjectDispatcher")
 data class SaveLanguagesAndFinish(
-  private val languages: Language,
+  val languages: Language,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val lifecycleScope: CoroutineScope
 ) : SideEffect<Unit> {

@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -151,6 +152,11 @@ class LanguageViewModel @Inject constructor(
     } else {
       actions.emit(Error(context.getString(R.string.no_language_available)))
     }
+  }
+
+  @VisibleForTesting
+  fun onClearedExposed() {
+    onCleared()
   }
 
   override fun onCleared() {
