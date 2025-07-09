@@ -126,7 +126,6 @@ const val MAX_PROGRESS = 100
 const val THREE = 3
 const val FOUR = 4
 
-@Suppress("LargeClass", "UnusedPrivateProperty")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,

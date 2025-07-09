@@ -89,6 +89,7 @@ const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG =
   "onlineLibrarySearchViewCloseButtonTestingTag"
 const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
+const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -256,7 +257,8 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
     Text(
       text = dividerItem.sectionTitle,
       textAlign = TextAlign.Center,
-      style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
+      style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+      modifier = Modifier.semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }
     )
   }
 }
