@@ -119,6 +119,7 @@ class ZimManageViewModelTest {
   private val booksOnFileSystem = MutableStateFlow<List<Book>>(emptyList())
   private val books = MutableStateFlow<List<BookOnDisk>>(emptyList())
   private val languages = MutableStateFlow<List<Language>>(emptyList())
+  private val onlineContentLanguage = MutableStateFlow("")
   private val fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
@@ -158,7 +159,9 @@ class ZimManageViewModelTest {
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
     every { sharedPreferenceUtil.prefWifiOnly } returns true
+    every { sharedPreferenceUtil.getCachedLanguageList() } returns languages.value
     coEvery { onlineLibraryManager.getOnlineBooksLanguage() } returns listOf("eng")
+    every { sharedPreferenceUtil.onlineContentLanguage } returns onlineContentLanguage
     downloads.value = emptyList()
     booksOnFileSystem.value = emptyList()
     books.value = emptyList()
