@@ -286,7 +286,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun getOnlineLibraryRequest(): OnlineLibraryRequest = OnlineLibraryRequest(
     null,
     null,
-    null,
+    sharedPreferenceUtil.selectedOnlineContentLanguage.takeUnless { it.isBlank() },
     false,
     1
   )
