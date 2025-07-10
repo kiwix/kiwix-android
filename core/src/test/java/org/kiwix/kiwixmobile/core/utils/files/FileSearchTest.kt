@@ -183,6 +183,7 @@ suspend fun <T> TestScope.testFlow(
       triggerAction()
       assert()
       cancelAndIgnoreRemainingEvents()
+      ensureAllEventsConsumed()
     }
   }
   job.join()

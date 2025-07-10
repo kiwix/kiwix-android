@@ -58,6 +58,6 @@ interface KiwixService {
 
   companion object {
     const val OPDS_LIBRARY_ENDPOINT = "v2/entries"
-    const val ITEMS_PER_PAGE = 50
+    const val ITEMS_PER_PAGE = 25
   }
 }

@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
+import org.kiwix.kiwixmobile.zimManager.TURBINE_TIMEOUT
 import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.language
@@ -199,7 +200,8 @@ class LanguageViewModelTest {
       assert = {
         assertThat(awaitItem()).isEqualTo(Loading)
         assertThat(awaitItem()).isEqualTo(Content(listOf()))
-      }
+      },
+      TURBINE_TIMEOUT
     )
   }
 

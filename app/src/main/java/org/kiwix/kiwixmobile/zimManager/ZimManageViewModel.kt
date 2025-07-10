@@ -163,6 +163,8 @@ class ZimManageViewModel @Inject constructor(
     val books: List<LibkiwixBook>
   )
 
+  @Suppress("InjectDispatcher")
+  private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   private val _libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
@@ -313,11 +315,11 @@ class ZimManageViewModel @Inject constructor(
     onCleared()
   }
 
-  private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+  private fun observeCoroutineFlows() {
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
     coroutineJobs.apply {
-      add(scanBooksFromStorage(dispatcher))
+      add(scanBooksFromStorage())
       add(updateBookItems())
       add(fileSelectActions())
       add(updateLibraryItems(booksFromDao, downloads, networkLibrary))
@@ -340,7 +342,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   @OptIn(FlowPreview::class)
-  private fun observeSearch(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+  private fun observeSearch() =
     requestFiltering
       .onEach {
         libraryListIsRefreshing.postValue(true)
@@ -349,17 +351,17 @@ class ZimManageViewModel @Inject constructor(
         )
       }
       .debounce(500)
-      .flowOn(dispatcher)
+      .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
-  private fun observeLanguageChanges(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+  private fun observeLanguageChanges() =
     sharedPreferenceUtil.onlineContentLanguage
       .onEach {
         updateOnlineLibraryFilters(
           OnlineLibraryRequest(lang = it, page = ZERO, isLoadMoreItem = false)
         )
       }
-      .flowOn(dispatcher)
+      .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
   fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
@@ -381,11 +383,11 @@ class ZimManageViewModel @Inject constructor(
     }
     .launchIn(viewModelScope)
 
-  private fun scanBooksFromStorage(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+  private fun scanBooksFromStorage() =
     checkFileSystemForBooksOnRequest(books())
       .catch { it.printStackTrace() }
       .onEach { books -> libkiwixBookOnDisk.insert(books) }
-      .flowOn(dispatcher)
+      .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
   private fun fileSelectActions() =
@@ -472,14 +474,11 @@ class ZimManageViewModel @Inject constructor(
 
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun requestsAndConnectivityChangesToLibraryRequests(
-    library: MutableStateFlow<List<LibkiwixBook>>,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    library: MutableStateFlow<List<LibkiwixBook>>
   ) = requestDownloadLibrary.onEach { onlineLibraryRequest ->
-    // Cancel any previous ongoing job
     onlineLibraryFetchingJob?.cancel()
 
-    // Launch new job
-    onlineLibraryFetchingJob = viewModelScope.launch(dispatcher) {
+    onlineLibraryFetchingJob = viewModelScope.launch(ioDispatcher) {
       connectivityBroadcastReceiver.networkStates
         .filter { it == CONNECTED }
         .take(1)
@@ -499,15 +498,17 @@ class ZimManageViewModel @Inject constructor(
           }
         }
         .collect { result ->
-          library.value = if (result.onlineLibraryRequest.isLoadMoreItem) {
-            library.value + result.books
-          } else {
-            result.books
-          }
+          library.emit(
+            if (result.onlineLibraryRequest.isLoadMoreItem) {
+              library.value + result.books
+            } else {
+              result.books
+            }
+          )
           resetDownloadState()
         }
     }
-  }.flowOn(dispatcher)
+  }.flowOn(ioDispatcher)
     .launchIn(viewModelScope)
 
   private fun shouldProceedWithDownload(onlineLibraryRequest: OnlineLibraryRequest): Flow<KiwixService> {
@@ -606,9 +607,8 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLibraryItems(
     localBooksFromLibkiwix: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
-    library: MutableStateFlow<List<LibkiwixBook>>,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ) = viewModelScope.launch(dispatcher) {
+    library: MutableStateFlow<List<LibkiwixBook>>
+  ) = viewModelScope.launch(ioDispatcher) {
     combine(
       localBooksFromLibkiwix,
       downloads,

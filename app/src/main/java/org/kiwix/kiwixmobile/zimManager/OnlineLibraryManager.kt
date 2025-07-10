@@ -60,14 +60,6 @@ class OnlineLibraryManager @Inject constructor(
       it.printStackTrace()
     }.getOrNull()
 
-  suspend fun getOnlineBooksLanguage(): List<String> {
-    return runCatching {
-      library.booksLanguages.distinct()
-    }.onFailure {
-      it.printStackTrace()
-    }.getOrDefault(emptyList())
-  }
-
   /**
    * Builds the URL for fetching the OPDS library entries with pagination and optional filters.
    *
