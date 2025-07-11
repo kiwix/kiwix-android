@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -42,6 +43,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -51,7 +55,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.reader.rememberScrollBehavior
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -81,6 +89,7 @@ const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG =
   "onlineLibrarySearchViewCloseButtonTestingTag"
 const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
+const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -194,6 +203,46 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
         }
       }
     }
+    showLoadMoreProgressBar(state.isLoadingMoreItem)
+  }
+
+  LaunchedEffect(state.isLoadingMoreItem) {
+    if (state.isLoadingMoreItem) {
+      // Scroll to the last item (i.e., the loading spinner)
+      val lastItemIndex = state.onlineLibraryList?.size ?: 0
+      lazyListState.animateScrollToItem(lastItemIndex)
+    }
+  }
+
+  LaunchedEffect(lazyListState) {
+    snapshotFlow {
+      derivedStateOf {
+        val layoutInfo = lazyListState.layoutInfo
+        val totalItems = layoutInfo.totalItemsCount
+        val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
+        (totalItems > ZERO && lastVisibleItemIndex >= totalItems.minus(FIVE)) to totalItems
+      }.value
+    }
+      .distinctUntilChanged()
+      .filter { it.first }
+      .collect { (_, totalItems) ->
+        state.onLoadMore(totalItems)
+      }
+  }
+}
+
+private fun LazyListScope.showLoadMoreProgressBar(isLoadingMoreItem: Boolean) {
+  if (isLoadingMoreItem) {
+    item {
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(SIXTEEN_DP),
+        contentAlignment = Alignment.Center
+      ) {
+        ContentLoadingProgressBar()
+      }
+    }
   }
 }
 
@@ -206,9 +255,10 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
       .padding(top = SIXTEEN_DP, bottom = EIGHT_DP)
   ) {
     Text(
-      text = stringResource(dividerItem.stringId),
+      text = dividerItem.sectionTitle,
       textAlign = TextAlign.Center,
-      style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
+      style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+      modifier = Modifier.semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }
     )
   }
 }

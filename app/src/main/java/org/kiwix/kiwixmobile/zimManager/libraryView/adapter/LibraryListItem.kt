@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
-import androidx.annotation.StringRes
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
@@ -37,7 +36,7 @@ sealed class LibraryListItem {
 
   data class DividerItem constructor(
     override val id: Long,
-    @StringRes val stringId: Int
+    val sectionTitle: String
   ) : LibraryListItem()
 
   data class BookItem constructor(

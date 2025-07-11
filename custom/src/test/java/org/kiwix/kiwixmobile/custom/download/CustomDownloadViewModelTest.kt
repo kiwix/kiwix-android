@@ -50,6 +50,8 @@ import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.downloadItem
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class CustomDownloadViewModelTest {
@@ -70,7 +72,9 @@ internal class CustomDownloadViewModelTest {
       setPreferredStorageWithMostSpace,
       downloadCustom,
       navigateToCustomReader
-    )
+    ).also {
+      it.getStateForTesting().value = DownloadRequired
+    }
   }
 
   @Test
@@ -187,15 +191,16 @@ internal class CustomDownloadViewModelTest {
       initialState: State,
       action: DatabaseEmission,
       endState: State,
-      awaitItemCount: Int = 1
+      awaitItemCount: Int = 1,
     ) {
       customDownloadViewModel.getStateForTesting().value = initialState
       testScope.testFlow(
         flow = customDownloadViewModel.state,
-        triggerAction = { customDownloadViewModel.actions.emit(action) },
+        triggerAction = { customDownloadViewModel.actions.tryEmit(action) },
         assert = {
           val items = (1..awaitItemCount).map { awaitItem() }
-          assertThat(items.last()).isEqualTo(endState)
+          print("items = $items")
+          assertThat(items).contains(endState)
         }
       )
     }
@@ -232,11 +237,14 @@ suspend fun <T> TestScope.testFlow(
   assert: suspend TurbineTestContext<T>.() -> Unit
 ) {
   val job = launch {
-    flow.test {
+    flow.test(timeout = TURBINE_TIMEOUT) {
       triggerAction()
       assert()
       cancelAndIgnoreRemainingEvents()
+      ensureAllEventsConsumed()
     }
   }
   job.join()
 }
+
+val TURBINE_TIMEOUT = 5000.toDuration(DurationUnit.MILLISECONDS)

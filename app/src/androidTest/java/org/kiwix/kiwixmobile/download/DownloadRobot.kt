@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STATE_TE
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_BOOK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG
@@ -83,6 +84,15 @@ class DownloadRobot : BaseRobot() {
       }
       // throw the exception when there is no more retry left.
       throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
+    }
+  }
+
+  fun checkLanguageFilterAppliedToOnlineContent(
+    composeTestRule: ComposeContentTestRule,
+    language: String
+  ) {
+    composeTestRule.apply {
+      onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).assertTextEquals(language)
     }
   }
 
@@ -127,7 +137,7 @@ class DownloadRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
-        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[1].performClick()
+        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0].performClick()
       }
     })
   }

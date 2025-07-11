@@ -180,6 +180,7 @@
   <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline.\nDo you want to continue?</string>
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages" tools:keep="@string/your_languages">Selected languages:</string>
+  <string name="your_language" tools:keep="@string/your_language">Selected language: %s</string>
   <string name="other_languages" tools:keep="@string/other_languages">Other languages:</string>
   <string name="downloading" tools:keep="@string/no_items_msg">Downloading:</string>
   <string name="no_items_msg" tools:keep="@string/no_items_msg">No items available</string>
@@ -208,8 +209,10 @@
   <string name="go_to_previous_page">Go to previous page</string>
   <string name="go_to_next_page">Go to next page</string>
   <string name="table_of_contents">Table of contents</string>
-  <string name="select_languages" tools:keep="@string/select_languages">Select languages</string>
+  <string name="select_language" tools:keep="@string/select_language">Select language</string>
   <string name="save_languages" tools:keep="@string/save_languages">Save languages</string>
+  <string name="all_languages" tools:keep="@string/all_languages">All languages</string>
+  <string name="no_language_available" tools:keep="@string/no_language_available">No languages available</string>
   <string name="expand">Expand</string>
   <string name="history">History</string>
   <string name="history_from_current_book">View History From All Books</string>

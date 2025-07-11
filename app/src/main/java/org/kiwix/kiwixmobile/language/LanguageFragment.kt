@@ -80,7 +80,7 @@ class LanguageFragment : BaseFragment() {
             isSearchActive = isSearchActive,
             onSearchClick = { isSearchActive = true },
             onSaveClick = {
-              languageViewModel.actions.tryEmit(Action.SaveAll)
+              languageViewModel.actions.tryEmit(Action.Save)
             }
           ),
           onClearClick = { resetSearchState() },

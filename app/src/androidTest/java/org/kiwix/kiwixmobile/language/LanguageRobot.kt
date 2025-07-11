@@ -18,21 +18,21 @@
 
 package org.kiwix.kiwixmobile.language
 
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.ComposeTimeoutException
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
-import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -69,21 +69,6 @@ class LanguageRobot : BaseRobot() {
     searchField.performTextInput(text = searchLanguage)
   }
 
-  // error prone
-  fun deSelectLanguageIfAlreadySelected(
-    composeTestRule: ComposeContentTestRule,
-    matchLanguage: String
-  ) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    try {
-      composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
-        .assertIsOff()
-    } catch (_: AssertionError) {
-      composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
-        .performClick()
-    }
-  }
-
   fun selectLanguage(
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
@@ -92,12 +77,27 @@ class LanguageRobot : BaseRobot() {
       .performClick()
   }
 
-  fun checkIsLanguageSelected(
+  fun waitForLanguageToLoad(
     composeTestRule: ComposeContentTestRule,
-    matchLanguage: String
+    retryCountForDataToLoad: Int = 20
   ) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
-      .assertIsOn()
+    try {
+      composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        composeTestRule
+          .onAllNodesWithContentDescription(
+            context.getString(string.select_language_content_description)
+          )[0].isDisplayed()
+      }
+    } catch (e: ComposeTimeoutException) {
+      if (retryCountForDataToLoad > 0) {
+        waitForLanguageToLoad(
+          retryCountForDataToLoad = retryCountForDataToLoad - 1,
+          composeTestRule = composeTestRule
+        )
+        return
+      }
+      // throw the exception when there is no more retry left.
+      throw RuntimeException("Couldn't load the language list.\n Original exception = $e")
+    }
   }
 }

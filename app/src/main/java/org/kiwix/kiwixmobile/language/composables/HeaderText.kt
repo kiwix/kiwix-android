@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
@@ -32,9 +33,14 @@ fun HeaderText(
   modifier: Modifier,
   item: LanguageListItem.HeaderItem
 ) {
+  val context = LocalContext.current
   Text(
     text = when (item.id) {
-      LanguageListItem.HeaderItem.SELECTED -> stringResource(R.string.your_languages)
+      LanguageListItem.HeaderItem.SELECTED -> stringResource(
+        R.string.your_language,
+        context.getString(R.string.empty_string)
+      )
+
       LanguageListItem.HeaderItem.OTHER -> stringResource(R.string.other_languages)
       else -> ""
     },

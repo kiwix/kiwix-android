@@ -212,10 +212,12 @@ class ObjectBoxToRoomMigratorTest {
 
   private suspend fun <T> clearRoomAndBoxStoreDatabases(box: Box<T>) {
     // delete history for testing other edge cases
-    kiwixRoomDatabase.recentSearchRoomDao().deleteSearchHistory()
-    kiwixRoomDatabase.historyRoomDao().deleteAllHistory()
-    kiwixRoomDatabase.notesRoomDao()
-      .deletePages(kiwixRoomDatabase.notesRoomDao().notes().first())
+    with(kiwixRoomDatabase) {
+      recentSearchRoomDao().deleteSearchHistory()
+      historyRoomDao().deleteAllHistory()
+      notesRoomDao()
+        .deletePages(kiwixRoomDatabase.notesRoomDao().notes().first())
+    }
     box.removeAll()
   }
 
