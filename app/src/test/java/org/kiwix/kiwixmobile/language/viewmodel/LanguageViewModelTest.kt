@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import android.app.Application
 import android.os.Build
 import androidx.lifecycle.viewModelScope
+import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -175,20 +176,13 @@ class LanguageViewModelTest {
     every { application.getString(any()) } returns ""
     val activeLanguage = language(languageCode = "eng").copy(active = true)
     val inactiveLanguage = language(languageCode = "fr").copy(active = false)
-
-    val contentState = Content(listOf(activeLanguage, inactiveLanguage))
-    languageViewModel.state.value = contentState
-
-    testFlow(
-      languageViewModel.effects,
-      triggerAction = {
-        languageViewModel.actions.emit(Save)
-      },
-      assert = {
-        val effect = awaitItem() as SaveLanguagesAndFinish
-        assertThat(effect.languages).isEqualTo(activeLanguage)
-      }
-    )
+    languageViewModel.effects.test {
+      val contentState = Content(listOf(activeLanguage, inactiveLanguage))
+      languageViewModel.state.value = contentState
+      languageViewModel.actions.emit(Save)
+      val effect = awaitItem() as SaveLanguagesAndFinish
+      assertThat(effect.languages).isEqualTo(activeLanguage)
+    }
   }
 
   @Test
