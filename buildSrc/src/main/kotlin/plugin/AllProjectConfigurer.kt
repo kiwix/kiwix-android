@@ -245,6 +245,7 @@ class AllProjectConfigurer {
       implementation(Libs.COMPOSE_LIVE_DATA)
       implementation(Libs.COIL3_COMPOSE)
       implementation(Libs.COIL3_OKHTTP_COMPOSE)
+      implementation(Libs.COMPOSE_NAVIGATION)
 
       // Compose UI test implementation
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
