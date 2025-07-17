@@ -74,6 +74,8 @@
   <string name="zim_not_opened">ZIM 파일을 열 수 없습니다</string>
   <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다. %s</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
+  <string name="error_loading_random_article_zim_not_loaded">문서를 불러올 수 없습니다. ZIM 파일이 제대로 로드되지 않았습니다.</string>
+  <string name="could_not_find_random_article">임의의 문서를 찾을 수 없습니다. 나중에 다시 시도해 주십시오.</string>
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
@@ -197,6 +199,7 @@
   <string name="external_link_popup_dialog_message">외부 링크를 입력하고 있습니다. 추가적인 데이터 전송 비용이 들거나 오프라인일 때 동작하지 않을 수 있습니다.\n계속하시겠습니까?</string>
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
+  <string name="your_language">선택한 언어: %s</string>
   <string name="other_languages">다른 언어:</string>
   <string name="downloading">다운로드 중:</string>
   <string name="no_items_msg">사용 가능한 항목이 없음</string>
@@ -219,11 +222,15 @@
   <string name="welcome_to_the_family">포럼에 오신것을 환영합니다</string>
   <string name="save_books_offline">책을 오프라인으로 저장하기</string>
   <string name="download_books_message">책을 다운받고, 당신이 어디있든 읽으세요.</string>
+  <string name="save_books_in_desired_storage">원하는 저장소에 책을 저장하세요</string>
   <string name="unable_to_add_to_bookmarks">북마크에 추가할 수 없습니다</string>
   <string name="go_to_previous_page">이전 페이지로 이동</string>
   <string name="go_to_next_page">다음 페이지로 이동</string>
   <string name="table_of_contents">목차</string>
+  <string name="select_language">언어 선택</string>
   <string name="save_languages">언어 저장</string>
+  <string name="all_languages">모든 언어</string>
+  <string name="no_language_available">사용 가능한 언어 없음</string>
   <string name="expand">펼치기</string>
   <string name="history">역사</string>
   <string name="history_from_current_book">모든 책의 역사 보기</string>
