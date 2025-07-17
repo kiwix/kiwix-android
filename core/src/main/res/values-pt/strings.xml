@@ -189,6 +189,7 @@
   <string name="external_link_popup_dialog_message" fuzzy="true">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
+  <string name="your_language">Idioma selecionado: %s</string>
   <string name="other_languages">Outras línguas:</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isto é constrangedor</string>
@@ -214,7 +215,10 @@
   <string name="go_to_previous_page">Ir para a página anterior</string>
   <string name="go_to_next_page">Vá para a página seguinte</string>
   <string name="table_of_contents">Índice</string>
+  <string name="select_language">Selecionar idioma</string>
   <string name="save_languages">Guardar idiomas</string>
+  <string name="all_languages">Todos os idiomas</string>
+  <string name="no_language_available">Sem idiomas disponíveis</string>
   <string name="expand">Expandir</string>
   <string name="history">Histórico</string>
   <string name="history_from_current_book">Ver histórico de todos os livros</string>

@@ -343,5 +343,5 @@
   <string name="empty_string">{{Ignored}}</string>
   <string name="resuming_state">This text is shown to inform the user that the current state of download is resuming.</string>
   <string name="downloading_state">This text is shown to inform the user that the current state of download is actively in progress.</string>
-  <string name="download_failed_state">This text is shown to inform the user when a download has been failed.</string>
+  <string name="download_failed_state">This text is shown to inform the user when a download has failed.</string>
 </resources>

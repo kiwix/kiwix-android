@@ -213,6 +213,7 @@
   <string name="external_link_popup_dialog_message">Vous accédez à un lien externe. Cela peut engendrer des coûts supplémentaires pour le transfert de données ou ne fonctionnera tout simplement pas si vous êtes hors ligne. Voulez-vous continuer ?</string>
   <string name="do_not_ask_anymore">Ne plus demander</string>
   <string name="your_languages">Langues sélectionnées :</string>
+  <string name="your_language">Langue sélectionnée : %s</string>
   <string name="other_languages">Autres langues :</string>
   <string name="downloading">Téléchargement:</string>
   <string name="no_items_msg">Aucun élément disponible</string>
@@ -241,7 +242,10 @@
   <string name="go_to_previous_page">Aller à la page précédente</string>
   <string name="go_to_next_page">Aller à la page suivante</string>
   <string name="table_of_contents">Table des matières</string>
+  <string name="select_language">Sélectionner la langue</string>
   <string name="save_languages">Sauvegarder les langues</string>
+  <string name="all_languages">Toutes les langues</string>
+  <string name="no_language_available">Aucune langue disponible</string>
   <string name="expand">Étendre</string>
   <string name="history">Historique</string>
   <string name="history_from_current_book">Afficher l’historique de tous les livres</string>
