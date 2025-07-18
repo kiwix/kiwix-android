@@ -253,6 +253,25 @@ internal class NewBookDaoTest {
     every { query.findFirst() } returns bookOnDiskEntity
     assertThat(newBookDao.bookMatching(downloadTitle)).isEqualTo(bookOnDiskEntity)
   }
+
+  @Test
+  fun `bookById queries file by id`() {
+    val bookId = "id"
+    val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
+    every { box.query() } returns queryBuilder
+    every {
+      queryBuilder.equal(
+        BookOnDiskEntity_.bookId,
+        bookId,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
+    val query: Query<BookOnDiskEntity> = mockk()
+    every { queryBuilder.build() } returns query
+    val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()
+    every { query.findFirst() } returns bookOnDiskEntity
+    assertThat(newBookDao.bookById(bookId)).isEqualTo(bookOnDiskEntity)
+  }
 }
 
 fun <T> mockBoxAsFlow(box: Box<T>, result: List<T>) {

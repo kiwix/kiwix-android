@@ -153,6 +153,15 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
       endsWith(
         BookOnDiskEntity_.zimReaderSource,
         downloadTitle,
+      QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    }.findFirst()
+
+  fun bookById(bookId: String) =
+    box.query {
+      equal(
+        BookOnDiskEntity_.bookId,
+        bookId,
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     }.findFirst()
