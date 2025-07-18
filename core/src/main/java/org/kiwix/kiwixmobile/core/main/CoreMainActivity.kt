@@ -91,9 +91,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
   abstract val navController: NavController
-  abstract val drawerContainerLayout: DrawerLayout
-  abstract val drawerNavView: NavigationView
-  abstract val readerTableOfContentsDrawer: NavigationView
+
+  // abstract val drawerContainerLayout: DrawerLayout
+  // abstract val drawerNavView: NavigationView
+  // abstract val readerTableOfContentsDrawer: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
@@ -101,7 +102,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
-  abstract val navHostContainer: FragmentContainerView
+  // abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
 
@@ -114,7 +115,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
-    setTheme(R.style.KiwixTheme)
+    // setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
@@ -160,9 +161,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
     rateDialogHandler.checkForRateDialog(getIconResId())
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      configureActivityBasedOn(destination)
-    }
+    // navController.addOnDestinationChangedListener { _, destination, _ ->
+    //   configureActivityBasedOn(destination)
+    // }
   }
 
   /**
@@ -206,17 +207,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (destination.id !in topLevelDestinations) {
       handleDrawerOnNavigation()
     }
-    readerTableOfContentsDrawer.setLockMode(
-      if (destination.id == readerFragmentResId) {
-        LOCK_MODE_UNLOCKED
-      } else {
-        LOCK_MODE_LOCKED_CLOSED
-      }
-    )
+    // readerTableOfContentsDrawer.setLockMode(
+    //   if (destination.id == readerFragmentResId) {
+    //     LOCK_MODE_UNLOCKED
+    //   } else {
+    //     LOCK_MODE_LOCKED_CLOSED
+    //   }
+    // )
   }
 
   private fun NavigationView.setLockMode(lockMode: Int) {
-    drawerContainerLayout.setDrawerLockMode(lockMode, this)
+    // drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
   @Suppress("DEPRECATION")
@@ -278,34 +279,34 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     // toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
     //   getString(R.string.open_drawer)
     // )
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this,
-        drawerContainerLayout,
-        R.string.open_drawer,
-        R.string.close_drawer
-      )
-    drawerToggle?.let {
-      drawerContainerLayout.addDrawerListener(it)
-      it.syncState()
-    }
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    if (shouldEnableRightDrawer) {
-      // Enable the right drawer
-      drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
-    }
+    // drawerToggle =
+    //   ActionBarDrawerToggle(
+    //     this,
+    //     drawerContainerLayout,
+    //     R.string.open_drawer,
+    //     R.string.close_drawer
+    //   )
+    // drawerToggle?.let {
+    //   drawerContainerLayout.addDrawerListener(it)
+    //   it.syncState()
+    // }
+    // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    // if (shouldEnableRightDrawer) {
+    //   // Enable the right drawer
+    //   drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
+    // }
   }
 
   open fun disableDrawer(disableRightDrawer: Boolean = true) {
-    drawerToggle?.isDrawerIndicatorEnabled = false
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    if (disableRightDrawer) {
-      // Disable the right drawer
-      drawerContainerLayout.setDrawerLockMode(
-        DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-        GravityCompat.END
-      )
-    }
+    // drawerToggle?.isDrawerIndicatorEnabled = false
+    // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    // if (disableRightDrawer) {
+    //   // Disable the right drawer
+    //   drawerContainerLayout.setDrawerLockMode(
+    //     DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+    //     GravityCompat.END
+    //   )
+    // }
   }
 
   open fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -326,15 +327,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     handleDrawerOnNavigation()
   }
 
-  fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawerNavView)
+  fun navigationDrawerIsOpen(): Boolean = false
+  // drawerContainerLayout.isDrawerOpen(drawerNavView)
 
   fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawerNavView)
+    // drawerContainerLayout.closeDrawer(drawerNavView)
   }
 
   fun openNavigationDrawer() {
-    drawerContainerLayout.openDrawer(drawerNavView)
+    // drawerContainerLayout.openDrawer(drawerNavView)
   }
 
   fun openSupportKiwixExternalLink() {

@@ -44,7 +44,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.flow.launchIn
@@ -212,10 +211,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     composeView = it
   }
 
-  private fun getBottomNavigationView() =
-    requireActivity().findViewById<BottomNavigationView>(org.kiwix.kiwixmobile.R.id.bottom_nav_view)
+  // private fun getBottomNavigationView() =
+  //   requireActivity().findViewById<BottomNavigationView>(org.kiwix.kiwixmobile.R.id.bottom_nav_view)
 
-  private fun getBottomNavigationHeight() = getBottomNavigationView().measuredHeight
+  private fun getBottomNavigationHeight() = ZERO
+  // getBottomNavigationView().measuredHeight
 
   private fun onPauseResumeButtonClick(item: LibraryListItem.LibraryDownloadItem) {
     context?.let { context ->
@@ -298,8 +298,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         .onEach { onLibraryItemsChange(it) }
         .launchIn(viewLifecycleOwner.lifecycleScope)
         .also {
-          coreMainActivity.navHostContainer
-            .setBottomMarginToFragmentContainerView(0)
+          // coreMainActivity.navHostContainer
+          //   .setBottomMarginToFragmentContainerView(0)
         }
       // Observe when online library downloading.
       onlineLibraryDownloading
