@@ -4,4 +4,5 @@
   <item name="tabsAdapterCloseImageView" type="id" />
   <item name="tabsAdapterCardView" type="id" />
   <item name="tabsAdapterTextView" type="id" />
+  <item name="nav_host_fragment" type="id" />
 </resources>

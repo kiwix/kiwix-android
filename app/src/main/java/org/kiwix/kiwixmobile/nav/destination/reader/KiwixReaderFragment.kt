@@ -151,8 +151,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun loadDrawerViews() {
-    drawerLayout = requireActivity().findViewById(R.id.navigation_container)
-    tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
+    // drawerLayout = requireActivity().findViewById(R.id.navigation_container)
+    // tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
   }
 
   override fun openHomeScreen() {
@@ -199,13 +199,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
-    val bottomNavigationView =
-      requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-    bottomNavigationView?.let {
-      setBottomMarginToNavHostContainer(
-        bottomNavigationView.measuredHeight
-      )
-    }
+    // val bottomNavigationView =
+    //   requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+    // bottomNavigationView?.let {
+    //   setBottomMarginToNavHostContainer(
+    //     bottomNavigationView.measuredHeight
+    //   )
+    // }
   }
 
   // override fun onPause() {
@@ -240,8 +240,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     exitBook()
   }
 
-  override fun getBottomNavigationView(): BottomNavigationView? =
-    requireActivity().findViewById(R.id.bottom_nav_view)
+  override fun getBottomNavigationView(): BottomNavigationView? = null
+  // requireActivity().findViewById(R.id.bottom_nav_view)
 
   /**
    * Restores the view state based on the provided webViewHistoryItemList data and restore origin.
@@ -299,11 +299,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun updateNavigationBarHeight(toolbarOffset: Float) {
     // if no  activity exist simply return.
     if (activity == null) return
-    activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_view)?.let { view ->
-      val toolbarHeightPx = activity?.getToolbarHeight() ?: 0f
-      val offsetFactor = view.height / toolbarHeightPx.toFloat()
-      view.translationY = -1 * toolbarOffset * offsetFactor
-    }
+    // activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_view)?.let { view ->
+    //   val toolbarHeightPx = activity?.getToolbarHeight() ?: 0f
+    //   val offsetFactor = view.height / toolbarHeightPx.toFloat()
+    //   view.translationY = -1 * toolbarOffset * offsetFactor
+    // }
   }
 
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
@@ -328,15 +328,15 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun hideNavBar() {
-    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = GONE
+    // requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = GONE
     setBottomMarginToNavHostContainer(0)
   }
 
   private fun showNavBar() {
     // show the navBar if fullScreenMode is not active.
     if (!isInFullScreenMode()) {
-      requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility =
-        VISIBLE
+      // requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility =
+      //   VISIBLE
     }
   }
 
@@ -345,7 +345,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun setBottomMarginToNavHostContainer(margin: Int) {
-    coreMainActivity.navHostContainer
-      .setBottomMarginToFragmentContainerView(margin)
+    // coreMainActivity.navHostContainer
+    //   .setBottomMarginToFragmentContainerView(margin)
   }
 }

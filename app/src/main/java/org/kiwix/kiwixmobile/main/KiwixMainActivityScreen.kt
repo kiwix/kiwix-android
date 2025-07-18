@@ -18,34 +18,120 @@
 
 package org.kiwix.kiwixmobile.main
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.fragment.app.FragmentManager
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.fragment.NavHostFragment
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R.navigation
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun KiwixMainActivityScreen(
+  navController: NavController,
+  topLevelDestinations: List<Int>,
+  leftDrawerContent: @Composable ColumnScope.() -> Unit,
+  rightDrawerContent: @Composable ColumnScope.() -> Unit,
+  isBottomBarVisible: Boolean = true
+) {
+  val rightDrawerState = rememberDrawerState(DrawerValue.Closed)
+  val coroutineScope = rememberCoroutineScope()
+  val scrollingBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+  val context = LocalContext.current
+  val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+  KiwixTheme {
+    ModalNavigationDrawer(
+      drawerContent = {
+        Column(
+          Modifier
+            .fillMaxHeight()
+            .width(NAVIGATION_DRAWER_WIDTH)
+        ) {
+          leftDrawerContent()
+        }
+      },
+      gesturesEnabled = true
+    ) {
+      Box {
+        Scaffold(
+          bottomBar = {
+            if (isBottomBarVisible) {
+              BottomNavigationBar(
+                navController = navController,
+                scrollBehavior = scrollingBehavior,
+                topLevelDestinations = topLevelDestinations
+              )
+            }
+          }
+        ) { paddingValues ->
+          Box(modifier = Modifier.padding(paddingValues)) {
+            // AndroidView to host your FragmentContainerView with nav graph
+            AndroidView(
+              modifier = Modifier.fillMaxSize(),
+              factory = { ctx ->
+                FragmentContainerView(ctx).apply {
+                  id = R.id.nav_host_fragment
+                  if (fragmentManager.findFragmentById(id) == null) {
+                    val navHostFragment = NavHostFragment.create(navigation.kiwix_nav_graph)
+                    fragmentManager.beginTransaction()
+                      .replace(id, navHostFragment)
+                      .setPrimaryNavigationFragment(navHostFragment)
+                      .commitNow()
+                  }
+                }
+              }
+            )
+          }
+        }
+
+        // Right drawer overlay
+        ModalDrawerSheet(
+          drawerState = rightDrawerState,
+          modifier = Modifier
+            .fillMaxHeight()
+            .align(Alignment.CenterEnd)
+            .width(NAVIGATION_DRAWER_WIDTH)
+        ) {
+          rightDrawerContent()
+        }
+      }
+    }
+  }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,67 +174,6 @@ fun BottomNavigationBar(
             )
           },
           label = { Text(item.title) }
-        )
-      }
-    }
-  }
-}
-
-@Composable
-fun MainNavGraph(
-  fragmentManager: FragmentManager,
-  navGraphId: Int
-) {
-  val navController = remember {
-    fragmentManager.findNavController(R.id.nav_host_fragment)
-  }
-
-  // Drawer states
-  val leftDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-  val rightDrawerVisible = remember { mutableStateOf(false) }
-
-  // Bottom nav destinations
-  val bottomNavDestinations = listOf(
-    id.readerFragment,
-    id.libraryFragment,
-    id.downloadsFragment
-  )
-
-  // Observe current destination
-  val navBackStackEntry by navController.currentBackStackEntryAsState()
-  val currentDestinationId = navBackStackEntry?.destination?.id
-
-  // Coroutine scope for drawer
-  val scope = rememberCoroutineScope()
-
-  ModalNavigationDrawer(
-    drawerState = leftDrawerState,
-    drawerContent = { DrawerContentLeft() }
-  ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-      // Fragment content
-      FragmentContainer(
-        fragmentManager = fragmentManager,
-        containerId = R.id.nav_host_fragment,
-        navGraphId = navGraphId
-      )
-
-      // Right drawer (slide in)
-      AnimatedVisibility(
-        visible = rightDrawerVisible.value,
-        enter = slideInHorizontally(initialOffsetX = { it }),
-        exit = slideOutHorizontally(targetOffsetX = { it }),
-        modifier = Modifier.align(Alignment.CenterEnd)
-      ) {
-        DrawerContentRight(
-          onClose = { rightDrawerVisible.value = false }
-        )
-      }
-
-      // Bottom nav only on selected destinations
-      if (currentDestinationId in bottomNavDestinations) {
-        BottomNavigationBar(
-          navController = navController,
         )
       }
     }

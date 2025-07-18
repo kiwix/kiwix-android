@@ -24,22 +24,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
@@ -53,9 +50,6 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
-import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
-import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -63,9 +57,7 @@ import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
@@ -77,27 +69,23 @@ class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
   override val cachedComponent by lazy { kiwixActivityComponent }
   override val searchFragmentResId: Int = R.id.searchFragment
-  override val navController by lazy {
-    (
-      supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        as NavHostFragment
-    ).navController
-  }
 
-  override val drawerContainerLayout: DrawerLayout by lazy {
-    activityKiwixMainBinding.navigationContainer
-  }
+  // override val drawerContainerLayout: DrawerLayout by lazy {
+  //   // activityKiwixMainBinding.navigationContainer
+  // }
 
-  override val drawerNavView: NavigationView by lazy {
-    activityKiwixMainBinding.drawerNavView
-  }
+  // override val drawerNavView: NavigationView by lazy {
+  //   activityKiwixMainBinding.drawerNavView
+  // }
 
-  override val readerTableOfContentsDrawer: NavigationView by lazy {
-    activityKiwixMainBinding.readerDrawerNavView
-  }
+  // override val readerTableOfContentsDrawer: NavigationView by lazy {
+  //   activityKiwixMainBinding.readerDrawerNavView
+  // }
 
-  override val navHostContainer by lazy {
-    activityKiwixMainBinding.navHostFragment
+  override val navController: NavController by lazy {
+    val fragment = supportFragmentManager.findFragmentById(id.nav_host_fragment)
+    val navHostFragment = requireNotNull(fragment) as NavHostFragment
+    return@lazy navHostFragment.navController
   }
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
@@ -113,8 +101,9 @@ class KiwixMainActivity : CoreMainActivity() {
   override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
+  private val isBottomBarVisible = mutableStateOf(true)
 
-  private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
+  // private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
 
   private var isIntroScreenVisible: Boolean = false
 
@@ -127,25 +116,31 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
-    activityKiwixMainBinding = ActivityKiwixMainBinding.inflate(layoutInflater)
-    setContentView(activityKiwixMainBinding.root)
-
-    navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    activityKiwixMainBinding.drawerNavView.apply {
-      setupWithNavController(navController)
-      setNavigationItemSelectedListener { item ->
-        closeNavigationDrawer()
-        onNavigationItemSelected(item)
-      }
+    setContent {
+      KiwixMainActivityScreen(
+        navController = navController,
+        topLevelDestinations = topLevelDestinations.toList(),
+        isBottomBarVisible = isBottomBarVisible.value,
+        leftDrawerContent = { },
+        rightDrawerContent = { }
+      )
     }
-    activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
+    navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
+    // activityKiwixMainBinding.drawerNavView.apply {
+    //   setupWithNavController(navController)
+    //   setNavigationItemSelectedListener { item ->
+    //     closeNavigationDrawer()
+    //     onNavigationItemSelected(item)
+    //   }
+    // }
+    // activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
     }
     handleZimFileIntent(intent)
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
-    activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
+    // activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {
@@ -180,46 +175,46 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
-    if (::activityKiwixMainBinding.isInitialized) {
-      activityKiwixMainBinding.bottomNavView.menu.apply {
-        findItem(R.id.readerFragment)?.title = resources.getString(string.reader)
-        findItem(R.id.libraryFragment)?.title = resources.getString(string.library)
-        findItem(R.id.downloadsFragment)?.title = resources.getString(string.download)
-      }
-      activityKiwixMainBinding.drawerNavView.menu.apply {
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_bookmarks_list)?.title =
-          resources.getString(string.bookmarks)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_history)?.title =
-          resources.getString(string.history)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_notes)?.title =
-          resources.getString(string.pref_notes)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.title =
-          resources.getString(string.menu_wifi_hotspot)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_settings)?.title =
-          resources.getString(string.menu_settings)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.title =
-          resources.getString(string.menu_help)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.title =
-          resources.getString(string.menu_support_kiwix)
-      }
-    }
+    // if (::activityKiwixMainBinding.isInitialized) {
+    //   activityKiwixMainBinding.bottomNavView.menu.apply {
+    //     findItem(R.id.readerFragment)?.title = resources.getString(string.reader)
+    //     findItem(R.id.libraryFragment)?.title = resources.getString(string.library)
+    //     findItem(R.id.downloadsFragment)?.title = resources.getString(string.download)
+    //   }
+    //   activityKiwixMainBinding.drawerNavView.menu.apply {
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_bookmarks_list)?.title =
+    //       resources.getString(string.bookmarks)
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_history)?.title =
+    //       resources.getString(string.history)
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_notes)?.title =
+    //       resources.getString(string.pref_notes)
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.title =
+    //       resources.getString(string.menu_wifi_hotspot)
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_settings)?.title =
+    //       resources.getString(string.menu_settings)
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.title =
+    //       resources.getString(string.menu_help)
+    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.title =
+    //       resources.getString(string.menu_support_kiwix)
+    //   }
+    // }
   }
 
   override fun configureActivityBasedOn(destination: NavDestination) {
     super.configureActivityBasedOn(destination)
-    activityKiwixMainBinding.bottomNavView.isVisible = destination.id in topLevelDestinations
+    isBottomBarVisible.value = destination.id in topLevelDestinations
   }
 
   override fun onStart() {
     super.onStart()
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      activityKiwixMainBinding.bottomNavView.isVisible = destination.id in topLevelDestinations
-      if (destination.id !in topLevelDestinations) {
-        handleDrawerOnNavigation()
-      }
-    }
+    // navController.addOnDestinationChangedListener { _, destination, _ ->
+    //   isBottomBarVisible.value = destination.id in topLevelDestinations
+    //   if (destination.id !in topLevelDestinations) {
+    //     handleDrawerOnNavigation()
+    //   }
+    // }
     if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
-      navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
+      // navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
     if (!sharedPreferenceUtil.prefIsTest) {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
@@ -234,16 +229,16 @@ class KiwixMainActivity : CoreMainActivity() {
    * TODO Remove this once we migrate to compose.
    */
   override fun toggleBottomNavigation(isVisible: Boolean) {
-    activityKiwixMainBinding.bottomNavView.animate()
-      ?.translationY(
-        if (isVisible) {
-          ZERO.toFloat()
-        } else {
-          activityKiwixMainBinding.bottomNavView.height.toFloat()
-        }
-      )
-      ?.setDuration(KIWIX_BOTTOM_BAR_ANIMATION_DURATION)
-      ?.start()
+    // activityKiwixMainBinding.bottomNavView.animate()
+    //   ?.translationY(
+    //     if (isVisible) {
+    //       ZERO.toFloat()
+    //     } else {
+    //       activityKiwixMainBinding.bottomNavView.height.toFloat()
+    //     }
+    //   )
+    //   ?.setDuration(KIWIX_BOTTOM_BAR_ANIMATION_DURATION)
+    //   ?.start()
   }
 
   private fun setDefaultDeviceLanguage() {
@@ -283,9 +278,9 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleGetContentIntent(intent: Intent?) {
     if (intent?.action == ACTION_GET_CONTENT) {
-      activityKiwixMainBinding.bottomNavView.menu.findItem(R.id.downloadsFragment)?.let {
-        NavigationUI.onNavDestinationSelected(it, navController)
-      }
+      // activityKiwixMainBinding.bottomNavView.menu.findItem(R.id.downloadsFragment)?.let {
+      //   NavigationUI.onNavDestinationSelected(it, navController)
+      // }
     }
   }
 
@@ -356,7 +351,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
-    activityKiwixMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
+    // activityKiwixMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
   }
 
   // Outdated shortcut ids(new_tab, get_content)
