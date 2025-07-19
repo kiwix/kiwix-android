@@ -29,16 +29,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -90,10 +85,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
-  abstract val navController: NavController
-  abstract val drawerContainerLayout: DrawerLayout
-  abstract val drawerNavView: NavigationView
-  abstract val readerTableOfContentsDrawer: NavigationView
+
+  /**
+   * We have migrated the UI in compose, so providing the compose based navigation to activity
+   * is responsibility of child activities such as KiwixMainActivity, and CustomMainActivity.
+   */
+  lateinit var navController: NavHostController
+
+  // abstract val drawerContainerLayout: DrawerLayout
+  // abstract val drawerNavView: NavigationView
+  // abstract val readerTableOfContentsDrawer: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
@@ -101,7 +102,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
-  abstract val navHostContainer: FragmentContainerView
+
+  // abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
 
@@ -160,9 +162,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
     rateDialogHandler.checkForRateDialog(getIconResId())
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      configureActivityBasedOn(destination)
-    }
+    // navController.addOnDestinationChangedListener { _, destination, _ ->
+    //   configureActivityBasedOn(destination)
+    // }
   }
 
   /**
@@ -206,17 +208,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (destination.id !in topLevelDestinations) {
       handleDrawerOnNavigation()
     }
-    readerTableOfContentsDrawer.setLockMode(
-      if (destination.id == readerFragmentResId) {
-        LOCK_MODE_UNLOCKED
-      } else {
-        LOCK_MODE_LOCKED_CLOSED
-      }
-    )
+    // readerTableOfContentsDrawer.setLockMode(
+    //   if (destination.id == readerFragmentResId) {
+    //     LOCK_MODE_UNLOCKED
+    //   } else {
+    //     LOCK_MODE_LOCKED_CLOSED
+    //   }
+    // )
   }
 
   private fun NavigationView.setLockMode(lockMode: Int) {
-    drawerContainerLayout.setDrawerLockMode(lockMode, this)
+    // drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
   @Suppress("DEPRECATION")
@@ -278,34 +280,34 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     // toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
     //   getString(R.string.open_drawer)
     // )
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this,
-        drawerContainerLayout,
-        R.string.open_drawer,
-        R.string.close_drawer
-      )
-    drawerToggle?.let {
-      drawerContainerLayout.addDrawerListener(it)
-      it.syncState()
-    }
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    if (shouldEnableRightDrawer) {
-      // Enable the right drawer
-      drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
-    }
+    // drawerToggle =
+    //   ActionBarDrawerToggle(
+    //     this,
+    //     drawerContainerLayout,
+    //     R.string.open_drawer,
+    //     R.string.close_drawer
+    //   )
+    // drawerToggle?.let {
+    //   drawerContainerLayout.addDrawerListener(it)
+    //   it.syncState()
+    // }
+    // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    // if (shouldEnableRightDrawer) {
+    //   // Enable the right drawer
+    //   drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
+    // }
   }
 
   open fun disableDrawer(disableRightDrawer: Boolean = true) {
-    drawerToggle?.isDrawerIndicatorEnabled = false
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    if (disableRightDrawer) {
-      // Disable the right drawer
-      drawerContainerLayout.setDrawerLockMode(
-        DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-        GravityCompat.END
-      )
-    }
+    // drawerToggle?.isDrawerIndicatorEnabled = false
+    // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    // if (disableRightDrawer) {
+    //   // Disable the right drawer
+    //   drawerContainerLayout.setDrawerLockMode(
+    //     DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+    //     GravityCompat.END
+    //   )
+    // }
   }
 
   open fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -321,20 +323,20 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return true
   }
 
-  private fun openHelpFragment() {
+  protected fun openHelpFragment() {
     navigate(helpFragmentResId)
     handleDrawerOnNavigation()
   }
 
-  fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawerNavView)
+  fun navigationDrawerIsOpen(): Boolean = false
+  // drawerContainerLayout.isDrawerOpen(drawerNavView)
 
   fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawerNavView)
+    // drawerContainerLayout.closeDrawer(drawerNavView)
   }
 
   fun openNavigationDrawer() {
-    drawerContainerLayout.openDrawer(drawerNavView)
+    // drawerContainerLayout.openDrawer(drawerNavView)
   }
 
   fun openSupportKiwixExternalLink() {
@@ -488,6 +490,84 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   fun findInPage(searchString: String) {
     navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
   }
+
+  private val bookRelatedDrawerGroup = DrawerMenuGroup(
+    listOfNotNull(
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.bookmarks),
+        iconRes = R.drawable.ic_bookmark_black_24dp,
+        true,
+        onClick = { openBookmarks() }
+      ),
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.history),
+        iconRes = R.drawable.ic_history_24px,
+        true,
+        onClick = { openHistory() }
+      ),
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.pref_notes),
+        iconRes = R.drawable.ic_add_note,
+        true,
+        onClick = { openNotes() }
+      ),
+      zimHostDrawerMenuItem
+    )
+  )
+
+  private val settingDrawerGroup = DrawerMenuGroup(
+    listOf(
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.menu_settings),
+        iconRes = R.drawable.ic_settings_24px,
+        true,
+        onClick = { openSettings() }
+      )
+    )
+  )
+
+  open val helpAndSupportDrawerGroup = DrawerMenuGroup(
+    listOfNotNull(
+      helpDrawerMenuItem,
+      supportDrawerMenuItem,
+      aboutAppDrawerMenuItem
+    )
+  )
+
+  /**
+   * Returns the "Wi-Fi Hotspot" menu item in the left drawer.
+   * Currently, this feature is only included in the main Kiwix app.
+   * Custom apps do not include this item.
+   */
+  abstract val zimHostDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "Help" menu item in the left drawer.
+   * In custom apps, this item is hidden.
+   * Each app (main Kiwix or custom) provides its own implementation.
+   */
+  abstract val helpDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "Support" menu item in the left drawer.
+   * In custom apps, this item displays the application name dynamically.
+   * Child activities are responsible for defining this drawer item.
+   */
+  abstract val supportDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "About App" menu item in the left drawer.
+   * For custom apps, this item is shown if configured.
+   * It is not included in the main Kiwix app.
+   * Child activities are responsible for defining this drawer item.
+   */
+  abstract val aboutAppDrawerMenuItem: DrawerMenuItem?
+
+  val rightNavigationDrawerMenuItems = listOf<DrawerMenuGroup>(
+    bookRelatedDrawerGroup,
+    settingDrawerGroup,
+    helpAndSupportDrawerGroup
+  )
 
   protected abstract fun getIconResId(): Int
   abstract val readerFragmentResId: Int

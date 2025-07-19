@@ -288,8 +288,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
       .also {
-        coreMainActivity.navHostContainer
-          .setBottomMarginToFragmentContainerView(0)
+        // coreMainActivity.navHostContainer
+        //   .setBottomMarginToFragmentContainerView(0)
       }
     coroutineJobs.apply {
       add(sideEffects())
@@ -363,10 +363,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
-  private fun getBottomNavigationView() =
-    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+  // private fun getBottomNavigationView() =
+  //   requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 
-  private fun getBottomNavigationHeight() = getBottomNavigationView().measuredHeight
+  private fun getBottomNavigationHeight() = ZERO
+  // getBottomNavigationView().measuredHeight
 
   private fun filePickerButtonClick() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
@@ -560,10 +561,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
 
   private fun animateBottomViewToOrigin() {
-    getBottomNavigationView().animate()
-      .translationY(0F)
-      .setDuration(MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION)
-      .start()
+    // getBottomNavigationView().animate()
+    //   .translationY(0F)
+    //   .setDuration(MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION)
+    //   .start()
   }
 
   private fun render(state: FileSelectListState) {

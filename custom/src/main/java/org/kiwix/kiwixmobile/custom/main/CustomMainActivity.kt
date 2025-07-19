@@ -30,6 +30,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
@@ -37,6 +38,7 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -50,7 +52,7 @@ class CustomMainActivity : CoreMainActivity() {
       supportFragmentManager.findFragmentById(
         R.id.custom_nav_controller
       ) as NavHostFragment
-    )
+      )
       .navController
   }
   override val drawerContainerLayout: DrawerLayout by lazy {
@@ -191,6 +193,73 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
+
+  /**
+   * Hide the 'ZimHostFragment' option from the navigation menu
+   * because we are now using fd (FileDescriptor)
+   * to read the zim file from the asset folder. Currently,
+   * 'KiwixServer' is unable to host zim files via fd.
+   * This feature is temporarily removed for custom apps.
+   * We will re-enable it for custom apps once the issue is resolved.
+   * For more info see https://github.com/kiwix/kiwix-android/pull/3516,
+   * https://github.com/kiwix/kiwix-android/issues/4026
+   */
+  override val zimHostDrawerMenuItem: DrawerMenuItem? = null
+
+  /**
+   * Hide the `HelpFragment` from custom apps.
+   * We have not removed the relevant code for `HelpFragment` from custom apps.
+   * If, in the future, we need to display this for all/some custom apps,
+   * we can either remove the line below or configure it according to the requirements.
+   * For more information, see https://github.com/kiwix/kiwix-android/issues/3584
+   */
+  override val helpDrawerMenuItem: DrawerMenuItem? = null
+
+  override val supportDrawerMenuItem: DrawerMenuItem? =
+    /**
+     * If custom app is configured to show the "Support app_name" in navigation
+     * then show it navigation. "app_name" will be replaced with custom app name.
+     */
+    if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(
+          string.menu_support_kiwix_for_custom_apps,
+          CoreApp.instance.getString(R.string.app_name)
+        ),
+        iconRes = drawable.ic_support_24px,
+        true,
+        onClick = {
+          externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+        }
+      )
+    } else {
+      /**
+       * If custom app is not configured to show the "Support app_name" in navigation
+       * then remove it from navigation.
+       */
+      null
+    }
+
+  /**
+   * If custom app is configured to show the "About app_name app" in navigation
+   * then show it navigation. "app_name" will be replaced with custom app name.
+   */
+  override val aboutAppDrawerMenuItem: DrawerMenuItem? =
+    if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(
+          string.menu_about_app,
+          CoreApp.instance.getString(R.string.app_name)
+        ),
+        iconRes = drawable.ic_baseline_info,
+        true,
+        onClick = {
+          externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+        }
+      )
+    } else {
+      null
+    }
 
   override fun createApplicationShortcuts() {
     // Remove previously added dynamic shortcuts for old ids if any found.
