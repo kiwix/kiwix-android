@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.main
 
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -44,35 +42,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.fragment.app.FragmentContainerView
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.fragment.NavHostFragment
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.R.navigation
+import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
+import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
+import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixMainActivityScreen(
-  navController: NavController,
+  navController: NavHostController,
   topLevelDestinations: List<Int>,
-  leftDrawerContent: @Composable ColumnScope.() -> Unit,
+  leftDrawerContent: List<DrawerMenuGroup>,
   rightDrawerContent: @Composable ColumnScope.() -> Unit,
   isBottomBarVisible: Boolean = true
 ) {
   val rightDrawerState = rememberDrawerState(DrawerValue.Closed)
   val coroutineScope = rememberCoroutineScope()
   val scrollingBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
-  val context = LocalContext.current
-  val fragmentManager = (context as AppCompatActivity).supportFragmentManager
   KiwixTheme {
     ModalNavigationDrawer(
       drawerContent = {
@@ -81,7 +75,7 @@ fun KiwixMainActivityScreen(
             .fillMaxHeight()
             .width(NAVIGATION_DRAWER_WIDTH)
         ) {
-          leftDrawerContent()
+          LeftDrawerMenu(leftDrawerContent)
         }
       },
       gesturesEnabled = true
@@ -99,21 +93,9 @@ fun KiwixMainActivityScreen(
           }
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
-            // AndroidView to host your FragmentContainerView with nav graph
-            AndroidView(
-              modifier = Modifier.fillMaxSize(),
-              factory = { ctx ->
-                FragmentContainerView(ctx).apply {
-                  id = R.id.nav_host_fragment
-                  if (fragmentManager.findFragmentById(id) == null) {
-                    val navHostFragment = NavHostFragment.create(navigation.kiwix_nav_graph)
-                    fragmentManager.beginTransaction()
-                      .replace(id, navHostFragment)
-                      .setPrimaryNavigationFragment(navHostFragment)
-                      .commitNow()
-                  }
-                }
-              }
+            KiwixNavGraph(
+              navController = navController,
+              modifier = Modifier.fillMaxSize()
             )
           }
         }
@@ -136,7 +118,7 @@ fun KiwixMainActivityScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar(
-  navController: NavController,
+  navController: NavHostController,
   scrollBehavior: BottomAppBarScrollBehavior,
   topLevelDestinations: List<Int>
 ) {

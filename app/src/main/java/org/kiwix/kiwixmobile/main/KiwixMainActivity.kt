@@ -27,6 +27,7 @@ import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -36,13 +37,14 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.mipmap
@@ -53,6 +55,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATI
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -81,12 +84,6 @@ class KiwixMainActivity : CoreMainActivity() {
   // override val readerTableOfContentsDrawer: NavigationView by lazy {
   //   activityKiwixMainBinding.readerDrawerNavView
   // }
-
-  override val navController: NavController by lazy {
-    val fragment = supportFragmentManager.findFragmentById(id.nav_host_fragment)
-    val navHostFragment = requireNotNull(fragment) as NavHostFragment
-    return@lazy navHostFragment.navController
-  }
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
@@ -117,15 +114,24 @@ class KiwixMainActivity : CoreMainActivity() {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContent {
+      navController = rememberNavController()
       KiwixMainActivityScreen(
         navController = navController,
         topLevelDestinations = topLevelDestinations.toList(),
         isBottomBarVisible = isBottomBarVisible.value,
-        leftDrawerContent = { },
+        leftDrawerContent = rightNavigationDrawerMenuItems,
         rightDrawerContent = { }
       )
+      LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+          isBottomBarVisible.value = destination.id in topLevelDestinations
+          if (destination.id !in topLevelDestinations) {
+            handleDrawerOnNavigation()
+          }
+        }
+      }
     }
-    navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     // activityKiwixMainBinding.drawerNavView.apply {
     //   setupWithNavController(navController)
     //   setNavigationItemSelectedListener { item ->
@@ -207,12 +213,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onStart() {
     super.onStart()
-    // navController.addOnDestinationChangedListener { _, destination, _ ->
-    //   isBottomBarVisible.value = destination.id in topLevelDestinations
-    //   if (destination.id !in topLevelDestinations) {
-    //     handleDrawerOnNavigation()
-    //   }
-    // }
     if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
       // navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
@@ -336,6 +336,32 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     return true
   }
+
+  override val zimHostDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_wifi_hotspot),
+    iconRes = drawable.ic_mobile_screen_share_24px,
+    true,
+    onClick = { openZimHostFragment() }
+  )
+
+  override val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_help),
+    iconRes = drawable.ic_help_24px,
+    true,
+    onClick = { openHelpFragment() }
+  )
+
+  override val supportDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_support_kiwix),
+    iconRes = drawable.ic_support_24px,
+    true,
+    onClick = { openSupportKiwixExternalLink() }
+  )
+
+  /**
+   * In kiwix app we are not showing the "About app" item so returning null.
+   */
+  override val aboutAppDrawerMenuItem: DrawerMenuItem? = null
 
   private fun openZimHostFragment() {
     disableDrawer()
