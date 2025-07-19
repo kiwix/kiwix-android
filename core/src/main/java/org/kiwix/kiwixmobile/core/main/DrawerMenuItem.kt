@@ -18,10 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.main
 
+import androidx.annotation.DrawableRes
+
 data class DrawerMenuItem(
-  val id: Int,
   val title: String,
-  val iconRes: Int,
+  @DrawableRes val iconRes: Int,
   val visible: Boolean = true,
   val onClick: () -> Unit
 )

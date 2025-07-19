@@ -28,16 +28,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import org.kiwix.kiwixmobile.core.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 
 @Composable
-fun MainDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
+fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
   Surface(
     modifier = Modifier
       .width(NAVIGATION_DRAWER_WIDTH)
@@ -47,7 +49,7 @@ fun MainDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
     Column {
       // Banner image at the top
       Image(
-        painter = painterResource(id = R.drawable.ic_home_kiwix_banner),
+        painter = IconItem.MipmapImage(R.drawable.ic_home_kiwix_banner).toPainter(),
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
         modifier = Modifier.fillMaxWidth()
@@ -60,7 +62,7 @@ fun MainDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
 }
 
 @Composable
-fun DrawerGroup(items: List<DrawerMenuItem>) {
+private fun DrawerGroup(items: List<DrawerMenuItem>) {
   Column {
     items.filter { it.visible }.forEach { item ->
       DrawerMenuItemView(item)
@@ -69,7 +71,7 @@ fun DrawerGroup(items: List<DrawerMenuItem>) {
 }
 
 @Composable
-fun DrawerMenuItemView(item: DrawerMenuItem) {
+private fun DrawerMenuItemView(item: DrawerMenuItem) {
   ListItem(
     leadingContent = {
       Icon(

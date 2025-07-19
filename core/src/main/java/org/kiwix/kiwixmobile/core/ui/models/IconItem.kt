@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.ui.models
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -57,20 +58,19 @@ fun IconItem.toPainter(): Painter {
     is IconItem.Drawable -> painterResource(drawableRes)
     is IconItem.ImageBitmap -> remember { BitmapPainter(bitmap) }
     is IconItem.MipmapImage -> {
-      val drawable = ContextCompat.getDrawable(LocalContext.current, mipmapResId)
-      val imageBitmap = when {
-        drawable is BitmapDrawable -> drawable.bitmap.asImageBitmap()
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && drawable is AdaptiveIconDrawable -> {
-          val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-          val canvas = Canvas(bitmap)
-          drawable.setBounds(0, 0, canvas.width, canvas.height)
-          drawable.draw(canvas)
-          bitmap.asImageBitmap()
-        }
-
-        else -> {
-          createBitmap(0, 0).asImageBitmap()
-        }
+      val context = LocalContext.current
+      val drawable = ContextCompat.getDrawable(context, mipmapResId)
+      val imageBitmap = drawable?.let {
+        val width = it.intrinsicWidth.takeIf { w -> w > 0 } ?: 100
+        val height = it.intrinsicHeight.takeIf { h -> h > 0 } ?: 100
+        val bitmap = createBitmap(width, height)
+        val canvas = Canvas(bitmap)
+        it.setBounds(0, 0, canvas.width, canvas.height)
+        it.draw(canvas)
+        bitmap.asImageBitmap()
+      } ?: run {
+        // fallback empty bitmap if drawable is null
+        createBitmap(1, 1).asImageBitmap()
       }
       return remember { BitmapPainter(imageBitmap) }
     }

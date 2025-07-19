@@ -29,16 +29,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -90,7 +85,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
-  abstract val navController: NavController
+
+  /**
+   * We have migrated the UI in compose, so providing the compose based navigation to activity
+   * is responsibility of child activities such as KiwixMainActivity, and CustomMainActivity.
+   */
+  lateinit var navController: NavHostController
 
   // abstract val drawerContainerLayout: DrawerLayout
   // abstract val drawerNavView: NavigationView
@@ -102,6 +102,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
+
   // abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
@@ -115,7 +116,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
-    // setTheme(R.style.KiwixTheme)
+    setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
@@ -322,7 +323,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return true
   }
 
-  private fun openHelpFragment() {
+  protected fun openHelpFragment() {
     navigate(helpFragmentResId)
     handleDrawerOnNavigation()
   }
@@ -489,6 +490,84 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   fun findInPage(searchString: String) {
     navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
   }
+
+  private val bookRelatedDrawerGroup = DrawerMenuGroup(
+    listOfNotNull(
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.bookmarks),
+        iconRes = R.drawable.ic_bookmark_black_24dp,
+        true,
+        onClick = { openBookmarks() }
+      ),
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.history),
+        iconRes = R.drawable.ic_history_24px,
+        true,
+        onClick = { openHistory() }
+      ),
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.pref_notes),
+        iconRes = R.drawable.ic_add_note,
+        true,
+        onClick = { openNotes() }
+      ),
+      zimHostDrawerMenuItem
+    )
+  )
+
+  private val settingDrawerGroup = DrawerMenuGroup(
+    listOf(
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(R.string.menu_settings),
+        iconRes = R.drawable.ic_settings_24px,
+        true,
+        onClick = { openSettings() }
+      )
+    )
+  )
+
+  open val helpAndSupportDrawerGroup = DrawerMenuGroup(
+    listOfNotNull(
+      helpDrawerMenuItem,
+      supportDrawerMenuItem,
+      aboutAppDrawerMenuItem
+    )
+  )
+
+  /**
+   * Returns the "Wi-Fi Hotspot" menu item in the left drawer.
+   * Currently, this feature is only included in the main Kiwix app.
+   * Custom apps do not include this item.
+   */
+  abstract val zimHostDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "Help" menu item in the left drawer.
+   * In custom apps, this item is hidden.
+   * Each app (main Kiwix or custom) provides its own implementation.
+   */
+  abstract val helpDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "Support" menu item in the left drawer.
+   * In custom apps, this item displays the application name dynamically.
+   * Child activities are responsible for defining this drawer item.
+   */
+  abstract val supportDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "About App" menu item in the left drawer.
+   * For custom apps, this item is shown if configured.
+   * It is not included in the main Kiwix app.
+   * Child activities are responsible for defining this drawer item.
+   */
+  abstract val aboutAppDrawerMenuItem: DrawerMenuItem?
+
+  val rightNavigationDrawerMenuItems = listOf<DrawerMenuGroup>(
+    bookRelatedDrawerGroup,
+    settingDrawerGroup,
+    helpAndSupportDrawerGroup
+  )
 
   protected abstract fun getIconResId(): Int
   abstract val readerFragmentResId: Int
