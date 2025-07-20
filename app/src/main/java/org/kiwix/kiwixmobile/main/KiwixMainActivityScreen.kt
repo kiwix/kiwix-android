@@ -47,19 +47,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.kiwix.kiwixmobile.R.drawable
-import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
+import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixMainActivityScreen(
   navController: NavHostController,
-  topLevelDestinations: List<Int>,
   leftDrawerContent: List<DrawerMenuGroup>,
   rightDrawerContent: @Composable ColumnScope.() -> Unit,
   isBottomBarVisible: Boolean = true
@@ -70,26 +71,20 @@ fun KiwixMainActivityScreen(
   KiwixTheme {
     ModalNavigationDrawer(
       drawerContent = {
-        Column(
-          Modifier
-            .fillMaxHeight()
-            .width(NAVIGATION_DRAWER_WIDTH)
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
           LeftDrawerMenu(leftDrawerContent)
         }
-      },
-      gesturesEnabled = true
+      }
     ) {
       Box {
         Scaffold(
           bottomBar = {
-            if (isBottomBarVisible) {
-              BottomNavigationBar(
-                navController = navController,
-                scrollBehavior = scrollingBehavior,
-                topLevelDestinations = topLevelDestinations
-              )
-            }
+            // if (isBottomBarVisible) {
+            BottomNavigationBar(
+              navController = navController,
+              scrollBehavior = scrollingBehavior
+            )
+            // }
           }
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
@@ -119,45 +114,45 @@ fun KiwixMainActivityScreen(
 @Composable
 fun BottomNavigationBar(
   navController: NavHostController,
-  scrollBehavior: BottomAppBarScrollBehavior,
-  topLevelDestinations: List<Int>
+  scrollBehavior: BottomAppBarScrollBehavior
 ) {
   val bottomNavItems = listOf(
     BottomNavItem(
-      id = id.readerFragment,
+      route = KiwixDestination.Reader.route,
       title = stringResource(id = R.string.reader),
       iconRes = drawable.ic_reader_navigation_white_24px
     ),
     BottomNavItem(
-      id = id.libraryFragment,
+      route = KiwixDestination.Library.route,
       title = stringResource(id = R.string.library),
       iconRes = drawable.ic_library_navigation_white_24dp
     ),
     BottomNavItem(
-      id = id.downloadsFragment,
+      route = KiwixDestination.Downloads.route,
       title = stringResource(id = R.string.download),
       iconRes = drawable.ic_download_navigation_white_24dp
     )
   )
 
   val navBackStackEntry by navController.currentBackStackEntryAsState()
-  val currentDestinationId = navBackStackEntry?.destination?.id
-
-  if (currentDestinationId in topLevelDestinations) {
-    BottomAppBar(scrollBehavior = scrollBehavior) {
-      bottomNavItems.forEach { item ->
-        NavigationBarItem(
-          selected = currentDestinationId == item.id,
-          onClick = { navController.navigate(item.id) },
-          icon = {
-            Icon(
-              painter = painterResource(id = item.iconRes),
-              contentDescription = item.title
-            )
-          },
-          label = { Text(item.title) }
-        )
-      }
+  val currentDestinationRoute = navBackStackEntry?.destination?.route
+  BottomAppBar(
+    containerColor = Black,
+    contentColor = White,
+    scrollBehavior = scrollBehavior
+  ) {
+    bottomNavItems.forEach { item ->
+      NavigationBarItem(
+        selected = currentDestinationRoute == item.route,
+        onClick = { navController.navigate(item.route) },
+        icon = {
+          Icon(
+            painter = painterResource(id = item.iconRes),
+            contentDescription = item.title
+          )
+        },
+        label = { Text(item.title) }
+      )
     }
   }
 }

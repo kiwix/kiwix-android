@@ -187,7 +187,7 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
     (activity as CoreMainActivity?)?.let {
       it.navController.apply {
         popBackStack()
-        navigate(it.settingsFragmentResId)
+        navigate(it.settingsFragmentRoute)
       }
     }
   }

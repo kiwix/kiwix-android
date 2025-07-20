@@ -55,10 +55,10 @@ fun KiwixNavGraph(
 ) {
   NavHost(
     navController = navController,
-    startDestination = "readerFragment",
+    startDestination = KiwixDestination.Reader.route,
     modifier = modifier
   ) {
-    composable("readerFragment") {
+    composable(KiwixDestination.Reader.route) {
       FragmentContainer {
         KiwixReaderFragment().apply {
           arguments = Bundle().apply {
@@ -71,7 +71,7 @@ fun KiwixNavGraph(
         }
       }
     }
-    composable("libraryFragment") {
+    composable(KiwixDestination.Library.route) {
       FragmentContainer {
         LocalLibraryFragment().apply {
           arguments = Bundle().apply {
@@ -80,57 +80,57 @@ fun KiwixNavGraph(
         }
       }
     }
-    composable("downloadsFragment") {
+    composable(KiwixDestination.Downloads.route) {
       FragmentContainer {
         OnlineLibraryFragment()
       }
     }
-    composable("bookmarksFragment") {
+    composable(KiwixDestination.Bookmarks.route) {
       FragmentContainer {
         BookmarksFragment()
       }
     }
-    composable("notesFragment") {
+    composable(KiwixDestination.Notes.route) {
       FragmentContainer {
         NotesFragment()
       }
     }
-    composable("introFragment") {
+    composable(KiwixDestination.Intro.route) {
       FragmentContainer {
         IntroFragment()
       }
     }
-    composable("historyFragment") {
+    composable(KiwixDestination.History.route) {
       FragmentContainer {
         HistoryFragment()
       }
     }
-    composable("languageFragment") {
+    composable(KiwixDestination.Language.route) {
       FragmentContainer {
         LanguageFragment()
       }
     }
-    composable("zimHostFragment") {
+    composable(KiwixDestination.ZimHost.route) {
       FragmentContainer {
         ZimHostFragment()
       }
     }
-    composable("helpFragment") {
+    composable(KiwixDestination.Help.route) {
       FragmentContainer {
         KiwixHelpFragment()
       }
     }
-    composable("kiwixSettingsFragment") {
+    composable(KiwixDestination.Settings.route) {
       FragmentContainer {
         KiwixSettingsFragment()
       }
     }
-    composable("searchFragment") {
+    composable(KiwixDestination.Search.route) {
       FragmentContainer {
         SearchFragment()
       }
     }
-    composable("localFileTransferFragment") {
+    composable(KiwixDestination.LocalFileTransfer.route) {
       FragmentContainer {
         LocalFileTransferFragment().apply {
           arguments = Bundle().apply {
@@ -167,4 +167,20 @@ fun FragmentContainer(
       }
     }
   )
+}
+
+sealed class KiwixDestination(val route: String) {
+  object Reader : KiwixDestination("readerFragment")
+  object Library : KiwixDestination("libraryFragment")
+  object Downloads : KiwixDestination("downloadsFragment")
+  object Bookmarks : KiwixDestination("bookmarksFragment")
+  object Notes : KiwixDestination("notesFragment")
+  object Intro : KiwixDestination("introFragment")
+  object History : KiwixDestination("historyFragment")
+  object Language : KiwixDestination("languageFragment")
+  object ZimHost : KiwixDestination("zimHostFragment")
+  object Help : KiwixDestination("helpFragment")
+  object Settings : KiwixDestination("kiwixSettingsFragment")
+  object Search : KiwixDestination("searchFragment")
+  object LocalFileTransfer : KiwixDestination("localFileTransferFragment")
 }

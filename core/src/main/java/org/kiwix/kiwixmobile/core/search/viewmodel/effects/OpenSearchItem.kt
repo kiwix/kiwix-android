@@ -35,11 +35,12 @@ data class OpenSearchItem(
   private val openInNewTab: Boolean = false
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val readerFragmentResId = (activity as CoreMainActivity).readerFragmentResId
-    activity.navigate(
-      readerFragmentResId,
-      bundleOf(SEARCH_ITEM_TITLE_KEY to SEARCH_ITEM_TITLE_KEY)
-    )
+    val readerFragmentRoute = (activity as CoreMainActivity).readerFragmentRoute
+    // TODO fix this when properly migrated to compose navigation.
+    // activity.navigate(
+    //   readerFragmentRoute,
+    //   bundleOf(SEARCH_ITEM_TITLE_KEY to SEARCH_ITEM_TITLE_KEY)
+    // )
     activity.setNavigationResultOnCurrent(
       SearchItemToOpen(
         searchListItem.value,
