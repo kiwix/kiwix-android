@@ -75,7 +75,7 @@ const val ACTION_NEW_TAB = "NEW_TAB"
 const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
-  abstract val searchFragmentResId: Int
+  abstract val searchFragmentRoute: String
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
 
@@ -95,11 +95,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   // abstract val drawerContainerLayout: DrawerLayout
   // abstract val drawerNavView: NavigationView
   // abstract val readerTableOfContentsDrawer: NavigationView
-  abstract val bookmarksFragmentResId: Int
-  abstract val settingsFragmentResId: Int
-  abstract val historyFragmentResId: Int
-  abstract val notesFragmentResId: Int
-  abstract val helpFragmentResId: Int
+  abstract val bookmarksFragmentRoute: String
+  abstract val settingsFragmentRoute: String
+  abstract val historyFragmentRoute: String
+  abstract val notesFragmentRoute: String
+  abstract val helpFragmentRoute: String
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
 
@@ -324,7 +324,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   protected fun openHelpFragment() {
-    navigate(helpFragmentResId)
+    navigate(helpFragmentRoute)
     handleDrawerOnNavigation()
   }
 
@@ -362,9 +362,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         }
         activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
           if (it.onBackPressed(this@CoreMainActivity) == ShouldCall) {
-            if (navController.currentDestination?.id?.equals(readerFragmentResId) == true &&
+            if (navController.currentDestination?.route?.equals(readerFragmentRoute) == true &&
               navController.previousBackStackEntry?.destination
-                ?.id?.equals(searchFragmentResId) == false
+                ?.route?.equals(searchFragmentRoute) == false
             ) {
               drawerToggle = null
               finish()
@@ -400,8 +400,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  fun navigate(fragmentId: Int) {
-    navController.navigate(fragmentId)
+  fun navigate(route: String) {
+    navController.navigate(route)
   }
 
   fun navigate(fragmentId: Int, bundle: Bundle) {
@@ -414,11 +414,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   private fun openSettings() {
     handleDrawerOnNavigation()
-    navigate(settingsFragmentResId)
+    navigate(settingsFragmentRoute)
   }
 
   private fun openHistory() {
-    navigate(historyFragmentResId)
+    navigate(historyFragmentRoute)
   }
 
   fun openSearch(
@@ -426,23 +426,23 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     isOpenedFromTabView: Boolean = false,
     isVoice: Boolean = false
   ) {
-    navigate(
-      searchFragmentResId,
-      bundleOf(
-        NAV_ARG_SEARCH_STRING to searchString,
-        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
-        EXTRA_IS_WIDGET_VOICE to isVoice
-      )
-    )
+    // navigate(
+    //   searchFragmentRoute,
+    //   bundleOf(
+    //     NAV_ARG_SEARCH_STRING to searchString,
+    //     TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
+    //     EXTRA_IS_WIDGET_VOICE to isVoice
+    //   )
+    // )
   }
 
   fun openZimFromFilePath(path: String) {
-    navigate(
-      readerFragmentResId,
-      bundleOf(
-        ZIM_FILE_URI_KEY to path,
-      )
-    )
+    // navigate(
+    //   readerFragmentRoute,
+    //   bundleOf(
+    //     ZIM_FILE_URI_KEY to path,
+    //   )
+    // )
   }
 
   fun openPage(
@@ -456,26 +456,26 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     val navOptions = NavOptions.Builder()
       .setLaunchSingleTop(true)
-      .setPopUpTo(readerFragmentResId, inclusive = true)
+      .setPopUpTo(readerFragmentRoute, inclusive = true)
       .build()
-    navigate(
-      readerFragmentResId,
-      bundleOf(
-        PAGE_URL_KEY to pageUrl,
-        ZIM_FILE_URI_KEY to zimFileUri,
-        SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
-      ),
-      navOptions
-    )
+    // navigate(
+    //   readerFragmentRoute,
+    //   bundleOf(
+    //     PAGE_URL_KEY to pageUrl,
+    //     ZIM_FILE_URI_KEY to zimFileUri,
+    //     SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
+    //   ),
+    //   navOptions
+    // )
   }
 
   private fun openBookmarks() {
-    navigate(bookmarksFragmentResId)
+    navigate(bookmarksFragmentRoute)
     handleDrawerOnNavigation()
   }
 
   private fun openNotes() {
-    navigate(notesFragmentResId)
+    navigate(notesFragmentRoute)
   }
 
   protected fun handleDrawerOnNavigation() {
@@ -488,51 +488,57 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   fun findInPage(searchString: String) {
-    navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
+    // navigate(readerFragmentRoute, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
   }
 
-  private val bookRelatedDrawerGroup = DrawerMenuGroup(
-    listOfNotNull(
-      DrawerMenuItem(
-        title = CoreApp.instance.getString(R.string.bookmarks),
-        iconRes = R.drawable.ic_bookmark_black_24dp,
-        true,
-        onClick = { openBookmarks() }
-      ),
-      DrawerMenuItem(
-        title = CoreApp.instance.getString(R.string.history),
-        iconRes = R.drawable.ic_history_24px,
-        true,
-        onClick = { openHistory() }
-      ),
-      DrawerMenuItem(
-        title = CoreApp.instance.getString(R.string.pref_notes),
-        iconRes = R.drawable.ic_add_note,
-        true,
-        onClick = { openNotes() }
-      ),
-      zimHostDrawerMenuItem
-    )
-  )
-
-  private val settingDrawerGroup = DrawerMenuGroup(
-    listOf(
-      DrawerMenuItem(
-        title = CoreApp.instance.getString(R.string.menu_settings),
-        iconRes = R.drawable.ic_settings_24px,
-        true,
-        onClick = { openSettings() }
+  private val bookRelatedDrawerGroup by lazy {
+    DrawerMenuGroup(
+      listOfNotNull(
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.bookmarks),
+          iconRes = R.drawable.ic_bookmark_black_24dp,
+          true,
+          onClick = { openBookmarks() }
+        ),
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.history),
+          iconRes = R.drawable.ic_history_24px,
+          true,
+          onClick = { openHistory() }
+        ),
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.pref_notes),
+          iconRes = R.drawable.ic_add_note,
+          true,
+          onClick = { openNotes() }
+        ),
+        zimHostDrawerMenuItem
       )
     )
-  )
+  }
 
-  open val helpAndSupportDrawerGroup = DrawerMenuGroup(
-    listOfNotNull(
-      helpDrawerMenuItem,
-      supportDrawerMenuItem,
-      aboutAppDrawerMenuItem
+  private val settingDrawerGroup by lazy {
+    DrawerMenuGroup(
+      listOf(
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.menu_settings),
+          iconRes = R.drawable.ic_settings_24px,
+          true,
+          onClick = { openSettings() }
+        )
+      )
     )
-  )
+  }
+
+  private val helpAndSupportDrawerGroup by lazy {
+    DrawerMenuGroup(
+      listOfNotNull(
+        helpDrawerMenuItem,
+        supportDrawerMenuItem,
+        aboutAppDrawerMenuItem
+      )
+    )
+  }
 
   /**
    * Returns the "Wi-Fi Hotspot" menu item in the left drawer.
@@ -563,14 +569,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   abstract val aboutAppDrawerMenuItem: DrawerMenuItem?
 
-  val rightNavigationDrawerMenuItems = listOf<DrawerMenuGroup>(
-    bookRelatedDrawerGroup,
-    settingDrawerGroup,
-    helpAndSupportDrawerGroup
-  )
+  val leftNavigationDrawerMenuItems by lazy {
+    listOf<DrawerMenuGroup>(
+      bookRelatedDrawerGroup,
+      settingDrawerGroup,
+      helpAndSupportDrawerGroup
+    )
+  }
 
   protected abstract fun getIconResId(): Int
-  abstract val readerFragmentResId: Int
+  abstract val readerFragmentRoute: String
   abstract fun createApplicationShortcuts()
   abstract fun setDialogHostToActivity(alertDialogShower: AlertDialogShower)
 

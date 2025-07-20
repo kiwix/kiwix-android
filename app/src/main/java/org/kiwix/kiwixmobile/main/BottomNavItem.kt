@@ -18,10 +18,8 @@
 
 package org.kiwix.kiwixmobile.main
 
-import androidx.annotation.IdRes
-
 data class BottomNavItem(
-  @IdRes val id: Int,
+  val route: String,
   val title: String,
   val iconRes: Int
 )

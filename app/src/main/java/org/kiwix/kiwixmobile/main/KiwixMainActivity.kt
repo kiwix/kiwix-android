@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
@@ -71,7 +72,7 @@ const val KIWIX_BOTTOM_BAR_ANIMATION_DURATION = 250L
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
   override val cachedComponent by lazy { kiwixActivityComponent }
-  override val searchFragmentResId: Int = R.id.searchFragment
+  override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   // override val drawerContainerLayout: DrawerLayout by lazy {
   //   // activityKiwixMainBinding.navigationContainer
@@ -90,12 +91,12 @@ class KiwixMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
-  override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
-  override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
-  override val historyFragmentResId: Int = R.id.historyFragment
-  override val notesFragmentResId: Int = R.id.notesFragment
-  override val readerFragmentResId: Int = R.id.readerFragment
-  override val helpFragmentResId: Int = R.id.helpFragment
+  override val bookmarksFragmentRoute: String = KiwixDestination.Bookmarks.route
+  override val settingsFragmentRoute: String = KiwixDestination.Settings.route
+  override val historyFragmentRoute: String = KiwixDestination.History.route
+  override val notesFragmentRoute: String = KiwixDestination.Notes.route
+  override val readerFragmentRoute: String = KiwixDestination.Reader.route
+  override val helpFragmentRoute: String = KiwixDestination.Help.route
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
   private val isBottomBarVisible = mutableStateOf(true)
@@ -117,9 +118,8 @@ class KiwixMainActivity : CoreMainActivity() {
       navController = rememberNavController()
       KiwixMainActivityScreen(
         navController = navController,
-        topLevelDestinations = topLevelDestinations.toList(),
         isBottomBarVisible = isBottomBarVisible.value,
-        leftDrawerContent = rightNavigationDrawerMenuItems,
+        leftDrawerContent = leftNavigationDrawerMenuItems,
         rightDrawerContent = { }
       )
       LaunchedEffect(navController) {
@@ -365,7 +365,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun openZimHostFragment() {
     disableDrawer()
-    navigate(R.id.zimHostFragment)
+    navigate(KiwixDestination.ZimHost.route)
   }
 
   override fun getIconResId() = mipmap.ic_launcher

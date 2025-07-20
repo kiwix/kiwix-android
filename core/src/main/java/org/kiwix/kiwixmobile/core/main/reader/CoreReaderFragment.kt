@@ -1535,7 +1535,7 @@ abstract class CoreReaderFragment :
 
   private fun goToBookmarks(): Boolean {
     val parentActivity = requireActivity() as CoreMainActivity
-    parentActivity.navigate(parentActivity.bookmarksFragmentResId)
+    parentActivity.navigate(parentActivity.bookmarksFragmentRoute)
     return true
   }
 
