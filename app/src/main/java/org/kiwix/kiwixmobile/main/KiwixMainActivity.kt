@@ -23,12 +23,15 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -36,7 +39,6 @@ import androidx.core.os.ConfigurationCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -97,9 +99,12 @@ class KiwixMainActivity : CoreMainActivity() {
   override val notesFragmentRoute: String = KiwixDestination.Notes.route
   override val readerFragmentRoute: String = KiwixDestination.Reader.route
   override val helpFragmentRoute: String = KiwixDestination.Help.route
-  override val topLevelDestinations =
-    setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
-  private val isBottomBarVisible = mutableStateOf(true)
+  override val topLevelDestinationsRoute =
+    setOf(
+      KiwixDestination.Downloads.route,
+      KiwixDestination.Library.route,
+      KiwixDestination.Reader.route
+    )
 
   // private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
 
@@ -116,20 +121,18 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     setContent {
       navController = rememberNavController()
+      leftDrawerState = rememberDrawerState(DrawerValue.Closed)
+      uiCoroutineScope = rememberCoroutineScope()
       KiwixMainActivityScreen(
         navController = navController,
-        isBottomBarVisible = isBottomBarVisible.value,
-        leftDrawerContent = leftNavigationDrawerMenuItems,
-        rightDrawerContent = { }
+        leftDrawerContent = leftDrawerMenu,
+        topLevelDestinationsRoute = topLevelDestinationsRoute,
+        leftDrawerState = leftDrawerState,
+        uiCoroutineScope = uiCoroutineScope,
+        enableLeftDrawer = enableLeftDrawer.value
       )
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-          isBottomBarVisible.value = destination.id in topLevelDestinations
-          if (destination.id !in topLevelDestinations) {
-            handleDrawerOnNavigation()
-          }
-        }
       }
     }
     // activityKiwixMainBinding.drawerNavView.apply {
@@ -181,34 +184,9 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
-    // if (::activityKiwixMainBinding.isInitialized) {
-    //   activityKiwixMainBinding.bottomNavView.menu.apply {
-    //     findItem(R.id.readerFragment)?.title = resources.getString(string.reader)
-    //     findItem(R.id.libraryFragment)?.title = resources.getString(string.library)
-    //     findItem(R.id.downloadsFragment)?.title = resources.getString(string.download)
-    //   }
-    //   activityKiwixMainBinding.drawerNavView.menu.apply {
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_bookmarks_list)?.title =
-    //       resources.getString(string.bookmarks)
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_history)?.title =
-    //       resources.getString(string.history)
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_notes)?.title =
-    //       resources.getString(string.pref_notes)
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.title =
-    //       resources.getString(string.menu_wifi_hotspot)
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_settings)?.title =
-    //       resources.getString(string.menu_settings)
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.title =
-    //       resources.getString(string.menu_help)
-    //     findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.title =
-    //       resources.getString(string.menu_support_kiwix)
-    //   }
-    // }
-  }
-
-  override fun configureActivityBasedOn(destination: NavDestination) {
-    super.configureActivityBasedOn(destination)
-    isBottomBarVisible.value = destination.id in topLevelDestinations
+    Log.e("CONFIGURATION", "onConfigurationChanged: ")
+    leftDrawerMenu.clear()
+    leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
   override fun onStart() {
@@ -340,21 +318,21 @@ class KiwixMainActivity : CoreMainActivity() {
   override val zimHostDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
     title = CoreApp.instance.getString(string.menu_wifi_hotspot),
     iconRes = drawable.ic_mobile_screen_share_24px,
-    true,
+    visible = true,
     onClick = { openZimHostFragment() }
   )
 
   override val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
     title = CoreApp.instance.getString(string.menu_help),
     iconRes = drawable.ic_help_24px,
-    true,
+    visible = true,
     onClick = { openHelpFragment() }
   )
 
   override val supportDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
     title = CoreApp.instance.getString(string.menu_support_kiwix),
     iconRes = drawable.ic_support_24px,
-    true,
+    visible = true,
     onClick = { openSupportKiwixExternalLink() }
   )
 
@@ -365,6 +343,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun openZimHostFragment() {
     disableDrawer()
+    handleDrawerOnNavigation()
     navigate(KiwixDestination.ZimHost.route)
   }
 

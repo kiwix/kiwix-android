@@ -52,7 +52,7 @@ class CustomMainActivity : CoreMainActivity() {
       supportFragmentManager.findFragmentById(
         R.id.custom_nav_controller
       ) as NavHostFragment
-      )
+    )
       .navController
   }
   override val drawerContainerLayout: DrawerLayout by lazy {
@@ -229,6 +229,7 @@ class CustomMainActivity : CoreMainActivity() {
         iconRes = drawable.ic_support_24px,
         true,
         onClick = {
+          closeNavigationDrawer()
           externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
         }
       )
@@ -254,7 +255,8 @@ class CustomMainActivity : CoreMainActivity() {
         iconRes = drawable.ic_baseline_info,
         true,
         onClick = {
-          externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+          closeNavigationDrawer()
+          externalLinkOpener.openExternalUrl(BuildConfig.ABOUT_APP_URL.toUri().browserIntent(), false)
         }
       )
     } else {

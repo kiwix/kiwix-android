@@ -20,32 +20,28 @@ package org.kiwix.kiwixmobile.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
-import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
@@ -53,7 +49,6 @@ import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 
@@ -62,29 +57,35 @@ import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 fun KiwixMainActivityScreen(
   navController: NavHostController,
   leftDrawerContent: List<DrawerMenuGroup>,
-  rightDrawerContent: @Composable ColumnScope.() -> Unit,
-  isBottomBarVisible: Boolean = true
+  topLevelDestinationsRoute: Set<String>,
+  leftDrawerState: DrawerState,
+  uiCoroutineScope: CoroutineScope,
+  enableLeftDrawer: Boolean
 ) {
-  val rightDrawerState = rememberDrawerState(DrawerValue.Closed)
-  val coroutineScope = rememberCoroutineScope()
+  val navBackStackEntry by navController.currentBackStackEntryAsState()
   val scrollingBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   KiwixTheme {
     ModalNavigationDrawer(
+      drawerState = leftDrawerState,
       drawerContent = {
         Column(modifier = Modifier.fillMaxSize()) {
           LeftDrawerMenu(leftDrawerContent)
         }
-      }
+      },
+      gesturesEnabled = enableLeftDrawer && navBackStackEntry?.destination?.route in topLevelDestinationsRoute
     ) {
       Box {
         Scaffold(
           bottomBar = {
-            // if (isBottomBarVisible) {
-            BottomNavigationBar(
-              navController = navController,
-              scrollBehavior = scrollingBehavior
-            )
-            // }
+            if (navBackStackEntry?.destination?.route in topLevelDestinationsRoute) {
+              BottomNavigationBar(
+                navController = navController,
+                scrollBehavior = scrollingBehavior,
+                navBackStackEntry = navBackStackEntry,
+                leftDrawerState = leftDrawerState,
+                uiCoroutineScope = uiCoroutineScope
+              )
+            }
           }
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
@@ -93,17 +94,6 @@ fun KiwixMainActivityScreen(
               modifier = Modifier.fillMaxSize()
             )
           }
-        }
-
-        // Right drawer overlay
-        ModalDrawerSheet(
-          drawerState = rightDrawerState,
-          modifier = Modifier
-            .fillMaxHeight()
-            .align(Alignment.CenterEnd)
-            .width(NAVIGATION_DRAWER_WIDTH)
-        ) {
-          rightDrawerContent()
         }
       }
     }
@@ -114,7 +104,10 @@ fun KiwixMainActivityScreen(
 @Composable
 fun BottomNavigationBar(
   navController: NavHostController,
-  scrollBehavior: BottomAppBarScrollBehavior
+  scrollBehavior: BottomAppBarScrollBehavior,
+  navBackStackEntry: NavBackStackEntry?,
+  leftDrawerState: DrawerState,
+  uiCoroutineScope: CoroutineScope
 ) {
   val bottomNavItems = listOf(
     BottomNavItem(
@@ -133,8 +126,6 @@ fun BottomNavigationBar(
       iconRes = drawable.ic_download_navigation_white_24dp
     )
   )
-
-  val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestinationRoute = navBackStackEntry?.destination?.route
   BottomAppBar(
     containerColor = Black,
@@ -144,7 +135,12 @@ fun BottomNavigationBar(
     bottomNavItems.forEach { item ->
       NavigationBarItem(
         selected = currentDestinationRoute == item.route,
-        onClick = { navController.navigate(item.route) },
+        onClick = {
+          uiCoroutineScope.launch {
+            leftDrawerState.close()
+            navController.navigate(item.route)
+          }
+        },
         icon = {
           Icon(
             painter = painterResource(id = item.iconRes),

@@ -51,7 +51,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
@@ -69,9 +68,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -100,6 +97,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -649,7 +647,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun navigateToLocalFileTransferFragment() {
-    requireActivity().navigate(R.id.localFileTransferFragment)
+    requireActivity().navigate(KiwixDestination.LocalFileTransfer.route)
   }
 
   private fun shouldShowRationalePermission() =
