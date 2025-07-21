@@ -27,8 +27,10 @@ import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.DrawerState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination
@@ -56,10 +58,7 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
@@ -92,6 +91,25 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   lateinit var navController: NavHostController
 
+  /**
+   * For managing the leftDrawer.
+   */
+  lateinit var leftDrawerState: DrawerState
+
+  /**
+   * The compose coroutine scope for calling the compose based UI elements in coroutine scope.
+   * Such as opening/closing leftDrawer.
+   */
+  lateinit var uiCoroutineScope: CoroutineScope
+
+  /**
+   * Managing the leftDrawerMenu in compose way so that when app's language changed
+   * it will update the text in selected language.
+   */
+  protected val leftDrawerMenu = mutableStateListOf<DrawerMenuGroup>()
+
+  protected val enableLeftDrawer = mutableStateOf(true)
+
   // abstract val drawerContainerLayout: DrawerLayout
   // abstract val drawerNavView: NavigationView
   // abstract val readerTableOfContentsDrawer: NavigationView
@@ -101,7 +119,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val notesFragmentRoute: String
   abstract val helpFragmentRoute: String
   abstract val cachedComponent: CoreActivityComponent
-  abstract val topLevelDestinations: Set<Int>
+  abstract val topLevelDestinationsRoute: Set<String>
 
   // abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
@@ -146,6 +164,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       createApplicationShortcuts()
     }
     handleBackPressed()
+    leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
   @Suppress("DEPRECATION")
@@ -205,9 +224,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   open fun configureActivityBasedOn(destination: NavDestination) {
-    if (destination.id !in topLevelDestinations) {
-      handleDrawerOnNavigation()
-    }
+    // if (destination.id !in topLevelDestinations) {
+    //   handleDrawerOnNavigation()
+    // }
     // readerTableOfContentsDrawer.setLockMode(
     //   if (destination.id == readerFragmentResId) {
     //     LOCK_MODE_UNLOCKED
@@ -271,6 +290,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigateUp() || super.onSupportNavigateUp()
 
   open fun setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) {
+    enableLeftDrawer.value = true
     // Set the initial contentDescription to the hamburger icon.
     // This method is called from various locations after modifying the navigationIcon.
     // For example, we previously changed this icon/contentDescription to the "+" button
@@ -328,18 +348,22 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     handleDrawerOnNavigation()
   }
 
-  fun navigationDrawerIsOpen(): Boolean = false
-  // drawerContainerLayout.isDrawerOpen(drawerNavView)
+  fun navigationDrawerIsOpen(): Boolean = leftDrawerState.isOpen
 
   fun closeNavigationDrawer() {
-    // drawerContainerLayout.closeDrawer(drawerNavView)
+    uiCoroutineScope.launch {
+      leftDrawerState.close()
+    }
   }
 
   fun openNavigationDrawer() {
-    // drawerContainerLayout.openDrawer(drawerNavView)
+    uiCoroutineScope.launch {
+      leftDrawerState.open()
+    }
   }
 
   fun openSupportKiwixExternalLink() {
+    closeNavigationDrawer()
     externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent(), false)
   }
 
@@ -418,6 +442,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun openHistory() {
+    handleDrawerOnNavigation()
     navigate(historyFragmentRoute)
   }
 
@@ -470,11 +495,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun openBookmarks() {
-    navigate(bookmarksFragmentRoute)
     handleDrawerOnNavigation()
+    navigate(bookmarksFragmentRoute)
   }
 
   private fun openNotes() {
+    handleDrawerOnNavigation()
     navigate(notesFragmentRoute)
   }
 
@@ -497,19 +523,19 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         DrawerMenuItem(
           title = CoreApp.instance.getString(R.string.bookmarks),
           iconRes = R.drawable.ic_bookmark_black_24dp,
-          true,
+          visible = true,
           onClick = { openBookmarks() }
         ),
         DrawerMenuItem(
           title = CoreApp.instance.getString(R.string.history),
           iconRes = R.drawable.ic_history_24px,
-          true,
+          visible = true,
           onClick = { openHistory() }
         ),
         DrawerMenuItem(
           title = CoreApp.instance.getString(R.string.pref_notes),
           iconRes = R.drawable.ic_add_note,
-          true,
+          visible = true,
           onClick = { openNotes() }
         ),
         zimHostDrawerMenuItem
@@ -523,7 +549,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         DrawerMenuItem(
           title = CoreApp.instance.getString(R.string.menu_settings),
           iconRes = R.drawable.ic_settings_24px,
-          true,
+          visible = true,
           onClick = { openSettings() }
         )
       )
@@ -569,7 +595,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   abstract val aboutAppDrawerMenuItem: DrawerMenuItem?
 
-  val leftNavigationDrawerMenuItems by lazy {
+  protected val leftNavigationDrawerMenuItems by lazy {
     listOf<DrawerMenuGroup>(
       bookRelatedDrawerGroup,
       settingDrawerGroup,

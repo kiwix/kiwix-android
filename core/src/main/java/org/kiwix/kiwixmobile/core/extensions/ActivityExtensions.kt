@@ -103,8 +103,8 @@ object ActivityExtensions {
   fun Activity.setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) =
     coreMainActivity.setupDrawerToggle(shouldEnableRightDrawer)
 
-  fun Activity.navigate(fragmentId: Int) {
-    coreMainActivity.navigate(fragmentId)
+  fun Activity.navigate(route: String) {
+    coreMainActivity.navigate(route)
   }
 
   fun Activity.navigate(fragmentId: Int, bundle: Bundle) {

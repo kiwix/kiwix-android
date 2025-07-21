@@ -65,9 +65,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
-import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -95,6 +93,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
@@ -394,7 +393,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   )
 
   private fun onLanguageMenuIconClick() {
-    requireActivity().navigate(org.kiwix.kiwixmobile.R.id.languageFragment)
+    requireActivity().navigate(KiwixDestination.Language.route)
     closeKeyboard()
   }
 

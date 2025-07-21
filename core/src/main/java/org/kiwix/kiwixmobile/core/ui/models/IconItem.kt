@@ -18,11 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.ui.models
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.BitmapDrawable
-import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 
 sealed class IconItem {
   data class Vector(val imageVector: ImageVector) : IconItem()
@@ -61,8 +58,8 @@ fun IconItem.toPainter(): Painter {
       val context = LocalContext.current
       val drawable = ContextCompat.getDrawable(context, mipmapResId)
       val imageBitmap = drawable?.let {
-        val width = it.intrinsicWidth.takeIf { w -> w > 0 } ?: 100
-        val height = it.intrinsicHeight.takeIf { h -> h > 0 } ?: 100
+        val width = it.intrinsicWidth.takeIf { w -> w > 0 } ?: HUNDERED
+        val height = it.intrinsicHeight.takeIf { h -> h > 0 } ?: HUNDERED
         val bitmap = createBitmap(width, height)
         val canvas = Canvas(bitmap)
         it.setBounds(0, 0, canvas.width, canvas.height)
