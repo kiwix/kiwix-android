@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
@@ -272,7 +273,8 @@ class CustomReaderFragment : CoreReaderFragment() {
       },
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
-          findNavController().navigate(R.id.customDownloadFragment)
+          // TODO refactor this when migrating the custom app in compose
+          // (requireActivity() as CoreMainActivity).navigate(R.id.customDownloadFragment)
         }
       }
     )

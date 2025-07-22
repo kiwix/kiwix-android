@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
@@ -55,6 +56,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 
 class KiwixReaderFragment : CoreReaderFragment() {
@@ -70,9 +72,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val activity = activity as CoreMainActivity
     readerScreenState.update {
       copy(onOpenLibraryButtonClicked = {
-        activity.navigate(
-          KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
-        )
+        val navOptions = NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
+          .build()
+        activity.navigate(KiwixDestination.Library.route, navOptions)
       })
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

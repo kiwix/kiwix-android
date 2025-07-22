@@ -28,18 +28,22 @@ import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
-import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
@@ -59,9 +63,9 @@ import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
@@ -106,6 +110,7 @@ class KiwixMainActivity : CoreMainActivity() {
       KiwixDestination.Reader.route
     )
 
+  private val shouldShowBottomAppBar = mutableStateOf(true)
   // private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
 
   private var isIntroScreenVisible: Boolean = false
@@ -116,6 +121,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   private val storageDeviceList = arrayListOf<StorageDevice>()
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
@@ -123,17 +129,27 @@ class KiwixMainActivity : CoreMainActivity() {
       navController = rememberNavController()
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
+      bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
       KiwixMainActivityScreen(
         navController = navController,
         leftDrawerContent = leftDrawerMenu,
         topLevelDestinationsRoute = topLevelDestinationsRoute,
         leftDrawerState = leftDrawerState,
         uiCoroutineScope = uiCoroutineScope,
-        enableLeftDrawer = enableLeftDrawer.value
+        enableLeftDrawer = enableLeftDrawer.value,
+        shouldShowBottomAppBar = shouldShowBottomAppBar.value,
+        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
       )
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
+        if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
+          val navOptions = NavOptions.Builder()
+            .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
+            .build()
+          navigate(KiwixDestination.Intro.route, navOptions)
+        }
       }
+      DialogHost(alertDialogShower)
     }
     // activityKiwixMainBinding.drawerNavView.apply {
     //   setupWithNavController(navController)
@@ -191,32 +207,10 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onStart() {
     super.onStart()
-    if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
-      // navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
-    }
     if (!sharedPreferenceUtil.prefIsTest) {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
     }
     setDefaultDeviceLanguage()
-  }
-
-  /**
-   * This is for manually showing/hiding the BottomNavigationView with animation from compose
-   * screens until we migrate the BottomNavigationView to compose. Once we migrate we will remove it.
-   *
-   * TODO Remove this once we migrate to compose.
-   */
-  override fun toggleBottomNavigation(isVisible: Boolean) {
-    // activityKiwixMainBinding.bottomNavView.animate()
-    //   ?.translationY(
-    //     if (isVisible) {
-    //       ZERO.toFloat()
-    //     } else {
-    //       activityKiwixMainBinding.bottomNavView.height.toFloat()
-    //     }
-    //   )
-    //   ?.setDuration(KIWIX_BOTTOM_BAR_ANIMATION_DURATION)
-    //   ?.start()
   }
 
   private fun setDefaultDeviceLanguage() {
@@ -256,9 +250,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleGetContentIntent(intent: Intent?) {
     if (intent?.action == ACTION_GET_CONTENT) {
-      // activityKiwixMainBinding.bottomNavView.menu.findItem(R.id.downloadsFragment)?.let {
-      //   NavigationUI.onNavDestinationSelected(it, navController)
-      // }
+      navigate(KiwixDestination.Downloads.route)
     }
   }
 
@@ -286,12 +278,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun openLocalLibraryWithZimFilePath(path: String) {
-    navigate(
-      R.id.libraryFragment,
-      bundleOf(
-        ZIM_FILE_URI_KEY to path,
-      )
-    )
+    navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
   }
 
   private fun handleNotificationIntent(intent: Intent) {
@@ -305,6 +292,10 @@ class KiwixMainActivity : CoreMainActivity() {
         }
       }
     }
+  }
+
+  private fun openZimFromFilePath(path: String) {
+    navigate(KiwixDestination.Reader.createRoute(zimFileUri = path))
   }
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -357,6 +348,24 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
     // activityKiwixMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
+  }
+
+  override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
+    navigate(
+      KiwixDestination.Search.createRoute(
+        searchString = searchString,
+        isOpenedFromTabView = isOpenedFromTabView,
+        isVoice = isVoice
+      )
+    )
+  }
+
+  override fun hideBottomAppBar() {
+    shouldShowBottomAppBar.value = false
+  }
+
+  override fun showBottomAppBar() {
+    shouldShowBottomAppBar.value = true
   }
 
   // Outdated shortcut ids(new_tab, get_content)

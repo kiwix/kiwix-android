@@ -39,6 +39,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
@@ -78,7 +80,6 @@ import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -173,6 +174,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     baseActivity.cachedComponent.inject(this)
   }
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -183,10 +185,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     return ComposeView(requireContext()).apply {
       setContent {
         val lazyListState = rememberLazyListState()
-        val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
-        LaunchedEffect(isBottomNavVisible) {
-          (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
-        }
         LaunchedEffect(Unit) {
           updateLibraryScreenState(
             bottomNavigationHeight = getBottomNavigationHeight(),
@@ -202,6 +200,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           onMultiSelect = { offerAction(RequestSelect(it)) },
           onRefresh = { onSwipeRefresh() },
           onDownloadButtonClick = { downloadBookButtonClick() },
+          bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
         ) {
           NavigationIcon(
             iconItem = IconItem.Vector(Icons.Filled.Menu),
@@ -493,9 +492,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
             zimFileReader.dispose()
           }
       }
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       activity?.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = file.toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = file.toUri().toString()),
+        navOptions
       )
     }
   }

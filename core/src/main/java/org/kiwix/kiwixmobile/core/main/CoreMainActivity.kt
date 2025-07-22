@@ -27,7 +27,9 @@ import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
@@ -73,6 +75,21 @@ const val KIWIX_INTERNAL_ERROR = 10
 const val ACTION_NEW_TAB = "NEW_TAB"
 const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 
+// Fragments names for compose based navigation.
+const val READER_FRAGMENT = "readerFragment"
+const val LOCAL_LIBRARY_FRAGMENT = "localLibraryFragment"
+const val DOWNLOAD_FRAGMENT = "downloadsFragment"
+const val BOOKMARK_FRAGMENT = "bookmarkFragment"
+const val NOTES_FRAGMENT = "notesFragment"
+const val INTRO_FRAGMENT = "introFragment"
+const val HISTORY_FRAGMENT = "historyFragment"
+const val LANGUAGE_FRAGMENT = "languageFragment"
+const val ZIM_HOST_FRAGMENT = "zimHostFragment"
+const val HELP_FRAGMENT = "helpFragment"
+const val SETTINGS_FRAGMENT = "settingsFragment"
+const val SEARCH_FRAGMENT = "searchFragment"
+const val LOCAL_FILE_TRANSFER_FRAGMENT = "localFileTransferFragment"
+
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val searchFragmentRoute: String
 
@@ -108,7 +125,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   protected val leftDrawerMenu = mutableStateListOf<DrawerMenuGroup>()
 
+  /**
+   * Manages the enabling/disabling the left drawer
+   */
   protected val enableLeftDrawer = mutableStateOf(true)
+
+  /**
+   * For managing the the showing/hiding the bottomAppBar when scrolling.
+   */
+  @OptIn(ExperimentalMaterial3Api::class)
+  lateinit var bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior
 
   // abstract val drawerContainerLayout: DrawerLayout
   // abstract val drawerNavView: NavigationView
@@ -319,6 +345,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   open fun disableDrawer(disableRightDrawer: Boolean = true) {
+    enableLeftDrawer.value = false
     // drawerToggle?.isDrawerIndicatorEnabled = false
     // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     // if (disableRightDrawer) {
@@ -424,8 +451,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  fun navigate(route: String) {
-    navController.navigate(route)
+  fun navigate(route: String, navOptions: NavOptions? = null) {
+    navController.navigate(route, navOptions)
   }
 
   fun navigate(fragmentId: Int, bundle: Bundle) {
@@ -446,29 +473,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(historyFragmentRoute)
   }
 
-  fun openSearch(
+  abstract fun openSearch(
     searchString: String = "",
     isOpenedFromTabView: Boolean = false,
     isVoice: Boolean = false
-  ) {
-    // navigate(
-    //   searchFragmentRoute,
-    //   bundleOf(
-    //     NAV_ARG_SEARCH_STRING to searchString,
-    //     TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
-    //     EXTRA_IS_WIDGET_VOICE to isVoice
-    //   )
-    // )
-  }
-
-  fun openZimFromFilePath(path: String) {
-    // navigate(
-    //   readerFragmentRoute,
-    //   bundleOf(
-    //     ZIM_FILE_URI_KEY to path,
-    //   )
-    // )
-  }
+  )
 
   fun openPage(
     pageUrl: String,
@@ -607,14 +616,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val readerFragmentRoute: String
   abstract fun createApplicationShortcuts()
   abstract fun setDialogHostToActivity(alertDialogShower: AlertDialogShower)
-
-  /**
-   * This is for showing and hiding the bottomNavigationView when user scroll the screen.
-   * We are making this abstract so that it can be easily used from the reader screen.
-   * Since we do not have the bottomNavigationView in custom apps. So doing this way both apps will
-   * provide there own implementation.
-   *
-   * TODO we will remove this once we will migrate mainActivity to the compose.
-   */
-  abstract fun toggleBottomNavigation(isVisible: Boolean)
+  abstract fun hideBottomAppBar()
+  abstract fun showBottomAppBar()
 }

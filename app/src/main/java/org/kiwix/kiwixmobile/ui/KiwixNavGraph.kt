@@ -18,26 +18,52 @@
 
 package org.kiwix.kiwixmobile.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.core.view.doOnAttach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.INTRO_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.LANGUAGE_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
+import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.help.KiwixHelpFragment
 import org.kiwix.kiwixmobile.intro.IntroFragment
 import org.kiwix.kiwixmobile.language.LanguageFragment
@@ -58,24 +84,47 @@ fun KiwixNavGraph(
     startDestination = KiwixDestination.Reader.route,
     modifier = modifier
   ) {
-    composable(KiwixDestination.Reader.route) {
+    composable(
+      route = KiwixDestination.Reader.route,
+      arguments = listOf(
+        navArgument(ZIM_FILE_URI_KEY) { type = NavType.StringType; defaultValue = "" },
+        navArgument(FIND_IN_PAGE_SEARCH_STRING) { type = NavType.StringType; defaultValue = "" },
+        navArgument(PAGE_URL_KEY) { type = NavType.StringType; defaultValue = "" },
+        navArgument(SHOULD_OPEN_IN_NEW_TAB) { type = NavType.BoolType; defaultValue = false },
+        navArgument(SEARCH_ITEM_TITLE_KEY) { type = NavType.StringType; defaultValue = "" }
+      )
+    ) { backStackEntry ->
+      val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
+      val findInPageSearchString =
+        backStackEntry.arguments?.getString(FIND_IN_PAGE_SEARCH_STRING).orEmpty()
+      val pageUrl = backStackEntry.arguments?.getString(PAGE_URL_KEY).orEmpty()
+      val shouldOpenInNewTab = backStackEntry.arguments?.getBoolean(SHOULD_OPEN_IN_NEW_TAB) ?: false
+      val searchItemTitle = backStackEntry.arguments?.getString(SEARCH_ITEM_TITLE_KEY).orEmpty()
+
       FragmentContainer {
         KiwixReaderFragment().apply {
           arguments = Bundle().apply {
-            putString("zimFileUri", "")
-            putString("findInPageSearchString", "")
-            putString("pageUrl", "")
-            putBoolean("shouldOpenInNewTab", false)
-            putString("searchItemTitle", "")
+            putString(ZIM_FILE_URI_KEY, zimFileUri)
+            putString(FIND_IN_PAGE_SEARCH_STRING, findInPageSearchString)
+            putString(PAGE_URL_KEY, pageUrl)
+            putBoolean(SHOULD_OPEN_IN_NEW_TAB, shouldOpenInNewTab)
+            putString(SEARCH_ITEM_TITLE_KEY, searchItemTitle)
           }
         }
       }
     }
-    composable(KiwixDestination.Library.route) {
+    composable(
+      route = KiwixDestination.Library.route,
+      arguments = listOf(
+        navArgument(ZIM_FILE_URI_KEY) { type = NavType.StringType; defaultValue = "" }
+      )
+    ) { backStackEntry ->
+      val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
+
       FragmentContainer {
         LocalLibraryFragment().apply {
           arguments = Bundle().apply {
-            putString("zimFileUri", "")
+            putString(ZIM_FILE_URI_KEY, zimFileUri)
           }
         }
       }
@@ -125,16 +174,51 @@ fun KiwixNavGraph(
         KiwixSettingsFragment()
       }
     }
-    composable(KiwixDestination.Search.route) {
+    composable(
+      route = KiwixDestination.Search.route,
+      arguments = listOf(
+        navArgument(NAV_ARG_SEARCH_STRING) { type = NavType.StringType; defaultValue = "" },
+        navArgument(TAG_FROM_TAB_SWITCHER) { type = NavType.BoolType; defaultValue = false },
+        navArgument(EXTRA_IS_WIDGET_VOICE) { type = NavType.BoolType; defaultValue = false }
+      )
+    ) { backStackEntry ->
+      val searchString = backStackEntry.arguments?.getString(NAV_ARG_SEARCH_STRING).orEmpty()
+      val isOpenedFromTabSwitcher =
+        backStackEntry.arguments?.getBoolean(TAG_FROM_TAB_SWITCHER) ?: false
+      val isVoice = backStackEntry.arguments?.getBoolean(EXTRA_IS_WIDGET_VOICE) ?: false
       FragmentContainer {
-        SearchFragment()
+        SearchFragment().apply {
+          arguments = Bundle().apply {
+            putString(NAV_ARG_SEARCH_STRING, searchString)
+            putBoolean(TAG_FROM_TAB_SWITCHER, isOpenedFromTabSwitcher)
+            putBoolean(EXTRA_IS_WIDGET_VOICE, isVoice)
+          }
+        }
       }
     }
-    composable(KiwixDestination.LocalFileTransfer.route) {
+    composable(
+      route = KiwixDestination.LocalFileTransfer.route,
+      arguments = listOf(
+        navArgument("uris") {
+          type = NavType.StringType
+          nullable = true
+          defaultValue = null
+        }
+      )
+    ) { backStackEntry ->
+      val urisParam = backStackEntry.arguments?.getString("uris")
+      val uris: List<Uri>? =
+        urisParam?.takeIf { it != "null" }?.split(",")?.map {
+          Uri.decode(it).toUri()
+        }
+
       FragmentContainer {
         LocalFileTransferFragment().apply {
           arguments = Bundle().apply {
-            putParcelableArray("uris", null)
+            putParcelableArray(
+              "uris",
+              uris?.toTypedArray()
+            )
           }
         }
       }
@@ -142,6 +226,7 @@ fun KiwixNavGraph(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FragmentContainer(
   fragmentProvider: () -> Fragment
@@ -170,17 +255,72 @@ fun FragmentContainer(
 }
 
 sealed class KiwixDestination(val route: String) {
-  object Reader : KiwixDestination("readerFragment")
-  object Library : KiwixDestination("libraryFragment")
-  object Downloads : KiwixDestination("downloadsFragment")
-  object Bookmarks : KiwixDestination("bookmarksFragment")
-  object Notes : KiwixDestination("notesFragment")
-  object Intro : KiwixDestination("introFragment")
-  object History : KiwixDestination("historyFragment")
-  object Language : KiwixDestination("languageFragment")
-  object ZimHost : KiwixDestination("zimHostFragment")
-  object Help : KiwixDestination("helpFragment")
-  object Settings : KiwixDestination("kiwixSettingsFragment")
-  object Search : KiwixDestination("searchFragment")
-  object LocalFileTransfer : KiwixDestination("localFileTransferFragment")
+  object Reader : KiwixDestination(
+    READER_FRAGMENT +
+      "?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}" +
+      "&$FIND_IN_PAGE_SEARCH_STRING={$FIND_IN_PAGE_SEARCH_STRING}" +
+      "&$PAGE_URL_KEY={$PAGE_URL_KEY}" +
+      "&$SHOULD_OPEN_IN_NEW_TAB={$SHOULD_OPEN_IN_NEW_TAB}" +
+      "&$SEARCH_ITEM_TITLE_KEY={$SEARCH_ITEM_TITLE_KEY}"
+  ) {
+    fun createRoute(
+      zimFileUri: String = "",
+      findInPageSearchString: String = "",
+      pageUrl: String = "",
+      shouldOpenInNewTab: Boolean = false,
+      searchItemTitle: String = ""
+    ): String {
+      return READER_FRAGMENT +
+        "?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}" +
+        "&$FIND_IN_PAGE_SEARCH_STRING=${Uri.encode(findInPageSearchString)}" +
+        "&$PAGE_URL_KEY=${Uri.encode(pageUrl)}" +
+        "&$SHOULD_OPEN_IN_NEW_TAB=$shouldOpenInNewTab" +
+        "&$SEARCH_ITEM_TITLE_KEY=${Uri.encode(searchItemTitle)}"
+    }
+  }
+
+  object Library :
+    KiwixDestination("$LOCAL_LIBRARY_FRAGMENT?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}") {
+    fun createRoute(zimFileUri: String = "") =
+      "$LOCAL_LIBRARY_FRAGMENT?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}"
+  }
+
+  object Downloads : KiwixDestination(DOWNLOAD_FRAGMENT)
+  object Bookmarks : KiwixDestination(BOOKMARK_FRAGMENT)
+  object Notes : KiwixDestination(NOTES_FRAGMENT)
+  object Intro : KiwixDestination(INTRO_FRAGMENT)
+  object History : KiwixDestination(HISTORY_FRAGMENT)
+  object Language : KiwixDestination(LANGUAGE_FRAGMENT)
+  object ZimHost : KiwixDestination(ZIM_HOST_FRAGMENT)
+  object Help : KiwixDestination(HELP_FRAGMENT)
+  object Settings : KiwixDestination(SETTINGS_FRAGMENT)
+  object Search : KiwixDestination(
+    SEARCH_FRAGMENT +
+      "?$NAV_ARG_SEARCH_STRING={$NAV_ARG_SEARCH_STRING}" +
+      "&$TAG_FROM_TAB_SWITCHER={$TAG_FROM_TAB_SWITCHER}" +
+      "&$EXTRA_IS_WIDGET_VOICE={$EXTRA_IS_WIDGET_VOICE}"
+  ) {
+    fun createRoute(
+      searchString: String = "",
+      isOpenedFromTabView: Boolean = false,
+      isVoice: Boolean = false
+    ): String {
+      return SEARCH_FRAGMENT +
+        "?$NAV_ARG_SEARCH_STRING=$searchString" +
+        "&$TAG_FROM_TAB_SWITCHER=$isOpenedFromTabView" +
+        "&$EXTRA_IS_WIDGET_VOICE=$isVoice"
+    }
+  }
+
+  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?uris={uris}") {
+    fun createRoute(uris: String? = null): String {
+      return if (uris != null)
+        "$LOCAL_FILE_TRANSFER_FRAGMENT?uris=${Uri.encode(uris)}"
+      else
+        "$LOCAL_FILE_TRANSFER_FRAGMENT?uris=null"
+    }
+  }
 }
+
+fun List<Uri>.toUriParam(): String =
+  joinToString(",") { Uri.encode(it.toString()) }

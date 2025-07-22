@@ -26,7 +26,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
@@ -41,7 +40,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
@@ -93,22 +92,14 @@ object ActivityExtensions {
     ViewModelProviders.of(this, viewModelFactory)
       .get(T::class.java)
 
-  fun Activity.navigate(action: NavDirections) {
-    coreMainActivity.navigate(action)
-  }
-
   val Activity.cachedComponent: CoreActivityComponent
     get() = coreMainActivity.cachedComponent
 
   fun Activity.setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) =
     coreMainActivity.setupDrawerToggle(shouldEnableRightDrawer)
 
-  fun Activity.navigate(route: String) {
-    coreMainActivity.navigate(route)
-  }
-
-  fun Activity.navigate(fragmentId: Int, bundle: Bundle) {
-    coreMainActivity.navigate(fragmentId, bundle)
+  fun Activity.navigate(route: String, navOptions: NavOptions? = null) {
+    coreMainActivity.navigate(route, navOptions)
   }
 
   fun Activity.popNavigationBackstack() {
