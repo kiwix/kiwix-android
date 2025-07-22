@@ -285,8 +285,16 @@ class CustomMainActivity : CoreMainActivity() {
     activityCustomMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
   }
 
-  override fun toggleBottomNavigation(isVisible: Boolean) {
-    // Do nothing as we do not have the bottomNavigationView in custom apps.
+  override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
+    // TODO implement when refactoring the custom app UI.
+  }
+
+  override fun hideBottomAppBar() {
+    // Do nothing since custom apps does not have the bottomAppBar.
+  }
+
+  override fun showBottomAppBar() {
+    // Do nothing since custom apps does not have the bottomAppBar.
   }
 
   // Outdated shortcut id(new_tab)

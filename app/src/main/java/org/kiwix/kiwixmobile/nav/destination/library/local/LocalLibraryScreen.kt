@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -49,7 +50,6 @@ import androidx.compose.ui.text.style.TextAlign
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
-import org.kiwix.kiwixmobile.core.main.reader.rememberScrollBehavior
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -60,7 +60,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FAB_ICON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
@@ -85,10 +84,9 @@ fun LocalLibraryScreen(
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit
 ) {
-  val (bottomNavHeight, lazyListState) =
-    rememberScrollBehavior(state.bottomNavigationHeight, listState)
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
@@ -105,7 +103,7 @@ fun LocalLibraryScreen(
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
-        .padding(bottom = bottomNavHeight.value)
+        .nestedScroll(bottomAppBarScrollBehaviour.nestedScrollConnection)
     ) { contentPadding ->
       SwipeRefreshLayout(
         isRefreshing = state.swipeRefreshItem.first,
@@ -130,7 +128,7 @@ fun LocalLibraryScreen(
             onClick,
             onLongClick,
             onMultiSelect,
-            lazyListState
+            listState
           )
         }
       }
@@ -178,7 +176,6 @@ private fun SelectFileButton(fabButtonClick: () -> Unit) {
   FloatingActionButton(
     onClick = fabButtonClick,
     modifier = Modifier
-      .padding(bottom = FAB_ICON_BOTTOM_MARGIN)
       .testTag(SELECT_FILE_BUTTON_TESTING_TAG),
     containerColor = Black,
     shape = MaterialTheme.shapes.extraLarge

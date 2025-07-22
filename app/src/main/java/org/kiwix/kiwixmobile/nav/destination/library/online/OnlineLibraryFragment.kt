@@ -34,6 +34,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -75,7 +76,6 @@ import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -244,14 +244,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
       val lazyListState = rememberLazyListState()
-      val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
-      LaunchedEffect(isBottomNavVisible) {
-        (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
-      }
       LaunchedEffect(Unit) {
         onlineLibraryScreenState.value.update {
           copy(
@@ -273,7 +270,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             contentDescription = string.open_drawer,
             onClick = { navigationIconClick(onlineLibraryScreenState.value.value.isSearchActive) }
           )
-        }
+        },
+        bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
       )
       DialogHost(alertDialogShower)
     }

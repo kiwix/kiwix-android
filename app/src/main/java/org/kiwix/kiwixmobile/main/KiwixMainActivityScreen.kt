@@ -60,10 +60,11 @@ fun KiwixMainActivityScreen(
   topLevelDestinationsRoute: Set<String>,
   leftDrawerState: DrawerState,
   uiCoroutineScope: CoroutineScope,
-  enableLeftDrawer: Boolean
+  enableLeftDrawer: Boolean,
+  shouldShowBottomAppBar: Boolean,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
-  val scrollingBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   KiwixTheme {
     ModalNavigationDrawer(
       drawerState = leftDrawerState,
@@ -77,16 +78,17 @@ fun KiwixMainActivityScreen(
       Box {
         Scaffold(
           bottomBar = {
-            if (navBackStackEntry?.destination?.route in topLevelDestinationsRoute) {
+            if (navBackStackEntry?.destination?.route in topLevelDestinationsRoute && shouldShowBottomAppBar) {
               BottomNavigationBar(
                 navController = navController,
-                scrollBehavior = scrollingBehavior,
+                bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
                 navBackStackEntry = navBackStackEntry,
                 leftDrawerState = leftDrawerState,
                 uiCoroutineScope = uiCoroutineScope
               )
             }
-          }
+          },
+          modifier = Modifier.fillMaxSize()
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
             KiwixNavGraph(
@@ -104,7 +106,7 @@ fun KiwixMainActivityScreen(
 @Composable
 fun BottomNavigationBar(
   navController: NavHostController,
-  scrollBehavior: BottomAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior,
   navBackStackEntry: NavBackStackEntry?,
   leftDrawerState: DrawerState,
   uiCoroutineScope: CoroutineScope
@@ -130,12 +132,14 @@ fun BottomNavigationBar(
   BottomAppBar(
     containerColor = Black,
     contentColor = White,
-    scrollBehavior = scrollBehavior
+    scrollBehavior = bottomAppBarScrollBehaviour
   ) {
     bottomNavItems.forEach { item ->
       NavigationBarItem(
         selected = currentDestinationRoute == item.route,
         onClick = {
+          // Do not load again fragment that is already loaded.
+          if (item.route == currentDestinationRoute) return@NavigationBarItem
           uiCoroutineScope.launch {
             leftDrawerState.close()
             navController.navigate(item.route)

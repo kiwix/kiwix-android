@@ -22,11 +22,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavOptions
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
 class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtensions {
@@ -58,7 +60,10 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   private fun navigateToLibrary() {
     presenter.setIntroShown()
-    findNavController().navigate(IntroFragmentDirections.actionIntrofragmentToLibraryFragment())
+    val navOptions = NavOptions.Builder()
+      .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
+      .build()
+    (requireActivity() as CoreMainActivity).navigate(KiwixDestination.Library.route, navOptions)
   }
 
   override fun onDestroyView() {

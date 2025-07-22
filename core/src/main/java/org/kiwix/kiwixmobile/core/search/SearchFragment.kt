@@ -226,7 +226,7 @@ class SearchFragment : BaseFragment() {
 
   private fun goBack() {
     val readerFragmentRoute = (activity as CoreMainActivity).readerFragmentRoute
-    findNavController().popBackStack(readerFragmentRoute, false)
+    (requireActivity() as CoreMainActivity).navController.popBackStack(readerFragmentRoute, false)
   }
 
   private fun getSearchListItemForQuery(query: String): SearchListItem? =

@@ -741,10 +741,10 @@ abstract class CoreReaderFragment :
   }
 
   private fun showTabSwitcher() {
-    (requireActivity() as CoreMainActivity).disableDrawer()
-    // Set a negative top margin to the web views to remove
-    // the unwanted blank space caused by the toolbar.
-    // setTopMarginToWebViews(-requireActivity().getToolbarHeight())
+    (requireActivity() as CoreMainActivity).apply {
+      disableDrawer()
+      hideBottomAppBar()
+    }
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     readerScreenState.update {
       copy(
@@ -787,6 +787,7 @@ abstract class CoreReaderFragment :
    */
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     setUpDrawerToggle()
+    (requireActivity() as CoreMainActivity).showBottomAppBar()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     readerScreenState.update {
       copy(
@@ -1569,7 +1570,10 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
-    (requireActivity() as CoreMainActivity).disableDrawer(false)
+    (requireActivity() as CoreMainActivity).apply {
+      disableDrawer(false)
+      hideBottomAppBar()
+    }
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = false,
@@ -1588,6 +1592,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   open fun closeFullScreen() {
     setUpDrawerToggle()
+    (requireActivity() as CoreMainActivity).showBottomAppBar()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
     updateBottomToolbarVisibility()
