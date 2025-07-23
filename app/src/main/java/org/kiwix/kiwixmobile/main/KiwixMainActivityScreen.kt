@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.main
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,6 +65,9 @@ fun KiwixMainActivityScreen(
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
+  val currentRoute = navBackStackEntry?.destination?.route
+  val shouldShowBottomBar = currentRoute in topLevelDestinationsRoute && shouldShowBottomAppBar
+  Log.e("CURRENT_DESTINATION", "KiwixMainActivityScreen: $currentRoute and $shouldShowBottomAppBar")
   KiwixTheme {
     ModalNavigationDrawer(
       drawerState = leftDrawerState,
@@ -73,12 +76,18 @@ fun KiwixMainActivityScreen(
           LeftDrawerMenu(leftDrawerContent)
         }
       },
-      gesturesEnabled = enableLeftDrawer && navBackStackEntry?.destination?.route in topLevelDestinationsRoute
+      gesturesEnabled = enableLeftDrawer &&
+        currentRoute in topLevelDestinationsRoute &&
+        // Fixing the webView scrolling is lagging when navigation gesture is enabled,
+        // since navigation consumes the swipes event makes webView lagging.
+        // However, on reader screen navigation drawer can be opened by clicking
+        // on the hamburger button.
+        (currentRoute != KiwixDestination.Reader.route || leftDrawerState.isOpen)
     ) {
       Box {
         Scaffold(
           bottomBar = {
-            if (navBackStackEntry?.destination?.route in topLevelDestinationsRoute && shouldShowBottomAppBar) {
+            if (shouldShowBottomBar) {
               BottomNavigationBar(
                 navController = navController,
                 bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
