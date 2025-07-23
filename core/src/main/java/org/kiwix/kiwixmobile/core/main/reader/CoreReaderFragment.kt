@@ -52,6 +52,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -424,6 +425,7 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @OptIn(ExperimentalMaterial3Api::class)
   @SuppressLint("ClickableViewAccessibility")
   @Suppress("LongMethod")
   override fun onViewCreated(
@@ -483,7 +485,8 @@ abstract class CoreReaderFragment :
               onClick = { navigationIconClick() },
               iconTint = navigationIconTint()
             )
-          }
+          },
+          bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -587,11 +590,6 @@ abstract class CoreReaderFragment :
     if (readerMenuState?.isInTabSwitcher == true) {
       onHomeMenuClicked()
     } else {
-      // Manually handle the navigation open/close.
-      // Since currently we are using the view based navigation drawer in other screens.
-      // Once we fully migrate to jetpack compose we will refactor this code to use the
-      // compose navigation.
-      // TODO Replace with compose based navigation when migration is done.
       val activity = activity as CoreMainActivity
       if (activity.navigationDrawerIsOpen()) {
         activity.closeNavigationDrawer()
@@ -788,6 +786,7 @@ abstract class CoreReaderFragment :
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     setUpDrawerToggle()
     (requireActivity() as CoreMainActivity).showBottomAppBar()
+    Log.e("SHOW_BOTTOM_APP", "hideTabSwitcher: ")
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     readerScreenState.update {
       copy(

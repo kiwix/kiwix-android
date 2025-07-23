@@ -54,13 +54,12 @@ import javax.inject.Inject
 private const val INITIAL_SCALE = 100
 
 @SuppressLint("ViewConstructor")
-@SuppressWarnings("LongParameterList")
 open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   context: Context,
   private val callback: WebViewCallback,
   attrs: AttributeSet,
   videoView: ViewGroup?,
-  private val webViewClient: CoreWebViewClient,
+  private val coreWebViewClient: CoreWebViewClient,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
@@ -99,7 +98,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     }
     setInitialScale(INITIAL_SCALE)
     clearCache(true)
-    setWebViewClient(webViewClient)
+    webViewClient = coreWebViewClient
     webChromeClient =
       KiwixWebChromeClient(callback, videoView, this).apply {
         setOnToggledFullscreen(
@@ -117,7 +116,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     val result = hitTestResult
     if (result.type == HitTestResult.SRC_ANCHOR_TYPE) {
       result.extra?.let {
-        if (!webViewClient.handleUnsupportedFiles(it)) {
+        if (!coreWebViewClient.handleUnsupportedFiles(it)) {
           callback.webViewLongClick(it)
         }
       }

@@ -89,6 +89,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -160,6 +161,7 @@ fun ReaderScreen(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
   onBottomScrollOffsetChanged: (Float) -> Unit,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit
 ) {
   val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
@@ -183,6 +185,7 @@ fun ReaderScreen(
       modifier = Modifier
         .systemBarsPadding()
         .padding(bottom = bottomNavHeightInDp)
+        .nestedScroll(bottomAppBarScrollBehaviour.nestedScrollConnection)
         .semantics { testTag = READER_SCREEN_TESTING_TAG }
     ) { paddingValues ->
       ReaderContentLayout(

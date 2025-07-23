@@ -43,7 +43,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.room.util.copy
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
@@ -59,6 +59,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
@@ -151,21 +152,12 @@ class KiwixMainActivity : CoreMainActivity() {
       }
       DialogHost(alertDialogShower)
     }
-    // activityKiwixMainBinding.drawerNavView.apply {
-    //   setupWithNavController(navController)
-    //   setNavigationItemSelectedListener { item ->
-    //     closeNavigationDrawer()
-    //     onNavigationItemSelected(item)
-    //   }
-    // }
-    // activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
     }
     handleZimFileIntent(intent)
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
-    // activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {
@@ -200,7 +192,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
-    Log.e("CONFIGURATION", "onConfigurationChanged: ")
     leftDrawerMenu.clear()
     leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
@@ -361,11 +352,12 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun hideBottomAppBar() {
-    shouldShowBottomAppBar.value = false
+    shouldShowBottomAppBar.update { false }
   }
 
   override fun showBottomAppBar() {
-    shouldShowBottomAppBar.value = true
+    Log.e("SHOW_BOTTOM_APP", "showBottomAppBar: ")
+    shouldShowBottomAppBar.update { true }
   }
 
   // Outdated shortcut ids(new_tab, get_content)
