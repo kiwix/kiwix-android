@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Vlad5250
+* Winston Sung
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Vaš sustav ne podržava datoteke veće od 4GB.</string>
