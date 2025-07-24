@@ -82,7 +82,7 @@
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
   <string name="pref_language_title">語言</string>
   <string name="pref_language_chooser">選擇語言</string>
-  <string name="pref_credits">貢獻者和許可協議</string>
+  <string name="pref_credits">貢獻者和授權條款</string>
   <string name="pref_credits_title">參與名單</string>
   <string name="tts_lang_not_supported">本頁面不支援這個語言。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
@@ -174,6 +174,7 @@
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下載？</string>
   <string name="confirm_stop_download_msg">您確定要取消此次下載？</string>
+  <string name="change_storage">更改</string>
   <string name="tts_not_enabled">朗讀無法用在此 ZIM 檔案上</string>
   <string name="texttospeech_initialization_failed">朗讀初始化失敗，請重試</string>
   <string name="texttospeech_error">朗讀出現意外錯誤，請重試</string>
@@ -195,6 +196,7 @@
   <string name="external_link_popup_dialog_message">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。\n您要繼續嗎？</string>
   <string name="do_not_ask_anymore">不再詢問</string>
   <string name="your_languages">所選語言：</string>
+  <string name="your_language">已選語言：%s</string>
   <string name="other_languages">其它語言：</string>
   <string name="downloading">正在下載：</string>
   <string name="no_items_msg">沒有可用的項目</string>
@@ -223,7 +225,10 @@
   <string name="go_to_previous_page">前往上一頁</string>
   <string name="go_to_next_page">前往下一頁</string>
   <string name="table_of_contents">目次</string>
+  <string name="select_language">選擇語言</string>
   <string name="save_languages">儲存語言</string>
+  <string name="all_languages">所有語言</string>
+  <string name="no_language_available">沒有可用的語言</string>
   <string name="expand">展開</string>
   <string name="history">歷史</string>
   <string name="history_from_current_book">檢視來自目前書籍的歷史</string>
