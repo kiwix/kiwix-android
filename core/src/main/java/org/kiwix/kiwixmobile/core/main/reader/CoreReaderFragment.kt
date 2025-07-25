@@ -475,9 +475,6 @@ abstract class CoreReaderFragment :
         ReaderScreen(
           state = readerScreenState.value,
           actionMenuItems = readerMenuState?.menuItems.orEmpty(),
-          onBottomScrollOffsetChanged = { offset ->
-            updateNavigationBarHeight(offset)
-          },
           navigationIcon = {
             NavigationIcon(
               iconItem = navigationIcon(),
@@ -486,7 +483,7 @@ abstract class CoreReaderFragment :
               iconTint = navigationIconTint()
             )
           },
-          bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
+          mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -541,17 +538,6 @@ abstract class CoreReaderFragment :
       viewLifecycleOwner,
       Observer(::storeSearchItem)
     )
-  }
-
-  /**
-   * This method is for hiding the KiwixMainActivity bottomNavigationView.
-   * In custom apps we do not have the bottomnavigationView so that's why this method is empty here.
-   *
-   * See the implementation in KiwixReaderFragment.
-   * TODO refactore this when migrating the KiwixMainActivity in compose.
-   */
-  open fun updateNavigationBarHeight(toolbarOffset: Float) {
-    // Do nothing since in custom apps we do not have the bottomNavigationView.
   }
 
   private fun getVideoView() = context?.let {

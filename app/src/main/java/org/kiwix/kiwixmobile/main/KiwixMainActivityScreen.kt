@@ -62,7 +62,7 @@ fun KiwixMainActivityScreen(
   uiCoroutineScope: CoroutineScope,
   enableLeftDrawer: Boolean,
   shouldShowBottomAppBar: Boolean,
-  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -115,7 +115,7 @@ fun KiwixMainActivityScreen(
 @Composable
 fun BottomNavigationBar(
   navController: NavHostController,
-  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navBackStackEntry: NavBackStackEntry?,
   leftDrawerState: DrawerState,
   uiCoroutineScope: CoroutineScope

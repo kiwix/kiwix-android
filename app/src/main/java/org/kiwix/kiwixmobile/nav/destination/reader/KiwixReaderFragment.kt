@@ -293,16 +293,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun updateNavigationBarHeight(toolbarOffset: Float) {
-    // if no  activity exist simply return.
-    if (activity == null) return
-    // activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_view)?.let { view ->
-    //   val toolbarHeightPx = activity?.getToolbarHeight() ?: 0f
-    //   val offsetFactor = view.height / toolbarHeightPx.toFloat()
-    //   view.translationY = -1 * toolbarOffset * offsetFactor
-    // }
-  }
-
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
     isFullScreenVideo = isFullScreen
     if (isFullScreenVideo) {

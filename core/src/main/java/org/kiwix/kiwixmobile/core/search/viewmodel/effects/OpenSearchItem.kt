@@ -24,6 +24,7 @@ import kotlinx.parcelize.Parcelize
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.reader.addContentPrefix
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -34,11 +35,9 @@ data class OpenSearchItem(
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     val readerFragmentRoute = (activity as CoreMainActivity).readerFragmentRoute
-    // TODO fix this when properly migrated to compose navigation.
-    // activity.navigate(
-    //   readerFragmentRoute,
-    //   bundleOf(SEARCH_ITEM_TITLE_KEY to SEARCH_ITEM_TITLE_KEY)
-    // )
+    activity.navigate(
+      "$readerFragmentRoute?$SEARCH_ITEM_TITLE_KEY=$SEARCH_ITEM_TITLE_KEY"
+    )
     activity.setNavigationResultOnCurrent(
       SearchItemToOpen(
         searchListItem.value,

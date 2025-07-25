@@ -43,7 +43,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
-import androidx.room.util.copy
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
@@ -112,7 +111,6 @@ class KiwixMainActivity : CoreMainActivity() {
     )
 
   private val shouldShowBottomAppBar = mutableStateOf(true)
-  // private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
 
   private var isIntroScreenVisible: Boolean = false
 
