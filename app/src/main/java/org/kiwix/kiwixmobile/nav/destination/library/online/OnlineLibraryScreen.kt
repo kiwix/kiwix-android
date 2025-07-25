@@ -98,7 +98,7 @@ fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
-  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -117,7 +117,11 @@ fun OnlineLibraryScreen(
       },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
-        .nestedScroll(bottomAppBarScrollBehaviour.nestedScrollConnection)
+        .let { baseModifier ->
+          bottomAppBarScrollBehaviour?.let {
+            baseModifier.nestedScroll(it.nestedScrollConnection)
+          } ?: baseModifier
+        }
     ) { paddingValues ->
       SwipeRefreshLayout(
         isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,

@@ -134,7 +134,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * For managing the the showing/hiding the bottomAppBar when scrolling.
    */
   @OptIn(ExperimentalMaterial3Api::class)
-  lateinit var bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior
+  var bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior? = null
 
   // abstract val drawerContainerLayout: DrawerLayout
   // abstract val drawerNavView: NavigationView

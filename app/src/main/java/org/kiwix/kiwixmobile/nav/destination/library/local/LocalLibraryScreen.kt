@@ -84,7 +84,7 @@ fun LocalLibraryScreen(
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
-  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -103,7 +103,11 @@ fun LocalLibraryScreen(
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
-        .nestedScroll(bottomAppBarScrollBehaviour.nestedScrollConnection)
+        .let { baseModifier ->
+          bottomAppBarScrollBehaviour?.let {
+            baseModifier.nestedScroll(it.nestedScrollConnection)
+          } ?: baseModifier
+        }
     ) { contentPadding ->
       SwipeRefreshLayout(
         isRefreshing = state.swipeRefreshItem.first,
