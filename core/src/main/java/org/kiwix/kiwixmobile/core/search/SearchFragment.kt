@@ -29,7 +29,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -225,8 +224,8 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun goBack() {
-    val readerFragmentResId = (activity as CoreMainActivity).readerFragmentResId
-    findNavController().popBackStack(readerFragmentResId, false)
+    val readerFragmentRoute = (activity as CoreMainActivity).readerFragmentRoute
+    (requireActivity() as CoreMainActivity).navController.popBackStack(readerFragmentRoute, false)
   }
 
   private fun getSearchListItemForQuery(query: String): SearchListItem? =

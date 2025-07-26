@@ -19,12 +19,11 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
+import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.ui.toUriParam
 
 data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
   SideEffect<Unit> {
@@ -34,8 +33,7 @@ data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
         it.zimReaderSource.getUri(activity)
       }
     activity.navigate(
-      R.id.localFileTransferFragment,
-      bundleOf(URIS_KEY to selectedFileContentURIs.toTypedArray())
+      KiwixDestination.LocalFileTransfer.createRoute(uris = selectedFileContentURIs.toUriParam())
     )
   }
 }

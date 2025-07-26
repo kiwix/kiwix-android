@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -272,7 +271,8 @@ class CustomReaderFragment : CoreReaderFragment() {
       },
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
-          findNavController().navigate(R.id.customDownloadFragment)
+          // TODO refactor this when migrating the custom app in compose
+          // (requireActivity() as CoreMainActivity).navigate(R.id.customDownloadFragment)
         }
       }
     )

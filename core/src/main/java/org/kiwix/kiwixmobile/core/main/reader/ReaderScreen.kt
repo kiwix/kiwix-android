@@ -27,7 +27,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
@@ -42,6 +44,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,7 +52,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -69,6 +72,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -89,6 +93,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -108,16 +113,16 @@ import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
-import org.kiwix.kiwixmobile.core.ui.components.ScrollDirection
-import org.kiwix.kiwixmobile.core.ui.components.rememberLazyListScrollListener
+import org.kiwix.kiwixmobile.core.ui.components.TWELVE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
@@ -134,6 +139,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
@@ -144,6 +150,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
@@ -159,15 +166,14 @@ const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
 fun ReaderScreen(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  onBottomScrollOffsetChanged: (Float) -> Unit,
+  showTableOfContentDrawer: MutableState<Boolean>,
+  documentSections: MutableList<DocumentSection>?,
+  mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
   val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
   val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
-  LaunchedEffect(bottomAppBarScrollBehavior.state.heightOffset) {
-    onBottomScrollOffsetChanged(bottomAppBarScrollBehavior.state.heightOffset)
-  }
   KiwixDialogTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
@@ -183,14 +189,43 @@ fun ReaderScreen(
       modifier = Modifier
         .systemBarsPadding()
         .padding(bottom = bottomNavHeightInDp)
+        .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+        .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
+        .let { baseModifier ->
+          mainActivityBottomAppBarScrollBehaviour?.let {
+            baseModifier.nestedScroll(it.nestedScrollConnection)
+          } ?: baseModifier
+        }
         .semantics { testTag = READER_SCREEN_TESTING_TAG }
     ) { paddingValues ->
-      ReaderContentLayout(
-        state,
-        Modifier.padding(paddingValues),
-        bottomAppBarScrollBehavior,
-        topAppBarScrollBehavior
-      )
+      Box(Modifier.fillMaxSize()) {
+        ReaderContentLayout(
+          state,
+          Modifier.padding(paddingValues),
+          bottomAppBarScrollBehavior
+        )
+        AnimatedVisibility(
+          visible = showTableOfContentDrawer.value,
+          enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+          exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
+          modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+          TableDrawerSheet(
+            title = state.tableOfContentTitle,
+            sections = documentSections.orEmpty(),
+            onHeaderClick = state.tableContentHeaderClick,
+            onSectionClick = state.tableOfContentSectionClick
+          )
+        }
+        if (showTableOfContentDrawer.value) {
+          Box(
+            Modifier
+              .fillMaxSize()
+              .background(Color.Black.copy(alpha = 0.3f))
+              .clickable { showTableOfContentDrawer.update { false } }
+          )
+        }
+      }
     }
   }
 }
@@ -221,8 +256,7 @@ private fun ReaderTopBar(
 private fun ReaderContentLayout(
   state: ReaderScreenState,
   modifier: Modifier = Modifier,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
-  topAppBarScrollBehavior: TopAppBarScrollBehavior
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state)
@@ -232,7 +266,7 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(state, bottomAppBarScrollBehavior, topAppBarScrollBehavior)
+          ShowZIMFileContent(state)
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
@@ -252,6 +286,45 @@ private fun ReaderContentLayout(
             state.onExitFullscreenClick
           )
         }
+      }
+    }
+  }
+}
+
+@Composable
+fun TableDrawerSheet(
+  title: String,
+  sections: List<DocumentSection>,
+  onHeaderClick: () -> Unit,
+  onSectionClick: (Int) -> Unit
+) {
+  ModalDrawerSheet(
+    modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH)
+  ) {
+    LazyColumn(
+      modifier = Modifier
+        .fillMaxHeight()
+    ) {
+      item {
+        Text(
+          text = title.ifEmpty { stringResource(id = R.string.no_section_info) },
+          style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onHeaderClick() }
+            .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
+        )
+      }
+      itemsIndexed(sections) { index, section ->
+        val paddingStart = (section.level - ONE) * TWELVE
+        Text(
+          text = section.title,
+          style = MaterialTheme.typography.bodyMedium,
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onSectionClick(index) }
+            .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
+        )
       }
     }
   }
@@ -360,37 +433,41 @@ private fun BoxScope.CloseFullScreenImageButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowZIMFileContent(
-  state: ReaderScreenState,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
-  topAppBarScrollBehavior: TopAppBarScrollBehavior
-) {
+private fun ShowZIMFileContent(state: ReaderScreenState) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
-      AndroidView(
-        factory = { context ->
-          // Create a new container and add the WebView to it
-          FrameLayout(context).apply {
-            // Ensure the WebView has no parent before adding
-            (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
-            selectedWebView.setOnScrollChangeListener(null)
-            selectedWebView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-              val deltaY = (scrollY - oldScrollY).toFloat()
-              if (deltaY == 0f) return@setOnScrollChangeListener
-              // SAFELY drive top and bottom app bars
-              topAppBarScrollBehavior.state.heightOffset -= deltaY
-              bottomAppBarScrollBehavior.state.heightOffset -= deltaY
-            }
-            selectedWebView.layoutParams = FrameLayout.LayoutParams(
-              FrameLayout.LayoutParams.MATCH_PARENT,
-              FrameLayout.LayoutParams.MATCH_PARENT
-            )
-            addView(selectedWebView)
-          }
-        },
+      ScrollableWebViewWithNestedScroll(
+        selectedWebView = selectedWebView,
         modifier = Modifier.fillMaxSize()
       )
     }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ScrollableWebViewWithNestedScroll(
+  selectedWebView: KiwixWebView,
+  modifier: Modifier = Modifier
+) {
+  Box(
+    modifier = modifier
+      .fillMaxSize()
+      .verticalScroll(rememberScrollState())
+  ) {
+    AndroidView(
+      factory = { context ->
+        FrameLayout(context).apply {
+          (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
+          selectedWebView.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+          addView(selectedWebView)
+        }
+      },
+      modifier = Modifier.fillMaxSize(),
+    )
   }
 }
 
@@ -821,34 +898,9 @@ fun getTabCardSize(toolbarHeightDp: Dp): Pair<Dp, Dp> {
   return cardWidth to cardHeight
 }
 
-@Composable
-fun rememberScrollBehavior(
-  bottomNavigationHeight: Int,
-  listState: LazyListState,
-): Pair<MutableState<Dp>, LazyListState> {
-  val bottomNavHeightInDp = with(LocalDensity.current) { bottomNavigationHeight.toDp() }
-  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
-  val lazyListState = rememberLazyListScrollListener(
-    lazyListState = listState,
-    onScrollChanged = { direction ->
-      when (direction) {
-        ScrollDirection.SCROLL_UP -> {
-          bottomNavHeight.value = bottomNavHeightInDp
-        }
-
-        ScrollDirection.SCROLL_DOWN -> {
-          bottomNavHeight.value = ZERO.dp
-        }
-
-        ScrollDirection.IDLE -> {}
-      }
-    }
-  )
-
-  return bottomNavHeight to lazyListState
-}
-
 interface TabClickListener {
   fun onSelectTab(position: Int)
   fun onCloseTab(position: Int)
 }
+
+data class DocumentSection(var title: String, var id: String, var level: Int)

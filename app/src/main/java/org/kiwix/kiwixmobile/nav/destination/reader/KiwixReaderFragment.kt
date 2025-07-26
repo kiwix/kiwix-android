@@ -24,15 +24,13 @@ import android.os.Looper
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -40,9 +38,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
-import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -55,12 +51,12 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
-import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 
 class KiwixReaderFragment : CoreReaderFragment() {
@@ -76,9 +72,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val activity = activity as CoreMainActivity
     readerScreenState.update {
       copy(onOpenLibraryButtonClicked = {
-        activity.navigate(
-          KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
-        )
+        val navOptions = NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
+          .build()
+        activity.navigate(KiwixDestination.Library.route, navOptions)
       })
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -151,8 +148,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun loadDrawerViews() {
-    drawerLayout = requireActivity().findViewById(R.id.navigation_container)
-    tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
+    // drawerLayout = requireActivity().findViewById(R.id.navigation_container)
+    // tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
   }
 
   override fun openHomeScreen() {
@@ -178,6 +175,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
    */
   override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
     activity?.setupDrawerToggle(true)
+    (requireActivity() as CoreMainActivity).showBottomAppBar()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (webViewList.isEmpty()) {
       readerMenuState?.hideTabSwitcher()
@@ -197,23 +195,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
       selectTab(currentWebViewIndex)
     }
   }
-
-  private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
-    val bottomNavigationView =
-      requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-    bottomNavigationView?.let {
-      setBottomMarginToNavHostContainer(
-        bottomNavigationView.measuredHeight
-      )
-    }
-  }
-
-  // override fun onPause() {
-  //   super.onPause()
-  //   // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
-  //   // this resets the margin to zero, before fragment navigation.
-  //   setBottomMarginToNavHostContainer(ZERO)
-  // }
 
   @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -240,8 +221,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     exitBook()
   }
 
-  override fun getBottomNavigationView(): BottomNavigationView? =
-    requireActivity().findViewById(R.id.bottom_nav_view)
+  override fun getBottomNavigationView(): BottomNavigationView? = null
+  // requireActivity().findViewById(R.id.bottom_nav_view)
 
   /**
    * Restores the view state based on the provided webViewHistoryItemList data and restore origin.
@@ -296,16 +277,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun updateNavigationBarHeight(toolbarOffset: Float) {
-    // if no  activity exist simply return.
-    if (activity == null) return
-    activity?.findViewById<BottomNavigationView>(R.id.bottom_nav_view)?.let { view ->
-      val toolbarHeightPx = activity?.getToolbarHeight() ?: 0f
-      val offsetFactor = view.height / toolbarHeightPx.toFloat()
-      view.translationY = -1 * toolbarOffset * offsetFactor
-    }
-  }
-
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
     isFullScreenVideo = isFullScreen
     if (isFullScreenVideo) {
@@ -324,28 +295,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun closeFullScreen() {
     super.closeFullScreen()
     showNavBar()
-    setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   private fun hideNavBar() {
-    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = GONE
-    setBottomMarginToNavHostContainer(0)
+    (requireActivity() as CoreMainActivity).hideBottomAppBar()
   }
 
   private fun showNavBar() {
     // show the navBar if fullScreenMode is not active.
     if (!isInFullScreenMode()) {
-      requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility =
-        VISIBLE
+      (requireActivity() as CoreMainActivity).showBottomAppBar()
     }
   }
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  private fun setBottomMarginToNavHostContainer(margin: Int) {
-    coreMainActivity.navHostContainer
-      .setBottomMarginToFragmentContainerView(margin)
   }
 }

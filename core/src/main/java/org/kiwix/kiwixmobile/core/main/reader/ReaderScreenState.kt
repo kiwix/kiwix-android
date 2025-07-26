@@ -168,5 +168,17 @@ data class ReaderScreenState(
   /**
    * Handles the click when user clicks on "Later" button in donation layout.
    */
-  val laterButtonClick: () -> Unit
+  val laterButtonClick: () -> Unit,
+  /**
+   * Manages the showing of header title of "table of content".
+   */
+  val tableOfContentTitle: String,
+  /**
+   * Handles the click when user clicks on the "Header" of "table of content".
+   */
+  val tableContentHeaderClick: () -> Unit,
+  /**
+   * Handles the click when user clicks on the "section" of "table of content".
+   */
+  val tableOfContentSectionClick: (Int) -> Unit
 )
