@@ -62,6 +62,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -71,10 +72,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -124,9 +123,6 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
-import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter
-import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
-import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
@@ -199,7 +195,6 @@ abstract class CoreReaderFragment :
   private val webUrlsFlow = MutableStateFlow("")
 
   var drawerLayout: DrawerLayout? = null
-  protected var tableDrawerRightContainer: NavigationView? = null
 
   @JvmField
   @Inject
@@ -256,7 +251,7 @@ abstract class CoreReaderFragment :
   @Inject
   var unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler? = null
   private var hideBackToTopTimer: CountDownTimer? = null
-  private val documentSections: MutableList<DocumentSection>? = ArrayList()
+  private val documentSections: SnapshotStateList<DocumentSection>? = mutableStateListOf()
   private var isBackToTopEnabled = false
   private var isOpenNewTabInBackground = false
   private var documentParserJs: String? = null
@@ -269,8 +264,6 @@ abstract class CoreReaderFragment :
   private val tempWebViewListForUndo: MutableList<KiwixWebView> = ArrayList()
   private var tempZimSourceForUndo: ZimReaderSource? = null
   private var isFirstRun = false
-  private var tableDrawerAdapter: TableDrawerAdapter? = null
-  private var tableDrawerRight: RecyclerView? = null
   private var bookmarkingJob: Job? = null
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
@@ -279,6 +272,7 @@ abstract class CoreReaderFragment :
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
+  private var shouldTableOfContentDrawer = mutableStateOf(false)
 
   protected var readerMenuState: ReaderMenuState? = null
   private var composeView: ComposeView? = null
@@ -296,7 +290,7 @@ abstract class CoreReaderFragment :
       onExitFullscreenClick = { closeFullScreen() },
       showTtsControls = false,
       onPauseTtsClick = { pauseTts() },
-      pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty(),
+      pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty(),
       onStopTtsClick = { stopTts() },
       kiwixWebViewList = webViewList,
       bookmarkButtonItem = Triple(
@@ -335,7 +329,10 @@ abstract class CoreReaderFragment :
       },
       appName = "",
       donateButtonClick = {},
-      laterButtonClick = {}
+      laterButtonClick = {},
+      tableOfContentTitle = "",
+      tableContentHeaderClick = { tableOfContentHeaderClick() },
+      tableOfContentSectionClick = { tableOfContentSectionClick(it) },
     )
   )
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -362,12 +359,12 @@ abstract class CoreReaderFragment :
            *  2) Permission has been disabled on device
            */
           requireActivity().toast(
-            R.string.ext_storage_permission_rationale_add_note,
+            string.ext_storage_permission_rationale_add_note,
             Toast.LENGTH_LONG
           )
         } else {
           requireActivity().toast(
-            R.string.ext_storage_write_permission_denied_add_note,
+            string.ext_storage_write_permission_denied_add_note,
             Toast.LENGTH_LONG
           )
           alertDialogShower?.show(
@@ -447,7 +444,7 @@ abstract class CoreReaderFragment :
           readerScreenState.update {
             copy(
               bottomNavigationHeight = getBottomNavigationHeight(),
-              readerScreenTitle = context.getString(R.string.reader),
+              readerScreenTitle = context.getString(string.reader),
               darkModeViewPainter = darkModeViewPainter,
               fullScreenItem = fullScreenItem.first to getVideoView(),
               tocButtonItem = getTocButtonStateAndAction(),
@@ -483,7 +480,9 @@ abstract class CoreReaderFragment :
               iconTint = navigationIconTint()
             )
           },
-          mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
+          mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
+          documentSections = documentSections,
+          showTableOfContentDrawer = shouldTableOfContentDrawer,
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -497,10 +496,7 @@ abstract class CoreReaderFragment :
     handleLocaleCheck()
     initHideBackToTopTimer()
     loadDrawerViews()
-    tableDrawerRight =
-      tableDrawerRightContainer?.getHeaderView(0)?.findViewById(R.id.right_drawer_list)
     addFileReader()
-    setTableDrawerInfo()
     activity?.let {
       compatCallback = CompatFindActionModeCallback(it)
     }
@@ -567,7 +563,7 @@ abstract class CoreReaderFragment :
 
   private fun navigationIconContentDescription() =
     if (readerMenuState?.isInTabSwitcher == true) {
-      R.string.search_open_in_new_tab
+      string.search_open_in_new_tab
     } else {
       string.open_drawer
     }
@@ -665,29 +661,15 @@ abstract class CoreReaderFragment :
         sections: List<DocumentSection>
       ) {
         if (isAdded) {
-          documentSections?.let {
-            it.addAll(sections)
-            tableDrawerAdapter?.setTitle(title)
-            tableDrawerAdapter?.setSections(it)
-            tableDrawerAdapter?.notifyDataSetChanged()
-          }
+          documentSections?.addAll(sections)
+          readerScreenState.update { copy(tableOfContentTitle = title) }
         }
       }
 
       override fun clearSections() {
         documentSections?.clear()
-        tableDrawerAdapter?.notifyDataSetChanged()
       }
     })
-  }
-
-  private fun setTableDrawerInfo() {
-    tableDrawerRight?.apply {
-      layoutManager = LinearLayoutManager(requireActivity())
-      tableDrawerAdapter = setupTableDrawerAdapter()
-      adapter = tableDrawerAdapter
-      tableDrawerAdapter?.notifyDataSetChanged()
-    }
   }
 
   private fun addFileReader() {
@@ -695,24 +677,20 @@ abstract class CoreReaderFragment :
     documentSections?.clear()
   }
 
-  private fun setupTableDrawerAdapter(): TableDrawerAdapter {
-    return TableDrawerAdapter(object : TableClickListener {
-      override fun onHeaderClick(view: View?) {
-        getCurrentWebView()?.scrollY = 0
-        drawerLayout?.closeDrawer(GravityCompat.END)
-      }
+  private fun tableOfContentHeaderClick() {
+    getCurrentWebView()?.scrollY = 0
+    shouldTableOfContentDrawer.update { false }
+  }
 
-      override fun onSectionClick(view: View?, position: Int) {
-        if (hasItemForPositionInDocumentSectionsList(position)) { // Bug Fix #3796
-          loadUrlWithCurrentWebview(
-            "javascript:document.getElementById('" +
-              documentSections?.get(position)?.id?.replace("'", "\\'") +
-              "').scrollIntoView();"
-          )
-        }
-        drawerLayout?.closeDrawers()
-      }
-    })
+  private fun tableOfContentSectionClick(position: Int) {
+    if (hasItemForPositionInDocumentSectionsList(position)) { // Bug Fix #3796
+      loadUrlWithCurrentWebview(
+        "javascript:document.getElementById('" +
+          documentSections?.get(position)?.id?.replace("'", "\\'") +
+          "').scrollIntoView();"
+      )
+    }
+    shouldTableOfContentDrawer.update { false }
   }
 
   private fun hasItemForPositionInDocumentSectionsList(position: Int): Boolean {
@@ -772,7 +750,6 @@ abstract class CoreReaderFragment :
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     setUpDrawerToggle()
     (requireActivity() as CoreMainActivity).showBottomAppBar()
-    Log.e("SHOW_BOTTOM_APP", "hideTabSwitcher: ")
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     readerScreenState.update {
       copy(
@@ -862,9 +839,9 @@ abstract class CoreReaderFragment :
        **/
       val dialogFragment = NavigationHistoryDialog(
         if (isForwardHistory) {
-          R.string.forward_history
+          string.forward_history
         } else {
-          R.string.backward_history
+          string.backward_history
         },
         navigationHistoryList,
         this
@@ -885,7 +862,7 @@ abstract class CoreReaderFragment :
       repositoryActions?.clearWebViewPageHistory()
     }
     updateBottomToolbarArrowsAlpha()
-    toast(R.string.navigation_history_cleared)
+    toast(string.navigation_history_cleared)
   }
 
   @Suppress("MagicNumber")
@@ -900,7 +877,7 @@ abstract class CoreReaderFragment :
   }
 
   protected fun openToc() {
-    drawerLayout?.openDrawer(GravityCompat.END)
+    shouldTableOfContentDrawer.update { true }
   }
 
   @Suppress("ReturnCount", "NestedBlockDepth")
@@ -1029,7 +1006,7 @@ abstract class CoreReaderFragment :
                 readerScreenState.update {
                   copy(
                     showTtsControls = false,
-                    pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty()
+                    pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty()
                   )
                 }
                 setActionAndStartTTSService(ACTION_STOP_TTS)
@@ -1048,14 +1025,14 @@ abstract class CoreReaderFragment :
                 AudioManager.AUDIOFOCUS_LOSS -> {
                   if (tts?.currentTTSTask?.paused == false) tts?.pauseOrResume()
                   readerScreenState.update {
-                    copy(pauseTtsButtonText = context?.getString(R.string.tts_resume).orEmpty())
+                    copy(pauseTtsButtonText = context?.getString(string.tts_resume).orEmpty())
                   }
                   setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
                 }
 
                 AudioManager.AUDIOFOCUS_GAIN -> {
                   readerScreenState.update {
-                    copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
+                    copy(pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty())
                   }
                   setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
                 }
@@ -1090,13 +1067,13 @@ abstract class CoreReaderFragment :
       if (it.paused) {
         tts?.pauseOrResume()
         readerScreenState.update {
-          copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
+          copy(pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty())
         }
         setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
       } else {
         tts?.pauseOrResume()
         readerScreenState.update {
-          copy(pauseTtsButtonText = context?.getString(R.string.tts_resume).orEmpty())
+          copy(pauseTtsButtonText = context?.getString(string.tts_resume).orEmpty())
         }
         setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
       }
@@ -1135,8 +1112,6 @@ abstract class CoreReaderFragment :
     hideBackToTopTimer?.cancel()
     hideBackToTopTimer = null
     stopOngoingLoadingAndClearWebViewList()
-    tableDrawerRight?.adapter = null
-    tableDrawerAdapter = null
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
     deleteCachedFiles(requireActivity())
@@ -1166,7 +1141,6 @@ abstract class CoreReaderFragment :
     compatCallback?.finish()
     compatCallback = null
     drawerLayout = null
-    tableDrawerRightContainer = null
   }
 
   private fun updateTableOfContents() {
@@ -1281,8 +1255,8 @@ abstract class CoreReaderFragment :
       currentWebViewIndex--
     }
     readerScreenState.value.snackBarHostState.snack(
-      requireActivity().getString(R.string.tab_closed),
-      actionLabel = requireActivity().getString(R.string.undo),
+      requireActivity().getString(string.tab_closed),
+      actionLabel = requireActivity().getString(string.undo),
       actionClick = { restoreDeletedTab(index) },
       lifecycleScope = lifecycleScope,
       snackBarResult = { result ->
@@ -1307,7 +1281,7 @@ abstract class CoreReaderFragment :
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = false,
-        readerScreenTitle = context?.getString(R.string.reader).orEmpty()
+        readerScreenTitle = context?.getString(string.reader).orEmpty()
       )
     }
     hideProgressBar()
@@ -1342,7 +1316,7 @@ abstract class CoreReaderFragment :
     tempWebViewForUndo?.let {
       webViewList.add(index, it)
       readerScreenState.value.snackBarHostState.snack(
-        context?.getString(R.string.tab_restored).orEmpty(),
+        context?.getString(string.tab_restored).orEmpty(),
         lifecycleScope = lifecycleScope
       )
       setUpWithTextToSpeech(it)
@@ -1421,7 +1395,7 @@ abstract class CoreReaderFragment :
           hideBackToTopButton()
         }
         readerScreenState.update {
-          copy(pauseTtsButtonText = context?.getString(R.string.tts_pause).orEmpty())
+          copy(pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty())
         }
         if (tts?.isInitialized == false) {
           isReadSelection = false
@@ -1621,7 +1595,7 @@ abstract class CoreReaderFragment :
         exitBook()
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
         requireActivity().toast(
-          getString(R.string.error_file_not_found, zimReaderSource.toDatabase()),
+          getString(string.error_file_not_found, zimReaderSource.toDatabase()),
           Toast.LENGTH_LONG
         )
       }
@@ -1664,13 +1638,13 @@ abstract class CoreReaderFragment :
         }
         readerMenuState?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
-      } ?: kotlin.run {
+      } ?: run {
         // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
         // disable all controls for this ZIM file. This prevents potential crashes.
         // See issue #4161 for more details.
         exitBook()
         requireActivity().toast(
-          getString(R.string.error_file_invalid, zimReaderSource.toDatabase()),
+          getString(string.error_file_invalid, zimReaderSource.toDatabase()),
           Toast.LENGTH_LONG
         )
       }
@@ -1758,8 +1732,8 @@ abstract class CoreReaderFragment :
           }
         } else {
           readerScreenState.value.snackBarHostState.snack(
-            context?.getString(R.string.request_storage).orEmpty(),
-            context?.getString(R.string.menu_settings),
+            context?.getString(string.request_storage).orEmpty(),
+            context?.getString(string.menu_settings),
             snackbarDuration = SnackbarDuration.Long,
             actionClick = {
               val intent = Intent()
@@ -1791,8 +1765,8 @@ abstract class CoreReaderFragment :
     webViewList.clear()
     openHomeScreen()
     readerScreenState.value.snackBarHostState.snack(
-      context?.getString(R.string.tabs_closed).orEmpty(),
-      context?.getString(R.string.undo),
+      context?.getString(string.tabs_closed).orEmpty(),
+      context?.getString(string.undo),
       actionClick = { restoreDeletedTabs() },
       lifecycleScope = lifecycleScope,
       snackBarResult = { result ->
@@ -1810,7 +1784,7 @@ abstract class CoreReaderFragment :
     if (tempWebViewListForUndo.isNotEmpty()) {
       webViewList.addAll(tempWebViewListForUndo)
       readerScreenState.value.snackBarHostState.snack(
-        context?.getString(R.string.tabs_restored).orEmpty(),
+        context?.getString(string.tabs_restored).orEmpty(),
         lifecycleScope = lifecycleScope
       )
       reopenBook()
@@ -1850,7 +1824,7 @@ abstract class CoreReaderFragment :
             if (isBookmarked) {
               repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
               readerScreenState.value.snackBarHostState.snack(
-                context?.getString(R.string.bookmark_removed).orEmpty(),
+                context?.getString(string.bookmark_removed).orEmpty(),
                 lifecycleScope = lifecycleScope
               )
             } else {
@@ -1859,22 +1833,22 @@ abstract class CoreReaderFragment :
                   LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
                 )
                 readerScreenState.value.snackBarHostState.snack(
-                  context?.getString(R.string.bookmark_added).orEmpty(),
+                  context?.getString(string.bookmark_added).orEmpty(),
                   lifecycleScope = lifecycleScope,
-                  actionLabel = context?.getString(R.string.open),
+                  actionLabel = context?.getString(string.open),
                   actionClick = { goToBookmarks() }
                 )
               }
             }
           }
-        } ?: kotlin.run {
-          requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
+        } ?: run {
+          requireActivity().toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
         }
       }
     } catch (_: Exception) {
       // Catch the exception while saving the bookmarks for splitted zim files.
       // we have an issue with split zim files, see #3827
-      requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
+      requireActivity().toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
     }
   }
 
@@ -1952,7 +1926,7 @@ abstract class CoreReaderFragment :
     if (item.shouldOpenInNewTab) {
       createNewTab()
     }
-    item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
+    item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: run {
       zimReaderContainer?.titleToUrl(item.pageTitle)?.apply {
         loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
       }
@@ -2069,7 +2043,7 @@ abstract class CoreReaderFragment :
       } else {
         contentUrl
       }
-    } ?: kotlin.run {
+    } ?: run {
       return@redirectOrOriginal contentUrl
     }
   }
@@ -2088,7 +2062,7 @@ abstract class CoreReaderFragment :
   private fun openRandomArticle(retryCount: Int = 2) {
     // Check if the ZIM file reader is available, if not show an error and exit.
     if (zimReaderContainer?.zimFileReader == null) {
-      toast(R.string.error_loading_random_article_zim_not_loaded)
+      toast(string.error_loading_random_article_zim_not_loaded)
       return
     }
     val articleUrl = zimReaderContainer?.getRandomArticleUrl()
@@ -2105,7 +2079,7 @@ abstract class CoreReaderFragment :
       } else {
         // if it is failed to find the random article two times then show a error to user.
         Log.e(TAG_KIWIX, "Failed to load random article after multiple attempts")
-        toast(R.string.could_not_find_random_article)
+        toast(string.could_not_find_random_article)
       }
       return
     }
@@ -2420,7 +2394,7 @@ abstract class CoreReaderFragment :
       Log.d(
         TAG_KIWIX,
         String.format(
-          getString(R.string.error_article_url_not_found),
+          getString(string.error_article_url_not_found),
           failingUrl
         )
       )
@@ -2500,9 +2474,9 @@ abstract class CoreReaderFragment :
         if (isOpenNewTabInBackground) {
           newTabInBackground(url)
           readerScreenState.value.snackBarHostState.snack(
-            message = context?.getString(R.string.new_tab_snack_bar).orEmpty(),
+            message = context?.getString(string.new_tab_snack_bar).orEmpty(),
             lifecycleScope = lifecycleScope,
-            actionLabel = context?.getString(R.string.open),
+            actionLabel = context?.getString(string.open),
             actionClick = {
               if (webViewList.size > 1) {
                 selectTab(webViewList.size - 1)
@@ -2603,7 +2577,7 @@ abstract class CoreReaderFragment :
       readerMenuState?.showWebViewOptions(urlIsValid())
     } catch (ignore: Exception) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", ignore)
-      activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
+      activity.toast(string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
   }
 
@@ -2627,7 +2601,7 @@ abstract class CoreReaderFragment :
     webViewHistoryItem?.webViewBackForwardListBundle?.let { bundle ->
       webView.restoreState(bundle)
       webView.scrollY = webViewHistoryItem.webViewCurrentPosition
-    } ?: kotlin.run {
+    } ?: run {
       zimReaderContainer?.zimFileReader?.let {
         webView.loadUrl(redirectOrOriginal(contentUrl("${it.mainPage}")))
       }

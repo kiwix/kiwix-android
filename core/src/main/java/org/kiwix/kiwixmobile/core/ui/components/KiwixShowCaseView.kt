@@ -86,6 +86,7 @@ const val SHOWCASE_VIEW_ROUND_ANIMATION_DURATION = 2000
 const val ONE = 1
 const val TWO = 2
 const val SIXTEEN = 16
+const val TWELVE = 12
 
 const val SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG = "showcaseViewNextButtonTestingTag"
 const val SHOWCASE_VIEW_MESSAGE_TESTING_TAG = "showCaseViewMessageTestingTag"

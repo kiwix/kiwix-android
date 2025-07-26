@@ -54,6 +54,7 @@ import javax.inject.Inject
 private const val INITIAL_SCALE = 100
 
 @SuppressLint("ViewConstructor")
+@Suppress("LongParameterList")
 open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   context: Context,
   private val callback: WebViewCallback,

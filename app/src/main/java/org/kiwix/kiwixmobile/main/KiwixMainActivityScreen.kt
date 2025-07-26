@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.main
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,7 +66,6 @@ fun KiwixMainActivityScreen(
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
   val shouldShowBottomBar = currentRoute in topLevelDestinationsRoute && shouldShowBottomAppBar
-  Log.e("CURRENT_DESTINATION", "KiwixMainActivityScreen: $currentRoute and $shouldShowBottomAppBar")
   KiwixTheme {
     ModalNavigationDrawer(
       drawerState = leftDrawerState,

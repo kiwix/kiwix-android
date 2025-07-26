@@ -23,7 +23,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -354,7 +353,6 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun showBottomAppBar() {
-    Log.e("SHOW_BOTTOM_APP", "showBottomAppBar: ")
     shouldShowBottomAppBar.update { true }
   }
 

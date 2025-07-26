@@ -27,7 +27,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
@@ -42,6 +44,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,6 +52,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -68,6 +72,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -76,6 +81,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -107,13 +113,16 @@ import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.ui.components.TWELVE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
@@ -130,6 +139,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
@@ -140,6 +150,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
@@ -155,6 +166,8 @@ const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
 fun ReaderScreen(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
+  showTableOfContentDrawer: MutableState<Boolean>,
+  documentSections: MutableList<DocumentSection>?,
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
@@ -185,11 +198,34 @@ fun ReaderScreen(
         }
         .semantics { testTag = READER_SCREEN_TESTING_TAG }
     ) { paddingValues ->
-      ReaderContentLayout(
-        state,
-        Modifier.padding(paddingValues),
-        bottomAppBarScrollBehavior
-      )
+      Box(Modifier.fillMaxSize()) {
+        ReaderContentLayout(
+          state,
+          Modifier.padding(paddingValues),
+          bottomAppBarScrollBehavior
+        )
+        AnimatedVisibility(
+          visible = showTableOfContentDrawer.value,
+          enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+          exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
+          modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+          TableDrawerSheet(
+            title = state.tableOfContentTitle,
+            sections = documentSections.orEmpty(),
+            onHeaderClick = state.tableContentHeaderClick,
+            onSectionClick = state.tableOfContentSectionClick
+          )
+        }
+        if (showTableOfContentDrawer.value) {
+          Box(
+            Modifier
+              .fillMaxSize()
+              .background(Color.Black.copy(alpha = 0.3f))
+              .clickable { showTableOfContentDrawer.update { false } }
+          )
+        }
+      }
     }
   }
 }
@@ -250,6 +286,45 @@ private fun ReaderContentLayout(
             state.onExitFullscreenClick
           )
         }
+      }
+    }
+  }
+}
+
+@Composable
+fun TableDrawerSheet(
+  title: String,
+  sections: List<DocumentSection>,
+  onHeaderClick: () -> Unit,
+  onSectionClick: (Int) -> Unit
+) {
+  ModalDrawerSheet(
+    modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH)
+  ) {
+    LazyColumn(
+      modifier = Modifier
+        .fillMaxHeight()
+    ) {
+      item {
+        Text(
+          text = title.ifEmpty { stringResource(id = R.string.no_section_info) },
+          style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onHeaderClick() }
+            .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
+        )
+      }
+      itemsIndexed(sections) { index, section ->
+        val paddingStart = (section.level - ONE) * TWELVE
+        Text(
+          text = section.title,
+          style = MaterialTheme.typography.bodyMedium,
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onSectionClick(index) }
+            .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
+        )
       }
     }
   }
@@ -827,3 +902,5 @@ interface TabClickListener {
   fun onSelectTab(position: Int)
   fun onCloseTab(position: Int)
 }
+
+data class DocumentSection(var title: String, var id: String, var level: Int)
