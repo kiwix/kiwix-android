@@ -175,6 +175,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
    */
   override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
     activity?.setupDrawerToggle(true)
+    (requireActivity() as CoreMainActivity).showBottomAppBar()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (webViewList.isEmpty()) {
       readerMenuState?.hideTabSwitcher()
@@ -194,23 +195,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
       selectTab(currentWebViewIndex)
     }
   }
-
-  private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
-    // val bottomNavigationView =
-    //   requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-    // bottomNavigationView?.let {
-    //   setBottomMarginToNavHostContainer(
-    //     bottomNavigationView.measuredHeight
-    //   )
-    // }
-  }
-
-  // override fun onPause() {
-  //   super.onPause()
-  //   // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
-  //   // this resets the margin to zero, before fragment navigation.
-  //   setBottomMarginToNavHostContainer(ZERO)
-  // }
 
   @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -311,28 +295,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun closeFullScreen() {
     super.closeFullScreen()
     showNavBar()
-    setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   private fun hideNavBar() {
-    // requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = GONE
-    setBottomMarginToNavHostContainer(0)
+    (requireActivity() as CoreMainActivity).hideBottomAppBar()
   }
 
   private fun showNavBar() {
     // show the navBar if fullScreenMode is not active.
     if (!isInFullScreenMode()) {
-      // requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility =
-      //   VISIBLE
+      (requireActivity() as CoreMainActivity).showBottomAppBar()
     }
   }
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  private fun setBottomMarginToNavHostContainer(margin: Int) {
-    // coreMainActivity.navHostContainer
-    //   .setBottomMarginToFragmentContainerView(margin)
   }
 }

@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -249,19 +248,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  open fun configureActivityBasedOn(destination: NavDestination) {
-    // if (destination.id !in topLevelDestinations) {
-    //   handleDrawerOnNavigation()
-    // }
-    // readerTableOfContentsDrawer.setLockMode(
-    //   if (destination.id == readerFragmentResId) {
-    //     LOCK_MODE_UNLOCKED
-    //   } else {
-    //     LOCK_MODE_LOCKED_CLOSED
-    //   }
-    // )
-  }
-
+  @Suppress("UnusedParameter")
   private fun NavigationView.setLockMode(lockMode: Int) {
     // drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
@@ -455,14 +442,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(route, navOptions)
   }
 
-  fun navigate(fragmentId: Int, bundle: Bundle) {
-    navController.navigate(fragmentId, bundle)
-  }
-
-  fun navigate(fragmentId: Int, bundle: Bundle, navOptions: NavOptions) {
-    navController.navigate(fragmentId, bundle, navOptions)
-  }
-
   private fun openSettings() {
     handleDrawerOnNavigation()
     navigate(settingsFragmentRoute)
@@ -492,15 +471,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       .setLaunchSingleTop(true)
       .setPopUpTo(readerFragmentRoute, inclusive = true)
       .build()
-    // navigate(
-    //   readerFragmentRoute,
-    //   bundleOf(
-    //     PAGE_URL_KEY to pageUrl,
-    //     ZIM_FILE_URI_KEY to zimFileUri,
-    //     SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
-    //   ),
-    //   navOptions
-    // )
+    val readerRouteWithArguments =
+      "$readerFragmentRoute?$PAGE_URL_KEY=$pageUrl&$ZIM_FILE_URI_KEY=$zimFileUri" +
+        "&$SHOULD_OPEN_IN_NEW_TAB=$shouldOpenInNewTab"
+    navigate(
+      readerRouteWithArguments,
+      navOptions
+    )
   }
 
   private fun openBookmarks() {
@@ -523,7 +500,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   fun findInPage(searchString: String) {
-    // navigate(readerFragmentRoute, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
+    navigate("$readerFragmentRoute?$FIND_IN_PAGE_SEARCH_STRING=$searchString")
   }
 
   private val bookRelatedDrawerGroup by lazy {

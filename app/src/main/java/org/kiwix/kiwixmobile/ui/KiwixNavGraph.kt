@@ -87,11 +87,26 @@ fun KiwixNavGraph(
     composable(
       route = KiwixDestination.Reader.route,
       arguments = listOf(
-        navArgument(ZIM_FILE_URI_KEY) { type = NavType.StringType; defaultValue = "" },
-        navArgument(FIND_IN_PAGE_SEARCH_STRING) { type = NavType.StringType; defaultValue = "" },
-        navArgument(PAGE_URL_KEY) { type = NavType.StringType; defaultValue = "" },
-        navArgument(SHOULD_OPEN_IN_NEW_TAB) { type = NavType.BoolType; defaultValue = false },
-        navArgument(SEARCH_ITEM_TITLE_KEY) { type = NavType.StringType; defaultValue = "" }
+        navArgument(ZIM_FILE_URI_KEY) {
+          type = NavType.StringType
+          defaultValue = ""
+        },
+        navArgument(FIND_IN_PAGE_SEARCH_STRING) {
+          type = NavType.StringType
+          defaultValue = ""
+        },
+        navArgument(PAGE_URL_KEY) {
+          type = NavType.StringType
+          defaultValue = ""
+        },
+        navArgument(SHOULD_OPEN_IN_NEW_TAB) {
+          type = NavType.BoolType
+          defaultValue = false
+        },
+        navArgument(SEARCH_ITEM_TITLE_KEY) {
+          type = NavType.StringType
+          defaultValue = ""
+        }
       )
     ) { backStackEntry ->
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
@@ -116,7 +131,10 @@ fun KiwixNavGraph(
     composable(
       route = KiwixDestination.Library.route,
       arguments = listOf(
-        navArgument(ZIM_FILE_URI_KEY) { type = NavType.StringType; defaultValue = "" }
+        navArgument(ZIM_FILE_URI_KEY) {
+          type = NavType.StringType
+          defaultValue = ""
+        }
       )
     ) { backStackEntry ->
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
@@ -177,9 +195,18 @@ fun KiwixNavGraph(
     composable(
       route = KiwixDestination.Search.route,
       arguments = listOf(
-        navArgument(NAV_ARG_SEARCH_STRING) { type = NavType.StringType; defaultValue = "" },
-        navArgument(TAG_FROM_TAB_SWITCHER) { type = NavType.BoolType; defaultValue = false },
-        navArgument(EXTRA_IS_WIDGET_VOICE) { type = NavType.BoolType; defaultValue = false }
+        navArgument(NAV_ARG_SEARCH_STRING) {
+          type = NavType.StringType
+          defaultValue = ""
+        },
+        navArgument(TAG_FROM_TAB_SWITCHER) {
+          type = NavType.BoolType
+          defaultValue = false
+        },
+        navArgument(EXTRA_IS_WIDGET_VOICE) {
+          type = NavType.BoolType
+          defaultValue = false
+        }
       )
     ) { backStackEntry ->
       val searchString = backStackEntry.arguments?.getString(NAV_ARG_SEARCH_STRING).orEmpty()
@@ -314,10 +341,11 @@ sealed class KiwixDestination(val route: String) {
 
   object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?uris={uris}") {
     fun createRoute(uris: String? = null): String {
-      return if (uris != null)
+      return if (uris != null) {
         "$LOCAL_FILE_TRANSFER_FRAGMENT?uris=${Uri.encode(uris)}"
-      else
+      } else {
         "$LOCAL_FILE_TRANSFER_FRAGMENT?uris=null"
+      }
     }
   }
 }
