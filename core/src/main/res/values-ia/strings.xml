@@ -8,7 +8,7 @@
 <resources>
   <string name="menu_help">Adjuta</string>
   <string name="menu_home">Initio</string>
-  <string name="menu_settings">Preferentias</string>
+  <string name="menu_settings">Parametros</string>
   <string name="menu_search_in_text">Cercar in pagina</string>
   <string name="bookmarks">Marcapaginas</string>
   <string name="menu_random_article">Articulo aleatori</string>
@@ -62,6 +62,7 @@
   <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide. %s</string>
   <string name="error_article_url_not_found">Error: Le cargamento del articulo (Url: %1$s) ha fallite.</string>
   <string name="error_loading_random_article_zim_not_loaded">Non pote cargar le articulo. Le file ZIM non ha essite cargate correctemente.</string>
+  <string name="could_not_find_random_article">Non pote trovar un articulo aleatori. Per favor tenta lo de novo plu tarde.</string>
   <string name="pref_display_title">Visualisation</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
@@ -145,20 +146,25 @@
   <string name="help_9">• Altere contento como Wikileaks o Wikisource es tamben disponibile</string>
   <string name="help_10">Tu pote discargar le files ZIM de tu preferentia in le application, o seliger cautemente le file(s) que tu vole e discargar desde un computator de scriptorio ante de transferer le files ZIM a tu carta SD.</string>
   <string name="help_11">Le files ZIM discargate in le application es situate in le directorio de immagazinage externe in un dossier appellate Kiwix.</string>
+  <string name="fetching_storage_info">Obtenente detalios de immagazinage…</string>
   <string name="pref_storage">Immagazinage</string>
   <string name="pref_current_folder">Dossier actual</string>
   <string name="pref_storage_used">%s usate</string>
   <string name="pref_free_storage">%s libere</string>
+  <string name="choose_storage_to_download_book">Elige un immagazinage pro discargar le libro</string>
   <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">reprender</string>
   <string name="stop">stoppar</string>
+  <string name="notification_pause_button_text">Pausar</string>
+  <string name="notification_resume_button_text">Reprender</string>
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
   <string name="yes">Si</string>
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Stoppar le discargamento?</string>
   <string name="confirm_stop_download_msg">Es tu secur de voler interrumper iste discargamento?</string>
+  <string name="change_storage">Cambiar</string>
   <string name="tts_not_enabled">Le lectura a voce alte non es activate pro iste file ZIM</string>
   <string name="texttospeech_initialization_failed">Le initialisation del lectura a voce alte ha fallite. Per favor tenta lo de novo</string>
   <string name="texttospeech_error">Error inexpectate in le lectura a voce alte. Per favor tenta lo de novo</string>
@@ -180,7 +186,9 @@
   <string name="external_link_popup_dialog_message">Tu sta sur le puncto de sequer un ligamine externe. Isto pote comportar costos additional pro le transferimento de datos, o non functiona si tu es foras de linea.\nVole tu continuar?</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
   <string name="your_languages">Linguas eligite:</string>
+  <string name="your_language">Lingua seligite: %s</string>
   <string name="other_languages">Altere linguas:</string>
+  <string name="downloading">Discargante:</string>
   <string name="no_items_msg">Nulle articulos disponibile</string>
   <string name="crash_title">Ben… isto es embarassante</string>
   <string name="crash_description">Pare que le programma ha collabite.\n\nTe displaciarea adjutar nos a resolver iste problema inviante nos le sequente information?</string>
@@ -201,11 +209,16 @@
   <string name="welcome_to_the_family">Benvenite al familia</string>
   <string name="save_books_offline">Salveguardar libros foras de linea</string>
   <string name="download_books_message">Discarga libros e lege los ubicunque.</string>
+  <string name="save_books_in_desired_storage">Salveguardar libros in le immagazinage preferite</string>
+  <string name="storage_location_hint">Tu pote eliger tu loco de immagazinage preferite pro discargar le files ZIM, sia un carta SD o un immagazinage interne, in le schermo Parametros.</string>
   <string name="unable_to_add_to_bookmarks">Non pote adder al marcapaginas</string>
   <string name="go_to_previous_page">Ir al pagina precedente</string>
   <string name="go_to_next_page">Ir al pagina sequente</string>
   <string name="table_of_contents">Tabula de contento</string>
+  <string name="select_language">Selige lingua</string>
   <string name="save_languages">Salveguardar linguas</string>
+  <string name="all_languages">Tote le linguas</string>
+  <string name="no_language_available">Necun lingua disponibile</string>
   <string name="expand">Expander</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Vider historia de tote le libros</string>
@@ -225,6 +238,7 @@
   <string name="custom_download_error_message_for_authentication_failed">Le file ZIM non poteva esser discargate. Per favor tenta reinstallar le application a partir del Play Store.</string>
   <string name="save">Salveguardar</string>
   <string name="note">Nota</string>
+  <string name="take_notes">Prender notas</string>
   <string name="wiki_article_title">Titulo del articulo wiki</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Le accesso al immagazinage es necessari pro exportar marcapaginas</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Le marcapaginas non pote esser exportate sin accesso al immagazinage</string>
@@ -316,10 +330,15 @@
   <string name="preparing_file_for_copy">Preparation pro copiar/displaciar</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Displaciar</string>
+  <string name="copying_zim_file">Copiante le file ZIM…</string>
+  <string name="moving_zim_file">Displaciante le file ZIM…</string>
   <string name="copy_move_files_dialog_description">Kiwix require que le file ZIM se trova in su proprie directorio de datos.\nVole tu copiar o displaciar lo illac?</string>
   <string name="copy_file_error_message">Error durante le copia del file ZIM: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Attention: Assecura te que tote le segmentos ZIM ha essite displaciate/copiate correctemente!</string>
+  <string name="verify_zim_chunks_dialog_message">Tu pote verificar los in le dossier “Android/media/org.kiwix…/”.\nQuando terminate, glissa a basso pro refrescar le schermo de bibliotheca. Le file ZIM dividite apparera alora in tu bibliotheca.</string>
   <string name="why_copy_move_files_to_app_directory">Proque displaciar/copiar files al directorio public del app?</string>
   <string name="copy_move_files_to_app_directory_description">A causa del politicas de Google Play sur Android 11 e plus recente, iste application non pote plus acceder directemente al files immagazinate in altere locos sur iste apparato. Pro permitter le accesso al files seligite, es necessari displaciar o copiar los in un dossier special in le directorio de iste application. Isto permittera acceder al files e aperir los.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Elige le immagazinage pro copiar/displaciar le file ZIM</string>
   <string name="move_file_error_message">Error durante le displaciamento del file ZIM: %s.</string>
   <string name="how_to_update_content">Como actualisar contento?</string>
   <string name="update_content_description">Pro actualisar le contento (un file ZIM) tu debe discargar le ultime version complete de iste mesme contento. Tu pote facer lo in le section de discargamento.</string>
@@ -368,4 +387,8 @@
   <string name="donation_dialog_title">Dona hodie mesmo</string>
   <string name="donation_dialog_description">%s ha besonio de tu adjuta.</string>
   <string name="make_donation">Facer un donation</string>
+  <string name="resuming_state">Reprendente</string>
+  <string name="downloading_state">Discargante</string>
+  <string name="download_failed_state">Fallite</string>
+  <string name="searchview_description_clear">Rader consulta</string>
 </resources>

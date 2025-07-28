@@ -184,6 +184,7 @@
   <string name="external_link_popup_dialog_message">Внесувате надворешна врска. Ова може да доведе до дополнителни трошоци за податочен пренос или пак просто нема да работи кога не сте на линија.\nДали сакате да продолжите?</string>
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
+  <string name="your_language">Избран јазик: %s</string>
   <string name="other_languages">Други јазици:</string>
   <string name="downloading">Преземање:</string>
   <string name="no_items_msg">Нема ставки</string>
@@ -212,7 +213,10 @@
   <string name="go_to_previous_page">Оди на претходната страница</string>
   <string name="go_to_next_page">Оди на следната страница</string>
   <string name="table_of_contents">Содржина</string>
+  <string name="select_language">Одберете јазик</string>
   <string name="save_languages">Зачувај јазици</string>
+  <string name="all_languages">Сите јазици</string>
+  <string name="no_language_available">Нема јазици на располагање</string>
   <string name="expand">Прикажи</string>
   <string name="history">Историја</string>
   <string name="history_from_current_book">Историја од сите книги</string>

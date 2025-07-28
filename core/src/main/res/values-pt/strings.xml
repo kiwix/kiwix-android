@@ -67,11 +67,13 @@
   <string name="server_started_message">Digite este endereço IP no seu navegador para aceder ao servidor %s</string>
   <string name="qr_code">Código QR renderizado</string>
   <string name="share_host_address">Compartilhar URL através de outros aplicativos</string>
-  <string name="error_file_not_found" fuzzy="true">Erro: não foi possível encontrar o ficheiro ZIM selecionado. %s</string>
+  <string name="error_file_not_found">Erro: Não foi possível encontrar o ficheiro ZIM selecionado. %s</string>
   <string name="unable_to_read_zim_file">Não é possível ler este arquivo ZIM!</string>
   <string name="zim_not_opened">Não é possível abrir o arquivo ZIM</string>
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido. %s</string>
   <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
+  <string name="error_loading_random_article_zim_not_loaded">Não é possível carregar o artigo. O ficheiro ZIM não foi carregado corretamente.</string>
+  <string name="could_not_find_random_article">Não foi possível encontrar um artigo aleatório. Por favor, tente novamente mais tarde.</string>
   <string name="pref_display_title">Mostrar</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
@@ -158,16 +160,21 @@
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
   <string name="pref_storage_used">%s usado</string>
+  <string name="pref_free_storage">%s grátis</string>
+  <string name="choose_storage_to_download_book">Selecionar o armazenamento para descarregar o livro</string>
   <string name="delete_zim_failed">Desculpe, não foi possível eliminar este ficheiro. Pode tentar usar um gestor de ficheiros.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">parar</string>
+  <string name="notification_pause_button_text">Pausa</string>
+  <string name="notification_resume_button_text">Retomar</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Sim</string>
   <string name="no">Não</string>
   <string name="confirm_stop_download_title">Parar download?</string>
   <string name="confirm_stop_download_msg">Tem a certeza de que deseja parar este download?</string>
+  <string name="change_storage">Alterar</string>
   <string name="tts_not_enabled">A leitura em voz alta não está habilitada para este ficheiro ZIM</string>
   <string name="texttospeech_initialization_failed">A inicialização do Read Aloud falhou. Tente novamente</string>
   <string name="texttospeech_error">Erro inesperado em Ler em voz alta. Tente novamente</string>
@@ -186,10 +193,12 @@
   <string name="pref_external_link_popup_title">Avisar quando seguir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
   <string name="external_link_popup_dialog_title">Acesso a uma ligação externa!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
+  <string name="external_link_popup_dialog_message">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado.\nDeseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
+  <string name="your_language">Idioma selecionado: %s</string>
   <string name="other_languages">Outras línguas:</string>
+  <string name="downloading">Baixando:</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isto é constrangedor</string>
   <string name="crash_description">Parece que a aplicação bloqueou.\n\nPode ajudar-nos a corrigir este problema enviando as seguintes informações?</string>
@@ -210,11 +219,15 @@
   <string name="welcome_to_the_family">Bem-vindo à família</string>
   <string name="save_books_offline">Guardar livros offline</string>
   <string name="download_books_message">Descarregue livros e leia-os em qualquer lugar.</string>
+  <string name="save_books_in_desired_storage">Guardar os livros no armazenamento desejado</string>
   <string name="unable_to_add_to_bookmarks">Não foi possível adicionar aos marcadores</string>
   <string name="go_to_previous_page">Ir para a página anterior</string>
   <string name="go_to_next_page">Vá para a página seguinte</string>
   <string name="table_of_contents">Índice</string>
+  <string name="select_language">Selecionar idioma</string>
   <string name="save_languages">Guardar idiomas</string>
+  <string name="all_languages">Todos os idiomas</string>
+  <string name="no_language_available">Sem idiomas disponíveis</string>
   <string name="expand">Expandir</string>
   <string name="history">Histórico</string>
   <string name="history_from_current_book">Ver histórico de todos os livros</string>
