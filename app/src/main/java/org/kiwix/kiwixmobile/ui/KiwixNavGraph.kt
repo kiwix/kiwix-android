@@ -77,11 +77,12 @@ import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 @Composable
 fun KiwixNavGraph(
   navController: NavHostController,
+  startDestination: String,
   modifier: Modifier = Modifier
 ) {
   NavHost(
     navController = navController,
-    startDestination = KiwixDestination.Reader.route,
+    startDestination = startDestination,
     modifier = modifier
   ) {
     composable(

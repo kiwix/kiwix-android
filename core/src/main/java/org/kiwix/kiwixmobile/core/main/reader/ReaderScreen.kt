@@ -33,10 +33,12 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -86,12 +88,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -111,8 +115,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -130,6 +136,7 @@ import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
@@ -139,6 +146,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
@@ -171,60 +179,65 @@ fun ReaderScreen(
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
-  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
+  val localWebViewScrollState: MutableState<ScrollState?> =
+    remember { mutableStateOf(ScrollState(0)) }
   val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   KiwixDialogTheme {
-    Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
-      topBar = {
-        ReaderTopBar(
-          state,
-          actionMenuItems,
-          topAppBarScrollBehavior,
-          navigationIcon
-        )
-      },
-      floatingActionButton = { BackToTopFab(state) },
-      modifier = Modifier
-        .systemBarsPadding()
-        .padding(bottom = bottomNavHeightInDp)
-        .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
-        .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
-        .let { baseModifier ->
-          mainActivityBottomAppBarScrollBehaviour?.let {
-            baseModifier.nestedScroll(it.nestedScrollConnection)
-          } ?: baseModifier
-        }
-        .semantics { testTag = READER_SCREEN_TESTING_TAG }
-    ) { paddingValues ->
-      Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize()) {
+      Scaffold(
+        snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+        topBar = {
+          ReaderTopBar(
+            state,
+            actionMenuItems,
+            topAppBarScrollBehavior,
+            navigationIcon
+          )
+        },
+        floatingActionButton = { BackToTopFab(state) },
+        modifier = Modifier
+          .systemBarsPadding()
+          .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+          .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
+          .let { baseModifier ->
+            mainActivityBottomAppBarScrollBehaviour?.let {
+              baseModifier.nestedScroll(it.nestedScrollConnection)
+            } ?: baseModifier
+          }
+          .semantics { testTag = READER_SCREEN_TESTING_TAG }
+      ) { paddingValues ->
         ReaderContentLayout(
           state,
           Modifier.padding(paddingValues),
-          bottomAppBarScrollBehavior
+          bottomAppBarScrollBehavior,
+          localWebViewScrollState.value
         )
-        AnimatedVisibility(
-          visible = showTableOfContentDrawer.value,
-          enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
-          exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
-          modifier = Modifier.align(Alignment.CenterEnd)
-        ) {
-          TableDrawerSheet(
-            title = state.tableOfContentTitle,
-            sections = documentSections.orEmpty(),
-            onHeaderClick = state.tableContentHeaderClick,
-            onSectionClick = state.tableOfContentSectionClick
-          )
-        }
-        if (showTableOfContentDrawer.value) {
-          Box(
-            Modifier
-              .fillMaxSize()
-              .background(Color.Black.copy(alpha = 0.3f))
-              .clickable { showTableOfContentDrawer.update { false } }
-          )
-        }
+      }
+      if (showTableOfContentDrawer.value) {
+        // Showing the background color on screen so that it look same as navigation drawer.
+        Box(
+          Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.3f))
+            .clickable { showTableOfContentDrawer.update { false } }
+        )
+      }
+      AnimatedVisibility(
+        visible = showTableOfContentDrawer.value,
+        enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+        exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
+        modifier = Modifier
+          .systemBarsPadding()
+          .align(Alignment.CenterEnd)
+      ) {
+        TableDrawerSheet(
+          title = state.tableOfContentTitle,
+          sections = documentSections.orEmpty(),
+          localWebViewScrollState,
+          state.selectedWebView,
+          showTableOfContentDrawer
+        )
       }
     }
   }
@@ -256,7 +269,8 @@ private fun ReaderTopBar(
 private fun ReaderContentLayout(
   state: ReaderScreenState,
   modifier: Modifier = Modifier,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
+  webViewScrollState: ScrollState?
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state)
@@ -266,7 +280,7 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(state)
+          ShowZIMFileContent(state, webViewScrollState)
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
@@ -295,23 +309,40 @@ private fun ReaderContentLayout(
 fun TableDrawerSheet(
   title: String,
   sections: List<DocumentSection>,
-  onHeaderClick: () -> Unit,
-  onSectionClick: (Int) -> Unit
+  webViewScrollState: MutableState<ScrollState?>,
+  selectedWebView: KiwixWebView?,
+  showTableOfContentDrawer: MutableState<Boolean>
 ) {
+  val drawerBackgroundColor = if (isSystemInDarkTheme()) {
+    MineShaftGray700
+  } else {
+    White
+  }
+  var scrollToSectionIndex by remember { mutableStateOf<Int?>(null) }
+  val coroutineScope = rememberCoroutineScope()
+  LaunchedEffect(scrollToSectionIndex) {
+    scrollToSectionIndex?.let {
+      webViewScrollState.value = null
+    }
+  }
   ModalDrawerSheet(
-    modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH)
+    modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
+    drawerShape = RectangleShape,
+    drawerContainerColor = drawerBackgroundColor
   ) {
-    LazyColumn(
-      modifier = Modifier
-        .fillMaxHeight()
-    ) {
+    LazyColumn(modifier = Modifier.fillMaxHeight()) {
       item {
         Text(
           text = title.ifEmpty { stringResource(id = R.string.no_section_info) },
-          style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+          style = MaterialTheme.typography.titleMedium,
           modifier = Modifier
             .fillMaxWidth()
-            .clickable { onHeaderClick() }
+            .clickable {
+              coroutineScope.launch {
+                webViewScrollState.value?.animateScrollTo(ZERO)
+              }
+              showTableOfContentDrawer.update { false }
+            }
             .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
         )
       }
@@ -319,14 +350,45 @@ fun TableDrawerSheet(
         val paddingStart = (section.level - ONE) * TWELVE
         Text(
           text = section.title,
-          style = MaterialTheme.typography.bodyMedium,
+          style = MaterialTheme.typography.bodyMedium.copy(
+            fontWeight = FontWeight.Light,
+            fontSize = LARGE_BODY_TEXT_SIZE
+          ),
           modifier = Modifier
             .fillMaxWidth()
-            .clickable { onSectionClick(index) }
+            .clickable { scrollToSectionIndex = index }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
         )
       }
     }
+  }
+  LaunchedEffect(webViewScrollState.value) {
+    if (webViewScrollState.value == null &&
+      scrollToSectionIndex != null &&
+      hasItemForPositionInDocumentSectionsList(scrollToSectionIndex!!, sections)
+    ) {
+      val targetId = sections[scrollToSectionIndex!!].id.replace("'", "\\'")
+      selectedWebView?.evaluateJavascript(
+        "document.getElementById('$targetId')?.scrollIntoView();",
+        null
+      )
+      delay(100)
+      webViewScrollState.value = ScrollState(selectedWebView?.scrollY ?: ZERO)
+      scrollToSectionIndex = null
+      showTableOfContentDrawer.update { false }
+    }
+  }
+}
+
+private fun hasItemForPositionInDocumentSectionsList(
+  position: Int,
+  sections: List<DocumentSection>
+): Boolean {
+  val documentListSize = sections.size
+  return when {
+    position < 0 -> false
+    position >= documentListSize -> false
+    else -> true
   }
 }
 
@@ -433,12 +495,13 @@ private fun BoxScope.CloseFullScreenImageButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowZIMFileContent(state: ReaderScreenState) {
+private fun ShowZIMFileContent(state: ReaderScreenState, webViewScrollState: ScrollState?) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
       ScrollableWebViewWithNestedScroll(
         selectedWebView = selectedWebView,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        webViewScrollState = webViewScrollState
       )
     }
   }
@@ -448,12 +511,19 @@ private fun ShowZIMFileContent(state: ReaderScreenState) {
 @Composable
 fun ScrollableWebViewWithNestedScroll(
   selectedWebView: KiwixWebView,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  webViewScrollState: ScrollState?
 ) {
   Box(
     modifier = modifier
       .fillMaxSize()
-      .verticalScroll(rememberScrollState())
+      .let { baseModifier ->
+        webViewScrollState?.let {
+          baseModifier.verticalScroll(it)
+        } ?: run {
+          baseModifier
+        }
+      }
   ) {
     AndroidView(
       factory = { context ->

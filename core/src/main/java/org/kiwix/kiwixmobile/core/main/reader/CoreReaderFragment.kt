@@ -73,7 +73,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -303,7 +302,6 @@ abstract class CoreReaderFragment :
       nextPageButtonItem = Triple({ goForward() }, { showForwardHistory() }, false),
       tocButtonItem = false to { },
       onCloseAllTabs = { closeAllTabs() },
-      bottomNavigationHeight = ZERO,
       shouldShowBottomAppBar = true,
       selectedWebView = null,
       readerScreenTitle = "",
@@ -330,9 +328,7 @@ abstract class CoreReaderFragment :
       appName = "",
       donateButtonClick = {},
       laterButtonClick = {},
-      tableOfContentTitle = "",
-      tableContentHeaderClick = { tableOfContentHeaderClick() },
-      tableOfContentSectionClick = { tableOfContentSectionClick(it) },
+      tableOfContentTitle = ""
     )
   )
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -443,7 +439,6 @@ abstract class CoreReaderFragment :
         LaunchedEffect(Unit) {
           readerScreenState.update {
             copy(
-              bottomNavigationHeight = getBottomNavigationHeight(),
               readerScreenTitle = context.getString(string.reader),
               darkModeViewPainter = darkModeViewPainter,
               fullScreenItem = fullScreenItem.first to getVideoView(),
@@ -482,7 +477,7 @@ abstract class CoreReaderFragment :
           },
           mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
           documentSections = documentSections,
-          showTableOfContentDrawer = shouldTableOfContentDrawer,
+          showTableOfContentDrawer = shouldTableOfContentDrawer
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -544,8 +539,6 @@ abstract class CoreReaderFragment :
       )
     }
   }
-
-  private fun getBottomNavigationHeight(): Int = getBottomNavigationView()?.measuredHeight ?: ZERO
 
   /**
    * Provides the visibility state and click action for the TOC (Table of Contents) button
@@ -675,31 +668,6 @@ abstract class CoreReaderFragment :
   private fun addFileReader() {
     documentParserJs = requireActivity().readFile("js/documentParser.js")
     documentSections?.clear()
-  }
-
-  private fun tableOfContentHeaderClick() {
-    getCurrentWebView()?.scrollY = 0
-    shouldTableOfContentDrawer.update { false }
-  }
-
-  private fun tableOfContentSectionClick(position: Int) {
-    if (hasItemForPositionInDocumentSectionsList(position)) { // Bug Fix #3796
-      loadUrlWithCurrentWebview(
-        "javascript:document.getElementById('" +
-          documentSections?.get(position)?.id?.replace("'", "\\'") +
-          "').scrollIntoView();"
-      )
-    }
-    shouldTableOfContentDrawer.update { false }
-  }
-
-  private fun hasItemForPositionInDocumentSectionsList(position: Int): Boolean {
-    val documentListSize = documentSections?.size ?: return false
-    return when {
-      position < 0 -> false
-      position >= documentListSize -> false
-      else -> true
-    }
   }
 
   private fun showTabSwitcher() {
@@ -2699,8 +2667,6 @@ abstract class CoreReaderFragment :
    * when handling invalid JSON scenarios.
    */
   abstract fun restoreViewStateOnInvalidWebViewHistory()
-
-  abstract fun getBottomNavigationView(): BottomNavigationView?
 }
 
 enum class RestoreOrigin {

@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 fun KiwixMainActivityScreen(
   navController: NavHostController,
   leftDrawerContent: List<DrawerMenuGroup>,
+  startDestination: String,
   topLevelDestinationsRoute: Set<String>,
   leftDrawerState: DrawerState,
   uiCoroutineScope: CoroutineScope,
@@ -100,6 +101,7 @@ fun KiwixMainActivityScreen(
           Box(modifier = Modifier.padding(paddingValues)) {
             KiwixNavGraph(
               navController = navController,
+              startDestination = startDestination,
               modifier = Modifier.fillMaxSize()
             )
           }

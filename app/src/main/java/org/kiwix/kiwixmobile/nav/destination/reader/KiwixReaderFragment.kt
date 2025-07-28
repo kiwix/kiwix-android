@@ -221,9 +221,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     exitBook()
   }
 
-  override fun getBottomNavigationView(): BottomNavigationView? = null
-  // requireActivity().findViewById(R.id.bottom_nav_view)
-
   /**
    * Restores the view state based on the provided webViewHistoryItemList data and restore origin.
    *

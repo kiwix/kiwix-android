@@ -33,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -40,7 +41,6 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -128,9 +128,17 @@ class KiwixMainActivity : CoreMainActivity() {
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
       bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+      val startDestination = remember {
+        if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
+          KiwixDestination.Intro.route
+        } else {
+          KiwixDestination.Reader.route
+        }
+      }
       KiwixMainActivityScreen(
         navController = navController,
         leftDrawerContent = leftDrawerMenu,
+        startDestination = startDestination,
         topLevelDestinationsRoute = topLevelDestinationsRoute,
         leftDrawerState = leftDrawerState,
         uiCoroutineScope = uiCoroutineScope,
@@ -140,12 +148,6 @@ class KiwixMainActivity : CoreMainActivity() {
       )
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-        if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
-          val navOptions = NavOptions.Builder()
-            .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
-            .build()
-          navigate(KiwixDestination.Intro.route, navOptions)
-        }
       }
       DialogHost(alertDialogShower)
     }

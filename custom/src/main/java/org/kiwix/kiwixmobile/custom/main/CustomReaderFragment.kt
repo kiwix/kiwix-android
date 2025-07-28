@@ -173,9 +173,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     openHomeScreen()
   }
 
-  // Since custom apps do not have the bottomNavigationView, so returning null.
-  override fun getBottomNavigationView(): BottomNavigationView? = null
-
   /**
    * Restores the view state when the webViewHistory data is valid.
    * This method restores the tabs with webView pages history.
