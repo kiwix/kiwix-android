@@ -123,7 +123,7 @@
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Jo</string>
-  <string name="no">Neen</string>
+  <string name="no">Nee</string>
   <string name="confirm_stop_download_title">Erofluede stoppen?</string>
   <string name="next">Nächst</string>
   <string name="previous">Vireg</string>
@@ -139,6 +139,7 @@
   <string name="external_link_popup_dialog_title">Externe Link aginn!</string>
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
+  <string name="your_language">Erausgesicht Sprooch: %s</string>
   <string name="other_languages">Aner Sproochen:</string>
   <string name="downloading">Eroflueden:</string>
   <string name="crash_checkbox_language">Är Sproochastellungen</string>
@@ -156,7 +157,10 @@
   <string name="go_to_previous_page">Op déi vireg Säit goen</string>
   <string name="go_to_next_page">Op déi nächst Säit goen</string>
   <string name="table_of_contents">Inhaltsverzeechnes</string>
+  <string name="select_language">Sprooch eraussichen</string>
   <string name="save_languages">Sprooche späicheren</string>
+  <string name="all_languages">All Sproochen</string>
+  <string name="no_language_available">Keng Sproochen disponibel</string>
   <string name="selected_items">%1$d ausgewielt</string>
   <string name="search_bookmarks">Lieszeechen duerchsichen</string>
   <string name="switch_tabs">Tabs wiesselen</string>

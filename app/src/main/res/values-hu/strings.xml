@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Hanna Tardos
+* Urbalazs
 -->
 <resources>
-  <string name="send_files_title">Fájlküldés</string>
-  <string name="receive_files_title">Beérkező fájlok</string>
+  <string name="send_files_title">Fájlok küldése</string>
+  <string name="receive_files_title">Fájlok fogadása</string>
+  <string name="no_app_found_to_open">Nem található alkalmazás a ZIM-fájl kiválasztásához!</string>
 </resources>

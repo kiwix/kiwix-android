@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 787IYO
+* Gwanki
 * MercyDansanda
 * MohitMali
 * Muhammad Idriss Criteria
@@ -170,6 +171,7 @@
   <string name="external_link_popup_dialog_message" fuzzy="true">Kuna shigar da hanyar haɗin waje. Wannan na iya haifar da ƙarin farashi don canja wurin bayanai ko kuma ba zai yi aiki ba lokacin da kuke layi. Kuna so ku ci gaba?</string>
   <string name="do_not_ask_anymore">Kar a sake tambaya</string>
   <string name="your_languages">Zaɓin harshe</string>
+  <string name="your_language">Harshen da aka zaɓa: %s</string>
   <string name="other_languages">Wasu harsuna</string>
   <string name="no_items_msg">Babu abubuwa da akwai</string>
   <string name="crash_title">To… Wannan Abin Abin kunya ne</string>
@@ -195,7 +197,10 @@
   <string name="go_to_previous_page">Je zuwa shafin da ya gabata</string>
   <string name="go_to_next_page">Jeka shafi na gaba</string>
   <string name="table_of_contents">Abubuwan dake ciki</string>
+  <string name="select_language">Zaɓi harshe</string>
   <string name="save_languages">Harsuna da yawa</string>
+  <string name="all_languages">Duka harsunan</string>
+  <string name="no_language_available">Babu yaruka da ke akwai</string>
   <string name="expand">fadada</string>
   <string name="history">Tarihi</string>
   <string name="history_from_current_book">Duba Tarihi Daga Duk Littattafai</string>

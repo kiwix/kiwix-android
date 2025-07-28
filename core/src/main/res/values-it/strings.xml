@@ -12,6 +12,7 @@
 * Gianfranco
 * Matteocng
 * MohitMali
+* Moliseforever
 * Mpayansilva
 * Nivit
 * Purodha
@@ -29,6 +30,7 @@
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
   <string name="menu_support_kiwix">Sostieni Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Supporto %s</string>
   <string name="menu_about_app">Informazioni sull’app %s</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Salva file multimediale</string>
@@ -71,6 +73,8 @@
   <string name="zim_not_opened">Impossibile aprire il file ZIM</string>
   <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido. %s</string>
   <string name="error_article_url_not_found">Errore: caricamento della voce (URL: %1$s) non riuscito.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Impossibile caricare l\'articolo. Il file ZIM non è caricato correttamente.</string>
+  <string name="could_not_find_random_article">Impossibile trovare un articolo casuale. Per favore, riprova più tardi.</string>
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
@@ -84,6 +88,8 @@
   <string name="pref_credits_title">Riconoscimenti</string>
   <string name="tts_lang_not_supported">La lingua di questa pagina non è supportata. La voce potrebbe non essere letta correttamente.</string>
   <string name="no_reader_application_installed">Non è stata trovata alcuna applicazione installata per questo tipo di file</string>
+  <string name="no_email_application_installed">Si prega di installare un client di posta elettronica</string>
+  <string name="no_app_found_to_select_bookmark_file">Nessuna app trovata per selezionare il file contente i segnalibri</string>
   <string name="no_section_info">Nessuna intestazione di contenuto trovata</string>
   <string name="request_storage">Per accedere ai contenuti offline è necessario l’accesso al tuo spazio di archiviazione</string>
   <string name="request_write_storage">Per scaricare i file ZIM abbiamo bisogno dell’accesso in scrittura al tuo spazio di archiviazione</string>
@@ -93,7 +99,11 @@
   <string name="pref_clear_all_history_summary">Cancella le ricerche recenti e la cronologia delle schede aperte</string>
   <string name="pref_notes">Note</string>
   <string name="pref_permission">Autorizzazioni</string>
+  <string name="pref_import_bookmark_title">Importa Segnalibri</string>
+  <string name="pref_import_bookmark_summary">Importa i segnalibri salvati</string>
   <string name="pref_export_bookmark_title">Esporta segnalibri</string>
+  <string name="pref_export_bookmark_summary">Esporta tutti i segnalibri salvati</string>
+  <string name="export_bookmark_saved">I segnalibri vengono esportati nel file %s</string>
   <string name="all_history_cleared">Tutta la cronologia è stata cancellata</string>
   <string name="pref_clear_all_bookmarks_title">Cancella i segnalibri</string>
   <string name="clear_all_history_dialog_title">Vuoi cancellare tutta la cronologia?</string>
@@ -107,6 +117,7 @@
   <string name="did_you_know">Lo sapevi?</string>
   <string name="undo">Annulla</string>
   <string name="tab_closed">Scheda chiusa</string>
+  <string name="tabs_closed">Schede chiuse</string>
   <string name="bookmark_added">Segnalibro aggiunto</string>
   <string name="rate_dialog_title">Valutaci</string>
   <string name="rate_dialog_msg">Se ti sta piacendo %s, prenditi un minuto per lasciare una valutazione. Grazie per il sostegno!</string>
@@ -146,9 +157,12 @@
   <string name="help_9">• Sono disponibili anche altri contenuti come Wikileaks o Wikisource</string>
   <string name="help_10">Puoi scaricare i file ZIM all’interno dell’app oppure selezionare attentamente quelli che preferisci e scaricarli usando un PC, per poi trasferirli sulla tua memoria SD.</string>
   <string name="help_11">I file ZIM scaricati all’interno dell’app vengono salvati nella memoria esterna in una cartella chiamata Kiwix.</string>
+  <string name="fetching_storage_info">Recupero dei dettagli di archiviazione in corso…</string>
   <string name="pref_storage">Spazio di archiviazione</string>
   <string name="pref_current_folder">Cartella attuale</string>
   <string name="pref_storage_used">%s utilizzato</string>
+  <string name="pref_free_storage">%s libero/i</string>
+  <string name="choose_storage_to_download_book">Scegli quale spazio di archiviazione da usare per scaricare il libro</string>
   <string name="delete_zim_failed">Non siamo stati in grado di eliminare alcuni file. Dovresti provare ad usare un gestore di file.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">riprendi</string>
@@ -183,6 +197,7 @@
   <string name="external_link_popup_dialog_message">Stai aprendo un collegamento esterno. Ciò potrebbe comportare dei costi aggiuntivi per il trasferimento dati e non funzionerà se non sei connesso a Internet.\nVuoi continuare?</string>
   <string name="do_not_ask_anymore">Non chiedere più</string>
   <string name="your_languages">Lingue selezionate:</string>
+  <string name="your_language">Lingua selezionata: %s</string>
   <string name="other_languages">Altre lingue:</string>
   <string name="downloading">Download in corso:</string>
   <string name="no_items_msg">Nessun elemento disponibile</string>
@@ -205,11 +220,16 @@
   <string name="welcome_to_the_family">Benvenuto</string>
   <string name="save_books_offline">Salva libri offline</string>
   <string name="download_books_message">Scarica libri e leggili ovunque tu sia.</string>
+  <string name="save_books_in_desired_storage">Salva i libri nello spazio di archiviazione desiderato</string>
+  <string name="storage_location_hint">Dalla schermata delle Impostazioni è possibile scegliere la posizione di archiviazione desiderata per scaricare i file ZIM: la scheda SD o la memoria interna.</string>
   <string name="unable_to_add_to_bookmarks">Impossibile aggiungere la voce ai segnalibri</string>
   <string name="go_to_previous_page">Vai alla pagina precedente</string>
   <string name="go_to_next_page">Vai alla pagina successiva</string>
   <string name="table_of_contents">Indice</string>
+  <string name="select_language">Seleziona lingua</string>
   <string name="save_languages">Salva lingue</string>
+  <string name="all_languages">Tutte le lingue</string>
+  <string name="no_language_available">Nessuna lingua disponibile</string>
   <string name="expand">Espandi</string>
   <string name="history">Cronologia</string>
   <string name="history_from_current_book">Mostra la cronologia di tutti i libri</string>
@@ -226,11 +246,14 @@
   <string name="complete">Completato</string>
   <string name="paused_state">In pausa</string>
   <string name="failed_state">Fallito: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Impossibile scaricare il file ZIM. Per favore, prova a reinstallare l\'applicazione dal Play Store.</string>
   <string name="save">Salva</string>
   <string name="note">Nota</string>
+  <string name="take_notes">Modifica/salva annotazioni</string>
   <string name="wiki_article_title">Titolo della voce</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Per esportare i segnalibri è necessario l’accesso allo spazio di archiviazione</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">I segnalibri non possono essere esportati senza accesso allo spazio di archiviazione</string>
+  <string name="export_bookmark_error">Si è verificato un errore durante il tentativo di esportare il segnalibro.</string>
   <string name="ext_storage_permission_rationale_add_note">L’accesso allo spazio di archiviazione è richiesto per poter aggiungere note</string>
   <string name="ext_storage_write_permission_denied_add_note">Le note non possono essere salvate senza l’accesso allo spazio di archiviazione</string>
   <string name="note_save_unsuccessful">Salvataggio della nota fallito</string>
@@ -251,6 +274,7 @@
   <string name="severe_loss_error">Errore grave rilevato! Prova a disabilitare e a riabilitare Wi-Fi Direct</string>
   <string name="connection_failed">Connessione fallita</string>
   <string name="permission_rationale_location">L’accesso alla posizione è richiesto da Android per consentire all’app di rilevare i dispositivi nelle vicinanze</string>
+  <string name="permission_rationale_nearby">L\'accesso all\'autorizzazione Dispositivi nelle vicinanze è richiesta da Android per consentire all\'app di rilevare i dispositivi vicino a te</string>
   <string name="permission_refused_location">Impossibile cercare i dispositivi nelle vicinanze senza l’accesso alla posizione</string>
   <string name="permission_refused_storage">Impossibile accedere ai file ZIM senza l’accesso allo spazio di archiviazione</string>
   <string name="request_enable_location">Abilita la geolocalizzazione per poter cercare i dispositivi nelle vicinanze</string>
@@ -274,6 +298,7 @@
   <string name="status">Stato</string>
   <string name="pref_clear_all_notes_summary">Cancella le note su tutte le voci</string>
   <string name="pref_clear_all_notes_title">Cancella tutte le note</string>
+  <string name="pref_clear_notes">Elimina le annotazioni</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Autorizzazione a leggere e scrivere i file ZIM sulla scheda SD</string>
   <string name="pref_text_zoom_summary">Aumenta o diminuisci la dimensione del testo del 25%% alla volta.</string>
   <string name="tag_pic">Immagini</string>
@@ -293,7 +318,9 @@
   <string name="delete_selected_bookmarks">Vuoi cancellare i segnalibri selezionati?</string>
   <string name="import_bookmarks_dialog_title">Importare segnalibri?</string>
   <string name="export_all_bookmarks_dialog_title">Esportare tutti i segnalibri?</string>
+  <string name="export_all_bookmarks_dialog_message">L\'esportazione genererà il file bookmark.xml nella cartella Download/org.kiwix…/</string>
   <string name="bookmark_imported_message">Tutti i segnalibri sono stati importati.</string>
+  <string name="error_invalid_bookmark_file">Errore: il file selezionato non è un file segnalibro valido.</string>
   <string name="on">Attivata</string>
   <string name="off">Disattivata</string>
   <string name="auto">Automatica</string>
@@ -308,15 +335,21 @@
   <string name="no_open_book">Nessun libro aperto</string>
   <string name="open_library">Apri libreria</string>
   <string name="tab_restored">Scheda ripristinata</string>
+  <string name="tabs_restored">Schede ripristinate</string>
   <string name="open_drawer">Apri menù laterale</string>
   <string name="close_drawer">Chiudi menù laterale</string>
   <string name="preparing_file_for_copy">Preparazione per la copia/spostamento</string>
   <string name="action_copy">Copia</string>
   <string name="move">Sposta</string>
+  <string name="copying_zim_file">Copia del file ZIM…</string>
   <string name="moving_zim_file">Spostamento del file ZIM…</string>
   <string name="copy_move_files_dialog_description">Kiwix richiede che il file ZIM sia nella sua directory dati.\nVuoi copiarlo o spostarlo lì?</string>
   <string name="copy_file_error_message">Errore nella copia del file ZIM: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Attenzione: Assicurati che tutti i blocchi ZIM siano stati spostati/copiati correttamente!</string>
+  <string name="verify_zim_chunks_dialog_message">Puoi verificarli nella cartella \"Android/media/org.kiwix…/\". Una volta fatto, aggiorna la schermata della libreria scorrendo verso il basso. Il file ZIM diviso apparirà in seguito nella tua libreria.</string>
   <string name="why_copy_move_files_to_app_directory">Perché copiare/spostare i file nella directory pubblica dell’app?</string>
+  <string name="copy_move_files_to_app_directory_description">A causa delle politiche di Google Play su Android 11 e versioni successive, la nostra app non può più accedere direttamente ai file archiviati altrove sul tuo dispositivo. Per consentirti di visualizzare i file selezionati, dobbiamo spostarli o copiarli in una cartella speciale all\'interno della directory dell\'applicazione. Questo ci consente di accedere ai file e aprirli.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Scegli l\'archiviazione in cui copiare/spostare il file ZIM</string>
   <string name="move_file_error_message">Errore nello spostamento del file ZIM: %s.</string>
   <string name="how_to_update_content">Come aggiornare i contenuti?</string>
   <string name="update_content_description">Per aggiornare un contenuto (un file ZIM), devi scaricare l’ultima versione completa di quello stesso contenuto. Puoi farlo nella sezione Scarica.</string>
@@ -327,6 +360,10 @@
   <string name="denied_internet_permission_message">Abilita il Wi-Fi per scaricare i contenuti</string>
   <string name="system_unable_to_grant_permission_message">Il sistema non è in grado di concedere l’autorizzazione!</string>
   <string name="allow">Consenti</string>
+  <string name="swipe_down_for_library">Scorri verso il basso per la libreria</string>
+  <string name="parsing_remote_library">Analisi della libreria remota</string>
+  <string name="starting_downloading_remote_library">Avvio del download della biblioteca online</string>
+  <string name="downloading_library">Scaricamento della libreria in corso %s</string>
   <string name="no_notes">Nessuna nota</string>
   <string name="notes_from_all_books">Visualizza le note di tutti i libri</string>
   <string name="search_notes">Cerca note</string>
@@ -335,9 +372,19 @@
   <string name="open_article">Apri articolo</string>
   <string name="delete_note_dialog_message">Nota: le note non vengono eliminate dalla memoria</string>
   <string name="delete_selected_notes">Elimina le note selezionate?</string>
+  <string name="download_tts_language_title">Scarica questa lingua per la funzione di lettura ad alta voce</string>
+  <string name="download_tts_language_message">Clicca sul pulsante Scarica. La lingua richiesta verrà scaricata automaticamente.</string>
   <string name="external_link_copied_message">Collegamento esterno copiato negli appunti</string>
+  <string name="read_aloud_service_channel_name">Canale del servizio di lettura ad alta voce</string>
+  <string name="read_aloud_channel_description">Comandi della lettura ad alta voce.</string>
+  <string name="read_aloud_running">Lettura ad alta voce in esecuzione</string>
   <string name="navigation_history_cleared">Cronologia di navigazione cancellata</string>
   <string name="go_to_settings_label">Vai alle impostazioni</string>
+  <string name="request_notification_permission_message">Per eseguire questa azione, concedi l\'accesso alle notifiche</string>
+  <string name="click_nearby_devices_message">Clicca qui per cercare dispositivi nelle vicinanze.</string>
+  <string name="your_device_name_message">Il nome del tuo dispositivo apparirà qui.</string>
+  <string name="nearby_devices_list_message">Qui troverai un elenco dei dispositivi nelle vicinanze. Tocca il nome di un dispositivo per avviare il trasferimento file.</string>
+  <string name="transfer_zim_files_list_message">Qui troverai l\'elenco dei file ZIM disponibili per il trasferimento.</string>
   <string name="donation_dialog_title">Dona oggi</string>
   <string name="make_donation">Fai una donazione</string>
   <string name="downloading_state">Download in corso</string>

@@ -10,6 +10,7 @@
 * Loran
 * McDutchie
 * MohitMali
+* Moliseforever
 * Robby
 * Shirayuki
 * Stephane
@@ -34,6 +35,7 @@
   <string name="save_media_error">This error message shows to the user in an “Android Toast”, when there is an error while saving the file in phone storage.</string>
   <string name="save_media_saved">This appears in an “Android Toast” when a file is successfully saved in the “Downloads/org.kiwix/” directory of the phone storage. Here “%s” will be replaced by the saved file name on runtime.</string>
   <string name="search_label">{{Identical|Search}}</string>
+  <string name="searched_list">Needs documentation in order to be translated</string>
   <string name="choose_file">This is a text message to inform the user please select a file .zim file.</string>
   <string name="open_in_new_tab">This message appears in a dialog window when a user long clicks on any URL/pageURL on the current page. This message is to indicate to the user if he wants to open the current URL in a new window.</string>
   <string name="hotspot_service_channel_name">Name of the notification channel used for the hotspot persistent notification.\nCan be found in Android notification settings for Kiwix app.</string>
@@ -343,5 +345,5 @@
   <string name="empty_string">{{Ignored}}</string>
   <string name="resuming_state">This text is shown to inform the user that the current state of download is resuming.</string>
   <string name="downloading_state">This text is shown to inform the user that the current state of download is actively in progress.</string>
-  <string name="download_failed_state">This text is shown to inform the user when a download has been failed.</string>
+  <string name="download_failed_state">This text is shown to inform the user when a download has failed.</string>
 </resources>
