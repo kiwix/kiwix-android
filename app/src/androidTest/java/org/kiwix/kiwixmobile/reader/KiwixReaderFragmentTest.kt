@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -117,7 +118,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   fun testTabClosedDialog() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     val loadFileStream =
       KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
@@ -158,7 +159,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   fun testZimFileRendering() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     val downloadingZimFile = getDownloadingZimFile()
     getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->

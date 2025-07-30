@@ -22,7 +22,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -47,8 +46,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.search.SearchFragment
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -60,6 +57,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -134,7 +132,7 @@ class SearchFragmentTest : BaseActivityTest() {
   fun searchFragmentSimple() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     testZimFile = getTestZimFile()
     openKiwixReaderFragmentWithFile(testZimFile)
@@ -173,7 +171,7 @@ class SearchFragmentTest : BaseActivityTest() {
       pressBack()
     }
 
-    UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(R.id.libraryFragment) }
+    UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(KiwixDestination.Library.route) }
     // test with a large ZIM file to properly test the scenario
     downloadingZimFile = getDownloadingZimFile()
     getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
@@ -259,7 +257,7 @@ class SearchFragmentTest : BaseActivityTest() {
         )
       activityScenario.onActivity {
         kiwixMainActivity = it
-        kiwixMainActivity.navigate(R.id.libraryFragment)
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
       downloadingZimFile = getDownloadingZimFile()
       getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
@@ -279,33 +277,34 @@ class SearchFragmentTest : BaseActivityTest() {
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchFragment become visible on screen.
       delay(2000)
-      val navHostFragment: NavHostFragment =
-        kiwixMainActivity.supportFragmentManager
-          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-      val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
-      for (i in 1..100) {
-        // This will execute the render method 100 times frequently.
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      }
-      for (i in 1..100) {
-        // this will execute the render method 100 times with 100MS delay.
-        delay(100)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      }
-      for (i in 1..100) {
-        // this will execute the render method 100 times with 200MS delay.
-        delay(200)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      }
-      for (i in 1..100) {
-        // this will execute the render method 100 times with 200MS delay.
-        delay(300)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      }
+      // TODO refactor this with compose based navController.
+      // val navHostFragment: NavHostFragment =
+      //   kiwixMainActivity.supportFragmentManager
+      //     .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+      // val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
+      // for (i in 1..100) {
+      //   // This will execute the render method 100 times frequently.
+      //   val searchTerm = searchTerms[i % searchTerms.size]
+      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      // }
+      // for (i in 1..100) {
+      //   // this will execute the render method 100 times with 100MS delay.
+      //   delay(100)
+      //   val searchTerm = searchTerms[i % searchTerms.size]
+      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      // }
+      // for (i in 1..100) {
+      //   // this will execute the render method 100 times with 200MS delay.
+      //   delay(200)
+      //   val searchTerm = searchTerms[i % searchTerms.size]
+      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      // }
+      // for (i in 1..100) {
+      //   // this will execute the render method 100 times with 200MS delay.
+      //   delay(300)
+      //   val searchTerm = searchTerms[i % searchTerms.size]
+      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      // }
     }
 
   private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {

@@ -37,6 +37,7 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_LIST_TEST_TAG
@@ -143,9 +144,9 @@ class BookmarksRobot : BaseRobot() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 
-  fun openBookmarkScreen() {
+  fun openBookmarkScreen(coreMainActivity: CoreMainActivity) {
     testFlakyView({
-      openDrawer()
+      openDrawer(coreMainActivity)
       onView(withText(R.string.bookmarks)).perform(click())
     })
   }

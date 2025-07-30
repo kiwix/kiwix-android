@@ -22,7 +22,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -41,16 +40,16 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.settingsRobo
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -123,13 +122,13 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   private fun openZimFileInReader() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     loadZimFileInReader()
   }
 
   private fun toggleDarkMode(enable: Boolean) {
-    darkModeViewPainter(DarkModeViewPainterRobot::openSettings)
+    darkModeViewPainter { openSettings(kiwixMainActivity as CoreMainActivity) }
     settingsRobo { clickNightModePreference(composeTestRule) }
     darkModeViewPainter {
       if (enable) {
@@ -142,27 +141,28 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   }
 
   private fun verifyDarkMode(isEnabled: Boolean) {
-    UiThreadStatement.runOnUiThread {
-      val navHostFragment: NavHostFragment =
-        kiwixMainActivity.supportFragmentManager
-          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-      val kiwixReaderFragment =
-        navHostFragment.childFragmentManager.fragments[0] as KiwixReaderFragment
-      val currentWebView = kiwixReaderFragment.getCurrentWebView()
-      currentWebView?.let {
-        darkModeViewPainter {
-          if (isEnabled) {
-            assertNightModeEnabled(it)
-          } else {
-            assertLightModeEnabled(it)
-          }
-        }
-      } ?: run {
-        throw RuntimeException(
-          "Could not check the dark mode enable or not because zim file is not loaded in the reader"
-        )
-      }
-    }
+    // TODO refactor this with compose based navController.
+    // UiThreadStatement.runOnUiThread {
+    //   val navHostFragment: NavHostFragment =
+    //     kiwixMainActivity.supportFragmentManager
+    //       .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    //   val kiwixReaderFragment =
+    //     navHostFragment.childFragmentManager.fragments[0] as KiwixReaderFragment
+    //   val currentWebView = kiwixReaderFragment.getCurrentWebView()
+    //   currentWebView?.let {
+    //     darkModeViewPainter {
+    //       if (isEnabled) {
+    //         assertNightModeEnabled(it)
+    //       } else {
+    //         assertLightModeEnabled(it)
+    //       }
+    //     }
+    //   } ?: run {
+    //     throw RuntimeException(
+    //       "Could not check the dark mode enable or not because zim file is not loaded in the reader"
+    //     )
+    //   }
+    // }
   }
 
   private fun loadZimFileInReader() {

@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
@@ -138,7 +139,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
             "en",
             SharedPreferenceUtil(context)
           )
-          it.navigate(R.id.libraryFragment)
+          it.navigate(KiwixDestination.Library.route)
         }
       }
     boxStore = DatabaseModule.boxStore

@@ -150,7 +150,7 @@ class SearchFragmentTestForCustomApp {
       }
     }
     UiThreadStatement.runOnUiThread {
-      customMainActivity.navigate(customMainActivity.readerFragmentResId)
+      customMainActivity.navigate(customMainActivity.readerFragmentRoute)
     }
     openZimFileInReader(zimFile = downloadingZimFile)
     openSearchWithQuery()
@@ -230,7 +230,7 @@ class SearchFragmentTestForCustomApp {
         }
       }
       UiThreadStatement.runOnUiThread {
-        customMainActivity.navigate(customMainActivity.readerFragmentResId)
+        customMainActivity.navigate(customMainActivity.readerFragmentRoute)
       }
       openZimFileInReader(zimFile = downloadingZimFile)
       openSearchWithQuery(searchTerms[0])
@@ -288,7 +288,7 @@ class SearchFragmentTestForCustomApp {
         }
       }
     UiThreadStatement.runOnUiThread {
-      customMainActivity.navigate(customMainActivity.readerFragmentResId)
+      customMainActivity.navigate(customMainActivity.readerFragmentRoute)
     }
     openZimFileInReader(zimFile = downloadingZimFile)
     search {

@@ -18,17 +18,14 @@
 package org.kiwix.kiwixmobile.utils
 
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import androidx.core.view.GravityCompat
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.closeDrawerWithGravity
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
@@ -40,14 +37,14 @@ object StandardActions {
     clickOn(TestUtils.getResourceString(string.menu_settings))
   }
 
-  fun openDrawer() {
+  fun openDrawer(coreMainActivity: CoreMainActivity) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    openDrawerWithGravity(R.id.navigation_container, GravityCompat.START)
+    coreMainActivity.openNavigationDrawer()
   }
 
-  fun closeDrawer() {
+  fun closeDrawer(coreMainActivity: CoreMainActivity) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    closeDrawerWithGravity(R.id.navigation_container, GravityCompat.START)
+    coreMainActivity.closeNavigationDrawer()
   }
 
   @JvmStatic

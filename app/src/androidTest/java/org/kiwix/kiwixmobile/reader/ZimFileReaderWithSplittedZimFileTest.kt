@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.reader
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -50,10 +51,10 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileOutputStream
@@ -112,13 +113,16 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
   fun testZimFileReaderWithSplittedZimFile() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     createAndGetSplitedZimFile()?.let {
       UiThreadStatement.runOnUiThread {
+        val navOptions = NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, false)
+          .build()
         kiwixMainActivity.navigate(
-          LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-            .apply { zimFileUri = it.toUri().toString() }
+          KiwixDestination.Reader.createRoute(zimFileUri = it.toUri().toString()),
+          navOptions
         )
       }
 

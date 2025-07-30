@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.help.help
 import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
@@ -53,7 +54,6 @@ fun topLevel(func: TopLevelDestinationRobot.() -> Unit) =
 
 class TopLevelDestinationRobot : BaseRobot() {
   fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
-    isVisible(ViewId(R.id.navigation_container))
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     testFlakyView({ onView(withId(R.id.readerFragment)).perform(click()) })
     reader(func)
@@ -70,51 +70,54 @@ class TopLevelDestinationRobot : BaseRobot() {
     onlineLibrary(func)
   }
 
-  private fun inNavDrawer(navDrawerAction: () -> Unit) {
-    openDrawer()
+  private fun inNavDrawer(coreMainActivity: CoreMainActivity, navDrawerAction: () -> Unit) {
+    openDrawer(coreMainActivity)
     navDrawerAction.invoke()
     pressBack()
   }
 
-  fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
-    inNavDrawer {
+  fun clickBookmarksOnNavDrawer(
+    coreMainActivity: CoreMainActivity,
+    func: BookmarksRobot.() -> Unit
+  ) {
+    inNavDrawer(coreMainActivity = coreMainActivity) {
       testFlakyView({ onView(withText(string.bookmarks)).perform(click()) })
       bookmarks(func)
       pressBack()
     }
   }
 
-  fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
-    inNavDrawer {
+  fun clickHistoryOnSideNav(coreMainActivity: CoreMainActivity, func: HistoryRobot.() -> Unit) {
+    inNavDrawer(coreMainActivity) {
       clickOn(TextId(string.history))
       history(func)
       pressBack()
     }
   }
 
-  fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
-    inNavDrawer {
+  fun clickHostBooksOnSideNav(coreMainActivity: CoreMainActivity, func: ZimHostRobot.() -> Unit) {
+    inNavDrawer(coreMainActivity) {
       clickOn(TextId(string.menu_wifi_hotspot))
       zimHost(func)
     }
   }
 
-  fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
-    inNavDrawer {
+  fun clickSettingsOnSideNav(coreMainActivity: CoreMainActivity, func: SettingsRobot.() -> Unit) {
+    inNavDrawer(coreMainActivity) {
       clickOn(TextId(string.menu_settings))
       settingsRobo(func)
     }
   }
 
-  fun clickHelpOnSideNav(func: HelpRobot.() -> Unit) {
-    inNavDrawer {
+  fun clickHelpOnSideNav(coreMainActivity: CoreMainActivity, func: HelpRobot.() -> Unit) {
+    inNavDrawer(coreMainActivity) {
       clickOn(TextId(string.menu_help))
       help(func)
     }
   }
 
-  fun clickSupportKiwixOnSideNav() {
-    inNavDrawer {
+  fun clickSupportKiwixOnSideNav(coreMainActivity: CoreMainActivity) {
+    inNavDrawer(coreMainActivity) {
       clickOn(TextId(string.menu_support_kiwix))
     }
   }

@@ -47,7 +47,7 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -59,6 +59,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
 
@@ -128,7 +129,7 @@ class DownloadTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(R.id.libraryFragment)
+      it.navigate(KiwixDestination.Library.route)
     }
     try {
       // delete all the ZIM files showing in the LocalLibrary
@@ -159,7 +160,7 @@ class DownloadTest : BaseActivityTest() {
           )
         }
         UiThreadStatement.runOnUiThread {
-          kiwixMainActivity.navigate(R.id.libraryFragment)
+          kiwixMainActivity.navigate(KiwixDestination.Library.route)
         }
         // refresh the local library list to show the downloaded zim file
         library { refreshList(composeTestRule) }
@@ -179,7 +180,7 @@ class DownloadTest : BaseActivityTest() {
   fun testPauseAndResumeInOtherLanguage() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
-      it.navigate(R.id.libraryFragment)
+      it.navigate(KiwixDestination.Library.route)
     }
     try {
       // delete all the ZIM files showing in the LocalLibrary
@@ -192,7 +193,7 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         // change the application language
         topLevel {
-          clickSettingsOnSideNav {
+          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity) {
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectDeviceDefaultLanguage(composeTestRule)
@@ -213,7 +214,7 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted(composeTestRule)
         // select the default device language to perform other test cases.
         topLevel {
-          clickSettingsOnSideNav {
+          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity) {
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectDeviceDefaultLanguage(composeTestRule)
