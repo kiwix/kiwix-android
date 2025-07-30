@@ -95,9 +95,6 @@ object ActivityExtensions {
   val Activity.cachedComponent: CoreActivityComponent
     get() = coreMainActivity.cachedComponent
 
-  fun Activity.setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) =
-    coreMainActivity.setupDrawerToggle(shouldEnableRightDrawer)
-
   fun Activity.navigate(route: String, navOptions: NavOptions? = null) {
     coreMainActivity.navigate(route, navOptions)
   }

@@ -26,10 +26,8 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
@@ -37,7 +35,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -79,7 +76,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       })
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    activity.setupDrawerToggle(true)
+    activity.enableLeftDrawer()
     openPageInBookFromNavigationArguments()
   }
 
@@ -147,11 +144,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     openZimFile(zimReaderSource)
   }
 
-  override fun loadDrawerViews() {
-    // drawerLayout = requireActivity().findViewById(R.id.navigation_container)
-    // tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
-  }
-
   override fun openHomeScreen() {
     Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.isEmpty()) {
@@ -174,9 +166,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
    * @see closeAllTabs
    */
   override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
-    activity?.setupDrawerToggle(true)
+    enableLeftDrawer()
     (requireActivity() as CoreMainActivity).showBottomAppBar()
-    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (webViewList.isEmpty()) {
       readerMenuState?.hideTabSwitcher()
       exitBook(shouldCloseZimBook)

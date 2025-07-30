@@ -113,7 +113,6 @@ import java.util.Locale
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
-private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
 const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 
 @Suppress("LargeClass")

@@ -68,8 +68,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -192,8 +190,6 @@ abstract class CoreReaderFragment :
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
-
-  var drawerLayout: DrawerLayout? = null
 
   @JvmField
   @Inject
@@ -490,7 +486,6 @@ abstract class CoreReaderFragment :
     }
     handleLocaleCheck()
     initHideBackToTopTimer()
-    loadDrawerViews()
     addFileReader()
     activity?.let {
       compatCallback = CompatFindActionModeCallback(it)
@@ -561,16 +556,28 @@ abstract class CoreReaderFragment :
       string.open_drawer
     }
 
-  private fun navigationIconClick() {
+  /**
+   * Handles clicks on the navigation icon.
+   * - If the tab switcher is active, triggers the home menu action.
+   * - Otherwise, toggles the navigation drawer: opens it if closed, closes it if open.
+   *
+   * Subclasses like CustomReaderFragment can override this method to provide custom behavior,
+   * such as disabling the hamburger icon click when the sidebar is configured to be hidden.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open fun navigationIconClick() {
     if (readerMenuState?.isInTabSwitcher == true) {
       onHomeMenuClicked()
+      return
+    }
+
+    val activity = activity as CoreMainActivity
+    if (activity.navigationDrawerIsOpen()) {
+      activity.closeNavigationDrawer()
     } else {
-      val activity = activity as CoreMainActivity
-      if (activity.navigationDrawerIsOpen()) {
-        activity.closeNavigationDrawer()
-      } else {
-        activity.openNavigationDrawer()
-      }
+      activity.openNavigationDrawer()
     }
   }
 
@@ -616,13 +623,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  /**
-   * Abstract method to be implemented by subclasses for loading drawer-related views.
-   * Subclasses like CustomReaderFragment and KiwixReaderFragment should override this method
-   * to set up specific views for both the left and right drawers, such as custom containers
-   * or navigation views.
-   */
-  protected abstract fun loadDrawerViews()
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -672,10 +672,9 @@ abstract class CoreReaderFragment :
 
   private fun showTabSwitcher() {
     (requireActivity() as CoreMainActivity).apply {
-      disableDrawer()
+      disableLeftDrawer()
       hideBottomAppBar()
     }
-    setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = false,
@@ -716,9 +715,8 @@ abstract class CoreReaderFragment :
    *          as closing the ZIM book would require reloading the ZIM file, which can be a resource-intensive operation.
    */
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
-    setUpDrawerToggle()
+    enableLeftDrawer()
     (requireActivity() as CoreMainActivity).showBottomAppBar()
-    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = true,
@@ -730,20 +728,15 @@ abstract class CoreReaderFragment :
     selectTab(currentWebViewIndex)
   }
 
-  open fun setUpDrawerToggle() {
-    (requireActivity() as CoreMainActivity).setupDrawerToggle(true)
-  }
-
   /**
-   * Sets the lock mode for the drawer, controlling whether the drawer can be opened or closed.
-   * Subclasses like CustomReaderFragment override this method to provide custom
-   * behavior, such as disabling the sidebar when configured not to show it.
+   * Enables the activity's left drawer, allowing it to be opened by clicking the hamburger icon.
+   * Subclasses like CustomReaderFragment can override this method to customize the behavior,
+   * for example, to disable the sidebar when it shouldn't be shown.
    *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
+   * WARNING: If you modify this method, thoroughly test it in custom apps to ensure it works correctly.
    */
-  protected open fun setDrawerLockMode(lockMode: Int) {
-    drawerLayout?.setDrawerLockMode(lockMode)
+  open fun enableLeftDrawer() {
+    (requireActivity() as CoreMainActivity).enableLeftDrawer()
   }
 
   private fun goBack() {
@@ -873,8 +866,8 @@ abstract class CoreReaderFragment :
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
 
-      drawerLayout?.isDrawerOpen(GravityCompat.END) == true -> {
-        drawerLayout?.closeDrawers()
+      shouldTableOfContentDrawer.value -> {
+        shouldTableOfContentDrawer.update { false }
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
 
@@ -1108,7 +1101,6 @@ abstract class CoreReaderFragment :
   private fun unBindViewsAndBinding() {
     compatCallback?.finish()
     compatCallback = null
-    drawerLayout = null
   }
 
   private fun updateTableOfContents() {
@@ -1484,13 +1476,12 @@ abstract class CoreReaderFragment :
           shouldShowBottomAppBar = false
         )
       }
-      (requireActivity() as CoreMainActivity).disableDrawer(false)
+      (requireActivity() as CoreMainActivity).disableLeftDrawer()
     } else {
       readerScreenState.update { copy(fullScreenItem = fullScreenItem.copy(first = false)) }
       if (!isInFullScreenMode()) {
         readerScreenState.update { copy(shouldShowBottomAppBar = true) }
-        setUpDrawerToggle()
-        setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        enableLeftDrawer()
       }
     }
   }
@@ -1498,7 +1489,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
     (requireActivity() as CoreMainActivity).apply {
-      disableDrawer(false)
+      disableLeftDrawer()
       hideBottomAppBar()
     }
     readerScreenState.update {
@@ -1518,9 +1509,8 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   open fun closeFullScreen() {
-    setUpDrawerToggle()
+    enableLeftDrawer()
     (requireActivity() as CoreMainActivity).showBottomAppBar()
-    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
     updateBottomToolbarVisibility()
     val window = requireActivity().window
@@ -1982,7 +1972,9 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   private fun contentsDrawerHint() {
-    drawerLayout?.postDelayed({ drawerLayout?.openDrawer(GravityCompat.END) }, 500)
+    Handler(Looper.getMainLooper()).postDelayed({
+      shouldTableOfContentDrawer.update { true }
+    }, 500)
     alertDialogShower?.show(KiwixDialog.ContentsDrawerHint)
   }
 

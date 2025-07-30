@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
@@ -51,6 +52,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 
+@Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixMainActivityScreen(
@@ -83,28 +85,28 @@ fun KiwixMainActivityScreen(
         // on the hamburger button.
         (currentRoute != KiwixDestination.Reader.route || leftDrawerState.isOpen)
     ) {
-      Box {
-        Scaffold(
-          bottomBar = {
-            if (shouldShowBottomBar) {
-              BottomNavigationBar(
-                navController = navController,
-                bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-                navBackStackEntry = navBackStackEntry,
-                leftDrawerState = leftDrawerState,
-                uiCoroutineScope = uiCoroutineScope
-              )
-            }
-          },
-          modifier = Modifier.fillMaxSize()
-        ) { paddingValues ->
-          Box(modifier = Modifier.padding(paddingValues)) {
-            KiwixNavGraph(
+      Scaffold(
+        bottomBar = {
+          if (shouldShowBottomBar) {
+            BottomNavigationBar(
               navController = navController,
-              startDestination = startDestination,
-              modifier = Modifier.fillMaxSize()
+              bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
+              navBackStackEntry = navBackStackEntry,
+              leftDrawerState = leftDrawerState,
+              uiCoroutineScope = uiCoroutineScope
             )
           }
+        },
+        modifier = Modifier
+          .fillMaxSize()
+          .systemBarsPadding()
+      ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+          KiwixNavGraph(
+            navController = navController,
+            startDestination = startDestination,
+            modifier = Modifier.fillMaxSize()
+          )
         }
       }
     }

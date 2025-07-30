@@ -127,17 +127,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   /**
    * Manages the enabling/disabling the left drawer
    */
-  protected val enableLeftDrawer = mutableStateOf(true)
+  val enableLeftDrawer = mutableStateOf(true)
 
   /**
    * For managing the the showing/hiding the bottomAppBar when scrolling.
    */
   @OptIn(ExperimentalMaterial3Api::class)
   var bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior? = null
-
-  // abstract val drawerContainerLayout: DrawerLayout
-  // abstract val drawerNavView: NavigationView
-  // abstract val readerTableOfContentsDrawer: NavigationView
   abstract val bookmarksFragmentRoute: String
   abstract val settingsFragmentRoute: String
   abstract val historyFragmentRoute: String
@@ -145,8 +141,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val helpFragmentRoute: String
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinationsRoute: Set<String>
-
-  // abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
 
@@ -200,15 +194,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
-    setDialogHostToActivity(alertDialogShower)
     externalLinkOpener.setAlertDialogShower(alertDialogShower)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
     rateDialogHandler.checkForRateDialog(getIconResId())
-    // navController.addOnDestinationChangedListener { _, destination, _ ->
-    //   configureActivityBasedOn(destination)
-    // }
   }
 
   /**
@@ -302,59 +292,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onSupportNavigateUp(): Boolean =
     navController.navigateUp() || super.onSupportNavigateUp()
 
-  open fun setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) {
+  fun enableLeftDrawer() {
     enableLeftDrawer.value = true
-    // Set the initial contentDescription to the hamburger icon.
-    // This method is called from various locations after modifying the navigationIcon.
-    // For example, we previously changed this icon/contentDescription to the "+" button
-    // when opening the tabSwitcher. After closing the tabSwitcher, we reset the
-    // contentDescription to the default hamburger icon.
-    // Todo we will refactore this when migrating the CoreMainActivity.
-    // toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-    //   getString(R.string.open_drawer)
-    // )
-    // drawerToggle =
-    //   ActionBarDrawerToggle(
-    //     this,
-    //     drawerContainerLayout,
-    //     R.string.open_drawer,
-    //     R.string.close_drawer
-    //   )
-    // drawerToggle?.let {
-    //   drawerContainerLayout.addDrawerListener(it)
-    //   it.syncState()
-    // }
-    // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    // if (shouldEnableRightDrawer) {
-    //   // Enable the right drawer
-    //   drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
-    // }
   }
 
-  open fun disableDrawer(disableRightDrawer: Boolean = true) {
+  open fun disableLeftDrawer() {
     enableLeftDrawer.value = false
-    // drawerToggle?.isDrawerIndicatorEnabled = false
-    // drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    // if (disableRightDrawer) {
-    //   // Disable the right drawer
-    //   drawerContainerLayout.setDrawerLockMode(
-    //     DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-    //     GravityCompat.END
-    //   )
-    // }
-  }
-
-  open fun onNavigationItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
-      R.id.menu_settings -> openSettings()
-      R.id.menu_help -> openHelpFragment()
-      R.id.menu_notes -> openNotes()
-      R.id.menu_history -> openHistory()
-      R.id.menu_bookmarks_list -> openBookmarks()
-      else -> return false
-    }
-    return true
   }
 
   protected fun openHelpFragment() {
@@ -492,7 +435,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
-    disableDrawer()
+    disableLeftDrawer()
   }
 
   private fun setMainActivityToCoreApp() {
@@ -592,7 +535,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected abstract fun getIconResId(): Int
   abstract val readerFragmentRoute: String
   abstract fun createApplicationShortcuts()
-  abstract fun setDialogHostToActivity(alertDialogShower: AlertDialogShower)
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()
 }

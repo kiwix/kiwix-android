@@ -169,7 +169,7 @@ const val CLOSE_ALL_TABS_BUTTON_TESTING_TAG = "closeAllTabsButtonTestingTag"
 const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongMethod")
 @Composable
 fun ReaderScreen(
   state: ReaderScreenState,
@@ -305,6 +305,7 @@ private fun ReaderContentLayout(
   }
 }
 
+@Suppress("LongMethod", "UnsafeCallOnNullableType")
 @Composable
 fun TableDrawerSheet(
   title: String,
@@ -372,7 +373,7 @@ fun TableDrawerSheet(
         "document.getElementById('$targetId')?.scrollIntoView();",
         null
       )
-      delay(100)
+      delay(HUNDERED.toLong())
       webViewScrollState.value = ScrollState(selectedWebView?.scrollY ?: ZERO)
       scrollToSectionIndex = null
       showTableOfContentDrawer.update { false }

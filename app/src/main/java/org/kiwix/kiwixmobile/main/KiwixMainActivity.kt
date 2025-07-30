@@ -23,7 +23,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -50,7 +49,6 @@ import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -63,7 +61,6 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -72,24 +69,11 @@ import javax.inject.Inject
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
-const val KIWIX_BOTTOM_BAR_ANIMATION_DURATION = 250L
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
   override val cachedComponent by lazy { kiwixActivityComponent }
   override val searchFragmentRoute: String = KiwixDestination.Search.route
-
-  // override val drawerContainerLayout: DrawerLayout by lazy {
-  //   // activityKiwixMainBinding.navigationContainer
-  // }
-
-  // override val drawerNavView: NavigationView by lazy {
-  //   activityKiwixMainBinding.drawerNavView
-  // }
-
-  // override val readerTableOfContentsDrawer: NavigationView by lazy {
-  //   activityKiwixMainBinding.readerDrawerNavView
-  // }
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
@@ -288,14 +272,6 @@ class KiwixMainActivity : CoreMainActivity() {
     navigate(KiwixDestination.Reader.createRoute(zimFileUri = path))
   }
 
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      id.menu_host_books -> openZimHostFragment()
-      else -> return super.onNavigationItemSelected(item)
-    }
-    return true
-  }
-
   override val zimHostDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
     title = CoreApp.instance.getString(string.menu_wifi_hotspot),
     iconRes = drawable.ic_mobile_screen_share_24px,
@@ -323,7 +299,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val aboutAppDrawerMenuItem: DrawerMenuItem? = null
 
   private fun openZimHostFragment() {
-    disableDrawer()
+    disableLeftDrawer()
     handleDrawerOnNavigation()
     navigate(KiwixDestination.ZimHost.route)
   }
@@ -334,10 +310,6 @@ class KiwixMainActivity : CoreMainActivity() {
     // Remove previously added dynamic shortcuts for old ids if any found.
     removeOutdatedIdShortcuts()
     ShortcutManagerCompat.addDynamicShortcuts(this, dynamicShortcutList())
-  }
-
-  override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
-    // activityKiwixMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
   }
 
   override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
