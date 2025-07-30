@@ -40,11 +40,14 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.HIDE_TAB_SWITCHER_DELAY
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
+import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
@@ -83,11 +86,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
   @Suppress("MagicNumber")
   private fun openPageInBookFromNavigationArguments() {
     showProgressBarWithProgress(30)
-    val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
+    val zimFileUri = arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
+    val pageUrl = arguments?.getString(PAGE_URL_KEY).orEmpty()
+    val searchItemTitle = arguments?.getString(SEARCH_ITEM_TITLE_KEY).orEmpty()
     coreReaderLifeCycleScope?.launch {
-      if (args.pageUrl.isNotEmpty()) {
-        if (args.zimFileUri.isNotEmpty()) {
-          tryOpeningZimFile(args.zimFileUri)
+      if (pageUrl.isNotEmpty()) {
+        if (zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(zimFileUri)
         } else {
           // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
           // This is necessary because we are not opening the ZIM file again; the bookmark is
@@ -96,13 +101,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
           zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
         }
         hideProgressBar()
-        loadUrlWithCurrentWebview(args.pageUrl)
+        loadUrlWithCurrentWebview(pageUrl)
       } else {
-        if (args.zimFileUri.isNotEmpty()) {
-          tryOpeningZimFile(args.zimFileUri)
+        if (zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(zimFileUri)
         } else {
           val restoreOrigin =
-            if (args.searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
+            if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
           manageExternalLaunchAndRestoringViewState(restoreOrigin)
         }
       }

@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
@@ -173,9 +174,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun loadPageFromNavigationArguments() {
-    val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
-    if (args.pageUrl.isNotEmpty()) {
-      loadUrlWithCurrentWebview(args.pageUrl)
+    val pageUrl = arguments?.getString(PAGE_URL_KEY).orEmpty()
+    if (pageUrl.isNotEmpty()) {
+      loadUrlWithCurrentWebview(pageUrl)
       // Setup bookmark for current book
       // See https://github.com/kiwix/kiwix-android/issues/3541
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)

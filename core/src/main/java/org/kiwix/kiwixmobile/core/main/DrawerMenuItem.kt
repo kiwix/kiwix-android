@@ -24,7 +24,8 @@ data class DrawerMenuItem(
   val title: String,
   @DrawableRes val iconRes: Int,
   val visible: Boolean = true,
-  val onClick: () -> Unit
+  val onClick: () -> Unit,
+  val testingTag: String
 )
 
 data class DrawerMenuGroup(val drawerMenuItemList: List<DrawerMenuItem>)

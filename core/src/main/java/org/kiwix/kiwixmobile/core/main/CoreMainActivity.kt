@@ -62,6 +62,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -88,6 +89,16 @@ const val HELP_FRAGMENT = "helpFragment"
 const val SETTINGS_FRAGMENT = "settingsFragment"
 const val SEARCH_FRAGMENT = "searchFragment"
 const val LOCAL_FILE_TRANSFER_FRAGMENT = "localFileTransferFragment"
+const val ZIM_HOST_DEEP_LINK_SCHEME = "kiwix"
+const val ZIM_HOST_NAV_DEEP_LINK = "$ZIM_HOST_DEEP_LINK_SCHEME://zimhost"
+const val LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG = "leftDrawerBookmarkItemTestingTag"
+const val LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG = "leftDrawerHistoryItemTestingTag"
+const val LEFT_DRAWER_NOTES_ITEM_TESTING_TAG = "leftDrawerNotesItemTestingTag"
+const val LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG = "leftDrawerSettingsItemTestingTag"
+const val LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG = "leftDrawerSupportItemTestingTag"
+const val LEFT_DRAWER_HELP_ITEM_TESTING_TAG = "leftDrawerHelpItemTestingTag"
+const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingTag"
+const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val searchFragmentRoute: String
@@ -373,7 +384,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun activeFragments(): MutableList<Fragment> =
-    supportFragmentManager.fragments
+    supportFragmentManager.fragments.also {
+      Log.d("Fragments", "Found fragments: ${supportFragmentManager.fragments}")
+    }
 
   fun navigate(action: NavDirections) {
     navController.currentDestination?.getAction(action.actionId)?.run {
@@ -453,19 +466,22 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           title = CoreApp.instance.getString(R.string.bookmarks),
           iconRes = R.drawable.ic_bookmark_black_24dp,
           visible = true,
-          onClick = { openBookmarks() }
+          onClick = { openBookmarks() },
+          testingTag = LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
         ),
         DrawerMenuItem(
           title = CoreApp.instance.getString(R.string.history),
           iconRes = R.drawable.ic_history_24px,
           visible = true,
-          onClick = { openHistory() }
+          onClick = { openHistory() },
+          testingTag = LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG
         ),
         DrawerMenuItem(
           title = CoreApp.instance.getString(R.string.pref_notes),
           iconRes = R.drawable.ic_add_note,
           visible = true,
-          onClick = { openNotes() }
+          onClick = { openNotes() },
+          testingTag = LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
         ),
         zimHostDrawerMenuItem
       )
@@ -479,7 +495,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           title = CoreApp.instance.getString(R.string.menu_settings),
           iconRes = R.drawable.ic_settings_24px,
           visible = true,
-          onClick = { openSettings() }
+          onClick = { openSettings() },
+          testingTag = LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
         )
       )
     )

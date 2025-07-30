@@ -99,8 +99,8 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       clickOnSearchIcon(composeTestRule)
       searchWikipediaZIMFiles(composeTestRule)
       pressBack()
-      clickLibraryOnBottomNav()
-      clickDownloadOnBottomNav()
+      clickLibraryOnBottomNav(composeTestRule)
+      clickDownloadOnBottomNav(composeTestRule)
       assertPreviousSearchRemainsActive(composeTestRule)
     }
   }
@@ -118,8 +118,8 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       searchWikipediaZIMFiles(composeTestRule)
       clickOnClearSearchIcon(composeTestRule)
       pressBack()
-      clickLibraryOnBottomNav()
-      clickDownloadOnBottomNav()
+      clickLibraryOnBottomNav(composeTestRule)
+      clickDownloadOnBottomNav(composeTestRule)
       assertSearchViewIsNotActive(composeTestRule)
     }
   }

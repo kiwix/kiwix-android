@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.search
 
 import android.view.KeyEvent
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -34,11 +35,11 @@ import androidx.test.uiautomator.UiDevice
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -59,9 +60,12 @@ class SearchRobot : BaseRobot() {
     }
   }
 
-  fun checkZimFileSearchSuccessful(readerFragment: Int) {
+  fun checkZimFileSearchSuccessful(composeTestRule: ComposeContentTestRule) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    isVisible(ViewId(readerFragment))
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).assertIsDisplayed()
+    }
   }
 
   fun searchWithFrequentlyTypedWords(
@@ -131,7 +135,7 @@ class SearchRobot : BaseRobot() {
     openSearchScreen(composeTestRule)
     searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)
     clickOnSearchItemInSearchList(composeTestRule)
-    checkZimFileSearchSuccessful(org.kiwix.kiwixmobile.R.id.readerFragment)
+    checkZimFileSearchSuccessful(composeTestRule)
   }
 
   fun assertArticleLoaded() {

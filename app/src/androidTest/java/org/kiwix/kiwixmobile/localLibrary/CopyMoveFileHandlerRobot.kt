@@ -29,18 +29,17 @@ import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
-import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
-import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 
 fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
@@ -117,8 +116,13 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   }
 
   fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitUntilTimeout()
-    isVisible(Findable.ViewId(id.readerFragment))
+    composeTestRule.apply {
+      waitUntilTimeout()
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
+      }
+    }
     testFlakyView({
       Web.onWebView()
         .withElement(

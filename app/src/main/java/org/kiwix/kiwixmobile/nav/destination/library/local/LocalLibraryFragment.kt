@@ -75,6 +75,7 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -283,10 +284,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
     zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
-      .also {
-        // coreMainActivity.navHostContainer
-        //   .setBottomMarginToFragmentContainerView(0)
-      }
     coroutineJobs.apply {
       add(sideEffects())
       add(fileSelectActions())
@@ -315,9 +312,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
-    val args = LocalLibraryFragmentArgs.fromBundle(requireArguments())
-    if (args.zimFileUri.isNotEmpty()) {
-      handleSelectedFileUri(args.zimFileUri.toUri())
+    val zimFileUri = arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
+    if (zimFileUri.isNotEmpty()) {
+      handleSelectedFileUri(zimFileUri.toUri())
     }
     requireArguments().clear()
   }

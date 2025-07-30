@@ -40,9 +40,9 @@ fun darkModeViewPainter(func: DarkModeViewPainterRobot.() -> Unit) =
   DarkModeViewPainterRobot().applyWithViewHierarchyPrinting(func)
 
 class DarkModeViewPainterRobot : BaseRobot() {
-  fun openSettings(coreMainActivity: CoreMainActivity) {
+  fun openSettings(coreMainActivity: CoreMainActivity, composeContentTest: ComposeContentTestRule) {
     openDrawer(coreMainActivity)
-    enterSettings()
+    enterSettings(composeContentTest)
   }
 
   fun enableTheDarkMode(composeContentTest: ComposeContentTestRule) {

@@ -130,13 +130,13 @@ class GetContentShortcutTest {
     ActivityScenario.launch<KiwixMainActivity>(shortcutIntent)
     onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
     topLevel {
-      clickReaderOnBottomNav {
+      clickReaderOnBottomNav(composeTestRule) {
         assertReaderScreenDisplayed(composeTestRule)
       }
-      clickDownloadOnBottomNav {
+      clickDownloadOnBottomNav(composeTestRule) {
         onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
       }
-      clickLibraryOnBottomNav {
+      clickLibraryOnBottomNav(composeTestRule) {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
         clickFileTransferIcon(composeTestRule) {
           assertReceiveFileTitleVisible(composeTestRule)

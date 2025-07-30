@@ -140,7 +140,7 @@ class DownloadTest : BaseActivityTest() {
         deleteZimIfExists(composeTestRule)
       }
       downloadRobot {
-        clickDownloadOnBottomNav()
+        clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule)
         downloadZimFile(composeTestRule)
@@ -202,7 +202,7 @@ class DownloadTest : BaseActivityTest() {
             selectAlbanianLanguage(composeTestRule)
           }
         }
-        clickDownloadOnBottomNav()
+        clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule)
         downloadZimFile(composeTestRule)

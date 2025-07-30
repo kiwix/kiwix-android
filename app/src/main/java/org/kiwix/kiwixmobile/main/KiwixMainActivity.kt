@@ -59,7 +59,11 @@ import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -217,6 +221,10 @@ class KiwixMainActivity : CoreMainActivity() {
     handleNotificationIntent(intent)
     handleZimFileIntent(intent)
     handleGetContentIntent(intent)
+    intent.data?.let { uri ->
+      // for handling the deepLink of ZimHost screen when application is opened.
+      navController.handleDeepLink(intent)
+    }
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
@@ -239,7 +247,11 @@ class KiwixMainActivity : CoreMainActivity() {
           }, OPENING_ZIM_FILE_DELAY)
         }
 
-        else -> toast(R.string.cannot_open_file)
+        else -> {
+          if (it.scheme != ZIM_HOST_DEEP_LINK_SCHEME) {
+            toast(R.string.cannot_open_file)
+          }
+        }
       }
     }
   }
@@ -276,21 +288,24 @@ class KiwixMainActivity : CoreMainActivity() {
     title = CoreApp.instance.getString(string.menu_wifi_hotspot),
     iconRes = drawable.ic_mobile_screen_share_24px,
     visible = true,
-    onClick = { openZimHostFragment() }
+    onClick = { openZimHostFragment() },
+    testingTag = LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
   )
 
   override val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
     title = CoreApp.instance.getString(string.menu_help),
     iconRes = drawable.ic_help_24px,
     visible = true,
-    onClick = { openHelpFragment() }
+    onClick = { openHelpFragment() },
+    testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
   )
 
   override val supportDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
     title = CoreApp.instance.getString(string.menu_support_kiwix),
     iconRes = drawable.ic_support_24px,
     visible = true,
-    onClick = { openSupportKiwixExternalLink() }
+    onClick = { openSupportKiwixExternalLink() },
+    testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
   )
 
   /**

@@ -37,6 +37,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -51,6 +53,10 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.ui.KiwixNavGraph
+
+const val BOTTOM_NAV_READER_ITEM_TESTING_TAG = "bottomNavReaderItemTestingTag"
+const val BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG = "bottomNavLibraryItemTestingTag"
+const val BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG = "bottomNavDownloadsItemTestingTag"
 
 @Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,17 +132,20 @@ fun BottomNavigationBar(
     BottomNavItem(
       route = KiwixDestination.Reader.route,
       title = stringResource(id = R.string.reader),
-      iconRes = drawable.ic_reader_navigation_white_24px
+      iconRes = drawable.ic_reader_navigation_white_24px,
+      testingTag = BOTTOM_NAV_READER_ITEM_TESTING_TAG
     ),
     BottomNavItem(
       route = KiwixDestination.Library.route,
       title = stringResource(id = R.string.library),
-      iconRes = drawable.ic_library_navigation_white_24dp
+      iconRes = drawable.ic_library_navigation_white_24dp,
+      testingTag = BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
     ),
     BottomNavItem(
       route = KiwixDestination.Downloads.route,
       title = stringResource(id = R.string.download),
-      iconRes = drawable.ic_download_navigation_white_24dp
+      iconRes = drawable.ic_download_navigation_white_24dp,
+      testingTag = BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
     )
   )
   val currentDestinationRoute = navBackStackEntry?.destination?.route
@@ -162,7 +171,8 @@ fun BottomNavigationBar(
             contentDescription = item.title
           )
         },
-        label = { Text(item.title) }
+        label = { Text(item.title) },
+        modifier = Modifier.semantics { testTag = item.testingTag }
       )
     }
   }

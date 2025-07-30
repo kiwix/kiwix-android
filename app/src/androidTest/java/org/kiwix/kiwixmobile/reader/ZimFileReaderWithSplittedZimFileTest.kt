@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -43,12 +44,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.page.history.navigationHistory
@@ -64,6 +65,9 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -127,8 +131,8 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
       }
 
       navigationHistory {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
-        clickOnReaderFragment() // activate the accessibility check to check the issues.
+        checkZimFileLoadedSuccessful(composeTestRule)
+        clickOnReaderFragment(composeTestRule) // activate the accessibility check to check the issues.
         assertZimFileLoaded() // check if the zim file successfully loaded
         clickOnAndroidArticle()
       }

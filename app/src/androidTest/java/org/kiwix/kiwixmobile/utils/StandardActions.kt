@@ -17,24 +17,29 @@
  */
 package org.kiwix.kiwixmobile.utils
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 /**
  * Created by mhutti1 on 27/04/17.
  */
 object StandardActions {
-  fun enterSettings() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(TestUtils.getResourceString(string.menu_settings))
+  fun enterSettings(composeContentTest: ComposeContentTestRule) {
+    composeContentTest.apply {
+      waitUntilTimeout()
+      onNodeWithTag(LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG).performClick()
+    }
   }
 
   fun openDrawer(coreMainActivity: CoreMainActivity) {

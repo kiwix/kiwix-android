@@ -37,6 +37,8 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -117,7 +119,8 @@ class CustomMainActivity : CoreMainActivity() {
         onClick = {
           closeNavigationDrawer()
           externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
-        }
+        },
+        testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
       )
     } else {
       /**
@@ -146,7 +149,8 @@ class CustomMainActivity : CoreMainActivity() {
             BuildConfig.ABOUT_APP_URL.toUri().browserIntent(),
             false
           )
-        }
+        },
+        testingTag = LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
       )
     } else {
       null

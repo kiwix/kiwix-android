@@ -17,16 +17,16 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.help.HelpRobot
@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
@@ -53,20 +54,40 @@ fun topLevel(func: TopLevelDestinationRobot.() -> Unit) =
   TopLevelDestinationRobot().applyWithViewHierarchyPrinting(func)
 
 class TopLevelDestinationRobot : BaseRobot() {
-  fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
+  fun clickReaderOnBottomNav(
+    composeTestRule: ComposeContentTestRule,
+    func: ReaderRobot.() -> Unit
+  ) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    testFlakyView({ onView(withId(R.id.readerFragment)).perform(click()) })
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
+      }
+    })
     reader(func)
   }
 
-  fun clickLibraryOnBottomNav(func: LibraryRobot.() -> Unit) {
-    clickOn(ViewId(R.id.libraryFragment))
+  fun clickLibraryOnBottomNav(
+    composeTestRule: ComposeContentTestRule,
+    func: LibraryRobot.() -> Unit
+  ) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
+    }
     library(func)
     pressBack()
   }
 
-  fun clickDownloadOnBottomNav(func: OnlineLibraryRobot.() -> Unit) {
-    clickOn(ViewId(R.id.downloadsFragment))
+  fun clickDownloadOnBottomNav(
+    composeTestRule: ComposeContentTestRule,
+    func: OnlineLibraryRobot.() -> Unit
+  ) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
+    }
     onlineLibrary(func)
   }
 

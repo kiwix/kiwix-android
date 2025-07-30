@@ -119,7 +119,7 @@ class KiwixSettingsFragmentTest {
       clickGetStarted(composeTestRule) {}
     }
     StandardActions.openDrawer(kiwixMainActivity as CoreMainActivity)
-    StandardActions.enterSettings()
+    StandardActions.enterSettings(composeTestRule)
   }
 
   @Test

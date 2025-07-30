@@ -22,6 +22,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -45,13 +46,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -136,11 +135,11 @@ class SearchFragmentTest : BaseActivityTest() {
     }
     testZimFile = getTestZimFile()
     openKiwixReaderFragmentWithFile(testZimFile)
-    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+    search { checkZimFileSearchSuccessful(composeTestRule) }
     openSearchWithQuery("Android", testZimFile)
     search {
       clickOnSearchItemInSearchList(composeTestRule)
-      checkZimFileSearchSuccessful(R.id.readerFragment)
+      checkZimFileSearchSuccessful(composeTestRule)
     }
 
     openSearchWithQuery(zimFile = testZimFile)
@@ -187,7 +186,7 @@ class SearchFragmentTest : BaseActivityTest() {
       }
     }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
-    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+    search { checkZimFileSearchSuccessful(composeTestRule) }
     openSearchWithQuery(zimFile = downloadingZimFile)
     search {
       // test with fast typing/deleting
@@ -273,7 +272,7 @@ class SearchFragmentTest : BaseActivityTest() {
         }
       }
       openKiwixReaderFragmentWithFile(downloadingZimFile)
-      search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+      search { checkZimFileSearchSuccessful(composeTestRule) }
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchFragment become visible on screen.
       delay(2000)
@@ -313,9 +312,12 @@ class SearchFragmentTest : BaseActivityTest() {
 
   private fun openKiwixReaderFragmentWithFile(zimFile: File) {
     UiThreadStatement.runOnUiThread {
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       kiwixMainActivity.navigate(
-        actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+        navOptions
       )
     }
   }

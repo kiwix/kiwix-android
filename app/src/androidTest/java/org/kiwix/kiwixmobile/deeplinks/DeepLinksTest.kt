@@ -43,7 +43,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
@@ -110,7 +109,7 @@ class DeepLinksTest : BaseActivityTest() {
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
       clickOnCopy(composeTestRule)
       navigationHistory {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
+        checkZimFileLoadedSuccessful(composeTestRule)
         assertZimFileLoaded() // check if the zim file successfully loaded
         clickOnAndroidArticle()
       }
@@ -138,7 +137,7 @@ class DeepLinksTest : BaseActivityTest() {
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
       clickOnCopy(composeTestRule)
       navigationHistory {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
+        checkZimFileLoadedSuccessful(composeTestRule)
         assertZimFileLoaded() // check if the zim file successfully loaded
         clickOnAndroidArticle()
       }

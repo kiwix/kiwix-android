@@ -132,7 +132,7 @@ class LanguageFragmentTest {
   fun testLanguageFragment() {
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
     downloadRobot {
-      clickDownloadOnBottomNav()
+      clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
     }
     language {

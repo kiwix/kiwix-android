@@ -43,7 +43,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -153,7 +152,7 @@ class NavigationHistoryTest : BaseActivityTest() {
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
     navigationHistory {
       closeTabSwitcherIfVisible(composeTestRule)
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
       clickOnAndroidArticle()
       longClickOnBackwardButton(composeTestRule)
       assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)

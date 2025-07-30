@@ -23,6 +23,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -49,7 +50,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -279,9 +279,12 @@ class NoteFragmentTest : BaseActivityTest() {
       }
     }
     UiThreadStatement.runOnUiThread {
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+        navOptions
       )
     }
   }

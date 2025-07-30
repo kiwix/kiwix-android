@@ -294,10 +294,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       libraryItems
         .onEach { onLibraryItemsChange(it) }
         .launchIn(viewLifecycleOwner.lifecycleScope)
-        .also {
-          // coreMainActivity.navHostContainer
-          //   .setBottomMarginToFragmentContainerView(0)
-        }
       // Observe when online library downloading.
       onlineLibraryDownloading
         .onEach { (initialLibraryDownloading, loadingMoreItem) ->

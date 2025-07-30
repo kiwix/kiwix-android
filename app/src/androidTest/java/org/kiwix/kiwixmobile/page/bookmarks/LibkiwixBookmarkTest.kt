@@ -46,7 +46,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
@@ -117,9 +116,12 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = getZimFile().toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = getZimFile().toUri().toString()),
+        navOptions
       )
     }
     bookmarks {

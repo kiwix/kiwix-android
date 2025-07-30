@@ -25,9 +25,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
@@ -36,12 +33,13 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_SWITCHER_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -54,9 +52,11 @@ class NavigationHistoryRobot : BaseRobot() {
   private var retryCountForBackwardNavigationHistory = 5
   private var retryCountForForwardNavigationHistory = 5
 
-  fun checkZimFileLoadedSuccessful(readerFragment: Int) {
-    pauseForBetterTestPerformance()
-    isVisible(ViewId(readerFragment))
+  fun checkZimFileLoadedSuccessful(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(READER_SCREEN_TESTING_TAG).assertExists()
+    }
   }
 
   fun closeTabSwitcherIfVisible(composeTestRule: ComposeContentTestRule) {
@@ -189,7 +189,12 @@ class NavigationHistoryRobot : BaseRobot() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 
-  fun clickOnReaderFragment() {
-    testFlakyView({ onView(withId(org.kiwix.kiwixmobile.R.id.readerFragment)).perform(click()) })
+  fun clickOnReaderFragment(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
+      }
+    })
   }
 }

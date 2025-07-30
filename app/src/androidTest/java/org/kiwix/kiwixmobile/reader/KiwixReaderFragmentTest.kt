@@ -23,6 +23,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -44,13 +45,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -141,13 +140,13 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     }
     openKiwixReaderFragmentWithFile(zimFile)
     reader {
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
       clickOnTabIcon(composeTestRule)
       clickOnClosedAllTabsButton(composeTestRule)
       clickOnUndoButton(composeTestRule)
       assertTabRestored(composeTestRule)
       pressBack()
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       // temporary disabled on Android 25
@@ -176,7 +175,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
     reader {
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
       clickOnTabIcon(composeTestRule)
       clickOnTabIcon(composeTestRule)
       // test the whole welcome page is loaded or not
@@ -260,9 +259,12 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
 
   private fun openKiwixReaderFragmentWithFile(zimFile: File) {
     UiThreadStatement.runOnUiThread {
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+        navOptions
       )
     }
   }

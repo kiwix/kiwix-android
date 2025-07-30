@@ -125,7 +125,7 @@ class InitialDownloadTest : BaseActivityTest() {
       deleteZimIfExists(composeTestRule)
     }
     downloadRobot {
-      clickDownloadOnBottomNav()
+      clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule)
       downloadZimFile(composeTestRule)

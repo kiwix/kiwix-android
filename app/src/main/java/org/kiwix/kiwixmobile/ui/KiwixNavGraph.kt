@@ -39,6 +39,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
@@ -56,6 +57,7 @@ import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
@@ -68,6 +70,7 @@ import org.kiwix.kiwixmobile.help.KiwixHelpFragment
 import org.kiwix.kiwixmobile.intro.IntroFragment
 import org.kiwix.kiwixmobile.language.LanguageFragment
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
+import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
@@ -179,7 +182,10 @@ fun KiwixNavGraph(
         LanguageFragment()
       }
     }
-    composable(KiwixDestination.ZimHost.route) {
+    composable(
+      KiwixDestination.ZimHost.route,
+      deepLinks = listOf(navDeepLink { uriPattern = ZIM_HOST_NAV_DEEP_LINK })
+    ) {
       FragmentContainer {
         ZimHostFragment()
       }
@@ -228,14 +234,14 @@ fun KiwixNavGraph(
     composable(
       route = KiwixDestination.LocalFileTransfer.route,
       arguments = listOf(
-        navArgument("uris") {
+        navArgument(URIS_KEY) {
           type = NavType.StringType
           nullable = true
           defaultValue = null
         }
       )
     ) { backStackEntry ->
-      val urisParam = backStackEntry.arguments?.getString("uris")
+      val urisParam = backStackEntry.arguments?.getString(URIS_KEY)
       val uris: List<Uri>? =
         urisParam?.takeIf { it != "null" }?.split(",")?.map {
           Uri.decode(it).toUri()
@@ -245,7 +251,7 @@ fun KiwixNavGraph(
         LocalFileTransferFragment().apply {
           arguments = Bundle().apply {
             putParcelableArray(
-              "uris",
+              URIS_KEY,
               uris?.toTypedArray()
             )
           }
@@ -341,12 +347,12 @@ sealed class KiwixDestination(val route: String) {
     }
   }
 
-  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?uris={uris}") {
+  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY={uris}") {
     fun createRoute(uris: String? = null): String {
       return if (uris != null) {
-        "$LOCAL_FILE_TRANSFER_FRAGMENT?uris=${Uri.encode(uris)}"
+        "$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY=${Uri.encode(uris)}"
       } else {
-        "$LOCAL_FILE_TRANSFER_FRAGMENT?uris=null"
+        "$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY=null"
       }
     }
   }

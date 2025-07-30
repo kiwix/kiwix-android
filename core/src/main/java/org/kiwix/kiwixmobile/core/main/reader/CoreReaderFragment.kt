@@ -123,6 +123,7 @@ import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -1931,7 +1932,7 @@ abstract class CoreReaderFragment :
           // Added condition to handle ZIM files. When opening from storage, the intent may
           // return null for the type, triggering the search unintentionally. This condition
           // prevents such occurrences.
-          intent.scheme !in listOf("file", "content")
+          intent.scheme !in listOf("file", "content", ZIM_HOST_DEEP_LINK_SCHEME)
         ) {
           val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
           openSearch(
