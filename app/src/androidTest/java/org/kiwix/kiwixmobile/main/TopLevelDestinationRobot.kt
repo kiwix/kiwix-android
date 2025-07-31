@@ -20,15 +20,16 @@ package org.kiwix.kiwixmobile.main
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.help.help
 import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
@@ -99,47 +100,79 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickBookmarksOnNavDrawer(
     coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule,
     func: BookmarksRobot.() -> Unit
   ) {
     inNavDrawer(coreMainActivity = coreMainActivity) {
-      testFlakyView({ onView(withText(string.bookmarks)).perform(click()) })
+      testFlakyView({
+        composeTestRule.onNodeWithTag(LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG).performClick()
+      })
       bookmarks(func)
       pressBack()
     }
   }
 
-  fun clickHistoryOnSideNav(coreMainActivity: CoreMainActivity, func: HistoryRobot.() -> Unit) {
+  fun clickHistoryOnSideNav(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule,
+    func: HistoryRobot.() -> Unit
+  ) {
     inNavDrawer(coreMainActivity) {
-      clickOn(TextId(string.history))
+      testFlakyView({
+        composeTestRule.onNodeWithTag(LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG).performClick()
+      })
       history(func)
       pressBack()
     }
   }
 
-  fun clickHostBooksOnSideNav(coreMainActivity: CoreMainActivity, func: ZimHostRobot.() -> Unit) {
+  fun clickHostBooksOnSideNav(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule,
+    func: ZimHostRobot.() -> Unit
+  ) {
     inNavDrawer(coreMainActivity) {
-      clickOn(TextId(string.menu_wifi_hotspot))
+      testFlakyView({
+        composeTestRule.onNodeWithTag(LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG).performClick()
+      })
       zimHost(func)
     }
   }
 
-  fun clickSettingsOnSideNav(coreMainActivity: CoreMainActivity, func: SettingsRobot.() -> Unit) {
+  fun clickSettingsOnSideNav(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule,
+    func: SettingsRobot.() -> Unit
+  ) {
     inNavDrawer(coreMainActivity) {
-      clickOn(TextId(string.menu_settings))
+      testFlakyView({
+        composeTestRule.onNodeWithTag(LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG).performClick()
+      })
       settingsRobo(func)
     }
   }
 
-  fun clickHelpOnSideNav(coreMainActivity: CoreMainActivity, func: HelpRobot.() -> Unit) {
+  fun clickHelpOnSideNav(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule,
+    func: HelpRobot.() -> Unit
+  ) {
     inNavDrawer(coreMainActivity) {
-      clickOn(TextId(string.menu_help))
+      testFlakyView({
+        composeTestRule.onNodeWithTag(LEFT_DRAWER_HELP_ITEM_TESTING_TAG).performClick()
+      })
       help(func)
     }
   }
 
-  fun clickSupportKiwixOnSideNav(coreMainActivity: CoreMainActivity) {
+  fun clickSupportKiwixOnSideNav(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule,
+  ) {
     inNavDrawer(coreMainActivity) {
-      clickOn(TextId(string.menu_support_kiwix))
+      testFlakyView({
+        composeTestRule.onNodeWithTag(LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG).performClick()
+      })
     }
   }
 }

@@ -89,8 +89,12 @@ const val HELP_FRAGMENT = "helpFragment"
 const val SETTINGS_FRAGMENT = "settingsFragment"
 const val SEARCH_FRAGMENT = "searchFragment"
 const val LOCAL_FILE_TRANSFER_FRAGMENT = "localFileTransferFragment"
+
+// Zim host deep link for opening the ZimHost fragment from notification.
 const val ZIM_HOST_DEEP_LINK_SCHEME = "kiwix"
 const val ZIM_HOST_NAV_DEEP_LINK = "$ZIM_HOST_DEEP_LINK_SCHEME://zimhost"
+
+// Left drawer items testing tag.
 const val LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG = "leftDrawerBookmarkItemTestingTag"
 const val LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG = "leftDrawerHistoryItemTestingTag"
 const val LEFT_DRAWER_NOTES_ITEM_TESTING_TAG = "leftDrawerNotesItemTestingTag"

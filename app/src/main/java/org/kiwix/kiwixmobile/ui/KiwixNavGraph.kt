@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,6 +39,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
@@ -121,7 +121,7 @@ fun KiwixNavGraph(
       val shouldOpenInNewTab = backStackEntry.arguments?.getBoolean(SHOULD_OPEN_IN_NEW_TAB) ?: false
       val searchItemTitle = backStackEntry.arguments?.getString(SEARCH_ITEM_TITLE_KEY).orEmpty()
 
-      FragmentContainer {
+      FragmentContainer(R.id.readerFragmentContainer) {
         KiwixReaderFragment().apply {
           arguments = Bundle().apply {
             putString(ZIM_FILE_URI_KEY, zimFileUri)
@@ -144,7 +144,7 @@ fun KiwixNavGraph(
     ) { backStackEntry ->
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
 
-      FragmentContainer {
+      FragmentContainer(R.id.localLibraryFragmentContainer) {
         LocalLibraryFragment().apply {
           arguments = Bundle().apply {
             putString(ZIM_FILE_URI_KEY, zimFileUri)
@@ -153,32 +153,32 @@ fun KiwixNavGraph(
       }
     }
     composable(KiwixDestination.Downloads.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.downloadFragmentContainer) {
         OnlineLibraryFragment()
       }
     }
     composable(KiwixDestination.Bookmarks.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.bookmarksFragmentContainer) {
         BookmarksFragment()
       }
     }
     composable(KiwixDestination.Notes.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.notesFragmentContainer) {
         NotesFragment()
       }
     }
     composable(KiwixDestination.Intro.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.introFragmentContainer) {
         IntroFragment()
       }
     }
     composable(KiwixDestination.History.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.historyFragmentContainer) {
         HistoryFragment()
       }
     }
     composable(KiwixDestination.Language.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.languageFragmentContainer) {
         LanguageFragment()
       }
     }
@@ -186,17 +186,17 @@ fun KiwixNavGraph(
       KiwixDestination.ZimHost.route,
       deepLinks = listOf(navDeepLink { uriPattern = ZIM_HOST_NAV_DEEP_LINK })
     ) {
-      FragmentContainer {
+      FragmentContainer(R.id.zimHostFragmentContainer) {
         ZimHostFragment()
       }
     }
     composable(KiwixDestination.Help.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.helpFragmentContainer) {
         KiwixHelpFragment()
       }
     }
     composable(KiwixDestination.Settings.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.settingsFragmentContainer) {
         KiwixSettingsFragment()
       }
     }
@@ -221,7 +221,7 @@ fun KiwixNavGraph(
       val isOpenedFromTabSwitcher =
         backStackEntry.arguments?.getBoolean(TAG_FROM_TAB_SWITCHER) ?: false
       val isVoice = backStackEntry.arguments?.getBoolean(EXTRA_IS_WIDGET_VOICE) ?: false
-      FragmentContainer {
+      FragmentContainer(R.id.searchFragmentContainer) {
         SearchFragment().apply {
           arguments = Bundle().apply {
             putString(NAV_ARG_SEARCH_STRING, searchString)
@@ -247,7 +247,7 @@ fun KiwixNavGraph(
           Uri.decode(it).toUri()
         }
 
-      FragmentContainer {
+      FragmentContainer(R.id.localFileTransferFragmentContainer) {
         LocalFileTransferFragment().apply {
           arguments = Bundle().apply {
             putParcelableArray(
@@ -264,24 +264,23 @@ fun KiwixNavGraph(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FragmentContainer(
+  fragmentId: Int,
   fragmentProvider: () -> Fragment
 ) {
   val context = LocalContext.current
   val fragmentManager = remember {
     (context as AppCompatActivity).supportFragmentManager
   }
-  val viewId = remember { View.generateViewId() }
+  val fragment = remember { fragmentProvider() }
 
   AndroidView(
     modifier = Modifier.fillMaxSize(),
     factory = { ctx ->
       FragmentContainerView(ctx).apply {
-        id = viewId
+        id = fragmentId
         doOnAttach {
           fragmentManager.commit {
-            if (fragmentManager.findFragmentById(viewId) == null) {
-              add(viewId, fragmentProvider())
-            }
+            replace(fragmentId, fragment)
           }
         }
       }

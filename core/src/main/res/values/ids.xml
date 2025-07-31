@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <item name="tabsAdapterContentImageView" type="id" />
-  <item name="tabsAdapterCloseImageView" type="id" />
-  <item name="tabsAdapterCardView" type="id" />
-  <item name="tabsAdapterTextView" type="id" />
-  <item name="nav_host_fragment" type="id" />
+  <item type="id" name="readerFragmentContainer" />
+  <item type="id" name="localLibraryFragmentContainer" />
+  <item type="id" name="bookmarksFragmentContainer" />
+  <item type="id" name="downloadFragmentContainer" />
+  <item type="id" name="notesFragmentContainer" />
+  <item type="id" name="introFragmentContainer" />
+  <item type="id" name="historyFragmentContainer" />
+  <item type="id" name="languageFragmentContainer" />
+  <item type="id" name="zimHostFragmentContainer" />
+  <item type="id" name="helpFragmentContainer" />
+  <item type="id" name="settingsFragmentContainer" />
+  <item type="id" name="searchFragmentContainer" />
+  <item type="id" name="localFileTransferFragmentContainer" />
 </resources>

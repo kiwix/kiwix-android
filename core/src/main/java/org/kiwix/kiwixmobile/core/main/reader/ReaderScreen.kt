@@ -167,6 +167,14 @@ const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
 const val CLOSE_ALL_TABS_BUTTON_TESTING_TAG = "closeAllTabsButtonTestingTag"
 const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
+const val READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG = "readerBottomBarBookmarkButtonTestingTag"
+const val READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG =
+  "readerBottomBarPreviousScreenButtonTestingTag"
+const val READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG =
+  "readerBottomBarNextScreenButtonTestingTag"
+const val READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG = "readerBottomBarHomeButtonTestingTag"
+const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
+  "readerBottomBarTableContentButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongMethod")
@@ -666,7 +674,8 @@ private fun BottomAppBarOfReaderScreen(
         onClick = bookmarkButtonItem.first,
         onLongClick = bookmarkButtonItem.second,
         buttonIcon = bookmarkButtonItem.third,
-        contentDescription = stringResource(R.string.bookmarks)
+        contentDescription = stringResource(R.string.bookmarks),
+        testingTag = READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG
       )
       // Back Icon(for going to previous page)
       BottomAppBarButtonIcon(
@@ -674,13 +683,15 @@ private fun BottomAppBarOfReaderScreen(
         onLongClick = previousPageButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_left_24dp),
         shouldEnable = previousPageButtonItem.third,
-        contentDescription = stringResource(R.string.go_to_previous_page)
+        contentDescription = stringResource(R.string.go_to_previous_page),
+        testingTag = READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
       )
       // Home Icon(to open the home page of ZIM file)
       BottomAppBarButtonIcon(
         onClick = onHomeButtonClick,
         buttonIcon = Drawable(R.drawable.action_home),
-        contentDescription = stringResource(R.string.menu_home)
+        contentDescription = stringResource(R.string.menu_home),
+        testingTag = READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG
       )
       // Forward Icon(for going to next page)
       BottomAppBarButtonIcon(
@@ -688,14 +699,16 @@ private fun BottomAppBarOfReaderScreen(
         onLongClick = nextPageButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_right_24dp),
         shouldEnable = nextPageButtonItem.third,
-        contentDescription = stringResource(R.string.go_to_next_page)
+        contentDescription = stringResource(R.string.go_to_next_page),
+        testingTag = READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG
       )
       // Toggle Icon(to open the table of content in right side bar)
       BottomAppBarButtonIcon(
         shouldEnable = tocButtonItem.first,
         onClick = tocButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_toc_24dp),
-        contentDescription = stringResource(R.string.table_of_contents)
+        contentDescription = stringResource(R.string.table_of_contents),
+        testingTag = READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG
       )
     }
   }
@@ -707,7 +720,8 @@ private fun BottomAppBarButtonIcon(
   onLongClick: (() -> Unit)? = null,
   buttonIcon: IconItem,
   shouldEnable: Boolean = true,
-  contentDescription: String
+  contentDescription: String,
+  testingTag: String
 ) {
   Box(
     modifier = Modifier
@@ -717,7 +731,7 @@ private fun BottomAppBarButtonIcon(
         onClick = onClick,
         onLongClick = onLongClick,
         enabled = shouldEnable
-      ),
+      ).testTag(testingTag),
     contentAlignment = Alignment.Center
   ) {
     Icon(

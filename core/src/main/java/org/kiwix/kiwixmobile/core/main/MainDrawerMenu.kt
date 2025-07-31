@@ -35,6 +35,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -105,5 +107,6 @@ private fun DrawerMenuItemView(item: DrawerMenuItem) {
     modifier = Modifier
       .fillMaxWidth()
       .clickable { item.onClick.invoke() }
+      .semantics { testTag = item.testingTag }
   )
 }

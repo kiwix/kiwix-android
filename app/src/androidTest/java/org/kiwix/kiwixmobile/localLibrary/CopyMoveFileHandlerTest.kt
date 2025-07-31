@@ -39,7 +39,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
@@ -50,6 +49,7 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -201,33 +201,29 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun showMoveFileToPublicDirectoryDialog() {
-    // TODO refactore this with compose based navController.
-    // kiwixMainActivity.lifecycleScope.launch {
-    //   val navHostFragment: NavHostFragment =
-    //     kiwixMainActivity.navController
-    //       .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-    //   val localLibraryFragment =
-    //     navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
-    //   localLibraryFragment.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
-    //     Uri.fromFile(selectedFile),
-    //     DocumentFile.fromFile(selectedFile),
-    //     fragmentManager = localLibraryFragment.parentFragmentManager
-    //   )
-    // }
+    kiwixMainActivity.lifecycleScope.launch {
+      val localLibraryFragment =
+        kiwixMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<LocalLibraryFragment>()
+          .firstOrNull()
+      localLibraryFragment?.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+        Uri.fromFile(selectedFile),
+        DocumentFile.fromFile(selectedFile),
+        fragmentManager = localLibraryFragment.parentFragmentManager
+      )
+    }
   }
 
   private fun tryOpeningInvalidZimFiles(uri: Uri) {
-    // TODO refactore this with compose based navController.
-    // UiThreadStatement.runOnUiThread {
-    //   val navHostFragment: NavHostFragment =
-    //     kiwixMainActivity.supportFragmentManager
-    //       .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-    //   val localLibraryFragment =
-    //     navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
-    //   localLibraryFragment.handleSelectedFileUri(
-    //     uri,
-    //   )
-    // }
+    UiThreadStatement.runOnUiThread {
+      val localLibraryFragment =
+        kiwixMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<LocalLibraryFragment>()
+          .firstOrNull()
+      localLibraryFragment?.handleSelectedFileUri(
+        uri,
+      )
+    }
   }
 
   private fun getSelectedFile(): File {

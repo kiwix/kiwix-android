@@ -193,7 +193,7 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         // change the application language
         topLevel {
-          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity) {
+          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectDeviceDefaultLanguage(composeTestRule)
@@ -214,7 +214,7 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted(composeTestRule)
         // select the default device language to perform other test cases.
         topLevel {
-          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity) {
+          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectDeviceDefaultLanguage(composeTestRule)

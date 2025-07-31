@@ -24,7 +24,6 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -43,12 +42,10 @@ object StandardActions {
   }
 
   fun openDrawer(coreMainActivity: CoreMainActivity) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     coreMainActivity.openNavigationDrawer()
   }
 
   fun closeDrawer(coreMainActivity: CoreMainActivity) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     coreMainActivity.closeNavigationDrawer()
   }
 

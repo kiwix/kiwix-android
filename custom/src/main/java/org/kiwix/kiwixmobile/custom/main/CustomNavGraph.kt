@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +37,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
@@ -95,7 +95,7 @@ fun CustomNavGraph(
       val pageUrl = backStackEntry.arguments?.getString(PAGE_URL_KEY).orEmpty()
       val shouldOpenInNewTab = backStackEntry.arguments?.getBoolean(SHOULD_OPEN_IN_NEW_TAB) ?: false
 
-      FragmentContainer {
+      FragmentContainer(R.id.readerFragmentContainer) {
         CustomReaderFragment().apply {
           arguments = Bundle().apply {
             putString(FIND_IN_PAGE_SEARCH_STRING, findInPageSearchString)
@@ -106,32 +106,32 @@ fun CustomNavGraph(
       }
     }
     composable(CustomDestination.History.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.historyFragmentContainer) {
         HistoryFragment()
       }
     }
     composable(CustomDestination.Notes.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.notesFragmentContainer) {
         NotesFragment()
       }
     }
     composable(CustomDestination.Bookmarks.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.bookmarksFragmentContainer) {
         BookmarksFragment()
       }
     }
     composable(CustomDestination.Help.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.helpFragmentContainer) {
         CustomHelpFragment()
       }
     }
     composable(CustomDestination.Settings.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.settingsFragmentContainer) {
         CustomSettingsFragment()
       }
     }
     composable(CustomDestination.Downloads.route) {
-      FragmentContainer {
+      FragmentContainer(R.id.downloadFragmentContainer) {
         CustomDownloadFragment()
       }
     }
@@ -156,7 +156,7 @@ fun CustomNavGraph(
       val isOpenedFromTabSwitcher =
         backStackEntry.arguments?.getBoolean(TAG_FROM_TAB_SWITCHER) ?: false
       val isVoice = backStackEntry.arguments?.getBoolean(EXTRA_IS_WIDGET_VOICE) ?: false
-      FragmentContainer {
+      FragmentContainer(R.id.searchFragmentContainer) {
         SearchFragment().apply {
           arguments = Bundle().apply {
             putString(NAV_ARG_SEARCH_STRING, searchString)
@@ -172,24 +172,23 @@ fun CustomNavGraph(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FragmentContainer(
+  fragmentId: Int,
   fragmentProvider: () -> Fragment
 ) {
   val context = LocalContext.current
   val fragmentManager = remember {
     (context as AppCompatActivity).supportFragmentManager
   }
-  val viewId = remember { View.generateViewId() }
+  val fragment = remember { fragmentProvider() }
 
   AndroidView(
     modifier = Modifier.fillMaxSize(),
     factory = { ctx ->
       FragmentContainerView(ctx).apply {
-        id = viewId
+        id = fragmentId
         doOnAttach {
           fragmentManager.commit {
-            if (fragmentManager.findFragmentById(viewId) == null) {
-              add(viewId, fragmentProvider())
-            }
+            replace(fragmentId, fragment)
           }
         }
       }

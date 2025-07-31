@@ -142,26 +142,26 @@ class GetContentShortcutTest {
           assertReceiveFileTitleVisible(composeTestRule)
         }
       }
-      clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity) {
+      clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertBookMarksDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
         assertDeleteBookmarksDialogDisplayed(composeTestRule)
       }
-      clickHistoryOnSideNav(kiwixMainActivity as CoreMainActivity) {
+      clickHistoryOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertHistoryDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
         assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
-      clickHostBooksOnSideNav(kiwixMainActivity as CoreMainActivity) {
+      clickHostBooksOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertMenuWifiHotspotDisplayed(composeTestRule)
       }
-      clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity) {
+      clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertMenuSettingsDisplayed(composeTestRule)
       }
-      clickHelpOnSideNav(kiwixMainActivity as CoreMainActivity) {
+      clickHelpOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         HelpRobot().assertToolbarDisplayed(composeTestRule)
       }
-      clickSupportKiwixOnSideNav(kiwixMainActivity as CoreMainActivity)
+      clickSupportKiwixOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule)
       pressBack()
     }
   }

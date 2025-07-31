@@ -19,9 +19,9 @@ package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -34,6 +34,8 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_SWITCHER_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
@@ -41,6 +43,7 @@ import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -99,9 +102,12 @@ class NavigationHistoryRobot : BaseRobot() {
 
   fun longClickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitForIdle()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
+      }
       testFlakyView({
-        onNodeWithContentDescription(context.getString(R.string.go_to_previous_page))
+        onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG)
           .performTouchInput { longClick() }
       })
     }
@@ -109,9 +115,12 @@ class NavigationHistoryRobot : BaseRobot() {
 
   fun longClickOnForwardButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitForIdle()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
+      }
       testFlakyView({
-        onNodeWithContentDescription(context.getString(R.string.go_to_next_page))
+        onNodeWithTag(READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG)
           .performTouchInput { longClick() }
       })
     }
@@ -135,8 +144,11 @@ class NavigationHistoryRobot : BaseRobot() {
 
   fun clickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
-      onNodeWithContentDescription(context.getString(R.string.go_to_previous_page))
+      waitForIdle()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG)
         .performClick()
     }
   }
