@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,10 +29,14 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -42,9 +48,18 @@ fun CustomMainActivityScreen(
   topLevelDestinationsRoute: Set<String>,
   leftDrawerState: DrawerState,
   enableLeftDrawer: Boolean,
+  customBackHandler: MutableState<(() -> FragmentActivityExtensions.Super)?>,
+  uiCoroutineScope: CoroutineScope
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
+  OnUserBackPressed(
+    leftDrawerState,
+    uiCoroutineScope,
+    currentRoute,
+    navController,
+    customBackHandler
+  )
   KiwixTheme {
     ModalNavigationDrawer(
       drawerState = leftDrawerState,
@@ -71,6 +86,37 @@ fun CustomMainActivityScreen(
             navController = navController,
             modifier = Modifier.fillMaxSize()
           )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun OnUserBackPressed(
+  leftDrawerState: DrawerState,
+  uiCoroutineScope: CoroutineScope,
+  currentRoute: String?,
+  navController: NavHostController,
+  customBackHandler: MutableState<(() -> FragmentActivityExtensions.Super)?>,
+) {
+  val activity = LocalActivity.current
+  BackHandler(enabled = true) {
+    when {
+      leftDrawerState.isOpen -> uiCoroutineScope.launch { leftDrawerState.close() }
+      customBackHandler.value?.invoke() == FragmentActivityExtensions.Super.ShouldNotCall -> {
+        // do nothing since fragment handles the back press.
+      }
+
+      currentRoute == CustomDestination.Reader.route &&
+        navController.previousBackStackEntry?.destination?.route != CustomDestination.Search.route -> {
+        activity?.finish()
+      }
+
+      else -> {
+        val popped = navController.popBackStack()
+        if (!popped) {
+          activity?.finish()
         }
       }
     }

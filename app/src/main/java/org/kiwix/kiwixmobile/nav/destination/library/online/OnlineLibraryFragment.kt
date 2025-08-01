@@ -29,7 +29,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -271,7 +270,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             onClick = { navigationIconClick(onlineLibraryScreenState.value.value.isSearchActive) }
           )
         },
-        bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
+        bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
+        navHostController = (requireActivity() as CoreMainActivity).navController,
+        onUserBackPressed = { onUserBackPressed() }
       )
       DialogHost(alertDialogShower)
     }
@@ -460,8 +461,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     composeView = null
   }
 
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    if (isKeyboardVisible() || onlineLibraryScreenState.value.value.isSearchActive) {
+  @Suppress("ReturnCount")
+  private fun onUserBackPressed(): FragmentActivityExtensions.Super {
+    val coreMainActivity = (activity as? CoreMainActivity)
+    if (coreMainActivity?.navigationDrawerIsOpen() == true) {
+      coreMainActivity.closeNavigationDrawer()
+      return FragmentActivityExtensions.Super.ShouldNotCall
+    } else if (isKeyboardVisible() || onlineLibraryScreenState.value.value.isSearchActive) {
       closeKeyboard()
       closeSearch()
       return FragmentActivityExtensions.Super.ShouldNotCall

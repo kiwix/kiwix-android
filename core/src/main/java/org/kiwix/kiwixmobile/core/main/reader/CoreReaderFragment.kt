@@ -474,7 +474,9 @@ abstract class CoreReaderFragment :
           },
           mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
           documentSections = documentSections,
-          showTableOfContentDrawer = shouldTableOfContentDrawer
+          showTableOfContentDrawer = shouldTableOfContentDrawer,
+          onUserBackPressed = { onUserBackPressed(requireActivity() as CoreMainActivity) },
+          navHostController = (requireActivity() as CoreMainActivity).navController
         )
         DialogHost(alertDialogShower as AlertDialogShower)
       }
@@ -842,9 +844,16 @@ abstract class CoreReaderFragment :
     shouldTableOfContentDrawer.update { true }
   }
 
-  @Suppress("ReturnCount", "NestedBlockDepth")
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
+  @Suppress("ReturnCount", "NestedBlockDepth", "LongMethod", "CyclomaticComplexMethod")
+  private fun onUserBackPressed(coreMainActivity: CoreMainActivity): FragmentActivityExtensions.Super {
     when {
+      coreMainActivity.leftDrawerState.isOpen -> {
+        coreMainActivity.uiCoroutineScope.launch {
+          coreMainActivity.leftDrawerState.close()
+        }
+        return FragmentActivityExtensions.Super.ShouldNotCall
+      }
+
       readerScreenState.value.showTabSwitcher -> {
         selectTab(
           if (currentWebViewIndex < webViewList.size) {
@@ -893,7 +902,12 @@ abstract class CoreReaderFragment :
             isHomePageOfServiceWorkerZimFiles(url, webViewBackWordHistoryList)
           ) {
             // If it is the last page that is showing to the user, then exit the application.
-            return@onBackPressed FragmentActivityExtensions.Super.ShouldCall
+            if (coreMainActivity.navController.previousBackStackEntry?.destination?.route !=
+              coreMainActivity.searchFragmentRoute
+            ) {
+              activity?.finish()
+            }
+            return FragmentActivityExtensions.Super.ShouldCall
           }
         }
         // Otherwise, go to the previous page.

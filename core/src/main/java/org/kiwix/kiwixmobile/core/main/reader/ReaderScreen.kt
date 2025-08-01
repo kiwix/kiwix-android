@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -114,9 +115,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -177,13 +180,15 @@ const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
   "readerBottomBarTableContentButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming", "LongMethod")
+@Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
 @Composable
 fun ReaderScreen(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
   showTableOfContentDrawer: MutableState<Boolean>,
   documentSections: MutableList<DocumentSection>?,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
@@ -215,6 +220,7 @@ fun ReaderScreen(
           }
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
       ) { paddingValues ->
+        OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
           state,
           Modifier.padding(paddingValues),
@@ -247,6 +253,19 @@ fun ReaderScreen(
           showTableOfContentDrawer
         )
       }
+    }
+  }
+}
+
+@Composable
+fun OnBackPressed(
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController
+) {
+  BackHandler(enabled = true) {
+    val result = onUserBackPressed()
+    if (result == FragmentActivityExtensions.Super.ShouldCall) {
+      navHostController.popBackStack()
     }
   }
 }
@@ -731,7 +750,8 @@ private fun BottomAppBarButtonIcon(
         onClick = onClick,
         onLongClick = onLongClick,
         enabled = shouldEnable
-      ).testTag(testingTag),
+      )
+      .testTag(testingTag),
     contentAlignment = Alignment.Center
   ) {
     Icon(

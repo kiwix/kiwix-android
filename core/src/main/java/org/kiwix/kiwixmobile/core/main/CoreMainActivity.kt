@@ -24,7 +24,6 @@ import android.os.Process
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.BottomAppBarScrollBehavior
@@ -38,7 +37,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +45,6 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
@@ -145,6 +142,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   val enableLeftDrawer = mutableStateOf(true)
 
   /**
+   * For managing the back press of fragments.
+   */
+  val customBackHandler = mutableStateOf<(() -> FragmentActivityExtensions.Super)?>(null)
+
+  /**
    * For managing the the showing/hiding the bottomAppBar when scrolling.
    */
   @OptIn(ExperimentalMaterial3Api::class)
@@ -197,7 +199,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     lifecycleScope.launch(Dispatchers.IO) {
       createApplicationShortcuts()
     }
-    handleBackPressed()
     leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
@@ -231,11 +232,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  override fun onDestroy() {
-    onBackPressedCallBack.remove()
-    super.onDestroy()
-  }
-
   override fun onStop() {
     startMonitoringDownloads()
     downloadMonitor.stopListeningDownloads()
@@ -251,11 +247,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
       startService(Intent(this, DownloadMonitorService::class.java))
     }
-  }
-
-  @Suppress("UnusedParameter")
-  private fun NavigationView.setLockMode(lockMode: Int) {
-    // drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
   @Suppress("DEPRECATION")
@@ -338,41 +329,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     closeNavigationDrawer()
     externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent(), false)
   }
-
-  private fun handleBackPressed() {
-    onBackPressedDispatcher.addCallback(this, onBackPressedCallBack)
-  }
-
-  private val onBackPressedCallBack =
-    object : OnBackPressedCallback(true) {
-      override fun handleOnBackPressed() {
-        if (navigationDrawerIsOpen()) {
-          closeNavigationDrawer()
-          return
-        }
-        if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-          isEnabled = false
-          return onBackPressedDispatcher.onBackPressed().also {
-            isEnabled = true
-          }
-        }
-        activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-          if (it.onBackPressed(this@CoreMainActivity) == ShouldCall) {
-            if (navController.currentDestination?.route?.equals(readerFragmentRoute) == true &&
-              navController.previousBackStackEntry?.destination
-                ?.route?.equals(searchFragmentRoute) == false
-            ) {
-              drawerToggle = null
-              finish()
-            } else {
-              isEnabled = false
-              onBackPressedDispatcher.onBackPressed()
-              isEnabled = true
-            }
-          }
-        }
-      }
-    }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {

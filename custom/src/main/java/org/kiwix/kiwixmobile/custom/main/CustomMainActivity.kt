@@ -71,7 +71,9 @@ class CustomMainActivity : CoreMainActivity() {
         leftDrawerContent = leftDrawerMenu,
         topLevelDestinationsRoute = topLevelDestinationsRoute,
         leftDrawerState = leftDrawerState,
-        enableLeftDrawer = enableLeftDrawer.value
+        enableLeftDrawer = enableLeftDrawer.value,
+        uiCoroutineScope = uiCoroutineScope,
+        customBackHandler = customBackHandler
       )
       DialogHost(alertDialogShower)
     }

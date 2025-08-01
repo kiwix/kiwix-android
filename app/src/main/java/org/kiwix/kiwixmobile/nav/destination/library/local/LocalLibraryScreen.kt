@@ -47,9 +47,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavHostController
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -73,7 +76,7 @@ const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
 const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun LocalLibraryScreen(
   state: LocalLibraryScreenState,
@@ -85,6 +88,8 @@ fun LocalLibraryScreen(
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -117,6 +122,7 @@ fun LocalLibraryScreen(
           .fillMaxSize()
           .padding(contentPadding)
       ) {
+        OnBackPressed(onUserBackPressed, navHostController)
         if (state.scanningProgressItem.first) {
           ContentLoadingProgressBar(
             modifier = Modifier.testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG),

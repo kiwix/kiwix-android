@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.main
 
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -75,6 +77,7 @@ fun KiwixMainActivityScreen(
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
   val shouldShowBottomBar = currentRoute in topLevelDestinationsRoute && shouldShowBottomAppBar
+  OnUserBackPressed(leftDrawerState, uiCoroutineScope, currentRoute, navController)
   KiwixTheme {
     ModalNavigationDrawer(
       drawerState = leftDrawerState,
@@ -113,6 +116,33 @@ fun KiwixMainActivityScreen(
             startDestination = startDestination,
             modifier = Modifier.fillMaxSize()
           )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun OnUserBackPressed(
+  leftDrawerState: DrawerState,
+  uiCoroutineScope: CoroutineScope,
+  currentRoute: String?,
+  navController: NavHostController
+) {
+  val activity = LocalActivity.current
+  BackHandler(enabled = true) {
+    when {
+      leftDrawerState.isOpen -> uiCoroutineScope.launch { leftDrawerState.close() }
+
+      currentRoute == KiwixDestination.Reader.route &&
+        navController.previousBackStackEntry?.destination?.route != KiwixDestination.Search.route -> {
+        activity?.finish()
+      }
+
+      else -> {
+        val popped = navController.popBackStack()
+        if (!popped) {
+          activity?.finish()
         }
       }
     }

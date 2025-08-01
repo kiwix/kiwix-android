@@ -22,7 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
@@ -39,6 +39,7 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -123,6 +124,12 @@ class SearchFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     composeView?.apply {
       setContent {
+        DisposableEffect(Unit) {
+          (activity as CoreMainActivity).customBackHandler.value = { handleBackPress() }
+          onDispose {
+            (activity as CoreMainActivity).customBackHandler.value = null
+          }
+        }
         SearchScreen(
           searchScreenState.value,
           actionMenuItems(),
@@ -134,7 +141,6 @@ class SearchFragment : BaseFragment() {
     searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     observeViewModelData()
     handleSearchArgument()
-    handleBackPress()
   }
 
   private fun handleSearchArgument() {
@@ -203,15 +209,9 @@ class SearchFragment : BaseFragment() {
     }
   }
 
-  private fun handleBackPress() {
-    activity?.onBackPressedDispatcher?.addCallback(
-      viewLifecycleOwner,
-      object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-          goBack()
-        }
-      }
-    )
+  private fun handleBackPress(): FragmentActivityExtensions.Super {
+    goBack()
+    return FragmentActivityExtensions.Super.ShouldCall
   }
 
   override fun onDestroyView() {

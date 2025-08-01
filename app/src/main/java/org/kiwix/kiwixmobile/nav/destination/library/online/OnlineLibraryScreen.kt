@@ -56,12 +56,15 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
+import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
@@ -99,6 +102,8 @@ fun OnlineLibraryScreen(
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
   navigationIcon: @Composable () -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -135,6 +140,7 @@ fun OnlineLibraryScreen(
             end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
           )
       ) {
+        OnBackPressed(onUserBackPressed, navHostController)
         OnlineLibraryScreenContent(state, listState)
       }
     }

@@ -66,6 +66,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
@@ -200,7 +201,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           onMultiSelect = { offerAction(RequestSelect(it)) },
           onRefresh = { onSwipeRefresh() },
           onDownloadButtonClick = { downloadBookButtonClick() },
-          bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour
+          bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
+          navHostController = (requireActivity() as CoreMainActivity).navController,
+          onUserBackPressed = { onUserBackPressed() }
         ) {
           NavigationIcon(
             iconItem = IconItem.Vector(Icons.Filled.Menu),
@@ -213,12 +216,16 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
+  private fun onUserBackPressed(): FragmentActivityExtensions.Super {
+    val coreMainActivity = (activity as? CoreMainActivity)
+    if (coreMainActivity?.navigationDrawerIsOpen() == true) {
+      coreMainActivity.closeNavigationDrawer()
+      return FragmentActivityExtensions.Super.ShouldNotCall
+    }
+    return FragmentActivityExtensions.Super.ShouldCall
+  }
+
   private fun navigationIconClick() {
-    // Manually handle the navigation open/close.
-    // Since currently we are using the view based navigation drawer in other screens.
-    // Once we fully migrate to jetpack compose we will refactor this code to use the
-    // compose navigation.
-    // TODO Replace with compose based navigation when migration is done.
     val activity = activity as CoreMainActivity
     if (activity.navigationDrawerIsOpen()) {
       activity.closeNavigationDrawer()
