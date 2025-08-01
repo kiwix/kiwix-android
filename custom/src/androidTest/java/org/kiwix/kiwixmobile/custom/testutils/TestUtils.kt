@@ -33,7 +33,7 @@ import java.util.TimerTask
 
 object TestUtils {
   private const val TAG = "TESTUTILS"
-  const val TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
+  const val TEST_PAUSE_MS_FOR_SEARCH_TEST = 10000
   const val TEST_PAUSE_MS = 3000
 
   @JvmStatic

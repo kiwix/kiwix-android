@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 @RunWith(AndroidJUnit4::class)
 class ObjectBoxToRoomMigratorTest {
@@ -90,7 +91,7 @@ class ObjectBoxToRoomMigratorTest {
           "en",
           SharedPreferenceUtil(context)
         )
-        it.navigate(R.id.libraryFragment)
+        it.navigate(KiwixDestination.Library.route)
       }
     }
     kiwixRoomDatabase =

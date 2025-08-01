@@ -29,6 +29,7 @@ import applyWithViewHierarchyPrinting
 import org.junit.Assert.assertEquals
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.settings.DIALOG_PREFERENCE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -39,9 +40,9 @@ fun darkModeViewPainter(func: DarkModeViewPainterRobot.() -> Unit) =
   DarkModeViewPainterRobot().applyWithViewHierarchyPrinting(func)
 
 class DarkModeViewPainterRobot : BaseRobot() {
-  fun openSettings() {
-    openDrawer()
-    enterSettings()
+  fun openSettings(coreMainActivity: CoreMainActivity, composeContentTest: ComposeContentTestRule) {
+    openDrawer(coreMainActivity)
+    enterSettings(composeContentTest)
   }
 
   fun enableTheDarkMode(composeContentTest: ComposeContentTestRule) {

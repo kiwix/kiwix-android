@@ -29,6 +29,7 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
 import android.location.LocationManager.GPS_PROVIDER
 import android.location.LocationManager.NETWORK_PROVIDER
+import android.net.Uri
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.os.Build
@@ -57,16 +58,16 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBac
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import javax.inject.Inject
 
@@ -190,7 +191,20 @@ class LocalFileTransferFragment :
     }
 
   private fun getFilesForTransfer() =
-    LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem).orEmpty()
+    arguments
+      ?.getParcelableArrayCompat(URIS_KEY)
+      ?.map(::FileItem)
+      .orEmpty()
+
+  @Suppress("DEPRECATION")
+  private fun Bundle.getParcelableArrayCompat(key: String): Array<Uri>? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      getParcelableArray(key, Uri::class.java)
+    } else {
+      @Suppress("UNCHECKED_CAST")
+      getParcelableArray(key) as? Array<Uri>
+    }
+  }
 
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     isPeerSearching.value = true

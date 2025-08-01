@@ -42,7 +42,7 @@ import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class LocalFileTransferTest {
@@ -81,6 +82,8 @@ class LocalFileTransferTest {
   @JvmField
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
+
+  lateinit var kiwixMainActivity: KiwixMainActivity
 
   private val instrumentation: Instrumentation by lazy {
     InstrumentationRegistry.getInstrumentation()
@@ -119,6 +122,7 @@ class LocalFileTransferTest {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
+          kiwixMainActivity = it
           handleLocaleChange(
             it,
             "en",
@@ -126,10 +130,10 @@ class LocalFileTransferTest {
           )
         }
       }
-    StandardActions.closeDrawer()
+    StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
-        it.navigate(R.id.libraryFragment)
+        it.navigate(KiwixDestination.Library.route)
       }
       library {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
@@ -153,15 +157,16 @@ class LocalFileTransferTest {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
+          kiwixMainActivity = it
           handleLocaleChange(
             it,
             "en",
             SharedPreferenceUtil(context)
           )
-          it.navigate(R.id.libraryFragment)
+          it.navigate(KiwixDestination.Library.route)
         }
       }
-    StandardActions.closeDrawer()
+    StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
     library {
       assertGetZimNearbyDeviceDisplayed(composeTestRule)
       clickFileTransferIcon(composeTestRule) {
@@ -187,10 +192,11 @@ class LocalFileTransferTest {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          it.navigate(R.id.libraryFragment)
+          kiwixMainActivity = it
+          it.navigate(KiwixDestination.Library.route)
         }
       }
-    StandardActions.closeDrawer()
+    StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
     library {
       // test show case view show once.
       clickFileTransferIcon(composeTestRule) {

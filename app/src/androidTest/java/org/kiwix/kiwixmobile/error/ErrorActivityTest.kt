@@ -37,7 +37,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -46,6 +45,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 class ErrorActivityTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -106,7 +106,7 @@ class ErrorActivityTest : BaseActivityTest() {
   @Test
   fun verifyErrorActivity() {
     activityScenario.onActivity {
-      it.navigate(R.id.helpFragment)
+      it.navigate(KiwixDestination.Help.route)
     }
     errorActivity {
       assertSendDiagnosticReportDisplayed(composeTestRule)
@@ -116,7 +116,7 @@ class ErrorActivityTest : BaseActivityTest() {
       clickOnNoThanksButton(composeTestRule)
       // Handle the app restart explicitly. Since test case does not handle the app restart.
       activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-        it.navigate(R.id.helpFragment)
+        it.navigate(KiwixDestination.Help.route)
       }
       // Assert HelpFragment is visible or not after clicking on the "No, Thanks" button.
       assertSendDiagnosticReportDisplayed(composeTestRule)

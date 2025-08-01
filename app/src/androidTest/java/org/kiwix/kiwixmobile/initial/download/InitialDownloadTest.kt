@@ -41,7 +41,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -53,6 +52,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 @LargeTest
 class InitialDownloadTest : BaseActivityTest() {
@@ -115,7 +115,7 @@ class InitialDownloadTest : BaseActivityTest() {
   fun initialDownloadTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     activityScenario.onActivity {
-      it.navigate(R.id.libraryFragment)
+      it.navigate(KiwixDestination.Library.route)
     }
     // delete all the ZIM files showing in the LocalLibrary
     // screen to properly test the scenario.
@@ -125,7 +125,7 @@ class InitialDownloadTest : BaseActivityTest() {
       deleteZimIfExists(composeTestRule)
     }
     downloadRobot {
-      clickDownloadOnBottomNav()
+      clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule)
       downloadZimFile(composeTestRule)

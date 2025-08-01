@@ -26,22 +26,24 @@ import androidx.compose.ui.test.performClick
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
-import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class InitialDownloadRobot : BaseRobot() {
-  fun clickDownloadOnBottomNav() {
-    clickOn(ViewId(R.id.downloadsFragment))
+  fun clickDownloadOnBottomNav(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
+    }
   }
 
   fun assertStorageConfigureDialogDisplayed(composeTestRule: ComposeContentTestRule) {

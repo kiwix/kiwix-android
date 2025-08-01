@@ -22,15 +22,14 @@ import android.os.Handler
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import org.kiwix.kiwixmobile.core.main.reader.DocumentSection
 import kotlin.collections.List
-
-import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 
 class DocumentParser(private var listener: DocumentParser.SectionsListener) {
   private var title: String = ""
 
   @Suppress("DoubleMutabilityForCollection")
-  private var sections = ArrayList<TableDrawerAdapter.DocumentSection>()
+  private var sections = ArrayList<DocumentSection>()
 
   fun initInterface(webView: WebView) {
     webView.addJavascriptInterface(ParserCallback(), "DocumentParser")

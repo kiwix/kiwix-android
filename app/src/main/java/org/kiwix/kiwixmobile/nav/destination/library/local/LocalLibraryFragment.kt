@@ -39,6 +39,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +52,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.NavOptions
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
@@ -65,23 +66,22 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -100,6 +100,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -114,7 +115,6 @@ import java.util.Locale
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
-private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
 const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 
 @Suppress("LargeClass")
@@ -175,6 +175,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     baseActivity.cachedComponent.inject(this)
   }
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -185,10 +186,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     return ComposeView(requireContext()).apply {
       setContent {
         val lazyListState = rememberLazyListState()
-        val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
-        LaunchedEffect(isBottomNavVisible) {
-          (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
-        }
         LaunchedEffect(Unit) {
           updateLibraryScreenState(
             bottomNavigationHeight = getBottomNavigationHeight(),
@@ -204,6 +201,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           onMultiSelect = { offerAction(RequestSelect(it)) },
           onRefresh = { onSwipeRefresh() },
           onDownloadButtonClick = { downloadBookButtonClick() },
+          bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
+          navHostController = (requireActivity() as CoreMainActivity).navController,
+          onUserBackPressed = { onUserBackPressed() }
         ) {
           NavigationIcon(
             iconItem = IconItem.Vector(Icons.Filled.Menu),
@@ -216,12 +216,16 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
+  private fun onUserBackPressed(): FragmentActivityExtensions.Super {
+    val coreMainActivity = activity as? CoreMainActivity
+    if (coreMainActivity?.navigationDrawerIsOpen() == true) {
+      coreMainActivity.closeNavigationDrawer()
+      return FragmentActivityExtensions.Super.ShouldNotCall
+    }
+    return FragmentActivityExtensions.Super.ShouldCall
+  }
+
   private fun navigationIconClick() {
-    // Manually handle the navigation open/close.
-    // Since currently we are using the view based navigation drawer in other screens.
-    // Once we fully migrate to jetpack compose we will refactor this code to use the
-    // compose navigation.
-    // TODO Replace with compose based navigation when migration is done.
     val activity = activity as CoreMainActivity
     if (activity.navigationDrawerIsOpen()) {
       activity.closeNavigationDrawer()
@@ -287,10 +291,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
     zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
-      .also {
-        coreMainActivity.navHostContainer
-          .setBottomMarginToFragmentContainerView(0)
-      }
     coroutineJobs.apply {
       add(sideEffects())
       add(fileSelectActions())
@@ -319,9 +319,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
-    val args = LocalLibraryFragmentArgs.fromBundle(requireArguments())
-    if (args.zimFileUri.isNotEmpty()) {
-      handleSelectedFileUri(args.zimFileUri.toUri())
+    val zimFileUri = arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
+    if (zimFileUri.isNotEmpty()) {
+      handleSelectedFileUri(zimFileUri.toUri())
     }
     requireArguments().clear()
   }
@@ -363,10 +363,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
-  private fun getBottomNavigationView() =
-    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+  // private fun getBottomNavigationView() =
+  //   requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 
-  private fun getBottomNavigationHeight() = getBottomNavigationView().measuredHeight
+  private fun getBottomNavigationHeight() = ZERO
+  // getBottomNavigationView().measuredHeight
 
   private fun filePickerButtonClick() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
@@ -494,9 +495,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
             zimFileReader.dispose()
           }
       }
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       activity?.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = file.toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = file.toUri().toString()),
+        navOptions
       )
     }
   }
@@ -560,10 +564,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
 
   private fun animateBottomViewToOrigin() {
-    getBottomNavigationView().animate()
-      .translationY(0F)
-      .setDuration(MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION)
-      .start()
+    // getBottomNavigationView().animate()
+    //   .translationY(0F)
+    //   .setDuration(MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION)
+    //   .start()
   }
 
   private fun render(state: FileSelectListState) {
@@ -648,7 +652,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun navigateToLocalFileTransferFragment() {
-    requireActivity().navigate(R.id.localFileTransferFragment)
+    requireActivity().navigate(KiwixDestination.LocalFileTransfer.route)
   }
 
   private fun shouldShowRationalePermission() =

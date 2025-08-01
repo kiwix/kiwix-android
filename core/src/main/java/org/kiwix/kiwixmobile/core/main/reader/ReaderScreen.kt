@@ -22,19 +22,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -42,6 +47,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,7 +55,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -69,6 +75,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -82,13 +89,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -105,19 +115,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
-import org.kiwix.kiwixmobile.core.ui.components.ScrollDirection
-import org.kiwix.kiwixmobile.core.ui.components.rememberLazyListScrollListener
+import org.kiwix.kiwixmobile.core.ui.components.TWELVE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
@@ -125,6 +139,7 @@ import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
@@ -134,6 +149,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
@@ -144,6 +161,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
@@ -152,45 +170,102 @@ const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
 const val CLOSE_ALL_TABS_BUTTON_TESTING_TAG = "closeAllTabsButtonTestingTag"
 const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
+const val READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG = "readerBottomBarBookmarkButtonTestingTag"
+const val READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG =
+  "readerBottomBarPreviousScreenButtonTestingTag"
+const val READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG =
+  "readerBottomBarNextScreenButtonTestingTag"
+const val READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG = "readerBottomBarHomeButtonTestingTag"
+const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
+  "readerBottomBarTableContentButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
 @Composable
 fun ReaderScreen(
   state: ReaderScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  onBottomScrollOffsetChanged: (Float) -> Unit,
+  showTableOfContentDrawer: MutableState<Boolean>,
+  documentSections: MutableList<DocumentSection>?,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
+  mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
-  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
+  val localWebViewScrollState: MutableState<ScrollState?> =
+    remember { mutableStateOf(ScrollState(0)) }
   val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
-  LaunchedEffect(bottomAppBarScrollBehavior.state.heightOffset) {
-    onBottomScrollOffsetChanged(bottomAppBarScrollBehavior.state.heightOffset)
-  }
   KiwixDialogTheme {
-    Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
-      topBar = {
-        ReaderTopBar(
+    Box(Modifier.fillMaxSize()) {
+      Scaffold(
+        snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+        topBar = {
+          ReaderTopBar(
+            state,
+            actionMenuItems,
+            topAppBarScrollBehavior,
+            navigationIcon
+          )
+        },
+        floatingActionButton = { BackToTopFab(state) },
+        modifier = Modifier
+          .systemBarsPadding()
+          .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+          .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
+          .let { baseModifier ->
+            mainActivityBottomAppBarScrollBehaviour?.let {
+              baseModifier.nestedScroll(it.nestedScrollConnection)
+            } ?: baseModifier
+          }
+          .semantics { testTag = READER_SCREEN_TESTING_TAG }
+      ) { paddingValues ->
+        OnBackPressed(onUserBackPressed, navHostController)
+        ReaderContentLayout(
           state,
-          actionMenuItems,
-          topAppBarScrollBehavior,
-          navigationIcon
+          Modifier.padding(paddingValues),
+          bottomAppBarScrollBehavior,
+          localWebViewScrollState.value
         )
-      },
-      floatingActionButton = { BackToTopFab(state) },
-      modifier = Modifier
-        .systemBarsPadding()
-        .padding(bottom = bottomNavHeightInDp)
-        .semantics { testTag = READER_SCREEN_TESTING_TAG }
-    ) { paddingValues ->
-      ReaderContentLayout(
-        state,
-        Modifier.padding(paddingValues),
-        bottomAppBarScrollBehavior,
-        topAppBarScrollBehavior
-      )
+      }
+      if (showTableOfContentDrawer.value) {
+        // Showing the background color on screen so that it look same as navigation drawer.
+        Box(
+          Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.3f))
+            .clickable { showTableOfContentDrawer.update { false } }
+        )
+      }
+      AnimatedVisibility(
+        visible = showTableOfContentDrawer.value,
+        enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+        exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
+        modifier = Modifier
+          .systemBarsPadding()
+          .align(Alignment.CenterEnd)
+      ) {
+        TableDrawerSheet(
+          title = state.tableOfContentTitle,
+          sections = documentSections.orEmpty(),
+          localWebViewScrollState,
+          state.selectedWebView,
+          showTableOfContentDrawer
+        )
+      }
+    }
+  }
+}
+
+@Composable
+fun OnBackPressed(
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController
+) {
+  BackHandler(enabled = true) {
+    val result = onUserBackPressed()
+    if (result == FragmentActivityExtensions.Super.ShouldCall) {
+      navHostController.popBackStack()
     }
   }
 }
@@ -222,7 +297,7 @@ private fun ReaderContentLayout(
   state: ReaderScreenState,
   modifier: Modifier = Modifier,
   bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
-  topAppBarScrollBehavior: TopAppBarScrollBehavior
+  webViewScrollState: ScrollState?
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state)
@@ -232,7 +307,7 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(state, bottomAppBarScrollBehavior, topAppBarScrollBehavior)
+          ShowZIMFileContent(state, webViewScrollState)
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
@@ -254,6 +329,94 @@ private fun ReaderContentLayout(
         }
       }
     }
+  }
+}
+
+@Suppress("LongMethod", "UnsafeCallOnNullableType")
+@Composable
+fun TableDrawerSheet(
+  title: String,
+  sections: List<DocumentSection>,
+  webViewScrollState: MutableState<ScrollState?>,
+  selectedWebView: KiwixWebView?,
+  showTableOfContentDrawer: MutableState<Boolean>
+) {
+  val drawerBackgroundColor = if (isSystemInDarkTheme()) {
+    MineShaftGray700
+  } else {
+    White
+  }
+  var scrollToSectionIndex by remember { mutableStateOf<Int?>(null) }
+  val coroutineScope = rememberCoroutineScope()
+  LaunchedEffect(scrollToSectionIndex) {
+    scrollToSectionIndex?.let {
+      webViewScrollState.value = null
+    }
+  }
+  ModalDrawerSheet(
+    modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
+    drawerShape = RectangleShape,
+    drawerContainerColor = drawerBackgroundColor
+  ) {
+    LazyColumn(modifier = Modifier.fillMaxHeight()) {
+      item {
+        Text(
+          text = title.ifEmpty { stringResource(id = R.string.no_section_info) },
+          style = MaterialTheme.typography.titleMedium,
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+              coroutineScope.launch {
+                webViewScrollState.value?.animateScrollTo(ZERO)
+              }
+              showTableOfContentDrawer.update { false }
+            }
+            .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
+        )
+      }
+      itemsIndexed(sections) { index, section ->
+        val paddingStart = (section.level - ONE) * TWELVE
+        Text(
+          text = section.title,
+          style = MaterialTheme.typography.bodyMedium.copy(
+            fontWeight = FontWeight.Light,
+            fontSize = LARGE_BODY_TEXT_SIZE
+          ),
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable { scrollToSectionIndex = index }
+            .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
+        )
+      }
+    }
+  }
+  LaunchedEffect(webViewScrollState.value) {
+    if (webViewScrollState.value == null &&
+      scrollToSectionIndex != null &&
+      hasItemForPositionInDocumentSectionsList(scrollToSectionIndex!!, sections)
+    ) {
+      val targetId = sections[scrollToSectionIndex!!].id.replace("'", "\\'")
+      selectedWebView?.evaluateJavascript(
+        "document.getElementById('$targetId')?.scrollIntoView();",
+        null
+      )
+      delay(HUNDERED.toLong())
+      webViewScrollState.value = ScrollState(selectedWebView?.scrollY ?: ZERO)
+      scrollToSectionIndex = null
+      showTableOfContentDrawer.update { false }
+    }
+  }
+}
+
+private fun hasItemForPositionInDocumentSectionsList(
+  position: Int,
+  sections: List<DocumentSection>
+): Boolean {
+  val documentListSize = sections.size
+  return when {
+    position < 0 -> false
+    position >= documentListSize -> false
+    else -> true
   }
 }
 
@@ -360,37 +523,49 @@ private fun BoxScope.CloseFullScreenImageButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowZIMFileContent(
-  state: ReaderScreenState,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
-  topAppBarScrollBehavior: TopAppBarScrollBehavior
-) {
+private fun ShowZIMFileContent(state: ReaderScreenState, webViewScrollState: ScrollState?) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
-      AndroidView(
-        factory = { context ->
-          // Create a new container and add the WebView to it
-          FrameLayout(context).apply {
-            // Ensure the WebView has no parent before adding
-            (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
-            selectedWebView.setOnScrollChangeListener(null)
-            selectedWebView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-              val deltaY = (scrollY - oldScrollY).toFloat()
-              if (deltaY == 0f) return@setOnScrollChangeListener
-              // SAFELY drive top and bottom app bars
-              topAppBarScrollBehavior.state.heightOffset -= deltaY
-              bottomAppBarScrollBehavior.state.heightOffset -= deltaY
-            }
-            selectedWebView.layoutParams = FrameLayout.LayoutParams(
-              FrameLayout.LayoutParams.MATCH_PARENT,
-              FrameLayout.LayoutParams.MATCH_PARENT
-            )
-            addView(selectedWebView)
-          }
-        },
-        modifier = Modifier.fillMaxSize()
+      ScrollableWebViewWithNestedScroll(
+        selectedWebView = selectedWebView,
+        modifier = Modifier.fillMaxSize(),
+        webViewScrollState = webViewScrollState
       )
     }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ScrollableWebViewWithNestedScroll(
+  selectedWebView: KiwixWebView,
+  modifier: Modifier = Modifier,
+  webViewScrollState: ScrollState?
+) {
+  Box(
+    modifier = modifier
+      .fillMaxSize()
+      .let { baseModifier ->
+        webViewScrollState?.let {
+          baseModifier.verticalScroll(it)
+        } ?: run {
+          baseModifier
+        }
+      }
+  ) {
+    AndroidView(
+      factory = { context ->
+        FrameLayout(context).apply {
+          (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
+          selectedWebView.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+          addView(selectedWebView)
+        }
+      },
+      modifier = Modifier.fillMaxSize(),
+    )
   }
 }
 
@@ -518,7 +693,8 @@ private fun BottomAppBarOfReaderScreen(
         onClick = bookmarkButtonItem.first,
         onLongClick = bookmarkButtonItem.second,
         buttonIcon = bookmarkButtonItem.third,
-        contentDescription = stringResource(R.string.bookmarks)
+        contentDescription = stringResource(R.string.bookmarks),
+        testingTag = READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG
       )
       // Back Icon(for going to previous page)
       BottomAppBarButtonIcon(
@@ -526,13 +702,15 @@ private fun BottomAppBarOfReaderScreen(
         onLongClick = previousPageButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_left_24dp),
         shouldEnable = previousPageButtonItem.third,
-        contentDescription = stringResource(R.string.go_to_previous_page)
+        contentDescription = stringResource(R.string.go_to_previous_page),
+        testingTag = READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
       )
       // Home Icon(to open the home page of ZIM file)
       BottomAppBarButtonIcon(
         onClick = onHomeButtonClick,
         buttonIcon = Drawable(R.drawable.action_home),
-        contentDescription = stringResource(R.string.menu_home)
+        contentDescription = stringResource(R.string.menu_home),
+        testingTag = READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG
       )
       // Forward Icon(for going to next page)
       BottomAppBarButtonIcon(
@@ -540,14 +718,16 @@ private fun BottomAppBarOfReaderScreen(
         onLongClick = nextPageButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_right_24dp),
         shouldEnable = nextPageButtonItem.third,
-        contentDescription = stringResource(R.string.go_to_next_page)
+        contentDescription = stringResource(R.string.go_to_next_page),
+        testingTag = READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG
       )
       // Toggle Icon(to open the table of content in right side bar)
       BottomAppBarButtonIcon(
         shouldEnable = tocButtonItem.first,
         onClick = tocButtonItem.second,
         buttonIcon = Drawable(R.drawable.ic_toc_24dp),
-        contentDescription = stringResource(R.string.table_of_contents)
+        contentDescription = stringResource(R.string.table_of_contents),
+        testingTag = READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG
       )
     }
   }
@@ -559,7 +739,8 @@ private fun BottomAppBarButtonIcon(
   onLongClick: (() -> Unit)? = null,
   buttonIcon: IconItem,
   shouldEnable: Boolean = true,
-  contentDescription: String
+  contentDescription: String,
+  testingTag: String
 ) {
   Box(
     modifier = Modifier
@@ -569,7 +750,8 @@ private fun BottomAppBarButtonIcon(
         onClick = onClick,
         onLongClick = onLongClick,
         enabled = shouldEnable
-      ),
+      )
+      .testTag(testingTag),
     contentAlignment = Alignment.Center
   ) {
     Icon(
@@ -821,34 +1003,9 @@ fun getTabCardSize(toolbarHeightDp: Dp): Pair<Dp, Dp> {
   return cardWidth to cardHeight
 }
 
-@Composable
-fun rememberScrollBehavior(
-  bottomNavigationHeight: Int,
-  listState: LazyListState,
-): Pair<MutableState<Dp>, LazyListState> {
-  val bottomNavHeightInDp = with(LocalDensity.current) { bottomNavigationHeight.toDp() }
-  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
-  val lazyListState = rememberLazyListScrollListener(
-    lazyListState = listState,
-    onScrollChanged = { direction ->
-      when (direction) {
-        ScrollDirection.SCROLL_UP -> {
-          bottomNavHeight.value = bottomNavHeightInDp
-        }
-
-        ScrollDirection.SCROLL_DOWN -> {
-          bottomNavHeight.value = ZERO.dp
-        }
-
-        ScrollDirection.IDLE -> {}
-      }
-    }
-  )
-
-  return bottomNavHeight to lazyListState
-}
-
 interface TabClickListener {
   fun onSelectTab(position: Int)
   fun onCloseTab(position: Int)
 }
+
+data class DocumentSection(var title: String, var id: String, var level: Int)

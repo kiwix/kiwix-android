@@ -33,6 +33,7 @@ import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
@@ -68,8 +69,8 @@ class ZimHostRobot : BaseRobot() {
     zimFileNodes.assertCountEquals(2)
   }
 
-  fun openZimHostFragment() {
-    openDrawer()
+  fun openZimHostFragment(coreMainActivity: CoreMainActivity) {
+    openDrawer(coreMainActivity)
     clickOn(TextId(R.string.menu_wifi_hotspot))
   }
 

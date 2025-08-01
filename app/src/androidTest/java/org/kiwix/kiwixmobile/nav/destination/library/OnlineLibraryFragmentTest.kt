@@ -30,7 +30,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -41,6 +40,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 class OnlineLibraryFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -92,15 +92,15 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(R.id.downloadsFragment)
+      it.navigate(KiwixDestination.Downloads.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)
       clickOnSearchIcon(composeTestRule)
       searchWikipediaZIMFiles(composeTestRule)
       pressBack()
-      clickLibraryOnBottomNav()
-      clickDownloadOnBottomNav()
+      clickLibraryOnBottomNav(composeTestRule)
+      clickDownloadOnBottomNav(composeTestRule)
       assertPreviousSearchRemainsActive(composeTestRule)
     }
   }
@@ -110,7 +110,7 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(R.id.downloadsFragment)
+      it.navigate(KiwixDestination.Downloads.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)
@@ -118,8 +118,8 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       searchWikipediaZIMFiles(composeTestRule)
       clickOnClearSearchIcon(composeTestRule)
       pressBack()
-      clickLibraryOnBottomNav()
-      clickDownloadOnBottomNav()
+      clickLibraryOnBottomNav(composeTestRule)
+      clickDownloadOnBottomNav(composeTestRule)
       assertSearchViewIsNotActive(composeTestRule)
     }
   }

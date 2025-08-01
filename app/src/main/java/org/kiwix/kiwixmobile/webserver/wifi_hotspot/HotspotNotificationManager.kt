@@ -26,11 +26,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.navigation.NavDeepLinkBuilder
+import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.R.id
-import org.kiwix.kiwixmobile.R.navigation
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
 import javax.inject.Inject
@@ -58,13 +57,15 @@ class HotspotNotificationManager @Inject constructor(
   @SuppressLint("UnspecifiedImmutableFlag")
   fun buildForegroundNotification(uri: String? = null): Notification {
     val coreMainActivity = (context as CoreApp).getMainActivity()
-    val contentIntent =
-      NavDeepLinkBuilder(context).setComponentName(
-        coreMainActivity.mainActivity::class.java
-      )
-        .setGraph(navigation.kiwix_nav_graph)
-        .setDestination(id.zimHostFragment)
-        .createPendingIntent()
+    val contentIntent = PendingIntent.getActivity(
+      context,
+      0,
+      Intent(context, coreMainActivity.mainActivity::class.java).apply {
+        action = Intent.ACTION_VIEW
+        data = ZIM_HOST_NAV_DEEP_LINK.toUri()
+      },
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
     hotspotNotificationChannel()
     val stopIntent =
       Intent(context, HotspotService::class.java).setAction(
