@@ -217,7 +217,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun onUserBackPressed(): FragmentActivityExtensions.Super {
-    val coreMainActivity = (activity as? CoreMainActivity)
+    val coreMainActivity = activity as? CoreMainActivity
     if (coreMainActivity?.navigationDrawerIsOpen() == true) {
       coreMainActivity.closeNavigationDrawer()
       return FragmentActivityExtensions.Super.ShouldNotCall

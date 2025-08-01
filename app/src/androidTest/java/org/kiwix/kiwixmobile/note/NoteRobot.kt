@@ -30,9 +30,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.espresso.Espresso.closeSoftKeyboard
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
@@ -42,6 +39,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAKE_NOTE_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
@@ -129,9 +127,17 @@ class NoteRobot : BaseRobot() {
     })
   }
 
-  fun openNoteFragment(coreMainActivity: CoreMainActivity) {
+  fun openNoteFragment(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule
+  ) {
     openDrawer(coreMainActivity)
-    testFlakyView({ onView(withText(R.string.pref_notes)).perform(click()) })
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(LEFT_DRAWER_NOTES_ITEM_TESTING_TAG).performClick()
+      }
+    })
   }
 
   fun clickOnSavedNote(composeTestRule: ComposeContentTestRule) {

@@ -92,6 +92,7 @@ class NoteFragmentTest : BaseActivityTest() {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
+          kiwixMainActivity = it
           handleLocaleChange(
             it,
             "en",
@@ -139,7 +140,7 @@ class NoteFragmentTest : BaseActivityTest() {
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
       pressBack()
-      openNoteFragment(kiwixMainActivity as CoreMainActivity)
+      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
@@ -162,7 +163,7 @@ class NoteFragmentTest : BaseActivityTest() {
     }
 
     note {
-      openNoteFragment(kiwixMainActivity as CoreMainActivity)
+      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
@@ -186,7 +187,7 @@ class NoteFragmentTest : BaseActivityTest() {
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
       pressBack()
-      openNoteFragment(kiwixMainActivity as CoreMainActivity)
+      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
@@ -209,7 +210,7 @@ class NoteFragmentTest : BaseActivityTest() {
         writeDemoNote(composeTestRule)
         saveNote(composeTestRule)
         pressBack()
-        openNoteFragment(kiwixMainActivity as CoreMainActivity)
+        openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
         assertToolbarExist(composeTestRule)
         clickOnSavedNote(composeTestRule)
         clickOnOpenNote(composeTestRule)
@@ -247,7 +248,7 @@ class NoteFragmentTest : BaseActivityTest() {
   private fun deletePreviouslySavedNotes() {
     // delete the notes if any saved to properly run the test scenario
     note {
-      openNoteFragment(kiwixMainActivity as CoreMainActivity)
+      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnTrashIcon(composeTestRule)
       assertDeleteNoteDialogDisplayed(composeTestRule)

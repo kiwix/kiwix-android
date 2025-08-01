@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile
 import android.R.id
 import android.app.Instrumentation
 import android.content.Context
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Direction
@@ -50,7 +51,7 @@ abstract class BaseRobot(
   }
 
   internal fun pressBack() {
-    uiDevice.pressBack()
+    Espresso.pressBack()
   }
 
   internal fun pressHome() {
