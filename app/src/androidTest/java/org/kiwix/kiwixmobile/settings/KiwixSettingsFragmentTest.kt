@@ -114,6 +114,7 @@ class KiwixSettingsFragmentTest {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Intro.route)
     }
+    composeTestRule.waitForIdle()
     intro {
       swipeLeft(composeTestRule)
       clickGetStarted(composeTestRule) {}

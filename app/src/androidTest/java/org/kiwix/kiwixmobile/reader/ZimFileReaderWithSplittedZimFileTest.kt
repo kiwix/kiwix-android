@@ -119,6 +119,7 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
+    composeTestRule.waitForIdle()
     createAndGetSplitedZimFile()?.let {
       UiThreadStatement.runOnUiThread {
         val navOptions = NavOptions.Builder()
@@ -129,7 +130,7 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
           navOptions
         )
       }
-
+      composeTestRule.waitForIdle()
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
         clickOnReaderFragment(composeTestRule) // activate the accessibility check to check the issues.

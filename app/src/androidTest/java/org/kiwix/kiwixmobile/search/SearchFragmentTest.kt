@@ -46,6 +46,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -258,6 +260,7 @@ class SearchFragmentTest : BaseActivityTest() {
         kiwixMainActivity = it
         kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
+      composeTestRule.waitForIdle()
       downloadingZimFile = getDownloadingZimFile()
       getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
         if (response.isSuccessful) {
@@ -272,38 +275,37 @@ class SearchFragmentTest : BaseActivityTest() {
         }
       }
       openKiwixReaderFragmentWithFile(downloadingZimFile)
+      composeTestRule.waitForIdle()
       search { checkZimFileSearchSuccessful(composeTestRule) }
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchFragment become visible on screen.
       delay(2000)
-      // TODO refactor this with compose based navController.
-      // val navHostFragment: NavHostFragment =
-      //   kiwixMainActivity.supportFragmentManager
-      //     .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-      // val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
-      // for (i in 1..100) {
-      //   // This will execute the render method 100 times frequently.
-      //   val searchTerm = searchTerms[i % searchTerms.size]
-      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      // }
-      // for (i in 1..100) {
-      //   // this will execute the render method 100 times with 100MS delay.
-      //   delay(100)
-      //   val searchTerm = searchTerms[i % searchTerms.size]
-      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      // }
-      // for (i in 1..100) {
-      //   // this will execute the render method 100 times with 200MS delay.
-      //   delay(200)
-      //   val searchTerm = searchTerms[i % searchTerms.size]
-      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      // }
-      // for (i in 1..100) {
-      //   // this will execute the render method 100 times with 200MS delay.
-      //   delay(300)
-      //   val searchTerm = searchTerms[i % searchTerms.size]
-      //   searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-      // }
+      val searchFragment = kiwixMainActivity.supportFragmentManager.fragments
+        .filterIsInstance<SearchFragment>()
+        .firstOrNull()
+      for (i in 1..100) {
+        // This will execute the render method 100 times frequently.
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 100MS delay.
+        delay(100)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 200MS delay.
+        delay(200)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 200MS delay.
+        delay(300)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+      }
     }
 
   private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {

@@ -32,7 +32,6 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Assert
@@ -47,7 +46,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -94,7 +92,7 @@ class KiwixSplashActivityTest {
     shouldShowIntro(true)
     ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
     }
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    composeTestRule.waitForIdle()
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
@@ -122,7 +120,7 @@ class KiwixSplashActivityTest {
     shouldShowIntro(false)
     ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
     }
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    composeTestRule.waitForIdle()
     Intents.intended(
       IntentMatchers.hasComponent(
         KiwixMainActivity::class.java.canonicalName
