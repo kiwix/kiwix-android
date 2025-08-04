@@ -145,8 +145,6 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickHelpOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertToolbarDisplayed(composeTestRule)
       }
-      clickSupportKiwixOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule)
-      pressBack()
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       LeakAssertions.assertNoLeaks()

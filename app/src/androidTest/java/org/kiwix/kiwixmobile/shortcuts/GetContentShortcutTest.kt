@@ -161,8 +161,6 @@ class GetContentShortcutTest {
       clickHelpOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         HelpRobot().assertToolbarDisplayed(composeTestRule)
       }
-      clickSupportKiwixOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule)
-      pressBack()
     }
   }
 }

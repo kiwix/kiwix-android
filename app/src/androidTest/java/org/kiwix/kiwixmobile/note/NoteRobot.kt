@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -79,7 +80,9 @@ class NoteRobot : BaseRobot() {
 
   fun clickOnNoteMenuItem(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).isDisplayed()
+      }
       onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
       waitUntilTimeout()
       onNodeWithTag(TAKE_NOTE_MENU_ITEM_TESTING_TAG).performClick()

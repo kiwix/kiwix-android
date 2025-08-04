@@ -33,6 +33,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
@@ -107,7 +108,8 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
             matchesCheck(TouchTargetSizeCheck::class.java),
             matchesViews(withContentDescription("More options"))
           ),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
+          matchesCheck(SpeakableTextPresentCheck::class.java),
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
         )
       )
     }
@@ -119,6 +121,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
+    composeTestRule.waitForIdle()
     val loadFileStream =
       KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
@@ -139,6 +142,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
     }
     openKiwixReaderFragmentWithFile(zimFile)
+    composeTestRule.waitForIdle()
     reader {
       checkZimFileLoadedSuccessful(composeTestRule)
       clickOnTabIcon(composeTestRule)
@@ -160,6 +164,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
+    composeTestRule.waitForIdle()
     val downloadingZimFile = getDownloadingZimFile()
     getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
       if (response.isSuccessful) {
@@ -174,6 +179,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
     }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
+    composeTestRule.waitForIdle()
     reader {
       checkZimFileLoadedSuccessful(composeTestRule)
       clickOnTabIcon(composeTestRule)

@@ -140,6 +140,7 @@ class NavigationHistoryTest : BaseActivityTest() {
         }
       }
     }
+    composeTestRule.waitForIdle()
     UiThreadStatement.runOnUiThread {
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
@@ -149,6 +150,7 @@ class NavigationHistoryTest : BaseActivityTest() {
         navOptions
       )
     }
+    composeTestRule.waitForIdle()
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
     navigationHistory {
       closeTabSwitcherIfVisible(composeTestRule)

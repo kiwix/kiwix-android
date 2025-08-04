@@ -31,9 +31,11 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -106,6 +108,7 @@ class KiwixMainActivity : CoreMainActivity() {
       actionMode?.finish()
     }
   private val storageDeviceList = arrayListOf<StorageDevice>()
+  private var pendingIntent by mutableStateOf<Intent?>(null)
 
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,15 +139,28 @@ class KiwixMainActivity : CoreMainActivity() {
       )
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
+        handleAllIntents(intent)
+      }
+      LaunchedEffect(pendingIntent) {
+        handleAllIntents(pendingIntent)
+        pendingIntent = null
       }
       DialogHost(alertDialogShower)
     }
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
     }
-    handleZimFileIntent(intent)
-    handleNotificationIntent(intent)
-    handleGetContentIntent(intent)
+  }
+
+  private fun handleAllIntents(newIntent: Intent?) {
+    newIntent?.let { intent ->
+      handleZimFileIntent(intent)
+      handleNotificationIntent(intent)
+      handleGetContentIntent(intent)
+      intent.data?.let {
+        navController.handleDeepLink(intent)
+      }
+    }
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {
@@ -218,13 +234,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    handleNotificationIntent(intent)
-    handleZimFileIntent(intent)
-    handleGetContentIntent(intent)
-    intent.data?.let { uri ->
-      // for handling the deepLink of ZimHost screen when application is opened.
-      navController.handleDeepLink(intent)
-    }
+    pendingIntent = intent
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
@@ -267,8 +277,8 @@ class KiwixMainActivity : CoreMainActivity() {
     navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
   }
 
-  private fun handleNotificationIntent(intent: Intent) {
-    if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
+  private fun handleNotificationIntent(intent: Intent?) {
+    if (intent?.hasExtra(DOWNLOAD_NOTIFICATION_TITLE) == true) {
       lifecycleScope.launch {
         delay(OPENING_ZIM_FILE_DELAY)
         intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {

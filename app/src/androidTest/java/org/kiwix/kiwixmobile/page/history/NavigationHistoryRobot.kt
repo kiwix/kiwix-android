@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
@@ -43,7 +42,6 @@ import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -103,9 +101,6 @@ class NavigationHistoryRobot : BaseRobot() {
   fun longClickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
-      }
       testFlakyView({
         onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG)
           .performTouchInput { longClick() }
@@ -116,9 +111,6 @@ class NavigationHistoryRobot : BaseRobot() {
   fun longClickOnForwardButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        onNodeWithTag(READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
-      }
       testFlakyView({
         onNodeWithTag(READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG)
           .performTouchInput { longClick() }
@@ -145,9 +137,6 @@ class NavigationHistoryRobot : BaseRobot() {
   fun clickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
-      }
       onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG)
         .performClick()
     }
