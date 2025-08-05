@@ -122,9 +122,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
-    intent?.let {
-      pendingIntentFlow.value = it
-    }
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       navController = rememberNavController()
@@ -170,6 +167,9 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
+    }
+    intent?.let {
+      pendingIntentFlow.value = it
     }
   }
 

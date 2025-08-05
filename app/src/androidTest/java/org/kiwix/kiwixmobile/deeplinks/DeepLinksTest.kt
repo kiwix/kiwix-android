@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.deeplinks
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -51,6 +52,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import java.io.File
 import java.io.FileOutputStream
@@ -107,7 +109,6 @@ class DeepLinksTest : BaseActivityTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("file")?.let {
       // Launch the activity to test the deep link
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
-      composeTestRule.waitForIdle()
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
@@ -124,7 +125,9 @@ class DeepLinksTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       testFlakyView({
         composeTestRule.apply {
-          waitForIdle()
+          waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+            onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).isDisplayed()
+          }
           onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
         }
       })
@@ -136,7 +139,6 @@ class DeepLinksTest : BaseActivityTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("content")?.let {
       // Launch the activity to test the deep link
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
-      composeTestRule.waitForIdle()
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)

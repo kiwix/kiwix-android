@@ -111,6 +111,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)
       }
+      composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
@@ -143,6 +144,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)
       }
+      composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
