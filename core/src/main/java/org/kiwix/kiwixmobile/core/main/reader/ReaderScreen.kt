@@ -34,7 +34,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -83,13 +82,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -117,7 +116,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
@@ -192,10 +190,14 @@ fun ReaderScreen(
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   navigationIcon: @Composable () -> Unit
 ) {
-  val localWebViewScrollState: MutableState<ScrollState?> =
-    remember { mutableStateOf(ScrollState(0)) }
+  // For managing the scroll event handling of webView.
+  val shouldUpdateTopAppBarAndBottomAppBarOnScrolling = remember { mutableStateOf(true) }
   val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+  LaunchedEffect(bottomAppBarScrollBehavior.state.heightOffset) {
+    mainActivityBottomAppBarScrollBehaviour?.state?.heightOffset =
+      bottomAppBarScrollBehavior.state.heightOffset
+  }
   KiwixDialogTheme {
     Box(Modifier.fillMaxSize()) {
       Scaffold(
@@ -213,11 +215,6 @@ fun ReaderScreen(
           .systemBarsPadding()
           .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
-          .let { baseModifier ->
-            mainActivityBottomAppBarScrollBehaviour?.let {
-              baseModifier.nestedScroll(it.nestedScrollConnection)
-            } ?: baseModifier
-          }
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
       ) { paddingValues ->
         OnBackPressed(onUserBackPressed, navHostController)
@@ -225,8 +222,12 @@ fun ReaderScreen(
           state,
           Modifier.padding(paddingValues),
           bottomAppBarScrollBehavior,
-          localWebViewScrollState.value
+          topAppBarScrollBehavior,
+          shouldUpdateTopAppBarAndBottomAppBarOnScrolling
         )
+      }
+      LaunchedEffect(showTableOfContentDrawer.value) {
+        shouldUpdateTopAppBarAndBottomAppBarOnScrolling.value = !showTableOfContentDrawer.value
       }
       if (showTableOfContentDrawer.value) {
         // Showing the background color on screen so that it look same as navigation drawer.
@@ -248,7 +249,6 @@ fun ReaderScreen(
         TableDrawerSheet(
           title = state.tableOfContentTitle,
           sections = documentSections.orEmpty(),
-          localWebViewScrollState,
           state.selectedWebView,
           showTableOfContentDrawer
         )
@@ -297,7 +297,8 @@ private fun ReaderContentLayout(
   state: ReaderScreenState,
   modifier: Modifier = Modifier,
   bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
-  webViewScrollState: ScrollState?
+  topAppBarScrollBehavior: TopAppBarScrollBehavior,
+  shouldUpdateTopAppBarAndBottomAppBarOnScrolling: MutableState<Boolean>,
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state)
@@ -307,7 +308,12 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(state, webViewScrollState)
+          ShowZIMFileContent(
+            state,
+            bottomAppBarScrollBehavior,
+            topAppBarScrollBehavior,
+            shouldUpdateTopAppBarAndBottomAppBarOnScrolling
+          )
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
@@ -332,12 +338,11 @@ private fun ReaderContentLayout(
   }
 }
 
-@Suppress("LongMethod", "UnsafeCallOnNullableType")
+@Suppress("LongMethod")
 @Composable
 fun TableDrawerSheet(
   title: String,
   sections: List<DocumentSection>,
-  webViewScrollState: MutableState<ScrollState?>,
   selectedWebView: KiwixWebView?,
   showTableOfContentDrawer: MutableState<Boolean>
 ) {
@@ -345,13 +350,6 @@ fun TableDrawerSheet(
     MineShaftGray700
   } else {
     White
-  }
-  var scrollToSectionIndex by remember { mutableStateOf<Int?>(null) }
-  val coroutineScope = rememberCoroutineScope()
-  LaunchedEffect(scrollToSectionIndex) {
-    scrollToSectionIndex?.let {
-      webViewScrollState.value = null
-    }
   }
   ModalDrawerSheet(
     modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
@@ -366,10 +364,10 @@ fun TableDrawerSheet(
           modifier = Modifier
             .fillMaxWidth()
             .clickable {
-              coroutineScope.launch {
-                webViewScrollState.value?.animateScrollTo(ZERO)
-              }
-              showTableOfContentDrawer.update { false }
+              onTableOfContentHeaderClick(
+                selectedWebView,
+                showTableOfContentDrawer
+              )
             }
             .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
         )
@@ -384,28 +382,43 @@ fun TableDrawerSheet(
           ),
           modifier = Modifier
             .fillMaxWidth()
-            .clickable { scrollToSectionIndex = index }
+            .clickable {
+              onTableOfContentSectionClick(
+                selectedWebView,
+                index,
+                sections,
+                showTableOfContentDrawer
+              )
+            }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
         )
       }
     }
   }
-  LaunchedEffect(webViewScrollState.value) {
-    if (webViewScrollState.value == null &&
-      scrollToSectionIndex != null &&
-      hasItemForPositionInDocumentSectionsList(scrollToSectionIndex!!, sections)
-    ) {
-      val targetId = sections[scrollToSectionIndex!!].id.replace("'", "\\'")
-      selectedWebView?.evaluateJavascript(
-        "document.getElementById('$targetId')?.scrollIntoView();",
-        null
-      )
-      delay(HUNDERED.toLong())
-      webViewScrollState.value = ScrollState(selectedWebView?.scrollY ?: ZERO)
-      scrollToSectionIndex = null
-      showTableOfContentDrawer.update { false }
-    }
+}
+
+private fun onTableOfContentHeaderClick(
+  selectedWebView: KiwixWebView?,
+  showTableOfContentDrawer: MutableState<Boolean>
+) {
+  selectedWebView?.scrollY = ZERO
+  showTableOfContentDrawer.update { false }
+}
+
+private fun onTableOfContentSectionClick(
+  selectedWebView: KiwixWebView?,
+  position: Int,
+  sections: List<DocumentSection>,
+  showTableOfContentDrawer: MutableState<Boolean>
+) {
+  if (hasItemForPositionInDocumentSectionsList(position, sections)) {
+    val targetId = sections[position].id.replace("'", "\\'")
+    selectedWebView?.evaluateJavascript(
+      "document.getElementById('$targetId')?.scrollIntoView();",
+      null
+    )
   }
+  showTableOfContentDrawer.update { false }
 }
 
 private fun hasItemForPositionInDocumentSectionsList(
@@ -523,49 +536,50 @@ private fun BoxScope.CloseFullScreenImageButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowZIMFileContent(state: ReaderScreenState, webViewScrollState: ScrollState?) {
+private fun ShowZIMFileContent(
+  state: ReaderScreenState,
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
+  topAppBarScrollBehavior: TopAppBarScrollBehavior,
+  shouldUpdateTopAppBarAndBottomAppBarOnScrolling: MutableState<Boolean>
+) {
   state.selectedWebView?.let { selectedWebView ->
     key(selectedWebView) {
-      ScrollableWebViewWithNestedScroll(
-        selectedWebView = selectedWebView,
-        modifier = Modifier.fillMaxSize(),
-        webViewScrollState = webViewScrollState
-      )
-    }
-  }
-}
+      DisposableEffect(Unit) {
+        val listener = View.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+          val deltaY = (scrollY - oldScrollY).toFloat()
+          if (deltaY == 0f || !shouldUpdateTopAppBarAndBottomAppBarOnScrolling.value) return@OnScrollChangeListener
+          val topLimit = topAppBarScrollBehavior.state.heightOffsetLimit
+          val bottomLimit = bottomAppBarScrollBehavior.state.heightOffsetLimit
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ScrollableWebViewWithNestedScroll(
-  selectedWebView: KiwixWebView,
-  modifier: Modifier = Modifier,
-  webViewScrollState: ScrollState?
-) {
-  Box(
-    modifier = modifier
-      .fillMaxSize()
-      .let { baseModifier ->
-        webViewScrollState?.let {
-          baseModifier.verticalScroll(it)
-        } ?: run {
-          baseModifier
+          topAppBarScrollBehavior.state.heightOffset =
+            (topAppBarScrollBehavior.state.heightOffset - deltaY)
+              .coerceIn(topLimit, 0f)
+
+          bottomAppBarScrollBehavior.state.heightOffset =
+            (bottomAppBarScrollBehavior.state.heightOffset - deltaY)
+              .coerceIn(bottomLimit, 0f)
+        }
+
+        selectedWebView.setOnScrollChangeListener(listener)
+
+        onDispose {
+          selectedWebView.setOnScrollChangeListener(null)
         }
       }
-  ) {
-    AndroidView(
-      factory = { context ->
-        FrameLayout(context).apply {
-          (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
-          selectedWebView.layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-          addView(selectedWebView)
-        }
-      },
-      modifier = Modifier.fillMaxSize(),
-    )
+      AndroidView(
+        factory = { context ->
+          FrameLayout(context).apply {
+            (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
+            selectedWebView.layoutParams = FrameLayout.LayoutParams(
+              FrameLayout.LayoutParams.MATCH_PARENT,
+              FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            addView(selectedWebView)
+          }
+        },
+        modifier = Modifier.fillMaxSize(),
+      )
+    }
   }
 }
 

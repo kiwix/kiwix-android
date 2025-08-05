@@ -32,6 +32,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -181,7 +182,7 @@ fun BottomNavigationBar(
   val currentDestinationRoute = navBackStackEntry?.destination?.route
   BottomAppBar(
     containerColor = Black,
-    contentColor = White,
+    contentColor = White.copy(alpha = 0.5f),
     scrollBehavior = bottomAppBarScrollBehaviour
   ) {
     bottomNavItems.forEach { item ->
@@ -198,11 +199,14 @@ fun BottomNavigationBar(
         icon = {
           Icon(
             painter = painterResource(id = item.iconRes),
-            contentDescription = item.title
+            contentDescription = item.title,
+            tint = White
           )
         },
-        label = { Text(item.title) },
-        modifier = Modifier.semantics { testTag = item.testingTag }
+        label = { Text(item.title, color = White) },
+        modifier = Modifier.semantics { testTag = item.testingTag },
+        colors = NavigationBarItemDefaults.colors()
+          .copy(selectedIndicatorColor = White.copy(alpha = 0.3f))
       )
     }
   }
