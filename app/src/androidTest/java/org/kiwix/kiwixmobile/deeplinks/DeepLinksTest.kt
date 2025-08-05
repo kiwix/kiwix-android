@@ -107,6 +107,7 @@ class DeepLinksTest : BaseActivityTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("file")?.let {
       // Launch the activity to test the deep link
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
+      composeTestRule.waitForIdle()
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
@@ -135,6 +136,7 @@ class DeepLinksTest : BaseActivityTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("content")?.let {
       // Launch the activity to test the deep link
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
+      composeTestRule.waitForIdle()
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)

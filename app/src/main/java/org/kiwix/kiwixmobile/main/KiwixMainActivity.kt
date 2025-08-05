@@ -31,21 +31,28 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
@@ -56,6 +63,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
@@ -108,13 +116,17 @@ class KiwixMainActivity : CoreMainActivity() {
       actionMode?.finish()
     }
   private val storageDeviceList = arrayListOf<StorageDevice>()
-  private var pendingIntent by mutableStateOf<Intent?>(null)
+  private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
+    intent?.let {
+      pendingIntentFlow.value = it
+    }
     setContent {
+      val pendingIntent by pendingIntentFlow.collectAsState()
       navController = rememberNavController()
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
@@ -139,11 +151,20 @@ class KiwixMainActivity : CoreMainActivity() {
       )
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-        handleAllIntents(intent)
       }
-      LaunchedEffect(pendingIntent) {
-        handleAllIntents(pendingIntent)
-        pendingIntent = null
+      val lifecycleOwner = LocalLifecycleOwner.current
+      val lifecycle = lifecycleOwner.lifecycle
+      LaunchedEffect(navController, pendingIntent) {
+        snapshotFlow { pendingIntent }
+          .filterNotNull()
+          .collectLatest { intent ->
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+              // Wait until fragment manager is fully initialized and view hierarchy is ready
+              delay(HUNDERED.toLong())
+              handleAllIntents(intent)
+              pendingIntentFlow.value = null
+            }
+          }
       }
       DialogHost(alertDialogShower)
     }
@@ -157,9 +178,13 @@ class KiwixMainActivity : CoreMainActivity() {
       handleZimFileIntent(intent)
       handleNotificationIntent(intent)
       handleGetContentIntent(intent)
-      intent.data?.let {
-        navController.handleDeepLink(intent)
-      }
+      safelyHandleDeepLink(intent)
+    }
+  }
+
+  private fun safelyHandleDeepLink(intent: Intent) {
+    if (intent.data != null && intent.extras != null) {
+      navController.handleDeepLink(intent)
     }
   }
 
@@ -234,7 +259,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    pendingIntent = intent
+    pendingIntentFlow.value = intent
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }

@@ -129,6 +129,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
         navOptions
       )
     }
+    composeTestRule.waitForIdle()
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage(composeTestRule)
@@ -137,12 +138,14 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
+      composeTestRule.waitForIdle()
       // Test saving bookmark
       clickOnSaveBookmarkImage(composeTestRule)
       openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertBookmarkSaved(composeTestRule)
       pressBack()
       // Test removing bookmark
+      composeTestRule.waitForIdle()
       composeTestRule.waitUntilTimeout()
       clickOnSaveBookmarkImage(composeTestRule)
       longClickOnSaveBookmarkImage(composeTestRule, TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
@@ -158,6 +161,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     activityScenario.onActivity {
       kiwixMainActivity = it
     }
+    composeTestRule.waitForIdle()
     topLevel {
       clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertBookmarkSaved(composeTestRule)
