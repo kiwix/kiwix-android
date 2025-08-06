@@ -104,8 +104,12 @@ object ActivityExtensions {
   }
 
   private fun <T> Activity.getObservableNavigationResult(key: String = "result") =
-    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle
-      ?.getLiveData<T>(key)
+    if (coreMainActivity.isNavControllerInitialized) {
+      coreMainActivity.navController.currentBackStackEntry?.savedStateHandle
+        ?.getLiveData<T>(key)
+    } else {
+      null
+    }
 
   fun <T> Activity.observeNavigationResult(
     key: String,
@@ -119,20 +123,28 @@ object ActivityExtensions {
   }
 
   fun <T> Activity.consumeObservable(key: String = "result") =
-    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+    if (coreMainActivity.isNavControllerInitialized) {
+      coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+    } else {
+      // do nothing.
+    }
 
   fun <T> Activity.setNavigationResult(result: T, key: String = "result") {
-    coreMainActivity.navController.previousBackStackEntry?.savedStateHandle?.set(
-      key,
-      result
-    )
+    if (coreMainActivity.isNavControllerInitialized) {
+      coreMainActivity.navController.previousBackStackEntry?.savedStateHandle?.set(
+        key,
+        result
+      )
+    }
   }
 
   fun <T> Activity.setNavigationResultOnCurrent(result: T, key: String = "result") {
-    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.set(
-      key,
-      result
-    )
+    if (coreMainActivity.isNavControllerInitialized) {
+      coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.set(
+        key,
+        result
+      )
+    }
   }
 
   fun Activity.hasNotificationPermission(sharedPreferenceUtil: SharedPreferenceUtil?) =
@@ -180,16 +192,6 @@ object ActivityExtensions {
 
   fun Activity.isLandScapeMode(): Boolean =
     resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-  @Suppress("MagicNumber")
-  fun Activity.isTablet(): Boolean {
-    val configuration = resources.configuration
-    val isLargeOrXLarge =
-      configuration.screenLayout and
-        Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
-    val isWideEnough = configuration.smallestScreenWidthDp >= 600
-    return isLargeOrXLarge && isWideEnough
-  }
 
   /**
    * Sets the window background color to black for Android 15 and above.

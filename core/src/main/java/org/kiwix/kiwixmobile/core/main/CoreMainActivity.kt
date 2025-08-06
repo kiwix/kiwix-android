@@ -118,6 +118,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * is responsibility of child activities such as KiwixMainActivity, and CustomMainActivity.
    */
   lateinit var navController: NavHostController
+  val isNavControllerInitialized: Boolean
+    get() = ::navController.isInitialized
 
   /**
    * For managing the leftDrawer.

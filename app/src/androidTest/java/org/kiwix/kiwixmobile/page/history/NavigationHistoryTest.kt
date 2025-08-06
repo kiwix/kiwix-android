@@ -114,7 +114,7 @@ class NavigationHistoryTest : BaseActivityTest() {
     composeTestRule.apply {
       waitForIdle()
       runOnUiThread {
-        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        activity.navigate(KiwixDestination.Library.route)
       }
     }
     val loadFileStream =
@@ -142,7 +142,7 @@ class NavigationHistoryTest : BaseActivityTest() {
         val navOptions = NavOptions.Builder()
           .setPopUpTo(KiwixDestination.Reader.route, false)
           .build()
-        kiwixMainActivity.navigate(
+        activity.navigate(
           KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
           navOptions
         )
@@ -162,7 +162,7 @@ class NavigationHistoryTest : BaseActivityTest() {
       assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
       clickOnDeleteHistory(composeTestRule)
       assertDeleteDialogDisplayed(composeTestRule)
-      pressBack()
+      clickOnCancelButton(composeTestRule)
       pressBack()
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&

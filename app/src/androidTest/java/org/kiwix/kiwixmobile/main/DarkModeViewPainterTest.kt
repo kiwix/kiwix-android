@@ -18,15 +18,13 @@
 
 package org.kiwix.kiwixmobile.main
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
@@ -65,7 +63,7 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
   @Before
@@ -86,18 +84,17 @@ class DarkModeViewPainterTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          kiwixMainActivity = it
-          LanguageUtils.handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
-        }
+    composeTestRule.apply {
+      kiwixMainActivity = activity
+      runOnUiThread {
+        LanguageUtils.handleLocaleChange(
+          kiwixMainActivity,
+          "en",
+          SharedPreferenceUtil(context)
+        )
       }
+      waitForIdle()
+    }
   }
 
   init {
@@ -118,6 +115,9 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   @Test
   fun testDarkMode() {
     composeTestRule.waitForIdle()
+    composeTestRule.runOnUiThread {
+      composeTestRule.activity.navigate(KiwixDestination.Library.route)
+    }
     toggleDarkMode(true)
     openZimFileInReader()
     verifyDarkMode(true)
@@ -127,10 +127,9 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   }
 
   private fun openZimFileInReader() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-    }
+    kiwixMainActivity = composeTestRule.activity
     composeTestRule.apply {
+      waitForIdle()
       waitUntilTimeout()
       onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
       waitUntilTimeout()
@@ -141,6 +140,7 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   }
 
   private fun toggleDarkMode(enable: Boolean) {
+    composeTestRule.waitForIdle()
     darkModeViewPainter { openSettings(kiwixMainActivity as CoreMainActivity, composeTestRule) }
     settingsRobo { clickNightModePreference(composeTestRule) }
     darkModeViewPainter {
@@ -155,6 +155,7 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   private fun verifyDarkMode(isEnabled: Boolean) {
     var kiwixReaderFragment: KiwixReaderFragment? = null
     composeTestRule.waitForIdle()
+    kiwixMainActivity = composeTestRule.activity
     composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
       kiwixReaderFragment =
         kiwixMainActivity.supportFragmentManager.fragments
@@ -171,6 +172,8 @@ class DarkModeViewPainterTest : BaseActivityTest() {
           assertLightModeEnabled(it)
         }
       }
+      composeTestRule.waitForIdle()
+      composeTestRule.waitUntilTimeout()
     } ?: run {
       throw RuntimeException(
         "Could not check the dark mode enable or not because zim file is not loaded in the reader"
@@ -179,6 +182,7 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   }
 
   private fun loadZimFileInReader() {
+    composeTestRule.waitForIdle()
     val loadFileStream =
       DarkModeViewPainterTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
@@ -198,18 +202,16 @@ class DarkModeViewPainterTest : BaseActivityTest() {
         }
       }
     }
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-    }
     composeTestRule.runOnIdle {
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
         .build()
-      kiwixMainActivity.navigate(
+      composeTestRule.activity.navigate(
         KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
         navOptions
       )
     }
+    composeTestRule.waitForIdle()
   }
 
   @After
