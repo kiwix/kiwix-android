@@ -31,9 +31,9 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
@@ -69,9 +69,17 @@ class ZimHostRobot : BaseRobot() {
     zimFileNodes.assertCountEquals(2)
   }
 
-  fun openZimHostFragment(coreMainActivity: CoreMainActivity) {
+  fun openZimHostFragment(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule
+  ) {
     openDrawer(coreMainActivity)
-    clickOn(TextId(R.string.menu_wifi_hotspot))
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG).performClick()
+      }
+    })
   }
 
   fun clickOnTestZim(composeTestRule: ComposeContentTestRule) {

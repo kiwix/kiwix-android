@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import android.content.Intent
-import android.os.Bundle
+import androidx.navigation.NavOptions
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -45,7 +45,10 @@ internal class OpenSearchItemTest {
     } returns intent
     OpenSearchItem(searchListItem, false).invokeWith(activity)
     verify {
-      activity.navigate(activity.readerFragmentResId, any<Bundle>())
+      activity.navigate(
+        "${activity.readerFragmentRoute}?searchItemTitle=searchItemTitle",
+        any<NavOptions>()
+      )
       activity.setNavigationResultOnCurrent(
         SearchItemToOpen(searchListItem.value, false, ZimFileReader.CONTENT_PREFIX),
         TAG_FILE_SEARCHED
@@ -65,7 +68,10 @@ internal class OpenSearchItemTest {
     } returns intent
     OpenSearchItem(searchListItem, true).invokeWith(activity)
     verify {
-      activity.navigate(activity.readerFragmentResId, any<Bundle>())
+      activity.navigate(
+        "${activity.readerFragmentRoute}?searchItemTitle=searchItemTitle",
+        any<NavOptions>()
+      )
       activity.setNavigationResultOnCurrent(
         SearchItemToOpen(searchListItem.value, true, ZimFileReader.CONTENT_PREFIX),
         TAG_FILE_SEARCHED

@@ -162,7 +162,7 @@ class ZimHostFragmentTest {
       zimHost {
         refreshLibraryList(composeTestRule)
         assertZimFilesLoaded(composeTestRule)
-        openZimHostFragment(kiwixMainActivity as CoreMainActivity)
+        openZimHostFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
 
         // Check if server is already started
         stopServerIfAlreadyStarted(composeTestRule)
