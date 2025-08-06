@@ -19,11 +19,13 @@
 package org.kiwix.kiwixmobile.page.history
 
 import android.os.Build
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
@@ -62,7 +64,7 @@ class NavigationHistoryTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
+  val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -84,14 +86,18 @@ class NavigationHistoryTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    kiwixMainActivity = composeTestRule.activity
-    composeTestRule.runOnUiThread {
-      handleLocaleChange(
-        kiwixMainActivity,
-        "en",
-        SharedPreferenceUtil(context)
-      )
-    }
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          kiwixMainActivity = it
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
+      }
   }
 
   init {
@@ -111,10 +117,13 @@ class NavigationHistoryTest : BaseActivityTest() {
 
   @Test
   fun navigationHistoryDialogTest() {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+    }
     composeTestRule.apply {
       waitForIdle()
       runOnUiThread {
-        activity.navigate(KiwixDestination.Library.route)
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
     }
     val loadFileStream =
@@ -142,7 +151,7 @@ class NavigationHistoryTest : BaseActivityTest() {
         val navOptions = NavOptions.Builder()
           .setPopUpTo(KiwixDestination.Reader.route, false)
           .build()
-        activity.navigate(
+        kiwixMainActivity.navigate(
           KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
           navOptions
         )
