@@ -153,7 +153,7 @@ class NavigationHistoryTest : BaseActivityTest() {
     navigationHistory {
       closeTabSwitcherIfVisible(composeTestRule)
       checkZimFileLoadedSuccessful(composeTestRule)
-      clickOnAndroidArticle()
+      clickOnAndroidArticle(composeTestRule)
       longClickOnBackwardButton(composeTestRule)
       assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
       pressBack()
@@ -163,7 +163,6 @@ class NavigationHistoryTest : BaseActivityTest() {
       clickOnDeleteHistory(composeTestRule)
       assertDeleteDialogDisplayed(composeTestRule)
       clickOnCancelButton(composeTestRule)
-      pressBack()
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU

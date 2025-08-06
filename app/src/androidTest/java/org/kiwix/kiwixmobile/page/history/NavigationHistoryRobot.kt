@@ -29,7 +29,6 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
@@ -76,8 +75,9 @@ class NavigationHistoryRobot : BaseRobot() {
     }
   }
 
-  fun clickOnAndroidArticle() {
-    pauseForBetterTestPerformance()
+  fun clickOnAndroidArticle(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.waitForIdle()
+    pauseForBetterTestPerformance(composeTestRule)
     onWebView()
       .withElement(
         findElement(
@@ -88,8 +88,9 @@ class NavigationHistoryRobot : BaseRobot() {
       .perform(webClick())
   }
 
-  fun assertZimFileLoaded() {
-    pauseForBetterTestPerformance()
+  fun assertZimFileLoaded(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.waitForIdle()
+    pauseForBetterTestPerformance(composeTestRule)
     onWebView()
       .withElement(
         findElement(
@@ -127,7 +128,7 @@ class NavigationHistoryRobot : BaseRobot() {
           .assertTextEquals(context.getString(R.string.backward_history))
       }
     } catch (_: AssertionError) {
-      pauseForBetterTestPerformance()
+      pauseForBetterTestPerformance(composeTestRule)
       if (retryCountForBackwardNavigationHistory > 0) {
         retryCountForBackwardNavigationHistory--
         assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
@@ -151,7 +152,7 @@ class NavigationHistoryRobot : BaseRobot() {
           .assertTextEquals(context.getString(R.string.forward_history))
       }
     } catch (_: AssertionError) {
-      pauseForBetterTestPerformance()
+      pauseForBetterTestPerformance(composeTestRule)
       if (retryCountForForwardNavigationHistory > 0) {
         retryCountForForwardNavigationHistory--
         assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
@@ -160,7 +161,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun clickOnDeleteHistory(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
+    pauseForBetterTestPerformance(composeTestRule)
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
@@ -177,7 +178,7 @@ class NavigationHistoryRobot : BaseRobot() {
           .assertTextEquals(context.getString(R.string.clear_all_history_dialog_title))
       }
     } catch (ignore: AssertionFailedError) {
-      pauseForBetterTestPerformance()
+      pauseForBetterTestPerformance(composeTestRule)
       if (retryCountForClearNavigationHistory > 0) {
         retryCountForClearNavigationHistory--
         assertDeleteDialogDisplayed(composeTestRule)
@@ -187,8 +188,8 @@ class NavigationHistoryRobot : BaseRobot() {
     }
   }
 
-  private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+  private fun pauseForBetterTestPerformance(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 
   fun clickOnReaderFragment(composeTestRule: ComposeContentTestRule) {

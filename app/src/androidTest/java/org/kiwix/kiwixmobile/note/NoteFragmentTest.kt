@@ -168,7 +168,6 @@ class NoteFragmentTest : BaseActivityTest() {
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
       assertNoteSaved(composeTestRule)
-      pressBack()
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       // temporary disabled on Android 25

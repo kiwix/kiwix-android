@@ -134,8 +134,8 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
         clickOnReaderFragment(composeTestRule) // activate the accessibility check to check the issues.
-        assertZimFileLoaded() // check if the zim file successfully loaded
-        clickOnAndroidArticle()
+        assertZimFileLoaded(composeTestRule) // check if the zim file successfully loaded
+        clickOnAndroidArticle(composeTestRule)
       }
     } ?: kotlin.run {
       // error in creating the zim file chunk

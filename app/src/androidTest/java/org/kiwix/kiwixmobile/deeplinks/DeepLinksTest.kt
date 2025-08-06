@@ -112,8 +112,8 @@ class DeepLinksTest : BaseActivityTest() {
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
-        assertZimFileLoaded() // check if the zim file successfully loaded
-        clickOnAndroidArticle()
+        assertZimFileLoaded(composeTestRule) // check if the zim file successfully loaded
+        clickOnAndroidArticle(composeTestRule)
       }
     } ?: kotlin.run {
       // error in getting the zim file Uri
@@ -142,8 +142,8 @@ class DeepLinksTest : BaseActivityTest() {
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
-        assertZimFileLoaded() // check if the zim file successfully loaded
-        clickOnAndroidArticle()
+        assertZimFileLoaded(composeTestRule) // check if the zim file successfully loaded
+        clickOnAndroidArticle(composeTestRule)
       }
     } ?: kotlin.run {
       // error in getting the zim file Uri
