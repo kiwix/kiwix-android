@@ -24,7 +24,6 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -39,7 +38,6 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_LIST_TEST_TAG
 import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -136,7 +134,7 @@ class BookmarksRobot : BaseRobot() {
     pauseForBetterTestPerformance()
     composeTestRule.apply {
       waitForIdle()
-      onAllNodesWithTag(PAGE_ITEM_TESTING_TAG)[0].assertExists()
+      onNodeWithText("Test Zim").assertExists()
     }
   }
 

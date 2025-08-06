@@ -18,13 +18,11 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
@@ -66,7 +64,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -88,17 +86,18 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
-        }
+    kiwixMainActivity = composeTestRule.activity
+
+    composeTestRule.apply {
+      runOnUiThread {
+        handleLocaleChange(
+          kiwixMainActivity,
+          "en",
+          SharedPreferenceUtil(context)
+        )
       }
+      waitForIdle()
+    }
   }
 
   init {
@@ -118,18 +117,20 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
   @Test
   fun testBookmarks() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-      val navOptions = NavOptions.Builder()
-        .setPopUpTo(KiwixDestination.Reader.route, false)
-        .build()
-      kiwixMainActivity.navigate(
-        KiwixDestination.Reader.createRoute(zimFileUri = getZimFile().toUri().toString()),
-        navOptions
-      )
+    composeTestRule.apply {
+      runOnUiThread {
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        val navOptions = NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, false)
+          .build()
+        kiwixMainActivity.navigate(
+          KiwixDestination.Reader.createRoute(zimFileUri = getZimFile().toUri().toString()),
+          navOptions
+        )
+      }
+      waitForIdle()
+      waitUntilTimeout() // to load the ZIM file properly.
     }
-    composeTestRule.waitForIdle()
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage(composeTestRule)
@@ -138,29 +139,35 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
-      composeTestRule.waitForIdle()
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+      }
       // Test saving bookmark
       clickOnSaveBookmarkImage(composeTestRule)
       openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertBookmarkSaved(composeTestRule)
       pressBack()
       // Test removing bookmark
-      composeTestRule.waitForIdle()
-      composeTestRule.waitUntilTimeout()
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+      }
       clickOnSaveBookmarkImage(composeTestRule)
       longClickOnSaveBookmarkImage(composeTestRule, TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       assertBookmarkRemoved(composeTestRule)
       pressBack()
       // Save the bookmark to test whether it remains saved after the application restarts or not.
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+      }
       clickOnSaveBookmarkImage(composeTestRule)
     }
   }
 
   @Test
   fun testBookmarkRemainsSavedOrNot() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-    }
     composeTestRule.waitForIdle()
     topLevel {
       clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity, composeTestRule) {
@@ -172,16 +179,18 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   @Test
   fun testSavedBookmarksShowingOnBookmarkScreen() {
     val zimFile = getZimFile()
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-      val navOptions = NavOptions.Builder()
-        .setPopUpTo(KiwixDestination.Reader.route, false)
-        .build()
-      kiwixMainActivity.navigate(
-        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
-        navOptions
-      )
+    composeTestRule.apply {
+      runOnUiThread {
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        val navOptions = NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, false)
+          .build()
+        kiwixMainActivity.navigate(
+          KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+          navOptions
+        )
+      }
+      waitForIdle()
     }
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
