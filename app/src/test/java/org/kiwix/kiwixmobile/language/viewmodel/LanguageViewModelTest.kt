@@ -29,8 +29,11 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -171,15 +174,17 @@ class LanguageViewModelTest {
     )
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `Save uses active language`() = runTest {
     every { application.getString(any()) } returns ""
     val activeLanguage = language(languageCode = "eng").copy(active = true)
     val inactiveLanguage = language(languageCode = "fr").copy(active = false)
     languageViewModel.effects.test {
-      val contentState = Content(listOf(activeLanguage, inactiveLanguage))
-      languageViewModel.state.value = contentState
+      languageViewModel.state.value = Content(listOf(activeLanguage, inactiveLanguage))
       languageViewModel.actions.emit(Save)
+      advanceUntilIdle()
+      advanceTimeBy(100)
       val effect = awaitItem() as SaveLanguagesAndFinish
       assertThat(effect.languages).isEqualTo(activeLanguage)
     }

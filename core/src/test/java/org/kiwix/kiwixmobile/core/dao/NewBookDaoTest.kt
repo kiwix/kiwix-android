@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -50,6 +51,8 @@ import org.kiwix.sharedFunctions.libkiwixBook
 import java.io.File
 import java.util.concurrent.Callable
 
+const val MOCKK_TIMEOUT_FOR_VERIFICATION = 1000L
+
 internal class NewBookDaoTest {
   private val box: Box<BookOnDiskEntity> = mockk(relaxed = true)
   private val newBookDao = NewBookDao(box)
@@ -77,7 +80,11 @@ internal class NewBookDaoTest {
       testFlow(
         flow = newBookDao.books(),
         triggerAction = {},
-        assert = { verify { box.remove(listOf(deletedEntity)) } }
+        assert = {
+          coVerify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
+            box.remove(listOf(deletedEntity))
+          }
+        }
       )
     }
 
