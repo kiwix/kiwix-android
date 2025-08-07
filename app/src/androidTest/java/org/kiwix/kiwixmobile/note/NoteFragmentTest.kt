@@ -191,10 +191,6 @@ class NoteFragmentTest : BaseActivityTest() {
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
       assertNoteSaved(composeTestRule)
-      // to close the note dialog.
-      pressBack()
-      // to close the notes fragment.
-      pressBack()
     }
   }
 
