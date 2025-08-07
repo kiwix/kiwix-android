@@ -195,4 +195,8 @@ object ComposeDimens {
 
   // MainActivity dimens
   val NAVIGATION_DRAWER_WIDTH = 280.dp
+
+  // Custom download screen dimens
+  val CUSTOM_DOWNLOAD_LAYOUT_TOP_MARGIN = 100.dp
+  val CUSTOM_DOWNLOAD_PROGRESS_BAR_WIDTH = 200.dp
 }
