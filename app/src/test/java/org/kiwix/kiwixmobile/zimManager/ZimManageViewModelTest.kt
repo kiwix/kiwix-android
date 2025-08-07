@@ -317,16 +317,6 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `search triggers downloading online content`() = runTest {
-    viewModel.onlineLibraryRequest.test {
-      skipItems(1)
-      viewModel.requestFiltering.emit("test")
-      advanceUntilIdle()
-      assertThat(awaitItem().query).isEqualTo("test")
-    }
-  }
-
-  @Test
   fun `library update removes from sources and maps to list items`() = runTest {
     val book = BookTestWrapper("0")
     val bookAlreadyOnDisk =

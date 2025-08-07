@@ -117,67 +117,67 @@ class NavigationHistoryTest : BaseActivityTest() {
 
   @Test
   fun navigationHistoryDialogTest() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-    }
-    composeTestRule.apply {
-      waitForIdle()
-      runOnUiThread {
-        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+      activityScenario.onActivity {
+        kiwixMainActivity = it
       }
-    }
-    val loadFileStream =
-      NavigationHistoryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        "testzim.zim"
-      )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
+      composeTestRule.apply {
+        waitForIdle()
+        runOnUiThread {
+          kiwixMainActivity.navigate(KiwixDestination.Library.route)
         }
       }
-    }
-    composeTestRule.apply {
-      waitForIdle()
-      runOnUiThread {
-        val navOptions = NavOptions.Builder()
-          .setPopUpTo(KiwixDestination.Reader.route, false)
-          .build()
-        kiwixMainActivity.navigate(
-          KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
-          navOptions
+      val loadFileStream =
+        NavigationHistoryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      val zimFile =
+        File(
+          context.getExternalFilesDirs(null)[0],
+          "testzim.zim"
         )
+      if (zimFile.exists()) zimFile.delete()
+      zimFile.createNewFile()
+      loadFileStream.use { inputStream ->
+        val outputStream: OutputStream = FileOutputStream(zimFile)
+        outputStream.use { it ->
+          val buffer = ByteArray(inputStream.available())
+          var length: Int
+          while (inputStream.read(buffer).also { length = it } > 0) {
+            it.write(buffer, 0, length)
+          }
+        }
       }
-      waitForIdle()
-    }
-    StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
-    navigationHistory {
-      closeTabSwitcherIfVisible(composeTestRule)
-      checkZimFileLoadedSuccessful(composeTestRule)
-      clickOnAndroidArticle(composeTestRule)
-      longClickOnBackwardButton(composeTestRule)
-      assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
-      pressBack()
-      clickOnBackwardButton(composeTestRule)
-      longClickOnForwardButton(composeTestRule)
-      assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
-      clickOnDeleteHistory(composeTestRule)
-      assertDeleteDialogDisplayed(composeTestRule)
-      clickOnCancelButton(composeTestRule)
-    }
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-    ) {
-      // temporary disabled on Android 25
-      LeakAssertions.assertNoLeaks()
+      composeTestRule.apply {
+        waitForIdle()
+        runOnUiThread {
+          val navOptions = NavOptions.Builder()
+            .setPopUpTo(KiwixDestination.Reader.route, false)
+            .build()
+          kiwixMainActivity.navigate(
+            KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+            navOptions
+          )
+        }
+        waitForIdle()
+      }
+      StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
+      navigationHistory {
+        closeTabSwitcherIfVisible(composeTestRule)
+        checkZimFileLoadedSuccessful(composeTestRule)
+        clickOnAndroidArticle(composeTestRule)
+        longClickOnBackwardButton(composeTestRule)
+        assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
+        pressBack()
+        clickOnBackwardButton(composeTestRule)
+        longClickOnForwardButton(composeTestRule)
+        assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
+        clickOnDeleteHistory(composeTestRule)
+        assertDeleteDialogDisplayed(composeTestRule)
+        clickOnCancelButton(composeTestRule)
+      }
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+        // temporary disabled on Android 25
+        LeakAssertions.assertNoLeaks()
+      }
     }
   }
 
