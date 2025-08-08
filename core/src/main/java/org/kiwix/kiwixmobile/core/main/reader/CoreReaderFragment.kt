@@ -1769,7 +1769,7 @@ abstract class CoreReaderFragment :
   }
 
   // opens home screen when user closes all tabs
-  protected fun showNoBookOpenViews() {
+  open fun showNoBookOpenViews() {
     readerScreenState.update { copy(isNoBookOpenInReader = true) }
   }
 

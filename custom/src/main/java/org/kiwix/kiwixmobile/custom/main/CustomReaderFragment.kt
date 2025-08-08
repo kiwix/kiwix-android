@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +54,8 @@ import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
+
+const val OPENING_DOWNLOAD_SCREEN_DELAY = 300L
 
 class CustomReaderFragment : CoreReaderFragment() {
   override fun inject(baseActivity: BaseActivity) {
@@ -288,13 +292,15 @@ class CustomReaderFragment : CoreReaderFragment() {
       },
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
-          val navOptions = NavOptions.Builder()
-            .setPopUpTo(CustomDestination.Reader.route, true)
-            .build()
-          (requireActivity() as CoreMainActivity).navigate(
-            CustomDestination.Downloads.route,
-            navOptions
-          )
+          Handler(Looper.getMainLooper()).postDelayed({
+            val navOptions = NavOptions.Builder()
+              .setPopUpTo(CustomDestination.Reader.route, true)
+              .build()
+            (requireActivity() as CoreMainActivity).navigate(
+              CustomDestination.Downloads.route,
+              navOptions
+            )
+          }, OPENING_DOWNLOAD_SCREEN_DELAY)
         }
       }
     )
@@ -387,6 +393,10 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
+  }
+
+  override fun showNoBookOpenViews() {
+    readerScreenState.update { copy(isNoBookOpenInReader = false) }
   }
 
   /**

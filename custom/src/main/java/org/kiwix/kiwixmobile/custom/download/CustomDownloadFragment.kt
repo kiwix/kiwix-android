@@ -19,39 +19,33 @@
 package org.kiwix.kiwixmobile.custom.download
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.data.remote.isAuthenticationUrl
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
-import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.databinding.FragmentCustomDownloadBinding
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
-import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
-import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
-import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
-import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
 
 class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
@@ -68,8 +62,8 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   var sharedPreferenceUtil: SharedPreferenceUtil? = null
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
-  private var fragmentCustomDownloadBinding: FragmentCustomDownloadBinding? = null
+  private var composeView: ComposeView? = null
+  private var downloadState = mutableStateOf<State>(State.DownloadRequired)
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.customActivityComponent.inject(this)
   }
@@ -80,12 +74,20 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     savedInstanceState: Bundle?
   ): View? {
     super.onCreate(savedInstanceState)
-    fragmentCustomDownloadBinding =
-      FragmentCustomDownloadBinding.inflate(inflater, container, false)
+    composeView = ComposeView(requireContext()).apply {
+      setContent {
+        CustomDownloadScreen(
+          state = downloadState.value,
+          onDownloadClick = { downloadButtonClick() },
+          onRetryClick = { retryButtonClick() }
+        )
+        DialogHost(alertDialogShower as AlertDialogShower)
+      }
+    }
     val activity = requireActivity() as CoreMainActivity
     viewLifecycleOwner.lifecycleScope.launch {
       downloadViewModel.state.collect { state ->
-        render(state)
+        downloadState.update { state }
       }
     }
 
@@ -95,26 +97,22 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
           effect.invokeWith(activity)
         }
     }
-    return fragmentCustomDownloadBinding?.root
+    return composeView
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    fragmentCustomDownloadBinding?.apply {
-      customDownloadRequired.cdDownloadButton.setOnClickListener {
-        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          performAction(ClickedDownload)
-        } else {
-          requestNotificationPermission()
-        }
-      }
-      customDownloadError.cdRetryButton.setOnClickListener {
-        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          performAction(ClickedRetry)
-        } else {
-          requestNotificationPermission()
-        }
-      }
+  private fun downloadButtonClick() {
+    if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+      performAction(ClickedDownload)
+    } else {
+      requestNotificationPermission()
+    }
+  }
+
+  private fun retryButtonClick() {
+    if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+      performAction(ClickedRetry)
+    } else {
+      requestNotificationPermission()
     }
   }
 
@@ -144,63 +142,9 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     activity?.finish()
   }
 
-  private fun render(state: State): Unit? {
-    return when (state) {
-      DownloadRequired ->
-        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(0)
-
-      is DownloadInProgress -> {
-        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(1)
-        showDownloadingProgress(state.downloads[0])
-      }
-
-      is DownloadFailed -> {
-        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(2)
-        val errorMessage = context?.let { context ->
-          if (state.downloadState.zimUrl?.isAuthenticationUrl == false) {
-            return@let getErrorMessageFromDownloadState(state.downloadState, context)
-          }
-
-          val defaultErrorMessage = getErrorMessageFromDownloadState(state.downloadState, context)
-          // Check if `REQUEST_NOT_SUCCESSFUL` indicates an unsuccessful response from the server.
-          // If the server does not respond to the URL, we will display a custom message to the user.
-          if (defaultErrorMessage == context.getString(
-              R.string.failed_state,
-              "REQUEST_NOT_SUCCESSFUL"
-            )
-          ) {
-            context.getString(
-              R.string.failed_state,
-              context.getString(R.string.custom_download_error_message_for_authentication_failed)
-            )
-          } else {
-            defaultErrorMessage
-          }
-        }
-        fragmentCustomDownloadBinding?.customDownloadError?.cdErrorText?.text = errorMessage
-      }
-
-      DownloadComplete ->
-        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(3)
-    }
-  }
-
-  private fun getErrorMessageFromDownloadState(
-    downloadState: DownloadState,
-    context: Context
-  ): String = "${downloadState.toReadableState(context)}"
-
-  private fun showDownloadingProgress(downloadItem: DownloadItem) {
-    fragmentCustomDownloadBinding?.customDownloadInProgress?.apply {
-      cdDownloadState.text = downloadItem.readableEta
-      cdEta.text = context?.let(downloadItem.downloadState::toReadableState)
-      cdProgress.progress = downloadItem.progress
-    }
-  }
-
   override fun onDestroyView() {
     super.onDestroyView()
-    fragmentCustomDownloadBinding?.root?.removeAllViews()
-    fragmentCustomDownloadBinding = null
+    composeView?.disposeComposition()
+    composeView = null
   }
 }
