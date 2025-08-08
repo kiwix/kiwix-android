@@ -36,7 +36,7 @@ import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
@@ -55,6 +56,8 @@ class KiwixSettingsFragmentTest {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
+
+  lateinit var kiwixMainActivity: KiwixMainActivity
 
   private val permissions =
     arrayOf(
@@ -108,14 +111,16 @@ class KiwixSettingsFragmentTest {
       }
     }
     activityScenario.onActivity {
-      it.navigate(R.id.introFragment)
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Intro.route)
     }
+    composeTestRule.waitForIdle()
     intro {
       swipeLeft(composeTestRule)
       clickGetStarted(composeTestRule) {}
     }
-    StandardActions.openDrawer()
-    StandardActions.enterSettings()
+    StandardActions.openDrawer(kiwixMainActivity as CoreMainActivity)
+    StandardActions.enterSettings(composeTestRule)
   }
 
   @Test

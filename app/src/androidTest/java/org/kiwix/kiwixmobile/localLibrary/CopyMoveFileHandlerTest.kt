@@ -20,19 +20,17 @@ package org.kiwix.kiwixmobile.localLibrary
 
 import android.net.Uri
 import android.os.Build
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.content.edit
 import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
-import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Assert
@@ -40,7 +38,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
@@ -55,6 +52,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import java.io.File
@@ -67,7 +65,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixMainActivity: KiwixMainActivity
@@ -93,17 +91,18 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      sharedPreferenceUtil = SharedPreferenceUtil(context)
-      onActivity {
+    composeTestRule.apply {
+      kiwixMainActivity = activity
+      runOnUiThread {
+        sharedPreferenceUtil = SharedPreferenceUtil(kiwixMainActivity)
         LanguageUtils.handleLocaleChange(
-          it,
+          kiwixMainActivity,
           "en",
           sharedPreferenceUtil
         )
         parentFile = File(sharedPreferenceUtil.prefStorage)
       }
+      waitForIdle()
     }
   }
 
@@ -113,11 +112,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       selectedFile = getSelectedFile()
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(R.id.libraryFragment)
+      composeTestRule.apply {
+        runOnUiThread {
+          kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        }
+        waitForIdle()
+        waitUntilTimeout() // to properly load the library screen.
       }
-      composeTestRule.waitUntilTimeout()
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       showMoveFileToPublicDirectoryDialog()
@@ -152,11 +153,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       selectedFile = getSelectedFile()
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(R.id.libraryFragment)
+      composeTestRule.apply {
+        runOnUiThread {
+          kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        }
+        waitForIdle()
+        waitUntilTimeout() // to properly load the library screen.
       }
-      composeTestRule.waitUntilTimeout()
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       showMoveFileToPublicDirectoryDialog()
@@ -196,19 +199,18 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   private fun assertZimFileAddedInTheLocalLibrary() {
     UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     copyMoveFileHandler { assertZimFileAddedInTheLocalLibrary(composeTestRule) }
   }
 
   private fun showMoveFileToPublicDirectoryDialog() {
     kiwixMainActivity.lifecycleScope.launch {
-      val navHostFragment: NavHostFragment =
-        kiwixMainActivity.supportFragmentManager
-          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
       val localLibraryFragment =
-        navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
-      localLibraryFragment.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+        kiwixMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<LocalLibraryFragment>()
+          .firstOrNull()
+      localLibraryFragment?.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
         Uri.fromFile(selectedFile),
         DocumentFile.fromFile(selectedFile),
         fragmentManager = localLibraryFragment.parentFragmentManager
@@ -218,12 +220,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   private fun tryOpeningInvalidZimFiles(uri: Uri) {
     UiThreadStatement.runOnUiThread {
-      val navHostFragment: NavHostFragment =
-        kiwixMainActivity.supportFragmentManager
-          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
       val localLibraryFragment =
-        navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
-      localLibraryFragment.handleSelectedFileUri(
+        kiwixMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<LocalLibraryFragment>()
+          .firstOrNull()
+      localLibraryFragment?.handleSelectedFileUri(
         uri,
       )
     }
@@ -257,9 +258,12 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   @Test
   fun testGetDestinationFile() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+    composeTestRule.apply {
+      runOnUiThread {
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+      }
+      waitForIdle()
+      waitUntilTimeout() // to properly load the library screen.
     }
     val selectedFileName = "testCopyMove.zim"
     deleteAllFilesInDirectory(parentFile)
@@ -271,7 +275,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     ).apply {
       setAlertDialogShower(AlertDialogShower())
     }
-    kiwixMainActivity.lifecycleScope.launch {
+    runBlocking {
       // test fileName when there is already a file available with same name.
       // it should return different name
       selectedFile = File(parentFile, selectedFileName).apply {
@@ -309,11 +313,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       selectedFile = getSelectedFile()
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(R.id.libraryFragment)
+      composeTestRule.apply {
+        runOnUiThread {
+          kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        }
+        waitForIdle()
+        waitUntilTimeout() // to properly load the library screen.
       }
-      composeTestRule.waitUntilTimeout()
       sharedPreferenceUtil.apply {
         shouldShowStorageSelectionDialog = false
         setIsPlayStoreBuildType(true)

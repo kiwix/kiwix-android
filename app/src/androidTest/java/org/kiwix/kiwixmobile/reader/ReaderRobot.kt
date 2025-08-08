@@ -31,8 +31,8 @@ import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -44,9 +44,11 @@ fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyP
 class ReaderRobot : BaseRobot() {
   private var retryCountForClickOnUndoButton = 5
 
-  fun checkZimFileLoadedSuccessful(readerFragment: Int) {
-    pauseForBetterTestPerformance()
-    isVisible(ViewId(readerFragment))
+  fun checkZimFileLoadedSuccessful(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(READER_SCREEN_TESTING_TAG).assertExists()
+    }
   }
 
   fun clickOnTabIcon(composeTestRule: ComposeContentTestRule) {
@@ -86,10 +88,6 @@ class ReaderRobot : BaseRobot() {
       waitUntilTimeout()
       onAllNodesWithTag(TAB_TITLE_TESTING_TAG)[0].assertTextEquals("Test Zim")
     }
-  }
-
-  private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 
   fun clickOnArticle(articleTitle: String) {

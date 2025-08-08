@@ -109,9 +109,6 @@ object ComposeDimens {
   // BookItem dimens
   val BOOK_ICON_SIZE = 48.dp
 
-  // LocalLibraryFragment dimens
-  val FAB_ICON_BOTTOM_MARGIN = 50.dp
-
   // HelpFragment dimens
   val HELP_SCREEN_DIVIDER_HEIGHT = 0.7.dp
   val HELP_SCREEN_ITEM_TITLE_TEXT_SIZE = 20.sp
@@ -195,4 +192,7 @@ object ComposeDimens {
   const val READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA = 0.38f
   val SEARCH_PLACEHOLDER_TEXT_SIZE = 12.sp
   val DONATION_LAYOUT_MAXIMUM_WIDTH = 400.dp
+
+  // MainActivity dimens
+  val NAVIGATION_DRAWER_WIDTH = 280.dp
 }

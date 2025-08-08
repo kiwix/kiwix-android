@@ -24,19 +24,18 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_LIST_TEST_TAG
@@ -46,6 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -103,8 +103,11 @@ class BookmarksRobot : BaseRobot() {
 
   fun clickOnSaveBookmarkImage(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
-      onNodeWithContentDescription(context.getString(R.string.bookmarks))
+      waitForIdle()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
         .performClick()
     }
   }
@@ -114,9 +117,13 @@ class BookmarksRobot : BaseRobot() {
     timeout: Long = TEST_PAUSE_MS.toLong()
   ) {
     composeTestRule.apply {
+      waitForIdle()
       // wait for disappearing the snack-bar after removing the bookmark
       waitUntilTimeout(timeout)
-      onNodeWithContentDescription(context.getString(R.string.bookmarks))
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
         .performTouchInput {
           longClick()
         }
@@ -127,7 +134,7 @@ class BookmarksRobot : BaseRobot() {
     pauseForBetterTestPerformance()
     composeTestRule.apply {
       waitForIdle()
-      composeTestRule.onNodeWithText("Test Zim").assertExists()
+      onNodeWithText("Test Zim").assertExists()
     }
   }
 
@@ -143,10 +150,17 @@ class BookmarksRobot : BaseRobot() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 
-  fun openBookmarkScreen() {
+  fun openBookmarkScreen(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule
+  ) {
     testFlakyView({
-      openDrawer()
-      onView(withText(R.string.bookmarks)).perform(click())
+      composeTestRule.waitForIdle()
+      openDrawer(coreMainActivity)
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG).performClick()
+      }
     })
   }
 

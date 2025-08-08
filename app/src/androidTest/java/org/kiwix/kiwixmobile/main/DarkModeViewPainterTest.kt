@@ -18,16 +18,15 @@
 
 package org.kiwix.kiwixmobile.main
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
@@ -41,16 +40,19 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.settingsRobo
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -61,7 +63,7 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
   @Before
@@ -82,17 +84,17 @@ class DarkModeViewPainterTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          LanguageUtils.handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
-        }
+    composeTestRule.apply {
+      kiwixMainActivity = activity
+      runOnUiThread {
+        LanguageUtils.handleLocaleChange(
+          kiwixMainActivity,
+          "en",
+          SharedPreferenceUtil(context)
+        )
       }
+      waitForIdle()
+    }
   }
 
   init {
@@ -112,6 +114,10 @@ class DarkModeViewPainterTest : BaseActivityTest() {
 
   @Test
   fun testDarkMode() {
+    composeTestRule.waitForIdle()
+    composeTestRule.runOnUiThread {
+      composeTestRule.activity.navigate(KiwixDestination.Library.route)
+    }
     toggleDarkMode(true)
     openZimFileInReader()
     verifyDarkMode(true)
@@ -121,15 +127,21 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   }
 
   private fun openZimFileInReader() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+    kiwixMainActivity = composeTestRule.activity
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntilTimeout()
+      onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      waitUntilTimeout()
+      onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
+      waitUntilTimeout()
     }
     loadZimFileInReader()
   }
 
   private fun toggleDarkMode(enable: Boolean) {
-    darkModeViewPainter(DarkModeViewPainterRobot::openSettings)
+    composeTestRule.waitForIdle()
+    darkModeViewPainter { openSettings(kiwixMainActivity as CoreMainActivity, composeTestRule) }
     settingsRobo { clickNightModePreference(composeTestRule) }
     darkModeViewPainter {
       if (enable) {
@@ -137,35 +149,40 @@ class DarkModeViewPainterTest : BaseActivityTest() {
       } else {
         enableTheLightMode(composeTestRule)
       }
-      pressBack()
     }
   }
 
   private fun verifyDarkMode(isEnabled: Boolean) {
-    UiThreadStatement.runOnUiThread {
-      val navHostFragment: NavHostFragment =
-        kiwixMainActivity.supportFragmentManager
-          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-      val kiwixReaderFragment =
-        navHostFragment.childFragmentManager.fragments[0] as KiwixReaderFragment
-      val currentWebView = kiwixReaderFragment.getCurrentWebView()
-      currentWebView?.let {
-        darkModeViewPainter {
-          if (isEnabled) {
-            assertNightModeEnabled(it)
-          } else {
-            assertLightModeEnabled(it)
-          }
+    var kiwixReaderFragment: KiwixReaderFragment? = null
+    composeTestRule.waitForIdle()
+    kiwixMainActivity = composeTestRule.activity
+    composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+      kiwixReaderFragment =
+        kiwixMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<KiwixReaderFragment>()
+          .firstOrNull()
+      kiwixReaderFragment?.getCurrentWebView() != null
+    }
+    val currentWebView = kiwixReaderFragment?.getCurrentWebView()
+    currentWebView?.let {
+      darkModeViewPainter {
+        if (isEnabled) {
+          assertNightModeEnabled(it)
+        } else {
+          assertLightModeEnabled(it)
         }
-      } ?: run {
-        throw RuntimeException(
-          "Could not check the dark mode enable or not because zim file is not loaded in the reader"
-        )
       }
+      composeTestRule.waitForIdle()
+      composeTestRule.waitUntilTimeout()
+    } ?: run {
+      throw RuntimeException(
+        "Could not check the dark mode enable or not because zim file is not loaded in the reader"
+      )
     }
   }
 
   private fun loadZimFileInReader() {
+    composeTestRule.waitForIdle()
     val loadFileStream =
       DarkModeViewPainterTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
@@ -185,12 +202,16 @@ class DarkModeViewPainterTest : BaseActivityTest() {
         }
       }
     }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+    composeTestRule.runOnIdle {
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
+      composeTestRule.activity.navigate(
+        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+        navOptions
       )
     }
+    composeTestRule.waitForIdle()
   }
 
   @After

@@ -39,7 +39,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.THREE_MONTHS_IN_MILLISECONDS
@@ -51,6 +50,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -123,7 +123,7 @@ class DonationDialogTest : BaseActivityTest() {
     sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = 0L
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     deleteAllZIMFilesFromApplication()
     openReaderFragment()
@@ -170,7 +170,7 @@ class DonationDialogTest : BaseActivityTest() {
 
   private fun openReaderFragment() {
     UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(kiwixMainActivity.readerFragmentResId)
+      kiwixMainActivity.navigate(kiwixMainActivity.readerFragmentRoute)
     }
   }
 
@@ -202,7 +202,7 @@ class DonationDialogTest : BaseActivityTest() {
   private fun openLocalLibraryScreen() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
   }
 

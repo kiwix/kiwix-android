@@ -21,17 +21,13 @@ package org.kiwix.kiwixmobile.custom.search
 import android.view.KeyEvent
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
-import androidx.core.view.GravityCompat
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -41,17 +37,17 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.hamcrest.CoreMatchers.containsString
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.custom.R.id
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
 
@@ -146,12 +142,13 @@ class SearchRobot {
     })
   }
 
-  fun clickOnHomeButton(
-    composeTestRule: ComposeContentTestRule,
-    customMainActivity: CustomMainActivity
-  ) {
+  fun clickOnHomeButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      onNodeWithContentDescription(customMainActivity.getString(R.string.menu_home))
+      waitForIdle()
+      waitUntil(TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      onNodeWithTag(READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG)
         .performClick()
     }
   }
@@ -182,9 +179,16 @@ class SearchRobot {
     })
   }
 
-  fun openNoteFragment() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    openDrawerWithGravity(id.custom_drawer_container, GravityCompat.START)
-    testFlakyView({ onView(withText(R.string.pref_notes)).perform(click()) })
+  fun openNoteFragment(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule
+  ) {
+    coreMainActivity.openNavigationDrawer()
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(LEFT_DRAWER_NOTES_ITEM_TESTING_TAG).performClick()
+      }
+    })
   }
 }

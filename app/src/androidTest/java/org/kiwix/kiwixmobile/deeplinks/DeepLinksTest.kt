@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.deeplinks
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -43,7 +44,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import java.io.File
 import java.io.FileOutputStream
@@ -110,9 +111,9 @@ class DeepLinksTest : BaseActivityTest() {
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
       clickOnCopy(composeTestRule)
       navigationHistory {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
-        assertZimFileLoaded() // check if the zim file successfully loaded
-        clickOnAndroidArticle()
+        checkZimFileLoadedSuccessful(composeTestRule)
+        assertZimFileLoaded(composeTestRule) // check if the zim file successfully loaded
+        clickOnAndroidArticle(composeTestRule)
       }
     } ?: kotlin.run {
       // error in getting the zim file Uri
@@ -124,7 +125,9 @@ class DeepLinksTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       testFlakyView({
         composeTestRule.apply {
-          waitForIdle()
+          waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+            onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).isDisplayed()
+          }
           onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
         }
       })
@@ -138,9 +141,9 @@ class DeepLinksTest : BaseActivityTest() {
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
       clickOnCopy(composeTestRule)
       navigationHistory {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
-        assertZimFileLoaded() // check if the zim file successfully loaded
-        clickOnAndroidArticle()
+        checkZimFileLoadedSuccessful(composeTestRule)
+        assertZimFileLoaded(composeTestRule) // check if the zim file successfully loaded
+        clickOnAndroidArticle(composeTestRule)
       }
     } ?: kotlin.run {
       // error in getting the zim file Uri

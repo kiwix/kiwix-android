@@ -29,11 +29,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +44,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.flow.launchIn
@@ -66,9 +65,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
-import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -78,7 +75,6 @@ import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -96,6 +92,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
@@ -212,10 +209,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     composeView = it
   }
 
-  private fun getBottomNavigationView() =
-    requireActivity().findViewById<BottomNavigationView>(org.kiwix.kiwixmobile.R.id.bottom_nav_view)
+  // private fun getBottomNavigationView() =
+  //   requireActivity().findViewById<BottomNavigationView>(org.kiwix.kiwixmobile.R.id.bottom_nav_view)
 
-  private fun getBottomNavigationHeight() = getBottomNavigationView().measuredHeight
+  private fun getBottomNavigationHeight() = ZERO
+  // getBottomNavigationView().measuredHeight
 
   private fun onPauseResumeButtonClick(item: LibraryListItem.LibraryDownloadItem) {
     context?.let { context ->
@@ -245,14 +243,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
       val lazyListState = rememberLazyListState()
-      val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
-      LaunchedEffect(isBottomNavVisible) {
-        (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
-      }
       LaunchedEffect(Unit) {
         onlineLibraryScreenState.value.update {
           copy(
@@ -274,7 +269,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             contentDescription = string.open_drawer,
             onClick = { navigationIconClick(onlineLibraryScreenState.value.value.isSearchActive) }
           )
-        }
+        },
+        bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
+        navHostController = (requireActivity() as CoreMainActivity).navController,
+        onUserBackPressed = { onUserBackPressed() }
       )
       DialogHost(alertDialogShower)
     }
@@ -297,10 +295,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       libraryItems
         .onEach { onLibraryItemsChange(it) }
         .launchIn(viewLifecycleOwner.lifecycleScope)
-        .also {
-          coreMainActivity.navHostContainer
-            .setBottomMarginToFragmentContainerView(0)
-        }
       // Observe when online library downloading.
       onlineLibraryDownloading
         .onEach { (initialLibraryDownloading, loadingMoreItem) ->
@@ -394,7 +388,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   )
 
   private fun onLanguageMenuIconClick() {
-    requireActivity().navigate(org.kiwix.kiwixmobile.R.id.languageFragment)
+    requireActivity().navigate(KiwixDestination.Language.route)
     closeKeyboard()
   }
 
@@ -467,8 +461,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     composeView = null
   }
 
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    if (isKeyboardVisible() || onlineLibraryScreenState.value.value.isSearchActive) {
+  @Suppress("ReturnCount")
+  private fun onUserBackPressed(): FragmentActivityExtensions.Super {
+    val coreMainActivity = activity as? CoreMainActivity
+    if (coreMainActivity?.navigationDrawerIsOpen() == true) {
+      coreMainActivity.closeNavigationDrawer()
+      return FragmentActivityExtensions.Super.ShouldNotCall
+    } else if (isKeyboardVisible() || onlineLibraryScreenState.value.value.isSearchActive) {
       closeKeyboard()
       closeSearch()
       return FragmentActivityExtensions.Super.ShouldNotCall

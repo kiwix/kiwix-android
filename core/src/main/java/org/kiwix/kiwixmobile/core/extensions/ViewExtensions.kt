@@ -21,16 +21,13 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.annotation.SuppressLint
 import android.os.Build
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.TooltipCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.updateLayoutParams
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -128,33 +125,5 @@ fun View.closeFullScreenMode(window: Window) {
   window.apply {
     addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
     clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-  }
-}
-
-/**
- * Applies edge-to-edge insets to the current view by adjusting its margins
- * to account for system bars and display cutouts (e.g., status bar, navigation bar, and notches).
- *
- * This method ensures that the view avoids overlapping with system UI components by dynamically
- * setting margins based on the insets provided by the system.
- *
- * Usage: Call this method on any view to apply edge-to-edge handling.
- */
-fun View?.applyEdgeToEdgeInsets() {
-  this?.let {
-    ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
-      val systemBarsInsets =
-        windowInsets.getInsets(
-          WindowInsetsCompat.Type.displayCutout() or
-            WindowInsetsCompat.Type.systemBars()
-        )
-      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        topMargin = systemBarsInsets.top
-        leftMargin = systemBarsInsets.left
-        bottomMargin = systemBarsInsets.bottom
-        rightMargin = systemBarsInsets.right
-      }
-      WindowInsetsCompat.CONSUMED
-    }
   }
 }

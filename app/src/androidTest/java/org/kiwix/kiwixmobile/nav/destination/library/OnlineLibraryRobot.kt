@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
   OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
@@ -33,8 +34,12 @@ fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
 class OnlineLibraryRobot : BaseRobot() {
   fun assertOnlineLibraryFragmentDisplayed(composeContentTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeContentTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
-        .assertTextEquals(context.getString(string.download))
+      composeContentTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(string.download))
+      }
     })
   }
 }

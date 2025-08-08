@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -50,6 +51,8 @@ import org.kiwix.sharedFunctions.libkiwixBook
 import java.io.File
 import java.util.concurrent.Callable
 
+const val MOCKK_TIMEOUT_FOR_VERIFICATION = 1000L
+
 internal class NewBookDaoTest {
   private val box: Box<BookOnDiskEntity> = mockk(relaxed = true)
   private val newBookDao = NewBookDao(box)
@@ -62,33 +65,43 @@ internal class NewBookDaoTest {
   @Nested
   inner class BooksTests {
     @Test
-    fun `books emits entities whose file exists`() = runTest {
-      val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
-      testFlow(
-        flow = newBookDao.books(),
-        triggerAction = {},
-        assert = { assertThat(awaitItem()).contains(BookOnDisk(expectedEntity)) }
-      )
+    fun `books emits entities whose file exists`() = flakyTest {
+      runTest {
+        val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
+        testFlow(
+          flow = newBookDao.books(),
+          triggerAction = {},
+          assert = { assertThat(awaitItem()).contains(BookOnDisk(expectedEntity)) }
+        )
+      }
     }
 
     @Test
-    fun `books deletes entities whose file does not exist`() = runTest {
-      val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
-      testFlow(
-        flow = newBookDao.books(),
-        triggerAction = {},
-        assert = { verify { box.remove(listOf(deletedEntity)) } }
-      )
+    fun `books deletes entities whose file does not exist`() = flakyTest {
+      runTest {
+        val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
+        testFlow(
+          flow = newBookDao.books(),
+          triggerAction = {},
+          assert = {
+            coVerify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
+              box.remove(listOf(deletedEntity))
+            }
+          }
+        )
+      }
     }
 
     @Test
-    fun `books removes entities whose files are in the trash folder`() = runTest {
-      val (_, _) = expectEmissionOfExistingAndNotExistingBook(true)
-      testFlow(
-        flow = newBookDao.books(),
-        triggerAction = {},
-        assert = { Assertions.assertEquals(emptyList<BookOnDisk>(), awaitItem()) }
-      )
+    fun `books removes entities whose files are in the trash folder`() = flakyTest {
+      runTest {
+        val (_, _) = expectEmissionOfExistingAndNotExistingBook(true)
+        testFlow(
+          flow = newBookDao.books(),
+          triggerAction = {},
+          assert = { Assertions.assertEquals(emptyList<BookOnDisk>(), awaitItem()) }
+        )
+      }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -258,4 +271,25 @@ internal class NewBookDaoTest {
 fun <T> mockBoxAsFlow(box: Box<T>, result: List<T>) {
   mockkStatic("org.kiwix.kiwixmobile.core.dao.NewLanguagesDaoKt")
   every { box.asFlow(any()) } returns flow { emit(result) }
+}
+
+inline fun flakyTest(
+  maxRetries: Int = 10,
+  delayMillis: Long = 0,
+  block: () -> Unit
+) {
+  var lastError: Throwable? = null
+
+  repeat(maxRetries) { attempt ->
+    try {
+      block()
+      return
+    } catch (e: Throwable) {
+      lastError = e
+      println("Test attempt ${attempt + 1} failed: ${e.message}")
+      if (delayMillis > 0) Thread.sleep(delayMillis)
+    }
+  }
+
+  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
 }

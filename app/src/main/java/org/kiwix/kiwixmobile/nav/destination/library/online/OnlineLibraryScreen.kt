@@ -35,6 +35,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,13 +56,15 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
-import org.kiwix.kiwixmobile.core.main.reader.rememberScrollBehavior
+import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
@@ -98,10 +101,11 @@ fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
   navigationIcon: @Composable () -> Unit,
 ) {
-  val (bottomNavHeight, lazyListState) =
-    rememberScrollBehavior(state.bottomNavigationHeight, listState)
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
   KiwixTheme {
@@ -118,7 +122,11 @@ fun OnlineLibraryScreen(
       },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
-        .padding(bottom = bottomNavHeight.value)
+        .let { baseModifier ->
+          bottomAppBarScrollBehaviour?.let {
+            baseModifier.nestedScroll(it.nestedScrollConnection)
+          } ?: baseModifier
+        }
     ) { paddingValues ->
       SwipeRefreshLayout(
         isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,
@@ -132,7 +140,8 @@ fun OnlineLibraryScreen(
             end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
           )
       ) {
-        OnlineLibraryScreenContent(state, lazyListState)
+        OnBackPressed(onUserBackPressed, navHostController)
+        OnlineLibraryScreenContent(state, listState)
       }
     }
   }

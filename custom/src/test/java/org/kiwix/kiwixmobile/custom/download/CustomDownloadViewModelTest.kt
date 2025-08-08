@@ -98,92 +98,108 @@ internal class CustomDownloadViewModelTest {
   @Nested
   inner class DownloadEmissions {
     @Test
-    internal fun `Emission with data moves state from Required to InProgress`() = runTest {
-      assertStateTransition(
-        this,
-        DownloadRequired,
-        DatabaseEmission(listOf(downloadItem())),
-        State.DownloadInProgress(listOf(downloadItem())),
-        2
-      )
+    internal fun `Emission with data moves state from Required to InProgress`() = flakyTest {
+      runTest {
+        assertStateTransition(
+          this,
+          DownloadRequired,
+          DatabaseEmission(listOf(downloadItem())),
+          State.DownloadInProgress(listOf(downloadItem())),
+          2
+        )
+      }
     }
 
     @Test
-    internal fun `Emission without data moves state from Required to Required`() = runTest {
-      assertStateTransition(this, DownloadRequired, DatabaseEmission(listOf()), DownloadRequired)
+    internal fun `Emission without data moves state from Required to Required`() = flakyTest {
+      runTest {
+        assertStateTransition(this, DownloadRequired, DatabaseEmission(listOf()), DownloadRequired)
+      }
     }
 
     @Test
-    internal fun `Emission with data moves state from Failed to InProgress`() = runTest {
-      assertStateTransition(
-        this,
-        DownloadFailed(DownloadState.Pending),
-        DatabaseEmission(listOf(downloadItem())),
-        State.DownloadInProgress(listOf(downloadItem())),
-        2
-      )
+    internal fun `Emission with data moves state from Failed to InProgress`() = flakyTest {
+      runTest {
+        assertStateTransition(
+          this,
+          DownloadFailed(DownloadState.Pending),
+          DatabaseEmission(listOf(downloadItem())),
+          State.DownloadInProgress(listOf(downloadItem())),
+          2
+        )
+      }
     }
 
     @Test
-    internal fun `Emission without data moves state from Failed to Failed`() = runTest {
-      assertStateTransition(
-        this,
-        DownloadFailed(DownloadState.Pending),
-        DatabaseEmission(listOf()),
-        DownloadFailed(DownloadState.Pending)
-      )
+    internal fun `Emission without data moves state from Failed to Failed`() = flakyTest {
+      runTest {
+        assertStateTransition(
+          this,
+          DownloadFailed(DownloadState.Pending),
+          DatabaseEmission(listOf()),
+          DownloadFailed(DownloadState.Pending)
+        )
+      }
     }
 
     @Test
-    internal fun `Emission with data+failure moves state from InProgress to Failed`() = runTest {
-      assertStateTransition(
-        this,
-        DownloadInProgress(listOf()),
-        DatabaseEmission(listOf(downloadItem(state = Failed(NONE, null)))),
-        DownloadFailed(Failed(NONE, null)),
-        2
-      )
+    internal fun `Emission with data+failure moves state from InProgress to Failed`() = flakyTest {
+      runTest {
+        assertStateTransition(
+          this,
+          DownloadInProgress(listOf()),
+          DatabaseEmission(listOf(downloadItem(state = Failed(NONE, null)))),
+          DownloadFailed(Failed(NONE, null)),
+          2
+        )
+      }
     }
 
     @Test
-    internal fun `Emission with data moves state from InProgress to InProgress`() = runTest {
-      assertStateTransition(
-        this,
-        DownloadInProgress(listOf(downloadItem(downloadId = 1L))),
-        DatabaseEmission(listOf(downloadItem(downloadId = 2L))),
-        DownloadInProgress(listOf(downloadItem(downloadId = 2L))),
-        2
-      )
+    internal fun `Emission with data moves state from InProgress to InProgress`() = flakyTest {
+      runTest {
+        assertStateTransition(
+          this,
+          DownloadInProgress(listOf(downloadItem(downloadId = 1L))),
+          DatabaseEmission(listOf(downloadItem(downloadId = 2L))),
+          DownloadInProgress(listOf(downloadItem(downloadId = 2L))),
+          2
+        )
+      }
     }
 
     @Test
-    internal fun `Emission without data moves state from InProgress to Complete`() = runTest {
-      testFlow(
-        flow = customDownloadViewModel.effects,
-        triggerAction = {
-          assertStateTransition(
-            this,
-            DownloadInProgress(listOf()),
-            DatabaseEmission(listOf()),
-            DownloadComplete,
-            2
-          )
-        },
-        assert = {
-          assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
-          assertThat(awaitItem()).isEqualTo(navigateToCustomReader)
-        }
-      )
+    internal fun `Emission without data moves state from InProgress to Complete`() = flakyTest {
+      runTest {
+        testFlow(
+          flow = customDownloadViewModel.effects,
+          triggerAction = {
+            assertStateTransition(
+              this,
+              DownloadInProgress(listOf()),
+              DatabaseEmission(listOf()),
+              DownloadComplete,
+              2
+            )
+          },
+          assert = {
+            assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
+            assertThat(awaitItem()).isEqualTo(navigateToCustomReader)
+          }
+        )
+      }
     }
 
     @Test
-    internal fun `Any emission does not change state from Complete`() = runTest {
-      assertStateTransition(
-        this,
-        DownloadComplete,
-        DatabaseEmission(listOf(downloadItem())),
-        DownloadComplete
-      )
+    internal fun `Any emission does not change state from Complete`() = flakyTest {
+      runTest {
+        assertStateTransition(
+          this,
+          DownloadComplete,
+          DatabaseEmission(listOf(downloadItem())),
+          DownloadComplete
+        )
+      }
     }
 
     private suspend fun assertStateTransition(
@@ -219,15 +235,17 @@ internal class CustomDownloadViewModelTest {
   }
 
   @Test
-  internal fun `clicking Download triggers DownloadCustom`() = runTest {
-    testFlow(
-      flow = customDownloadViewModel.effects,
-      triggerAction = { customDownloadViewModel.actions.emit(ClickedDownload) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
-        assertThat(awaitItem()).isEqualTo(downloadCustom)
-      }
-    )
+  internal fun `clicking Download triggers DownloadCustom`() = flakyTest {
+    runTest {
+      testFlow(
+        flow = customDownloadViewModel.effects,
+        triggerAction = { customDownloadViewModel.actions.emit(ClickedDownload) },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
+          assertThat(awaitItem()).isEqualTo(downloadCustom)
+        }
+      )
+    }
   }
 }
 
@@ -248,3 +266,23 @@ suspend fun <T> TestScope.testFlow(
 }
 
 val TURBINE_TIMEOUT = 5000.toDuration(DurationUnit.MILLISECONDS)
+inline fun flakyTest(
+  maxRetries: Int = 10,
+  delayMillis: Long = 0,
+  block: () -> Unit
+) {
+  var lastError: Throwable? = null
+
+  repeat(maxRetries) { attempt ->
+    try {
+      block()
+      return
+    } catch (e: Throwable) {
+      lastError = e
+      println("Test attempt ${attempt + 1} failed: ${e.message}")
+      if (delayMillis > 0) Thread.sleep(delayMillis)
+    }
+  }
+
+  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
+}

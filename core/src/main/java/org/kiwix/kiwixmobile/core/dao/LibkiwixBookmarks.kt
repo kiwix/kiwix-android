@@ -301,17 +301,19 @@ class LibkiwixBookmarks @Inject constructor(
       bookmarkArray.mapNotNull { bookmark ->
         // Check if the library contains the book associated with the bookmark.
         val book =
-          if (isBookAlreadyExistInLibrary(bookmark.bookId)) {
-            library.getBookById(bookmark.bookId)
-          } else {
-            Log.d(
-              TAG,
-              "Library does not contain the book for this bookmark:\n" +
-                "Book Title: ${bookmark.bookTitle}\n" +
-                "Bookmark URL: ${bookmark.url}"
-            )
-            null
-          }
+          runCatching {
+            if (isBookAlreadyExistInLibrary(bookmark.bookId)) {
+              library.getBookById(bookmark.bookId)
+            } else {
+              Log.d(
+                TAG,
+                "Library does not contain the book for this bookmark:\n" +
+                  "Book Title: ${bookmark.bookTitle}\n" +
+                  "Bookmark URL: ${bookmark.url}"
+              )
+              null
+            }
+          }.getOrNull()
 
         // Check if the book has an illustration of the specified size and encode it to Base64.
         val favicon = book?.getFavicon()

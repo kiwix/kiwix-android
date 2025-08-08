@@ -30,9 +30,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.espresso.Espresso.closeSoftKeyboard
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
@@ -40,7 +37,9 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAKE_NOTE_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
@@ -53,6 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -80,7 +80,9 @@ class NoteRobot : BaseRobot() {
 
   fun clickOnNoteMenuItem(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).isDisplayed()
+      }
       onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
       waitUntilTimeout()
       onNodeWithTag(TAKE_NOTE_MENU_ITEM_TESTING_TAG).performClick()
@@ -128,9 +130,17 @@ class NoteRobot : BaseRobot() {
     })
   }
 
-  fun openNoteFragment() {
-    openDrawer()
-    testFlakyView({ onView(withText(R.string.pref_notes)).perform(click()) })
+  fun openNoteFragment(
+    coreMainActivity: CoreMainActivity,
+    composeTestRule: ComposeContentTestRule
+  ) {
+    openDrawer(coreMainActivity)
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(LEFT_DRAWER_NOTES_ITEM_TESTING_TAG).performClick()
+      }
+    })
   }
 
   fun clickOnSavedNote(composeTestRule: ComposeContentTestRule) {

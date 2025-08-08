@@ -43,7 +43,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -52,6 +51,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.SELECT_FILE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -109,8 +109,9 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Build.VERSION.SDK_INT != Build.VERSION_CODES.VANILLA_ICE_CREAM) {
       activityScenario.onActivity {
         kiwixMainActivity = it
-        it.navigate(R.id.libraryFragment)
+        it.navigate(KiwixDestination.Library.route)
       }
+      composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
@@ -141,8 +142,9 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     ) {
       activityScenario.onActivity {
         kiwixMainActivity = it
-        it.navigate(R.id.libraryFragment)
+        it.navigate(KiwixDestination.Library.route)
       }
+      composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true

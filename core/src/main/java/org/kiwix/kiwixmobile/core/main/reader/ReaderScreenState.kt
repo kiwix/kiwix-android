@@ -140,10 +140,6 @@ data class ReaderScreenState(
   val tocButtonItem: Pair<Boolean, () -> Unit>,
   val onCloseAllTabs: () -> Unit,
   /**
-   * Stores the height of the bottom navigation bar in pixels.
-   */
-  val bottomNavigationHeight: Int,
-  /**
    * Manages the showing of Reader's [BottomAppBarOfReaderScreen].
    */
   val shouldShowBottomAppBar: Boolean,
@@ -168,5 +164,9 @@ data class ReaderScreenState(
   /**
    * Handles the click when user clicks on "Later" button in donation layout.
    */
-  val laterButtonClick: () -> Unit
+  val laterButtonClick: () -> Unit,
+  /**
+   * Manages the showing of header title of "table of content".
+   */
+  val tableOfContentTitle: String
 )

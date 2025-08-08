@@ -41,6 +41,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -63,6 +64,7 @@ class GetContentShortcutTest {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
+  lateinit var kiwixMainActivity: KiwixMainActivity
 
   init {
     AccessibilityChecks.enable().apply {
@@ -106,6 +108,7 @@ class GetContentShortcutTest {
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
+        kiwixMainActivity = it
         handleLocaleChange(
           it,
           "en",
@@ -125,35 +128,40 @@ class GetContentShortcutTest {
         action = ACTION_GET_CONTENT
       }
     ActivityScenario.launch<KiwixMainActivity>(shortcutIntent)
+    composeTestRule.waitForIdle()
     onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
     topLevel {
-      clickReaderOnBottomNav {
+      clickReaderOnBottomNav(composeTestRule) {
         assertReaderScreenDisplayed(composeTestRule)
       }
-      clickDownloadOnBottomNav {
+      clickDownloadOnBottomNav(composeTestRule) {
         onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
       }
-      clickLibraryOnBottomNav {
+      clickLibraryOnBottomNav(composeTestRule) {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
         clickFileTransferIcon(composeTestRule) {
           assertReceiveFileTitleVisible(composeTestRule)
         }
       }
-      clickBookmarksOnNavDrawer {
+      clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertBookMarksDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
         assertDeleteBookmarksDialogDisplayed(composeTestRule)
       }
-      clickHistoryOnSideNav {
+      clickHistoryOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
         assertHistoryDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
         assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
-      clickHostBooksOnSideNav { assertMenuWifiHotspotDisplayed(composeTestRule) }
-      clickSettingsOnSideNav { assertMenuSettingsDisplayed(composeTestRule) }
-      clickHelpOnSideNav { HelpRobot().assertToolbarDisplayed(composeTestRule) }
-      clickSupportKiwixOnSideNav()
-      pressBack()
+      clickHostBooksOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
+        assertMenuWifiHotspotDisplayed(composeTestRule)
+      }
+      clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
+        assertMenuSettingsDisplayed(composeTestRule)
+      }
+      clickHelpOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
+        HelpRobot().assertToolbarDisplayed(composeTestRule)
+      }
     }
   }
 }

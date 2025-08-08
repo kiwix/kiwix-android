@@ -21,21 +21,20 @@ package org.kiwix.kiwixmobile.custom.main
 import android.app.Dialog
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.NavOptions
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
@@ -76,10 +75,10 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
 
     if (isAdded) {
-      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      enableLeftDrawer()
       with(activity as AppCompatActivity) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setUpDrawerToggle()
+        enableLeftDrawer()
       }
       loadPageFromNavigationArguments()
       if (BuildConfig.DISABLE_EXTERNAL_LINK) {
@@ -152,10 +151,32 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
+  /**
+   * Handles clicks on the navigation icon in custom apps.
+   * - If the tab switcher is active, triggers the home menu action.
+   * - Otherwise, toggles the navigation drawer: closes it if open; opens it only if the sidebar is enabled.
+   *
+   * This override customizes the default behavior by preventing the drawer from opening
+   * when the sidebar is disabled in the app configuration.
+   */
+  override fun navigationIconClick() {
+    if (readerMenuState?.isInTabSwitcher == true) {
+      onHomeMenuClicked()
+      return
+    }
+
+    val activity = activity as CoreMainActivity
+    if (activity.navigationDrawerIsOpen()) {
+      activity.closeNavigationDrawer()
+    } else if (!BuildConfig.DISABLE_SIDEBAR) {
+      activity.openNavigationDrawer()
+    }
+  }
+
   private fun loadPageFromNavigationArguments() {
-    val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
-    if (args.pageUrl.isNotEmpty()) {
-      loadUrlWithCurrentWebview(args.pageUrl)
+    val pageUrl = arguments?.getString(PAGE_URL_KEY).orEmpty()
+    if (pageUrl.isNotEmpty()) {
+      loadUrlWithCurrentWebview(pageUrl)
       // Setup bookmark for current book
       // See https://github.com/kiwix/kiwix-android/issues/3541
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
@@ -174,9 +195,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     openHomeScreen()
   }
 
-  // Since custom apps do not have the bottomNavigationView, so returning null.
-  override fun getBottomNavigationView(): BottomNavigationView? = null
-
   /**
    * Restores the view state when the webViewHistory data is valid.
    * This method restores the tabs with webView pages history.
@@ -192,18 +210,16 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   /**
-   * Sets the locking mode for the sidebar in a custom app. If the app is configured not to show the sidebar,
-   * this function disables the sidebar by locking it in the closed position through the parent class.
-   * https://developer.android.com/reference/kotlin/androidx/drawerlayout/widget/DrawerLayout#LOCK_MODE_LOCKED_CLOSED()
+   * Enables or disables the sidebar in a custom app based on the configuration.
+   * If the app is configured to disable the sidebar, this method disables it;
+   * otherwise, it enables the sidebar.
    */
-  override fun setDrawerLockMode(lockMode: Int) {
-    super.setDrawerLockMode(
-      if (BuildConfig.DISABLE_SIDEBAR) {
-        DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-      } else {
-        lockMode
-      }
-    )
+  override fun enableLeftDrawer() {
+    if (BuildConfig.DISABLE_SIDEBAR) {
+      (requireActivity() as CoreMainActivity).disableLeftDrawer()
+    } else {
+      super.enableLeftDrawer()
+    }
   }
 
   /**
@@ -272,7 +288,13 @@ class CustomReaderFragment : CoreReaderFragment() {
       },
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
-          findNavController().navigate(R.id.customDownloadFragment)
+          val navOptions = NavOptions.Builder()
+            .setPopUpTo(CustomDestination.Reader.route, true)
+            .build()
+          (requireActivity() as CoreMainActivity).navigate(
+            CustomDestination.Downloads.route,
+            navOptions
+          )
         }
       }
     )
@@ -282,13 +304,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     File(getDemoFilePathForCustomApp(requireActivity())).also {
       if (!it.isFileExist()) it.createNewFile()
     }
-
-  @Suppress("DEPRECATION")
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super.onCreateOptionsMenu(menu, inflater)
-    menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.isVisible = false
-    menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
-  }
 
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
@@ -305,17 +320,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       return true
     }
     return false
-  }
-
-  /**
-   * This method is overridden to set the IDs of the `drawerLayout` and `tableDrawerRightContainer`
-   * specific to the custom module in the `CoreReaderFragment`. Since we have an app and a custom module,
-   * and `CoreReaderFragment` is a common class for both modules, we set the IDs of the custom module
-   * in the parent class to ensure proper integration.
-   */
-  override fun loadDrawerViews() {
-    drawerLayout = requireActivity().findViewById(R.id.custom_drawer_container)
-    tableDrawerRightContainer = requireActivity().findViewById(R.id.activity_main_nav_view)
   }
 
   /**

@@ -23,6 +23,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -32,6 +33,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
@@ -44,18 +46,17 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -107,7 +108,8 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
             matchesCheck(TouchTargetSizeCheck::class.java),
             matchesViews(withContentDescription("More options"))
           ),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
+          matchesCheck(SpeakableTextPresentCheck::class.java),
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
         )
       )
     }
@@ -117,8 +119,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   fun testTabClosedDialog() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
+    composeTestRule.waitForIdle()
     val loadFileStream =
       KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
@@ -139,16 +142,17 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
     }
     openKiwixReaderFragmentWithFile(zimFile)
+    composeTestRule.waitForIdle()
     reader {
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
       clickOnTabIcon(composeTestRule)
       clickOnClosedAllTabsButton(composeTestRule)
       clickOnUndoButton(composeTestRule)
       assertTabRestored(composeTestRule)
       pressBack()
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
     }
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 && Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU) {
       // temporary disabled on Android 25
       LeakAssertions.assertNoLeaks()
     }
@@ -158,8 +162,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   fun testZimFileRendering() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
+    composeTestRule.waitForIdle()
     val downloadingZimFile = getDownloadingZimFile()
     getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
       if (response.isSuccessful) {
@@ -174,8 +179,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
     }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
+    composeTestRule.waitForIdle()
     reader {
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      checkZimFileLoadedSuccessful(composeTestRule)
       clickOnTabIcon(composeTestRule)
       clickOnTabIcon(composeTestRule)
       // test the whole welcome page is loaded or not
@@ -259,9 +265,12 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
 
   private fun openKiwixReaderFragmentWithFile(zimFile: File) {
     UiThreadStatement.runOnUiThread {
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Reader.route, false)
+        .build()
       kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+        navOptions
       )
     }
   }

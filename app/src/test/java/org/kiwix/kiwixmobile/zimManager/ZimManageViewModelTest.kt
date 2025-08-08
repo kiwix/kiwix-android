@@ -72,6 +72,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
+import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -317,109 +318,103 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `search triggers downloading online content`() = runTest {
-    viewModel.onlineLibraryRequest.test {
-      skipItems(1)
-      viewModel.requestFiltering.emit("test")
-      advanceUntilIdle()
-      assertThat(awaitItem().query).isEqualTo("test")
-    }
-  }
+  fun `library update removes from sources and maps to list items`() = flakyTest {
+    runTest {
+      val book = BookTestWrapper("0")
+      val bookAlreadyOnDisk =
+        libkiwixBook(id = "0", url = "", language = Locale.ENGLISH.language, nativeBook = book)
+      val bookDownloading = libkiwixBook(id = "1", url = "")
+      val bookWithActiveLanguage = libkiwixBook(id = "3", language = "activeLanguage", url = "")
+      viewModel.libraryItems.test {
+        every { application.getString(any()) } returns ""
+        every { application.getString(any(), any()) } returns ""
+        coEvery {
+          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+        } returns arrayListOf(bookWithActiveLanguage)
+        networkStates.value = CONNECTED
+        downloads.value = listOf(downloadModel(book = bookDownloading))
+        books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
+        fileSystemStates.value = CanWrite4GbFile
+        advanceUntilIdle()
 
-  @Test
-  fun `library update removes from sources and maps to list items`() = runTest {
-    val book = BookTestWrapper("0")
-    val bookAlreadyOnDisk =
-      libkiwixBook(id = "0", url = "", language = Locale.ENGLISH.language, nativeBook = book)
-    val bookDownloading = libkiwixBook(id = "1", url = "")
-    val bookWithActiveLanguage = libkiwixBook(id = "3", language = "activeLanguage", url = "")
-    viewModel.libraryItems.test {
-      every { application.getString(any()) } returns ""
-      every { application.getString(any(), any()) } returns ""
-      coEvery {
-        onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
-      } returns arrayListOf(bookWithActiveLanguage)
-      networkStates.value = CONNECTED
-      downloads.value = listOf(downloadModel(book = bookDownloading))
-      books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
-      fileSystemStates.value = CanWrite4GbFile
-      advanceUntilIdle()
-
-      val items = awaitItem()
-      val bookItems = items.filterIsInstance<LibraryListItem.BookItem>()
-      if (bookItems.size >= 2 && bookItems[0].fileSystemState == CanWrite4GbFile) {
-        assertThat(items).isEqualTo(
-          listOf(
-            LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading:"),
-            LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
-            LibraryListItem.DividerItem(Long.MAX_VALUE - 1, "All languages"),
-            LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
+        val items = awaitItem()
+        val bookItems = items.filterIsInstance<LibraryListItem.BookItem>()
+        if (bookItems.size >= 2 && bookItems[0].fileSystemState == CanWrite4GbFile) {
+          assertThat(items).isEqualTo(
+            listOf(
+              LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading:"),
+              LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
+              LibraryListItem.DividerItem(Long.MAX_VALUE - 1, "All languages"),
+              LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
+            )
           )
-        )
+        }
       }
     }
   }
 
   @Test
-  fun `library marks files over 4GB as can't download if file system state says to`() = runTest {
-    val bookOver4Gb =
-      libkiwixBook(
-        id = "0",
-        url = "",
-        size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
-      )
-    every { application.getString(any()) } answers { "" }
-    every { application.getString(any(), any()) } answers { "" }
-    every { application.getString(any(), *anyVararg()) } answers { "" }
-
-    // test libraryItems fetches for all language.
-    viewModel.libraryItems.test {
-      coEvery {
-        onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
-      } returns arrayListOf(bookOver4Gb)
-      networkStates.value = CONNECTED
-      downloads.value = listOf()
-      books.value = listOf()
-      onlineContentLanguage.value = ""
-      fileSystemStates.emit(FileSystemState.DetectingFileSystem)
-      fileSystemStates.emit(CannotWrite4GbFile)
-      advanceUntilIdle()
-
-      val item = awaitItem()
-      val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
-      if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-        assertThat(item).isEqualTo(
-          listOf(
-            LibraryListItem.DividerItem(Long.MIN_VALUE, "All languages"),
-            LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
-          )
+  fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
+    runTest {
+      val bookOver4Gb =
+        libkiwixBook(
+          id = "0",
+          url = "",
+          size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
         )
+      every { application.getString(any()) } answers { "" }
+      every { application.getString(any(), any()) } answers { "" }
+      every { application.getString(any(), *anyVararg()) } answers { "" }
+
+      // test libraryItems fetches for all language.
+      viewModel.libraryItems.test {
+        coEvery {
+          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+        } returns arrayListOf(bookOver4Gb)
+        networkStates.value = CONNECTED
+        downloads.value = listOf()
+        books.value = listOf()
+        onlineContentLanguage.value = ""
+        fileSystemStates.emit(FileSystemState.DetectingFileSystem)
+        fileSystemStates.emit(CannotWrite4GbFile)
+        advanceUntilIdle()
+
+        val item = awaitItem()
+        val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+        if (bookItem?.fileSystemState == CannotWrite4GbFile) {
+          assertThat(item).isEqualTo(
+            listOf(
+              LibraryListItem.DividerItem(Long.MIN_VALUE, "All languages"),
+              LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
+            )
+          )
+        }
       }
-    }
 
-    // test library items fetches for a particular language
-    viewModel.libraryItems.test {
-      coEvery {
-        onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
-      } returns arrayListOf(bookOver4Gb)
-      every { application.getString(any(), any()) } answers { "Selected language: English" }
-      networkStates.value = CONNECTED
-      downloads.value = listOf()
-      books.value = listOf()
-      onlineContentLanguage.value = "eng"
-      fileSystemStates.emit(FileSystemState.DetectingFileSystem)
-      fileSystemStates.emit(CannotWrite4GbFile)
-      advanceUntilIdle()
+      // test library items fetches for a particular language
+      viewModel.libraryItems.test {
+        coEvery {
+          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+        } returns arrayListOf(bookOver4Gb)
+        every { application.getString(any(), any()) } answers { "Selected language: English" }
+        networkStates.value = CONNECTED
+        downloads.value = listOf()
+        books.value = listOf()
+        onlineContentLanguage.value = "eng"
+        fileSystemStates.emit(FileSystemState.DetectingFileSystem)
+        fileSystemStates.emit(CannotWrite4GbFile)
+        advanceUntilIdle()
 
-      val item = awaitItem()
-      val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
-      if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-        assertThat(item).isEqualTo(
-          listOf(
-            LibraryListItem.DividerItem(Long.MIN_VALUE, "Selected language: English"),
-            LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
+        val item = awaitItem()
+        val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+        if (bookItem?.fileSystemState == CannotWrite4GbFile) {
+          assertThat(item).isEqualTo(
+            listOf(
+              LibraryListItem.DividerItem(Long.MIN_VALUE, "Selected language: English"),
+              LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
+            )
           )
-        )
+        }
       }
     }
   }

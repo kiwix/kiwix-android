@@ -44,6 +44,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -78,6 +79,7 @@ class LanguageFragmentTest {
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
 
+  lateinit var kiwixMainActivity: KiwixMainActivity
   private val instrumentation: Instrumentation by lazy(InstrumentationRegistry::getInstrumentation)
 
   init {
@@ -116,6 +118,7 @@ class LanguageFragmentTest {
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
+        kiwixMainActivity = it
         handleLocaleChange(
           it,
           "en",
@@ -127,9 +130,9 @@ class LanguageFragmentTest {
 
   @Test
   fun testLanguageFragment() {
-    StandardActions.closeDrawer() // close the drawer if open before running the test cases.
+    StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
     downloadRobot {
-      clickDownloadOnBottomNav()
+      clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
     }
     language {

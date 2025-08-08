@@ -23,98 +23,91 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MenuItem
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
-import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
-import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
-import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
-const val KIWIX_BOTTOM_BAR_ANIMATION_DURATION = 250L
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
   override val cachedComponent by lazy { kiwixActivityComponent }
-  override val searchFragmentResId: Int = R.id.searchFragment
-  override val navController by lazy {
-    (
-      supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        as NavHostFragment
-    ).navController
-  }
-
-  override val drawerContainerLayout: DrawerLayout by lazy {
-    activityKiwixMainBinding.navigationContainer
-  }
-
-  override val drawerNavView: NavigationView by lazy {
-    activityKiwixMainBinding.drawerNavView
-  }
-
-  override val readerTableOfContentsDrawer: NavigationView by lazy {
-    activityKiwixMainBinding.readerDrawerNavView
-  }
-
-  override val navHostContainer by lazy {
-    activityKiwixMainBinding.navHostFragment
-  }
+  override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
-  override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
-  override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
-  override val historyFragmentResId: Int = R.id.historyFragment
-  override val notesFragmentResId: Int = R.id.notesFragment
-  override val readerFragmentResId: Int = R.id.readerFragment
-  override val helpFragmentResId: Int = R.id.helpFragment
-  override val topLevelDestinations =
-    setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
+  override val bookmarksFragmentRoute: String = KiwixDestination.Bookmarks.route
+  override val settingsFragmentRoute: String = KiwixDestination.Settings.route
+  override val historyFragmentRoute: String = KiwixDestination.History.route
+  override val notesFragmentRoute: String = KiwixDestination.Notes.route
+  override val readerFragmentRoute: String = KiwixDestination.Reader.route
+  override val helpFragmentRoute: String = KiwixDestination.Help.route
+  override val topLevelDestinationsRoute =
+    setOf(
+      KiwixDestination.Downloads.route,
+      KiwixDestination.Library.route,
+      KiwixDestination.Reader.route
+    )
 
-  private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
+  private val shouldShowBottomAppBar = mutableStateOf(true)
 
   private var isIntroScreenVisible: Boolean = false
 
@@ -123,29 +116,76 @@ class KiwixMainActivity : CoreMainActivity() {
       actionMode?.finish()
     }
   private val storageDeviceList = arrayListOf<StorageDevice>()
+  private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
-    activityKiwixMainBinding = ActivityKiwixMainBinding.inflate(layoutInflater)
-    setContentView(activityKiwixMainBinding.root)
-
-    navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    activityKiwixMainBinding.drawerNavView.apply {
-      setupWithNavController(navController)
-      setNavigationItemSelectedListener { item ->
-        closeNavigationDrawer()
-        onNavigationItemSelected(item)
+    setContent {
+      val pendingIntent by pendingIntentFlow.collectAsState()
+      navController = rememberNavController()
+      leftDrawerState = rememberDrawerState(DrawerValue.Closed)
+      uiCoroutineScope = rememberCoroutineScope()
+      bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+      val startDestination = remember {
+        if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
+          KiwixDestination.Intro.route
+        } else {
+          KiwixDestination.Reader.route
+        }
       }
+      KiwixMainActivityScreen(
+        navController = navController,
+        leftDrawerContent = leftDrawerMenu,
+        startDestination = startDestination,
+        topLevelDestinationsRoute = topLevelDestinationsRoute,
+        leftDrawerState = leftDrawerState,
+        uiCoroutineScope = uiCoroutineScope,
+        enableLeftDrawer = enableLeftDrawer.value,
+        shouldShowBottomAppBar = shouldShowBottomAppBar.value,
+        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+      )
+      LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
+      }
+      val lifecycleOwner = LocalLifecycleOwner.current
+      val lifecycle = lifecycleOwner.lifecycle
+      LaunchedEffect(navController, pendingIntent) {
+        snapshotFlow { pendingIntent }
+          .filterNotNull()
+          .collectLatest { intent ->
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+              // Wait until fragment manager is fully initialized and view hierarchy is ready
+              delay(HUNDERED.toLong())
+              handleAllIntents(intent)
+              pendingIntentFlow.value = null
+            }
+          }
+      }
+      DialogHost(alertDialogShower)
     }
-    activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
     }
-    handleZimFileIntent(intent)
-    handleNotificationIntent(intent)
-    handleGetContentIntent(intent)
-    activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
+    intent?.let {
+      pendingIntentFlow.value = it
+    }
+  }
+
+  private fun handleAllIntents(newIntent: Intent?) {
+    newIntent?.let { intent ->
+      handleZimFileIntent(intent)
+      handleNotificationIntent(intent)
+      handleGetContentIntent(intent)
+      safelyHandleDeepLink(intent)
+    }
+  }
+
+  private fun safelyHandleDeepLink(intent: Intent) {
+    if (intent.data != null && intent.extras != null) {
+      navController.handleDeepLink(intent)
+    }
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {
@@ -180,70 +220,16 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
-    if (::activityKiwixMainBinding.isInitialized) {
-      activityKiwixMainBinding.bottomNavView.menu.apply {
-        findItem(R.id.readerFragment)?.title = resources.getString(string.reader)
-        findItem(R.id.libraryFragment)?.title = resources.getString(string.library)
-        findItem(R.id.downloadsFragment)?.title = resources.getString(string.download)
-      }
-      activityKiwixMainBinding.drawerNavView.menu.apply {
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_bookmarks_list)?.title =
-          resources.getString(string.bookmarks)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_history)?.title =
-          resources.getString(string.history)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_notes)?.title =
-          resources.getString(string.pref_notes)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.title =
-          resources.getString(string.menu_wifi_hotspot)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_settings)?.title =
-          resources.getString(string.menu_settings)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.title =
-          resources.getString(string.menu_help)
-        findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.title =
-          resources.getString(string.menu_support_kiwix)
-      }
-    }
-  }
-
-  override fun configureActivityBasedOn(destination: NavDestination) {
-    super.configureActivityBasedOn(destination)
-    activityKiwixMainBinding.bottomNavView.isVisible = destination.id in topLevelDestinations
+    leftDrawerMenu.clear()
+    leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
   override fun onStart() {
     super.onStart()
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      activityKiwixMainBinding.bottomNavView.isVisible = destination.id in topLevelDestinations
-      if (destination.id !in topLevelDestinations) {
-        handleDrawerOnNavigation()
-      }
-    }
-    if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
-      navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
-    }
     if (!sharedPreferenceUtil.prefIsTest) {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
     }
     setDefaultDeviceLanguage()
-  }
-
-  /**
-   * This is for manually showing/hiding the BottomNavigationView with animation from compose
-   * screens until we migrate the BottomNavigationView to compose. Once we migrate we will remove it.
-   *
-   * TODO Remove this once we migrate to compose.
-   */
-  override fun toggleBottomNavigation(isVisible: Boolean) {
-    activityKiwixMainBinding.bottomNavView.animate()
-      ?.translationY(
-        if (isVisible) {
-          ZERO.toFloat()
-        } else {
-          activityKiwixMainBinding.bottomNavView.height.toFloat()
-        }
-      )
-      ?.setDuration(KIWIX_BOTTOM_BAR_ANIMATION_DURATION)
-      ?.start()
   }
 
   private fun setDefaultDeviceLanguage() {
@@ -273,9 +259,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    handleNotificationIntent(intent)
-    handleZimFileIntent(intent)
-    handleGetContentIntent(intent)
+    pendingIntentFlow.value = intent
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
@@ -283,9 +267,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleGetContentIntent(intent: Intent?) {
     if (intent?.action == ACTION_GET_CONTENT) {
-      activityKiwixMainBinding.bottomNavView.menu.findItem(R.id.downloadsFragment)?.let {
-        NavigationUI.onNavDestinationSelected(it, navController)
-      }
+      navigate(KiwixDestination.Downloads.route)
     }
   }
 
@@ -300,7 +282,11 @@ class KiwixMainActivity : CoreMainActivity() {
           }, OPENING_ZIM_FILE_DELAY)
         }
 
-        else -> toast(R.string.cannot_open_file)
+        else -> {
+          if (it.scheme != ZIM_HOST_DEEP_LINK_SCHEME) {
+            toast(R.string.cannot_open_file)
+          }
+        }
       }
     }
   }
@@ -313,16 +299,11 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun openLocalLibraryWithZimFilePath(path: String) {
-    navigate(
-      R.id.libraryFragment,
-      bundleOf(
-        ZIM_FILE_URI_KEY to path,
-      )
-    )
+    navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
   }
 
-  private fun handleNotificationIntent(intent: Intent) {
-    if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
+  private fun handleNotificationIntent(intent: Intent?) {
+    if (intent?.hasExtra(DOWNLOAD_NOTIFICATION_TITLE) == true) {
       lifecycleScope.launch {
         delay(OPENING_ZIM_FILE_DELAY)
         intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
@@ -334,17 +315,43 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      id.menu_host_books -> openZimHostFragment()
-      else -> return super.onNavigationItemSelected(item)
-    }
-    return true
+  private fun openZimFromFilePath(path: String) {
+    navigate(KiwixDestination.Reader.createRoute(zimFileUri = path))
   }
 
+  override val zimHostDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_wifi_hotspot),
+    iconRes = drawable.ic_mobile_screen_share_24px,
+    visible = true,
+    onClick = { openZimHostFragment() },
+    testingTag = LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
+  )
+
+  override val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_help),
+    iconRes = drawable.ic_help_24px,
+    visible = true,
+    onClick = { openHelpFragment() },
+    testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+  )
+
+  override val supportDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_support_kiwix),
+    iconRes = drawable.ic_support_24px,
+    visible = true,
+    onClick = { openSupportKiwixExternalLink() },
+    testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+  )
+
+  /**
+   * In kiwix app we are not showing the "About app" item so returning null.
+   */
+  override val aboutAppDrawerMenuItem: DrawerMenuItem? = null
+
   private fun openZimHostFragment() {
-    disableDrawer()
-    navigate(R.id.zimHostFragment)
+    disableLeftDrawer()
+    handleDrawerOnNavigation()
+    navigate(KiwixDestination.ZimHost.route)
   }
 
   override fun getIconResId() = mipmap.ic_launcher
@@ -355,8 +362,22 @@ class KiwixMainActivity : CoreMainActivity() {
     ShortcutManagerCompat.addDynamicShortcuts(this, dynamicShortcutList())
   }
 
-  override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
-    activityKiwixMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
+  override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
+    navigate(
+      KiwixDestination.Search.createRoute(
+        searchString = searchString,
+        isOpenedFromTabView = isOpenedFromTabView,
+        isVoice = isVoice
+      )
+    )
+  }
+
+  override fun hideBottomAppBar() {
+    shouldShowBottomAppBar.update { false }
+  }
+
+  override fun showBottomAppBar() {
+    shouldShowBottomAppBar.update { true }
   }
 
   // Outdated shortcut ids(new_tab, get_content)

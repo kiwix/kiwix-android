@@ -117,6 +117,8 @@ object Versions {
   const val TURBINE_FLOW_TEST = "1.2.0"
 
   const val COIL_COMPOSE = "3.2.0"
+
+  const val COMPOSE_NAVIGATION = "2.7.7"
 }
 
 /**

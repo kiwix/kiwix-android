@@ -24,23 +24,19 @@ import android.os.Process
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.BottomAppBarScrollBehavior
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +45,6 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
@@ -61,12 +56,10 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -79,8 +72,37 @@ const val KIWIX_INTERNAL_ERROR = 10
 const val ACTION_NEW_TAB = "NEW_TAB"
 const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 
+// Fragments names for compose based navigation.
+const val READER_FRAGMENT = "readerFragment"
+const val LOCAL_LIBRARY_FRAGMENT = "localLibraryFragment"
+const val DOWNLOAD_FRAGMENT = "downloadsFragment"
+const val BOOKMARK_FRAGMENT = "bookmarkFragment"
+const val NOTES_FRAGMENT = "notesFragment"
+const val INTRO_FRAGMENT = "introFragment"
+const val HISTORY_FRAGMENT = "historyFragment"
+const val LANGUAGE_FRAGMENT = "languageFragment"
+const val ZIM_HOST_FRAGMENT = "zimHostFragment"
+const val HELP_FRAGMENT = "helpFragment"
+const val SETTINGS_FRAGMENT = "settingsFragment"
+const val SEARCH_FRAGMENT = "searchFragment"
+const val LOCAL_FILE_TRANSFER_FRAGMENT = "localFileTransferFragment"
+
+// Zim host deep link for opening the ZimHost fragment from notification.
+const val ZIM_HOST_DEEP_LINK_SCHEME = "kiwix"
+const val ZIM_HOST_NAV_DEEP_LINK = "$ZIM_HOST_DEEP_LINK_SCHEME://zimhost"
+
+// Left drawer items testing tag.
+const val LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG = "leftDrawerBookmarkItemTestingTag"
+const val LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG = "leftDrawerHistoryItemTestingTag"
+const val LEFT_DRAWER_NOTES_ITEM_TESTING_TAG = "leftDrawerNotesItemTestingTag"
+const val LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG = "leftDrawerSettingsItemTestingTag"
+const val LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG = "leftDrawerSupportItemTestingTag"
+const val LEFT_DRAWER_HELP_ITEM_TESTING_TAG = "leftDrawerHelpItemTestingTag"
+const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingTag"
+const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
+
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
-  abstract val searchFragmentResId: Int
+  abstract val searchFragmentRoute: String
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
 
@@ -90,18 +112,54 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
-  abstract val navController: NavController
-  abstract val drawerContainerLayout: DrawerLayout
-  abstract val drawerNavView: NavigationView
-  abstract val readerTableOfContentsDrawer: NavigationView
-  abstract val bookmarksFragmentResId: Int
-  abstract val settingsFragmentResId: Int
-  abstract val historyFragmentResId: Int
-  abstract val notesFragmentResId: Int
-  abstract val helpFragmentResId: Int
+
+  /**
+   * We have migrated the UI in compose, so providing the compose based navigation to activity
+   * is responsibility of child activities such as KiwixMainActivity, and CustomMainActivity.
+   */
+  lateinit var navController: NavHostController
+  val isNavControllerInitialized: Boolean
+    get() = ::navController.isInitialized
+
+  /**
+   * For managing the leftDrawer.
+   */
+  lateinit var leftDrawerState: DrawerState
+
+  /**
+   * The compose coroutine scope for calling the compose based UI elements in coroutine scope.
+   * Such as opening/closing leftDrawer.
+   */
+  lateinit var uiCoroutineScope: CoroutineScope
+
+  /**
+   * Managing the leftDrawerMenu in compose way so that when app's language changed
+   * it will update the text in selected language.
+   */
+  protected val leftDrawerMenu = mutableStateListOf<DrawerMenuGroup>()
+
+  /**
+   * Manages the enabling/disabling the left drawer
+   */
+  val enableLeftDrawer = mutableStateOf(true)
+
+  /**
+   * For managing the back press of fragments.
+   */
+  val customBackHandler = mutableStateOf<(() -> FragmentActivityExtensions.Super)?>(null)
+
+  /**
+   * For managing the the showing/hiding the bottomAppBar when scrolling.
+   */
+  @OptIn(ExperimentalMaterial3Api::class)
+  var bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior? = null
+  abstract val bookmarksFragmentRoute: String
+  abstract val settingsFragmentRoute: String
+  abstract val historyFragmentRoute: String
+  abstract val notesFragmentRoute: String
+  abstract val helpFragmentRoute: String
   abstract val cachedComponent: CoreActivityComponent
-  abstract val topLevelDestinations: Set<Int>
-  abstract val navHostContainer: FragmentContainerView
+  abstract val topLevelDestinationsRoute: Set<String>
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
 
@@ -143,7 +201,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     lifecycleScope.launch(Dispatchers.IO) {
       createApplicationShortcuts()
     }
-    handleBackPressed()
+    leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
   @Suppress("DEPRECATION")
@@ -154,15 +212,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
-    setDialogHostToActivity(alertDialogShower)
     externalLinkOpener.setAlertDialogShower(alertDialogShower)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
     rateDialogHandler.checkForRateDialog(getIconResId())
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      configureActivityBasedOn(destination)
-    }
   }
 
   /**
@@ -180,11 +234,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  override fun onDestroy() {
-    onBackPressedCallBack.remove()
-    super.onDestroy()
-  }
-
   override fun onStop() {
     startMonitoringDownloads()
     downloadMonitor.stopListeningDownloads()
@@ -200,23 +249,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
       startService(Intent(this, DownloadMonitorService::class.java))
     }
-  }
-
-  open fun configureActivityBasedOn(destination: NavDestination) {
-    if (destination.id !in topLevelDestinations) {
-      handleDrawerOnNavigation()
-    }
-    readerTableOfContentsDrawer.setLockMode(
-      if (destination.id == readerFragmentResId) {
-        LOCK_MODE_UNLOCKED
-      } else {
-        LOCK_MODE_LOCKED_CLOSED
-      }
-    )
-  }
-
-  private fun NavigationView.setLockMode(lockMode: Int) {
-    drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
   @Suppress("DEPRECATION")
@@ -268,113 +300,37 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onSupportNavigateUp(): Boolean =
     navController.navigateUp() || super.onSupportNavigateUp()
 
-  open fun setupDrawerToggle(shouldEnableRightDrawer: Boolean = false) {
-    // Set the initial contentDescription to the hamburger icon.
-    // This method is called from various locations after modifying the navigationIcon.
-    // For example, we previously changed this icon/contentDescription to the "+" button
-    // when opening the tabSwitcher. After closing the tabSwitcher, we reset the
-    // contentDescription to the default hamburger icon.
-    // Todo we will refactore this when migrating the CoreMainActivity.
-    // toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-    //   getString(R.string.open_drawer)
-    // )
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this,
-        drawerContainerLayout,
-        R.string.open_drawer,
-        R.string.close_drawer
-      )
-    drawerToggle?.let {
-      drawerContainerLayout.addDrawerListener(it)
-      it.syncState()
-    }
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    if (shouldEnableRightDrawer) {
-      // Enable the right drawer
-      drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
-    }
+  fun enableLeftDrawer() {
+    enableLeftDrawer.value = true
   }
 
-  open fun disableDrawer(disableRightDrawer: Boolean = true) {
-    drawerToggle?.isDrawerIndicatorEnabled = false
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    if (disableRightDrawer) {
-      // Disable the right drawer
-      drawerContainerLayout.setDrawerLockMode(
-        DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-        GravityCompat.END
-      )
-    }
+  open fun disableLeftDrawer() {
+    enableLeftDrawer.value = false
   }
 
-  open fun onNavigationItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
-      R.id.menu_settings -> openSettings()
-      R.id.menu_help -> openHelpFragment()
-      R.id.menu_notes -> openNotes()
-      R.id.menu_history -> openHistory()
-      R.id.menu_bookmarks_list -> openBookmarks()
-      else -> return false
-    }
-    return true
-  }
-
-  private fun openHelpFragment() {
-    navigate(helpFragmentResId)
+  protected fun openHelpFragment() {
+    navigate(helpFragmentRoute)
     handleDrawerOnNavigation()
   }
 
-  fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawerNavView)
+  fun navigationDrawerIsOpen(): Boolean = leftDrawerState.isOpen
 
   fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawerNavView)
+    uiCoroutineScope.launch {
+      leftDrawerState.close()
+    }
   }
 
   fun openNavigationDrawer() {
-    drawerContainerLayout.openDrawer(drawerNavView)
+    uiCoroutineScope.launch {
+      leftDrawerState.open()
+    }
   }
 
   fun openSupportKiwixExternalLink() {
+    closeNavigationDrawer()
     externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent(), false)
   }
-
-  private fun handleBackPressed() {
-    onBackPressedDispatcher.addCallback(this, onBackPressedCallBack)
-  }
-
-  private val onBackPressedCallBack =
-    object : OnBackPressedCallback(true) {
-      override fun handleOnBackPressed() {
-        if (navigationDrawerIsOpen()) {
-          closeNavigationDrawer()
-          return
-        }
-        if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-          isEnabled = false
-          return onBackPressedDispatcher.onBackPressed().also {
-            isEnabled = true
-          }
-        }
-        activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-          if (it.onBackPressed(this@CoreMainActivity) == ShouldCall) {
-            if (navController.currentDestination?.id?.equals(readerFragmentResId) == true &&
-              navController.previousBackStackEntry?.destination
-                ?.id?.equals(searchFragmentResId) == false
-            ) {
-              drawerToggle = null
-              finish()
-            } else {
-              isEnabled = false
-              onBackPressedDispatcher.onBackPressed()
-              isEnabled = true
-            }
-          }
-        }
-      }
-    }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
@@ -390,7 +346,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun activeFragments(): MutableList<Fragment> =
-    supportFragmentManager.fragments
+    supportFragmentManager.fragments.also {
+      Log.d("Fragments", "Found fragments: ${supportFragmentManager.fragments}")
+    }
 
   fun navigate(action: NavDirections) {
     navController.currentDestination?.getAction(action.actionId)?.run {
@@ -398,50 +356,25 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  fun navigate(fragmentId: Int) {
-    navController.navigate(fragmentId)
-  }
-
-  fun navigate(fragmentId: Int, bundle: Bundle) {
-    navController.navigate(fragmentId, bundle)
-  }
-
-  fun navigate(fragmentId: Int, bundle: Bundle, navOptions: NavOptions) {
-    navController.navigate(fragmentId, bundle, navOptions)
+  fun navigate(route: String, navOptions: NavOptions? = null) {
+    navController.navigate(route, navOptions)
   }
 
   private fun openSettings() {
     handleDrawerOnNavigation()
-    navigate(settingsFragmentResId)
+    navigate(settingsFragmentRoute)
   }
 
   private fun openHistory() {
-    navigate(historyFragmentResId)
+    handleDrawerOnNavigation()
+    navigate(historyFragmentRoute)
   }
 
-  fun openSearch(
+  abstract fun openSearch(
     searchString: String = "",
     isOpenedFromTabView: Boolean = false,
     isVoice: Boolean = false
-  ) {
-    navigate(
-      searchFragmentResId,
-      bundleOf(
-        NAV_ARG_SEARCH_STRING to searchString,
-        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
-        EXTRA_IS_WIDGET_VOICE to isVoice
-      )
-    )
-  }
-
-  fun openZimFromFilePath(path: String) {
-    navigate(
-      readerFragmentResId,
-      bundleOf(
-        ZIM_FILE_URI_KEY to path,
-      )
-    )
-  }
+  )
 
   fun openPage(
     pageUrl: String,
@@ -454,31 +387,30 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     val navOptions = NavOptions.Builder()
       .setLaunchSingleTop(true)
-      .setPopUpTo(readerFragmentResId, inclusive = true)
+      .setPopUpTo(readerFragmentRoute, inclusive = true)
       .build()
+    val readerRouteWithArguments =
+      "$readerFragmentRoute?$PAGE_URL_KEY=$pageUrl&$ZIM_FILE_URI_KEY=$zimFileUri" +
+        "&$SHOULD_OPEN_IN_NEW_TAB=$shouldOpenInNewTab"
     navigate(
-      readerFragmentResId,
-      bundleOf(
-        PAGE_URL_KEY to pageUrl,
-        ZIM_FILE_URI_KEY to zimFileUri,
-        SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
-      ),
+      readerRouteWithArguments,
       navOptions
     )
   }
 
   private fun openBookmarks() {
-    navigate(bookmarksFragmentResId)
     handleDrawerOnNavigation()
+    navigate(bookmarksFragmentRoute)
   }
 
   private fun openNotes() {
-    navigate(notesFragmentResId)
+    handleDrawerOnNavigation()
+    navigate(notesFragmentRoute)
   }
 
   protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
-    disableDrawer()
+    disableLeftDrawer()
   }
 
   private fun setMainActivityToCoreApp() {
@@ -486,21 +418,102 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   fun findInPage(searchString: String) {
-    navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
+    navigate("$readerFragmentRoute?$FIND_IN_PAGE_SEARCH_STRING=$searchString")
+  }
+
+  private val bookRelatedDrawerGroup by lazy {
+    DrawerMenuGroup(
+      listOfNotNull(
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.bookmarks),
+          iconRes = R.drawable.ic_bookmark_black_24dp,
+          visible = true,
+          onClick = { openBookmarks() },
+          testingTag = LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
+        ),
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.history),
+          iconRes = R.drawable.ic_history_24px,
+          visible = true,
+          onClick = { openHistory() },
+          testingTag = LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG
+        ),
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.pref_notes),
+          iconRes = R.drawable.ic_add_note,
+          visible = true,
+          onClick = { openNotes() },
+          testingTag = LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
+        ),
+        zimHostDrawerMenuItem
+      )
+    )
+  }
+
+  private val settingDrawerGroup by lazy {
+    DrawerMenuGroup(
+      listOf(
+        DrawerMenuItem(
+          title = CoreApp.instance.getString(R.string.menu_settings),
+          iconRes = R.drawable.ic_settings_24px,
+          visible = true,
+          onClick = { openSettings() },
+          testingTag = LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
+        )
+      )
+    )
+  }
+
+  private val helpAndSupportDrawerGroup by lazy {
+    DrawerMenuGroup(
+      listOfNotNull(
+        helpDrawerMenuItem,
+        supportDrawerMenuItem,
+        aboutAppDrawerMenuItem
+      )
+    )
+  }
+
+  /**
+   * Returns the "Wi-Fi Hotspot" menu item in the left drawer.
+   * Currently, this feature is only included in the main Kiwix app.
+   * Custom apps do not include this item.
+   */
+  abstract val zimHostDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "Help" menu item in the left drawer.
+   * In custom apps, this item is hidden.
+   * Each app (main Kiwix or custom) provides its own implementation.
+   */
+  abstract val helpDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "Support" menu item in the left drawer.
+   * In custom apps, this item displays the application name dynamically.
+   * Child activities are responsible for defining this drawer item.
+   */
+  abstract val supportDrawerMenuItem: DrawerMenuItem?
+
+  /**
+   * Returns the "About App" menu item in the left drawer.
+   * For custom apps, this item is shown if configured.
+   * It is not included in the main Kiwix app.
+   * Child activities are responsible for defining this drawer item.
+   */
+  abstract val aboutAppDrawerMenuItem: DrawerMenuItem?
+
+  protected val leftNavigationDrawerMenuItems by lazy {
+    listOf<DrawerMenuGroup>(
+      bookRelatedDrawerGroup,
+      settingDrawerGroup,
+      helpAndSupportDrawerGroup
+    )
   }
 
   protected abstract fun getIconResId(): Int
-  abstract val readerFragmentResId: Int
+  abstract val readerFragmentRoute: String
   abstract fun createApplicationShortcuts()
-  abstract fun setDialogHostToActivity(alertDialogShower: AlertDialogShower)
-
-  /**
-   * This is for showing and hiding the bottomNavigationView when user scroll the screen.
-   * We are making this abstract so that it can be easily used from the reader screen.
-   * Since we do not have the bottomNavigationView in custom apps. So doing this way both apps will
-   * provide there own implementation.
-   *
-   * TODO we will remove this once we will migrate mainActivity to the compose.
-   */
-  abstract fun toggleBottomNavigation(isVisible: Boolean)
+  abstract fun hideBottomAppBar()
+  abstract fun showBottomAppBar()
 }
