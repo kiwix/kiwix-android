@@ -17,6 +17,9 @@
  */
 package org.kiwix.kiwixmobile.download
 
+import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -24,6 +27,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -59,9 +63,12 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
+
+const val TWO_MINUTES_IN_MILLISECONDS = 2 * 60 * 1000
 
 @LargeTest
 class DownloadTest : BaseActivityTest() {
@@ -230,6 +237,52 @@ class DownloadTest : BaseActivityTest() {
       Assert.fail(
         "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
       )
+    }
+  }
+
+  @Test
+  fun downloadZIMFileInBackground() {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Library.route)
+    }
+    // delete all the ZIM files showing in the LocalLibrary
+    // screen to properly test the scenario.
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+    downloadRobot {
+      clickDownloadOnBottomNav(composeTestRule)
+      waitForDataToLoad(composeTestRule = composeTestRule)
+      stopDownloadIfAlreadyStarted(composeTestRule)
+      searchZappingSauvageFile(composeTestRule)
+      downloadZimFile(composeTestRule)
+      assertDownloadStart(composeTestRule)
+    }
+    // press the home button so that application goes into background
+    InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
+      AccessibilityService.GLOBAL_ACTION_HOME
+    )
+    // wait for 2 minutes to download the ZIM file in background.
+    composeTestRule.waitUntilTimeout(TWO_MINUTES_IN_MILLISECONDS.toLong())
+    // relaunch the application.
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    context.startActivity(intent)
+    InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Library.route)
+    }
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      downloadRobot {
+        checkIfZimFileDownloaded(composeTestRule)
+      }
     }
   }
 

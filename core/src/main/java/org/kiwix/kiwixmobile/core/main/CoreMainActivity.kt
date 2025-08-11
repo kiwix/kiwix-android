@@ -60,7 +60,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -351,9 +350,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun activeFragments(): MutableList<Fragment> =
-    supportFragmentManager.fragments.also {
-      Log.d("Fragments", "Found fragments: ${supportFragmentManager.fragments}")
-    }
+    supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
     navController.currentDestination?.getAction(action.actionId)?.run {

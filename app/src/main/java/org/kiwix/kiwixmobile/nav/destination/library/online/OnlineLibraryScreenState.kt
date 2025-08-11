@@ -31,10 +31,6 @@ data class OnlineLibraryScreenState(
    */
   val onlineLibraryList: List<LibraryListItem>?,
   /**
-   * Stores the height of the bottom navigation bar in pixels.
-   */
-  val bottomNavigationHeight: Int,
-  /**
    * Controls the visibility and behavior of the "Pull to refresh" animation.
    *
    *  - [Boolean]: The first boolean triggers/hides the "pull to refresh" animation.

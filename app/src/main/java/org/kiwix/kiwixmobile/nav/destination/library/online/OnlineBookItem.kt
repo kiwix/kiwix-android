@@ -206,7 +206,9 @@ private fun BookSizeAndDateRow(item: BookItem) {
   ) {
     BookSize(
       Byte(item.book.size).humanReadable,
-      modifier = Modifier.weight(1f).testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
+      modifier = Modifier
+        .weight(1f)
+        .testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
     )
     BookDate(item.book.date)
   }
