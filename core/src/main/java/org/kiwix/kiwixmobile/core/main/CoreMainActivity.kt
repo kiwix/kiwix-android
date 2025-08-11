@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -247,7 +248,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   private fun startMonitoringDownloads() {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
-      startService(Intent(this, DownloadMonitorService::class.java))
+      startService(
+        Intent(this, DownloadMonitorService::class.java).apply {
+          putExtra(APP_NAME_KEY, appName)
+        }
+      )
     }
   }
 

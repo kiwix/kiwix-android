@@ -19,11 +19,11 @@
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -52,6 +53,8 @@ import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import javax.inject.Inject
 
 const val THIRTY_TREE = 33
+const val DOWNLOAD_SERVICE_NOTIFICATION_ID = 1
+const val APP_NAME_KEY = "appNameKey"
 
 @Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
@@ -59,7 +62,7 @@ class DownloadMonitorService : Service() {
   private var updaterJob: Job? = null
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
   private val notificationManager: NotificationManager by lazy {
-    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    getSystemService(NOTIFICATION_SERVICE) as NotificationManager
   }
   private val downloadNotificationsBuilderMap = mutableMapOf<Int, NotificationCompat.Builder>()
 
@@ -71,6 +74,7 @@ class DownloadMonitorService : Service() {
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
+  private var appName: String? = "kiwix"
 
   override fun onCreate() {
     CoreApp.coreComponent
@@ -81,18 +85,15 @@ class DownloadMonitorService : Service() {
     super.onCreate()
     setupUpdater()
     fetch.addListener(fetchListener, true)
-    setForegroundNotification()
+    showDownloadServiceForegroundNotification()
   }
 
-  @Suppress("TooGenericExceptionCaught")
   private fun setupUpdater() {
     updaterJob = scope.launch {
       taskFlow.collect { task ->
-        try {
+        runCatching {
           task.invoke()
-        } catch (e: Exception) {
-          e.printStackTrace()
-        }
+        }.onFailure { it.printStackTrace() }
       }
     }
   }
@@ -100,60 +101,49 @@ class DownloadMonitorService : Service() {
   override fun onBind(intent: Intent?): IBinder? = null
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    if (intent?.hasExtra(APP_NAME_KEY) == true) {
+      appName = intent.getStringExtra(APP_NAME_KEY)
+    }
     if (intent?.action == STOP_DOWNLOAD_SERVICE) {
       stopForegroundServiceForDownloads()
     }
-    return START_NOT_STICKY
+    return START_STICKY
   }
 
   /**
-   * Sets the foreground notification for the service.
-   * This notification is used to display the current download progress,
-   * and it is updated dynamically based on the state of the downloads.
+   * Shows a persistent foreground notification while at least one download is active.
+   * The notification remains visible until all downloads are complete or stopped.
    *
-   * The method checks for any active downloads and, if found, updates the notification
-   * with the latest download progress. If there are no active downloads,
-   * the service is stopped and removed from the foreground. Additionally, if the user cancels a
-   * download, the corresponding notification is immediately removed to reflect the cancellation.
+   * Keeping this notification active ensures that the DownloadMonitorService
+   * stays alive and prevents common issues such as
+   * [android.app.ForegroundServiceStartNotAllowedException] that can occur
+   * when trying to set a new foreground notification for another download
+   * after one has completed while the app is in the background.
    *
-   * @param downloadId Optional parameter representing the ID of the download whose notification
-   *                   should be canceled if the user cancels the download.
+   * In short, this method ensures a foreground notification is maintained
+   * until there are no active downloads, at which point the service is stopped.
    */
-  private fun setForegroundNotification(downloadId: Int? = null) {
-    taskFlow.tryEmit {
-      // Cancel the ongoing download notification if the user cancels the download.
-      downloadId?.let(::cancelNotificationForId)
-      fetch.getDownloads { downloadList ->
-        downloadList.firstOrNull {
-          it.status == Status.NONE ||
-            it.status == Status.ADDED ||
-            it.status == Status.QUEUED ||
-            it.status == Status.DOWNLOADING ||
-            it.isPaused()
-        }?.let(::setForegroundNotificationForDownload) ?: kotlin.run {
-          stopForegroundServiceForDownloads()
-          // Cancel the last ongoing notification after detaching it from
-          // the foreground service if no active downloads are found.
-          downloadId?.let(::cancelNotificationForId)
-        }
+  private fun showDownloadServiceForegroundNotification() {
+    fetch.getDownloadsWithStatus(
+      listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
+    ) { activeDownloads ->
+      if (activeDownloads.isNotEmpty()) {
+        downloadNotificationChannel()
+        startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
+      } else {
+        // Stop the foreground service if no active downloads.
+        stopForegroundServiceForDownloads()
       }
     }
   }
 
-  private fun setForegroundNotificationForDownload(it: Download) {
-    val notificationBuilder =
-      fetchDownloadNotificationManager.getNotificationBuilder(it.id, it.id)
-    var foreGroundServiceNotification = notificationBuilder.build()
-    if (it.isPaused()) {
-      // Clear any pending actions on this notification builder.
-      notificationBuilder.clearActions()
-      // If a download is paused that means there is no notification for it, so we have to
-      // show our custom cancel notification.
-      foreGroundServiceNotification =
-        fetchDownloadNotificationManager.getCancelNotification(fetch, it, notificationBuilder)
-    }
-    startForeground(it.id, foreGroundServiceNotification)
-  }
+  private fun buildForegroundNotification(): Notification =
+    NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+      .setContentTitle(appName)
+      .setContentText(getString(string.download_notification_channel_description))
+      .setSmallIcon(R.mipmap.ic_launcher)
+      .setWhen(System.currentTimeMillis())
+      .build()
 
   private fun cancelNotificationForId(downloadId: Int) {
     notificationManager.cancel(downloadId)
@@ -226,14 +216,14 @@ class DownloadMonitorService : Service() {
 
     private fun update(
       download: Download,
-      shouldSetForegroundNotification: Boolean = false
+      updateForeGroundService: Boolean = false
     ) {
       taskFlow.tryEmit {
         downloadRoomDao.update(download)
         if (download.status == Status.COMPLETED) {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
-            // to move these downloads in NewBookDao.
+            // to move these downloads in LibkiwixBookOnDisk.
             @Suppress("IgnoredReturnValue")
             downloadRoomDao.downloads().first()
           }
@@ -241,12 +231,10 @@ class DownloadMonitorService : Service() {
         // If someone pause the Download then post a notification since fetch removes the
         // notification for ongoing download when pause so we needs to show our custom notification.
         if (download.isPaused()) {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download).also {
-            setForeGroundServiceNotificationIfNoActiveDownloads(fetch, download)
-          }
+          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
         }
-        if (shouldSetForegroundNotification) {
-          setForegroundNotification(download.id)
+        if (updateForeGroundService) {
+          stopForegroundServiceIfNoActiveDownloads(fetch)
         }
       }
     }
@@ -254,15 +242,12 @@ class DownloadMonitorService : Service() {
     private fun delete(download: Download) {
       taskFlow.tryEmit {
         downloadRoomDao.delete(download)
-        setForegroundNotification(download.id)
+        stopForegroundServiceIfNoActiveDownloads(fetch)
       }
     }
   }
 
-  private fun setForeGroundServiceNotificationIfNoActiveDownloads(
-    fetch: Fetch,
-    download: Download
-  ) {
+  private fun stopForegroundServiceIfNoActiveDownloads(fetch: Fetch) {
     taskFlow.tryEmit {
       // Check if there are any ongoing downloads.
       // If the list is empty, it means no other downloads are running,
@@ -271,14 +256,13 @@ class DownloadMonitorService : Service() {
         listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING)
       ) { activeDownloads ->
         if (activeDownloads.isEmpty()) {
-          setForegroundNotificationForDownload(download)
+          stopForegroundServiceForDownloads()
         }
       }
     }
   }
 
   private fun showDownloadCompletedNotification(download: Download) {
-    downloadNotificationChannel()
     val notificationBuilder = getNotificationBuilder(download.id)
     val notificationTitle =
       downloadRoomDao.getEntityForFileName(getDownloadNotificationTitle(download))?.title
@@ -302,6 +286,8 @@ class DownloadMonitorService : Service() {
     // Cancel the complete download notification if already shown due to the application's
     // lifecycle fetch. See #4237 for more details.
     cancelNotificationForId(download.id - THIRTY_TREE)
+    // Cancel the fetch related any notification if present.
+    cancelNotificationForId(download.id)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
 
@@ -334,6 +320,7 @@ class DownloadMonitorService : Service() {
       getString(string.download_notification_channel_name),
       NotificationManager.IMPORTANCE_HIGH
     ).apply {
+      description = getString(string.download_notification_channel_description)
       setSound(null, null)
       enableVibration(false)
     }
@@ -371,7 +358,7 @@ class DownloadMonitorService : Service() {
   private fun stopForegroundServiceForDownloads() {
     updaterJob?.cancel()
     fetch.removeListener(fetchListener)
-    stopForeground(STOP_FOREGROUND_DETACH)
+    stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
   }
 
