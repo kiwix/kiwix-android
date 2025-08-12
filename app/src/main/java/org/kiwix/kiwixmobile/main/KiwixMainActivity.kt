@@ -46,6 +46,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -368,7 +369,8 @@ class KiwixMainActivity : CoreMainActivity() {
         searchString = searchString,
         isOpenedFromTabView = isOpenedFromTabView,
         isVoice = isVoice
-      )
+      ),
+      NavOptions.Builder().setPopUpTo(searchFragmentRoute, inclusive = true).build()
     )
   }
 
