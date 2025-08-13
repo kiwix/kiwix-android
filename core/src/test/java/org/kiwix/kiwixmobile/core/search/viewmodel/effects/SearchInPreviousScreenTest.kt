@@ -19,12 +19,13 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import android.content.Intent
+import androidx.navigation.NavHostController
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.verify
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 
@@ -33,11 +34,20 @@ internal class SearchInPreviousScreenTest {
   fun `invoke with returns positive result with string to previous screen`() {
     val searchString = "search"
     mockkConstructor(Intent::class)
-    val activity = mockk<CoreMainActivity>(relaxed = true)
+
+    // Mock the activity & navController
+    val mockNavController = mockk<NavHostController>(relaxed = true)
+    val activity = mockk<CoreMainActivity>(relaxed = true) {
+      every { readerFragmentRoute } returns "readerRoute"
+      every { navController } returns mockNavController
+    }
+
     SearchInPreviousScreen(searchString).invokeWith(activity)
-    verify {
-      activity.setNavigationResult(searchString, FIND_IN_PAGE_SEARCH_STRING)
-      activity.popNavigationBackstack()
+
+    verifyOrder {
+      mockNavController.popBackStack("readerRoute", true)
+      mockNavController.navigate("readerRoute")
+      activity.setNavigationResultOnCurrent(searchString, FIND_IN_PAGE_SEARCH_STRING)
     }
   }
 }

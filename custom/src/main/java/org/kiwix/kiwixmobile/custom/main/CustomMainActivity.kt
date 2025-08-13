@@ -29,6 +29,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
@@ -182,7 +183,8 @@ class CustomMainActivity : CoreMainActivity() {
         searchString = searchString,
         isOpenedFromTabView = isOpenedFromTabView,
         isVoice = isVoice
-      )
+      ),
+      NavOptions.Builder().setPopUpTo(searchFragmentRoute, inclusive = true).build()
     )
   }
 
