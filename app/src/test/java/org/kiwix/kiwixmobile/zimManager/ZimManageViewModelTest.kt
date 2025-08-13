@@ -302,18 +302,22 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `updateOnlineLibraryFilters updates onlineLibraryRequest`() = runTest {
-    val newRequest = ZimManageViewModel.OnlineLibraryRequest(
-      query = "test",
-      category = "cat",
-      lang = "en",
-      page = 2,
-      isLoadMoreItem = true
-    )
-    viewModel.onlineLibraryRequest.test {
-      skipItems(1)
-      viewModel.updateOnlineLibraryFilters(newRequest)
-      assertThat(awaitItem()).isEqualTo(newRequest)
+  fun `updateOnlineLibraryFilters updates onlineLibraryRequest`() = flakyTest {
+    runTest {
+      viewModel.setIsUnitTestCase()
+      val newRequest = ZimManageViewModel.OnlineLibraryRequest(
+        query = "test",
+        category = "cat",
+        lang = "en",
+        page = 2,
+        isLoadMoreItem = true,
+        version = 100L
+      )
+      viewModel.onlineLibraryRequest.test {
+        skipItems(1)
+        viewModel.updateOnlineLibraryFilters(newRequest)
+        assertThat(awaitItem()).isEqualTo(newRequest)
+      }
     }
   }
 
