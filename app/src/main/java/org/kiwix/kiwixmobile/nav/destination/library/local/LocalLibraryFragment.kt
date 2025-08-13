@@ -144,8 +144,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       swipeRefreshItem = Pair(false, true),
       scanningProgressItem = Pair(false, ZERO),
       noFilesViewItem = Triple("", "", false),
-      actionMenuItems = listOf(),
-      bottomNavigationHeight = ZERO
+      actionMenuItems = listOf()
     )
   )
 
@@ -187,10 +186,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       setContent {
         val lazyListState = rememberLazyListState()
         LaunchedEffect(Unit) {
-          updateLibraryScreenState(
-            bottomNavigationHeight = getBottomNavigationHeight(),
-            actionMenuItems = actionMenuItems()
-          )
+          updateLibraryScreenState(actionMenuItems = actionMenuItems())
         }
         LocalLibraryScreen(
           listState = lazyListState,
@@ -266,8 +262,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     swipeRefreshItem: Pair<Boolean, Boolean>? = null,
     scanningProgressItem: Pair<Boolean, Int>? = null,
     noFilesViewItem: Triple<String, String, Boolean>? = null,
-    actionMenuItems: List<ActionMenuItem>? = null,
-    bottomNavigationHeight: Int? = null
+    actionMenuItems: List<ActionMenuItem>? = null
   ) {
     libraryScreenState.value = libraryScreenState.value.copy(
       fileSelectListState = fileSelectListState ?: libraryScreenState.value.fileSelectListState,
@@ -276,9 +271,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       scanningProgressItem = scanningProgressItem
         ?: libraryScreenState.value.scanningProgressItem,
       noFilesViewItem = noFilesViewItem ?: libraryScreenState.value.noFilesViewItem,
-      actionMenuItems = actionMenuItems ?: libraryScreenState.value.actionMenuItems,
-      bottomNavigationHeight = bottomNavigationHeight
-        ?: libraryScreenState.value.bottomNavigationHeight
+      actionMenuItems = actionMenuItems ?: libraryScreenState.value.actionMenuItems
     )
   }
 
@@ -362,12 +355,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       )
     }
   }
-
-  // private fun getBottomNavigationView() =
-  //   requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-
-  private fun getBottomNavigationHeight() = ZERO
-  // getBottomNavigationView().measuredHeight
 
   private fun filePickerButtonClick() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {

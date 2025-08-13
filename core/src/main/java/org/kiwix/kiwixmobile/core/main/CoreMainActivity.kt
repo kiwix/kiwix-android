@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -59,7 +60,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -247,7 +247,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   private fun startMonitoringDownloads() {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
-      startService(Intent(this, DownloadMonitorService::class.java))
+      startService(
+        Intent(this, DownloadMonitorService::class.java).apply {
+          putExtra(APP_NAME_KEY, appName)
+        }
+      )
     }
   }
 
@@ -346,9 +350,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun activeFragments(): MutableList<Fragment> =
-    supportFragmentManager.fragments.also {
-      Log.d("Fragments", "Found fragments: ${supportFragmentManager.fragments}")
-    }
+    supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
     navController.currentDestination?.getAction(action.actionId)?.run {

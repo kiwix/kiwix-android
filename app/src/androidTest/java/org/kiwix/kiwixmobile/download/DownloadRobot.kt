@@ -26,6 +26,7 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
@@ -57,6 +58,7 @@ fun downloadRobot(func: DownloadRobot.() -> Unit) =
   DownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class DownloadRobot : BaseRobot() {
+  private val searchZIMFileTitle = "Zapping Sauvage"
   fun clickLibraryOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitUntilTimeout()
@@ -133,6 +135,27 @@ class DownloadRobot : BaseRobot() {
       // check if "No files here" text is not visible on
       // screen that means zim file is downloaded successfully.
     }
+  }
+
+  fun searchZappingSauvageFile(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle() // let the compose settle.
+        runCatching {
+          // if searchView already opened do nothing.
+          onNodeWithTag(ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG).assertExists()
+        }.onFailure {
+          // if searchView is not opened then open it.
+          onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+        }
+        waitForIdle()
+        onNodeWithTag(ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG).apply {
+          performTextClearance()
+          performTextInput(searchZIMFileTitle)
+        }
+        waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      }
+    })
   }
 
   private fun refreshOnlineList(composeTestRule: ComposeContentTestRule) {

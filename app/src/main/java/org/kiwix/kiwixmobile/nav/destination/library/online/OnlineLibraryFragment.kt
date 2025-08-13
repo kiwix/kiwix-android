@@ -58,7 +58,6 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
@@ -129,7 +128,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         isRefreshing = false,
         scanningProgressItem = Pair(false, ""),
         noContentViewItem = Pair("", false),
-        bottomNavigationHeight = ZERO,
         onBookItemClick = { onBookItemClick(it) },
         availableSpaceCalculator = availableSpaceCalculator,
         onRefresh = { refreshFragment(true) },
@@ -209,12 +207,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     composeView = it
   }
 
-  // private fun getBottomNavigationView() =
-  //   requireActivity().findViewById<BottomNavigationView>(org.kiwix.kiwixmobile.R.id.bottom_nav_view)
-
-  private fun getBottomNavigationHeight() = ZERO
-  // getBottomNavigationView().measuredHeight
-
   private fun onPauseResumeButtonClick(item: LibraryListItem.LibraryDownloadItem) {
     context?.let { context ->
       if (isNotConnected) {
@@ -251,7 +243,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       LaunchedEffect(Unit) {
         onlineLibraryScreenState.value.update {
           copy(
-            bottomNavigationHeight = getBottomNavigationHeight(),
             isSearchActive = isSearchActive,
             scanningProgressItem = false to getString(R.string.reaching_remote_library)
           )

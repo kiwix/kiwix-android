@@ -65,9 +65,5 @@ data class LocalLibraryScreenState(
   /**
    * Represents a list of action menu items available in the screen's top app bar.
    */
-  val actionMenuItems: List<ActionMenuItem>,
-  /**
-   * Stores the height of the bottom navigation bar in pixels.
-   */
-  val bottomNavigationHeight: Int
+  val actionMenuItems: List<ActionMenuItem>
 )

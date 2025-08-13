@@ -255,7 +255,7 @@ class FetchDownloadNotificationManager @Inject constructor(
   }
 
   @Suppress("InjectDispatcher")
-  fun getCancelNotification(
+  private fun getCancelNotification(
     fetch: Fetch,
     download: Download,
     notificationBuilder: Builder
