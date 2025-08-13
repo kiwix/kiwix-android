@@ -37,6 +37,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.navOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -360,6 +362,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   fun navigate(route: String, navOptions: NavOptions? = null) {
     navController.navigate(route, navOptions)
+  }
+
+  fun navigate(route: String, builder: NavOptionsBuilder.() -> Unit) {
+    navigate(route, navOptions(builder))
   }
 
   private fun openSettings() {

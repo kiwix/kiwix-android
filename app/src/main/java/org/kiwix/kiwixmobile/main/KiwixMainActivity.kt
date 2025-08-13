@@ -47,6 +47,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -268,7 +269,13 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleGetContentIntent(intent: Intent?) {
     if (intent?.action == ACTION_GET_CONTENT) {
-      navigate(KiwixDestination.Downloads.route)
+      navigate(KiwixDestination.Downloads.route) {
+        launchSingleTop = true
+        popUpTo(navController.graph.findStartDestination().id) {
+          saveState = true
+        }
+        restoreState = true
+      }
     }
   }
 

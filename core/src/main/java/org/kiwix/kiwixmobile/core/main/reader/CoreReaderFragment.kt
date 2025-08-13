@@ -338,6 +338,13 @@ abstract class CoreReaderFragment :
       return readerLifeCycleScope
     }
 
+  /**
+   * Handles actions that require the ZIM file to be fully loaded in the reader
+   * before opening the search screen. The search screen depends on the ZIM file,
+   * as its results come from the ZimFileReader.
+   */
+  private var pendingIntent: Intent? = null
+
   private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
     registerForActivityResult(
       ActivityResultContracts.RequestPermission()
@@ -1073,6 +1080,7 @@ abstract class CoreReaderFragment :
     super.onDestroyView()
     findInPageTitle = null
     searchItemToOpen = null
+    pendingIntent = null
     try {
       coreReaderLifeCycleScope?.cancel()
       readerLifeCycleScope?.cancel()
@@ -1907,12 +1915,15 @@ abstract class CoreReaderFragment :
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
-  private fun handleIntentActions(intent: Intent) {
-    Log.d(TAG_KIWIX, "action" + requireActivity().intent?.action)
-    startIntentBasedOnAction(intent)
+  private fun handlePendingIntent() {
+    pendingIntent?.let {
+      startIntentBasedOnAction(it)
+    }
+    pendingIntent = null
   }
 
   private fun startIntentBasedOnAction(intent: Intent?) {
+    Log.d(TAG_KIWIX, "action" + requireActivity().intent?.action)
     when (intent?.action) {
       Intent.ACTION_PROCESS_TEXT -> {
         goToSearchWithText(intent)
@@ -1981,7 +1992,7 @@ abstract class CoreReaderFragment :
     intent: Intent,
     activity: AppCompatActivity
   ): FragmentActivityExtensions.Super {
-    handleIntentActions(intent)
+    pendingIntent = intent
     return FragmentActivityExtensions.Super.ShouldCall
   }
 
@@ -2483,6 +2494,8 @@ abstract class CoreReaderFragment :
       }
       if (webViewHistoryList.isEmpty()) {
         restoreViewStateOnInvalidWebViewHistory()
+        // handle the pending intent if any present.
+        handlePendingIntent()
         return
       }
       restoreViewStateOnValidWebViewHistory(
@@ -2499,6 +2512,7 @@ abstract class CoreReaderFragment :
         searchItemToOpen = null
         findInPageTitle?.let(::findInPage)
         findInPageTitle = null
+        handlePendingIntent()
       }
     } catch (e: Exception) {
       Log.e(
@@ -2506,6 +2520,8 @@ abstract class CoreReaderFragment :
         "Could not restore tabs. Original exception = ${e.printStackTrace()}"
       )
       restoreViewStateOnInvalidWebViewHistory()
+      // handle the pending intent if any present.
+      handlePendingIntent()
     }
   }
 
