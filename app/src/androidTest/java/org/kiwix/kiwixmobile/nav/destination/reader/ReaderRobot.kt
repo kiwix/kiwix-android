@@ -30,6 +30,7 @@ fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyP
 class ReaderRobot : BaseRobot() {
   fun assertReaderScreenDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
+      waitForIdle()
       waitUntilTimeout()
       onNodeWithTag(READER_SCREEN_TESTING_TAG).assertExists()
     }
