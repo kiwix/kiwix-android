@@ -132,10 +132,12 @@ class BookmarksRobot : BaseRobot() {
 
   fun assertBookmarkSaved(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    composeTestRule.apply {
-      waitForIdle()
-      onNodeWithText("Test Zim").assertExists()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithText("Test Zim").assertExists()
+      }
+    })
   }
 
   fun assertBookmarkRemoved(composeTestRule: ComposeTestRule) {
