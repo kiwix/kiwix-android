@@ -18,11 +18,15 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
+import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
@@ -128,8 +132,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
           navOptions
         )
       }
-      waitForIdle()
-      waitUntilTimeout() // to load the ZIM file properly.
+      waitComposeToSettleViews() // to load the ZIM file properly.
     }
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
@@ -139,40 +142,47 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
-      composeTestRule.apply {
-        waitForIdle()
-        waitUntilTimeout()
-      }
+      waitComposeToSettleViews()
       // Test saving bookmark
       clickOnSaveBookmarkImage(composeTestRule)
       openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertBookmarkSaved(composeTestRule)
       pressBack()
       // Test removing bookmark
-      composeTestRule.apply {
-        waitForIdle()
-        waitUntilTimeout()
-      }
+      waitComposeToSettleViews()
       clickOnSaveBookmarkImage(composeTestRule)
       longClickOnSaveBookmarkImage(composeTestRule, TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       assertBookmarkRemoved(composeTestRule)
       pressBack()
       // Save the bookmark to test whether it remains saved after the application restarts or not.
-      composeTestRule.apply {
-        waitForIdle()
-        waitUntilTimeout()
-      }
+      waitComposeToSettleViews()
       clickOnSaveBookmarkImage(composeTestRule)
+      waitComposeToSettleViews()
+      // Close the application.
+      InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
+        AccessibilityService.GLOBAL_ACTION_HOME
+      )
+      // wait a bit
+      waitComposeToSettleViews()
+      // reopen the application to test that book remains saved or not.
+      val context = ApplicationProvider.getApplicationContext<Context>()
+      val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+      intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+      context.startActivity(intent)
+      InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+      waitComposeToSettleViews()
+      topLevel {
+        clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity, composeTestRule) {
+          assertBookmarkSaved(composeTestRule)
+        }
+      }
     }
   }
 
-  @Test
-  fun testBookmarkRemainsSavedOrNot() {
-    composeTestRule.waitForIdle()
-    topLevel {
-      clickBookmarksOnNavDrawer(kiwixMainActivity as CoreMainActivity, composeTestRule) {
-        assertBookmarkSaved(composeTestRule)
-      }
+  private fun waitComposeToSettleViews() {
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntilTimeout()
     }
   }
 
@@ -201,7 +211,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
     }
-    composeTestRule.waitUntilTimeout()
+    waitComposeToSettleViews()
     val coreReaderFragment = kiwixMainActivity.supportFragmentManager.fragments
       .filterIsInstance<CoreReaderFragment>()
       .firstOrNull()

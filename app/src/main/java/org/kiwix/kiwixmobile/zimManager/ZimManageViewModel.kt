@@ -155,7 +155,9 @@ class ZimManageViewModel @Inject constructor(
     val category: String? = null,
     val lang: String? = null,
     val isLoadMoreItem: Boolean,
-    val page: Int
+    val page: Int,
+    // Bug Fix #4381
+    val version: Long = System.nanoTime()
   )
 
   data class OnlineLibraryResult(
@@ -371,7 +373,20 @@ class ZimManageViewModel @Inject constructor(
         category = newRequest.category ?: current.category,
         lang = newRequest.lang ?: current.lang,
         page = newRequest.page,
-        isLoadMoreItem = newRequest.isLoadMoreItem
+        isLoadMoreItem = newRequest.isLoadMoreItem,
+        version = if (isUnitTestCase) {
+          // In unit tests, we want predictable and testable values,
+          // so use the provided version instead of a dynamic timestamp.
+          newRequest.version
+        } else {
+          // Bug Fix #4381:
+          // Force StateFlow to emit even if all other fields are unchanged.
+          // Without this, identical requests may not trigger observers,
+          // causing the UI not to refresh.
+          // Using System.nanoTime() ensures a unique value each time,
+          // guaranteeing that collectors receive an update.
+          System.nanoTime()
+        }
       )
     }
   }
