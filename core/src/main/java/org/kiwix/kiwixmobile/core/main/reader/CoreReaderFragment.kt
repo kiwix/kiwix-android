@@ -482,7 +482,7 @@ abstract class CoreReaderFragment :
           mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
           documentSections = documentSections,
           showTableOfContentDrawer = shouldTableOfContentDrawer,
-          onUserBackPressed = { onUserBackPressed(requireActivity() as CoreMainActivity) },
+          onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
           navHostController = (requireActivity() as CoreMainActivity).navController
         )
         DialogHost(alertDialogShower as AlertDialogShower)
@@ -852,12 +852,10 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("ReturnCount", "NestedBlockDepth", "LongMethod", "CyclomaticComplexMethod")
-  private fun onUserBackPressed(coreMainActivity: CoreMainActivity): FragmentActivityExtensions.Super {
+  private fun onUserBackPressed(coreMainActivity: CoreMainActivity?): FragmentActivityExtensions.Super {
     when {
-      coreMainActivity.leftDrawerState.isOpen -> {
-        coreMainActivity.uiCoroutineScope.launch {
-          coreMainActivity.leftDrawerState.close()
-        }
+      coreMainActivity?.navigationDrawerIsOpen() == true -> {
+        coreMainActivity.closeNavigationDrawer()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
 
@@ -909,8 +907,8 @@ abstract class CoreReaderFragment :
             isHomePageOfServiceWorkerZimFiles(url, webViewBackWordHistoryList)
           ) {
             // If it is the last page that is showing to the user, then exit the application.
-            if (coreMainActivity.navController.previousBackStackEntry?.destination?.route !=
-              coreMainActivity.searchFragmentRoute
+            if (coreMainActivity?.navController?.previousBackStackEntry?.destination?.route !=
+              coreMainActivity?.searchFragmentRoute
             ) {
               activity?.finish()
             }

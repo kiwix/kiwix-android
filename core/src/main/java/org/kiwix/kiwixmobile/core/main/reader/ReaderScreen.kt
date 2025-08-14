@@ -262,10 +262,17 @@ fun OnBackPressed(
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController
 ) {
-  BackHandler(enabled = true) {
+  // Tracks whether the fragment's BackHandler should be enabled.
+  var shouldEnableBackPress by remember { mutableStateOf(true) }
+  BackHandler(enabled = shouldEnableBackPress) {
     val result = onUserBackPressed()
     if (result == FragmentActivityExtensions.Super.ShouldCall) {
+      // Disable the fragment's BackHandler so that MainActivity's back handler can be triggered.
+      shouldEnableBackPress = false
       navHostController.popBackStack()
+    } else {
+      // Keep the fragment's BackHandler active.
+      shouldEnableBackPress = true
     }
   }
 }
