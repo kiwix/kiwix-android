@@ -29,6 +29,7 @@
   <string name="save_media_error">Pri poskusu shranjevanja predstavnosti je prišlo do napake!</string>
   <string name="save_media_saved">Shrani medij kot %s na Downloads/org.kiwix…/</string>
   <string name="search_label">Iskanje</string>
+  <string name="searched_list">Preiskani seznam</string>
   <string name="choose_file">Izberite vsebinsko datoteko (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo na novem zavihku?</string>
   <string name="hotspot_service_channel_name">Kanal storitve dostopne točke</string>
@@ -58,12 +59,15 @@
   <string name="error_server_already_running">Strežnik že deluje. Izklopite ga in poskusite znova.</string>
   <string name="error_ip_address_not_found">IP-naslova ni bilo mogoče najti.</string>
   <string name="server_started_message">Za dostop do strežnika %s vnesite v brskalnik ta lP-naslov</string>
+  <string name="qr_code">Upodobljena koda QR</string>
   <string name="share_host_address">Delite URL z drugimi aplikacijami</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni bilo mogoče najti. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">Te datoteke ZIM ni mogoče prebrati!</string>
-  <string name="zim_not_opened" fuzzy="true">Datoteke ZIM ni mogoče odpreti</string>
-  <string name="error_file_invalid" fuzzy="true">Napaka: izbrana datoteka ni veljavna datoteka ZIM. %s</string>
+  <string name="unable_to_read_zim_file">Te datoteke ZIM ni mogoče prebrati!</string>
+  <string name="zim_not_opened">Datoteke ZIM ni mogoče odpreti</string>
+  <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM. %s</string>
   <string name="error_article_url_not_found">Napaka: Nalaganje članka (url: %1$s) ni uspelo.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Članka ni mogoče naložiti. Datoteka ZIM ni pravilno naložena.</string>
+  <string name="could_not_find_random_article">Naključnega članka ni mogoče najti. Poskusite znova pozneje.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Različica</string>
@@ -78,9 +82,10 @@
   <string name="tts_lang_not_supported">Jezik na tej strani ni podprt. Članek mogoče ne bo pravilno prebran.</string>
   <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
   <string name="no_email_application_installed">Prosimo, namestite e-poštni odjemalec</string>
+  <string name="no_app_found_to_select_bookmark_file">Ni najdene aplikacije za izbiro datoteke z zaznamki</string>
   <string name="no_section_info">Ni najdene vsebine glave</string>
   <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega prostora za shranjevanje</string>
-  <string name="request_write_storage" fuzzy="true">Za prenos datotek ZIM potrebujemo dostop za zapisovanje v vaš prostor za shranjevanje</string>
+  <string name="request_write_storage">Za prenos datotek ZIM potrebujemo dostop za zapisovanje v vaš prostor za shranjevanje</string>
   <string name="clear_recent_and_tabs_history_dialog">Ali svojo zgodovino iskanja res želite izbrisati in ponastaviti vse aktivne zavihke?</string>
   <string name="delete_recent_search_item">Izbrišem ta element?</string>
   <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
@@ -91,6 +96,7 @@
   <string name="pref_import_bookmark_summary">Uvozite shranjene zaznamke</string>
   <string name="pref_export_bookmark_title">Izvozi zaznamke</string>
   <string name="pref_export_bookmark_summary">Izvozite vse shranjene zaznamke</string>
+  <string name="export_bookmark_saved">Zaznamki so izvoženi v datoteko %s</string>
   <string name="all_history_cleared">Vsa zgodovina izbrisana</string>
   <string name="pref_clear_all_bookmarks_title">Počisti zaznamke</string>
   <string name="clear_all_history_dialog_title">Počistim vso zgodovino?</string>
@@ -123,12 +129,14 @@
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
   <string name="library">Knjižnica</string>
-  <string name="delete_zim_body" fuzzy="true">Naslednja(e) datoteka(e) ZIM bo(do) izbrisana(e):\n\n%s</string>
+  <string name="delete_zim_body">Naslednja(e) datoteka(e) ZIM bo(do) izbrisana(e):\n\n%s</string>
   <string name="delete_zims_toast">Datoteka je izbrisana</string>
   <string name="no_files_here">Tukaj ni datotek</string>
   <string name="download_no_space">Premalo prostora za prenos.</string>
   <string name="download">Prenosi</string>
+  <string name="download_notification_channel_name">Ime kanala za obveščanje o prenosih</string>
   <string name="space_available">Razpoložljivi prostor:</string>
+  <string name="move_no_space">Premalo prostora za premik/kopiranje.</string>
   <string name="zim_simple">Preprosto</string>
   <string name="zim_no_pic">Ni slik</string>
   <string name="zim_no_vid">Ni videoposnetkov</string>
@@ -141,23 +149,30 @@
   <string name="help_7">Na voljo je v obliki datotek ZIM. Veliko jih je:</string>
   <string name="help_8">• Wikipedija je na voljo za vsak jezik posebej.</string>
   <string name="help_9">• Na voljo so tudi druge vsebine, npr. WikiLeaks ali Wikivir.</string>
-  <string name="help_10" fuzzy="true">Pred prenosom datotek ZIM na kartico SD lahko prenesete izbrane datoteke ZIM v aplikaciji ali pazljivo izberete želeno(e) in jo(jih) prenesete z namiznega računalnika.</string>
+  <string name="help_10">Pred prenosom datotek ZIM na kartico SD lahko prenesete izbrane datoteke ZIM v aplikaciji ali pazljivo izberete želeno(e) in jo(jih) prenesete z namiznega računalnika.</string>
   <string name="help_11">Datoteke ZIM za prenos v aplikaciji so v imeniku zunanjega pomnilnika v mapi z imenom Kiwix.</string>
+  <string name="fetching_storage_info">Pridobivanje podrobnosti o shrambi …</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
+  <string name="pref_storage_used">%s uporabljeno</string>
+  <string name="pref_free_storage">%s prosto</string>
+  <string name="choose_storage_to_download_book">Izberite shrambo za prenos knjige</string>
   <string name="delete_zim_failed">Žal nekaterih datotek ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
   <string name="stop">ustavi</string>
+  <string name="notification_pause_button_text">Premor</string>
+  <string name="notification_resume_button_text">Nadaljuj</string>
   <string name="internal_storage">Notranji</string>
   <string name="external_storage">Zunanji</string>
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavim prenos?</string>
   <string name="confirm_stop_download_msg">Ali res želite ustaviti ta prenos?</string>
-  <string name="tts_not_enabled" fuzzy="true">Pretvarjanje besedila v govor za to datoteko ZIM ni omogočeno</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Inicializacija besedila v govor ni uspela. Prosimo, poskusite znova.</string>
-  <string name="texttospeech_error" fuzzy="true">Nepričakovana napaka pri pretvorbi besedila v govor. Prosimo, poskusite znova.</string>
+  <string name="change_storage">Spremeni</string>
+  <string name="tts_not_enabled">Glasno branje za to datoteko ZIM ni omogočeno</string>
+  <string name="texttospeech_initialization_failed">Inicializacija glasnega branja ni uspela. Prosimo, poskusite znova.</string>
+  <string name="texttospeech_error">Nepričakovana napaka pri glasnem branju. Prosimo, poskusite znova.</string>
   <string name="next">Naprej</string>
   <string name="previous">Nazaj</string>
   <string name="wifi_only_title">Dovolite prenos vsebine v mobilnem omrežju?</string>
@@ -173,15 +188,17 @@
   <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
   <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da povezave ne delujejo v načinu brez povezave.</string>
   <string name="external_link_popup_dialog_title">Dostopanje do zunanje povezave!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Odpirate zunanjo povezavo. To bi lahko povzročilo dodatne stroške prenosa podatkov ali preprosto ne bo delovalo, ko boste brez povezave. Želite nadaljevati?</string>
+  <string name="external_link_popup_dialog_message">Odpirate zunanjo povezavo. To bi lahko povzročilo dodatne stroške prenosa podatkov ali preprosto ne bo delovalo, ko boste brez povezave.\nŽelite nadaljevati?</string>
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
   <string name="your_languages">Izbrani jeziki:</string>
+  <string name="your_language">Izbrani jezik: %s</string>
   <string name="other_languages">Drugi jeziki:</string>
+  <string name="downloading">Prenašanje:</string>
   <string name="no_items_msg">Na voljo ni noben predmet</string>
   <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Zdi se, da smo se zrušili.\n\nSte nam pripravljeni pomagati tako, da pošljete naslednje informacije?</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Seznam vaših datotek ZIM</string>
+  <string name="crash_checkbox_zimfiles">Seznam vaših datotek ZIM</string>
   <string name="crash_checkbox_exception">Podrobnosti o sesutju</string>
   <string name="crash_checkbox_logs">Dnevniki aplikacije</string>
   <string name="crash_checkbox_device">Podatki o napravi</string>
@@ -197,11 +214,16 @@
   <string name="welcome_to_the_family">Pozdravljeni v družini</string>
   <string name="save_books_offline">Shrani knjige brez povezave</string>
   <string name="download_books_message">Prenesite knjige in berite, kjer koli že ste.</string>
+  <string name="save_books_in_desired_storage">Shrani knjige v želeno shrambo</string>
+  <string name="storage_location_hint">Na zaslonu z nastavitvami lahko izberete želeno mesto shranjevanja za prenos datotek ZIM, bodisi kartico SD bodisi notranji pomnilnik.</string>
   <string name="unable_to_add_to_bookmarks">Zaznamkov ni mogoče dodati</string>
   <string name="go_to_previous_page">Pojdi na prejšnjo stran</string>
   <string name="go_to_next_page">Pojdi na naslednjo stran</string>
   <string name="table_of_contents">Kazalo vsebine</string>
+  <string name="select_language">Izbira jezika</string>
   <string name="save_languages">Shrani jezike</string>
+  <string name="all_languages">Vsi jeziki</string>
+  <string name="no_language_available">Na voljo ni noben jezik</string>
   <string name="expand">Razširi</string>
   <string name="history">Zgodovina</string>
   <string name="history_from_current_book">Ogled zgodovinr iz vseh knjig</string>
@@ -212,15 +234,20 @@
   <string name="switch_tabs">Preklopi zavihke</string>
   <string name="close_all_tabs">Zapri vse zavihke</string>
   <string name="close_tab">Zapri zavihek</string>
+  <string name="could_not_restore_tabs">Zavihkov ni bilo mogoče obnoviti.</string>
   <string name="pending_state">Priprava</string>
   <string name="running_state">Prenos</string>
   <string name="complete">Končano</string>
   <string name="paused_state">Premor</string>
   <string name="failed_state">Neuspešno: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Datoteke zim ni bilo mogoče prenesti. Poskusite znova namestiti aplikacijo iz trgovine Play.</string>
+  <string name="custom_download_error_message_for_authentication_failed">Datoteke ZIM ni bilo mogoče prenesti. Poskusite znova namestiti aplikacijo iz trgovine Play.</string>
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
+  <string name="take_notes">Shrani opombe</string>
   <string name="wiki_article_title">Naslov viki članka</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Za izvoz zaznamkov je potreben dostop do shrambe</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Zaznamkov ni mogoče izvoziti brez dostopa do shrambe</string>
+  <string name="export_bookmark_error">Pri poskusu izvoza zaznamka je prišlo do napake!</string>
   <string name="ext_storage_permission_rationale_add_note">Za Beležke je potreben dostop do prostora za shranjevanje</string>
   <string name="ext_storage_write_permission_denied_add_note">Beležk ni mogoče uporabljati brez dostopa do prostora za shranjevanje</string>
   <string name="note_save_unsuccessful">Shranjevanje beležke ni uspelo</string>
@@ -243,7 +270,7 @@
   <string name="permission_rationale_location">Android zahteva dovoljenje za lokacijo, da lahko aplikaciji omogoči zaznavanje enakovrednih naprav</string>
   <string name="permission_rationale_nearby">Android zahteva dovoljenje za bližnje naprave, da lahko aplikaciji omogoči zaznavanje enakovrednih naprav</string>
   <string name="permission_refused_location">Enakovrednih naprav ni mogoče najti brez dovoljenj za lokacijo</string>
-  <string name="permission_refused_storage" fuzzy="true">Do datotek ZIM ni mogoče dostopati brez dovoljenja za shranjevanje</string>
+  <string name="permission_refused_storage">Do datotek ZIM ni mogoče dostopati brez dovoljenja za shranjevanje</string>
   <string name="request_enable_location">Omogočite lokacijo, da bo mogoče zaznavanje enakovrednih naprav</string>
   <string name="discovery_needs_location">Enakovrednih naprav ni mogoče odkriti brez lokacijskih storitev</string>
   <string name="request_enable_wifi">V sistemskih nastavitvah omogočite Wi-Fi P2P</string>
@@ -256,6 +283,7 @@
   <string name="get_content_from_nearby_device">Pridobi vsebino iz naprave v bližini</string>
   <string name="search_for_peers">Poišči vrstnike</string>
   <string name="your_device">Vaša naprava:</string>
+  <string name="device_name">Ime naprave</string>
   <string name="nearby_devices">BLIŽNJE NAPRAVE</string>
   <string name="no_devices_found">Ni zaznanih naprav. Dotaknite se gumba za iskanje, da poskusite znova.</string>
   <string name="files_for_transfer">DATOTEKE ZA PRENOS</string>
@@ -282,6 +310,11 @@
   <string name="delete_selected_history">Izbrišem izbrano zgodovino?</string>
   <string name="delete_bookmarks">Izbrišem vse zaznamke?</string>
   <string name="delete_selected_bookmarks">Izbrišem izbrane zaznamke?</string>
+  <string name="import_bookmarks_dialog_title">Uvozim zaznamke?</string>
+  <string name="export_all_bookmarks_dialog_title">Izvozim vse zaznamke?</string>
+  <string name="export_all_bookmarks_dialog_message">Izvoz bo ustvaril datoteko bookmark.xml v mapi Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">Vsi zaznamki so uvoženi.</string>
+  <string name="error_invalid_bookmark_file">Napaka: Izbrana datoteka ni veljavna datoteka zaznamkov.</string>
   <string name="on">Vklop</string>
   <string name="off">Izklop</string>
   <string name="auto">Samodejno</string>
@@ -299,6 +332,13 @@
   <string name="tabs_restored">Zavihki obnovljeni</string>
   <string name="open_drawer">Odpri predal</string>
   <string name="close_drawer">Zapri predal</string>
+  <string name="preparing_file_for_copy">Priprava na kopiranje/prestavitev</string>
+  <string name="action_copy">Kopiraj</string>
+  <string name="move">Prestavi</string>
+  <string name="copying_zim_file">Kopiranje datoteke ZIM …</string>
+  <string name="moving_zim_file">Prestavljanje datoteke ZIM …</string>
+  <string name="copy_move_files_dialog_description">Kiwix zahteva, da je datoteka ZIM v svojem imeniku s podatki. Ali jo želite kopirati ali prestaviti tja?</string>
+  <string name="copy_file_error_message">Napaka pri kopiranju datoteke ZIM: %s.</string>
   <string name="how_to_update_content">Kako posodobiti vsebino?</string>
   <string name="update_content_description" fuzzy="true">Če želite posodobiti vsebino (datoteko ZIM), morate prenesti celotno najnovejšo različico te iste vsebine. To lahko storite v razdelku za prenos.</string>
   <string name="all_files_permission_needed">Potrebno je dovoljenje za vse datoteke</string>

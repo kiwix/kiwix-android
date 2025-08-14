@@ -101,6 +101,7 @@
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir erofzelueden.</string>
   <string name="download">Eroflueden</string>
+  <string name="download_notification_channel_description">ZIM-Fichieren eroflueden…</string>
   <string name="space_available">Plaz disponibel:</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keng Biller</string>
