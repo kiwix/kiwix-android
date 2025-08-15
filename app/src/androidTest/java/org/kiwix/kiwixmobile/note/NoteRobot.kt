@@ -36,6 +36,7 @@ import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
@@ -177,6 +178,15 @@ class NoteRobot : BaseRobot() {
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
         .assertTextContains("", ignoreCase = true)
+    })
+  }
+
+  fun closeAddNoteDialog(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG).performClick()
+      }
     })
   }
 

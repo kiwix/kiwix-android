@@ -38,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
@@ -75,7 +76,9 @@ fun KiwixSearchView(
       Text(
         text = placeholder,
         color = Color.LightGray,
-        fontSize = ComposeDimens.EIGHTEEN_SP
+        fontSize = ComposeDimens.EIGHTEEN_SP,
+        maxLines = ONE,
+        overflow = Ellipsis
       )
     },
     colors = colors,
