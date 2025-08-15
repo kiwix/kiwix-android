@@ -205,9 +205,13 @@ class DownloadTest : BaseActivityTest() {
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectDeviceDefaultLanguage(composeTestRule)
+            // Advance the main clock to settle the frame of compose.
+            composeTestRule.mainClock.advanceTimeByFrame()
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectAlbanianLanguage(composeTestRule)
+            // Advance the main clock to settle the frame of compose.
+            composeTestRule.mainClock.advanceTimeByFrame()
           }
         }
         clickDownloadOnBottomNav(composeTestRule)
@@ -226,6 +230,8 @@ class DownloadTest : BaseActivityTest() {
             clickLanguagePreference(composeTestRule)
             assertLanguagePrefDialogDisplayed(composeTestRule)
             selectDeviceDefaultLanguage(composeTestRule)
+            // Advance the main clock to settle the frame of compose.
+            composeTestRule.mainClock.advanceTimeByFrame()
             // check if the device default language is selected or not.
             clickLanguagePreference(composeTestRule)
             // close the language dialog.

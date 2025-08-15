@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -183,12 +184,27 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
     composeView = it
   }
 
+  /**
+   * Restarts the Settings screen by popping it from the back stack and reopening it.
+   *
+   * This is useful when we need to refresh the Settings UI (e.g., after a app's language
+   * change) without fully recreating the activity.
+   *
+   * Steps:
+   * 1. Get the CoreMainActivity reference to access the NavController.
+   * 2. Pop the Settings fragment from the navigation back stack.
+   * 3. Wait for one frame so the back stack can settle after the pop operation.
+   * 4. Navigate back to the Settings fragment route.
+   */
   private fun restartActivity() {
-    (activity as CoreMainActivity?)?.let {
-      it.navController.apply {
-        popBackStack()
-        navigate(it.settingsFragmentRoute)
-      }
+    val coreMainActivity = activity as? CoreMainActivity ?: return
+    val navController = coreMainActivity.navController
+    navController.popBackStack()
+    coreMainActivity.uiCoroutineScope.launch {
+      // Wait for one frame to ensure the back stack has settled before navigation
+      // Bug fix #4387
+      withFrameNanos { }
+      navController.navigate(coreMainActivity.settingsFragmentRoute)
     }
   }
 

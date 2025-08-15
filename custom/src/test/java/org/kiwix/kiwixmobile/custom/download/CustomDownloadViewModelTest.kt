@@ -215,7 +215,6 @@ internal class CustomDownloadViewModelTest {
         triggerAction = { customDownloadViewModel.actions.tryEmit(action) },
         assert = {
           val items = (1..awaitItemCount).map { awaitItem() }
-          print("items = $items")
           assertThat(items).contains(endState)
         }
       )

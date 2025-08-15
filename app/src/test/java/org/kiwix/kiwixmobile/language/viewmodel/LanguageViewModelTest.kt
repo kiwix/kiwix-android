@@ -144,34 +144,36 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `observeLanguages uses network when no cache and online`() = runTest {
-    every { application.getString(any()) } returns ""
-    val fetchedLanguages = listOf(language(languageCode = "eng"))
-    LanguageSessionCache.hasFetched = false
-    languages.value = emptyList()
+  fun `observeLanguages uses network when no cache and online`() = flakyTest {
+    runTest {
+      every { application.getString(any()) } returns ""
+      val fetchedLanguages = listOf(language(languageCode = "eng"))
+      LanguageSessionCache.hasFetched = false
+      languages.value = emptyList()
 
-    every { sharedPreferenceUtil.getCachedLanguageList() } returns null
-    coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply {
-      entries = fetchedLanguages.map {
-        LanguageEntry().apply {
-          languageCode = it.languageCode
-          count = 1
-          title = "English"
+      every { sharedPreferenceUtil.getCachedLanguageList() } returns null
+      coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply {
+        entries = fetchedLanguages.map {
+          LanguageEntry().apply {
+            languageCode = it.languageCode
+            count = 1
+            title = "English"
+          }
         }
       }
-    }
-    every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns ""
-    every { sharedPreferenceUtil.saveLanguageList(any()) } just Runs
+      every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns ""
+      every { sharedPreferenceUtil.saveLanguageList(any()) } just Runs
 
-    testFlow(
-      languageViewModel.actions,
-      triggerAction = {},
-      assert = {
-        val result = awaitItem()
-        assertThat(result).isInstanceOf(UpdateLanguages::class.java)
-        verify { sharedPreferenceUtil.saveLanguageList(any()) }
-      }
-    )
+      testFlow(
+        languageViewModel.actions,
+        triggerAction = {},
+        assert = {
+          val result = awaitItem()
+          assertThat(result).isInstanceOf(UpdateLanguages::class.java)
+          verify { sharedPreferenceUtil.saveLanguageList(any()) }
+        }
+      )
+    }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)

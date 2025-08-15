@@ -314,7 +314,6 @@ class ZimManageViewModelTest {
         version = 100L
       )
       viewModel.onlineLibraryRequest.test {
-        skipItems(1)
         viewModel.updateOnlineLibraryFilters(newRequest)
         assertThat(awaitItem()).isEqualTo(newRequest)
       }
