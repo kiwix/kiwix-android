@@ -145,10 +145,7 @@ class NoteFragmentTest : BaseActivityTest() {
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
       assertNoteSaved(composeTestRule)
-      // to close the note dialog.
-      pressBack()
-      // to close the notes fragment.
-      pressBack()
+      closeAddNoteDialog(composeTestRule)
     }
 
     // goto local library fragment to delete the ZIM file
@@ -185,7 +182,7 @@ class NoteFragmentTest : BaseActivityTest() {
       assertNoteDialogDisplayed(composeTestRule)
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
-      pressBack()
+      closeAddNoteDialog(composeTestRule)
       openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
@@ -204,7 +201,7 @@ class NoteFragmentTest : BaseActivityTest() {
         assertNoteDialogDisplayed(composeTestRule)
         writeDemoNote(composeTestRule)
         saveNote(composeTestRule)
-        pressBack()
+        closeAddNoteDialog(composeTestRule)
         openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
         assertToolbarExist(composeTestRule)
         clickOnSavedNote(composeTestRule)
@@ -227,7 +224,7 @@ class NoteFragmentTest : BaseActivityTest() {
       assertNoteDialogDisplayed(composeTestRule)
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
-      pressBack()
+      closeAddNoteDialog(composeTestRule)
     }
     // Delete that note from "Note" screen.
     deletePreviouslySavedNotes()

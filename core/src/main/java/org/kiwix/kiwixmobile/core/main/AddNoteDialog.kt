@@ -74,6 +74,8 @@ import javax.inject.Inject
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
  */
 
+const val ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG = "addNoteDialogCloseImageButtonTestingTag"
+
 class AddNoteDialog : DialogFragment() {
   private lateinit var zimId: String
   private var zimFileName: String? = null
@@ -180,7 +182,8 @@ class AddNoteDialog : DialogFragment() {
             onClick = {
               exitAddNoteDialog()
               closeKeyboard()
-            }
+            },
+            testingTag = ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
           )
         },
         noteText = noteText.value,
