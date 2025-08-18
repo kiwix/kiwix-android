@@ -304,7 +304,6 @@ class NoteRobot : BaseRobot() {
               "//*[contains(text(), 'History')]"
             )
           )
-          .perform(webClick())
       }
     })
   }

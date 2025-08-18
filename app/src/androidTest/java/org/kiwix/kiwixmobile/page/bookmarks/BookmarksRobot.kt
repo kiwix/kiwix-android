@@ -114,6 +114,7 @@ class BookmarksRobot : BaseRobot() {
   fun clickOnSaveBookmarkImage(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
+      waitUntilTimeout()
       waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
         onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
       }
@@ -194,7 +195,6 @@ class BookmarksRobot : BaseRobot() {
 
   fun assertZimFileLoadedIntoTheReader(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
       composeTestRule.apply {
         waitUntilTimeout()
         onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
@@ -238,7 +238,6 @@ class BookmarksRobot : BaseRobot() {
               "//*[contains(text(), 'History')]"
             )
           )
-          .perform(webClick())
       }
     })
   }

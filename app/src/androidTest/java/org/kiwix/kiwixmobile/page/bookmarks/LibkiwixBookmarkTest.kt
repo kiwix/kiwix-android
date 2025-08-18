@@ -189,6 +189,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       clickOnAndroidArticle(composeTestRule)
       waitComposeToSettleViews()
       assertAndroidArticleLoadedInReader(composeTestRule)
+      waitComposeToSettleViews()
       // Save bookmark
       clickOnSaveBookmarkImage(composeTestRule)
       // open previous page
