@@ -46,8 +46,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -76,6 +76,7 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -378,6 +379,30 @@ class KiwixMainActivity : CoreMainActivity() {
         isVoice = isVoice
       ),
       NavOptions.Builder().setPopUpTo(searchFragmentRoute, inclusive = true).build()
+    )
+  }
+
+  override fun openPage(
+    pageUrl: String,
+    zimReaderSource: ZimReaderSource?,
+    shouldOpenInNewTab: Boolean
+  ) {
+    var zimFileUri = ""
+    if (zimReaderSource != null) {
+      zimFileUri = zimReaderSource.toDatabase()
+    }
+    val navOptions = NavOptions.Builder()
+      .setLaunchSingleTop(true)
+      .setPopUpTo(readerFragmentRoute, inclusive = true)
+      .build()
+    val readerRoute = KiwixDestination.Reader.createRoute(
+      zimFileUri = zimFileUri,
+      pageUrl = pageUrl,
+      shouldOpenInNewTab = shouldOpenInNewTab
+    )
+    navigate(
+      readerRoute,
+      navOptions
     )
   }
 

@@ -384,27 +384,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     isVoice: Boolean = false
   )
 
-  fun openPage(
+  abstract fun openPage(
     pageUrl: String,
     zimReaderSource: ZimReaderSource? = null,
     shouldOpenInNewTab: Boolean = false
-  ) {
-    var zimFileUri = ""
-    if (zimReaderSource != null) {
-      zimFileUri = zimReaderSource.toDatabase()
-    }
-    val navOptions = NavOptions.Builder()
-      .setLaunchSingleTop(true)
-      .setPopUpTo(readerFragmentRoute, inclusive = true)
-      .build()
-    val readerRouteWithArguments =
-      "$readerFragmentRoute?$PAGE_URL_KEY=$pageUrl&$ZIM_FILE_URI_KEY=$zimFileUri" +
-        "&$SHOULD_OPEN_IN_NEW_TAB=$shouldOpenInNewTab"
-    navigate(
-      readerRouteWithArguments,
-      navOptions
-    )
-  }
+  )
 
   private fun openBookmarks() {
     handleDrawerOnNavigation()
