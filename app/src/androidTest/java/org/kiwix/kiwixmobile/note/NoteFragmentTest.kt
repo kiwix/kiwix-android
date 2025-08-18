@@ -237,6 +237,26 @@ class NoteFragmentTest : BaseActivityTest() {
     }
   }
 
+  @Test
+  fun testSavedNotePageOpenInReader() {
+    deletePreviouslySavedNotes()
+    loadZimFileInReader("testzim.zim")
+    note {
+      assertHomePageIsLoadedOfTestZimFile()
+      clickOnAndroidArticle(composeTestRule)
+      clickOnNoteMenuItem(composeTestRule)
+      assertNoteDialogDisplayed(composeTestRule)
+      writeDemoNote(composeTestRule)
+      saveNote(composeTestRule)
+      closeAddNoteDialog(composeTestRule)
+      clickOnBackwardButton(composeTestRule)
+      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      clickOnSavedNote(composeTestRule)
+      clickOnOpenArticle(composeTestRule)
+      assertAndroidArticleLoadedInReader(composeTestRule)
+    }
+  }
+
   private fun deletePreviouslySavedNotes() {
     // delete the notes if any saved to properly run the test scenario
     note {

@@ -121,19 +121,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
   @Test
   fun testBookmarks() {
-    composeTestRule.apply {
-      runOnUiThread {
-        kiwixMainActivity.navigate(KiwixDestination.Library.route)
-        val navOptions = NavOptions.Builder()
-          .setPopUpTo(KiwixDestination.Reader.route, false)
-          .build()
-        kiwixMainActivity.navigate(
-          KiwixDestination.Reader.createRoute(zimFileUri = getZimFile().toUri().toString()),
-          navOptions
-        )
-      }
-      waitComposeToSettleViews() // to load the ZIM file properly.
-    }
+    openZimFileInReader()
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage(composeTestRule)
@@ -187,21 +175,36 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   }
 
   @Test
-  fun testSavedBookmarksShowingOnBookmarkScreen() {
-    val zimFile = getZimFile()
-    composeTestRule.apply {
-      runOnUiThread {
-        kiwixMainActivity.navigate(KiwixDestination.Library.route)
-        val navOptions = NavOptions.Builder()
-          .setPopUpTo(KiwixDestination.Reader.route, false)
-          .build()
-        kiwixMainActivity.navigate(
-          KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
-          navOptions
-        )
-      }
-      waitForIdle()
+  fun testBookMarkPageOpenInReader() {
+    openZimFileInReader()
+    bookmarks {
+      openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      clickOnTrashIcon(composeTestRule)
+      assertDeleteBookmarksDialogDisplayed(composeTestRule)
+      clickOnDeleteButton(composeTestRule)
+      assertNoBookMarkTextDisplayed(composeTestRule)
+      pressBack()
+      waitComposeToSettleViews() // to properly load the ZIM file in reader.
+      assertZimFileLoadedIntoTheReader(composeTestRule)
+      clickOnAndroidArticle(composeTestRule)
+      waitComposeToSettleViews()
+      assertAndroidArticleLoadedInReader(composeTestRule)
+      // Save bookmark
+      clickOnSaveBookmarkImage(composeTestRule)
+      // open previous page
+      clickOnBackwardButton(composeTestRule)
+      // open bookmark screen.
+      openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      // tries to open the bookmark page in reader.
+      openBookmarkInReader(composeTestRule)
+      waitComposeToSettleViews()
+      assertAndroidArticleLoadedInReader(composeTestRule)
     }
+  }
+
+  @Test
+  fun testSavedBookmarksShowingOnBookmarkScreen() {
+    openZimFileInReader()
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage(composeTestRule)
@@ -244,6 +247,23 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       // test all the saved bookmarks are showing on the bookmarks screen
       openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       testAllBookmarkShowing(bookmarkList, composeTestRule)
+    }
+  }
+
+  private fun openZimFileInReader() {
+    val zimFile = getZimFile()
+    composeTestRule.apply {
+      runOnUiThread {
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        val navOptions = NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, false)
+          .build()
+        kiwixMainActivity.navigate(
+          KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
+          navOptions
+        )
+      }
+      waitComposeToSettleViews()
     }
   }
 

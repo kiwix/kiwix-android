@@ -32,6 +32,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -42,6 +43,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAKE_NOTE_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
@@ -248,6 +250,62 @@ class NoteRobot : BaseRobot() {
             "//*[contains(text(), 'Android_(operating_system)')]"
           )
         )
+    })
+  }
+
+  fun clickOnAndroidArticle(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onWebView()
+          .withElement(
+            findElement(
+              Locator.XPATH,
+              "//*[contains(text(), 'Android_(operating_system)')]"
+            )
+          )
+          .perform(webClick())
+      }
+    })
+  }
+
+  fun clickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      onNodeWithTag(READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG)
+        .performClick()
+    }
+  }
+
+  fun clickOnOpenArticle(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(
+          TestUtils.TEST_PAUSE_MS.toLong()
+        ) { onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).isDisplayed() }
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
+          .performClick()
+      }
+    })
+  }
+
+  fun assertAndroidArticleLoadedInReader(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+        onWebView()
+          .withElement(
+            findElement(
+              Locator.XPATH,
+              "//*[contains(text(), 'History')]"
+            )
+          )
+          .perform(webClick())
+      }
     })
   }
 
