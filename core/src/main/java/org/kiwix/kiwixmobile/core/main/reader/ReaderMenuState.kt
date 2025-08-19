@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
@@ -57,6 +58,7 @@ const val TAKE_NOTE_MENU_ITEM_TESTING_TAG = "takeNoteMenuItemTestingTag"
 const val FULL_SCREEN_MENU_ITEM_TESTING_TAG = "fullScreenMenuItemTestingTag"
 const val RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG = "randomArticleMenuItemTestingTag"
 const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
+const val TABS_SIZE_TEXT_TESTING_TAG = "tabsSizeTextTestingTag"
 
 @Stable
 class ReaderMenuState(
@@ -227,7 +229,8 @@ class ReaderMenuState(
           fontWeight = FontWeight.Bold,
           fontSize = TAB_SWITCHER_TEXT_SIZE,
           maxLines = 1,
-          overflow = TextOverflow.Ellipsis
+          overflow = TextOverflow.Ellipsis,
+          modifier = Modifier.testTag(TABS_SIZE_TEXT_TESTING_TAG)
         )
       }
     }

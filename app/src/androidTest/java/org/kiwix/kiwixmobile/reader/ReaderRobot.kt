@@ -35,6 +35,9 @@ import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.search.OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.TABS_SIZE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -113,6 +116,33 @@ class ReaderRobot : BaseRobot() {
             "//*[contains(text(), '$articlePageContent')]"
           )
         )
+    })
+  }
+
+  fun openAndroidArticleInNewTab(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onAllNodesWithTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)[0].performClick()
+      }
+    })
+  }
+
+  fun assertTabsRestored(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(TABS_SIZE_TEXT_TESTING_TAG, useUnmergedTree = true).assertTextEquals("2")
+      }
+    })
+  }
+
+  fun openLocalLibraryScreenViaBottomAppBar(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
+      }
     })
   }
 }
