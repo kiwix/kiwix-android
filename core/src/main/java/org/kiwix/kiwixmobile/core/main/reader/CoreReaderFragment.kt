@@ -1075,6 +1075,7 @@ abstract class CoreReaderFragment :
 
   override fun onDestroyView() {
     super.onDestroyView()
+    libkiwixBook = null
     findInPageTitle = null
     searchItemToOpen = null
     pendingIntent = null

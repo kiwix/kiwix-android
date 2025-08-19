@@ -179,6 +179,8 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
+    // remove the previous backStack entry with old arguments.
+    removeArgumentsOfReaderScreen()
     navigate(
       CustomDestination.Search.createRoute(
         searchString = searchString,
@@ -219,6 +221,25 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun showBottomAppBar() {
     // Do nothing since custom apps does not have the bottomAppBar.
+  }
+
+  /**
+   * Handles navigation from the left drawer to the Reader screen.
+   *
+   * Clears any existing Reader back stack entry (with its arguments)
+   * and replaces it with a fresh Reader screen using default arguments.
+   * This ensures old arguments are not retained when navigating
+   * via the left drawer.
+   */
+  override fun removeArgumentsOfReaderScreen() {
+    if (navController.currentDestination?.route?.startsWith(readerFragmentRoute) == true) {
+      navigate(
+        readerFragmentRoute,
+        NavOptions.Builder()
+          .setPopUpTo(CustomDestination.Reader.route, inclusive = true)
+          .build()
+      )
+    }
   }
 
   // Outdated shortcut id(new_tab)
