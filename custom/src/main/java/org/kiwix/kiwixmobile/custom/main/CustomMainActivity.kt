@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -185,6 +186,30 @@ class CustomMainActivity : CoreMainActivity() {
         isVoice = isVoice
       ),
       NavOptions.Builder().setPopUpTo(searchFragmentRoute, inclusive = true).build()
+    )
+  }
+
+  override fun openPage(
+    pageUrl: String,
+    zimReaderSource: ZimReaderSource?,
+    shouldOpenInNewTab: Boolean
+  ) {
+    var zimFileUri = ""
+    if (zimReaderSource != null) {
+      zimFileUri = zimReaderSource.toDatabase()
+    }
+    val navOptions = NavOptions.Builder()
+      .setLaunchSingleTop(true)
+      .setPopUpTo(readerFragmentRoute, inclusive = true)
+      .build()
+    val readerRoute = CustomDestination.Reader.createRoute(
+      zimFileUri = zimFileUri,
+      pageUrl = pageUrl,
+      shouldOpenInNewTab = shouldOpenInNewTab
+    )
+    navigate(
+      readerRoute,
+      navOptions
     )
   }
 

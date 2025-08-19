@@ -279,7 +279,6 @@ abstract class CoreReaderFragment :
       onOpenLibraryButtonClicked = {},
       pageLoadingItem = false to ZERO,
       shouldShowDonationPopup = false,
-      // TODO set in onViewCreated.
       fullScreenItem = false to null,
       showBackToTopButton = false,
       backToTopButtonClick = { backToTop() },
@@ -441,11 +440,11 @@ abstract class CoreReaderFragment :
             }
         }
         LaunchedEffect(Unit) {
+          addFullScreenItemIfNotAttached()
           readerScreenState.update {
             copy(
               readerScreenTitle = context.getString(string.reader),
               darkModeViewPainter = darkModeViewPainter,
-              fullScreenItem = fullScreenItem.first to getVideoView(),
               tocButtonItem = getTocButtonStateAndAction(),
               appName = (requireActivity() as CoreMainActivity).appName,
               donateButtonClick = {
@@ -1172,8 +1171,20 @@ abstract class CoreReaderFragment :
     return null
   }
 
+  /**
+   * Attached the full-screen item for videos in readerState if not already attached.
+   */
+  private fun addFullScreenItemIfNotAttached() {
+    if (readerScreenState.value.fullScreenItem.second == null) {
+      readerScreenState.update {
+        copy(fullScreenItem = fullScreenItem.first to getVideoView())
+      }
+    }
+  }
+
   @Throws(IllegalArgumentException::class)
   protected open fun createWebView(attrs: AttributeSet?): KiwixWebView? {
+    addFullScreenItemIfNotAttached()
     return KiwixWebView(
       requireContext(),
       this,
