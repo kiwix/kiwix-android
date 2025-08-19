@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -44,21 +43,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
@@ -233,24 +227,4 @@ private fun OverflowMenuItems(
       )
     }
   }
-}
-
-@Composable
-fun rememberBottomNavigationVisibility(lazyListState: LazyListState?): Boolean {
-  var isToolbarVisible by remember { mutableStateOf(true) }
-  var lastScrollIndex by remember { mutableIntStateOf(ZERO) }
-  val updatedLazyListState = rememberUpdatedState(lazyListState)
-
-  LaunchedEffect(updatedLazyListState) {
-    updatedLazyListState.value?.let { state ->
-      snapshotFlow { state.firstVisibleItemIndex }
-        .collect { newScrollIndex ->
-          if (newScrollIndex != lastScrollIndex) {
-            isToolbarVisible = newScrollIndex < lastScrollIndex
-            lastScrollIndex = newScrollIndex
-          }
-        }
-    }
-  }
-  return isToolbarVisible
 }
