@@ -215,14 +215,6 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
 
-  LaunchedEffect(state.isLoadingMoreItem) {
-    if (state.isLoadingMoreItem) {
-      // Scroll to the last item (i.e., the loading spinner)
-      val lastItemIndex = state.onlineLibraryList?.size ?: 0
-      lazyListState.animateScrollToItem(lastItemIndex)
-    }
-  }
-
   LaunchedEffect(lazyListState) {
     snapshotFlow {
       derivedStateOf {

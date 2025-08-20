@@ -513,6 +513,7 @@ class ZimManageViewModel @Inject constructor(
           }
         }
         .collect { result ->
+          resetDownloadState()
           library.emit(
             if (result.onlineLibraryRequest.isLoadMoreItem) {
               library.value + result.books
@@ -520,7 +521,6 @@ class ZimManageViewModel @Inject constructor(
               result.books
             }
           )
-          resetDownloadState()
         }
     }
   }.flowOn(ioDispatcher)
