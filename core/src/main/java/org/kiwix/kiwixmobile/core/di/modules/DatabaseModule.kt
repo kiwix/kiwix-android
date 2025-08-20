@@ -21,15 +21,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
-import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.core.dao.FlowBuilder
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.dao.NewNoteDao
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import javax.inject.Singleton
@@ -48,26 +40,6 @@ open class DatabaseModule {
     }
     return boxStore!!
   }
-
-  @Provides @Singleton fun providesNewBookDao(boxStore: BoxStore): NewBookDao =
-    NewBookDao(boxStore.boxFor())
-
-  @Provides @Singleton fun providesNewLanguagesDao(boxStore: BoxStore): NewLanguagesDao =
-    NewLanguagesDao(boxStore.boxFor())
-
-  @Provides @Singleton fun providesNewHistoryDao(boxStore: BoxStore): HistoryDao =
-    HistoryDao(boxStore.boxFor())
-
-  @Provides @Singleton fun providesNewBookmarksDao(boxStore: BoxStore): NewBookmarksDao =
-    NewBookmarksDao(boxStore.boxFor())
-
-  @Provides @Singleton fun providesNewNoteDao(boxStore: BoxStore): NewNoteDao =
-    NewNoteDao(boxStore.boxFor())
-
-  @Provides @Singleton fun providesNewRecentSearchDao(
-    boxStore: BoxStore,
-    flowBuilder: FlowBuilder
-  ): NewRecentSearchDao = NewRecentSearchDao(boxStore.boxFor(), flowBuilder)
 
   @Singleton
   @Provides

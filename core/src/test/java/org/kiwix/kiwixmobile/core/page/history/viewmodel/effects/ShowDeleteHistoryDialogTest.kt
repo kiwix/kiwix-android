@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
@@ -21,7 +21,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedHistory
 
 internal class ShowDeleteHistoryDialogTest {
   val effects = mockk<MutableSharedFlow<SideEffect<*>>>(relaxed = true)
-  private val historyDao = mockk<HistoryDao>()
+  private val historyRoomDao = mockk<HistoryRoomDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
@@ -33,7 +33,7 @@ internal class ShowDeleteHistoryDialogTest {
         ShowDeleteHistoryDialog(
           effects,
           historyState(),
-          historyDao,
+          historyRoomDao,
           viewModelScope,
           dialogShower
         )
@@ -42,7 +42,7 @@ internal class ShowDeleteHistoryDialogTest {
       showDeleteHistoryDialog.invokeWith(activity)
       verify { dialogShower.show(any(), capture(lambdaSlot)) }
       lambdaSlot.captured.invoke()
-      verify { effects.tryEmit(DeletePageItems(historyState(), historyDao, viewModelScope)) }
+      verify { effects.tryEmit(DeletePageItems(historyState(), historyRoomDao, viewModelScope)) }
     }
 
   @Test
@@ -52,7 +52,7 @@ internal class ShowDeleteHistoryDialogTest {
         ShowDeleteHistoryDialog(
           effects,
           historyState(listOf(historyItem(isSelected = true, zimReaderSource = mockk()))),
-          historyDao,
+          historyRoomDao,
           viewModelScope,
           dialogShower
         )
@@ -68,7 +68,7 @@ internal class ShowDeleteHistoryDialogTest {
         ShowDeleteHistoryDialog(
           effects,
           historyState(),
-          historyDao,
+          historyRoomDao,
           viewModelScope,
           dialogShower
         )
