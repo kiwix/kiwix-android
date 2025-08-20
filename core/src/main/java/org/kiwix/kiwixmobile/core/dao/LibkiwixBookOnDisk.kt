@@ -212,7 +212,6 @@ class LibkiwixBookOnDisk @Inject constructor(
       }
     }.onFailure { it.printStackTrace() }
     writeBookMarksAndSaveLibraryToFile()
-    // TODO test when getting books it will not goes to circular dependencies mode.
     updateLocalBooksFlow()
   }
 

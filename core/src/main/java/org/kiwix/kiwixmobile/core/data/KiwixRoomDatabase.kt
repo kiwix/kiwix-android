@@ -33,9 +33,11 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.BundleRoomConverter
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.ErrorConverter
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.StatusConverter
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
 
@@ -48,13 +50,15 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     DownloadRoomEntity::class,
     WebViewHistoryEntity::class
   ],
-  version = 8,
+  version = 9,
   exportSchema = false
 )
 @TypeConverters(
   HistoryRoomDaoCoverts::class,
   ZimSourceRoomConverter::class,
-  BundleRoomConverter::class
+  BundleRoomConverter::class,
+  StatusConverter::class,
+  ErrorConverter::class
 )
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
@@ -78,7 +82,8 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               MIGRATION_4_5,
               MIGRATION_5_6,
               MIGRATION_6_7,
-              MIGRATION_7_8
+              MIGRATION_7_8,
+              MIGRATION_8_9
             )
             .build().also { db = it }
       }
@@ -302,6 +307,60 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             )
             """
           )
+        }
+      }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_8_9 =
+      object : Migration(8, 9) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS DownloadRoomEntity_new (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                 downloadId INTEGER NOT NULL,
+                 file TEXT,
+                 etaInMilliSeconds INTEGER NOT NULL DEFAULT -1,
+                 bytesDownloaded INTEGER NOT NULL DEFAULT -1,
+                 totalSizeOfDownload INTEGER NOT NULL DEFAULT -1,
+                 status INTEGER NOT NULL DEFAULT 0,
+                 error INTEGER NOT NULL DEFAULT 0,
+                 progress INTEGER NOT NULL DEFAULT -1,
+                 bookId TEXT NOT NULL,
+                 title TEXT NOT NULL,
+                 description TEXT,
+                 language TEXT NOT NULL,
+                 creator TEXT NOT NULL,
+                 publisher TEXT NOT NULL,
+                 date TEXT NOT NULL,
+                 url TEXT,
+                 articleCount TEXT,
+                 mediaCount TEXT,
+                 size TEXT NOT NULL,
+                 name TEXT,
+                 favIcon TEXT NOT NULL,
+                 tags TEXT
+            )
+            """.trimIndent()
+          )
+          db.execSQL(
+            """
+            INSERT INTO DownloadRoomEntity_new (
+                 id, downloadId, file, etaInMilliSeconds, bytesDownloaded,
+                 totalSizeOfDownload, status, error, progress, bookId, title,
+                 description, language, creator, publisher, date, url,
+                 articleCount, mediaCount, size, name, favIcon, tags
+            )
+            SELECT id, downloadId, file, etaInMilliSeconds, bytesDownloaded,
+                 totalSizeOfDownload, status, error, progress, bookId, title, description,
+                 language, creator, publisher, date, url, articleCount,
+                 mediaCount, size, name, favIcon, tags
+                 FROM DownloadRoomEntity
+            """.trimIndent()
+          )
+
+          db.execSQL("DROP TABLE DownloadRoomEntity")
+          db.execSQL("ALTER TABLE DownloadRoomEntity_new RENAME TO DownloadRoomEntity")
         }
       }
 

@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.bookmarkState
 import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
@@ -41,7 +41,7 @@ import java.util.UUID
 
 internal class ShowDeleteBookmarksDialogTest {
   val effects = mockk<MutableSharedFlow<SideEffect<*>>>(relaxed = true)
-  private val newBookmarksDao = mockk<NewBookmarksDao>()
+  private val libkiwixBookmark = mockk<LibkiwixBookmarks>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
@@ -52,7 +52,7 @@ internal class ShowDeleteBookmarksDialogTest {
       ShowDeleteBookmarksDialog(
         effects,
         bookmarkState(),
-        newBookmarksDao,
+        libkiwixBookmark,
         viewModelScope,
         dialogShower
       )
@@ -61,7 +61,7 @@ internal class ShowDeleteBookmarksDialogTest {
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.tryEmit(DeletePageItems(bookmarkState(), newBookmarksDao, viewModelScope)) }
+    verify { effects.tryEmit(DeletePageItems(bookmarkState(), libkiwixBookmark, viewModelScope)) }
   }
 
   private fun mockkActivityInjection(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog) {
@@ -88,7 +88,7 @@ internal class ShowDeleteBookmarksDialogTest {
               )
             )
           ),
-          newBookmarksDao,
+          libkiwixBookmark,
           viewModelScope,
           dialogShower
         )
@@ -113,7 +113,7 @@ internal class ShowDeleteBookmarksDialogTest {
               )
             )
           ),
-          newBookmarksDao,
+          libkiwixBookmark,
           viewModelScope,
           dialogShower
         )
