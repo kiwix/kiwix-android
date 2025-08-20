@@ -47,7 +47,7 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
         )
       } else {
         val navOptions = NavOptions.Builder()
-          .setPopUpTo(KiwixDestination.Library.route, inclusive = false)
+          .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
           .build()
         activity.navigate(
           KiwixDestination.Reader.createRoute(zimFileUri = zimReaderSource.toDatabase()),

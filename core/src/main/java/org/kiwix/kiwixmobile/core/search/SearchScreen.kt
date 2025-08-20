@@ -50,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -73,6 +74,7 @@ const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
 const val NO_SEARCH_RESULT_TESTING_TAG = "noSearchResultTestingTag"
 const val FIND_IN_PAGE_TESTING_TAG = "findInPageTestingTag"
 const val SEARCH_ITEM_TESTING_TAG = "searchItemTestingTag"
+const val OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG = "openItemInNewTagIconTestingTag"
 const val LOADING_ITEMS_BEFORE = 3
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -232,6 +234,7 @@ private fun SearchListItem(
 
     IconButton(
       onClick = { onNewTabIconClick(searchListItem) },
+      modifier = Modifier.testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_open_in_new_24dp),

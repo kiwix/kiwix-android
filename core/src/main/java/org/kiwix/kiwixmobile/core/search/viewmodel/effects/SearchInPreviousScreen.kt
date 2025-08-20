@@ -20,25 +20,14 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 
 data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val coreMainActivity = activity as CoreMainActivity
-
-    // Remove current ReaderFragment. Bug Fix #4377
-    coreMainActivity.navController.popBackStack(
-      coreMainActivity.readerFragmentRoute,
-      inclusive = true
-    )
-
-    // Launch fresh ReaderFragment so all the previous arguments will remove.
-    coreMainActivity.navController.navigate(coreMainActivity.readerFragmentRoute)
-
-    // Pass search result to the *new* instance
-    activity.setNavigationResultOnCurrent(searchString, FIND_IN_PAGE_SEARCH_STRING)
+    activity.setNavigationResult(searchString, FIND_IN_PAGE_SEARCH_STRING)
+    activity.popNavigationBackstack()
   }
 
   companion object {

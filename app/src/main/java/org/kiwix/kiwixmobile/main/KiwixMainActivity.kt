@@ -272,10 +272,7 @@ class KiwixMainActivity : CoreMainActivity() {
     if (intent?.action == ACTION_GET_CONTENT) {
       navigate(KiwixDestination.Downloads.route) {
         launchSingleTop = true
-        popUpTo(navController.graph.findStartDestination().id) {
-          saveState = true
-        }
-        restoreState = true
+        popUpTo(navController.graph.findStartDestination().id)
       }
     }
   }
@@ -372,6 +369,9 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
+    // remove the previous backStack entry with old arguments. Bug Fix #4392
+    removeArgumentsOfReaderScreen()
+    // Freshly open the search fragment.
     navigate(
       KiwixDestination.Search.createRoute(
         searchString = searchString,
@@ -412,6 +412,25 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun showBottomAppBar() {
     shouldShowBottomAppBar.update { true }
+  }
+
+  /**
+   * Handles navigation from the left drawer to the Reader screen.
+   *
+   * Clears any existing Reader back stack entry (with its arguments)
+   * and replaces it with a fresh Reader screen using default arguments.
+   * This ensures old arguments are not retained when navigating
+   * via the left drawer.
+   */
+  override fun removeArgumentsOfReaderScreen() {
+    if (navController.currentDestination?.route?.startsWith(readerFragmentRoute) == true) {
+      navigate(
+        readerFragmentRoute,
+        NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
+          .build()
+      )
+    }
   }
 
   // Outdated shortcut ids(new_tab, get_content)

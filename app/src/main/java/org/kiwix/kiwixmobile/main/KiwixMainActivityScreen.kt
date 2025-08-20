@@ -198,11 +198,12 @@ fun BottomNavigationBar(
 
               // Pop up to the start destination of the graph to avoid building up a large stack
               popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
+                // Bug fix #4392
+                saveState = item.route != KiwixDestination.Reader.route
               }
 
               // Restore state when reselecting a previously selected tab
-              restoreState = true
+              restoreState = item.route != KiwixDestination.Reader.route
             }
           }
         },
