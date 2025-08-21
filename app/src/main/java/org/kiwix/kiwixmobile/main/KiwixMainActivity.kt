@@ -83,6 +83,7 @@ import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -307,6 +308,21 @@ class KiwixMainActivity : CoreMainActivity() {
             openLocalLibraryWithZimFilePath("$it")
             clearIntentDataAndAction()
           }, OPENING_ZIM_FILE_DELAY)
+        }
+
+        "zim" -> {
+          val zimId = it.host
+          val page = it.encodedPath?.removePrefix("/")
+          if (zimId.isNullOrEmpty() || page.isNullOrEmpty()) {
+            return toast(R.string.cannot_open_file)
+          }
+          lifecycleScope.launch {
+            delay(OPENING_ZIM_FILE_DELAY)
+            val book = libkiwixBookOnDisk.bookById(zimId)
+              ?: return@launch toast(R.string.cannot_open_file)
+            openPage("$CONTENT_PREFIX$page", book.zimReaderSource)
+            clearIntentDataAndAction()
+          }
         }
 
         else -> {
