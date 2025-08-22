@@ -37,11 +37,10 @@ import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
-import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
+import org.kiwix.kiwixmobile.core.di.modules.MigrationModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
@@ -65,7 +64,8 @@ import javax.inject.Singleton
     DataModule::class,
     CoreViewModelModule::class,
     SearchModule::class,
-    MutexModule::class
+    MutexModule::class,
+    MigrationModule::class
   ]
 )
 interface CoreComponent {
@@ -88,14 +88,12 @@ interface CoreComponent {
   fun dataSource(): DataSource
   fun downloadRoomDao(): DownloadRoomDao
   fun connectivityManager(): ConnectivityManager
-  fun objectBoxToLibkiwixMigrator(): ObjectBoxToLibkiwixMigrator
   fun libkiwixBookmarks(): LibkiwixBookmarks
   fun libkiwixBooks(): LibkiwixBookOnDisk
   fun recentSearchRoomDao(): RecentSearchRoomDao
   fun historyRoomDao(): HistoryRoomDao
   fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
   fun noteRoomDao(): NotesRoomDao
-  fun objectBoxToRoomMigrator(): ObjectBoxToRoomMigrator
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager
@@ -107,7 +105,5 @@ interface CoreComponent {
   fun inject(kiwixWebView: KiwixWebView)
 
   fun inject(errorActivity: ErrorActivity)
-  fun inject(objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator)
-  fun inject(objectBoxToRoomMigrator: ObjectBoxToRoomMigrator)
   fun coreServiceComponent(): CoreServiceComponent.Builder
 }

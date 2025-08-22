@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2022 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,40 +15,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.dao.entities
+
+package org.kiwix.kiwixmobile.objectboxmigration.entities
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
-data class HistoryEntity(
+data class NotesEntity(
   @Id var id: Long = 0L,
   val zimId: String,
-  val zimName: String,
-  // keep this to handle previously saved history
-  val zimFilePath: String?,
+  // keep this to handle previously saved notes
+  var zimFilePath: String?,
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
   var zimReaderSource: ZimReaderSource?,
-  val favicon: String?,
-  val historyUrl: String,
-  val historyTitle: String,
-  val dateString: String,
-  val timeStamp: Long
+  val zimUrl: String,
+  var noteTitle: String,
+  var noteFilePath: String,
+  var favicon: String?
 ) {
-  constructor(historyItem: HistoryItem) : this(
-    historyItem.databaseId,
-    historyItem.zimId,
-    historyItem.zimName,
-    // pass null for new history items
-    null,
-    historyItem.zimReaderSource,
-    historyItem.favicon,
-    historyItem.historyUrl,
-    historyItem.title,
-    historyItem.dateString,
-    historyItem.timeStamp
+  constructor(item: NoteListItem) : this(
+    id = item.databaseId,
+    zimId = item.zimId,
+    // pass null for new notes
+    zimFilePath = null,
+    zimReaderSource = item.zimReaderSource,
+    zimUrl = item.zimUrl,
+    noteTitle = item.title,
+    noteFilePath = item.noteFilePath,
+    favicon = item.favicon
   )
 }
