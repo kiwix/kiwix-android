@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.dao.entities
+package org.kiwix.kiwixmobile.objectboxmigration.entities
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity

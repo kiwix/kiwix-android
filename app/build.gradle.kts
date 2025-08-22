@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import com.slack.keeper.optInToKeeper
 import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin

@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.page.history.adapter
 
-import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
@@ -54,19 +53,6 @@ sealed class HistoryListItem : PageRelated {
       title = title,
       dateString = dateString,
       timeStamp = timeStamp
-    )
-
-    constructor(historyEntity: HistoryEntity) : this(
-      historyEntity.id,
-      historyEntity.zimId,
-      historyEntity.zimName,
-      historyEntity.zimReaderSource,
-      historyEntity.favicon,
-      historyEntity.historyUrl,
-      historyEntity.historyTitle,
-      historyEntity.dateString,
-      historyEntity.timeStamp,
-      false
     )
 
     constructor(historyRoomEntity: HistoryRoomEntity) : this(
