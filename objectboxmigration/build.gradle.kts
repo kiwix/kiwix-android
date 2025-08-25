@@ -41,5 +41,5 @@ android {
 
 dependencies {
   implementation(Libs.objectbox_kotlin)
-  implementation(project(":core"))
+  api(project(":core"))
 }

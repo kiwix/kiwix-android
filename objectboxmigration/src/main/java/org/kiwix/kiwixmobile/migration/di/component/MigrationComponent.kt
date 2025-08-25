@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,20 +16,29 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.di
+package org.kiwix.kiwixmobile.migration.di.component
 
 import dagger.Component
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
+import org.kiwix.kiwixmobile.migration.di.MigrationScope
 import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
 import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 
+@MigrationScope
 @Component(
   dependencies = [CoreComponent::class],
-  modules = [CustomViewModelModule::class, MigrationModule::class, DatabaseModule::class]
+  modules = [DatabaseModule::class, MigrationModule::class]
 )
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
-  fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
+interface MigrationComponent {
+  fun inject(migrator: ObjectBoxToRoomMigrator)
+  fun inject(migrator: ObjectBoxToLibkiwixMigrator)
+
+  fun recentSearchRoomDao(): RecentSearchRoomDao
+  fun historyRoomDao(): HistoryRoomDao
+  fun notesRoomDao(): NotesRoomDao
 }

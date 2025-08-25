@@ -52,7 +52,6 @@ class ObjectBoxToLibkiwixMigrator {
   private val migrationMutex = Mutex()
 
   suspend fun migrateObjectBoxDataToLibkiwix() {
-    // CoreApp.coreComponent.inject(this)
     if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
       migrateBookMarks(boxStore.boxFor())
     }

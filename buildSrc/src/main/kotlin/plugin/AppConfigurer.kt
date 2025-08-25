@@ -123,7 +123,6 @@ class AppConfigurer {
 
   private fun configureDependencies(target: Project) {
     target.dependencies {
-      add("implementation", project(":core"))
       androidTestImplementation(Libs.espresso_core)
       androidTestImplementation(Libs.espresso_web)
       androidTestImplementation(Libs.espresso_intents)
