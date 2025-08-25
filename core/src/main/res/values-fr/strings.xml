@@ -157,6 +157,7 @@
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
   <string name="download">Télécharger</string>
   <string name="download_notification_channel_name">Nom du canal de notification des téléchargements</string>
+  <string name="download_notification_channel_description">Téléchargement des fichiers ZIM…</string>
   <string name="space_available">Espace disponible :</string>
   <string name="move_no_space">Espace insuffisant pour déplacer/copier.</string>
   <string name="zim_simple">Simple</string>
