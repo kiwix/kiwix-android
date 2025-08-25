@@ -16,19 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile.objectboxmigration
+package org.kiwix.kiwixmobile.migration.di.module
 
+import dagger.Module
+import dagger.Provides
 import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
-import org.kiwix.kiwixmobile.objectboxmigration.data.ObjectBoxToLibkiwixMigrator
-import org.kiwix.kiwixmobile.objectboxmigration.data.ObjectBoxToRoomMigrator
-import javax.inject.Inject
+import org.kiwix.kiwixmobile.migration.ObjectBoxMigrationHandler
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
 
-class ObjectBoxMigrationHandler @Inject constructor(
-  private val objectBoxToRoomMigrator: ObjectBoxToRoomMigrator,
-  private val objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
-) : ObjectBoxDataMigrationHandler {
-  override suspend fun migrate() {
-    objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
-    objectBoxToLibkiwixMigrator.migrateObjectBoxDataToLibkiwix()
-  }
+@Module
+class MigrationModule {
+  @Provides
+  fun provideObjectBoxToLibkiwixMigrator() = ObjectBoxToLibkiwixMigrator()
+
+  @Provides
+  fun provideObjectBoxToRoomMigrator() = ObjectBoxToRoomMigrator()
+
+  @Provides
+  fun provideMigrationHandler(
+    objectBoxToRoomMigrator: ObjectBoxToRoomMigrator,
+    objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
+  ): ObjectBoxDataMigrationHandler =
+    ObjectBoxMigrationHandler(objectBoxToRoomMigrator, objectBoxToLibkiwixMigrator)
 }

@@ -16,13 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.objectboxmigration.di.module
+package org.kiwix.kiwixmobile.migration.di.module
 
 import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
-import org.kiwix.kiwixmobile.objectboxmigration.entities.MyObjectBox
+import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 import javax.inject.Singleton
 
 @Module

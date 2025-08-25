@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2022 Kiwix <android.kiwix.org>
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,37 +15,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-package org.kiwix.kiwixmobile.objectboxmigration.entities
+package org.kiwix.kiwixmobile.migration.entities
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
-data class NotesEntity(
-  @Id var id: Long = 0L,
+data class BookmarkEntity(
+  @Id var id: Long = 0,
   val zimId: String,
-  // keep this to handle previously saved notes
+  var zimName: String,
+  // keep this to handle previously saved bookmarks
   var zimFilePath: String?,
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
   var zimReaderSource: ZimReaderSource?,
-  val zimUrl: String,
-  var noteTitle: String,
-  var noteFilePath: String,
+  var bookmarkUrl: String,
+  var bookmarkTitle: String,
   var favicon: String?
 ) {
-  constructor(item: NoteListItem) : this(
-    id = item.databaseId,
-    zimId = item.zimId,
-    // pass null for new notes
-    zimFilePath = null,
-    zimReaderSource = item.zimReaderSource,
-    zimUrl = item.zimUrl,
-    noteTitle = item.title,
-    noteFilePath = item.noteFilePath,
-    favicon = item.favicon
+  constructor(item: BookmarkItem) : this(
+    item.databaseId,
+    item.zimId,
+    item.zimName,
+    // pass null for new bookmarks
+    null,
+    item.zimReaderSource,
+    item.bookmarkUrl,
+    item.title,
+    item.favicon
   )
 }

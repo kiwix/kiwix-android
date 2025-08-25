@@ -31,9 +31,13 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -46,6 +50,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import javax.inject.Inject
 
 class CustomMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }
@@ -61,6 +66,10 @@ class CustomMainActivity : CoreMainActivity() {
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 
+  @Inject
+  lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
+
+  @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
@@ -78,6 +87,10 @@ class CustomMainActivity : CoreMainActivity() {
         customBackHandler = customBackHandler
       )
       DialogHost(alertDialogShower)
+    }
+    // run the migration on background thread to avoid any UI related issues.
+    CoroutineScope(Dispatchers.IO).launch {
+      objectBoxDataMigrationHandler.migrate()
     }
     if (savedInstanceState != null) {
       return

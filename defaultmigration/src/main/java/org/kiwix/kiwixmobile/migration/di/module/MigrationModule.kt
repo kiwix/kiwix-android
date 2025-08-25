@@ -16,9 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.di.modules
+package org.kiwix.kiwixmobile.migration.di.module
 
 import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
+import org.kiwix.kiwixmobile.migration.DefaultMigrationHandler
 
 @Module
-abstract class MigrationModule
+class MigrationModule {
+  @Provides
+  fun provideMigrationHandler(): ObjectBoxDataMigrationHandler =
+    DefaultMigrationHandler()
+}

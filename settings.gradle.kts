@@ -4,7 +4,6 @@ include(
   ":custom",
   ":install_time_asset",
   ":objectboxmigration",
-  ":defaultMigration"
+  ":defaultmigration"
 )
 rootProject.name = "kiwix-android"
-include(":objectboxmigration2")

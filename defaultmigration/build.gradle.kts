@@ -6,7 +6,7 @@ plugins {
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 android {
-  namespace = "org.kiwix.kiwixmobile.defaultmigration"
+  namespace = "org.kiwix.kiwixmobile.migration"
 
   defaultConfig {
     minSdk = 25

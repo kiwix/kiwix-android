@@ -16,10 +16,19 @@
  *
  */
 
-package org.kiwix.kiwixmobile.objectboxmigration.di
+package org.kiwix.kiwixmobile.migration
 
-import javax.inject.Scope
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
+import javax.inject.Inject
 
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class MigrationScope
+class ObjectBoxMigrationHandler @Inject constructor(
+  private val objectBoxToRoomMigrator: ObjectBoxToRoomMigrator,
+  private val objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
+) : ObjectBoxDataMigrationHandler {
+  override suspend fun migrate() {
+    objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
+    objectBoxToLibkiwixMigrator.migrateObjectBoxDataToLibkiwix()
+  }
+}

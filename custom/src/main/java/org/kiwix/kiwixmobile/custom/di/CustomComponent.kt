@@ -20,8 +20,13 @@ package org.kiwix.kiwixmobile.custom.di
 
 import dagger.Component
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
+import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
+@Component(
+  dependencies = [CoreComponent::class],
+  modules = [CustomViewModelModule::class, MigrationModule::class, DatabaseModule::class]
+)
 @CustomScope
 interface CustomComponent {
   fun activityComponentBuilder(): CustomActivityComponent.Builder
