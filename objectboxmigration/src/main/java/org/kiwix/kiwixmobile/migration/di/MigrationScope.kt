@@ -16,27 +16,10 @@
  *
  */
 
-package org.kiwix.kiwixmobile.migration.di.module
+package org.kiwix.kiwixmobile.migration.di
 
-import android.content.Context
-import dagger.Module
-import dagger.Provides
-import io.objectbox.BoxStore
-import org.kiwix.kiwixmobile.migration.di.MigrationScope
-import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
+import javax.inject.Scope
 
-@Module
-class DatabaseModule {
-  companion object {
-    var boxStore: BoxStore? = null
-  }
-
-  @Suppress("UnsafeCallOnNullableType")
-  // NOT RECOMMENDED TODO use custom runner to load TestApplication
-  @Provides @MigrationScope fun providesBoxStore(context: Context): BoxStore {
-    if (boxStore == null) {
-      boxStore = MyObjectBox.builder().androidContext(context).build()
-    }
-    return boxStore!!
-  }
-}
+@Scope
+@Retention
+annotation class MigrationScope

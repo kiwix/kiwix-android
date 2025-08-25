@@ -130,8 +130,12 @@ dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+  // inject migration module in test cases.
+  testImplementation(project(":objectboxmigration"))
+  // inject default module for all variant.
   debugImplementation(project(":defaultmigration"))
   releaseImplementation(project(":defaultmigration"))
+  // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
 }
 tasks.register("generateVersionCodeAndName") {

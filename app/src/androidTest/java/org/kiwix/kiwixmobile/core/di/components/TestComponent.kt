@@ -26,10 +26,10 @@ import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
-import org.kiwix.kiwixmobile.core.di.modules.MigrationModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.di.modules.TestNetworkModule
+import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 import javax.inject.Singleton
 
 /**
