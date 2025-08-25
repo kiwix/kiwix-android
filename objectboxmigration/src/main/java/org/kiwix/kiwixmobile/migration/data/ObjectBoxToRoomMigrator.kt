@@ -16,14 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.objectboxmigration.data
+package org.kiwix.kiwixmobile.migration.data
 
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.objectboxmigration.entities.HistoryEntity
-import org.kiwix.kiwixmobile.objectboxmigration.entities.NotesEntity
-import org.kiwix.kiwixmobile.objectboxmigration.entities.RecentSearchEntity
+import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
+import org.kiwix.kiwixmobile.migration.entities.NotesEntity
+import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem

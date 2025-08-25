@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.defaultmigration
+package org.kiwix.kiwixmobile.migration
 
 import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import javax.inject.Inject

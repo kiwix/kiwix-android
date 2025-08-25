@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
-import org.kiwix.kiwixmobile.core.di.modules.MigrationModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
@@ -64,8 +63,7 @@ import javax.inject.Singleton
     DataModule::class,
     CoreViewModelModule::class,
     SearchModule::class,
-    MutexModule::class,
-    MigrationModule::class
+    MutexModule::class
   ]
 )
 interface CoreComponent {

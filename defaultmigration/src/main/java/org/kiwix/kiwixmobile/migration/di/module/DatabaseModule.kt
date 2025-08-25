@@ -16,15 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.defaultmigration
+package org.kiwix.kiwixmobile.migration.di.module
 
 import dagger.Module
-import dagger.Provides
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 
 @Module
-class DefaultMigrationModule {
-  @Provides
-  fun provideMigrationHandler(): ObjectBoxDataMigrationHandler =
-    DefaultMigrationHandler()
+class DatabaseModule {
+  // Do nothing it just for compiling the project, because we are passing the database module
+  // from objectbox migration which have the objectbox.
 }

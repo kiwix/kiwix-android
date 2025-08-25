@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.objectboxmigration.entities
+package org.kiwix.kiwixmobile.migration.entities
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity

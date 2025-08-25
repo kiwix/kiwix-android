@@ -51,6 +51,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -64,6 +66,7 @@ import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -121,6 +124,10 @@ class KiwixMainActivity : CoreMainActivity() {
   private val storageDeviceList = arrayListOf<StorageDevice>()
   private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
+  @Inject
+  lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
+
+  @Suppress("InjectDispatcher")
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
@@ -173,6 +180,10 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     intent?.let {
       pendingIntentFlow.value = it
+    }
+    // run the migration on background thread to avoid any UI related issues.
+    CoroutineScope(Dispatchers.IO).launch {
+      objectBoxDataMigrationHandler.migrate()
     }
   }
 

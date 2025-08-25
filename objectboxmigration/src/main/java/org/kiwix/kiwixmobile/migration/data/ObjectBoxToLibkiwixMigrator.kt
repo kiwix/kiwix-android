@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.objectboxmigration.data
+package org.kiwix.kiwixmobile.migration.data
 
 import io.objectbox.Box
 import io.objectbox.BoxStore
@@ -30,8 +30,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.objectboxmigration.entities.BookOnDiskEntity
-import org.kiwix.kiwixmobile.objectboxmigration.entities.BookmarkEntity
+import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.migration.entities.BookmarkEntity
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
 import java.io.File
