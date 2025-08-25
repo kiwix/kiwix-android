@@ -63,6 +63,8 @@ android {
 dependencies {
   testImplementation(Libs.kotlinx_coroutines_test)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+  // Keep the migration for custom apps, since they are released on playStore.
+  implementation(project(":objectboxmigration"))
 }
 
 fun ProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {

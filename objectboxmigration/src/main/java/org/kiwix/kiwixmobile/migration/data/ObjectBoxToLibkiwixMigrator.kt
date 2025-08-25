@@ -16,23 +16,22 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.data.remote
+package org.kiwix.kiwixmobile.migration.data
 
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
-import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.migration.entities.BookmarkEntity
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
 import java.io.File
@@ -53,7 +52,6 @@ class ObjectBoxToLibkiwixMigrator {
   private val migrationMutex = Mutex()
 
   suspend fun migrateObjectBoxDataToLibkiwix() {
-    CoreApp.coreComponent.inject(this)
     if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
       migrateBookMarks(boxStore.boxFor())
     }
@@ -73,7 +71,12 @@ class ObjectBoxToLibkiwixMigrator {
           bookOnDiskEntity.zimReaderSource = zimReaderSource
         }
       }
-      BookOnDisk(bookOnDiskEntity)
+      BookOnDisk(
+        databaseId = bookOnDiskEntity.id,
+        file = bookOnDiskEntity.file,
+        book = bookOnDiskEntity.toBook(),
+        zimReaderSource = bookOnDiskEntity.zimReaderSource
+      )
     }
     migrationMutex.withLock {
       runCatching {
@@ -118,13 +121,22 @@ class ObjectBoxToLibkiwixMigrator {
                 // to display them on the bookmark screen.
                 null
               }
-            } ?: kotlin.run {
+            } ?: run {
               // for migrating bookmarks for recent custom apps since in recent version of
               // custom app we are using the `assetFileDescriptor` which does not have the filePath.
               null
             }
           libkiwixBookmarks.saveBookmark(
-            LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook),
+            LibkiwixBookmarkItem(
+              zimId = bookmarkEntity.zimId,
+              zimFilePath = bookmarkEntity.zimReaderSource?.toDatabase(),
+              zimReaderSource = bookmarkEntity.zimReaderSource,
+              zimName = bookmarkEntity.zimName,
+              bookmarkUrl = bookmarkEntity.bookmarkUrl,
+              title = bookmarkEntity.bookmarkTitle,
+              favicon = bookmarkEntity.favicon,
+              libKiwixBook = libkiwixBook
+            ),
             shouldWriteBookmarkToFile = index == bookMarksList.size - 1
           )
           archive?.dispose()

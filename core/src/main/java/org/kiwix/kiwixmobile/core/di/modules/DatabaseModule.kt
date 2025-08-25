@@ -20,27 +20,12 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import io.objectbox.BoxStore
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import javax.inject.Singleton
 
 @Module
 open class DatabaseModule {
-  companion object {
-    var boxStore: BoxStore? = null
-  }
-
-  @Suppress("UnsafeCallOnNullableType")
-  // NOT RECOMMENDED TODO use custom runner to load TestApplication
-  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore {
-    if (boxStore == null) {
-      boxStore = MyObjectBox.builder().androidContext(context).build()
-    }
-    return boxStore!!
-  }
-
   @Singleton
   @Provides
   fun provideYourDatabase(

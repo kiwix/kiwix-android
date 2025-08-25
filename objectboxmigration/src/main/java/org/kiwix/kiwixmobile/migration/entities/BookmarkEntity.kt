@@ -15,40 +15,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.dao.entities
+package org.kiwix.kiwixmobile.migration.entities
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
-data class HistoryEntity(
-  @Id var id: Long = 0L,
+data class BookmarkEntity(
+  @Id var id: Long = 0,
   val zimId: String,
-  val zimName: String,
-  // keep this to handle previously saved history
-  val zimFilePath: String?,
+  var zimName: String,
+  // keep this to handle previously saved bookmarks
+  var zimFilePath: String?,
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
   var zimReaderSource: ZimReaderSource?,
-  val favicon: String?,
-  val historyUrl: String,
-  val historyTitle: String,
-  val dateString: String,
-  val timeStamp: Long
+  var bookmarkUrl: String,
+  var bookmarkTitle: String,
+  var favicon: String?
 ) {
-  constructor(historyItem: HistoryItem) : this(
-    historyItem.databaseId,
-    historyItem.zimId,
-    historyItem.zimName,
-    // pass null for new history items
+  constructor(item: BookmarkItem) : this(
+    item.databaseId,
+    item.zimId,
+    item.zimName,
+    // pass null for new bookmarks
     null,
-    historyItem.zimReaderSource,
-    historyItem.favicon,
-    historyItem.historyUrl,
-    historyItem.title,
-    historyItem.dateString,
-    historyItem.timeStamp
+    item.zimReaderSource,
+    item.bookmarkUrl,
+    item.title,
+    item.favicon
   )
 }

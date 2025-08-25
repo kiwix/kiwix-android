@@ -15,21 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.migration.entities
 
-package org.kiwix.kiwixmobile.custom.di
+import io.objectbox.annotation.Entity
+import io.objectbox.annotation.Id
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
-import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
-
-@Component(
-  dependencies = [CoreComponent::class],
-  modules = [CustomViewModelModule::class, MigrationModule::class, DatabaseModule::class]
+@Entity
+data class RecentSearchEntity(
+  @Id var id: Long = 0L,
+  val searchTerm: String,
+  val zimId: String,
+  val url: String?
 )
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
-  fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
-}

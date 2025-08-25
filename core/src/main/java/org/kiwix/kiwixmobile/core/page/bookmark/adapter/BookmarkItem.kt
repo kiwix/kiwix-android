@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 
-import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -35,16 +34,6 @@ data class BookmarkItem(
   override val url: String = bookmarkUrl,
   override val id: Long = databaseId
 ) : Page {
-  constructor(entity: BookmarkEntity) : this(
-    entity.id,
-    entity.zimId,
-    entity.zimName,
-    entity.zimReaderSource,
-    entity.bookmarkUrl,
-    entity.bookmarkTitle,
-    entity.favicon
-  )
-
   constructor(
     title: String,
     url: String,

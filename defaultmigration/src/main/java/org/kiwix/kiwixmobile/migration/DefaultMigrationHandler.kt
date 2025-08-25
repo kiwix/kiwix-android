@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.base.adapter
+package org.kiwix.kiwixmobile.migration
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kotlinx.android.extensions.LayoutContainer
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
+import javax.inject.Inject
 
-abstract class BaseViewHolder<in ITEM>(override val containerView: View) :
-  ViewHolder(
-    containerView
-  ),
-  LayoutContainer {
-  abstract fun bind(item: ITEM)
+class DefaultMigrationHandler @Inject constructor() : ObjectBoxDataMigrationHandler {
+  override suspend fun migrate() {
+    // Do nothing
+  }
 }
