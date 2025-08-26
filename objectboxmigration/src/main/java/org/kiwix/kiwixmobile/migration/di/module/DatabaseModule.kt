@@ -22,7 +22,6 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
-import org.kiwix.kiwixmobile.migration.di.MigrationScope
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 
 @Module
@@ -33,7 +32,7 @@ class DatabaseModule {
 
   @Suppress("UnsafeCallOnNullableType")
   // NOT RECOMMENDED TODO use custom runner to load TestApplication
-  @Provides @MigrationScope fun providesBoxStore(context: Context): BoxStore {
+  @Provides fun providesBoxStore(context: Context): BoxStore {
     if (boxStore == null) {
       boxStore = MyObjectBox.builder().androidContext(context).build()
     }

@@ -39,14 +39,17 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
-import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
+import org.kiwix.kiwixmobile.migration.di.component.DaggerMigrationComponent
+import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.migration.entities.BookmarkEntity
+import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -140,8 +143,20 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
           it.navigate(KiwixDestination.Library.route)
         }
       }
-    boxStore = DatabaseModule.boxStore
-    CoreApp.coreComponent.inject(objectBoxToLibkiwixMigrator)
+    val migrationComponent = DaggerMigrationComponent.builder()
+      .coreComponent(CoreApp.coreComponent)
+      .build()
+
+    // Inject dependencies into migrators
+    migrationComponent.inject(objectBoxToLibkiwixMigrator)
+    val testDir = File(
+      InstrumentationRegistry.getInstrumentation().targetContext.filesDir,
+      "objectbox-test"
+    )
+    boxStore = MyObjectBox.builder()
+      .directory(testDir)
+      .androidContext(InstrumentationRegistry.getInstrumentation().targetContext)
+      .build()
     setUpObjectBoxAndData()
   }
 
@@ -316,8 +331,14 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       val libkiwixBook = Book()
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
         LibkiwixBookmarkItem(
-          secondBookmarkEntity,
-          libkiwixBook
+          zimId = secondBookmarkEntity.zimId,
+          zimFilePath = secondBookmarkEntity.zimReaderSource?.toDatabase(),
+          zimReaderSource = secondBookmarkEntity.zimReaderSource,
+          zimName = secondBookmarkEntity.zimName,
+          bookmarkUrl = secondBookmarkEntity.bookmarkUrl,
+          title = secondBookmarkEntity.bookmarkTitle,
+          favicon = secondBookmarkEntity.favicon,
+          libKiwixBook = libkiwixBook
         )
       )
       bookmarkBox.put(bookmarkEntity)
@@ -456,6 +477,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   fun finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
     TestUtils.deleteTemporaryFilesOfTestCases(context)
+    boxStore?.close()
+    boxStore?.deleteAllFiles()
   }
 
   companion object {

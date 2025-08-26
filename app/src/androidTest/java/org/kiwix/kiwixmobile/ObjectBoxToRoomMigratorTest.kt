@@ -43,17 +43,19 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
-import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
-import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
-import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
+import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
+import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
+import org.kiwix.kiwixmobile.migration.entities.NotesEntity
+import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class ObjectBoxToRoomMigratorTest {
@@ -97,9 +99,18 @@ class ObjectBoxToRoomMigratorTest {
       Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
         .allowMainThreadQueries()
         .build()
-    boxStore = DatabaseModule.boxStore!!
+    val testDir = File(
+      InstrumentationRegistry.getInstrumentation().targetContext.filesDir,
+      "objectbox-test"
+    )
+    boxStore = MyObjectBox.builder()
+      .directory(testDir)
+      .androidContext(InstrumentationRegistry.getInstrumentation().targetContext)
+      .build()
     objectBoxToRoomMigrator = ObjectBoxToRoomMigrator()
-    objectBoxToRoomMigrator.kiwixRoomDatabase = kiwixRoomDatabase
+    objectBoxToRoomMigrator.historyRoomDao = kiwixRoomDatabase.historyRoomDao()
+    objectBoxToRoomMigrator.notesRoomDao = kiwixRoomDatabase.notesRoomDao()
+    objectBoxToRoomMigrator.recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
     objectBoxToRoomMigrator.boxStore = boxStore
     objectBoxToRoomMigrator.sharedPreferenceUtil = SharedPreferenceUtil(context)
   }
@@ -108,6 +119,7 @@ class ObjectBoxToRoomMigratorTest {
   fun cleanup() {
     kiwixRoomDatabase.close()
     boxStore.close()
+    boxStore.deleteAllFiles()
   }
 
   @Test

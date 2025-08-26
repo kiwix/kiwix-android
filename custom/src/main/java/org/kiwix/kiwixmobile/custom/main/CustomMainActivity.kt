@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -50,7 +50,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import javax.inject.Inject
+import org.kiwix.kiwixmobile.custom.customComponent
 
 class CustomMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }
@@ -65,9 +65,6 @@ class CustomMainActivity : CoreMainActivity() {
   override val helpFragmentRoute: String = CustomDestination.Help.route
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
-
-  @Inject
-  lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
 
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +87,11 @@ class CustomMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
-      objectBoxDataMigrationHandler.migrate()
+      if (!sharedPreferenceUtil.prefIsTest) {
+        (this as BaseActivity).customComponent
+          .provideObjectBoxDataMigrationHandler()
+          .migrate()
+      }
     }
     if (savedInstanceState != null) {
       return

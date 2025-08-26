@@ -24,7 +24,7 @@ import androidx.annotation.IdRes
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.custom.di.CustomComponent
 
-private val BaseActivity.customComponent: CustomComponent
+val BaseActivity.customComponent: CustomComponent
   get() = customApp()?.customComponent ?: throw RuntimeException(
     """
         applicationContext is ${applicationContext::class.java.simpleName}
