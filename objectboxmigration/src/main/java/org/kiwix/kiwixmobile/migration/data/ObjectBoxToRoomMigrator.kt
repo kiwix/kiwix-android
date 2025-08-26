@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
 import org.kiwix.kiwixmobile.migration.entities.NotesEntity
@@ -74,6 +75,12 @@ class ObjectBoxToRoomMigrator {
   suspend fun migrateHistory(box: Box<HistoryEntity>) {
     val historyEntityList = box.all
     historyEntityList.forEachIndexed { _, historyEntity ->
+      historyEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved history items
+        ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          historyEntity.zimReaderSource = zimReaderSource
+        }
+      }
       historyRoomDao
         .saveHistory(
           HistoryListItem.HistoryItem(
@@ -98,6 +105,12 @@ class ObjectBoxToRoomMigrator {
   suspend fun migrateNotes(box: Box<NotesEntity>) {
     val notesEntityList = box.all
     notesEntityList.forEachIndexed { _, notesEntity ->
+      notesEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved notes
+        ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          notesEntity.zimReaderSource = zimReaderSource
+        }
+      }
       notesRoomDao.saveNote(
         NoteListItem(
           notesEntity.id,
