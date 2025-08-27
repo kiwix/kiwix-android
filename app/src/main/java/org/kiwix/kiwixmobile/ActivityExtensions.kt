@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.di.components.KiwixActivityComponent
 import org.kiwix.kiwixmobile.di.components.KiwixComponent
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
-val BaseActivity.kiwixComponent: KiwixComponent
+private val BaseActivity.kiwixComponent: KiwixComponent
   get() = kiwixApp()?.kiwixComponent ?: throw RuntimeException(
     """
         applicationContext is ${applicationContext::class.java.simpleName}

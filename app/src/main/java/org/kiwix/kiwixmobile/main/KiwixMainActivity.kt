@@ -59,12 +59,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
@@ -83,7 +83,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.kiwixComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
@@ -182,7 +181,7 @@ class KiwixMainActivity : CoreMainActivity() {
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
       if (!sharedPreferenceUtil.prefIsTest) {
-        (this as BaseActivity).kiwixComponent
+        (applicationContext as KiwixApp).kiwixComponent
           .provideObjectBoxDataMigrationHandler()
           .migrate()
       }
