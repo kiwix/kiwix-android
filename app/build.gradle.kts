@@ -133,7 +133,10 @@ dependencies {
   // inject migration module in test cases.
   androidTestImplementation(project(":objectboxmigration"))
   // inject default module for all variant.
-  implementation(project(":defaultmigration"))
+  debugImplementation(project(":defaultmigration"))
+  releaseImplementation(project(":defaultmigration"))
+  add("nightlyImplementation", project(":defaultmigration"))
+  add("standaloneImplementation", project(":defaultmigration"))
   // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
 }
