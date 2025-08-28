@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.page
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,8 +57,6 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
-import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_SP
@@ -172,22 +169,17 @@ fun PageSwitchRow(
   val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
   if (!context.isCustomApp()) {
-    val switchTextColor = if (isSystemInDarkTheme()) {
-      AlabasterWhite
-    } else {
-      White
-    }
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .background(Black)
+        .background(MaterialTheme.colorScheme.onPrimary)
         .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
       horizontalArrangement = Arrangement.Absolute.Right,
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
         state.switchString,
-        color = switchTextColor,
+        color = MaterialTheme.colorScheme.onBackground,
         style = TextStyle(fontSize = FOURTEEN_SP),
         modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
       )

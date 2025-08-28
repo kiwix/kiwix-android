@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,7 +60,23 @@ fun NavigationIcon(
     Icon(
       painter = iconItem.toPainter(),
       contentDescription = stringResource(contentDescription),
-      tint = iconTint
+      tint = getNavigationIconTintColor(iconTint)
     )
   }
 }
+
+/**
+ * Returns the navigationIcon color.
+ *
+ * If iconTint is set as [Color.Unspecified] then return that color. Because it is set to show
+ * the actual color of image or icon set on navigation icon.
+ *
+ * Otherwise: return the navigationIcon color according to theme.
+ */
+@Composable
+private fun getNavigationIconTintColor(iconTint: Color): Color =
+  if (iconTint == Color.Unspecified) {
+    iconTint
+  } else {
+    MaterialTheme.colorScheme.onBackground
+  }

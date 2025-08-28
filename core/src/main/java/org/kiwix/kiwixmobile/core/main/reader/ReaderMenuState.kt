@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -42,8 +43,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.theme.Black
-import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
@@ -217,15 +216,19 @@ class ReaderMenuState(
       Box(
         modifier = modifier
           .clip(RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
-          .background(Black)
-          .border(ONE_DP, White, RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
+          .background(MaterialTheme.colorScheme.onPrimary)
+          .border(
+            ONE_DP,
+            MaterialTheme.colorScheme.onBackground,
+            RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS)
+          )
           .padding(horizontal = SIX_DP, vertical = TWO_DP)
           .defaultMinSize(minWidth = TWENTY_DP, minHeight = TWENTY_DP),
         contentAlignment = Alignment.Center
       ) {
         Text(
           text = tabLabel,
-          color = White,
+          color = MaterialTheme.colorScheme.onBackground,
           fontWeight = FontWeight.Bold,
           fontSize = TAB_SWITCHER_TEXT_SIZE,
           maxLines = 1,

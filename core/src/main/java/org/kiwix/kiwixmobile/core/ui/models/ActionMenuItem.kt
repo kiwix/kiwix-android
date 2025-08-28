@@ -21,14 +21,11 @@ package org.kiwix.kiwixmobile.core.ui.models
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import org.kiwix.kiwixmobile.core.ui.theme.White
 
 data class ActionMenuItem(
   val icon: IconItem? = null,
   @StringRes val contentDescription: Int,
   val onClick: () -> Unit,
-  val iconTint: Color = White,
   val isEnabled: Boolean = true,
   val iconButtonText: String = "",
   val testingTag: String,

@@ -19,26 +19,16 @@
 package org.kiwix.kiwixmobile.core.base
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.enableEdgeToEdgeMode
-import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.setFragmentBackgroundColorForAndroid15AndAbove
-import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
+import org.kiwix.kiwixmobile.core.extensions.setStatusBarColor
 
 /**
  * All fragments should inherit from this fragment.
  */
 
 abstract class BaseFragment : Fragment() {
-  open val fragmentToolbar: Toolbar? = null
-  open val fragmentTitle: String? = null
-
   override fun onAttach(context: Context) {
     super.onAttach(context)
     inject(activity as BaseActivity)
@@ -47,32 +37,7 @@ abstract class BaseFragment : Fragment() {
   abstract fun inject(baseActivity: BaseActivity)
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    setStatusBarColor()
     super.onViewCreated(view, savedInstanceState)
-    enableEdgeToEdgeMode()
-    setupToolbar()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-      setFragmentBackgroundColorForAndroid15AndAbove()
-    }
-  }
-
-  // Setup toolbar to handle common back pressed event
-  private fun setupToolbar() {
-    val activity = activity as AppCompatActivity?
-    fragmentToolbar?.apply {
-      activity?.let {
-        it.setSupportActionBar(this)
-        it.supportActionBar?.let { actionBar ->
-          actionBar.setDisplayHomeAsUpEnabled(true)
-          actionBar.title = fragmentTitle
-          // set the navigation back button contentDescription
-          getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-            getString(R.string.toolbar_back_button_content_description)
-          )
-        }
-      }
-      setNavigationOnClickListener {
-        activity?.onBackPressedDispatcher?.onBackPressed()
-      }
-    }
   }
 }
