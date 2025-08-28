@@ -141,6 +141,7 @@
   <string name="download_no_space">Espaço insuficiente para descarregar este ficheiro.</string>
   <string name="download">Transferir</string>
   <string name="download_notification_channel_name">Nome do canal de notificação de download</string>
+  <string name="download_notification_channel_description">A transferir ficheiros ZIM…</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="move_no_space">Espaço insuficiente para mover/copiar.</string>
   <string name="zim_simple">Simples</string>
