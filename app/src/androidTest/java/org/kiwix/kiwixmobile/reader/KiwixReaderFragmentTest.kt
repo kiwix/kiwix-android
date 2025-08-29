@@ -272,7 +272,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     Request.Builder()
       .url(
         URI.create(
-          "https://download.kiwix.org/zim/wikipedia_fr_climate_change_mini.zim"
+          "https://download.kiwix.org/zim/wikipedia_fr_climate-change_mini.zim"
         ).toURL()
       ).build()
 

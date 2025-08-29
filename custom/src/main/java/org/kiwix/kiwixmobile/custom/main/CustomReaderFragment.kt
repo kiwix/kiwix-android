@@ -20,17 +20,17 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -80,10 +80,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
     if (isAdded) {
       enableLeftDrawer()
-      with(activity as AppCompatActivity) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        enableLeftDrawer()
-      }
       loadPageFromNavigationArguments()
       if (BuildConfig.DISABLE_EXTERNAL_LINK) {
         // If "external links" are disabled in a custom app,
@@ -185,7 +181,9 @@ class CustomReaderFragment : CoreReaderFragment() {
       // See https://github.com/kiwix/kiwix-android/issues/3541
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
-      openObbOrZim(true)
+      coreReaderLifeCycleScope?.launch {
+        openObbOrZim(true)
+      }
     }
     requireArguments().clear()
   }
@@ -247,12 +245,13 @@ class CustomReaderFragment : CoreReaderFragment() {
    * @param shouldManageExternalLaunch Indicates whether to manage external launch and
    *                                   restore the view state after opening the file. Default is false.
    */
-  private fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
+  @Suppress("InjectDispatcher")
+  private suspend fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
     customFileValidator.validate(
       onFilesFound = {
-        coreReaderLifeCycleScope?.launch {
-          when (it) {
-            is ValidationState.HasFile -> {
+        when (it) {
+          is ValidationState.HasFile -> {
+            withContext(Dispatchers.Main) {
               openZimFile(
                 ZimReaderSource(
                   file = it.file,
@@ -276,31 +275,34 @@ class CustomReaderFragment : CoreReaderFragment() {
                 manageExternalLaunchAndRestoringViewState()
               }
             }
+          }
 
-            is ValidationState.HasBothFiles -> {
-              it.zimFile.delete()
+          is ValidationState.HasBothFiles -> {
+            it.zimFile.delete()
+            withContext(Dispatchers.Main) {
               openZimFile(ZimReaderSource(it.obbFile), true, shouldManageExternalLaunch)
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
                 manageExternalLaunchAndRestoringViewState()
               }
             }
-
-            else -> {}
           }
+
+          else -> {}
         }
       },
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
-          Handler(Looper.getMainLooper()).postDelayed({
+          delay(OPENING_DOWNLOAD_SCREEN_DELAY)
+          withContext(Dispatchers.Main) {
             val navOptions = NavOptions.Builder()
               .setPopUpTo(CustomDestination.Reader.route, true)
               .build()
-            (requireActivity() as CoreMainActivity).navigate(
+            (activity as? CoreMainActivity)?.navigate(
               CustomDestination.Downloads.route,
               navOptions
             )
-          }, OPENING_DOWNLOAD_SCREEN_DELAY)
+          }
         }
       }
     )
@@ -424,7 +426,9 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.onResume()
     if (appSettingsLaunched) {
       appSettingsLaunched = false
-      openObbOrZim()
+      coreReaderLifeCycleScope?.launch {
+        openObbOrZim(true)
+      }
     }
   }
 }
