@@ -30,6 +30,7 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -52,7 +53,6 @@ import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
-import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -182,7 +182,7 @@ fun BottomNavigationBar(
   )
   val currentDestinationRoute = navBackStackEntry?.destination?.route
   BottomAppBar(
-    containerColor = Black,
+    containerColor = MaterialTheme.colorScheme.onPrimary,
     contentColor = White.copy(alpha = 0.5f),
     scrollBehavior = bottomAppBarScrollBehaviour
   ) {
@@ -211,13 +211,13 @@ fun BottomNavigationBar(
           Icon(
             painter = painterResource(id = item.iconRes),
             contentDescription = item.title,
-            tint = White
+            tint = MaterialTheme.colorScheme.onBackground
           )
         },
-        label = { Text(item.title, color = White) },
+        label = { Text(item.title, color = MaterialTheme.colorScheme.onBackground) },
         modifier = Modifier.semantics { testTag = item.testingTag },
         colors = NavigationBarItemDefaults.colors()
-          .copy(selectedIndicatorColor = White.copy(alpha = 0.3f))
+          .copy(selectedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f))
       )
     }
   }

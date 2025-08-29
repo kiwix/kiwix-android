@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -53,6 +55,11 @@ fun KiwixSearchView(
   onClearClick: () -> Unit,
   onKeyboardSubmitButtonClick: (String) -> Unit = {}
 ) {
+  val hintColor = if (isSystemInDarkTheme()) {
+    Color.LightGray
+  } else {
+    Color.Gray
+  }
   val keyboardController = LocalSoftwareKeyboardController.current
   val colors = TextFieldDefaults.colors(
     focusedIndicatorColor = Color.Transparent,
@@ -60,11 +67,10 @@ fun KiwixSearchView(
     focusedContainerColor = Color.Transparent,
     disabledContainerColor = Color.Transparent,
     unfocusedContainerColor = Color.Transparent,
-    focusedTextColor = Color.White
+    focusedTextColor = MaterialTheme.colorScheme.onBackground
   )
   val focusRequester = FocusRequester()
   SideEffect(focusRequester::requestFocus)
-
   TextField(
     modifier = modifier
       .testTag(searchViewTextFiledTestTag)
@@ -75,33 +81,27 @@ fun KiwixSearchView(
     placeholder = {
       Text(
         text = placeholder,
-        color = Color.LightGray,
+        color = hintColor,
         fontSize = ComposeDimens.EIGHTEEN_SP,
         maxLines = ONE,
         overflow = Ellipsis
       )
     },
     colors = colors,
-    textStyle = TextStyle.Default.copy(
-      fontSize = ComposeDimens.EIGHTEEN_SP
-    ),
-    onValueChange = {
-      onValueChange(it.replace("\n", ""))
-    },
+    textStyle = TextStyle.Default.copy(fontSize = ComposeDimens.EIGHTEEN_SP),
+    onValueChange = { onValueChange(it.replace("\n", "")) },
     trailingIcon = {
       if (value.isNotEmpty()) {
         IconButton(onClick = onClearClick, modifier = Modifier.testTag(clearButtonTestTag)) {
           Icon(
             painter = painterResource(R.drawable.ic_clear_white_24dp),
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.onBackground,
             contentDescription = stringResource(R.string.searchview_description_clear)
           )
         }
       }
     },
-    keyboardOptions = KeyboardOptions.Default.copy(
-      imeAction = ImeAction.Done
-    ),
+    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
     keyboardActions = KeyboardActions(
       onDone = {
         keyboardController?.hide()

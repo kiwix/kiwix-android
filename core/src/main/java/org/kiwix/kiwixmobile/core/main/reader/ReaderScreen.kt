@@ -134,9 +134,8 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
@@ -198,7 +197,7 @@ fun ReaderScreen(
     mainActivityBottomAppBarScrollBehaviour?.state?.heightOffset =
       bottomAppBarScrollBehavior.state.heightOffset
   }
-  KiwixDialogTheme {
+  KiwixTheme {
     Box(Modifier.fillMaxSize()) {
       Scaffold(
         snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
@@ -698,8 +697,8 @@ private fun BottomAppBarOfReaderScreen(
 ) {
   if (!shouldShowBottomAppBar) return
   BottomAppBar(
-    containerColor = Black,
-    contentColor = White,
+    containerColor = MaterialTheme.colorScheme.onPrimary,
+    contentColor = MaterialTheme.colorScheme.onBackground,
     scrollBehavior = bottomAppBarScrollBehavior,
   ) {
     Row(

@@ -22,11 +22,15 @@ import android.app.Activity
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -47,3 +51,12 @@ fun Modifier.hideKeyboardOnLazyColumnScroll(lazyListState: LazyListState): Modif
 
   return this
 }
+
+fun Modifier.bottomShadow(shadow: Dp) =
+  clip(
+    GenericShape { size, _ ->
+      lineTo(size.width, 0f)
+      lineTo(size.width, Float.MAX_VALUE)
+      lineTo(0f, Float.MAX_VALUE)
+    }
+  ).shadow(shadow)

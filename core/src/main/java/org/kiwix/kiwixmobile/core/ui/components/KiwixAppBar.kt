@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,16 +48,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
-import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_SHADOW_ELEVATION
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
@@ -82,14 +80,14 @@ fun KiwixAppBar(
       actions = { ActionMenu(actionMenuItems) },
       scrollBehavior = topAppBarScrollBehavior,
       colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = Black,
-        scrolledContainerColor = Black
+        containerColor = MaterialTheme.colorScheme.onPrimary,
+        scrolledContainerColor = MaterialTheme.colorScheme.onPrimary
       ),
       // Edge-to-Edge mode is already enabled in our application,
       // so we don't need to apply additional top insets.
       // This prevents unwanted extra margin at the top.
       windowInsets = WindowInsets.statusBars.only(WindowInsetsSides.Horizontal),
-      modifier = modifier
+      modifier = modifier.shadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)
     )
   }
 }
@@ -118,14 +116,9 @@ private fun AppBarTitleSection(
 private fun AppBarTitle(
   title: String
 ) {
-  val appBarTitleColor = if (isSystemInDarkTheme()) {
-    MineShaftGray350
-  } else {
-    White
-  }
   Text(
     text = title,
-    color = appBarTitleColor,
+    color = MaterialTheme.colorScheme.onBackground,
     style = MaterialTheme.typography.titleMedium,
     overflow = TextOverflow.Ellipsis,
     maxLines = 1,
@@ -149,7 +142,7 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
         Icon(
           imageVector = Icons.Default.MoreVert,
           contentDescription = null,
-          tint = White
+          tint = MaterialTheme.colorScheme.onBackground
         )
       }
     }
@@ -161,7 +154,6 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
 private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
   mainActions.forEach { menuItem ->
     val modifier = menuItem.modifier.testTag(menuItem.testingTag)
-
     menuItem.customView?.let { customComposable ->
       Box(modifier = modifier.clickable(enabled = menuItem.isEnabled) { menuItem.onClick() }) {
         customComposable()
@@ -176,7 +168,7 @@ private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
           Icon(
             painter = iconItem.toPainter(),
             contentDescription = stringResource(menuItem.contentDescription),
-            tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
+            tint = if (menuItem.isEnabled) MaterialTheme.colorScheme.onBackground else Color.Gray
           )
         }
       } ?: run {
@@ -187,7 +179,7 @@ private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
         ) {
           Text(
             text = menuItem.iconButtonText.uppercase(),
-            color = if (menuItem.isEnabled) Color.White else Color.Gray,
+            color = if (menuItem.isEnabled) MaterialTheme.colorScheme.onBackground else Color.Gray,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
           )

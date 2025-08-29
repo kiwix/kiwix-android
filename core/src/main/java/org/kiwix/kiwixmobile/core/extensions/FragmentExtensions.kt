@@ -20,21 +20,16 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.color.MaterialColors
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setWindowBackgroundColorForAndroid15AndAbove
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 inline fun <reified T : ViewModel> Fragment.viewModel(
@@ -64,27 +59,18 @@ fun View.closeKeyboard() {
 val Fragment.coreMainActivity get() = activity as CoreMainActivity
 
 /**
- * It enables the edge to edge mode for fragments.
+ * Updates the Activity window’s background color to match the current theme (light or dark).
+ *
+ * Since the status bar is drawn over the window background in edge-to-edge mode,
+ * this effectively controls the visible status bar color and ensures proper
+ * contrast with dark mode or light mode.
  */
-fun Fragment.enableEdgeToEdgeMode() {
-  activity?.window?.let {
-    WindowCompat.setDecorFitsSystemWindows(it, false)
+fun Fragment.setStatusBarColor() {
+  val darkModeActivity = CoreApp.instance.darkModeConfig.isDarkModeActive()
+  val windowBackGroundColor = if (darkModeActivity) {
+    Color.BLACK
+  } else {
+    Color.WHITE
   }
-}
-
-/**
- * We are changing the fragment's background color for android 15 and above.
- * @see setWindowBackgroundColorForAndroid15AndAbove for more details.
- */
-@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-fun Fragment.setFragmentBackgroundColorForAndroid15AndAbove() {
-  this.view?.let {
-    val darkModeActivity = CoreApp.instance.darkModeConfig.isDarkModeActive()
-    val windowBackGroundColor = if (darkModeActivity) {
-      MaterialColors.getColor(it.context, android.R.attr.windowBackground, Color.BLACK)
-    } else {
-      MaterialColors.getColor(it.context, android.R.attr.windowBackground, Color.WHITE)
-    }
-    it.setBackgroundColor(windowBackGroundColor)
-  }
+  activity?.window?.decorView?.setBackgroundColor(windowBackGroundColor)
 }
