@@ -38,6 +38,7 @@ object ComposeDimens {
   // KiwixAppBar(Toolbar) dimens
   val ACTION_MENU_TEXTVIEW_BUTTON_PADDING = 13.dp
   val KIWIX_TOOLBAR_HEIGHT = 56.dp
+  val KIWIX_TOOLBAR_SHADOW_ELEVATION = 4.dp
 
   // Padding & Margins
   val SIXTY_DP = 60.dp

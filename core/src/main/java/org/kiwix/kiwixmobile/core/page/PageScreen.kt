@@ -35,6 +35,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -49,6 +50,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.bottomShadow
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
@@ -60,6 +62,7 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_SP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_SHADOW_ELEVATION
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_LEFT_RIGHT_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_ROW_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -169,30 +172,32 @@ fun PageSwitchRow(
   val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
   if (!context.isCustomApp()) {
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .background(MaterialTheme.colorScheme.onPrimary)
-        .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
-      horizontalArrangement = Arrangement.Absolute.Right,
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Text(
-        state.switchString,
-        color = MaterialTheme.colorScheme.onBackground,
-        style = TextStyle(fontSize = FOURTEEN_SP),
-        modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
-      )
-      Switch(
-        checked = state.switchIsChecked,
-        onCheckedChange = { state.onSwitchCheckedChanged(it) },
-        enabled = state.switchIsEnabled,
+    Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
+      Row(
         modifier = Modifier
-          .padding(horizontal = PAGE_SWITCH_LEFT_RIGHT_MARGIN),
-        colors = SwitchDefaults.colors(
-          uncheckedTrackColor = White
+          .fillMaxWidth()
+          .background(MaterialTheme.colorScheme.onPrimary)
+          .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
+        horizontalArrangement = Arrangement.Absolute.Right,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          state.switchString,
+          color = MaterialTheme.colorScheme.onBackground,
+          style = TextStyle(fontSize = FOURTEEN_SP),
+          modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
         )
-      )
+        Switch(
+          checked = state.switchIsChecked,
+          onCheckedChange = { state.onSwitchCheckedChanged(it) },
+          enabled = state.switchIsEnabled,
+          modifier = Modifier
+            .padding(horizontal = PAGE_SWITCH_LEFT_RIGHT_MARGIN),
+          colors = SwitchDefaults.colors(
+            uncheckedTrackColor = White
+          )
+        )
+      }
     }
   }
 }
