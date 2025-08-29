@@ -23,6 +23,9 @@ import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
@@ -32,13 +35,18 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CustomFileValidator @Inject constructor(private val context: Context) {
-  fun validate(onFilesFound: (ValidationState) -> Unit, onNoFilesFound: () -> Unit) =
+  suspend fun validate(
+    onFilesFound: suspend (ValidationState) -> Unit,
+    onNoFilesFound: suspend () -> Unit,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) = withContext(dispatcher) {
     when (val installationState = detectInstallationState()) {
       is HasBothFiles,
       is HasFile -> onFilesFound(installationState)
 
       HasNothing -> onNoFilesFound()
     }
+  }
 
   private fun detectInstallationState(
     obbFiles: List<File> = obbFiles(),

@@ -2487,17 +2487,16 @@ abstract class CoreReaderFragment :
     )
   }
 
-  @Suppress("TooGenericExceptionCaught")
   protected suspend fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch,
     dispatchersToGetWebViewHistoryFromDatabase: CoroutineDispatcher = Dispatchers.IO
   ) {
-    val settings = requireActivity().getSharedPreferences(
-      SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-      0
-    )
-    val currentTab = safelyGetCurrentTab(settings)
-    try {
+    runCatching {
+      val settings = requireActivity().getSharedPreferences(
+        SharedPreferenceUtil.PREF_KIWIX_MOBILE,
+        0
+      )
+      val currentTab = safelyGetCurrentTab(settings)
       val webViewHistoryList = withContext(dispatchersToGetWebViewHistoryFromDatabase) {
         // perform database operation on IO thread.
         repositoryActions?.loadWebViewPagesHistory().orEmpty()
@@ -2524,10 +2523,10 @@ abstract class CoreReaderFragment :
         findInPageTitle = null
         handlePendingIntent()
       }
-    } catch (e: Exception) {
+    }.onFailure {
       Log.e(
         TAG_KIWIX,
-        "Could not restore tabs. Original exception = ${e.printStackTrace()}"
+        "Could not restore tabs. Original exception = ${it.printStackTrace()}"
       )
       restoreViewStateOnInvalidWebViewHistory()
       // handle the pending intent if any present.

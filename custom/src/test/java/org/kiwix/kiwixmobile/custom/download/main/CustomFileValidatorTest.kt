@@ -26,6 +26,7 @@ import android.content.res.AssetManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
@@ -48,7 +49,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onFilesFound when both OBB and ZIM files are found`() {
+  fun `validate should call onFilesFound when both OBB and ZIM files are found`() = runTest {
     val obbFile = mockk<File>()
     val zimFile = mockk<File>()
     mockZimFiles(arrayOf(obbFile), "obb")
@@ -65,7 +66,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onFilesFound when only OBB file is found`() {
+  fun `validate should call onFilesFound when only OBB file is found`() = runTest {
     val obbFile = mockk<File>()
     mockZimFiles(arrayOf(obbFile), "obb")
     mockZimFiles(arrayOf(), "zim")
@@ -80,7 +81,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onFilesFound when only ZIM file is found`() {
+  fun `validate should call onFilesFound when only ZIM file is found`() = runTest {
     val zimFile = mockk<File>()
     mockZimFiles(arrayOf(), "obb")
     mockZimFiles(arrayOf(zimFile), "zim")
@@ -95,7 +96,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onNoFilesFound when no OBB or ZIM files are found`() {
+  fun `validate should call onNoFilesFound when no OBB or ZIM files are found`() = runTest {
     mockZimFiles(arrayOf(), extension = "zim")
     mockZimFiles(arrayOf(), extension = "obb")
 
@@ -106,7 +107,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onNoFilesFound when directories are null`() {
+  fun `validate should call onNoFilesFound when directories are null`() = runTest {
     mockZimFiles(null, "zim")
     mockZimFiles(null, "obb")
 
@@ -117,7 +118,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onNoFilesFound when no matching files are found`() {
+  fun `validate should call onNoFilesFound when no matching files are found`() = runTest {
     val textFile = mockk<File>()
     mockZimFiles(arrayOf(textFile), "txt")
 
@@ -128,7 +129,7 @@ class CustomFileValidatorTest {
   }
 
   @Test
-  fun `validate should call onFilesFound for case insensitive file extensions`() {
+  fun `validate should call onFilesFound for case insensitive file extensions`() = runTest {
     val zimFile = mockk<File>()
     mockZimFiles(arrayOf(zimFile), "ZIM")
 
