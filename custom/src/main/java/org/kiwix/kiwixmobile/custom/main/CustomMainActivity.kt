@@ -31,6 +31,9 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
@@ -44,6 +47,7 @@ import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
+import org.kiwix.kiwixmobile.custom.CustomApp
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 
@@ -61,6 +65,7 @@ class CustomMainActivity : CoreMainActivity() {
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 
+  @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
@@ -78,6 +83,14 @@ class CustomMainActivity : CoreMainActivity() {
         customBackHandler = customBackHandler
       )
       DialogHost(alertDialogShower)
+    }
+    // run the migration on background thread to avoid any UI related issues.
+    CoroutineScope(Dispatchers.IO).launch {
+      if (!sharedPreferenceUtil.prefIsTest) {
+        (applicationContext as CustomApp).customComponent
+          .provideObjectBoxDataMigrationHandler()
+          .migrate()
+      }
     }
     if (savedInstanceState != null) {
       return

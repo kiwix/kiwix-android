@@ -88,7 +88,7 @@ class LocalLibraryTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       // set PREF_IS_TEST false for testing the real scenario
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       // set PREF_MANAGE_EXTERNAL_FILES false for hiding
       // manage external storage permission dialog on android 11 and above
       putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, false)

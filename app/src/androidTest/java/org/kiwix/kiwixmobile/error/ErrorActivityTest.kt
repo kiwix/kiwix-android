@@ -66,6 +66,7 @@ class ErrorActivityTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context)
       .edit {
         putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+        putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
         putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
         putString(SharedPreferenceUtil.PREF_LANG, "en")
         putLong(

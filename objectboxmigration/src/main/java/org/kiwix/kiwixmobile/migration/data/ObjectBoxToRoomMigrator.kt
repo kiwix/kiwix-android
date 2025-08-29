@@ -16,30 +16,35 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.data.remote
+package org.kiwix.kiwixmobile.migration.data
 
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
-import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
-import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
+import org.kiwix.kiwixmobile.migration.entities.NotesEntity
+import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
 import javax.inject.Inject
 
 class ObjectBoxToRoomMigrator {
-  @Inject lateinit var kiwixRoomDatabase: KiwixRoomDatabase
+  @Inject lateinit var recentSearchRoomDao: RecentSearchRoomDao
+
+  @Inject lateinit var historyRoomDao: HistoryRoomDao
+
+  @Inject lateinit var notesRoomDao: NotesRoomDao
 
   @Inject lateinit var boxStore: BoxStore
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   suspend fun migrateObjectBoxDataToRoom() {
-    CoreApp.coreComponent.inject(this)
     if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
       migrateRecentSearch(boxStore.boxFor())
     }
@@ -55,7 +60,7 @@ class ObjectBoxToRoomMigrator {
   suspend fun migrateRecentSearch(box: Box<RecentSearchEntity>) {
     val searchRoomEntityList = box.all
     searchRoomEntityList.forEachIndexed { _, recentSearchEntity ->
-      kiwixRoomDatabase.recentSearchRoomDao()
+      recentSearchRoomDao
         .saveSearch(
           recentSearchEntity.searchTerm,
           recentSearchEntity.zimId,
@@ -70,8 +75,27 @@ class ObjectBoxToRoomMigrator {
   suspend fun migrateHistory(box: Box<HistoryEntity>) {
     val historyEntityList = box.all
     historyEntityList.forEachIndexed { _, historyEntity ->
-      kiwixRoomDatabase.historyRoomDao()
-        .saveHistory(HistoryListItem.HistoryItem(historyEntity))
+      historyEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved history items
+        ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          historyEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      historyRoomDao
+        .saveHistory(
+          HistoryListItem.HistoryItem(
+            historyEntity.id,
+            historyEntity.zimId,
+            historyEntity.zimName,
+            historyEntity.zimReaderSource,
+            historyEntity.favicon,
+            historyEntity.historyUrl,
+            historyEntity.historyTitle,
+            historyEntity.dateString,
+            historyEntity.timeStamp,
+            false
+          )
+        )
       // removing the single entity from the object box after migration.
       box.remove(historyEntity.id)
     }
@@ -81,7 +105,23 @@ class ObjectBoxToRoomMigrator {
   suspend fun migrateNotes(box: Box<NotesEntity>) {
     val notesEntityList = box.all
     notesEntityList.forEachIndexed { _, notesEntity ->
-      kiwixRoomDatabase.notesRoomDao().saveNote(NoteListItem(notesEntity))
+      notesEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved notes
+        ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          notesEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      notesRoomDao.saveNote(
+        NoteListItem(
+          notesEntity.id,
+          notesEntity.zimId,
+          notesEntity.noteTitle,
+          notesEntity.zimReaderSource,
+          notesEntity.zimUrl,
+          notesEntity.noteFilePath,
+          notesEntity.favicon
+        )
+      )
       // removing the single entity from the object box after migration.
       box.remove(notesEntity.id)
     }

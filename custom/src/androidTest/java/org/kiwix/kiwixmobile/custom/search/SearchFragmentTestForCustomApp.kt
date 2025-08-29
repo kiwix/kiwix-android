@@ -54,8 +54,10 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
+import org.kiwix.kiwixmobile.custom.testutils.RetryRule
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -81,9 +83,9 @@ class SearchFragmentTestForCustomApp {
     InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
   }
 
-  // @Rule(order = RETRY_RULE_ORDER)
-  // @JvmField
-  // var retryRule = RetryRule()
+  @Rule(order = RETRY_RULE_ORDER)
+  @JvmField
+  var retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()

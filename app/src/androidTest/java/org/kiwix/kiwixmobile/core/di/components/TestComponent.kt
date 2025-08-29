@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.di.modules.TestNetworkModule
+import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 import javax.inject.Singleton
 
 /**
@@ -44,7 +45,8 @@ import javax.inject.Singleton
     DataModule::class,
     CoreViewModelModule::class,
     SearchModule::class,
-    MutexModule::class
+    MutexModule::class,
+    MigrationModule::class
   ]
 )
 interface TestComponent : CoreComponent {

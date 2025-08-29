@@ -19,7 +19,9 @@ package org.kiwix.kiwixmobile.help
 
 import android.os.Build
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -59,6 +61,11 @@ class HelpFragmentTest : BaseActivityTest() {
         closeSystemDialogs(context, this)
       }
       waitForIdle()
+    }
+    PreferenceManager.getDefaultSharedPreferences(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

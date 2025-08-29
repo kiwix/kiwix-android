@@ -51,12 +51,15 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
@@ -121,6 +124,7 @@ class KiwixMainActivity : CoreMainActivity() {
   private val storageDeviceList = arrayListOf<StorageDevice>()
   private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
+  @Suppress("InjectDispatcher")
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
@@ -173,6 +177,14 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     intent?.let {
       pendingIntentFlow.value = it
+    }
+    // run the migration on background thread to avoid any UI related issues.
+    CoroutineScope(Dispatchers.IO).launch {
+      if (!sharedPreferenceUtil.prefIsTest) {
+        (applicationContext as KiwixApp).kiwixComponent
+          .provideObjectBoxDataMigrationHandler()
+          .migrate()
+      }
     }
   }
 

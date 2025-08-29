@@ -139,6 +139,7 @@ class KiwixSplashActivityTest {
       PreferenceManager.getDefaultSharedPreferences(
         context
       ).edit()
+    preferencesEditor.putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true).commit()
     preferencesEditor.putBoolean(
       SharedPreferenceUtil.PREF_SHOW_INTRO,
       value

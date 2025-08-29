@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,36 +15,41 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.dao.entities
+
+package org.kiwix.kiwixmobile.migration.entities
 
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
-data class BookmarkEntity(
-  @Id var id: Long = 0,
+data class HistoryEntity(
+  @Id var id: Long = 0L,
   val zimId: String,
-  var zimName: String,
-  // keep this to handle previously saved bookmarks
-  var zimFilePath: String?,
+  val zimName: String,
+  // keep this to handle previously saved history
+  val zimFilePath: String?,
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
   var zimReaderSource: ZimReaderSource?,
-  var bookmarkUrl: String,
-  var bookmarkTitle: String,
-  var favicon: String?
+  val favicon: String?,
+  val historyUrl: String,
+  val historyTitle: String,
+  val dateString: String,
+  val timeStamp: Long
 ) {
-  constructor(item: BookmarkItem) : this(
-    item.databaseId,
-    item.zimId,
-    item.zimName,
-    // pass null for new bookmarks
+  constructor(historyItem: HistoryListItem.HistoryItem) : this(
+    historyItem.databaseId,
+    historyItem.zimId,
+    historyItem.zimName,
+    // pass null for new history items
     null,
-    item.zimReaderSource,
-    item.bookmarkUrl,
-    item.title,
-    item.favicon
+    historyItem.zimReaderSource,
+    historyItem.favicon,
+    historyItem.historyUrl,
+    historyItem.title,
+    historyItem.dateString,
+    historyItem.timeStamp
   )
 }
