@@ -166,7 +166,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject
   lateinit var downloadMonitor: DownloadMonitor
 
-  @Suppress("InjectDispatcher")
+  @Suppress("InjectDispatcher", "DefaultUncaughtExceptionDelegation")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
