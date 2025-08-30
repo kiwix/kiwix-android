@@ -23,6 +23,7 @@
 * Nol
 * Pittigrilli
 * Rofiatmustapha12
+* Russianbabe1978
 * Sebastian Wallroth
 * SergeCroise
 * Stephane
@@ -157,6 +158,7 @@
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
   <string name="download">Herunterladen</string>
   <string name="download_notification_channel_name">Benachrichtigungskanal-Namen herunterladen</string>
+  <string name="download_notification_channel_description">ZIM-Dateien werden heruntergeladen …</string>
   <string name="space_available">Verfügbarer Speicher:</string>
   <string name="move_no_space">Nicht genügend Platz zum Verschieben/Kopieren.</string>
   <string name="zim_simple">Einfach</string>
