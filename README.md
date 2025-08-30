@@ -80,7 +80,7 @@ Kiwix requires the following permissions to fully work:
 
 ## Build instructions
 1. Clone [this repository](https://github.com/kiwix/kiwix-android).
-2. Import the project with [Android Studio Narwhal Canary build](https://developer.android.com/studio/preview).
+2. Import the project with [Android Studio](https://developer.android.com/studio).
 3. Set the Gradle JDK to Java 17.
 4. Run ./gradlew build from the root directory.
 
