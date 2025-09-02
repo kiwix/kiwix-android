@@ -45,6 +45,8 @@ import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -125,10 +127,10 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
         val navOptions = NavOptions.Builder()
           .setPopUpTo(KiwixDestination.Reader.route, false)
           .build()
-        kiwixMainActivity.navigate(
-          KiwixDestination.Reader.createRoute(zimFileUri = it.toUri().toString()),
-          navOptions
-        )
+        kiwixMainActivity.apply {
+          kiwixMainActivity.navigate(KiwixDestination.Reader.route, navOptions)
+          setNavigationResultOnCurrent(it.toUri().toString(), ZIM_FILE_URI_KEY)
+        }
       }
       composeTestRule.waitForIdle()
       navigationHistory {
