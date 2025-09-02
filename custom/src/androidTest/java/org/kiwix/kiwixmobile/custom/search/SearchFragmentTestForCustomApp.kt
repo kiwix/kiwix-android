@@ -22,6 +22,8 @@ import android.Manifest
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -51,6 +53,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -61,6 +64,7 @@ import org.kiwix.kiwixmobile.custom.testutils.RetryRule
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
@@ -294,13 +298,14 @@ class SearchFragmentTestForCustomApp {
       // click on home button to load the main page of ZIM file.
       clickOnHomeButton(composeTestRule)
       // click on an article to load the other page.
-      clickOnAFoolForYouArticle()
-      assertAFoolForYouArticleLoaded()
+      clickOnAFoolForYouArticle(composeTestRule)
+      assertAFoolForYouArticleLoaded(composeTestRule)
       // open note screen.
       openNoteFragment(customMainActivity as CoreMainActivity, composeTestRule)
-      pressBack()
+      composeTestRule.waitUntilTimeout()
+      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
       // after came back check the previously loaded article is still showing or not.
-      assertAFoolForYouArticleLoaded()
+      assertAFoolForYouArticleLoaded(composeTestRule)
     }
   }
 
