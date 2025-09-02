@@ -44,14 +44,17 @@ tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
   def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
 
   rootProject.subprojects.each { proj ->
-    javaClasses << fileTree(dir: "$proj.buildDir/intermediates/javac/debug", excludes: fileFilter)
-    kotlinClasses << fileTree(dir: "$proj.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
-    javaSrc << "$proj.projectDir/src/main/java"
-    kotlinSrc << "$proj.projectDir/src/main/kotlin"
-    execution << fileTree(dir: proj.buildDir,
-      includes: ['jacoco/testDebugUnitTest.exec',
-        'outputs/code-coverage/connected/*coverage.ec',
-        'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
+    if (proj.name != "defaultmigration") {
+      javaClasses << fileTree(dir: "$proj.buildDir/intermediates/javac/debug", excludes: fileFilter)
+      kotlinClasses << fileTree(dir: "$proj.buildDir/tmp/kotlin-classes/debug",
+        excludes: fileFilter)
+      javaSrc << "$proj.projectDir/src/main/java"
+      kotlinSrc << "$proj.projectDir/src/main/kotlin"
+      execution << fileTree(dir: proj.buildDir,
+        includes: ['jacoco/testDebugUnitTest.exec',
+          'outputs/code-coverage/connected/*coverage.ec',
+          'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
+    }
   }
   sourceDirectories.from = files(javaSrc, kotlinSrc)
   classDirectories.from = files(javaClasses, kotlinClasses)

@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import com.slack.keeper.optInToKeeper
 import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin
@@ -131,6 +130,15 @@ dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+  // inject migration module in test cases.
+  androidTestImplementation(project(":objectboxmigration"))
+  // inject default module for all variant.
+  debugImplementation(project(":defaultmigration"))
+  releaseImplementation(project(":defaultmigration"))
+  add("nightlyImplementation", project(":defaultmigration"))
+  add("standaloneImplementation", project(":defaultmigration"))
+  // inject migration module in playStore variant.
+  add("playStoreImplementation", project(":objectboxmigration"))
 }
 tasks.register("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")

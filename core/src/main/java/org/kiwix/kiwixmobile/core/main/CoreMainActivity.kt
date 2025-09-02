@@ -47,8 +47,6 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
-import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
@@ -165,10 +163,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
 
-  @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
-
-  @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
-
   @Inject
   lateinit var downloadMonitor: DownloadMonitor
 
@@ -192,14 +186,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
 
     setMainActivityToCoreApp()
-    // run the migration on background thread to avoid any UI related issues.
-    CoroutineScope(Dispatchers.IO).launch {
-      objectBoxToLibkiwixMigrator.migrateObjectBoxDataToLibkiwix()
-    }
-    // run the migration on background thread to avoid any UI related issues.
-    CoroutineScope(Dispatchers.IO).launch {
-      objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
-    }
     lifecycleScope.launch(Dispatchers.IO) {
       createApplicationShortcuts()
     }

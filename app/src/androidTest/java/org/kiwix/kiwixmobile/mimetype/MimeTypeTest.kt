@@ -55,6 +55,7 @@ class MimeTypeTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,

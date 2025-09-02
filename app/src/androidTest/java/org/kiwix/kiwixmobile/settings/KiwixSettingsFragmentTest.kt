@@ -19,7 +19,9 @@ package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
@@ -96,6 +98,11 @@ class KiwixSettingsFragmentTest {
         )
       }
       waitForIdle()
+    }
+    PreferenceManager.getDefaultSharedPreferences(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
     val activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)

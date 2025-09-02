@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
-import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -53,17 +52,6 @@ sealed class BooksOnDiskListItem {
     val locale: Locale by lazy {
       book.language.convertToLocal()
     }
-
-    @Deprecated(
-      "Now we are using the libkiwix to store and retrieve the local " +
-        "books so this constructor is no longer used."
-    )
-    constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
-      databaseId = bookOnDiskEntity.id,
-      file = bookOnDiskEntity.file,
-      book = bookOnDiskEntity.toBook(),
-      zimReaderSource = bookOnDiskEntity.zimReaderSource
-    )
 
     constructor(downloadRoomEntity: DownloadRoomEntity) : this(
       book = downloadRoomEntity.toBook(),

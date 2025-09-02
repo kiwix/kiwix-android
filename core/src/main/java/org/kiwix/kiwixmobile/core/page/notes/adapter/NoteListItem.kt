@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.page.notes.adapter
 
-import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -18,16 +17,6 @@ data class NoteListItem(
   override val url: String = zimUrl,
   override val id: Long = databaseId
 ) : Page, Serializable {
-  constructor(notesEntity: NotesEntity) : this(
-    notesEntity.id,
-    notesEntity.zimId,
-    notesEntity.noteTitle,
-    notesEntity.zimReaderSource,
-    notesEntity.zimUrl,
-    notesEntity.noteFilePath,
-    notesEntity.favicon
-  )
-
   constructor(
     zimId: String,
     title: String,
