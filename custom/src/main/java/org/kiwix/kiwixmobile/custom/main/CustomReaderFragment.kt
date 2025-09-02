@@ -32,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -174,7 +175,10 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun loadPageFromNavigationArguments() {
-    val pageUrl = arguments?.getString(PAGE_URL_KEY).orEmpty()
+    val customMainActivity = activity as? CustomMainActivity
+    val savedStateHandle =
+      customMainActivity?.navController?.currentBackStackEntry?.savedStateHandle
+    val pageUrl = savedStateHandle?.get<String>(PAGE_URL_KEY).orEmpty()
     if (pageUrl.isNotEmpty()) {
       loadUrlWithCurrentWebview(pageUrl)
       // Setup bookmark for current book
@@ -185,7 +189,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         openObbOrZim(true)
       }
     }
-    requireArguments().clear()
+    customMainActivity?.consumeObservable<String>(PAGE_URL_KEY)
   }
 
   /**

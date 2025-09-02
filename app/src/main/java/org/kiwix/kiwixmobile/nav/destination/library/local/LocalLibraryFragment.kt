@@ -70,6 +70,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -485,10 +486,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
         .build()
-      activity?.navigate(
-        KiwixDestination.Reader.createRoute(zimFileUri = file.toUri().toString()),
-        navOptions
-      )
+      activity?.apply {
+        navigate(KiwixDestination.Reader.route, navOptions)
+        setNavigationResultOnCurrent(file.toUri().toString(), ZIM_FILE_URI_KEY)
+      }
     }
   }
 

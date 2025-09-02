@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,17 +39,12 @@ import androidx.navigation.navArgument
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
@@ -73,36 +67,9 @@ fun CustomNavGraph(
     startDestination = CustomDestination.Reader.route,
     modifier = modifier
   ) {
-    composable(
-      route = CustomDestination.Reader.route,
-      arguments = listOf(
-        navArgument(FIND_IN_PAGE_SEARCH_STRING) {
-          type = NavType.StringType
-          defaultValue = ""
-        },
-        navArgument(PAGE_URL_KEY) {
-          type = NavType.StringType
-          defaultValue = ""
-        },
-        navArgument(SHOULD_OPEN_IN_NEW_TAB) {
-          type = NavType.BoolType
-          defaultValue = false
-        }
-      )
-    ) { backStackEntry ->
-      val findInPageSearchString =
-        backStackEntry.arguments?.getString(FIND_IN_PAGE_SEARCH_STRING).orEmpty()
-      val pageUrl = backStackEntry.arguments?.getString(PAGE_URL_KEY).orEmpty()
-      val shouldOpenInNewTab = backStackEntry.arguments?.getBoolean(SHOULD_OPEN_IN_NEW_TAB) ?: false
-
+    composable(route = CustomDestination.Reader.route) { backStackEntry ->
       FragmentContainer(R.id.readerFragmentContainer) {
-        CustomReaderFragment().apply {
-          arguments = Bundle().apply {
-            putString(FIND_IN_PAGE_SEARCH_STRING, findInPageSearchString)
-            putString(PAGE_URL_KEY, pageUrl)
-            putBoolean(SHOULD_OPEN_IN_NEW_TAB, shouldOpenInNewTab)
-          }
-        }
+        CustomReaderFragment()
       }
     }
     composable(CustomDestination.History.route) {
@@ -197,29 +164,7 @@ fun FragmentContainer(
 }
 
 sealed class CustomDestination(val route: String) {
-  object Reader : CustomDestination(
-    READER_FRAGMENT +
-      "?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}" +
-      "&$FIND_IN_PAGE_SEARCH_STRING={$FIND_IN_PAGE_SEARCH_STRING}" +
-      "&$PAGE_URL_KEY={$PAGE_URL_KEY}" +
-      "&$SHOULD_OPEN_IN_NEW_TAB={$SHOULD_OPEN_IN_NEW_TAB}" +
-      "&$SEARCH_ITEM_TITLE_KEY={$SEARCH_ITEM_TITLE_KEY}"
-  ) {
-    fun createRoute(
-      zimFileUri: String = "",
-      findInPageSearchString: String = "",
-      pageUrl: String = "",
-      shouldOpenInNewTab: Boolean = false,
-      searchItemTitle: String = ""
-    ): String {
-      return READER_FRAGMENT +
-        "?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}" +
-        "&$FIND_IN_PAGE_SEARCH_STRING=${Uri.encode(findInPageSearchString)}" +
-        "&$PAGE_URL_KEY=${Uri.encode(pageUrl)}" +
-        "&$SHOULD_OPEN_IN_NEW_TAB=$shouldOpenInNewTab" +
-        "&$SEARCH_ITEM_TITLE_KEY=${Uri.encode(searchItemTitle)}"
-    }
-  }
+  object Reader : CustomDestination(READER_FRAGMENT)
 
   object History : CustomDestination(HISTORY_FRAGMENT)
   object Notes : CustomDestination(NOTES_FRAGMENT)

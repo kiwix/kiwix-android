@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -56,6 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 
@@ -86,9 +88,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
   @Suppress("MagicNumber")
   private fun openPageInBookFromNavigationArguments() {
     showProgressBarWithProgress(30)
-    val zimFileUri = arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
-    val pageUrl = arguments?.getString(PAGE_URL_KEY).orEmpty()
-    val searchItemTitle = arguments?.getString(SEARCH_ITEM_TITLE_KEY).orEmpty()
+    val kiwixMainActivity = activity as? KiwixMainActivity
+    val savedStateHandle = kiwixMainActivity?.navController?.currentBackStackEntry?.savedStateHandle
+
+    val zimFileUri = savedStateHandle?.get<String>(ZIM_FILE_URI_KEY).orEmpty()
+    val pageUrl = savedStateHandle?.get<String>(PAGE_URL_KEY).orEmpty()
+    val searchItemTitle = savedStateHandle?.get<String>(SEARCH_ITEM_TITLE_KEY).orEmpty()
     coreReaderLifeCycleScope?.launch {
       if (pageUrl.isNotEmpty()) {
         if (zimFileUri.isNotEmpty()) {
@@ -111,7 +116,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
           manageExternalLaunchAndRestoringViewState(restoreOrigin)
         }
       }
-      requireArguments().clear()
+      // Consume the argument.
+      kiwixMainActivity?.apply {
+        consumeObservable<String>(ZIM_FILE_URI_KEY)
+        consumeObservable<String>(PAGE_URL_KEY)
+        consumeObservable<String>(SEARCH_ITEM_TITLE_KEY)
+      }
     }
   }
 

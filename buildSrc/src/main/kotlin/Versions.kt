@@ -46,7 +46,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "8.11.0-alpha03"
+  const val com_android_tools_build_gradle: String = "8.11.1"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
