@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -176,9 +177,8 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   private fun loadPageFromNavigationArguments() {
     val customMainActivity = activity as? CustomMainActivity
-    val savedStateHandle =
-      customMainActivity?.navController?.currentBackStackEntry?.savedStateHandle
-    val pageUrl = savedStateHandle?.get<String>(PAGE_URL_KEY).orEmpty()
+    val pageUrl =
+      customMainActivity?.getObservableNavigationResult<String>(PAGE_URL_KEY)?.value.orEmpty()
     if (pageUrl.isNotEmpty()) {
       loadUrlWithCurrentWebview(pageUrl)
       // Setup bookmark for current book

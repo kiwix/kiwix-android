@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -89,11 +90,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun openPageInBookFromNavigationArguments() {
     showProgressBarWithProgress(30)
     val kiwixMainActivity = activity as? KiwixMainActivity
-    val savedStateHandle = kiwixMainActivity?.navController?.currentBackStackEntry?.savedStateHandle
-
-    val zimFileUri = savedStateHandle?.get<String>(ZIM_FILE_URI_KEY).orEmpty()
-    val pageUrl = savedStateHandle?.get<String>(PAGE_URL_KEY).orEmpty()
-    val searchItemTitle = savedStateHandle?.get<String>(SEARCH_ITEM_TITLE_KEY).orEmpty()
+    val zimFileUri = getNavigationResult(ZIM_FILE_URI_KEY, kiwixMainActivity)
+    val pageUrl = getNavigationResult(PAGE_URL_KEY, kiwixMainActivity)
+    val searchItemTitle = getNavigationResult(SEARCH_ITEM_TITLE_KEY, kiwixMainActivity)
     coreReaderLifeCycleScope?.launch {
       if (pageUrl.isNotEmpty()) {
         if (zimFileUri.isNotEmpty()) {
@@ -124,6 +123,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
     }
   }
+
+  private fun getNavigationResult(key: String, kiwixMainActivity: KiwixMainActivity?) =
+    kiwixMainActivity?.getObservableNavigationResult<String>(key)?.value.orEmpty()
 
   private suspend fun tryOpeningZimFile(zimFileUri: String) {
     // Stop any ongoing WebView loading and clear the WebView list
