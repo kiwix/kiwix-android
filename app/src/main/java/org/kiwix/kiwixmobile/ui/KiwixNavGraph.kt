@@ -42,7 +42,6 @@ import androidx.navigation.navDeepLink
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.INTRO_FRAGMENT
@@ -50,15 +49,12 @@ import org.kiwix.kiwixmobile.core.main.LANGUAGE_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
-import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
@@ -89,48 +85,9 @@ fun KiwixNavGraph(
     startDestination = startDestination,
     modifier = modifier
   ) {
-    composable(
-      route = KiwixDestination.Reader.route,
-      arguments = listOf(
-        navArgument(ZIM_FILE_URI_KEY) {
-          type = NavType.StringType
-          defaultValue = ""
-        },
-        navArgument(FIND_IN_PAGE_SEARCH_STRING) {
-          type = NavType.StringType
-          defaultValue = ""
-        },
-        navArgument(PAGE_URL_KEY) {
-          type = NavType.StringType
-          defaultValue = ""
-        },
-        navArgument(SHOULD_OPEN_IN_NEW_TAB) {
-          type = NavType.BoolType
-          defaultValue = false
-        },
-        navArgument(SEARCH_ITEM_TITLE_KEY) {
-          type = NavType.StringType
-          defaultValue = ""
-        }
-      )
-    ) { backStackEntry ->
-      val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
-      val findInPageSearchString =
-        backStackEntry.arguments?.getString(FIND_IN_PAGE_SEARCH_STRING).orEmpty()
-      val pageUrl = backStackEntry.arguments?.getString(PAGE_URL_KEY).orEmpty()
-      val shouldOpenInNewTab = backStackEntry.arguments?.getBoolean(SHOULD_OPEN_IN_NEW_TAB) ?: false
-      val searchItemTitle = backStackEntry.arguments?.getString(SEARCH_ITEM_TITLE_KEY).orEmpty()
-
+    composable(route = KiwixDestination.Reader.route) { backStackEntry ->
       FragmentContainer(R.id.readerFragmentContainer) {
-        KiwixReaderFragment().apply {
-          arguments = Bundle().apply {
-            putString(ZIM_FILE_URI_KEY, zimFileUri)
-            putString(FIND_IN_PAGE_SEARCH_STRING, findInPageSearchString)
-            putString(PAGE_URL_KEY, pageUrl)
-            putBoolean(SHOULD_OPEN_IN_NEW_TAB, shouldOpenInNewTab)
-            putString(SEARCH_ITEM_TITLE_KEY, searchItemTitle)
-          }
-        }
+        KiwixReaderFragment()
       }
     }
     composable(
@@ -289,29 +246,7 @@ fun FragmentContainer(
 }
 
 sealed class KiwixDestination(val route: String) {
-  object Reader : KiwixDestination(
-    READER_FRAGMENT +
-      "?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}" +
-      "&$FIND_IN_PAGE_SEARCH_STRING={$FIND_IN_PAGE_SEARCH_STRING}" +
-      "&$PAGE_URL_KEY={$PAGE_URL_KEY}" +
-      "&$SHOULD_OPEN_IN_NEW_TAB={$SHOULD_OPEN_IN_NEW_TAB}" +
-      "&$SEARCH_ITEM_TITLE_KEY={$SEARCH_ITEM_TITLE_KEY}"
-  ) {
-    fun createRoute(
-      zimFileUri: String = "",
-      findInPageSearchString: String = "",
-      pageUrl: String = "",
-      shouldOpenInNewTab: Boolean = false,
-      searchItemTitle: String = ""
-    ): String {
-      return READER_FRAGMENT +
-        "?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}" +
-        "&$FIND_IN_PAGE_SEARCH_STRING=${Uri.encode(findInPageSearchString)}" +
-        "&$PAGE_URL_KEY=${Uri.encode(pageUrl)}" +
-        "&$SHOULD_OPEN_IN_NEW_TAB=$shouldOpenInNewTab" +
-        "&$SEARCH_ITEM_TITLE_KEY=${Uri.encode(searchItemTitle)}"
-    }
-  }
+  object Reader : KiwixDestination(READER_FRAGMENT)
 
   object Library :
     KiwixDestination("$LOCAL_LIBRARY_FRAGMENT?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}") {

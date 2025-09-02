@@ -101,7 +101,7 @@ object ActivityExtensions {
     coreMainActivity.navController.popBackStack()
   }
 
-  private fun <T> Activity.getObservableNavigationResult(key: String = "result") =
+  fun <T> Activity.getObservableNavigationResult(key: String = "result") =
     if (coreMainActivity.isNavControllerInitialized) {
       coreMainActivity.navController.currentBackStackEntry?.savedStateHandle
         ?.getLiveData<T>(key)

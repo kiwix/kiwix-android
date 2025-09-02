@@ -45,10 +45,7 @@ internal class OpenSearchItemTest {
     } returns intent
     OpenSearchItem(searchListItem, false).invokeWith(activity)
     verify {
-      activity.navigate(
-        "${activity.readerFragmentRoute}?searchItemTitle=searchItemTitle",
-        any<NavOptions>()
-      )
+      activity.navigate(activity.readerFragmentRoute, any<NavOptions>())
       activity.setNavigationResultOnCurrent(
         SearchItemToOpen(searchListItem.value, false, ZimFileReader.CONTENT_PREFIX),
         TAG_FILE_SEARCHED
@@ -68,10 +65,7 @@ internal class OpenSearchItemTest {
     } returns intent
     OpenSearchItem(searchListItem, true).invokeWith(activity)
     verify {
-      activity.navigate(
-        "${activity.readerFragmentRoute}?searchItemTitle=searchItemTitle",
-        any<NavOptions>()
-      )
+      activity.navigate(activity.readerFragmentRoute, any<NavOptions>())
       activity.setNavigationResultOnCurrent(
         SearchItemToOpen(searchListItem.value, true, ZimFileReader.CONTENT_PREFIX),
         TAG_FILE_SEARCHED

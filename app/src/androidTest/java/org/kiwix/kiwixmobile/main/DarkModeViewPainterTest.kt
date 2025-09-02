@@ -40,7 +40,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -206,10 +208,10 @@ class DarkModeViewPainterTest : BaseActivityTest() {
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
         .build()
-      composeTestRule.activity.navigate(
-        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
-        navOptions
-      )
+      composeTestRule.activity.apply {
+        navigate(KiwixDestination.Reader.route, navOptions)
+        setNavigationResultOnCurrent(zimFile.toUri().toString(), ZIM_FILE_URI_KEY)
+      }
     }
     composeTestRule.waitForIdle()
   }

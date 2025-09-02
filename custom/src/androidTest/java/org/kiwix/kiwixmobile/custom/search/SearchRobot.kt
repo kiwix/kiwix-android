@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_HOME_BUTTON_TEST
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
@@ -153,9 +152,9 @@ class SearchRobot {
     }
   }
 
-  fun clickOnAFoolForYouArticle() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+  fun clickOnAFoolForYouArticle(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
+      composeTestRule.waitUntilTimeout()
       onWebView()
         .withElement(
           findElement(
@@ -166,9 +165,9 @@ class SearchRobot {
     })
   }
 
-  fun assertAFoolForYouArticleLoaded() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+  fun assertAFoolForYouArticleLoaded(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
+      composeTestRule.waitForIdle()
       onWebView()
         .withElement(
           findElement(

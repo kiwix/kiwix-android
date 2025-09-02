@@ -46,6 +46,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -317,10 +319,10 @@ class SearchFragmentTest : BaseActivityTest() {
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
         .build()
-      kiwixMainActivity.navigate(
-        KiwixDestination.Reader.createRoute(zimFileUri = zimFile.toUri().toString()),
-        navOptions
-      )
+      kiwixMainActivity.apply {
+        kiwixMainActivity.navigate(KiwixDestination.Reader.route, navOptions)
+        setNavigationResultOnCurrent(zimFile.toUri().toString(), ZIM_FILE_URI_KEY)
+      }
     }
   }
 
