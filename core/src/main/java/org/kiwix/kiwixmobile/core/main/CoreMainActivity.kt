@@ -166,20 +166,27 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject
   lateinit var downloadMonitor: DownloadMonitor
 
-  @Suppress("InjectDispatcher", "DefaultUncaughtExceptionDelegation")
+  @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
+      // Save the existing uncaught exception handler (usually set by Android).
+      val existingHandler = Thread.getDefaultUncaughtExceptionHandler()
       Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?, paramThrowable: Throwable? ->
         val intent = Intent(appContext, ErrorActivity::class.java)
+        intent.putExtra(ErrorActivity.EXCEPTION_KEY, paramThrowable)
         val extras = Bundle()
         extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
         intent.putExtras(extras)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         appContext.startActivity(intent)
         finish()
+        if (paramThread != null && paramThrowable != null) {
+          // Delegate to the system/default handler (ensures logs & system reporting)
+          existingHandler?.uncaughtException(paramThread, paramThrowable)
+        }
         Process.killProcess(Process.myPid())
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
