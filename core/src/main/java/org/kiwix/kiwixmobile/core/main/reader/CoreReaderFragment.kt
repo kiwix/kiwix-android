@@ -2232,10 +2232,6 @@ abstract class CoreReaderFragment :
   private fun saveTabStates(onComplete: () -> Unit = {}) {
     CoroutineScope(Dispatchers.Main).launch {
       savingTabsMutex.withLock {
-        // clear the previous history saved in database
-        withContext(Dispatchers.IO) {
-          repositoryActions?.clearWebViewPageHistory()
-        }
         val coreApp = sharedPreferenceUtil?.context as CoreApp
         val settings = coreApp.getSharedPreferences(
           SharedPreferenceUtil.PREF_KIWIX_MOBILE,
@@ -2247,6 +2243,9 @@ abstract class CoreReaderFragment :
           getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
         }
         withContext(Dispatchers.IO) {
+          // clear the previous history saved in database
+          repositoryActions?.clearWebViewPageHistory()
+          // Store new history in database.
           repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
         }
         settings.edit {
