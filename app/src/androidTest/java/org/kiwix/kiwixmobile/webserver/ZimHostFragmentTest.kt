@@ -22,6 +22,8 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -41,6 +43,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -213,6 +216,33 @@ class ZimHostFragmentTest {
       }
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testZIMFilesShowingOnZimHostScreen() {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Library.route)
+    }
+    // delete all the ZIM files showing in the LocalLibrary
+    // screen to properly test the scenario.
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+    loadZimFileInApplication("testzim.zim")
+    loadZimFileInApplication("small.zim")
+    zimHost {
+      refreshLibraryList(composeTestRule)
+      assertZimFilesLoaded(composeTestRule)
+      openZimHostFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      assertZimFilesLoaded(composeTestRule)
+      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      composeTestRule.mainClock.advanceTimeByFrame()
+      openZimHostFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      assertZimFilesLoaded(composeTestRule)
+    }
   }
 
   private fun loadZimFileInApplication(zimFileName: String) {
