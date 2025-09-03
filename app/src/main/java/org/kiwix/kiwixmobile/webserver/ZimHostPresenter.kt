@@ -30,11 +30,9 @@ import javax.inject.Inject
 @ActivityScope
 class ZimHostPresenter @Inject internal constructor(
   private val dataSource: DataSource
-) : BasePresenter<View>(),
-  Presenter {
-  @Suppress("TooGenericExceptionCaught")
+) : BasePresenter<View>(), Presenter {
   override suspend fun loadBooks(previouslyHostedBooks: Set<String>) {
-    try {
+    runCatching {
       val books = dataSource.getLanguageCategorizedBooks().first()
       books.forEach { item ->
         if (item is BooksOnDiskListItem.BookOnDisk) {
@@ -43,8 +41,8 @@ class ZimHostPresenter @Inject internal constructor(
         }
       }
       view?.addBooks(books)
-    } catch (e: Exception) {
-      Log.e(TAG, "Unable to load books", e)
+    }.onFailure {
+      Log.e(TAG, "Unable to load books", it)
     }
   }
 

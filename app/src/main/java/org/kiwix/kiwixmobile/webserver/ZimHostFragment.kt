@@ -404,7 +404,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   override fun onDestroyView() {
     super.onDestroyView()
     unRegisterHotspotService()
-    presenter.detachView()
+    presenter.detachView(this)
   }
 
   private fun unRegisterHotspotService() {
