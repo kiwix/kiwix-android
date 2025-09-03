@@ -32,7 +32,11 @@ abstract class BasePresenter<T : View<*>?> : Presenter<T> {
     this.view = view
   }
 
-  override fun detachView() {
-    view = null
+  override fun detachView(view: T) {
+    // Detach the view only if it matches the one currently attached.
+    // Bug Fix #4409
+    if (this.view == view) {
+      this.view = null
+    }
   }
 }

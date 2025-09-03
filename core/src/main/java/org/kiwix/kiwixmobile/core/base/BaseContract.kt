@@ -34,7 +34,9 @@ class BaseContract {
 
     /**
      * Drops the reference to the view when destroyed
+     *
+     * @param view the view instance to be detached
      */
-    fun detachView()
+    fun detachView(view: T)
   }
 }
