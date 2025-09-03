@@ -167,7 +167,7 @@ sealed class ValidationState {
   data class HasBothFiles(val obbFile: File, val zimFile: File) : ValidationState()
   data class HasFile(
     val file: File?,
-    val assetFileDescriptorList: List<AssetFileDescriptor> = emptyList()
+    val assetFileDescriptorList: List<AssetFileDescriptor>? = null
   ) :
     ValidationState()
 

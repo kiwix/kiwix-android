@@ -69,6 +69,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
@@ -78,6 +79,9 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -334,7 +338,8 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun openZimFromFilePath(path: String) {
-    navigate(KiwixDestination.Reader.createRoute(zimFileUri = path))
+    navigate(KiwixDestination.Reader.route)
+    setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
   }
 
   override val zimHostDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
@@ -381,8 +386,6 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
-    // remove the previous backStack entry with old arguments. Bug Fix #4392
-    removeArgumentsOfReaderScreen()
     // Freshly open the search fragment.
     navigate(
       KiwixDestination.Search.createRoute(
@@ -407,15 +410,12 @@ class KiwixMainActivity : CoreMainActivity() {
       .setLaunchSingleTop(true)
       .setPopUpTo(readerFragmentRoute, inclusive = true)
       .build()
-    val readerRoute = KiwixDestination.Reader.createRoute(
-      zimFileUri = zimFileUri,
-      pageUrl = pageUrl,
-      shouldOpenInNewTab = shouldOpenInNewTab
-    )
-    navigate(
-      readerRoute,
-      navOptions
-    )
+    // Navigate to reader screen.
+    navigate(KiwixDestination.Reader.route, navOptions)
+    // Set arguments on current destination(reader).
+    setNavigationResultOnCurrent(zimFileUri, ZIM_FILE_URI_KEY)
+    setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
+    setNavigationResultOnCurrent(shouldOpenInNewTab, SHOULD_OPEN_IN_NEW_TAB)
   }
 
   override fun hideBottomAppBar() {
@@ -424,25 +424,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun showBottomAppBar() {
     shouldShowBottomAppBar.update { true }
-  }
-
-  /**
-   * Handles navigation from the left drawer to the Reader screen.
-   *
-   * Clears any existing Reader back stack entry (with its arguments)
-   * and replaces it with a fresh Reader screen using default arguments.
-   * This ensures old arguments are not retained when navigating
-   * via the left drawer.
-   */
-  override fun removeArgumentsOfReaderScreen() {
-    if (navController.currentDestination?.route?.startsWith(readerFragmentRoute) == true) {
-      navigate(
-        readerFragmentRoute,
-        NavOptions.Builder()
-          .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
-          .build()
-      )
-    }
   }
 
   // Outdated shortcut ids(new_tab, get_content)

@@ -396,7 +396,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
     disableLeftDrawer()
-    removeArgumentsOfReaderScreen()
   }
 
   private fun setMainActivityToCoreApp() {
@@ -502,5 +501,4 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()
-  abstract fun removeArgumentsOfReaderScreen()
 }

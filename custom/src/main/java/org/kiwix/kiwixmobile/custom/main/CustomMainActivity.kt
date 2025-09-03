@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -44,6 +45,9 @@ import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -192,8 +196,6 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
-    // remove the previous backStack entry with old arguments.
-    removeArgumentsOfReaderScreen()
     navigate(
       CustomDestination.Search.createRoute(
         searchString = searchString,
@@ -217,15 +219,12 @@ class CustomMainActivity : CoreMainActivity() {
       .setLaunchSingleTop(true)
       .setPopUpTo(readerFragmentRoute, inclusive = true)
       .build()
-    val readerRoute = CustomDestination.Reader.createRoute(
-      zimFileUri = zimFileUri,
-      pageUrl = pageUrl,
-      shouldOpenInNewTab = shouldOpenInNewTab
-    )
-    navigate(
-      readerRoute,
-      navOptions
-    )
+    // Navigate to reader screen.
+    navigate(CustomDestination.Reader.route, navOptions)
+    // Set arguments on current destination(reader).
+    setNavigationResultOnCurrent(zimFileUri, ZIM_FILE_URI_KEY)
+    setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
+    setNavigationResultOnCurrent(shouldOpenInNewTab, SHOULD_OPEN_IN_NEW_TAB)
   }
 
   override fun hideBottomAppBar() {
@@ -234,25 +233,6 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun showBottomAppBar() {
     // Do nothing since custom apps does not have the bottomAppBar.
-  }
-
-  /**
-   * Handles navigation from the left drawer to the Reader screen.
-   *
-   * Clears any existing Reader back stack entry (with its arguments)
-   * and replaces it with a fresh Reader screen using default arguments.
-   * This ensures old arguments are not retained when navigating
-   * via the left drawer.
-   */
-  override fun removeArgumentsOfReaderScreen() {
-    if (navController.currentDestination?.route?.startsWith(readerFragmentRoute) == true) {
-      navigate(
-        readerFragmentRoute,
-        NavOptions.Builder()
-          .setPopUpTo(CustomDestination.Reader.route, inclusive = true)
-          .build()
-      )
-    }
   }
 
   // Outdated shortcut id(new_tab)
