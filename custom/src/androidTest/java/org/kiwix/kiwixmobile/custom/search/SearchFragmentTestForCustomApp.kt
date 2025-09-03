@@ -299,7 +299,9 @@ class SearchFragmentTestForCustomApp {
       clickOnHomeButton(composeTestRule)
       // click on an article to load the other page.
       clickOnAFoolForYouArticle(composeTestRule)
+      composeTestRule.mainClock.advanceTimeByFrame()
       assertAFoolForYouArticleLoaded(composeTestRule)
+      composeTestRule.waitUntilTimeout()
       // open note screen.
       openNoteFragment(customMainActivity as CoreMainActivity, composeTestRule)
       composeTestRule.waitUntilTimeout()
