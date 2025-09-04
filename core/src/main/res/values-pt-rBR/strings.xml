@@ -71,8 +71,8 @@
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Parar servidor</string>
   <string name="error_server_already_running">O servidor já está sendo executado. Por favor desligue e tente novamente.</string>
-  <string name="error_ip_address_not_found">Não foi possível encontrar o endereço ip.</string>
-  <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Não foi possível encontrar o endereço ip.</string>
+  <string name="server_started_message" fuzzy="true">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
   <string name="qr_code">QR Code renderizado</string>
   <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado. %s</string>

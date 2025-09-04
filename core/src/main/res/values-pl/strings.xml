@@ -63,8 +63,8 @@
   <string name="start_server_label">Uruchom serwer</string>
   <string name="stop_server_label">Zatrzymaj serwer</string>
   <string name="error_server_already_running">Serwer już działa. Wyłącz go i spróbuj ponownie.</string>
-  <string name="error_ip_address_not_found">Nie udało się znaleźć adresu IP.</string>
-  <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nie udało się znaleźć adresu IP.</string>
+  <string name="server_started_message" fuzzy="true">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="qr_code">Wygenerowany kod QR</string>
   <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony. %s</string>

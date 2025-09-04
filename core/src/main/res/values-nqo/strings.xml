@@ -49,7 +49,7 @@
   <string name="hotspot_notification_content_title">ߞߥߌߞߛ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ</string>
   <string name="start_server_label">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߝߟߐ߫</string>
   <string name="stop_server_label">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߟߐ߬</string>
-  <string name="server_started_message">IP ߢߌ߲߬ ߠߊߘߏ߲߬ ߌ ߟߊ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߊ߬ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊߛߐ߬ߘߐ߲߬ %s</string>
+  <string name="server_started_message" fuzzy="true">IP ߢߌ߲߬ ߠߊߘߏ߲߬ ߌ ߟߊ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߊ߬ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊߛߐ߬ߘߐ߲߬ %s</string>
   <string name="share_host_address">URL ߟߊߖߍ߲ߛߍ߲߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߜߘߍ ߟߎ߬ ߛߌߟߊ ߝߍ߬</string>
   <string name="error_file_not_found">ߝߌ߬ߟߌ: ZIM ߞߐߕߐ߯ ߡߊߡߌ߬ߘߊ߬ߣߍ߲ ߕߍߣߊ߬ ߡߊߛߐ߬ߘߐ߲߫ ߠߊ߫. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ߊ߬ ߕߴߛߋ߫ ߞߊ߬ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߘߐߞߊ߬ߙߊ߲߬߹</string>

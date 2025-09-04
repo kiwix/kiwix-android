@@ -50,8 +50,8 @@
   <string name="start_server_label">make you Start server</string>
   <string name="stop_server_label">make you Stop server</string>
   <string name="error_server_already_running">De server already dey run. Abeg turn am off den try again.</string>
-  <string name="error_ip_address_not_found">Eno fi find ip address.</string>
-  <string name="server_started_message">Make you Enter dis ip address for your browser insyd so say you go fi access de server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Eno fi find ip address.</string>
+  <string name="server_started_message" fuzzy="true">Make you Enter dis ip address for your browser insyd so say you go fi access de server %s</string>
   <string name="share_host_address">Make you Share URL via oda applications</string>
   <string name="error_file_not_found">Error: Eno fi find de selected ZIM file. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Eno fi read dis zim file!</string>

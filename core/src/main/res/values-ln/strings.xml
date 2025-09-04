@@ -51,8 +51,8 @@
   <string name="start_server_label">Kobanda serveur</string>
   <string name="stop_server_label">Kosukisa serveur</string>
   <string name="error_server_already_running">Serveur ezali kosala. Tosengi yo kanga yango mpe meka lisusu.</string>
-  <string name="error_ip_address_not_found">Nakokaki te kozwa adrɛsi ya IP.</string>
-  <string name="server_started_message">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nakokaki te kozwa adrɛsi ya IP.</string>
+  <string name="server_started_message" fuzzy="true">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
   <string name="qr_code">Kofungola QR Code</string>
   <string name="share_host_address">Kabola URL na nzela ya ba applications misusu</string>
   <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te. %s</string>

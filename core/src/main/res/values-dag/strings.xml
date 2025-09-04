@@ -57,8 +57,8 @@
   <string name="start_server_label">Pilimi sheeva maa</string>
   <string name="stop_server_label">Taɣimi sheeva maa zani</string>
   <string name="error_server_already_running">Niŋsim niŋda ŋɔ nyɛla ŋun pun niŋda. Pahimi suɣilo kpihim mi li ka labi niŋ.</string>
-  <string name="error_ip_address_not_found">N bi nya ip addreesi</string>
-  <string name="server_started_message">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">N bi nya ip addreesi</string>
+  <string name="server_started_message" fuzzy="true">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
   <string name="share_host_address">Shiriki URL kupitia programu zingine</string>
   <string name="error_file_not_found" fuzzy="true">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Di bi tooi karim zim mazagali ŋɔ!</string>

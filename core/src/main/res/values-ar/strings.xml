@@ -7,6 +7,7 @@
 * Hamoudak
 * Hanzo64
 * McDutchie
+* Mdktb
 * Meno25
 * Mohanad
 * Mohanad Kh
@@ -67,8 +68,8 @@
   <string name="start_server_label">تشغيل الخادم</string>
   <string name="stop_server_label">إيقاف التشغيل</string>
   <string name="error_server_already_running">الخادم يعمل بالفعل. من فضلك قم بإيقاف تشغيله وحاول مرة أخرى.</string>
-  <string name="error_ip_address_not_found">لم يتمكن من العثور علي عنوان بروتوكول الإنترنت</string>
-  <string name="server_started_message">أدخل هذا العنوان في المتصفح للإتصال بالخادم %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">لم يتمكن من العثور علي عنوان بروتوكول الإنترنت</string>
+  <string name="server_started_message" fuzzy="true">أدخل هذا العنوان في المتصفح للإتصال بالخادم %s</string>
   <string name="qr_code">رمز QR المقدَم</string>
   <string name="share_host_address">مشاركة URL عبر تطبيقات أخرى</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد %s</string>

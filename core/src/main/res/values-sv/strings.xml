@@ -61,8 +61,8 @@
   <string name="start_server_label">Starta server</string>
   <string name="stop_server_label">Stoppa server</string>
   <string name="error_server_already_running">Servern körs redan. Stäng av den och försök igen.</string>
-  <string name="error_ip_address_not_found">Kunde inte hitta ip-adressen.</string>
-  <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Kunde inte hitta ip-adressen.</string>
+  <string name="server_started_message" fuzzy="true">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="qr_code">Renderad QR-kod</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas. %s</string>

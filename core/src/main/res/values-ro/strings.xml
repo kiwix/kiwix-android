@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Dimitrie569
 * Firilacroco
 * Fitoschido
 * MSClaudiu
@@ -55,14 +56,14 @@
   <string name="start_server_label">Pornește server</string>
   <string name="stop_server_label">Oprește server</string>
   <string name="error_server_already_running">Serverul rulează deja. Opriți-l și încercați din nou.</string>
-  <string name="error_ip_address_not_found">Nu am putut găsi adresa ip.</string>
-  <string name="server_started_message">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nu am putut găsi adresa ip.</string>
+  <string name="server_started_message" fuzzy="true">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
   <string name="qr_code">Cod QR redat</string>
   <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit. %s</string>
   <string name="unable_to_read_zim_file">Nu se poate citi acest fișier ZIM!</string>
   <string name="zim_not_opened">Nu se poate deschide fișierul ZIM</string>
-  <string name="error_file_invalid" fuzzy="true">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
+  <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
   <string name="error_loading_random_article_zim_not_loaded">Nu se poate încărca articolul. Fișierul ZIM nu este încărcat corect.</string>
   <string name="could_not_find_random_article">Imposibil de găsit un articol aleatoriu. Vă rugăm să încercați din nou mai târziu.</string>
@@ -133,6 +134,7 @@
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
   <string name="download">Descarcă</string>
   <string name="download_notification_channel_name">Descărcați numele canalului de notificare</string>
+  <string name="download_notification_channel_description">Se descarcă fișierele ZIM…</string>
   <string name="space_available">Spațiu disponibil:</string>
   <string name="move_no_space">Spațiu insuficient pentru mutare/copiere.</string>
   <string name="zim_simple">Simplu</string>
@@ -167,6 +169,7 @@
   <string name="no">Nu</string>
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
+  <string name="change_storage">Schimbă</string>
   <string name="tts_not_enabled">Citirea cu voce tare nu este activată pentru acest fișier ZIM</string>
   <string name="texttospeech_initialization_failed">Inițializarea citirii cu voce tare a eșuat. Vă rugăm să încercați din nou</string>
   <string name="texttospeech_error">Eroare neașteptată în Citire cu voce tare. Vă rugăm să încercați din nou</string>
@@ -185,9 +188,10 @@
   <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
   <string name="external_link_popup_dialog_title">Introduc Legătura externă!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
+  <string name="external_link_popup_dialog_message">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
+  <string name="your_language">Limbă selectată: %s</string>
   <string name="other_languages">Alte limbi:</string>
   <string name="downloading">Descărcare:</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>

@@ -49,8 +49,8 @@
   <string name="start_server_label">Serveur ya kuyantika</string>
   <string name="stop_server_label">Sosa ya kupema</string>
   <string name="error_server_already_running">Serveur ke tambula dezia. Beto ke lomba nge na kukanga yo mpi meka diaka.</string>
-  <string name="error_ip_address_not_found">Kukonda kuzwa adresi ya ip.</string>
-  <string name="server_started_message">Tula adresi yai ya ip na navigateur na nge sambu na kukota na server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Kukonda kuzwa adresi ya ip.</string>
+  <string name="server_started_message" fuzzy="true">Tula adresi yai ya ip na navigateur na nge sambu na kukota na server %s</string>
   <string name="qr_code">Kidimbu ya QR</string>
   <string name="share_host_address">Kupesa URL na nzila ya ba application ya nkaka</string>
   <string name="error_file_not_found">Kifu: Bo monaka ve fiche ZIM yina bo ponaka. %s</string>

@@ -47,8 +47,8 @@
   <string name="start_server_label">سرور شروع کریں۔</string>
   <string name="stop_server_label">سرور کو روکیں</string>
   <string name="error_server_already_running">سرور پہلے ہی چل رہا ہے۔ براہ کرم اسے آف کریں اور دوبارہ کوشش کریں۔</string>
-  <string name="error_ip_address_not_found">آئی پی ایڈریس نہیں مل سکا۔</string>
-  <string name="server_started_message">سرور تک رسائی حاصل کرنے کے لیے اس آئی پی کو اپنے براؤزر میں درج کریں %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">آئی پی ایڈریس نہیں مل سکا۔</string>
+  <string name="server_started_message" fuzzy="true">سرور تک رسائی حاصل کرنے کے لیے اس آئی پی کو اپنے براؤزر میں درج کریں %s</string>
   <string name="share_host_address">دوسرے ایپلیکیشنز کے ذریعے یو آر ایل شیئر کریں۔</string>
   <string name="error_file_not_found">خرابی: منتخب کردہ ZIM فائل نہیں مل سکی۔ %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">اس zim فائل کو پڑھنے سے قاصر!</string>

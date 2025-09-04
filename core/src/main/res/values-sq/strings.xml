@@ -2,6 +2,7 @@
 <!-- Authors:
 * Besnik b
 * Fitoschido
+* Xhulianoo
 -->
 <resources>
   <string name="menu_help">Ndihmë</string>
@@ -50,8 +51,8 @@
   <string name="start_server_label">Nise shërbyesin</string>
   <string name="stop_server_label">Ndale shërbyesin</string>
   <string name="error_server_already_running">Shërbyesi është tashmë në punë. Ju lutemi, fikeni dhe riprovoni.</string>
-  <string name="error_ip_address_not_found">S’u gjet adresë IP.</string>
-  <string name="server_started_message">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
+  <string name="error_ip_address_not_found" fuzzy="true">S’u gjet adresë IP.</string>
+  <string name="server_started_message" fuzzy="true">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
   <string name="qr_code">Kodi QR i vizatuar</string>
   <string name="share_host_address">Jepeni URL-në përmes aplikacionesh të tjera</string>
   <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur. %s</string>
@@ -210,7 +211,7 @@
   <string name="selected_items">%1$d të përzgjedhur</string>
   <string name="bookmarks_from_current_book">Shihni Faqerojtës Prej Krejt Librave</string>
   <string name="search_bookmarks">Kërkoni te faqerojtësit</string>
-  <string name="switch_tabs">Këmbeni skeda</string>
+  <string name="switch_tabs">Ndërro skedat</string>
   <string name="close_all_tabs">Mbylli krejt skedat</string>
   <string name="close_tab">Mbylle skedën</string>
   <string name="could_not_restore_tabs">S’u rikthyen dot skedat.</string>

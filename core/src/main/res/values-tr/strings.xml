@@ -68,8 +68,8 @@
   <string name="start_server_label">Sunucuyu Başlat</string>
   <string name="stop_server_label">Sunucuyu durdur</string>
   <string name="error_server_already_running">Sunucu zaten çalışıyor. Lütfen kapatıp tekrar deneyin.</string>
-  <string name="error_ip_address_not_found">IP adresi bulunamadı.</string>
-  <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
+  <string name="error_ip_address_not_found" fuzzy="true">IP adresi bulunamadı.</string>
+  <string name="server_started_message" fuzzy="true">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
   <string name="qr_code">İşlenmiş QR Kodu</string>
   <string name="share_host_address">URL’yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı. %s</string>
