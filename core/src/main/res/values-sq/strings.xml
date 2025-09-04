@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Gjej në faqe</string>
   <string name="bookmarks">Faqerojtës</string>
   <string name="menu_random_article">Artikull kuturu</string>
-  <string name="menu_full_screen">Sa krejt ekrani</string>
-  <string name="menu_exit_full_screen">Dil nga mënyra Sa Krejt Ekrani</string>
   <string name="menu_read_aloud">Lexoje me zë</string>
   <string name="menu_read_aloud_stop">Ndale leximin me zë</string>
   <string name="menu_support_kiwix">Përkrahni Kiwix-in</string>

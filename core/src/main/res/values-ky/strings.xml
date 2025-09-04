@@ -12,8 +12,6 @@
   <string name="menu_search_in_text">Тексттен табуу</string>
   <string name="bookmarks">Чөп каттар</string>
   <string name="menu_random_article">Тушкелди макала</string>
-  <string name="menu_full_screen">Толук көрүнүшү</string>
-  <string name="menu_exit_full_screen">Толук көрүнүштөн чыгуу</string>
   <string name="menu_read_aloud">Үн чыгарып окуу</string>
   <string name="menu_read_aloud_stop">Үн чыгарып окууну токтотуу</string>
   <string name="save_media">Медиафайлды мындай түрдө сактоо…</string>

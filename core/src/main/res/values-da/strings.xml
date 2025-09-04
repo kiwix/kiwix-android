@@ -18,8 +18,6 @@
   <string name="menu_search_in_text">Søg på siden</string>
   <string name="bookmarks">Bogmærker</string>
   <string name="menu_random_article">Vilkårlig artikel</string>
-  <string name="menu_full_screen">Fuldskærm</string>
-  <string name="menu_exit_full_screen">Forlad fuldskærm</string>
   <string name="menu_read_aloud">Læs højt</string>
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
   <string name="menu_support_kiwix">Støt Kiwix</string>

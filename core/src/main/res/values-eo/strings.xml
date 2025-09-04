@@ -19,8 +19,6 @@
   <string name="menu_search_in_text">Trovi en paĝo</string>
   <string name="bookmarks">Legosignoj</string>
   <string name="menu_random_article">Hazarda artikolo</string>
-  <string name="menu_full_screen">Plenekrane</string>
-  <string name="menu_exit_full_screen">Eliri plenekranan reĝimon</string>
   <string name="menu_read_aloud">Laŭtlegi</string>
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
   <string name="menu_support_kiwix">Subteni Kiwix</string>

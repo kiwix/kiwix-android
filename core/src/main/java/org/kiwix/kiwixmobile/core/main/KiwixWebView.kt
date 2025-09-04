@@ -72,9 +72,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     (context as Activity).window.apply {
       if (isFullScreen) {
         showFullScreenMode(this)
-      } else if (!sharedPreferenceUtil.prefFullScreen) {
-        // close the fullScreenMode if application is not running in the fullScreenMode.
-        // when closing the video's fullScreenMode, otherwise no need to close the fullScreenMode.
+      } else {
         closeFullScreenMode(this)
       }
     }

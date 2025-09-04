@@ -14,8 +14,6 @@
   <string name="menu_search_in_text">Kavout er bajenn</string>
   <string name="bookmarks">Sinedoù</string>
   <string name="menu_random_article">Pennad dre zegouezh</string>
-  <string name="menu_full_screen">Skramm leun</string>
-  <string name="menu_exit_full_screen">Kuitaat ar skramm leun</string>
   <string name="menu_read_aloud">Lenn a vouezh uhel</string>
   <string name="menu_read_aloud_stop">Paouez da lenn a vouezh uhel</string>
   <string name="menu_support_kiwix">Harpit Kiwix</string>

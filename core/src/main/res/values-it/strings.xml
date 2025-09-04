@@ -25,8 +25,6 @@
   <string name="menu_search_in_text">Trova nella pagina</string>
   <string name="bookmarks">Segnalibri</string>
   <string name="menu_random_article">Voce a caso</string>
-  <string name="menu_full_screen">A schermo intero</string>
-  <string name="menu_exit_full_screen">Esci dalla modalità a schermo intero</string>
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
   <string name="menu_support_kiwix">Sostieni Kiwix</string>

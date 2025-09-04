@@ -17,8 +17,6 @@
   <string name="menu_search_in_text">Poišči na strani</string>
   <string name="bookmarks">Zaznamki</string>
   <string name="menu_random_article">Naključni članek</string>
-  <string name="menu_full_screen">Celozaslonski način</string>
-  <string name="menu_exit_full_screen">Izhod iz celozaslonskega načina</string>
   <string name="menu_read_aloud">Beri naglas</string>
   <string name="menu_read_aloud_stop">Prenehaj z branjem naglas</string>
   <string name="menu_support_kiwix">Podprite Kiwix</string>

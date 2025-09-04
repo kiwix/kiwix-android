@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Hitady anaty lahatsoratra</string>
   <string name="bookmarks">Marika pejy</string>
   <string name="menu_random_article">Takelaka kisendra</string>
-  <string name="menu_full_screen">Fisehoana mameno ekrà</string>
-  <string name="menu_exit_full_screen">Hiala amin ny fisehoana mameno fikandra</string>
   <string name="menu_read_aloud">Vakiana ho heno</string>
   <string name="menu_read_aloud_stop">Hijanona tsy hamaky ho heno</string>
   <string name="save_media">Hitahiry ny media ho…</string>

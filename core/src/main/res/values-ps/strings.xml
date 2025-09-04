@@ -12,8 +12,6 @@
   <string name="menu_search_in_text">په متن کې موندل</string>
   <string name="bookmarks">کتاب نخښې</string>
   <string name="menu_random_article">ناټاکلې ليکنه</string>
-  <string name="menu_full_screen">ډکه پرده</string>
-  <string name="menu_exit_full_screen">بشپړ پردې څخه وتل</string>
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
   <string name="save_media">رسنۍ ساتل لکه…</string>

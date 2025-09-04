@@ -15,8 +15,6 @@
   <string name="menu_search_in_text">Procurar na páxina</string>
   <string name="bookmarks">Favoritos</string>
   <string name="menu_random_article">Artigo ao chou</string>
-  <string name="menu_full_screen">Pantalla completa</string>
-  <string name="menu_exit_full_screen">Saír da pantalla completa</string>
   <string name="menu_read_aloud">Ler en voz alta</string>
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
   <string name="save_media">Gardar multimedia</string>

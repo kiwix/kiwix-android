@@ -27,8 +27,6 @@
   <string name="menu_search_in_text">البحث في الصفحة</string>
   <string name="bookmarks">العلامات المرجعية</string>
   <string name="menu_random_article">مقالة عشوائية</string>
-  <string name="menu_full_screen">ملء الشاشة</string>
-  <string name="menu_exit_full_screen">إنهاء وضع ملء الشاشة</string>
   <string name="menu_read_aloud">اقرأ بصوت عالٍ</string>
   <string name="menu_read_aloud_stop">توقف عن القراءة بصوت عالٍ</string>
   <string name="menu_support_kiwix">دعم كيويكس</string>

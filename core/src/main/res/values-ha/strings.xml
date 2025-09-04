@@ -16,8 +16,6 @@
   <string name="menu_search_in_text">Nema a shafi</string>
   <string name="bookmarks"> Alamomin tuni</string>
   <string name="menu_random_article">Labarun da suke a bazu</string>
-  <string name="menu_full_screen">Cikakken allo</string>
-  <string name="menu_exit_full_screen">Fita daga cikakken allo</string>
   <string name="menu_read_aloud"> Daga murya</string>
   <string name="menu_read_aloud_stop">A daina karatu da babbar murya</string>
   <string name="menu_support_kiwix">Tallafa wa kiwix</string>

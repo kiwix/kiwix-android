@@ -9,8 +9,6 @@
   <string name="menu_search_in_text">पाठे अन्विष्यताम्</string>
   <string name="bookmarks">पुस्तकचिह्नानि</string>
   <string name="menu_random_article">यादृच्छिकं (Random) पृष्ठम्</string>
-  <string name="menu_full_screen">सम्पूर्णपटलम्</string>
-  <string name="menu_exit_full_screen">सम्पूर्णपटलात् निर्गम्यताम्</string>
   <string name="menu_read_aloud">उच्चैः पठ्यताम्</string>
   <string name="menu_read_aloud_stop">उच्चैः पठनं स्थगयतु</string>
   <string name="save_media">सञ्चिकाम् अमुकनाम्ना रक्ष</string>

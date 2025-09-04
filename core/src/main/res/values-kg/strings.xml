@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Nge ta mona yo na lutiti</string>
   <string name="bookmarks">Bidimbu ya mikanda</string>
   <string name="menu_random_article">Disolo ya kintulumukina</string>
-  <string name="menu_full_screen">Kifwanisu ya mvimba</string>
-  <string name="menu_exit_full_screen">Kubasika na écran ya mvimba</string>
   <string name="menu_read_aloud">Tanga yo na ndinga ya ngolo</string>
   <string name="menu_read_aloud_stop">Yambula kutanga na ndinga ya ngolo</string>
   <string name="menu_support_kiwix">Lusadisu Kiwix</string>

@@ -14,8 +14,6 @@
   <string name="menu_search_in_text">Tìm trong trang</string>
   <string name="bookmarks">Dấu trang</string>
   <string name="menu_random_article">Bài viết ngẫu nhiên</string>
-  <string name="menu_full_screen">Toàn màn hình</string>
-  <string name="menu_exit_full_screen">Thoát toàn màn hình</string>
   <string name="menu_read_aloud">Đọc to</string>
   <string name="menu_read_aloud_stop">Dừng đọc to</string>
   <string name="save_media">Lưu tập tin đa phương tiện</string>

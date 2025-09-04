@@ -23,8 +23,6 @@
   <string name="menu_search_in_text">Keresés a lapon</string>
   <string name="bookmarks">Könyvjelzők</string>
   <string name="menu_random_article">Lap találomra</string>
-  <string name="menu_full_screen">Teljes képernyő</string>
-  <string name="menu_exit_full_screen">Kilépés a teljes képernyős módból</string>
   <string name="menu_read_aloud">Felolvasás</string>
   <string name="menu_read_aloud_stop">Felolvasás leállítása</string>
   <string name="menu_support_kiwix">A Kiwix támogatása</string>

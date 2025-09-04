@@ -14,8 +14,6 @@
   <string name="menu_search_in_text">Op der Säit sichen</string>
   <string name="bookmarks">Lieszeechen</string>
   <string name="menu_random_article">Zoufällegen Artikel</string>
-  <string name="menu_full_screen">Ganzen Ecran</string>
-  <string name="menu_exit_full_screen">Aus dem ganzen Ecran erausgoen</string>
   <string name="menu_read_aloud">Virliesen</string>
   <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
   <string name="menu_support_kiwix">Kiwix ënnerstëtzen</string>

@@ -12,8 +12,6 @@
   <string name="menu_search_in_text">Atrast tekstā</string>
   <string name="bookmarks">Grāmatzīmes</string>
   <string name="menu_random_article">Nejaušs raksts</string>
-  <string name="menu_full_screen">Pilnekrāna režīms</string>
-  <string name="menu_exit_full_screen">Iziet no pilnekrāna</string>
   <string name="menu_support_kiwix">Atbalstiet Kiwix</string>
   <string name="search_label">Meklēt</string>
   <string name="pref_display_title">Displejs</string>

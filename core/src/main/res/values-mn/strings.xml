@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">Бичвэрээс хайх</string>
   <string name="bookmarks">Тэмдэглэсэн хуудсууд</string>
   <string name="menu_random_article">Санаандгүй сонгосон нийлэл</string>
-  <string name="menu_full_screen">Дэлгэц дүүргэн харах</string>
-  <string name="menu_exit_full_screen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
   <string name="save_media">медиаг өөр төрлөөр хадгалах</string>
   <string name="search_label">Хайлт</string>
   <string name="choose_file" fuzzy="true">ZIM  агуулгын файлыг сонгох (*.zim)</string>

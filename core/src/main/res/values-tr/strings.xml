@@ -28,8 +28,6 @@
   <string name="menu_search_in_text">Sayfada bul</string>
   <string name="bookmarks">Yer imleri</string>
   <string name="menu_random_article">Rastgele madde</string>
-  <string name="menu_full_screen">Tam ekran</string>
-  <string name="menu_exit_full_screen">Tam ekrandan çık</string>
   <string name="menu_read_aloud">Yüksek sesle oku</string>
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
   <string name="menu_support_kiwix">Kiwix’i destekle</string>

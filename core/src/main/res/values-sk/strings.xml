@@ -14,8 +14,6 @@
   <string name="menu_search_in_text">Nájsť na stránke</string>
   <string name="bookmarks">Záložky</string>
   <string name="menu_random_article">Náhodný článok</string>
-  <string name="menu_full_screen">Celá obrazovka</string>
-  <string name="menu_exit_full_screen">Ukončiť režim celej obrazovky</string>
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
   <string name="menu_support_kiwix">Podporiť Kiwix</string>

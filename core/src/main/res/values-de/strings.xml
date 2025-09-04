@@ -39,8 +39,6 @@
   <string name="menu_search_in_text">In Seite suchen</string>
   <string name="bookmarks">Lesezeichen</string>
   <string name="menu_random_article">Zufälliger Artikel</string>
-  <string name="menu_full_screen">Vollbild</string>
-  <string name="menu_exit_full_screen">Vollbild beenden</string>
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="menu_support_kiwix">Kiwix unterstützen</string>

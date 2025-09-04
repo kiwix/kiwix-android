@@ -25,8 +25,6 @@
   <string name="menu_search_in_text">문서에서 찾기</string>
   <string name="bookmarks">책갈피</string>
   <string name="menu_random_article">임의 문서</string>
-  <string name="menu_full_screen">전체 화면</string>
-  <string name="menu_exit_full_screen">전체 화면에서 나가기</string>
   <string name="menu_read_aloud">소리내어 읽기</string>
   <string name="menu_read_aloud_stop">소리내어 읽기 중단하기</string>
   <string name="menu_support_kiwix">Kiwix 지원하기</string>

@@ -13,8 +13,6 @@
   <string name="menu_search_in_text">Soek in teks</string>
   <string name="bookmarks">Boekmerke</string>
   <string name="menu_random_article">Lukrake artikel</string>
-  <string name="menu_full_screen">Volle skerm</string>
-  <string name="menu_exit_full_screen">Verlaat volskerm-modus</string>
   <string name="menu_read_aloud">Lees hardop</string>
   <string name="menu_read_aloud_stop">Hou op om hardop te lees</string>
   <string name="menu_support_kiwix">Ondersteun Kiwix</string>

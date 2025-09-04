@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">ხასჷლას გორუა</string>
   <string name="bookmarks">მიკაწონებელეფი</string>
   <string name="menu_random_article">შემთხვევითი სტატია</string>
-  <string name="menu_full_screen">სრულ ეკრანზე</string>
-  <string name="menu_exit_full_screen">მთლიანი ეკრანიდან გამოსვლა</string>
   <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
   <string name="menu_support_kiwix">Kiwix-იშ აზარა</string>

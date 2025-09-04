@@ -12,8 +12,6 @@
   <string name="menu_search_in_text">Bolukiluki na lokasa</string>
   <string name="bookmarks">Makomi ya mikanda</string>
   <string name="menu_random_article">Ekakoli na mbɛsɛ</string>
-  <string name="menu_full_screen">Écran mobimba</string>
-  <string name="menu_exit_full_screen">Bima na écran mobimba</string>
   <string name="menu_read_aloud">Tángá na mongongo makasi</string>
   <string name="menu_read_aloud_stop">Tika kotanga na mongongo makasi</string>
   <string name="menu_support_kiwix">Lisungi ya Kiwix</string>

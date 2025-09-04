@@ -18,8 +18,6 @@
   <string name="menu_search_in_text">Aurkitu orrialdean</string>
   <string name="bookmarks">Lastermarkak</string>
   <string name="menu_random_article">Ausazko artikulua</string>
-  <string name="menu_full_screen">Pantaila osoa</string>
-  <string name="menu_exit_full_screen">Irten pantaila osotik</string>
   <string name="menu_read_aloud">Irakurri ozenki</string>
   <string name="menu_read_aloud_stop">Ozen irakurtzeari utzi</string>
   <string name="menu_support_kiwix">Lagundu Kiwix proiektuari</string>

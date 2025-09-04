@@ -78,9 +78,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefShowShowCaseToUser: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_SHOWCASE, true)
 
-  val prefFullScreen: Boolean
-    get() = sharedPreferences.getBoolean(PREF_FULLSCREEN, false)
-
   var prefBackToTop: Boolean
     get() = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false)
     set(backToTop) {
@@ -201,9 +198,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
     sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
-
-  fun putPrefFullScreen(fullScreen: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_FULLSCREEN, fullScreen) }
 
   fun putPrefExternalLinkPopup(externalLinkPopup: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup) }
@@ -381,7 +375,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_IS_TEST = "is_test"
     const val PREF_SHOW_SHOWCASE = "showShowCase"
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
-    private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"

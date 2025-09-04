@@ -20,8 +20,6 @@
   <string name="menu_search_in_text">পাতায় খুঁজুন</string>
   <string name="bookmarks">বুকমার্ক</string>
   <string name="menu_random_article">অজানা নিবন্ধ</string>
-  <string name="menu_full_screen">পূর্ণ পর্দা</string>
-  <string name="menu_exit_full_screen">পূর্ণ পর্দা থেকে প্রস্থান</string>
   <string name="menu_read_aloud">জোরে পড়ুন</string>
   <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
   <string name="menu_support_kiwix">কিউইক্সকে সমর্থন করুন</string>

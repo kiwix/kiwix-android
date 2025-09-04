@@ -54,7 +54,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 
 const val READ_ALOUD_MENU_ITEM_TESTING_TAG = "readAloudMenuItemTestingTag"
 const val TAKE_NOTE_MENU_ITEM_TESTING_TAG = "takeNoteMenuItemTestingTag"
-const val FULL_SCREEN_MENU_ITEM_TESTING_TAG = "fullScreenMenuItemTestingTag"
 const val RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG = "randomArticleMenuItemTestingTag"
 const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 const val TABS_SIZE_TEXT_TESTING_TAG = "tabsSizeTextTestingTag"
@@ -73,7 +72,6 @@ class ReaderMenuState(
     fun onAddNoteMenuClicked()
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
-    fun onFullscreenMenuClicked()
     fun onSearchMenuClickedMenuClicked()
   }
 
@@ -84,7 +82,6 @@ class ReaderMenuState(
     put(MenuItemType.TabSwitcher, true)
     put(MenuItemType.AddNote, true)
     put(MenuItemType.RandomArticle, true)
-    put(MenuItemType.Fullscreen, true)
     put(MenuItemType.ReadAloud, true)
   }
 
@@ -113,7 +110,6 @@ class ReaderMenuState(
       MenuItemType.RandomArticle,
       MenuItemType.Search,
       MenuItemType.ReadAloud,
-      MenuItemType.Fullscreen,
       MenuItemType.AddNote,
       MenuItemType.TabSwitcher
     )
@@ -161,8 +157,7 @@ class ReaderMenuState(
       false,
       MenuItemType.RandomArticle,
       MenuItemType.ReadAloud,
-      MenuItemType.AddNote,
-      MenuItemType.Fullscreen
+      MenuItemType.AddNote
     )
   }
 
@@ -258,15 +253,6 @@ class ReaderMenuState(
       )
     }
 
-    if (menuItemVisibility[MenuItemType.Fullscreen] == true) {
-      menuItems += ActionMenuItem(
-        contentDescription = R.string.menu_full_screen,
-        onClick = { menuClickListener.onFullscreenMenuClicked() },
-        testingTag = FULL_SCREEN_MENU_ITEM_TESTING_TAG,
-        isInOverflow = true
-      )
-    }
-
     if (menuItemVisibility[MenuItemType.ReadAloud] == true && !disableReadAloud) {
       menuItems += ActionMenuItem(
         contentDescription = if (isReadingAloud) R.string.menu_read_aloud_stop else R.string.menu_read_aloud,
@@ -297,6 +283,5 @@ enum class MenuItemType {
   TabSwitcher,
   AddNote,
   RandomArticle,
-  Fullscreen,
   ReadAloud
 }

@@ -15,8 +15,6 @@
   <string name="menu_search_in_text">Găsește în pagină</string>
   <string name="bookmarks">Semn de carte</string>
   <string name="menu_random_article">Articol aleatoriu</string>
-  <string name="menu_full_screen">Ecran complet</string>
-  <string name="menu_exit_full_screen">Ieși din modul ecran complet</string>
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
   <string name="menu_support_kiwix">Susține Kiwix</string>

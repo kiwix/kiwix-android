@@ -22,8 +22,6 @@
   <string name="menu_search_in_text">於頁面中尋找</string>
   <string name="bookmarks">書籤</string>
   <string name="menu_random_article">隨機條目</string>
-  <string name="menu_full_screen">全螢幕</string>
-  <string name="menu_exit_full_screen">結束全螢幕</string>
   <string name="menu_read_aloud">朗讀</string>
   <string name="menu_read_aloud_stop">停止朗讀</string>
   <string name="menu_support_kiwix">支持 Kiwix</string>

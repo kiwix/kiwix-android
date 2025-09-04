@@ -31,8 +31,6 @@
   <string name="menu_search_in_text">Encontrar na página</string>
   <string name="bookmarks">Favoritos</string>
   <string name="menu_random_article">Artigo aleatório</string>
-  <string name="menu_full_screen">Tela inteira</string>
-  <string name="menu_exit_full_screen">Sair do modo de tela inteira</string>
   <string name="menu_read_aloud">Ler em voz alta</string>
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
   <string name="menu_support_kiwix">Apoie Kiwix</string>

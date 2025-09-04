@@ -20,8 +20,6 @@
   <string name="menu_search_in_text">Op pagina zoeken</string>
   <string name="bookmarks">Bladwijzers</string>
   <string name="menu_random_article">Willekeurig artikel</string>
-  <string name="menu_full_screen">Volledig scherm</string>
-  <string name="menu_exit_full_screen">Volledig scherm verlaten</string>
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="menu_support_kiwix">Steun Kiwix</string>

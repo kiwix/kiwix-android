@@ -22,8 +22,6 @@
   <string name="menu_search_in_text">पृष्ठ में ढूंढें</string>
   <string name="bookmarks">बूकमार्क</string>
   <string name="menu_random_article">कोई भी लेख</string>
-  <string name="menu_full_screen">पूरा स्क्रीन</string>
-  <string name="menu_exit_full_screen">पूरे स्क्रीन से बाहर निकलें</string>
   <string name="menu_read_aloud">पढ़ा कर सुनें</string>
   <string name="menu_read_aloud_stop">पढ़ा कर सुनना रोकें</string>
   <string name="menu_support_kiwix">किविक्स का समर्थन करें</string>

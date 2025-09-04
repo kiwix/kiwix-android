@@ -64,10 +64,6 @@ data class ReaderScreenState(
    */
   val fullScreenItem: Pair<Boolean, FrameLayout?>,
   /**
-   * Manages the showing of "Full screen mode".
-   */
-  val shouldShowFullScreenMode: Boolean,
-  /**
    * Manages the showing of "BackToTop" fab button.
    */
   val showBackToTopButton: Boolean,
@@ -75,7 +71,6 @@ data class ReaderScreenState(
    * Handles the click of "BackToTop" fab button.
    */
   val backToTopButtonClick: () -> Unit,
-  val onExitFullscreenClick: () -> Unit = {},
   val showTtsControls: Boolean = false,
   val onPauseTtsClick: () -> Unit = {},
   /**

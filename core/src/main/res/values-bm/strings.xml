@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">Ɲinini kɛ sɛbɛnni kɔnɔ</string>
   <string name="bookmarks">Ɲɛ dogo</string>
   <string name="menu_random_article">Laala kunnafoni</string>
-  <string name="menu_full_screen">Ekaran fa</string>
-  <string name="menu_exit_full_screen">Bɔ ekaran falen na</string>
   <string name="search_label">Ɲinini kɛ</string>
   <string name="choose_file" fuzzy="true">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
   <string name="error_file_not_found" fuzzy="true">Fili: Fisiye sugantilen ma se ka ye fan si. %s</string>

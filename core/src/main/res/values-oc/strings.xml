@@ -12,8 +12,6 @@
   <string name="menu_search_in_text">Trobar dins la pagina</string>
   <string name="bookmarks">Favorits</string>
   <string name="menu_random_article">Article a l’azard</string>
-  <string name="menu_full_screen">Ecran complet</string>
-  <string name="menu_exit_full_screen">Quitar l’ecran complet</string>
   <string name="menu_read_aloud">Legir a votz nauta</string>
   <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
   <string name="save_media">Enregistrar lo mèdia</string>
