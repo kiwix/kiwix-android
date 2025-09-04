@@ -60,8 +60,8 @@
   <string name="start_server_label">開啟伺服器</string>
   <string name="stop_server_label">停止伺服器</string>
   <string name="error_server_already_running">伺服器已運作。請關閉後重試。</string>
-  <string name="error_ip_address_not_found">找不到 IP 位址。</string>
-  <string name="server_started_message">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">找不到 IP 位址。</string>
+  <string name="server_started_message" fuzzy="true">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
   <string name="qr_code">呈現 QR 碼</string>
   <string name="share_host_address">透過別種應用程式分享 URL</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。 %s</string>
@@ -138,6 +138,7 @@
   <string name="download_no_space">沒有足夠的空間來下載。</string>
   <string name="download">下載</string>
   <string name="download_notification_channel_name">下載通知頻道名稱</string>
+  <string name="download_notification_channel_description">正在下載 ZIM 檔案…</string>
   <string name="space_available">可用空間：</string>
   <string name="move_no_space">沒有足夠的空間來移動/拷貝。</string>
   <string name="zim_simple">簡易</string>

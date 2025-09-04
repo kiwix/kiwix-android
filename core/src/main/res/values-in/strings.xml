@@ -58,8 +58,8 @@
   <string name="start_server_label">Nyalakan server</string>
   <string name="stop_server_label">Matikan server</string>
   <string name="error_server_already_running">Server sudah berjalan. Tolong matikan dan coba lagi.</string>
-  <string name="error_ip_address_not_found">Tak dapat menemukan alamat IP.</string>
-  <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Tak dapat menemukan alamat IP.</string>
+  <string name="server_started_message" fuzzy="true">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
   <string name="qr_code">Kode QR yang Disajikan</string>
   <string name="share_host_address">Bagikan URL melalui aplikasi lain</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan. %s</string>

@@ -51,8 +51,8 @@
   <string name="start_server_label">Bẹrẹ olupin</string>
   <string name="stop_server_label">Duro olupin</string>
   <string name="error_server_already_running">Olupin naa ti nṣiṣẹ tẹlẹ. Jọwọ pa a ki o gbiyanju lẹẹkansi.</string>
-  <string name="error_ip_address_not_found">Ko le ri adiresi ip.</string>
-  <string name="server_started_message">Tẹ adiresi IP yii sinu ẹrọ aṣawakiri rẹ lati wọle si olupin %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Ko le ri adiresi ip.</string>
+  <string name="server_started_message" fuzzy="true">Tẹ adiresi IP yii sinu ẹrọ aṣawakiri rẹ lati wọle si olupin %s</string>
   <string name="share_host_address">Pin URL nipasẹ awọn ohun elo miiran</string>
   <string name="error_file_not_found">Aṣiṣe: Faili ZIM ti o yan ko ṣee ri. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Ko le ka faili zim yii!</string>

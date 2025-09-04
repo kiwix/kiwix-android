@@ -43,8 +43,8 @@
   <string name="start_server_label">Start tjener</string>
   <string name="stop_server_label">Stopp tjener</string>
   <string name="error_server_already_running">Tjeneren kjører allerede. Stopp den og forsøk på nytt.</string>
-  <string name="error_ip_address_not_found">Klarte ikke å finne IP adressen.</string>
-  <string name="server_started_message">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Klarte ikke å finne IP adressen.</string>
+  <string name="server_started_message" fuzzy="true">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
   <string name="qr_code">Generert QR-kode</string>
   <string name="share_host_address">Del webadresse via andre programmer</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet \n. %s</string>

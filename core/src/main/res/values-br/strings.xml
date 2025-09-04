@@ -34,8 +34,8 @@
   <string name="hotspot_dialog_neutral_button">KENDERC’HEL</string>
   <string name="start_server_label">Loc’hañ ar servijer</string>
   <string name="stop_server_label">Ehanañ ar servijer</string>
-  <string name="error_ip_address_not_found">N’haller ket kavout ar chomlec’h IP.</string>
-  <string name="server_started_message">Enankit ar chomlec’h IP-mañ e-barzh ho merdeer evit kaout ar servijer %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">N’haller ket kavout ar chomlec’h IP.</string>
+  <string name="server_started_message" fuzzy="true">Enankit ar chomlec’h IP-mañ e-barzh ho merdeer evit kaout ar servijer %s</string>
   <string name="share_host_address">Rannañ an URL war-bouez arloadoù all</string>
   <string name="error_file_not_found">Fazi : N’eus ket bet gallet kavout ar restr ZIM diuzet. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">N’haller ket lenn ar restr ZIM-mañ!</string>

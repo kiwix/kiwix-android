@@ -48,8 +48,8 @@
   <string name="start_server_label">Покрени го опслужувачот</string>
   <string name="stop_server_label">Запри го опслужувачот</string>
   <string name="error_server_already_running">Опслужувачот веќе работи. Исклучете го и пробајте повторно.</string>
-  <string name="error_ip_address_not_found">Не можев да најдам IP-адреса.</string>
-  <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Не можев да најдам IP-адреса.</string>
+  <string name="server_started_message" fuzzy="true">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
   <string name="qr_code">Испишан QR-код</string>
   <string name="share_host_address">Сподели URL преку други прилози</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека. %s</string>
@@ -126,6 +126,7 @@
   <string name="download_no_space">Нема доволно место за преземање.</string>
   <string name="download">Преземи</string>
   <string name="download_notification_channel_name">Име на каналот за известување за преземања</string>
+  <string name="download_notification_channel_description">Преземам ZIM-податотеки…</string>
   <string name="space_available">Достапен простор:</string>
   <string name="move_no_space">Нема доволно простор за преместување/копирање.</string>
   <string name="zim_simple">Просто</string>

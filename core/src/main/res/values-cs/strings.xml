@@ -56,7 +56,7 @@
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Spustit server</string>
   <string name="stop_server_label">Zastavit server</string>
-  <string name="server_started_message">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
+  <string name="server_started_message" fuzzy="true">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
   <string name="share_host_address">Sdílet URL přes jiné aplikace</string>
   <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Tento soubor zim nelze přečíst!</string>

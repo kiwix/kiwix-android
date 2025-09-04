@@ -50,8 +50,8 @@
   <string name="start_server_label">Initiar servitor</string>
   <string name="stop_server_label">Stoppar servitor</string>
   <string name="error_server_already_running">Le servitor es ja in execution. Per favor disactiva lo e re-tenta.</string>
-  <string name="error_ip_address_not_found">Non poteva trovar le adresse IP.</string>
-  <string name="server_started_message">Entra iste adresse IP in tu navigator pro acceder al servitor %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Non poteva trovar le adresse IP.</string>
+  <string name="server_started_message" fuzzy="true">Entra iste adresse IP in tu navigator pro acceder al servitor %s</string>
   <string name="qr_code">Codice QR rendite</string>
   <string name="share_host_address">Condivider le URL via altere applicationes</string>
   <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate. %s</string>
@@ -89,7 +89,7 @@
   <string name="pref_import_bookmark_summary">Importar le marcapaginas salveguardate</string>
   <string name="pref_export_bookmark_title">Exportar marcapaginas</string>
   <string name="pref_export_bookmark_summary">Exportar tote le marcapaginas salveguardate</string>
-  <string name="export_bookmark_saved">Le marcapaginas es exportate in un file %s</string>
+  <string name="export_bookmark_saved">Le marcapaginas es exportate in le file %s</string>
   <string name="all_history_cleared">Tote le historia ha essite radite</string>
   <string name="pref_clear_all_bookmarks_title">Rader marcapaginas</string>
   <string name="clear_all_history_dialog_title">Rader tote le historia?</string>
@@ -128,6 +128,7 @@
   <string name="download_no_space">Spatio insufficiente pro discargar.</string>
   <string name="download">Discargar</string>
   <string name="download_notification_channel_name">Nomine del canal de notification de discargamentos</string>
+  <string name="download_notification_channel_description">Discarga files ZIM…</string>
   <string name="space_available">Spatio disponibile:</string>
   <string name="move_no_space">Spatio insufficiente pro displaciar/copiar.</string>
   <string name="zim_simple">Simple</string>

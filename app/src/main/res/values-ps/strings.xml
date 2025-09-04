@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* شاه زمان پټان
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">ستاسو د دوتنې غونډال له 4GB پورته دوتنو ملاتړ نه کوي.</string>
+  <string name="detecting_file_system">دا مالومول چې ايا دا د دوتنې غونډال کولی شي 4GB دوتنې رامنځته کړي</string>
+  <string name="cannot_open_file">د دوتنې پرانېستلو کې پاتې راغی\nمهرباني وکړئ هڅه وکړئ چې دا دوتنه په خپل کتابتون کې ومومئ</string>
+  <string name="send_files_title">دوتنې لېږل</string>
+  <string name="receive_files_title">دوتنې ترلاسه‌کول</string>
+  <string name="no_app_found_to_open">د ZIM دوتنې ټاکلو لپاره هېڅ کاريال ونه موندل شو!</string>
+  <string name="select_zim_file">لوستلو لپاره ZIM دوتنه ټاکل</string>
+</resources>

@@ -47,7 +47,7 @@
   <string name="hotspot_notification_content_title">Kiwix ହଟସ୍ପଟ୍</string>
   <string name="start_server_label">ସର୍ଭର ଆରମ୍ଭ କରନ୍ତୁ</string>
   <string name="stop_server_label">ସର୍ଭର ବନ୍ଦ କରନ୍ତୁ</string>
-  <string name="server_started_message">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
+  <string name="server_started_message" fuzzy="true">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
   <string name="share_host_address">ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକ ମାଧ୍ୟମରେ URL ଅଂଶୀଦାର କରନ୍ତୁ</string>
   <string name="error_file_not_found" fuzzy="true">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ । %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ଏହି zim ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ</string>

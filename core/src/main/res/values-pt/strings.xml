@@ -61,8 +61,8 @@
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Parar servidor</string>
   <string name="error_server_already_running">O servidor já está em execução. Por favor, desligue-o e tente novamente.</string>
-  <string name="error_ip_address_not_found">Não foi possível encontrar o endereço IP.</string>
-  <string name="server_started_message">Digite este endereço IP no seu navegador para aceder ao servidor %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Não foi possível encontrar o endereço IP.</string>
+  <string name="server_started_message" fuzzy="true">Digite este endereço IP no seu navegador para aceder ao servidor %s</string>
   <string name="qr_code">Código QR renderizado</string>
   <string name="share_host_address">Compartilhar URL através de outros aplicativos</string>
   <string name="error_file_not_found">Erro: Não foi possível encontrar o ficheiro ZIM selecionado. %s</string>
@@ -139,6 +139,7 @@
   <string name="download_no_space">Espaço insuficiente para descarregar este ficheiro.</string>
   <string name="download">Transferir</string>
   <string name="download_notification_channel_name">Nome do canal de notificação de download</string>
+  <string name="download_notification_channel_description">A transferir ficheiros ZIM…</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="move_no_space">Espaço insuficiente para mover/copiar.</string>
   <string name="zim_simple">Simples</string>

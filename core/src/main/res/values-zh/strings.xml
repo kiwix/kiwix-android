@@ -77,8 +77,8 @@
   <string name="start_server_label">启动服务器</string>
   <string name="stop_server_label">停止服务器</string>
   <string name="error_server_already_running">服务器正在运行。请关闭后再重试。</string>
-  <string name="error_ip_address_not_found">找不到IP地址。</string>
-  <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">找不到IP地址。</string>
+  <string name="server_started_message" fuzzy="true">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="qr_code">显示二维码</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
   <string name="error_file_not_found">错误：找不到选定的 ZIM 文件。 %s</string>
