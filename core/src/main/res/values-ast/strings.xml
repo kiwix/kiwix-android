@@ -14,8 +14,6 @@
   <string name="menu_search_in_text">Alcontrar na páxina</string>
   <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artículu al debalu</string>
-  <string name="menu_full_screen">Pantalla completa</string>
-  <string name="menu_exit_full_screen">Colar de pantalla completa</string>
   <string name="menu_read_aloud">Lleer en voz alta</string>
   <string name="menu_read_aloud_stop">Dexar de lleer en voz alta</string>
   <string name="menu_support_kiwix">Sofitar a Kiwix</string>

@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Matndan qidirish</string>
   <string name="bookmarks">Xatchoʻplar</string>
   <string name="menu_random_article">Tasodifiy sahifa</string>
-  <string name="menu_full_screen">Toʻliq ekran</string>
-  <string name="menu_exit_full_screen">Toʻliq ekran tartibidan chiqish</string>
   <string name="search_label">Qidiruv</string>
   <string name="pref_display_title">Koʻrsatish</string>
   <string name="pref_info_title">Axborot</string>

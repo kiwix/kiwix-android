@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">Find insyd page</string>
   <string name="bookmarks">Bookmarks</string>
   <string name="menu_random_article">Random article</string>
-  <string name="menu_full_screen">Full screen</string>
-  <string name="menu_exit_full_screen">Make you Exit full screen</string>
   <string name="menu_read_aloud">Make you read aloud</string>
   <string name="menu_read_aloud_stop">Make you stop dey read aloud</string>
   <string name="menu_support_kiwix">Make you Support Kiwix</string>

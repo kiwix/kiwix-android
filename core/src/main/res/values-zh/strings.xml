@@ -39,8 +39,6 @@
   <string name="menu_search_in_text">在页面中查找</string>
   <string name="bookmarks">书签</string>
   <string name="menu_random_article">随机条目</string>
-  <string name="menu_full_screen">全屏</string>
-  <string name="menu_exit_full_screen">退出全屏</string>
   <string name="menu_read_aloud">朗读</string>
   <string name="menu_read_aloud_stop">停止朗读</string>
   <string name="menu_support_kiwix">支持Kiwix</string>

@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Текста табырға</string>
   <string name="bookmarks">Һалынмалар</string>
   <string name="menu_random_article">Осраҡлы мәҡәлә</string>
-  <string name="menu_full_screen">Тулы экран</string>
-  <string name="menu_exit_full_screen">Тулы экран режимынан сығырға</string>
   <string name="save_media">Медиа файлды һаҡлау форматы</string>
   <string name="search_label">Эҙләү</string>
   <string name="pref_display_title">Күрһәтергә</string>

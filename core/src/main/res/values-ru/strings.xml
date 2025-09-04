@@ -40,8 +40,6 @@
   <string name="menu_search_in_text">Найти на странице</string>
   <string name="bookmarks">Закладки</string>
   <string name="menu_random_article">Случайная статья</string>
-  <string name="menu_full_screen">Полный экран</string>
-  <string name="menu_exit_full_screen">Выйти из полноэкранного режима</string>
   <string name="menu_read_aloud">Читать вслух</string>
   <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
   <string name="menu_support_kiwix">Поддержать Kiwix</string>

@@ -219,7 +219,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (isFullScreenVideo || isInFullScreenMode()) {
+    if (isFullScreenVideo) {
       hideNavBar()
     }
   }
@@ -292,25 +292,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onFullscreenVideoToggled(isFullScreen)
   }
 
-  override fun openFullScreen() {
-    super.openFullScreen()
-    hideNavBar()
-  }
-
-  override fun closeFullScreen() {
-    super.closeFullScreen()
-    showNavBar()
-  }
-
   private fun hideNavBar() {
     (requireActivity() as CoreMainActivity).hideBottomAppBar()
   }
 
   private fun showNavBar() {
-    // show the navBar if fullScreenMode is not active.
-    if (!isInFullScreenMode()) {
-      (requireActivity() as CoreMainActivity).showBottomAppBar()
-    }
+    (requireActivity() as CoreMainActivity).showBottomAppBar()
   }
 
   override fun createNewTab() {

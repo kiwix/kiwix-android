@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Најди на страницата</string>
   <string name="bookmarks">Обележани</string>
   <string name="menu_random_article">Случајна статија</string>
-  <string name="menu_full_screen">На цел екран</string>
-  <string name="menu_exit_full_screen">Излези од цел екран</string>
   <string name="menu_read_aloud">Прочитај на глас</string>
   <string name="menu_read_aloud_stop">Запри читање на глас</string>
   <string name="menu_support_kiwix">Поддржете го Кивикс</string>

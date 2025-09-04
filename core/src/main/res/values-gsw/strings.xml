@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">I de Syte finde</string>
   <string name="bookmarks">Läsezeiche</string>
   <string name="menu_random_article">Zuefälligi Syte</string>
-  <string name="menu_full_screen">Vollbildschirm</string>
-  <string name="menu_exit_full_screen">Vollbildmodus beende</string>
   <string name="menu_read_aloud">Vorläse</string>
   <string name="menu_read_aloud_stop">Ufhöre vorläse</string>
   <string name="menu_support_kiwix">Kiwix unterstützä</string>

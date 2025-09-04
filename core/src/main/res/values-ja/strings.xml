@@ -21,8 +21,6 @@
   <string name="menu_search_in_text">テキストで検索</string>
   <string name="bookmarks">ブックマーク</string>
   <string name="menu_random_article">ランダム記事</string>
-  <string name="menu_full_screen">全画面表示</string>
-  <string name="menu_exit_full_screen">全画面表示を終了</string>
   <string name="menu_read_aloud">読み上げる</string>
   <string name="menu_read_aloud_stop">読み上げをやめる</string>
   <string name="menu_support_kiwix">Kiwix をサポートする</string>

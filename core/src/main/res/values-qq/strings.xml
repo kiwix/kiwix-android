@@ -25,9 +25,7 @@
   <string name="menu_search_in_text">This is for finding all words on the current page, which contain the current search string.</string>
   <string name="bookmarks">{{Identical|Bookmark}}</string>
   <string name="menu_random_article">{{Identical|Random article}}</string>
-  <string name="menu_full_screen">{{Identical|Full screen}}</string>
-  <string name="menu_exit_full_screen">This is for the content description of ImageButton, this is showing when the user reads the article in full-screen mode, by clicking on this ImageButton full-screen mode will close.</string>
-  <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
+   <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
   <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the “Read aloud (Text to speech is reading the current page data)” and if the user clicks on this button “Read Aloud” will stop reading the current page data.</string>
   <string name="menu_support_kiwix">This is for the “Navigation Item” button text on the main page of the “Kiwix app”, clicking on this button leads to opening the “Kiwix support” website page.</string>
   <string name="menu_wifi_hotspot">* English : it maps to some “hotspot” feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité “hotspot” l’anglais “host books” n’est pas particulièrement satisfaisant à la base.</string>

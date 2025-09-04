@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Ka dhex baar qoraalka</string>
   <string name="bookmarks">Calaamadaha aqriska</string>
   <string name="menu_random_article">Bogag iskuraran ah</string>
-  <string name="menu_full_screen">Dhammaan Shaashadda</string>
-  <string name="menu_exit_full_screen">Ka bax shaashadda weyn</string>
   <string name="menu_read_aloud">Aqri kuwa kale</string>
   <string name="menu_read_aloud_stop">Iska jooji aqrinta kuwa kale</string>
   <string name="save_media">Kaydi galka muuqaalka ah si</string>

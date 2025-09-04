@@ -20,8 +20,6 @@
   <string name="menu_search_in_text">Temukan dalam halaman</string>
   <string name="bookmarks">Markah</string>
   <string name="menu_random_article">Artikel sembarang</string>
-  <string name="menu_full_screen">Layar penuh</string>
-  <string name="menu_exit_full_screen">Keluar dari modus layar penuh</string>
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
   <string name="menu_support_kiwix">Dukung Kiwix</string>

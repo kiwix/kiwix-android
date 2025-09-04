@@ -9,8 +9,6 @@
   <string name="menu_search_in_text">Pronađi na stranici</string>
   <string name="bookmarks">Oznake</string>
   <string name="menu_random_article">Slučajni članak</string>
-  <string name="menu_full_screen">Cijeli ekran</string>
-  <string name="menu_exit_full_screen">Izađi iz prikaza preko cijelog ekrana</string>
   <string name="menu_read_aloud">Čitaj naglas</string>
   <string name="menu_read_aloud_stop">Prestani čitati naglas</string>
   <string name="menu_support_kiwix">Podržite Kiwix</string>

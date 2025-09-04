@@ -17,8 +17,6 @@
   <string name="menu_settings">Подешавања</string>
   <string name="bookmarks">Обележивачи</string>
   <string name="menu_random_article">Случајан чланак</string>
-  <string name="menu_full_screen">Цео екран</string>
-  <string name="menu_exit_full_screen">Изађи из целог екрана</string>
   <string name="menu_read_aloud">Читај на глас</string>
   <string name="menu_read_aloud_stop">Престани да читаш на глас</string>
   <string name="save_media_error">Дошло је до грешке при чувању мултимедије!</string>

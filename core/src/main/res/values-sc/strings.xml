@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">Agata in sa pàgina</string>
   <string name="bookmarks">Sinnalibros</string>
   <string name="menu_random_article">Artìculu a sa tzurpa</string>
-  <string name="menu_full_screen">Ischermu intreu</string>
-  <string name="menu_exit_full_screen">Essi dae s’ichermu intreu</string>
   <string name="menu_read_aloud">Leghe a boghe arta</string>
   <string name="menu_read_aloud_stop">Firma sa leghidura a boghe arta</string>
   <string name="menu_support_kiwix">Suporta Kiwix</string>

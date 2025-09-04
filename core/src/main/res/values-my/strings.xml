@@ -14,8 +14,6 @@
   <string name="menu_search_in_text">စာမျက်နှာတွင် ရှာဖွေရန်</string>
   <string name="bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="menu_random_article">ကျပန်း ဆောင်းပါး</string>
-  <string name="menu_full_screen">မျက်နှာဖွင့်အပြည့်</string>
-  <string name="menu_exit_full_screen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
   <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
   <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
   <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>

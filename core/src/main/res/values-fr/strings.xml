@@ -39,8 +39,6 @@
   <string name="menu_search_in_text">Trouver dans la page</string>
   <string name="bookmarks">Signets</string>
   <string name="menu_random_article">Article au hasard</string>
-  <string name="menu_full_screen">Plein écran</string>
-  <string name="menu_exit_full_screen">Sortir du mode plein écran</string>
   <string name="menu_read_aloud">Lire à haute voix</string>
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>

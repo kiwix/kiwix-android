@@ -24,8 +24,6 @@
   <string name="menu_search_in_text">Znajdź na stronie</string>
   <string name="bookmarks">Zakładki</string>
   <string name="menu_random_article">Losowy artykuł</string>
-  <string name="menu_full_screen">Pełny ekran</string>
-  <string name="menu_exit_full_screen">Wyjdź z trybu pełnoekranowego</string>
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
   <string name="menu_support_kiwix">Wspieraj Kiwix</string>

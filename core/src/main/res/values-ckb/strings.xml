@@ -17,8 +17,6 @@
   <string name="menu_search_in_text">دۆزینەوە لەنێو پەڕە</string>
   <string name="bookmarks">نیشانکراوەکان</string>
   <string name="menu_random_article">وتاری ھەڕەمەکی</string>
-  <string name="menu_full_screen">پڕ بە شاشە</string>
-  <string name="menu_exit_full_screen">چونە دەرەوە لە پڕ بەشاشە</string>
   <string name="menu_read_aloud">بە بەرزی بیخوێنەوە</string>
   <string name="menu_read_aloud_stop">بوەستە لە خوێندنەوە</string>
   <string name="menu_support_kiwix">پشتگیریی کیویکس بکە</string>

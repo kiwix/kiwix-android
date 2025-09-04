@@ -16,8 +16,6 @@
   <string name="menu_search_in_text">Finn i tekst</string>
   <string name="bookmarks">Bokmerker</string>
   <string name="menu_random_article">Tilfeldig artikkel</string>
-  <string name="menu_full_screen">Fullskjerm</string>
-  <string name="menu_exit_full_screen">Avslutt fullskjerm</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
   <string name="menu_support_kiwix">Støtt Kiwix</string>

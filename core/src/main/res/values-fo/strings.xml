@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Finn á síðu</string>
   <string name="bookmarks">Bókamerki</string>
   <string name="menu_random_article">Tilvildarlig grein</string>
-  <string name="menu_full_screen">Fullan skerm</string>
-  <string name="menu_exit_full_screen">Far burtur frá fullum skermi</string>
   <string name="search_label">Leita</string>
   <string name="pref_display_title">Vís</string>
   <string name="pref_info_title">Kunning</string>

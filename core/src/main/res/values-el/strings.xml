@@ -17,8 +17,6 @@
   <string name="menu_search_in_text">Βρείτε στην σελίδα</string>
   <string name="bookmarks">Σελιδοδείκτες</string>
   <string name="menu_random_article">Τυχαίο άρθρο</string>
-  <string name="menu_full_screen">Πλήρης οθόνη</string>
-  <string name="menu_exit_full_screen">Έξοδος από πλήρη οθόνη</string>
   <string name="menu_read_aloud">Διάβασε δυνατά</string>
   <string name="menu_read_aloud_stop">Σταμάτα να διαβάζεις δυνατά</string>
   <string name="menu_support_kiwix">Υποστήριξη Kiwix</string>

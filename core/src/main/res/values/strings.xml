@@ -6,8 +6,6 @@
   <string name="menu_search_in_text">Find in page</string>
   <string name="bookmarks">Bookmarks</string>
   <string name="menu_random_article">Random article</string>
-  <string name="menu_full_screen">Full screen</string>
-  <string name="menu_exit_full_screen">Exit full screen</string>
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
   <string name="menu_support_kiwix">Support Kiwix</string>

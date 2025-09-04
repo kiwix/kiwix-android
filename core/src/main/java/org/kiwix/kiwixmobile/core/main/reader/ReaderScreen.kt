@@ -80,7 +80,6 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -153,7 +152,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
@@ -285,7 +283,7 @@ private fun ReaderTopBar(
   topAppBarScrollBehavior: TopAppBarScrollBehavior,
   navigationIcon: @Composable () -> Unit,
 ) {
-  if (!state.shouldShowFullScreenMode && !state.fullScreenItem.first) {
+  if (!state.fullScreenItem.first) {
     KiwixAppBar(
       title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
       navigationIcon = navigationIcon,
@@ -334,10 +332,6 @@ private fun ReaderContentLayout(
               bottomAppBarScrollBehavior
             )
           }
-          CloseFullScreenImageButton(
-            state.shouldShowFullScreenMode,
-            state.onExitFullscreenClick
-          )
         }
       }
     }
@@ -514,29 +508,6 @@ fun SearchPlaceholder(hint: String, searchPlaceHolderClick: () -> Unit) {
       contentDescription = null,
       tint = White
     )
-  }
-}
-
-@Composable
-private fun BoxScope.CloseFullScreenImageButton(
-  shouldShowFullScreenMode: Boolean,
-  onExitFullScreen: () -> Unit
-) {
-  if (shouldShowFullScreenMode) {
-    IconButton(
-      onClick = onExitFullScreen,
-      modifier = Modifier
-        .align(Alignment.TopEnd)
-        .padding(SEVEN_DP)
-        .minimumInteractiveComponentSize()
-        .background(MaterialTheme.colorScheme.onSurface)
-    ) {
-      Icon(
-        painter = IconItem.Drawable(R.drawable.fullscreen_exit).toPainter(),
-        contentDescription = stringResource(id = R.string.menu_exit_full_screen),
-        tint = MaterialTheme.colorScheme.surface
-      )
-    }
   }
 }
 

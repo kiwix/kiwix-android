@@ -21,8 +21,6 @@
   <string name="menu_search_in_text">Hitta på sidan</string>
   <string name="bookmarks">Bokmärken</string>
   <string name="menu_random_article">Slumpartikel</string>
-  <string name="menu_full_screen">Helskärm</string>
-  <string name="menu_exit_full_screen">Stäng helskärm</string>
   <string name="menu_read_aloud">Läs upp</string>
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="menu_support_kiwix">Stöd Kiwix</string>

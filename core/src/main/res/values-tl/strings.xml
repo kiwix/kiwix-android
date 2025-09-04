@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Hanapin sa teksto</string>
   <string name="bookmarks">Mga pananda</string>
   <string name="menu_random_article">Alin mang artikulo</string>
-  <string name="menu_full_screen">Buong panooran</string>
-  <string name="menu_exit_full_screen">Huwag buong panooran</string>
   <string name="menu_read_aloud">Basahin nang malakas</string>
   <string name="menu_read_aloud_stop">Itigil basahin nang malakas</string>
   <string name="menu_support_kiwix">Itaguyod ang Kiwix</string>

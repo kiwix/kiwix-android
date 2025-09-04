@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Tschertgar en il text</string>
   <string name="bookmarks">Segnapaginas</string>
   <string name="menu_random_article">Artitgel casual</string>
-  <string name="menu_full_screen">Maletg entir</string>
-  <string name="menu_exit_full_screen">Ord il maletg entir</string>
   <string name="search_label">Tschertgar</string>
   <string name="choose_file" fuzzy="true">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
   <string name="open_in_new_tab">Avrir il link en in nov tab?</string>

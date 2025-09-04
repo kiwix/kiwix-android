@@ -22,8 +22,6 @@
   <string name="menu_search_in_text">Знайти на сторінці</string>
   <string name="bookmarks">Закладки</string>
   <string name="menu_random_article">Випадкова стаття</string>
-  <string name="menu_full_screen">На весь екран</string>
-  <string name="menu_exit_full_screen">Вийти з повноекранного режиму</string>
   <string name="menu_read_aloud">Читати вголос</string>
   <string name="menu_read_aloud_stop">Зупинити читання вголос</string>
   <string name="menu_support_kiwix">Підтримати Kiwix</string>

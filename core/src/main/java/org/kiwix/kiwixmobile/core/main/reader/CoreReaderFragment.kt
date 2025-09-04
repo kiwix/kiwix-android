@@ -100,8 +100,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservabl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
-import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
-import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -282,7 +280,6 @@ abstract class CoreReaderFragment :
       fullScreenItem = false to null,
       showBackToTopButton = false,
       backToTopButtonClick = { backToTop() },
-      onExitFullscreenClick = { closeFullScreen() },
       showTtsControls = false,
       onPauseTtsClick = { pauseTts() },
       pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty(),
@@ -317,7 +314,6 @@ abstract class CoreReaderFragment :
           closeTab(position)
         }
       },
-      shouldShowFullScreenMode = false,
       searchPlaceHolderItemForCustomApps = false to {
         openSearch(searchString = "", isOpenedFromTabView = false, false)
       },
@@ -870,11 +866,6 @@ abstract class CoreReaderFragment :
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
 
-      isInFullScreenMode() -> {
-        closeFullScreen()
-        return FragmentActivityExtensions.Super.ShouldNotCall
-      }
-
       compatCallback?.isActive == true -> {
         compatCallback?.finish()
         return FragmentActivityExtensions.Super.ShouldNotCall
@@ -1357,14 +1348,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  override fun onFullscreenMenuClicked() {
-    if (isInFullScreenMode()) {
-      closeFullScreen()
-    } else {
-      openFullScreen()
-    }
-  }
-
   override fun onSearchMenuClickedMenuClicked() {
     saveTabStates {
       // Pass this function to saveTabStates so that after saving
@@ -1495,11 +1478,7 @@ abstract class CoreReaderFragment :
   /**
    * Handles the toggling of fullscreen video mode and adjusts the drawer's behavior accordingly.
    * - If a video is playing in fullscreen mode, the drawer is disabled to restrict interactions.
-   * - When fullscreen mode is exited, the drawer is re-enabled unless the reader is still
-   *   in fullscreen mode.
-   * - Specifically, if the reader is in fullscreen mode and the user plays a video in
-   *   fullscreen, then exits the video's fullscreen mode, the drawer remains disabled
-   *   because the reader is still in fullscreen mode.
+   * - When fullscreen mode is exited, the drawer is re-enabled.
    */
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
     if (isFullScreen) {
@@ -1511,49 +1490,10 @@ abstract class CoreReaderFragment :
       }
       (requireActivity() as CoreMainActivity).disableLeftDrawer()
     } else {
-      readerScreenState.update { copy(fullScreenItem = fullScreenItem.copy(first = false)) }
-      if (!isInFullScreenMode()) {
-        readerScreenState.update { copy(shouldShowBottomAppBar = true) }
-        enableLeftDrawer()
+      readerScreenState.update {
+        copy(fullScreenItem = fullScreenItem.copy(first = false), shouldShowBottomAppBar = true)
       }
-    }
-  }
-
-  @Suppress("MagicNumber")
-  protected open fun openFullScreen() {
-    (requireActivity() as CoreMainActivity).apply {
-      disableLeftDrawer()
-      hideBottomAppBar()
-    }
-    readerScreenState.update {
-      copy(
-        shouldShowBottomAppBar = false,
-        shouldShowFullScreenMode = true
-      )
-    }
-    val window = requireActivity().window
-    window.decorView.showFullScreenMode(window)
-    getCurrentWebView()?.apply {
-      requestLayout()
-      translationY = 0f
-    }
-    sharedPreferenceUtil?.putPrefFullScreen(true)
-  }
-
-  @Suppress("MagicNumber")
-  open fun closeFullScreen() {
-    enableLeftDrawer()
-    (requireActivity() as CoreMainActivity).showBottomAppBar()
-    sharedPreferenceUtil?.putPrefFullScreen(false)
-    updateBottomToolbarVisibility()
-    val window = requireActivity().window
-    window.decorView.closeFullScreenMode(window)
-    getCurrentWebView()?.requestLayout()
-    readerScreenState.update {
-      copy(
-        shouldShowBottomAppBar = true,
-        shouldShowFullScreenMode = false
-      )
+      enableLeftDrawer()
     }
   }
 
@@ -1874,17 +1814,9 @@ abstract class CoreReaderFragment :
     (requireActivity() as CoreMainActivity).openSupportKiwixExternalLink()
   }
 
-  private fun openFullScreenIfEnabled() {
-    if (isInFullScreenMode()) {
-      openFullScreen()
-    }
-  }
-
-  protected fun isInFullScreenMode(): Boolean = sharedPreferenceUtil?.prefFullScreen == true
-
   private fun updateBottomToolbarVisibility() {
     readerScreenState.update {
-      copy(shouldShowBottomAppBar = readerMenuState?.isInTabSwitcher == false && !isInFullScreenMode())
+      copy(shouldShowBottomAppBar = readerMenuState?.isInTabSwitcher == false)
     }
   }
 
@@ -2188,7 +2120,6 @@ abstract class CoreReaderFragment :
     if (!isBackToTopEnabled) {
       hideBackToTopButton()
     }
-    openFullScreenIfEnabled()
     updateNightMode()
   }
 
@@ -2372,7 +2303,6 @@ abstract class CoreReaderFragment :
         }
       }
       updateBottomToolbarVisibility()
-      openFullScreenIfEnabled()
       updateNightMode()
     }
   }

@@ -33,8 +33,6 @@
   <string name="menu_search_in_text">Buscar en la página</string>
   <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artículo aleatorio</string>
-  <string name="menu_full_screen">Pantalla completa</string>
-  <string name="menu_exit_full_screen">Salir de pantalla completa</string>
   <string name="menu_read_aloud">Leer en voz alta</string>
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
   <string name="menu_support_kiwix">Apoyar a Kiwix</string>

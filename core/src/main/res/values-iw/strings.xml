@@ -18,8 +18,6 @@
   <string name="menu_search_in_text">למצוא בדף</string>
   <string name="bookmarks">סימניות</string>
   <string name="menu_random_article">ערך אקראי</string>
-  <string name="menu_full_screen">מסך מלא</string>
-  <string name="menu_exit_full_screen">יציאה ממסך מלא</string>
   <string name="menu_read_aloud">הקראה בקול</string>
   <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
   <string name="menu_support_kiwix">לתמוך בקיוויקס</string>

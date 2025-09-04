@@ -15,8 +15,6 @@
   <string name="menu_search_in_text">Rasti tekste</string>
   <string name="bookmarks">Žymės</string>
   <string name="menu_random_article">Atsitiktinis straipsnis</string>
-  <string name="menu_full_screen">Visas ekranas</string>
-  <string name="menu_exit_full_screen">Išeiti iš viso ekrano režimo</string>
   <string name="menu_read_aloud">Skaityk garsiai</string>
   <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
   <string name="save_media">Išsaugoti duomenis kaip…</string>

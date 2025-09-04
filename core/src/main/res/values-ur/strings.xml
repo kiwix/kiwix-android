@@ -11,8 +11,6 @@
   <string name="menu_search_in_text">متن میں تلاش کریں</string>
   <string name="bookmarks">نشانزدہ</string>
   <string name="menu_random_article">تصادفی مقالہ</string>
-  <string name="menu_full_screen">مکمل تظاہرہ</string>
-  <string name="menu_exit_full_screen">مکمل اسکرین ختم کریں</string>
   <string name="menu_read_aloud">بلند آواز سے پڑھیں</string>
   <string name="menu_read_aloud_stop">بلند آواز سے پڑھنا بند کریں</string>
   <string name="menu_support_kiwix">کیوکس کی حمایت کریں</string>
