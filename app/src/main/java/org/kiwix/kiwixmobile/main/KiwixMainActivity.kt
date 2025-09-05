@@ -128,7 +128,6 @@ class KiwixMainActivity : CoreMainActivity() {
   private val storageDeviceList = arrayListOf<StorageDevice>()
   private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
-  @Suppress("InjectDispatcher")
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
@@ -146,6 +145,8 @@ class KiwixMainActivity : CoreMainActivity() {
           KiwixDestination.Reader.route
         }
       }
+      RestoreDrawerStateOnOrientationChange()
+      PersistDrawerStateOnChange()
       KiwixMainActivityScreen(
         navController = navController,
         leftDrawerContent = leftDrawerMenu,
@@ -160,8 +161,7 @@ class KiwixMainActivity : CoreMainActivity() {
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
       }
-      val lifecycleOwner = LocalLifecycleOwner.current
-      val lifecycle = lifecycleOwner.lifecycle
+      val lifecycle = LocalLifecycleOwner.current.lifecycle
       LaunchedEffect(navController, pendingIntent) {
         snapshotFlow { pendingIntent }
           .filterNotNull()
@@ -176,11 +176,16 @@ class KiwixMainActivity : CoreMainActivity() {
       }
       DialogHost(alertDialogShower)
     }
-    lifecycleScope.launch {
-      migrateInternalToPublicAppDirectory()
-    }
+    runMigrations()
     intent?.let {
       pendingIntentFlow.value = it
+    }
+  }
+
+  @Suppress("InjectDispatcher")
+  private fun runMigrations() {
+    lifecycleScope.launch {
+      migrateInternalToPublicAppDirectory()
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {

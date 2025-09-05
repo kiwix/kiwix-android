@@ -28,9 +28,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -166,6 +171,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject
   lateinit var downloadMonitor: DownloadMonitor
 
+  /**
+   * Manages the visibility of the left drawer by tracking its state.
+   * In Compose, when the screen rotates and the screen width is above 600dp,
+   * the drawerState is automatically set to open. This causes unexpected behavior.
+   * To ensure a smooth user experience, we save the drawer state in a boolean so
+   * that it survives configuration changes and is not affected by Compose’s
+   * default implementation.
+   */
+  private var wasLeftDrawerOpen = false
+
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
@@ -197,6 +212,38 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       createApplicationShortcuts()
     }
     leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
+  }
+
+  /**
+   * Restores the drawer state after an orientation change.
+   *
+   * In Compose, rotating the device (especially on large screens) can cause the drawer
+   * to be automatically opened by default. To provide a consistent user experience,
+   * this function syncs the drawer's state (open/closed) with the last known value
+   * stored in [wasLeftDrawerOpen].
+   */
+  @Composable
+  fun RestoreDrawerStateOnOrientationChange() {
+    LaunchedEffect(LocalConfiguration.current.orientation) {
+      if (wasLeftDrawerOpen) {
+        openNavigationDrawer()
+      } else {
+        closeNavigationDrawer()
+      }
+    }
+  }
+
+  /**
+   * Tracks the current drawer state and updates [wasLeftDrawerOpen] whenever the
+   * drawer is opened or closed. This ensures the drawer state is persisted across
+   * configuration changes (e.g., screen rotations) and can be restored later.
+   */
+  @Composable
+  fun PersistDrawerStateOnChange() {
+    LaunchedEffect(leftDrawerState) {
+      snapshotFlow { leftDrawerState.currentValue }
+        .collect { wasLeftDrawerOpen = it == DrawerValue.Open }
+    }
   }
 
   @Suppress("DEPRECATION")
