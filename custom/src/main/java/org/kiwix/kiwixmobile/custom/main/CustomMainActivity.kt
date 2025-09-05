@@ -77,6 +77,8 @@ class CustomMainActivity : CoreMainActivity() {
       navController = rememberNavController()
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
+      RestoreDrawerStateOnOrientationChange()
+      PersistDrawerStateOnChange()
       CustomMainActivityScreen(
         navController = navController,
         leftDrawerContent = leftDrawerMenu,
@@ -95,9 +97,6 @@ class CustomMainActivity : CoreMainActivity() {
           .provideObjectBoxDataMigrationHandler()
           .migrate()
       }
-    }
-    if (savedInstanceState != null) {
-      return
     }
   }
 
