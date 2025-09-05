@@ -185,6 +185,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       // See https://github.com/kiwix/kiwix-android/issues/3541
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
+      isWebViewHistoryRestoring = true
       coreReaderLifeCycleScope?.launch {
         openObbOrZim(true)
       }
@@ -197,7 +198,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    * due to the absence of any history records. In this case, it navigates to the homepage of the
    * ZIM file, as custom apps are expected to have the ZIM file readily available.
    */
-  override fun restoreViewStateOnInvalidWebViewHistory() {
+  override suspend fun restoreViewStateOnInvalidWebViewHistory() {
     openHomeScreen()
   }
 
@@ -205,7 +206,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    * Restores the view state when the webViewHistory data is valid.
    * This method restores the tabs with webView pages history.
    */
-  override fun restoreViewStateOnValidWebViewHistory(
+  override suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     // Unused in custom apps as there is only one ZIM file that is already set.
@@ -430,6 +431,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.onResume()
     if (appSettingsLaunched) {
       appSettingsLaunched = false
+      isWebViewHistoryRestoring = true
       coreReaderLifeCycleScope?.launch {
         openObbOrZim(true)
       }

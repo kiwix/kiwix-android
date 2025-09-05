@@ -110,6 +110,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         if (zimFileUri.isNotEmpty()) {
           tryOpeningZimFile(zimFileUri)
         } else {
+          isWebViewHistoryRestoring = true
           val restoreOrigin =
             if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
           manageExternalLaunchAndRestoringViewState(restoreOrigin)
@@ -224,7 +225,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun restoreViewStateOnInvalidWebViewHistory() {
+  override suspend fun restoreViewStateOnInvalidWebViewHistory() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
   }
@@ -242,7 +243,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
    * @param restoreOrigin Indicates whether the restoration is triggered from an external launch or the search screen.
    * @param onComplete  Callback to be invoked upon completion of the restoration process.
    */
-  override fun restoreViewStateOnValidWebViewHistory(
+  override suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     restoreOrigin: RestoreOrigin,
@@ -250,29 +251,27 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ) {
     when (restoreOrigin) {
       FromExternalLaunch -> {
-        coreReaderLifeCycleScope?.launch {
-          if (!isAdded) return@launch
-          val settings =
-            activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-          val zimReaderSource = fromDatabaseValue(settings?.getString(TAG_CURRENT_FILE, null))
-          if (zimReaderSource?.canOpenInLibkiwix() == true) {
-            if (zimReaderContainer?.zimReaderSource == null) {
-              openZimFile(zimReaderSource, isFromManageExternalLaunch = true)
-              Log.d(
-                TAG_KIWIX,
-                "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
-              )
-            } else {
-              zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
-            }
-            restoreTabs(webViewHistoryItemList, currentTab, onComplete)
-          } else {
-            readerScreenState.value.snackBarHostState.snack(
-              requireActivity().getString(string.zim_not_opened),
-              lifecycleScope = lifecycleScope
+        if (!isAdded) return
+        val settings =
+          activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+        val zimReaderSource = fromDatabaseValue(settings?.getString(TAG_CURRENT_FILE, null))
+        if (zimReaderSource?.canOpenInLibkiwix() == true) {
+          if (zimReaderContainer?.zimReaderSource == null) {
+            openZimFile(zimReaderSource, isFromManageExternalLaunch = true)
+            Log.d(
+              TAG_KIWIX,
+              "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
             )
-            exitBook() // hide the options for zim file to avoid unexpected UI behavior
+          } else {
+            zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
           }
+          restoreTabs(webViewHistoryItemList, currentTab, onComplete)
+        } else {
+          readerScreenState.value.snackBarHostState.snack(
+            requireActivity().getString(string.zim_not_opened),
+            lifecycleScope = lifecycleScope
+          )
+          exitBook() // hide the options for zim file to avoid unexpected UI behavior
         }
       }
 
