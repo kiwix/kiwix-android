@@ -172,6 +172,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
+import kotlin.concurrent.Volatile
 import kotlin.math.max
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
@@ -224,7 +225,8 @@ abstract class CoreReaderFragment :
   protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
   private var isFirstTimeMainPageLoaded = true
-  private var isFromManageExternalLaunch = false
+
+  @Volatile var isFromManageExternalLaunch = false
   private val savingTabsMutex = Mutex()
   private var searchItemToOpen: SearchItemToOpen? = null
   private var findInPageTitle: String? = null
@@ -339,6 +341,8 @@ abstract class CoreReaderFragment :
    * as its results come from the ZimFileReader.
    */
   private var pendingIntent: Intent? = null
+
+  @Volatile var isWebViewHistoryRestoring = false
 
   private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
     registerForActivityResult(
@@ -2304,6 +2308,9 @@ abstract class CoreReaderFragment :
       }
       updateBottomToolbarVisibility()
       updateNightMode()
+      if (!isWebViewHistoryRestoring) {
+        saveTabStates()
+      }
     }
   }
 
@@ -2333,7 +2340,6 @@ abstract class CoreReaderFragment :
       showProgressBarWithProgress(progress)
       if (progress == 100) {
         hideProgressBar()
-        saveTabStates()
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()
@@ -2434,6 +2440,7 @@ abstract class CoreReaderFragment :
         restoreViewStateOnInvalidWebViewHistory()
         // handle the pending intent if any present.
         handlePendingIntent()
+        isWebViewHistoryRestoring = false
         return
       }
       restoreViewStateOnValidWebViewHistory(
@@ -2446,11 +2453,14 @@ abstract class CoreReaderFragment :
         // to open the specified item, then sets `searchItemToOpen` to null to prevent
         // any unexpected behavior on future calls. Similarly, if `findInPageTitle` is set,
         // it invokes `findInPage` and resets `findInPageTitle` to null.
+        isWebViewHistoryRestoring = false
         searchItemToOpen?.let(::openSearchItem)
         searchItemToOpen = null
         findInPageTitle?.let(::findInPage)
         findInPageTitle = null
         handlePendingIntent()
+        // When the restoration completes than save the tabs history.
+        saveTabStates()
       }
     }.onFailure {
       Log.e(
@@ -2460,6 +2470,7 @@ abstract class CoreReaderFragment :
       restoreViewStateOnInvalidWebViewHistory()
       // handle the pending intent if any present.
       handlePendingIntent()
+      isWebViewHistoryRestoring = false
     }
   }
 
@@ -2487,7 +2498,7 @@ abstract class CoreReaderFragment :
    * @Warning: This method restores tabs state in new launches, do not modify it
    *           unless it is explicitly mentioned in the issue you're fixing.
    */
-  protected fun restoreTabs(
+  protected suspend fun restoreTabs(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     onComplete: () -> Unit
@@ -2612,7 +2623,7 @@ abstract class CoreReaderFragment :
    * KiwixReaderFragment.restoreViewStateOnValidWebViewHistory) to ensure consistent behavior
    * when handling valid webViewHistory scenarios.
    */
-  protected abstract fun restoreViewStateOnValidWebViewHistory(
+  protected abstract suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     restoreOrigin: RestoreOrigin,
@@ -2627,7 +2638,7 @@ abstract class CoreReaderFragment :
    * KiwixReaderFragment.restoreViewStateOnInvalidWebViewHistory) to ensure consistent behavior
    * when handling invalid JSON scenarios.
    */
-  abstract fun restoreViewStateOnInvalidWebViewHistory()
+  abstract suspend fun restoreViewStateOnInvalidWebViewHistory()
 }
 
 enum class RestoreOrigin {
