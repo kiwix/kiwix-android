@@ -228,6 +228,9 @@ class LibkiwixBookOnDisk @Inject constructor(
       it.zimReaderSource.toDatabase().endsWith(downloadTitle, true)
     }
 
+  suspend fun bookById(bookId: String) =
+    getBooks().firstOrNull { it.book.id == bookId }
+
   /**
    * Asynchronously writes the library data to their respective file in a background thread
    * to prevent potential data loss and ensures that the library holds the updated ZIM file data.

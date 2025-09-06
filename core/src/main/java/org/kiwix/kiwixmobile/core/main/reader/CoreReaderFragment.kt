@@ -1869,7 +1869,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun startIntentBasedOnAction(intent: Intent?) {
-    Log.d(TAG_KIWIX, "action" + requireActivity().intent?.action)
+    Log.d(TAG_KIWIX, "action: ${requireActivity().intent?.action}")
     when (intent?.action) {
       Intent.ACTION_PROCESS_TEXT -> {
         goToSearchWithText(intent)
@@ -1903,7 +1903,7 @@ abstract class CoreReaderFragment :
           // Added condition to handle ZIM files. When opening from storage, the intent may
           // return null for the type, triggering the search unintentionally. This condition
           // prevents such occurrences.
-          intent.scheme !in listOf("file", "content", ZIM_HOST_DEEP_LINK_SCHEME)
+          intent.scheme !in listOf("file", "content", "zim", ZIM_HOST_DEEP_LINK_SCHEME)
         ) {
           val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
           openSearch(
