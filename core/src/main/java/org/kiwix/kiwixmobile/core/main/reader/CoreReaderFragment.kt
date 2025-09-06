@@ -226,8 +226,7 @@ abstract class CoreReaderFragment :
   private var currentTtsWebViewIndex = 0
   private var isFirstTimeMainPageLoaded = true
 
-  @Volatile
-  private var isFromManageExternalLaunch = false
+  @Volatile var isFromManageExternalLaunch = false
   private val savingTabsMutex = Mutex()
   private var searchItemToOpen: SearchItemToOpen? = null
   private var findInPageTitle: String? = null
@@ -2309,6 +2308,9 @@ abstract class CoreReaderFragment :
       }
       updateBottomToolbarVisibility()
       updateNightMode()
+      if (!isWebViewHistoryRestoring) {
+        saveTabStates()
+      }
     }
   }
 
@@ -2338,9 +2340,6 @@ abstract class CoreReaderFragment :
       showProgressBarWithProgress(progress)
       if (progress == 100) {
         hideProgressBar()
-        if (!isWebViewHistoryRestoring) {
-          saveTabStates()
-        }
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()

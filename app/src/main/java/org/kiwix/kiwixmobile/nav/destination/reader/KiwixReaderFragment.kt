@@ -81,7 +81,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
         activity.navigate(KiwixDestination.Library.route, navOptions)
       })
     }
-    activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     activity.enableLeftDrawer()
     openPageInBookFromNavigationArguments()
   }
@@ -111,6 +110,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           tryOpeningZimFile(zimFileUri)
         } else {
           isWebViewHistoryRestoring = true
+          isFromManageExternalLaunch = true
           val restoreOrigin =
             if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
           manageExternalLaunchAndRestoringViewState(restoreOrigin)

@@ -186,8 +186,13 @@ class CustomReaderFragment : CoreReaderFragment() {
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
       isWebViewHistoryRestoring = true
+      isFromManageExternalLaunch = true
       coreReaderLifeCycleScope?.launch {
-        openObbOrZim(true)
+        if (zimReaderContainer?.zimFileReader == null || zimReaderContainer?.zimReaderSource?.exists() == false) {
+          openObbOrZim(true)
+        } else {
+          manageExternalLaunchAndRestoringViewState()
+        }
       }
     }
     customMainActivity?.consumeObservable<String>(PAGE_URL_KEY)
@@ -433,7 +438,11 @@ class CustomReaderFragment : CoreReaderFragment() {
       appSettingsLaunched = false
       isWebViewHistoryRestoring = true
       coreReaderLifeCycleScope?.launch {
-        openObbOrZim(true)
+        if (zimReaderContainer?.zimFileReader == null) {
+          openObbOrZim(true)
+        } else {
+          manageExternalLaunchAndRestoringViewState()
+        }
       }
     }
   }
