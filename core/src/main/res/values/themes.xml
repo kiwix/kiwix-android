@@ -83,7 +83,11 @@
 
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
     <item name="android:statusBarColor" tools:ignore="NewApi">@color/black</item>
-    <item name="actionModeBackground">@color/cornflower_blue</item>
+    <!-- Increase the default action bar size so that ActionMode has more height.
+         Since we are now using Compose's TopAppBar, changing this will not affect the main UI. -->
+    <item name="actionBarSize">64dp</item>
+    <!-- Apply our custom ActionMode style -->
+    <item name="actionModeStyle">@style/Widget.KiwixTheme.ActionMode</item>
     <item name="windowActionModeOverlay">true</item>
 
     <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
@@ -95,4 +99,15 @@
     <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">never</item>
   </style>
 
+  <style name="Widget.KiwixTheme.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+    <item name="background">@color/cornflower_blue</item>
+    <item name="titleTextStyle">@style/TextAppearance.KiwixTheme.ActionMode.Title</item>
+    <!-- Use a custom back button (white) so it matches our theme -->
+    <item name="closeItemLayout">@layout/action_mode_back_button</item>
+  </style>
+
+  <style name="TextAppearance.KiwixTheme.ActionMode.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionMode.Title">
+    <!-- Set the ActionMode title text color to white -->
+    <item name="android:textColor">@color/white</item>
+  </style>
 </resources>
