@@ -314,9 +314,6 @@
   <string name="export_all_bookmarks_dialog_message">निर्यात करने से Download/org.kiwix…/ फ़ोल्डर में bookmark.xml फ़ाइल बन जाएगी।</string>
   <string name="bookmark_imported_message">सभी बुकमार्क आयात कर लिए गए हैं।</string>
   <string name="error_invalid_bookmark_file">त्रुटि: चयनित फ़ाइल वैध बुकमार्क फ़ाइल नहीं है.</string>
-  <string name="on">चालू</string>
-  <string name="off">बंद</string>
-  <string name="auto">स्वत:</string>
   <string name="send_report">निदान रिपोर्ट भेजें</string>
   <string name="crash_checkbox_file_system">फ़ाइल सिस्टम विवरण</string>
   <string name="diagnostic_report">डायग्नोस्टिक रिपोर्ट</string>

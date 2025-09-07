@@ -175,7 +175,5 @@
   <string name="no_results">Ke Ergäbnis</string>
   <string name="no_history">Ke Verlouf</string>
   <string name="delete_history" fuzzy="true">Verlouf lösche?</string>
-  <string name="on">Aa</string>
-  <string name="off">Uus</string>
   <string name="percentage">%d%%</string>
 </resources>

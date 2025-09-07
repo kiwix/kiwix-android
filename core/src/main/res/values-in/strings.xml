@@ -311,9 +311,6 @@
   <string name="export_all_bookmarks_dialog_message">Mengekspor akan menghasilkan berkas bookmark.xml dalam folder Unduh/org.kiwix…/.</string>
   <string name="bookmark_imported_message">Semua markah telah diimpor.</string>
   <string name="error_invalid_bookmark_file">Kesalahan: Berkas yang dipilih bukan berkas markah yang sah.</string>
-  <string name="on">Nyala</string>
-  <string name="off">Mati</string>
-  <string name="auto">Otomatis</string>
   <string name="send_report">Kirim laporan diagnostik</string>
   <string name="crash_checkbox_file_system">Rincian Sistem Berkas</string>
   <string name="diagnostic_report">Laporan Diagnostik</string>

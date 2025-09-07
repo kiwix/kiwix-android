@@ -278,9 +278,6 @@
   <string name="delete_selected_history">Hichapụ akụkọ ihe mere eme ndị ahọpụtara?</string>
   <string name="delete_bookmarks">Hichapụ ibe ndokọba niile?</string>
   <string name="delete_selected_bookmarks">Hichapụ ibe ndokọba ahọpụtara?</string>
-  <string name="on">Gbanye</string>
-  <string name="off">Gbanyụọ</string>
-  <string name="auto">Mmenaonwe</string>
   <string name="send_report">Ziga akụkọ nchọpụta</string>
   <string name="crash_checkbox_file_system">Nkọwa nke Usoro faịlụ</string>
   <string name="diagnostic_report">Akụkọ nyocha</string>

@@ -271,9 +271,6 @@
   <string name="delete_selected_history">Smazat vybranou historii?</string>
   <string name="delete_bookmarks">Smazat všechny záložky?</string>
   <string name="delete_selected_bookmarks">Smazat vybrané záložky?</string>
-  <string name="on">Zapnout</string>
-  <string name="off">Vypnout</string>
-  <string name="auto">Automaticky</string>
   <string name="send_report">Odeslat diagnostickou zprávu</string>
   <string name="crash_checkbox_file_system">Podrobnosti o souborovém systému</string>
   <string name="diagnostic_report">Diagnostická zpráva</string>

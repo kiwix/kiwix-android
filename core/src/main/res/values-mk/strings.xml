@@ -306,9 +306,6 @@
   <string name="export_all_bookmarks_dialog_message">Извозот ќе создаде податотека bookmark.xml во папката Download/org.kiwix…/.</string>
   <string name="bookmark_imported_message">Сите обележувачи се увезени.</string>
   <string name="error_invalid_bookmark_file">Грешка: Избраната податотека не е важечка податотека со обележувачи.</string>
-  <string name="on">Вкл.</string>
-  <string name="off">Искл.</string>
-  <string name="auto">Авто</string>
   <string name="send_report">Испрати дијагностички извештај</string>
   <string name="crash_checkbox_file_system">Поединости за податотечниот систем</string>
   <string name="diagnostic_report">Дијагностички извештај</string>

@@ -312,9 +312,6 @@
   <string name="export_all_bookmarks_dialog_message">Exportering kommer generera bokmärke.xml-fil i mappen Download/org.kiwix…/.</string>
   <string name="bookmark_imported_message">Alla bokmärken har importerats.</string>
   <string name="error_invalid_bookmark_file">Fel: De valda filerna är inte en giltigt bokmärke-fil.</string>
-  <string name="on">På</string>
-  <string name="off">Av</string>
-  <string name="auto">Auto</string>
   <string name="send_report">Skicka diagnostisk rapport</string>
   <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>

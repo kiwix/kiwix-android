@@ -315,9 +315,6 @@
   <string name="export_all_bookmarks_dialog_message">Eksportowanie stworzy plik bookmark.xml w folderze Download/org.kiwix…/</string>
   <string name="bookmark_imported_message">Wszystkie zakładki zostały zaimportowane.</string>
   <string name="error_invalid_bookmark_file">Błąd: Wybrany plik nie jest prawidłowym plikiem zakładek.</string>
-  <string name="on">Włącz</string>
-  <string name="off">Wyłącz</string>
-  <string name="auto">Automatycznie</string>
   <string name="send_report">Wyślij raport diagnostyczny</string>
   <string name="crash_checkbox_file_system">Szczegóły systemu plików</string>
   <string name="diagnostic_report">Raport diagnostyczny</string>

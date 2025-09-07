@@ -261,9 +261,6 @@
   <string name="delete_selected_history">Weçinaye veror wa bıesteriyo?</string>
   <string name="delete_bookmarks">İşareti pêro wa bıesteriyo?</string>
   <string name="delete_selected_bookmarks">Weçineyaye nışani wa bıesteriyê?</string>
-  <string name="on">Akerde</string>
-  <string name="off">Racınaye</string>
-  <string name="auto">Otomatik</string>
   <string name="send_report">Rapora teşhisi bırışê</string>
   <string name="crash_checkbox_file_system">Detayê Sistemê Dosya</string>
   <string name="diagnostic_report">Rapora Teşhisi</string>

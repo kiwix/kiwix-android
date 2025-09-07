@@ -320,9 +320,6 @@
   <string name="delete_selected_bookmarks">Ausgewählte Lesezeichen löschen?</string>
   <string name="import_bookmarks_dialog_title">Lesezeichen importieren?</string>
   <string name="export_all_bookmarks_dialog_title">Alle Lesezeichen exportieren?</string>
-  <string name="on">An</string>
-  <string name="off">Aus</string>
-  <string name="auto">Automatisch</string>
   <string name="send_report">Übermittle das Untersuchungsergebnis</string>
   <string name="crash_checkbox_file_system">Dateisystem Details</string>
   <string name="diagnostic_report">Untersuchungsergebnis</string>

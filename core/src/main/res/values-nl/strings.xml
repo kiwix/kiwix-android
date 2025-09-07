@@ -309,9 +309,6 @@
   <string name="export_all_bookmarks_dialog_message">Door het exporteren wordt in de map Download/org.kiwix…/ een bestand bookmark.xml aangemaakt.</string>
   <string name="bookmark_imported_message">Alle bladwijzers zijn geïmporteerd.</string>
   <string name="error_invalid_bookmark_file">Fout: het geselecteerde bestand is geen geldig bladwijzerbestand.</string>
-  <string name="on">Aan</string>
-  <string name="off">Uit</string>
-  <string name="auto">Automatisch</string>
   <string name="send_report">Diagnostisch rapport verzenden</string>
   <string name="crash_checkbox_file_system">Bestandssysteemdetails</string>
   <string name="diagnostic_report">Diagnostisch rapport</string>

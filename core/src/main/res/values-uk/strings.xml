@@ -270,9 +270,6 @@
   <string name="delete_selected_history">Видалити обрану історію?</string>
   <string name="delete_bookmarks">Видалити всі закладки?</string>
   <string name="delete_selected_bookmarks">Видалити обрані закладки?</string>
-  <string name="on">Вмикнути</string>
-  <string name="off">Вимкнути</string>
-  <string name="auto">Автоматично</string>
   <string name="send_report">Відправити звіт діагностики</string>
   <string name="crash_checkbox_file_system">Інформація про файлову систему</string>
   <string name="diagnostic_report">Діагностичний звіт</string>

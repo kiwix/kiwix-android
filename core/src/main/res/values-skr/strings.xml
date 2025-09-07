@@ -115,9 +115,6 @@
   <string name="no_bookmarks">بک مارک کائنی</string>
   <string name="no_history">کوئی تاریخ کائنی</string>
   <string name="delete_history">ساری تاریخ مٹاؤں؟</string>
-  <string name="on">آن</string>
-  <string name="off">بند</string>
-  <string name="auto">خود بخود</string>
   <string name="percentage">%d%%</string>
   <string name="open_library">مفت لائبریری</string>
   <string name="tab_restored">ٹیب بحال تھی ڳئی</string>

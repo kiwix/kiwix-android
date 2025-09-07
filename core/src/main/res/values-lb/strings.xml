@@ -204,9 +204,6 @@
   <string name="export_all_bookmarks_dialog_message">Beim Exportéiere gëtt ee Fichier „bookmark.xml“ am Dossier „Download/org.kiwix…/“ ugeluecht.</string>
   <string name="bookmark_imported_message">All d’Lieszeeche goufen importéiert.</string>
   <string name="error_invalid_bookmark_file">Feeler: Den ausgewielte Fichier ass kee valabele Lieszeechefichier.</string>
-  <string name="on">Un</string>
-  <string name="off">Aus</string>
-  <string name="auto">Automatesch</string>
   <string name="diagnostic_report_message">Schéckt ons wgl. all déi follgend Detailer fir datt mir de Problem feststelle kënnen</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-Zoom</string>

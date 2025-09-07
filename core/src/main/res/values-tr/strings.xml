@@ -304,9 +304,6 @@
   <string name="delete_selected_history">Seçilmiş Geçmişi Silinsin mi?</string>
   <string name="delete_bookmarks">Tüm Yer İşaretleri Silinsin mi?</string>
   <string name="delete_selected_bookmarks">Seçilmiş Yer İşaretleri Silinsin mi?</string>
-  <string name="on">Açık</string>
-  <string name="off">Kapalı</string>
-  <string name="auto">Otomatik</string>
   <string name="send_report">Teşhis raporu gönder</string>
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>

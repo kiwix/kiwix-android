@@ -280,9 +280,6 @@
   <string name="delete_selected_history">Izbrišem izbrano zgodovino?</string>
   <string name="delete_bookmarks">Izbrišem vse zaznamke?</string>
   <string name="delete_selected_bookmarks">Izbrišem izbrane zaznamke?</string>
-  <string name="on">Vklop</string>
-  <string name="off">Izklop</string>
-  <string name="auto">Samodejno</string>
   <string name="send_report">Pošljite diagnostično poročilo</string>
   <string name="crash_checkbox_file_system">Podatki o datotečnem sistemu</string>
   <string name="diagnostic_report">Diagnostično poročilo</string>

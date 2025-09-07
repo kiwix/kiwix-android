@@ -318,9 +318,6 @@
   <string name="export_all_bookmarks_dialog_message">Exportar generará un archivo llamado bookmark.xml en la carpeta Descargas/org.kiwix…/</string>
   <string name="bookmark_imported_message">Todos los marcadores han sido exportados.</string>
   <string name="error_invalid_bookmark_file">Error: El archivo seleccionado no es un archivo de marcador válido.</string>
-  <string name="on">Activado</string>
-  <string name="off">Desactivado</string>
-  <string name="auto">Automático</string>
   <string name="send_report">Enviar informe de diagnóstico</string>
   <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
   <string name="diagnostic_report">Informe de diagnóstico</string>

@@ -267,9 +267,6 @@
   <string name="delete_selected_history">A o phimola Hisitori e o e tlhophileng?</string>
   <string name="delete_bookmarks">A o Phimola Matshwao a dibuka otlhe?</string>
   <string name="delete_selected_bookmarks">A o Phimola Matshwao a Dobuka a a tlhophilweng?</string>
-  <string name="on">Tshuba</string>
-  <string name="off">Tima</string>
-  <string name="auto">go itirisa</string>
   <string name="send_report">Romela pego ya tlhatlhobo</string>
   <string name="crash_checkbox_file_system">Dintlha Tsa Tsamaiso ya Difaele</string>
   <string name="diagnostic_report">Pego ya Tlhatlhobo</string>

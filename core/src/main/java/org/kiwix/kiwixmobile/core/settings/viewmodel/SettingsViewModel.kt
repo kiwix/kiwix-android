@@ -49,9 +49,9 @@ class SettingsViewModel @Inject constructor(
   val darkModeLabel: StateFlow<String> = darkMode
     .map { mode ->
       when (mode) {
-        DarkModeConfig.Mode.ON -> context.getString(R.string.on)
-        DarkModeConfig.Mode.OFF -> context.getString(R.string.off)
-        DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.auto)
+        DarkModeConfig.Mode.ON -> context.getString(R.string.theme_dark)
+        DarkModeConfig.Mode.OFF -> context.getString(R.string.theme_light)
+        DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.theme_system)
       }
     }
     .stateIn(
@@ -87,9 +87,9 @@ class SettingsViewModel @Inject constructor(
 
   private fun getLabelFor(mode: DarkModeConfig.Mode): String {
     return when (mode) {
-      DarkModeConfig.Mode.ON -> context.getString(R.string.on)
-      DarkModeConfig.Mode.OFF -> context.getString(R.string.off)
-      DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.auto)
+      DarkModeConfig.Mode.ON -> context.getString(R.string.theme_dark)
+      DarkModeConfig.Mode.OFF -> context.getString(R.string.theme_light)
+      DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.theme_system)
     }
   }
 

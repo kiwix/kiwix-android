@@ -310,9 +310,6 @@
   <string name="export_all_bookmarks_dialog_message">יצוא ייצור קובץ bookmark.xml בתיקייה Download/org.kiwix…/.</string>
   <string name="bookmark_imported_message">כל הסימניות יובאו.</string>
   <string name="error_invalid_bookmark_file">שגיאה: הקובץ שנבחר אינו קובץ סימניות תקין.</string>
-  <string name="on">מופעל</string>
-  <string name="off">כבוי</string>
-  <string name="auto">אוטומטי</string>
   <string name="send_report">שליחת דוח אבחון</string>
   <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
   <string name="diagnostic_report">דוח אבחון</string>

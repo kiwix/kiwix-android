@@ -318,9 +318,6 @@
   <string name="export_all_bookmarks_dialog_message">匯出時會在 Download/org.kiwix…/ 資料夾中產生 bookmark.xml 檔案。</string>
   <string name="bookmark_imported_message">已匯入所有書籤。</string>
   <string name="error_invalid_bookmark_file">錯誤：所選檔案不是有效的書籤檔案。</string>
-  <string name="on">開啟</string>
-  <string name="off">關閉</string>
-  <string name="auto">自動</string>
   <string name="send_report">傳送診斷報告</string>
   <string name="crash_checkbox_file_system">檔案系統詳細資訊</string>
   <string name="diagnostic_report">診斷報告</string>

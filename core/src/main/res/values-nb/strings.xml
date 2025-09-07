@@ -210,9 +210,6 @@
   <string name="delete_bookmarks">Vil du slette alle bokmerker?</string>
   <string name="delete_selected_bookmarks">Vil du slette valgte bokmerker?</string>
   <string name="error_invalid_bookmark_file">Feil: Den valgte filen er ikke en gyldig bokmerke-fil.</string>
-  <string name="on">På</string>
-  <string name="off">Av</string>
-  <string name="auto">Auto</string>
   <string name="send_report">Send diagnoserapport</string>
   <string name="crash_checkbox_file_system">Filsystemdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>

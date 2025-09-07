@@ -264,9 +264,6 @@
   <string name="delete_selected_history">Dixwazî Dîroka Bijartî Jê Bibî?</string>
   <string name="delete_bookmarks">Dixwazî Hemû Bijareyan Jê Bibî?</string>
   <string name="delete_selected_bookmarks">Dixwazî Bijareyên Bijartî Jê Bibî?</string>
-  <string name="on">Vekirî</string>
-  <string name="off">Girtî</string>
-  <string name="auto">Otomatîk</string>
   <string name="send_report">Rapora teşhîsê bişîne</string>
   <string name="crash_checkbox_file_system">Detayên Sîstema Pelê</string>
   <string name="diagnostic_report">Rapora Teşhîsê</string>

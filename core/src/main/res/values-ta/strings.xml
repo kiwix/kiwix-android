@@ -264,9 +264,6 @@
   <string name="delete_selected_history">தேர்ந்தெடுக்கப்பட்ட வரலாற்றை நீக்கவா?</string>
   <string name="delete_bookmarks">அனைத்து புத்தகக்குறிகளையும் நீக்கவா?</string>
   <string name="delete_selected_bookmarks">தேர்ந்தெடுத்த புத்தகக்குறிகளை நீக்கவா?</string>
-  <string name="on">இயக்கு</string>
-  <string name="off">முடக்கு</string>
-  <string name="auto">தானியக்கம்</string>
   <string name="send_report">பிழையறிதல் அறிக்கையை அனுப்பு</string>
   <string name="crash_checkbox_file_system">கோப்பு முறை விவரங்கள்</string>
   <string name="diagnostic_report">கண்டறியும் அறிக்கை</string>

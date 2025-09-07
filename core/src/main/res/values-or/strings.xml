@@ -265,9 +265,6 @@
   <string name="delete_selected_history">ମନୋନୀତ ଇତିହାସ ବିଲୋପ କରିବେ କି?</string>
   <string name="delete_bookmarks">ସମସ୍ତ ବୁକମାର୍କ ବିଲୋପ କରିବେ କି?</string>
   <string name="delete_selected_bookmarks">ମନୋନୀତ ବୁକମାର୍କଗୁଡିକ ବିଲୋପ କରିବେ କି?</string>
-  <string name="on">ଅନ୍</string>
-  <string name="off">ବନ୍ଦ</string>
-  <string name="auto">ସ୍ଵତଃ</string>
   <string name="send_report">ଡାଇଗ୍ନୋଷ୍ଟିକ୍ ରିପୋର୍ଟ ପଠାନ୍ତୁ</string>
   <string name="crash_checkbox_file_system">ଫାଇଲ ତନ୍ତ୍ର ବିବରଣୀ</string>
   <string name="diagnostic_report">ଡାଇଗ୍ନୋଷ୍ଟିକ୍ ରିପୋର୍ଟ</string>

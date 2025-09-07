@@ -228,9 +228,6 @@
   <string name="note">Oharra</string>
   <string name="status">Egoera</string>
   <string name="no_bookmarks">Lastermarkarik ez</string>
-  <string name="on">Piztuta</string>
-  <string name="off">Itzalita</string>
-  <string name="auto">Auto</string>
   <string name="reader">Irakurgailua</string>
   <string name="download_tts_language_title">Hizkuntza hau deskargatu ozen irakurri ahal izateko.</string>
   <string name="download_tts_language_message">Mesedez, Deskargatu botoian klik egin. Beharrezko hizkuntzak automatikoki deskargatuko ditu.</string>

@@ -249,8 +249,5 @@
   <string name="device_default">Predeterminao del preséu</string>
   <string name="delete_history">¿Desaniciar tol Historial?</string>
   <string name="delete_bookmarks">¿Desaniciar tolos Marcadores?</string>
-  <string name="on">Activáu</string>
-  <string name="off">Desactiváu</string>
-  <string name="auto">Auto</string>
   <string name="go_to_settings_label">Dir a configuración</string>
 </resources>

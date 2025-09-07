@@ -291,9 +291,6 @@
   <string name="export_all_bookmarks_dialog_message">Eksportimi do të krijojë një kartelë bookmark.xml fte dosja Download/org.kiwix…/ folder.</string>
   <string name="bookmark_imported_message">Janë importuar krejt faqerojtësit.</string>
   <string name="error_invalid_bookmark_file">Gabim: Kartela e përzgjedhur s’është kartelë e vlefshme faqerojtësish.</string>
-  <string name="on">On</string>
-  <string name="off">Off</string>
-  <string name="auto">Auto</string>
   <string name="send_report">Dërgo raport diagnostikimi</string>
   <string name="crash_checkbox_file_system">Hollësi Sistemi Kartelash</string>
   <string name="diagnostic_report">Raport Diagnostikimi</string>

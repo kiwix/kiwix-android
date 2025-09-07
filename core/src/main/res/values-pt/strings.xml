@@ -271,9 +271,6 @@
   <string name="delete_selected_history">Eliminar o histórico selecionado?</string>
   <string name="delete_bookmarks">Eliminar todos os marcadores?</string>
   <string name="delete_selected_bookmarks">Eliminar os marcadores selecionados?</string>
-  <string name="on">Ativado</string>
-  <string name="off">Desativado</string>
-  <string name="auto">Automático</string>
   <string name="send_report">Enviar relatório de diagnóstico</string>
   <string name="crash_checkbox_file_system">Detalhes do sistema de ficheiros</string>
   <string name="diagnostic_report">Relatório de diagnóstico</string>

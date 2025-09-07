@@ -302,9 +302,6 @@
   <string name="delete_selected_history">حذف تاريخ محدد؟</string>
   <string name="delete_bookmarks">حذف جميع العلامات المرجعية؟</string>
   <string name="delete_selected_bookmarks">حذف علامات مرجعية محددة؟</string>
-  <string name="on">تشغيل</string>
-  <string name="off">تعطيل</string>
-  <string name="auto">تلقائي</string>
   <string name="send_report">إرسال تقرير التشخيص</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
   <string name="diagnostic_report">تقرير التشخيص</string>

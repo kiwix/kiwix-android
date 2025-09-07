@@ -281,9 +281,6 @@
   <string name="delete_selected_history">Yihimi taarihi shɛŋa bɛ ni piigi?</string>
   <string name="delete_bookmarks">Yihimi Buku’dalima zaa?</string>
   <string name="delete_selected_bookmarks">Yihimi Buku’dalima shɛŋa bɛ ni piigi?</string>
-  <string name="on">Nyɔma</string>
-  <string name="off">Kpima</string>
-  <string name="auto">Niŋdi ntoli</string>
   <string name="send_report">Tahimi tibbu lahabali</string>
   <string name="crash_checkbox_file_system">Fasara puuni bayana</string>
   <string name="diagnostic_report">Tibbu lahabali</string>

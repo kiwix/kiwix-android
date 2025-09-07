@@ -272,9 +272,6 @@
   <string name="export_all_bookmarks_dialog_title">Keti Yo Keba na Banzo-nkanda Yonso?</string>
   <string name="bookmark_imported_message">Bo me kotisa mikanda yonso na bansi ya nzenza.</string>
   <string name="error_invalid_bookmark_file">Kifu: Fichier ya bo me pona kele ve fichier ya mbote ya bookmark.</string>
-  <string name="on">Beto ke landa</string>
-  <string name="off">Katula</string>
-  <string name="auto">Kamio</string>
   <string name="send_report">Tinda rapore ya ekzame</string>
   <string name="crash_checkbox_file_system">Mambu ya Mfunu ya Kusadila Mikanda</string>
   <string name="diagnostic_report">Rapore ya kuzaba maladi</string>

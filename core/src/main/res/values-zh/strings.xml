@@ -330,9 +330,6 @@
   <string name="export_all_bookmarks_dialog_message">导出时会在 Download/org.kiwix…/ 文件夹中生成 bookmark.xml 文件。</string>
   <string name="bookmark_imported_message">所有书签已导入。</string>
   <string name="error_invalid_bookmark_file">错误：选定的文件不是有效的书签文件。</string>
-  <string name="on">开</string>
-  <string name="off">关</string>
-  <string name="auto">自动</string>
   <string name="send_report">发送诊断报告</string>
   <string name="crash_checkbox_file_system">文件系统详情</string>
   <string name="diagnostic_report">诊断报告</string>

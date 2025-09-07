@@ -277,9 +277,6 @@
   <string name="delete_selected_history">Je, ungependa kufuta Historia Iliyochaguliwa?</string>
   <string name="delete_bookmarks">Ungependa kufuta Alamisho Zote?</string>
   <string name="delete_selected_bookmarks">Ungependa kufuta Alamisho Ulizochagua?</string>
-  <string name="on">Wazi</string>
-  <string name="off">Zima</string>
-  <string name="auto">Otomatiki</string>
   <string name="send_report">Tuma ripoti ya uchunguzi</string>
   <string name="crash_checkbox_file_system">Maelezo ya Mfumo wa Faili</string>
   <string name="diagnostic_report">Ripoti ya Uchunguzi</string>

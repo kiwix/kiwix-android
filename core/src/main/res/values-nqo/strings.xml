@@ -264,9 +264,6 @@
   <string name="delete_selected_history">ߋ߫߸ ߞߊ߬ ߘߝߐ߬ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߠߎ߬ ߖߏ߲߫؟</string>
   <string name="delete_bookmarks">ߋ߫߸ ߟߊ߬ߡߊ ߟߎ߬ ߓߍ߯ ߖߏ߲߫؟</string>
   <string name="delete_selected_bookmarks">ߞߊ߬ ߟߊ߬ߡߊ߫ ߛߎߥߊ߲ߘߌߣߍ߲ ߠߎ߬ ߖߏ߰ߛߌ߫؟</string>
-  <string name="on">ߊ߬ ߟߊߞߎߣߎ߲߫</string>
-  <string name="off">ߊ߬ ߓߐ߫ ߊ߬ ߟߊ߫</string>
-  <string name="auto">ߞߍߒߖߘߍߦߋ</string>
   <string name="send_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ ߗߋ߫</string>
   <string name="crash_checkbox_file_system">ߞߐߕߐ߮ ߞߊ߲ߞߋ ߝߊߙߊ߲ߝߊ߯ߛߌ</string>
   <string name="diagnostic_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ</string>

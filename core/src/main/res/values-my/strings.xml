@@ -121,9 +121,6 @@
   <string name="no_results">ရလဒ်များ မရှိပါ</string>
   <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
   <string name="no_history">ရာဇဝင် မရှိ</string>
-  <string name="on">ဖွင့်</string>
-  <string name="off">ပိတ်</string>
-  <string name="auto">အလိုအလျောက်</string>
   <string name="allowed">ခွင့်ပြုပြီး</string>
   <string name="not_allowed">ခွင့်မပြုပါ</string>
 </resources>

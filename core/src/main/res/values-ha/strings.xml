@@ -278,9 +278,6 @@
   <string name="delete_selected_history">Share Zaɓaɓɓen Tarihi?</string>
   <string name="delete_bookmarks">Share Duk Alamomin?</string>
   <string name="delete_selected_bookmarks">Ka share Shaidu da aka Zaɓa?</string>
-  <string name="on">Kunna</string>
-  <string name="off">Kashe</string>
-  <string name="auto">Mota</string>
   <string name="send_report">Aika rahoton bincike</string>
   <string name="crash_checkbox_file_system">Bayanan Tsarin Fayil</string>
   <string name="diagnostic_report">Rahoton Bincike</string>

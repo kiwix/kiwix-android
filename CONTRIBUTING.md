@@ -184,11 +184,11 @@ Start by adding your new string resource `new_string` to
 
 You will now have to describe the string in `values-qq/strings.xml`
 with where and how the new string is used. E.x. for the string
-`<string name="on">On</string>`: `values-qq/strings.xml:`
+`<string name="theme_dark">Dark</string>`: `values-qq/strings.xml:`
 
 ```
 ...
-<string name="on">This is used in the settings screen to turn on the dark mode.</string>
+<string name="theme_dark">This is used in the settings screen to turn on the dark mode.</string>
 ...
 ```
 

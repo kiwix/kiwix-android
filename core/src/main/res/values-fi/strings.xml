@@ -217,9 +217,6 @@
   <string name="delete_selected_history">Poista valittu historia?</string>
   <string name="delete_bookmarks">Poista kaikki kirjanmerkit?</string>
   <string name="delete_selected_bookmarks">Poista valitut kirjanmerkit?</string>
-  <string name="on">Päälle</string>
-  <string name="off">Pois</string>
-  <string name="auto">Auto</string>
   <string name="diagnostic_report_message">Lähetä kaikki seuraavat tiedot jotta voimme diagnosoida ongelman</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Tekstin tarkennus</string>

@@ -321,9 +321,6 @@
   <string name="export_all_bookmarks_dialog_message">내보내기를 하면 Download/org.kiwix…/ 폴더에 bookmark.xml 파일이 생성됩니다.</string>
   <string name="bookmark_imported_message">모든 북마크를 가져왔습니다.</string>
   <string name="error_invalid_bookmark_file">오류: 선택한 파일은 유효한 북마크 파일이 아닙니다.</string>
-  <string name="on">켜기</string>
-  <string name="off">끄기</string>
-  <string name="auto">자동</string>
   <string name="send_report">진단 보고서 보내기</string>
   <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
   <string name="diagnostic_report">진단 보고서</string>

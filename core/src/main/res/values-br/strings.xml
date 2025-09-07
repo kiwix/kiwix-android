@@ -223,9 +223,6 @@
   <string name="delete_selected_history">Dilemel an istor diuzet?</string>
   <string name="delete_bookmarks">Dilemel an holl sinedoù?</string>
   <string name="delete_selected_bookmarks">Dilemel ar sinedoù diuzet?</string>
-  <string name="on">Enaouet</string>
-  <string name="off">Lazhet</string>
-  <string name="auto">Emgefre</string>
   <string name="send_report">Kas danevell an diagnostik</string>
   <string name="crash_checkbox_file_system">Munudoù ar reizhiad restroù</string>
   <string name="diagnostic_report">Danevell an diagnostik</string>

@@ -271,9 +271,6 @@
   <string name="delete_selected_history">Pa itan ti a yan rẹ rẹ bi?</string>
   <string name="delete_bookmarks">Pa Gbogbo Awọn bukumaaki rẹ bi?</string>
   <string name="delete_selected_bookmarks">Paarẹ Awọn bukumaaki ti o yan bi?</string>
-  <string name="on">Nípa</string>
-  <string name="off">Paa</string>
-  <string name="auto">Aifọwọyi</string>
   <string name="send_report">Fi ijabọ aisan ranṣẹ</string>
   <string name="crash_checkbox_file_system">Awọn alaye Eto Faili</string>
   <string name="diagnostic_report">Aisan Iroyin</string>

@@ -161,9 +161,6 @@
   <string name="no_history">تاریخچه‌ای نیست</string>
   <string name="delete_history" fuzzy="true">تاریخچه حذف شود؟</string>
   <string name="delete_bookmarks" fuzzy="true">نشانک‌ها حذف شوند؟</string>
-  <string name="on">روشن</string>
-  <string name="off">خاموش</string>
-  <string name="auto">خودکار</string>
   <string name="send_report">ارسال گزارش تشخیصی</string>
   <string name="diagnostic_report">گزارش تشخیصی</string>
   <string name="allowed">مجاز</string>
