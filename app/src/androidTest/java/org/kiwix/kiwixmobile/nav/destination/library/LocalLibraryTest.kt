@@ -171,7 +171,8 @@ class LocalLibraryTest : BaseActivityTest() {
       showScanFileSystemDialog(
         scanFileSystemDialogShown = false,
         false,
-        showManagePermissionDialog = true
+        showManagePermissionDialog = true,
+        isPlayStoreBuild = false
       )
       clickOnReaderFragment(composeTestRule)
       clickOnLocalLibraryFragment(composeTestRule)
@@ -191,7 +192,8 @@ class LocalLibraryTest : BaseActivityTest() {
       showScanFileSystemDialog(
         scanFileSystemDialogShown = false,
         false,
-        showManagePermissionDialog = false
+        showManagePermissionDialog = false,
+        isPlayStoreBuild = false
       )
       loadZimFileInReader("testzim.zim")
       refreshList(composeTestRule)
@@ -200,7 +202,8 @@ class LocalLibraryTest : BaseActivityTest() {
       showScanFileSystemDialog(
         scanFileSystemDialogShown = false,
         false,
-        showManagePermissionDialog = true
+        showManagePermissionDialog = true,
+        isPlayStoreBuild = false
       )
       clickOnLocalLibraryFragment(composeTestRule)
       assertScanDialogNotDisplayed(composeTestRule)
@@ -229,7 +232,8 @@ class LocalLibraryTest : BaseActivityTest() {
   private fun showScanFileSystemDialog(
     scanFileSystemDialogShown: Boolean,
     isTest: Boolean,
-    showManagePermissionDialog: Boolean
+    showManagePermissionDialog: Boolean,
+    isPlayStoreBuild: Boolean
   ) {
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
@@ -244,6 +248,7 @@ class LocalLibraryTest : BaseActivityTest() {
         SharedPreferenceUtil.PREF_IS_SCAN_FILE_SYSTEM_TEST,
         true
       )
+      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, isPlayStoreBuild)
     }
   }
 
@@ -252,7 +257,8 @@ class LocalLibraryTest : BaseActivityTest() {
     showScanFileSystemDialog(
       scanFileSystemDialogShown = true,
       true,
-      showManagePermissionDialog = false
+      showManagePermissionDialog = false,
+      isPlayStoreBuild = false
     )
     TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
