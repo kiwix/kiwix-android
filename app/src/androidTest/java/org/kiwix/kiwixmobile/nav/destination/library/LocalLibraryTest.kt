@@ -160,15 +160,21 @@ class LocalLibraryTest : BaseActivityTest() {
   fun testScanStorageDialog() {
     // Delete all the files before opening the library screen.
     TestUtils.deleteTemporaryFilesOfTestCases(context)
-    showScanFileSystemDialog(
-      scanFileSystemDialogShown = false,
-      false,
-      showManagePermissionDialog = true
-    )
     activityScenario.onActivity {
       it.navigate(KiwixDestination.Library.route)
     }
     library {
+      // Delete any ZIM file if available.
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+      showScanFileSystemDialog(
+        scanFileSystemDialogShown = false,
+        false,
+        showManagePermissionDialog = true
+      )
+      clickOnReaderFragment(composeTestRule)
+      clickOnLocalLibraryFragment(composeTestRule)
       // Assert scan dialog visible.
       assertScanFileSystemDialogDisplayed(composeTestRule)
       clickOnDialogConfirmButton(composeTestRule)
@@ -184,7 +190,7 @@ class LocalLibraryTest : BaseActivityTest() {
       // Set to not show the "All files permission" dialog.
       showScanFileSystemDialog(
         scanFileSystemDialogShown = false,
-        true,
+        false,
         showManagePermissionDialog = false
       )
       loadZimFileInReader("testzim.zim")
@@ -193,7 +199,7 @@ class LocalLibraryTest : BaseActivityTest() {
       clickOnReaderFragment(composeTestRule)
       showScanFileSystemDialog(
         scanFileSystemDialogShown = false,
-        true,
+        false,
         showManagePermissionDialog = true
       )
       clickOnLocalLibraryFragment(composeTestRule)
