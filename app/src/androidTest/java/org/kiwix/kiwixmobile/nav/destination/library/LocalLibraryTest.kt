@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import android.os.Build
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
@@ -44,6 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.note.NoteFragmentTest
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -87,7 +89,6 @@ class LocalLibraryTest : BaseActivityTest() {
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      // set PREF_IS_TEST false for testing the real scenario
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       // set PREF_MANAGE_EXTERNAL_FILES false for hiding
       // manage external storage permission dialog on android 11 and above
@@ -155,8 +156,98 @@ class LocalLibraryTest : BaseActivityTest() {
     LeakAssertions.assertNoLeaks()
   }
 
+  @Test
+  fun testScanStorageDialog() {
+    // Delete all the files before opening the library screen.
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
+    showScanFileSystemDialog(
+      scanFileSystemDialogShown = false,
+      false,
+      showManagePermissionDialog = true
+    )
+    activityScenario.onActivity {
+      it.navigate(KiwixDestination.Library.route)
+    }
+    library {
+      // Assert scan dialog visible.
+      assertScanFileSystemDialogDisplayed(composeTestRule)
+      clickOnDialogConfirmButton(composeTestRule)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        assertManageExternalPermissionDialogDisplayed(composeTestRule)
+        clickOnDialogDismissButton(composeTestRule)
+      }
+      // Assert scan dialog does not show again.
+      clickOnReaderFragment(composeTestRule)
+      clickOnLocalLibraryFragment(composeTestRule)
+      assertScanDialogNotDisplayed(composeTestRule)
+      // Assert When there are ZIM files in local library screen then this dialog does not display.
+      // Set to not show the "All files permission" dialog.
+      showScanFileSystemDialog(
+        scanFileSystemDialogShown = false,
+        true,
+        showManagePermissionDialog = false
+      )
+      loadZimFileInReader("testzim.zim")
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      clickOnReaderFragment(composeTestRule)
+      showScanFileSystemDialog(
+        scanFileSystemDialogShown = false,
+        true,
+        showManagePermissionDialog = true
+      )
+      clickOnLocalLibraryFragment(composeTestRule)
+      assertScanDialogNotDisplayed(composeTestRule)
+      assertShowSwipeDownToScanFileSystemTextDisplayed(composeTestRule)
+    }
+  }
+
+  private fun loadZimFileInReader(zimFileName: String) {
+    val loadFileStream =
+      NoteFragmentTest::class.java.classLoader.getResourceAsStream(zimFileName)
+    val zimFile = File(context.getExternalFilesDirs(null)[0], zimFileName)
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
+  }
+
+  private fun showScanFileSystemDialog(
+    scanFileSystemDialogShown: Boolean,
+    isTest: Boolean,
+    showManagePermissionDialog: Boolean
+  ) {
+    PreferenceManager.getDefaultSharedPreferences(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, isTest)
+      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, scanFileSystemDialogShown)
+      putBoolean(
+        SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH,
+        showManagePermissionDialog
+      )
+      putBoolean(
+        SharedPreferenceUtil.PREF_IS_SCAN_FILE_SYSTEM_TEST,
+        true
+      )
+    }
+  }
+
   @After
   fun finish() {
+    showScanFileSystemDialog(
+      scanFileSystemDialogShown = true,
+      true,
+      showManagePermissionDialog = false
+    )
     TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

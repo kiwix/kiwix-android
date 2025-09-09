@@ -47,6 +47,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
@@ -77,6 +79,8 @@ const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
 const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
 const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
 const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
+const val SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG =
+  "showSwipeDownToScanFileSystemTextTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -160,7 +164,8 @@ private fun ShowSwipeDownToScanFileSystemText() {
       text = stringResource(string.swipe_down_to_scan_storage),
       modifier = Modifier
         .fillMaxWidth()
-        .padding(EIGHT_DP),
+        .padding(EIGHT_DP)
+        .semantics { testTag = SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG },
       textAlign = TextAlign.Center,
       style = MaterialTheme.typography.bodySmall.copy(
         color = MaterialTheme.colorScheme.onSurfaceVariant
