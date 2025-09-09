@@ -568,17 +568,17 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   /**
    * Scan the file system for ZIM files.
    * Checks:
-   * 1. If our app has the storage permission. If not, it asks for the permission.
+   * 1. If our app has the storage permission. If not, it asks for the permission(if not running in test).
    * 2. Checks if app has the full scan permission. If not, then it asks for the permission.
    * 3. Then finally it scans the storage for ZIM files.
    */
   private fun scanFileSystem() {
     when {
-      !hasReadExternalStoragePermission() -> askForReaderExternalStoragePermission()
+      !hasReadExternalStoragePermission() && !sharedPreferenceUtil.prefIsScanFileSystemTest ->
+        askForReaderExternalStoragePermission()
 
-      !requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil) -> {
+      !requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil) ->
         showManageExternalStoragePermissionDialog()
-      }
 
       else -> {
         shouldScanFileSystem = false
@@ -591,15 +591,13 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
    * Determines whether the file system scan dialog should be shown.
    * Conditions:
    *  1. The scan dialog has not already been shown.
-   *  2. This is the app’s first launch.
-   *  3. This is not the Play Store build (only the non-PS version, e.g. standalone app).
-   *  4. If there are no ZIM files showing on the library screen.
+   *  2. This is not the Play Store build (only the non-PS version, e.g. standalone app).
+   *  3. If there are no ZIM files showing on the library screen.
    */
   private fun shouldShowFileSystemDialog(): Boolean =
     !sharedPreferenceUtil.prefIsScanFileSystemDialogShown &&
-      sharedPreferenceUtil.prefIsFirstRun &&
       !BuildConfig.IS_PLAYSTORE &&
-      libraryScreenState.value.fileSelectListState.bookOnDiskListItems.size == 0
+      libraryScreenState.value.fileSelectListState.bookOnDiskListItems.isEmpty()
 
   override fun onDestroyView() {
     super.onDestroyView()
@@ -685,10 +683,10 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     ContextCompat.checkSelfPermission(
       requireActivity(),
       Manifest.permission.READ_EXTERNAL_STORAGE
-    ) != PackageManager.PERMISSION_GRANTED
+    ) == PackageManager.PERMISSION_GRANTED
 
   private fun checkPermissions() {
-    if (hasReadExternalStoragePermission()) {
+    if (!hasReadExternalStoragePermission()) {
       askForReaderExternalStoragePermission()
     } else {
       checkManageExternalStoragePermission()

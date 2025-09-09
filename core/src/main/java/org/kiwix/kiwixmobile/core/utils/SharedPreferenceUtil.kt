@@ -22,6 +22,7 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -73,6 +74,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getBoolean(PREF_IS_TEST, false)
     set(prefIsTest) {
       sharedPreferences.edit { putBoolean(PREF_IS_TEST, prefIsTest) }
+    }
+
+  var prefIsScanFileSystemTest: Boolean
+    get() = sharedPreferences.getBoolean(PREF_IS_SCAN_FILE_SYSTEM_TEST, false)
+    set(prefIsScanFileSystemTest) {
+      sharedPreferences.edit { putBoolean(PREF_IS_SCAN_FILE_SYSTEM_TEST, prefIsScanFileSystemTest) }
     }
 
   val prefShowShowCaseToUser: Boolean
@@ -297,6 +304,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       }
 
   // this is only used for test cases
+  @VisibleForTesting
   var manageExternalFilesPermissionDialogOnRefresh: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, true)
     set(manageExternalFilesPermissionDialogOnRefresh) =
@@ -414,5 +422,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val KEY_LANGUAGE_ACTIVE = "languageActive"
     private const val KEY_LANGUAGE_ID = "languageId"
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
+    const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
   }
 }
