@@ -185,6 +185,7 @@ class LibraryRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
+        composeTestRule.mainClock.advanceTimeByFrame()
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.all_files_permission_needed))
       }
