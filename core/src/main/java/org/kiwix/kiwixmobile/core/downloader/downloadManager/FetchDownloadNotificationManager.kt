@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
@@ -117,11 +118,36 @@ class FetchDownloadNotificationManager @Inject constructor(
     return when {
       downloadNotification.isCompleted -> context.getString(R.string.complete)
       downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
-      downloadNotification.isPaused -> context.getString(R.string.paused_state)
+      downloadNotification.isPaused -> buildSubtitle(
+        context.getString(R.string.paused_state),
+        downloadNotification.downloaded,
+        downloadNotification.total
+      )
+
       downloadNotification.isQueued -> context.getString(R.string.resuming_state)
       downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
-      else -> super.getSubtitleText(context, downloadNotification)
+      else -> buildSubtitle(
+        super.getSubtitleText(context, downloadNotification),
+        downloadNotification.downloaded,
+        downloadNotification.total
+      )
     }
+  }
+
+  private fun buildSubtitle(
+    mainText: String,
+    downloaded: Long,
+    total: Long
+  ): String {
+    val sizeText = getDownloadedSizeText(downloaded, total)
+    return "$mainText • $sizeText"
+  }
+
+  private fun getDownloadedSizeText(downloadedBytes: Long, totalBytes: Long): String {
+    if (downloadedBytes <= 0 || totalBytes <= 0) return ""
+    val downloadedText = Byte(downloadedBytes.toString()).humanReadable
+    val totalText = Byte(totalBytes.toString()).humanReadable
+    return "$downloadedText/$totalText"
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
@@ -250,12 +276,12 @@ class FetchDownloadNotificationManager @Inject constructor(
     download: Download
   ) {
     val notificationBuilder = getNotificationBuilder(download.id, download.id)
-    val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
-    downloadNotificationManager.notify(download.id, cancelNotification)
+    val pauseNotification = getPauseNotification(fetch, download, notificationBuilder)
+    downloadNotificationManager.notify(download.id, pauseNotification)
   }
 
   @Suppress("InjectDispatcher")
-  private fun getCancelNotification(
+  private fun getPauseNotification(
     fetch: Fetch,
     download: Download,
     notificationBuilder: Builder
@@ -270,7 +296,13 @@ class FetchDownloadNotificationManager @Inject constructor(
       return notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setSmallIcon(android.R.drawable.stat_sys_download_done)
         .setContentTitle(notificationTitle)
-        .setContentText(context.getString(R.string.paused_state))
+        .setContentText(
+          buildSubtitle(
+            context.getString(R.string.paused_state),
+            download.downloaded,
+            download.total
+          )
+        )
         // Set the ongoing true so that could not cancel the pause notification.
         // However, on Android 14 and above user can cancel the notification by swipe right so we
         // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications

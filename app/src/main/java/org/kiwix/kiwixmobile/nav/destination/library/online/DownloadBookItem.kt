@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
@@ -113,6 +114,7 @@ private fun DownloadBookContent(
       BookTitle(item.title)
       Spacer(modifier = Modifier.height(TWO_DP))
       BookDescription(item.description.orEmpty())
+      DownloadStateText(item)
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier.padding(horizontal = ONE_DP, vertical = FIVE_DP),
@@ -183,17 +185,33 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
-      text = item.downloadState.toReadableState(LocalContext.current).toString(),
+      text = item.readableEta.toString(),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary,
-      modifier = Modifier
-        .weight(1f)
-        .testTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      modifier = Modifier.weight(1f)
     )
     Text(
-      text = item.readableEta.toString(),
+      text = getDownloadedSizeText(item.bytesDownloaded, item.totalSizeBytes),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary
     )
   }
+}
+
+private fun getDownloadedSizeText(downloadedBytes: Long, totalBytes: Long): String {
+  if (totalBytes <= 0 || downloadedBytes <= 0) return ""
+  val downloadedText = Byte(downloadedBytes.toString()).humanReadable
+  val totalText = Byte(totalBytes.toString()).humanReadable
+  return "$downloadedText/$totalText"
+}
+
+@Composable
+private fun DownloadStateText(item: LibraryDownloadItem) {
+  Text(
+    text = item.downloadState.toReadableState(LocalContext.current).toString(),
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = Modifier
+      .testTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+  )
 }
