@@ -18,11 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.libzim.SuggestionSearch
 
 data class SearchState(
   val searchTerm: String,
@@ -30,54 +34,62 @@ data class SearchState(
   val recentResults: List<SearchListItem.RecentSearchListItem>,
   val searchOrigin: SearchOrigin
 ) {
-  @Suppress("NestedBlockDepth")
   suspend fun getVisibleResults(
     startIndex: Int,
-    job: Job? = null
-  ): List<SearchListItem.RecentSearchListItem>? =
-    if (searchTerm.isEmpty()) {
-      recentResults
-    } else {
-      searchResultsWithTerm.searchMutex.withLock {
-        searchResultsWithTerm.suggestionSearch?.also { yield() }?.let {
-          val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
-          try {
-            if (job?.isActive == false) {
-              // if the previous job is cancel then do not execute the code
-              return@getVisibleResults searchResults
-            }
-            val safeEndIndex = startIndex + 100
-            yield()
-            val searchIterator =
-              it.getResults(startIndex, safeEndIndex)
-            while (searchIterator.hasNext()) {
-              if (job?.isActive == false) {
-                // check if the previous job is cancel while retrieving the data for
-                // previous searched item then break the execution of code.
-                break
-              }
-              yield()
-              val entry = searchIterator.next()
-              searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
-            }
-          } catch (ignore: Exception) {
-            Log.e(
-              "SearchState",
-              "Could not get the searched result for searchTerm $searchTerm\n" +
-                "Original exception = $ignore"
-            )
-          }
-          /**
-           * Returns null if there are no suggestions left in the iterator.
-           * We check this in SearchFragment to avoid unnecessary data loading
-           * while scrolling to the end of the list when there are no items available.
-           */
-          searchResults.ifEmpty { null }
-        } ?: kotlin.run {
-          recentResults
+    job: Job? = null,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): List<SearchListItem.RecentSearchListItem>? {
+    if (searchTerm.isEmpty()) return recentResults
+    return searchResultsWithTerm.searchMutex.withLock {
+      searchResultsWithTerm.suggestionSearch?.let {
+        yield()
+        withContext(ioDispatcher) {
+          fetchSearchResults(it, startIndex, job)
         }
+      } ?: kotlin.run {
+        recentResults
       }
     }
+  }
+
+  @Suppress("MagicNumber")
+  private suspend fun fetchSearchResults(
+    suggestionSearch: SuggestionSearch,
+    startIndex: Int,
+    job: Job?
+  ): List<SearchListItem.RecentSearchListItem>? {
+    val results = mutableListOf<SearchListItem.RecentSearchListItem>()
+
+    // if the previous job is cancel then do not execute the code
+    if (job?.isActive == false) return results
+
+    runCatching {
+      val safeEndIndex = startIndex + 20
+      yield()
+      val searchIterator = suggestionSearch.getResults(startIndex, safeEndIndex)
+      while (searchIterator.hasNext()) {
+        // check if the previous job is cancel while retrieving the data for
+        // previous searched item then break the execution of code.
+        if (job?.isActive == false) break
+        yield()
+        val entry = searchIterator.next()
+        results.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
+      }
+    }.onFailure {
+      Log.e(
+        "SearchState",
+        "Could not get the searched result for searchTerm $searchTerm\n" +
+          "Original exception = $it"
+      )
+    }
+
+    /**
+     * Returns null if there are no suggestions left in the iterator.
+     * We check this in SearchFragment to avoid unnecessary data loading
+     * while scrolling to the end of the list when there are no items available.
+     */
+    return results.ifEmpty { null }
+  }
 
   val isLoading = searchTerm != searchResultsWithTerm.searchTerm
 }

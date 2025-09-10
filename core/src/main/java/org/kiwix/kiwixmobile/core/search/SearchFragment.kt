@@ -30,16 +30,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -268,7 +267,6 @@ class SearchFragment : BaseFragment() {
     }
   )
 
-  @Suppress("InjectDispatcher")
   private suspend fun render(state: SearchState) {
     renderingJob?.apply {
       // cancel the children job. Since we are getting the result on IO thread
@@ -285,9 +283,7 @@ class SearchFragment : BaseFragment() {
     // To avoid unnecessary data loading and prevent crashes, we check if the search screen is
     // visible to the user before proceeding. If the screen is not visible,
     // we skip the data loading process.
-    if (!isVisible) {
-      return
-    }
+    if (!isVisible) return
     isDataLoading.value = false
     findInPageMenuItem.value = findInPageMenuItem.value.first to (state.searchOrigin == FromWebView)
     setIsPageSearchEnabled(state.searchTerm)
@@ -295,12 +291,7 @@ class SearchFragment : BaseFragment() {
     renderingJob =
       lifecycleScope.launch {
         try {
-          val searchResult =
-            withContext(Dispatchers.IO) {
-              state.getVisibleResults(0, coroutineContext[Job])
-            }
-
-          searchScreenState.update { copy(isLoading = false) }
+          val searchResult = state.getVisibleResults(ZERO, coroutineContext[Job])
           searchResult?.let {
             searchScreenState.update {
               copy(searchList = it)
