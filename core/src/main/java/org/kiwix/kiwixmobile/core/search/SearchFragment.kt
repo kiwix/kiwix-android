@@ -48,7 +48,6 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
@@ -245,7 +244,7 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun searchEntryForSearchTerm(searchText: String) {
-    searchViewModel.actions.trySend(Filter(searchText)).isSuccess
+    searchViewModel.searchResults(searchText)
   }
 
   private fun actionMenuItems() = listOfNotNull(
