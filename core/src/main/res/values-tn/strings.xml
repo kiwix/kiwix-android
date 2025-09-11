@@ -58,8 +58,6 @@
   <string name="pref_display_title">Pontsho</string>
   <string name="pref_info_title">Tshedimosetso</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode" fuzzy="true">Mokgwa wa bosigo</string>
-  <string name="pref_dark_mode_summary">Supa dipadi tse di nang le mebala e e fetotsweng</string>
   <string name="pref_back_to_top">Boela ko Godimo</string>
   <string name="pref_back_to_top_summary">Supa konopo kwa bofelong jwa tsebe go e tlhatlogela kwa godimo</string>
   <string name="pref_language_title">Teme</string>

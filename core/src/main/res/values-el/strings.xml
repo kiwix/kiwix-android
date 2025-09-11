@@ -56,8 +56,6 @@
   <string name="pref_display_title">Εμφάνιση</string>
   <string name="pref_info_title">Πληροφορίες</string>
   <string name="pref_info_version">Έκδοση</string>
-  <string name="pref_dark_mode">Σκοτεινή λειτουργία</string>
-  <string name="pref_dark_mode_summary">Προβολή λημμάτων με ανεστραμμένα χρώματα</string>
   <string name="pref_back_to_top">Επιστροφή στην κορυφή</string>
   <string name="pref_back_to_top_summary">Εμφάνιση κουμπιού στο τέλος της σελίδας για να μετακινηθείτε στην κορυφή</string>
   <string name="pref_language_title">Γλώσσα</string>

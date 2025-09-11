@@ -72,8 +72,6 @@
   <string name="pref_display_title">Tampilan</string>
   <string name="pref_info_title">Informasi</string>
   <string name="pref_info_version">Versi</string>
-  <string name="pref_dark_mode">Mode gelap</string>
-  <string name="pref_dark_mode_summary">Tampilkan artikel dengan warna terbalik</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>
   <string name="pref_back_to_top_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
   <string name="pref_language_title">Bahasa</string>

@@ -66,8 +66,6 @@
   <string name="pref_display_title">Zobrazení</string>
   <string name="pref_info_title">Informace</string>
   <string name="pref_info_version">Verze</string>
-  <string name="pref_dark_mode">Tmavý režim</string>
-  <string name="pref_dark_mode_summary">Zobrazuje stránky v invertovaných barvách.</string>
   <string name="pref_back_to_top">Zpět na začátek</string>
   <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
   <string name="pref_language_title">Jazyk</string>

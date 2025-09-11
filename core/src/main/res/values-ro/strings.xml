@@ -67,8 +67,6 @@
   <string name="pref_display_title">Afișaj</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
-  <string name="pref_dark_mode">Mod întunecat</string>
-  <string name="pref_dark_mode_summary">Afișează articolele în culori inversate</string>
   <string name="pref_back_to_top">Începutul paginii</string>
   <string name="pref_back_to_top_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
   <string name="pref_language_title">Limba</string>

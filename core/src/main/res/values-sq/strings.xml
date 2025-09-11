@@ -60,8 +60,6 @@
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Informacione</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode">Mënyra “E errët”</string>
-  <string name="pref_dark_mode_summary">Shfaqi artikujt me ngjyra së prapthi</string>
   <string name="pref_back_to_top">Mbrapsht te Kreu</string>
   <string name="pref_back_to_top_summary">Shfaq në fund të faqes një buton për t’u ngjitur sipër në krye</string>
   <string name="pref_language_title">Gjuhë</string>

@@ -70,8 +70,6 @@
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
-  <string name="pref_dark_mode">מצב כהה</string>
-  <string name="pref_dark_mode_summary">הצגת ערכים עם צבעים הפוכים</string>
   <string name="pref_back_to_top">חזרה למעלה</string>
   <string name="pref_back_to_top_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
   <string name="pref_language_title">שפה</string>

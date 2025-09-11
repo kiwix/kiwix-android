@@ -171,7 +171,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickNightModePreference(composeTestRule: ComposeContentTestRule) {
-    clickPreferenceItem(context.getString(R.string.pref_dark_mode), composeTestRule)
+    clickPreferenceItem(context.getString(R.string.pref_theme), composeTestRule)
   }
 
   private fun clickPreferenceItem(title: String, composeTestRule: ComposeContentTestRule) {
@@ -194,7 +194,7 @@ class SettingsRobot : BaseRobot() {
     composeTestRule.apply {
       waitUntilTimeout()
       onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-        .assertTextEquals(context.getString(R.string.pref_dark_mode))
+        .assertTextEquals(context.getString(R.string.pref_theme))
     }
   }
 

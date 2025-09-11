@@ -24,7 +24,6 @@ import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -65,8 +64,7 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun providesZimFileReaderFactory(darkModeConfig: DarkModeConfig):
-    ZimFileReader.Factory = ZimFileReader.Factory.Impl(darkModeConfig)
+  internal fun providesZimFileReaderFactory(): ZimFileReader.Factory = ZimFileReader.Factory.Impl()
 
   @Provides
   @Singleton

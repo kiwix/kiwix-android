@@ -61,8 +61,6 @@
   <string name="pref_display_title">Kumonisa</string>
   <string name="pref_info_title">Bansangu</string>
   <string name="pref_info_version">Mbalula</string>
-  <string name="pref_dark_mode">Mutindu ya mudidi</string>
-  <string name="pref_dark_mode_summary">Songa masolo ti mikubu ya kubaluka</string>
   <string name="pref_back_to_top">Beto vutuka na zulu</string>
   <string name="pref_back_to_top_summary">Songa buton na nsuka ya lutiti sambu na kukangula na zulu</string>
   <string name="pref_language_title">Ndinga</string>

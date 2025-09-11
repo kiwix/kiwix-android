@@ -64,8 +64,6 @@
   <string name="pref_display_title">Nunawa</string>
   <string name="pref_info_title">Bayani</string>
   <string name="pref_info_version">Sigar</string>
-  <string name="pref_dark_mode">Yanayin duhu</string>
-  <string name="pref_dark_mode_summary">Nuna articles da inverted launuka</string>
   <string name="pref_back_to_top">Komawa xuwa sama</string>
   <string name="pref_back_to_top_summary">Nuna maɓallin a ƙarshen shafin don gungurawa har zuwa saman</string>
   <string name="pref_language_title">Yare</string>

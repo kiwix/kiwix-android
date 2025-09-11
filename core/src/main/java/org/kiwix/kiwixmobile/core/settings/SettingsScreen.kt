@@ -338,7 +338,7 @@ private fun ExtrasCategory(
 
 @Composable
 private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
-  val darkModeLabel by settingsViewModel.darkModeLabel.collectAsState()
+  val darkModeLabel by settingsViewModel.themeLabel.collectAsState()
   val backToTopEnabled by settingsViewModel.backToTopEnabled
   val textZoom by settingsViewModel.textZoom.collectAsState()
   val textZoomPosition = (textZoom / ZOOM_SCALE) - ZOOM_OFFSET
@@ -367,15 +367,15 @@ fun DarkModePreference(
   settingsViewModel: SettingsViewModel,
 ) {
   val entries = remember {
-    context.resources.getStringArray(R.array.pref_dark_modes_entries).toList()
+    context.resources.getStringArray(R.array.pref_themes_entries).toList()
   }
   val values = remember {
-    context.resources.getStringArray(R.array.pref_dark_modes_values).toList()
+    context.resources.getStringArray(R.array.pref_themes_values).toList()
   }
 
   ListPreference(
-    titleId = R.string.pref_dark_mode,
-    summary = stringResource(id = R.string.pref_dark_mode_summary),
+    titleId = R.string.pref_theme,
+    summary = stringResource(id = R.string.pref_theme_summary),
     options = entries,
     selectedOption = darkModeLabel,
     onOptionSelected = { selectedEntry ->

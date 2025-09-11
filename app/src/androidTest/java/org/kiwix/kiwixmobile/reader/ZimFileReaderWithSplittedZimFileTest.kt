@@ -44,7 +44,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -156,7 +156,7 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
           ZimFileReader(
             zimReaderSource,
             archive!!,
-            DarkModeConfig(SharedPreferenceUtil(context), context),
+            ThemeConfig(SharedPreferenceUtil(context), context),
             SuggestionSearcher(archive)
           )
         Assert.assertEquals(zimFileReader.mediaCount, 16)

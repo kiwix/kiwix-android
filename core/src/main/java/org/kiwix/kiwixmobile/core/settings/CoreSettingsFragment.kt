@@ -47,7 +47,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
-import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
@@ -100,7 +100,7 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
 
   @JvmField
   @Inject
-  var darkModeConfig: DarkModeConfig? = null
+  var themeConfig: ThemeConfig? = null
 
   @JvmField
   @Inject
@@ -288,7 +288,7 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
       maxHeightInPx
     )
     view.loadUrl("file:///android_asset/credits.html")
-    if (darkModeConfig?.isDarkModeActive() == true) {
+    if (themeConfig?.isThemeDark() == true) {
       view.settings.javaScriptEnabled = true
       view.setBackgroundColor(0)
     }

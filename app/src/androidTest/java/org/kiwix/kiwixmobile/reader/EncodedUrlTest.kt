@@ -30,7 +30,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -102,7 +102,7 @@ class EncodedUrlTest : BaseActivityTest() {
         ZimFileReader(
           zimReaderSource,
           archive!!,
-          DarkModeConfig(SharedPreferenceUtil(context), context),
+          ThemeConfig(SharedPreferenceUtil(context), context),
           SuggestionSearcher(archive)
         )
       val encodedUrls =

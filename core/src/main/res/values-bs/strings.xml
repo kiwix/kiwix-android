@@ -61,8 +61,6 @@
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Verzija</string>
-  <string name="pref_dark_mode">Tamna tema</string>
-  <string name="pref_dark_mode_summary">Prikaži članke s invertovanim bojama</string>
   <string name="pref_back_to_top">Nazad na vrh</string>
   <string name="pref_back_to_top_summary">Prikaži dugme na kraju stranice za pomicanje na vrh</string>
   <string name="pref_language_title">Jezik</string>

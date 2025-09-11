@@ -32,8 +32,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
-import org.kiwix.kiwixmobile.core.DarkModeConfig
-import org.kiwix.kiwixmobile.core.DarkModeConfig.Mode.Companion.from
+import org.kiwix.kiwixmobile.core.ThemeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -55,7 +55,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
   private val _textZooms = MutableStateFlow(textZoom)
   val textZooms get() = _textZooms.asStateFlow()
-  private val darkModes = MutableStateFlow(DarkModeConfig.Mode.SYSTEM)
+  private val darkModes = MutableStateFlow(ThemeConfig.Theme.SYSTEM)
   private val _prefWifiOnlys = MutableStateFlow(true)
   val prefWifiOnlys
     get() = _prefWifiOnlys.onStart { emit(prefWifiOnly) }
@@ -267,18 +267,18 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
       }
 
-  val darkMode: DarkModeConfig.Mode
+  val darkTheme: ThemeConfig.Theme
     get() =
       from(
         sharedPreferences.getString(PREF_DARK_MODE, null)?.toInt()
           ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
       )
 
-  fun darkModes(): Flow<DarkModeConfig.Mode> = darkModes.onStart { emit(darkMode) }
+  fun darkThemes(): Flow<ThemeConfig.Theme> = darkModes.onStart { emit(darkTheme) }
 
   fun updateDarkMode(selectedMode: String) {
     sharedPreferences.edit { putString(PREF_DARK_MODE, selectedMode) }
-    darkModes.tryEmit(darkMode)
+    darkModes.tryEmit(darkTheme)
   }
 
   var manageExternalFilesPermissionDialog: Boolean

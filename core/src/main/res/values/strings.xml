@@ -58,11 +58,11 @@
   <string name="pref_display_title">Display</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode">Theme</string>
+  <string name="pref_theme">Theme</string>
   <string name="theme_system">System</string>
   <string name="theme_light">Light</string>
   <string name="theme_dark">Dark</string>
-  <string name="pref_dark_mode_summary">Show articles with inverted colors</string>
+  <string name="pref_theme_summary">Show articles with inverted colors</string>
   <string name="pref_back_to_top">Back to Top</string>
   <string name="pref_back_to_top_summary">Display a button at the end of the page to scroll up to the top</string>
   <string name="pref_language_title">Language</string>
@@ -360,12 +360,12 @@
   <string name="parsing_remote_library">Parsing remote library</string>
   <string name="starting_downloading_remote_library">Starting download of the online library</string>
   <string name="downloading_library">Downloading library \n%s</string>
-  <string-array name="pref_dark_modes_entries">
+  <string-array name="pref_themes_entries">
     <item>@string/theme_system</item>
     <item>@string/theme_light</item>
     <item>@string/theme_dark</item>
   </string-array>
-  <string-array name="pref_dark_modes_values">
+  <string-array name="pref_themes_values">
     <item>-1</item>
     <item>1</item>
     <item>2</item>

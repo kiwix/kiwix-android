@@ -66,8 +66,6 @@
   <string name="pref_display_title">Дисплей</string>
   <string name="pref_info_title">Інформація</string>
   <string name="pref_info_version">Версія</string>
-  <string name="pref_dark_mode" fuzzy="true">Нічний режим</string>
-  <string name="pref_dark_mode_summary">Показати статті з інвертованими кольорами</string>
   <string name="pref_back_to_top">Повернутись угору</string>
   <string name="pref_back_to_top_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
   <string name="pref_language_title">Мова</string>

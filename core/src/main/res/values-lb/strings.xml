@@ -50,8 +50,6 @@
   <string name="pref_display_title">Weisen</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
-  <string name="pref_dark_mode">Däischtere Modus</string>
-  <string name="pref_dark_mode_summary">Artikele mat ëmgedréite Faarwe weisen</string>
   <string name="pref_back_to_top">Zréck no uewen</string>
   <string name="pref_back_to_top_summary">Weist e Knäppchen ënnen op der Säit fir no uewen ze scrollen</string>
   <string name="pref_language_title">Sprooch</string>

@@ -52,8 +52,6 @@
   <string name="pref_display_title">Amosar</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
-  <string name="pref_dark_mode" fuzzy="true">Mou nocherniegu</string>
-  <string name="pref_dark_mode_summary">Ver los artículos colos colores invertíos</string>
   <string name="pref_back_to_top">Volver arriba</string>
   <string name="pref_back_to_top_summary">Amosar un botón al final de la páxina pa volver al entamu</string>
   <string name="pref_language_title">Llingua</string>

@@ -66,8 +66,6 @@
   <string name="pref_display_title">Zaŋ wuhi</string>
   <string name="pref_info_title">Lahabali</string>
   <string name="pref_info_version">Dabam</string>
-  <string name="pref_dark_mode">Zimsim dini</string>
-  <string name="pref_dark_mode_summary">Onyesha makala yaliyogeuzwa\n rangi</string>
   <string name="pref_back_to_top">N labi zuɣu saa</string>
   <string name="pref_back_to_top_summary">Onyesha kitufe\n mwishoni mwa ukurasa kusogeza hadi juu</string>
   <string name="pref_language_title">Balli</string>

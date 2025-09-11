@@ -67,8 +67,6 @@
   <string name="pref_display_title">Ngosipụta</string>
   <string name="pref_info_title">Ozi</string>
   <string name="pref_info_version">Ụdị</string>
-  <string name="pref_dark_mode">Ụdị ngwa n’egosi na Ọchịchịrị</string>
-  <string name="pref_dark_mode_summary">Gosi akụkọ nwere agba tụgharịa</string>
   <string name="pref_back_to_top">gbàgarịa elu</string>
   <string name="pref_back_to_top_summary">Gosipụta bọtịnụ na njedebe nke ibe ka ịpịrị elu n’elu</string>
   <string name="pref_language_title">Ásụ̀sụ̀</string>
