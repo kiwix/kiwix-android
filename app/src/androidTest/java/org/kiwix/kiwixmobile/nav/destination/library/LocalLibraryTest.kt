@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
@@ -168,6 +169,7 @@ class LocalLibraryTest : BaseActivityTest() {
       refreshList(composeTestRule)
       waitUntilZimFilesRefreshing(composeTestRule)
       deleteZimIfExists(composeTestRule)
+      assertShowSwipeDownToScanFileSystemTextDisplayed(composeTestRule)
       showScanFileSystemDialog(
         scanFileSystemDialogShown = false,
         false,
@@ -176,6 +178,7 @@ class LocalLibraryTest : BaseActivityTest() {
       )
       clickOnReaderFragment(composeTestRule)
       clickOnLocalLibraryFragment(composeTestRule)
+      composeTestRule.waitUntilTimeout()
       // Assert scan dialog visible.
       assertScanFileSystemDialogDisplayed(composeTestRule)
       clickOnDialogConfirmButton(composeTestRule)
@@ -207,7 +210,6 @@ class LocalLibraryTest : BaseActivityTest() {
       )
       clickOnLocalLibraryFragment(composeTestRule)
       assertScanDialogNotDisplayed(composeTestRule)
-      assertShowSwipeDownToScanFileSystemTextDisplayed(composeTestRule)
     }
   }
 

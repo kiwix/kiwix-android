@@ -672,7 +672,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun showTabSwitcher() {
-    (requireActivity() as CoreMainActivity).apply {
+    (activity as? CoreMainActivity)?.apply {
       disableLeftDrawer()
       hideBottomAppBar()
     }
@@ -717,7 +717,7 @@ abstract class CoreReaderFragment :
    */
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     enableLeftDrawer()
-    (requireActivity() as CoreMainActivity).showBottomAppBar()
+    (activity as? CoreMainActivity)?.showBottomAppBar()
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = true,
@@ -737,7 +737,7 @@ abstract class CoreReaderFragment :
    * WARNING: If you modify this method, thoroughly test it in custom apps to ensure it works correctly.
    */
   open fun enableLeftDrawer() {
-    (requireActivity() as CoreMainActivity).enableLeftDrawer()
+    (activity as? CoreMainActivity)?.enableLeftDrawer()
   }
 
   private fun goBack() {
@@ -1073,9 +1073,6 @@ abstract class CoreReaderFragment :
     } catch (ignore: Exception) {
       ignore.printStackTrace()
     }
-    if (sharedPreferenceUtil?.showIntro() == true) {
-      (requireActivity() as? AppCompatActivity)?.setSupportActionBar(null)
-    }
     safelyCancelBookmarkJob()
     unBindViewsAndBinding()
     hideBackToTopTimer?.cancel()
@@ -1083,7 +1080,7 @@ abstract class CoreReaderFragment :
     stopOngoingLoadingAndClearWebViewList()
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
-    deleteCachedFiles(requireActivity())
+    activity?.let(::deleteCachedFiles)
     tts?.apply {
       setActionAndStartTTSService(ACTION_STOP_TTS)
       shutdown()
@@ -1092,7 +1089,7 @@ abstract class CoreReaderFragment :
     tempWebViewForUndo = null
     // to fix IntroFragmentTest see https://github.com/kiwix/kiwix-android/pull/3217
     try {
-      requireActivity().unbindService(serviceConnection)
+      activity?.unbindService(serviceConnection)
     } catch (_: IllegalArgumentException) {
       // to handle if service is already unbounded
     }
