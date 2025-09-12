@@ -585,20 +585,14 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   private fun scanFileSystem() {
     when {
       !hasReadExternalStoragePermission() && !sharedPreferenceUtil.prefIsScanFileSystemTest ->
-        askForReaderExternalStoragePermission(true).also {
-          Log.e("DEMO_NOTE", "scanFileSystem: asking permission")
-        }
+        askForReaderExternalStoragePermission(true)
 
       !requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil) ->
-        showManageExternalStoragePermissionDialog().also {
-          Log.e("DEMO_NOTE", "scanFileSystem: asking isManageExternalStoragePermissionGranted")
-        }
+        showManageExternalStoragePermissionDialog()
 
       else -> {
         shouldScanFileSystem = false
-        requestFileSystemCheck().also {
-          Log.e("DEMO_NOTE", "scanFileSystem: ")
-        }
+        requestFileSystemCheck()
       }
     }
   }
