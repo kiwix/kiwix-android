@@ -43,8 +43,8 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
-  private val darkTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.darkThemes()
-    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.darkTheme)
+  private val darkTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.appThemes()
+    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.appTheme)
 
   val themeLabel: StateFlow<String> = darkTheme
     .map { mode ->
@@ -57,7 +57,7 @@ class SettingsViewModel @Inject constructor(
     .stateIn(
       viewModelScope,
       SharingStarted.Companion.Eagerly,
-      getLabelFor(sharedPreferenceUtil.darkTheme)
+      getLabelFor(sharedPreferenceUtil.appTheme)
     )
 
   var backToTopEnabled = mutableStateOf(sharedPreferenceUtil.prefBackToTop)
@@ -93,8 +93,8 @@ class SettingsViewModel @Inject constructor(
     }
   }
 
-  fun setDarkMode(selectedMode: String) {
-    sharedPreferenceUtil.updateDarkMode(selectedMode)
+  fun setAppTheme(selectedMode: String) {
+    sharedPreferenceUtil.updateAppTheme(selectedMode)
   }
 
   fun setBackToTop(enabled: Boolean) {

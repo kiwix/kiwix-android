@@ -32,21 +32,21 @@ class ThemeConfig @Inject constructor(
 ) {
   fun init() {
     CoroutineScope(Dispatchers.Main).launch {
-      sharedPreferenceUtil.darkThemes().collect {
+      sharedPreferenceUtil.appThemes().collect {
         setMode(it)
       }
     }
   }
 
-  fun isThemeDark() =
-    when (sharedPreferenceUtil.darkTheme) {
+  fun isDarkTheme() =
+    when (sharedPreferenceUtil.appTheme) {
       Theme.DARK -> true
       Theme.LIGHT -> false
       Theme.SYSTEM -> uiMode() == UiMode.DARK
     }
 
-  private fun setMode(darkTheme: Theme) {
-    AppCompatDelegate.setDefaultNightMode(darkTheme.value)
+  private fun setMode(theme: Theme) {
+    AppCompatDelegate.setDefaultNightMode(theme.value)
   }
 
   private fun uiMode() = UiMode.from(context.uiMode)

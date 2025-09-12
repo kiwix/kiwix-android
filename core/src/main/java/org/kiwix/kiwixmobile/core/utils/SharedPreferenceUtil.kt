@@ -55,7 +55,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
   private val _textZooms = MutableStateFlow(textZoom)
   val textZooms get() = _textZooms.asStateFlow()
-  private val darkModes = MutableStateFlow(ThemeConfig.Theme.SYSTEM)
+  private val appThemes = MutableStateFlow(ThemeConfig.Theme.SYSTEM)
   private val _prefWifiOnlys = MutableStateFlow(true)
   val prefWifiOnlys
     get() = _prefWifiOnlys.onStart { emit(prefWifiOnly) }
@@ -267,18 +267,18 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
       }
 
-  val darkTheme: ThemeConfig.Theme
+  val appTheme: ThemeConfig.Theme
     get() =
       from(
-        sharedPreferences.getString(PREF_DARK_MODE, null)?.toInt()
+        sharedPreferences.getString(PREF_THEME, null)?.toInt()
           ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
       )
 
-  fun darkThemes(): Flow<ThemeConfig.Theme> = darkModes.onStart { emit(darkTheme) }
+  fun appThemes(): Flow<ThemeConfig.Theme> = appThemes.onStart { emit(appTheme) }
 
-  fun updateDarkMode(selectedMode: String) {
-    sharedPreferences.edit { putString(PREF_DARK_MODE, selectedMode) }
-    darkModes.tryEmit(darkTheme)
+  fun updateAppTheme(selectedTheme: String) {
+    sharedPreferences.edit { putString(PREF_THEME, selectedTheme) }
+    appThemes.tryEmit(appTheme)
   }
 
   var manageExternalFilesPermissionDialog: Boolean
@@ -383,7 +383,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
     private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
-    const val PREF_DARK_MODE = "pref_dark_mode"
+    const val PREF_THEME = "pref_theme"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"

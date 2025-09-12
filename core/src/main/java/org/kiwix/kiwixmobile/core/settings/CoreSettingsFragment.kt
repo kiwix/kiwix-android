@@ -288,7 +288,7 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
       maxHeightInPx
     )
     view.loadUrl("file:///android_asset/credits.html")
-    if (themeConfig?.isThemeDark() == true) {
+    if (themeConfig?.isDarkTheme() == true) {
       view.settings.javaScriptEnabled = true
       view.setBackgroundColor(0)
     }
