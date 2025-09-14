@@ -19,11 +19,16 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import android.os.Process
 import android.view.ActionMode
+import android.view.GestureDetector
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.BottomAppBarScrollBehavior
@@ -44,6 +49,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.navOptions
+import javax.inject.Inject
+import kotlin.system.exitProcess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,8 +72,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
-import javax.inject.Inject
-import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
@@ -115,6 +120,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var rateDialogHandler: RateDialogHandler
   private var drawerToggle: ActionBarDrawerToggle? = null
+
+  // Add a gesture detector to handle double-tap events
+  private lateinit var gestureDetector: GestureDetector
+
+  // Define a constant to avoid magic numbers, used for calculating the middle third of the screen
+  private val middleAreaFactor = 3f
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
@@ -207,6 +218,52 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       }
     }
 
+    // Initialize the gesture detector and define the callback for the double-tap event
+    gestureDetector = GestureDetector(
+      this,
+      object : GestureDetector.SimpleOnGestureListener() {
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+          // Get the current active WebView
+          val webView = getCurrentWebView()
+          if (webView != null) {
+            // Get the WebView's position and size on the screen
+            val webViewLocation = IntArray(2)
+            webView.getLocationOnScreen(webViewLocation)
+            val webViewRect = Rect(
+              webViewLocation[0],
+              webViewLocation[1],
+              webViewLocation[0] + webView.width,
+              webViewLocation[1] + webView.height
+            )
+
+            // Check if the screen coordinates of the double-tap event are within the WebView's rectangular area
+            if (webViewRect.contains(e.rawX.toInt(), e.rawY.toInt())) {
+              // Define the middle area of the WebView
+              val middleArea = RectF(
+                webView.width / middleAreaFactor,
+                webView.height / middleAreaFactor,
+                webView.width * (middleAreaFactor - 1) / middleAreaFactor,
+                webView.height * (middleAreaFactor - 1) / middleAreaFactor
+              )
+
+              // Calculate the click position relative to the top-left corner of the WebView
+              val relativeX = e.rawX - webViewLocation[0]
+              val relativeY = e.rawY - webViewLocation[1]
+
+              // If the double-tap occurs in the middle area, call the function to hide the bottom app bar
+              if (middleArea.contains(relativeX, relativeY)) {
+                hideBottomAppBar()
+                // Return true to indicate that we have handled this event
+                return true
+              }
+            }
+          }
+          // If the event was not handled, call the superclass's default implementation
+          return super.onDoubleTap(e)
+        }
+      }
+    )
+
     setMainActivityToCoreApp()
     lifecycleScope.launch(Dispatchers.IO) {
       createApplicationShortcuts()
@@ -285,7 +342,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   /**
    * Starts monitoring the downloads by ensuring that the `DownloadMonitorService` is running.
    * This service keeps the Fetch instance alive when the application is in the background
-   *  or has been killed by the user or system, allowing downloads to continue in the background.
+   * or has been killed by the user or system, allowing downloads to continue in the background.
    */
   private fun startMonitoringDownloads() {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
@@ -336,6 +393,52 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
+  }
+
+  // Override onKeyDown to control WebView page scrolling with volume keys
+  override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    // Define a variable to track whether the event has been handled
+    var isHandled = false
+
+    // Check if the pressed key is a volume key
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+      // Get the current WebView instance
+      val webView = getCurrentWebView()
+      if (webView != null) {
+        // Calculate the height of the WebView's visible area to use as the base distance for scrolling
+        val pageHeight = webView.measuredHeight
+        // Set a line height for page overlap to avoid content being cut off. Approximated by font size here.
+        val lineHeight = webView.settings.defaultFontSize
+
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+          // Handle the volume down key to scroll down
+          val contentHeight = (webView.contentHeight * webView.scale).toInt()
+          val maxScrollY = contentHeight - pageHeight
+          val newScrollY = (webView.scrollY + pageHeight - lineHeight).coerceAtMost(maxScrollY)
+          webView.scrollTo(0, newScrollY)
+        } else { // KEYCODE_VOLUME_UP
+          // Handle the volume up key to scroll up
+          val newScrollY = (webView.scrollY - pageHeight + lineHeight).coerceAtLeast(0)
+          webView.scrollTo(0, newScrollY)
+        }
+        // Mark the event as handled to prevent the system from adjusting the volume
+        isHandled = true
+      }
+    }
+
+    // If the event is handled, return true; otherwise, call the superclass's default implementation
+    if (isHandled) {
+      return true
+    }
+    return super.onKeyDown(keyCode, event)
+  }
+
+  // Override dispatchTouchEvent to intercept all touch events and pass them to the gesture detector
+  override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+    // Pass the touch event to the GestureDetector for analysis, which will call callbacks like onDoubleTap as needed
+    gestureDetector.onTouchEvent(ev)
+    // Call the superclass's implementation to ensure normal touch processing continues
+    return super.dispatchTouchEvent(ev)
   }
 
   override fun getCurrentWebView(): KiwixWebView? {
