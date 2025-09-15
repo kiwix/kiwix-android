@@ -70,7 +70,7 @@
   <string name="pref_display_title">{{Identical|Display}}\n\nThis is the label on the preference settings page. which shows as the display settings list label.</string>
   <string name="pref_info_title">{{Identical|Information}}</string>
   <string name="pref_info_version">{{Identical|Version}}</string>
-  <string name="pref_theme">This is part of the preference settings to change the app's theme.</string>
+  <string name="pref_theme">This is part of the preference settings to change the app theme.</string>
   <string name="pref_theme_summary">This is part of preference settings to show the user if he enables this setting then all the articles will show with inverted colors.</string>
   <string name="theme_dark">This is used in the settings screen to turn on the dark mode.</string>
   <string name="theme_light">This is used in the settings screen to turn off the dark mode.</string>
