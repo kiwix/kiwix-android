@@ -341,12 +341,7 @@ class ZimFileReader constructor(
         val output = ByteArrayOutputStream()
         when {
           uri.endsWith(UNINITIALISER_ADDRESS) -> output.write(UNINITIALISE_HTML.toByteArray())
-          item != null -> {
-            if ("text/css" == item.mimetype && darkModeConfig.isDarkModeActive()) {
-              output.write(INVERT_IMAGES_VIDEO.toByteArray())
-            }
-            output.write(item.data.data)
-          }
+          item != null -> output.write(item.data.data)
         }
 
         ByteArrayInputStream(output.toByteArray())
@@ -415,21 +410,6 @@ class ZimFileReader constructor(
     val UI_URI: Uri? = "content://org.kiwix.ui/".toUri()
 
     const val CONTENT_PREFIX = "https://kiwix.app/"
-
-    private val INVERT_IMAGES_VIDEO =
-      """
-      img, video, div[poster] { 
-         -webkit-filter: invert(1); 
-         filter: invert(1); 
-      }
-      div[poster] img, div[poster] video {
-        -webkit-filter: invert(0); 
-        filter: invert(0); 
-      }
-      img {
-          background-color: white !important;
-      }
-      """.trimIndent()
     private val assetExtensions =
       listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg", "warc")
     private val compressedExtensions =

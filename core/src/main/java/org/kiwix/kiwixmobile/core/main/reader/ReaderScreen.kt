@@ -120,7 +120,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.update
-import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
@@ -458,8 +457,7 @@ private fun TabSwitcherAnimated(state: ReaderScreenState) {
       state.kiwixWebViewList,
       state.currentWebViewPosition,
       state.onTabClickListener,
-      state.onCloseAllTabs,
-      state.darkModeViewPainter
+      state.onCloseAllTabs
     )
   }
 }
@@ -776,8 +774,7 @@ fun TabSwitcherView(
   webViews: List<KiwixWebView>,
   selectedIndex: Int,
   onTabClickListener: TabClickListener,
-  onCloseAllTabs: () -> Unit,
-  painter: DarkModeViewPainter?
+  onCloseAllTabs: () -> Unit
 ) {
   val state = rememberLazyListState()
   Box(modifier = Modifier.fillMaxSize()) {
@@ -795,12 +792,6 @@ fun TabSwitcherView(
         val title = remember(webView) {
           webView.title?.fromHtml()?.toString()
             ?: context.getString(R.string.menu_home)
-        }
-
-        LaunchedEffect(webView) {
-          if (title != context.getString(R.string.menu_home)) {
-            painter?.update(webView)
-          }
         }
 
         TabItemView(

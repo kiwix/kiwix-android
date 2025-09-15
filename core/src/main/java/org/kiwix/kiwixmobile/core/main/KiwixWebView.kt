@@ -188,15 +188,4 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       }
     }
   }
-
-  companion object {
-    val DARK_MODE_COLORS =
-      floatArrayOf(
-        -1.0f, 0f, 0f, 0f,
-        255f, 0f, -1.0f, 0f,
-        0f, 255f, 0f, 0f,
-        -1.0f, 0f, 255f, 0f,
-        0f, 0f, 1.0f, 0f
-      )
-  }
 }
