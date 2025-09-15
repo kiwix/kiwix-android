@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,7 @@ import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -54,6 +56,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
@@ -183,7 +186,7 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
-      text = item.downloadState.toReadableState(LocalContext.current).toString(),
+      text = getDownloadStateText(item, LocalContext.current),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary,
       modifier = Modifier
@@ -191,9 +194,30 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
         .testTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
     )
     Text(
-      text = item.readableEta.toString(),
+      text = getDownloadedSizeText(item.bytesDownloaded, item.totalSizeBytes),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary
     )
   }
+}
+
+/**
+ * Returns the current download state text.
+ * If the download is "In Progress", it returns the ETA. Otherwise, it returns the current
+ * download state (e.g., Pending, Paused, or Complete).
+ */
+private fun getDownloadStateText(item: LibraryDownloadItem, context: Context): String {
+  val currentDownloadState = item.downloadState
+  return if (currentDownloadState == DownloadState.Running) {
+    item.readableEta.toString()
+  } else {
+    currentDownloadState.toReadableState(context).toString()
+  }
+}
+
+private fun getDownloadedSizeText(downloadedBytes: Long, totalBytes: Long): String {
+  if (totalBytes <= 0 || downloadedBytes <= 0) return ""
+  val downloadedText = Byte(downloadedBytes.toString()).humanReadable
+  val totalText = Byte(totalBytes.toString()).humanReadable
+  return "$downloadedText/$totalText"
 }
