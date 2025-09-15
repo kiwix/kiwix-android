@@ -383,7 +383,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
     private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
-    const val PREF_THEME = "pref_theme"
+    const val PREF_THEME = "pref_dark_mode"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"

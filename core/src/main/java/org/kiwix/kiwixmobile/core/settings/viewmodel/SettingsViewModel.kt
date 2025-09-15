@@ -43,10 +43,10 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
-  private val darkTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.appThemes()
+  private val appTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.appThemes()
     .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.appTheme)
 
-  val themeLabel: StateFlow<String> = darkTheme
+  val themeLabel: StateFlow<String> = appTheme
     .map { mode ->
       when (mode) {
         ThemeConfig.Theme.DARK -> context.getString(R.string.theme_dark)
