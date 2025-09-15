@@ -108,7 +108,6 @@ import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
-import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.DocumentParser
 import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
@@ -218,10 +217,6 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var donationDialogHandler: DonationDialogHandler? = null
-
-  @JvmField
-  @Inject
-  var painter: DarkModeViewPainter? = null
   protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
   private var isFirstTimeMainPageLoaded = true
@@ -301,7 +296,6 @@ abstract class CoreReaderFragment :
       selectedWebView = null,
       readerScreenTitle = "",
       showTabSwitcher = false,
-      darkModeViewPainter = null,
       currentWebViewPosition = ZERO,
       onTabClickListener = object : TabClickListener {
         override fun onSelectTab(position: Int) {
@@ -444,7 +438,6 @@ abstract class CoreReaderFragment :
           readerScreenState.update {
             copy(
               readerScreenTitle = context.getString(string.reader),
-              darkModeViewPainter = darkModeViewPainter,
               tocButtonItem = getTocButtonStateAndAction(),
               appName = (requireActivity() as CoreMainActivity).appName,
               donateButtonClick = {
@@ -1803,7 +1796,6 @@ abstract class CoreReaderFragment :
   override fun onResume() {
     super.onResume()
     updateBottomToolbarVisibility()
-    updateNightMode()
     if (tts == null) {
       setUpTTS()
     }
@@ -2108,23 +2100,12 @@ abstract class CoreReaderFragment :
     getCurrentWebView()?.url?.let { webUrlsFlow.value = it }
   }
 
-  private fun updateNightMode() {
-    painter?.update(
-      getCurrentWebView(),
-      ::shouldActivateNightMode,
-      readerScreenState.value.fullScreenItem.second
-    )
-  }
-
-  private fun shouldActivateNightMode(kiwixWebView: KiwixWebView?): Boolean = kiwixWebView != null
-
   private fun loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil?.prefBackToTop == true
     isOpenNewTabInBackground = sharedPreferenceUtil?.prefNewTabBackground == true
     if (!isBackToTopEnabled) {
       hideBackToTopButton()
     }
-    updateNightMode()
   }
 
   private fun showBackToTopButton() {
@@ -2307,7 +2288,6 @@ abstract class CoreReaderFragment :
         }
       }
       updateBottomToolbarVisibility()
-      updateNightMode()
       if (!isWebViewHistoryRestoring) {
         saveTabStates()
       }

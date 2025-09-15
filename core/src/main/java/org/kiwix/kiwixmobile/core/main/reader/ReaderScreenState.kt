@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main.reader
 
 import android.widget.FrameLayout
 import androidx.compose.material3.SnackbarHostState
-import org.kiwix.kiwixmobile.core.main.DarkModeViewPainter
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 
@@ -139,7 +138,6 @@ data class ReaderScreenState(
    */
   val shouldShowBottomAppBar: Boolean,
   val readerScreenTitle: String,
-  val darkModeViewPainter: DarkModeViewPainter?,
   /**
    * Manages the click event on tabs.
    */
