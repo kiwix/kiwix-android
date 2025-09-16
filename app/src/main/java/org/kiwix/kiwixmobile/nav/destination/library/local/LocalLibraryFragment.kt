@@ -34,6 +34,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -82,7 +83,9 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -130,6 +133,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   @Inject lateinit var zimReaderFactory: ZimFileReader.Factory
 
+  @Inject lateinit var storageCalculator: StorageCalculator
+
   @JvmField
   @Inject
   var copyMoveFileHandler: CopyMoveFileHandler? = null
@@ -137,7 +142,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private var actionMode: ActionMode? = null
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   private var permissionDeniedLayoutShowing = false
-  private var zimFileUri: Uri? = null
+  private val selectedZimFileUriList: MutableList<Uri> = mutableListOf()
   private val libraryScreenState = mutableStateOf(
     LocalLibraryScreenState(
       fileSelectListState = FileSelectListState(emptyList()),
@@ -315,7 +320,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
     val zimFileUri = arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
     if (zimFileUri.isNotEmpty()) {
-      handleSelectedFileUri(zimFileUri.toUri())
+      handleSelectedFileUri(listOf(zimFileUri.toUri()))
     }
     requireArguments().clear()
   }
@@ -370,6 +375,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       action = Intent.ACTION_OPEN_DOCUMENT
       type = "*/*"
       addCategory(Intent.CATEGORY_OPENABLE)
+      putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
       if (sharedPreferenceUtil.prefIsTest) {
         putExtra(
           "android.provider.extra.INITIAL_URI",
@@ -386,52 +392,179 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private val fileSelectLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-      if (result.resultCode == RESULT_OK) {
-        result.data?.data?.let {
-          requireActivity().applicationContext.contentResolver.takePersistableUriPermission(
-            it,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION or
-              Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-          )
-          handleSelectedFileUri(it)
-        }
+      if (result.resultCode != RESULT_OK) return@registerForActivityResult
+      val uriList = extractUrisFromIntent(result.data)
+      if (uriList.isNotEmpty()) {
+        handleSelectedFileUri(uriList)
       }
     }
 
-  fun handleSelectedFileUri(uri: Uri) {
-    lifecycleScope.launch {
-      if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-        val documentFile =
-          when (uri.scheme) {
-            "file" -> DocumentFile.fromFile(File("$uri"))
-            else -> {
-              DocumentFile.fromSingleUri(requireActivity(), uri)
-            }
+  /**
+   * Extract the uris from result intent and return the uri list.
+   */
+  private fun extractUrisFromIntent(intent: Intent?): List<Uri> {
+    val urisList = arrayListOf<Uri>()
+    when {
+      intent?.clipData != null -> {
+        // Handle multiple files.
+        val count: Int = intent.clipData?.itemCount ?: ZERO
+        for (i in ZERO..count - ONE) {
+          intent.clipData?.getItemAt(i)?.uri?.let {
+            takePersistableUriPermission(it)
+            urisList.add(it)
           }
-        // If the file is not valid, it shows an error message and stops further processing.
-        // If the file name is not found, then let them to copy the file
-        // and we will handle this later.
-        val fileName = documentFile?.name
-        if (fileName != null && !isValidZimFile(fileName)) {
-          activity.toast(getString(string.error_file_invalid, "$uri"))
-          return@launch
         }
-        copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
-          uri,
-          documentFile,
-          // pass if fileName is null then we will validate it after copying/moving
-          fileName == null,
-          parentFragmentManager
-        )
-      } else {
-        zimFileUri = uri
-        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          showManageExternalStoragePermissionDialog()
-        } else if (requestExternalStorageWritePermission()) {
-          getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
+      }
+
+      intent?.data != null -> {
+        // Handle single file.
+        intent.data?.let {
+          takePersistableUriPermission(it)
+          urisList.add(it)
         }
       }
     }
+    return urisList
+  }
+
+  private fun takePersistableUriPermission(uri: Uri) {
+    runCatching {
+      activity?.applicationContext?.contentResolver?.takePersistableUriPermission(
+        uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or
+          Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
+    }.onFailure {
+      Log.e(TAG_KIWIX, "Could not take persistable permission for uri = $uri")
+    }
+  }
+
+  fun handleSelectedFileUri(uris: List<Uri>) {
+    lifecycleScope.launch {
+      selectedZimFileUriList.clear()
+      selectedZimFileUriList.addAll(uris)
+      when {
+        sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ->
+          handleFilesForPlayStoreWithAndroid11AndAboveDevices()
+
+        else -> handleFilesForNonPlayStoreAndBelowAndroid11Devices()
+      }
+    }
+  }
+
+  @RequiresApi(Build.VERSION_CODES.R)
+  private suspend fun handleFilesForPlayStoreWithAndroid11AndAboveDevices() {
+    val totalSelectedFileSize = getTotalSizeOfSelectedZIMFiles()
+    val availableSpaceInStorage =
+      storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
+    if (availableSpaceInStorage < totalSelectedFileSize) {
+      // User does not have enough storage in his selected storage.
+      // Show storage selection dialog.
+      insufficientSpaceInStorage(availableSpaceInStorage)
+      return
+    }
+    selectedZimFileUriList.forEach { uri ->
+      val documentFile =
+        when (uri.scheme) {
+          "file" -> DocumentFile.fromFile(File("$uri"))
+          else -> {
+            DocumentFile.fromSingleUri(requireActivity(), uri)
+          }
+        }
+      // If the file is not valid, it shows an error message and stops further processing.
+      // If the file name is not found, then let them to copy the file
+      // and we will handle this later.
+      val fileName = documentFile?.name
+      if (fileName != null && !isValidZimFile(fileName)) {
+        showFileCopyMoveErrorDialog(
+          getString(string.error_file_invalid, fileName)
+        ) {
+          // selectedZimFileUriList?.drop(index + ONE)
+          handleFilesForPlayStoreWithAndroid11AndAboveDevices()
+        }
+        return
+      }
+    }
+    // copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+    //   uri,
+    //   documentFile,
+    //   // pass if fileName is null then we will validate it after copying/moving
+    //   fileName == null,
+    //   parentFragmentManager
+    // )
+  }
+
+  private fun getTotalSizeOfSelectedZIMFiles(): Long {
+    var totalFilesSize = 0L
+    selectedZimFileUriList.forEach { uri ->
+      val documentFile =
+        when (uri.scheme) {
+          "file" -> DocumentFile.fromFile(File("$uri"))
+          else -> {
+            DocumentFile.fromSingleUri(sharedPreferenceUtil.context, uri)
+          }
+        }
+      totalFilesSize = totalFilesSize.plus(documentFile?.length() ?: ZERO.toLong())
+    }
+    return totalFilesSize
+  }
+
+  private suspend fun handleFilesForNonPlayStoreAndBelowAndroid11Devices() {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+      return
+    }
+    if (!requestExternalStorageWritePermission()) return
+    processSelectedFiles(selectedZimFileUriList)
+  }
+
+  private suspend fun processSelectedFiles(uris: List<Uri>, isAfterRetry: Boolean = false) {
+    if (uris.size == 1 && !isAfterRetry) {
+      processSingleFile(uris.first())
+    } else {
+      processMultipleFiles(uris)
+    }
+  }
+
+  private suspend fun processSingleFile(uri: Uri) {
+    val (file, errorMessage) = getZimFileFromUri(uri)
+    if (file == null) {
+      activity?.toast(errorMessage)
+    } else {
+      navigateToReaderFragment(file)
+    }
+  }
+
+  private suspend fun processMultipleFiles(uris: List<Uri>) {
+    uris.forEachIndexed { index, uri ->
+      val (file, errorMessage) = getZimFileFromUri(uri)
+
+      if (file == null) {
+        showFileCopyMoveErrorDialog(errorMessage) {
+          processSelectedFiles(uris.drop(index + ONE), true)
+        }
+        return
+      }
+
+      addBookToLibkiwixBookOnDisk(file)
+      if (index == uris.lastIndex) {
+        activity?.toast(getString(string.your_selected_files_added_to_library))
+      }
+    }
+  }
+
+  private fun showFileCopyMoveErrorDialog(
+    errorMessage: String,
+    clickListener: suspend () -> Unit
+  ) {
+    dialogShower.show(
+      KiwixDialog.FileCopyMoveError(errorMessage),
+      {
+        lifecycleScope.launch {
+          clickListener.invoke()
+        }
+      }
+    )
   }
 
   private fun isValidZimFile(fileName: String): Boolean =
@@ -439,7 +572,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private suspend fun getZimFileFromUri(
     uri: Uri
-  ): File? {
+  ): Pair<File?, String> {
     val filePath =
       FileUtils.getLocalFilePathByUri(
         requireActivity().applicationContext,
@@ -451,38 +584,28 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         "The Selected ZIM file not found in the storage. File Uri = $uri\n" +
           "Retrieved Path = $filePath"
       )
-      activity.toast(getString(string.error_file_not_found, "$uri"))
-      return null
+      return null to getString(string.error_file_not_found, "$uri")
     }
     val file = File(filePath)
     return if (!FileUtils.isValidZimFile(file.path)) {
       Log.e(TAG_KIWIX, "Selected ZIM file is not a valid ZIM file. File path = ${file.path}")
-      activity.toast(getString(string.error_file_invalid, file.path))
-      null
+      null to getString(string.error_file_invalid, file.path)
     } else {
-      file
+      file to ""
     }
   }
 
-  @Suppress("InjectDispatcher")
   private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
       activity.toast(string.unable_to_read_zim_file)
     } else {
-      // Save the ZIM file to the database to display it on the local library screen.
+      // Save the ZIM file to the libkiwix to display it on the local library screen.
       // This is particularly useful when storage is slow or contains a large number of files.
       // In such cases, scanning may take some time to show all the files on the
       // local library screen. Since our application is already aware of this opened ZIM file,
-      // we can directly add it to the database.
+      // we can directly add it to the libkiwix.
       // See https://github.com/kiwix/kiwix-android/issues/3650
-      CoroutineScope(Dispatchers.IO).launch {
-        zimReaderFactory.create(ZimReaderSource(file))
-          ?.let { zimFileReader ->
-            val book = Book().apply { update(zimFileReader.jniKiwixReader) }
-            mainRepositoryActions.saveBook(book)
-            zimFileReader.dispose()
-          }
-      }
+      addBookToLibkiwixBookOnDisk(file)
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
         .build()
@@ -490,6 +613,18 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         navigate(KiwixDestination.Reader.route, navOptions)
         setNavigationResultOnCurrent(file.toUri().toString(), ZIM_FILE_URI_KEY)
       }
+    }
+  }
+
+  @Suppress("InjectDispatcher")
+  private fun addBookToLibkiwixBookOnDisk(file: File) {
+    CoroutineScope(Dispatchers.IO).launch {
+      zimReaderFactory.create(ZimReaderSource(file))
+        ?.let { zimFileReader ->
+          val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+          mainRepositoryActions.saveBook(book)
+          zimFileReader.dispose()
+        }
     }
   }
 
@@ -523,7 +658,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     copyMoveFileHandler = null
     readStoragePermissionLauncher?.unregister()
     readStoragePermissionLauncher = null
-    zimFileUri = null
+    selectedZimFileUriList.clear()
   }
 
   private fun sideEffects() =
@@ -741,12 +876,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           Map.Entry<String, @JvmSuppressWildcards Boolean>::value
         )
       if (isGranted) {
-        zimFileUri?.let {
-          // open the selected ZIM file in reader.
-          lifecycleScope.launch {
-            getZimFileFromUri(it)?.let(::navigateToReaderFragment)
-          }
-        }
+        // handle the selected ZIM files.
+        handleSelectedFileUri(selectedZimFileUriList)
       } else {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
           /* shouldShowRequestPermissionRationale() returns false when:

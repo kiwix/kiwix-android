@@ -564,7 +564,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun getStorageDeviceList() =
-    (activity as KiwixMainActivity).getStorageDeviceList()
+    (activity as? KiwixMainActivity)?.getStorageDeviceList().orEmpty()
 
   fun dispose() {
     storageObservingJob?.cancel()
