@@ -103,6 +103,8 @@ class DeepLinksTest : BaseActivityTest() {
           setIntroShown()
           putPrefWifiOnly(false)
           setIsPlayStoreBuildType(true)
+          putPrefIsFirstRun(false)
+          prefIsScanFileSystemDialogShown = true
           prefIsTest = true
           putPrefLanguage("en")
           shouldShowStorageSelectionDialog = false

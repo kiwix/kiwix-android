@@ -228,7 +228,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    */
   override fun enableLeftDrawer() {
     if (BuildConfig.DISABLE_SIDEBAR) {
-      (requireActivity() as CoreMainActivity).disableLeftDrawer()
+      (activity as? CoreMainActivity)?.disableLeftDrawer()
     } else {
       super.enableLeftDrawer()
     }

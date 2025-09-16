@@ -27,6 +27,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +63,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
@@ -117,6 +120,7 @@ import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
+private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 
 @Suppress("LargeClass")
 class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCallback {
@@ -138,6 +142,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   private var permissionDeniedLayoutShowing = false
   private var zimFileUri: Uri? = null
+
+  /**
+   * Manages the scanning of storage on firs app launch
+   * and the necessary permission are not granted.
+   */
+  private var shouldScanFileSystem = false
   private val libraryScreenState = mutableStateOf(
     LocalLibraryScreenState(
       fileSelectListState = FileSelectListState(emptyList()),
@@ -161,6 +171,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       val isPermanentlyDenied = readStorageHasBeenPermanentlyDenied(isGranted)
       permissionDeniedLayoutShowing = isPermanentlyDenied
       if (permissionDeniedLayoutShowing) {
+        shouldScanFileSystem = false
         updateLibraryScreenState(
           noFilesViewItem = Triple(
             requireActivity().resources.getString(string.grant_read_storage_permission),
@@ -168,6 +179,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
             true
           )
         )
+      } else if (shouldScanFileSystem) {
+        scanFileSystem()
       }
     }
 
@@ -348,6 +361,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private fun showManageExternalStoragePermissionDialog() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!isAdded) return
       dialogShower.show(
         KiwixDialog.ManageExternalFilesPermissionDialog,
         {
@@ -495,20 +509,90 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   override fun onResume() {
     super.onResume()
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
-    ) {
-      checkPermissions()
-    } else if (!permissionDeniedLayoutShowing) {
-      updateLibraryScreenState(
-        noFilesViewItem = Triple(
-          requireActivity().resources.getString(string.no_files_here),
-          requireActivity().resources.getString(string.download_books),
-          false
+    when {
+      shouldShowFileSystemDialog() -> {
+        Handler(Looper.getMainLooper()).postDelayed({
+          showFileSystemScanDialog()
+        }, SHOW_SCAN_DIALOG_DELAY)
+      }
+
+      shouldScanFileSystem -> {
+        // When user goes to settings for granting the `MANAGE_EXTERNAL_STORAGE` permission, and
+        // came back to the application then initiate the scanning of file system.
+        scanFileSystem()
+      }
+
+      !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+        !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing -> {
+        checkPermissions()
+      }
+
+      else -> {
+        updateLibraryScreenState(
+          noFilesViewItem = Triple(
+            requireActivity().resources.getString(string.no_files_here),
+            requireActivity().resources.getString(string.download_books),
+            false
+          )
         )
-      )
+      }
     }
   }
+
+  // Shows the FileSystemScan dialog.
+  private fun showFileSystemScanDialog() {
+    // Do not execute the code if fragment is not visible.
+    // We are showing this dialog 2 seconds later. In the meantime; user can
+    // navigate to other screens.
+    if (!isAdded) return
+    dialogShower.show(
+      KiwixDialog.YesNoDialog.FileSystemScan,
+      {
+        // Sets true so that it can not show again.
+        sharedPreferenceUtil.prefIsScanFileSystemDialogShown = true
+        shouldScanFileSystem = true
+        scanFileSystem()
+      },
+      {
+        // User clicks on the "No" button so not show again.
+        sharedPreferenceUtil.prefIsScanFileSystemDialogShown = true
+      }
+    )
+  }
+
+  /**
+   * Scan the file system for ZIM files.
+   * Checks:
+   * 1. If our app has the storage permission. If not, it asks for the permission(if not running in test).
+   * 2. Checks if app has the full scan permission. If not, then it asks for the permission.
+   * 3. Then finally it scans the storage for ZIM files.
+   */
+  private fun scanFileSystem() {
+    when {
+      !hasReadExternalStoragePermission() && !sharedPreferenceUtil.prefIsScanFileSystemTest ->
+        askForReaderExternalStoragePermission(true)
+
+      !requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil) ->
+        showManageExternalStoragePermissionDialog()
+
+      else -> {
+        shouldScanFileSystem = false
+        requestFileSystemCheck()
+      }
+    }
+  }
+
+  /**
+   * Determines whether the file system scan dialog should be shown.
+   * Conditions:
+   *  1. The scan dialog has not already been shown.
+   *  2. This is not the Play Store build (only the non-PS version, e.g. standalone app).
+   *  3. If there are no ZIM files showing on the library screen.
+   */
+  private fun shouldShowFileSystemDialog(): Boolean =
+    !sharedPreferenceUtil.prefIsScanFileSystemDialogShown &&
+      !BuildConfig.IS_PLAYSTORE &&
+      libraryScreenState.value.fileSelectListState.bookOnDiskListItems.isEmpty()
 
   override fun onDestroyView() {
     super.onDestroyView()
@@ -590,39 +674,51 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     outState.putBoolean(WAS_IN_ACTION_MODE, actionMode != null)
   }
 
+  private fun hasReadExternalStoragePermission(): Boolean =
+    ContextCompat.checkSelfPermission(
+      requireActivity(),
+      Manifest.permission.READ_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
+
   private fun checkPermissions() {
-    if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED
-    ) {
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        context.toast(string.request_storage)
-        storagePermissionLauncher?.launch(
-          arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-          )
-        )
-      } else {
-        checkManageExternalStoragePermission()
-      }
+    if (!hasReadExternalStoragePermission()) {
+      askForReaderExternalStoragePermission()
     } else {
       checkManageExternalStoragePermission()
     }
   }
 
-  private fun checkManageExternalStoragePermission() {
+  private fun askForReaderExternalStoragePermission(shouldScanIfHasPermission: Boolean = false) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      context.toast(string.request_storage)
+      storagePermissionLauncher?.launch(
+        arrayOf(
+          Manifest.permission.READ_EXTERNAL_STORAGE,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+      )
+    } else {
+      // Pass the parameter it comes from scan dialog.
+      // So ask for the permission or scan if granted.
+      // This will help us in scanning on already installed apps.
+      checkManageExternalStoragePermission(shouldScanIfHasPermission)
+    }
+  }
+
+  private fun checkManageExternalStoragePermission(shouldScanIfHasPermission: Boolean = false) {
     if (!sharedPreferenceUtil.isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       if (!Environment.isExternalStorageManager()) {
         // We do not have the permission!!
-        if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+        if (sharedPreferenceUtil.manageExternalFilesPermissionDialog || shouldScanIfHasPermission) {
           // We should only ask for first time, If the users wants to revoke settings
           // then they can directly toggle this feature from settings screen
           sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
           // Show Dialog and  Go to settings to give permission
           showManageExternalStoragePermissionDialog()
         }
+      } else if (shouldScanIfHasPermission) {
+        shouldScanFileSystem = false
+        requestFileSystemCheck()
       }
     }
   }
