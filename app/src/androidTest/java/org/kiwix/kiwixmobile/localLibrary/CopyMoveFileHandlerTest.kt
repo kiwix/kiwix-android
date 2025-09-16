@@ -225,7 +225,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
           .filterIsInstance<LocalLibraryFragment>()
           .firstOrNull()
       localLibraryFragment?.handleSelectedFileUri(
-        uri,
+        arrayListOf(uri),
       )
     }
   }

@@ -49,6 +49,17 @@ sealed class KiwixDialog(
     constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
+  data class FileCopyMoveError(override val args: List<Any>) :
+    KiwixDialog(
+      null,
+      R.string.file_copy_move_error_dialog_message,
+      R.string.yes,
+      R.string.no
+    ),
+    HasBodyFormatArgs {
+    constructor(errorMessage: String) : this(listOf(errorMessage))
+  }
+
   object LocationPermissionRationale : KiwixDialog(
     null,
     R.string.permission_rationale_location,
@@ -134,15 +145,16 @@ sealed class KiwixDialog(
     private val titleId: Int,
     private val customViewBottomPadding: Dp,
     private val customGetView: @Composable (() -> Unit)?
-  ) : KiwixDialog(
-      title = titleId,
-      message = null,
-      cancelable = false,
-      confirmButtonText = R.string.empty_string,
-      dismissButtonText = null,
-      customComposeView = customGetView,
-      customComposeViewBottomPadding = customViewBottomPadding
-    )
+  ) :
+    KiwixDialog(
+        title = titleId,
+        message = null,
+        cancelable = false,
+        confirmButtonText = R.string.empty_string,
+        dismissButtonText = null,
+        customComposeView = customGetView,
+        customComposeViewBottomPadding = customViewBottomPadding
+      )
 
   data object ShowWarningAboutSplittedZimFile : KiwixDialog(
     R.string.verify_zim_chunk_dialog_title,
