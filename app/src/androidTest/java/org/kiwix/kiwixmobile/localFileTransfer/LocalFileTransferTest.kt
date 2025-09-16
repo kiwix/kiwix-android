@@ -211,6 +211,8 @@ class LocalFileTransferTest {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, shouldShowShowCase)
+      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
+      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
   }

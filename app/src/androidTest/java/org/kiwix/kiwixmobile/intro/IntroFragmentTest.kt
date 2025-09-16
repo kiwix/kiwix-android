@@ -93,6 +93,8 @@ class IntroFragmentTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
+      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,

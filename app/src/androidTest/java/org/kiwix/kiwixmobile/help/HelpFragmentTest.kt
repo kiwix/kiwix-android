@@ -65,6 +65,8 @@ class HelpFragmentTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
+      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
     activityScenario =
