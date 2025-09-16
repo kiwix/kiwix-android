@@ -70,8 +70,6 @@
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
-  <string name="pref_dark_mode">מצב כהה</string>
-  <string name="pref_dark_mode_summary">הצגת ערכים עם צבעים הפוכים</string>
   <string name="pref_back_to_top">חזרה למעלה</string>
   <string name="pref_back_to_top_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
   <string name="pref_language_title">שפה</string>
@@ -310,9 +308,6 @@
   <string name="export_all_bookmarks_dialog_message">יצוא ייצור קובץ bookmark.xml בתיקייה Download/org.kiwix…/.</string>
   <string name="bookmark_imported_message">כל הסימניות יובאו.</string>
   <string name="error_invalid_bookmark_file">שגיאה: הקובץ שנבחר אינו קובץ סימניות תקין.</string>
-  <string name="on">מופעל</string>
-  <string name="off">כבוי</string>
-  <string name="auto">אוטומטי</string>
   <string name="send_report">שליחת דוח אבחון</string>
   <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
   <string name="diagnostic_report">דוח אבחון</string>

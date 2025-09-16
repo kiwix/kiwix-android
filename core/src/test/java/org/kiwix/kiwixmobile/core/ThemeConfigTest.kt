@@ -36,8 +36,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-class DarkModeConfigTest {
-  private lateinit var darkModeConfig: DarkModeConfig
+class ThemeConfigTest {
+  private lateinit var themeConfig: ThemeConfig
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var context: Context
 
@@ -50,20 +50,20 @@ class DarkModeConfigTest {
     Dispatchers.setMain(testDispatcher)
     sharedPreferenceUtil = mockk()
     context = mockk()
-    darkModeConfig = DarkModeConfig(sharedPreferenceUtil, context)
+    themeConfig = ThemeConfig(sharedPreferenceUtil, context)
   }
 
   @Test
   fun `should return true when dark mode is ON`() {
-    every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.ON
-    val result = darkModeConfig.isDarkModeActive()
+    every { sharedPreferenceUtil.appTheme } returns ThemeConfig.Theme.DARK
+    val result = themeConfig.isDarkTheme()
     assertTrue(result)
   }
 
   @Test
   fun `should return false when dark mode is OFF`() {
-    every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.OFF
-    val result = darkModeConfig.isDarkModeActive()
+    every { sharedPreferenceUtil.appTheme } returns ThemeConfig.Theme.LIGHT
+    val result = themeConfig.isDarkTheme()
     assertFalse(result)
   }
 
@@ -75,8 +75,8 @@ class DarkModeConfigTest {
       }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
-    every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.SYSTEM
-    val result = darkModeConfig.isDarkModeActive()
+    every { sharedPreferenceUtil.appTheme } returns ThemeConfig.Theme.SYSTEM
+    val result = themeConfig.isDarkTheme()
     assertTrue(result)
   }
 
@@ -88,8 +88,8 @@ class DarkModeConfigTest {
       }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
-    every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.SYSTEM
-    val result = darkModeConfig.isDarkModeActive()
+    every { sharedPreferenceUtil.appTheme } returns ThemeConfig.Theme.SYSTEM
+    val result = themeConfig.isDarkTheme()
     assertFalse(result)
   }
 
@@ -101,17 +101,17 @@ class DarkModeConfigTest {
       }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
-    every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.SYSTEM
-    val result = darkModeConfig.isDarkModeActive()
+    every { sharedPreferenceUtil.appTheme } returns ThemeConfig.Theme.SYSTEM
+    val result = themeConfig.isDarkTheme()
     assertFalse(result)
   }
 
   @Test
   fun `should call setMode during init`() {
-    every { sharedPreferenceUtil.darkModes() } returns mockk(relaxed = true)
-    val spy = spyk(darkModeConfig)
+    every { sharedPreferenceUtil.appThemes() } returns mockk(relaxed = true)
+    val spy = spyk(themeConfig)
     spy.init()
-    verify { sharedPreferenceUtil.darkModes() }
+    verify { sharedPreferenceUtil.appThemes() }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)

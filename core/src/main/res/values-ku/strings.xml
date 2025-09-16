@@ -59,8 +59,6 @@
   <string name="pref_display_title">Nîşan bide</string>
   <string name="pref_info_title">Agahî</string>
   <string name="pref_info_version">Guherto</string>
-  <string name="pref_dark_mode">Moda tarî</string>
-  <string name="pref_dark_mode_summary">Gotaran bi rengên vajîkirî nîşan bide</string>
   <string name="pref_back_to_top">Vegere Jor</string>
   <string name="pref_back_to_top_summary">Ji bo vegerî jor, li binê rûpelê wê bişkojek nîşan bide</string>
   <string name="pref_language_title">Ziman</string>
@@ -264,9 +262,6 @@
   <string name="delete_selected_history">Dixwazî Dîroka Bijartî Jê Bibî?</string>
   <string name="delete_bookmarks">Dixwazî Hemû Bijareyan Jê Bibî?</string>
   <string name="delete_selected_bookmarks">Dixwazî Bijareyên Bijartî Jê Bibî?</string>
-  <string name="on">Vekirî</string>
-  <string name="off">Girtî</string>
-  <string name="auto">Otomatîk</string>
   <string name="send_report">Rapora teşhîsê bişîne</string>
   <string name="crash_checkbox_file_system">Detayên Sîstema Pelê</string>
   <string name="diagnostic_report">Rapora Teşhîsê</string>

@@ -45,8 +45,6 @@
   <string name="pref_display_title">Diskwel</string>
   <string name="pref_info_title">Titouroù</string>
   <string name="pref_info_version">Stumm</string>
-  <string name="pref_dark_mode" fuzzy="true">Mod noz</string>
-  <string name="pref_dark_mode_summary">Diskouez ar pennadoù gant livioù eilpennet</string>
   <string name="pref_back_to_top">Distreiñ da grec’h ar bajenn</string>
   <string name="pref_back_to_top_summary">Diskwel ur bouton e traoñ ar bajenn evit distreiñ d’an deroù</string>
   <string name="pref_language_title">Yezh</string>
@@ -223,9 +221,6 @@
   <string name="delete_selected_history">Dilemel an istor diuzet?</string>
   <string name="delete_bookmarks">Dilemel an holl sinedoù?</string>
   <string name="delete_selected_bookmarks">Dilemel ar sinedoù diuzet?</string>
-  <string name="on">Enaouet</string>
-  <string name="off">Lazhet</string>
-  <string name="auto">Emgefre</string>
   <string name="send_report">Kas danevell an diagnostik</string>
   <string name="crash_checkbox_file_system">Munudoù ar reizhiad restroù</string>
   <string name="diagnostic_report">Danevell an diagnostik</string>

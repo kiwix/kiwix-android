@@ -48,8 +48,6 @@
   <string name="pref_display_title">Azeig</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode">Dunkelmodus</string>
-  <string name="pref_dark_mode_summary">Zeig d’Artikel mit umcherte Farbe</string>
   <string name="pref_back_to_top">Zruck nach obe</string>
   <string name="pref_back_to_top_summary">Zeig e Chnopf am End vo dr Syte zuem uffe rolle</string>
   <string name="pref_language_title">Sprach</string>
@@ -175,7 +173,5 @@
   <string name="no_results">Ke Ergäbnis</string>
   <string name="no_history">Ke Verlouf</string>
   <string name="delete_history" fuzzy="true">Verlouf lösche?</string>
-  <string name="on">Aa</string>
-  <string name="off">Uus</string>
   <string name="percentage">%d%%</string>
 </resources>

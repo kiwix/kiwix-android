@@ -71,9 +71,6 @@
   <string name="tag_pic">ಚಿತ್ರ</string>
   <string name="tag_vid">ವೀಡಿಯೊ</string>
   <string name="tag_text_only">ಪಠ್ಯ ಮಾತ್ರ</string>
-  <string name="on">ಮಾಡಿ</string>
-  <string name="off">ನಿಲ್ಲಿಸಿ</string>
-  <string name="auto">ಸ್ವಯಂಚಲನ</string>
   <string name="allowed">ಮಾಡಬಹುದು</string>
   <string name="not_allowed">ಮಾಡಲಾಗುವುದಿಲ್ಲ</string>
   <string name="allow">ಅನುಮತಿಸಿ</string>

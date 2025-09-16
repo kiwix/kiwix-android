@@ -30,8 +30,6 @@
   <string name="pref_display_title">Rodyti</string>
   <string name="pref_info_title">Informacija</string>
   <string name="pref_info_version">Versija</string>
-  <string name="pref_dark_mode">Tamsus režimas</string>
-  <string name="pref_dark_mode_summary">Rodyti straipsnius su ankstesnėmis spalvomis</string>
   <string name="pref_back_to_top">Atgal į viršų</string>
   <string name="pref_back_to_top_summary">Rodyti  puslapio pabaigoje mygtuką sugrįžti į viršų</string>
   <string name="pref_language_title">Kalba</string>

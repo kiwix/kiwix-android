@@ -57,8 +57,6 @@
   <string name="pref_display_title">Ischermu</string>
   <string name="pref_info_title">Informatziones</string>
   <string name="pref_info_version">Versione</string>
-  <string name="pref_dark_mode">Modalidade iscura</string>
-  <string name="pref_dark_mode_summary">Ammustra sos artìculos cun colores furriados</string>
   <string name="pref_back_to_top">Torra a su cumintzu</string>
   <string name="pref_back_to_top_summary">Ammustra unu butone a sa fine de sa pàgina pro torrare a su cumintzu</string>
   <string name="pref_language_title">Limba</string>
@@ -265,9 +263,6 @@
   <string name="delete_selected_history">Iscantzellare sa cronologia ischertada?</string>
   <string name="delete_bookmarks">Iscantzellare totu sos sinnalibros?</string>
   <string name="delete_selected_bookmarks">Iscantzellare sos sinnalibros ischertados?</string>
-  <string name="on">Alluta</string>
-  <string name="off">Istudada</string>
-  <string name="auto">Automàtica</string>
   <string name="send_report">Imbia su raportu de diagnòstica</string>
   <string name="crash_checkbox_file_system">Detàllios de su sistema de documentos</string>
   <string name="diagnostic_report">Raportu de diagnòstica</string>

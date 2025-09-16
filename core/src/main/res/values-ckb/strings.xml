@@ -42,8 +42,6 @@
   <string name="pref_display_title">پیشاندان</string>
   <string name="pref_info_title">زانیاری</string>
   <string name="pref_info_version">وەشان</string>
-  <string name="pref_dark_mode">دۆخی تاریک</string>
-  <string name="pref_dark_mode_summary">وتارەکان بیشان بدە بە ڕەنگی پێچەوانە</string>
   <string name="pref_back_to_top">گەڕانەوە بۆ سەرەوە</string>
   <string name="pref_language_title">زمان</string>
   <string name="pref_language_chooser">زمانێک ھەڵبژێرە</string>
@@ -181,9 +179,6 @@
   <string name="delete_history">تەواوی مێژوو دەسڕیتەوە؟</string>
   <string name="delete_selected_history">مێژووی دیاریکراو دەسڕیتەوە؟</string>
   <string name="delete_bookmarks" fuzzy="true">کتێبە دەستنیشانکراوەکان دەسڕیتەوە؟</string>
-  <string name="on">دای گیرسێنە</string>
-  <string name="off">بیکوژێنەوە</string>
-  <string name="auto">خۆگەڕ</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">زوومکردنی دەق</string>
   <string name="search_open_in_new_tab">لە تابێکی نوێ بیکەوە</string>

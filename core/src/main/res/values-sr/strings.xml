@@ -30,8 +30,6 @@
   <string name="pref_display_title">Приказ</string>
   <string name="pref_info_title">Информације</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_dark_mode">Тамни режим</string>
-  <string name="pref_dark_mode_summary">Прикажи чланке с обрнутим бојама</string>
   <string name="pref_back_to_top">Назад на врх</string>
   <string name="pref_back_to_top_summary">Прикажи дугме на крају странице како би се могли отићи на врх</string>
   <string name="pref_language_title">Језик</string>
@@ -112,9 +110,6 @@
   <string name="delete_selected_history">Избрисати изабрану историју?</string>
   <string name="delete_bookmarks">Избрисати све обележиваче?</string>
   <string name="delete_selected_bookmarks">Избрисати изабране обележиваче?</string>
-  <string name="on">Укљ.</string>
-  <string name="off">Искљ.</string>
-  <string name="auto">Ауто</string>
   <string name="send_report">Пошаљи дијагностички извештај</string>
   <string name="crash_checkbox_file_system">Детаљи о систему датотека</string>
   <string name="diagnostic_report">Дијагностички извештај</string>

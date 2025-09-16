@@ -68,8 +68,6 @@
   <string name="pref_display_title">Erakutsi</string>
   <string name="pref_info_title">Informazioa</string>
   <string name="pref_info_version">Bertsioa</string>
-  <string name="pref_dark_mode">Modu iluna</string>
-  <string name="pref_dark_mode_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
   <string name="pref_back_to_top">Gora itzuli</string>
   <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>
   <string name="pref_language_title">Hizkuntza</string>
@@ -228,9 +226,6 @@
   <string name="note">Oharra</string>
   <string name="status">Egoera</string>
   <string name="no_bookmarks">Lastermarkarik ez</string>
-  <string name="on">Piztuta</string>
-  <string name="off">Itzalita</string>
-  <string name="auto">Auto</string>
   <string name="reader">Irakurgailua</string>
   <string name="download_tts_language_title">Hizkuntza hau deskargatu ozen irakurri ahal izateko.</string>
   <string name="download_tts_language_message">Mesedez, Deskargatu botoian klik egin. Beharrezko hizkuntzak automatikoki deskargatuko ditu.</string>

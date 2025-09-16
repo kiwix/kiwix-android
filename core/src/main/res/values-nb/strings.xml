@@ -57,8 +57,6 @@
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
   <string name="pref_info_version">Versjon</string>
-  <string name="pref_dark_mode">Mørk modus</string>
-  <string name="pref_dark_mode_summary">Vis artikler med inverterte farger</string>
   <string name="pref_back_to_top">Tilbake til toppen</string>
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
   <string name="pref_language_title">Språk</string>
@@ -210,9 +208,6 @@
   <string name="delete_bookmarks">Vil du slette alle bokmerker?</string>
   <string name="delete_selected_bookmarks">Vil du slette valgte bokmerker?</string>
   <string name="error_invalid_bookmark_file">Feil: Den valgte filen er ikke en gyldig bokmerke-fil.</string>
-  <string name="on">På</string>
-  <string name="off">Av</string>
-  <string name="auto">Auto</string>
   <string name="send_report">Send diagnoserapport</string>
   <string name="crash_checkbox_file_system">Filsystemdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>

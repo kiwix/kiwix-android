@@ -87,7 +87,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
@@ -204,7 +204,7 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
-  var darkModeConfig: DarkModeConfig? = null
+  var themeConfig: ThemeConfig? = null
 
   @JvmField
   @Inject

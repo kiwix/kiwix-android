@@ -80,8 +80,6 @@
   <string name="pref_display_title">Görüntüle</string>
   <string name="pref_info_title">Bilgi</string>
   <string name="pref_info_version">Sürüm</string>
-  <string name="pref_dark_mode">Gece modu</string>
-  <string name="pref_dark_mode_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
   <string name="pref_language_title">Dil</string>
@@ -304,9 +302,6 @@
   <string name="delete_selected_history">Seçilmiş Geçmişi Silinsin mi?</string>
   <string name="delete_bookmarks">Tüm Yer İşaretleri Silinsin mi?</string>
   <string name="delete_selected_bookmarks">Seçilmiş Yer İşaretleri Silinsin mi?</string>
-  <string name="on">Açık</string>
-  <string name="off">Kapalı</string>
-  <string name="auto">Otomatik</string>
   <string name="send_report">Teşhis raporu gönder</string>
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>

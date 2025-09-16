@@ -43,7 +43,7 @@ abstract class CoreApp : Application() {
   }
 
   @Inject
-  lateinit var darkModeConfig: DarkModeConfig
+  lateinit var themeConfig: ThemeConfig
 
   /**
    * The init of this class does the work of initializing,
@@ -80,7 +80,7 @@ abstract class CoreApp : Application() {
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
     serviceWorkerInitialiser.init(this)
-    darkModeConfig.init()
+    themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()
   }

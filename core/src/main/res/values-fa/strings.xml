@@ -36,8 +36,6 @@
   <string name="pref_display_title">نمایش</string>
   <string name="pref_info_title">اطلاعات</string>
   <string name="pref_info_version">نسخه</string>
-  <string name="pref_dark_mode">حالت تاریک</string>
-  <string name="pref_dark_mode_summary">نمایش مقاله‌ها با رنگ‌های معکوس‌شده</string>
   <string name="pref_back_to_top">بازگشت به بالای صفحه</string>
   <string name="pref_back_to_top_summary">نمایش دکمه در پایان صفحه برای انتقال به بالا</string>
   <string name="pref_language_title">زبان</string>
@@ -161,9 +159,6 @@
   <string name="no_history">تاریخچه‌ای نیست</string>
   <string name="delete_history" fuzzy="true">تاریخچه حذف شود؟</string>
   <string name="delete_bookmarks" fuzzy="true">نشانک‌ها حذف شوند؟</string>
-  <string name="on">روشن</string>
-  <string name="off">خاموش</string>
-  <string name="auto">خودکار</string>
   <string name="send_report">ارسال گزارش تشخیصی</string>
   <string name="diagnostic_report">گزارش تشخیصی</string>
   <string name="allowed">مجاز</string>

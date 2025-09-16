@@ -63,8 +63,6 @@
   <string name="pref_display_title">వీక్షణం</string>
   <string name="pref_info_title">సమాచారం</string>
   <string name="pref_info_version">సంచిక</string>
-  <string name="pref_dark_mode" fuzzy="true">చీకటి రీతి</string>
-  <string name="pref_dark_mode_summary">వ్యాసాలను వ్యతిరేక రంగులలో చూపించు</string>
   <string name="pref_back_to_top">తిరిగి పైకి</string>
   <string name="pref_back_to_top_summary">పేజీ చివర్లో పేజీ మొదటికి చేరుకునే బొత్తమును చూపండి</string>
   <string name="pref_language_title">భాష</string>
@@ -271,9 +269,6 @@
   <string name="delete_selected_history">ఎంచుకున్న చరిత్రను తొలగించాలా?</string>
   <string name="delete_bookmarks">అన్ని బుక్‌మార్క్‌లను తొలగించాలా?</string>
   <string name="delete_selected_bookmarks">ఎంచుకున్న బుక్‌మార్క్‌లను తొలగించాలా?</string>
-  <string name="on">ఆన్</string>
-  <string name="off">ఆఫ్</string>
-  <string name="auto">దానంతట అదే</string>
   <string name="send_report">రోగనిర్ధారణ నివేదికను పంపండి</string>
   <string name="crash_checkbox_file_system">ఫైల్ సిస్టమ్ వివరాలు</string>
   <string name="diagnostic_report">రోగనిర్ధారణ నివేదిక</string>

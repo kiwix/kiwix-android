@@ -64,8 +64,6 @@
   <string name="pref_display_title">Visualisation</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode">Modo obscur</string>
-  <string name="pref_dark_mode_summary">Monstrar articulos in colores invertite</string>
   <string name="pref_back_to_top">Initio del pagina</string>
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
   <string name="pref_language_title">Lingua</string>
@@ -308,9 +306,6 @@
   <string name="export_all_bookmarks_dialog_message">Le exportation generara un file bookmark.xml in le dossier Download/org.kiwix…/.</string>
   <string name="bookmark_imported_message">Tote le marcapaginas ha essite importate.</string>
   <string name="error_invalid_bookmark_file">Error: Le file seligite non es un file de marcapaginas valide.</string>
-  <string name="on">Si</string>
-  <string name="off">No</string>
-  <string name="auto">Auto</string>
   <string name="send_report">Inviar reporto diagnostic</string>
   <string name="crash_checkbox_file_system">Detalios de systema de files</string>
   <string name="diagnostic_report">Reporto diagnostic</string>

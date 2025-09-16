@@ -30,7 +30,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -95,7 +94,6 @@ class MimeTypeTest : BaseActivityTest() {
         ZimFileReader(
           zimSource,
           archive!!,
-          DarkModeConfig(SharedPreferenceUtil(context), context),
           SuggestionSearcher(archive)
         )
       zimFileReader.getRandomArticleUrl()?.let { randomArticle ->

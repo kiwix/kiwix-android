@@ -75,8 +75,6 @@
   <string name="pref_display_title">Mostrar</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
-  <string name="pref_dark_mode">Modo escuro</string>
-  <string name="pref_dark_mode_summary">Mostrar artigos com as cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Apresentar um botão no fim da página para voltar ao topo da página</string>
   <string name="pref_language_title">Língua</string>
@@ -271,9 +269,6 @@
   <string name="delete_selected_history">Eliminar o histórico selecionado?</string>
   <string name="delete_bookmarks">Eliminar todos os marcadores?</string>
   <string name="delete_selected_bookmarks">Eliminar os marcadores selecionados?</string>
-  <string name="on">Ativado</string>
-  <string name="off">Desativado</string>
-  <string name="auto">Automático</string>
   <string name="send_report">Enviar relatório de diagnóstico</string>
   <string name="crash_checkbox_file_system">Detalhes do sistema de ficheiros</string>
   <string name="diagnostic_report">Relatório de diagnóstico</string>

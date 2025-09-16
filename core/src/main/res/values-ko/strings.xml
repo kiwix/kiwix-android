@@ -77,8 +77,6 @@
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
-  <string name="pref_dark_mode">어두운 모드</string>
-  <string name="pref_dark_mode_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>
   <string name="pref_language_title">언어</string>
@@ -321,9 +319,6 @@
   <string name="export_all_bookmarks_dialog_message">내보내기를 하면 Download/org.kiwix…/ 폴더에 bookmark.xml 파일이 생성됩니다.</string>
   <string name="bookmark_imported_message">모든 북마크를 가져왔습니다.</string>
   <string name="error_invalid_bookmark_file">오류: 선택한 파일은 유효한 북마크 파일이 아닙니다.</string>
-  <string name="on">켜기</string>
-  <string name="off">끄기</string>
-  <string name="auto">자동</string>
   <string name="send_report">진단 보고서 보내기</string>
   <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
   <string name="diagnostic_report">진단 보고서</string>

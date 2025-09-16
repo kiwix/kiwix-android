@@ -27,7 +27,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
@@ -55,15 +54,12 @@ private const val TAG = "ZimFileReader"
 class ZimFileReader constructor(
   val zimReaderSource: ZimReaderSource,
   val jniKiwixReader: Archive,
-  private val darkModeConfig: DarkModeConfig,
   private val searcher: SuggestionSearcher
 ) {
   interface Factory {
     suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
 
-    class Impl @Inject constructor(
-      private val darkModeConfig: DarkModeConfig
-    ) : Factory {
+    class Impl @Inject constructor() : Factory {
       @Suppress("InjectDispatcher")
       override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
         withContext(Dispatchers.IO) { // Bug Fix #3805
@@ -71,7 +67,6 @@ class ZimFileReader constructor(
             zimReaderSource.createArchive()?.let {
               ZimFileReader(
                 zimReaderSource,
-                darkModeConfig = darkModeConfig,
                 jniKiwixReader = it,
                 searcher = SuggestionSearcher(it)
               ).also {

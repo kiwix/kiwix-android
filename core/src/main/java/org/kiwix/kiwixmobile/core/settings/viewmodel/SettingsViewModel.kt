@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -43,21 +43,21 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
-  private val darkMode: StateFlow<DarkModeConfig.Mode> = sharedPreferenceUtil.darkModes()
-    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.darkMode)
+  private val appTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.appThemes()
+    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.appTheme)
 
-  val darkModeLabel: StateFlow<String> = darkMode
+  val themeLabel: StateFlow<String> = appTheme
     .map { mode ->
       when (mode) {
-        DarkModeConfig.Mode.ON -> context.getString(R.string.on)
-        DarkModeConfig.Mode.OFF -> context.getString(R.string.off)
-        DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.auto)
+        ThemeConfig.Theme.DARK -> context.getString(R.string.theme_dark)
+        ThemeConfig.Theme.LIGHT -> context.getString(R.string.theme_light)
+        ThemeConfig.Theme.SYSTEM -> context.getString(R.string.theme_system)
       }
     }
     .stateIn(
       viewModelScope,
       SharingStarted.Companion.Eagerly,
-      getLabelFor(sharedPreferenceUtil.darkMode)
+      getLabelFor(sharedPreferenceUtil.appTheme)
     )
 
   var backToTopEnabled = mutableStateOf(sharedPreferenceUtil.prefBackToTop)
@@ -85,16 +85,16 @@ class SettingsViewModel @Inject constructor(
       _actions.emit(action)
     }
 
-  private fun getLabelFor(mode: DarkModeConfig.Mode): String {
-    return when (mode) {
-      DarkModeConfig.Mode.ON -> context.getString(R.string.on)
-      DarkModeConfig.Mode.OFF -> context.getString(R.string.off)
-      DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.auto)
+  private fun getLabelFor(theme: ThemeConfig.Theme): String {
+    return when (theme) {
+      ThemeConfig.Theme.DARK -> context.getString(R.string.theme_dark)
+      ThemeConfig.Theme.LIGHT -> context.getString(R.string.theme_light)
+      ThemeConfig.Theme.SYSTEM -> context.getString(R.string.theme_system)
     }
   }
 
-  fun setDarkMode(selectedMode: String) {
-    sharedPreferenceUtil.updateDarkMode(selectedMode)
+  fun setAppTheme(selectedMode: String) {
+    sharedPreferenceUtil.updateAppTheme(selectedMode)
   }
 
   fun setBackToTop(enabled: Boolean) {

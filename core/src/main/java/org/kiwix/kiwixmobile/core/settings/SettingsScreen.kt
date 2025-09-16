@@ -338,12 +338,12 @@ private fun ExtrasCategory(
 
 @Composable
 private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
-  val darkModeLabel by settingsViewModel.darkModeLabel.collectAsState()
+  val themeLabel by settingsViewModel.themeLabel.collectAsState()
   val backToTopEnabled by settingsViewModel.backToTopEnabled
   val textZoom by settingsViewModel.textZoom.collectAsState()
   val textZoomPosition = (textZoom / ZOOM_SCALE) - ZOOM_OFFSET
   SettingsCategory(stringResource(R.string.pref_display_title)) {
-    DarkModePreference(darkModeLabel = darkModeLabel, settingsViewModel = settingsViewModel)
+    AppThemePreference(themeLabel = themeLabel, settingsViewModel = settingsViewModel)
     SwitchPreference(
       title = stringResource(R.string.pref_back_to_top),
       summary = stringResource(R.string.pref_back_to_top_summary),
@@ -361,26 +361,26 @@ private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
 }
 
 @Composable
-fun DarkModePreference(
+fun AppThemePreference(
   context: Context = LocalContext.current,
-  darkModeLabel: String,
+  themeLabel: String,
   settingsViewModel: SettingsViewModel,
 ) {
   val entries = remember {
-    context.resources.getStringArray(R.array.pref_dark_modes_entries).toList()
+    context.resources.getStringArray(R.array.pref_themes_entries).toList()
   }
   val values = remember {
-    context.resources.getStringArray(R.array.pref_dark_modes_values).toList()
+    context.resources.getStringArray(R.array.pref_themes_values).toList()
   }
 
   ListPreference(
-    titleId = R.string.pref_dark_mode,
-    summary = stringResource(id = R.string.pref_dark_mode_summary),
+    titleId = R.string.pref_theme,
+    summary = stringResource(id = R.string.pref_theme_summary),
     options = entries,
-    selectedOption = darkModeLabel,
+    selectedOption = themeLabel,
     onOptionSelected = { selectedEntry ->
       val selectedValue = entries.indexOf(selectedEntry).let { values[it] }
-      settingsViewModel.setDarkMode(selectedValue)
+      settingsViewModel.setAppTheme(selectedValue)
     }
   )
 }

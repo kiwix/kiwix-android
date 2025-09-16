@@ -74,8 +74,6 @@
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>
-  <string name="pref_dark_mode">深色模式</string>
-  <string name="pref_dark_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
   <string name="pref_language_title">語言</string>
@@ -318,9 +316,6 @@
   <string name="export_all_bookmarks_dialog_message">匯出時會在 Download/org.kiwix…/ 資料夾中產生 bookmark.xml 檔案。</string>
   <string name="bookmark_imported_message">已匯入所有書籤。</string>
   <string name="error_invalid_bookmark_file">錯誤：所選檔案不是有效的書籤檔案。</string>
-  <string name="on">開啟</string>
-  <string name="off">關閉</string>
-  <string name="auto">自動</string>
   <string name="send_report">傳送診斷報告</string>
   <string name="crash_checkbox_file_system">檔案系統詳細資訊</string>
   <string name="diagnostic_report">診斷報告</string>

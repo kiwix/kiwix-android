@@ -83,8 +83,6 @@
   <string name="pref_display_title">Mostrar</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
-  <string name="pref_dark_mode">Modo oscuro</string>
-  <string name="pref_dark_mode_summary">Mostrar artículos con colores invertidos</string>
   <string name="pref_back_to_top">Volver al principio</string>
   <string name="pref_back_to_top_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
   <string name="pref_language_title">Idioma</string>
@@ -318,9 +316,6 @@
   <string name="export_all_bookmarks_dialog_message">Exportar generará un archivo llamado bookmark.xml en la carpeta Descargas/org.kiwix…/</string>
   <string name="bookmark_imported_message">Todos los marcadores han sido exportados.</string>
   <string name="error_invalid_bookmark_file">Error: El archivo seleccionado no es un archivo de marcador válido.</string>
-  <string name="on">Activado</string>
-  <string name="off">Desactivado</string>
-  <string name="auto">Automático</string>
   <string name="send_report">Enviar informe de diagnóstico</string>
   <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
   <string name="diagnostic_report">Informe de diagnóstico</string>

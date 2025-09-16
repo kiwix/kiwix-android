@@ -63,6 +63,8 @@ internal class SaveSearchToRecentsTest {
         testDispatcher
       ).invokeWith(activity)
       delay(50)
-      verify { newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX) }
+      verify {
+        newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX)
+      }
     }
 }

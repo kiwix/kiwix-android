@@ -63,8 +63,6 @@
   <string name="pref_display_title">Kolakisa</string>
   <string name="pref_info_title">Nsango</string>
   <string name="pref_info_version">Libongoli</string>
-  <string name="pref_dark_mode">Mosala ya molili</string>
-  <string name="pref_dark_mode_summary">Lakisa masolo oyo na balangi ebalusami</string>
   <string name="pref_back_to_top">Kozonga Likolo</string>
   <string name="pref_back_to_top_summary">Tyá butɔ moko na nsuka ya lokasa mpo na kobaluka tii na likoló</string>
   <string name="pref_language_title">Lokótá</string>

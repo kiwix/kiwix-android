@@ -36,8 +36,6 @@
   <string name="pref_display_title">Montrado</string>
   <string name="pref_info_title">Informo</string>
   <string name="pref_info_version">Versio</string>
-  <string name="pref_dark_mode">Malhela reĝimo</string>
-  <string name="pref_dark_mode_summary">Montri artikolojn inverskolore</string>
   <string name="pref_back_to_top">Reiri al Supro</string>
   <string name="pref_back_to_top_summary">Montri suprenan rulumilon paĝofine</string>
   <string name="pref_language_title">Lingvo</string>
@@ -194,8 +192,6 @@
   <string name="pref_clear_all_notes_title" fuzzy="true">Forviŝi Ĉiujn Notojn</string>
   <string name="no_bookmarks">Neniu Legosigno</string>
   <string name="no_history">Neniu Historio</string>
-  <string name="on">Ŝaltita</string>
-  <string name="off">Malŝaltita</string>
   <string name="pref_text_zoom_title">Teksta Zomo</string>
   <string name="search_open_in_new_tab">Malfermi en nova langeto</string>
   <string name="allow">Permesi</string>

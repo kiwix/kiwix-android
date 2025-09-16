@@ -50,8 +50,6 @@
   <string name="pref_display_title">ეკრანი</string>
   <string name="pref_info_title">ინფორმაცია</string>
   <string name="pref_info_version">ვერსია</string>
-  <string name="pref_dark_mode" fuzzy="true">სერიშ რეჟიმი</string>
-  <string name="pref_dark_mode_summary">სტატიაშ კინნარაგადა ფერეფით ძირაფა</string>
   <string name="pref_back_to_top">ჟილე დორთა</string>
   <string name="pref_back_to_top_summary">ხასჷლაშ ბოლოს ჟილე დორთაშ კონჭიშ ძირაფა</string>
   <string name="pref_language_title">ნინა</string>

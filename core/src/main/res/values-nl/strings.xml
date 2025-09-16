@@ -72,8 +72,6 @@
   <string name="pref_display_title">Weergave</string>
   <string name="pref_info_title">Informatie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_dark_mode">Donkere modus</string>
-  <string name="pref_dark_mode_summary">Artikelen weergeven met omgekeerde kleuren</string>
   <string name="pref_back_to_top">Terug naar boven</string>
   <string name="pref_back_to_top_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar het begin</string>
   <string name="pref_language_title">Taal</string>
@@ -309,9 +307,6 @@
   <string name="export_all_bookmarks_dialog_message">Door het exporteren wordt in de map Download/org.kiwix…/ een bestand bookmark.xml aangemaakt.</string>
   <string name="bookmark_imported_message">Alle bladwijzers zijn geïmporteerd.</string>
   <string name="error_invalid_bookmark_file">Fout: het geselecteerde bestand is geen geldig bladwijzerbestand.</string>
-  <string name="on">Aan</string>
-  <string name="off">Uit</string>
-  <string name="auto">Automatisch</string>
   <string name="send_report">Diagnostisch rapport verzenden</string>
   <string name="crash_checkbox_file_system">Bestandssysteemdetails</string>
   <string name="diagnostic_report">Diagnostisch rapport</string>

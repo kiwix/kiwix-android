@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_MANAGER
@@ -381,7 +380,6 @@ class LibkiwixBookmarks @Inject constructor(
           ZimFileReader(
             it,
             archive,
-            DarkModeConfig(sharedPreferenceUtil, sharedPreferenceUtil.context),
             SuggestionSearcher(archive)
           )
         }

@@ -60,8 +60,6 @@
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Informacione</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode">Mënyra “E errët”</string>
-  <string name="pref_dark_mode_summary">Shfaqi artikujt me ngjyra së prapthi</string>
   <string name="pref_back_to_top">Mbrapsht te Kreu</string>
   <string name="pref_back_to_top_summary">Shfaq në fund të faqes një buton për t’u ngjitur sipër në krye</string>
   <string name="pref_language_title">Gjuhë</string>
@@ -291,9 +289,6 @@
   <string name="export_all_bookmarks_dialog_message">Eksportimi do të krijojë një kartelë bookmark.xml fte dosja Download/org.kiwix…/ folder.</string>
   <string name="bookmark_imported_message">Janë importuar krejt faqerojtësit.</string>
   <string name="error_invalid_bookmark_file">Gabim: Kartela e përzgjedhur s’është kartelë e vlefshme faqerojtësish.</string>
-  <string name="on">On</string>
-  <string name="off">Off</string>
-  <string name="auto">Auto</string>
   <string name="send_report">Dërgo raport diagnostikimi</string>
   <string name="crash_checkbox_file_system">Hollësi Sistemi Kartelash</string>
   <string name="diagnostic_report">Raport Diagnostikimi</string>

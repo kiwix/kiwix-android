@@ -75,8 +75,6 @@
   <string name="pref_display_title">Megjelenítés</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
-  <string name="pref_dark_mode">Sötét mód</string>
-  <string name="pref_dark_mode_summary">Szócikkek megjelenítése fordított színekkel</string>
   <string name="pref_back_to_top">Vissza a tetejére</string>
   <string name="pref_back_to_top_summary">Gomb megjelenítése a lap alján a lap tetejére történő görgetéshez</string>
   <string name="pref_language_title">Nyelv</string>

@@ -66,8 +66,8 @@ val Fragment.coreMainActivity get() = activity as CoreMainActivity
  * contrast with dark mode or light mode.
  */
 fun Fragment.setStatusBarColor() {
-  val darkModeActivity = CoreApp.instance.darkModeConfig.isDarkModeActive()
-  val windowBackGroundColor = if (darkModeActivity) {
+  val isDarkTheme = CoreApp.instance.themeConfig.isDarkTheme()
+  val windowBackGroundColor = if (isDarkTheme) {
     Color.BLACK
   } else {
     Color.WHITE

@@ -26,46 +26,46 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-class DarkModeConfig @Inject constructor(
+class ThemeConfig @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val context: Context
 ) {
   fun init() {
     CoroutineScope(Dispatchers.Main).launch {
-      sharedPreferenceUtil.darkModes().collect {
+      sharedPreferenceUtil.appThemes().collect {
         setMode(it)
       }
     }
   }
 
-  fun isDarkModeActive() =
-    when (sharedPreferenceUtil.darkMode) {
-      Mode.ON -> true
-      Mode.OFF -> false
-      Mode.SYSTEM -> uiMode() == UiMode.ON
+  fun isDarkTheme() =
+    when (sharedPreferenceUtil.appTheme) {
+      Theme.DARK -> true
+      Theme.LIGHT -> false
+      Theme.SYSTEM -> uiMode() == UiMode.DARK
     }
 
-  private fun setMode(darkMode: Mode) {
-    AppCompatDelegate.setDefaultNightMode(darkMode.value)
+  private fun setMode(theme: Theme) {
+    AppCompatDelegate.setDefaultNightMode(theme.value)
   }
 
   private fun uiMode() = UiMode.from(context.uiMode)
 
-  enum class Mode(val value: Int) {
-    ON(AppCompatDelegate.MODE_NIGHT_YES),
-    OFF(AppCompatDelegate.MODE_NIGHT_NO),
+  enum class Theme(val value: Int) {
+    DARK(AppCompatDelegate.MODE_NIGHT_YES),
+    LIGHT(AppCompatDelegate.MODE_NIGHT_NO),
     SYSTEM(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
     companion object {
-      @JvmStatic fun from(darkMode: Int) =
-        Mode.entries.firstOrNull { it.value == darkMode }
-          ?: throw RuntimeException("Invalid dark mode $darkMode")
+      @JvmStatic fun from(theme: Int) =
+        Theme.entries.firstOrNull { it.value == theme }
+          ?: throw RuntimeException("Invalid theme $theme")
     }
   }
 
   enum class UiMode(val value: Int) {
-    ON(Configuration.UI_MODE_NIGHT_YES),
-    OFF(Configuration.UI_MODE_NIGHT_NO),
+    DARK(Configuration.UI_MODE_NIGHT_YES),
+    LIGHT(Configuration.UI_MODE_NIGHT_NO),
     NOT_SET(Configuration.UI_MODE_NIGHT_UNDEFINED),
     UNKNOWN(Configuration.UI_MODE_NIGHT_MASK); // Value returned from amazon devices
 
@@ -73,7 +73,7 @@ class DarkModeConfig @Inject constructor(
       @JvmStatic
       fun from(uiMode: Int) =
         UiMode.entries.firstOrNull { it.value == uiMode }
-          ?: throw RuntimeException("Invalid dark mode $uiMode")
+          ?: throw RuntimeException("Invalid theme $uiMode")
     }
   }
 }

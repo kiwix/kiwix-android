@@ -69,8 +69,6 @@
   <string name="pref_display_title">Onesha</string>
   <string name="pref_info_title">Maarifa</string>
   <string name="pref_info_version">Toleo</string>
-  <string name="pref_dark_mode" fuzzy="true">Hali ya Usiku</string>
-  <string name="pref_dark_mode_summary">Onyesha makala yakiwa na rangi kubatilishwa</string>
   <string name="pref_back_to_top">Rudi kwenye kichwa cha ukurasa</string>
   <string name="pref_back_to_top_summary">Onyesha kidude kwenye mwisho wa kurasa ili kurudi hadi sehemu ya juu</string>
   <string name="pref_language_title">Lugha</string>
@@ -277,9 +275,6 @@
   <string name="delete_selected_history">Je, ungependa kufuta Historia Iliyochaguliwa?</string>
   <string name="delete_bookmarks">Ungependa kufuta Alamisho Zote?</string>
   <string name="delete_selected_bookmarks">Ungependa kufuta Alamisho Ulizochagua?</string>
-  <string name="on">Wazi</string>
-  <string name="off">Zima</string>
-  <string name="auto">Otomatiki</string>
   <string name="send_report">Tuma ripoti ya uchunguzi</string>
   <string name="crash_checkbox_file_system">Maelezo ya Mfumo wa Faili</string>
   <string name="diagnostic_report">Ripoti ya Uchunguzi</string>

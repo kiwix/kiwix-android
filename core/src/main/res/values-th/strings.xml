@@ -34,8 +34,6 @@
   <string name="pref_display_title">แสดงผล</string>
   <string name="pref_info_title">ข้อมูล</string>
   <string name="pref_info_version">รุ่น</string>
-  <string name="pref_dark_mode" fuzzy="true">โหมดกลางคืน</string>
-  <string name="pref_dark_mode_summary">แสดงบทความด้วยสีที่สลับกัน</string>
   <string name="pref_back_to_top">กลับไปด้านบน</string>
   <string name="pref_back_to_top_summary">เพิ่มปุ่มด้านล่างของหน้าสำหรับเลื่อนกลับสู่ด้านบน</string>
   <string name="pref_language_title">ภาษา</string>
