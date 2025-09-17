@@ -20,20 +20,19 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import android.os.Bundle
 import androidx.lifecycle.viewModelScope
+import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -75,6 +74,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialo
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.libzim.SuggestionSearch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -120,13 +120,106 @@ internal class SearchViewModelTest {
   }
 
   @Nested
+  inner class DebouncedTest {
+    @Test
+    fun `Search action is debounced`() = runTest {
+      val searchTerm1 = "query1"
+      val searchTerm2 = "query2"
+      val searchTerm3 = "query3"
+      val searchOrigin = FromWebView
+      val suggestionSearch: SuggestionSearch = mockk()
+      testFlow(
+        viewModel.state,
+        triggerAction = {
+          searchResult(searchTerm1, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+          searchResult(searchTerm2, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+          searchResult(searchTerm3, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+        },
+        assert = {
+          skipItems(1) // Skip the initial item.
+          assertThat(awaitItem()).isEqualTo(
+            SearchState(
+              searchTerm3,
+              SearchResultsWithTerm(searchTerm3, suggestionSearch, searchMutex),
+              emptyList(),
+              searchOrigin
+            )
+          )
+        }
+      )
+    }
+
+    @Test
+    fun `Search action is not debounced if time hasn't passed`() = runTest {
+      val searchTerm1 = "query1"
+      val searchTerm2 = "query2"
+      val searchTerm3 = "query3"
+      val searchOrigin = FromWebView
+      val suggestionSearch: SuggestionSearch = mockk()
+      viewModel.state.test {
+        searchResult(searchTerm1, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+        searchResult(searchTerm2, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+        searchResult(searchTerm3, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+        // test value is not passed to searchResult as time has not passed and user still typing
+        // Match if it is initial `SearchState`
+        assertThat(awaitItem()).isEqualTo(
+          SearchState(
+            "",
+            SearchResultsWithTerm("", null, searchMutex),
+            emptyList(),
+            searchOrigin
+          )
+        )
+        testScheduler.advanceTimeBy(DEBOUNCE_DELAY)
+        assertThat(awaitItem()).isEqualTo(
+          SearchState(
+            searchTerm3,
+            SearchResultsWithTerm(searchTerm3, suggestionSearch, searchMutex),
+            emptyList(),
+            searchOrigin
+          )
+        )
+      }
+    }
+
+    private fun searchResult(
+      searchTerm: String,
+      suggestionSearch: SuggestionSearch,
+      testScheduler: TestCoroutineScheduler,
+      timeout: Long
+    ) {
+      coEvery {
+        searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
+      } returns suggestionSearch
+      viewModel.searchResults(searchTerm)
+      recentsFromDb.trySend(emptyList()).isSuccess
+      viewModel.actions.trySend(ScreenWasStartedFrom(FromWebView)).isSuccess
+      testScheduler.apply {
+        advanceTimeBy(timeout)
+        runCurrent()
+      }
+    }
+  }
+
+  @Nested
   inner class StateTests {
     @Test
     fun `initial state is Initialising`() =
       runTest {
-        viewModel.state.test(this).assertLastValue(
-          SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
-        ).finish()
+        testFlow(
+          viewModel.state,
+          triggerAction = {},
+          assert = {
+            assertThat(awaitItem()).isEqualTo(
+              SearchState(
+                "",
+                SearchResultsWithTerm("", null, searchMutex),
+                emptyList(),
+                FromWebView
+              )
+            )
+          }
+        )
       }
 
     @Test
@@ -135,24 +228,28 @@ internal class SearchViewModelTest {
         val searchTerm = "searchTerm"
         val searchOrigin = FromWebView
         val suggestionSearch: SuggestionSearch = mockk()
-        viewModel.state.test(this, 2)
-          .also {
+        testFlow(
+          viewModel.state,
+          triggerAction = {
             emissionOf(
               searchTerm = searchTerm,
               suggestionSearch = suggestionSearch,
               databaseResults = listOf(RecentSearchListItem("", "")),
               searchOrigin = searchOrigin
             )
-          }
-          .assertLastValue(
-            SearchState(
-              searchTerm,
-              SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
-              listOf(RecentSearchListItem("", "")),
-              searchOrigin
+          },
+          assert = {
+            skipItems(2)
+            assertThat(awaitItem()).isEqualTo(
+              SearchState(
+                searchTerm,
+                SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
+                listOf(RecentSearchListItem("", "")),
+                searchOrigin
+              )
             )
-          )
-          .finish()
+          }
+        )
       }
   }
 
@@ -292,88 +389,5 @@ internal class SearchViewModelTest {
     viewModel.actions.trySend(Filter(searchTerm)).isSuccess
     recentsFromDb.trySend(databaseResults).isSuccess
     viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
-  }
-}
-
-fun <T> Flow<T>.test(scope: TestScope, itemCountsToEmitInFlow: Int = 1): TestObserver<T> {
-  val observer = TestObserver(scope, this, itemCountsToEmitInFlow)
-  scope.launch { observer.startCollecting() }
-  return observer
-}
-
-fun <T> MutableSharedFlow<T>.test(scope: TestScope, itemCountsToEmitInFlow: Int): TestObserver<T> {
-  val observer = TestObserver(scope, this, itemCountsToEmitInFlow)
-  scope.launch { observer.startCollecting() }
-  return observer
-}
-
-class TestObserver<T>(
-  private val scope: TestScope,
-  private val flow: Flow<T>,
-  private val itemCountsToEmitInFlow: Int
-) {
-  private val values = mutableListOf<T>()
-  private val completionChannel = Channel<Unit>()
-  private var job: Job? = null
-
-  fun startCollecting() {
-    job = scope.launch {
-      flow.collect {
-        values.add(it)
-        completionChannel.trySend(Unit)
-      }
-    }
-  }
-
-  /**
-   * Returns the list of values collected from the flow.
-   *
-   * If [shouldAwaitCompletion] is true, this method will suspend until the flow
-   * signals completion, ensuring all values have been collected before returning.
-   *
-   * @param shouldAwaitCompletion Whether to wait for the flow to finish collecting before returning the results.
-   * @return A mutable list of values emitted by the flow.
-   */
-  suspend fun getValues(shouldAwaitCompletion: Boolean = true): MutableList<T> {
-    if (shouldAwaitCompletion) {
-      awaitCompletion()
-    }
-    return values
-  }
-
-  private suspend fun awaitCompletion() {
-    repeat(itemCountsToEmitInFlow) {
-      completionChannel.receive()
-    }
-  }
-
-  suspend fun assertValues(listValues: MutableList<T>): TestObserver<T> {
-    awaitCompletion()
-    assertThat(listValues).containsExactlyElementsOf(values)
-    return this
-  }
-
-  suspend fun containsExactlyInAnyOrder(
-    listValues: MutableList<T>,
-    vararg values: T
-  ): TestObserver<T> {
-    assertThat(listValues).containsExactlyInAnyOrder(*values)
-    return this
-  }
-
-  suspend fun assertLastValue(value: T): TestObserver<T> {
-    awaitCompletion()
-    assertThat(values.last()).isEqualTo(value)
-    return this
-  }
-
-  fun finish() {
-    job?.cancel()
-  }
-
-  suspend fun assertLastValue(value: (T) -> Boolean): TestObserver<T> {
-    awaitCompletion()
-    assertThat(values.last()).satisfies({ value(it) })
-    return this
   }
 }
