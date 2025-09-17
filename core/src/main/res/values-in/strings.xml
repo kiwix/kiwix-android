@@ -326,8 +326,8 @@
   <string name="preparing_file_for_copy">Bersiap untuk menyalin/memindahkan</string>
   <string name="action_copy">Salin</string>
   <string name="move">Pindahkan</string>
-  <string name="copying_zim_file">Menyalin berkas ZIM…</string>
-  <string name="moving_zim_file">Memindahkan berkas ZIM…</string>
+  <string name="copying_zim_file">Menyalin berkas ZIM %s…</string>
+  <string name="moving_zim_file">Memindahkan berkas ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix mewajibkan file ZIM berada di direktori datanya sendiri.\nApakah Anda ingin menyalin atau memindahkannya ke sana?</string>
   <string name="copy_file_error_message">Kesalahan saat menyalin berkas ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Hati-hati: Pastikan semua potongan ZIM telah dipindah/disalin dengan benar!</string>

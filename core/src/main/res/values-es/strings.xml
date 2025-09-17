@@ -333,8 +333,8 @@
   <string name="preparing_file_for_copy">Preparando para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
-  <string name="copying_zim_file">Copiando el archivo ZIM…</string>
-  <string name="moving_zim_file">Moviendo el archivo ZIM…</string>
+  <string name="copying_zim_file">Copiando el archivo ZIM %s…</string>
+  <string name="moving_zim_file">Moviendo el archivo ZIM %s…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix requiere que el archivo ZIM se encuentre en su propio directorio de datos. ¿Quieres copiarlo o moverlo allí?</string>
   <string name="copy_file_error_message">Error al copiar el archivo ZIM: %s</string>
   <string name="why_copy_move_files_to_app_directory">¿Por qué copiar/mover archivos al directorio público de la aplicación?</string>

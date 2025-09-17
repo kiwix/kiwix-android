@@ -338,8 +338,8 @@
   <string name="preparing_file_for_copy">Preparando-se para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
-  <string name="copying_zim_file">Copiando arquivo ZIM…</string>
-  <string name="moving_zim_file">Movendo arquivo ZIM…</string>
+  <string name="copying_zim_file">Copiando arquivo ZIM %s…</string>
+  <string name="moving_zim_file">Movendo arquivo ZIM %s…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Você quer copiar ou mover o arquivo?</string>
   <string name="copy_file_error_message" fuzzy="true">Erro ao copiar o arquivo zim: %s.</string>
   <string name="why_copy_move_files_to_app_directory" fuzzy="true">Mover/Copiar arquivos para o diretório público do app?</string>

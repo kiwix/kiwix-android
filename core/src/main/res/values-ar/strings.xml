@@ -314,8 +314,8 @@
   <string name="tabs_restored">استُعيدت علامات التبويب</string>
   <string name="open_drawer">افتح الدرج</string>
   <string name="close_drawer">أغلق الدرج</string>
-  <string name="copying_zim_file">يتم الآن نسخ ملف ZIM…</string>
-  <string name="moving_zim_file">يتم الآن نقل ملف ZIM…</string>
+  <string name="copying_zim_file">يتم الآن نسخ ملف ZIM %s…</string>
+  <string name="moving_zim_file">يتم الآن نقل ملف ZIM %s…</string>
   <string name="copy_move_files_dialog_description">يتطلب Kiwix أن يكون ملف ZIM موجودًا في دليل البيانات الخاص به.\nهل تريد نسخه أم نقله إلى هناك؟</string>
   <string name="copy_file_error_message">خطأ في نسخ ملف ZIM : %s.  .</string>
   <string name="verify_zim_chunk_dialog_title">انتبه: تأكد أن جميع أجزاء ZIM تم نقلها/نسخها جيداً.\n{تأكد من نقل/نسخ جميع أجزاء ملف/ملفات ZIM بشكل صحيح.}</string>

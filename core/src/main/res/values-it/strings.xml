@@ -334,8 +334,8 @@
   <string name="preparing_file_for_copy">Preparazione per la copia/spostamento</string>
   <string name="action_copy">Copia</string>
   <string name="move">Sposta</string>
-  <string name="copying_zim_file">Copia del file ZIM…</string>
-  <string name="moving_zim_file">Spostamento del file ZIM…</string>
+  <string name="copying_zim_file">Copia del file ZIM %s…</string>
+  <string name="moving_zim_file">Spostamento del file ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix richiede che il file ZIM sia nella sua directory dati.\nVuoi copiarlo o spostarlo lì?</string>
   <string name="copy_file_error_message">Errore nella copia del file ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Attenzione: Assicurati che tutti i blocchi ZIM siano stati spostati/copiati correttamente!</string>

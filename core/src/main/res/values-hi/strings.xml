@@ -329,7 +329,7 @@
   <string name="preparing_file_for_copy">प्रतिलिपि/स्थानांतरण की तैयारी</string>
   <string name="action_copy">प्रतिलिपि बनाएँ</string>
   <string name="move">स्थानांतरित करें</string>
-  <string name="copying_zim_file">ZIM फ़ाइल कॉपी की जा रही है…</string>
+  <string name="copying_zim_file">ZIM फ़ाइल कॉपी की जा रही है %s…</string>
   <string name="copy_move_files_dialog_description">किवीक्स को ZIM फ़ाइल को अपनी डेटा निर्देशिका में रखने की आवश्यकता है।\nक्या आप इसे कॉपी करना चाहते हैं या वहाँ ले जाना चाहते हैं?</string>
   <string name="copy_file_error_message">ZIM फ़ाइल की प्रतिलिपि बनाने में त्रुटि: %s .</string>
   <string name="verify_zim_chunk_dialog_title">सावधान रहें: सुनिश्चित करें कि ZIM के सभी खंड ठीक से स्थानांतरित/कॉपी किए गए हैं!</string>

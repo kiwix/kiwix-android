@@ -27,11 +27,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
@@ -50,6 +54,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.COPY_MOVE_DIALOG_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -71,6 +77,8 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import javax.inject.Inject
+
+const val COPY_MOVE_DIALOG_TITLE_TESTING_TAG = "copyMoveDialogTitleTestingTag"
 
 class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
@@ -97,11 +105,11 @@ class CopyMoveFileHandler @Inject constructor(
   private lateinit var fragmentManager: FragmentManager
   private lateinit var alertDialogShower: AlertDialogShower
 
-  private val copyMoveTitle: Int by lazy {
+  private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
-      R.string.moving_zim_file
+      activity.getString(R.string.moving_zim_file, selectedFile?.name)
     } else {
-      R.string.copying_zim_file
+      activity.getString(R.string.copying_zim_file, selectedFile?.name)
     }
   }
 
@@ -537,7 +545,6 @@ class CopyMoveFileHandler @Inject constructor(
       activity.getString(R.string.percentage, ZERO) to ZERO
     alertDialogShower.show(
       KiwixDialog.CopyMoveProgressBarDialog(
-        titleId = copyMoveTitle,
         customViewBottomPadding = ZERO.dp,
         customGetView = { CopyMoveProgressDialog() }
       )
@@ -547,6 +554,17 @@ class CopyMoveFileHandler @Inject constructor(
   @Composable
   private fun CopyMoveProgressDialog() {
     Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
+      Text(
+        text = copyMoveTitle,
+        style = MaterialTheme.typography.titleSmall.copy(
+          fontSize = COPY_MOVE_DIALOG_TITLE_TEXT_SIZE,
+          fontWeight = FontWeight.Medium
+        ),
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(bottom = DIALOG_TITLE_BOTTOM_PADDING)
+          .semantics { testTag = COPY_MOVE_DIALOG_TITLE_TESTING_TAG }
+      )
       ContentLoadingProgressBar(
         progress = progressBarState.value.second,
         progressBarStyle = ProgressBarStyle.HORIZONTAL

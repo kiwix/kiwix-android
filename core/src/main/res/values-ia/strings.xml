@@ -323,8 +323,8 @@
   <string name="preparing_file_for_copy">Preparation pro copiar/displaciar</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Displaciar</string>
-  <string name="copying_zim_file">Copiante le file ZIM…</string>
-  <string name="moving_zim_file">Displaciante le file ZIM…</string>
+  <string name="copying_zim_file">Copiante le file ZIM %s…</string>
+  <string name="moving_zim_file">Displaciante le file ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix require que le file ZIM se trova in su proprie directorio de datos.\nVole tu copiar o displaciar lo illac?</string>
   <string name="copy_file_error_message">Error durante le copia del file ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Attention: Assecura te que tote le segmentos ZIM ha essite displaciate/copiate correctemente!</string>

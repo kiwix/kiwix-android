@@ -142,19 +142,17 @@ sealed class KiwixDialog(
   )
 
   data class CopyMoveProgressBarDialog(
-    private val titleId: Int,
     private val customViewBottomPadding: Dp,
     private val customGetView: @Composable (() -> Unit)?
-  ) :
-    KiwixDialog(
-        title = titleId,
-        message = null,
-        cancelable = false,
-        confirmButtonText = R.string.empty_string,
-        dismissButtonText = null,
-        customComposeView = customGetView,
-        customComposeViewBottomPadding = customViewBottomPadding
-      )
+  ) : KiwixDialog(
+      title = null,
+      message = null,
+      cancelable = false,
+      confirmButtonText = R.string.empty_string,
+      dismissButtonText = null,
+      customComposeView = customGetView,
+      customComposeViewBottomPadding = customViewBottomPadding
+    )
 
   data object ShowWarningAboutSplittedZimFile : KiwixDialog(
     R.string.verify_zim_chunk_dialog_title,
