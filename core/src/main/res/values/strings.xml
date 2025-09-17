@@ -335,8 +335,8 @@
   <string name="preparing_file_for_copy">Preparing for copy/move</string>
   <string name="action_copy">Copy</string>
   <string name="move">Move</string>
-  <string name="copying_zim_file">Copying ZIM file…</string>
-  <string name="moving_zim_file">Moving ZIM file…</string>
+  <string name="copying_zim_file">Copying ZIM file %s…</string>
+  <string name="moving_zim_file">Moving ZIM file %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix requires the ZIM file to be in its own data directory.\nDo you want to copy or move it there?</string>
   <string name="copy_file_error_message">Error in copying the ZIM file: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Be cautious: Ensure all ZIM chunks have been properly moved/copied!</string>

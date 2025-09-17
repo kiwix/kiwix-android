@@ -345,8 +345,8 @@
   <string name="preparing_file_for_copy">准备复制/移动</string>
   <string name="action_copy">复制</string>
   <string name="move">移动</string>
-  <string name="copying_zim_file">正在复制 ZIM 文件…</string>
-  <string name="moving_zim_file">正在移动 ZIM 文件…</string>
+  <string name="copying_zim_file">正在复制 ZIM 文件 %s…</string>
+  <string name="moving_zim_file">正在移动 ZIM 文件 %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 文件位于自己的数据目录中。您要复制或移动文件到该目录吗？</string>
   <string name="copy_file_error_message">复制 ZIM 文件时出错：%s。</string>
   <string name="verify_zim_chunk_dialog_title">注意：请确保所有的 ZIM 块都已正确移动/复制！</string>

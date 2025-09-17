@@ -214,8 +214,8 @@
   <string name="preparing_file_for_copy">Virbereede fir ze kopéieren/réckelen</string>
   <string name="action_copy">Kopéieren</string>
   <string name="move">Réckelen</string>
-  <string name="copying_zim_file">ZIM-Fichier kopéieren…</string>
-  <string name="moving_zim_file">ZIM-Fichier réckelen…</string>
+  <string name="copying_zim_file">ZIM-Fichier kopéieren %s…</string>
+  <string name="moving_zim_file">ZIM-Fichier réckelen %s…</string>
   <string name="copy_file_error_message">Feeler beim Kopéiere vum ZIM-FIchier: %s.</string>
   <string name="move_file_error_message">Feeler beim Réckele vum ZIM-FIchier: %s.</string>
   <string name="allowed">Erlaabt</string>

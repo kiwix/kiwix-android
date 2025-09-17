@@ -230,8 +230,8 @@
   <string name="close_drawer">Luk skuffe</string>
   <string name="action_copy">Kopier</string>
   <string name="move">Flyt</string>
-  <string name="copying_zim_file">Kopierer ZIM-fil…</string>
-  <string name="moving_zim_file">Flytter ZIM-fil…</string>
+  <string name="copying_zim_file">Kopierer ZIM-fil %s…</string>
+  <string name="moving_zim_file">Flytter ZIM-fil %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix kræver at ZIM-filen er i sin egen mappe.\nVil du kopiere eller flytte den dertil?</string>
   <string name="allowed">Tilladt</string>
   <string name="not_allowed">Ikke tilladt</string>
