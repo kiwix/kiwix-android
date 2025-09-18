@@ -7,7 +7,9 @@
 * Hamoudak
 * Hanzo64
 * McDutchie
+* Mdktb
 * Meno25
+* Mohammed Qays
 * Mohanad
 * Mohanad Kh
 * MohitMali
@@ -65,8 +67,8 @@
   <string name="start_server_label">تشغيل الخادم</string>
   <string name="stop_server_label">إيقاف التشغيل</string>
   <string name="error_server_already_running">الخادم يعمل بالفعل. من فضلك قم بإيقاف تشغيله وحاول مرة أخرى.</string>
-  <string name="error_ip_address_not_found">لم يتمكن من العثور علي عنوان بروتوكول الإنترنت</string>
-  <string name="server_started_message">أدخل هذا العنوان في المتصفح للإتصال بالخادم %s</string>
+  <string name="error_ip_address_not_found">لم أتمكن من العثور على عنوان IP.</string>
+  <string name="server_started_message">أدخل عنوان IP هذا في متصفحك للوصول إلى الخادم %s</string>
   <string name="qr_code">رمز QR المقدَم</string>
   <string name="share_host_address">مشاركة URL عبر تطبيقات أخرى</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد %s</string>
@@ -79,6 +81,7 @@
   <string name="pref_display_title">العرض</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">الإصدار {النسخة}</string>
+  <string name="pref_theme_summary">عرض المقالات بألوانٍ معكوسة</string>
   <string name="pref_back_to_top">ارجع إلى الأعلى</string>
   <string name="pref_back_to_top_summary">عرض أيقونة في نهاية الصفحة للذهاب إلى الأعلى</string>
   <string name="pref_language_title">اللغة</string>

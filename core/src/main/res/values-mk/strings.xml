@@ -62,6 +62,11 @@
   <string name="pref_display_title">Приказник</string>
   <string name="pref_info_title">Информации</string>
   <string name="pref_info_version">Верзија</string>
+  <string name="pref_theme">Изглед</string>
+  <string name="theme_system">Систем</string>
+  <string name="theme_light">Светол</string>
+  <string name="theme_dark">Темен</string>
+  <string name="pref_theme_summary">Прикажувај ги статиите со обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
   <string name="pref_language_title">Јазик</string>
@@ -124,6 +129,7 @@
   <string name="download_no_space">Нема доволно место за преземање.</string>
   <string name="download">Преземи</string>
   <string name="download_notification_channel_name">Име на каналот за известување за преземања</string>
+  <string name="download_notification_channel_description">Преземам ZIM-податотеки…</string>
   <string name="space_available">Достапен простор:</string>
   <string name="move_no_space">Нема доволно простор за преместување/копирање.</string>
   <string name="zim_simple">Просто</string>

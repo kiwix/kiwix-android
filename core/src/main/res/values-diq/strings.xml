@@ -49,7 +49,7 @@
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Serveri serkewtış</string>
   <string name="stop_server_label">Serveri vındardış</string>
-  <string name="server_started_message">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
+  <string name="server_started_message" fuzzy="true">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
   <string name="share_host_address">URL’yi be aplikasyonanê binan ra bare ke</string>
   <string name="error_file_not_found" fuzzy="true">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye. %s</string>
   <string name="zim_not_opened" fuzzy="true">Dosyay Zimi nêabiyena</string>
@@ -58,6 +58,7 @@
   <string name="pref_display_title">Bımocne</string>
   <string name="pref_info_title">Melumat</string>
   <string name="pref_info_version">Versiyon</string>
+  <string name="pref_theme_summary">Meqaleya dimlaşt bıyaye rengana bımocne</string>
   <string name="pref_back_to_top">Peyser şo serêniye</string>
   <string name="pref_back_to_top_summary">Seba ameyışê seri peyniya pele de yew gocege mocneno</string>
   <string name="pref_language_title">Zıwan</string>
