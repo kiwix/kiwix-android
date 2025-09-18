@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.localLibrary
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -35,8 +36,6 @@ import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
@@ -108,26 +107,19 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
-  fun clickOnCancel(composeTestRule: ComposeContentTestRule) {
+  fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG)
-          .assertTextEquals(context.getString(R.string.cancel).uppercase())
-          .performClick()
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
       }
     })
   }
 
   fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitUntilTimeout()
-      composeTestRule.apply {
-        waitUntilTimeout()
-        onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
-      }
-    }
     testFlakyView({
+      composeTestRule.waitUntilTimeout()
+      composeTestRule.mainClock.advanceTimeByFrame()
       Web.onWebView()
         .withElement(
           DriverAtoms.findElement(
@@ -139,11 +131,32 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   }
 
   fun assertZimFileAddedInTheLocalLibrary(composeTestRule: ComposeContentTestRule) {
-    try {
-      composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
-      throw RuntimeException("ZimFile not added in the local library")
-    } catch (_: AssertionError) {
-      // do nothing zim file is added in the local library
+    testFlakyView({
+      try {
+        composeTestRule.apply {
+          waitUntilTimeout()
+          mainClock.advanceTimeByFrame()
+          composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+          throw RuntimeException("ZimFile not added in the local library")
+        }
+      } catch (_: AssertionError) {
+        // do nothing zim file is added in the local library
+      }
+    })
+  }
+
+  fun assertFileCopyMoveErrorDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG).isDisplayed()
+      }
+      // We are checking for text contains as ZIM file name is dynamic.
+      onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
+        .assertTextContains(
+          "Do you want to continue with other ZIM files?",
+          substring = true,
+          ignoreCase = true
+        )
     }
   }
 }
