@@ -101,7 +101,7 @@ class LibkiwixBookOnDisk @Inject constructor(
       }
       // Retrieve the list of books from the library.
       val booksIds = library.booksIds.toList()
-
+      libraryBooksList = booksIds
       // Create a list to store LibkiwixBook objects.
       localBooksList =
         booksIds.mapNotNull { bookId ->

@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -85,6 +86,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
@@ -121,7 +123,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
-      showMoveFileToPublicDirectoryDialog()
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -135,7 +137,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // Test with second launch, this time permission dialog should not show.
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
-      showMoveFileToPublicDirectoryDialog()
+      library { refreshList(composeTestRule) }
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -144,6 +147,23 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       assertZimFileAddedInTheLocalLibrary()
       deleteAllFilesInDirectory(parentFile)
+      TestUtils.deleteTemporaryFilesOfTestCases(context)
+
+      // Test multiple files copying.
+      navigateToLocalLibraryFragment()
+      deleteZimFilesIfExistInLocalLibrary()
+      val invalidZimFile = getInvalidZimFileUri(".mp4")
+      selectedFile = getSelectedFile()
+      showMoveFileToPublicDirectoryDialog(mutableListOf(invalidZimFile, Uri.fromFile(selectedFile)))
+      copyMoveFileHandler {
+        // assert first ZIM file is invalid file so it should show the continue
+        // with other ZIM files dialog.
+        assertFileCopyMoveErrorDialogDisplayed(composeTestRule)
+        clickOnYesButton(composeTestRule)
+        assertCopyMoveDialogDisplayed(composeTestRule)
+        clickOnCopy(composeTestRule)
+        assertZimFileAddedInTheLocalLibrary(composeTestRule)
+      }
     }
   }
 
@@ -162,7 +182,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
-      showMoveFileToPublicDirectoryDialog()
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -176,7 +196,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
       selectedFile = getSelectedFile()
-      showMoveFileToPublicDirectoryDialog()
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -185,36 +205,52 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       assertZimFileAddedInTheLocalLibrary()
       deleteAllFilesInDirectory(parentFile)
+      TestUtils.deleteTemporaryFilesOfTestCases(context)
+
+      // Test multiple files copying.
+      navigateToLocalLibraryFragment()
+      deleteZimFilesIfExistInLocalLibrary()
+      val invalidZimFile = getInvalidZimFileUri(".mp4")
+      selectedFile = getSelectedFile()
+      showMoveFileToPublicDirectoryDialog(mutableListOf(invalidZimFile, Uri.fromFile(selectedFile)))
+      copyMoveFileHandler {
+        // assert first ZIM file is invalid file so it should show the continue
+        // with other ZIM files dialog.
+        assertFileCopyMoveErrorDialogDisplayed(composeTestRule)
+        clickOnYesButton(composeTestRule)
+        assertCopyMoveDialogDisplayed(composeTestRule)
+        clickOnMove(composeTestRule)
+        assertZimFileAddedInTheLocalLibrary(composeTestRule)
+      }
     }
   }
 
   private fun assertZimFileAddedInTheLocalLibrary() {
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-    }
+    navigateToLocalLibraryFragment()
     copyMoveFileHandler { assertZimFileAddedInTheLocalLibrary(composeTestRule) }
   }
 
-  private fun showMoveFileToPublicDirectoryDialog() {
+  private fun navigateToLocalLibraryFragment() {
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+    }
+  }
+
+  private fun deleteZimFilesIfExistInLocalLibrary() {
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+  }
+
+  private fun showMoveFileToPublicDirectoryDialog(urisList: List<Uri>) {
     kiwixMainActivity.lifecycleScope.launch {
       val localLibraryFragment =
         kiwixMainActivity.supportFragmentManager.fragments
           .filterIsInstance<LocalLibraryFragment>()
           .firstOrNull()
-      localLibraryFragment?.processSelectedZimFilesForPlayStore
-        ?.processSelectedFiles(listOf(Uri.fromFile(selectedFile)))
-    }
-  }
-
-  private fun tryOpeningInvalidZimFiles(uri: Uri) {
-    UiThreadStatement.runOnUiThread {
-      val localLibraryFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<LocalLibraryFragment>()
-          .firstOrNull()
-      localLibraryFragment?.handleSelectedFileUri(
-        arrayListOf(uri),
-      )
+      localLibraryFragment?.handleSelectedFileUri(urisList)
     }
   }
 
@@ -313,13 +349,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         setIsPlayStoreBuildType(true)
       }
       // test opening images
-      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".jpg"))
+      showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".jpg")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
       // test opening videos
-      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".mp4"))
+      showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".mp4")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
       // test opening pdf
-      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".pdf"))
+      showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".pdf")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
     }
   }
