@@ -327,8 +327,8 @@
   <string name="preparing_file_for_copy">Förbereder för kopiering/flyttning</string>
   <string name="action_copy">Kopiera</string>
   <string name="move">Flytta</string>
-  <string name="copying_zim_file">Kopierar ZIM-fil…</string>
-  <string name="moving_zim_file">Flyttar ZIM-fil…</string>
+  <string name="copying_zim_file">Kopierar ZIM-fil %s…</string>
+  <string name="moving_zim_file">Flyttar ZIM-fil %s…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix kräver att ZIM-filen finns i sin egen datakatalog. Vill du kopiera eller flytta den dit?</string>
   <string name="copy_file_error_message">Fel vid kopiering av ZIM-filen: %s .</string>
   <string name="verify_zim_chunk_dialog_title">Var försiktig: Se till att alla ZIM-bitar har flyttats/kopierats på rätt sätt!</string>

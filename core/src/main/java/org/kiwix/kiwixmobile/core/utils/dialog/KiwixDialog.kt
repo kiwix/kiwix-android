@@ -49,6 +49,17 @@ sealed class KiwixDialog(
     constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
+  data class FileCopyMoveError(override val args: List<Any>) :
+    KiwixDialog(
+      null,
+      R.string.file_copy_move_error_dialog_message,
+      R.string.yes,
+      R.string.no
+    ),
+    HasBodyFormatArgs {
+    constructor(errorMessage: String) : this(listOf(errorMessage))
+  }
+
   object LocationPermissionRationale : KiwixDialog(
     null,
     R.string.permission_rationale_location,
@@ -131,11 +142,10 @@ sealed class KiwixDialog(
   )
 
   data class CopyMoveProgressBarDialog(
-    private val titleId: Int,
     private val customViewBottomPadding: Dp,
     private val customGetView: @Composable (() -> Unit)?
   ) : KiwixDialog(
-      title = titleId,
+      title = null,
       message = null,
       cancelable = false,
       confirmButtonText = R.string.empty_string,

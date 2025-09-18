@@ -190,8 +190,8 @@
   <string name="preparing_file_for_copy">بۆ لەبەرگرتنەوە/گواستنەوە ئامادە دەکرێت</string>
   <string name="action_copy">لەبەرگرتنەوە</string>
   <string name="move">گواستنەوە</string>
-  <string name="copying_zim_file">پەڕگەی ZIM لەبەر دەگیرێتەوە…</string>
-  <string name="moving_zim_file">پەڕگەی ZIM دەگوێزرێتەوە…</string>
+  <string name="copying_zim_file">پەڕگەی ZIM %s لەبەر دەگیرێتەوە…</string>
+  <string name="moving_zim_file">پەڕگەی ZIM %s دەگوێزرێتەوە…</string>
   <string name="no_notes">ھیچ تێبینییەک نییە</string>
   <string name="notes_from_all_books">تێبینییەکان لە ھەموو کتێبەکانەوە ببینە</string>
   <string name="search_notes">تێبینییەکان بگەڕێ</string>

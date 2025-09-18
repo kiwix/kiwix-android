@@ -191,8 +191,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       createDeepLinkIntent(uri)
     ).onActivity {}
     copyMoveFileHandler {
-      assertCopyMoveDialogDisplayed(composeTestRule)
-      clickOnCancel(composeTestRule)
+      assertCopyMoveDialogNotDisplayed(composeTestRule)
     }
   }
 

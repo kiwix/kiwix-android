@@ -220,8 +220,8 @@
   <string name="tabs_restored">Faner gjenopprettet</string>
   <string name="action_copy">Kopier</string>
   <string name="move">Flytt</string>
-  <string name="copying_zim_file">Kopierer ZIM-fil…</string>
-  <string name="moving_zim_file">Flytter ZIM-fil…</string>
+  <string name="copying_zim_file">Kopierer ZIM-fil %s…</string>
+  <string name="moving_zim_file">Flytter ZIM-fil %s…</string>
   <string name="move_file_error_message">Feil ved flytting av ZIM-filen: %s.</string>
   <string name="allowed">Tillatt</string>
   <string name="not_allowed">Ikke tillatt</string>

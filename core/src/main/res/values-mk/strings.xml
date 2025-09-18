@@ -321,8 +321,8 @@
   <string name="preparing_file_for_copy">Подготовка за копирање/преместување</string>
   <string name="action_copy">Копирај</string>
   <string name="move">Премести</string>
-  <string name="copying_zim_file">Ја копирам ZIM податотеката…</string>
-  <string name="moving_zim_file">Ја преместувам ZIM-податотеката…</string>
+  <string name="copying_zim_file">Ја копирам ZIM податотеката %s…</string>
+  <string name="moving_zim_file">Ја преместувам ZIM-податотеката %s…</string>
   <string name="copy_move_files_dialog_description">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка.\nДали сакате да ја прекопирате или преместите таму?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Бидете внимателни: Проверете дали сите ZIM-делови се правилно преместени/ископирани!</string>

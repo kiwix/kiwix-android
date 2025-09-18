@@ -334,8 +334,8 @@
   <string name="close_drawer">Schublade schließen</string>
   <string name="action_copy">Kopieren</string>
   <string name="move">Verschieben</string>
-  <string name="copying_zim_file">ZIM-Datei wird kopiert…</string>
-  <string name="moving_zim_file">ZIM-Datei wird verschoben…</string>
+  <string name="copying_zim_file">ZIM-Datei wird kopiert %s…</string>
+  <string name="moving_zim_file">ZIM-Datei wird verschoben %s…</string>
   <string name="how_to_update_content">Wie aktualisiert man Inhalte?</string>
   <string name="update_content_description">Um Inhalte (eine ZIM-Datei) zu aktualisieren, musst du die neueste Version genau derselben Inhalte vollständig herunterladen. Das kannst du über den Download-Bereich tun.</string>
   <string name="all_files_permission_needed">Berechtigung für alle Dateien erforderlich</string>

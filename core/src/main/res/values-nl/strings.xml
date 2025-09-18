@@ -324,8 +324,8 @@
   <string name="preparing_file_for_copy">Voorbereiden op kopiëren/verplaatsen</string>
   <string name="action_copy">Kopiëren</string>
   <string name="move">Verplaatsen</string>
-  <string name="copying_zim_file">ZIM-bestand kopiëren…</string>
-  <string name="moving_zim_file">ZIM-bestand verplaatsen…</string>
+  <string name="copying_zim_file">ZIM-bestand kopiëren %s…</string>
+  <string name="moving_zim_file">ZIM-bestand verplaatsen %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix vereist dat het ZIM-bestand in een eigen gegevensdirectory staat.\nWilt u het daarheen kopiëren of verplaatsen?</string>
   <string name="copy_file_error_message">Fout bij het kopiëren van het ZIM-bestand: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Waarom bestanden verplaatsen/kopiëren naar de openbare directory van de app?</string>
