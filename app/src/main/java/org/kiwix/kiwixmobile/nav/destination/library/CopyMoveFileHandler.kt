@@ -105,13 +105,12 @@ class CopyMoveFileHandler @Inject constructor(
   private lateinit var fragmentManager: FragmentManager
   private lateinit var alertDialogShower: AlertDialogShower
 
-  private val copyMoveTitle: String by lazy {
+  private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
       activity.getString(R.string.moving_zim_file, selectedFile?.name)
     } else {
       activity.getString(R.string.copying_zim_file, selectedFile?.name)
     }
-  }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
@@ -555,7 +554,7 @@ class CopyMoveFileHandler @Inject constructor(
   private fun CopyMoveProgressDialog() {
     Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
       Text(
-        text = copyMoveTitle,
+        text = getCopyMoveTitle(),
         style = MaterialTheme.typography.titleSmall.copy(
           fontSize = COPY_MOVE_DIALOG_TITLE_TEXT_SIZE,
           fontWeight = FontWeight.Medium

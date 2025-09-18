@@ -321,6 +321,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       }
 
       else -> lifecycleScope?.launch {
+        selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)
         processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
       }
     }
