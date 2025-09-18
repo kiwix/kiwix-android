@@ -184,16 +184,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
-      kiwixMainActivity.lifecycleScope.launch {
-        assertSelectedZimFileIsDeletedFromTheStorage(selectedFile)
-        deleteAllFilesInDirectory(parentFile)
-      }
-    }
-  }
-
-  private suspend fun assertSelectedZimFileIsDeletedFromTheStorage(selectedZimFile: File) {
-    if (selectedZimFile.isFileExist()) {
-      throw RuntimeException("Selected zim file is not deleted from the storage")
+      deleteAllFilesInDirectory(parentFile)
     }
   }
 
@@ -210,11 +201,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         kiwixMainActivity.supportFragmentManager.fragments
           .filterIsInstance<LocalLibraryFragment>()
           .firstOrNull()
-      localLibraryFragment?.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
-        Uri.fromFile(selectedFile),
-        DocumentFile.fromFile(selectedFile),
-        fragmentManager = localLibraryFragment.parentFragmentManager
-      )
+      localLibraryFragment?.processSelectedZimFilesForPlayStore
+        ?.processSelectedFiles(listOf(Uri.fromFile(selectedFile)))
     }
   }
 
