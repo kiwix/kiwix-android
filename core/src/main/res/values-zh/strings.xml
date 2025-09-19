@@ -77,7 +77,7 @@
   <string name="start_server_label">启动服务器</string>
   <string name="stop_server_label">停止服务器</string>
   <string name="error_server_already_running">服务器正在运行。请关闭后再重试。</string>
-  <string name="error_ip_address_not_found">找不到IP地址。</string>
+  <string name="error_ip_address_not_found">找不到 IP 地址。</string>
   <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="qr_code">显示二维码</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
@@ -91,6 +91,7 @@
   <string name="pref_display_title">显示</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_info_version">版本</string>
+  <string name="pref_theme_summary">以反色调显示条目</string>
   <string name="pref_back_to_top">返回顶部</string>
   <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
   <string name="pref_language_title">语言</string>

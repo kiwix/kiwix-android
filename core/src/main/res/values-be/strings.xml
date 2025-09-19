@@ -29,6 +29,7 @@
   <string name="pref_display_title">Паказаць</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Версія</string>
+  <string name="pref_theme_summary">Паказаць артыкулы з «павернутымі колерамі»</string>
   <string name="pref_back_to_top">Вярнуцца ўверх</string>
   <string name="pref_back_to_top_summary">Паказваць кнопку ў канцы старонкі для пракруткі ўверх</string>
   <string name="pref_language_title">Мова</string>

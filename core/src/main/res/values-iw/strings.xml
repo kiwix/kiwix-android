@@ -56,8 +56,8 @@
   <string name="start_server_label">הרצת השרת</string>
   <string name="stop_server_label">כיבוי השרת</string>
   <string name="error_server_already_running">השרת כבר פעיל. נא לכבות אותו ולנסות שוב.</string>
-  <string name="error_ip_address_not_found">לא ניתן למצוא כתובת IP.</string>
-  <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">לא ניתן למצוא כתובת IP.</string>
+  <string name="server_started_message" fuzzy="true">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
   <string name="qr_code">קוד QR מתוצג</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא. %s</string>
@@ -70,6 +70,7 @@
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
+  <string name="pref_theme_summary">הצגת ערכים עם צבעים הפוכים</string>
   <string name="pref_back_to_top">חזרה למעלה</string>
   <string name="pref_back_to_top_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
   <string name="pref_language_title">שפה</string>
@@ -132,6 +133,7 @@
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
   <string name="download">הורדה</string>
   <string name="download_notification_channel_name">שם ערוץ התראות ההורדה</string>
+  <string name="download_notification_channel_description">קובצי ZIM מתקבלים…</string>
   <string name="space_available">נפח זמין:</string>
   <string name="move_no_space">אין מספיק מקום להעברה או העתקה.</string>
   <string name="zim_simple">פשוט</string>
@@ -188,6 +190,7 @@
   <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור.\n\nלהמשיך?</string>
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
   <string name="your_languages">שפות נבחרות:</string>
+  <string name="your_language">השפה הנבחרת: %s</string>
   <string name="other_languages">שפות אחרות:</string>
   <string name="downloading">מתבצעת הורדה:</string>
   <string name="no_items_msg">אין פריטים זמינים</string>
@@ -216,7 +219,10 @@
   <string name="go_to_previous_page">מעבר לדף הקודם</string>
   <string name="go_to_next_page">מעבר לדף הבא</string>
   <string name="table_of_contents">תוכן עניינים</string>
+  <string name="select_language">בחירת שפה</string>
   <string name="save_languages">שמירת שפות</string>
+  <string name="all_languages">כל השפות</string>
+  <string name="no_language_available">אין שפות זמינות</string>
   <string name="expand">הרחבה</string>
   <string name="history">היסטוריה</string>
   <string name="history_from_current_book">צפייה בהיסטוריה מכל הספרים</string>

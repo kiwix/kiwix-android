@@ -149,6 +149,7 @@ tasks.register("generateVersionCodeAndName") {
 }
 
 tasks.register("renameTarakFile") {
+  dependsOn("deleteEsFormalDirectory")
   val taraskFile = File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml")
   val mainStringsFile = File("$rootDir/core/src/main/res/values/strings.xml")
 
@@ -224,9 +225,23 @@ fun elementToString(element: Element): String {
   return result.writer.toString()
 }
 
+tasks.register("deleteEsFormalDirectory") {
+  // Fixes #4369
+  listOf(
+    "$rootDir/core/src/main/res/values-es-formal",
+    "$rootDir/app/src/main/res/values-es-formal",
+    "$rootDir/custom/src/main/res/values-es-formal"
+  ).forEach { path ->
+    val dir = file(path)
+    if (dir.exists()) {
+      dir.deleteRecursively()
+    }
+  }
+}
+
 gradle.projectsEvaluated {
   tasks.forEach { task ->
-    if (task.name != "renameTarakFile") {
+    if (task.name != "renameTarakFile" && task.name != "deleteEsFormalDirectory") {
       task.dependsOn("renameTarakFile")
     }
   }

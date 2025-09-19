@@ -2,6 +2,7 @@
 <!-- Authors:
 * Alex00728
 * Apzp79
+* Bisang
 * CYAN
 * Codenstory
 * Ellif
@@ -77,6 +78,7 @@
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
+  <string name="pref_theme_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>
   <string name="pref_language_title">언어</string>
@@ -139,6 +141,7 @@
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
   <string name="download">다운로드</string>
   <string name="download_notification_channel_name">다운로드 알림 채널 이름</string>
+  <string name="download_notification_channel_description">ZIM 파일을 다운로드하는 중…</string>
   <string name="space_available">사용 가능한 공간:</string>
   <string name="move_no_space">이동/복사할 공간이 충분하지 않습니다.</string>
   <string name="zim_simple">간단히</string>

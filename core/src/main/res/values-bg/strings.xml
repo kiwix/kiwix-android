@@ -32,6 +32,7 @@
   <string name="pref_display_title">Покажете</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
+  <string name="pref_theme_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_back_to_top">Връщане в началото</string>
   <string name="pref_back_to_top_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
   <string name="pref_language_title">Език</string>

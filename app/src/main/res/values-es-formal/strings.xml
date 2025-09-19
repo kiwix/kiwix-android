@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Camachevaz
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Tu sistema de archivos no soporta archivos superiores a 4GB</string>
+  <string name="detecting_file_system">Detectando si el sistema de archivos puede crear archivos de 4GB</string>
+  <string name="cannot_open_file">Falló abrir archivo\nPor favor intente buscar este archivo en su Biblioteca</string>
+  <string name="send_files_title">Enviar Archivos</string>
+  <string name="receive_files_title">Recibir Archivos</string>
+  <string name="no_app_found_to_open">¡No se encontró una aplicación para seleccionar el archivo ZIMǃ</string>
+  <string name="select_zim_file">Selecciona el archivo ZIM para leer</string>
+</resources>

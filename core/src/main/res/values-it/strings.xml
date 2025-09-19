@@ -63,7 +63,7 @@
   <string name="stop_server_label">Arresta server</string>
   <string name="error_server_already_running">Il server è già in esecuzione. Spegnilo e riprova.</string>
   <string name="error_ip_address_not_found">Impossibile trovare l’indirizzo IP.</string>
-  <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server: %s</string>
+  <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server %s</string>
   <string name="qr_code">Codice QR renderizzato</string>
   <string name="share_host_address">Condividi URL con altre applicazioni</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato. %s</string>
@@ -76,6 +76,7 @@
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
+  <string name="pref_theme_summary">Visualizza le voci con colori invertiti</string>
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
   <string name="pref_language_title">Lingua</string>

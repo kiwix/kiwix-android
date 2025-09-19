@@ -23,6 +23,7 @@
   <string name="pref_display_title">प्रदर्श्यताम्</string>
   <string name="pref_info_title">सूचना</string>
   <string name="pref_info_version">संस्करणम्</string>
+  <string name="pref_theme_summary">विपरितरङ्गैः लेखः दृश्यताम्</string>
   <string name="pref_back_to_top">साक्षात् उपरि गच्छतु</string>
   <string name="pref_back_to_top_summary">साक्षात् उपरि गन्तु पृष्ठस्य अन्ते सारणकुड्मलं (scroll button) दर्श्यताम्</string>
   <string name="pref_language_title">भाषा</string>
