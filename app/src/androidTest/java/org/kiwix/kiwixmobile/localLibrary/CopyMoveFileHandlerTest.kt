@@ -113,7 +113,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -153,8 +153,15 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       navigateToLocalLibraryFragment()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
-      selectedFile = getSelectedFile()
-      showMoveFileToPublicDirectoryDialog(mutableListOf(invalidZimFile, Uri.fromFile(selectedFile)))
+      selectedFile = getSelectedFile("testzim.zim")
+      val secondValidZimFile = getSelectedFile("small.zim")
+      showMoveFileToPublicDirectoryDialog(
+        mutableListOf(
+          invalidZimFile,
+          Uri.fromFile(selectedFile),
+          Uri.fromFile(secondValidZimFile)
+        )
+      )
       copyMoveFileHandler {
         // assert first ZIM file is invalid file so it should show the continue
         // with other ZIM files dialog.
@@ -172,7 +179,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -195,7 +202,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // Test with second launch, this time permission dialog should not show.
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
       copyMoveFileHandler {
@@ -211,8 +218,15 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       navigateToLocalLibraryFragment()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
-      selectedFile = getSelectedFile()
-      showMoveFileToPublicDirectoryDialog(mutableListOf(invalidZimFile, Uri.fromFile(selectedFile)))
+      selectedFile = getSelectedFile("testzim.zim")
+      val secondValidZimFile = getSelectedFile("small.zim")
+      showMoveFileToPublicDirectoryDialog(
+        mutableListOf(
+          invalidZimFile,
+          Uri.fromFile(selectedFile),
+          Uri.fromFile(secondValidZimFile)
+        )
+      )
       copyMoveFileHandler {
         // assert first ZIM file is invalid file so it should show the continue
         // with other ZIM files dialog.
@@ -254,10 +268,10 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     }
   }
 
-  private fun getSelectedFile(): File {
+  private fun getSelectedFile(fileName: String): File {
     val loadFileStream =
-      CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.getExternalFilesDirs(null)[0], "testzim.zim")
+      CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
+    val zimFile = File(context.getExternalFilesDirs(null)[0], fileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -336,7 +350,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)

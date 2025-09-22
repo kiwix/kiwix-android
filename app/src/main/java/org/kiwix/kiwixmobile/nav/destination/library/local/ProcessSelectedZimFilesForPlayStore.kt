@@ -69,6 +69,11 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private var lifecycleScope: CoroutineScope? = null
   private var alertDialogShower: AlertDialogShower? = null
   private var isSingleFileSelected = false
+
+  /**
+   * Manages the selected action by user when processing the multiple files.
+   */
+  private var multipleFilesProcessAction: MultipleFilesProcessAction? = null
   private val selectedZimFileUriList: MutableList<Uri> = mutableListOf()
 
   /**
@@ -136,7 +141,10 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * - From multiple selection → show error dialog but continue with other files.
    * - From single selection → show toast and stop.
    */
-  private suspend fun processSingleFile(uri: Uri, isFromMultipleFiles: Boolean = false) {
+  private suspend fun processSingleFile(
+    uri: Uri,
+    isFromMultipleFiles: Boolean = false
+  ) {
     val documentFile = when (uri.scheme) {
       "file" -> DocumentFile.fromFile(File("$uri"))
       else -> {
@@ -155,7 +163,8 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       documentFile,
       // pass if fileName is null then we will validate it after copying/moving
       fileName == null,
-      fragmentManager
+      fragmentManager,
+      multipleFilesProcessAction
     )
   }
 
@@ -189,6 +198,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     // Therefore, we observe the callbacks and continue with the next operation accordingly.
     if (uris.isEmpty()) {
       // All files processed successfully.
+      multipleFilesProcessAction = null
       activity.toast(activity.getString(string.your_selected_files_added_to_library))
       return
     }
@@ -270,6 +280,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     copyMoveFileHandler.dispose()
     lifecycleScope = null
     selectedZimFileCallback = null
+    multipleFilesProcessAction = null
   }
 
   override fun onFileCopied(file: File) {
@@ -296,6 +307,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
 
   override fun onError(errorMessage: String) {
     if (isSingleFileSelected) {
+      multipleFilesProcessAction = null
       activity.toast(errorMessage)
     } else {
       selectedZimFileCallback?.showFileCopyMoveErrorDialog(errorMessage) {
@@ -303,6 +315,10 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
       }
     }
+  }
+
+  override fun onMultipleFilesProcessSelection(multipleFilesProcessAction: MultipleFilesProcessAction) {
+    this.multipleFilesProcessAction = multipleFilesProcessAction
   }
 
   /**
@@ -330,4 +346,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private fun showWarningDialogForSplittedZimFile() {
     alertDialogShower?.show(KiwixDialog.ShowWarningAboutSplittedZimFile)
   }
+}
+
+sealed class MultipleFilesProcessAction {
+  object Copy : MultipleFilesProcessAction()
+  object Move : MultipleFilesProcessAction()
 }

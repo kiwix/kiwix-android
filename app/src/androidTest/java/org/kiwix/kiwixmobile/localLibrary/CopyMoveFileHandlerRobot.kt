@@ -134,7 +134,7 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     testFlakyView({
       try {
         composeTestRule.apply {
-          waitUntilTimeout()
+          waitUntilTimeout(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
           mainClock.advanceTimeByFrame()
           composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
           throw RuntimeException("ZimFile not added in the local library")

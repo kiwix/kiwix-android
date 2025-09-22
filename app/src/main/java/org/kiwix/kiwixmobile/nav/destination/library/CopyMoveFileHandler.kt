@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
@@ -127,7 +128,8 @@ class CopyMoveFileHandler @Inject constructor(
     uri: Uri? = null,
     documentFile: DocumentFile? = null,
     shouldValidateZimFile: Boolean = false,
-    fragmentManager: FragmentManager
+    fragmentManager: FragmentManager,
+    multipleFilesProcessAction: MultipleFilesProcessAction? = null
   ) {
     this.shouldValidateZimFile = shouldValidateZimFile
     this.fragmentManager = fragmentManager
@@ -150,7 +152,11 @@ class CopyMoveFileHandler @Inject constructor(
       }
       hidePreparingCopyMoveDialog()
       if (validateZimFileCanCopyOrMove()) {
-        showCopyMoveDialog()
+        when (multipleFilesProcessAction) {
+          MultipleFilesProcessAction.Copy -> performCopyOperation()
+          MultipleFilesProcessAction.Move -> performMoveOperation()
+          null -> showCopyMoveDialog()
+        }
       }
     }
   }
@@ -285,6 +291,7 @@ class CopyMoveFileHandler @Inject constructor(
   fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = false
     lifecycleScope?.launch {
+      fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
       if (showStorageSelectionDialog) {
         showStorageSelectDialog(getStorageDeviceList())
       } else {
@@ -296,6 +303,7 @@ class CopyMoveFileHandler @Inject constructor(
   fun performMoveOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = true
     lifecycleScope?.launch {
+      fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
       if (showStorageSelectionDialog) {
         showStorageSelectDialog(getStorageDeviceList())
       } else {
@@ -596,5 +604,6 @@ class CopyMoveFileHandler @Inject constructor(
     fun insufficientSpaceInStorage(availableSpace: Long)
     fun filesystemDoesNotSupportedCopyMoveFilesOver4GB()
     fun onError(errorMessage: String)
+    fun onMultipleFilesProcessSelection(multipleFilesProcessAction: MultipleFilesProcessAction)
   }
 }
