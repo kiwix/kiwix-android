@@ -39,7 +39,7 @@ internal class SearchStateTest {
       val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
       val searchIteratorWrapper: SuggestionIteratorWrapper = mockk()
       val entryWrapper: SuggestionItemWrapper = mockk()
-      val estimatedMatches = 100
+      val estimatedMatches = 20
       every { suggestionSearchWrapper.estimatedMatches } returns estimatedMatches.toLong()
       // Settings list to hasNext() to ensure it returns true only for the first call.
       // Otherwise, if we do not set this, the method will always return true when

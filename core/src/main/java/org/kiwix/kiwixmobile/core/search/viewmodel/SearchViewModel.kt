@@ -22,12 +22,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -65,6 +68,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
+const val DEBOUNCE_DELAY = 150L
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
@@ -91,26 +96,39 @@ class SearchViewModel @Inject constructor(
   private val searchOrigin = MutableStateFlow(FromWebView)
   val voiceSearchResult: MutableLiveData<String?> = MutableLiveData(null)
   private lateinit var alertDialogShower: AlertDialogShower
+  private val debouncedSearchQuery = MutableStateFlow("")
 
   init {
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
+    viewModelScope.launch { debouncedSearchQuery() }
   }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
   }
 
-  @Suppress("DEPRECATION")
+  @OptIn(FlowPreview::class)
+  private suspend fun debouncedSearchQuery() {
+    // Observe and collect the debounced search query
+    debouncedSearchQuery
+      // Applying debouncing to delay the emission of consecutive search queries
+      .debounce(DEBOUNCE_DELAY)
+      // Ensuring that only distinct search queries are processed
+      .distinctUntilChanged()
+      .collect { query ->
+        actions.trySend(Filter(query)).isSuccess
+      }
+  }
+
   private suspend fun reducer() {
     combine(
-      filter.asStateFlow(),
       searchResults(),
       recentSearchRoomDao.recentSearches(zimReaderContainer.id),
       searchOrigin.asStateFlow()
-    ) { searchTerm, searchResultsWithTerm, recentResults, searchOrigin ->
+    ) { searchResultsWithTerm, recentResults, searchOrigin ->
       SearchState(
-        searchTerm,
+        searchResultsWithTerm.searchTerm,
         searchResultsWithTerm,
         recentResults as List<SearchListItem.RecentSearchListItem>,
         searchOrigin
@@ -119,7 +137,6 @@ class SearchViewModel @Inject constructor(
       .collect { state.value = it }
   }
 
-  @Suppress("DEPRECATION")
   private fun searchResults() =
     filter.asStateFlow()
       .mapLatest {
@@ -199,6 +216,10 @@ class SearchViewModel @Inject constructor(
       )
     ).isSuccess
     _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))
+  }
+
+  fun searchResults(query: String) {
+    debouncedSearchQuery.value = query
   }
 
   /**
