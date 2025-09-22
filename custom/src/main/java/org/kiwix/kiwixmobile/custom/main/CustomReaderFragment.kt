@@ -153,28 +153,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
-  /**
-   * Handles clicks on the navigation icon in custom apps.
-   * - If the tab switcher is active, triggers the home menu action.
-   * - Otherwise, toggles the navigation drawer: closes it if open; opens it only if the sidebar is enabled.
-   *
-   * This override customizes the default behavior by preventing the drawer from opening
-   * when the sidebar is disabled in the app configuration.
-   */
-  override fun navigationIconClick() {
-    if (readerMenuState?.isInTabSwitcher == true) {
-      onHomeMenuClicked()
-      return
-    }
-
-    val activity = activity as CoreMainActivity
-    if (activity.navigationDrawerIsOpen()) {
-      activity.closeNavigationDrawer()
-    } else if (!BuildConfig.DISABLE_SIDEBAR) {
-      activity.openNavigationDrawer()
-    }
-  }
-
   private fun loadPageFromNavigationArguments() {
     val customMainActivity = activity as? CustomMainActivity
     val pageUrl =
@@ -219,19 +197,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     onComplete: () -> Unit
   ) {
     restoreTabs(webViewHistoryItemList, currentTab, onComplete)
-  }
-
-  /**
-   * Enables or disables the sidebar in a custom app based on the configuration.
-   * If the app is configured to disable the sidebar, this method disables it;
-   * otherwise, it enables the sidebar.
-   */
-  override fun enableLeftDrawer() {
-    if (BuildConfig.DISABLE_SIDEBAR) {
-      (requireActivity() as CoreMainActivity).disableLeftDrawer()
-    } else {
-      super.enableLeftDrawer()
-    }
   }
 
   /**

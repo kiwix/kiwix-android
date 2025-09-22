@@ -87,10 +87,10 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -562,12 +562,6 @@ abstract class CoreReaderFragment :
    * Handles clicks on the navigation icon.
    * - If the tab switcher is active, triggers the home menu action.
    * - Otherwise, toggles the navigation drawer: opens it if closed, closes it if open.
-   *
-   * Subclasses like CustomReaderFragment can override this method to provide custom behavior,
-   * such as disabling the hamburger icon click when the sidebar is configured to be hidden.
-   *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
    */
   open fun navigationIconClick() {
     if (readerMenuState?.isInTabSwitcher == true) {
@@ -575,11 +569,11 @@ abstract class CoreReaderFragment :
       return
     }
 
-    val activity = activity as CoreMainActivity
-    if (activity.navigationDrawerIsOpen()) {
+    val activity = activity as? CoreMainActivity
+    if (activity?.navigationDrawerIsOpen() == true) {
       activity.closeNavigationDrawer()
     } else {
-      activity.openNavigationDrawer()
+      activity?.openNavigationDrawer()
     }
   }
 
@@ -732,13 +726,9 @@ abstract class CoreReaderFragment :
 
   /**
    * Enables the activity's left drawer, allowing it to be opened by clicking the hamburger icon.
-   * Subclasses like CustomReaderFragment can override this method to customize the behavior,
-   * for example, to disable the sidebar when it shouldn't be shown.
-   *
-   * WARNING: If you modify this method, thoroughly test it in custom apps to ensure it works correctly.
    */
   open fun enableLeftDrawer() {
-    (requireActivity() as CoreMainActivity).enableLeftDrawer()
+    (activity as? CoreMainActivity)?.enableLeftDrawer()
   }
 
   private fun goBack() {
