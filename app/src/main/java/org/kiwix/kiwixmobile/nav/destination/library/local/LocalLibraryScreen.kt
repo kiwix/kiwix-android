@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -36,6 +37,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -64,6 +66,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
@@ -104,6 +107,7 @@ fun LocalLibraryScreen(
           topAppBarScrollBehavior = scrollBehavior
         )
       },
+      bottomBar = { ShowSwipeDownToScanFileSystemText() },
       floatingActionButton = { SelectFileButton(fabButtonClick) },
       modifier = Modifier
         .systemBarsPadding()
@@ -143,6 +147,25 @@ fun LocalLibraryScreen(
         }
       }
     }
+  }
+}
+
+@Composable
+private fun ShowSwipeDownToScanFileSystemText() {
+  Surface(
+    color = MaterialTheme.colorScheme.onPrimary,
+    tonalElevation = ONE_DP
+  ) {
+    Text(
+      text = stringResource(string.swipe_down_to_scan_storage),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(EIGHT_DP),
+      textAlign = TextAlign.Center,
+      style = MaterialTheme.typography.bodySmall.copy(
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+    )
   }
 }
 

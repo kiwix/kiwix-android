@@ -8,4 +8,5 @@
   <string name="receive_files_title">Receive Files</string>
   <string name="no_app_found_to_open">No app found to select ZIM file!</string>
   <string name="select_zim_file">Select ZIM file to read</string>
+  <string name="swipe_down_to_scan_storage">Swipe down to scan your device for new books…</string>
 </resources>
