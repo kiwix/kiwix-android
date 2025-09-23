@@ -128,6 +128,8 @@ class ZimHostFragmentTest {
           prefIsTest = true
           putPrefLanguage("en")
           lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+          prefIsScanFileSystemDialogShown = true
+          putPrefIsFirstRun(false)
         }
     }
     activityScenario =

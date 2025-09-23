@@ -340,6 +340,11 @@ sealed class KiwixDialog(
       R.string.export_all_bookmarks_dialog_title,
       message = R.string.export_all_bookmarks_dialog_message,
     )
+
+    object FileSystemScan : YesNoDialog(
+      R.string.file_system_scan_dialog_title,
+      R.string.file_system_scan_dialog_message
+    )
   }
 
   object ImportBookmarks : KiwixDialog(

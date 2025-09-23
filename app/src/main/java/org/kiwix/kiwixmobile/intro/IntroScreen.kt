@@ -34,16 +34,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.intro.composable.IndicatorColumn
 import org.kiwix.kiwixmobile.intro.composable.IntroPage
+import org.kiwix.kiwixmobile.zimManager.THREE
 
 private const val ANIMATION_DURATION: Long = 2000
-private const val PAGE_COUNT: Int = 3
+private const val PAGE_COUNT_IN_BUNDLE_VERSION: Int = 3
+private const val PAGE_COUNT_IN_APK_VERSION = 4
 const val HORIZONTAL_PAGER_TESTING_TAG = "horizontalPagerTestingTag"
 
 @Composable
@@ -54,14 +59,13 @@ fun IntroScreen(
     Column(
       modifier = Modifier.fillMaxSize()
     ) {
-      val pagerState = rememberPagerState(pageCount = { PAGE_COUNT })
+      val pagerState = rememberPagerState(pageCount = { getPageCount() })
       val pagerIsDragged = pagerState.interactionSource.collectIsDraggedAsState()
       val pageInteractionSource = remember { MutableInteractionSource() }
       val pageIsPressed = pageInteractionSource.collectIsPressedAsState()
 
       // Stop  auto-advancing when pager is dragged or one of the pages is pressed
       val autoAdvance = !pagerIsDragged.value && !pageIsPressed.value
-
       if (autoAdvance) {
         LaunchedEffect(pagerState, pageInteractionSource) {
           while (true) {
@@ -76,7 +80,8 @@ fun IntroScreen(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         HorizontalPager(
-          modifier = Modifier.weight(1f)
+          modifier = Modifier
+            .weight(1f)
             .testTag(HORIZONTAL_PAGER_TESTING_TAG),
           state = pagerState
         ) { page ->
@@ -91,6 +96,17 @@ fun IntroScreen(
   }
 }
 
+/**
+ * Returns the page.
+ * If it is a playStore version(bundle) it will returns the [PAGE_COUNT_IN_BUNDLE_VERSION]
+ * Otherwise; returns the [PAGE_COUNT_IN_APK_VERSION].
+ */
+private fun getPageCount() = if (BuildConfig.IS_PLAYSTORE) {
+  PAGE_COUNT_IN_BUNDLE_VERSION
+} else {
+  PAGE_COUNT_IN_APK_VERSION
+}
+
 @Composable
 private fun IntroPagerContent(page: Int) {
   when (page) {
@@ -98,7 +114,7 @@ private fun IntroPagerContent(page: Int) {
       IntroPage(
         headingText = R.string.welcome_to_the_family,
         labelText = R.string.humankind_knowledge,
-        image = org.kiwix.kiwixmobile.R.drawable.kiwix_icon
+        image = drawable.kiwix_icon
       )
     }
 
@@ -106,7 +122,7 @@ private fun IntroPagerContent(page: Int) {
       IntroPage(
         headingText = R.string.save_books_offline,
         labelText = R.string.download_books_message,
-        image = org.kiwix.kiwixmobile.R.drawable.ic_airplane
+        image = drawable.ic_airplane
       )
     }
 
@@ -114,7 +130,15 @@ private fun IntroPagerContent(page: Int) {
       IntroPage(
         headingText = R.string.save_books_in_desired_storage,
         labelText = R.string.storage_location_hint,
-        image = org.kiwix.kiwixmobile.R.drawable.ic_storage
+        image = drawable.ic_storage
+      )
+    }
+
+    THREE -> {
+      IntroPage(
+        headingText = string.auto_detect_books,
+        labelText = string.auto_detect_books_description,
+        image = drawable.ic_book
       )
     }
   }
