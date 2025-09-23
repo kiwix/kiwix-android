@@ -104,6 +104,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -227,11 +228,13 @@ fun ReaderScreen(
       }
       if (showTableOfContentDrawer.value) {
         // Showing the background color on screen so that it look same as navigation drawer.
+        val overlayContentDescription = stringResource(android.R.string.untitled)
         Box(
           Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.3f))
             .clickable { showTableOfContentDrawer.update { false } }
+            .semantics { contentDescription = overlayContentDescription }
         )
       }
       AnimatedVisibility(
@@ -503,7 +506,7 @@ fun SearchPlaceholder(hint: String, searchPlaceHolderClick: () -> Unit) {
     Spacer(modifier = Modifier.width(TEN_DP))
     Icon(
       painter = IconItem.Drawable(R.drawable.action_search).toPainter(),
-      contentDescription = null,
+      contentDescription = stringResource(R.string.search_label),
       tint = White
     )
   }
@@ -929,7 +932,7 @@ private fun TabItemHeader(
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_clear_white_24dp),
-        contentDescription = stringResource(R.string.close_tab)
+        contentDescription = stringResource(R.string.close_tab) + index
       )
     }
   }
@@ -964,6 +967,7 @@ private fun TabItemCard(
             setOnClickListener { onTabClickListener.onSelectTab(index) }
           }
           addView(clickableView)
+          contentDescription = "${webView.contentDescription}${webView.hashCode()}"
         }
       },
       modifier = Modifier.fillMaxSize()

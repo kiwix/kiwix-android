@@ -555,7 +555,8 @@ private fun ListOptions(
       ) {
         RadioButton(
           selected = option == selected,
-          onClick = { onOptionSelected(option) }
+          onClick = { onOptionSelected(option) },
+          modifier = Modifier.semantics { contentDescription = option }
         )
         Text(text = option, style = MaterialTheme.typography.bodyLarge)
       }

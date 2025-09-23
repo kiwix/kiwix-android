@@ -238,7 +238,7 @@ private fun SearchListItem(
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-        contentDescription = stringResource(id = R.string.search_open_in_new_tab),
+        contentDescription = stringResource(id = R.string.search_open_in_new_tab) + searchListItem.hashCode(),
       )
     }
   }
