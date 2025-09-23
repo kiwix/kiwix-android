@@ -254,7 +254,6 @@ abstract class CoreReaderFragment :
   private var tempWebViewForUndo: KiwixWebView? = null
   private val tempWebViewListForUndo: MutableList<KiwixWebView> = ArrayList()
   private var tempZimSourceForUndo: ZimReaderSource? = null
-  private var isFirstRun = false
   private var bookmarkingJob: Job? = null
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
@@ -2214,10 +2213,9 @@ abstract class CoreReaderFragment :
   }
 
   override fun webViewUrlLoading() {
-    if (isFirstRun && !BuildConfig.DEBUG) {
+    if (sharedPreferenceUtil?.prefIsFirstRun == true && !BuildConfig.DEBUG) {
       contentsDrawerHint()
       sharedPreferenceUtil?.putPrefIsFirstRun(false) // It is no longer the first run
-      isFirstRun = false
     }
   }
 

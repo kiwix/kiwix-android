@@ -58,6 +58,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
@@ -134,6 +135,12 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   private var permissionDeniedLayoutShowing = false
   private val selectedZimFileUriList: MutableList<Uri> = mutableListOf()
+
+  /**
+   * Manages the scanning of storage on firs app launch
+   * and the necessary permission are not granted.
+   */
+  private var shouldScanFileSystem = false
   private val libraryScreenState = mutableStateOf(
     LocalLibraryScreenState(
       fileSelectListState = FileSelectListState(emptyList()),
@@ -157,6 +164,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       val isPermanentlyDenied = readStorageHasBeenPermanentlyDenied(isGranted)
       permissionDeniedLayoutShowing = isPermanentlyDenied
       if (permissionDeniedLayoutShowing) {
+        shouldScanFileSystem = false
         updateLibraryScreenState(
           noFilesViewItem = Triple(
             requireActivity().resources.getString(string.grant_read_storage_permission),
@@ -164,6 +172,8 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
             true
           )
         )
+      } else if (shouldScanFileSystem) {
+        scanFileSystem()
       }
     }
 
@@ -510,20 +520,86 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   override fun onResume() {
     super.onResume()
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
-    ) {
-      checkPermissions()
-    } else if (!permissionDeniedLayoutShowing) {
-      updateLibraryScreenState(
-        noFilesViewItem = Triple(
-          requireActivity().resources.getString(string.no_files_here),
-          requireActivity().resources.getString(string.download_books),
-          false
+    when {
+      shouldShowFileSystemDialog() -> {
+        showFileSystemScanDialog()
+      }
+
+      shouldScanFileSystem -> {
+        // When user goes to settings for granting the `MANAGE_EXTERNAL_STORAGE` permission, and
+        // came back to the application then initiate the scanning of file system.
+        scanFileSystem()
+      }
+
+      !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+        !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing -> {
+        checkPermissions()
+      }
+
+      else -> {
+        updateLibraryScreenState(
+          noFilesViewItem = Triple(
+            requireActivity().resources.getString(string.no_files_here),
+            requireActivity().resources.getString(string.download_books),
+            false
+          )
         )
-      )
+      }
     }
   }
+
+  // Shows the FileSystemScan dialog.
+  private fun showFileSystemScanDialog() {
+    dialogShower.show(
+      KiwixDialog.YesNoDialog.FileSystemScan,
+      {
+        // Sets true so that it can not show again.
+        sharedPreferenceUtil.prefIsScanFileSystemDialogShown = true
+        shouldScanFileSystem = true
+        scanFileSystem()
+      },
+      {
+        // User clicks on the "No" button so not show again.
+        sharedPreferenceUtil.prefIsScanFileSystemDialogShown = true
+      }
+    )
+  }
+
+  /**
+   * Scan the file system for ZIM files.
+   * Checks:
+   * 1. If our app has the storage permission. If not, it asks for the permission.
+   * 2. Checks if app has the full scan permission. If not, then it asks for the permission.
+   * 3. Then finally it scans the storage for ZIM files.
+   */
+  private fun scanFileSystem() {
+    when {
+      !hasReadExternalStoragePermission() -> askForReaderExternalStoragePermission()
+
+      !requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil) -> {
+        showManageExternalStoragePermissionDialog()
+      }
+
+      else -> {
+        shouldScanFileSystem = false
+        requestFileSystemCheck()
+      }
+    }
+  }
+
+  /**
+   * Determines whether the file system scan dialog should be shown.
+   * Conditions:
+   *  1. The scan dialog has not already been shown.
+   *  2. This is the app’s first launch.
+   *  3. This is not the Play Store build (only the non-PS version, e.g. standalone app).
+   *  4. If there are no ZIM files showing on the library screen.
+   */
+  private fun shouldShowFileSystemDialog(): Boolean =
+    !sharedPreferenceUtil.prefIsScanFileSystemDialogShown &&
+      sharedPreferenceUtil.prefIsFirstRun &&
+      !BuildConfig.IS_PLAYSTORE &&
+      libraryScreenState.value.fileSelectListState.bookOnDiskListItems.size == 0
 
   override fun onDestroyView() {
     super.onDestroyView()
@@ -605,23 +681,29 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     outState.putBoolean(WAS_IN_ACTION_MODE, actionMode != null)
   }
 
+  private fun hasReadExternalStoragePermission(): Boolean =
+    ContextCompat.checkSelfPermission(
+      requireActivity(),
+      Manifest.permission.READ_EXTERNAL_STORAGE
+    ) != PackageManager.PERMISSION_GRANTED
+
   private fun checkPermissions() {
-    if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED
-    ) {
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        context.toast(string.request_storage)
-        storagePermissionLauncher?.launch(
-          arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-          )
+    if (hasReadExternalStoragePermission()) {
+      askForReaderExternalStoragePermission()
+    } else {
+      checkManageExternalStoragePermission()
+    }
+  }
+
+  private fun askForReaderExternalStoragePermission() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      context.toast(string.request_storage)
+      storagePermissionLauncher?.launch(
+        arrayOf(
+          Manifest.permission.READ_EXTERNAL_STORAGE,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
-      } else {
-        checkManageExternalStoragePermission()
-      }
+      )
     } else {
       checkManageExternalStoragePermission()
     }

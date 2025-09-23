@@ -411,4 +411,6 @@
   <string name="downloading_state">Downloading</string>
   <string name="download_failed_state">Failed</string>
   <string name="searchview_description_clear">Clear query</string>
+  <string name="file_system_scan_dialog_title">Scan storage?</string>
+  <string name="file_system_scan_dialog_message">Kiwix will scan your storage and list the ZIM files here</string>
 </resources>

@@ -120,6 +120,14 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsBookOnDiskMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_BOOK_ON_DISK_MIGRATED, false)
 
+  var prefIsScanFileSystemDialogShown: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, false)
+    set(isFileScanFileSystemDialogShown) {
+      sharedPreferences.edit {
+        putBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, isFileScanFileSystemDialogShown)
+      }
+    }
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -405,5 +413,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val KEY_OCCURRENCES_OF_LANGUAGE = "occurrencesOfLanguage"
     private const val KEY_LANGUAGE_ACTIVE = "languageActive"
     private const val KEY_LANGUAGE_ID = "languageId"
+    private const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
   }
 }
