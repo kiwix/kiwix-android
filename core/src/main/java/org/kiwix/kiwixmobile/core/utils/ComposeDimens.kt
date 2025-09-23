@@ -200,4 +200,7 @@ object ComposeDimens {
   // Custom download screen dimens
   val CUSTOM_DOWNLOAD_LAYOUT_TOP_MARGIN = 100.dp
   val CUSTOM_DOWNLOAD_PROGRESS_BAR_WIDTH = 200.dp
+
+  // Copy move dialog dimens
+  val COPY_MOVE_DIALOG_TITLE_TEXT_SIZE = 16.sp
 }

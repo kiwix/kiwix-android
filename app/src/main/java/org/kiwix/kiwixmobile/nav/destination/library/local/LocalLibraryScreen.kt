@@ -130,7 +130,7 @@ fun LocalLibraryScreen(
             progress = state.scanningProgressItem.second
           )
         }
-        if (state.noFilesViewItem.third) {
+        if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
           NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
         } else {
           BookItemList(

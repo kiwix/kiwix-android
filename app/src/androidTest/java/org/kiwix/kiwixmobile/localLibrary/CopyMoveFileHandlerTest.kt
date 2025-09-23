@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -85,6 +86,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
@@ -111,7 +113,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -121,7 +123,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
-      showMoveFileToPublicDirectoryDialog()
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -135,7 +137,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // Test with second launch, this time permission dialog should not show.
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
-      showMoveFileToPublicDirectoryDialog()
+      library { refreshList(composeTestRule) }
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -144,6 +147,30 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       assertZimFileAddedInTheLocalLibrary()
       deleteAllFilesInDirectory(parentFile)
+      TestUtils.deleteTemporaryFilesOfTestCases(context)
+
+      // Test multiple files copying.
+      navigateToLocalLibraryFragment()
+      deleteZimFilesIfExistInLocalLibrary()
+      val invalidZimFile = getInvalidZimFileUri(".mp4")
+      selectedFile = getSelectedFile("testzim.zim")
+      val secondValidZimFile = getSelectedFile("small.zim")
+      showMoveFileToPublicDirectoryDialog(
+        mutableListOf(
+          invalidZimFile,
+          Uri.fromFile(selectedFile),
+          Uri.fromFile(secondValidZimFile)
+        )
+      )
+      copyMoveFileHandler {
+        // assert first ZIM file is invalid file so it should show the continue
+        // with other ZIM files dialog.
+        assertFileCopyMoveErrorDialogDisplayed(composeTestRule)
+        clickOnYesButton(composeTestRule)
+        assertCopyMoveDialogDisplayed(composeTestRule, true)
+        clickOnCopy(composeTestRule)
+        assertZimFileAddedInTheLocalLibrary(composeTestRule)
+      }
     }
   }
 
@@ -152,7 +179,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -162,7 +189,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
-      showMoveFileToPublicDirectoryDialog()
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -175,8 +202,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // Test with second launch, this time permission dialog should not show.
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
-      selectedFile = getSelectedFile()
-      showMoveFileToPublicDirectoryDialog()
+      selectedFile = getSelectedFile("testzim.zim")
+      showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
@@ -184,56 +211,67 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
-      kiwixMainActivity.lifecycleScope.launch {
-        assertSelectedZimFileIsDeletedFromTheStorage(selectedFile)
-        deleteAllFilesInDirectory(parentFile)
+      deleteAllFilesInDirectory(parentFile)
+      TestUtils.deleteTemporaryFilesOfTestCases(context)
+
+      // Test multiple files copying.
+      navigateToLocalLibraryFragment()
+      deleteZimFilesIfExistInLocalLibrary()
+      val invalidZimFile = getInvalidZimFileUri(".mp4")
+      selectedFile = getSelectedFile("testzim.zim")
+      val secondValidZimFile = getSelectedFile("small.zim")
+      showMoveFileToPublicDirectoryDialog(
+        mutableListOf(
+          invalidZimFile,
+          Uri.fromFile(selectedFile),
+          Uri.fromFile(secondValidZimFile)
+        )
+      )
+      copyMoveFileHandler {
+        // assert first ZIM file is invalid file so it should show the continue
+        // with other ZIM files dialog.
+        assertFileCopyMoveErrorDialogDisplayed(composeTestRule)
+        clickOnYesButton(composeTestRule)
+        assertCopyMoveDialogDisplayed(composeTestRule, true)
+        clickOnMove(composeTestRule)
+        assertZimFileAddedInTheLocalLibrary(composeTestRule)
       }
     }
   }
 
-  private suspend fun assertSelectedZimFileIsDeletedFromTheStorage(selectedZimFile: File) {
-    if (selectedZimFile.isFileExist()) {
-      throw RuntimeException("Selected zim file is not deleted from the storage")
-    }
-  }
-
   private fun assertZimFileAddedInTheLocalLibrary() {
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-    }
+    navigateToLocalLibraryFragment()
     copyMoveFileHandler { assertZimFileAddedInTheLocalLibrary(composeTestRule) }
   }
 
-  private fun showMoveFileToPublicDirectoryDialog() {
+  private fun navigateToLocalLibraryFragment() {
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+    }
+  }
+
+  private fun deleteZimFilesIfExistInLocalLibrary() {
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+  }
+
+  private fun showMoveFileToPublicDirectoryDialog(urisList: List<Uri>) {
     kiwixMainActivity.lifecycleScope.launch {
       val localLibraryFragment =
         kiwixMainActivity.supportFragmentManager.fragments
           .filterIsInstance<LocalLibraryFragment>()
           .firstOrNull()
-      localLibraryFragment?.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
-        Uri.fromFile(selectedFile),
-        DocumentFile.fromFile(selectedFile),
-        fragmentManager = localLibraryFragment.parentFragmentManager
-      )
+      localLibraryFragment?.handleSelectedFileUri(urisList)
     }
   }
 
-  private fun tryOpeningInvalidZimFiles(uri: Uri) {
-    UiThreadStatement.runOnUiThread {
-      val localLibraryFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<LocalLibraryFragment>()
-          .firstOrNull()
-      localLibraryFragment?.handleSelectedFileUri(
-        uri,
-      )
-    }
-  }
-
-  private fun getSelectedFile(): File {
+  private fun getSelectedFile(fileName: String): File {
     val loadFileStream =
-      CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.getExternalFilesDirs(null)[0], "testzim.zim")
+      CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
+    val zimFile = File(context.getExternalFilesDirs(null)[0], fileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -312,7 +350,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile()
+      selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -325,13 +363,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         setIsPlayStoreBuildType(true)
       }
       // test opening images
-      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".jpg"))
+      showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".jpg")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
       // test opening videos
-      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".mp4"))
+      showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".mp4")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
       // test opening pdf
-      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".pdf"))
+      showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".pdf")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
     }
   }

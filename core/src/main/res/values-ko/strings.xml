@@ -336,8 +336,8 @@
   <string name="preparing_file_for_copy">복사/이동 준비 중</string>
   <string name="action_copy">복사</string>
   <string name="move">이동</string>
-  <string name="copying_zim_file">ZIM 파일을 복사하는 중…</string>
-  <string name="moving_zim_file">ZIM 파일을 이동하는 중…</string>
+  <string name="copying_zim_file">ZIM 파일을 복사하는 중 %s…</string>
+  <string name="moving_zim_file">ZIM 파일을 이동하는 중 %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix는 ZIM 파일을 자체 데이터 디렉터리에 위치할 것을 요구합니다.\n복사하거나 이동하시겠습니까?</string>
   <string name="copy_file_error_message">ZIM 파일 복사 오류: %s.</string>
   <string name="verify_zim_chunk_dialog_title">주의하세요: 모든 ZIM 청크가 제대로 이동/복사되었는지 확인하세요!</string>

@@ -342,8 +342,8 @@
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
   <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>
-  <string name="copying_zim_file">Копирование ZIM-файла…</string>
-  <string name="moving_zim_file">Перемещение ZIM-файла…</string>
+  <string name="copying_zim_file">Копирование ZIM-файла %s…</string>
+  <string name="moving_zim_file">Перемещение ZIM-файла %s…</string>
   <string name="copy_move_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных.\nВы хотите скопировать или переместить его туда?</string>
   <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Зачем копировать / перемещать файлы в общий каталог приложения?</string>

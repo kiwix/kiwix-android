@@ -325,8 +325,8 @@
   <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
   <string name="action_copy">העתקה</string>
   <string name="move">העברה</string>
-  <string name="copying_zim_file">מתבצעת העתקת קובץ ZIM…</string>
-  <string name="moving_zim_file">מתבצעת העברת קובץ ZIM…</string>
+  <string name="copying_zim_file">מתבצעת העתקת קובץ ZIM %s…</string>
+  <string name="moving_zim_file">מתבצעת העברת קובץ ZIM %s…</string>
   <string name="copy_move_files_dialog_description">לקיוויקס דורש שקובץ ZIM יהיה בספריית נתונים משלו.\n\nהאם ברצונך להעתיק או להעביר אותו לשם?</string>
   <string name="copy_file_error_message">שגיאה בהעתקת קובץ ZIM‏: %s.</string>
   <string name="verify_zim_chunk_dialog_title">זהירות: נא לשים לב לכך שכל קטעי ה־ZIM הועברו או הועתקו כמו שצריך!</string>

@@ -321,8 +321,8 @@
   <string name="preparing_file_for_copy">Se pregătește pentru copiere/mutare</string>
   <string name="action_copy">Copie</string>
   <string name="move">Mută</string>
-  <string name="copying_zim_file">Se copiază fişierul ZIM…</string>
-  <string name="moving_zim_file">Se mută fișierul ZIM…</string>
+  <string name="copying_zim_file">Se copiază fişierul ZIM %s…</string>
+  <string name="moving_zim_file">Se mută fișierul ZIM %s…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix necesită ca fișierul ZIM să fie în propriul director de date. Doriți să o copiați sau să o mutați acolo?</string>
   <string name="copy_file_error_message">Eroare la copierea fișierului ZIM: %s .</string>
   <string name="verify_zim_chunk_dialog_title">Fiți atenți: asigurați-vă că toate fragmentele ZIM au fost mutate/copiate corect!</string>
