@@ -1064,9 +1064,6 @@ abstract class CoreReaderFragment :
     } catch (ignore: Exception) {
       ignore.printStackTrace()
     }
-    if (sharedPreferenceUtil?.showIntro() == true) {
-      (requireActivity() as? AppCompatActivity)?.setSupportActionBar(null)
-    }
     safelyCancelBookmarkJob()
     unBindViewsAndBinding()
     hideBackToTopTimer?.cancel()
@@ -1074,7 +1071,7 @@ abstract class CoreReaderFragment :
     stopOngoingLoadingAndClearWebViewList()
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
-    deleteCachedFiles(requireActivity())
+    activity?.let(::deleteCachedFiles)
     tts?.apply {
       setActionAndStartTTSService(ACTION_STOP_TTS)
       shutdown()
@@ -1083,7 +1080,7 @@ abstract class CoreReaderFragment :
     tempWebViewForUndo = null
     // to fix IntroFragmentTest see https://github.com/kiwix/kiwix-android/pull/3217
     try {
-      requireActivity().unbindService(serviceConnection)
+      activity?.unbindService(serviceConnection)
     } catch (_: IllegalArgumentException) {
       // to handle if service is already unbounded
     }
@@ -1127,7 +1124,7 @@ abstract class CoreReaderFragment :
    */
   private fun initalizeWebView(url: String, shouldLoadUrl: Boolean = true): KiwixWebView? {
     if (isAdded) {
-      val attrs = requireActivity().getAttributes(R.xml.webview)
+      val attrs = activity?.getAttributes(R.xml.webview)
       val webView: KiwixWebView? = try {
         createWebView(attrs)
       } catch (illegalArgumentException: IllegalArgumentException) {
@@ -1475,7 +1472,7 @@ abstract class CoreReaderFragment :
           shouldShowBottomAppBar = false
         )
       }
-      (requireActivity() as CoreMainActivity).disableLeftDrawer()
+      (activity as? CoreMainActivity)?.disableLeftDrawer()
     } else {
       readerScreenState.update {
         copy(fullScreenItem = fullScreenItem.copy(first = false), shouldShowBottomAppBar = true)
@@ -1760,13 +1757,13 @@ abstract class CoreReaderFragment :
             }
           }
         } ?: run {
-          requireActivity().toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
+          context?.toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
         }
       }
     } catch (_: Exception) {
       // Catch the exception while saving the bookmarks for splitted zim files.
       // we have an issue with split zim files, see #3827
-      requireActivity().toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
+      context?.toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
     }
   }
 
@@ -1797,7 +1794,7 @@ abstract class CoreReaderFragment :
   }
 
   protected open fun openKiwixSupportUrl() {
-    (requireActivity() as CoreMainActivity).openSupportKiwixExternalLink()
+    (activity as? CoreMainActivity)?.openSupportKiwixExternalLink()
   }
 
   private fun updateBottomToolbarVisibility() {
