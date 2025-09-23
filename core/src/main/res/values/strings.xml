@@ -338,6 +338,7 @@
   <string name="copying_zim_file">Copying ZIM file %s…</string>
   <string name="moving_zim_file">Moving ZIM file %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix requires the ZIM file to be in its own data directory.\nDo you want to copy or move it there?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix requires the ZIM files to be in its own data directory.\nDo you want to copy or move them there?</string>
   <string name="copy_file_error_message">Error in copying the ZIM file: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Be cautious: Ensure all ZIM chunks have been properly moved/copied!</string>
   <string name="verify_zim_chunks_dialog_message">You can verify them inside “Android/media/org.kiwix…/” folder.\nOnce done, refresh the library screen by swiping down. The split ZIM file will then appear in your library.</string>

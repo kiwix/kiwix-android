@@ -132,14 +132,18 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
-  data object CopyMoveFileToPublicDirectoryDialog : KiwixDialog(
-    null,
-    R.string.copy_move_files_dialog_description,
-    R.string.action_copy,
-    R.string.move,
-    neutralButtonText = R.string.cancel,
-    cancelable = false
-  )
+  data class CopyMoveFileToPublicDirectoryDialog(override val args: List<Any>) :
+    KiwixDialog(
+      null,
+      R.string.single_arg_format_string,
+      R.string.action_copy,
+      R.string.move,
+      neutralButtonText = R.string.cancel,
+      cancelable = false
+    ),
+    HasBodyFormatArgs {
+    constructor(copyMoveFileDialogDescription: String) : this(listOf(copyMoveFileDialogDescription))
+  }
 
   data class CopyMoveProgressBarDialog(
     private val customViewBottomPadding: Dp,

@@ -105,6 +105,7 @@ class CopyMoveFileHandler @Inject constructor(
   var shouldValidateZimFile: Boolean = false
   private lateinit var fragmentManager: FragmentManager
   private lateinit var alertDialogShower: AlertDialogShower
+  private var isSingleFileSelected = true
 
   private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
@@ -129,8 +130,10 @@ class CopyMoveFileHandler @Inject constructor(
     documentFile: DocumentFile? = null,
     shouldValidateZimFile: Boolean = false,
     fragmentManager: FragmentManager,
-    multipleFilesProcessAction: MultipleFilesProcessAction? = null
+    multipleFilesProcessAction: MultipleFilesProcessAction? = null,
+    isSingleFileSelected: Boolean
   ) {
+    this.isSingleFileSelected = isSingleFileSelected
     this.shouldValidateZimFile = shouldValidateZimFile
     this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
@@ -282,10 +285,18 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
     alertDialogShower.show(
-      KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
+      KiwixDialog.CopyMoveFileToPublicDirectoryDialog(
+        getCopyMoveFilesToPublicDirectoryDialogMessage()
+      ),
       { performCopyOperation(showStorageSelectionDialog) },
       { performMoveOperation(showStorageSelectionDialog) }
     )
+  }
+
+  private fun getCopyMoveFilesToPublicDirectoryDialogMessage() = if (isSingleFileSelected) {
+    activity.getString(R.string.copy_move_files_dialog_description)
+  } else {
+    activity.getString(R.string.copy_move_multiple_files_dialog_description)
   }
 
   fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {

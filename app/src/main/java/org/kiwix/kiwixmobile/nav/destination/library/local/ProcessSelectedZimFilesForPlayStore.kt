@@ -164,7 +164,8 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       // pass if fileName is null then we will validate it after copying/moving
       fileName == null,
       fragmentManager,
-      multipleFilesProcessAction
+      multipleFilesProcessAction,
+      isSingleFileSelected
     )
   }
 

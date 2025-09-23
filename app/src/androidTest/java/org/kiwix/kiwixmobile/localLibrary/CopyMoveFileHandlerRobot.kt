@@ -46,13 +46,21 @@ fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
 
 class CopyMoveFileHandlerRobot : BaseRobot() {
-  fun assertCopyMoveDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+  fun assertCopyMoveDialogDisplayed(
+    composeTestRule: ComposeContentTestRule,
+    isMultipleFiles: Boolean = false
+  ) {
     composeTestRule.apply {
       waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
         onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG).isDisplayed()
       }
+      val copyMoveDialogMessage = if (isMultipleFiles) {
+        context.getString(R.string.copy_move_multiple_files_dialog_description)
+      } else {
+        context.getString(R.string.copy_move_files_dialog_description)
+      }
       onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
-        .assertTextEquals(context.getString(R.string.copy_move_files_dialog_description))
+        .assertTextEquals(copyMoveDialogMessage)
     }
   }
 

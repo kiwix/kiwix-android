@@ -167,7 +167,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         // with other ZIM files dialog.
         assertFileCopyMoveErrorDialogDisplayed(composeTestRule)
         clickOnYesButton(composeTestRule)
-        assertCopyMoveDialogDisplayed(composeTestRule)
+        assertCopyMoveDialogDisplayed(composeTestRule, true)
         clickOnCopy(composeTestRule)
         assertZimFileAddedInTheLocalLibrary(composeTestRule)
       }
@@ -232,7 +232,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         // with other ZIM files dialog.
         assertFileCopyMoveErrorDialogDisplayed(composeTestRule)
         clickOnYesButton(composeTestRule)
-        assertCopyMoveDialogDisplayed(composeTestRule)
+        assertCopyMoveDialogDisplayed(composeTestRule, true)
         clickOnMove(composeTestRule)
         assertZimFileAddedInTheLocalLibrary(composeTestRule)
       }
