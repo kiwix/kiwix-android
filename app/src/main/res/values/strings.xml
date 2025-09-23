@@ -9,4 +9,6 @@
   <string name="no_app_found_to_open">No app found to select ZIM file!</string>
   <string name="select_zim_file">Select ZIM file to read</string>
   <string name="swipe_down_to_scan_storage">Swipe down to scan your device for new books…</string>
+  <string name="auto_detect_books">Auto-detect your books</string>
+  <string name="auto_detect_books_description">On first launch, you will be asked if the app can scan your storage. If you allow it, we will automatically detect your ZIM files without needing to add them manually.</string>
 </resources>

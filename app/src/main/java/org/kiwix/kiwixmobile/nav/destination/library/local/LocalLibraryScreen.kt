@@ -18,14 +18,25 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -37,12 +48,13 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -51,10 +63,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
+import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -63,17 +78,22 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
+import kotlin.math.roundToInt
 
 const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
 const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
@@ -111,7 +131,6 @@ fun LocalLibraryScreen(
           topAppBarScrollBehavior = scrollBehavior
         )
       },
-      bottomBar = { ShowSwipeDownToScanFileSystemText() },
       floatingActionButton = { SelectFileButton(fabButtonClick) },
       modifier = Modifier
         .systemBarsPadding()
@@ -155,26 +174,6 @@ fun LocalLibraryScreen(
 }
 
 @Composable
-private fun ShowSwipeDownToScanFileSystemText() {
-  Surface(
-    color = MaterialTheme.colorScheme.onPrimary,
-    tonalElevation = ONE_DP
-  ) {
-    Text(
-      text = stringResource(string.swipe_down_to_scan_storage),
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(EIGHT_DP)
-        .semantics { testTag = SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG },
-      textAlign = TextAlign.Center,
-      style = MaterialTheme.typography.bodySmall.copy(
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-      )
-    )
-  }
-}
-
-@Composable
 private fun BookItemList(
   state: FileSelectListState,
   onClick: ((BookOnDisk) -> Unit)? = null,
@@ -204,6 +203,16 @@ private fun BookItemList(
             onMultiSelect = onMultiSelect
           )
         }
+      }
+    }
+    item {
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(vertical = TEN_DP),
+        contentAlignment = Alignment.Center
+      ) {
+        SwipeDownToScanFileSystemText()
       }
     }
   }
@@ -251,5 +260,56 @@ fun NoFilesView(
       clickListener = onDownloadButtonClick,
       modifier = Modifier.testTag(DOWNLOAD_BUTTON_TESTING_TAG)
     )
+    SwipeDownToScanFileSystemText()
   }
 }
+
+@Suppress("MagicNumber")
+@Composable
+private fun SwipeDownToScanFileSystemText() {
+  val infiniteTransition = rememberInfiniteTransition(label = "swipeAnim")
+
+  val offsetY by infiniteTransition.animateFloat(
+    initialValue = ZERO.toFloat(),
+    targetValue = 24f,
+    animationSpec = infiniteRepeatable(
+      animation =
+        tween(SWIPE_DOWN_IMAGE_ANIMATION_TIME, easing = FastOutSlowInEasing),
+      repeatMode = RepeatMode.Restart
+    ),
+    label = "swipeOffset"
+  )
+
+  val alpha = 1f - (offsetY / 24f).coerceIn(ZERO.toFloat(), 1f)
+
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(EIGHT_DP),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Center
+  ) {
+    Icon(
+      painter = IconItem.Drawable(drawable.ic_swipe_down).toPainter(),
+      contentDescription = null,
+      modifier = Modifier
+        .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
+        .size(TWENTY_DP)
+        .alpha(alpha),
+      tint = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+    Spacer(Modifier.width(SIX_DP))
+    Text(
+      text = stringResource(string.swipe_down_to_scan_storage),
+      textAlign = TextAlign.Center,
+      style = MaterialTheme.typography.bodySmall.copy(
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+      ),
+      modifier = Modifier.semantics {
+        testTag = SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG
+      }
+    )
+  }
+}
+
+const val SWIPE_DOWN_IMAGE_ANIMATION_TIME = 2000

@@ -666,7 +666,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun showTabSwitcher() {
-    (requireActivity() as CoreMainActivity).apply {
+    (activity as? CoreMainActivity)?.apply {
       disableLeftDrawer()
       hideBottomAppBar()
     }
@@ -711,7 +711,7 @@ abstract class CoreReaderFragment :
    */
   protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     enableLeftDrawer()
-    (requireActivity() as CoreMainActivity).showBottomAppBar()
+    (activity as? CoreMainActivity)?.showBottomAppBar()
     readerScreenState.update {
       copy(
         shouldShowBottomAppBar = true,

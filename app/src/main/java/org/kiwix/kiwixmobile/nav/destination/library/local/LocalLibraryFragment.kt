@@ -27,6 +27,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -108,6 +110,7 @@ import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
+private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 
 @Suppress("LargeClass")
 class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
@@ -363,6 +366,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   private fun showManageExternalStoragePermissionDialog() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!isAdded) return
       dialogShower.show(
         KiwixDialog.ManageExternalFilesPermissionDialog,
         {
@@ -522,7 +526,9 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     super.onResume()
     when {
       shouldShowFileSystemDialog() -> {
-        showFileSystemScanDialog()
+        Handler(Looper.getMainLooper()).postDelayed({
+          showFileSystemScanDialog()
+        }, SHOW_SCAN_DIALOG_DELAY)
       }
 
       shouldScanFileSystem -> {
@@ -550,6 +556,10 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   // Shows the FileSystemScan dialog.
   private fun showFileSystemScanDialog() {
+    // Do not execute the code if fragment is not visible.
+    // We are showing this dialog 2 seconds later. In the meantime; user can
+    // navigate to other screens.
+    if (!isAdded) return
     dialogShower.show(
       KiwixDialog.YesNoDialog.FileSystemScan,
       {
@@ -575,14 +585,20 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   private fun scanFileSystem() {
     when {
       !hasReadExternalStoragePermission() && !sharedPreferenceUtil.prefIsScanFileSystemTest ->
-        askForReaderExternalStoragePermission()
+        askForReaderExternalStoragePermission(true).also {
+          Log.e("DEMO_NOTE", "scanFileSystem: asking permission")
+        }
 
       !requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil) ->
-        showManageExternalStoragePermissionDialog()
+        showManageExternalStoragePermissionDialog().also {
+          Log.e("DEMO_NOTE", "scanFileSystem: asking isManageExternalStoragePermissionGranted")
+        }
 
       else -> {
         shouldScanFileSystem = false
-        requestFileSystemCheck()
+        requestFileSystemCheck().also {
+          Log.e("DEMO_NOTE", "scanFileSystem: ")
+        }
       }
     }
   }
@@ -693,7 +709,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     }
   }
 
-  private fun askForReaderExternalStoragePermission() {
+  private fun askForReaderExternalStoragePermission(shouldScanIfHasPermission: Boolean = false) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
       context.toast(string.request_storage)
       storagePermissionLauncher?.launch(
@@ -703,21 +719,27 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
         )
       )
     } else {
-      checkManageExternalStoragePermission()
+      // Pass the parameter it comes from scan dialog.
+      // So ask for the permission or scan if granted.
+      // This will help us in scanning on already installed apps.
+      checkManageExternalStoragePermission(shouldScanIfHasPermission)
     }
   }
 
-  private fun checkManageExternalStoragePermission() {
+  private fun checkManageExternalStoragePermission(shouldScanIfHasPermission: Boolean = false) {
     if (!sharedPreferenceUtil.isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       if (!Environment.isExternalStorageManager()) {
         // We do not have the permission!!
-        if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+        if (sharedPreferenceUtil.manageExternalFilesPermissionDialog || shouldScanIfHasPermission) {
           // We should only ask for first time, If the users wants to revoke settings
           // then they can directly toggle this feature from settings screen
           sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
           // Show Dialog and  Go to settings to give permission
           showManageExternalStoragePermissionDialog()
         }
+      } else if (shouldScanIfHasPermission) {
+        shouldScanFileSystem = false
+        requestFileSystemCheck()
       }
     }
   }

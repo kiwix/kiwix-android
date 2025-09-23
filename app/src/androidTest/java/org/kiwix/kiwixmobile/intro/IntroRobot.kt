@@ -26,7 +26,8 @@ import androidx.compose.ui.test.performScrollToIndex
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.intro.composable.INTRO_SUB_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.zimManager.THREE
 
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 
@@ -44,7 +46,7 @@ class IntroRobot : BaseRobot() {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-        .assertTextEquals(context.getString(R.string.get_started).uppercase())
+        .assertTextEquals(context.getString(string.get_started).uppercase())
       attempt(10) {
         onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.welcome_to_the_family))
@@ -64,6 +66,15 @@ class IntroRobot : BaseRobot() {
           .assertTextEquals(context.getString(string.save_books_in_desired_storage))
         onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.storage_location_hint))
+      }
+      if (!BuildConfig.IS_PLAYSTORE) {
+        scrollToPage(THREE, composeTestRule)
+        attempt(10) {
+          onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
+            .assertTextEquals(context.getString(R.string.auto_detect_books))
+          onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
+            .assertTextEquals(context.getString(R.string.auto_detect_books_description))
+        }
       }
     }
   }
