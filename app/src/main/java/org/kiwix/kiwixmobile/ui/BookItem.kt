@@ -41,6 +41,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.R
@@ -137,7 +139,9 @@ private fun BookCheckbox(
         SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
       }
     },
-    modifier = Modifier.testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
+    modifier = Modifier
+      .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
+      .semantics { contentDescription = "${bookOnDisk.isSelected}${bookOnDisk.hashCode()}" }
   )
 }
 
@@ -181,7 +185,7 @@ private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk) {
       )
     }
     Spacer(modifier = Modifier.height(FOUR_DP))
-    TagsView(bookOnDisk.tags)
+    TagsView(bookOnDisk.tags, hasCode = bookOnDisk.hashCode())
   }
 }
 

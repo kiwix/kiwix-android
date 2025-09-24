@@ -176,7 +176,7 @@ private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils) {
       BookDescription(item.book.description.orEmpty())
       BookSizeAndDateRow(item)
       BookCreatorAndLanguageRow(item, bookUtils)
-      TagsView(item.tags)
+      TagsView(item.tags, hasCode = item.hashCode())
     }
   }
 }

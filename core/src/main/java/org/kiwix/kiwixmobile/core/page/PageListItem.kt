@@ -77,7 +77,7 @@ fun PageListItem(
       } else {
         Base64String(page.favicon).toPainter()
       },
-      contentDescription = stringResource(R.string.fav_icon),
+      contentDescription = stringResource(R.string.fav_icon) + page.hashCode(),
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
     )
