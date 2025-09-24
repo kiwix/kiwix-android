@@ -80,6 +80,7 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -105,6 +106,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -365,6 +367,7 @@ fun TableDrawerSheet(
           style = MaterialTheme.typography.titleMedium,
           modifier = Modifier
             .fillMaxWidth()
+            .minimumInteractiveComponentSize()
             .clickable {
               onTableOfContentHeaderClick(
                 selectedWebView,
@@ -384,6 +387,7 @@ fun TableDrawerSheet(
           ),
           modifier = Modifier
             .fillMaxWidth()
+            .minimumInteractiveComponentSize()
             .clickable {
               onTableOfContentSectionClick(
                 selectedWebView,
@@ -956,6 +960,7 @@ private fun TabItemCard(
       .width(cardWidth)
       .height(cardHeight)
       .clickable { onTabClickListener.onSelectTab(index) }
+      .semantics { hideFromAccessibility() }
   ) {
     AndroidView(
       factory = { context ->
