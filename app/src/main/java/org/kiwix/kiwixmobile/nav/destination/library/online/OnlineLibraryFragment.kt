@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
@@ -99,6 +100,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
+const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
@@ -117,6 +119,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private val lock = Any()
   private var downloadBookItem: LibraryListItem.BookItem? = null
   private var composeView: ComposeView? = null
+
+  private var showOnlineCategoryDialog: MutableState<Boolean> = mutableStateOf(false)
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
@@ -263,7 +267,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         },
         bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
         navHostController = (requireActivity() as CoreMainActivity).navController,
-        onUserBackPressed = { onUserBackPressed() }
+        onUserBackPressed = { onUserBackPressed() },
+        showOnlineCategoryDialog = showOnlineCategoryDialog
       )
       DialogHost(alertDialogShower)
     }
@@ -371,12 +376,23 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     },
     ActionMenuItem(
       IconItem.Drawable(drawable.ic_language_white_24dp),
+      string.select_category,
+      { onCategoryMenuIconClick() },
+      isEnabled = true,
+      testingTag = CATEGORY_MENU_ICON_TESTING_TAG
+    ),
+    ActionMenuItem(
+      IconItem.Drawable(drawable.ic_language_white_24dp),
       string.pref_language_chooser,
       { onLanguageMenuIconClick() },
       isEnabled = true,
       testingTag = LANGUAGE_MENU_ICON_TESTING_TAG
     )
   )
+
+  private fun onCategoryMenuIconClick() {
+    showOnlineCategoryDialog.value = true
+  }
 
   private fun onLanguageMenuIconClick() {
     requireActivity().navigate(KiwixDestination.Language.route)

@@ -414,4 +414,5 @@
   <string name="searchview_description_clear">Clear query</string>
   <string name="file_system_scan_dialog_title">Scan storage for books?</string>
   <string name="file_system_scan_dialog_message">Kiwix will scan your device storage and list the available books here.</string>
+  <string name="select_category">Select category</string>
 </resources>

@@ -330,6 +330,7 @@ class ZimManageViewModel @Inject constructor(
       add(onlineLibraryRequest())
       add(observeLanguageChanges())
       add(observeSearch())
+      add(observeCategory())
     }
   }
 
@@ -342,6 +343,17 @@ class ZimManageViewModel @Inject constructor(
     appProgressListener = null
     super.onCleared()
   }
+
+  private fun observeCategory() =
+    sharedPreferenceUtil.onlineContentCategory
+      .onEach {
+        libraryListIsRefreshing.postValue(true)
+        updateOnlineLibraryFilters(
+          OnlineLibraryRequest(category = it, page = ONE, isLoadMoreItem = false)
+        )
+      }
+      .flowOn(ioDispatcher)
+      .launchIn(viewModelScope)
 
   @OptIn(FlowPreview::class)
   private fun observeSearch() =
