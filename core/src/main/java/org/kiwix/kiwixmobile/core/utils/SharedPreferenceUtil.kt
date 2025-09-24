@@ -67,6 +67,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _onlineContentLanguage = MutableStateFlow("")
   val onlineContentLanguage = _onlineContentLanguage.asStateFlow()
 
+  private val _onlineContentCategory = MutableStateFlow("")
+  val onlineContentCategory = _onlineContentCategory.asStateFlow()
+
   val prefIsFirstRun: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
 
@@ -364,6 +367,18 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       _onlineContentLanguage.tryEmit(selectedOnlineContentLanguage)
     }
 
+  var selectedOnlineContentCategory: String
+    get() = sharedPreferences.getString(SELECTED_ONLINE_CONTENT_CATEGORY, "").orEmpty()
+    set(selectedOnlineContentCategory) {
+      sharedPreferences.edit {
+        putString(
+          SELECTED_ONLINE_CONTENT_CATEGORY,
+          selectedOnlineContentCategory
+        )
+      }
+      _onlineContentCategory.tryEmit(selectedOnlineContentCategory)
+    }
+
   fun getPublicDirectoryPath(path: String): String =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       path
@@ -423,5 +438,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val KEY_LANGUAGE_ID = "languageId"
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
+    private const val SELECTED_ONLINE_CONTENT_CATEGORY = "selectedOnlineContentCategory"
   }
 }
