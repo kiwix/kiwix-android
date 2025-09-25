@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Alno
+* Bananax47
 * Benoit74
 * BlueCamille
 * Boniface
@@ -9,6 +10,7 @@
 * Djiboun
 * Eneelk
 * Eneelktransfer_to
+* Escargot bleu
 * Fitoschido
 * Gomoko
 * Goombiis
@@ -17,6 +19,7 @@
 * Kelson
 * Lingabo
 * Mahabarata
+* Marphy 123
 * McDutchie
 * MohitMali
 * Méthodes Bulebe Hangi
@@ -50,6 +53,7 @@
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Downloads/org.kiwix…/</string>
   <string name="search_label">Rechercher</string>
   <string name="searched_list">Liste de recherche</string>
+  <string name="more_options">Plus d\'options</string>
   <string name="choose_file">Sélectionner un fichier de contenu (*.zim)</string>
   <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
   <string name="hotspot_service_channel_name">Nom du service de notification du point d’accès Wifi</string>
@@ -91,6 +95,11 @@
   <string name="pref_display_title">Affichage</string>
   <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme">Thème</string>
+  <string name="theme_system">Système</string>
+  <string name="theme_light">Clair</string>
+  <string name="theme_dark">Sombre</string>
+  <string name="pref_theme_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir en haut</string>
   <string name="pref_language_title">Langue</string>
@@ -153,6 +162,7 @@
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
   <string name="download">Télécharger</string>
   <string name="download_notification_channel_name">Nom du canal de notification des téléchargements</string>
+  <string name="download_notification_channel_description">Téléchargement des fichiers ZIM…</string>
   <string name="space_available">Espace disponible :</string>
   <string name="move_no_space">Espace insuffisant pour déplacer/copier.</string>
   <string name="zim_simple">Simple</string>
@@ -353,6 +363,7 @@
   <string name="copying_zim_file">Copie du fichier ZIM %s…</string>
   <string name="moving_zim_file">Déplacement du fichier ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix a besoin que le fichier ZIM soit dans son propre répertoire de données. Voulez-vous le copier ou le déplacer à cet endroit ?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix exige que les fichiers ZIM se trouvent dans son propre répertoire de données.\nVoulez-vous les copier ou les déplacer là-bas ?</string>
   <string name="copy_file_error_message">Erreur lors de la copie du fichier ZIM : %s.</string>
   <string name="verify_zim_chunk_dialog_title">Soyez prudent : assurez-vous que tous les blocs ZIM ont été correctement déplacés/copiés !</string>
   <string name="verify_zim_chunks_dialog_message">Vous pouvez les vérifier dans le dossier « Android/media/org.kiwix…/ ».\nUne fois terminé, actualisez l\'écran de la bibliothèque en faisant glisser votre doigt vers le bas. Le fichier ZIM divisé apparaîtra alors dans votre bibliothèque.</string>
@@ -360,6 +371,8 @@
   <string name="copy_move_files_to_app_directory_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, notre application ne peut plus accéder directement aux fichiers stockés n’importe où sur votre appareil. Pour vous permettre de visualiser les fichiers sélectionnés, nous devons les déplacer ou les copier dans un dossier spécial dans le répertoire de notre application. Cela permettra d’accéder aux fichiers et de les ouvrir.</string>
   <string name="choose_storage_to_copy_move_zim_file">Choisissez l’espace de stockage pour copier/déplacer le fichier ZIM</string>
   <string name="move_file_error_message">Erreur lors du déplacement du fichier ZIM : %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nDo you want to continue with other ZIM files?</string>
+  <string name="your_selected_files_added_to_library">Vos fichiers ZIM sélectionnés sont ajoutés à la bibliothèque.</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier ZIM), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
   <string name="all_files_permission_needed">Tous les droits sur les fichiers sont nécessaires</string>
@@ -411,4 +424,6 @@
   <string name="downloading_state">Téléchargement en cours</string>
   <string name="download_failed_state">Échec</string>
   <string name="searchview_description_clear">Effacer la requête</string>
+  <string name="file_system_scan_dialog_title">Stockage de numérisation pour les livres ?</string>
+  <string name="file_system_scan_dialog_message">Kiwix will scan your device storage and list the available books here.</string>
 </resources>

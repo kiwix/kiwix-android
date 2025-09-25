@@ -63,7 +63,7 @@
   <string name="stop_server_label">Arresta server</string>
   <string name="error_server_already_running">Il server è già in esecuzione. Spegnilo e riprova.</string>
   <string name="error_ip_address_not_found">Impossibile trovare l’indirizzo IP.</string>
-  <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server: %s</string>
+  <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server %s</string>
   <string name="qr_code">Codice QR renderizzato</string>
   <string name="share_host_address">Condividi URL con altre applicazioni</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato. %s</string>
@@ -76,6 +76,7 @@
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
+  <string name="pref_theme_summary">Visualizza le voci con colori invertiti</string>
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
   <string name="pref_language_title">Lingua</string>
@@ -344,6 +345,7 @@
   <string name="copy_move_files_to_app_directory_description">A causa delle politiche di Google Play su Android 11 e versioni successive, la nostra app non può più accedere direttamente ai file archiviati altrove sul tuo dispositivo. Per consentirti di visualizzare i file selezionati, dobbiamo spostarli o copiarli in una cartella speciale all\'interno della directory dell\'applicazione. Questo ci consente di accedere ai file e aprirli.</string>
   <string name="choose_storage_to_copy_move_zim_file">Scegli l\'archiviazione in cui copiare/spostare il file ZIM</string>
   <string name="move_file_error_message">Errore nello spostamento del file ZIM: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nVuoi continuare con altri file ZIM?</string>
   <string name="how_to_update_content">Come aggiornare i contenuti?</string>
   <string name="update_content_description">Per aggiornare un contenuto (un file ZIM), devi scaricare l’ultima versione completa di quello stesso contenuto. Puoi farlo nella sezione Scarica.</string>
   <string name="all_files_permission_needed">Accesso a tutti i file richiesto</string>

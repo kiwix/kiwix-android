@@ -35,13 +35,14 @@
   <string name="go_to_wifi_settings_label">ওয়াইফাই সেটিংসে যান</string>
   <string name="connection_refused">সংযোগ প্রত্যাখান করা হয়েছে।</string>
   <string name="error_server_already_running">সার্ভার ইতিমধ্যেই চলছে। দয়া করে এটি বন্ধ করে আবার চেষ্টা করুন।</string>
-  <string name="error_ip_address_not_found">আইপি ঠিকানা খুঁজে পাওয়া যায়নি।</string>
+  <string name="error_ip_address_not_found" fuzzy="true">আইপি ঠিকানা খুঁজে পাওয়া যায়নি।</string>
   <string name="error_file_not_found">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি। %s</string>
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়। %s</string>
   <string name="error_article_url_not_found">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>
   <string name="pref_display_title">প্রদর্শন</string>
   <string name="pref_info_title">তথ্য</string>
   <string name="pref_info_version">সংস্করণ</string>
+  <string name="pref_theme_summary">উল্টানো রঙসহ নিবন্ধ দেখান</string>
   <string name="pref_back_to_top">উপরে ফিরুন</string>
   <string name="pref_back_to_top_summary">উপরে স্ক্রল করতে পাতার শেষে একটি বোতাম প্রদর্শিত হবে</string>
   <string name="pref_language_title">ভাষা</string>
