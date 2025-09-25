@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.language.viewmodel
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
 import androidx.annotation.VisibleForTesting
@@ -34,6 +34,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -44,27 +45,24 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_LANGUAGE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
-import org.kiwix.kiwixmobile.language.viewmodel.State.Content
-import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Error
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Select
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.UpdateCategory
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
-class LanguageViewModel @Inject constructor(
+@Suppress("UnusedPrivateProperty")
+class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private var kiwixService: KiwixService,
@@ -73,13 +71,14 @@ class LanguageViewModel @Inject constructor(
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
+
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
     coroutineJobs.apply {
       add(observeActions())
-      add(observeLanguages())
+      add(observeCategories())
     }
   }
 
@@ -90,68 +89,33 @@ class LanguageViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private suspend fun fetchLanguages(): List<Language>? =
-    runCatching {
-      kiwixService =
-        KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
-      val feed = kiwixService.getLanguages()
-      var allBooksCount = ZERO
-
-      val languages = feed.entries.orEmpty().mapIndexedNotNull { index, entry ->
-        allBooksCount += entry.count
-        runCatching {
-          Language(
-            languageCode = entry.languageCode,
-            active = sharedPreferenceUtil.selectedOnlineContentLanguage == entry.languageCode,
-            occurrencesOfLanguage = entry.count,
-            id = (index + 1).toLong()
-          )
-        }.onFailure {
-          Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", it)
-        }.getOrNull()
-      }
-
-      buildList {
-        add(
-          Language(
-            languageCode = "",
-            active = sharedPreferenceUtil.selectedOnlineContentLanguage.isEmpty(),
-            occurrencesOfLanguage = allBooksCount,
-            id = 0L
-          )
-        )
-        addAll(languages)
-      }
-    }.onFailure { it.printStackTrace() }.getOrNull()
-
-  private fun observeLanguages() = viewModelScope.launch {
+  private fun observeCategories() = viewModelScope.launch {
     state.value = Loading
 
-    val cachedLanguageList = sharedPreferenceUtil.getCachedLanguageList()
+    val cachedCategoryList = sharedPreferenceUtil.getCachedCategoryList()
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
-
-    if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
-      actions.emit(UpdateLanguages(cachedLanguageList))
+    if (CategorySessionCache.hasFetched && !cachedCategoryList.isNullOrEmpty()) {
+      actions.emit(UpdateCategory(cachedCategoryList))
       return@launch
     }
 
     if (isOnline) {
       runCatching {
-        val fetched = fetchLanguages()
+        val fetched = fetchCategories()
         if (!fetched.isNullOrEmpty()) {
-          sharedPreferenceUtil.saveLanguageList(fetched)
-          LanguageSessionCache.hasFetched = true
-          actions.emit(UpdateLanguages(fetched))
+          sharedPreferenceUtil.saveCategoryList(fetched)
+          CategorySessionCache.hasFetched = true
+          actions.emit(UpdateCategory(fetched))
           return@launch
         }
       }.onFailure { it.printStackTrace() }
     }
 
-    if (!cachedLanguageList.isNullOrEmpty()) {
-      actions.emit(UpdateLanguages(cachedLanguageList))
+    if (!cachedCategoryList.isNullOrEmpty()) {
+      actions.emit(UpdateCategory(cachedCategoryList))
     } else {
       val errorMessage = if (isOnline) {
-        context.getString(R.string.no_language_available)
+        context.getString(string.no_category_available)
       } else {
         context.getString(R.string.no_network_connection)
       }
@@ -159,19 +123,31 @@ class LanguageViewModel @Inject constructor(
     }
   }
 
-  @VisibleForTesting
-  fun onClearedExposed() {
-    onCleared()
-  }
+  private suspend fun fetchCategories(): List<Category>? =
+    runCatching {
+      kiwixService =
+        KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+      val feed = kiwixService.getCategories()
 
-  override fun onCleared() {
-    coroutineJobs.forEach {
-      it.cancel()
-    }
-    coroutineJobs.clear()
-    context.unregisterReceiver(connectivityBroadcastReceiver)
-    super.onCleared()
-  }
+      val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
+        Category(
+          category = entry.title,
+          active = sharedPreferenceUtil.selectedOnlineContentCategory == entry.title,
+          id = (index + 1).toLong()
+        )
+      }
+
+      buildList {
+        add(
+          Category(
+            category = "",
+            active = sharedPreferenceUtil.selectedOnlineContentCategory.isEmpty(),
+            id = 0L
+          )
+        )
+        addAll(categories)
+      }
+    }.onFailure { it.printStackTrace() }.getOrNull()
 
   private fun reduce(
     action: Action,
@@ -180,9 +156,9 @@ class LanguageViewModel @Inject constructor(
     return when (action) {
       is Error -> State.Error(action.errorMessage)
 
-      is UpdateLanguages ->
+      is UpdateCategory ->
         when (currentState) {
-          Loading -> Content(action.languages)
+          Loading -> Content(action.categories)
           else -> currentState
         }
 
@@ -195,39 +171,37 @@ class LanguageViewModel @Inject constructor(
 
       is Select ->
         when (currentState) {
-          is Content -> updateSelection(action.language, currentState)
-          else -> currentState
-        }
+          is Content -> {
+            val newState = updateSelection(action.category, currentState)
+            save(newState)
+          }
 
-      Save ->
-        when (currentState) {
-          is Content -> save(currentState)
           else -> currentState
         }
     }
   }
 
+  private fun filterContent(
+    filter: String,
+    currentState: Content
+  ) = currentState.updateFilter(filter)
+
+  private fun updateSelection(
+    categoryItem: CategoryItem,
+    currentState: Content
+  ) = currentState.select(categoryItem)
+
   private fun save(currentState: Content): State {
-    val selectedLanguage = currentState.items.first { it.active }
+    val selectedCategory = currentState.items.first { it.active }
     effects.tryEmit(
-      SaveLanguagesAndFinish(
-        selectedLanguage,
+      SaveCategoryAndFinish(
+        selectedCategory,
         sharedPreferenceUtil,
         viewModelScope
       )
     )
     return Saving
   }
-
-  private fun updateSelection(
-    languageItem: LanguageItem,
-    currentState: Content
-  ) = currentState.select(languageItem)
-
-  private fun filterContent(
-    filter: String,
-    currentState: Content
-  ) = currentState.updateFilter(filter)
 
   private fun getOkHttpClient() = OkHttpClient().newBuilder()
     .followRedirects(true)
@@ -242,8 +216,22 @@ class LanguageViewModel @Inject constructor(
     )
     .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
     .build()
+
+  @VisibleForTesting
+  fun onClearedExposed() {
+    onCleared()
+  }
+
+  override fun onCleared() {
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
+    context.unregisterReceiver(connectivityBroadcastReceiver)
+    super.onCleared()
+  }
 }
 
-object LanguageSessionCache {
+object CategorySessionCache {
   var hasFetched: Boolean = false
 }

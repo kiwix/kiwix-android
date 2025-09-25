@@ -95,7 +95,7 @@ const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutT
 const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
