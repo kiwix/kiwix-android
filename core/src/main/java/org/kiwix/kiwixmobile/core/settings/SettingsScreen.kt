@@ -58,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -438,7 +439,11 @@ private fun SwitchPreference(
         PreferenceTitleText(title)
         PreferenceSummaryText(summary)
       }
-      Switch(checked = checked, onCheckedChange = onCheckedChange)
+      Switch(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        modifier = Modifier.semantics { contentDescription = title }
+      )
     }
   }
 }
@@ -458,6 +463,7 @@ private fun SeekBarPreference(
       .semantics {
         testTag = SEEKBAR_PREFERENCE_TESTING_TAG
         contentDescription = title
+        hideFromAccessibility()
       }
   ) {
     PreferenceTitleText(title)
@@ -555,7 +561,8 @@ private fun ListOptions(
       ) {
         RadioButton(
           selected = option == selected,
-          onClick = { onOptionSelected(option) }
+          onClick = { onOptionSelected(option) },
+          modifier = Modifier.semantics { contentDescription = option }
         )
         Text(text = option, style = MaterialTheme.typography.bodyLarge)
       }
@@ -573,6 +580,7 @@ private fun PreferenceItem(title: String, summary: String, onClick: () -> Unit) 
       .semantics {
         testTag = PREFERENCE_ITEM_TESTING_TAG
         contentDescription = title
+        hideFromAccessibility()
       }
   ) {
     PreferenceTitleText(title)

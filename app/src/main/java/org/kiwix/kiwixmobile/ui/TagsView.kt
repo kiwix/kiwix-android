@@ -28,6 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
@@ -39,32 +41,36 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier) {
+fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, hasCode: Int) {
   FlowRow(
     modifier = modifier,
     horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {
     if (tags.isYesOrNotDefined<PicturesTag>()) {
-      TagChip(text = stringResource(R.string.tag_pic))
+      val picture = stringResource(R.string.tag_pic)
+      TagChip(text = picture, contentDescription = "$picture$hasCode")
     }
     if (tags.isYesOrNotDefined<VideoTag>()) {
-      TagChip(text = stringResource(R.string.tag_vid))
+      val video = stringResource(R.string.tag_vid)
+      TagChip(text = video, contentDescription = "$video$hasCode")
     }
     val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
     if (tags.isDefinedAndNo<PicturesTag>() &&
       tags.isDefinedAndNo<VideoTag>() &&
       !shortTextIsSelected
     ) {
-      TagChip(text = stringResource(R.string.tag_text_only))
+      val textOnly = stringResource(R.string.tag_text_only)
+      TagChip(text = textOnly, contentDescription = "$textOnly$hasCode")
     }
     if (shortTextIsSelected) {
-      TagChip(text = stringResource(R.string.tag_short_text))
+      val shortText = stringResource(R.string.tag_short_text)
+      TagChip(text = shortText, contentDescription = "$shortText$hasCode")
     }
   }
 }
 
 @Composable
-private fun TagChip(text: String) {
+private fun TagChip(text: String, contentDescription: String) {
   val chipColors = SuggestionChipDefaults.suggestionChipColors(
     disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.24f),
     disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.87f)
@@ -76,6 +82,7 @@ private fun TagChip(text: String) {
     shape = MaterialTheme.shapes.extraLarge,
     colors = chipColors,
     border = null,
+    modifier = Modifier.semantics { this.contentDescription = contentDescription }
   )
 }
 

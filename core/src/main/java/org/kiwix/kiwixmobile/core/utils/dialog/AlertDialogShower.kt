@@ -177,7 +177,7 @@ fun DialogIcon(dialog: KiwixDialog) {
   dialog.iconItem?.let {
     Icon(
       it.toPainter(),
-      contentDescription = null,
+      contentDescription = stringResource(R.string.fav_icon),
       // Setting end padding to give space between icon and title
       modifier = Modifier
         .size(DIALOG_ICON_SIZE)

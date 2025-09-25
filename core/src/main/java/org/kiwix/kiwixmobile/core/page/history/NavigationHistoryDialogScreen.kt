@@ -132,7 +132,7 @@ private fun NavigationHistoryItem(
   ) {
     Image(
       painter = IconItem.MipmapImage(R.mipmap.ic_launcher_round).toPainter(),
-      contentDescription = stringResource(R.string.fav_icon),
+      contentDescription = stringResource(R.string.fav_icon) + item.hashCode(),
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
     )
