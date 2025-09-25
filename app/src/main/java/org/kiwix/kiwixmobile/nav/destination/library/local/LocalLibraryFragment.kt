@@ -393,7 +393,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   private fun showFileChooser() {
     val intent = Intent().apply {
       action = Intent.ACTION_OPEN_DOCUMENT
-      type = "*/*"
+      type = "application/*"
       addCategory(Intent.CATEGORY_OPENABLE)
       putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
       if (sharedPreferenceUtil.prefIsTest) {
