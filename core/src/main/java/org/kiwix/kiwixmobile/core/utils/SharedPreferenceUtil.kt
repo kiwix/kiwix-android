@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.io.File
 import java.util.Locale
@@ -254,6 +255,37 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       }
     }.onFailure { it.printStackTrace() }.getOrNull()
 
+  fun saveCategoryList(categories: List<Category>) {
+    runCatching {
+      val jsonArray = JSONArray()
+      categories.forEach { category ->
+        val obj = JSONObject().apply {
+          put(KEY_ONLINE_CATEGORY_NAME, category.category)
+          put(KEY_ONLINE_CATEGORY_ID, category.id)
+        }
+        jsonArray.put(obj)
+      }
+      sharedPreferences.edit {
+        putString(CACHED_ONLINE_CATEGORIES, jsonArray.toString())
+      }
+    }.onFailure { it.printStackTrace() }
+  }
+
+  fun getCachedCategoryList(): List<Category>? =
+    runCatching {
+      val jsonString =
+        sharedPreferences.getString(CACHED_ONLINE_CATEGORIES, null) ?: return@runCatching null
+      val jsonArray = JSONArray(jsonString)
+      List(jsonArray.length()) { i ->
+        val obj = jsonArray.getJSONObject(i)
+        Category(
+          category = obj.getString(KEY_ONLINE_CATEGORY_NAME),
+          active = selectedOnlineContentCategory == obj.getString(KEY_ONLINE_CATEGORY_NAME),
+          id = obj.getLong(KEY_ONLINE_CATEGORY_ID)
+        )
+      }
+    }.onFailure { it.printStackTrace() }.getOrNull()
+
   fun showIntro(): Boolean = sharedPreferences.getBoolean(PREF_SHOW_INTRO, true)
 
   fun setIntroShown() = sharedPreferences.edit { putBoolean(PREF_SHOW_INTRO, false) }
@@ -439,5 +471,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
     private const val SELECTED_ONLINE_CONTENT_CATEGORY = "selectedOnlineContentCategory"
+    private const val CACHED_ONLINE_CATEGORIES = "cachedOnlineCategories"
+    private const val KEY_ONLINE_CATEGORY_NAME = "onlineCategoryName"
+    private const val KEY_ONLINE_CATEGORY_ID = "onlineCategoryId"
   }
 }

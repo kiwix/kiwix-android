@@ -16,21 +16,24 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library.online
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.ViewModel
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import javax.inject.Inject
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 
-@Suppress("UnusedPrivateProperty")
-class CategoryViewModel @Inject constructor(
-  private val context: Application,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private var kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
-) : ViewModel() {
-  // Prepare the category based data here.
+sealed class CategoryListItem {
+  abstract val id: Long
+
+  data class HeaderItem constructor(
+    override val id: Long
+  ) : CategoryListItem() {
+    companion object {
+      const val SELECTED = Long.MAX_VALUE
+      const val OTHER = Long.MIN_VALUE
+    }
+  }
+
+  data class CategoryItem(
+    val category: Category,
+    override val id: Long = category.id
+  ) : CategoryListItem()
 }

@@ -372,7 +372,7 @@ class ZimManageViewModel @Inject constructor(
     sharedPreferenceUtil.onlineContentLanguage
       .onEach {
         updateOnlineLibraryFilters(
-          OnlineLibraryRequest(lang = it, page = ZERO, isLoadMoreItem = false)
+          OnlineLibraryRequest(lang = it, page = ONE, isLoadMoreItem = false)
         )
       }
       .flowOn(ioDispatcher)

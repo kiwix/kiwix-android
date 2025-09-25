@@ -25,6 +25,7 @@ import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 
 @Module(includes = [CoreViewModelModule::class])
@@ -38,4 +39,9 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(LanguageViewModel::class)
   abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(CategoryViewModel::class)
+  abstract fun bindCategoryViewModel(categoryViewModel: CategoryViewModel): ViewModel
 }
