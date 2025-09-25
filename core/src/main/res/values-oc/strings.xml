@@ -26,6 +26,7 @@
   <string name="pref_display_title">Afichatge</string>
   <string name="pref_info_title">Informacion</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme_summary">Afichar los articles en colors inversadas</string>
   <string name="pref_back_to_top">Retorn al començament</string>
   <string name="pref_back_to_top_summary">Afichar un boton en bas de la pagina per tornar al començament</string>
   <string name="pref_language_title">Lenga</string>

@@ -64,6 +64,11 @@
   <string name="pref_display_title">Visualisation</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme">Thema</string>
+  <string name="theme_system">Systema</string>
+  <string name="theme_light">Clar</string>
+  <string name="theme_dark">Obscur</string>
+  <string name="pref_theme_summary">Monstrar articulos in colores invertite</string>
   <string name="pref_back_to_top">Initio del pagina</string>
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
   <string name="pref_language_title">Lingua</string>
@@ -87,7 +92,7 @@
   <string name="pref_import_bookmark_summary">Importar le marcapaginas salveguardate</string>
   <string name="pref_export_bookmark_title">Exportar marcapaginas</string>
   <string name="pref_export_bookmark_summary">Exportar tote le marcapaginas salveguardate</string>
-  <string name="export_bookmark_saved">Le marcapaginas es exportate in un file %s</string>
+  <string name="export_bookmark_saved">Le marcapaginas es exportate in le file %s</string>
   <string name="all_history_cleared">Tote le historia ha essite radite</string>
   <string name="pref_clear_all_bookmarks_title">Rader marcapaginas</string>
   <string name="clear_all_history_dialog_title">Rader tote le historia?</string>
@@ -126,6 +131,7 @@
   <string name="download_no_space">Spatio insufficiente pro discargar.</string>
   <string name="download">Discargar</string>
   <string name="download_notification_channel_name">Nomine del canal de notification de discargamentos</string>
+  <string name="download_notification_channel_description">Discarga files ZIM…</string>
   <string name="space_available">Spatio disponibile:</string>
   <string name="move_no_space">Spatio insufficiente pro displaciar/copiar.</string>
   <string name="zim_simple">Simple</string>
@@ -323,7 +329,7 @@
   <string name="preparing_file_for_copy">Preparation pro copiar/displaciar</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Displaciar</string>
-  <string name="copying_zim_file">Copiante le file ZIM %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Copiante le file ZIM %s…</string>
   <string name="moving_zim_file">Displaciante le file ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix require que le file ZIM se trova in su proprie directorio de datos.\nVole tu copiar o displaciar lo illac?</string>
   <string name="copy_file_error_message">Error durante le copia del file ZIM: %s.</string>
