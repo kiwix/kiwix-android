@@ -1,9 +1,13 @@
-name: Publish nightly build
+name: Publish fdroid nightly build
 
+# This workflow is triggered on a schedule or when specific tags are pushed.
+# It runs every Monday at 12:00 UTC and also when the 'fdroid_nightly' tag is pushed.
 on:
-  pull_request:
-    branches:
-      - testing
+  push:
+    tags:
+      - 'fdroid_nightly' # fdroid_nightly Tag
+  schedule:
+    - cron: '0 12 * * 1'  # Runs every Monday at 12:00
 
 jobs:
   nightly:
@@ -22,9 +26,6 @@ jobs:
 
       - name: Build
         run: |
-          # use timestamp as Version Code
-          export versionCode=$(date '+%s')
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
           ./gradlew assembleDebug
 
       - name: fdroid nightly
