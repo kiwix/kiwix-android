@@ -193,7 +193,7 @@
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
-  <string name="downloading">डाउनलोड हो रहा है:</string>
+  <string name="downloading">डाउनलोड हो रहा है</string>
   <string name="no_items_msg">कोई आइटम उपलब्ध नहीं है</string>
   <string name="crash_title">खैर, यह शर्मनाक है</string>
   <string name="crash_description">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>

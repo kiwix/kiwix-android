@@ -202,7 +202,7 @@
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
   <string name="other_languages">Outros idiomas:</string>
-  <string name="downloading">Baixando:</string>
+  <string name="downloading">Baixando</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isso é constrangedor</string>
   <string name="crash_description">Parece que caímos.\n\nVocê se importaria em nos ajudar a corrigir esse problema enviando as seguintes informações?</string>

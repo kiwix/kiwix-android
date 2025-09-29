@@ -184,7 +184,7 @@
   <string name="your_languages">Linguas eligite:</string>
   <string name="your_language">Lingua seligite: %s</string>
   <string name="other_languages">Altere linguas:</string>
-  <string name="downloading">Discargante:</string>
+  <string name="downloading">Discargante</string>
   <string name="no_items_msg">Nulle articulos disponibile</string>
   <string name="crash_title">Ben… isto es embarassante</string>
   <string name="crash_description">Pare que le programma ha collabite.\n\nTe displaciarea adjutar nos a resolver iste problema inviante nos le sequente information?</string>

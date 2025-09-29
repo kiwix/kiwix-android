@@ -194,7 +194,7 @@
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
   <string name="your_languages">Wybrane języki:</string>
   <string name="other_languages">Inne języki:</string>
-  <string name="downloading">Pobierane:</string>
+  <string name="downloading">Pobierane</string>
   <string name="no_items_msg">Brak dostępnych pozycji</string>
   <string name="crash_title">Cóż… To jest krępujące</string>
   <string name="crash_description">Czy mógłbyś pomóc nam rozwiązać ten problem, wysyłając następujące informacje?</string>

@@ -181,7 +181,7 @@
   <string name="do_not_ask_anymore">Kosenga lisusu te</string>
   <string name="your_languages">Minɔkɔ misusu:</string>
   <string name="other_languages">Minɔkɔ misusu:</string>
-  <string name="downloading">Kobimisa:</string>
+  <string name="downloading">Kobimisa</string>
   <string name="no_items_msg">Biloko ezali te</string>
   <string name="crash_description">Emonani lokola to crasher.\n\nOkozala na problème ya kosalisa biso to bongisa problème oyo na kotinda ba informations oyo elandi?</string>
   <string name="crash_checkbox_language">Ndenge oyo monɔkɔ na yo ezali</string>

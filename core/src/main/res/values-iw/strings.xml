@@ -189,7 +189,7 @@
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
   <string name="your_languages">שפות נבחרות:</string>
   <string name="other_languages">שפות אחרות:</string>
-  <string name="downloading">מתבצעת הורדה:</string>
+  <string name="downloading">מתבצעת הורדה</string>
   <string name="no_items_msg">אין פריטים זמינים</string>
   <string name="crash_title">טוב… זה מביך</string>
   <string name="crash_description">נראה שקרסנו.\n\nהאם ברצונך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת המידע הבא?</string>

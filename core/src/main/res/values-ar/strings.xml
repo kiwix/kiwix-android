@@ -195,7 +195,7 @@
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
   <string name="your_languages">اللغات المختارة:</string>
   <string name="other_languages">لغات أخرى:</string>
-  <string name="downloading">جاري التحميل:</string>
+  <string name="downloading">جاري التحميل</string>
   <string name="no_items_msg">لا توجد عناصر متاحة</string>
   <string name="crash_title">حسنًا.. هذا أمر محرج</string>
   <string name="crash_description">يبدو أننا انهرنا.\n\nهل تمانع في مساعدتنا في حل هذه المشكلة عن طريق إرسال المعلومات التالية؟</string>

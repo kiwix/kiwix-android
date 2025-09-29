@@ -197,7 +197,7 @@
   <string name="your_languages">선택한 언어:</string>
   <string name="your_language">선택한 언어: %s</string>
   <string name="other_languages">다른 언어:</string>
-  <string name="downloading">다운로드 중:</string>
+  <string name="downloading">다운로드 중</string>
   <string name="no_items_msg">사용 가능한 항목이 없음</string>
   <string name="crash_title">앗.. 부끄럽네요.</string>
   <string name="crash_description">충돌이 발생한 것 같습니다.\n\n다음의 정보를 보냄으로써 저희가 이 문제를 해결하는데 도움을 주시겠습니까?</string>

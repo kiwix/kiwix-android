@@ -195,7 +195,7 @@
   <string name="your_languages">Lingue selezionate:</string>
   <string name="your_language">Lingua selezionata: %s</string>
   <string name="other_languages">Altre lingue:</string>
-  <string name="downloading">Download in corso:</string>
+  <string name="downloading">Download in corso</string>
   <string name="no_items_msg">Nessun elemento disponibile</string>
   <string name="crash_title">Oops… questo è imbarazzante</string>
   <string name="crash_description">Sembra che si sia verificato un arresto anomalo.\n\nTi dispiacerebbe aiutarci a risolvere questo problema inviandoci le seguenti informazioni?</string>
