@@ -25,10 +25,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -90,45 +93,50 @@ class LanguageViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private suspend fun fetchLanguages(): List<Language>? =
-    runCatching {
-      kiwixService =
-        KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
-      val feed = kiwixService.getLanguages()
-      var allBooksCount = ZERO
+  @Suppress("MagicNumber")
+  private fun fetchLanguagesFlow() = flow {
+    kiwixService =
+      KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+    val feed = kiwixService.getLanguages()
+    var allBooksCount = ZERO
 
-      val languages = feed.entries.orEmpty().mapIndexedNotNull { index, entry ->
-        allBooksCount += entry.count
-        runCatching {
-          Language(
-            languageCode = entry.languageCode,
-            active = sharedPreferenceUtil.selectedOnlineContentLanguage == entry.languageCode,
-            occurrencesOfLanguage = entry.count,
-            id = (index + 1).toLong()
-          )
-        }.onFailure {
-          Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", it)
-        }.getOrNull()
-      }
-
-      buildList {
-        add(
-          Language(
-            languageCode = "",
-            active = sharedPreferenceUtil.selectedOnlineContentLanguage.isEmpty(),
-            occurrencesOfLanguage = allBooksCount,
-            id = 0L
-          )
+    val languages = feed.entries.orEmpty().mapIndexedNotNull { index, entry ->
+      allBooksCount += entry.count
+      runCatching {
+        Language(
+          languageCode = entry.languageCode,
+          active = sharedPreferenceUtil.selectedOnlineContentLanguage == entry.languageCode,
+          occurrencesOfLanguage = entry.count,
+          id = (index + 1).toLong()
         )
-        addAll(languages)
-      }
-    }.onFailure { it.printStackTrace() }.getOrNull()
+      }.onFailure {
+        Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", it)
+      }.getOrNull()
+    }
+
+    val languageList = buildList {
+      add(
+        Language(
+          languageCode = "",
+          active = sharedPreferenceUtil.selectedOnlineContentLanguage.isEmpty(),
+          occurrencesOfLanguage = allBooksCount,
+          id = 0L
+        )
+      )
+      addAll(languages)
+    }
+    emit(languageList)
+  }.retry(5)
+    .catch { e ->
+      e.printStackTrace()
+      emit(emptyList())
+    }
 
   private fun observeLanguages() = viewModelScope.launch {
     state.value = Loading
 
     val cachedLanguageList = sharedPreferenceUtil.getCachedLanguageList()
-    val isOnline = connectivityBroadcastReceiver.networkStates.value != NetworkState.NOT_CONNECTED
+    val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
 
     if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
       actions.emit(UpdateLanguages(cachedLanguageList))
@@ -136,21 +144,31 @@ class LanguageViewModel @Inject constructor(
     }
 
     if (isOnline) {
-      runCatching {
-        val fetched = fetchLanguages()
-        if (!fetched.isNullOrEmpty()) {
-          sharedPreferenceUtil.saveLanguageList(fetched)
+      fetchLanguagesFlow().collect { languages ->
+        if (languages.isNotEmpty()) {
+          sharedPreferenceUtil.saveLanguageList(languages)
           LanguageSessionCache.hasFetched = true
-          actions.emit(UpdateLanguages(fetched))
-          return@launch
+          actions.emit(UpdateLanguages(languages))
+        } else {
+          emitCachedLanguage(cachedLanguageList, true)
         }
-      }.onFailure { it.printStackTrace() }
+      }
+      return@launch
     }
 
+    emitCachedLanguage(cachedLanguageList, false)
+  }
+
+  private suspend fun emitCachedLanguage(cachedLanguageList: List<Language>?, isOnline: Boolean) {
     if (!cachedLanguageList.isNullOrEmpty()) {
       actions.emit(UpdateLanguages(cachedLanguageList))
     } else {
-      actions.emit(Error(context.getString(R.string.no_language_available)))
+      val errorMessage = if (isOnline) {
+        context.getString(R.string.no_language_available)
+      } else {
+        context.getString(R.string.no_network_connection)
+      }
+      actions.emit(Error(errorMessage))
     }
   }
 
