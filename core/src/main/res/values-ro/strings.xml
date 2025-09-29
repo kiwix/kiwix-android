@@ -185,7 +185,7 @@
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
   <string name="other_languages">Alte limbi:</string>
-  <string name="downloading">Descărcare:</string>
+  <string name="downloading">Descărcare</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
   <string name="crash_title">Ei bine … Este jenant</string>
   <string name="crash_description">Se pare că ne-am prăbușit.</string>

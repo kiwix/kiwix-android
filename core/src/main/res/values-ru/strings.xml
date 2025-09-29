@@ -208,7 +208,7 @@
   <string name="do_not_ask_anymore">Больше не спрашивать</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
-  <string name="downloading">Скачивание:</string>
+  <string name="downloading">Скачивание</string>
   <string name="no_items_msg">Нет доступных элементов</string>
   <string name="crash_title">Хммм… Как неловко</string>
   <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>

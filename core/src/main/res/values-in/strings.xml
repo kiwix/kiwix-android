@@ -190,7 +190,7 @@
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
   <string name="your_languages">Bahasa terpilih:</string>
   <string name="other_languages">Bahasa lain:</string>
-  <string name="downloading">Mengunduh:</string>
+  <string name="downloading">Mengunduh</string>
   <string name="no_items_msg">Tidak ada item yang tersedia</string>
   <string name="crash_title">Yah… Ini memalukan</string>
   <string name="crash_description">Sepertinya kami mengalami kerusakan.\n\nBisakah Anda membantu kami memperbaiki masalah ini dengan mengirimkan informasi berikut?</string>

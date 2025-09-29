@@ -166,7 +166,7 @@
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
   <string name="your_languages">Valgte sprog:</string>
   <string name="other_languages">Andre sprog:</string>
-  <string name="downloading">Henter:</string>
+  <string name="downloading">Henter</string>
   <string name="crash_title">Åh nej. Det her er pinligt</string>
   <string name="crash_description">Det ser ud til at vi er gået ned.\n\nVil du hjælpe os med at løse problemet ved at sende følgende oplysninger?</string>
   <string name="crash_checkbox_language">Dine sprogindstillinger</string>

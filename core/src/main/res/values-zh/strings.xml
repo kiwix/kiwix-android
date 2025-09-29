@@ -209,7 +209,7 @@
   <string name="do_not_ask_anymore">不再询问</string>
   <string name="your_languages">选择的语言：</string>
   <string name="other_languages">其他语言：</string>
-  <string name="downloading">下载中：</string>
+  <string name="downloading">下载中</string>
   <string name="no_items_msg">没有可用的项目</string>
   <string name="crash_title">呃…这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>

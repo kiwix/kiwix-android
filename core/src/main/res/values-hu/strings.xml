@@ -195,7 +195,7 @@
   <string name="your_languages">Kiválasztott nyelvek:</string>
   <string name="your_language">Kiválasztott nyelv: %s</string>
   <string name="other_languages">További nyelvek:</string>
-  <string name="downloading">Letöltés:</string>
+  <string name="downloading">Letöltés</string>
   <string name="no_items_msg">Nincsenek elérhető elemek</string>
   <string name="crash_title">Nos… ez kínos!</string>
   <string name="crash_description">Úgy tűnik, hogy összeomlottunk.\n\nSegítene nekünk a probléma megoldásában az alábbi információk elküldésével?</string>

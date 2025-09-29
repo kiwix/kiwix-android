@@ -182,7 +182,7 @@
   <string name="your_languages">Избрани јазици:</string>
   <string name="your_language">Избран јазик: %s</string>
   <string name="other_languages">Други јазици:</string>
-  <string name="downloading">Преземање:</string>
+  <string name="downloading">Преземање</string>
   <string name="no_items_msg">Нема ставки</string>
   <string name="crash_title">Ова е незгодно</string>
   <string name="crash_description">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>

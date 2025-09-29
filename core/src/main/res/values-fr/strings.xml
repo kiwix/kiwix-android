@@ -211,7 +211,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="your_language">Langue sélectionnée : %s</string>
   <string name="other_languages">Autres langues :</string>
-  <string name="downloading">Téléchargement:</string>
+  <string name="downloading">Téléchargement</string>
   <string name="no_items_msg">Aucun élément disponible</string>
   <string name="crash_title">Eh bien… c’est embarrassant</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>

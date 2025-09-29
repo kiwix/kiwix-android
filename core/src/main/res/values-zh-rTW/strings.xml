@@ -194,7 +194,7 @@
   <string name="your_languages">所選語言：</string>
   <string name="your_language">已選語言：%s</string>
   <string name="other_languages">其它語言：</string>
-  <string name="downloading">正在下載：</string>
+  <string name="downloading">正在下載</string>
   <string name="no_items_msg">沒有可用的項目</string>
   <string name="crash_title">唔…真是丟臉</string>
   <string name="crash_description">看起來是我們這邊出了問題。\n\n您是否願意透過發送以下資訊，來協助我們修正此問題？</string>

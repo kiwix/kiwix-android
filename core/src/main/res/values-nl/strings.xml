@@ -190,7 +190,7 @@
   <string name="do_not_ask_anymore">Dit niet meer vragen</string>
   <string name="your_languages">Geselecteerde talen:</string>
   <string name="other_languages">Andere talen:</string>
-  <string name="downloading">Downloaden:</string>
+  <string name="downloading">Downloaden</string>
   <string name="no_items_msg">Niets beschikbaar</string>
   <string name="crash_title">Ai… dit is nogal pijnlijk</string>
   <string name="crash_description">Het lijkt erop dat we zijn gecrasht.\n\nWilt u ons helpen dit probleem op te lossen door de volgende informatie in te sturen?</string>
