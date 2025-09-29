@@ -42,6 +42,9 @@ interface KiwixService {
   @GET("catalog/v2/languages")
   suspend fun getLanguages(): LanguageFeed
 
+  @GET("catalog/v2/categories")
+  suspend fun getCategories(): CategoryFeed
+
   /******** Helper class that sets up new services  */
   object ServiceCreator {
     @Suppress("DEPRECATION")
