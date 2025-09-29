@@ -25,10 +25,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -100,17 +103,22 @@ class CategoryViewModel @Inject constructor(
     }
 
     if (isOnline) {
-      runCatching {
-        val fetched = fetchCategories()
-        if (!fetched.isNullOrEmpty()) {
-          sharedPreferenceUtil.saveCategoryList(fetched)
+      fetchCategoriesFlow().collect { categories ->
+        if (categories.isNotEmpty()) {
+          sharedPreferenceUtil.saveCategoryList(categories)
           CategorySessionCache.hasFetched = true
-          actions.emit(UpdateCategory(fetched))
-          return@launch
+          actions.emit(UpdateCategory(categories))
+        } else {
+          emitCachedCategories(cachedCategoryList, true)
         }
-      }.onFailure { it.printStackTrace() }
+      }
+      return@launch
     }
 
+    emitCachedCategories(cachedCategoryList, false)
+  }
+
+  private suspend fun emitCachedCategories(cachedCategoryList: List<Category>?, isOnline: Boolean) {
     if (!cachedCategoryList.isNullOrEmpty()) {
       actions.emit(UpdateCategory(cachedCategoryList))
     } else {
@@ -123,31 +131,36 @@ class CategoryViewModel @Inject constructor(
     }
   }
 
-  private suspend fun fetchCategories(): List<Category>? =
-    runCatching {
-      kiwixService =
-        KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
-      val feed = kiwixService.getCategories()
+  @Suppress("MagicNumber")
+  private fun fetchCategoriesFlow() = flow {
+    kiwixService =
+      KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+    val feed = kiwixService.getCategories()
 
-      val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
+    val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
+      Category(
+        category = entry.title,
+        active = sharedPreferenceUtil.selectedOnlineContentCategory == entry.title,
+        id = (index + 1).toLong()
+      )
+    }
+
+    val categoryList = buildList {
+      add(
         Category(
-          category = entry.title,
-          active = sharedPreferenceUtil.selectedOnlineContentCategory == entry.title,
-          id = (index + 1).toLong()
+          category = "",
+          active = sharedPreferenceUtil.selectedOnlineContentCategory.isEmpty(),
+          id = 0L
         )
-      }
-
-      buildList {
-        add(
-          Category(
-            category = "",
-            active = sharedPreferenceUtil.selectedOnlineContentCategory.isEmpty(),
-            id = 0L
-          )
-        )
-        addAll(categories)
-      }
-    }.onFailure { it.printStackTrace() }.getOrNull()
+      )
+      addAll(categories)
+    }
+    emit(categoryList)
+  }.retry(5)
+    .catch { e ->
+      e.printStackTrace()
+      emit(emptyList())
+    }
 
   private fun reduce(
     action: Action,
