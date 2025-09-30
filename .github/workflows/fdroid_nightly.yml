@@ -11,12 +11,14 @@ on:
 
 jobs:
   nightly:
-    name: Publish nightly build
+    name: Publish fdroid nightly build
     runs-on: ubuntu-22.04
     environment: nightly
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -58,7 +60,7 @@ jobs:
           mkdir -p fdroid/repo/icons
           cp $UNIVERSAL_DEBUG_APK fdroid/repo/
           cp "$KIWIX_ICON" fdroid/repo/icons/icon.png
-          cd fdroid/repo
+          cd fdroid
           fdroid update --create-metadata --nosign
 
       - name: release fdroid nightly to kiwix.download.org
