@@ -12,6 +12,8 @@ on:
 jobs:
   nightly:
     name: Publish fdroid nightly build
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     environment: nightly
     steps:
@@ -43,9 +45,6 @@ jobs:
           APK_BUILD: "true"
         run: |
           ./gradlew assembleNightly
-          
-      - name: Set date variable
-        run: echo "DATE=$(echo $(date +%Y-%m-%d))" >> $GITHUB_ENV
 
       - name: Install fdroidserver
         run: |
