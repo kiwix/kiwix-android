@@ -24,14 +24,43 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Build
+      - name: Decrypt files
+        env:
+          KEYSTORE: ${{ secrets.keystore }}
+          SSH_KEY: ${{ secrets.ssh_key }}
         run: |
-          ./gradlew assembleDebug
+          echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
+          echo "$SSH_KEY" | base64 -d > ssh_key
+          chmod 600 ssh_key
 
-      - name: fdroid nightly
+      - name: Build nightly APK
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          APK_BUILD: "true"
         run: |
-          sudo add-apt-repository ppa:fdroid/fdroidserver
+          ./gradlew assembleNightly
+          
+      - name: Set date variable
+        run: echo "DATE=$(echo $(date +%Y-%m-%d))" >> $GITHUB_ENV
+
+      - name: Install fdroidserver
+        run: |
           sudo apt-get update
-          sudo apt-get install apksigner fdroidserver --no-install-recommends
-          export DEBUG_KEYSTORE=$\{\{ secrets.DEBUG_KEYSTORE \}\}
-          fdroid nightly --archive-older 10
+          sudo apt-get install -y fdroidserver
+
+      - name: Prepare F-Droid repo
+        env:
+          UNIVERSAL_DEBUG_APK: app/build/outputs/apk/nightly/*universal*.apk
+          KIWIX_ICON: app/src/main/kiwix_icon-web.png
+        run: |
+          mkdir -p fdroid/repo/icons
+          cp $UNIVERSAL_DEBUG_APK fdroid/repo/
+          cp "$KIWIX_ICON" fdroid/repo/icons/icon.png
+          cd fdroid/repo
+          fdroid update --create-metadata --nosign
+
+      - name: release fdroid nightly to kiwix.download.org
+        run: |
+          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no fdroid ci@master.download.kiwix.org:/data/download/fdroid/
