@@ -46,10 +46,17 @@ jobs:
         run: |
           ./gradlew assembleNightly
 
-      - name: Install fdroidserver
+      - name: Install F-Droid server and dependencies
         run: |
+          # Install F-Droid server package
           sudo apt-get update
-          sudo apt-get install -y fdroidserver
+          sudo apt-get install -y python3 python3-pip fdroidserver
+          # Remove the old system version of Androguard (fdroidserver installs an outdated version by default)
+          sudo apt-get remove -y python3-androguard
+
+          # Install the latest stable version of Androguard via pip
+          # This is required to correctly parse modern APK resources (resources.arsc)
+          python3 -m pip install --upgrade androguard
 
       - name: Prepare F-Droid repo
         env:
