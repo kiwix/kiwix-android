@@ -22,23 +22,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue200
-import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
-import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_CHECKBOX_START_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_CHECKBOX_TOP_PADDING
 
 @Composable
-fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
+fun CrashCheckBox(
+  checkBoxItem: Pair<Int, MutableState<Boolean>>,
+  crashMessageAndCheckboxTextColor: Color
+) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -47,17 +47,12 @@ fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
   ) {
     Checkbox(
       checked = checkBoxItem.second.value,
-      onCheckedChange = { checkBoxItem.second.value = it },
-      colors = CheckboxDefaults.colors(
-        checkedColor = DenimBlue200,
-        checkmarkColor = ErrorActivityBackground,
-        uncheckedColor = DenimBlue200
-      )
+      onCheckedChange = { checkBoxItem.second.value = it }
     )
     Text(
       style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
       text = stringResource(id = checkBoxItem.first),
-      color = White,
+      color = crashMessageAndCheckboxTextColor,
       modifier = Modifier.padding(start = CRASH_CHECKBOX_TOP_PADDING)
     )
   }

@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.error
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,8 +50,9 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
-import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
+import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray900
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -67,11 +69,15 @@ fun ErrorActivityScreen(
   noThanksButtonClickListener: () -> Unit,
   sendDetailsButtonClickListener: () -> Unit
 ) {
+  val crashMessageAndCheckboxTextColor = if (isSystemInDarkTheme()) {
+    White
+  } else {
+    Black
+  }
   KiwixTheme {
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .background(ErrorActivityBackground)
         .systemBarsPadding()
         .imePadding()
         .padding(SIXTEEN_DP),
@@ -79,12 +85,13 @@ fun ErrorActivityScreen(
     ) {
       CrashTitle(crashTitleStringId)
       AppIcon()
-      CrashMessage(messageStringId)
+      CrashMessage(messageStringId, crashMessageAndCheckboxTextColor)
       CrashCheckBoxList(
         checkBoxData,
         Modifier
           .weight(1f)
-          .padding(top = SEVENTEEN_DP, bottom = EIGHT_DP)
+          .padding(top = SEVENTEEN_DP, bottom = EIGHT_DP),
+        crashMessageAndCheckboxTextColor
       )
 
       // Buttons on the ErrorActivity.
@@ -112,10 +119,15 @@ fun ErrorActivityScreen(
 private fun CrashTitle(
   @StringRes titleId: Int
 ) {
+  val textColor = if (isSystemInDarkTheme()) {
+    AlabasterWhite
+  } else {
+    MineShaftGray900
+  }
   Text(
     text = stringResource(titleId),
     style = MaterialTheme.typography.headlineSmall,
-    color = AlabasterWhite,
+    color = textColor,
     modifier = Modifier.padding(top = SIXTY_DP, start = EIGHT_DP, end = EIGHT_DP)
   )
 }
@@ -133,13 +145,14 @@ private fun AppIcon() {
 
 @Composable
 private fun CrashMessage(
-  @StringRes messageId: Int
+  @StringRes messageId: Int,
+  crashMessageAndCheckboxTextColor: Color
 ) {
   Text(
     text = stringResource(messageId),
     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
     textAlign = TextAlign.Center,
-    color = White,
+    color = crashMessageAndCheckboxTextColor,
     modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)
   )
 }
@@ -147,11 +160,12 @@ private fun CrashMessage(
 @Composable
 private fun CrashCheckBoxList(
   checkBoxData: List<Pair<Int, MutableState<Boolean>>>,
-  modifier: Modifier
+  modifier: Modifier,
+  crashMessageAndCheckboxTextColor: Color
 ) {
   LazyColumn(modifier = modifier) {
     itemsIndexed(checkBoxData) { _, item ->
-      CrashCheckBox(item)
+      CrashCheckBox(item, crashMessageAndCheckboxTextColor)
     }
   }
 }
