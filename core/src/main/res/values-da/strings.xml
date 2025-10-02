@@ -8,6 +8,7 @@
 * Overlaet
 * Saederup92
 * SiGNOUT
+* Steenth
 * Tinamalmgren
 * Zakawer2
 -->
@@ -28,6 +29,7 @@
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
   <string name="save_media_saved">Gemte medie som %s til Downloads/org.kiwix…/</string>
   <string name="search_label">Søg</string>
+  <string name="more_options">Flere muligheder</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
   <string name="hotspot_service_channel_name">Hotspot servicekanal</string>
@@ -47,7 +49,7 @@
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Start server</string>
   <string name="stop_server_label">Stop server</string>
-  <string name="error_ip_address_not_found">Kunne ikke finde IP adressen.</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Kunne ikke finde IP adressen.</string>
   <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet. %s</string>
   <string name="unable_to_read_zim_file">Kan ikke læse denne ZIM-fil!</string>
   <string name="zim_not_opened">Kan ikke åbne ZIM-filen</string>
@@ -56,6 +58,7 @@
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme_summary">Vis artikler med farverne vendt om</string>
   <string name="pref_back_to_top">Tilbage til toppen</string>
   <string name="pref_back_to_top_summary">Få vist en knap i slutningen af siden for at rulle op til toppen</string>
   <string name="pref_language_title">Sprog</string>
@@ -230,7 +233,7 @@
   <string name="close_drawer">Luk skuffe</string>
   <string name="action_copy">Kopier</string>
   <string name="move">Flyt</string>
-  <string name="copying_zim_file">Kopierer ZIM-fil %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Kopierer ZIM-fil %s…</string>
   <string name="moving_zim_file">Flytter ZIM-fil %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix kræver at ZIM-filen er i sin egen mappe.\nVil du kopiere eller flytte den dertil?</string>
   <string name="allowed">Tilladt</string>

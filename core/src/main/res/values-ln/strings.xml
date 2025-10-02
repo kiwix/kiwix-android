@@ -3,6 +3,7 @@
 * BOKOBA VEROLY
 * CapitainAfrika
 * Lingabo
+* Marphy 123
 * MohitMali
 -->
 <resources>
@@ -22,6 +23,7 @@
   <string name="save_media_error">Libunga esalemaki ntango bazalaki koluka kobomba ba médias!</string>
   <string name="search_label">Boluki</string>
   <string name="searched_list">Liste ya bato oyo balukaka</string>
+  <string name="more_options">Plus d\'options</string>
   <string name="choose_file">Poná makambo oyo ezali na kati (*.zim)</string>
   <string name="open_in_new_tab">Bofungoli esika na esika ya sika?</string>
   <string name="hotspot_service_channel_name">Esika ya mosala</string>
@@ -49,8 +51,8 @@
   <string name="start_server_label">Kobanda serveur</string>
   <string name="stop_server_label">Kosukisa serveur</string>
   <string name="error_server_already_running">Serveur ezali kosala. Tosengi yo kanga yango mpe meka lisusu.</string>
-  <string name="error_ip_address_not_found">Nakokaki te kozwa adrɛsi ya IP.</string>
-  <string name="server_started_message">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nakokaki te kozwa adrɛsi ya IP.</string>
+  <string name="server_started_message" fuzzy="true">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
   <string name="qr_code">Kofungola QR Code</string>
   <string name="share_host_address">Kabola URL na nzela ya ba applications misusu</string>
   <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te. %s</string>
@@ -63,6 +65,7 @@
   <string name="pref_display_title">Kolakisa</string>
   <string name="pref_info_title">Nsango</string>
   <string name="pref_info_version">Libongoli</string>
+  <string name="pref_theme_summary">Lakisa masolo oyo na balangi ebalusami</string>
   <string name="pref_back_to_top">Kozonga Likolo</string>
   <string name="pref_back_to_top_summary">Tyá butɔ moko na nsuka ya lokasa mpo na kobaluka tii na likoló</string>
   <string name="pref_language_title">Lokótá</string>
@@ -201,4 +204,11 @@
   <string name="note">Ntingá</string>
   <string name="wiki_article_title">nkómbó ya lokasa o Wiki</string>
   <string name="note_delete_successful">Ba fisyé elongolamaki</string>
+  <string name="copying_zim_file">Copie du fichier ZIM %s…</string>
+  <string name="moving_zim_file">Déplacement du fichier ZIM %s…</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix esengaka ba fichiers ZIM ezala na répertoire ya ba données na yango moko.\nOlingi o copier to o déplacer yango kuna?</string>
+  <string name="file_copy_move_error_dialog_message">%s Olingi kokoba na ba fichiers mosusu ya ZIM?</string>
+  <string name="your_selected_files_added_to_library">Ba fichiers ZIM oyo oponi ebakisami na bibliothèque.</string>
+  <string name="file_system_scan_dialog_title">Scan ebombelo mpo na mikanda?</string>
+  <string name="file_system_scan_dialog_message">Kiwix ekotala biloko na yo ya kobomba mpe ekomonisa babuku oyo ezali awa.</string>
 </resources>

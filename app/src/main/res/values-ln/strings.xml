@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Marphy 123
+-->
+<resources>
+  <string name="swipe_down_to_scan_storage">Faites glisser vers le bas pour rechercher de nouveaux livres sur votre appareil…</string>
+  <string name="auto_detect_books">Komona babuku na yo</string>
+  <string name="auto_detect_books_description">Na lancement ya liboso, bakotuna yo soki appli ekoki ko scanner stockage na yo. Soki opesi yango nzela, toko détecter automatiquement ba fichiers ZIM na yo sans besoin ya kobakisa yango manuellement.</string>
+</resources>

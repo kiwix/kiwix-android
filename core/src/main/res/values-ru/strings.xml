@@ -78,8 +78,8 @@
   <string name="start_server_label">Запустить сервер</string>
   <string name="stop_server_label">Остановить сервер</string>
   <string name="error_server_already_running">Сервер уже работает. Пожалуйста, выключите его и повторите попытку.</string>
-  <string name="error_ip_address_not_found">Не удалось найти IP-адрес.</string>
-  <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Не удалось найти IP-адрес.</string>
+  <string name="server_started_message" fuzzy="true">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден. %s</string>
@@ -90,6 +90,7 @@
   <string name="pref_display_title">Экран</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
+  <string name="pref_theme_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
   <string name="pref_back_to_top_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
   <string name="pref_language_title">Язык</string>
@@ -342,8 +343,8 @@
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
   <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>
-  <string name="copying_zim_file">Копирование ZIM-файла %s…</string>
-  <string name="moving_zim_file">Перемещение ZIM-файла %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Копирование ZIM-файла %s…</string>
+  <string name="moving_zim_file" fuzzy="true">Перемещение ZIM-файла %s…</string>
   <string name="copy_move_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных.\nВы хотите скопировать или переместить его туда?</string>
   <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Зачем копировать / перемещать файлы в общий каталог приложения?</string>

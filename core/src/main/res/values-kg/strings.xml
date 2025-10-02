@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * BOKOBA VEROLY
+* Marphy 123
 * MohitMali
 -->
 <resources>
@@ -20,6 +21,7 @@
   <string name="save_media_error">Kifu mosi salamaka ntangu bo vandaka kusosa kugulusa bimwangi-nsangu!</string>
   <string name="search_label">Kusosa</string>
   <string name="searched_list">Lisiti ya bo sosaka</string>
+  <string name="more_options">Mambu ya nkaka ya kupona</string>
   <string name="choose_file">Pona mambu ya kele na kati (*.zim)</string>
   <string name="open_in_new_tab">Keti nge ta kangula nzila na kisika ya mpa?</string>
   <string name="hotspot_service_channel_name">Kisika ya Kisalu ya Hotspot</string>
@@ -47,8 +49,8 @@
   <string name="start_server_label">Serveur ya kuyantika</string>
   <string name="stop_server_label">Sosa ya kupema</string>
   <string name="error_server_already_running">Serveur ke tambula dezia. Beto ke lomba nge na kukanga yo mpi meka diaka.</string>
-  <string name="error_ip_address_not_found">Kukonda kuzwa adresi ya ip.</string>
-  <string name="server_started_message">Tula adresi yai ya ip na navigateur na nge sambu na kukota na server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Kukonda kuzwa adresi ya ip.</string>
+  <string name="server_started_message" fuzzy="true">Tula adresi yai ya ip na navigateur na nge sambu na kukota na server %s</string>
   <string name="qr_code">Kidimbu ya QR</string>
   <string name="share_host_address">Kupesa URL na nzila ya ba application ya nkaka</string>
   <string name="error_file_not_found">Kifu: Bo monaka ve fiche ZIM yina bo ponaka. %s</string>
@@ -61,6 +63,7 @@
   <string name="pref_display_title">Kumonisa</string>
   <string name="pref_info_title">Bansangu</string>
   <string name="pref_info_version">Mbalula</string>
+  <string name="pref_theme_summary">Songa masolo ti mikubu ya kubaluka</string>
   <string name="pref_back_to_top">Beto vutuka na zulu</string>
   <string name="pref_back_to_top_summary">Songa buton na nsuka ya lutiti sambu na kukangula na zulu</string>
   <string name="pref_language_title">Ndinga</string>
@@ -287,13 +290,17 @@
   <string name="preparing_file_for_copy">Kuyilama sambu na kusala kopi</string>
   <string name="action_copy">Kopi</string>
   <string name="move">Kwenda</string>
+  <string name="copying_zim_file">Copying ZIM file %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix ke lombaka nde fiche ZIM kuvanda na lisiti na yo mosi ya bansangu. Keti nge ke zola kusala kopi to kunata yo kuna?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix ke lombaka nde ba fiche ZIM kuvanda na lisiti na yo mosi ya bansangu. Keti nge ke zola kusala kopi to kunata yo kuna?</string>
   <string name="copy_file_error_message">Kukonda kusala kopi ya fiche ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Vanda na mayele: Sala yonso sambu na kuzaba kana bo me nata/bakopi na bitini yonso ya ZIM!</string>
   <string name="why_copy_move_files_to_app_directory">Sambu na nki kusala kopi/kukatula ba fichier na application public directory?</string>
   <string name="copy_move_files_to_app_directory_description">Sambu na bansiku ya Google Play na Android 11 mpi na zulu, application na beto lenda diaka ve kukota mbala mosi na ba fichier yina bo me bumba na kisika ya nkaka na disu na nge. Sambu na kubika nge na kutala ba fiche yina nge me pona, beto fwete nata to kusala kopi na yo na folder mosi ya sipesiali na kati ya lisiti na beto ya bisalu. Yo ke pesaka beto nzila ya kukota mpi kukangula ba fichier.</string>
   <string name="choose_storage_to_copy_move_zim_file">Pona kisika ya kubumba sambu na kusala kopi/kukatula fiche ZIM</string>
   <string name="move_file_error_message">Kukonda kusoba mambu ya ZIM: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nDo you want to continue with other ZIM files?</string>
+  <string name="your_selected_files_added_to_library">Bo ke yikaka ba fichier ya ZIM na biblioteke.</string>
   <string name="how_to_update_content">Inki mutindu nge lenda tomisa mambu yina nge kele na yo?</string>
   <string name="update_content_description">Sambu na kutomisa mambu (fichier ya ZIM) nge fwete baka version ya mpa ya mambu ya mutindu mosi. Nge lenda sala yo na nzila ya kitini ya kukotisa.</string>
   <string name="all_files_permission_needed">Bansiku yonso ya bo ke lombaka</string>
@@ -345,4 +352,6 @@
   <string name="downloading_state">Kubaka na Internet</string>
   <string name="download_failed_state">Kukonda kununga</string>
   <string name="searchview_description_clear">Kusosa ya pwelele</string>
+  <string name="file_system_scan_dialog_title">Keti yo ke bumbaka mikanda?</string>
+  <string name="file_system_scan_dialog_message">Kiwix ta tala na kisika ya nge ke bumbaka bima mpi ta sonika mikanda yina nge kele awa.</string>
 </resources>
