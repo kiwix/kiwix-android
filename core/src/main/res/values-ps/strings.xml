@@ -14,52 +14,77 @@
   <string name="menu_random_article">ناټاکلې ليکنه</string>
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
+  <string name="menu_support_kiwix">د کيويکس ملاتړ کول</string>
+  <string name="menu_support_kiwix_for_custom_apps">ملاتړ %s</string>
+  <string name="menu_about_app">د %s کاريال په اړه</string>
   <string name="save_media">رسنۍ ساتل لکه…</string>
-  <string name="save_media_error" fuzzy="true">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
-  <string name="save_media_saved" fuzzy="true">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
+  <string name="save_media_error">د رسنۍ خوندي‌کولو پرمهال يوه تېروتنه رامنځ ته شوه!</string>
+  <string name="save_media_saved">رسنۍ د %s په توگه Downloads/org.kiwix\nکې خوندي کړئ</string>
   <string name="search_label">پلټل</string>
-  <string name="choose_file" fuzzy="true">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
+  <string name="searched_list">پلټل‌شوی لړليک</string>
+  <string name="choose_file">د منځپانگې يوه دوتنه غوره‌کړئ (*.zim)</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانېستل</string>
   <string name="error_file_not_found">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه. %s</string>
-  <string name="error_file_invalid" fuzzy="true">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده. %s</string>
+  <string name="error_file_invalid">تېروتنه:ټاکل‌شوې دوتنه يوه باوري زيم دوتنه نه ده. %s</string>
   <string name="error_article_url_not_found">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
   <string name="pref_display_title">ښکارېدنه</string>
   <string name="pref_info_title">مالومات</string>
   <string name="pref_info_version">بل‌بڼه</string>
+  <string name="pref_theme_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
   <string name="pref_back_to_top">بېرته سر ته</string>
   <string name="pref_back_to_top_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
   <string name="pref_language_title">ژبه</string>
   <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
-  <string name="tts_lang_not_supported" fuzzy="true">د همدې مخ د ژبې ملاتړ نه کېږي، يا کېدای شي د کاروړ ژب اومتوک نه وي نصب شوی. دا ليکنه به په سمه توگه د لوستلو وړ نه وي.</string>
+  <string name="tts_lang_not_supported">د دې مخ ژبه نه ملاتړ کېږي. ليکنه ښايي په سمه توگه ونه لوستل شي.</string>
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
-  <string name="no_section_info" fuzzy="true">هېڅ نيوليک سرليکونه نشته</string>
-  <string name="request_storage" fuzzy="true">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
+  <string name="no_section_info">د منځپانگې سرليکونه ونه موندل شول</string>
+  <string name="request_storage">د افلاين منځپانگې لاسرسي لپاره موږ ستاسو زخيرې ته د لاسرسي اړتيا لرو</string>
+  <string name="delete_recent_search_item">دا توکی ړنگ کړي؟</string>
+  <string name="pref_clear_all_history_title">پېښليک سپينول</string>
+  <string name="pref_clear_all_history_summary">د وروستيو پلټنو او ريښکو پېښليک سپينول</string>
+  <string name="pref_notes">يادښتونه</string>
+  <string name="pref_permission">پرېښولي</string>
+  <string name="all_history_cleared">ټول پېښليک سپا شو</string>
+  <string name="clear_all_history_dialog_title">ټول پېښليک سپا کړي؟</string>
+  <string name="share">وېشل</string>
   <string name="delete">ړنگول</string>
   <string name="cancel">ناگارل</string>
+  <string name="delete_specific_search_toast">وروستۍ پلټنه لرې‌شوه</string>
+  <string name="got_it">وپوهېدم</string>
+  <string name="did_you_know">ايا پوهېدې؟</string>
   <string name="undo">پريښودل</string>
   <string name="tab_closed">ټب تړل شوی</string>
+  <string name="tabs_closed">ريښکې تړل‌شوې</string>
   <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
   <string name="rate_dialog_title">لطفاً زموږ ارزونه وکړئ</string>
   <string name="rate_dialog_positive">ارزول!</string>
   <string name="no_thanks">نه، مننه</string>
   <string name="rate_dialog_neutral">وروسته</string>
+  <string name="open">پرانېستل</string>
   <string name="pref_newtab_background_title">نوې کړکۍ په شاځمکه کې پرانېستل</string>
   <string name="pref_newtab_background_summary">کله چې يوه نوې کړکۍ پرانيزئ هغه به په شاځمکه کې پرانيستل شي</string>
+  <string name="pref_extras">زياتي</string>
+  <string name="new_tab_snack_bar">ليکنه نوې ريښکه کې پرانېستل شوه</string>
   <string name="search_widget_text">کيويس پلټل</string>
   <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
   <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
+  <string name="local_zims">وسیله</string>
   <string name="remote_zims">پر ليکه</string>
   <string name="library">د منځپانګې مدیریت</string>
+  <string name="no_files_here">دلته هېڅ دوتنې نشته</string>
   <string name="download">ښکته کول</string>
+  <string name="download_notification_channel_name">د خبرتيا چينل نوم راکښته‌کول</string>
   <string name="space_available">ځای شتون لري:</string>
   <string name="zim_simple">اسان</string>
   <string name="zim_no_pic">هيڅ دوتنه نشته</string>
   <string name="zim_no_vid">هيڅ ويډيو نسته</string>
+  <string name="help_9">نورې منځپاگې له ويکي‌ليکس او ويکي‌سرچينه هم د لاسرسي وړ دي</string>
   <string name="tts_pause">تفریحي درونه</string>
   <string name="tts_resume">انتظارول</string>
   <string name="stop">درول</string>
   <string name="yes">هو</string>
-  <string name="tts_not_enabled" fuzzy="true">د زيم دوتنې لپاره متن ته د وینا متن ندی فعال شوی</string>
+  <string name="tts_not_enabled">دې زيم دوتنې ته لوړغږي لوستل ناچارن دي</string>
+  <string name="texttospeech_initialization_failed">د لوړغږ لوستنې پيل نابرياله شو. مهرباني وکړئ وروسته بيا هڅه وکړئ</string>
   <string name="wifi_only_title">د ګرځنده شبکې له لارې د منځپانګې ډاونلوډ ته اجازه ورکړئ؟</string>
   <string name="wifi_only_msg">که تاسو “هو” انتخاب کړئ نو تاسو به په راتلونکی کې خبرداری ورنکړئ. په هرصورت، تاسو کولی شئ دا په ترتیباتو کې بدل کړئ</string>
   <string name="time_day">ورځ</string>
@@ -73,6 +98,14 @@
   <string name="other_languages">نورې ژبې:</string>
   <string name="all_languages">ټولې ژبې</string>
   <string name="no_language_available">هېڅ ژبه د لاسرسي وړ نه ده</string>
-  <string name="no_bookmarks" fuzzy="true">بې کتاب نښو!</string>
+  <string name="tag_text_only">يوازې ليک</string>
+  <string name="tag_short_text">لنډ ليک</string>
+  <string name="storage_permission_denied">د زېرمه‌کولو اجازه رد شوه</string>
+  <string name="no_bookmarks">بې کتاب نښو</string>
   <string name="reader">لوستونکی</string>
+  <string name="go_to_settings_label">اوڼنو ته ورتلل</string>
+  <string name="donation_dialog_title">نن بسپنه ورکول</string>
+  <string name="make_donation">بسپنه ورکول</string>
+  <string name="resuming_state">بیا پيلول</string>
+  <string name="download_failed_state">پاتې راغلی</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * BOKOBA VEROLY
+* Marphy 123
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Systeme na nge ya ba fichier ke sadisaka ve ba fichiers kuluta 4GB</string>
@@ -10,4 +11,6 @@
   <string name="receive_files_title">Kubaka Bafiliale</string>
   <string name="no_app_found_to_open">Bo monaka ve application mosi sambu na kupona fiche ZIM!</string>
   <string name="select_zim_file">Pona fiche ZIM sambu na kutanga</string>
+  <string name="auto_detect_books">Sosa mikanda na nge nge mosi</string>
+  <string name="auto_detect_books_description">Na luyantiku, bo ta yula nge kana application lenda tala kisika ya nge ke bumbaka bima. Kana nge me pesa yo nzila, beto ta zaba na mbala mosi ba fichier na nge ya ZIM kukonda kuyika yo na maboko.</string>
 </resources>

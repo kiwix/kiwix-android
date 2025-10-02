@@ -2,6 +2,7 @@
 <!-- Authors:
 * Gomoko
 * Mahabarata
+* Marphy 123
 * Thibaut120094
 * Verdy p
 -->
@@ -13,4 +14,7 @@
   <string name="receive_files_title">Recevoir des fichiers</string>
   <string name="no_app_found_to_open">Aucune application trouvée pour sélectionner le fichier ZIM !</string>
   <string name="select_zim_file">Sélectionnez le fichier ZIM à lire</string>
+  <string name="swipe_down_to_scan_storage">Faites glisser vers le bas pour rechercher de nouveaux livres sur votre appareil…</string>
+  <string name="auto_detect_books">Détectez vos livres automatiquement</string>
+  <string name="auto_detect_books_description">Au premier lancement, l\'application vous demandera si elle peut analyser votre espace de stockage. Si vous l\'autorisez, vos fichiers ZIM seront automatiquement détectés sans que vous ayez à les ajouter manuellement.</string>
 </resources>

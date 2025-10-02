@@ -11,4 +11,7 @@
   <string name="receive_files_title">Bestanden ontvangen</string>
   <string name="no_app_found_to_open">Geen app gevonden om ZIM-bestand te selecteren!</string>
   <string name="select_zim_file">Kies het te lezen ZIM-bestand</string>
+  <string name="swipe_down_to_scan_storage">Veeg omlaag om uw apparaat op nieuwe boeken door te lichten…</string>
+  <string name="auto_detect_books">Laat uw boeken automatisch opsporen</string>
+  <string name="auto_detect_books_description">Bij de eerste keer opstarten wordt u gevraagd of de app uw opslagruimte mag doorlichten. Als u dat toestaat, sporen we uw ZIM-bestanden automatisch op. Zo hoeft u ze niet met de hand toe te voegen.</string>
 </resources>
