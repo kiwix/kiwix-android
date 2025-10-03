@@ -403,7 +403,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       appSettingsLaunched = false
       isWebViewHistoryRestoring = true
       coreReaderLifeCycleScope?.launch {
-        if (zimReaderContainer?.zimFileReader == null) {
+        if (zimReaderContainer?.zimFileReader == null || zimReaderContainer?.zimReaderSource?.exists() == false) {
           openObbOrZim(true)
         } else {
           manageExternalLaunchAndRestoringViewState()
