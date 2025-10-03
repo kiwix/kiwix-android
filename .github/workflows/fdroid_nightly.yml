@@ -52,6 +52,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3 python3-pip fdroidserver
 
+          # Remove system androguard if installed
+          sudo apt-get purge -y python3-androguard || true
+          
           # Install the latest stable version of Androguard via pip
           # This is required to correctly parse modern APK resources (resources.arsc)
           python3 -m pip install --upgrade androguard
