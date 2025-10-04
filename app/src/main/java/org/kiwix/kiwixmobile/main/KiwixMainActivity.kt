@@ -75,7 +75,6 @@ import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
-import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
@@ -369,14 +368,6 @@ class KiwixMainActivity : CoreMainActivity() {
     visible = true,
     onClick = { openZimHostFragment() },
     testingTag = LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
-  )
-
-  override val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
-    title = CoreApp.instance.getString(string.menu_help),
-    iconRes = drawable.ic_help_24px,
-    visible = true,
-    onClick = { openHelpFragment() },
-    testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
   )
 
   override val supportDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(

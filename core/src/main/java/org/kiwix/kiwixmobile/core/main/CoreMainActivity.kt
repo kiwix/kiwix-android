@@ -50,6 +50,8 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
@@ -515,10 +517,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   /**
    * Returns the "Help" menu item in the left drawer.
-   * In custom apps, this item is hidden.
-   * Each app (main Kiwix or custom) provides its own implementation.
    */
-  abstract val helpDrawerMenuItem: DrawerMenuItem?
+  private val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
+    title = CoreApp.instance.getString(string.menu_help),
+    iconRes = drawable.ic_help_24px,
+    visible = true,
+    onClick = { openHelpFragment() },
+    testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+  )
 
   /**
    * Returns the "Support" menu item in the left drawer.
