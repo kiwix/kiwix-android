@@ -48,16 +48,14 @@ jobs:
 
       - name: Install F-Droid server and dependencies
         run: |
-          # Install F-Droid server package
+          # Installing fdroidserver and androguard.
+          # Note: fdroidserver from apt uses the system Python environment.
+          # The old androguard (v3.4.0a1) from apt can't parse resources.arsc in Android 16 APKs,
+          # so we install the latest androguard in the same environment via pip.
           sudo apt-get update
-          sudo apt-get install -y python3 python3-pip fdroidserver
-
-          # Remove system androguard if installed
-          sudo apt-get purge -y python3-androguard || true
-          
-          # Install the latest stable version of Androguard via pip
-          # This is required to correctly parse modern APK resources (resources.arsc)
-          python3 -m pip install --upgrade androguard
+          sudo apt-get install -y python3-pip
+          sudo apt-get install -y fdroidserver
+          sudo python3 -m pip install --upgrade androguard
 
       - name: Prepare F-Droid repo
         env:
