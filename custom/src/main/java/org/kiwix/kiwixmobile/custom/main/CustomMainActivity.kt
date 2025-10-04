@@ -114,15 +114,6 @@ class CustomMainActivity : CoreMainActivity() {
    */
   override val zimHostDrawerMenuItem: DrawerMenuItem? = null
 
-  /**
-   * Hide the `HelpFragment` from custom apps.
-   * We have not removed the relevant code for `HelpFragment` from custom apps.
-   * If, in the future, we need to display this for all/some custom apps,
-   * we can either remove the line below or configure it according to the requirements.
-   * For more information, see https://github.com/kiwix/kiwix-android/issues/3584
-   */
-  override val helpDrawerMenuItem: DrawerMenuItem? = null
-
   override val supportDrawerMenuItem: DrawerMenuItem? =
     /**
      * If custom app is configured to show the "Support app_name" in navigation

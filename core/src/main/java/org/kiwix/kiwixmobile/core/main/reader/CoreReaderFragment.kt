@@ -1895,7 +1895,7 @@ abstract class CoreReaderFragment :
 
   private fun openSearch(searchString: String?, isOpenedFromTabView: Boolean, isVoice: Boolean) {
     searchString?.let {
-      (requireActivity() as CoreMainActivity).openSearch(
+      (activity as? CoreMainActivity)?.openSearch(
         it,
         isOpenedFromTabView,
         isVoice
