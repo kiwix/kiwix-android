@@ -65,8 +65,9 @@ jobs:
           mkdir -p fdroid/repo/icons
           cp $UNIVERSAL_DEBUG_APK fdroid/repo/
           cp "$KIWIX_ICON" fdroid/repo/icons/icon.png
+          envsubst < config-template.yml > fdroid/config.yml
           cd fdroid
-          fdroid update --create-metadata --nosign
+          fdroid update --create-metadata
 
       - name: release fdroid nightly to kiwix.download.org
         run: |
