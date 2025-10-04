@@ -53,9 +53,9 @@ jobs:
           # The old androguard (v3.4.0a1) from apt can't parse resources.arsc in Android 16 APKs,
           # so we install the latest androguard in the same environment via pip.
           sudo apt-get update
-          sudo apt-get install -y python3-pip
-          sudo apt-get install -y fdroidserver
-          sudo python3 -m pip install --upgrade androguard
+          sudo apt-get install -y python3 python3-pip
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade fdroidserver androguard
 
       - name: Prepare F-Droid repo
         env:
