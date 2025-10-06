@@ -37,6 +37,7 @@ data class CustomApp(
   val disableReadAloud: Boolean = false,
   val disableTitle: Boolean = false,
   val disableExternalLinks: Boolean = false,
+  val disableHelpMenu: Boolean = false,
   val aboutAppUrl: String = "",
   val supportUrl: String = ""
 ) {
@@ -51,6 +52,7 @@ data class CustomApp(
     parsedJson.getAndCast("disable_read_aloud") ?: false,
     parsedJson.getAndCast("disable_title") ?: false,
     parsedJson.getAndCast("disable_external_links") ?: false,
+    parsedJson.getAndCast("disable_help_menu") ?: false,
     parsedJson.getAndCast("about_app_url") ?: "",
     parsedJson.getAndCast("support_url") ?: ""
   )

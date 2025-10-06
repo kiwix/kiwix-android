@@ -53,6 +53,7 @@ fun ProductFlavors.create(customApps: List<CustomApp>) {
       buildConfigField("Boolean", "DISABLE_READ_ALOUD", "${customApp.disableReadAloud}")
       buildConfigField("Boolean", "DISABLE_TITLE", "${customApp.disableTitle}")
       buildConfigField("Boolean", "DISABLE_EXTERNAL_LINK", "${customApp.disableExternalLinks}")
+      buildConfigField("Boolean", "DISABLE_HELP_MENU", "${customApp.disableHelpMenu}")
       configureStrings(customApp.displayName)
     }
   }
