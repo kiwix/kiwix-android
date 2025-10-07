@@ -23,11 +23,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.doOnAttach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
@@ -151,16 +151,22 @@ fun FragmentContainer(
   AndroidView(
     modifier = Modifier.fillMaxSize(),
     factory = { ctx ->
-      FragmentContainerView(ctx).apply {
-        id = fragmentId
-        doOnAttach {
-          fragmentManager.commit {
-            replace(fragmentId, fragment)
-          }
-        }
-      }
+      FragmentContainerView(ctx).apply { id = fragmentId }
     }
   )
+
+  // Lifecycle-safe fragment transaction
+  // LaunchedEffect ensures this runs once per fragmentManager + fragmentId combination
+  LaunchedEffect(fragmentManager, fragmentId) {
+    fragmentManager.commit(
+      // Allow state loss only if the fragmentManager has already saved its state
+      // This prevents IllegalStateException ("Can not perform this action after onSaveInstanceState")
+      // Bug fix #4454
+      allowStateLoss = fragmentManager.isStateSaved
+    ) {
+      replace(fragmentId, fragment)
+    }
+  }
 }
 
 sealed class CustomDestination(val route: String) {
