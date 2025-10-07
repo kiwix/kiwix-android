@@ -205,7 +205,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
    */
   private fun onTextChanged(searchText: String) {
     pageScreenState.update { copy(searchText = searchText) }
-    pageViewModel.actions.tryEmit(Action.Filter(searchText))
+    pageViewModel.actions.tryEmit(Action.Filter(searchText.trim()))
   }
 
   /**

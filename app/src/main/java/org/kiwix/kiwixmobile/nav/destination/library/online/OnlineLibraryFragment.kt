@@ -186,7 +186,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onlineLibraryScreenState.value.update {
       copy(searchText = searchText)
     }
-    zimManageViewModel.requestFiltering.tryEmit(searchText)
+    zimManageViewModel.requestFiltering.tryEmit(searchText.trim())
   }
 
   private val noWifiWithWifiOnlyPreferenceSet
