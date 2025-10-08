@@ -244,7 +244,7 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun searchEntryForSearchTerm(searchText: String) {
-    searchViewModel.searchResults(searchText)
+    searchViewModel.searchResults(searchText.trim())
   }
 
   private fun actionMenuItems() = listOfNotNull(

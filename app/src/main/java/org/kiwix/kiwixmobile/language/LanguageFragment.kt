@@ -86,7 +86,7 @@ class LanguageFragment : BaseFragment() {
           onClearClick = { resetSearchState() },
           onAppBarValueChange = {
             searchText = it
-            languageViewModel.actions.tryEmit(Action.Filter(it))
+            languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
           },
           navigationIcon = {
             NavigationIcon(
