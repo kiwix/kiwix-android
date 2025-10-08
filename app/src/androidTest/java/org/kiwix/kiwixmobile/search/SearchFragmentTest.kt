@@ -312,6 +312,27 @@ class SearchFragmentTest : BaseActivityTest() {
       }
     }
 
+  @Test
+  fun testSearchWithExtraSpaces() {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+    }
+    testZimFile = getTestZimFile()
+    openKiwixReaderFragmentWithFile(testZimFile)
+    search { checkZimFileSearchSuccessful(composeTestRule) }
+    openSearchWithQuery("Android ", testZimFile)
+    search {
+      clickOnSearchItemInSearchList(composeTestRule)
+      checkZimFileSearchSuccessful(composeTestRule)
+    }
+    openSearchWithQuery("   Unit test   ", testZimFile)
+    search {
+      clickOnSearchItemInSearchList(composeTestRule)
+      checkZimFileSearchSuccessful(composeTestRule)
+    }
+  }
+
   private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {
     testZimFile.delete()
   }
