@@ -347,7 +347,6 @@ class ZimManageViewModel @Inject constructor(
   private fun observeSearch() =
     requestFiltering
       .onEach {
-        libraryListIsRefreshing.postValue(true)
         updateOnlineLibraryFilters(
           OnlineLibraryRequest(query = it, page = ONE, isLoadMoreItem = false)
         )
