@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Camachevaz
+-->
+<resources>
+  <string name="retry">Reintentar</string>
+  <string name="invalid_installation">Instalación inválida. Por favor descargue archivo ZUM. Asegúrese que el WiFi está encendido y que tiene suficiente almacenamiento</string>
+</resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Baonguyen21022003
+* Bapham123
 * Dinhxuanduyet
 * Fitoschido
 * Leducthn
@@ -16,6 +17,9 @@
   <string name="menu_random_article">Bài viết ngẫu nhiên</string>
   <string name="menu_read_aloud">Đọc to</string>
   <string name="menu_read_aloud_stop">Dừng đọc to</string>
+  <string name="menu_support_kiwix">Hỗ trợ Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Hỗ trợ %s</string>
+  <string name="menu_about_app">Về ứng dụng %s</string>
   <string name="save_media">Lưu tập tin đa phương tiện</string>
   <string name="save_media_error">Đã xuất hiện lỗi khi lưu phương tiện!</string>
   <string name="save_media_saved" fuzzy="true">Đã lưu phương tiện thành %s trong thư mục hình ảnh Android/media/org.kiwix…/</string>
@@ -29,6 +33,7 @@
   <string name="pref_display_title">Hiển thị</string>
   <string name="pref_info_title">Thông tin</string>
   <string name="pref_info_version">Phiên bản</string>
+  <string name="pref_theme_summary">Đảo ngược màu sắc trong bài</string>
   <string name="pref_back_to_top">Trở lên Đầu trang</string>
   <string name="pref_back_to_top_summary">Hiển thị nút ở cuối trang để di chuyển lên trên cùng</string>
   <string name="pref_language_title">Ngôn ngữ</string>

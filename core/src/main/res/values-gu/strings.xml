@@ -20,6 +20,7 @@
   <string name="pref_display_title">દર્શાવો</string>
   <string name="pref_info_title">માહિતી</string>
   <string name="pref_info_version">આવૃત્તિ</string>
+  <string name="pref_theme_summary">ઉલ્ટા રંગો વડે લેખો દર્શાવો</string>
   <string name="pref_back_to_top">ટોપ પર પાછા જાઓ</string>
   <string name="pref_language_title">ભાષા</string>
   <string name="pref_language_chooser">ભાષા પસંદ કરો</string>
