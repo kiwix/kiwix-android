@@ -57,8 +57,8 @@
   <string name="start_server_label">サーバーを起動する</string>
   <string name="stop_server_label">サーバーを停止する</string>
   <string name="error_server_already_running">サーバーはすでに実行されています。オフにしてもう一度お試しください。</string>
-  <string name="error_ip_address_not_found">IPアドレスが見つかりませんでした。</string>
-  <string name="server_started_message">サーバー %s にアクセスするには、この IP アドレスをブラウザに入力してください</string>
+  <string name="error_ip_address_not_found" fuzzy="true">IPアドレスが見つかりませんでした。</string>
+  <string name="server_started_message" fuzzy="true">サーバー %s にアクセスするには、この IP アドレスをブラウザに入力してください</string>
   <string name="share_host_address">他のアプリケーション経由で URL を共有する</string>
   <string name="error_file_not_found">エラー: 選択した ZIM ファイルが見つかりませんでした。 %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">この zim ファイルは読み込めません！</string>
@@ -68,6 +68,7 @@
   <string name="pref_display_title">表示</string>
   <string name="pref_info_title">情報</string>
   <string name="pref_info_version">バージョン</string>
+  <string name="pref_theme_summary">記事を反転色で表示する</string>
   <string name="pref_back_to_top">トップに戻る</string>
   <string name="pref_back_to_top_summary">ページの最後に、ページの上部にスクロールするボタンを表示する</string>
   <string name="pref_language_title">言語</string>
