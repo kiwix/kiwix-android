@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -76,7 +77,20 @@ fun DownloadBookItem(
   // Automatically invoke onStopClick if the download failed
   LaunchedEffect(item.id, item.currentDownloadState) {
     if (item.currentDownloadState == Status.FAILED) {
-      onStopClick.invoke(item)
+      when (item.downloadError) {
+        Error.UNKNOWN_IO_ERROR,
+        Error.CONNECTION_TIMED_OUT,
+        Error.UNKNOWN -> {
+          // Only retrigger the download for CONNECTION_TIMED_OUT or UNKNOWN_IO_ERROR.
+          // For other errors (e.g., REQUEST_DOES_NOT_EXIST, EMPTY_RESPONSE_FROM_SERVER, REQUEST_NOT_SUCCESSFUL),
+          // we inform the user because the download cannot be restarted in these cases.
+          onStopClick.invoke(item)
+        }
+
+        else -> {
+          // Do nothing for remaining errors, since re-download is not possible due to the absence of the ZIM file.
+        }
+      }
     }
   }
   KiwixTheme {
