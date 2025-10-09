@@ -347,7 +347,6 @@ class ZimManageViewModel @Inject constructor(
   private fun observeSearch() =
     requestFiltering
       .onEach {
-        libraryListIsRefreshing.postValue(true)
         updateOnlineLibraryFilters(
           OnlineLibraryRequest(query = it, page = ONE, isLoadMoreItem = false)
         )
@@ -659,8 +658,8 @@ class ZimManageViewModel @Inject constructor(
   ): List<LibraryListItem> {
     val allBooks = onlineBooks - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
     val downloadingBooks =
-      activeDownloads.mapNotNull { download ->
-        allBooks.firstOrNull { it.id == download.book.id }
+      activeDownloads.map { download ->
+        allBooks.firstOrNull { it.id == download.book.id } ?: download.book
       }
     val filteredBooks = allBooks - downloadingBooks.toSet()
     val selectedLanguage = sharedPreferenceUtil.selectedOnlineContentLanguage

@@ -44,6 +44,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.flow.launchIn
@@ -222,17 +223,35 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun onStopButtonClick(item: LibraryListItem.LibraryDownloadItem) {
     if (item.currentDownloadState == Status.FAILED) {
-      if (isNotConnected) {
-        noInternetSnackbar()
-      } else {
-        downloader.retryDownload(item.downloadId)
+      when (item.downloadError) {
+        Error.UNKNOWN_IO_ERROR,
+        Error.CONNECTION_TIMED_OUT,
+        Error.UNKNOWN -> {
+          // Retry the download if it can be retried.
+          // For other failure reasons, retrying is not possible.
+          if (isNotConnected) {
+            noInternetSnackbar()
+          } else {
+            downloader.retryDownload(item.downloadId)
+          }
+        }
+
+        // For other errors such as REQUEST_DOES_NOT_EXIST, EMPTY_RESPONSE_FROM_SERVER,
+        // REQUEST_NOT_SUCCESSFUL, etc., the download cannot be retried.
+        // In such cases, allow the user to stop the failed download manually.
+        else -> showStopDownloadDialog(item)
       }
     } else {
-      alertDialogShower.show(
-        KiwixDialog.YesNoDialog.StopDownload,
-        { downloader.cancelDownload(item.downloadId) }
-      )
+      // If the download is not in FAILED state, simply show the stop dialog when user clicks on stop button.
+      showStopDownloadDialog(item)
     }
+  }
+
+  private fun showStopDownloadDialog(item: LibraryListItem.LibraryDownloadItem) {
+    alertDialogShower.show(
+      KiwixDialog.YesNoDialog.StopDownload,
+      { downloader.cancelDownload(item.downloadId) }
+    )
   }
 
   @OptIn(ExperimentalMaterial3Api::class)
