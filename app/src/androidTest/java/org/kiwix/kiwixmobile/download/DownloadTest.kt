@@ -151,15 +151,18 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
-        stopDownloadIfAlreadyStarted(composeTestRule)
+        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         downloadZimFile(composeTestRule)
         try {
           assertDownloadStart(composeTestRule)
           pauseDownload(composeTestRule)
-          assertDownloadPaused(composeTestRule)
+          assertDownloadPaused(composeTestRule, kiwixMainActivity)
           resumeDownload(composeTestRule)
-          assertDownloadResumed(composeTestRule)
-          waitUntilDownloadComplete(composeTestRule = composeTestRule)
+          assertDownloadResumed(composeTestRule, kiwixMainActivity)
+          waitUntilDownloadComplete(
+            composeTestRule = composeTestRule,
+            kiwixMainActivity = kiwixMainActivity
+          )
         } catch (ignore: Exception) {
           // do nothing as ZIM file already downloaded, since we are downloading the smallest file
           // so it can be downloaded immediately after starting.
@@ -204,38 +207,44 @@ class DownloadTest : BaseActivityTest() {
         // change the application language
         topLevel {
           clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
-            clickLanguagePreference(composeTestRule)
-            assertLanguagePrefDialogDisplayed(composeTestRule)
+            clickLanguagePreference(composeTestRule, kiwixMainActivity)
+            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
             selectDeviceDefaultLanguage(composeTestRule)
             // Advance the main clock to settle the frame of compose.
             composeTestRule.mainClock.advanceTimeByFrame()
-            clickLanguagePreference(composeTestRule)
-            assertLanguagePrefDialogDisplayed(composeTestRule)
+            clickLanguagePreference(composeTestRule, kiwixMainActivity)
+            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
             selectAlbanianLanguage(composeTestRule)
             // Advance the main clock to settle the frame of compose.
             composeTestRule.mainClock.advanceTimeByFrame()
           }
         }
+        activityScenario.onActivity {
+          kiwixMainActivity = it
+        }
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
-        stopDownloadIfAlreadyStarted(composeTestRule)
+        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
         pauseDownload(composeTestRule)
-        assertDownloadPaused(composeTestRule)
+        assertDownloadPaused(composeTestRule, kiwixMainActivity)
         resumeDownload(composeTestRule)
-        assertDownloadResumed(composeTestRule)
-        stopDownloadIfAlreadyStarted(composeTestRule)
+        assertDownloadResumed(composeTestRule, kiwixMainActivity)
+        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         // select the default device language to perform other test cases.
         topLevel {
           clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule) {
-            clickLanguagePreference(composeTestRule)
-            assertLanguagePrefDialogDisplayed(composeTestRule)
+            clickLanguagePreference(composeTestRule, kiwixMainActivity)
+            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
             selectDeviceDefaultLanguage(composeTestRule)
             // Advance the main clock to settle the frame of compose.
             composeTestRule.mainClock.advanceTimeByFrame()
+            activityScenario.onActivity {
+              kiwixMainActivity = it
+            }
             // check if the device default language is selected or not.
-            clickLanguagePreference(composeTestRule)
+            clickLanguagePreference(composeTestRule, kiwixMainActivity)
             // close the language dialog.
             pressBack()
           }
@@ -265,7 +274,7 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
-        stopDownloadIfAlreadyStarted(composeTestRule)
+        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         searchZappingSauvageFile(composeTestRule)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
@@ -296,7 +305,7 @@ class DownloadTest : BaseActivityTest() {
             // if currently downloading check.
             clickDownloadOnBottomNav(composeTestRule)
             waitForDataToLoad(composeTestRule = composeTestRule)
-            stopDownloadIfAlreadyStarted(composeTestRule)
+            stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
           }
         }
       }
