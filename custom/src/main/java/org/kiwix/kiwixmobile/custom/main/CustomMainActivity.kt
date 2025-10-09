@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
@@ -115,18 +116,26 @@ class CustomMainActivity : CoreMainActivity() {
   override val zimHostDrawerMenuItem: DrawerMenuItem? = null
 
   /**
-   * Hide the `HelpFragment` from custom apps.
-   * We have not removed the relevant code for `HelpFragment` from custom apps.
-   * If, in the future, we need to display this for all/some custom apps,
-   * we can either remove the line below or configure it according to the requirements.
-   * For more information, see https://github.com/kiwix/kiwix-android/issues/3584
+   * If custom app is configured to show the "Help menu" in navigation
+   * then show it in navigation.
    */
-  override val helpDrawerMenuItem: DrawerMenuItem? = null
+  override val helpDrawerMenuItem: DrawerMenuItem? =
+    if (BuildConfig.DISABLE_HELP_MENU) {
+      null
+    } else {
+      DrawerMenuItem(
+        title = CoreApp.instance.getString(string.menu_help),
+        iconRes = drawable.ic_help_24px,
+        visible = true,
+        onClick = { openHelpFragment() },
+        testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+      )
+    }
 
   override val supportDrawerMenuItem: DrawerMenuItem? =
     /**
      * If custom app is configured to show the "Support app_name" in navigation
-     * then show it navigation. "app_name" will be replaced with custom app name.
+     * then show it in navigation. "app_name" will be replaced with custom app name.
      */
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
       DrawerMenuItem(
@@ -152,7 +161,7 @@ class CustomMainActivity : CoreMainActivity() {
 
   /**
    * If custom app is configured to show the "About app_name app" in navigation
-   * then show it navigation. "app_name" will be replaced with custom app name.
+   * then show it in navigation. "app_name" will be replaced with custom app name.
    */
   override val aboutAppDrawerMenuItem: DrawerMenuItem? =
     if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
