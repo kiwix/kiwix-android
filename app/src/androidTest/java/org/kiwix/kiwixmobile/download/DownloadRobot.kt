@@ -327,7 +327,6 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun clickOnClearSearchIcon(composeTestRule: ComposeContentTestRule) {
-    ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
