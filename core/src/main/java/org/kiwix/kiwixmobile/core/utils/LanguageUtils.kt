@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
@@ -28,6 +27,7 @@ import android.os.Looper
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.text.Collator
@@ -147,38 +147,30 @@ class LanguageUtils(private val context: Context) {
 
     @JvmStatic
     fun handleLocaleChange(
-      activity: Activity,
+      context: Context,
       sharedPreferenceUtil: SharedPreferenceUtil
-    ) {
-      sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
-        handleLocaleChange(activity, it, sharedPreferenceUtil)
-      }
+    ): Context {
+      return sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
+        handleLocaleChange(context, it, sharedPreferenceUtil)
+      } ?: run { context }
     }
 
-    @SuppressLint("AppBundleLocaleChanges")
-    @Suppress("DEPRECATION")
     @JvmStatic
     fun handleLocaleChange(
-      activity: Activity,
+      context: Context,
       language: String,
       sharedPreferenceUtil: SharedPreferenceUtil
-    ) {
-      val locale =
-        if (language == Locale.ROOT.toString()) {
-          Locale(sharedPreferenceUtil.prefDeviceDefaultLanguage)
-        } else {
-          Locale(language)
-        }
+    ): Context {
+      val locale = if (language == Locale.ROOT.toString()) {
+        sharedPreferenceUtil.prefDeviceDefaultLanguage.convertToLocal()
+      } else {
+        language.convertToLocal()
+      }
       Locale.setDefault(locale)
-      val config = Configuration()
+      val config = Configuration(context.resources.configuration)
       config.setLocale(locale)
       config.setLayoutDirection(locale)
-      activity.resources
-        .updateConfiguration(config, activity.resources.displayMetrics).also {
-          activity.applicationContext.resources
-            .updateConfiguration(config, activity.resources.displayMetrics)
-        }
-      activity.onConfigurationChanged(config)
+      return context.createConfigurationContext(config)
     }
 
     /**

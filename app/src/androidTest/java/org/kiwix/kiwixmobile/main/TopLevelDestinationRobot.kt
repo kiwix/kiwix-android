@@ -92,10 +92,16 @@ class TopLevelDestinationRobot : BaseRobot() {
     onlineLibrary(func)
   }
 
-  private fun inNavDrawer(coreMainActivity: CoreMainActivity, navDrawerAction: () -> Unit) {
+  private fun inNavDrawer(
+    coreMainActivity: CoreMainActivity,
+    isMultiWindowCompose: Boolean = false,
+    navDrawerAction: () -> Unit
+  ) {
     openDrawer(coreMainActivity)
     navDrawerAction.invoke()
-    pressBack()
+    if (!isMultiWindowCompose) {
+      pressBack()
+    }
   }
 
   fun clickBookmarksOnNavDrawer(
@@ -142,9 +148,10 @@ class TopLevelDestinationRobot : BaseRobot() {
   fun clickSettingsOnSideNav(
     coreMainActivity: CoreMainActivity,
     composeTestRule: ComposeContentTestRule,
+    isMultiWindowCompose: Boolean = false,
     func: SettingsRobot.() -> Unit
   ) {
-    inNavDrawer(coreMainActivity) {
+    inNavDrawer(coreMainActivity, isMultiWindowCompose) {
       testFlakyView({
         composeTestRule.onNodeWithTag(LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG).performClick()
       })

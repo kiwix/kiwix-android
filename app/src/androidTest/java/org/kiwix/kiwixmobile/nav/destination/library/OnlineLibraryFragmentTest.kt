@@ -122,7 +122,7 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       pressBack()
       clickLibraryOnBottomNav(composeTestRule)
       clickDownloadOnBottomNav(composeTestRule)
-      assertSearchViewIsNotActive(composeTestRule)
+      assertSearchViewIsNotActive(composeTestRule, kiwixMainActivity)
     }
   }
 }

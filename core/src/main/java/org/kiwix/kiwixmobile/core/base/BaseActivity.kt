@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.base
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
@@ -30,11 +31,24 @@ open class BaseActivity : AppCompatActivity() {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
+  /**
+   * Apply the currently selected language to the base context
+   * so that Compose can properly localize everything.
+   */
+  override fun attachBaseContext(newBase: Context) {
+    val sharedPreferenceUtil = SharedPreferenceUtil(newBase)
+    val localizedContext = LanguageUtils.handleLocaleChange(
+      newBase,
+      sharedPreferenceUtil.prefLanguage,
+      sharedPreferenceUtil
+    )
+    super.attachBaseContext(localizedContext)
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     enableEdgeToEdge(
       statusBarStyle = SystemBarStyle.auto(Color.WHITE, Color.BLACK)
     )
     super.onCreate(savedInstanceState)
-    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
   }
 }
