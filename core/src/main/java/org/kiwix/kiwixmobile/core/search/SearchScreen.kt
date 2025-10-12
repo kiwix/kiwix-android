@@ -99,7 +99,9 @@ fun SearchScreen(
               onValueChange = searchScreenState.onSearchViewValueChange,
               onClearClick = searchScreenState.onSearchViewClearClick,
               modifier = Modifier,
-              onKeyboardSubmitButtonClick = searchScreenState.onKeyboardSubmitButtonClick
+              onKeyboardSubmitButtonClick = searchScreenState.onKeyboardSubmitButtonClick,
+              suggestionText = searchScreenState.suggestedSpelledWord,
+              onSuggestedWordClick = searchScreenState.onSuggestedItemClick
             )
           }
         )
