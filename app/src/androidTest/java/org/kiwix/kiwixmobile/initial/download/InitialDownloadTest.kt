@@ -62,6 +62,7 @@ class InitialDownloadTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
+  private lateinit var kiwixMainActivity: KiwixMainActivity
 
   init {
     AccessibilityChecks.enable().apply {
@@ -117,6 +118,7 @@ class InitialDownloadTest : BaseActivityTest() {
   fun initialDownloadTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     activityScenario.onActivity {
+      kiwixMainActivity = it
       it.navigate(KiwixDestination.Library.route)
     }
     // delete all the ZIM files showing in the LocalLibrary
@@ -129,7 +131,7 @@ class InitialDownloadTest : BaseActivityTest() {
     downloadRobot {
       clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
-      stopDownloadIfAlreadyStarted(composeTestRule)
+      stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
       downloadZimFile(composeTestRule)
     }
     initialDownload {
@@ -138,7 +140,7 @@ class InitialDownloadTest : BaseActivityTest() {
       downloadRobot {
         assertDownloadStart(composeTestRule)
         stopDownload(composeTestRule)
-        assertStopDownloadDialogDisplayed(composeTestRule)
+        assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
         clickOnYesButton(composeTestRule)
       }
       assertDownloadStop(composeTestRule)

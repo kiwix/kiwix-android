@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_PAUSE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STATE_TEXT_TESTING_TAG
@@ -189,12 +190,15 @@ class DownloadRobot : BaseRobot() {
     })
   }
 
-  fun assertDownloadPaused(composeTestRule: ComposeContentTestRule) {
+  fun assertDownloadPaused(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     composeTestRule.apply {
       waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
         composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-          .assertTextEquals(context.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+          .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
           .isDisplayed()
       }
     }
@@ -204,12 +208,15 @@ class DownloadRobot : BaseRobot() {
     pauseDownload(composeTestRule)
   }
 
-  fun assertDownloadResumed(composeTestRule: ComposeContentTestRule) {
+  fun assertDownloadResumed(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     try {
       composeTestRule.apply {
         waitUntilTimeout()
         onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-          .assertTextEquals(context.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+          .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
       }
       throw IllegalStateException("Could not resume the download")
     } catch (_: AssertionError) {
@@ -220,17 +227,22 @@ class DownloadRobot : BaseRobot() {
   // wait for 5 minutes for downloading the ZIM file
   fun waitUntilDownloadComplete(
     retryCountForDownloadingZimFile: Int = 30,
-    composeTestRule: ComposeContentTestRule
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
   ) {
     try {
       composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0].assertDoesNotExist()
       Log.e(KIWIX_DOWNLOAD_TEST, "Download complete")
     } catch (e: AssertionError) {
       if (retryCountForDownloadingZimFile > 0) {
-        resumeDownloadIfPaused(composeTestRule)
+        resumeDownloadIfPaused(composeTestRule, kiwixMainActivity)
         composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
         Log.e(KIWIX_DOWNLOAD_TEST, "Downloading in progress")
-        waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1, composeTestRule)
+        waitUntilDownloadComplete(
+          retryCountForDownloadingZimFile - 1,
+          composeTestRule,
+          kiwixMainActivity
+        )
         return
       }
       // throw the exception when there is no more retry left.
@@ -238,11 +250,14 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  private fun resumeDownloadIfPaused(composeTestRule: ComposeContentTestRule) {
+  private fun resumeDownloadIfPaused(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     try {
       composeTestRule
         .onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-        .assertTextEquals(context.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+        .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
       resumeDownload(composeTestRule)
     } catch (_: AssertionError) {
       // do nothing since downloading is In Progress.
@@ -251,12 +266,15 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+  fun assertStopDownloadDialogDisplayed(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.confirm_stop_download_title))
+          .assertTextEquals(kiwixMainActivity.getString(string.confirm_stop_download_title))
       }
     })
   }
@@ -270,11 +288,14 @@ class DownloadRobot : BaseRobot() {
     })
   }
 
-  fun stopDownloadIfAlreadyStarted(composeTestRule: ComposeContentTestRule) {
+  fun stopDownloadIfAlreadyStarted(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     try {
       composeTestRule.waitUntilTimeout()
       stopDownload(composeTestRule)
-      assertStopDownloadDialogDisplayed(composeTestRule)
+      assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
       clickOnYesButton(composeTestRule)
       composeTestRule.waitUntilTimeout()
     } catch (_: AssertionError) {
@@ -306,7 +327,6 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun clickOnClearSearchIcon(composeTestRule: ComposeContentTestRule) {
-    ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
@@ -336,12 +356,15 @@ class DownloadRobot : BaseRobot() {
     })
   }
 
-  fun assertSearchViewIsNotActive(composeTestRule: ComposeContentTestRule) {
+  fun assertSearchViewIsNotActive(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
-          .assertTextEquals(context.getString(string.download))
+          .assertTextEquals(kiwixMainActivity.getString(string.download))
       }
     })
   }

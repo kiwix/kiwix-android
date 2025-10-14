@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -95,15 +96,21 @@ class SettingsRobot : BaseRobot() {
     clickSwitchPreference(context.getString(R.string.pref_wifi_only), composeTestRule)
   }
 
-  fun clickLanguagePreference(composeTestRule: ComposeContentTestRule) {
-    clickPreferenceItem(context.getString(R.string.pref_language_title), composeTestRule)
+  fun clickLanguagePreference(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    clickPreferenceItem(kiwixMainActivity.getString(R.string.pref_language_title), composeTestRule)
   }
 
-  fun assertLanguagePrefDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+  fun assertLanguagePrefDialogDisplayed(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-        .assertTextEquals(context.getString(R.string.pref_language_title))
+        .assertTextEquals(kiwixMainActivity.getString(R.string.pref_language_title))
     }
   }
 
