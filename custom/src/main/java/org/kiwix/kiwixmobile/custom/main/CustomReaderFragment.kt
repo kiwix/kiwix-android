@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -27,10 +26,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
@@ -47,7 +44,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -66,11 +62,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   @Inject
   lateinit var customFileValidator: CustomFileValidator
-
-  @JvmField
-  @Inject
-  var dialogShower: DialogShower? = null
-  private var permissionRequiredDialog: Dialog? = null
   private var appSettingsLaunched = false
 
   @Suppress("NestedBlockDepth")
@@ -166,15 +157,33 @@ class CustomReaderFragment : CoreReaderFragment() {
       isWebViewHistoryRestoring = true
       isFromManageExternalLaunch = true
       coreReaderLifeCycleScope?.launch {
-        if (zimReaderContainer?.zimFileReader == null || zimReaderContainer?.zimReaderSource?.exists() == false) {
-          openObbOrZim(true)
-        } else {
+        if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
+        } else {
+          openObbOrZim(true)
         }
       }
     }
     customMainActivity?.consumeObservable<String>(PAGE_URL_KEY)
   }
+
+  /**
+   * Checks whether a ZIM file is currently opened and active in the reader.
+   *
+   * This method verifies these conditions:
+   * 1. A ZIM file reader instance is available.
+   * 2. The underlying ZIM file source still exists in storage.
+   * 3. The currently opened ZIM file can open with libkiwix(Validates previous opened ZIM file).
+   * 4. The currently opened archive has passed its internal validity check.
+   *
+   * @return `true` if a valid and accessible ZIM file is currently opened in the reader;
+   *         otherwise `false`.
+   */
+  private suspend fun isZimFileAlreadyOpenedInReader(): Boolean =
+    zimReaderContainer?.zimFileReader != null &&
+      zimReaderContainer?.zimReaderSource?.exists() == true &&
+      zimReaderContainer?.zimReaderSource?.canOpenInLibkiwix() == true &&
+      zimReaderContainer?.zimFileReader?.jniKiwixReader?.check() == true
 
   /**
    * Restores the view state when the attempt to read web view history from the room database fails
@@ -220,13 +229,12 @@ class CustomReaderFragment : CoreReaderFragment() {
    * @param shouldManageExternalLaunch Indicates whether to manage external launch and
    *                                   restore the view state after opening the file. Default is false.
    */
-  @Suppress("InjectDispatcher")
   private suspend fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
     customFileValidator.validate(
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            withContext(Dispatchers.Main) {
+            coreReaderLifeCycleScope?.launch {
               openZimFile(
                 ZimReaderSource(
                   file = it.file,
@@ -254,7 +262,7 @@ class CustomReaderFragment : CoreReaderFragment() {
 
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            withContext(Dispatchers.Main) {
+            coreReaderLifeCycleScope?.launch {
               openZimFile(ZimReaderSource(it.obbFile), true, shouldManageExternalLaunch)
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
@@ -269,7 +277,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
           delay(OPENING_DOWNLOAD_SCREEN_DELAY)
-          withContext(Dispatchers.Main) {
+          coreReaderLifeCycleScope?.launch {
             val navOptions = NavOptions.Builder()
               .setPopUpTo(CustomDestination.Reader.route, true)
               .build()
@@ -394,7 +402,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    permissionRequiredDialog = null
   }
 
   override fun onResume() {
@@ -403,10 +410,10 @@ class CustomReaderFragment : CoreReaderFragment() {
       appSettingsLaunched = false
       isWebViewHistoryRestoring = true
       coreReaderLifeCycleScope?.launch {
-        if (zimReaderContainer?.zimFileReader == null) {
-          openObbOrZim(true)
-        } else {
+        if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
+        } else {
+          openObbOrZim(true)
         }
       }
     }
