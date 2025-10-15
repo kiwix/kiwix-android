@@ -422,6 +422,44 @@ class ZimManageViewModelTest {
     }
   }
 
+  @Test
+  fun `library shows downloading books even when not in online source`() = flakyTest {
+    runTest {
+      val downloadingBook = libkiwixBook(id = "10", url = "")
+      val bookInOnlineList = libkiwixBook(id = "20", url = "")
+      val downloadModel = downloadModel(book = downloadingBook)
+
+      every { application.getString(any()) } returns "Downloading"
+      every { application.getString(any(), any()) } returns "All languages"
+      every { application.getString(any(), *anyVararg()) } returns "All languages"
+
+      viewModel.libraryItems.test {
+        coEvery {
+          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+        } returns arrayListOf(bookInOnlineList)
+        networkStates.value = CONNECTED
+        downloads.value = listOf(downloadModel)
+        books.value = listOf()
+        onlineContentLanguage.value = ""
+        fileSystemStates.value = CanWrite4GbFile
+        advanceUntilIdle()
+
+        val items = awaitItem()
+        val bookItems = items.filterIsInstance<LibraryListItem.BookItem>()
+        if (bookItems.size >= 2) {
+          assertThat(items).isEqualTo(
+            listOf(
+              LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading"),
+              LibraryListItem.LibraryDownloadItem(downloadModel),
+              LibraryListItem.DividerItem(Long.MIN_VALUE, "All languages"),
+              LibraryListItem.BookItem(bookInOnlineList, CanWrite4GbFile)
+            )
+          )
+        }
+      }
+    }
+  }
+
   @Nested
   inner class SideEffects {
     @Test

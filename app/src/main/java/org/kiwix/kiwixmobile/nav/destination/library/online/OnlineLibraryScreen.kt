@@ -45,7 +45,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,8 +56,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
@@ -215,19 +214,21 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
 
-  LaunchedEffect(lazyListState) {
-    snapshotFlow {
-      derivedStateOf {
-        val layoutInfo = lazyListState.layoutInfo
+  LaunchedEffect(lazyListState, state.onlineLibraryList) {
+    snapshotFlow { lazyListState.layoutInfo }
+      .combine(
+        snapshotFlow { state.onlineLibraryList.orEmpty() }
+      ) { layoutInfo, libraryList ->
+        val bookItems = libraryList.filterIsInstance<LibraryListItem.BookItem>()
         val totalItems = layoutInfo.totalItemsCount
         val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
-        (totalItems > ZERO && lastVisibleItemIndex >= totalItems.minus(FIVE)) to totalItems
-      }.value
-    }
+        Triple(bookItems, totalItems, lastVisibleItemIndex)
+      }
       .distinctUntilChanged()
-      .filter { it.first }
-      .collect { (_, totalItems) ->
-        state.onLoadMore(totalItems)
+      .collect { (bookItems, totalItems, lastVisibleItemIndex) ->
+        if (bookItems.isNotEmpty() && lastVisibleItemIndex >= totalItems.minus(FIVE)) {
+          state.onLoadMore(totalItems)
+        }
       }
   }
 }
