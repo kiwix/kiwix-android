@@ -174,7 +174,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    * 1. A ZIM file reader instance is available.
    * 2. The underlying ZIM file source still exists in storage.
    * 3. The currently opened ZIM file can open with libkiwix(Validates previous opened ZIM file).
-   * 4. The currently opened archive has passed its internal validity check.
+   * 4. The currently opened archive is not null.
    *
    * @return `true` if a valid and accessible ZIM file is currently opened in the reader;
    *         otherwise `false`.
@@ -183,7 +183,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     zimReaderContainer?.zimFileReader != null &&
       zimReaderContainer?.zimReaderSource?.exists() == true &&
       zimReaderContainer?.zimReaderSource?.canOpenInLibkiwix() == true &&
-      zimReaderContainer?.zimFileReader?.jniKiwixReader?.check() == true
+      zimReaderContainer?.zimFileReader?.jniKiwixReader != null
 
   /**
    * Restores the view state when the attempt to read web view history from the room database fails
