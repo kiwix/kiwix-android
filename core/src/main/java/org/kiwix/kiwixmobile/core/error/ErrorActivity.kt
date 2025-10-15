@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
@@ -65,6 +66,7 @@ open class ErrorActivity : BaseActivity() {
   lateinit var fileLogger: FileLogger
 
   private var exception: Throwable? = null
+  var appName: String? = null
 
   open val crashTitle: Int = R.string.crash_title
   open val crashDescription: Int = R.string.crash_description
@@ -75,7 +77,7 @@ open class ErrorActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     val extras = intent.extras
     exception =
-      if (extras != null && safeContains(extras)) {
+      if (extras != null && safeContains(extras, EXCEPTION_KEY)) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
           extras.getSerializable(EXCEPTION_KEY, Throwable::class.java)
         } else {
@@ -85,6 +87,11 @@ open class ErrorActivity : BaseActivity() {
       } else {
         null
       }
+    appName = if (extras != null && safeContains(extras, APP_NAME_KEY)) {
+      extras.getString(APP_NAME_KEY)
+    } else {
+      null
+    }
     setContent {
       diagnosticDetailsItems = remember { getDiagnosticDetailsItems() }
       ErrorActivityScreen(
@@ -279,9 +286,9 @@ open class ErrorActivity : BaseActivity() {
   private fun externalFileDetails(): String =
     getExternalFilesDirs(null).joinToString("\n") { it?.path ?: "null" }
 
-  private fun safeContains(extras: Bundle): Boolean {
+  private fun safeContains(extras: Bundle, key: String): Boolean {
     return try {
-      extras.containsKey(EXCEPTION_KEY)
+      extras.containsKey(key)
     } catch (_: RuntimeException) {
       false
     }
@@ -290,12 +297,12 @@ open class ErrorActivity : BaseActivity() {
   protected open val subject: String
     get() = "Someone has reported a crash"
 
-  protected open val initialBody: String
-    get() =
-      """
+  protected open val initialBody: String by lazy {
+    """
       Hi Kiwix Developers!
-      The Android app crashed, here are some details to help fix it:
-      """.trimIndent()
+      The "$appName" app crashed, here are some details to help fix it:
+    """.trimIndent()
+  }
 
   private val versionCode: Int
     @SuppressLint("WrongConstant")

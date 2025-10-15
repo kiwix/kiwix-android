@@ -43,10 +43,11 @@ class DiagnosticReportActivity : ErrorActivity() {
 
   override val subject = "Somebody has sent a Diagnostic Report  "
 
-  override val initialBody =
+  override val initialBody by lazy {
     """
     Hi Kiwix Developers,
-    I am having an issue with the app and would like you to check these details
+    I am having an issue with the "$appName" app and would like you to check these details
     
     """.trimIndent()
+  }
 }

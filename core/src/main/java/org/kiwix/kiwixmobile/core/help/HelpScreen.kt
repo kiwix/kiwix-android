@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.help
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -39,14 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
@@ -63,6 +59,7 @@ const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionT
 @Composable
 fun HelpScreen(
   data: List<HelpScreenItemDataClass>,
+  onSendReportButtonClick: () -> Unit,
   navigationIcon: @Composable () -> Unit
 ) {
   val dividerColor = if (isSystemInDarkTheme()) {
@@ -77,7 +74,7 @@ fun HelpScreen(
       }
     ) { innerPadding ->
       Column(modifier = Modifier.padding(innerPadding)) {
-        SendReportRow()
+        SendReportRow(onSendReportButtonClick)
         HorizontalDivider(color = dividerColor, thickness = HELP_SCREEN_DIVIDER_HEIGHT)
         HelpItemList(data, dividerColor)
       }
@@ -86,14 +83,13 @@ fun HelpScreen(
 }
 
 @Composable
-fun SendReportRow() {
-  val context = LocalContext.current
+fun SendReportRow(onSendReportButtonClick: () -> Unit) {
   val isDarkTheme = isSystemInDarkTheme()
 
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { (context as? Activity)?.start<DiagnosticReportActivity>() }
+      .clickable { onSendReportButtonClick.invoke() }
       .testTag(SEND_DIAGNOSTIC_REPORT_TESTING_TAG),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Start
