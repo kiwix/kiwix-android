@@ -25,8 +25,6 @@ import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
@@ -70,7 +68,7 @@ open class ErrorActivity : BaseActivity() {
 
   open val crashTitle: Int = R.string.crash_title
   open val crashDescription: Int = R.string.crash_description
-  private lateinit var checkBoxItems: List<Pair<Int, MutableState<Boolean>>>
+  private lateinit var diagnosticDetailsItems: List<Int>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     coreComponent.inject(this)
@@ -88,13 +86,11 @@ open class ErrorActivity : BaseActivity() {
         null
       }
     setContent {
-      checkBoxItems = remember {
-        getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
-      }
+      diagnosticDetailsItems = remember { getDiagnosticDetailsItems() }
       ErrorActivityScreen(
         crashTitle,
         crashDescription,
-        checkBoxItems,
+        diagnosticDetailsItems,
         { restartApp() },
         { sendDetailsOnMail() }
       )
@@ -102,23 +98,22 @@ open class ErrorActivity : BaseActivity() {
   }
 
   /**
-   * This list will create the checkBox items in ErrorActivity.
+   * This list will create the "Details included" items in ErrorActivity.
    * Subclasses like DiagnosticReportActivity override this method to customize
-   * the behavior, such as hiding the crashLogs checkbox.
+   * the behavior, such as hiding the crashLogs item.
    *
    * WARNING: If modifying this method, ensure thorough testing with DiagnosticReportActivity
    *    to verify proper functionality.
    */
-  open fun getCrashCheckBoxItems(): List<Pair<Int, Boolean>> {
-    return listOf(
+  open fun getDiagnosticDetailsItems(): List<Int> =
+    listOf(
       R.string.crash_checkbox_language,
       R.string.crash_checkbox_logs,
       R.string.crash_checkbox_exception,
       R.string.crash_checkbox_zimfiles,
       R.string.crash_checkbox_device,
       R.string.crash_checkbox_file_system
-    ).map { it to true }
-  }
+    )
 
   private fun sendDetailsOnMail() {
     lifecycleScope.launch {
@@ -195,7 +190,7 @@ open class ErrorActivity : BaseActivity() {
       type = "text/plain"
       putExtra(Intent.EXTRA_EMAIL, arrayOf(CRASH_AND_FEEDBACK_EMAIL_ADDRESS))
       putExtra(Intent.EXTRA_SUBJECT, subject)
-      val file = fileLogger.writeLogFile(this@ErrorActivity, shouldWriteDeviceLogsInFile())
+      val file = fileLogger.writeLogFile(this@ErrorActivity)
       file.appendText(emailBody)
       val path =
         FileProvider.getUriForFile(
@@ -210,40 +205,25 @@ open class ErrorActivity : BaseActivity() {
   }
 
   /**
-   * Determines whether device logs should be written to a file.
+   * Builds a detailed crash report body.
    *
-   * This function checks if the user has selected the option to include
-   * device logs in the crash report by looking for the corresponding checkbox entry.
-   *
-   * @return `true` if the user has enabled the log inclusion option, otherwise `false`.
-   */
-  private fun shouldWriteDeviceLogsInFile(): Boolean =
-    checkBoxItems.firstOrNull { it.first == R.string.crash_checkbox_logs }?.second?.value == true
-
-  /**
-   * Builds a detailed crash report body based on user-selected options.
-   *
-   * This function dynamically constructs a report by checking which options
-   * the user has selected in the error reporting UI. It gathers relevant
+   * This function dynamically constructs a report. It gathers relevant
    * details such as exception information, ZIM file details, language settings,
    * device specifications, and file system details.
    *
    * @return A formatted string containing the selected crash report details.
    */
-  private suspend fun buildBody(): String {
-    // Convert the checkbox list into a map for easy lookup of selected options.
-    val optionMap = checkBoxItems.associate { it.first to it.second.value }
-    return """ 
+  private suspend fun buildBody(): String =
+    """ 
     $initialBody
       
-    ${if (optionMap[R.string.crash_checkbox_exception] == true && exception != null) exceptionDetails() else ""}
-    ${if (optionMap[R.string.crash_checkbox_zimfiles] == true) zimFiles() else ""}
-    ${if (optionMap[R.string.crash_checkbox_language] == true) languageLocale() else ""}
-    ${if (optionMap[R.string.crash_checkbox_device] == true) deviceDetails() else ""}
-    ${if (optionMap[R.string.crash_checkbox_file_system] == true) systemDetails() else ""} 
+    ${if (diagnosticDetailsItems.contains(R.string.crash_checkbox_exception) && exception != null) exceptionDetails() else ""}
+    ${zimFiles()}
+    ${languageLocale()}
+    ${deviceDetails()}
+    ${systemDetails()}  
     
-      """.trimIndent()
-  }
+    """.trimIndent()
 
   private fun exceptionDetails(): String =
     """

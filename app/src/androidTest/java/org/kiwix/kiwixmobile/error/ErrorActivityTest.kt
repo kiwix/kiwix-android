@@ -126,8 +126,8 @@ class ErrorActivityTest : BaseActivityTest() {
       // Again click on "Send diagnostic report" button to open the ErrorActivity.
       clickOnSendDiagnosticReport(composeTestRule)
       assertErrorActivityDisplayed(composeTestRule)
-      // Check check boxes are displayed or not.
-      assertCheckBoxesDisplayed(composeTestRule)
+      // Check diagnostic details are displayed or not.
+      assertDetailsIncludedInErrorReportDisplayed(composeTestRule)
       // Click on "Send details" button.
       clickOnSendDetailsButton(composeTestRule)
     }

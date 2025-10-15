@@ -59,13 +59,17 @@ class ErrorActivityRobot : BaseRobot() {
     composeTestRule.onNodeWithText(context.getString(R.string.no_thanks).uppercase()).performClick()
   }
 
-  fun assertCheckBoxesDisplayed(composeTestRule: ComposeContentTestRule) {
+  fun assertDetailsIncludedInErrorReportDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       onNodeWithText(context.getString(R.string.crash_checkbox_language))
         .assertIsDisplayed()
       onNodeWithText(context.getString(R.string.crash_checkbox_logs))
         .assertIsDisplayed()
       onNodeWithText(context.getString(R.string.crash_checkbox_zimfiles))
+        .assertIsDisplayed()
+      onNodeWithText(context.getString(R.string.crash_checkbox_device))
+        .assertIsDisplayed()
+      onNodeWithText(context.getString(R.string.crash_checkbox_file_system))
         .assertIsDisplayed()
     }
   }

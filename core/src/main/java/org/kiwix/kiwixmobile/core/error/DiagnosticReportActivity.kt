@@ -25,18 +25,17 @@ class DiagnosticReportActivity : ErrorActivity() {
   override val crashDescription: Int = R.string.diagnostic_report_message
 
   /**
-   * Overrides this method to hide the `Details of The Crash` checkbox.
+   * Overrides this method to hide the `Details of The Crash`.
    * Since this screen for sending the diagnostic report.
    */
-  override fun getCrashCheckBoxItems(): List<Pair<Int, Boolean>> {
-    return listOf(
+  override fun getDiagnosticDetailsItems(): List<Int> =
+    listOf(
       R.string.crash_checkbox_language,
       R.string.crash_checkbox_logs,
       R.string.crash_checkbox_zimfiles,
       R.string.crash_checkbox_device,
       R.string.crash_checkbox_file_system
-    ).map { it to true }
-  }
+    )
 
   override fun restartApp() {
     finish()
