@@ -33,28 +33,36 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.tonyodev.fetch2.R.string
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.components.CrashCheckBox
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
 import org.kiwix.kiwixmobile.core.ui.theme.Black
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray900
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DETAILS_INCLUDED_TEXT_START_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DETAILS_INCLUDED_TEXT_TOP_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -65,7 +73,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 fun ErrorActivityScreen(
   @StringRes crashTitleStringId: Int,
   @StringRes messageStringId: Int,
-  checkBoxData: List<Pair<Int, MutableState<Boolean>>>,
+  diagnosticDetailsItems: List<Int>,
   noThanksButtonClickListener: () -> Unit,
   sendDetailsButtonClickListener: () -> Unit
 ) {
@@ -86,8 +94,8 @@ fun ErrorActivityScreen(
       CrashTitle(crashTitleStringId)
       AppIcon()
       CrashMessage(messageStringId, crashMessageAndCheckboxTextColor)
-      CrashCheckBoxList(
-        checkBoxData,
+      DetailsIncludedInErrorReport(
+        diagnosticDetailsItems,
         Modifier
           .weight(1f)
           .padding(top = SEVENTEEN_DP, bottom = EIGHT_DP),
@@ -158,14 +166,48 @@ private fun CrashMessage(
 }
 
 @Composable
-private fun CrashCheckBoxList(
-  checkBoxData: List<Pair<Int, MutableState<Boolean>>>,
+private fun DetailsIncludedInErrorReport(
+  diagnosticDetailsItems: List<Int>,
   modifier: Modifier,
   crashMessageAndCheckboxTextColor: Color
 ) {
   LazyColumn(modifier = modifier) {
-    itemsIndexed(checkBoxData) { _, item ->
-      CrashCheckBox(item, crashMessageAndCheckboxTextColor)
+    itemsIndexed(diagnosticDetailsItems) { index, item ->
+      DetailsIncludedItem(item, crashMessageAndCheckboxTextColor)
     }
+  }
+}
+
+@Composable
+private fun DetailsIncludedItem(
+  diagnosticDetailsItem: Int,
+  crashMessageAndCheckboxTextColor: Color
+) {
+  val iconColor = if (isSystemInDarkTheme()) {
+    DenimBlue400
+  } else {
+    DenimBlue800
+  }
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(
+        start = DETAILS_INCLUDED_TEXT_START_PADDING,
+        top = DETAILS_INCLUDED_TEXT_TOP_PADDING
+      ),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Icon(
+      imageVector = Icons.Default.CheckCircle,
+      contentDescription = null,
+      tint = iconColor,
+      modifier = Modifier.minimumInteractiveComponentSize().semantics { hideFromAccessibility() }
+    )
+    Text(
+      style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
+      text = stringResource(id = diagnosticDetailsItem),
+      color = crashMessageAndCheckboxTextColor,
+      modifier = Modifier.padding(start = DETAILS_INCLUDED_TEXT_TOP_PADDING)
+    )
   }
 }

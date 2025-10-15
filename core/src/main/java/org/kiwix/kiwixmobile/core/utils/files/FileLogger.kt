@@ -32,7 +32,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class FileLogger @Inject constructor() {
-  fun writeLogFile(context: Context, shouldWriteDeviceLogs: Boolean = true): File {
+  fun writeLogFile(context: Context): File {
     // Create a new folder in private storage with name: logs
     val logDir = File(context.filesDir, "logs")
 
@@ -47,10 +47,8 @@ class FileLogger @Inject constructor() {
 
     try {
       logFile.createNewFile()
-      if (shouldWriteDeviceLogs) {
-        Runtime.getRuntime().exec("logcat -f $logFile")
-        Runtime.getRuntime().exec("logcat -b all -d")
-      }
+      Runtime.getRuntime().exec("logcat -f $logFile")
+      Runtime.getRuntime().exec("logcat -b all -d")
     } catch (e: IOException) {
       Log.e("KIWIX", "Error while writing $fileName! ", e)
     }

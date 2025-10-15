@@ -194,6 +194,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         intent.putExtra(ErrorActivity.EXCEPTION_KEY, paramThrowable)
         val extras = Bundle()
         extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
+        extras.putString(APP_NAME_KEY, appName)
         intent.putExtras(extras)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         appContext.startActivity(intent)

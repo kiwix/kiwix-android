@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
 object ComposeDimens {
-  // Crash checkbox dimens
-  val CRASH_CHECKBOX_START_PADDING = 80.dp
-  val CRASH_CHECKBOX_TOP_PADDING = 8.dp
+  // Details included in error report dimens
+  val DETAILS_INCLUDED_TEXT_START_PADDING = 80.dp
+  val DETAILS_INCLUDED_TEXT_TOP_PADDING = 8.dp
 
   // Our default Button dimens
   val BUTTON_DEFAULT_ELEVATION = 2.dp

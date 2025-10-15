@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.help
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,8 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
+import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -54,10 +57,20 @@ abstract class HelpFragment : BaseFragment() {
         rawTitleDescriptionMap()
       )
       // Call your HelpScreen composable.
-      HelpScreen(data = helpScreenData) {
+      HelpScreen(data = helpScreenData, { onSendReportButtonClick() }) {
         NavigationIcon(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() })
       }
     }
+  }
+
+  private fun onSendReportButtonClick() {
+    if (activity == null) return
+    val appName = (activity as? CoreMainActivity)?.appName
+    val intent = Intent(activity, DiagnosticReportActivity::class.java)
+    val extras = Bundle()
+    extras.putString(APP_NAME_KEY, appName)
+    intent.putExtras(extras)
+    activity?.startActivity(intent)
   }
 }
 

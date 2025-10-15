@@ -188,7 +188,7 @@
   <string name="downloading" tools:keep="@string/no_items_msg">Downloading</string>
   <string name="no_items_msg" tools:keep="@string/no_items_msg">No items available</string>
   <string name="crash_title">Well… This is Embarrassing</string>
-  <string name="crash_description">It looks like we crashed.\n\nWould you mind helping us fix this problem by sending the following information?</string>
+  <string name="crash_description">It looks like we crashed.\n\nWould you mind helping us fix this problem by sending the crash report?</string>
   <string name="crash_checkbox_language">Your Language Settings</string>
   <string name="crash_checkbox_zimfiles">A List of Your ZIM Files</string>
   <string name="crash_checkbox_exception">Details of The Crash</string>
@@ -322,7 +322,7 @@
   <string name="send_report">Send diagnostic report</string>
   <string name="crash_checkbox_file_system">File System Details</string>
   <string name="diagnostic_report">Diagnostic Report</string>
-  <string name="diagnostic_report_message">Please send all the following details so we can diagnose the problem</string>
+  <string name="diagnostic_report_message">To help us diagnose the problem, reproduce the issue first, then send the diagnostic report.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
   <string name="search_open_in_new_tab">Open in new tab</string>

@@ -298,7 +298,7 @@
   <string name="send_report">It is a text description on the help screen which tells the user that they can send a diagnostic report by selecting it.</string>
   <string name="crash_checkbox_file_system">It is a checkbox title in the Diagnostic report screen which tells the user that they will be sending file system details while sending the diagnostic report.</string>
   <string name="diagnostic_report">It is the screen title for the Diagnostic report screen.</string>
-  <string name="diagnostic_report_message">It is a text on the Diagnostic report screen which is asking the user to send all the details seen as checkboxes on the screen.</string>
+  <string name="diagnostic_report_message">It is a text on the Diagnostic report screen which tells user how they can send the diagnostic report.</string>
   <string name="percentage">{{Identical|%d%%}}</string>
   <string name="pref_text_zoom_title">It is a text title in the settings screen which tells the user that they can change the zoom level of texts in the reader.</string>
   <string name="search_open_in_new_tab">* It is a dialog message shown on the reader screen when the user long presses a link.\n* It asks if the user wants to open that specific link in a new tab.</string>
