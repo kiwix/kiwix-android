@@ -450,6 +450,9 @@ abstract class CoreReaderFragment :
               }
             )
           }
+          // Update the title when Compose is ready to fix the issue
+          // where the user opens pages from history, notes, or bookmarks.
+          updateTitle()
         }
         LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
           readerScreenState.update {
@@ -1599,6 +1602,7 @@ abstract class CoreReaderFragment :
   }
 
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
+    if (!isAdded) return
     safelyCancelBookmarkJob()
     val zimFileReaderId = zimFileReader.id
     bookmarkingJob = viewLifecycleOwner.lifecycleScope.launch {
