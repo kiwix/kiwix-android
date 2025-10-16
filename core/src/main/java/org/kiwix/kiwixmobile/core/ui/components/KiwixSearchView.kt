@@ -38,6 +38,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
@@ -58,7 +60,7 @@ fun KiwixSearchView(
   val hintColor = if (isSystemInDarkTheme()) {
     Color.LightGray
   } else {
-    Color.Gray
+    Color.DarkGray
   }
   val keyboardController = LocalSoftwareKeyboardController.current
   val colors = TextFieldDefaults.colors(
@@ -75,7 +77,8 @@ fun KiwixSearchView(
     modifier = modifier
       .testTag(searchViewTextFiledTestTag)
       .minimumInteractiveComponentSize()
-      .focusRequester(focusRequester),
+      .focusRequester(focusRequester)
+      .semantics { contentDescription = placeholder },
     singleLine = true,
     value = value,
     placeholder = {

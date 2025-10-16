@@ -109,5 +109,7 @@
   <style name="TextAppearance.KiwixTheme.ActionMode.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionMode.Title">
     <!-- Set the ActionMode title text color to white -->
     <item name="android:textColor">@color/white</item>
+    <!-- Set the ActionMode title size in sp to fix the accessibility issue -->
+    <item name="android:textSize">20sp</item>
   </style>
 </resources>

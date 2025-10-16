@@ -32,12 +32,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.BuildConfig
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.R.drawable
+import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
@@ -56,9 +55,7 @@ fun IntroScreen(
   onButtonClick: () -> Unit
 ) {
   KiwixTheme {
-    Column(
-      modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
       val pagerState = rememberPagerState(pageCount = { getPageCount() })
       val pagerIsDragged = pagerState.interactionSource.collectIsDraggedAsState()
       val pageInteractionSource = remember { MutableInteractionSource() }
@@ -142,12 +139,4 @@ private fun IntroPagerContent(page: Int) {
       )
     }
   }
-}
-
-@Composable
-@Preview
-fun PageIndicatorPreview() {
-  IntroScreen(
-    onButtonClick = {}
-  )
 }

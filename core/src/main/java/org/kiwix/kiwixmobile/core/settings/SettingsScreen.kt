@@ -562,7 +562,7 @@ private fun ListOptions(
         RadioButton(
           selected = option == selected,
           onClick = { onOptionSelected(option) },
-          modifier = Modifier.semantics { contentDescription = option }
+          modifier = Modifier.semantics { contentDescription = "$option${option.hashCode()}" }
         )
         Text(text = option, style = MaterialTheme.typography.bodyLarge)
       }
