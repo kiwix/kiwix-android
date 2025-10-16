@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Error
@@ -132,7 +133,9 @@ private fun DownloadBookContent(
       BookDescription(item.description.orEmpty())
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
-        modifier = Modifier.padding(horizontal = ONE_DP, vertical = FIVE_DP),
+        modifier = Modifier
+          .padding(horizontal = ONE_DP, vertical = FIVE_DP)
+          .semantics { contentDescription = item.hashCode().toString() },
         progress = item.progress
       )
       DownloadStateRow(item)
@@ -160,9 +163,11 @@ fun PauseStopButtonsRow(
         .minimumInteractiveComponentSize()
         .semantics { testTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG }
     ) {
+      val contentDescription = context.getString(string.tts_pause) +
+        "/${context.getString(string.tts_resume)}/${item.hashCode()}"
       Icon(
         painter = getPauseResumeButtonIcon(item).toPainter(),
-        contentDescription = "${context.getString(string.tts_pause)}/${context.getString(string.tts_resume)}"
+        contentDescription = contentDescription
       )
     }
 
@@ -175,7 +180,7 @@ fun PauseStopButtonsRow(
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_stop_24dp),
-        contentDescription = context.getString(string.stop)
+        contentDescription = context.getString(string.stop) + item.hashCode()
       )
     }
   }
@@ -199,13 +204,15 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
       .padding(bottom = TEN_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
+    val downloadState = getDownloadStateText(item, LocalContext.current)
     Text(
-      text = getDownloadStateText(item, LocalContext.current),
+      text = downloadState,
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary,
       modifier = Modifier
         .weight(1f)
         .testTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+        .semantics { contentDescription = downloadState + item.hashCode() }
     )
     Text(
       text = getDownloadedSizeText(item.bytesDownloaded, item.totalSizeBytes),

@@ -151,7 +151,7 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
   if (isOnlineLibrary) {
     AsyncImage(
       model = iconSource,
-      contentDescription = stringResource(R.string.fav_icon),
+      contentDescription = stringResource(R.string.fav_icon) + iconSource.hashCode(),
       modifier = modifier,
       placeholder = painterResource(R.drawable.default_zim_file_icon),
       error = painterResource(R.drawable.default_zim_file_icon),
@@ -159,7 +159,7 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
   } else {
     Image(
       painter = Base64String(iconSource).toPainter(),
-      contentDescription = stringResource(R.string.fav_icon),
+      contentDescription = stringResource(R.string.fav_icon) + iconSource.hashCode(),
       modifier = modifier
     )
   }

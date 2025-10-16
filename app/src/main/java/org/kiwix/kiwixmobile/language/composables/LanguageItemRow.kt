@@ -67,6 +67,8 @@ fun LanguageItemRow(
         .padding(ComposeDimens.SIXTEEN_DP)
         .semantics {
           testTag = "$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${language.language}"
+          contentDescription =
+            "${context.getString(R.string.select_language_content_description)}${language.language}"
         },
       selected = language.active,
       onClick = {
