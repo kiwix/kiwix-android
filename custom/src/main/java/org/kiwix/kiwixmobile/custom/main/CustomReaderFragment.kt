@@ -29,6 +29,7 @@ import androidx.navigation.NavOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
@@ -293,7 +294,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private suspend fun createDemoFile() =
-    File(getDemoFilePathForCustomApp(requireActivity())).also {
+    File(getDemoFilePathForCustomApp(CoreApp.instance)).also {
       if (!it.isFileExist()) it.createNewFile()
     }
 
