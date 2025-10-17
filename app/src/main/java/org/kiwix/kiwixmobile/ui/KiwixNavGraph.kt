@@ -228,7 +228,6 @@ fun FragmentContainer(
   val fragmentManager = remember {
     (context as AppCompatActivity).supportFragmentManager
   }
-  val fragment = remember { fragmentProvider() }
 
   AndroidView(
     modifier = Modifier.fillMaxSize(),
@@ -246,7 +245,7 @@ fun FragmentContainer(
       // Bug fix #4454
       allowStateLoss = fragmentManager.isStateSaved
     ) {
-      replace(fragmentId, fragment)
+      replace(fragmentId, fragmentProvider())
     }
   }
 }

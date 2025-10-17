@@ -1501,7 +1501,7 @@ abstract class CoreReaderFragment :
     isFromManageExternalLaunch: Boolean = false
   ) {
     this.isFromManageExternalLaunch = isFromManageExternalLaunch
-    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
+    if (isCustomApp || hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
