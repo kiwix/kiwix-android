@@ -12,4 +12,7 @@
   <string name="receive_files_title">تلقي الملفات</string>
   <string name="no_app_found_to_open">لم يتم العثور على تطبيق لتحديد ملف ZIM!</string>
   <string name="select_zim_file">حدد ملف ZIM للقراءة</string>
+  <string name="swipe_down_to_scan_storage">مرر لأسفل لمسح جهازك للبحث عن كتب جديدة…</string>
+  <string name="auto_detect_books">الكشف التلقائي عن كتبك</string>
+  <string name="auto_detect_books_description">عند التشغيل الأول، سيُطلب منك تمكين التطبيق من فحص مساحة التخزين لديك. إذا سمحت بذلك، فسنكتشف ملفات ZIM تلقائيًا دون الحاجة إلى إضافتها يدويًا.</string>
 </resources>
