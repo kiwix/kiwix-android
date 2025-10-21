@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.download.effects
 
+import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -37,7 +38,7 @@ class SetPreferredStorageWithMostSpace @Inject constructor(
   }
 
   suspend fun findAndSetPreferredStorage(activity: AppCompatActivity) {
-    activity.externalMediaDirs
+    ContextWrapper(activity).externalMediaDirs
       .filterNotNull()
       .maxBy { storageCalculator.availableBytes(it) }
       .let { sharedPreferenceUtil.putPrefStorage(it.path) }

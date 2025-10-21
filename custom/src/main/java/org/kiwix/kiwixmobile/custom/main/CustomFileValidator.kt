@@ -122,31 +122,14 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
           // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
           // By obtaining the parent directory, we can scan files from the app-specific directory itself.
           directoryList.add(File(parentPath))
-        } ?: kotlin.run {
-          // If the parent directory is null, it means the current directory is the target folder itself.
-          // Add the current directory to the list, as it represents the app-specific directory for both internal
-          // and SD card storage. This allows us to scan files directly from this directory.
-          directoryList.add(dir)
         }
+        // Add the current folder as well.
+        directoryList.add(dir)
       }
     // Get the external files directories for the app
     ContextWrapper(context).externalMediaDirs?.filterNotNull()
       ?.filter(File::exists)
-      ?.forEach { dir ->
-        // Check if the directory's parent is not null
-        dir.parent?.let { parentPath ->
-          // Add the parent directory to the list, so we can scan all the files contained in the folder.
-          // We are doing this because context.getExternalFilesDirs(null) method returns the path to the
-          // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
-          // By obtaining the parent directory, we can scan files from the app-specific directory itself.
-          directoryList.add(File(parentPath))
-        } ?: kotlin.run {
-          // If the parent directory is null, it means the current directory is the target folder itself.
-          // Add the current directory to the list, as it represents the app-specific directory for both internal
-          // and SD card storage. This allows us to scan files directly from this directory.
-          directoryList.add(dir)
-        }
-      }
+      ?.forEach { directoryList.add(it) }
     return scanDirs(directoryList.toTypedArray(), "zim").filterNot {
       // Excluding the demo.zim file from the list as it is used for demonstration purposes
       // on the ZimHostFragment for hosting the ZIM file on the server.
