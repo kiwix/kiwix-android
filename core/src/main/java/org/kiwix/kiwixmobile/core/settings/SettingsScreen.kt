@@ -578,8 +578,7 @@ private fun PreferenceItem(title: String, summary: String, onClick: () -> Unit) 
       .clickable(onClick = onClick)
       .padding(vertical = TWELVE_DP)
       .semantics {
-        testTag = PREFERENCE_ITEM_TESTING_TAG
-        contentDescription = title
+        testTag = PREFERENCE_ITEM_TESTING_TAG + title
         hideFromAccessibility()
       }
   ) {

@@ -186,11 +186,10 @@ class SettingsRobot : BaseRobot() {
       waitForIdle()
       composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
         .performScrollToNode(
-          hasTestTag(PREFERENCE_ITEM_TESTING_TAG) and hasContentDescription(title)
+          hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
         )
       composeTestRule
-        .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG, true)
-        .filter(hasContentDescription(title))
+        .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG + title, true)
         .onFirst()
         .performScrollTo()
         .performClick()

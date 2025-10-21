@@ -375,6 +375,7 @@ fun TableDrawerSheet(
               )
             }
             .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
+            .semantics { contentDescription = "${title}${title.hashCode()}" }
         )
       }
       itemsIndexed(sections) { index, section ->
@@ -397,6 +398,7 @@ fun TableDrawerSheet(
               )
             }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
+            .semantics { contentDescription = "${section.title}${section.hashCode()}" }
         )
       }
     }
