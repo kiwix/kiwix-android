@@ -47,7 +47,7 @@
   <string name="hotspot_notification_content_title">Kiwix ହଟସ୍ପଟ୍</string>
   <string name="start_server_label">ସର୍ଭର ଆରମ୍ଭ କରନ୍ତୁ</string>
   <string name="stop_server_label">ସର୍ଭର ବନ୍ଦ କରନ୍ତୁ</string>
-  <string name="server_started_message">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
+  <string name="server_started_message" fuzzy="true">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
   <string name="share_host_address">ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକ ମାଧ୍ୟମରେ URL ଅଂଶୀଦାର କରନ୍ତୁ</string>
   <string name="error_file_not_found" fuzzy="true">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ । %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ଏହି zim ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ</string>
@@ -57,6 +57,7 @@
   <string name="pref_display_title">ଦେଖଣା</string>
   <string name="pref_info_title">ସୂଚନା</string>
   <string name="pref_info_version">ସଂସ୍କରଣ</string>
+  <string name="pref_theme_summary">ରଙ୍ଗର ଓଲଟା କ୍ରମରେ ପ୍ରସଙ୍ଗମାନ ଦେଖାଇବେ</string>
   <string name="pref_back_to_top">ଉପରକୁ ଫେରିବେ</string>
   <string name="pref_back_to_top_summary">ପୃଷ୍ଠାର ତଳୁ ଉପରକୁ ଯିବେ</string>
   <string name="pref_language_title">ଭାଷା</string>
@@ -163,7 +164,7 @@
   <string name="other_languages">ଅଲଗା ଭାଷା</string>
   <string name="no_items_msg">କୌଣସି ସାମଗ୍ରୀ ଉପଲବ୍ଧ ନାହିଁ</string>
   <string name="crash_title">ଆଚ୍ଛା… ଏହା ଲଜ୍ଜାଜନକ ଅଟେ |</string>
-  <string name="crash_description">ଏହା ଦେଖାଯାଏ ଯେ ଆମେ ଦୁର୍ଘଟଣାଗ୍ରସ୍ତ।! N !! N! ଆପଣ ନିମ୍ନଲିଖିତ ସୂଚନା ପଠାଇ ଏହି ସମସ୍ୟାର ସମାଧାନ କରିବାରେ ସାହାଯ୍ୟ କରିବେ କି?</string>
+  <string name="crash_description" fuzzy="true">ଏହା ଦେଖାଯାଏ ଯେ ଆମେ ଦୁର୍ଘଟଣାଗ୍ରସ୍ତ।! N !! N! ଆପଣ ନିମ୍ନଲିଖିତ ସୂଚନା ପଠାଇ ଏହି ସମସ୍ୟାର ସମାଧାନ କରିବାରେ ସାହାଯ୍ୟ କରିବେ କି?</string>
   <string name="crash_checkbox_language">ଆପଣଙ୍କ ଭାଷା ସଜାଣି</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">ଆପଣଙ୍କ ଜିମ ଫାଇଲଗୁଡ଼ିକର ଏକ ତାଲିକା</string>
   <string name="crash_checkbox_exception">ଦୁର୍ଘଟଣାର ବିବରଣୀ</string>
@@ -266,7 +267,7 @@
   <string name="send_report">ଡାଇଗ୍ନୋଷ୍ଟିକ୍ ରିପୋର୍ଟ ପଠାନ୍ତୁ</string>
   <string name="crash_checkbox_file_system">ଫାଇଲ ତନ୍ତ୍ର ବିବରଣୀ</string>
   <string name="diagnostic_report">ଡାଇଗ୍ନୋଷ୍ଟିକ୍ ରିପୋର୍ଟ</string>
-  <string name="diagnostic_report_message">ଦଯ଼ାକରି ନିମ୍ନଲିଖିତ ସମସ୍ତ ବିବରଣୀ ପଠାନ୍ତୁ ଯାହା ଦ୍ୱାରା ଆମେ ସମସ୍ୟା ଚିହ୍ନଟ କରିପାରିବା ।</string>
+  <string name="diagnostic_report_message" fuzzy="true">ଦଯ଼ାକରି ନିମ୍ନଲିଖିତ ସମସ୍ତ ବିବରଣୀ ପଠାନ୍ତୁ ଯାହା ଦ୍ୱାରା ଆମେ ସମସ୍ୟା ଚିହ୍ନଟ କରିପାରିବା ।</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">ଟେକ୍ସଟ୍ ଜୁମ୍</string>
   <string name="search_open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଖୋଲ</string>

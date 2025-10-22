@@ -47,7 +47,7 @@
   <string name="hotspot_notification_content_title">ߞߥߌߞߛ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ</string>
   <string name="start_server_label">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߝߟߐ߫</string>
   <string name="stop_server_label">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߟߐ߬</string>
-  <string name="server_started_message">IP ߢߌ߲߬ ߠߊߘߏ߲߬ ߌ ߟߊ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߊ߬ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊߛߐ߬ߘߐ߲߬ %s</string>
+  <string name="server_started_message" fuzzy="true">IP ߢߌ߲߬ ߠߊߘߏ߲߬ ߌ ߟߊ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߊ߬ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊߛߐ߬ߘߐ߲߬ %s</string>
   <string name="share_host_address">URL ߟߊߖߍ߲ߛߍ߲߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߜߘߍ ߟߎ߬ ߛߌߟߊ ߝߍ߬</string>
   <string name="error_file_not_found">ߝߌ߬ߟߌ: ZIM ߞߐߕߐ߯ ߡߊߡߌ߬ߘߊ߬ߣߍ߲ ߕߍߣߊ߬ ߡߊߛߐ߬ߘߐ߲߫ ߠߊ߫. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ߊ߬ ߕߴߛߋ߫ ߞߊ߬ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߘߐߞߊ߬ߙߊ߲߬߹</string>
@@ -57,6 +57,7 @@
   <string name="pref_display_title">ߦߌ߬ߘߊ߬ߟߌ</string>
   <string name="pref_info_title">ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲</string>
   <string name="pref_info_version">ߦߌߟߡߊ</string>
+  <string name="pref_theme_summary">ߞߎߡߘߊ ߟߎ߬ ߦߌ߬ߘߊ߬ ߞߐ߬ߟߐ߫ ߞߐߥߟߏߣߍ߲ ߠߎ߬ ߘߐ߫</string>
   <string name="pref_back_to_top">ߌ ߞߐߛߊ߬ߦߌ߬ ߛߊ߲ߝߍ߬</string>
   <string name="pref_back_to_top_summary">ߞߎ߬ߘߎ ߘߏ߫ ߟߊߓߊ߯ߙߊ߫ ߞߐߜߍ ߘߎ߰ߟߊ ߘߐ߫ ߡߍ߲ ߘߴߌ ߟߊߛߋ߫ ߊ߬ ߘߊߡߌߣߊ ߟߊ߫</string>
   <string name="pref_language_title">ߞߊ߲</string>
@@ -163,7 +164,7 @@
   <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
   <string name="no_items_msg">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
   <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
-  <string name="crash_description">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>
+  <string name="crash_description" fuzzy="true">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>
   <string name="crash_checkbox_language">ߌ ߟߊ߫ ߞߊ߲ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߟߎ߫</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">ߌ ߟߊ߫ ZIM ߞߐߕߐ߮ ߟߎ߬ ߛߙߍߘߍ</string>
   <string name="crash_checkbox_exception">ߜߊߛߊ߲ߠߌ߲ ߝߊߙߊ߲ߝߊ߯ߛߌ ߟߎ߬</string>
@@ -265,7 +266,7 @@
   <string name="send_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ ߗߋ߫</string>
   <string name="crash_checkbox_file_system">ߞߐߕߐ߮ ߞߊ߲ߞߋ ߝߊߙߊ߲ߝߊ߯ߛߌ</string>
   <string name="diagnostic_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ</string>
-  <string name="diagnostic_report_message">ߝߊߙߊ߲ߝߊ߯ߛߟߌ ߣߌ߲߬ ߠߎ߬ ߓߍ߯ ߗߋ߫ ߊ߲ ߡߊ߬ ߖߊ߰ߣߌ߲߫ ߛߴߊ߲ ߘߌ߫ ߛߋ߫ ߝߙߋߞߋ ߛߎ߯ߦߊ ߛߍ߯ߛߍ߯ ߟߊ߫</string>
+  <string name="diagnostic_report_message" fuzzy="true">ߝߊߙߊ߲ߝߊ߯ߛߟߌ ߣߌ߲߬ ߠߎ߬ ߓߍ߯ ߗߋ߫ ߊ߲ ߡߊ߬ ߖߊ߰ߣߌ߲߫ ߛߴߊ߲ ߘߌ߫ ߛߋ߫ ߝߙߋߞߋ ߛߎ߯ߦߊ ߛߍ߯ߛߍ߯ ߟߊ߫</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">ߞߟߏߜߍ ߟߊߓߏ߲߬ߧߊ</string>
   <string name="search_open_in_new_tab">ߊ߬ ߟߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ ߞߊ߲߬</string>

@@ -44,7 +44,7 @@
   <string name="hotspot_notification_content_title">Puntu WiFi de Kiwix</string>
   <string name="start_server_label">Aniciar el sirvidor</string>
   <string name="stop_server_label">Parar el sirvidor</string>
-  <string name="server_started_message">Escribi esta direición ip nel restolador pa tener accesu al sirvidor %s</string>
+  <string name="server_started_message" fuzzy="true">Escribi esta direición ip nel restolador pa tener accesu al sirvidor %s</string>
   <string name="error_file_not_found" fuzzy="true">Error: Nun pudo alcontrase ficheru ZIM seleicionáu. %s</string>
   <string name="zim_not_opened" fuzzy="true">Nun pudo abrise l ficheru zim</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu. %s</string>
@@ -52,6 +52,7 @@
   <string name="pref_display_title">Amosar</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
+  <string name="pref_theme_summary">Ver los artículos colos colores invertíos</string>
   <string name="pref_back_to_top">Volver arriba</string>
   <string name="pref_back_to_top_summary">Amosar un botón al final de la páxina pa volver al entamu</string>
   <string name="pref_language_title">Llingua</string>
@@ -152,7 +153,7 @@
   <string name="other_languages">Otres llingües:</string>
   <string name="no_items_msg">Nun hai nengún elementu disponible</string>
   <string name="crash_title">Bien… esto ye vergonzoso</string>
-  <string name="crash_description">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
+  <string name="crash_description" fuzzy="true">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">La to configuración de llingua</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Una llista de los tos ficheros Zim</string>
   <string name="crash_checkbox_exception">Detalles del cuelgue</string>

@@ -61,8 +61,8 @@
   <string name="start_server_label">Uruchom serwer</string>
   <string name="stop_server_label">Zatrzymaj serwer</string>
   <string name="error_server_already_running">Serwer już działa. Wyłącz go i spróbuj ponownie.</string>
-  <string name="error_ip_address_not_found">Nie udało się znaleźć adresu IP.</string>
-  <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nie udało się znaleźć adresu IP.</string>
+  <string name="server_started_message" fuzzy="true">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="qr_code">Wygenerowany kod QR</string>
   <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony. %s</string>
@@ -75,6 +75,7 @@
   <string name="pref_display_title">Wyświetlanie</string>
   <string name="pref_info_title">Informacje</string>
   <string name="pref_info_version">Wersja</string>
+  <string name="pref_theme_summary">Pokaż artykuły w trybie nocnym</string>
   <string name="pref_back_to_top">Powrót do góry</string>
   <string name="pref_back_to_top_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
   <string name="pref_language_title">Język</string>
@@ -197,7 +198,7 @@
   <string name="downloading">Pobierane</string>
   <string name="no_items_msg">Brak dostępnych pozycji</string>
   <string name="crash_title">Cóż… To jest krępujące</string>
-  <string name="crash_description">Czy mógłbyś pomóc nam rozwiązać ten problem, wysyłając następujące informacje?</string>
+  <string name="crash_description" fuzzy="true">Czy mógłbyś pomóc nam rozwiązać ten problem, wysyłając następujące informacje?</string>
   <string name="crash_checkbox_language">Ustawienia języka</string>
   <string name="crash_checkbox_zimfiles">Lista twoich plików ZIM</string>
   <string name="crash_checkbox_exception">Szczegóły awarii</string>
@@ -316,7 +317,7 @@
   <string name="send_report">Wyślij raport diagnostyczny</string>
   <string name="crash_checkbox_file_system">Szczegóły systemu plików</string>
   <string name="diagnostic_report">Raport diagnostyczny</string>
-  <string name="diagnostic_report_message">Prześlij wszystkie poniższe informacje, abyśmy mogli zdiagnozować problem</string>
+  <string name="diagnostic_report_message" fuzzy="true">Prześlij wszystkie poniższe informacje, abyśmy mogli zdiagnozować problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Powiększ tekst</string>
   <string name="search_open_in_new_tab">Otwórz w nowej karcie</string>

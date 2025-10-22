@@ -74,6 +74,7 @@
   <string name="pref_display_title">प्रदर्शन</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
+  <string name="pref_theme_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
   <string name="pref_back_to_top">वापस शीर्ष पे जाएँ</string>
   <string name="pref_back_to_top_summary">उपर तक खिसकाने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
   <string name="pref_language_title">भाषा</string>
@@ -193,10 +194,10 @@
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
-  <string name="downloading">डाउनलोड हो रहा है</string>
+  <string name="downloading" fuzzy="true">डाउनलोड हो रहा है</string>
   <string name="no_items_msg">कोई आइटम उपलब्ध नहीं है</string>
   <string name="crash_title">खैर, यह शर्मनाक है</string>
-  <string name="crash_description">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
+  <string name="crash_description" fuzzy="true">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
   <string name="crash_checkbox_language">अधिक भाषा सेटिंग्स</string>
   <string name="crash_checkbox_zimfiles">आपकी ZIM फ़ाइलों की सूची</string>
   <string name="crash_checkbox_exception">दुर्घटना का विवरण</string>
@@ -315,7 +316,7 @@
   <string name="send_report">निदान रिपोर्ट भेजें</string>
   <string name="crash_checkbox_file_system">फ़ाइल सिस्टम विवरण</string>
   <string name="diagnostic_report">डायग्नोस्टिक रिपोर्ट</string>
-  <string name="diagnostic_report_message">कृपया निम्नलिखित सभी विवरण भेजें ताकि हम समस्या का निदान कर सकें</string>
+  <string name="diagnostic_report_message" fuzzy="true">कृपया निम्नलिखित सभी विवरण भेजें ताकि हम समस्या का निदान कर सकें</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">पाठ ज़ूम करें</string>
   <string name="search_open_in_new_tab">नए टैब में खोलें</string>
@@ -329,7 +330,7 @@
   <string name="preparing_file_for_copy">प्रतिलिपि/स्थानांतरण की तैयारी</string>
   <string name="action_copy">प्रतिलिपि बनाएँ</string>
   <string name="move">स्थानांतरित करें</string>
-  <string name="copying_zim_file">ZIM फ़ाइल कॉपी की जा रही है %s…</string>
+  <string name="copying_zim_file" fuzzy="true">ZIM फ़ाइल कॉपी की जा रही है %s…</string>
   <string name="copy_move_files_dialog_description">किवीक्स को ZIM फ़ाइल को अपनी डेटा निर्देशिका में रखने की आवश्यकता है।\nक्या आप इसे कॉपी करना चाहते हैं या वहाँ ले जाना चाहते हैं?</string>
   <string name="copy_file_error_message">ZIM फ़ाइल की प्रतिलिपि बनाने में त्रुटि: %s .</string>
   <string name="verify_zim_chunk_dialog_title">सावधान रहें: सुनिश्चित करें कि ZIM के सभी खंड ठीक से स्थानांतरित/कॉपी किए गए हैं!</string>

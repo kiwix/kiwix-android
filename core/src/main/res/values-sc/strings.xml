@@ -46,8 +46,8 @@
   <string name="start_server_label">Avia su servidore</string>
   <string name="stop_server_label">Firma su servidore</string>
   <string name="error_server_already_running">Custu serbidore est giai in esecutzione. Pro praghere istuda·lu e torra·lu a allùghere.</string>
-  <string name="error_ip_address_not_found">Non apo pòdidu agatare s’indiritzu IP.</string>
-  <string name="server_started_message">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Non apo pòdidu agatare s’indiritzu IP.</string>
+  <string name="server_started_message" fuzzy="true">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
   <string name="share_host_address">Cumpartzi s’URL cun àteras aplicatziones</string>
   <string name="error_file_not_found" fuzzy="true">Errore: su documentu ZIM ischertadu no est istadu agatadu. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Non faghet a lèghere custu archìviu zim!</string>
@@ -57,6 +57,7 @@
   <string name="pref_display_title">Ischermu</string>
   <string name="pref_info_title">Informatziones</string>
   <string name="pref_info_version">Versione</string>
+  <string name="pref_theme_summary">Ammustra sos artìculos cun colores furriados</string>
   <string name="pref_back_to_top">Torra a su cumintzu</string>
   <string name="pref_back_to_top_summary">Ammustra unu butone a sa fine de sa pàgina pro torrare a su cumintzu</string>
   <string name="pref_language_title">Limba</string>
@@ -163,7 +164,7 @@
   <string name="other_languages">Àteras limbas:</string>
   <string name="no_items_msg">Perunu elementu disponìbile</string>
   <string name="crash_title">Oja… Custu est imbaratzante</string>
-  <string name="crash_description">Paret chi s’aplicatzione si siat serrada pro more de carchi errore.\n\nNon cheres agiudare a acontzare custu problema imbiende·nos sos datos chi sighint?</string>
+  <string name="crash_description" fuzzy="true">Paret chi s’aplicatzione si siat serrada pro more de carchi errore.\n\nNon cheres agiudare a acontzare custu problema imbiende·nos sos datos chi sighint?</string>
   <string name="crash_checkbox_language">Sas impostatziones de sa limba tuas</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Una lista de sos documentos Zim tuos</string>
   <string name="crash_checkbox_exception">Detàllios de sa serradura atzidentale</string>
@@ -266,7 +267,7 @@
   <string name="send_report">Imbia su raportu de diagnòstica</string>
   <string name="crash_checkbox_file_system">Detàllios de su sistema de documentos</string>
   <string name="diagnostic_report">Raportu de diagnòstica</string>
-  <string name="diagnostic_report_message">Pro praghere imbia totu sos detàllios chi sighent, in manera chi amus a pòdere diagnosticare su problema</string>
+  <string name="diagnostic_report_message" fuzzy="true">Pro praghere imbia totu sos detàllios chi sighent, in manera chi amus a pòdere diagnosticare su problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Ismanniamentu de su testu</string>
   <string name="search_open_in_new_tab">Aberi in un’ischeda noa</string>

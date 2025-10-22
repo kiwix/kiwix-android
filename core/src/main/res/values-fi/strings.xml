@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Anupulu
 * MITO
 * Macofe
 * McDutchie
+* Minilammas
 * MohitMali
 * Nike
 * Pyscowicz
+* Samoasambia
 * Silvonen
 * Spude
 -->
@@ -21,38 +24,55 @@
   <string name="menu_support_kiwix">Tue Kiwixiä</string>
   <string name="menu_support_kiwix_for_custom_apps">Tue %s</string>
   <string name="menu_about_app">Tietoja sovelluksesta %s</string>
-  <string name="menu_wifi_hotspot">Hostaa kirjoja</string>
+  <string name="menu_wifi_hotspot">WiFI Hotspot</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
   <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Downloads/org.kiwix…/</string>
   <string name="search_label">Hae</string>
+  <string name="searched_list">Haettu lista</string>
+  <string name="more_options">Lisää asetuksia</string>
   <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
+  <string name="hotspot_service_channel_name">Hotspot-palvelukanava</string>
   <string name="hotspot_failed_title">Virhe käynnistettäessä hotspottia</string>
+  <string name="hotspot_failed_message">Näyttää siltä, että hotspotisi on jo käytössä. Jatka poistamalla Wi-Fi-hotspot käytöstä.</string>
   <string name="go_to_wifi_settings_label">Siirry WiFi-asetuksiin</string>
   <string name="connection_refused">Yhteys evätty.</string>
+  <string name="hotspot_running">Aktiivinen hotspot</string>
   <string name="no_books_selected_toast_message">Valitse ensin kirjat</string>
+  <string name="server_failed_message">Palvelinta ei voitu käynnistää. Aktivoi hotspotisi.</string>
   <string name="server_failed_toast_message">Ei voitu käynnistää palvelinta.</string>
   <string name="server_started_successfully_toast_message">Palvelin käynnistetty onnistuneesti.</string>
   <string name="server_stopped_successfully_toast_message">Palvelin pysäytetty onnistuneesti.</string>
   <string name="hotspot_turned_on">Hotspot kytketty päälle</string>
+  <string name="hotspot_details_message">Paikallisen tukiasemasi tiedot. \nSSID: %1$s \nPass: %2$s</string>
   <string name="server_textview_default_message">Valitse tiedostot, joita haluat isännöidä palvelimella</string>
   <string name="progress_dialog_starting_server">Käynnistetään palvelinta</string>
   <string name="hotspot_dialog_title">Ohjeet kirjojen hostaamiseen</string>
   <string name="wifi_dialog_title">WiFi-yhteys tunnistettu</string>
+  <string name="wifi_dialog_body">Jotta voit katsella kirjoja muilla laitteilla, varmista, että kaikki laitteet on yhdistetty samaan WiFi-verkkoon.</string>
+  <string name="hotspot_dialog_message">Jotta tämä ominaisuus toimisi, sinun on ensin otettava Wi-Fi-hotspot käyttöön manuaalisesti tai varmistettava, että isäntälaite ja vastaanottava laite ovat samassa Wi-Fi-verkossa.</string>
   <string name="hotspot_dialog_neutral_button">ETENE</string>
+  <string name="hotspot_channel_description">Päivityksiä hotspotisi/palvelimesi tilasta.</string>
   <string name="hotspot_notification_content_title">Kiwix-hotspot</string>
   <string name="start_server_label">Käynnistä palvelin</string>
   <string name="stop_server_label">Pysäytä palvelin</string>
-  <string name="error_ip_address_not_found">IP-osoitetta ei löytynyt.</string>
-  <string name="error_file_not_found" fuzzy="true">Virhe: valittua ZIM-tiedostoa ei löytynyt. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">Zim-tiedostoa ei voitu lukea!</string>
-  <string name="zim_not_opened" fuzzy="true">Zim-tiedostoa ei voi avata</string>
+  <string name="error_server_already_running">Palvelin on jo käynnissä. Sammuta se ja yritä uudelleen.</string>
+  <string name="error_ip_address_not_found" fuzzy="true">IP-osoitetta ei löytynyt.</string>
+  <string name="server_started_message" fuzzy="true">Syötä tämä IP-osoite selaimeesi käyttääksesi palvelinta %s</string>
+  <string name="qr_code">Renderöity QR-koodi</string>
+  <string name="share_host_address">Jaa URL-osoite muiden sovellusten kautta</string>
+  <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt. %s</string>
+  <string name="unable_to_read_zim_file">Tämän ZIM-tiedoston lukeminen ei onnistu!</string>
+  <string name="zim_not_opened">ZIM-tiedostoa ei voitu avata</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto. %s</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Artikkelin lataaminen epäonnistui. ZIM-tiedostoa ei ole ladattu oikein.</string>
+  <string name="could_not_find_random_article">Satunnaista artikkelia ei löytynyt. Yritä myöhemmin uudelleen.</string>
   <string name="pref_display_title">Näytä</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
+  <string name="pref_theme_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
   <string name="pref_language_title">Kieli</string>
@@ -61,17 +81,27 @@
   <string name="pref_credits_title">Tekijät</string>
   <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta. Artikkelia ei voida lukea kunnolla.</string>
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
+  <string name="no_email_application_installed">Asenna sähköpostiohjelma</string>
+  <string name="no_app_found_to_select_bookmark_file">Kirjanmerkkitiedoston valitsemiseen ei löytynyt sovellusta</string>
   <string name="no_section_info">Sisältöotsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
+  <string name="request_write_storage">ZIM-tiedostojen lataamiseen tarvitsemme kirjoitusoikeudet tallennustilaasi.</string>
   <string name="clear_recent_and_tabs_history_dialog">Haluatko varmasti poistaa hakuhistoriasi ja resetoida kaikki aktiiviset välilehdet?</string>
   <string name="delete_recent_search_item">Poista tämä kohde?</string>
   <string name="pref_clear_all_history_title">Tyhjennä historia</string>
+  <string name="pref_clear_all_history_summary">Tyhjennä viimeisimmät haut ja välilehtien historia</string>
   <string name="pref_notes">Huomautukset</string>
   <string name="pref_permission">Käyttöoikeudet</string>
+  <string name="pref_import_bookmark_title">Tuo kirjanmerkit</string>
+  <string name="pref_import_bookmark_summary">Tuo tallennetut kirjanmerkit</string>
+  <string name="pref_export_bookmark_title">Vie kirjanmerkit</string>
+  <string name="pref_export_bookmark_summary">Vie kaikki tallennetut kirjanmerkit</string>
+  <string name="export_bookmark_saved">Kirjanmerkit viedään tiedostoon %s</string>
   <string name="all_history_cleared">Kaikki historia tyhjennetty</string>
   <string name="pref_clear_all_bookmarks_title">Tyhjennä kirjanmerkit</string>
   <string name="clear_all_history_dialog_title">Tyhjennä kaikki historia?</string>
   <string name="share">Jaa</string>
+  <string name="selected_file_cab_app_chooser_title">Jaa ZIM-tiedostoja seuraavien kanssa:</string>
   <string name="delete">Poista</string>
   <string name="cancel">Peruuta</string>
   <string name="delete_specific_search_toast">Viimeisin haku poistettu</string>
@@ -99,36 +129,55 @@
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kirjasto</string>
-  <string name="delete_zim_body" fuzzy="true">Seuraava(t) zim-tiedosto(t) tullaan poistamaan:\n\n%s</string>
+  <string name="delete_zim_body">Seuraavat ZIM-tiedostot poistetaan:\n\n %s</string>
   <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
+  <string name="download_no_space">Ei riittävästi tilaa lataamiseen.</string>
   <string name="download">Lataa</string>
+  <string name="download_notification_channel_name">Latausilmoituskanavan nimi</string>
+  <string name="download_notification_channel_description">Ladataan ZIM-tiedostoja…</string>
   <string name="space_available">Tilaa käytettävissä:</string>
+  <string name="move_no_space">Liian vähän tilaa siirtämiseen/kopiointiin.</string>
   <string name="zim_simple">Yksinkertainen</string>
   <string name="zim_no_pic">Ei kuvia</string>
   <string name="zim_no_vid">Ei videoita</string>
   <string name="no_network_connection">Ei verkkoyhteyttä</string>
   <string name="help_2">Mitä Kiwix tekee?</string>
+  <string name="help_3">Kiwix on offline-sisällönlukija. Se toimii hyvin samalla tavalla kuin selain, mutta verkkosivujen sijaan se lukee sisältöä ZIM-muodossa olevasta tiedostosta.</string>
+  <string name="help_4">Vaikka Kiwix on alun perin suunniteltu tarjoamaan Wikipediaa offline-tilassa, se lukee myös muuta sisältöä.</string>
   <string name="help_5">Missä sisältö on?</string>
   <string name="help_6">Sisältöämme ylläpidetään Kiwixin verkkosivulla.</string>
+  <string name="help_7">Ne ovat saatavilla ZIM-tiedostoina. Niitä on paljon:</string>
   <string name="help_8">• Wikipedia on saatavilla erikseen kullekin kielelle</string>
   <string name="help_9">• Muut sisällöt kuten Wikileaks tai Wikiaineisto ovat myös käytettävissä</string>
+  <string name="help_10">Voit joko ladata valitsemasi ZIM-tiedostot sovelluksesta tai valita huolellisesti haluamasi tiedostot ja ladata ne pöytätietokoneelta ennen ZIM-tiedostojen siirtämistä SD-kortille.</string>
+  <string name="help_11">Sovelluksessa ladattavat ZIM-tiedostot sijaitsevat ulkoisen tallennustilan hakemistossa Kiwix-nimisessä kansiossa.</string>
+  <string name="fetching_storage_info">Tallennustietoja noudetaan…</string>
   <string name="pref_storage">Tallennuslaite</string>
   <string name="pref_current_folder">Nykyinen kansio</string>
+  <string name="pref_storage_used">%s käytetty</string>
+  <string name="pref_free_storage">%s vapaana</string>
+  <string name="choose_storage_to_download_book">Valitse tallennustila kirjan lataamista varten</string>
   <string name="delete_zim_failed">Emme pystyneet poistamaan joitakin tiedostoja. Sinun tulisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
   <string name="tts_pause">keskeytä</string>
   <string name="tts_resume">jatka</string>
   <string name="stop">pysäytä</string>
+  <string name="notification_pause_button_text">Tauko</string>
+  <string name="notification_resume_button_text">Jatka</string>
   <string name="internal_storage">Sisäinen</string>
   <string name="external_storage">Ulkoinen</string>
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
   <string name="confirm_stop_download_title">Pysäytä lataaminen?</string>
   <string name="confirm_stop_download_msg">Haluatko varmasti pysäyttää tämän latauksen?</string>
-  <string name="tts_not_enabled" fuzzy="true">Teksti puheeksi ei ole käytössä tässä ZIM-tiedostossa</string>
+  <string name="change_storage">Muuta</string>
+  <string name="tts_not_enabled">Lue ääneen -toiminto ei ole käytössä tälle ZIM-tiedostolle.</string>
+  <string name="texttospeech_initialization_failed">Lue ääneen -toiminnon alustus epäonnistui. Yritä uudelleen.</string>
+  <string name="texttospeech_error">Odottamaton virhe Lue ääneen -toiminnossa. Yritä uudelleen.</string>
   <string name="next">Seuraava</string>
   <string name="previous">Edellinen</string>
   <string name="wifi_only_title">Salli sisällön lataaminen mobiiliverkon kautta?</string>
+  <string name="wifi_only_msg">Jos valitset \"Kyllä\", et saa varoitusta jatkossa. Voit kuitenkin aina muuttaa tämän asetuksista.</string>
   <string name="pref_wifi_only">Lataa sisältöä vain WiFin kautta</string>
   <string name="time_day">päivä</string>
   <string name="time_hour">t</string>
@@ -138,32 +187,44 @@
   <string name="time_today">Tänään</string>
   <string name="time_yesterday">Eilen</string>
   <string name="pref_external_link_popup_title">Varo lisätessä ulkoisia linkkejä</string>
+  <string name="pref_external_link_popup_summary">Näytä ponnahdusikkuna, joka varoittaa lisäkustannuksista tai toimimattomuudesta offline-linkeissä.</string>
   <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen!</string>
+  <string name="external_link_popup_dialog_message">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
   <string name="your_languages">Valitut kielet:</string>
+  <string name="your_language">Valittu kieli: %s</string>
   <string name="other_languages">Muut kielet:</string>
+  <string name="downloading">Ladataan</string>
   <string name="no_items_msg">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>
+  <string name="crash_description" fuzzy="true">Näyttää siltä, että sovellus kaatui.\n\nVoisitko auttaa meitä korjaamaan tämän ongelman lähettämällä seuraavat tiedot?</string>
   <string name="crash_checkbox_language">Omat kieliasetukset</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Luettelo Zim-tiedostoistasi</string>
+  <string name="crash_checkbox_zimfiles">Luettelo ZIM-tiedostoistasi</string>
   <string name="crash_checkbox_exception">Tiedot kaatumisesta</string>
+  <string name="crash_checkbox_logs">Sovelluslokit</string>
   <string name="crash_checkbox_device">Laitteen tiedot</string>
   <string name="crash_button_confirm">LÄHETÄ TIEDOT</string>
   <string name="shortcut_disabled_message">Ei pikakuvaketta saatavilla</string>
   <string name="new_tab_shortcut_label">Uusi välilehti</string>
   <string name="get_content_shortcut_label">Hanki sisältöä</string>
+  <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s artikkelia</string>
-  <string name="get_started">Aloittaminen</string>
+  <string name="get_started">Aloitetaan</string>
   <string name="download_books">Lataa kirjoja</string>
   <string name="humankind_knowledge">Ihmiskunnan tieto puhelimessasi.</string>
   <string name="welcome_to_the_family">Tervetuloa perheeseen</string>
   <string name="save_books_offline">Tallenna kirjoja offline-tilassa</string>
   <string name="download_books_message">Lataa kirjoja ja lue missä tahansa.</string>
+  <string name="save_books_in_desired_storage">Tallenna kirjat haluamaasi tallennustilaan</string>
+  <string name="storage_location_hint">Voit valita ZIM-tiedostojen lataamiseen haluamasi tallennuspaikan Asetukset-näytöltä (joko SD-kortin tai sisäisen tallennustilan).</string>
   <string name="unable_to_add_to_bookmarks">Ei voitu lisätä kirjanmerkkeihin</string>
   <string name="go_to_previous_page">Siirry edelliselle sivulle</string>
   <string name="go_to_next_page">Siirry seuraavalle sivulle</string>
   <string name="table_of_contents">Sisällysluettelo</string>
+  <string name="select_language">Valitse kieli</string>
   <string name="save_languages">Tallenna kielet</string>
+  <string name="all_languages">Kaikki kielet</string>
+  <string name="no_language_available">Ei kieliä saatavilla</string>
   <string name="expand">Laajenna</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Näytä historia kaikista kirjoista</string>
@@ -174,39 +235,62 @@
   <string name="switch_tabs">Vaihda välilehtiä</string>
   <string name="close_all_tabs">Sulje kaikki välilehdet</string>
   <string name="close_tab">Sulje välilehti</string>
-  <string name="pending_state">Avoin</string>
+  <string name="could_not_restore_tabs">Välilehtien palauttaminen epäonnistui.</string>
+  <string name="pending_state">Odottaa</string>
   <string name="running_state">Käynnissä</string>
   <string name="complete">Valmis</string>
   <string name="paused_state">Pysäytetty</string>
   <string name="failed_state">Epäonnistui: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">ZIM-tiedostoa ei voitu ladata. Yritä asentaa sovellus uudelleen Play Storesta.</string>
   <string name="save">Tallenna</string>
   <string name="note">Huomautus</string>
+  <string name="take_notes">Tee muistiinpanoja</string>
   <string name="wiki_article_title">Wikiartikkelin otsikko</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Kirjanmerkkien vientiin vaaditaan tallennustilan käyttöoikeus.</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Kirjanmerkkejä ei voi viedä ilman tallennustilan käyttöoikeutta.</string>
+  <string name="export_bookmark_error">Kirjanmerkin viennissä tapahtui virhe!</string>
+  <string name="ext_storage_permission_rationale_add_note">Muistiinpanoja varten tarvitaan tallennustilan käyttöoikeus</string>
+  <string name="ext_storage_write_permission_denied_add_note">Muistiinpanotoimintoa ei voi käyttää ilman tallennustilan käyttöoikeutta</string>
   <string name="note_save_unsuccessful">Huomautuksen tallennus epäonnistui</string>
   <string name="note_delete_successful">Huomautus poistettu onnistuneesti</string>
   <string name="note_delete_unsuccessful">Huomautusta ei poistettu</string>
   <string name="note_save_successful">Huomautus tallennettu</string>
+  <string name="note_save_error_storage_not_writable">Virhe muistiinpanon tallennuksessa: Tallennustilaan ei voi kirjoittaa</string>
   <string name="note_share_error_file_missing">Huomaustiedostoa ei ole olemassa</string>
+  <string name="note_share_app_chooser_title">Jaa muistiinpanotiedosto seuraavien kanssa:</string>
   <string name="confirmation_alert_dialog_message">Hylkää tallentamattomat muutokset?</string>
   <string name="delete_notes_confirmation_msg">Poista kaikki huomautukset?</string>
+  <string name="ext_storage_permission_not_granted">Virhe: Tallennusoikeuksia ei myönnetty</string>
+  <string name="notes_deletion_successful">Koko muistiinpanokansio poistettu</string>
   <string name="notes_deletion_unsuccessful">Joitakin tiedostoja ei poistettu</string>
   <string name="books_count">%d kirja(a)</string>
+  <string name="discovery_initiated">Löytö aloitettu</string>
+  <string name="discovery_failed">Löytö epäonnistui</string>
+  <string name="severe_loss_error">Vakava virhe! Kokeile poistaa WiFi P2P käytöstä/ottaa se uudelleen käyttöön.</string>
   <string name="connection_failed">Yhteys epäonnistui</string>
+  <string name="permission_rationale_location">Android tarvitsee luvan sijaintiisi, jotta sovellus voi havaita vertaislaitteet</string>
+  <string name="permission_rationale_nearby">Android tarvitsee lähellä olevien laitteiden käyttöoikeuden, jotta sovellus voi havaita vertaislaitteet.</string>
+  <string name="permission_refused_location">Vertaislaitteita ei löydy ilman sijaintilupia</string>
+  <string name="permission_refused_storage">ZIM-tiedostoihin ei pääse käsiksi ilman tallennuslupaa</string>
+  <string name="request_enable_wifi">Ota WiFi P2P käyttöön järjestelmäasetuksista</string>
   <string name="transfer_to">Siirretäänkö tiedostot kohteeseen %s?</string>
   <string name="file_transfer_complete">Tiedoston siirto valmis</string>
   <string name="error_during_transfer">Siirron aikana tapahtui virhe</string>
   <string name="error_transferring">Virhe siirrettäessä tiedostoa %s</string>
   <string name="get_content_from_nearby_device">Hanki sisältöä lähistöllä olevasta laitteesta</string>
   <string name="your_device">Laitteesi:</string>
+  <string name="device_name">Laitteen nimi</string>
   <string name="nearby_devices">LÄHELLÄ OLEVAT LAITTEET</string>
   <string name="preparing_files">Valmistellaan tiedostoja siirtoon…</string>
   <string name="status">Tila</string>
   <string name="pref_clear_all_notes_summary">Tyhjennä kaikki huomautukset kaikista artikkeleista</string>
   <string name="pref_clear_all_notes_title">Tyhjennä kaikki huomautukset</string>
+  <string name="pref_clear_notes">Tyhjennä muistiinpanot</string>
   <string name="tag_pic">Kuva</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Vain teksti</string>
   <string name="tag_short_text">Lyhyt teksti</string>
+  <string name="go_to_settings">Siirry Hotspot-asetuksiin</string>
   <string name="no_results">Ei tuloksia</string>
   <string name="no_bookmarks">Ei kirjanmerkkejä</string>
   <string name="no_history">Ei historiaa</string>
@@ -215,7 +299,12 @@
   <string name="delete_selected_history">Poista valittu historia?</string>
   <string name="delete_bookmarks">Poista kaikki kirjanmerkit?</string>
   <string name="delete_selected_bookmarks">Poista valitut kirjanmerkit?</string>
-  <string name="diagnostic_report_message">Lähetä kaikki seuraavat tiedot jotta voimme diagnosoida ongelman</string>
+  <string name="import_bookmarks_dialog_title">Tuo kirjanmerkkejä?</string>
+  <string name="export_all_bookmarks_dialog_title">Vie kaikki kirjanmerkit?</string>
+  <string name="error_invalid_bookmark_file">Virhe: Valittu tiedosto ei ole kelvollinen kirjanmerkkitiedosto.</string>
+  <string name="send_report">Lähetä diagnostiikkaraportti</string>
+  <string name="diagnostic_report">Diagnostiikkaraportti</string>
+  <string name="diagnostic_report_message" fuzzy="true">Lähetä kaikki seuraavat tiedot, jotta voimme diagnosoida ongelman</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Tekstin tarkennus</string>
   <string name="search_open_in_new_tab">Avaa uudessa välilehdessä</string>
@@ -223,12 +312,25 @@
   <string name="no_open_book">Ei avointa kirjaa</string>
   <string name="open_library">Avaa kirjasto</string>
   <string name="tab_restored">Välilehti palautettu</string>
+  <string name="action_copy">Kopioi</string>
+  <string name="move">Siirrä</string>
+  <string name="copying_zim_file">Kopioidaan ZIM-tiedostoa %s…</string>
+  <string name="moving_zim_file">Siirretään ZIM-tiedostoa %s…</string>
+  <string name="copy_file_error_message">Virhe ZIM-tiedoston kopioinnissa: %s.</string>
   <string name="how_to_update_content">Kuinka päivittää sisältöä?</string>
   <string name="allowed">Sallittu</string>
   <string name="not_allowed">Ei sallittu</string>
   <string name="allow">Salli</string>
+  <string name="downloading_library">Ladataan kirjastoa %s</string>
   <string name="open_article">Avaa artikkeli</string>
   <string name="go_to_settings_label">Siirry asetuksiin</string>
   <string name="your_device_name_message">Laitteesi nimi näkyy tässä.</string>
   <string name="toolbar_back_button_content_description">Siirry edelliseen ruutuun</string>
+  <string name="donation_dialog_title">Lahjoita nyt</string>
+  <string name="donation_dialog_description">%s tarvitsee apuasi.</string>
+  <string name="make_donation">Tee lahjoitus</string>
+  <string name="resuming_state">Jatketaan</string>
+  <string name="downloading_state">Ladataan</string>
+  <string name="download_failed_state">Epäonnistui</string>
+  <string name="searchview_description_clear">Tyhjennä kysely</string>
 </resources>

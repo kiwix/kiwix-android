@@ -48,8 +48,8 @@
   <string name="start_server_label">make you Start server</string>
   <string name="stop_server_label">make you Stop server</string>
   <string name="error_server_already_running">De server already dey run. Abeg turn am off den try again.</string>
-  <string name="error_ip_address_not_found">Eno fi find ip address.</string>
-  <string name="server_started_message">Make you Enter dis ip address for your browser insyd so say you go fi access de server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Eno fi find ip address.</string>
+  <string name="server_started_message" fuzzy="true">Make you Enter dis ip address for your browser insyd so say you go fi access de server %s</string>
   <string name="share_host_address">Make you Share URL via oda applications</string>
   <string name="error_file_not_found">Error: Eno fi find de selected ZIM file. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Eno fi read dis zim file!</string>
@@ -59,6 +59,7 @@
   <string name="pref_display_title">Display</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme_summary">Show articles plus inverted colors</string>
   <string name="pref_back_to_top">Back go Top</string>
   <string name="pref_back_to_top_summary">Display sam button for de end of de page so say you go scroll up go de top</string>
   <string name="pref_language_title">Language</string>

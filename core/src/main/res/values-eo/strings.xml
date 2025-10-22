@@ -11,6 +11,7 @@
 * MohitMali
 * Robin van der Vliet
 * Stefangrotz
+* Tymewalk
 -->
 <resources>
   <string name="menu_help">Helpo</string>
@@ -36,6 +37,7 @@
   <string name="pref_display_title">Montrado</string>
   <string name="pref_info_title">Informo</string>
   <string name="pref_info_version">Versio</string>
+  <string name="pref_theme_summary">Montri artikolojn inverskolore</string>
   <string name="pref_back_to_top">Reiri al Supro</string>
   <string name="pref_back_to_top_summary">Montri suprenan rulumilon paĝofine</string>
   <string name="pref_language_title">Lingvo</string>
@@ -133,9 +135,9 @@
   <string name="other_languages">Aliaj Lingvoj:</string>
   <string name="no_items_msg">Neniu ero havebla</string>
   <string name="crash_title">Nu… Tio estas Hontinda</string>
-  <string name="crash_description">Ŝajne ni fiaskis.\n\nĈu vi povas helpi la korektadon de ĉi tiu problemo per sendado de la jena informo?</string>
+  <string name="crash_description" fuzzy="true">Ŝajne ni fiaskis.\n\nĈu vi povas helpi la korektadon de ĉi tiu problemo per sendado de la jena informo?</string>
   <string name="crash_checkbox_language">Viaj Agordoj pri Lingvoj</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Listo de Viaj Zim-Dosieroj</string>
+  <string name="crash_checkbox_zimfiles">Listo de Viaj ZIM-Dosieroj</string>
   <string name="crash_checkbox_exception">Detaloj pri la Fiasko</string>
   <string name="crash_checkbox_logs">Protokoloj de la Aplikaĵo</string>
   <string name="crash_checkbox_device">Detaloj pri aparato</string>
@@ -155,7 +157,9 @@
   <string name="go_to_previous_page">Iri al antaŭa paĝo</string>
   <string name="go_to_next_page">Iri al sekva paĝo</string>
   <string name="table_of_contents">Enhavtabelo</string>
+  <string name="select_language">Elekti lingvon</string>
   <string name="save_languages">Konservi lingvojn</string>
+  <string name="all_languages">Ĉiuj lingvoj</string>
   <string name="expand">Etendi</string>
   <string name="history">Historio</string>
   <string name="history_from_current_book" fuzzy="true">Historio el la aktuala libro</string>
@@ -195,4 +199,5 @@
   <string name="pref_text_zoom_title">Teksta Zomo</string>
   <string name="search_open_in_new_tab">Malfermi en nova langeto</string>
   <string name="allow">Permesi</string>
+  <string name="donation_dialog_description">%s bezonas vian helpon.</string>
 </resources>

@@ -7,7 +7,9 @@
 * Hamoudak
 * Hanzo64
 * McDutchie
+* Mdktb
 * Meno25
+* Mohammed Qays
 * Mohanad
 * Mohanad Kh
 * MohitMali
@@ -38,6 +40,7 @@
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
   <string name="search_label">البحث</string>
   <string name="searched_list">قائمة مشتركة</string>
+  <string name="more_options">مزيد من الخيارات</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة؟</string>
   <string name="hotspot_service_channel_name">قناة خدمة نقطة الإتصال اللاسلكي</string>
@@ -65,8 +68,8 @@
   <string name="start_server_label">تشغيل الخادم</string>
   <string name="stop_server_label">إيقاف التشغيل</string>
   <string name="error_server_already_running">الخادم يعمل بالفعل. من فضلك قم بإيقاف تشغيله وحاول مرة أخرى.</string>
-  <string name="error_ip_address_not_found">لم يتمكن من العثور علي عنوان بروتوكول الإنترنت</string>
-  <string name="server_started_message">أدخل هذا العنوان في المتصفح للإتصال بالخادم %s</string>
+  <string name="error_ip_address_not_found">لم أتمكن من العثور على عنوان IP.</string>
+  <string name="server_started_message">أدخل عنوان IP هذا في متصفحك للوصول إلى الخادم %s</string>
   <string name="qr_code">رمز QR المقدَم</string>
   <string name="share_host_address">مشاركة URL عبر تطبيقات أخرى</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد %s</string>
@@ -79,6 +82,11 @@
   <string name="pref_display_title">العرض</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">الإصدار {النسخة}</string>
+  <string name="pref_theme">سمة</string>
+  <string name="theme_system">نظام</string>
+  <string name="theme_light">ضوء</string>
+  <string name="theme_dark">مظلم</string>
+  <string name="pref_theme_summary">عرض المقالات بألوانٍ معكوسة</string>
   <string name="pref_back_to_top">ارجع إلى الأعلى</string>
   <string name="pref_back_to_top_summary">عرض أيقونة في نهاية الصفحة للذهاب إلى الأعلى</string>
   <string name="pref_language_title">اللغة</string>
@@ -141,6 +149,7 @@
   <string name="download_no_space">لا توجد مساحة كافية للتنزيل.</string>
   <string name="download">تنزيل</string>
   <string name="download_notification_channel_name">تنزيل اسم قناة الإشعارات</string>
+  <string name="download_notification_channel_description">جاري تنزيل ملفات ZIM…</string>
   <string name="space_available">المساحة المتاحة:</string>
   <string name="move_no_space">لا توجد مساحة كافية للنقل/النسخ.</string>
   <string name="zim_simple">بسيط</string>
@@ -160,6 +169,8 @@
   <string name="fetching_storage_info">جاري إحضار تفاصيل التخزين..</string>
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
+  <string name="pref_storage_used">%s المستخدمة</string>
+  <string name="pref_free_storage">%s مجاني</string>
   <string name="choose_storage_to_download_book">اختر التخزين لتحميل الكتاب</string>
   <string name="delete_zim_failed">عذراً لم نتمكن من حذف بعض الملفات. حاول أن تستخدم مدير ملفات.</string>
   <string name="tts_pause">إيقاف مؤقت</string>
@@ -173,6 +184,7 @@
   <string name="no">لا</string>
   <string name="confirm_stop_download_title">إيقاف التنزيل؟</string>
   <string name="confirm_stop_download_msg"> هل تريد بالتأكيد إيقاف هذا التحميل؟</string>
+  <string name="change_storage">يتغير</string>
   <string name="tts_not_enabled">لم يتم تمكين القراءة بصوت عالٍ لملف ZIM هذا</string>
   <string name="texttospeech_initialization_failed">فشلت عملية تهيئة القراءة بصوت عالٍ. يُرجى المحاولة مرة أخرى</string>
   <string name="texttospeech_error">خطأ غير متوقع في القراءة بصوت عالٍ. يُرجى المحاولة مرة أخرى</string>
@@ -194,11 +206,12 @@
   <string name="external_link_popup_dialog_message">أنت تدخل رابطًا خارجيًا. قد يؤدي هذا إلى تكاليف إضافية لنقل البيانات أو لن يعمل ببساطة عندما تكون غير متصل بالإنترنت.\nهل تريد الاستمرار؟</string>
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
   <string name="your_languages">اللغات المختارة:</string>
+  <string name="your_language">اللغة المحددة: %s</string>
   <string name="other_languages">لغات أخرى:</string>
   <string name="downloading">جاري التحميل</string>
   <string name="no_items_msg">لا توجد عناصر متاحة</string>
   <string name="crash_title">حسنًا.. هذا أمر محرج</string>
-  <string name="crash_description">يبدو أننا انهرنا.\n\nهل تمانع في مساعدتنا في حل هذه المشكلة عن طريق إرسال المعلومات التالية؟</string>
+  <string name="crash_description" fuzzy="true">يبدو أننا انهرنا.\n\nهل تمانع في مساعدتنا في حل هذه المشكلة عن طريق إرسال المعلومات التالية؟</string>
   <string name="crash_checkbox_language">إعدادات اللغة</string>
   <string name="crash_checkbox_zimfiles">قائمة بملفات ZIM الخاصة بك</string>
   <string name="crash_checkbox_exception">تفاصيل انهيار التطبيق</string>
@@ -216,12 +229,16 @@
   <string name="welcome_to_the_family">مرحبًا بك في العائلة</string>
   <string name="save_books_offline">حفظ الكتب دون اتصال بالإنترنت</string>
   <string name="download_books_message">قم بتنزيل الكتب واقرأ أينما كنت.</string>
+  <string name="save_books_in_desired_storage">حفظ الكتب في التخزين المطلوب</string>
   <string name="storage_location_hint">لتنزيل ملفات ZIM من شاشة الإعدادات، يمكنك اختيار مكان التخزين الذي تفضله، سواء بطاقة ذاكرة رقمية أو وحدة التخزين الداخلية.</string>
   <string name="unable_to_add_to_bookmarks">غير قادر على إضافة العلامات المرجعية</string>
   <string name="go_to_previous_page">انتقل إلى الصفحة السابقة</string>
   <string name="go_to_next_page">انتقل إلى الصفحة التالية</string>
   <string name="table_of_contents">جدول المحتويات</string>
+  <string name="select_language">اختر اللغة</string>
   <string name="save_languages">حفظ اللغات</string>
+  <string name="all_languages">جميع اللغات</string>
+  <string name="no_language_available">لا توجد لغات متاحة</string>
   <string name="expand">اعرض الكل</string>
   <string name="history">التاريخ</string>
   <string name="history_from_current_book">اعرض التاريخ من جميع الكتب</string>
@@ -231,14 +248,21 @@
   <string name="search_bookmarks">البحث في العلامات المرجعية</string>
   <string name="switch_tabs">تبديل علامات التبويب</string>
   <string name="close_all_tabs">إغلاق جميع علامات التبويب</string>
+  <string name="close_tab">إغلاق علامة التبويب</string>
+  <string name="could_not_restore_tabs">لم يتمكن من استعادة علامات التبويب.</string>
   <string name="pending_state">قيد الإنتظار</string>
   <string name="running_state">في تقدم</string>
   <string name="complete">إكتمال</string>
   <string name="paused_state">متوقف مؤقتًا</string>
   <string name="failed_state">فشل: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">تعذر تنزيل ملف ZIM. يُرجى إعادة تثبيت التطبيق من متجر Play.</string>
   <string name="save">حفظ</string>
   <string name="note">ملاحظة</string>
+  <string name="take_notes">خذ ملاحظات</string>
   <string name="wiki_article_title">عنوان مقالة الويكي</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">يجب الوصول إلى وحدة التخزين لتصدير الإشارات المرجعية</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">لا يمكن تصدير الإشارات المرجعية دون الوصول إلى مساحة التخزين</string>
+  <string name="export_bookmark_error">حدث خطأ أثناء محاولة تصدير الإشارة المرجعية!</string>
   <string name="ext_storage_permission_rationale_add_note">الوصول إلى التخزين مطلوب للملاحظات</string>
   <string name="ext_storage_write_permission_denied_add_note">لا يمكن استخدام الملاحظات دون الوصول إلى وحدة التخزين</string>
   <string name="note_save_unsuccessful">لم ينجح حفظ الملاحظة</string>
@@ -283,6 +307,7 @@
   <string name="status">الحالة</string>
   <string name="pref_clear_all_notes_summary">مسح جميع الملاحظات علي كل المقالات</string>
   <string name="pref_clear_all_notes_title">مسح جميع الملاحظات</string>
+  <string name="pref_clear_notes">ملاحظات واضحة</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">السماح لقراءة وكتابة ملفات ZIM على بطاقة SD</string>
   <string name="pref_text_zoom_summary">تغيير حجم النص بزيادة مقدارها 25%.</string>
   <string name="tag_pic">صورة</string>
@@ -300,10 +325,15 @@
   <string name="delete_selected_history">حذف تاريخ محدد؟</string>
   <string name="delete_bookmarks">حذف جميع العلامات المرجعية؟</string>
   <string name="delete_selected_bookmarks">حذف علامات مرجعية محددة؟</string>
+  <string name="import_bookmarks_dialog_title">استيراد الإشارات المرجعية؟</string>
+  <string name="export_all_bookmarks_dialog_title">تصدير كافة الإشارات المرجعية؟</string>
+  <string name="export_all_bookmarks_dialog_message">سيؤدي التصدير إلى إنشاء ملف bookmark.xml في المجلد Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">تم استيراد كافة الإشارات المرجعية.</string>
+  <string name="error_invalid_bookmark_file">خطأ: الملف المحدد ليس ملف إشارة مرجعية صالحًا.</string>
   <string name="send_report">إرسال تقرير التشخيص</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
   <string name="diagnostic_report">تقرير التشخيص</string>
-  <string name="diagnostic_report_message">يرجى إرسال جميع التفاصيل التالية حتى نتمكن من تشخيص المشكلة</string>
+  <string name="diagnostic_report_message" fuzzy="true">يرجى إرسال جميع التفاصيل التالية حتى نتمكن من تشخيص المشكلة</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">تكبير النص</string>
   <string name="search_open_in_new_tab">افتح في تبويبٍ جديد</string>
@@ -314,13 +344,22 @@
   <string name="tabs_restored">استُعيدت علامات التبويب</string>
   <string name="open_drawer">افتح الدرج</string>
   <string name="close_drawer">أغلق الدرج</string>
-  <string name="copying_zim_file">يتم الآن نسخ ملف ZIM %s…</string>
+  <string name="preparing_file_for_copy">التحضير للنسخ/النقل</string>
+  <string name="action_copy">ينسخ</string>
+  <string name="move">يتحرك</string>
+  <string name="copying_zim_file">نسخ ملف ZIM %s …</string>
   <string name="moving_zim_file">يتم الآن نقل ملف ZIM %s…</string>
   <string name="copy_move_files_dialog_description">يتطلب Kiwix أن يكون ملف ZIM موجودًا في دليل البيانات الخاص به.\nهل تريد نسخه أم نقله إلى هناك؟</string>
+  <string name="copy_move_multiple_files_dialog_description">يتطلب برنامج Kiwix أن تكون ملفات ZIM موجودة في دليل البيانات الخاص به.\nهل تريد نسخها أو نقلها إلى هناك؟</string>
   <string name="copy_file_error_message">خطأ في نسخ ملف ZIM : %s.  .</string>
   <string name="verify_zim_chunk_dialog_title">انتبه: تأكد أن جميع أجزاء ZIM تم نقلها/نسخها جيداً.\n{تأكد من نقل/نسخ جميع أجزاء ملف/ملفات ZIM بشكل صحيح.}</string>
+  <string name="verify_zim_chunks_dialog_message">يمكنك التحقق منها داخل مجلد \"Android/media/org.kiwix…/\".\n بعد الانتهاء، حدّث شاشة المكتبة بالتمرير للأسفل. سيظهر ملف ZIM المقسم في مكتبتك.</string>
   <string name="why_copy_move_files_to_app_directory">لم تريد نسخ/نقل الملفات إلي الدليل العام للتطبيق؟</string>
   <string name="copy_move_files_to_app_directory_description">نظراً للسياسات التي وضعتها جوجل بلاي علي نظام التشغيل أندرويد ١١ وما فوقه، لم يعد بإمكان التطبيق الوصول إلي الملفات المخزنة علي جهازك. ولعرض ملفاتك التي قمت بتحديدها، ينبغي لنا نقلها أو نسخها إلي مجلد معين داخل دليل التطبيق. هذا يتيح لنا الوصول إلي الملفات وفتحها.</string>
+  <string name="choose_storage_to_copy_move_zim_file">اختر التخزين لنسخ/نقل ملف ZIM</string>
+  <string name="move_file_error_message">خطأ في نقل ملف ZIM: %s .</string>
+  <string name="file_copy_move_error_dialog_message">%s \nهل تريد الاستمرار مع ملفات ZIM الأخرى؟</string>
+  <string name="your_selected_files_added_to_library">سيتم إضافة ملفات ZIM المحددة إلى المكتبة.</string>
   <string name="how_to_update_content">كيفية تحديث المحتوى؟</string>
   <string name="update_content_description">لتحديث المحتوى (ملف ZIM)، يتعين عليك تنزيل أحدث إصدار كامل من نفس المحتوى. يمكنك القيام بذلك عبر قسم التنزيل.</string>
   <string name="all_files_permission_needed">مطلوب إذن كافة الملفات</string>
@@ -330,6 +369,11 @@
   <string name="denied_internet_permission_message">يرجى تمكين الواي فاي لتنزيل المحتوي</string>
   <string name="system_unable_to_grant_permission_message">النظام غير قادر على منح الإذن!</string>
   <string name="allow">السماح</string>
+  <string name="swipe_down_for_library">اسحب لأسفل للوصول إلى المكتبة</string>
+  <string name="reaching_remote_library">الوصول إلى المكتبة البعيدة</string>
+  <string name="parsing_remote_library">تحليل المكتبة البعيدة</string>
+  <string name="starting_downloading_remote_library">بدء تنزيل المكتبة الإلكترونية</string>
+  <string name="downloading_library">جاري تنزيل المكتبة \n %s</string>
   <string name="no_notes">لا توجد ملاحظات</string>
   <string name="notes_from_all_books">عرض الملاحظات من جميع الكتب</string>
   <string name="search_notes">ملاحظات البحث</string>
@@ -338,14 +382,35 @@
   <string name="open_article">افتح المادة</string>
   <string name="delete_note_dialog_message">ملحوظة : لا يتم حذف الملاحظات من مساحة التخزين الخاصة بك</string>
   <string name="delete_selected_notes">هل تريد حذف الملاحظات المحددة؟</string>
+  <string name="download_tts_language_title">قم بتنزيل هذه اللغة لميزة القراءة بصوت عالٍ</string>
   <string name="download_tts_language_message">برجاء الضغط علي زر التحميل. وسيجري تلقائياً تنزيل اللغة المطلوبة.</string>
   <string name="external_link_copied_message">نُسخ الرابط الخارجي إلى الحافظة</string>
+  <string name="read_aloud_service_channel_name">قناة خدمة القراءة بصوت عالٍ</string>
+  <string name="read_aloud_channel_description">عناصر التحكم في القراءة بصوت عالٍ.</string>
+  <string name="read_aloud_running">قراءة الجري بصوت عالٍ</string>
+  <string name="backward_history">التاريخ المتخلف</string>
+  <string name="forward_history">التاريخ المستقبلي</string>
+  <string name="clear_all_navigation_history_message">مسح جميع محفوظات التنقل (للخلف، للأمام)</string>
+  <string name="navigation_history_cleared">تم مسح سجل التنقل</string>
   <string name="go_to_settings_label">انتقل للإعدادات</string>
   <string name="request_notification_permission_message">لتنفيذ هذا الإجراء يرجي منح حق الوصول إلي الإشعارات</string>
   <string name="click_nearby_devices_message">اضغط هنا للبحث عن الأجهزة القريبة المجاورة</string>
   <string name="your_device_name_message">هنا سيظهر اسم جهازك.</string>
+  <string name="nearby_devices_list_message">ستجد هنا قائمة بالأجهزة القريبة. انقر على اسم الجهاز لبدء نقل الملف.</string>
+  <string name="transfer_zim_files_list_message">ستجد هنا قائمة بملفات ZIM المتاحة للنقل.</string>
+  <string name="storage_selection_dialog_accessibility_description">حدد مساحة التخزين لتنزيل ملفات ZIM.</string>
+  <string name="zim_file_content_description">ملف ZIM الذي يحتوي على محتوى القراءة</string>
+  <string name="select_language_content_description">سيؤدي تحديد هذه اللغة إلى إعطاء الأولوية لعرض الكتب القابلة للتنزيل بهذه اللغة في الأعلى.</string>
   <string name="toolbar_back_button_content_description">الإنتقال إلي الشاشة السابقة</string>
   <string name="save_or_open_unsupported_files_dialog_title">حفظ أو فتح هذا الملف؟</string>
+  <string name="save_or_open_unsupported_files_dialog_message">سيؤدي اختيار \"فتح\" إلى فتح هذا الملف في تطبيق القارئ الخارجي.</string>
   <string name="donation_dialog_title">تبرع اليوم</string>
+  <string name="donation_dialog_description">%s يحتاج إلى مساعدتك.</string>
   <string name="make_donation">قم بالتبرع</string>
+  <string name="resuming_state">استئناف</string>
+  <string name="downloading_state">جاري التحميل</string>
+  <string name="download_failed_state">فشل</string>
+  <string name="searchview_description_clear">مسح الاستعلام</string>
+  <string name="file_system_scan_dialog_title">مسح تخزين الكتب؟</string>
+  <string name="file_system_scan_dialog_message">سيقوم Kiwix بفحص مساحة تخزين جهازك وإدراج الكتب المتوفرة هنا.</string>
 </resources>

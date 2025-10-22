@@ -55,8 +55,8 @@
   <string name="start_server_label">Pilimi sheeva maa</string>
   <string name="stop_server_label">Taɣimi sheeva maa zani</string>
   <string name="error_server_already_running">Niŋsim niŋda ŋɔ nyɛla ŋun pun niŋda. Pahimi suɣilo kpihim mi li ka labi niŋ.</string>
-  <string name="error_ip_address_not_found">N bi nya ip addreesi</string>
-  <string name="server_started_message">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">N bi nya ip addreesi</string>
+  <string name="server_started_message" fuzzy="true">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
   <string name="share_host_address">Shiriki URL kupitia programu zingine</string>
   <string name="error_file_not_found" fuzzy="true">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Di bi tooi karim zim mazagali ŋɔ!</string>
@@ -66,6 +66,7 @@
   <string name="pref_display_title">Zaŋ wuhi</string>
   <string name="pref_info_title">Lahabali</string>
   <string name="pref_info_version">Dabam</string>
+  <string name="pref_theme_summary">Onyesha makala yaliyogeuzwa\n rangi</string>
   <string name="pref_back_to_top">N labi zuɣu saa</string>
   <string name="pref_back_to_top_summary">Onyesha kitufe\n mwishoni mwa ukurasa kusogeza hadi juu</string>
   <string name="pref_language_title">Balli</string>
@@ -175,7 +176,7 @@
   <string name="other_languages">Bal’shɛŋa</string>
   <string name="no_items_msg">Neema ka kani</string>
   <string name="crash_title">Toh… Di maa mali vi pam</string>
-  <string name="crash_description">Di ŋmanila ti binshaɣu mali la gadama.\n\nDim bɔŋɔ a bɔri ni a sɔŋ ti ka ti bo maliŋ zaŋ ti li? Sabima n zaŋ ti ti</string>
+  <string name="crash_description" fuzzy="true">Di ŋmanila ti binshaɣu mali la gadama.\n\nDim bɔŋɔ a bɔri ni a sɔŋ ti ka ti bo maliŋ zaŋ ti li? Sabima n zaŋ ti ti</string>
   <string name="crash_checkbox_language">A zuliya yɛltɔɣa nim malizali shee</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">A Zim faali nim biɛlima</string>
   <string name="crash_checkbox_exception">Karikari ŋɔ bayana</string>
@@ -282,7 +283,7 @@
   <string name="send_report">Tahimi tibbu lahabali</string>
   <string name="crash_checkbox_file_system">Fasara puuni bayana</string>
   <string name="diagnostic_report">Tibbu lahabali</string>
-  <string name="diagnostic_report_message">Pahimi suɣilo tahimi din doli na ŋɔ bayana zaa din yɛn chɛ ka ti tooi tibbu duro maa</string>
+  <string name="diagnostic_report_message" fuzzy="true">Pahimi suɣilo tahimi din doli na ŋɔ bayana zaa din yɛn chɛ ka ti tooi tibbu duro maa</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Sabbimi Zoom</string>
   <string name="search_open_in_new_tab">Yoomi binshɛɣ’kam palli</string>

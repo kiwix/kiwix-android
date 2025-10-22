@@ -35,6 +35,7 @@
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
   <string name="save_media_saved">File multimediale salvato come %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Cerca</string>
+  <string name="more_options">Altre opzioni</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Aprire il collegamento in una nuova scheda?</string>
   <string name="hotspot_service_channel_name">Servizio hotspot</string>
@@ -63,7 +64,7 @@
   <string name="stop_server_label">Arresta server</string>
   <string name="error_server_already_running">Il server è già in esecuzione. Spegnilo e riprova.</string>
   <string name="error_ip_address_not_found">Impossibile trovare l’indirizzo IP.</string>
-  <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server: %s</string>
+  <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server %s</string>
   <string name="qr_code">Codice QR renderizzato</string>
   <string name="share_host_address">Condividi URL con altre applicazioni</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato. %s</string>
@@ -76,6 +77,7 @@
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
+  <string name="pref_theme_summary">Visualizza le voci con colori invertiti</string>
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
   <string name="pref_language_title">Lingua</string>
@@ -198,7 +200,7 @@
   <string name="downloading">Download in corso</string>
   <string name="no_items_msg">Nessun elemento disponibile</string>
   <string name="crash_title">Oops… questo è imbarazzante</string>
-  <string name="crash_description">Sembra che si sia verificato un arresto anomalo.\n\nTi dispiacerebbe aiutarci a risolvere questo problema inviandoci le seguenti informazioni?</string>
+  <string name="crash_description">Sembra che si sia verificato un\'errore imprevisto.\n\nTi dispiacerebbe aiutarci a risolvere questo problema inviandoci il rapporto sull\'arresto anomalo?</string>
   <string name="crash_checkbox_language">Impostazioni della lingua</string>
   <string name="crash_checkbox_zimfiles">Un elenco dei tuoi file ZIM</string>
   <string name="crash_checkbox_exception">Dettagli dell’arresto anomalo</string>
@@ -320,7 +322,7 @@
   <string name="send_report">Invia report di diagnostica</string>
   <string name="crash_checkbox_file_system">Dettagli sul file system</string>
   <string name="diagnostic_report">Report di diagnostica</string>
-  <string name="diagnostic_report_message">Invia tutti i seguenti dettagli per aiutarci a identificare il problema</string>
+  <string name="diagnostic_report_message">Per aiutarci a diagnosticare l\'errore, riproduci prima il problema, quindi invia il rapporto diagnostico.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Dimensione del testo</string>
   <string name="search_open_in_new_tab">Apri in una nuova scheda</string>
@@ -344,6 +346,7 @@
   <string name="copy_move_files_to_app_directory_description">A causa delle politiche di Google Play su Android 11 e versioni successive, la nostra app non può più accedere direttamente ai file archiviati altrove sul tuo dispositivo. Per consentirti di visualizzare i file selezionati, dobbiamo spostarli o copiarli in una cartella speciale all\'interno della directory dell\'applicazione. Questo ci consente di accedere ai file e aprirli.</string>
   <string name="choose_storage_to_copy_move_zim_file">Scegli l\'archiviazione in cui copiare/spostare il file ZIM</string>
   <string name="move_file_error_message">Errore nello spostamento del file ZIM: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nVuoi continuare con altri file ZIM?</string>
   <string name="how_to_update_content">Come aggiornare i contenuti?</string>
   <string name="update_content_description">Per aggiornare un contenuto (un file ZIM), devi scaricare l’ultima versione completa di quello stesso contenuto. Puoi farlo nella sezione Scarica.</string>
   <string name="all_files_permission_needed">Accesso a tutti i file richiesto</string>

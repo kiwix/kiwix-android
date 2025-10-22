@@ -34,8 +34,8 @@
   <string name="hotspot_dialog_neutral_button">KENDERC’HEL</string>
   <string name="start_server_label">Loc’hañ ar servijer</string>
   <string name="stop_server_label">Ehanañ ar servijer</string>
-  <string name="error_ip_address_not_found">N’haller ket kavout ar chomlec’h IP.</string>
-  <string name="server_started_message">Enankit ar chomlec’h IP-mañ e-barzh ho merdeer evit kaout ar servijer %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">N’haller ket kavout ar chomlec’h IP.</string>
+  <string name="server_started_message" fuzzy="true">Enankit ar chomlec’h IP-mañ e-barzh ho merdeer evit kaout ar servijer %s</string>
   <string name="share_host_address">Rannañ an URL war-bouez arloadoù all</string>
   <string name="error_file_not_found">Fazi : N’eus ket bet gallet kavout ar restr ZIM diuzet. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">N’haller ket lenn ar restr ZIM-mañ!</string>
@@ -45,6 +45,7 @@
   <string name="pref_display_title">Diskwel</string>
   <string name="pref_info_title">Titouroù</string>
   <string name="pref_info_version">Stumm</string>
+  <string name="pref_theme_summary">Diskouez ar pennadoù gant livioù eilpennet</string>
   <string name="pref_back_to_top">Distreiñ da grec’h ar bajenn</string>
   <string name="pref_back_to_top_summary">Diskwel ur bouton e traoñ ar bajenn evit distreiñ d’an deroù</string>
   <string name="pref_language_title">Yezh</string>
@@ -146,7 +147,7 @@
   <string name="other_languages">Yezhoù all :</string>
   <string name="no_items_msg">Elfenn ebet da gaout</string>
   <string name="crash_title">Ma… Un tammig diaes omp lakaet</string>
-  <string name="crash_description">Gallout a rafec’h sikour ac’hanomp da renkañ ar gudenn-mañ en ur gas an titouroù-mañ ?</string>
+  <string name="crash_description" fuzzy="true">Gallout a rafec’h sikour ac’hanomp da renkañ ar gudenn-mañ en ur gas an titouroù-mañ ?</string>
   <string name="crash_checkbox_language">Hoc’h arventennoù yezh</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Ur roll eus ho restroù ZIM</string>
   <string name="crash_checkbox_device">Munudoù ar stignad</string>
@@ -224,7 +225,7 @@
   <string name="send_report">Kas danevell an diagnostik</string>
   <string name="crash_checkbox_file_system">Munudoù ar reizhiad restroù</string>
   <string name="diagnostic_report">Danevell an diagnostik</string>
-  <string name="diagnostic_report_message">Kasit an holl vunudoù da heul evit ma c’hallfemp diagnostikañ ar gudenn</string>
+  <string name="diagnostic_report_message" fuzzy="true">Kasit an holl vunudoù da heul evit ma c’hallfemp diagnostikañ ar gudenn</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoumañ an destenn</string>
   <string name="search_open_in_new_tab">Digeriñ en un ivinell nevez</string>

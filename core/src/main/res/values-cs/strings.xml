@@ -56,7 +56,7 @@
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Spustit server</string>
   <string name="stop_server_label">Zastavit server</string>
-  <string name="server_started_message">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
+  <string name="server_started_message" fuzzy="true">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
   <string name="share_host_address">Sdílet URL přes jiné aplikace</string>
   <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Tento soubor zim nelze přečíst!</string>
@@ -66,6 +66,7 @@
   <string name="pref_display_title">Zobrazení</string>
   <string name="pref_info_title">Informace</string>
   <string name="pref_info_version">Verze</string>
+  <string name="pref_theme_summary">Zobrazuje stránky v invertovaných barvách.</string>
   <string name="pref_back_to_top">Zpět na začátek</string>
   <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
   <string name="pref_language_title">Jazyk</string>
@@ -170,7 +171,7 @@
   <string name="other_languages">Jiné jazyky:</string>
   <string name="no_items_msg">Žádné dostupné položky</string>
   <string name="crash_title">Inu…to je trapné</string>
-  <string name="crash_description">Vypadá to, že aplikace selhala.\n\nNevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
+  <string name="crash_description" fuzzy="true">Vypadá to, že aplikace selhala.\n\nNevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
   <string name="crash_checkbox_language">Vaše nastavení jazyka</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Seznam Vašich Zim souborů</string>
   <string name="crash_checkbox_exception">Informace o výpadku</string>
@@ -272,7 +273,7 @@
   <string name="send_report">Odeslat diagnostickou zprávu</string>
   <string name="crash_checkbox_file_system">Podrobnosti o souborovém systému</string>
   <string name="diagnostic_report">Diagnostická zpráva</string>
-  <string name="diagnostic_report_message">Zašlete prosím všechny následující podrobnosti, abychom mohli problém diagnostikovat</string>
+  <string name="diagnostic_report_message" fuzzy="true">Zašlete prosím všechny následující podrobnosti, abychom mohli problém diagnostikovat</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zvětšit text</string>
   <string name="search_open_in_new_tab">Otevřít v nové záložce</string>

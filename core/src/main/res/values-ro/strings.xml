@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Dimitrie569
 * Firilacroco
 * Fitoschido
 * MSClaudiu
@@ -53,20 +54,21 @@
   <string name="start_server_label">Pornește server</string>
   <string name="stop_server_label">Oprește server</string>
   <string name="error_server_already_running">Serverul rulează deja. Opriți-l și încercați din nou.</string>
-  <string name="error_ip_address_not_found">Nu am putut găsi adresa ip.</string>
-  <string name="server_started_message">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nu am putut găsi adresa ip.</string>
+  <string name="server_started_message" fuzzy="true">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
   <string name="qr_code">Cod QR redat</string>
   <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit. %s</string>
   <string name="unable_to_read_zim_file">Nu se poate citi acest fișier ZIM!</string>
   <string name="zim_not_opened">Nu se poate deschide fișierul ZIM</string>
-  <string name="error_file_invalid" fuzzy="true">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
+  <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
   <string name="error_loading_random_article_zim_not_loaded">Nu se poate încărca articolul. Fișierul ZIM nu este încărcat corect.</string>
   <string name="could_not_find_random_article">Imposibil de găsit un articol aleatoriu. Vă rugăm să încercați din nou mai târziu.</string>
   <string name="pref_display_title">Afișaj</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
+  <string name="pref_theme_summary">Afișează articolele în culori inversate</string>
   <string name="pref_back_to_top">Începutul paginii</string>
   <string name="pref_back_to_top_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
   <string name="pref_language_title">Limba</string>
@@ -129,6 +131,7 @@
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
   <string name="download">Descarcă</string>
   <string name="download_notification_channel_name">Descărcați numele canalului de notificare</string>
+  <string name="download_notification_channel_description">Se descarcă fișierele ZIM…</string>
   <string name="space_available">Spațiu disponibil:</string>
   <string name="move_no_space">Spațiu insuficient pentru mutare/copiere.</string>
   <string name="zim_simple">Simplu</string>
@@ -163,6 +166,7 @@
   <string name="no">Nu</string>
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
+  <string name="change_storage">Schimbă</string>
   <string name="tts_not_enabled">Citirea cu voce tare nu este activată pentru acest fișier ZIM</string>
   <string name="texttospeech_initialization_failed">Inițializarea citirii cu voce tare a eșuat. Vă rugăm să încercați din nou</string>
   <string name="texttospeech_error">Eroare neașteptată în Citire cu voce tare. Vă rugăm să încercați din nou</string>
@@ -181,14 +185,15 @@
   <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
   <string name="external_link_popup_dialog_title">Introduc Legătura externă!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
+  <string name="external_link_popup_dialog_message">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
+  <string name="your_language">Limbă selectată: %s</string>
   <string name="other_languages">Alte limbi:</string>
-  <string name="downloading">Descărcare</string>
+  <string name="downloading" fuzzy="true">Descărcare</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
   <string name="crash_title">Ei bine … Este jenant</string>
-  <string name="crash_description">Se pare că ne-am prăbușit.</string>
+  <string name="crash_description" fuzzy="true">Se pare că ne-am prăbușit.</string>
   <string name="crash_checkbox_language">Setările dvs. de limbă</string>
   <string name="crash_checkbox_zimfiles">O listă a fișierelor dvs. ZIM</string>
   <string name="crash_checkbox_exception">Detaliile prăbușirii</string>
@@ -307,7 +312,7 @@
   <string name="send_report">Trimite raport de diagnostic</string>
   <string name="crash_checkbox_file_system">Detalii Sistem Fișiere</string>
   <string name="diagnostic_report">Raport Diagnostic</string>
-  <string name="diagnostic_report_message">Vă rugăm să trimiteți toate următoarele detalii, astfel încât să putem diagnostica problema</string>
+  <string name="diagnostic_report_message" fuzzy="true">Vă rugăm să trimiteți toate următoarele detalii, astfel încât să putem diagnostica problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Mărește text</string>
   <string name="search_open_in_new_tab">Deschide filă nouă</string>
@@ -321,8 +326,8 @@
   <string name="preparing_file_for_copy">Se pregătește pentru copiere/mutare</string>
   <string name="action_copy">Copie</string>
   <string name="move">Mută</string>
-  <string name="copying_zim_file">Se copiază fişierul ZIM %s…</string>
-  <string name="moving_zim_file">Se mută fișierul ZIM %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Se copiază fişierul ZIM %s…</string>
+  <string name="moving_zim_file" fuzzy="true">Se mută fișierul ZIM %s…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix necesită ca fișierul ZIM să fie în propriul director de date. Doriți să o copiați sau să o mutați acolo?</string>
   <string name="copy_file_error_message">Eroare la copierea fișierului ZIM: %s .</string>
   <string name="verify_zim_chunk_dialog_title">Fiți atenți: asigurați-vă că toate fragmentele ZIM au fost mutate/copiate corect!</string>

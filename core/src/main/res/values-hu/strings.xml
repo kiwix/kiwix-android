@@ -61,8 +61,8 @@
   <string name="start_server_label">Kiszolgáló indítása</string>
   <string name="stop_server_label">Kiszolgáló leállítása</string>
   <string name="error_server_already_running">A kiszolgáló már fut. Kapcsolja ki, és próbálja újra.</string>
-  <string name="error_ip_address_not_found">Nem található az IP-cím.</string>
-  <string name="server_started_message">Írja be ezt az IP-címet a böngészőjébe a(z) %s kiszolgáló eléréséhez</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nem található az IP-cím.</string>
+  <string name="server_started_message" fuzzy="true">Írja be ezt az IP-címet a böngészőjébe a(z) %s kiszolgáló eléréséhez</string>
   <string name="qr_code">Megjelenített QR-kód</string>
   <string name="share_host_address">URL megosztása más alkalmazásokon keresztül</string>
   <string name="error_file_not_found">Hiba: a kiválasztott ZIM-fájl nem található. %s</string>
@@ -75,6 +75,7 @@
   <string name="pref_display_title">Megjelenítés</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
+  <string name="pref_theme_summary">Szócikkek megjelenítése fordított színekkel</string>
   <string name="pref_back_to_top">Vissza a tetejére</string>
   <string name="pref_back_to_top_summary">Gomb megjelenítése a lap alján a lap tetejére történő görgetéshez</string>
   <string name="pref_language_title">Nyelv</string>
@@ -198,7 +199,7 @@
   <string name="downloading">Letöltés</string>
   <string name="no_items_msg">Nincsenek elérhető elemek</string>
   <string name="crash_title">Nos… ez kínos!</string>
-  <string name="crash_description">Úgy tűnik, hogy összeomlottunk.\n\nSegítene nekünk a probléma megoldásában az alábbi információk elküldésével?</string>
+  <string name="crash_description" fuzzy="true">Úgy tűnik, hogy összeomlottunk.\n\nSegítene nekünk a probléma megoldásában az alábbi információk elküldésével?</string>
   <string name="crash_checkbox_language">Nyelvi beállítások</string>
   <string name="crash_checkbox_zimfiles">ZIM-fájlok listája</string>
   <string name="crash_checkbox_exception">Az összeomlás részletei</string>

@@ -33,6 +33,7 @@
   <string name="save_media_saved">已將媒體以 %s 儲存到 Downloads/org.kiwix…/</string>
   <string name="search_label">搜尋</string>
   <string name="searched_list">搜尋清單</string>
+  <string name="more_options">更多選項</string>
   <string name="choose_file">請選擇一份內容檔案 (*.zim)</string>
   <string name="open_in_new_tab">在新分頁打開連結？</string>
   <string name="hotspot_service_channel_name">熱點服務頻道</string>
@@ -74,6 +75,11 @@
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>
+  <string name="pref_theme">主題</string>
+  <string name="theme_system">系統</string>
+  <string name="theme_light">明亮</string>
+  <string name="theme_dark">暗黑</string>
+  <string name="pref_theme_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
   <string name="pref_language_title">語言</string>
@@ -136,6 +142,7 @@
   <string name="download_no_space">沒有足夠的空間來下載。</string>
   <string name="download">下載</string>
   <string name="download_notification_channel_name">下載通知頻道名稱</string>
+  <string name="download_notification_channel_description">正在下載 ZIM 檔案…</string>
   <string name="space_available">可用空間：</string>
   <string name="move_no_space">沒有足夠的空間來移動/拷貝。</string>
   <string name="zim_simple">簡易</string>
@@ -197,7 +204,7 @@
   <string name="downloading">正在下載</string>
   <string name="no_items_msg">沒有可用的項目</string>
   <string name="crash_title">唔…真是丟臉</string>
-  <string name="crash_description">看起來是我們這邊出了問題。\n\n您是否願意透過發送以下資訊，來協助我們修正此問題？</string>
+  <string name="crash_description" fuzzy="true">看起來是我們這邊出了問題。\n\n您是否願意透過發送以下資訊，來協助我們修正此問題？</string>
   <string name="crash_checkbox_language">您的語言設定</string>
   <string name="crash_checkbox_zimfiles">您的 ZIM 檔案清單</string>
   <string name="crash_checkbox_exception">當機詳情</string>
@@ -319,7 +326,7 @@
   <string name="send_report">傳送診斷報告</string>
   <string name="crash_checkbox_file_system">檔案系統詳細資訊</string>
   <string name="diagnostic_report">診斷報告</string>
-  <string name="diagnostic_report_message">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
+  <string name="diagnostic_report_message" fuzzy="true">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
   <string name="search_open_in_new_tab">在新分頁開啟</string>
@@ -336,6 +343,7 @@
   <string name="copying_zim_file">正在拷貝 ZIM 檔案 %s…</string>
   <string name="moving_zim_file">正在移動 ZIM 檔案 %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 檔案應位於自己的資料目錄中。\n您要拷貝或移動檔案於此嗎？</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix 要求 ZIM 檔案位於自己的資料目錄中。\n您要複製或移動到那裡嗎？</string>
   <string name="copy_file_error_message">拷貝 ZIM 檔案時發生錯誤：%s。</string>
   <string name="verify_zim_chunk_dialog_title">請注意：確保所有 ZIM 區塊已正確移動/拷貝！</string>
   <string name="verify_zim_chunks_dialog_message">您可以在「Android/media/org.kiwix…/」資料夾中驗證它們。\n一旦完成後，向下滑動即可重整文庫畫面。分割後的 ZIM 檔案將會出現在您的文庫中。</string>
@@ -343,6 +351,8 @@
   <string name="copy_move_files_to_app_directory_description">由於 Android 11（或更高版本）的 Google Play 政策，我們的應用程式已無法直接存取儲存在您設備上其他位置的檔案。為了讓您能查看所選檔案，我們需要將它們移動或拷貝到應用程式目錄中的特殊資料夾裡，這樣才能讓我們能夠存取並開啟檔案。</string>
   <string name="choose_storage_to_copy_move_zim_file">選擇拷貝/移動 ZIM 檔案的儲存空間</string>
   <string name="move_file_error_message">移動 ZIM 檔案時發生錯誤：%s。</string>
+  <string name="file_copy_move_error_dialog_message">%s \n您要繼續處理其他 ZIM 檔案嗎？</string>
+  <string name="your_selected_files_added_to_library">您選擇的 ZIM 檔案已新增至文庫裡。</string>
   <string name="how_to_update_content">如何更新內容？</string>
   <string name="update_content_description">要更新內容（ZIM 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
   <string name="all_files_permission_needed">所有檔案需要允許權限</string>
@@ -394,4 +404,6 @@
   <string name="downloading_state">正在下載</string>
   <string name="download_failed_state">失敗</string>
   <string name="searchview_description_clear">清除查詢</string>
+  <string name="file_system_scan_dialog_title">掃描儲存裝置的書籍？</string>
+  <string name="file_system_scan_dialog_message">Kiwix 將掃描您的設備儲存空間並在此處列出可用的書籍。</string>
 </resources>

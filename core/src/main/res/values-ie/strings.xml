@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Lisyeng
+-->
 <resources>
   <string name="menu_help">Auxilie</string>
   <string name="menu_home">Principal</string>
@@ -7,8 +10,14 @@
   <string name="bookmarks">Marcatores</string>
   <string name="menu_random_article">Articul sporadic</string>
   <string name="search_label">Sercha</string>
+  <string name="more_options">Plu optiones</string>
+  <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="pref_display_title">Exposition</string>
+  <string name="pref_info_version">Version</string>
+  <string name="pref_theme">Fasson</string>
+  <string name="theme_system">Sistema</string>
   <string name="pref_back_to_top">Retro a supra</string>
   <string name="pref_back_to_top_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
   <string name="pref_language_title">Lingue</string>
+  <string name="no_thanks">No, mersí</string>
 </resources>

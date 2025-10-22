@@ -18,6 +18,7 @@
   <string name="error_article_url_not_found">Fili: Kunnafoni (Url: %1$s)  sariziyeli tigɛra sira la.</string>
   <string name="pref_display_title">Jirayɔrɔ</string>
   <string name="pref_info_title">Kunnafoni</string>
+  <string name="pref_theme_summary">Kunnafoni minnu ɲɛ cogoya yɛlɛmanen don, olu jira.</string>
   <string name="pref_language_title">Kan</string>
   <string name="library">Gafeso</string>
 </resources>

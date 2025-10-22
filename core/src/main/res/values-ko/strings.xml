@@ -2,6 +2,7 @@
 <!-- Authors:
 * Alex00728
 * Apzp79
+* Bisang
 * CYAN
 * Codenstory
 * Ellif
@@ -77,6 +78,7 @@
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
+  <string name="pref_theme_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>
   <string name="pref_language_title">언어</string>
@@ -139,6 +141,7 @@
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
   <string name="download">다운로드</string>
   <string name="download_notification_channel_name">다운로드 알림 채널 이름</string>
+  <string name="download_notification_channel_description">ZIM 파일을 다운로드하는 중…</string>
   <string name="space_available">사용 가능한 공간:</string>
   <string name="move_no_space">이동/복사할 공간이 충분하지 않습니다.</string>
   <string name="zim_simple">간단히</string>
@@ -200,7 +203,7 @@
   <string name="downloading">다운로드 중</string>
   <string name="no_items_msg">사용 가능한 항목이 없음</string>
   <string name="crash_title">앗.. 부끄럽네요.</string>
-  <string name="crash_description">충돌이 발생한 것 같습니다.\n\n다음의 정보를 보냄으로써 저희가 이 문제를 해결하는데 도움을 주시겠습니까?</string>
+  <string name="crash_description" fuzzy="true">충돌이 발생한 것 같습니다.\n\n다음의 정보를 보냄으로써 저희가 이 문제를 해결하는데 도움을 주시겠습니까?</string>
   <string name="crash_checkbox_language">내 언어 설정</string>
   <string name="crash_checkbox_zimfiles">ZIM 파일 목록</string>
   <string name="crash_checkbox_exception">충돌 상세 정보</string>
@@ -322,7 +325,7 @@
   <string name="send_report">진단 보고서 보내기</string>
   <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
   <string name="diagnostic_report">진단 보고서</string>
-  <string name="diagnostic_report_message">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
+  <string name="diagnostic_report_message" fuzzy="true">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">글자 크기 조정</string>
   <string name="search_open_in_new_tab">새 탭으로 열기</string>
@@ -336,8 +339,8 @@
   <string name="preparing_file_for_copy">복사/이동 준비 중</string>
   <string name="action_copy">복사</string>
   <string name="move">이동</string>
-  <string name="copying_zim_file">ZIM 파일을 복사하는 중 %s…</string>
-  <string name="moving_zim_file">ZIM 파일을 이동하는 중 %s…</string>
+  <string name="copying_zim_file" fuzzy="true">ZIM 파일을 복사하는 중 %s…</string>
+  <string name="moving_zim_file" fuzzy="true">ZIM 파일을 이동하는 중 %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix는 ZIM 파일을 자체 데이터 디렉터리에 위치할 것을 요구합니다.\n복사하거나 이동하시겠습니까?</string>
   <string name="copy_file_error_message">ZIM 파일 복사 오류: %s.</string>
   <string name="verify_zim_chunk_dialog_title">주의하세요: 모든 ZIM 청크가 제대로 이동/복사되었는지 확인하세요!</string>

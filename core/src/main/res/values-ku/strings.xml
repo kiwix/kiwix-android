@@ -49,7 +49,7 @@
   <string name="hotspot_notification_content_title">Hotspota Kiwix-ê.</string>
   <string name="start_server_label">Serverê bide destpêkirin</string>
   <string name="stop_server_label">Serverê bide sekinandin</string>
-  <string name="server_started_message">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
+  <string name="server_started_message" fuzzy="true">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
   <string name="share_host_address">URLyê bi riya sepanên din parve bike</string>
   <string name="error_file_not_found">Çewtî: Dosyeya ZIMê ya bijartî nehat dîtin. %s</string>
   <string name="unable_to_read_zim_file">Nebû ku vê dosyeya ZIMê bixwîne!</string>
@@ -59,6 +59,7 @@
   <string name="pref_display_title">Nîşan bide</string>
   <string name="pref_info_title">Agahî</string>
   <string name="pref_info_version">Guherto</string>
+  <string name="pref_theme_summary">Gotaran bi rengên vajîkirî nîşan bide</string>
   <string name="pref_back_to_top">Vegere Jor</string>
   <string name="pref_back_to_top_summary">Ji bo vegerî jor, li binê rûpelê wê bişkojek nîşan bide</string>
   <string name="pref_language_title">Ziman</string>
@@ -163,7 +164,7 @@
   <string name="other_languages">Zimanên din:</string>
   <string name="no_items_msg">Ti hêmanekî berdest tine</string>
   <string name="crash_title">Baş e… Ev Şermker e</string>
-  <string name="crash_description">Wisa dixuye ku em hilweşiyan. \n\nGelo tu dixwazî alî me bikî ku em vê problemê çareser bikin bi şandina agahiyên li jêr?</string>
+  <string name="crash_description" fuzzy="true">Wisa dixuye ku em hilweşiyan. \n\nGelo tu dixwazî alî me bikî ku em vê problemê çareser bikin bi şandina agahiyên li jêr?</string>
   <string name="crash_checkbox_language">Mîhengên Te yên Zimanî</string>
   <string name="crash_checkbox_zimfiles">Lîsteyeke Dosyeyên Te yên ZIMê</string>
   <string name="crash_checkbox_exception">Detayên Hilweşînê</string>
@@ -265,7 +266,7 @@
   <string name="send_report">Rapora teşhîsê bişîne</string>
   <string name="crash_checkbox_file_system">Detayên Sîstema Pelê</string>
   <string name="diagnostic_report">Rapora Teşhîsê</string>
-  <string name="diagnostic_report_message">Ji kerema xwe hemû detayên li jêr bişînin daku em karibin problemê teşhîs bikin</string>
+  <string name="diagnostic_report_message" fuzzy="true">Ji kerema xwe hemû detayên li jêr bişînin daku em karibin problemê teşhîs bikin</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Nêzîkkirina Metnê</string>
   <string name="search_open_in_new_tab">Di hilpêkîneke nû de veke</string>

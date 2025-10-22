@@ -53,8 +53,8 @@
   <string name="start_server_label">Fara server</string>
   <string name="stop_server_label">Dènà server</string>
   <string name="error_server_already_running">Tuni uwar garken ke gudana. Da fatan za a kashe shi kuma a sake gwadawa</string>
-  <string name="error_ip_address_not_found">An kasa samun ip address.</string>
-  <string name="server_started_message">Shigar da wannan adireshin ip a cikin burauzarka don samun damar sabar %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">An kasa samun ip address.</string>
+  <string name="server_started_message" fuzzy="true">Shigar da wannan adireshin ip a cikin burauzarka don samun damar sabar %s</string>
   <string name="share_host_address">Raba URL ta hanyar wasu aikace-aikace</string>
   <string name="error_file_not_found">Kuskure: Ba a iya samun fayil din ZIM da aka zaba ba %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">An kasa karanta wannan fayil na zim!</string>
@@ -64,6 +64,7 @@
   <string name="pref_display_title">Nunawa</string>
   <string name="pref_info_title">Bayani</string>
   <string name="pref_info_version">Sigar</string>
+  <string name="pref_theme_summary">Nuna articles da inverted launuka</string>
   <string name="pref_back_to_top">Komawa xuwa sama</string>
   <string name="pref_back_to_top_summary">Nuna maɓallin a ƙarshen shafin don gungurawa har zuwa saman</string>
   <string name="pref_language_title">Yare</string>
@@ -171,7 +172,7 @@
   <string name="other_languages">Wasu harsuna</string>
   <string name="no_items_msg">Babu abubuwa da akwai</string>
   <string name="crash_title">To… Wannan Abin Abin kunya ne</string>
-  <string name="crash_description">Kamar dai mun fadi.\n\nShin kuna son taimaka mana mu gyara wannan matsala ta hanyar aika da bayanai masu zuwa?</string>
+  <string name="crash_description" fuzzy="true">Kamar dai mun fadi.\n\nShin kuna son taimaka mana mu gyara wannan matsala ta hanyar aika da bayanai masu zuwa?</string>
   <string name="crash_checkbox_language">Ƙari saituttukan harshe.</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Jerin Fayilolin Zim ɗinku</string>
   <string name="crash_checkbox_exception">Cikakkun bayanai na Crash</string>
@@ -279,7 +280,7 @@
   <string name="send_report">Aika rahoton bincike</string>
   <string name="crash_checkbox_file_system">Bayanan Tsarin Fayil</string>
   <string name="diagnostic_report">Rahoton Bincike</string>
-  <string name="diagnostic_report_message">Da fatan za a aiko da duk cikakkun bayanai masu zuwa don mu iya gano matsalar</string>
+  <string name="diagnostic_report_message" fuzzy="true">Da fatan za a aiko da duk cikakkun bayanai masu zuwa don mu iya gano matsalar</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Rubutun Zoom</string>
   <string name="search_open_in_new_tab">Bude a cikin sabon tab</string>

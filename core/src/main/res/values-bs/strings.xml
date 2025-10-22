@@ -47,8 +47,8 @@
   <string name="start_server_label">Pokreni server</string>
   <string name="stop_server_label">Zaustavi server</string>
   <string name="error_server_already_running">Server je već pokrenut. Molimo vas da ga isključite i pokušate ponovo.</string>
-  <string name="error_ip_address_not_found">Nije moguće pronaći IP adresu.</string>
-  <string name="server_started_message">Unesite ovu IP adresu u svoj pretraživač da biste pristupili serveru %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nije moguće pronaći IP adresu.</string>
+  <string name="server_started_message" fuzzy="true">Unesite ovu IP adresu u svoj pretraživač da biste pristupili serveru %s</string>
   <string name="qr_code">QR kod</string>
   <string name="share_host_address">Dijeli URL putem drugih aplikacija</string>
   <string name="error_file_not_found">Greška: Odabrana ZIM datoteka nije pronađena. %s</string>
@@ -61,6 +61,7 @@
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Verzija</string>
+  <string name="pref_theme_summary">Prikaži članke s invertovanim bojama</string>
   <string name="pref_back_to_top">Nazad na vrh</string>
   <string name="pref_back_to_top_summary">Prikaži dugme na kraju stranice za pomicanje na vrh</string>
   <string name="pref_language_title">Jezik</string>

@@ -2,10 +2,11 @@
 <!-- Authors:
 * Nike
 * Pyscowicz
+* Samoasambia
 -->
 <resources>
-  <string name="file_system_does_not_support_4gb">Tiedostojärjestelmäsi ei tue yli 4GB kokoisia tiedostoja</string>
+  <string name="file_system_does_not_support_4gb">Tiedostojärjestelmäsi ei tue yli 4 Gt kokoisia tiedostoja</string>
   <string name="send_files_title">Lähetä tiedostoja</string>
   <string name="receive_files_title">Vastaanota tiedostoja</string>
-  <string name="select_zim_file" fuzzy="true">Valitse luettava zim-tiedosto</string>
+  <string name="select_zim_file">Valitse luettava ZIM-tiedosto</string>
 </resources>

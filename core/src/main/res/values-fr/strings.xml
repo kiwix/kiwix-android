@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Alno
+* Bananax47
 * Benoit74
 * BlueCamille
 * Boniface
@@ -9,6 +10,7 @@
 * Djiboun
 * Eneelk
 * Eneelktransfer_to
+* Escargot bleu
 * Fitoschido
 * Gomoko
 * Goombiis
@@ -17,6 +19,7 @@
 * Kelson
 * Lingabo
 * Mahabarata
+* Marphy 123
 * McDutchie
 * MohitMali
 * Méthodes Bulebe Hangi
@@ -50,6 +53,7 @@
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Downloads/org.kiwix…/</string>
   <string name="search_label">Rechercher</string>
   <string name="searched_list">Liste de recherche</string>
+  <string name="more_options">Plus d\'options</string>
   <string name="choose_file">Sélectionner un fichier de contenu (*.zim)</string>
   <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
   <string name="hotspot_service_channel_name">Nom du service de notification du point d’accès Wifi</string>
@@ -91,6 +95,11 @@
   <string name="pref_display_title">Affichage</string>
   <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme">Thème</string>
+  <string name="theme_system">Système</string>
+  <string name="theme_light">Clair</string>
+  <string name="theme_dark">Sombre</string>
+  <string name="pref_theme_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir en haut</string>
   <string name="pref_language_title">Langue</string>
@@ -153,6 +162,7 @@
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
   <string name="download">Télécharger</string>
   <string name="download_notification_channel_name">Nom du canal de notification des téléchargements</string>
+  <string name="download_notification_channel_description">Téléchargement des fichiers ZIM…</string>
   <string name="space_available">Espace disponible :</string>
   <string name="move_no_space">Espace insuffisant pour déplacer/copier.</string>
   <string name="zim_simple">Simple</string>
@@ -214,7 +224,7 @@
   <string name="downloading">Téléchargement</string>
   <string name="no_items_msg">Aucun élément disponible</string>
   <string name="crash_title">Eh bien… c’est embarrassant</string>
-  <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
+  <string name="crash_description" fuzzy="true">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
   <string name="crash_checkbox_exception">Détails du plantage</string>
@@ -336,7 +346,7 @@
   <string name="send_report">Envoyer un rapport de diagnostic</string>
   <string name="crash_checkbox_file_system">Détails du système de fichiers</string>
   <string name="diagnostic_report">Rapport de diagnostic</string>
-  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
+  <string name="diagnostic_report_message" fuzzy="true">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
   <string name="percentage">%d %%</string>
   <string name="pref_text_zoom_title">Zoom du texte</string>
   <string name="search_open_in_new_tab">Ouvrir dans un nouvel onglet</string>

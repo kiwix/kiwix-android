@@ -49,7 +49,7 @@
   <string name="hotspot_notification_content_title">கிவிக்ஸ் பகிரலை</string>
   <string name="start_server_label">சேவையகத்தைத் தொடங்கு</string>
   <string name="stop_server_label">சேவையகத்தை நிறுத்து</string>
-  <string name="server_started_message">%s சேவையகத்தை அணுக உங்கள் உலாவியில் இந்த ஐபி முகவரியை உள்ளிடவும்</string>
+  <string name="server_started_message" fuzzy="true">%s சேவையகத்தை அணுக உங்கள் உலாவியில் இந்த ஐபி முகவரியை உள்ளிடவும்</string>
   <string name="share_host_address">பிற பயன்பாடுகள் வழியாக URL ஐப் பகிரவும்</string>
   <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">இந்த ஜிம் கோப்பைப் படிக்க முடியவில்லை!</string>
@@ -59,6 +59,7 @@
   <string name="pref_display_title">காண்பி</string>
   <string name="pref_info_title">தகவல்</string>
   <string name="pref_info_version">பதிப்பு</string>
+  <string name="pref_theme_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
   <string name="pref_back_to_top">மீண்டும் மேலே</string>
   <string name="pref_back_to_top_summary">மேற்பகுதிக்குச் செல்ல, பக்கத்‌தின் அடியில் ஒரு பொத்தானை காண்பி</string>
   <string name="pref_language_title">மொழி</string>
@@ -163,7 +164,7 @@
   <string name="other_languages">பிற மொழிகள்:</string>
   <string name="no_items_msg">உருப்படிகள் எதுவும் கிடைக்கவில்லை</string>
   <string name="crash_title">நன்று… இது சங்கடமாக இருக்கிறது</string>
-  <string name="crash_description">நாங்கள் செயலிழந்ததாகத் தெரிகிறது.! N !! N! பின்வரும் தகவல்களை அனுப்புவதன் மூலம் இந்த சிக்கலை சரிசெய்ய எங்களுக்கு உதவ விரும்புகிறீர்களா?</string>
+  <string name="crash_description" fuzzy="true">நாங்கள் செயலிழந்ததாகத் தெரிகிறது.! N !! N! பின்வரும் தகவல்களை அனுப்புவதன் மூலம் இந்த சிக்கலை சரிசெய்ய எங்களுக்கு உதவ விரும்புகிறீர்களா?</string>
   <string name="crash_checkbox_language">உங்கள் மொழி அமைப்புகள்</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">உங்கள் Zim கோப்புகளின் பட்டியல்</string>
   <string name="crash_checkbox_exception">செயலி செயலிழந்ததற்கான விவரங்கள்</string>
@@ -265,7 +266,7 @@
   <string name="send_report">பிழையறிதல் அறிக்கையை அனுப்பு</string>
   <string name="crash_checkbox_file_system">கோப்பு முறை விவரங்கள்</string>
   <string name="diagnostic_report">கண்டறியும் அறிக்கை</string>
-  <string name="diagnostic_report_message">தயவுசெய்து பின்வரும் அனைத்து விவரங்களையும் அனுப்புங்கள், இதனால் சிக்கலைக் கண்டறிய முடியும்</string>
+  <string name="diagnostic_report_message" fuzzy="true">தயவுசெய்து பின்வரும் அனைத்து விவரங்களையும் அனுப்புங்கள், இதனால் சிக்கலைக் கண்டறிய முடியும்</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">உரை பெரிதாக்கி</string>
   <string name="search_open_in_new_tab">புதிய தாவலில் திறக்கவும்</string>

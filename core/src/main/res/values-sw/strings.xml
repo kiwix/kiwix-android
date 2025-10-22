@@ -58,8 +58,8 @@
   <string name="start_server_label">Anzisha seva</string>
   <string name="stop_server_label">Simamisha seva</string>
   <string name="error_server_already_running">Seva tayari inafanya kazi. Tafadhali zima na ujaribu tena.</string>
-  <string name="error_ip_address_not_found">Sikuweza kupata anwani ya IP.</string>
-  <string name="server_started_message">Ingiza anwani hii ya ip kwenye kivinjari chako ili kufikia seva %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Sikuweza kupata anwani ya IP.</string>
+  <string name="server_started_message" fuzzy="true">Ingiza anwani hii ya ip kwenye kivinjari chako ili kufikia seva %s</string>
   <string name="share_host_address">Kushiriki URL kupitia programu nyingine</string>
   <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Haiwezi kusoma faili hii zim!</string>
@@ -69,6 +69,7 @@
   <string name="pref_display_title">Onesha</string>
   <string name="pref_info_title">Maarifa</string>
   <string name="pref_info_version">Toleo</string>
+  <string name="pref_theme_summary">Onyesha makala yakiwa na rangi kubatilishwa</string>
   <string name="pref_back_to_top">Rudi kwenye kichwa cha ukurasa</string>
   <string name="pref_back_to_top_summary">Onyesha kidude kwenye mwisho wa kurasa ili kurudi hadi sehemu ya juu</string>
   <string name="pref_language_title">Lugha</string>
@@ -175,7 +176,7 @@
   <string name="other_languages">Lugha zingine:</string>
   <string name="no_items_msg">Hakuna vipengee vinavyopatikana</string>
   <string name="crash_title">Naam… Hii ni Aibu</string>
-  <string name="crash_description">Inaonekana tulianguka.\n\nUngependa kutusaidia kurekebisha tatizo hili kwa kutuma maelezo yafuatayo?</string>
+  <string name="crash_description" fuzzy="true">Inaonekana tulianguka.\n\nUngependa kutusaidia kurekebisha tatizo hili kwa kutuma maelezo yafuatayo?</string>
   <string name="crash_checkbox_language">Mipangilio mingine ya lugha</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Orodha ya Faili zako za Zim</string>
   <string name="crash_checkbox_exception">Maelezo ya mshuko</string>
@@ -278,7 +279,7 @@
   <string name="send_report">Tuma ripoti ya uchunguzi</string>
   <string name="crash_checkbox_file_system">Maelezo ya Mfumo wa Faili</string>
   <string name="diagnostic_report">Ripoti ya Uchunguzi</string>
-  <string name="diagnostic_report_message">Tafadhali tuma maelezo yote yafuatayo ili tuweze kutambua tatizo</string>
+  <string name="diagnostic_report_message" fuzzy="true">Tafadhali tuma maelezo yote yafuatayo ili tuweze kutambua tatizo</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Kuza maandishi</string>
   <string name="search_open_in_new_tab">Fungua kwenye kichupo kipya</string>

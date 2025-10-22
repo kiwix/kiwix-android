@@ -4,6 +4,7 @@
 * Akagisoy
 * Arthur2e5
 * Crocodoom
+* Cyanjiang
 * GuoPC
 * Huajing
 * IceButBin
@@ -22,6 +23,7 @@
 * SomeyaMako
 * StarrySky
 * Sunai
+* TFX202X
 * VulpesVulpes825
 * Wzl19371
 * XtexChooser
@@ -50,6 +52,7 @@
   <string name="save_media_saved">已将媒体作为%s保存至Downloads/org.kiwix…/</string>
   <string name="search_label">搜索</string>
   <string name="searched_list">已搜索项目列表</string>
+  <string name="more_options">更多选项</string>
   <string name="choose_file">选择一个内容文件（*.zim）</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
   <string name="hotspot_service_channel_name">热点服务频道</string>
@@ -77,7 +80,7 @@
   <string name="start_server_label">启动服务器</string>
   <string name="stop_server_label">停止服务器</string>
   <string name="error_server_already_running">服务器正在运行。请关闭后再重试。</string>
-  <string name="error_ip_address_not_found">找不到IP地址。</string>
+  <string name="error_ip_address_not_found">找不到 IP 地址。</string>
   <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="qr_code">显示二维码</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
@@ -91,6 +94,11 @@
   <string name="pref_display_title">显示</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_info_version">版本</string>
+  <string name="pref_theme">主题</string>
+  <string name="theme_system">系统</string>
+  <string name="theme_light">亮色</string>
+  <string name="theme_dark">暗色</string>
+  <string name="pref_theme_summary">以反色调显示条目</string>
   <string name="pref_back_to_top">返回顶部</string>
   <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
   <string name="pref_language_title">语言</string>
@@ -146,13 +154,14 @@
   <string name="speech_not_supported">很抱歉！您的设备不支持语音输入</string>
   <string name="local_zims">设备</string>
   <string name="remote_zims">在线</string>
-  <string name="library">图书馆</string>
+  <string name="library">文库</string>
   <string name="delete_zim_body">以下 ZIM 文件会被删除：\n\n%s</string>
   <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
   <string name="download_no_space">空间不足，无法下载。</string>
   <string name="download">下载</string>
   <string name="download_notification_channel_name">下载通知频道名称</string>
+  <string name="download_notification_channel_description">正在下载 ZIM 文件…</string>
   <string name="space_available">可用空间：</string>
   <string name="move_no_space">没有足够的空间来移动/复制。</string>
   <string name="zim_simple">简单</string>
@@ -187,6 +196,7 @@
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下载？</string>
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
+  <string name="change_storage">更改</string>
   <string name="tts_not_enabled">朗读功能未对该 ZIM 文件启用</string>
   <string name="texttospeech_initialization_failed">朗读初始化失败。请重试</string>
   <string name="texttospeech_error">朗读出现意外错误。请重试</string>
@@ -208,11 +218,12 @@
   <string name="external_link_popup_dialog_message">您正在打开一个外部链接。这可能会因数据传输产生额外费用，或者在您离线时无法使用。要继续吗？</string>
   <string name="do_not_ask_anymore">不再询问</string>
   <string name="your_languages">选择的语言：</string>
+  <string name="your_language">选择的语言：%s</string>
   <string name="other_languages">其他语言：</string>
   <string name="downloading">下载中</string>
   <string name="no_items_msg">没有可用的项目</string>
   <string name="crash_title">呃…这太尴尬了</string>
-  <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
+  <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送崩溃报告来帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
   <string name="crash_checkbox_zimfiles">ZIM 文件列表</string>
   <string name="crash_checkbox_exception">崩溃详情</string>
@@ -236,7 +247,10 @@
   <string name="go_to_previous_page">转到上一页</string>
   <string name="go_to_next_page">转到下一页</string>
   <string name="table_of_contents">目录</string>
+  <string name="select_language">选择语言</string>
   <string name="save_languages">保存语言</string>
+  <string name="all_languages">所有语言</string>
+  <string name="no_language_available">没有可用的语言</string>
   <string name="expand">展开</string>
   <string name="history">历史</string>
   <string name="history_from_current_book">查看所有书籍的历史记录</string>
@@ -331,7 +345,7 @@
   <string name="send_report">发送诊断报告</string>
   <string name="crash_checkbox_file_system">文件系统详情</string>
   <string name="diagnostic_report">诊断报告</string>
-  <string name="diagnostic_report_message">请发送以下所有细节以方便我们确定问题</string>
+  <string name="diagnostic_report_message">为了帮助我们诊断问题，请先重现问题，然后发送诊断报告。</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字缩放</string>
   <string name="search_open_in_new_tab">在新标签页打开</string>
@@ -347,7 +361,8 @@
   <string name="move">移动</string>
   <string name="copying_zim_file">正在复制 ZIM 文件 %s…</string>
   <string name="moving_zim_file">正在移动 ZIM 文件 %s…</string>
-  <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 文件位于自己的数据目录中。您要复制或移动文件到该目录吗？</string>
+  <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 文件位于自己的数据目录中。\n您要复制或移动文件到该目录吗？</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix 要求 ZIM 文件位于自己的数据目录中。\n您要复制或移动文件到该目录吗？</string>
   <string name="copy_file_error_message">复制 ZIM 文件时出错：%s。</string>
   <string name="verify_zim_chunk_dialog_title">注意：请确保所有的 ZIM 块都已正确移动/复制！</string>
   <string name="verify_zim_chunks_dialog_message">您可以在“Android/media/org.kiwix…/”文件夹中验证这些块。验证完成后，请向下滑动以刷新文库界面。拆分的 ZIM 文件将出现在您的文库中。</string>
@@ -355,6 +370,8 @@
   <string name="copy_move_files_to_app_directory_description">由于Android 11及更高版本的Google Play政策，我们的应用无法再直接访问存储在您设备其他地方的文件。为了让您查看所选文件，我们需要将它们移动或复制到我们应用目录中的特殊文件夹中。这样我们才能访问和打开这些文件。</string>
   <string name="choose_storage_to_copy_move_zim_file">选择存储来复制/移动 ZIM 文件</string>
   <string name="move_file_error_message">移动 ZIM 文件时出错：%s。</string>
+  <string name="file_copy_move_error_dialog_message">%s \n您要继续处理其他 ZIM 文件吗？</string>
+  <string name="your_selected_files_added_to_library">您选择的 ZIM 文件已添加到文库。</string>
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
   <string name="all_files_permission_needed">需要全部文件的存储权限</string>
@@ -364,11 +381,11 @@
   <string name="denied_internet_permission_message">请启用 WiFi 来下载内容</string>
   <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
   <string name="allow">允许</string>
-  <string name="swipe_down_for_library">下滑查看图书馆</string>
-  <string name="reaching_remote_library">获取远程图书馆</string>
-  <string name="parsing_remote_library">解析远程图书馆</string>
-  <string name="starting_downloading_remote_library">开始下载网上图书馆</string>
-  <string name="downloading_library">正在下载图书馆\n%s</string>
+  <string name="swipe_down_for_library">下滑查看文库</string>
+  <string name="reaching_remote_library">获取远程文库</string>
+  <string name="parsing_remote_library">解析远程文库</string>
+  <string name="starting_downloading_remote_library">开始下载在线文库</string>
+  <string name="downloading_library">正在下载文库\n%s</string>
   <string name="no_notes">没有注释</string>
   <string name="notes_from_all_books">查看来自所有书籍的注释</string>
   <string name="search_notes">搜索注释</string>
@@ -406,4 +423,6 @@
   <string name="downloading_state">下载中</string>
   <string name="download_failed_state">失败</string>
   <string name="searchview_description_clear">清空查询</string>
+  <string name="file_system_scan_dialog_title">要扫描存储中的书籍吗？</string>
+  <string name="file_system_scan_dialog_message">Kiwix 将扫描您的设备存储并在此处列出可用的书籍。</string>
 </resources>
