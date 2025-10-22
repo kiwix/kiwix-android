@@ -8,6 +8,9 @@
   <string name="cannot_open_file">Не можев да ја отворам податотеката\nВидете дали можете да ја најдете вашата Библиотека</string>
   <string name="send_files_title">Испраќање на податотеки</string>
   <string name="receive_files_title">Примање на податотеки</string>
-  <string name="no_app_found_to_open" fuzzy="true">Не пронајдов прилог за избирање на ZIM-податотека!</string>
-  <string name="select_zim_file" fuzzy="true">Изберете ZIM-податотека за читање</string>
+  <string name="no_app_found_to_open">Не пронајдов прилог за избирање на ZIM-податотека!</string>
+  <string name="select_zim_file">Изберете ZIM-податотека за читање</string>
+  <string name="swipe_down_to_scan_storage">Повлечете надолу за да отчитате нови книги…</string>
+  <string name="auto_detect_books">Автоматско пронаоѓање на вашите книги</string>
+  <string name="auto_detect_books_description">При првото пуштање ќе бидете прашани дали прилогот можа да го отчитува вашиот склад. Ако се согласите, ние автоматски ќе пронаоѓаме ZIM-податотеки без да треба да ги додавате рачно.</string>
 </resources>

@@ -19,13 +19,17 @@
   <string name="menu_support_kiwix">Kiwix ënnerstëtzen</string>
   <string name="menu_support_kiwix_for_custom_apps">Ënnerstëtzt %s</string>
   <string name="menu_about_app">Iwwer d’App %s</string>
+  <string name="menu_wifi_hotspot">WiFi-Hotspot</string>
   <string name="save_media">Medium späicheren</string>
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d’Medium ze späicheren!</string>
   <string name="save_media_saved">Medium als %s op Downloads/org.kiwix…/ gespäichert</string>
   <string name="search_label">Sichen</string>
+  <string name="more_options">Méi Optiounen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
+  <string name="go_to_wifi_settings_label">An d\'Wifi-Astellunge goen</string>
   <string name="connection_refused">Connectioun refuséiert.</string>
+  <string name="hotspot_running">Hotspot aktiv</string>
   <string name="server_failed_message">De Server konnt net gestart ginn. Wgl. aktivéiert Ären Hotspot</string>
   <string name="server_failed_toast_message">De Server konnt net gestart ginn.</string>
   <string name="server_started_successfully_toast_message">De Server gouf erfollegräich gestart.</string>
@@ -39,7 +43,7 @@
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server stoppen</string>
   <string name="error_server_already_running">De Server leeft schonn. Maacht e wgl. aus a probéiert nach eng Kéier.</string>
-  <string name="error_ip_address_not_found">IP-Adress konnt net fonnt ginn.</string>
+  <string name="error_ip_address_not_found">IP-Adress gouf net fonnt.</string>
   <string name="server_started_message">Gitt dës IP-Adress an Äre Browser a fir op de Server %s zouzegräifen</string>
   <string name="share_host_address">URL mat aneren Applikatiounen deelen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn. %s</string>
@@ -50,12 +54,14 @@
   <string name="pref_display_title">Weisen</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
-  <string name="pref_back_to_top">Zréck no uewen</string>
+  <string name="pref_theme_summary">Artikele mat ëmgedréite Faarwe weisen</string>
+  <string name="pref_back_to_top">Zeréck no uewen</string>
   <string name="pref_back_to_top_summary">Weist e Knäppchen ënnen op der Säit fir no uewen ze scrollen</string>
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
   <string name="tts_lang_not_supported">D’Sprooch vun dëser Säit gëtt net ënnerstëtzt. Et ass méiglech, datt den Artikel net richteg gelies ka ginn.</string>
+  <string name="no_email_application_installed">Installéiert wgl. en E-Mail-Client</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_history_title">Historique läschen</string>
   <string name="pref_notes">Notizen</string>
@@ -97,6 +103,7 @@
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir erofzelueden.</string>
   <string name="download">Eroflueden</string>
+  <string name="download_notification_channel_description">ZIM-Fichieren eroflueden…</string>
   <string name="space_available">Plaz disponibel:</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keng Biller</string>
@@ -108,9 +115,11 @@
   <string name="help_6">Eisen Inhalt ass um Kiwix Internetsite gehost.</string>
   <string name="help_8">• Wikipedia ass fir all Sprooch separat verfügbar</string>
   <string name="help_9">• Aner Inhalter wéi Wikileaks oder Wikisource sinn och verfügbar</string>
+  <string name="pref_storage">Späicher</string>
   <string name="pref_current_folder">Aktuelle Repertoire</string>
   <string name="pref_storage_used">%s benotzt</string>
   <string name="pref_free_storage">%s fräi</string>
+  <string name="choose_storage_to_download_book">Späicherplaz wiele fir d\'Buch erofzelueden</string>
   <string name="tts_pause">pauséieren</string>
   <string name="tts_resume">virufueren</string>
   <string name="stop">stopp</string>
@@ -121,6 +130,8 @@
   <string name="yes">Jo</string>
   <string name="no">Nee</string>
   <string name="confirm_stop_download_title">Erofluede stoppen?</string>
+  <string name="confirm_stop_download_msg">Sidd Dir sécher, datt Dir dësen Download stoppe wëllt?</string>
+  <string name="change_storage">Änneren</string>
   <string name="next">Nächst</string>
   <string name="previous">Vireg</string>
   <string name="pref_wifi_only">Inhalt just iwwer WIFI eroflueden</string>
@@ -157,6 +168,7 @@
   <string name="save_languages">Sprooche späicheren</string>
   <string name="all_languages">All Sproochen</string>
   <string name="no_language_available">Keng Sproochen disponibel</string>
+  <string name="expand">Opklappen</string>
   <string name="selected_items">%1$d ausgewielt</string>
   <string name="search_bookmarks">Lieszeechen duerchsichen</string>
   <string name="switch_tabs">Tabs wiesselen</string>
@@ -177,6 +189,7 @@
   <string name="note_save_successful">Notiz gespäichert</string>
   <string name="note_share_error_file_missing">De Fichier mat den Notize gëtt et net</string>
   <string name="note_share_app_chooser_title">De Fichier mat den Notizen deele mat:</string>
+  <string name="confirmation_alert_dialog_message">Net gespäichert Ännerunge verwerfen?</string>
   <string name="delete_notes_confirmation_msg">All d’Notize läschen?</string>
   <string name="notes_deletion_unsuccessful">E puer Fichiere goufen net geläscht</string>
   <string name="books_count">%d Buch/Bicher</string>
@@ -202,7 +215,7 @@
   <string name="export_all_bookmarks_dialog_message">Beim Exportéiere gëtt ee Fichier „bookmark.xml“ am Dossier „Download/org.kiwix…/“ ugeluecht.</string>
   <string name="bookmark_imported_message">All d’Lieszeeche goufen importéiert.</string>
   <string name="error_invalid_bookmark_file">Feeler: Den ausgewielte Fichier ass kee valabele Lieszeechefichier.</string>
-  <string name="diagnostic_report_message">Schéckt ons wgl. all déi follgend Detailer fir datt mir de Problem feststelle kënnen</string>
+  <string name="diagnostic_report_message" fuzzy="true">Schéckt ons wgl. all déi follgend Detailer fir datt mir de Problem feststelle kënnen</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-Zoom</string>
   <string name="search_open_in_new_tab">An engem neien Tab opmaachen</string>
@@ -214,10 +227,11 @@
   <string name="preparing_file_for_copy">Virbereede fir ze kopéieren/réckelen</string>
   <string name="action_copy">Kopéieren</string>
   <string name="move">Réckelen</string>
-  <string name="copying_zim_file">ZIM-Fichier kopéieren %s…</string>
+  <string name="copying_zim_file">ZIM-Fichier %s gëtt kopéiert…</string>
   <string name="moving_zim_file">ZIM-Fichier réckelen %s…</string>
   <string name="copy_file_error_message">Feeler beim Kopéiere vum ZIM-FIchier: %s.</string>
   <string name="move_file_error_message">Feeler beim Réckele vum ZIM-FIchier: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s\nWëllt Dir mat anere ZIM-Fichiere virufueren?</string>
   <string name="allowed">Erlaabt</string>
   <string name="not_allowed">Net erlaabt</string>
   <string name="allow">Erlaben</string>
@@ -235,4 +249,5 @@
   <string name="donation_dialog_title">Maacht haut een Don</string>
   <string name="donation_dialog_description">%s brauch Är Hëllef.</string>
   <string name="make_donation">En Don maachen</string>
+  <string name="downloading_state">Eroflueden</string>
 </resources>

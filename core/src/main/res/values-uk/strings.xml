@@ -56,27 +56,28 @@
   <string name="hotspot_notification_content_title">Точка Доступу Kiwix</string>
   <string name="start_server_label">Запустити сервер</string>
   <string name="stop_server_label">Зупинити сервер</string>
-  <string name="server_started_message">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
+  <string name="server_started_message" fuzzy="true">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
   <string name="share_host_address">Поділіться URL-адресою за допомогою інших програм</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">Неможливо прочитати цей файл zim!</string>
-  <string name="zim_not_opened" fuzzy="true">Неможливо відкрити файл zim</string>
+  <string name="unable_to_read_zim_file">Неможливо прочитати цей файл ZIM!</string>
+  <string name="zim_not_opened">Неможливо відкрити файл ZIM</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM. %s</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
   <string name="pref_display_title">Дисплей</string>
   <string name="pref_info_title">Інформація</string>
   <string name="pref_info_version">Версія</string>
+  <string name="pref_theme_summary">Показати статті з інвертованими кольорами</string>
   <string name="pref_back_to_top">Повернутись угору</string>
   <string name="pref_back_to_top_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
   <string name="pref_language_title">Мова</string>
   <string name="pref_language_chooser">Оберіть мову</string>
   <string name="pref_credits">Дописувачі й ліцензії</string>
   <string name="pref_credits_title">Автори</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Мова цієї сторінки не підтримується, або не було встановлено відповідні дані мови. Стаття може не читатись правильним чином.</string>
+  <string name="tts_lang_not_supported">Мова цієї сторінки не підтримується. Стаття може не читатись правильним чином.</string>
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
   <string name="request_storage">Для доступу до офлайнового контенту нам потрібен доступ до Вашого зберігання даних</string>
-  <string name="request_write_storage" fuzzy="true">Щоб завантажити файли zim, нам потрібен доступ для запису до вашого сховища</string>
+  <string name="request_write_storage">Щоб завантажити файли ZIM, нам потрібен доступ для запису до вашого сховища</string>
   <string name="clear_recent_and_tabs_history_dialog">Ви впевнені, що хочете вилучити свою історію пошуку і скинути всі активні вкладки?</string>
   <string name="delete_recent_search_item">Вилучити цей елемент?</string>
   <string name="pref_clear_all_history_title">Очистити історію</string>
@@ -113,7 +114,7 @@
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_zim_body" fuzzy="true">Такі zim файли буде видалено:\n\n%s</string>
+  <string name="delete_zim_body">Такі файли ZIM буде вилучено:\n\n%s</string>
   <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження.</string>
@@ -131,7 +132,7 @@
   <string name="help_7">Він доступний у формі ZIM-файлів. Їх є чимало:</string>
   <string name="help_8">• Вікіпедія доступна окремо для кожної мови</string>
   <string name="help_9">• Доступний також інший контент, такий як Вікілікс чи Вікіджерела</string>
-  <string name="help_10" fuzzy="true">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп’ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
+  <string name="help_10">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які хочете, й завантажити їх зі стаціонарного комп\'ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
@@ -145,9 +146,9 @@
   <string name="no">Ні</string>
   <string name="confirm_stop_download_title">Зупинити завантаження?</string>
   <string name="confirm_stop_download_msg">Ви впевнені, що хочете зупинити це завантаження?</string>
-  <string name="tts_not_enabled" fuzzy="true">Читання тексту вголос не увімкнене для цього ZIM-файлу</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Не вдалося иніціалізувати Текст-у-Розмову. Будь оаска, спробуйте ще раз</string>
-  <string name="texttospeech_error" fuzzy="true">Несподівана помилка Текст-у-Розмову. Будь ласка, спробуйте ще раз</string>
+  <string name="tts_not_enabled">Читання тексту вголос не увімкнене для цього ZIM-файлу</string>
+  <string name="texttospeech_initialization_failed">Не вдалося ініціалізувати читання вголос. Будь ласка, спробуйте ще раз</string>
+  <string name="texttospeech_error">Несподівана помилка читання тексту вголос. Будь ласка, спробуйте ще раз</string>
   <string name="next">Наступна</string>
   <string name="previous">Попереднє</string>
   <string name="wifi_only_title">Дозволити завантаження контенту через мобільну мережу?</string>
@@ -163,15 +164,15 @@
   <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
   <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
   <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Ви вказали зовнішнє посилання. Будь ласка пам’ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
+  <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Відкриття цього посилання може призвести до зняття грошей мобільним оператором або воно просто не працюватиме, якщо ви офлайн. \nБажаєте продовжити?</string>
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>
   <string name="no_items_msg">Немає елементів</string>
   <string name="crash_title">Хммм… Це збентежує</string>
-  <string name="crash_description">Схоже, наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надавши наступну інформацію?</string>
+  <string name="crash_description" fuzzy="true">Схоже, наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надавши наступну інформацію?</string>
   <string name="crash_checkbox_language">Ваші налаштування мави</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Перелік Ваших Zim Файлів</string>
+  <string name="crash_checkbox_zimfiles">Перелік ваших ZIM-файлів</string>
   <string name="crash_checkbox_exception">Деталі помилки</string>
   <string name="crash_checkbox_logs">Журнал подій застосунку</string>
   <string name="crash_checkbox_device">Подробиці про пристрій</string>
@@ -195,7 +196,7 @@
   <string name="expand">Розгорнути</string>
   <string name="history">Історія</string>
   <string name="history_from_current_book">Подивитися історію з усіх книг</string>
-  <string name="search_history" fuzzy="true">Історія пошуку</string>
+  <string name="search_history">Історія пошуку</string>
   <string name="selected_items">%1$d вибрано</string>
   <string name="bookmarks_from_current_book">Перегляд закладок із усіх книг</string>
   <string name="search_bookmarks">Шукати у закладках</string>
@@ -230,7 +231,7 @@
   <string name="connection_failed">З’єднання не вдалося</string>
   <string name="permission_rationale_location">Android-у потрібний дозвіл на отримання місцезнахождення для пошуку сусідніх пристроїв</string>
   <string name="permission_refused_location">Неможливо знайти сусідні пристрої без дозволу на доступ до місцезнаходження</string>
-  <string name="permission_refused_storage" fuzzy="true">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
+  <string name="permission_refused_storage">Неможливо отримати доступ до файлів ZIM без дозволу на доступ до сховища</string>
   <string name="request_enable_location">Вмикнути місцезнаходження для вможливлення пошуку сусідніх пристроїв</string>
   <string name="discovery_needs_location">Пошук сусідніх пристроїв неможливий без сервісу місцезнаходження</string>
   <string name="request_enable_wifi">Ввімкніть WiFi P2P у налаштуваннях системи</string>
@@ -246,8 +247,8 @@
   <string name="nearby_devices">ПРИСТРОЇ ПОРУЧ</string>
   <string name="no_devices_found">Пристрої не знайдено. Натисніть кнопку Пошук, щоб спробувати ще раз.</string>
   <string name="files_for_transfer">ФАЙЛИ ДЛЯ ПЕРЕДАЧІ</string>
-  <string name="preparing_files" fuzzy="true">Підготовка файлів для передачі….</string>
-  <string name="performing_handshake" fuzzy="true">Відбувається «рукостискання»…</string>
+  <string name="preparing_files">Підготовка файлів до передачі…</string>
+  <string name="performing_handshake">Відбувається «рукостискання»…</string>
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистити всі нотатки в усіх статтях</string>
   <string name="pref_clear_all_notes_title">Очистити всі нотатки</string>
@@ -271,7 +272,7 @@
   <string name="send_report">Відправити звіт діагностики</string>
   <string name="crash_checkbox_file_system">Інформація про файлову систему</string>
   <string name="diagnostic_report">Діагностичний звіт</string>
-  <string name="diagnostic_report_message">Будь ласка, надішліть наступні подробиці, аби ми змогли діагностувати проблему</string>
+  <string name="diagnostic_report_message" fuzzy="true">Будь ласка, надішліть наступні подробиці, аби ми змогли діагностувати проблему</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Збільшити текст</string>
   <string name="search_open_in_new_tab">Відкрити у новій вкладці</string>
@@ -282,9 +283,9 @@
   <string name="open_drawer">Відкрити редактор</string>
   <string name="close_drawer">Закрити редактор</string>
   <string name="how_to_update_content">Як оновити вміст?</string>
-  <string name="update_content_description" fuzzy="true">Щоб оновити вміст (zim-файл), вам треба завантажити повну найсвіжішу версію цього самого вмісту. Ви можете зробити це у розділі завантажень.</string>
+  <string name="update_content_description">Щоб оновити вміст (ZIM-файл), вам треба завантажити повну найсвіжішу версію цього самого вмісту. Ви можете зробити це у розділі завантажень.</string>
   <string name="all_files_permission_needed">Потрібний дозвіл на всі файли</string>
-  <string name="all_files_permission_needed_message" fuzzy="true">Щоб отримати доступ до всіх файлів zim на пристрої, нам потрібно мати дозвіл на всі файли</string>
+  <string name="all_files_permission_needed_message">Щоб отримати доступ до всіх файлів ZIM на пристрої, нам потрібно мати дозвіл на всі файли</string>
   <string name="allowed">Дозволено</string>
   <string name="not_allowed">Не дозволено</string>
   <string name="allow">Дозволити</string>

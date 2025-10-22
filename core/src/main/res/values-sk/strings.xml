@@ -48,7 +48,7 @@
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Spustiť server</string>
   <string name="stop_server_label">Zastaviť server</string>
-  <string name="server_started_message">Zadajte túto ip adresu to vášho prehliadača pre prístup na server %s</string>
+  <string name="server_started_message" fuzzy="true">Zadajte túto ip adresu to vášho prehliadača pre prístup na server %s</string>
   <string name="share_host_address">Zdieľať URL cez iné aplikácie</string>
   <string name="error_file_not_found">Chyba: Vybraný súbor ZIM sa nenašiel. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Nepodarilo sa prečítať súbor zim!</string>
@@ -58,6 +58,7 @@
   <string name="pref_display_title">Zobrazenie</string>
   <string name="pref_info_title">Informácie</string>
   <string name="pref_info_version">Verzia</string>
+  <string name="pref_theme_summary">Zobraziť články s obrátenými farbami</string>
   <string name="pref_back_to_top">Späť na začiatok</string>
   <string name="pref_back_to_top_summary">Zobraziť tlačidlo na konci stránky pre prechod na začiatok.</string>
   <string name="pref_language_title">Jazyk</string>
@@ -161,7 +162,7 @@
   <string name="other_languages">Iné jazyky:</string>
   <string name="no_items_msg">Žiadne dostupné položky</string>
   <string name="crash_title">Hm…Toto je trápne</string>
-  <string name="crash_description">Vyzerá to tak, že sme aplikácia zlyhala.\n\nNevadilo by Vám pomôcť nám opraviť tento problém tým, že nám zašlete nasledovné informácie?</string>
+  <string name="crash_description" fuzzy="true">Vyzerá to tak, že sme aplikácia zlyhala.\n\nNevadilo by Vám pomôcť nám opraviť tento problém tým, že nám zašlete nasledovné informácie?</string>
   <string name="crash_checkbox_language">Vaše jazykové nastavenia</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Zoznam Vašich súborov ZIM</string>
   <string name="crash_checkbox_exception">Detaily o zlyhaní</string>
@@ -263,7 +264,7 @@
   <string name="send_report">Odoslať diagnostické hlásenie</string>
   <string name="crash_checkbox_file_system">Podrobnosti systémového súbora</string>
   <string name="diagnostic_report">Diagnostické hlásenie</string>
-  <string name="diagnostic_report_message">Prosím odošlite všetky nasledovné detaily, aby sme mohli problém diagnostikovať</string>
+  <string name="diagnostic_report_message" fuzzy="true">Prosím odošlite všetky nasledovné detaily, aby sme mohli problém diagnostikovať</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Priblíženie textu</string>
   <string name="search_open_in_new_tab">Otvoriť na novej karte</string>

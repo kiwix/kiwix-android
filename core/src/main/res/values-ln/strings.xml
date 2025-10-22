@@ -49,8 +49,8 @@
   <string name="start_server_label">Kobanda serveur</string>
   <string name="stop_server_label">Kosukisa serveur</string>
   <string name="error_server_already_running">Serveur ezali kosala. Tosengi yo kanga yango mpe meka lisusu.</string>
-  <string name="error_ip_address_not_found">Nakokaki te kozwa adrɛsi ya IP.</string>
-  <string name="server_started_message">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Nakokaki te kozwa adrɛsi ya IP.</string>
+  <string name="server_started_message" fuzzy="true">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
   <string name="qr_code">Kofungola QR Code</string>
   <string name="share_host_address">Kabola URL na nzela ya ba applications misusu</string>
   <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te. %s</string>
@@ -63,6 +63,7 @@
   <string name="pref_display_title">Kolakisa</string>
   <string name="pref_info_title">Nsango</string>
   <string name="pref_info_version">Libongoli</string>
+  <string name="pref_theme_summary">Lakisa masolo oyo na balangi ebalusami</string>
   <string name="pref_back_to_top">Kozonga Likolo</string>
   <string name="pref_back_to_top_summary">Tyá butɔ moko na nsuka ya lokasa mpo na kobaluka tii na likoló</string>
   <string name="pref_language_title">Lokótá</string>
@@ -183,7 +184,7 @@
   <string name="other_languages">Minɔkɔ misusu:</string>
   <string name="downloading">Kobimisa</string>
   <string name="no_items_msg">Biloko ezali te</string>
-  <string name="crash_description">Emonani lokola to crasher.\n\nOkozala na problème ya kosalisa biso to bongisa problème oyo na kotinda ba informations oyo elandi?</string>
+  <string name="crash_description" fuzzy="true">Emonani lokola to crasher.\n\nOkozala na problème ya kosalisa biso to bongisa problème oyo na kotinda ba informations oyo elandi?</string>
   <string name="crash_checkbox_language">Ndenge oyo monɔkɔ na yo ezali</string>
   <string name="crash_checkbox_zimfiles">Liste ya ba fichiers na yo ya ZIM</string>
   <string name="crash_checkbox_exception">Makambo etali likama yango</string>

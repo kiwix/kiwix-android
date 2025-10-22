@@ -58,8 +58,8 @@
   <string name="start_server_label">Nyalakan server</string>
   <string name="stop_server_label">Matikan server</string>
   <string name="error_server_already_running">Server sudah berjalan. Tolong matikan dan coba lagi.</string>
-  <string name="error_ip_address_not_found">Tak dapat menemukan alamat IP.</string>
-  <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Tak dapat menemukan alamat IP.</string>
+  <string name="server_started_message" fuzzy="true">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
   <string name="qr_code">Kode QR yang Disajikan</string>
   <string name="share_host_address">Bagikan URL melalui aplikasi lain</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan. %s</string>
@@ -72,6 +72,7 @@
   <string name="pref_display_title">Tampilan</string>
   <string name="pref_info_title">Informasi</string>
   <string name="pref_info_version">Versi</string>
+  <string name="pref_theme_summary">Tampilkan artikel dengan warna terbalik</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>
   <string name="pref_back_to_top_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
   <string name="pref_language_title">Bahasa</string>
@@ -193,7 +194,7 @@
   <string name="downloading">Mengunduh</string>
   <string name="no_items_msg">Tidak ada item yang tersedia</string>
   <string name="crash_title">Yah… Ini memalukan</string>
-  <string name="crash_description">Sepertinya kami mengalami kerusakan.\n\nBisakah Anda membantu kami memperbaiki masalah ini dengan mengirimkan informasi berikut?</string>
+  <string name="crash_description" fuzzy="true">Sepertinya kami mengalami kerusakan.\n\nBisakah Anda membantu kami memperbaiki masalah ini dengan mengirimkan informasi berikut?</string>
   <string name="crash_checkbox_language">Pengaturan Bahasa Anda</string>
   <string name="crash_checkbox_zimfiles">Daftar file ZIM Anda</string>
   <string name="crash_checkbox_exception">Rincian Kerusakan</string>
@@ -312,7 +313,7 @@
   <string name="send_report">Kirim laporan diagnostik</string>
   <string name="crash_checkbox_file_system">Rincian Sistem Berkas</string>
   <string name="diagnostic_report">Laporan Diagnostik</string>
-  <string name="diagnostic_report_message">Kirimkan semua detil berikut agar kami dapat menelaah masalahnya</string>
+  <string name="diagnostic_report_message" fuzzy="true">Kirimkan semua detil berikut agar kami dapat menelaah masalahnya</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Pembesaran Teks</string>
   <string name="search_open_in_new_tab">Buka di tab baru</string>
@@ -326,8 +327,8 @@
   <string name="preparing_file_for_copy">Bersiap untuk menyalin/memindahkan</string>
   <string name="action_copy">Salin</string>
   <string name="move">Pindahkan</string>
-  <string name="copying_zim_file">Menyalin berkas ZIM %s…</string>
-  <string name="moving_zim_file">Memindahkan berkas ZIM %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Menyalin berkas ZIM %s…</string>
+  <string name="moving_zim_file" fuzzy="true">Memindahkan berkas ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix mewajibkan file ZIM berada di direktori datanya sendiri.\nApakah Anda ingin menyalin atau memindahkannya ke sana?</string>
   <string name="copy_file_error_message">Kesalahan saat menyalin berkas ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Hati-hati: Pastikan semua potongan ZIM telah dipindah/disalin dengan benar!</string>

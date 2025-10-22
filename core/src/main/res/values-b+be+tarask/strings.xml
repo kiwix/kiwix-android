@@ -10,8 +10,6 @@
   <string name="menu_search_in_text">Знайсьці на старонцы</string>
   <string name="bookmarks">Закладкі</string>
   <string name="menu_random_article">Выпадковы артыкул</string>
-  <string name="menu_full_screen">На ўвесь экран</string>
-  <string name="menu_exit_full_screen">Выйсьці з рэжыму поўнага экрану</string>
   <string name="menu_read_aloud">Чытаць уголас</string>
   <string name="menu_read_aloud_stop">Спыніць чытаньне ўголас</string>
   <string name="menu_support_kiwix">Падтрымаць Kiwix</string>
@@ -43,8 +41,7 @@
   <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Вэрсія</string>
-  <string name="pref_dark_mode">Цёмны рэжым</string>
-  <string name="pref_dark_mode_summary">Паказваць артыкулы ў інвэртаваных колерах</string>
+  <string name="pref_theme_summary">Паказваць артыкулы ў інвэртаваных колерах</string>
   <string name="pref_back_to_top">Вярнуцца ўгару</string>
   <string name="pref_back_to_top_summary">Паказваць кнопку ў канцы старонкі для пракручваньня ўверх</string>
   <string name="pref_language_title">Мова</string>
@@ -97,7 +94,7 @@
   <string name="do_not_ask_anymore">Болей не пытаць</string>
   <string name="your_languages">Выбраныя мовы:</string>
   <string name="other_languages">Іншыя мовы:</string>
-  <string name="crash_description">Падобна, што мы паламаліся.\n\nЦі можаце дапамагчы нам выправіць гэтую праблему, адаслаўшы наступную інфармацыю?</string>
+  <string name="crash_description" fuzzy="true">Падобна, што мы паламаліся.\n\nЦі можаце дапамагчы нам выправіць гэтую праблему, адаслаўшы наступную інфармацыю?</string>
   <string name="crash_checkbox_language">Вашыя моўныя налады</string>
   <string name="crash_checkbox_zimfiles">Сьпіс вашых ZIM-файлаў</string>
   <string name="crash_checkbox_exception">Падрабязнасьці аварыі</string>

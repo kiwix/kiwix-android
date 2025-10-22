@@ -51,8 +51,8 @@
   <string name="start_server_label">Bẹrẹ olupin</string>
   <string name="stop_server_label">Duro olupin</string>
   <string name="error_server_already_running">Olupin naa ti nṣiṣẹ tẹlẹ. Jọwọ pa a ki o gbiyanju lẹẹkansi.</string>
-  <string name="error_ip_address_not_found">Ko le ri adiresi ip.</string>
-  <string name="server_started_message">Tẹ adiresi IP yii sinu ẹrọ aṣawakiri rẹ lati wọle si olupin %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Ko le ri adiresi ip.</string>
+  <string name="server_started_message" fuzzy="true">Tẹ adiresi IP yii sinu ẹrọ aṣawakiri rẹ lati wọle si olupin %s</string>
   <string name="share_host_address">Pin URL nipasẹ awọn ohun elo miiran</string>
   <string name="error_file_not_found">Aṣiṣe: Faili ZIM ti o yan ko ṣee ri. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Ko le ka faili zim yii!</string>
@@ -62,6 +62,7 @@
   <string name="pref_display_title">Ìmúhàn</string>
   <string name="pref_info_title">Ìfitọ́nilétí</string>
   <string name="pref_info_version">Àtẹ̀jáde</string>
+  <string name="pref_theme_summary">Ṣafihan awọn nkan pẹlu awọn awọ ti o yipada</string>
   <string name="pref_back_to_top">A Lọ sí Òkè</string>
   <string name="pref_back_to_top_summary">Ṣe afihan bọtini kan ni opin oju-iwe lati yi lọ si oke</string>
   <string name="pref_language_title">Èdè</string>
@@ -168,7 +169,7 @@
   <string name="other_languages">Awọn ede miiran:</string>
   <string name="no_items_msg">Ko si nkan to wa</string>
   <string name="crash_title">O dara… Eyi jẹ didamu</string>
-  <string name="crash_description">Ó jọ pé a ṣubú. yor_Latnyor_Latnyor_Latn ni o Ṣé wàá fẹ́ ràn wá lọ́wọ́ láti yanjú ìṣòro yìí nípa rírán àwọn ìsọfúnni tó wà nísàlẹ̀ yìí ránṣẹ́?</string>
+  <string name="crash_description" fuzzy="true">Ó jọ pé a ṣubú. yor_Latnyor_Latnyor_Latn ni o Ṣé wàá fẹ́ ràn wá lọ́wọ́ láti yanjú ìṣòro yìí nípa rírán àwọn ìsọfúnni tó wà nísàlẹ̀ yìí ránṣẹ́?</string>
   <string name="crash_checkbox_language">Awọn Eto Ede Rẹ</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Atokọ ti Awọn faili Zim rẹ</string>
   <string name="crash_checkbox_exception">Awọn alaye ti jamba naa</string>
@@ -272,7 +273,7 @@
   <string name="send_report">Fi ijabọ aisan ranṣẹ</string>
   <string name="crash_checkbox_file_system">Awọn alaye Eto Faili</string>
   <string name="diagnostic_report">Aisan Iroyin</string>
-  <string name="diagnostic_report_message">Jọwọ fi gbogbo awọn alaye atẹle ranṣẹ ki a le ṣe iwadii iṣoro naa</string>
+  <string name="diagnostic_report_message" fuzzy="true">Jọwọ fi gbogbo awọn alaye atẹle ranṣẹ ki a le ṣe iwadii iṣoro naa</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Ọrọ Sun-un</string>
   <string name="search_open_in_new_tab">Ìsí ìpele tuntun</string>

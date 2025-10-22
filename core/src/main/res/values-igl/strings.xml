@@ -50,8 +50,8 @@
   <string name="start_server_label">Chanẹ server</string>
   <string name="stop_server_label">Kpi server lu</string>
   <string name="error_server_already_running">Sever dọmọ ach’ukọlọ mẹ. Kpalu kẹdabi chanẹ</string>
-  <string name="error_ip_address_not_found">Ineke li IP address no</string>
-  <string name="server_started_message">Dí únyí kí ip dë tefú ẹnwú ķẹdú búraúze atodú kẹneke lotígbo ẹńwú agbúćhẹ dẹ %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Ineke li IP address no</string>
+  <string name="server_started_message" fuzzy="true">Dí únyí kí ip dë tefú ẹnwú ķẹdú búraúze atodú kẹneke lotígbo ẹńwú agbúćhẹ dẹ %s</string>
   <string name="share_host_address">Kpí URL pkáyí ápplícásiọn omúnẹ</string>
   <string name="error_file_not_found">Faìlú: ZIM mádú málíñ úgbodúń %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Ineke gbi Zim file no</string>
@@ -60,6 +60,7 @@
   <string name="pref_display_title">Dutẹ</string>
   <string name="pref_info_title">Inabali</string>
   <string name="pref_info_version">Enwñ ojioji</string>
+  <string name="pref_theme_summary">Dẹńwú kúmákọ uwá kpài cọlọ èkpaíló</string>
   <string name="pref_back_to_top">Dabi tatẹ</string>
   <string name="pref_back_to_top_summary">Dí bọtíní oká cwá otîtálá ọgbá dü kẹ neke dúlotí átẹ</string>
   <string name="pref_language_title">Ichi</string>

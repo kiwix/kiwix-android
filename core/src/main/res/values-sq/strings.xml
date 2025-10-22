@@ -2,6 +2,7 @@
 <!-- Authors:
 * Besnik b
 * Fitoschido
+* Xhulianoo
 -->
 <resources>
   <string name="menu_help">Ndihmë</string>
@@ -48,8 +49,8 @@
   <string name="start_server_label">Nise shërbyesin</string>
   <string name="stop_server_label">Ndale shërbyesin</string>
   <string name="error_server_already_running">Shërbyesi është tashmë në punë. Ju lutemi, fikeni dhe riprovoni.</string>
-  <string name="error_ip_address_not_found">S’u gjet adresë IP.</string>
-  <string name="server_started_message">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
+  <string name="error_ip_address_not_found" fuzzy="true">S’u gjet adresë IP.</string>
+  <string name="server_started_message" fuzzy="true">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
   <string name="qr_code">Kodi QR i vizatuar</string>
   <string name="share_host_address">Jepeni URL-në përmes aplikacionesh të tjera</string>
   <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur. %s</string>
@@ -60,6 +61,7 @@
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Informacione</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme_summary">Shfaqi artikujt me ngjyra së prapthi</string>
   <string name="pref_back_to_top">Mbrapsht te Kreu</string>
   <string name="pref_back_to_top_summary">Shfaq në fund të faqes një buton për t’u ngjitur sipër në krye</string>
   <string name="pref_language_title">Gjuhë</string>
@@ -176,7 +178,7 @@
   <string name="other_languages">Gjuhë të tjera:</string>
   <string name="no_items_msg">S’ka objekte të passhëm</string>
   <string name="crash_title">Hëm… Kjo është turpëruese</string>
-  <string name="crash_description">Duket se u vithisëm.\n\nA do t’ju prishej punë të na ndihmonit në ndreqjen e këtij problemi duke na dërguar hollësitë vijuese?</string>
+  <string name="crash_description" fuzzy="true">Duket se u vithisëm.\n\nA do t’ju prishej punë të na ndihmonit në ndreqjen e këtij problemi duke na dërguar hollësitë vijuese?</string>
   <string name="crash_checkbox_language">Rregullimet tuaja për Gjuhën</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Një Listë e Kartelave Tuaja Zim</string>
   <string name="crash_checkbox_exception">Hollësi të Vithisjes</string>
@@ -206,7 +208,7 @@
   <string name="selected_items">%1$d të përzgjedhur</string>
   <string name="bookmarks_from_current_book">Shihni Faqerojtës Prej Krejt Librave</string>
   <string name="search_bookmarks">Kërkoni te faqerojtësit</string>
-  <string name="switch_tabs">Këmbeni skeda</string>
+  <string name="switch_tabs">Ndërro skedat</string>
   <string name="close_all_tabs">Mbylli krejt skedat</string>
   <string name="close_tab">Mbylle skedën</string>
   <string name="could_not_restore_tabs">S’u rikthyen dot skedat.</string>
@@ -292,7 +294,7 @@
   <string name="send_report">Dërgo raport diagnostikimi</string>
   <string name="crash_checkbox_file_system">Hollësi Sistemi Kartelash</string>
   <string name="diagnostic_report">Raport Diagnostikimi</string>
-  <string name="diagnostic_report_message">Ju lutemi, dërgoni krejt hollësitë vijuese, që të mund të diagnostikojmë problemin</string>
+  <string name="diagnostic_report_message" fuzzy="true">Ju lutemi, dërgoni krejt hollësitë vijuese, që të mund të diagnostikojmë problemin</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zmadhim Teksti</string>
   <string name="search_open_in_new_tab">Hape në skedë të re</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1917 Ekim Devrimi
+* 1ntelultra
 * Alidemirtas
 * Andac
 * BaRaN6161 TURK
@@ -80,6 +81,7 @@
   <string name="pref_display_title">Görüntüle</string>
   <string name="pref_info_title">Bilgi</string>
   <string name="pref_info_version">Sürüm</string>
+  <string name="pref_theme_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
   <string name="pref_language_title">Dil</string>
@@ -142,6 +144,7 @@
   <string name="download_no_space">İndirmek için yetersiz alan.</string>
   <string name="download">İndir</string>
   <string name="download_notification_channel_name">İleti Kanalı Adını indir</string>
+  <string name="download_notification_channel_description">ZIM dosyaları indiriliyor…</string>
   <string name="space_available">Kullanılabilir Alan:</string>
   <string name="move_no_space">Taşıma/kopyalama için yeterli alan yok.</string>
   <string name="zim_simple">Basit</string>
@@ -176,9 +179,10 @@
   <string name="no">Hayır</string>
   <string name="confirm_stop_download_title">İndirme durdurulsun mu?</string>
   <string name="confirm_stop_download_msg">Bu indirmeyi durdurmak istediğinize emin misiniz?</string>
-  <string name="tts_not_enabled" fuzzy="true">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Metinden Konuşmaya başlatılamadı. Lütfen tekrar deneyin</string>
-  <string name="texttospeech_error" fuzzy="true">Metinden Konuşmaya beklenmeyen hata. Lütfen tekrar deneyin</string>
+  <string name="change_storage">Seçimi Değiştir</string>
+  <string name="tts_not_enabled">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
+  <string name="texttospeech_initialization_failed">Metinden Konuşmaya başlatılamadı. Lütfen tekrar deneyin</string>
+  <string name="texttospeech_error">Metinden Konuşmaya beklenmeyen hata. Lütfen tekrar deneyin</string>
   <string name="next">Sonraki</string>
   <string name="previous">Önceki</string>
   <string name="wifi_only_title">İçeriğin mobil ağ kullanılarak indirilmesine izin verilsin mi?</string>
@@ -194,15 +198,17 @@
   <string name="pref_external_link_popup_title">Harici bağlantı girilirken uyarı ver</string>
   <string name="pref_external_link_popup_summary">Ek ücretlendirmelerde veya çevrimdışı bağlantılarla çalışılmadığında açılır pencere göstererek uyar.</string>
   <string name="external_link_popup_dialog_title">Harici Bağlantı Giriliyor!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Bir dış bağlantı giriyorsunuz. Bu, veri aktarımı için ilave ücretlendirmeye neden olabilir veya çevrimdışı olduğunuzda çalışmaz. Devam etmek istiyor musunuz?</string>
+  <string name="external_link_popup_dialog_message">Bir dış bağlantı giriyorsunuz. Bu, veri aktarımı için ilave ücretlendirmeye neden olabilir veya çevrimdışı olduğunuzda çalışmaz. Devam etmek istiyor musunuz?</string>
   <string name="do_not_ask_anymore">Artık sorma</string>
   <string name="your_languages">Seçilen diller:</string>
+  <string name="your_language">Seçilen dil: %s</string>
   <string name="other_languages">Diğer diller:</string>
+  <string name="downloading" fuzzy="true">Indiriliyor:</string>
   <string name="no_items_msg">Kullanılabilir öğe yok</string>
   <string name="crash_title">Peki… Bu utanç verici.</string>
-  <string name="crash_description">Düşmüş gibiyiz.\n\nAşağıdaki bilgileri göndererek bu sorunu çözmemize yardımcı olur musunuz?</string>
+  <string name="crash_description" fuzzy="true">Düşmüş gibiyiz.\n\nAşağıdaki bilgileri göndererek bu sorunu çözmemize yardımcı olur musunuz?</string>
   <string name="crash_checkbox_language">Dil Ayarlarınız</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Zim Dosyalarınızın Listesi</string>
+  <string name="crash_checkbox_zimfiles">Zim Dosyalarınızın Listesi</string>
   <string name="crash_checkbox_exception">Çökme Detayları</string>
   <string name="crash_checkbox_logs">Uygulama Günlükleri</string>
   <string name="crash_checkbox_device">Cihaz Detayları</string>
@@ -218,11 +224,16 @@
   <string name="welcome_to_the_family">Aileye hoş geldiniz</string>
   <string name="save_books_offline">Kitapları çevrimdışı kaydet</string>
   <string name="download_books_message">Kitapları indirin ve nerede olursanız olun okuyun.</string>
+  <string name="save_books_in_desired_storage">Kitapları istediğiniz depolama alanına kaydedin</string>
+  <string name="storage_location_hint">ZIM dosyalarını indirmek için tercih ettiğiniz depolama alanını (SD kart veya Dahili) ayarlar ekranından değiştirebilirsiniz.</string>
   <string name="unable_to_add_to_bookmarks">Yer imlerine eklenemiyor</string>
   <string name="go_to_previous_page">Önceki sayfaya git</string>
   <string name="go_to_next_page">Sonraki sayfaya git</string>
   <string name="table_of_contents">İçindekiler</string>
+  <string name="select_language">Dil seçin</string>
   <string name="save_languages">Dilleri kaydet</string>
+  <string name="all_languages">Tüm diller</string>
+  <string name="no_language_available">Kullanılabilir dil yok</string>
   <string name="expand">Genişlet</string>
   <string name="history">Geçmiş</string>
   <string name="history_from_current_book">Tüm Kitaplardan Geçmişi Görüntüle</string>
@@ -233,15 +244,20 @@
   <string name="switch_tabs">Sekmeleri değiştir</string>
   <string name="close_all_tabs">Tüm sekmeleri kapat</string>
   <string name="close_tab">Sekmeyi kapat</string>
+  <string name="could_not_restore_tabs">Sekmeler geri yüklenemedi.</string>
   <string name="pending_state">Beklemede</string>
   <string name="running_state">Devam Ediyor</string>
   <string name="complete">Tamamlandı</string>
   <string name="paused_state">Durduruldu</string>
   <string name="failed_state">Başarısız: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store’dan yeniden yüklemeyi deneyin.</string>
+  <string name="custom_download_error_message_for_authentication_failed">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store’dan yeniden yüklemeyi deneyin.</string>
   <string name="save">Kaydet</string>
   <string name="note">Not</string>
+  <string name="take_notes">Not al</string>
   <string name="wiki_article_title">Viki Madde Başlığı</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Yer işaretlerini dışarıya aktarmak için depolama erişimi gereklidir.</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Yer işaretleri depolama erişimi olmadan dışarıya aktarılamaz</string>
+  <string name="export_bookmark_error">Yer işaretlerini dışarıya aktarırken bir sorun oluştu!</string>
   <string name="ext_storage_permission_rationale_add_note">Notlar için depolama erişimi gerekir</string>
   <string name="ext_storage_write_permission_denied_add_note">Notlar depolama erişimi olmadan kullanılamaz</string>
   <string name="note_save_unsuccessful">Not kaydetme başarısız oldu</string>
@@ -262,8 +278,9 @@
   <string name="severe_loss_error">Ağır hata! WiFi P2P\'yi Devre Dışı Bırak/Yeniden Etkinleştir\'i deneyin</string>
   <string name="connection_failed">Bağlantı kurulamadı</string>
   <string name="permission_rationale_location">Uygulamanın eş aygıtları algılamasına izin vermek için Android tarafından konum izni gerekir</string>
+  <string name="permission_rationale_nearby">Uygulamanın eş cihazları algılayabilmesi için Android tarafından yakındaki cihazlar izni gereklidir.</string>
   <string name="permission_refused_location">Konum izinleri olmadan eş aygıtlar bulunamıyor</string>
-  <string name="permission_refused_storage" fuzzy="true">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
+  <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
   <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
   <string name="discovery_needs_location">Konum servisleri olmadan eşleri bulamıyor</string>
   <string name="request_enable_wifi">WiFi P2P’yi sistem ayarlarından etkinleştir</string>
@@ -285,6 +302,7 @@
   <string name="status">Durum</string>
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
+  <string name="pref_clear_notes">Notları temizle</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD karttaki ZIM dosyalarını okumaya ve yazmaya izin ver</string>
   <string name="pref_text_zoom_summary">Metin boyutunu %25’lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
@@ -302,10 +320,15 @@
   <string name="delete_selected_history">Seçilmiş Geçmişi Silinsin mi?</string>
   <string name="delete_bookmarks">Tüm Yer İşaretleri Silinsin mi?</string>
   <string name="delete_selected_bookmarks">Seçilmiş Yer İşaretleri Silinsin mi?</string>
+  <string name="import_bookmarks_dialog_title">Yer işaretlerini içeri aktar?</string>
+  <string name="export_all_bookmarks_dialog_title">Tüm yer işaretlerini dışarı aktar?</string>
+  <string name="export_all_bookmarks_dialog_message">Dışa aktarmak, Download/org.kiwix…/ dosyasında bookmark.xml dosyası oluşturur.</string>
+  <string name="bookmark_imported_message">Tüm yer işaretleri dışarı aktarıldı.</string>
+  <string name="error_invalid_bookmark_file">Hata: Seçilen dosya geçerli bir yer işareti dosyası değildir.</string>
   <string name="send_report">Teşhis raporu gönder</string>
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>
-  <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
+  <string name="diagnostic_report_message" fuzzy="true">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
   <string name="search_open_in_new_tab">Yeni sekmede aç</string>
@@ -316,8 +339,11 @@
   <string name="tabs_restored">Sekmeler geri yüklendi</string>
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
+  <string name="preparing_file_for_copy">Kopyalama/taşıma için hazırlanıyor</string>
   <string name="action_copy">Kopyala</string>
   <string name="move">Taşı</string>
+  <string name="copying_zim_file">ZIM dosyası kopyalanıyor %s…</string>
+  <string name="moving_zim_file">ZIM dosyası taşınıyor %s</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
   <string name="update_content_description" fuzzy="true">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>

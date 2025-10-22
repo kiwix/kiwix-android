@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* ButterflyOfFire
 * K Messaoudi
 -->
 <resources>
   <string name="cannot_open_file" fuzzy="true">Afaylu Yugi ad yeldi\nTtxil ɛreḍ ad d-tnadiḍ afaylu-a deg yiccer n wallalen n temkerḍit-rk</string>
+  <string name="send_files_title">Ceyyeɛ ifuyla</string>
 </resources>

@@ -23,6 +23,7 @@
 * Nol
 * Pittigrilli
 * Rofiatmustapha12
+* Russianbabe1978
 * Sebastian Wallroth
 * SergeCroise
 * Stephane
@@ -77,8 +78,8 @@
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server anhalten</string>
   <string name="error_server_already_running">Der Server läuft bereits. Bitte schalten Sie es aus und versuchen Sie es erneut.</string>
-  <string name="error_ip_address_not_found">IP-Adresse konnte nicht gefunden werden.</string>
-  <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
+  <string name="error_ip_address_not_found" fuzzy="true">IP-Adresse konnte nicht gefunden werden.</string>
+  <string name="server_started_message" fuzzy="true">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
   <string name="qr_code">Gerenderter QR-Code</string>
   <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden. %s</string>
@@ -91,6 +92,7 @@
   <string name="pref_display_title">Anzeige</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme_summary">Artikel mit umgekehrten Farben anzeigen</string>
   <string name="pref_back_to_top">Zurück nach oben</string>
   <string name="pref_back_to_top_summary">Zeige eine Schaltfläche am Seitenende an, um zum Anfang hochzuscrollen</string>
   <string name="pref_language_title">Sprache</string>
@@ -153,6 +155,7 @@
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
   <string name="download">Herunterladen</string>
   <string name="download_notification_channel_name">Benachrichtigungskanal-Namen herunterladen</string>
+  <string name="download_notification_channel_description">ZIM-Dateien werden heruntergeladen …</string>
   <string name="space_available">Verfügbarer Speicher:</string>
   <string name="move_no_space">Nicht genügend Platz zum Verschieben/Kopieren.</string>
   <string name="zim_simple">Einfach</string>
@@ -212,7 +215,7 @@
   <string name="downloading">Herunterladen</string>
   <string name="no_items_msg">Keine Objekte verfügbar</string>
   <string name="crash_title">Also… Das ist peinlich.</string>
-  <string name="crash_description">Es sieht aus, als wären wir abgestürzt.\n\nWürde es Ihnen etwas ausmachen, uns bei der Behebung dieses Problems zu helfen, indem Sie uns die folgenden Informationen schicken?</string>
+  <string name="crash_description" fuzzy="true">Es sieht aus, als wären wir abgestürzt.\n\nWürde es Ihnen etwas ausmachen, uns bei der Behebung dieses Problems zu helfen, indem Sie uns die folgenden Informationen schicken?</string>
   <string name="crash_checkbox_language">Ihre Spracheinstellungen</string>
   <string name="crash_checkbox_zimfiles">Eine Liste Ihrer ZIM-Dateien</string>
   <string name="crash_checkbox_exception">Einzelheiten zum Absturz</string>
@@ -321,7 +324,7 @@
   <string name="send_report">Übermittle das Untersuchungsergebnis</string>
   <string name="crash_checkbox_file_system">Dateisystem Details</string>
   <string name="diagnostic_report">Untersuchungsergebnis</string>
-  <string name="diagnostic_report_message">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
+  <string name="diagnostic_report_message" fuzzy="true">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
   <string name="search_open_in_new_tab">In neuer Registerkarte öffnen</string>
@@ -334,7 +337,7 @@
   <string name="close_drawer">Schublade schließen</string>
   <string name="action_copy">Kopieren</string>
   <string name="move">Verschieben</string>
-  <string name="copying_zim_file">ZIM-Datei wird kopiert %s…</string>
+  <string name="copying_zim_file" fuzzy="true">ZIM-Datei wird kopiert %s…</string>
   <string name="moving_zim_file">ZIM-Datei wird verschoben %s…</string>
   <string name="how_to_update_content">Wie aktualisiert man Inhalte?</string>
   <string name="update_content_description">Um Inhalte (eine ZIM-Datei) zu aktualisieren, musst du die neueste Version genau derselben Inhalte vollständig herunterladen. Das kannst du über den Download-Bereich tun.</string>

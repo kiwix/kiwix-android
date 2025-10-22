@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* شاه زمان پټان
+-->
+<resources>
+  <string name="retry">بيا هڅه‌کول</string>
+  <string name="invalid_installation">ناسم ځای‌پرځايونه. مهرباني وکړئ ZIM راکښته کړئ.\nځان ډاډه کړئ چې وای فای بله ده او تاسو کافي زخيره لرئ.</string>
+</resources>

@@ -23,9 +23,9 @@
   <string name="menu_home">{{Identical|Home}}</string>
   <string name="menu_settings">{{Identical|Settings}}</string>
   <string name="menu_search_in_text">This is for finding all words on the current page, which contain the current search string.</string>
-  <string name="bookmarks">{{Identical|Bookmark}}</string>
+  <string name="bookmarks">{{identical|Bookmark}}</string>
   <string name="menu_random_article">{{Identical|Random article}}</string>
-   <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
+  <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
   <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the “Read aloud (Text to speech is reading the current page data)” and if the user clicks on this button “Read Aloud” will stop reading the current page data.</string>
   <string name="menu_support_kiwix">This is for the “Navigation Item” button text on the main page of the “Kiwix app”, clicking on this button leads to opening the “Kiwix support” website page.</string>
   <string name="menu_wifi_hotspot">* English : it maps to some “hotspot” feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité “hotspot” l’anglais “host books” n’est pas particulièrement satisfaisant à la base.</string>
@@ -71,10 +71,10 @@
   <string name="pref_info_title">{{Identical|Information}}</string>
   <string name="pref_info_version">{{Identical|Version}}</string>
   <string name="pref_theme">This is part of the preference settings to change the app theme.</string>
-  <string name="pref_theme_summary">This is part of preference settings to show the user if he enables this setting then all the articles will show with inverted colors.</string>
-  <string name="theme_dark">This is used in the settings screen to turn on the dark mode.</string>
-  <string name="theme_light">This is used in the settings screen to turn off the dark mode.</string>
   <string name="theme_system">This is used in the settings screen to follow the System theme.</string>
+  <string name="theme_light">This is used in the settings screen to turn off the dark mode.</string>
+  <string name="theme_dark">This is used in the settings screen to turn on the dark mode.</string>
+  <string name="pref_theme_summary">This is part of preference settings to show the user if he enables this setting then all the articles will show with inverted colors.</string>
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_back_to_top_summary">This is part of the preference settings it informs the user, by enabling this setting it displays a button while reading articles at the end of the page, and by clicking on that button it will scroll the page to the top.</string>
   <string name="pref_language_title">{{Identical|Language}}</string>

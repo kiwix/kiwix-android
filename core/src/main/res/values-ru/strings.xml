@@ -78,8 +78,8 @@
   <string name="start_server_label">Запустить сервер</string>
   <string name="stop_server_label">Остановить сервер</string>
   <string name="error_server_already_running">Сервер уже работает. Пожалуйста, выключите его и повторите попытку.</string>
-  <string name="error_ip_address_not_found">Не удалось найти IP-адрес.</string>
-  <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Не удалось найти IP-адрес.</string>
+  <string name="server_started_message" fuzzy="true">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден. %s</string>
@@ -90,6 +90,7 @@
   <string name="pref_display_title">Экран</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
+  <string name="pref_theme_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
   <string name="pref_back_to_top_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
   <string name="pref_language_title">Язык</string>
@@ -211,7 +212,7 @@
   <string name="downloading">Скачивание</string>
   <string name="no_items_msg">Нет доступных элементов</string>
   <string name="crash_title">Хммм… Как неловко</string>
-  <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
+  <string name="crash_description" fuzzy="true">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
   <string name="crash_checkbox_language">Ваши Языковые Настройки</string>
   <string name="crash_checkbox_zimfiles">Список ваших ZIM-файлов</string>
   <string name="crash_checkbox_exception">Детали ошибки</string>
@@ -328,7 +329,7 @@
   <string name="send_report">Отправить отчёт диагностики</string>
   <string name="crash_checkbox_file_system">Информация о файловой системе</string>
   <string name="diagnostic_report">Отчёт диагностики</string>
-  <string name="diagnostic_report_message">Пожалуйста, пришлите нам всю информацию ниже, чтобы мы смогли обнаружить проблему</string>
+  <string name="diagnostic_report_message" fuzzy="true">Пожалуйста, пришлите нам всю информацию ниже, чтобы мы смогли обнаружить проблему</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Масштаб текста</string>
   <string name="search_open_in_new_tab">Открыть в новой вкладке</string>

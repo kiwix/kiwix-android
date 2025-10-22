@@ -23,7 +23,7 @@
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="menu_support_kiwix">Steun Kiwix</string>
-  <string name="menu_support_kiwix_for_custom_apps">Ondersteun %s!</string>
+  <string name="menu_support_kiwix_for_custom_apps">Ondersteun %s</string>
   <string name="menu_about_app">Over de app %s</string>
   <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Media opslaan</string>
@@ -31,6 +31,7 @@
   <string name="save_media_saved">Het bestand is opgeslagen als %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Zoeken</string>
   <string name="searched_list">Gezochte lijst</string>
+  <string name="more_options">Meer opties</string>
   <string name="choose_file">Selecteer een inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
   <string name="hotspot_service_channel_name">Hotspot-dienstkanaal</string>
@@ -72,6 +73,11 @@
   <string name="pref_display_title">Weergave</string>
   <string name="pref_info_title">Informatie</string>
   <string name="pref_info_version">Versie</string>
+  <string name="pref_theme">Thema</string>
+  <string name="theme_system">Systeem</string>
+  <string name="theme_light">Licht</string>
+  <string name="theme_dark">Donker</string>
+  <string name="pref_theme_summary">Artikelen weergeven met omgekeerde kleuren</string>
   <string name="pref_back_to_top">Terug naar boven</string>
   <string name="pref_back_to_top_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar het begin</string>
   <string name="pref_language_title">Taal</string>
@@ -80,7 +86,7 @@
   <string name="pref_credits_title">Vermeldingen</string>
   <string name="tts_lang_not_supported">De taal van deze pagina wordt niet ondersteund. Het artikel is mogelijk niet goed leesbaar.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
-  <string name="no_email_application_installed">Installeer alstublieft een e-mailclient</string>
+  <string name="no_email_application_installed">Installeer een e-mailprogramma</string>
   <string name="no_app_found_to_select_bookmark_file">Geen app gevonden om een bladwijzerbestand te selecteren</string>
   <string name="no_section_info">Geen inhoudskoppen gevonden</string>
   <string name="request_storage">Om offline inhoud aan te spreken is toegang tot uw opslag nodig</string>
@@ -134,6 +140,7 @@
   <string name="download_no_space">Onvoldoende ruimte om te downloaden.</string>
   <string name="download">Downloaden</string>
   <string name="download_notification_channel_name">Naam meldingskanaal downloads</string>
+  <string name="download_notification_channel_description">ZIM-bestanden downloaden…</string>
   <string name="space_available">Beschikbare ruimte:</string>
   <string name="move_no_space">Onvoldoende ruimte om te verplaatsen/kopiëren.</string>
   <string name="zim_simple">Eenvoudig</string>
@@ -168,6 +175,7 @@
   <string name="no">Nee</string>
   <string name="confirm_stop_download_title">Download stoppen?</string>
   <string name="confirm_stop_download_msg">Weet u zeker dat u deze download wilt stoppen?</string>
+  <string name="change_storage">Wijzigen</string>
   <string name="tts_not_enabled">Het hardop voorlezen is voor dit ZIM-bestand niet ingeschakeld</string>
   <string name="texttospeech_initialization_failed">De initialisatie van het hardop voorlezen is mislukt. Probeer het opnieuw</string>
   <string name="texttospeech_error">Onverwachte fout bij het hardop voorlezen. Probeer het opnieuw</string>
@@ -189,11 +197,12 @@
   <string name="external_link_popup_dialog_message">U volgt nu een externe koppeling. Dit kan leiden tot extra kosten voor gegevensoverdracht of werkt gewoon niet als u offline bent.\nWilt u doorgaan?</string>
   <string name="do_not_ask_anymore">Dit niet meer vragen</string>
   <string name="your_languages">Geselecteerde talen:</string>
+  <string name="your_language">Geselecteerde taal: %s</string>
   <string name="other_languages">Andere talen:</string>
-  <string name="downloading">Downloaden</string>
+  <string name="downloading">Aan het downloaden</string>
   <string name="no_items_msg">Niets beschikbaar</string>
   <string name="crash_title">Ai… dit is nogal pijnlijk</string>
-  <string name="crash_description">Het lijkt erop dat we zijn gecrasht.\n\nWilt u ons helpen dit probleem op te lossen door de volgende informatie in te sturen?</string>
+  <string name="crash_description" fuzzy="true">Het lijkt erop dat we zijn gecrasht.\n\nWilt u ons helpen dit probleem op te lossen door de volgende informatie in te sturen?</string>
   <string name="crash_checkbox_language">Uw taalinstellingen</string>
   <string name="crash_checkbox_zimfiles">Een lijst met uw ZIM-bestanden</string>
   <string name="crash_checkbox_exception">Details van de crash</string>
@@ -212,11 +221,15 @@
   <string name="save_books_offline">Bewaar boeken offline</string>
   <string name="download_books_message">Download boeken en lees ze waar u ook bent.</string>
   <string name="save_books_in_desired_storage">Bewaar boeken in de gewenste opslag</string>
+  <string name="storage_location_hint">Via het scherm Instellingen kunt u de gewenste opslagplek voor het downloaden van ZIM-bestanden kiezen: een SD-kaart of interne opslag.</string>
   <string name="unable_to_add_to_bookmarks">Kan geen bladwijzers toevoegen</string>
   <string name="go_to_previous_page">Naar vorige pagina</string>
   <string name="go_to_next_page">Naar volgende pagina</string>
   <string name="table_of_contents">Inhoudsopgave</string>
+  <string name="select_language">Kies een taal</string>
   <string name="save_languages">Talen opslaan</string>
+  <string name="all_languages">Alle talen</string>
+  <string name="no_language_available">Geen talen beschikbaar</string>
   <string name="expand">Uitvouwen</string>
   <string name="history">Geschiedenis</string>
   <string name="history_from_current_book">Geschiedenis van alle boeken bekijken</string>
@@ -226,7 +239,7 @@
   <string name="search_bookmarks">Bladwijzers doorzoeken</string>
   <string name="switch_tabs">Van tabblad wisselen</string>
   <string name="close_all_tabs">Alle tabbladen sluiten</string>
-  <string name="close_tab">Sluit Tab</string>
+  <string name="close_tab">Tabblad sluiten</string>
   <string name="could_not_restore_tabs">Kan tabbladen niet herstellen.</string>
   <string name="pending_state">In afwachting</string>
   <string name="running_state">In behandeling</string>
@@ -236,6 +249,7 @@
   <string name="custom_download_error_message_for_authentication_failed">Het ZIM-bestand kon niet worden gedownload. Probeer de applicatie opnieuw te installeren vanuit de Play Store.</string>
   <string name="save">Opslaan</string>
   <string name="note">Aantekening</string>
+  <string name="take_notes">Aantekeningen maken</string>
   <string name="wiki_article_title">Titel wiki-artikel</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Voor het exporteren van bladwijzers is opslagtoegang vereist</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Bladwijzers kunnen niet worden geëxporteerd zonder toegang tot opslagruimte</string>
@@ -310,7 +324,7 @@
   <string name="send_report">Diagnostisch rapport verzenden</string>
   <string name="crash_checkbox_file_system">Bestandssysteemdetails</string>
   <string name="diagnostic_report">Diagnostisch rapport</string>
-  <string name="diagnostic_report_message">Stuur alle volgende gegevens in zodat we het probleem kunnen vaststellen</string>
+  <string name="diagnostic_report_message" fuzzy="true">Stuur alle volgende gegevens in zodat we het probleem kunnen vaststellen</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Tekstgrootte</string>
   <string name="search_open_in_new_tab">In nieuw tabblad openen</string>
@@ -324,14 +338,19 @@
   <string name="preparing_file_for_copy">Voorbereiden op kopiëren/verplaatsen</string>
   <string name="action_copy">Kopiëren</string>
   <string name="move">Verplaatsen</string>
-  <string name="copying_zim_file">ZIM-bestand kopiëren %s…</string>
-  <string name="moving_zim_file">ZIM-bestand verplaatsen %s…</string>
+  <string name="copying_zim_file">ZIM-bestand %s wordt gekopieerd…</string>
+  <string name="moving_zim_file">ZIM-bestand %s wordt verplaatst…</string>
   <string name="copy_move_files_dialog_description">Kiwix vereist dat het ZIM-bestand in een eigen gegevensdirectory staat.\nWilt u het daarheen kopiëren of verplaatsen?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix vereist dat de ZIM-bestanden in een eigen gegevensmap staan.\nWilt u ze daarheen kopiëren of verplaatsen?</string>
   <string name="copy_file_error_message">Fout bij het kopiëren van het ZIM-bestand: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Let op: zorg ervoor dat alle ZIM-fragmenten correct zijn verplaatst/gekopieerd!</string>
+  <string name="verify_zim_chunks_dialog_message">U kunt ze controleren in de map “Android/media/org.kiwix…/”. Als u klaar bent, vernieuwt u het bibliotheekscherm door naar beneden te vegen. Het gesplitste ZIM-bestand verschijnt dan in uw bibliotheek.</string>
   <string name="why_copy_move_files_to_app_directory">Waarom bestanden verplaatsen/kopiëren naar de openbare directory van de app?</string>
   <string name="copy_move_files_to_app_directory_description">Vanwege het beleid van Google Play op Android 11 en hoger kan deze app niet langer rechtstreeks toegang krijgen tot bestanden die elders op uw apparaat zijn opgeslagen. Als u uw geselecteerde bestanden wilt bekijken, moeten ze worden verplaatst of gekopieerd naar een speciale map in de directory van deze app. Alleen zo kunnen de bestanden in de app worden geopend.</string>
   <string name="choose_storage_to_copy_move_zim_file">Kies de opslag om het ZIM-bestand naar te kopiëren/verplaatsen</string>
   <string name="move_file_error_message">Fout bij het verplaatsen van het ZIM-bestand: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nWilt u doorgaan met andere ZIM-bestanden?</string>
+  <string name="your_selected_files_added_to_library">Uw geselecteerde ZIM-bestanden worden aan de bibliotheek toegevoegd.</string>
   <string name="how_to_update_content">Hoe werk ik de inhoud bij?</string>
   <string name="update_content_description">Om inhoud (een ZIM-bestand) bij te werken moet u de volledige nieuwste versie van precies dezelfde inhoud downloaden. Dat kan via de downloadsectie.</string>
   <string name="all_files_permission_needed">Toestemming voor alle bestanden vereist</string>
@@ -382,4 +401,7 @@
   <string name="resuming_state">Hervatten</string>
   <string name="downloading_state">Downloaden</string>
   <string name="download_failed_state">Mislukt</string>
+  <string name="searchview_description_clear">Zoekopdracht wissen</string>
+  <string name="file_system_scan_dialog_title">De opslag op boeken doorlichten?</string>
+  <string name="file_system_scan_dialog_message">Kiwix tast de opslagruimte van uw apparaat af en geeft hier een overzicht van de beschikbare boeken.</string>
 </resources>

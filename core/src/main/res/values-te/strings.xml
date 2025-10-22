@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Chaduvari
 * MohitMali
 * Nskjnv
 * Rishitha 1238
@@ -52,8 +53,8 @@
   <string name="start_server_label">సర్వర్‌ని ప్రారంభించండి</string>
   <string name="stop_server_label">సర్వర్‌ని ఆపు</string>
   <string name="error_server_already_running">సర్వర్ ఇప్పటికే రన్ అవుతోంది. దయచేసి దాన్ని ఆఫ్ చేసి, మళ్లీ ప్రయత్నించండి.</string>
-  <string name="error_ip_address_not_found">ip చిరునామా కనుగొనబడలేదు.</string>
-  <string name="server_started_message">%s సర్వర్‌ని యాక్సెస్ చేయడానికి మీ బ్రౌజర్‌లో ఈ ip చిరునామాను నమోదు చేయండి</string>
+  <string name="error_ip_address_not_found">ఐపీ చిరునామా కనబడలేదు.</string>
+  <string name="server_started_message" fuzzy="true">%s సర్వర్‌ని యాక్సెస్ చేయడానికి మీ బ్రౌజర్‌లో ఈ ip చిరునామాను నమోదు చేయండి</string>
   <string name="share_host_address">ఇతర అప్లికేషన్ల ద్వారా URLని భాగస్వామ్యం చేయండి</string>
   <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ఈ జిమ్ ఫైల్‌ని చదవడం సాధ్యం కాలేదు!</string>
@@ -63,6 +64,7 @@
   <string name="pref_display_title">వీక్షణం</string>
   <string name="pref_info_title">సమాచారం</string>
   <string name="pref_info_version">సంచిక</string>
+  <string name="pref_theme_summary">వ్యాసాలను వ్యతిరేక రంగులలో చూపించు</string>
   <string name="pref_back_to_top">తిరిగి పైకి</string>
   <string name="pref_back_to_top_summary">పేజీ చివర్లో పేజీ మొదటికి చేరుకునే బొత్తమును చూపండి</string>
   <string name="pref_language_title">భాష</string>
@@ -169,7 +171,7 @@
   <string name="other_languages">ఇతర భాషలు:</string>
   <string name="no_items_msg">ఏ వస్తువులు అందుబాటులో లేవు</string>
   <string name="crash_title">సరే. ఇది సిగ్గుచేటు</string>
-  <string name="crash_description">మేము క్రాష్ అయినట్లు కనిపిస్తోంది.\n\nక్రింది సమాచారాన్ని పంపడం ద్వారా ఈ సమస్యను పరిష్కరించడంలో మాకు సహాయం చేయడానికి మీరు ఇష్టపడతారా?</string>
+  <string name="crash_description" fuzzy="true">మేము క్రాష్ అయినట్లు కనిపిస్తోంది.\n\nక్రింది సమాచారాన్ని పంపడం ద్వారా ఈ సమస్యను పరిష్కరించడంలో మాకు సహాయం చేయడానికి మీరు ఇష్టపడతారా?</string>
   <string name="crash_checkbox_language">మీ భాష సెట్టింగ్‌లు</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">మీ జిమ్ ఫైల్‌ల జాబితా</string>
   <string name="crash_checkbox_exception">క్రాష్ యొక్క వివరాలు</string>
@@ -272,7 +274,7 @@
   <string name="send_report">రోగనిర్ధారణ నివేదికను పంపండి</string>
   <string name="crash_checkbox_file_system">ఫైల్ సిస్టమ్ వివరాలు</string>
   <string name="diagnostic_report">రోగనిర్ధారణ నివేదిక</string>
-  <string name="diagnostic_report_message">దయచేసి కింది వివరాలన్నింటినీ పంపండి, తద్వారా మేము సమస్యను నిర్ధారించగలము</string>
+  <string name="diagnostic_report_message" fuzzy="true">దయచేసి కింది వివరాలన్నింటినీ పంపండి, తద్వారా మేము సమస్యను నిర్ధారించగలము</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">టెక్స్ట్ జూమ్</string>
   <string name="search_open_in_new_tab">కొత్త ట్యాబులో తెరువు</string>

@@ -47,8 +47,8 @@
   <string name="start_server_label">Serveur ya kuyantika</string>
   <string name="stop_server_label">Sosa ya kupema</string>
   <string name="error_server_already_running">Serveur ke tambula dezia. Beto ke lomba nge na kukanga yo mpi meka diaka.</string>
-  <string name="error_ip_address_not_found">Kukonda kuzwa adresi ya ip.</string>
-  <string name="server_started_message">Tula adresi yai ya ip na navigateur na nge sambu na kukota na server %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Kukonda kuzwa adresi ya ip.</string>
+  <string name="server_started_message" fuzzy="true">Tula adresi yai ya ip na navigateur na nge sambu na kukota na server %s</string>
   <string name="qr_code">Kidimbu ya QR</string>
   <string name="share_host_address">Kupesa URL na nzila ya ba application ya nkaka</string>
   <string name="error_file_not_found">Kifu: Bo monaka ve fiche ZIM yina bo ponaka. %s</string>
@@ -61,6 +61,7 @@
   <string name="pref_display_title">Kumonisa</string>
   <string name="pref_info_title">Bansangu</string>
   <string name="pref_info_version">Mbalula</string>
+  <string name="pref_theme_summary">Songa masolo ti mikubu ya kubaluka</string>
   <string name="pref_back_to_top">Beto vutuka na zulu</string>
   <string name="pref_back_to_top_summary">Songa buton na nsuka ya lutiti sambu na kukangula na zulu</string>
   <string name="pref_language_title">Ndinga</string>
@@ -182,7 +183,7 @@
   <string name="downloading">Kubaka</string>
   <string name="no_items_msg">Yo kele ve ti bima</string>
   <string name="crash_title">Yo ke pesa nsoni</string>
-  <string name="crash_description">Yo ke monana bonso nde beto me bwa. \n\n Keti nge ke zola kusadisa beto na kuyidika diambu yai na kutindaka bansangu ya ke landa?</string>
+  <string name="crash_description" fuzzy="true">Yo ke monana bonso nde beto me bwa. \n\n Keti nge ke zola kusadisa beto na kuyidika diambu yai na kutindaka bansangu ya ke landa?</string>
   <string name="crash_checkbox_language">Bandinga na Nge</string>
   <string name="crash_checkbox_zimfiles">Lisiti ya Bafichi na Nge ya ZIM</string>
   <string name="crash_checkbox_exception">Mambu ya me tala kisumbula</string>
@@ -273,7 +274,7 @@
   <string name="send_report">Tinda rapore ya ekzame</string>
   <string name="crash_checkbox_file_system">Mambu ya Mfunu ya Kusadila Mikanda</string>
   <string name="diagnostic_report">Rapore ya kuzaba maladi</string>
-  <string name="diagnostic_report_message">Beto tinda bansangu yonso ya ke landa sambu beto zaba maladi</string>
+  <string name="diagnostic_report_message" fuzzy="true">Beto tinda bansangu yonso ya ke landa sambu beto zaba maladi</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Mambu ya kusonika Zoom</string>
   <string name="search_open_in_new_tab">Kangula na kisika ya mpa</string>

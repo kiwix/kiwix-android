@@ -10,4 +10,7 @@
   <string name="receive_files_title">Reciper files</string>
   <string name="no_app_found_to_open">Necun application trovate pro seliger file ZIM!</string>
   <string name="select_zim_file">Selige le file ZIM a leger</string>
+  <string name="swipe_down_to_scan_storage">Glissa a basso pro cercar nove libros sur tu apparato…</string>
+  <string name="auto_detect_books">Auto-deteger tu libros</string>
+  <string name="auto_detect_books_description">Al prime lanceamento, le app te demandara si illo pote perquirer tu immagazinage. Si tu lo permitte, nos detegera automaticamente tu files ZIM pro evitar que tu debe adder los manualmente.</string>
 </resources>

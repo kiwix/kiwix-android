@@ -21,6 +21,7 @@
   <string name="save_media_saved">Податотеката е зачувана како %s во Downloads/org.kiwix…/</string>
   <string name="search_label">Пребарај</string>
   <string name="searched_list">Пребаран список</string>
+  <string name="more_options">Повеќе можности</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
   <string name="hotspot_service_channel_name">Известувач за пристапната точка</string>
@@ -62,6 +63,11 @@
   <string name="pref_display_title">Приказник</string>
   <string name="pref_info_title">Информации</string>
   <string name="pref_info_version">Верзија</string>
+  <string name="pref_theme">Изглед</string>
+  <string name="theme_system">Систем</string>
+  <string name="theme_light">Светол</string>
+  <string name="theme_dark">Темен</string>
+  <string name="pref_theme_summary">Прикажувај ги статиите со обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
   <string name="pref_language_title">Јазик</string>
@@ -124,6 +130,7 @@
   <string name="download_no_space">Нема доволно место за преземање.</string>
   <string name="download">Преземи</string>
   <string name="download_notification_channel_name">Име на каналот за известување за преземања</string>
+  <string name="download_notification_channel_description">Преземам ZIM-податотеки…</string>
   <string name="space_available">Достапен простор:</string>
   <string name="move_no_space">Нема доволно простор за преместување/копирање.</string>
   <string name="zim_simple">Просто</string>
@@ -182,10 +189,10 @@
   <string name="your_languages">Избрани јазици:</string>
   <string name="your_language">Избран јазик: %s</string>
   <string name="other_languages">Други јазици:</string>
-  <string name="downloading">Преземање</string>
+  <string name="downloading" fuzzy="true">Преземање</string>
   <string name="no_items_msg">Нема ставки</string>
   <string name="crash_title">Ова е незгодно</string>
-  <string name="crash_description">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>
+  <string name="crash_description" fuzzy="true">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>
   <string name="crash_checkbox_language">Ваши јазични поставки</string>
   <string name="crash_checkbox_zimfiles">Список на ваши ZIM-податотеки</string>
   <string name="crash_checkbox_exception">Поединости за уривањето</string>
@@ -307,7 +314,7 @@
   <string name="send_report">Испрати дијагностички извештај</string>
   <string name="crash_checkbox_file_system">Поединости за податотечниот систем</string>
   <string name="diagnostic_report">Дијагностички извештај</string>
-  <string name="diagnostic_report_message">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
+  <string name="diagnostic_report_message" fuzzy="true">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
   <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
@@ -324,6 +331,7 @@
   <string name="copying_zim_file">Ја копирам ZIM податотеката %s…</string>
   <string name="moving_zim_file">Ја преместувам ZIM-податотеката %s…</string>
   <string name="copy_move_files_dialog_description">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка.\nДали сакате да ја прекопирате или преместите таму?</string>
+  <string name="copy_move_multiple_files_dialog_description">Кивикс бара ZIM-податотеките да стојат во своја податочна папка.\nДали сакате да ги прекопирате или преместите таму?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Бидете внимателни: Проверете дали сите ZIM-делови се правилно преместени/ископирани!</string>
   <string name="verify_zim_chunks_dialog_message">Можете да ги проверите во папката „Android/media/org.kiwix…/“.\nШтом сте готови, превчитајте го екранот на библиотеката со поминување надолу. Разделената ZIM-податотека потоа ќе се појави во вашата библиотека.</string>
@@ -331,6 +339,8 @@
   <string name="copy_move_files_to_app_directory_description">Поради правилата на Google Play за Андроид 11 и поново, нашиот прилог повеќе нема непосреден пристап до податотеки складирани на други места на вашиот уред. За да ви овозможиме да ги гледате избраните податотеки ќе треба да ги преместиме или да ги прекопираме во специјална папка во директориумот на прилогот.</string>
   <string name="choose_storage_to_copy_move_zim_file">Изберете склад за копирање/преместување на ZIM-податотеката</string>
   <string name="move_file_error_message">Грешка при преместување на ZIM-податотеката: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nДали сакате да продолжите до други ZIM-податотеки?</string>
+  <string name="your_selected_files_added_to_library">Избраните ZIM-податотеки се додадени во библиотеката.</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
   <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
   <string name="all_files_permission_needed">Дозвола за сите податотеки</string>
@@ -382,4 +392,6 @@
   <string name="downloading_state">Се презема</string>
   <string name="download_failed_state">Неуспешно</string>
   <string name="searchview_description_clear">Исчисти барање</string>
+  <string name="file_system_scan_dialog_title">Да го отчитам складот за да најдам книги?</string>
+  <string name="file_system_scan_dialog_message">Кивикс ќе ви го отчита уредот и ќе ги овде ќе ги наведе расположливите книги.</string>
 </resources>

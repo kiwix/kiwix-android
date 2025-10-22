@@ -69,8 +69,8 @@
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Parar servidor</string>
   <string name="error_server_already_running">O servidor já está sendo executado. Por favor desligue e tente novamente.</string>
-  <string name="error_ip_address_not_found">Não foi possível encontrar o endereço ip.</string>
-  <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Não foi possível encontrar o endereço ip.</string>
+  <string name="server_started_message" fuzzy="true">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
   <string name="qr_code">QR Code renderizado</string>
   <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado. %s</string>
@@ -83,6 +83,7 @@
   <string name="pref_display_title">Exibição</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
+  <string name="pref_theme_summary">Mostrar artigos com cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Mostra um botão no fim da página para voltar ao topo</string>
   <string name="pref_language_title">Idioma</string>
@@ -202,10 +203,10 @@
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
   <string name="other_languages">Outros idiomas:</string>
-  <string name="downloading">Baixando</string>
+  <string name="downloading" fuzzy="true">Baixando</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isso é constrangedor</string>
-  <string name="crash_description">Parece que caímos.\n\nVocê se importaria em nos ajudar a corrigir esse problema enviando as seguintes informações?</string>
+  <string name="crash_description" fuzzy="true">Parece que caímos.\n\nVocê se importaria em nos ajudar a corrigir esse problema enviando as seguintes informações?</string>
   <string name="crash_checkbox_language">Suas configurações de idioma</string>
   <string name="crash_checkbox_zimfiles">Uma lista de seus arquivos ZIM</string>
   <string name="crash_checkbox_exception">Detalhes do acidente</string>
@@ -324,7 +325,7 @@
   <string name="send_report">Enviar relatório de diagnóstico</string>
   <string name="crash_checkbox_file_system">Detalhes do sistema de arquivos</string>
   <string name="diagnostic_report">Relatório de diagnóstico</string>
-  <string name="diagnostic_report_message">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
+  <string name="diagnostic_report_message" fuzzy="true">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
@@ -338,7 +339,7 @@
   <string name="preparing_file_for_copy">Preparando-se para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
-  <string name="copying_zim_file">Copiando arquivo ZIM %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Copiando arquivo ZIM %s…</string>
   <string name="moving_zim_file">Movendo arquivo ZIM %s…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Você quer copiar ou mover o arquivo?</string>
   <string name="copy_file_error_message" fuzzy="true">Erro ao copiar o arquivo zim: %s.</string>

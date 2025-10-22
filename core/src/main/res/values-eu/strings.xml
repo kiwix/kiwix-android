@@ -56,8 +56,8 @@
   <string name="start_server_label">Abiarazi zerbitzaria</string>
   <string name="stop_server_label">Gelditu zerbitzaria</string>
   <string name="error_server_already_running">Zerbitzaria exekutatzen ari da jadanik. Desgaitu eta saiatu berriro.</string>
-  <string name="error_ip_address_not_found">Ezin izan da aurkitu IP helbidea.</string>
-  <string name="server_started_message">Sartu IP helbide hau arakatzailean %s zerbitzaria atzitzeko.</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Ezin izan da aurkitu IP helbidea.</string>
+  <string name="server_started_message" fuzzy="true">Sartu IP helbide hau arakatzailean %s zerbitzaria atzitzeko.</string>
   <string name="qr_code">Errendaturiko QR kodea</string>
   <string name="share_host_address">Partekatu URLa beste aplikazioen bitartez</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu. %s</string>
@@ -68,6 +68,7 @@
   <string name="pref_display_title">Erakutsi</string>
   <string name="pref_info_title">Informazioa</string>
   <string name="pref_info_version">Bertsioa</string>
+  <string name="pref_theme_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
   <string name="pref_back_to_top">Gora itzuli</string>
   <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>
   <string name="pref_language_title">Hizkuntza</string>
@@ -183,7 +184,7 @@
   <string name="other_languages">Beste hizkuntzak:</string>
   <string name="no_items_msg">Ez dago elementurik erabilgarri</string>
   <string name="crash_title">Kriskitin, kraskitin!</string>
-  <string name="crash_description">Badirudi errore bat izan dela.\n\nLagunduko al zeniguke honako informazio hau bidaltzen arazoa konpon dezagun?</string>
+  <string name="crash_description" fuzzy="true">Badirudi errore bat izan dela.\n\nLagunduko al zeniguke honako informazio hau bidaltzen arazoa konpon dezagun?</string>
   <string name="crash_checkbox_language">Hizkuntzaren ezarpenak</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">ZIM fitxategien zerrenda</string>
   <string name="crash_checkbox_exception">Errorearen xehetasunak</string>

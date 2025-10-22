@@ -26,6 +26,7 @@
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret medier som %s i din bildemappe.</string>
   <string name="search_label">Søk</string>
+  <string name="more_options">Flere alternativer</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
   <string name="hotspot_failed_title">Kunne ikke starte hotspot</string>
@@ -43,8 +44,8 @@
   <string name="start_server_label">Start tjener</string>
   <string name="stop_server_label">Stopp tjener</string>
   <string name="error_server_already_running">Tjeneren kjører allerede. Stopp den og forsøk på nytt.</string>
-  <string name="error_ip_address_not_found">Klarte ikke å finne IP adressen.</string>
-  <string name="server_started_message">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
+  <string name="error_ip_address_not_found" fuzzy="true">Klarte ikke å finne IP adressen.</string>
+  <string name="server_started_message" fuzzy="true">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
   <string name="qr_code">Generert QR-kode</string>
   <string name="share_host_address">Del webadresse via andre programmer</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet \n. %s</string>
@@ -57,6 +58,7 @@
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
   <string name="pref_info_version">Versjon</string>
+  <string name="pref_theme_summary">Vis artikler med inverterte farger</string>
   <string name="pref_back_to_top">Tilbake til toppen</string>
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
   <string name="pref_language_title">Språk</string>
@@ -151,7 +153,7 @@
   <string name="do_not_ask_anymore">Ikke spør igjen</string>
   <string name="other_languages">Andre språk:</string>
   <string name="crash_title">Vel … Dette er pinlig</string>
-  <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
+  <string name="crash_description" fuzzy="true">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
   <string name="crash_checkbox_language">Dine språkinnstillinger</string>
   <string name="crash_checkbox_zimfiles">En liste over ZIM-filene dine</string>
   <string name="crash_checkbox_logs">Applikasjonslogger</string>
@@ -211,7 +213,7 @@
   <string name="send_report">Send diagnoserapport</string>
   <string name="crash_checkbox_file_system">Filsystemdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>
-  <string name="diagnostic_report_message">Vennligst send alle følgende detaljer slik at vi kan diagnostisere problemet</string>
+  <string name="diagnostic_report_message" fuzzy="true">Vennligst send alle følgende detaljer slik at vi kan diagnostisere problemet</string>
   <string name="percentage">%d%%</string>
   <string name="search_open_in_new_tab">Åpne i ny fane</string>
   <string name="reader">Leser</string>
@@ -220,8 +222,8 @@
   <string name="tabs_restored">Faner gjenopprettet</string>
   <string name="action_copy">Kopier</string>
   <string name="move">Flytt</string>
-  <string name="copying_zim_file">Kopierer ZIM-fil %s…</string>
-  <string name="moving_zim_file">Flytter ZIM-fil %s…</string>
+  <string name="copying_zim_file" fuzzy="true">Kopierer ZIM-fil %s…</string>
+  <string name="moving_zim_file" fuzzy="true">Flytter ZIM-fil %s…</string>
   <string name="move_file_error_message">Feil ved flytting av ZIM-filen: %s.</string>
   <string name="allowed">Tillatt</string>
   <string name="not_allowed">Ikke tillatt</string>

@@ -42,6 +42,7 @@
   <string name="pref_display_title">پیشاندان</string>
   <string name="pref_info_title">زانیاری</string>
   <string name="pref_info_version">وەشان</string>
+  <string name="pref_theme_summary">وتارەکان بیشان بدە بە ڕەنگی پێچەوانە</string>
   <string name="pref_back_to_top">گەڕانەوە بۆ سەرەوە</string>
   <string name="pref_language_title">زمان</string>
   <string name="pref_language_chooser">زمانێک ھەڵبژێرە</string>
@@ -190,7 +191,7 @@
   <string name="preparing_file_for_copy">بۆ لەبەرگرتنەوە/گواستنەوە ئامادە دەکرێت</string>
   <string name="action_copy">لەبەرگرتنەوە</string>
   <string name="move">گواستنەوە</string>
-  <string name="copying_zim_file">پەڕگەی ZIM %s لەبەر دەگیرێتەوە…</string>
+  <string name="copying_zim_file" fuzzy="true">پەڕگەی ZIM %s لەبەر دەگیرێتەوە…</string>
   <string name="moving_zim_file">پەڕگەی ZIM %s دەگوێزرێتەوە…</string>
   <string name="no_notes">ھیچ تێبینییەک نییە</string>
   <string name="notes_from_all_books">تێبینییەکان لە ھەموو کتێبەکانەوە ببینە</string>
