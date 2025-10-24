@@ -212,7 +212,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     lifecycleScope.launch(Dispatchers.IO) {
       createApplicationShortcuts()
     }
-    leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
   /**
@@ -458,21 +457,21 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     DrawerMenuGroup(
       listOfNotNull(
         DrawerMenuItem(
-          title = CoreApp.instance.getString(R.string.bookmarks),
+          title = getString(R.string.bookmarks),
           iconRes = R.drawable.ic_bookmark_black_24dp,
           visible = true,
           onClick = { openBookmarks() },
           testingTag = LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
         ),
         DrawerMenuItem(
-          title = CoreApp.instance.getString(R.string.history),
+          title = getString(R.string.history),
           iconRes = R.drawable.ic_history_24px,
           visible = true,
           onClick = { openHistory() },
           testingTag = LEFT_DRAWER_HISTORY_ITEM_TESTING_TAG
         ),
         DrawerMenuItem(
-          title = CoreApp.instance.getString(R.string.pref_notes),
+          title = getString(R.string.pref_notes),
           iconRes = R.drawable.ic_add_note,
           visible = true,
           onClick = { openNotes() },
@@ -487,7 +486,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     DrawerMenuGroup(
       listOf(
         DrawerMenuItem(
-          title = CoreApp.instance.getString(R.string.menu_settings),
+          title = getString(R.string.menu_settings),
           iconRes = R.drawable.ic_settings_24px,
           visible = true,
           onClick = { openSettings() },

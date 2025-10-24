@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.custom.download.effects
 
+import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -38,8 +40,9 @@ internal class SetPreferredStorageWithMostSpaceTest {
     val directoryWithMoreStorage = mockk<File>()
     val directoryWithLessStorage = mockk<File>()
     val sut = SetPreferredStorageWithMostSpace(storageCalculator, sharedPreferenceUtil)
+    mockkConstructor(ContextWrapper::class)
     every {
-      activity.externalMediaDirs
+      anyConstructed<ContextWrapper>().externalMediaDirs
     } returns arrayOf(directoryWithMoreStorage, null, directoryWithLessStorage)
     coEvery { storageCalculator.availableBytes(directoryWithMoreStorage) } returns 1
     coEvery { storageCalculator.availableBytes(directoryWithLessStorage) } returns 0

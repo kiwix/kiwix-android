@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -55,7 +57,8 @@ fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
       .statusBarsPadding(),
     shadowElevation = EIGHT_DP
   ) {
-    Column {
+    // Make it scrollable when there is no enough space to show all item, e.g., in landscape mode.
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
       // Banner image at the top
       Image(
         painter = IconItem.MipmapImage(R.drawable.ic_home_kiwix_banner).toPainter(),
