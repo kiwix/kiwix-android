@@ -74,7 +74,7 @@ class Repository @Inject internal constructor(
           } else {
             listOf(bookOnDisk)
           }
-        }.distinctBy { it.book.language to it.book.title }
+        }.distinctBy { it.book.id }
           .sortedBy { it.book.language + it.book.title }
       }
       .map { items ->
