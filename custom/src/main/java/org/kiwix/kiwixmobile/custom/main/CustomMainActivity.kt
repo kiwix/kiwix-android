@@ -24,6 +24,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -34,7 +35,6 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
@@ -55,6 +55,7 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.CustomApp
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import kotlin.lazy
 
 class CustomMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }
@@ -90,6 +91,10 @@ class CustomMainActivity : CoreMainActivity() {
         customBackHandler = customBackHandler
       )
       DialogHost(alertDialogShower)
+      LaunchedEffect(Unit) {
+        // Load the menu when UI is attached to screen.
+        leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
+      }
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
@@ -119,29 +124,30 @@ class CustomMainActivity : CoreMainActivity() {
    * If custom app is configured to show the "Help menu" in navigation
    * then show it in navigation.
    */
-  override val helpDrawerMenuItem: DrawerMenuItem? =
+  override val helpDrawerMenuItem: DrawerMenuItem? by lazy {
     if (BuildConfig.DISABLE_HELP_MENU) {
       null
     } else {
       DrawerMenuItem(
-        title = CoreApp.instance.getString(string.menu_help),
+        title = getString(string.menu_help),
         iconRes = drawable.ic_help_24px,
         visible = true,
         onClick = { openHelpFragment() },
         testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
       )
     }
+  }
 
-  override val supportDrawerMenuItem: DrawerMenuItem? =
+  override val supportDrawerMenuItem: DrawerMenuItem? by lazy {
     /**
      * If custom app is configured to show the "Support app_name" in navigation
      * then show it in navigation. "app_name" will be replaced with custom app name.
      */
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
       DrawerMenuItem(
-        title = CoreApp.instance.getString(
+        title = getString(
           string.menu_support_kiwix_for_custom_apps,
-          CoreApp.instance.getString(R.string.app_name)
+          getString(R.string.app_name)
         ),
         iconRes = drawable.ic_support_24px,
         true,
@@ -158,17 +164,18 @@ class CustomMainActivity : CoreMainActivity() {
        */
       null
     }
+  }
 
   /**
    * If custom app is configured to show the "About app_name app" in navigation
    * then show it in navigation. "app_name" will be replaced with custom app name.
    */
-  override val aboutAppDrawerMenuItem: DrawerMenuItem? =
+  override val aboutAppDrawerMenuItem: DrawerMenuItem? by lazy {
     if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
       DrawerMenuItem(
-        title = CoreApp.instance.getString(
+        title = getString(
           string.menu_about_app,
-          CoreApp.instance.getString(R.string.app_name)
+          getString(R.string.app_name)
         ),
         iconRes = drawable.ic_baseline_info,
         true,
@@ -184,6 +191,7 @@ class CustomMainActivity : CoreMainActivity() {
     } else {
       null
     }
+  }
 
   override fun createApplicationShortcuts() {
     // Remove previously added dynamic shortcuts for old ids if any found.

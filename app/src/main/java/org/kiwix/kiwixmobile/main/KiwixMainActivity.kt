@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -61,7 +60,6 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
@@ -159,6 +157,10 @@ class KiwixMainActivity : CoreMainActivity() {
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
       )
+      LaunchedEffect(Unit) {
+        // Load the menu when UI is attached to screen.
+        leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
+      }
       LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
       }
@@ -241,12 +243,6 @@ class KiwixMainActivity : CoreMainActivity() {
       storageDeviceList.addAll(StorageDeviceUtils.getWritableStorage(this))
     }
     return storageDeviceList
-  }
-
-  override fun onConfigurationChanged(newConfig: Configuration) {
-    super.onConfigurationChanged(newConfig)
-    leftDrawerMenu.clear()
-    leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
   }
 
   override fun onStart() {
@@ -363,29 +359,35 @@ class KiwixMainActivity : CoreMainActivity() {
     setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
   }
 
-  override val zimHostDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
-    title = CoreApp.instance.getString(string.menu_wifi_hotspot),
-    iconRes = drawable.ic_mobile_screen_share_24px,
-    visible = true,
-    onClick = { openZimHostFragment() },
-    testingTag = LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
-  )
+  override val zimHostDrawerMenuItem: DrawerMenuItem? by lazy {
+    DrawerMenuItem(
+      title = getString(string.menu_wifi_hotspot),
+      iconRes = drawable.ic_mobile_screen_share_24px,
+      visible = true,
+      onClick = { openZimHostFragment() },
+      testingTag = LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
+    )
+  }
 
-  override val helpDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
-    title = CoreApp.instance.getString(string.menu_help),
-    iconRes = drawable.ic_help_24px,
-    visible = true,
-    onClick = { openHelpFragment() },
-    testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
-  )
+  override val helpDrawerMenuItem: DrawerMenuItem? by lazy {
+    DrawerMenuItem(
+      title = getString(string.menu_help),
+      iconRes = drawable.ic_help_24px,
+      visible = true,
+      onClick = { openHelpFragment() },
+      testingTag = LEFT_DRAWER_HELP_ITEM_TESTING_TAG
+    )
+  }
 
-  override val supportDrawerMenuItem: DrawerMenuItem? = DrawerMenuItem(
-    title = CoreApp.instance.getString(string.menu_support_kiwix),
-    iconRes = drawable.ic_support_24px,
-    visible = true,
-    onClick = { openSupportKiwixExternalLink() },
-    testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
-  )
+  override val supportDrawerMenuItem: DrawerMenuItem? by lazy {
+    DrawerMenuItem(
+      title = getString(string.menu_support_kiwix),
+      iconRes = drawable.ic_support_24px,
+      visible = true,
+      onClick = { openSupportKiwixExternalLink() },
+      testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+    )
+  }
 
   /**
    * In kiwix app we are not showing the "About app" item so returning null.
@@ -448,7 +450,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   // Outdated shortcut ids(new_tab, get_content)
-  // Remove if the application has the outdated shortcuts.
+// Remove if the application has the outdated shortcuts.
   private fun removeOutdatedIdShortcuts() {
     ShortcutManagerCompat.getDynamicShortcuts(this).forEach {
       if (it.id == "new_tab" || it.id == "get_content") {
