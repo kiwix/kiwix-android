@@ -60,7 +60,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 3072M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
@@ -80,7 +79,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 3072M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -168,7 +166,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
@@ -188,7 +185,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -251,7 +247,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
@@ -271,7 +266,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -334,7 +328,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ndk: 27.3.13750724
           ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
@@ -354,7 +347,6 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_c
-          ndk: 27.3.13750724
           ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
