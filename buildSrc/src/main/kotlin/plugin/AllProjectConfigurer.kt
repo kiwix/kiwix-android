@@ -48,6 +48,9 @@ class AllProjectConfigurer {
 
   fun configureBaseExtension(target: Project, isLibrary: Boolean) {
     target.configureExtension<BaseExtension> {
+      // Using the same NDK version as in `java-libkiwix`, because with the default Gradle NDK,
+      // the debug symbols are not included in the Android App Bundle (AAB).
+      ndkVersion = Config.NDK_VERSION
       // The namespace cannot be directly set in `LibraryExtension`.
       // The core module is configured as a library for both Kiwix and custom apps.
       // Therefore, we set the namespace in `BaseExtension` for the core module,
