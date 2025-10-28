@@ -40,7 +40,7 @@ object Versions {
 
   const val androidx_test_orchestrator: String = "1.5.1"
 
-  const val io_objectbox: String = "4.0.3"
+  const val io_objectbox: String = "4.1.0"
 
   const val io_mockk: String = "1.13.13"
 
