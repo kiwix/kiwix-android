@@ -26,6 +26,10 @@ object Config {
   const val minSdk = 25 // Minimum SDK (Minimum Support Device) is 25 (Android 7.1 Nougat).
   const val targetSdk = 36 // Target SDK (Maximum Support Device) is 36 (Android 16).
 
+  // Using the same NDK version as in `java-libkiwix`. It helps include debug symbols
+  // in the Android App Bundle (AAB).
+  const val NDK_VERSION = "27.3.13750724"
+
   val javaVersion = JavaVersion.VERSION_17
 
   // Version Information

@@ -51,6 +51,16 @@ class AppConfigurer {
             getDefaultProguardFile("proguard-android-optimize.txt"),
             File("${target.rootDir}/app", "proguard-rules.pro")
           )
+          ndk {
+            // Enables including debug symbols in the Android App Bundle (AAB).
+            // There’s no option to include debug symbols directly in APKs, as they
+            // significantly increase the APK size. For APKs published on the Play Store,
+            // the only option is to upload the debug symbols manually.
+            // Two of our custom apps are published on the Play Store via APKs.
+            // Apart from those, all other APKs are distributed outside the Play Store,
+            // so the debug symbols are not included and do not affect their size.
+            debugSymbolLevel = "FULL"
+          }
         }
         getByName("debug") {
           if (target.hasProperty("testingMinimizedBuild")) {

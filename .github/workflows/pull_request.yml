@@ -137,6 +137,12 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: Set up Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r27d
+          link-to-sdk: true
+
       - name: Build all configurations
         env:
           APK_BUILD: "true"
