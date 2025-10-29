@@ -16,6 +16,13 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: false
+          large-packages: false
+
       - name: checkout
         uses: actions/checkout@v4
         with:
@@ -122,6 +129,13 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: false
+          large-packages: false
+
       - name: checkout
         uses: actions/checkout@v4
         with:
@@ -203,6 +217,13 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: false
+          large-packages: false
+
       - name: checkout
         uses: actions/checkout@v4
         with:
@@ -284,6 +305,13 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: false
+          large-packages: false
+
       - name: checkout
         uses: actions/checkout@v4
         with:
