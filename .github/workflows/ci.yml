@@ -22,6 +22,7 @@ jobs:
           tool-cache: false
           android: false
           large-packages: false
+          swap-storage: false
 
       - name: checkout
         uses: actions/checkout@v4
@@ -135,6 +136,7 @@ jobs:
           tool-cache: false
           android: false
           large-packages: false
+          swap-storage: false
 
       - name: checkout
         uses: actions/checkout@v4
@@ -223,6 +225,7 @@ jobs:
           tool-cache: false
           android: false
           large-packages: false
+          swap-storage: false
 
       - name: checkout
         uses: actions/checkout@v4
@@ -311,6 +314,7 @@ jobs:
           tool-cache: false
           android: false
           large-packages: false
+          swap-storage: false
 
       - name: checkout
         uses: actions/checkout@v4
