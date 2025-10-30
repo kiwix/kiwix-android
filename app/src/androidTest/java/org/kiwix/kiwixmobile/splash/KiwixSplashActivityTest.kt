@@ -20,11 +20,11 @@ package org.kiwix.kiwixmobile.splash
 import android.Manifest
 import android.content.Context
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -71,10 +71,6 @@ class KiwixSplashActivityTest {
     GrantPermissionRule.grant(*permissions)
   private lateinit var context: Context
 
-  init {
-    AccessibilityChecks.enable().setRunChecksFromRootView(true)
-  }
-
   @Before
   fun setUp() {
     Intents.init()
@@ -85,6 +81,7 @@ class KiwixSplashActivityTest {
       }
       waitForIdle()
     }
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test

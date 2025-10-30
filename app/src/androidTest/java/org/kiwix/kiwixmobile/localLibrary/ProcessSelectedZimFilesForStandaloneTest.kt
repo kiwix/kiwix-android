@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.localLibrary
 
 import android.net.Uri
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
@@ -90,6 +91,7 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
       }
       waitForIdle()
     }
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test

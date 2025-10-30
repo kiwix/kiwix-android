@@ -18,13 +18,15 @@
 package org.kiwix.kiwixmobile.help
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
@@ -82,10 +84,7 @@ class HelpFragmentTest : BaseActivityTest() {
           )
         }
       }
-  }
-
-  init {
-    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test
@@ -106,6 +105,7 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnHowToUpdateContent(composeTestRule)
       assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible(composeTestRule)
     }
+    composeTestRule.onRoot().tryPerformAccessibilityChecks()
     LeakAssertions.assertNoLeaks()
   }
 
@@ -130,6 +130,7 @@ class HelpFragmentTest : BaseActivityTest() {
         assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded(composeTestRule)
         clickWhyCopyMoveFilesToAppPublicDirectory(composeTestRule)
       }
+      composeTestRule.onRoot().tryPerformAccessibilityChecks()
       LeakAssertions.assertNoLeaks()
     }
   }

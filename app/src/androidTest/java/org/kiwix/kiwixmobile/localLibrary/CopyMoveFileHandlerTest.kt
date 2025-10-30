@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.localLibrary
 
 import android.net.Uri
 import android.os.Build
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.content.edit
 import androidx.documentfile.provider.DocumentFile
@@ -108,6 +109,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       waitForIdle()
     }
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test

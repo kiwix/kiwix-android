@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
@@ -87,6 +88,7 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
           )
         }
       }
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test

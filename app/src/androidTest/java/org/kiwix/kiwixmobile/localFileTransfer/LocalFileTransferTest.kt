@@ -22,23 +22,18 @@ import android.Manifest
 import android.app.Instrumentation
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -89,21 +84,6 @@ class LocalFileTransferTest {
     InstrumentationRegistry.getInstrumentation()
   }
 
-  init {
-    AccessibilityChecks.enable().apply {
-      setRunChecksFromRootView(true)
-      setSuppressingResultMatcher(
-        anyOf(
-          allOf(
-            matchesCheck(TouchTargetSizeCheck::class.java),
-            matchesViews(withContentDescription("More options"))
-          ),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    }
-  }
-
   @Before
   fun setup() {
     context = instrumentation.targetContext.applicationContext
@@ -113,6 +93,7 @@ class LocalFileTransferTest {
       }
       waitForIdle()
     }
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test
@@ -171,12 +152,16 @@ class LocalFileTransferTest {
       assertGetZimNearbyDeviceDisplayed(composeTestRule)
       clickFileTransferIcon(composeTestRule) {
         assertClickNearbyDeviceMessageVisible(composeTestRule)
+        composeTestRule.onRoot().tryPerformAccessibilityChecks()
         clickOnNextButton(composeTestRule)
         assertDeviceNameMessageVisible(composeTestRule)
+        composeTestRule.onRoot().tryPerformAccessibilityChecks()
         clickOnNextButton(composeTestRule)
         assertNearbyDeviceListMessageVisible(composeTestRule)
+        composeTestRule.onRoot().tryPerformAccessibilityChecks()
         clickOnNextButton(composeTestRule)
         assertTransferZimFilesListMessageVisible(composeTestRule)
+        composeTestRule.onRoot().tryPerformAccessibilityChecks()
         clickOnNextButton(composeTestRule)
         pressBack()
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
@@ -201,6 +186,7 @@ class LocalFileTransferTest {
       // test show case view show once.
       clickFileTransferIcon(composeTestRule) {
         assertClickNearbyDeviceMessageNotVisible(composeTestRule)
+        composeTestRule.onRoot().tryPerformAccessibilityChecks()
       }
     }
   }

@@ -18,23 +18,16 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -72,21 +65,6 @@ class KiwixSettingsFragmentTest {
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
 
-  init {
-    AccessibilityChecks.enable().apply {
-      setRunChecksFromRootView(true)
-      setSuppressingResultMatcher(
-        anyOf(
-          allOf(
-            matchesCheck(TouchTargetSizeCheck::class.java),
-            matchesViews(withContentDescription("More options"))
-          ),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    }
-  }
-
   @Before
   fun setup() {
     // Go to IntroFragment
@@ -119,6 +97,7 @@ class KiwixSettingsFragmentTest {
         )
       }
     }
+    composeTestRule.enableAccessibilityChecks()
     activityScenario.onActivity {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Intro.route)

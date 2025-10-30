@@ -55,12 +55,6 @@ object Libs {
   const val espresso_web: String = "androidx.test.espresso:espresso-web:" +
     Versions.androidx_test_espresso
 
-  /**
-   * https://developer.android.com/testing
-   */
-  const val espresso_accessibility: String = "androidx.test.espresso:espresso-accessibility:" +
-    Versions.androidx_test_espresso
-
   const val tracing: String = "androidx.tracing:tracing:" + Versions.tracing
 
   /**
@@ -364,6 +358,8 @@ object Libs {
   const val COMPOSE_TOOLING = "androidx.compose.ui:ui-tooling:${Versions.COMPOSE_VERSION}"
 
   const val COMPOSE_UI_TEST_JUNIT = "androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE_VERSION}"
+  const val COMPOSE_UI_TEST_JUNIT_ACCESSIBILITY =
+    "androidx.compose.ui:ui-test-junit4-accessibility:${Versions.COMPOSE_ACCESSIBILITY_TEST_VERSION}"
 
   const val COMPOSE_UI_MANIFEST = "androidx.compose.ui:ui-test-manifest:${Versions.COMPOSE_VERSION}"
 

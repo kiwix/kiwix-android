@@ -26,6 +26,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -104,6 +105,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
           )
         }
       }
+    composeTestRule.enableAccessibilityChecks()
   }
 
   @Test
