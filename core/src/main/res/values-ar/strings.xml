@@ -211,7 +211,7 @@
   <string name="downloading">جاري التحميل</string>
   <string name="no_items_msg">لا توجد عناصر متاحة</string>
   <string name="crash_title">حسنًا.. هذا أمر محرج</string>
-  <string name="crash_description" fuzzy="true">يبدو أننا انهرنا.\n\nهل تمانع في مساعدتنا في حل هذه المشكلة عن طريق إرسال المعلومات التالية؟</string>
+  <string name="crash_description">يبدو أننا تعطلنا.\n\nهل تمانع في مساعدتنا في حل هذه المشكلة عن طريق إرسال تقرير التعطل؟</string>
   <string name="crash_checkbox_language">إعدادات اللغة</string>
   <string name="crash_checkbox_zimfiles">قائمة بملفات ZIM الخاصة بك</string>
   <string name="crash_checkbox_exception">تفاصيل انهيار التطبيق</string>
@@ -333,7 +333,7 @@
   <string name="send_report">إرسال تقرير التشخيص</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
   <string name="diagnostic_report">تقرير التشخيص</string>
-  <string name="diagnostic_report_message" fuzzy="true">يرجى إرسال جميع التفاصيل التالية حتى نتمكن من تشخيص المشكلة</string>
+  <string name="diagnostic_report_message">لمساعدتنا في تشخيص المشكلة، قم بإعادة إنتاج المشكلة أولاً، ثم أرسل تقرير التشخيص.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">تكبير النص</string>
   <string name="search_open_in_new_tab">افتح في تبويبٍ جديد</string>
