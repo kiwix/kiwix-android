@@ -119,7 +119,7 @@ private fun BookContent(
       BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
     }
     BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
-    BookDetails(Modifier.weight(1f), bookOnDisk)
+    BookDetails(Modifier.weight(1f), bookOnDisk, index)
   }
 }
 
@@ -141,7 +141,7 @@ private fun BookCheckbox(
     },
     modifier = Modifier
       .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
-      .semantics { contentDescription = "${bookOnDisk.isSelected}${bookOnDisk.hashCode()}" }
+      .semantics { contentDescription = "${bookOnDisk.isSelected}$index" }
   )
 }
 
@@ -166,72 +166,77 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
 }
 
 @Composable
-private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk) {
+private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk, index: Int) {
   Column(modifier = modifier.padding(start = SIXTEEN_DP)) {
-    BookTitle(bookOnDisk.book.title)
+    BookTitle(bookOnDisk.book.title, index)
     Spacer(modifier = Modifier.height(TWO_DP))
-    BookDescription(bookOnDisk.book.description.orEmpty())
+    BookDescription(bookOnDisk.book.description.orEmpty(), index)
     Row(
       verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier.padding(top = FIVE_DP)
     ) {
-      BookDate(bookOnDisk.book.date)
+      BookDate(bookOnDisk.book.date, index)
       Spacer(modifier = Modifier.width(EIGHT_DP))
-      BookSize(Byte(bookOnDisk.book.size).humanReadable)
+      BookSize(Byte(bookOnDisk.book.size).humanReadable, index = index)
       Spacer(modifier = Modifier.width(EIGHT_DP))
       BookArticleCount(
         ArticleCount(bookOnDisk.book.articleCount.orEmpty())
-          .toHumanReadable(LocalContext.current)
+          .toHumanReadable(LocalContext.current),
+        index = index
       )
     }
     Spacer(modifier = Modifier.height(FOUR_DP))
-    TagsView(bookOnDisk.tags, hasCode = bookOnDisk.hashCode())
+    TagsView(bookOnDisk.tags, index = index)
   }
 }
 
 @Composable
-private fun BookArticleCount(articleCount: String) {
+private fun BookArticleCount(articleCount: String, index: Int) {
   Text(
     text = articleCount,
     style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = Modifier.semantics { contentDescription = "$articleCount$index" }
   )
 }
 
 @Composable
-fun BookSize(size: String, modifier: Modifier = Modifier) {
+fun BookSize(size: String, modifier: Modifier = Modifier, index: Int) {
   Text(
     text = size,
     style = MaterialTheme.typography.bodyMedium,
     color = MaterialTheme.colorScheme.onTertiary,
-    modifier = modifier
+    modifier = modifier.semantics { contentDescription = "$size$index" }
   )
 }
 
 @Composable
-fun BookDate(date: String) {
+fun BookDate(date: String, index: Int) {
   Text(
     text = date,
     style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = Modifier.semantics { contentDescription = "$date$index" }
   )
 }
 
 @Composable
-fun BookTitle(title: String) {
+fun BookTitle(title: String, index: Int) {
   Text(
     text = title,
-    style = MaterialTheme.typography.titleSmall
+    style = MaterialTheme.typography.titleSmall,
+    modifier = Modifier.semantics { contentDescription = "$title$index" }
   )
 }
 
 @Composable
-fun BookDescription(bookDescription: String) {
+fun BookDescription(bookDescription: String, index: Int) {
   Text(
     text = bookDescription,
     style = MaterialTheme.typography.bodyMedium,
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
-    color = MaterialTheme.colorScheme.onSecondary
+    color = MaterialTheme.colorScheme.onSecondary,
+    modifier = Modifier.semantics { contentDescription = "$bookDescription$index" }
   )
 }

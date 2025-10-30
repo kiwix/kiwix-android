@@ -398,7 +398,7 @@ fun TableDrawerSheet(
               )
             }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
-            .semantics { contentDescription = "${section.title}${section.hashCode()}" }
+            .semantics { contentDescription = "${section.title}$index" }
         )
       }
     }

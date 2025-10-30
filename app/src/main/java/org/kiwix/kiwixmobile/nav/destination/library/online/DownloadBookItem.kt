@@ -71,6 +71,7 @@ const val DOWNLOADING_STATE_TEXT_TESTING_TAG = "downloadingStateTextTestingTag"
 
 @Composable
 fun DownloadBookItem(
+  index: Int,
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
   onStopClick: (LibraryDownloadItem) -> Unit
@@ -104,13 +105,14 @@ fun DownloadBookItem(
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
-      DownloadBookContent(item, onPauseResumeClick, onStopClick)
+      DownloadBookContent(index, item, onPauseResumeClick, onStopClick)
     }
   }
 }
 
 @Composable
 private fun DownloadBookContent(
+  index: Int,
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
   onStopClick: (LibraryDownloadItem) -> Unit
@@ -128,9 +130,9 @@ private fun DownloadBookContent(
         .padding(start = SIXTEEN_DP),
       horizontalAlignment = Alignment.Start
     ) {
-      BookTitle(item.title)
+      BookTitle(item.title, index)
       Spacer(modifier = Modifier.height(TWO_DP))
-      BookDescription(item.description.orEmpty())
+      BookDescription(item.description.orEmpty(), index)
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier

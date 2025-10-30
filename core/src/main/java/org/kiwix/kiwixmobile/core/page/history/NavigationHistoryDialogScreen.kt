@@ -32,7 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
@@ -107,14 +108,15 @@ fun NavigationHistoryList(
   onNavigationItemClick: (NavigationHistoryListItem) -> Unit
 ) {
   LazyColumn {
-    items(navigationHistoryList) {
-      NavigationHistoryItem(it, onNavigationItemClick)
+    itemsIndexed(navigationHistoryList) { index, item ->
+      NavigationHistoryItem(index, item, onNavigationItemClick)
     }
   }
 }
 
 @Composable
 private fun NavigationHistoryItem(
+  index: Int,
   item: NavigationHistoryListItem,
   onNavigationItemClick: (NavigationHistoryListItem) -> Unit
 ) {
@@ -132,7 +134,7 @@ private fun NavigationHistoryItem(
   ) {
     Image(
       painter = IconItem.MipmapImage(R.mipmap.ic_launcher_round).toPainter(),
-      contentDescription = stringResource(R.string.fav_icon) + item.hashCode(),
+      contentDescription = stringResource(R.string.fav_icon) + index,
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
     )
@@ -142,7 +144,9 @@ private fun NavigationHistoryItem(
     Text(
       text = item.title,
       style = MaterialTheme.typography.bodyLarge,
-      modifier = Modifier.weight(1f),
+      modifier = Modifier
+        .weight(1f)
+        .semantics { contentDescription = "${item.title}$index" },
       maxLines = ONE,
       overflow = TextOverflow.Ellipsis
     )

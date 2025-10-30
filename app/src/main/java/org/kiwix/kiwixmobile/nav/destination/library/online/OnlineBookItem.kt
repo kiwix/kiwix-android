@@ -73,6 +73,7 @@ const val ONLINE_BOOK_SIZE_TEXT_TESTING_TAG = "onlineBookSizeTextTestingTag"
 
 @Composable
 fun OnlineBookItem(
+  index: Int,
   item: BookItem,
   bookUtils: BookUtils,
   availableSpaceCalculator: AvailableSpaceCalculator,
@@ -98,7 +99,7 @@ fun OnlineBookItem(
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
       Box(modifier = Modifier.fillMaxWidth()) {
-        OnlineBookContent(item, bookUtils)
+        OnlineBookContent(item, bookUtils, index)
         ShowDetectingFileSystemUi(
           isClickable,
           item,
@@ -158,7 +159,7 @@ private fun ShowDetectingFileSystemUi(
 }
 
 @Composable
-private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils) {
+private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils, index: Int) {
   Row(
     modifier = Modifier
       .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
@@ -171,12 +172,12 @@ private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils) {
         .weight(1f)
         .padding(start = SIXTEEN_DP)
     ) {
-      BookTitle(item.book.title)
+      BookTitle(item.book.title, index)
       Spacer(modifier = Modifier.height(TWO_DP))
-      BookDescription(item.book.description.orEmpty())
-      BookSizeAndDateRow(item)
+      BookDescription(item.book.description.orEmpty(), index)
+      BookSizeAndDateRow(item, index)
       BookCreatorAndLanguageRow(item, bookUtils)
-      TagsView(item.tags, hasCode = item.hashCode())
+      TagsView(item.tags, index = index)
     }
   }
 }
@@ -196,7 +197,7 @@ private fun BookCreatorAndLanguageRow(item: BookItem, bookUtils: BookUtils) {
 }
 
 @Composable
-private fun BookSizeAndDateRow(item: BookItem) {
+private fun BookSizeAndDateRow(item: BookItem, index: Int) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -208,9 +209,10 @@ private fun BookSizeAndDateRow(item: BookItem) {
       Byte(item.book.size).humanReadable,
       modifier = Modifier
         .weight(1f)
-        .testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
+        .testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG),
+      index = index
     )
-    BookDate(item.book.date)
+    BookDate(item.book.date, index)
   }
 }
 
