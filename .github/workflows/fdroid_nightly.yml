@@ -1,18 +1,26 @@
-name: Publish nightly build
+name: Publish fdroid nightly build
 
+# This workflow is triggered on a schedule or when specific tags are pushed.
+# It runs every Monday at 12:00 UTC and also when the 'fdroid_nightly' tag is pushed.
 on:
-  pull_request:
-    branches:
-      - testing
+  push:
+    tags:
+      - 'fdroid_nightly' # fdroid_nightly Tag
+  schedule:
+    - cron: '0 12 * * 1'  # Runs every Monday at 12:00
 
 jobs:
   nightly:
-    name: Publish nightly build
+    name: Publish fdroid nightly build
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     environment: nightly
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -26,17 +34,50 @@ jobs:
           ndk-version: r27d
           link-to-sdk: true
 
-      - name: Build
+      - name: Decrypt files
+        env:
+          KEYSTORE: ${{ secrets.keystore }}
+          SSH_KEY: ${{ secrets.ssh_key }}
         run: |
-          # use timestamp as Version Code
-          export versionCode=$(date '+%s')
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
-          ./gradlew assembleDebug
+          echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
+          echo "$SSH_KEY" | base64 -d > ssh_key
+          chmod 600 ssh_key
 
-      - name: fdroid nightly
+      - name: Build nightly APK
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          APK_BUILD: "true"
         run: |
-          sudo add-apt-repository ppa:fdroid/fdroidserver
+          ./gradlew assembleNightly
+
+      - name: Install F-Droid server and dependencies
+        run: |
+          # Installing fdroidserver and androguard.
+          # Note: fdroidserver from apt uses the system Python environment.
+          # The old androguard (v3.4.0a1) from apt can't parse resources.arsc in Android 16 APKs,
+          # so we install the latest androguard in the same environment via pip.
           sudo apt-get update
-          sudo apt-get install apksigner fdroidserver --no-install-recommends
-          export DEBUG_KEYSTORE=$\{\{ secrets.DEBUG_KEYSTORE \}\}
-          fdroid nightly --archive-older 10
+          sudo apt-get install -y python3 python3-pip
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade fdroidserver androguard
+
+      - name: Prepare F-Droid repo
+        env:
+          UNIVERSAL_DEBUG_APK: app/build/outputs/apk/nightly/*universal*.apk
+          KIWIX_ICON: app/src/main/kiwix_icon-web.png
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        run: |
+          mkdir -p fdroid/repo/icons
+          cp $UNIVERSAL_DEBUG_APK fdroid/repo/
+          cp "$KIWIX_ICON" fdroid/repo/icons/icon.png
+          envsubst < config-template.yml > fdroid/config.yml
+          cd fdroid
+          fdroid update --create-metadata
+
+      - name: release fdroid nightly to kiwix.download.org
+        run: |
+          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no fdroid ci@master.download.kiwix.org:/data/download/fdroid/
