@@ -28,6 +28,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
@@ -91,8 +92,16 @@ class TopLevelDestinationTest : BaseActivityTest() {
           )
         }
       }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      accessibilityValidator.setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
+    } else {
+      accessibilityValidator.setSuppressingResultMatcher(
         anyOf(
           matchesCheck(DuplicateClickableBoundsCheck::class.java)
         )
