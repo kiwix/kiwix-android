@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,6 +54,7 @@ const val PAGE_ITEM_TESTING_TAG = "pageItemTestingTag"
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PageListItem(
+  index: Int,
   page: Page,
   itemClickListener: OnItemClickListener
 ) {
@@ -77,7 +79,7 @@ fun PageListItem(
       } else {
         Base64String(page.favicon).toPainter()
       },
-      contentDescription = stringResource(R.string.fav_icon) + page.hashCode(),
+      contentDescription = stringResource(R.string.fav_icon) + index,
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
     )
@@ -87,7 +89,9 @@ fun PageListItem(
     Text(
       text = page.title,
       style = MaterialTheme.typography.bodyLarge,
-      modifier = Modifier.weight(1f),
+      modifier = Modifier
+        .weight(1f)
+        .semantics { contentDescription = "${page.title}$index" },
       maxLines = ONE,
       overflow = TextOverflow.Ellipsis
     )

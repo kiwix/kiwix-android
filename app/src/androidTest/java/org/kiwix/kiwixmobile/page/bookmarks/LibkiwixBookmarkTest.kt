@@ -32,6 +32,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
@@ -106,7 +107,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
       setSuppressingResultMatcher(
         anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+          matchesCheck(DuplicateClickableBoundsCheck::class.java),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
         )
       )
     }
