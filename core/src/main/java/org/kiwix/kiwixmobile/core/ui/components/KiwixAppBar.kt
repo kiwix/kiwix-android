@@ -183,7 +183,7 @@ private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
         ) {
           Text(
             text = menuItem.iconButtonText.uppercase(),
-            color = if (menuItem.isEnabled) MaterialTheme.colorScheme.onBackground else Color.Gray,
+            color = getMenuItemTextColor(menuItem),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
           )
@@ -192,6 +192,14 @@ private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
     }
   }
 }
+
+@Composable
+private fun getMenuItemTextColor(menuItem: ActionMenuItem) =
+  if (menuItem.isEnabled) {
+    MaterialTheme.colorScheme.onBackground
+  } else {
+    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+  }
 
 @Composable
 private fun OverflowMenuItems(
