@@ -21,8 +21,10 @@ package org.kiwix.kiwixmobile.intro
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
@@ -53,6 +55,7 @@ class IntroRobot : BaseRobot() {
         onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.humankind_knowledge))
       }
+      composeTestRule.onRoot().tryPerformAccessibilityChecks()
       scrollToPage(ONE, composeTestRule)
       attempt(10) {
         onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
@@ -60,6 +63,7 @@ class IntroRobot : BaseRobot() {
         onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.download_books_message))
       }
+      composeTestRule.onRoot().tryPerformAccessibilityChecks()
       scrollToPage(TWO, composeTestRule)
       attempt(10) {
         onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
@@ -67,6 +71,7 @@ class IntroRobot : BaseRobot() {
         onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.storage_location_hint))
       }
+      composeTestRule.onRoot().tryPerformAccessibilityChecks()
       if (!BuildConfig.IS_PLAYSTORE) {
         scrollToPage(THREE, composeTestRule)
         attempt(10) {
@@ -75,6 +80,7 @@ class IntroRobot : BaseRobot() {
           onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
             .assertTextEquals(context.getString(R.string.auto_detect_books_description))
         }
+        composeTestRule.onRoot().tryPerformAccessibilityChecks()
       }
     }
   }

@@ -30,7 +30,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -139,9 +139,9 @@ private fun PageList(
       // hides keyboard when scrolled
       .hideKeyboardOnLazyColumnScroll(listState)
   ) {
-    items(state.pageState.visiblePageItems) { item ->
+    itemsIndexed(state.pageState.visiblePageItems) { index, item ->
       when (item) {
-        is Page -> PageListItem(page = item, itemClickListener = itemClickListener)
+        is Page -> PageListItem(index = index, page = item, itemClickListener = itemClickListener)
         is DateItem -> DateItemText(item)
       }
     }

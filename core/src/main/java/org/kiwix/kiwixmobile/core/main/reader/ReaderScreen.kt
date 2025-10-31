@@ -398,7 +398,7 @@ fun TableDrawerSheet(
               )
             }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
-            .semantics { contentDescription = "${section.title}${section.hashCode()}" }
+            .semantics { contentDescription = "${section.title}$index" }
         )
       }
     }
@@ -961,7 +961,6 @@ private fun TabItemCard(
     modifier = Modifier
       .width(cardWidth)
       .height(cardHeight)
-      .clickable { onTabClickListener.onSelectTab(index) }
       .semantics { hideFromAccessibility() }
   ) {
     AndroidView(
@@ -971,13 +970,14 @@ private fun TabItemCard(
           addView(webView)
           val clickableView = View(context).apply {
             layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            // Prevent clicking inside the webView when tabs are active.
             setOnClickListener { onTabClickListener.onSelectTab(index) }
+            contentDescription = "${webView.contentDescription}${webView.hashCode()}"
           }
           addView(clickableView)
-          contentDescription = "${webView.contentDescription}${webView.hashCode()}"
         }
       },
-      modifier = Modifier.fillMaxSize()
+      modifier = Modifier.fillMaxSize().semantics { hideFromAccessibility() }
     )
   }
 }

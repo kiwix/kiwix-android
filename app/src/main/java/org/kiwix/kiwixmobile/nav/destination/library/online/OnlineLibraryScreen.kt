@@ -32,7 +32,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBarScrollBehavior
@@ -193,18 +193,20 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     state = lazyListState
   ) {
     state.onlineLibraryList?.let { libraryList ->
-      items(libraryList) {
-        when (it) {
-          is DividerItem -> ShowDividerItem(it)
+      itemsIndexed(libraryList) { index, item ->
+        when (item) {
+          is DividerItem -> ShowDividerItem(item)
           is LibraryListItem.BookItem -> OnlineBookItem(
-            it,
+            index = index,
+            item = item,
             state.bookUtils,
             state.availableSpaceCalculator,
             state.onBookItemClick
           )
 
           is LibraryListItem.LibraryDownloadItem -> DownloadBookItem(
-            it,
+            index = index,
+            item = item,
             onPauseResumeClick = state.onPauseResumeButtonClick,
             onStopClick = state.onStopButtonClick
           )

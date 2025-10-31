@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.page.history
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -26,16 +27,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavOptions
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
@@ -102,21 +99,14 @@ class NavigationHistoryTest : BaseActivityTest() {
           )
         }
       }
-  }
-
-  init {
-    AccessibilityChecks.enable().apply {
-      setRunChecksFromRootView(true)
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
       setSuppressingResultMatcher(
         anyOf(
-          allOf(
-            matchesCheck(TouchTargetSizeCheck::class.java),
-            matchesViews(withContentDescription("More options"))
-          ),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
         )
       )
     }
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test

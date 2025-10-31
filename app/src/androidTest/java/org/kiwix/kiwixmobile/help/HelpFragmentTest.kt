@@ -18,16 +18,22 @@
 package org.kiwix.kiwixmobile.help
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -82,10 +88,14 @@ class HelpFragmentTest : BaseActivityTest() {
           )
         }
       }
-  }
-
-  init {
-    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
+      setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+        )
+      )
+    }
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test
@@ -106,6 +116,7 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnHowToUpdateContent(composeTestRule)
       assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible(composeTestRule)
     }
+    composeTestRule.onRoot().tryPerformAccessibilityChecks()
     LeakAssertions.assertNoLeaks()
   }
 
@@ -130,6 +141,7 @@ class HelpFragmentTest : BaseActivityTest() {
         assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded(composeTestRule)
         clickWhyCopyMoveFilesToAppPublicDirectory(composeTestRule)
       }
+      composeTestRule.onRoot().tryPerformAccessibilityChecks()
       LeakAssertions.assertNoLeaks()
     }
   }

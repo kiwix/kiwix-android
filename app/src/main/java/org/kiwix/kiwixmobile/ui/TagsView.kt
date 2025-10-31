@@ -41,18 +41,18 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, hasCode: Int) {
+fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
   FlowRow(
     modifier = modifier,
     horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {
     if (tags.isYesOrNotDefined<PicturesTag>()) {
       val picture = stringResource(R.string.tag_pic)
-      TagChip(text = picture, contentDescription = "$picture$hasCode")
+      TagChip(text = picture, contentDescription = "$picture$index")
     }
     if (tags.isYesOrNotDefined<VideoTag>()) {
       val video = stringResource(R.string.tag_vid)
-      TagChip(text = video, contentDescription = "$video$hasCode")
+      TagChip(text = video, contentDescription = "$video$index")
     }
     val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
     if (tags.isDefinedAndNo<PicturesTag>() &&
@@ -60,11 +60,11 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, hasCode: Int) 
       !shortTextIsSelected
     ) {
       val textOnly = stringResource(R.string.tag_text_only)
-      TagChip(text = textOnly, contentDescription = "$textOnly$hasCode")
+      TagChip(text = textOnly, contentDescription = "$textOnly$index")
     }
     if (shortTextIsSelected) {
       val shortText = stringResource(R.string.tag_short_text)
-      TagChip(text = shortText, contentDescription = "$shortText$hasCode")
+      TagChip(text = shortText, contentDescription = "$shortText$index")
     }
   }
 }

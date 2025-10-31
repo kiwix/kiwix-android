@@ -39,8 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -118,7 +116,6 @@ private fun NoteTextField(
   noteText: TextFieldValue,
   onTextChange: (TextFieldValue) -> Unit
 ) {
-  val contentDescription = stringResource(R.string.pref_notes)
   TextField(
     value = noteText,
     onValueChange = { onTextChange(it) },
@@ -128,8 +125,7 @@ private fun NoteTextField(
       .heightIn(min = MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED)
       .padding(bottom = TEN_DP)
       .padding(horizontal = FOUR_DP)
-      .testTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
-      .semantics { this.contentDescription = contentDescription },
+      .testTag(ADD_NOTE_TEXT_FILED_TESTING_TAG),
     placeholder = { Text(text = stringResource(R.string.note)) },
     singleLine = false,
     shape = RectangleShape,
