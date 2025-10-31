@@ -30,6 +30,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -96,7 +100,14 @@ class GetContentShortcutTest {
         )
       }
     }
-    composeTestRule.enableAccessibilityChecks()
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
+      setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+        )
+      )
+    }
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test

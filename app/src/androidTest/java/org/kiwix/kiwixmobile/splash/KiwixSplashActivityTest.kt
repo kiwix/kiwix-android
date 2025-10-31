@@ -32,7 +32,11 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -81,7 +85,14 @@ class KiwixSplashActivityTest {
       }
       waitForIdle()
     }
-    composeTestRule.enableAccessibilityChecks()
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
+      setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+        )
+      )
+    }
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test

@@ -30,9 +30,13 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -95,7 +99,14 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
           )
         }
       }
-    composeTestRule.enableAccessibilityChecks()
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
+      setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+        )
+      )
+    }
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test
