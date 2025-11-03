@@ -233,7 +233,7 @@ class SearchViewModel @Inject constructor(
   suspend fun loadMoreSearchResults(
     startIndex: Int,
     existingSearchList: List<SearchListItem>?
-  ): List<SearchListItem.RecentSearchListItem>? {
+  ): List<SearchListItem>? {
     val searchResults = state.value.getVisibleResults(startIndex)
 
     return searchResults?.filter { newItem ->

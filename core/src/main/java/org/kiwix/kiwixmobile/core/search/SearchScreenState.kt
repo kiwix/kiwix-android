@@ -68,5 +68,14 @@ data class SearchScreenState(
   /**
    * Manages the navigationIcon shown in the toolbar.
    */
-  val navigationIcon: @Composable() () -> Unit
+  val navigationIcon: @Composable() () -> Unit,
+  /**
+   * Manages the showing of suggested word provided by the libkiwix if no search
+   * result found for typed value.
+   */
+  val suggestedSpelledWord: String?,
+  /**
+   * Manages the click of suggested item by the libkiwix.
+   */
+  val onSuggestedItemClick: (String) -> Unit
 )

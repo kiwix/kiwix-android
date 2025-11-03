@@ -102,7 +102,9 @@ class SearchFragment : BaseFragment() {
       onLoadMore = { loadMoreSearchResult() },
       onKeyboardSubmitButtonClick = {
         getSearchListItemForQuery(it)?.let(::onItemClick)
-      }
+      },
+      suggestedSpelledWord = null,
+      onSuggestedItemClick = { onSuggestedItemClick(it) }
     )
   )
 
@@ -247,6 +249,11 @@ class SearchFragment : BaseFragment() {
     searchViewModel.searchResults(searchText.trim())
   }
 
+  private fun onSuggestedItemClick(suggestedText: String) {
+    searchScreenState.update { copy(suggestedSpelledWord = null) }
+    onSearchValueChanged(suggestedText)
+  }
+
   private fun actionMenuItems() = listOfNotNull(
     // Check if the `FIND_IN_PAGE` is visible or not.
     // If visible then show it in menu.
@@ -304,7 +311,18 @@ class SearchFragment : BaseFragment() {
             "Error in getting searched result\nOriginal exception ${ignore.message}"
           )
         } finally {
-          searchScreenState.update { copy(isLoading = false) }
+          val onlyRecentSearches =
+            searchScreenState.value.searchList.all { it is SearchListItem.RecentSearchListItem }
+          searchScreenState.update {
+            copy(
+              isLoading = false,
+              suggestedSpelledWord = if (onlyRecentSearches && searchScreenState.value.searchText.isNotEmpty()) {
+                "Demo"
+              } else {
+                null
+              }
+            )
+          }
         }
       }
   }
