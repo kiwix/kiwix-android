@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils.files
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.net.Uri
@@ -58,6 +59,23 @@ import java.io.IOException
 
 object FileUtils {
   private val fileOperationMutex = Mutex()
+  private const val SPELLING_DB_CACHED_DIRECTORY = "SpellingsDBCachedDir"
+
+  @JvmStatic
+  fun getSpellingDBDir(context: Context): File? {
+    val externalFileDir = ContextWrapper(context).getExternalFilesDir("")
+    val spellingsDBCachedDir = File(externalFileDir, SPELLING_DB_CACHED_DIRECTORY)
+    if (!spellingsDBCachedDir.exists()) spellingsDBCachedDir.mkdir()
+    return spellingsDBCachedDir
+  }
+
+  @JvmStatic
+  @Synchronized
+  fun deleteSpellingDBDir(context: Context, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    CoroutineScope(dispatcher).launch {
+      getSpellingDBDir(context)?.deleteRecursively()
+    }
+  }
 
   @JvmStatic
   fun getFileCacheDir(context: Context): File? =

@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.MAX_SUGGEST_WORD_COUNT
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
@@ -103,7 +104,7 @@ class SearchFragment : BaseFragment() {
       onKeyboardSubmitButtonClick = {
         getSearchListItemForQuery(it)?.let(::onItemClick)
       },
-      suggestedSpelledWord = null,
+      suggestedWordsList = emptyList(),
       onSuggestedItemClick = { onSuggestedItemClick(it) }
     )
   )
@@ -250,7 +251,7 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun onSuggestedItemClick(suggestedText: String) {
-    searchScreenState.update { copy(suggestedSpelledWord = null) }
+    searchScreenState.update { copy(suggestedWordsList = emptyList()) }
     onSearchValueChanged(suggestedText)
   }
 
@@ -311,20 +312,30 @@ class SearchFragment : BaseFragment() {
             "Error in getting searched result\nOriginal exception ${ignore.message}"
           )
         } finally {
-          val onlyRecentSearches =
-            searchScreenState.value.searchList.all { it is SearchListItem.RecentSearchListItem }
-          searchScreenState.update {
-            copy(
-              isLoading = false,
-              suggestedSpelledWord = if (onlyRecentSearches && searchScreenState.value.searchText.isNotEmpty()) {
-                "Demo"
-              } else {
-                null
-              }
-            )
-          }
+          updateSuggestedWords()
         }
       }
+  }
+
+  /**
+   * Updates the suggested word list using the libkiwix spellings database.
+   */
+  private suspend fun updateSuggestedWords() {
+    val onlyRecentSearches =
+      searchScreenState.value.searchList.all { it is SearchListItem.RecentSearchListItem }
+
+    if (onlyRecentSearches && searchScreenState.value.searchText.isNotEmpty()) {
+      val suggestedWords = searchViewModel.getSuggestedSpelledWords(
+        searchScreenState.value.searchText,
+        MAX_SUGGEST_WORD_COUNT
+      )
+
+      searchScreenState.update {
+        copy(suggestedWordsList = suggestedWords, isLoading = false)
+      }
+    } else {
+      searchScreenState.update { copy(suggestedWordsList = emptyList(), isLoading = false) }
+    }
   }
 
   private fun setIsPageSearchEnabled(searchText: String) {

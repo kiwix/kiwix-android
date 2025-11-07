@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -80,7 +81,7 @@ fun KiwixSearchView(
   placeholder: String = stringResource(R.string.search_label),
   searchViewTextFiledTestTag: String = "",
   clearButtonTestTag: String = "",
-  suggestionText: String? = null,
+  suggestedWordsList: List<String> = emptyList(),
   onSuggestedWordClick: (String) -> Unit = {},
   onValueChange: (String) -> Unit,
   onClearClick: () -> Unit,
@@ -99,17 +100,17 @@ fun KiwixSearchView(
       onKeyboardSubmitButtonClick,
       textFieldBounds
     )
-    ShowCorrectWordSuggestion(suggestionText, onSuggestedWordClick, textFieldBounds)
+    ShowCorrectWordSuggestion(suggestedWordsList, onSuggestedWordClick, textFieldBounds)
   }
 }
 
 @Composable
 private fun ShowCorrectWordSuggestion(
-  suggestionText: String?,
+  suggestedWordsList: List<String>,
   onSuggestedWordClick: (String) -> Unit,
   textFieldBounds: MutableState<Rect>
 ) {
-  if (suggestionText.isNullOrBlank()) return
+  if (suggestedWordsList.isEmpty()) return
   Popup(
     alignment = Alignment.TopStart,
     offset = IntOffset(
@@ -117,27 +118,48 @@ private fun ShowCorrectWordSuggestion(
       y = textFieldBounds.value.bottom.roundToInt()
     )
   ) {
-    Row(
+    LazyColumn(
       modifier = Modifier
         .fillMaxWidth()
-        .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM)
         .background(MaterialTheme.colorScheme.background)
-        .clickable { onSuggestedWordClick(suggestionText) },
-      verticalAlignment = Alignment.CenterVertically
     ) {
-      Text(
-        text = getSuggestedHighlightedText(suggestionText),
-        modifier = Modifier
-          .padding(horizontal = EIGHT_DP)
-          .weight(1f),
-        fontSize = SEARCH_ITEM_TEXT_SIZE
-      )
-      Icon(
-        painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-        contentDescription = stringResource(id = R.string.suggested_search_icon_description),
-        modifier = Modifier.padding(horizontal = EIGHT_DP)
-      )
+      items(suggestedWordsList.size) { index ->
+        val suggestionText = suggestedWordsList[index]
+        SuggestedItem(index, suggestionText, onSuggestedWordClick)
+      }
     }
+  }
+}
+
+@Composable
+private fun SuggestedItem(
+  index: Int,
+  suggestedText: String,
+  onSuggestedWordClick: (String) -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM)
+      .clickable { onSuggestedWordClick(suggestedText) }
+      .padding(horizontal = EIGHT_DP, vertical = EIGHT_DP),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    val suggestedHighlightedText = getSuggestedHighlightedText(suggestedText)
+    Text(
+      text = suggestedHighlightedText,
+      modifier = Modifier
+        .weight(1f)
+        .semantics { contentDescription = "$suggestedHighlightedText$index" },
+      fontSize = SEARCH_ITEM_TEXT_SIZE,
+      maxLines = 1,
+      overflow = Ellipsis
+    )
+    Icon(
+      painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
+      contentDescription = stringResource(id = R.string.suggested_search_icon_description) + index,
+      modifier = Modifier.padding(start = EIGHT_DP)
+    )
   }
 }
 

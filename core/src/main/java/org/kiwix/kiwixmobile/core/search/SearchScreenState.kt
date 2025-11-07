@@ -73,7 +73,7 @@ data class SearchScreenState(
    * Manages the showing of suggested word provided by the libkiwix if no search
    * result found for typed value.
    */
-  val suggestedSpelledWord: String?,
+  val suggestedWordsList: List<String>,
   /**
    * Manages the click of suggested item by the libkiwix.
    */

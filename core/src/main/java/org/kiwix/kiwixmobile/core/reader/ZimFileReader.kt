@@ -31,9 +31,14 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteSpellingDBDir
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getFileCacheDir
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSpellingDBDir
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.JNIKiwixException
+import org.kiwix.libkiwix.SpellingsDB
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
 import org.kiwix.libzim.Item
@@ -47,6 +52,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URLDecoder
 import javax.inject.Inject
+import kotlin.collections.orEmpty
 
 private const val TAG = "ZimFileReader"
 
@@ -54,7 +60,8 @@ private const val TAG = "ZimFileReader"
 class ZimFileReader constructor(
   val zimReaderSource: ZimReaderSource,
   val jniKiwixReader: Archive,
-  private val searcher: SuggestionSearcher
+  private val searcher: SuggestionSearcher,
+  private val spellingsDB: SpellingsDB?
 ) {
   interface Factory {
     suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
@@ -68,7 +75,8 @@ class ZimFileReader constructor(
               ZimFileReader(
                 zimReaderSource,
                 jniKiwixReader = it,
-                searcher = SuggestionSearcher(it)
+                searcher = SuggestionSearcher(it),
+                spellingsDB = getSpellingDB(it)
               ).also {
                 Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
               }
@@ -98,6 +106,18 @@ class ZimFileReader constructor(
             null
           }
         }
+
+      private suspend fun getSpellingDB(archive: Archive): SpellingsDB? =
+        runCatching {
+          val cachedDir = getSpellingDBDir(CoreApp.instance)?.absolutePath
+          SpellingsDB(archive, cachedDir)
+        }.onFailure {
+          Log.e(
+            TAG_KIWIX,
+            "Failed to initialize SpellingsDB: ${it.message}",
+            it
+          )
+        }.getOrNull()
     }
   }
 
@@ -172,6 +192,25 @@ class ZimFileReader constructor(
       Log.e(TAG, "Unable to search in this file as it does not have FT Xapian index. $exception")
       null
     }
+
+  /**
+   * Retrieves a list of suggested or corrected spellings for a given search term.
+   *
+   * @param word The search term for which to retrieve spelling suggestions.
+   * @param maxCount The maximum number of suggestions to return.
+   * @return A list of suggested words ordered by relevance, or an empty list if
+   *         suggestions are unavailable or the SpellingsDB is not initialized.
+   */
+  fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
+    runCatching {
+      spellingsDB?.getSpellingCorrections(word, maxCount)?.toList().orEmpty()
+    }.onFailure {
+      Log.e(
+        TAG,
+        "Error fetching suggested spellings: ${it.message}",
+        it
+      )
+    }.getOrDefault(emptyList())
 
   fun getPageUrlFrom(title: String): String? =
     try {
@@ -386,6 +425,8 @@ class ZimFileReader constructor(
   fun dispose() {
     jniKiwixReader.dispose()
     searcher.dispose()
+    spellingsDB?.dispose()
+    deleteSpellingDBDir(CoreApp.instance)
   }
 
   @Suppress("TooGenericExceptionCaught")
