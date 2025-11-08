@@ -380,8 +380,7 @@ class LibkiwixBookmarks @Inject constructor(
           ZimFileReader(
             it,
             archive,
-            SuggestionSearcher(archive),
-            null
+            SuggestionSearcher(archive)
           )
         }
       }

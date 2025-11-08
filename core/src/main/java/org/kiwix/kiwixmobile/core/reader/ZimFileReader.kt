@@ -24,7 +24,9 @@ import android.util.Base64
 import androidx.core.net.toUri
 import eu.mhutti1.utils.storage.KB
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -34,7 +36,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteSpellingDBDir
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getFileCacheDir
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSpellingDBDir
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.JNIKiwixException
@@ -52,7 +53,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URLDecoder
 import javax.inject.Inject
-import kotlin.collections.orEmpty
 
 private const val TAG = "ZimFileReader"
 
@@ -60,8 +60,7 @@ private const val TAG = "ZimFileReader"
 class ZimFileReader constructor(
   val zimReaderSource: ZimReaderSource,
   val jniKiwixReader: Archive,
-  private val searcher: SuggestionSearcher,
-  private val spellingsDB: SpellingsDB?
+  private val searcher: SuggestionSearcher
 ) {
   interface Factory {
     suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
@@ -76,9 +75,13 @@ class ZimFileReader constructor(
                 zimReaderSource,
                 jniKiwixReader = it,
                 searcher = SuggestionSearcher(it),
-                spellingsDB = getSpellingDB(it)
-              ).also {
+              ).also { zimFileReader ->
                 Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
+                // Prepare the SpellingsDB asynchronously so that creating the
+                // ZIM reader doesn’t block the user experience
+                CoroutineScope(Dispatchers.IO).launch {
+                  zimFileReader.prepareSpellingsDB(zimFileReader.jniKiwixReader)
+                }
               }
             } ?: kotlin.run {
               Log.e(
@@ -106,20 +109,10 @@ class ZimFileReader constructor(
             null
           }
         }
-
-      private suspend fun getSpellingDB(archive: Archive): SpellingsDB? =
-        runCatching {
-          val cachedDir = getSpellingDBDir(CoreApp.instance)?.absolutePath
-          SpellingsDB(archive, cachedDir)
-        }.onFailure {
-          Log.e(
-            TAG_KIWIX,
-            "Failed to initialize SpellingsDB: ${it.message}",
-            it
-          )
-        }.getOrNull()
     }
   }
+
+  private var spellingsDB: SpellingsDB? = null
 
   /**
    * Note that the value returned is NOT unique for each zim file. Versions of the same wiki
@@ -192,6 +185,25 @@ class ZimFileReader constructor(
       Log.e(TAG, "Unable to search in this file as it does not have FT Xapian index. $exception")
       null
     }
+
+  /**
+   * Initializes the `SpellingsDB` instance using the currently opened ZIM archive.
+   *
+   * This prepares the spell correction database used by libkiwix
+   * for suggesting alternative or corrected search terms.
+   */
+  suspend fun prepareSpellingsDB(archive: Archive) {
+    runCatching {
+      val cachedDir = getSpellingDBDir(CoreApp.instance)?.absolutePath
+      spellingsDB = SpellingsDB(archive, cachedDir)
+    }.onFailure {
+      Log.e(
+        TAG_KIWIX,
+        "Failed to initialize SpellingsDB: ${it.message}",
+        it
+      )
+    }
+  }
 
   /**
    * Retrieves a list of suggested or corrected spellings for a given search term.
