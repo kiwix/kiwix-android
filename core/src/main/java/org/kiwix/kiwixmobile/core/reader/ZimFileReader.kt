@@ -27,6 +27,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -35,7 +37,6 @@ import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteSpellingDBDir
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSpellingDBDir
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.JNIKiwixException
@@ -62,6 +63,8 @@ class ZimFileReader constructor(
   val jniKiwixReader: Archive,
   private val searcher: SuggestionSearcher
 ) {
+  private val spellingsDBCreationMutex = Mutex()
+
   interface Factory {
     suspend fun create(
       zimReaderSource: ZimReaderSource,
@@ -201,15 +204,22 @@ class ZimFileReader constructor(
    * for suggesting alternative or corrected search terms.
    */
   suspend fun prepareSpellingsDB(archive: Archive) {
-    runCatching {
-      val cachedDir = getSpellingDBDir(CoreApp.instance)?.absolutePath
-      spellingsDB = SpellingsDB(archive, cachedDir)
-    }.onFailure {
-      Log.e(
-        TAG_KIWIX,
-        "Failed to initialize SpellingsDB: ${it.message}",
-        it
-      )
+    spellingsDBCreationMutex.withLock {
+      if (spellingsDB != null) {
+        Log.d(TAG_KIWIX, "SpellingsDB already initialized, skipping.")
+        return
+      }
+      runCatching {
+        val cachedDir = getSpellingDBDir(CoreApp.instance)?.absolutePath
+        spellingsDB = SpellingsDB(archive, cachedDir)
+        Log.d(TAG_KIWIX, "SpellingsDB successfully initialized.")
+      }.onFailure {
+        Log.e(
+          TAG_KIWIX,
+          "Failed to initialize SpellingsDB: ${it.message}",
+          it
+        )
+      }
     }
   }
 
@@ -446,7 +456,6 @@ class ZimFileReader constructor(
     jniKiwixReader.dispose()
     searcher.dispose()
     spellingsDB?.dispose()
-    deleteSpellingDBDir(CoreApp.instance)
   }
 
   @Suppress("TooGenericExceptionCaught")

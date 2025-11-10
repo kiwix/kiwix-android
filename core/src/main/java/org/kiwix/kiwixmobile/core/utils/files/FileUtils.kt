@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.utils.files
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.net.Uri
@@ -60,30 +59,31 @@ import java.io.IOException
 object FileUtils {
   private val fileOperationMutex = Mutex()
   private const val SPELLING_DB_CACHED_DIRECTORY = "SpellingsDBCachedDir"
+  private const val ASSET_LOADING_CACHED_DIRECTORY = "AssetLoadingCachedDir"
 
   @JvmStatic
   fun getSpellingDBDir(context: Context): File? {
-    val externalFileDir = ContextWrapper(context).getExternalFilesDir("")
-    val spellingsDBCachedDir = File(externalFileDir, SPELLING_DB_CACHED_DIRECTORY)
-    if (!spellingsDBCachedDir.exists()) spellingsDBCachedDir.mkdir()
-    return spellingsDBCachedDir
-  }
-
-  @JvmStatic
-  @Synchronized
-  fun deleteSpellingDBDir(context: Context, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-    CoroutineScope(dispatcher).launch {
-      getSpellingDBDir(context)?.deleteRecursively()
-    }
-  }
-
-  @JvmStatic
-  fun getFileCacheDir(context: Context): File? =
-    if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+    val baseCacheDir = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
       context.externalCacheDir
     } else {
       context.cacheDir
     }
+    return File(baseCacheDir, SPELLING_DB_CACHED_DIRECTORY).apply {
+      if (!exists()) mkdirs()
+    }
+  }
+
+  @JvmStatic
+  fun getFileCacheDir(context: Context): File? {
+    val baseCacheDir = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+      context.externalCacheDir
+    } else {
+      context.cacheDir
+    }
+    return File(baseCacheDir, ASSET_LOADING_CACHED_DIRECTORY).apply {
+      if (!exists()) mkdirs()
+    }
+  }
 
   @JvmStatic
   @Synchronized
