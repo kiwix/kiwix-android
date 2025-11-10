@@ -1543,10 +1543,20 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private suspend fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
+  /**
+   * Creates the ZimFileReader and loads the MainPage.
+   * Subclasses override this method to provide the showSearchSuggestion based on configuration.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open suspend fun openAndSetInContainer(
+    zimReaderSource: ZimReaderSource,
+    showSearchSuggestionsSpellChecked: Boolean = false
+  ) {
     clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
     zimReaderContainer?.let { zimReaderContainer ->
-      zimReaderContainer.setZimReaderSource(zimReaderSource)
+      zimReaderContainer.setZimReaderSource(zimReaderSource, showSearchSuggestionsSpellChecked)
 
       zimReaderContainer.zimFileReader?.let { zimFileReader ->
         // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561

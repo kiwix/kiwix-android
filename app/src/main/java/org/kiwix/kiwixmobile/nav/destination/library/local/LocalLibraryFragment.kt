@@ -513,7 +513,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   @Suppress("InjectDispatcher")
   override fun addBookToLibkiwixBookOnDisk(file: File) {
     CoroutineScope(Dispatchers.IO).launch {
-      zimReaderFactory.create(ZimReaderSource(file))
+      zimReaderFactory.create(ZimReaderSource(file), false)
         ?.let { zimFileReader ->
           val book = Book().apply { update(zimFileReader.jniKiwixReader) }
           mainRepositoryActions.saveBook(book)

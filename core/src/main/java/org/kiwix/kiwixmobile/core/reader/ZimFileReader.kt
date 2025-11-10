@@ -63,11 +63,17 @@ class ZimFileReader constructor(
   private val searcher: SuggestionSearcher
 ) {
   interface Factory {
-    suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
+    suspend fun create(
+      zimReaderSource: ZimReaderSource,
+      showSearchSuggestionsSpellChecked: Boolean
+    ): ZimFileReader?
 
     class Impl @Inject constructor() : Factory {
       @Suppress("InjectDispatcher")
-      override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
+      override suspend fun create(
+        zimReaderSource: ZimReaderSource,
+        showSearchSuggestionsSpellChecked: Boolean
+      ): ZimFileReader? =
         withContext(Dispatchers.IO) { // Bug Fix #3805
           try {
             zimReaderSource.createArchive()?.let {
@@ -77,10 +83,12 @@ class ZimFileReader constructor(
                 searcher = SuggestionSearcher(it),
               ).also { zimFileReader ->
                 Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
-                // Prepare the SpellingsDB asynchronously so that creating the
-                // ZIM reader doesn’t block the user experience
-                CoroutineScope(Dispatchers.IO).launch {
-                  zimFileReader.prepareSpellingsDB(zimFileReader.jniKiwixReader)
+                if (showSearchSuggestionsSpellChecked) {
+                  // Prepare the SpellingsDB asynchronously(when it configure to create) so that creating the
+                  // ZIM reader doesn’t block the user experience.
+                  CoroutineScope(Dispatchers.IO).launch {
+                    zimFileReader.prepareSpellingsDB(zimFileReader.jniKiwixReader)
+                  }
                 }
               }
             } ?: kotlin.run {
