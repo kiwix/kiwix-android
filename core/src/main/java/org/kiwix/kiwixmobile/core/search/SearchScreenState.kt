@@ -70,12 +70,12 @@ data class SearchScreenState(
    */
   val navigationIcon: @Composable() () -> Unit,
   /**
-   * Manages the showing of suggested word provided by the libkiwix if no search
+   * Manages the showing of suggestions provided by the libkiwix if no search
    * result found for typed value.
    */
-  val suggestedWordsList: List<String>,
+  val spellingCorrectionSuggestions: List<String>,
   /**
-   * Manages the click of suggested item by the libkiwix.
+   * Manages the click of suggestion item provided by the libkiwix.
    */
-  val onSuggestedItemClick: (String) -> Unit
+  val onSuggestionClick: (String) -> Unit
 )

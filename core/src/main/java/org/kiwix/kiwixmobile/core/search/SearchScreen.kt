@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,6 +35,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,6 +43,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -53,9 +56,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
@@ -63,6 +68,7 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LOAD_MORE_PROGRESS_BAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_SEARCH_ITEM
@@ -99,9 +105,7 @@ fun SearchScreen(
               onValueChange = searchScreenState.onSearchViewValueChange,
               onClearClick = searchScreenState.onSearchViewClearClick,
               modifier = Modifier,
-              onKeyboardSubmitButtonClick = searchScreenState.onKeyboardSubmitButtonClick,
-              suggestedWordsList = searchScreenState.suggestedWordsList,
-              onSuggestedWordClick = searchScreenState.onSuggestedItemClick
+              onKeyboardSubmitButtonClick = searchScreenState.onKeyboardSubmitButtonClick
             )
           }
         )
@@ -134,30 +138,101 @@ private fun SearchScreenContent(
       ),
     contentAlignment = Alignment.Center
   ) {
-    if (searchScreenState.searchList.isEmpty()) {
-      NoSearchResultView()
-    } else {
-      LazyColumn(
-        modifier = Modifier
-          .fillMaxSize(),
-        state = lazyListState
-      ) {
-        items(searchScreenState.searchList) { item ->
-          SearchListItem(
-            searchListItem = item,
-            onItemClick = { searchScreenState.onItemClick(item) },
-            onNewTabIconClick = { searchScreenState.onNewTabIconClick(item) },
-            onItemLongClick = if (item is SearchListItem.RecentSearchListItem) {
-              { searchScreenState.onItemLongClick(item) }
-            } else {
-              null
-            }
-          )
+    when {
+      searchScreenState.spellingCorrectionSuggestions.isNotEmpty() -> {
+        SpellingCorrectionSuggestions(
+          searchScreenState.spellingCorrectionSuggestions,
+          searchScreenState.onSuggestionClick
+        )
+      }
+
+      searchScreenState.searchList.isEmpty() -> NoSearchResultView()
+
+      else -> {
+        LazyColumn(
+          modifier = Modifier
+            .fillMaxSize(),
+          state = lazyListState
+        ) {
+          items(searchScreenState.searchList) { item ->
+            SearchListItem(
+              searchListItem = item,
+              onItemClick = { searchScreenState.onItemClick(item) },
+              onNewTabIconClick = { searchScreenState.onNewTabIconClick(item) },
+              onItemLongClick = if (item is SearchListItem.RecentSearchListItem) {
+                { searchScreenState.onItemLongClick(item) }
+              } else {
+                null
+              }
+            )
+          }
+          showLoadMoreProgressBar(searchScreenState, progressBarTrackColor)
         }
-        showLoadMoreProgressBar(searchScreenState, progressBarTrackColor)
       }
     }
     ShowLoadingProgressBar(searchScreenState.isLoading, progressBarTrackColor)
+  }
+}
+
+@Composable
+private fun SpellingCorrectionSuggestions(
+  spellingCorrectionSuggestions: List<String>,
+  onSuggestionClick: (String) -> Unit
+) {
+  LazyColumn(modifier = Modifier.fillMaxSize()) {
+    spellingCorrectionHeader()
+    itemsIndexed(spellingCorrectionSuggestions) { index, item ->
+      SpellingSuggestionItem(
+        index = index,
+        suggestionText = item,
+        onSuggestionClick = onSuggestionClick
+      )
+    }
+  }
+}
+
+private fun LazyListScope.spellingCorrectionHeader() {
+  item {
+    Text(
+      text = stringResource(R.string.do_you_mean),
+      fontSize = SEARCH_ITEM_TEXT_SIZE,
+      color = MaterialTheme.colorScheme.onBackground,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = EIGHT_DP)
+        .padding(top = FIFTEEN_DP)
+    )
+  }
+}
+
+@Composable
+private fun SpellingSuggestionItem(
+  index: Int,
+  suggestionText: String,
+  onSuggestionClick: (String) -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM)
+      .clickable { onSuggestionClick(suggestionText) },
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = suggestionText,
+      modifier = Modifier
+        .weight(1f)
+        .padding(horizontal = EIGHT_DP)
+        .semantics { contentDescription = "$suggestionText$index" },
+      fontSize = SEARCH_ITEM_TEXT_SIZE,
+      maxLines = 1,
+      overflow = Ellipsis
+    )
+    Icon(
+      painter = painterResource(id = R.drawable.action_search),
+      contentDescription = stringResource(id = R.string.suggested_search_icon_description) + index,
+      modifier = Modifier.padding(start = EIGHT_DP).minimumInteractiveComponentSize()
+    )
   }
 }
 

@@ -18,15 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -37,42 +29,22 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.Popup
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_SEARCH_ITEM
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_TEXT_SIZE
-import kotlin.math.roundToInt
 
 @Composable
 fun KiwixSearchView(
@@ -81,115 +53,9 @@ fun KiwixSearchView(
   placeholder: String = stringResource(R.string.search_label),
   searchViewTextFiledTestTag: String = "",
   clearButtonTestTag: String = "",
-  suggestedWordsList: List<String> = emptyList(),
-  onSuggestedWordClick: (String) -> Unit = {},
   onValueChange: (String) -> Unit,
   onClearClick: () -> Unit,
   onKeyboardSubmitButtonClick: (String) -> Unit = {}
-) {
-  val textFieldBounds = remember { mutableStateOf(Rect.Zero) }
-  Column {
-    SearchViewTextFiled(
-      modifier,
-      searchViewTextFiledTestTag,
-      value,
-      placeholder,
-      onValueChange,
-      onClearClick,
-      clearButtonTestTag,
-      onKeyboardSubmitButtonClick,
-      textFieldBounds
-    )
-    ShowCorrectWordSuggestion(suggestedWordsList, onSuggestedWordClick, textFieldBounds)
-  }
-}
-
-@Composable
-private fun ShowCorrectWordSuggestion(
-  suggestedWordsList: List<String>,
-  onSuggestedWordClick: (String) -> Unit,
-  textFieldBounds: MutableState<Rect>
-) {
-  if (suggestedWordsList.isEmpty()) return
-  Popup(
-    alignment = Alignment.TopStart,
-    offset = IntOffset(
-      x = textFieldBounds.value.left.roundToInt(),
-      y = textFieldBounds.value.bottom.roundToInt()
-    )
-  ) {
-    LazyColumn(
-      modifier = Modifier
-        .fillMaxWidth()
-        .background(MaterialTheme.colorScheme.background)
-    ) {
-      items(suggestedWordsList.size) { index ->
-        val suggestionText = suggestedWordsList[index]
-        SuggestedItem(index, suggestionText, onSuggestedWordClick)
-      }
-    }
-  }
-}
-
-@Composable
-private fun SuggestedItem(
-  index: Int,
-  suggestedText: String,
-  onSuggestedWordClick: (String) -> Unit
-) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM)
-      .clickable { onSuggestedWordClick(suggestedText) }
-      .padding(horizontal = EIGHT_DP, vertical = EIGHT_DP),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    val suggestedHighlightedText = getSuggestedHighlightedText(suggestedText)
-    Text(
-      text = suggestedHighlightedText,
-      modifier = Modifier
-        .weight(1f)
-        .semantics { contentDescription = "$suggestedHighlightedText$index" },
-      fontSize = SEARCH_ITEM_TEXT_SIZE,
-      maxLines = 1,
-      overflow = Ellipsis
-    )
-    Icon(
-      painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-      contentDescription = stringResource(id = R.string.suggested_search_icon_description) + index,
-      modifier = Modifier.padding(start = EIGHT_DP)
-    )
-  }
-}
-
-@Composable
-private fun getSuggestedHighlightedText(suggestionText: String): AnnotatedString {
-  val rawString = stringResource(R.string.suggest_search_text)
-  val parts = rawString.split("%s")
-  val before = parts.getOrNull(ZERO).orEmpty()
-  val after = parts.getOrNull(ONE).orEmpty()
-  return buildAnnotatedString {
-    append(before)
-    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-      append(suggestionText)
-    }
-    append(after)
-  }
-}
-
-@Suppress("LongParameterList", "LongMethod")
-@Composable
-private fun SearchViewTextFiled(
-  modifier: Modifier,
-  searchViewTextFiledTestTag: String,
-  value: String,
-  placeholder: String,
-  onValueChange: (String) -> Unit,
-  onClearClick: () -> Unit,
-  clearButtonTestTag: String,
-  onKeyboardSubmitButtonClick: (String) -> Unit,
-  textFieldBounds: MutableState<Rect>
 ) {
   val hintColor = if (isSystemInDarkTheme()) {
     Color.LightGray
@@ -212,17 +78,7 @@ private fun SearchViewTextFiled(
       .testTag(searchViewTextFiledTestTag)
       .minimumInteractiveComponentSize()
       .focusRequester(focusRequester)
-      .semantics { contentDescription = placeholder }
-      .onGloballyPositioned { coordinates ->
-        val position = coordinates.positionInRoot()
-        val size = coordinates.size.toSize()
-        textFieldBounds.value = Rect(
-          position.x,
-          position.y,
-          position.x + size.width,
-          position.y + size.height
-        )
-      },
+      .semantics { contentDescription = placeholder },
     singleLine = true,
     value = value,
     placeholder = {

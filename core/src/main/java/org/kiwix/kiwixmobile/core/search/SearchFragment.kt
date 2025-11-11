@@ -104,8 +104,8 @@ class SearchFragment : BaseFragment() {
       onKeyboardSubmitButtonClick = {
         getSearchListItemForQuery(it)?.let(::onItemClick)
       },
-      suggestedWordsList = emptyList(),
-      onSuggestedItemClick = { onSuggestedItemClick(it) }
+      spellingCorrectionSuggestions = emptyList(),
+      onSuggestionClick = { onSuggestionItemClick(it) }
     )
   )
 
@@ -250,9 +250,9 @@ class SearchFragment : BaseFragment() {
     searchViewModel.searchResults(searchText.trim())
   }
 
-  private fun onSuggestedItemClick(suggestedText: String) {
-    searchScreenState.update { copy(suggestedWordsList = emptyList()) }
-    onSearchValueChanged(suggestedText)
+  private fun onSuggestionItemClick(suggestionText: String) {
+    searchScreenState.update { copy(spellingCorrectionSuggestions = emptyList()) }
+    onSearchValueChanged(suggestionText)
   }
 
   private fun actionMenuItems() = listOfNotNull(
@@ -331,10 +331,12 @@ class SearchFragment : BaseFragment() {
       )
 
       searchScreenState.update {
-        copy(suggestedWordsList = suggestedWords, isLoading = false)
+        copy(spellingCorrectionSuggestions = suggestedWords, isLoading = false)
       }
     } else {
-      searchScreenState.update { copy(suggestedWordsList = emptyList(), isLoading = false) }
+      searchScreenState.update {
+        copy(spellingCorrectionSuggestions = emptyList(), isLoading = false)
+      }
     }
   }
 

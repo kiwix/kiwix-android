@@ -210,6 +210,7 @@ class ZimFileReader constructor(
         return
       }
       runCatching {
+        Log.d(TAG_KIWIX, "Initializing SpellingsDB")
         val cachedDir = getSpellingDBDir(CoreApp.instance)?.absolutePath
         spellingsDB = SpellingsDB(archive, cachedDir)
         Log.d(TAG_KIWIX, "SpellingsDB successfully initialized.")
