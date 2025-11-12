@@ -86,6 +86,15 @@ class KiwixServer @Inject constructor(
       }
   }
 
+  fun getServerAddress(): String? {
+    val serverAccessUrls = jniKiwixServer.serverAccessUrls
+    return if (serverAccessUrls.size > 0) {
+      serverAccessUrls[0]
+    } else {
+      null
+    }
+  }
+
   fun startServer(port: Int): Boolean {
     jniKiwixServer.setPort(port)
     return jniKiwixServer.start()

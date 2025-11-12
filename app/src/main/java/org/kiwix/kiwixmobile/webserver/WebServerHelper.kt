@@ -108,6 +108,8 @@ class WebServerHelper @Inject constructor(
     ServerUtils.isServerStarted = isStarted
   }
 
+  fun getServerAddress(): String = kiwixServer?.getServerAddress().orEmpty()
+
   /**
    * Starts polling for a valid IP address using a [Flow].
    * - Polls every [FINDING_IP_ADDRESS_RETRY_TIME] milliseconds.
