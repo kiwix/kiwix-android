@@ -68,9 +68,20 @@ object FileUtils {
     } else {
       context.cacheDir
     }
-    return File(baseCacheDir, SPELLING_DB_CACHED_DIRECTORY).apply {
+
+    val spellingDBCacheDir = File(baseCacheDir, SPELLING_DB_CACHED_DIRECTORY).apply {
       if (!exists()) mkdirs()
     }
+
+    // Clean up any incomplete `.tmp` folders inside the spelling DB directory
+    spellingDBCacheDir.listFiles()?.forEach { file ->
+      if (file.isDirectory && file.name.endsWith(".tmp")) {
+        file.deleteRecursively()
+        Log.w(TAG_KIWIX, "Deleted incomplete SpellingsDB folder: ${file.absolutePath}")
+      }
+    }
+
+    return spellingDBCacheDir
   }
 
   @JvmStatic

@@ -59,6 +59,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import org.kiwix.kiwixmobile.core.R
@@ -196,6 +197,7 @@ private fun LazyListScope.spellingCorrectionHeader() {
     Text(
       text = stringResource(R.string.do_you_mean),
       fontSize = SEARCH_ITEM_TEXT_SIZE,
+      fontWeight = FontWeight.Companion.W700,
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier
         .fillMaxWidth()

@@ -63,8 +63,6 @@ class ZimFileReader constructor(
   val jniKiwixReader: Archive,
   private val searcher: SuggestionSearcher
 ) {
-  private val spellingsDBCreationMutex = Mutex()
-
   interface Factory {
     suspend fun create(
       zimReaderSource: ZimReaderSource,
@@ -468,6 +466,8 @@ class ZimFileReader constructor(
     }
 
   companion object {
+    private val spellingsDBCreationMutex = Mutex()
+
     /*
      * these uris aren't actually nullable but unit tests fail to compile as
      * Uri.parse returns null without android dependencies loaded
