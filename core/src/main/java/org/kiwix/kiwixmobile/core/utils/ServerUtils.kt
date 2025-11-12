@@ -25,6 +25,12 @@ import java.net.SocketException
 object ServerUtils {
   @JvmField var port = 0
   @JvmField var isServerStarted = false
+
+  /**
+   * Stores the server address returned by libkiwix so that when the Hotspot screen
+   * becomes visible again, the server address can be displayed.
+   */
+  @JvmField var serverAddress = ""
   const val INVALID_IP = "-1" // To remove extra characters from IP for Android Pie
   private const val TAG = "ServerUtils"
 
@@ -60,9 +66,6 @@ object ServerUtils {
         .toRegex()
     return ipRegex.find(ip, 0)?.value ?: throw IllegalArgumentException()
   }
-
-  @JvmStatic fun getSocketAddress(): String =
-    "http://${getIpAddress()}:$port".replace("\n", "")
 
   @JvmStatic fun getIp(): String? =
     getIpAddress()?.replace("\n", "")?.takeIf(String::isNotEmpty) ?: INVALID_IP

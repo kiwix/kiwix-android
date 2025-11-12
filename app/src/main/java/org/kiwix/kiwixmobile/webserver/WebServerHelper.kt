@@ -97,6 +97,8 @@ class WebServerHelper @Inject constructor(
     ServerUtils.isServerStarted = isStarted
   }
 
+  fun getServerAddress(): String = kiwixServer?.getServerAddress().orEmpty()
+
   // Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
   // If no ip is found after 15 seconds, dismisses the progress dialog
   @Suppress("MagicNumber")
