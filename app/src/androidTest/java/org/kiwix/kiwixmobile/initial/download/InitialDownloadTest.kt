@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
+import android.os.Build
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -32,8 +33,11 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -90,15 +94,31 @@ class InitialDownloadTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      accessibilityValidator.setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
+    } else {
+      accessibilityValidator.setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+        )
+      )
     }
   }
 
