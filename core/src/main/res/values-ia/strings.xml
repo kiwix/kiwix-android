@@ -194,7 +194,7 @@
   <string name="downloading">Discargante</string>
   <string name="no_items_msg">Nulle articulos disponibile</string>
   <string name="crash_title">Ben… isto es embarassante</string>
-  <string name="crash_description" fuzzy="true">Pare que le programma ha collabite.\n\nTe displaciarea adjutar nos a resolver iste problema inviante nos le sequente information?</string>
+  <string name="crash_description">Pare que le programma ha collabite.\n\nVolerea tu adjutar nos a resolver iste problema inviante nos le sequente reporto de collapso?</string>
   <string name="crash_checkbox_language">Tu parametros de lingua</string>
   <string name="crash_checkbox_zimfiles">Un lista de tu files ZIM</string>
   <string name="crash_checkbox_exception">Detalios del collapso</string>
@@ -316,7 +316,7 @@
   <string name="send_report">Inviar reporto diagnostic</string>
   <string name="crash_checkbox_file_system">Detalios de systema de files</string>
   <string name="diagnostic_report">Reporto diagnostic</string>
-  <string name="diagnostic_report_message" fuzzy="true">Per favor invia tote le sequente detalios de sorta que nos pote diagnosticar le problema</string>
+  <string name="diagnostic_report_message">Pro adjutar nos a diagnosticar le problema, reproduce primo le problema, pois invia le reporto diagnostic.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="search_open_in_new_tab">Aperir in un nove scheda</string>

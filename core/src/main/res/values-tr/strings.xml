@@ -40,6 +40,7 @@
   <string name="save_media_saved">Medya %s olarak Downloads/org.kiwix…/\'e kaydedildi</string>
   <string name="search_label">Ara</string>
   <string name="searched_list">Aranan liste</string>
+  <string name="more_options">Daha fazla seçenek</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
   <string name="hotspot_service_channel_name">Hotspot Hizmet Kanalı</string>
@@ -81,6 +82,10 @@
   <string name="pref_display_title">Görüntüle</string>
   <string name="pref_info_title">Bilgi</string>
   <string name="pref_info_version">Sürüm</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">Sistem</string>
+  <string name="theme_light">Açık</string>
+  <string name="theme_dark">Koyu</string>
   <string name="pref_theme_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
@@ -203,10 +208,10 @@
   <string name="your_languages">Seçilen diller:</string>
   <string name="your_language">Seçilen dil: %s</string>
   <string name="other_languages">Diğer diller:</string>
-  <string name="downloading" fuzzy="true">Indiriliyor:</string>
+  <string name="downloading">İndiriliyor</string>
   <string name="no_items_msg">Kullanılabilir öğe yok</string>
   <string name="crash_title">Peki… Bu utanç verici.</string>
-  <string name="crash_description" fuzzy="true">Düşmüş gibiyiz.\n\nAşağıdaki bilgileri göndererek bu sorunu çözmemize yardımcı olur musunuz?</string>
+  <string name="crash_description">Galiba çöktük.\n\nBu sorunu düzeltmemize yardımcı olmak için çökme raporunu gönderir misin?</string>
   <string name="crash_checkbox_language">Dil Ayarlarınız</string>
   <string name="crash_checkbox_zimfiles">Zim Dosyalarınızın Listesi</string>
   <string name="crash_checkbox_exception">Çökme Detayları</string>
@@ -328,7 +333,7 @@
   <string name="send_report">Teşhis raporu gönder</string>
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>
-  <string name="diagnostic_report_message" fuzzy="true">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
+  <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için önce hatayı yeniden oluştur, ardından tanılama raporunu gönder.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
   <string name="search_open_in_new_tab">Yeni sekmede aç</string>
@@ -344,16 +349,28 @@
   <string name="move">Taşı</string>
   <string name="copying_zim_file">ZIM dosyası kopyalanıyor %s…</string>
   <string name="moving_zim_file">ZIM dosyası taşınıyor %s</string>
+  <string name="copy_move_files_dialog_description">Kiwix, ZIM dosyasının kendi veri dizininde olmasını gerektiriyor.\n\nDosyayı oraya kopyalamak mı yoksa taşımak mı istersin?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix, ZIM dosyalarının kendi veri dizininde olmasını gerektiriyor.\n\nDosyaları oraya kopyalamak mı yoksa taşımak mı istersin?</string>
+  <string name="copy_file_error_message">ZIM dosyası kopyalanırken hata: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Dikkat et: Tüm ZIM parçalarının doğru şekilde taşındığından ya da kopyalandığından emin ol!</string>
+  <string name="verify_zim_chunks_dialog_message">ZIM dosyalarını “Android/media/org.kiwix…/” klasörünün içinde doğrulayabilirsin. İşin bittiğinde, kütüphane ekranını aşağı kaydırarak yenile. Bölünmüş ZIM dosyası daha sonra kütüphanende görünecek.</string>
+  <string name="why_copy_move_files_to_app_directory">Dosyalar neden uygulamanın genel dizinine kopyalanıyor veya taşınıyor?</string>
+  <string name="copy_move_files_to_app_directory_description">Android 11 ve üzeri için geçerli Google Play politikaları nedeniyle uygulamamız artık cihazındaki diğer konumlarda saklanan dosyalara doğrudan erişemiyor. Seçtiğin dosyaları görüntüleyebilmemiz için onları uygulama dizinimiz içindeki özel bir klasöre taşımamız veya kopyalamamız gerekiyor. Bu sayede dosyalara erişip açabiliyoruz.</string>
+  <string name="choose_storage_to_copy_move_zim_file">ZIM dosyasını kopyalamak ya da taşımak için bir depolama alanı seç</string>
+  <string name="move_file_error_message">ZIM dosyası taşınırken hata: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s\nDiğer ZIM dosyalarıyla devam etmek ister misin?</string>
+  <string name="your_selected_files_added_to_library">Seçtiğin ZIM dosyaları kütüphaneye eklendi.</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
-  <string name="update_content_description" fuzzy="true">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
+  <string name="update_content_description">Bir içeriği (ZIM dosyasını) güncellemek için aynı içeriğin en son sürümünü tamamen indirmen gerekir. Bunu indirme bölümünden yapabilirsin.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>
-  <string name="all_files_permission_needed_message" fuzzy="true">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni’ne ihtiyacımız var</string>
+  <string name="all_files_permission_needed_message">Cihazdaki tüm ZIM dosyalarına erişebilmemiz için “Tüm Dosyalara Erişim İzni”ne ihtiyacımız var.</string>
   <string name="allowed">İzin verildi</string>
   <string name="not_allowed">İzin verilmedi</string>
   <string name="denied_internet_permission_message">Lütfen içeriği indirmek için wifi özelliğini etkinleştirin</string>
   <string name="system_unable_to_grant_permission_message">Sistem izin veremiyor!</string>
   <string name="allow">İzin ver</string>
   <string name="swipe_down_for_library">Kitaplık için Aşağı Kaydırın</string>
+  <string name="reaching_remote_library">Uzak kütüphaneye bağlanılıyor</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>

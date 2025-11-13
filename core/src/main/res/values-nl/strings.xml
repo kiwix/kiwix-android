@@ -202,7 +202,7 @@
   <string name="downloading">Aan het downloaden</string>
   <string name="no_items_msg">Niets beschikbaar</string>
   <string name="crash_title">Ai… dit is nogal pijnlijk</string>
-  <string name="crash_description" fuzzy="true">Het lijkt erop dat we zijn gecrasht.\n\nWilt u ons helpen dit probleem op te lossen door de volgende informatie in te sturen?</string>
+  <string name="crash_description">Het lijkt erop dat we zijn gecrasht.\n\nWilt u ons helpen dit probleem op te lossen door de crashgegevens in te sturen?</string>
   <string name="crash_checkbox_language">Uw taalinstellingen</string>
   <string name="crash_checkbox_zimfiles">Een lijst met uw ZIM-bestanden</string>
   <string name="crash_checkbox_exception">Details van de crash</string>
@@ -324,7 +324,7 @@
   <string name="send_report">Diagnostisch rapport verzenden</string>
   <string name="crash_checkbox_file_system">Bestandssysteemdetails</string>
   <string name="diagnostic_report">Diagnostisch rapport</string>
-  <string name="diagnostic_report_message" fuzzy="true">Stuur alle volgende gegevens in zodat we het probleem kunnen vaststellen</string>
+  <string name="diagnostic_report_message">Om ons te helpen het probleem te diagnosticeren, moet u het probleem eerst reproduceren en vervolgens het diagnoserapport sturen.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Tekstgrootte</string>
   <string name="search_open_in_new_tab">In nieuw tabblad openen</string>

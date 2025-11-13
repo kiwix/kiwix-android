@@ -199,7 +199,7 @@
   <string name="downloading">Baixando</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isto é constrangedor</string>
-  <string name="crash_description" fuzzy="true">Parece que a aplicação bloqueou.\n\nPode ajudar-nos a corrigir este problema enviando as seguintes informações?</string>
+  <string name="crash_description">Parece que a aplicação crachou.\n\nPode ajudar-nos a corrigir este problema enviando um relatório de crache?</string>
   <string name="crash_checkbox_language">As suas configurações de idioma</string>
   <string name="crash_checkbox_zimfiles">Uma lista dos seus ficheiros ZIM</string>
   <string name="crash_checkbox_exception">Detalhes do bloqueio</string>
@@ -274,7 +274,7 @@
   <string name="send_report">Enviar relatório de diagnóstico</string>
   <string name="crash_checkbox_file_system">Detalhes do sistema de ficheiros</string>
   <string name="diagnostic_report">Relatório de diagnóstico</string>
-  <string name="diagnostic_report_message" fuzzy="true">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
+  <string name="diagnostic_report_message">Para ajudar-nos a diagnosticar o problema, reproduza primeiro o problema, depois envie o relatório de diagnóstico.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom do texto</string>
   <string name="search_open_in_new_tab">Abrir num separador novo</string>

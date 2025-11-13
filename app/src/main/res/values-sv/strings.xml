@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Apq
 * Larsa
 * Sabelöga
 * WikiPhoenix
@@ -7,9 +8,12 @@
 <resources>
   <string name="file_system_does_not_support_4gb">Ditt filsystem har inte stöd för filer över 4GB</string>
   <string name="detecting_file_system">Upptäcker om filsystemet kan skapa filer på 4GB</string>
-  <string name="cannot_open_file">Misslyckades att öppna fil\nVar god försök leta efter denna fil i ditt bibliotek</string>
+  <string name="cannot_open_file">Kunde inte öppna filen\nFörsök att leta efter den här filen i ditt bibliotek.</string>
   <string name="send_files_title">Skicka filer</string>
   <string name="receive_files_title">Ta emot filer</string>
   <string name="no_app_found_to_open">Ingen app hittades för att välja ZIM-fil!</string>
   <string name="select_zim_file">Välj ZIM-fil att läsa</string>
+  <string name="swipe_down_to_scan_storage">Svep nedåt för att skanna din enhet efter nya böcker…</string>
+  <string name="auto_detect_books">Identifiera dina böcker automatiskt</string>
+  <string name="auto_detect_books_description">Vid första uppstarten blir du tillfrågad om appen kan skanna ditt lagringsutrymme. Om du tillåter det kommer vi automatiskt att identifiera dina ZIM-filer utan att behöva lägga till dem manuellt.</string>
 </resources>

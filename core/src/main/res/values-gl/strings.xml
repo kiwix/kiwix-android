@@ -4,6 +4,7 @@
 * Athena in Wonderland
 * Elisardojm
 * Fitoschido
+* Ghose
 * McDutchie
 * MohitMali
 * Toliño
@@ -17,12 +18,25 @@
   <string name="menu_random_article">Artigo ao chou</string>
   <string name="menu_read_aloud">Ler en voz alta</string>
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
+  <string name="menu_support_kiwix">Apoiar a Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Apoiar a %s</string>
+  <string name="menu_about_app">Sobre a app %s</string>
+  <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
   <string name="save_media_saved">Multimedia gardado como %s en Downloads/org.kiwix…/</string>
   <string name="search_label">Procurar</string>
+  <string name="searched_list">Lista buscada</string>
+  <string name="more_options">Máis opcións</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
+  <string name="hotspot_service_channel_name">Canle de servizo do punto de acceso</string>
+  <string name="hotspot_failed_title">Non se puido iniciar o punto de acceso</string>
+  <string name="hotspot_failed_message">Semella que o punto de acceso xa está activado.\nPor favor desactiva o teu punto de acceso wifi para continuar.</string>
+  <string name="go_to_wifi_settings_label">Ir aos axustes da WIFI</string>
+  <string name="connection_refused">Conexión rexeitada.</string>
+  <string name="hotspot_running">Punto de acceso activo</string>
+  <string name="no_books_selected_toast_message">Por favor selecciona primeiro os libros</string>
   <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado. %s</string>
   <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido. %s</string>
   <string name="error_article_url_not_found">Erro: Non se puido cargar o artigo (URL: %1$s).</string>

@@ -208,7 +208,7 @@
   <string name="selected_items">%1$d të përzgjedhur</string>
   <string name="bookmarks_from_current_book">Shihni Faqerojtës Prej Krejt Librave</string>
   <string name="search_bookmarks">Kërkoni te faqerojtësit</string>
-  <string name="switch_tabs">Ndërro skedat</string>
+  <string name="switch_tabs">Këmbeni skeda</string>
   <string name="close_all_tabs">Mbylli krejt skedat</string>
   <string name="close_tab">Mbylle skedën</string>
   <string name="could_not_restore_tabs">S’u rikthyen dot skedat.</string>
