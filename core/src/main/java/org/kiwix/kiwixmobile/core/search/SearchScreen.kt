@@ -19,15 +19,18 @@
 package org.kiwix.kiwixmobile.core.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,6 +40,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -76,6 +80,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_SEARCH_I
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
 const val NO_SEARCH_RESULT_TESTING_TAG = "noSearchResultTestingTag"
@@ -155,6 +160,9 @@ private fun SearchScreenContent(
             .fillMaxSize(),
           state = lazyListState
         ) {
+          item {
+            Spacer(modifier = Modifier.height(EIGHT_DP))
+          }
           items(searchScreenState.searchList) { item ->
             SearchListItem(
               searchListItem = item,
@@ -217,24 +225,36 @@ private fun SpellingSuggestionItem(
     modifier = Modifier
       .fillMaxWidth()
       .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM)
-      .clickable { onSuggestionClick(suggestionText) },
-    verticalAlignment = Alignment.CenterVertically
+      .clickable { onSuggestionClick(suggestionText) }
   ) {
-    Text(
-      text = suggestionText,
+    Row(
       modifier = Modifier
-        .weight(1f)
-        .padding(horizontal = EIGHT_DP)
-        .semantics { contentDescription = "$suggestionText$index" },
-      fontSize = SEARCH_ITEM_TEXT_SIZE,
-      maxLines = 1,
-      overflow = Ellipsis
-    )
-    Icon(
-      painter = painterResource(id = R.drawable.action_search),
-      contentDescription = stringResource(id = R.string.suggested_search_icon_description) + index,
-      modifier = Modifier.padding(start = EIGHT_DP).minimumInteractiveComponentSize()
-    )
+        .fillMaxSize()
+        .padding(FOUR_DP)
+        .background(
+          shape = RoundedCornerShape(TWELVE_DP),
+          color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+        ),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(
+        text = suggestionText,
+        modifier = Modifier
+          .weight(1f)
+          .padding(horizontal = EIGHT_DP)
+          .semantics { contentDescription = "$suggestionText$index" },
+        fontSize = SEARCH_ITEM_TEXT_SIZE,
+        maxLines = 1,
+        overflow = Ellipsis
+      )
+      Icon(
+        painter = painterResource(id = R.drawable.action_search),
+        contentDescription = stringResource(id = R.string.suggested_search_icon_description) + index,
+        modifier = Modifier
+          .padding(start = EIGHT_DP)
+          .minimumInteractiveComponentSize()
+      )
+    }
   }
 }
 
@@ -295,30 +315,40 @@ private fun SearchListItem(
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM),
-    verticalAlignment = Alignment.CenterVertically
+      .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM)
   ) {
-    Text(
-      text = searchListItem.value,
+    Row(
       modifier = Modifier
-        .weight(1f)
-        .padding(horizontal = EIGHT_DP)
-        .combinedClickable(
-          onClick = { onItemClick(searchListItem) },
-          onLongClick = { onItemLongClick?.invoke(searchListItem) }
-        )
-        .semantics { testTag = SEARCH_ITEM_TESTING_TAG },
-      fontSize = SEARCH_ITEM_TEXT_SIZE,
-    )
-
-    IconButton(
-      onClick = { onNewTabIconClick(searchListItem) },
-      modifier = Modifier.testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+        .fillMaxSize()
+        .padding(FOUR_DP)
+        .background(
+          shape = RoundedCornerShape(TWELVE_DP),
+          color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+        ),
+      verticalAlignment = Alignment.CenterVertically
     ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-        contentDescription = stringResource(id = R.string.search_open_in_new_tab) + searchListItem.hashCode(),
+      Text(
+        text = searchListItem.value,
+        modifier = Modifier
+          .weight(1f)
+          .padding(horizontal = EIGHT_DP)
+          .combinedClickable(
+            onClick = { onItemClick(searchListItem) },
+            onLongClick = { onItemLongClick?.invoke(searchListItem) }
+          )
+          .semantics { testTag = SEARCH_ITEM_TESTING_TAG },
+        fontSize = SEARCH_ITEM_TEXT_SIZE,
       )
+
+      IconButton(
+        onClick = { onNewTabIconClick(searchListItem) },
+        modifier = Modifier.testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
+          contentDescription = stringResource(id = R.string.search_open_in_new_tab) + searchListItem.hashCode(),
+        )
+      }
     }
   }
 }
