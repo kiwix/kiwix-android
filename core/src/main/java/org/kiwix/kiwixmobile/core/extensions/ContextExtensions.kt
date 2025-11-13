@@ -24,24 +24,9 @@ import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.TypedValue
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.AttrRes
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.scale
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import java.util.Locale
 
 fun Context?.toast(
@@ -81,43 +66,6 @@ fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Inte
 val Context.locale: Locale
   get() = resources.configuration.locales.get(0)
 
-fun Context.getAttribute(
-  @AttrRes attributeRes: Int
-) = with(TypedValue()) {
-  if (theme.resolveAttribute(attributeRes, this, true)) {
-    data
-  } else {
-    throw RuntimeException("invalid attribute $attributeRes")
-  }
-}
-
-fun Context.getResizedDrawable(resourceId: Int, width: Int, height: Int): Drawable? {
-  val drawable = ContextCompat.getDrawable(this, resourceId)
-
-  return if (drawable != null) {
-    val bitmap = getBitmapFromDrawable(drawable).scale(width, height, false)
-
-    bitmap.toDrawable(resources).apply {
-      bounds = drawable.bounds
-    }
-  } else {
-    null
-  }
-}
-
-fun Context.getBitmapFromDrawable(drawable: Drawable): Bitmap {
-  if (drawable is BitmapDrawable) {
-    return drawable.bitmap
-  }
-
-  val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-  val canvas = Canvas(bitmap)
-  drawable.setBounds(0, 0, canvas.width, canvas.height)
-  drawable.draw(canvas)
-
-  return bitmap
-}
-
 @Suppress("Deprecation")
 fun Context.isServiceRunning(serviceClass: Class<out Service>): Boolean {
   val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -125,15 +73,3 @@ fun Context.isServiceRunning(serviceClass: Class<out Service>): Boolean {
 
   return services.any { it.service.className == serviceClass.name }
 }
-
-fun Context.getDialogHostComposeView(alertDialogShower: AlertDialogShower) =
-  ComposeView(this).apply {
-    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-    layoutParams = ViewGroup.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-    setContent {
-      DialogHost(alertDialogShower)
-    }
-  }

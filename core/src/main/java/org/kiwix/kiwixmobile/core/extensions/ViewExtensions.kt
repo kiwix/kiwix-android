@@ -18,81 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import android.annotation.SuppressLint
 import android.view.View
 import android.view.Window
-import androidx.annotation.ColorInt
-import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
-
-@SuppressLint("ShowToast")
-fun View.snack(
-  stringId: Int,
-  anchor: View? = null,
-  actionStringId: Int? = null,
-  actionClick: (() -> Unit)? = null,
-  @ColorInt actionTextColor: Int? = null
-) {
-  Snackbar.make(
-    this,
-    stringId,
-    Snackbar.LENGTH_LONG
-  ).apply {
-    actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    actionTextColor?.let(::setActionTextColor)
-    anchor?.let {
-      anchorView = anchor
-      addCallback(
-        object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-          override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-            transientBottomBar?.anchorView = null
-          }
-        }
-      )
-    }
-  }.show()
-}
-
-@SuppressLint("ShowToast")
-fun View.snack(
-  message: String,
-  anchor: View,
-  actionStringId: Int? = null,
-  actionClick: (() -> Unit)? = null,
-  @ColorInt actionTextColor: Int? = null
-) {
-  Snackbar.make(
-    this,
-    message,
-    Snackbar.LENGTH_LONG
-  ).apply {
-    actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    actionTextColor?.let(::setActionTextColor)
-    anchorView = anchor
-    addCallback(
-      object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-          transientBottomBar?.anchorView = null
-        }
-      }
-    )
-  }.show()
-}
-
-/**
- * Sets the content description to address an accessibility issue reported by the Play Store.
- * Additionally, sets a tooltip for displaying hints to the user when they long-click on the view.
- *
- * @param description The content description and tooltip text to be set.
- */
-fun View.setToolTipWithContentDescription(description: String) {
-  contentDescription = description
-  TooltipCompat.setTooltipText(this, description)
-}
 
 fun View.showFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, false)

@@ -111,10 +111,10 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
 import retrofit2.Response
 import java.util.concurrent.TimeUnit.SECONDS
@@ -124,7 +124,6 @@ const val DEFAULT_PROGRESS = 0
 const val MAX_PROGRESS = 100
 
 const val THREE = 3
-const val FOUR = 4
 
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,

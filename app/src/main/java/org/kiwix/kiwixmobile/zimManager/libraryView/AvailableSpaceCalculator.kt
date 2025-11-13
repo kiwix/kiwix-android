@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
 class AvailableSpaceCalculator @Inject constructor(

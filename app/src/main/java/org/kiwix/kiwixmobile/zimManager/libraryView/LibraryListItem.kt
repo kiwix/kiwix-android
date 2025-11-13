@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
+package org.kiwix.kiwixmobile.zimManager.libraryView
 
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status

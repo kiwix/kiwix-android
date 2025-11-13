@@ -62,7 +62,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 
 const val DOWNLOAD_BOOK_ITEM_TESTING_TAG = "downloadBookItemTestingTag"
 const val DOWNLOADING_PAUSE_BUTTON_TESTING_TAG = "downloadingPauseButtonTestingTag"
