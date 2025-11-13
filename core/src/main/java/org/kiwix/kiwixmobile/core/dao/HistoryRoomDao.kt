@@ -26,6 +26,8 @@ import androidx.room.TypeConverter
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
@@ -33,6 +35,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Dao
 abstract class HistoryRoomDao : PageDao {
+  private val saveMutex = Mutex()
+
   @Query("SELECT * FROM HistoryRoomEntity ORDER BY HistoryRoomEntity.timeStamp DESC")
   abstract fun historyRoomEntity(): Flow<List<HistoryRoomEntity>>
 
@@ -65,26 +69,28 @@ abstract class HistoryRoomDao : PageDao {
   @Query("SELECT COUNT() FROM HistoryRoomEntity WHERE id = :id")
   abstract fun count(id: Int): Int
 
-  fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
-    getHistoryRoomEntity(
-      historyItem.historyUrl,
-      historyItem.dateString
-    )?.let {
-      it.apply {
-        // update the existing entity
-        historyUrl = historyItem.historyUrl
-        historyTitle = historyItem.title
-        timeStamp = historyItem.timeStamp
-        dateString = historyItem.dateString
+  suspend fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
+    saveMutex.withLock {
+      getHistoryRoomEntity(
+        historyItem.historyUrl,
+        historyItem.dateString
+      )?.let {
+        it.apply {
+          // update the existing entity
+          historyUrl = historyItem.historyUrl
+          historyTitle = historyItem.title
+          timeStamp = historyItem.timeStamp
+          dateString = historyItem.dateString
+        }
+        updateHistoryItem(it)
+      } ?: run {
+        val historyEntity = HistoryRoomEntity(historyItem)
+        if (count(historyEntity.id.toInt()) > 0) {
+          // set the default id so that room will automatically generates the database id.
+          historyEntity.id = 0
+        }
+        insertHistoryItem(historyEntity)
       }
-      updateHistoryItem(it)
-    } ?: run {
-      val historyEntity = HistoryRoomEntity(historyItem)
-      if (count(historyEntity.id.toInt()) > 0) {
-        // set the default id so that room will automatically generates the database id.
-        historyEntity.id = 0
-      }
-      insertHistoryItem(historyEntity)
     }
   }
 
