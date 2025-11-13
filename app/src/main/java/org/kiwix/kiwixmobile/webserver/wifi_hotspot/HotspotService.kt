@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.utils.ServerUtils.getSocketAddress
+import org.kiwix.kiwixmobile.core.utils.ServerUtils.serverAddress
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
@@ -88,7 +88,7 @@ class HotspotService :
                 webServerHelper?.startServerHelper(it, restartServer)
               }
             if (serverStatus?.isServerStarted == true) {
-              zimHostCallbacks?.onServerStarted(getSocketAddress())
+              zimHostCallbacks?.onServerStarted(webServerHelper?.getServerAddress().orEmpty())
               startForegroundNotificationHelper()
               if (!restartServer) {
                 Toast.makeText(
@@ -141,7 +141,7 @@ class HotspotService :
   private fun startForegroundNotificationHelper() {
     startForeground(
       HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
-      hotspotNotificationManager?.buildForegroundNotification(getSocketAddress())
+      hotspotNotificationManager?.buildForegroundNotification(serverAddress)
     )
   }
 

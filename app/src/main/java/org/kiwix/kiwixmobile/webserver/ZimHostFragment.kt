@@ -350,7 +350,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
     }
     if (ServerUtils.isServerStarted) {
-      ip = ServerUtils.getSocketAddress()
+      ip = ServerUtils.serverAddress
       layoutServerStarted()
     } else {
       layoutServerStopped()
@@ -442,6 +442,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     // Dismiss dialog when server started.
     alertDialogShower.dismiss()
     this.ip = ip
+    ServerUtils.serverAddress = ip
     layoutServerStarted()
   }
 
