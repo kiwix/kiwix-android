@@ -172,7 +172,6 @@ object ComposeDimens {
   const val ONLINE_BOOK_DISABLED_COLOR_ALPHA = 0.5F
 
   // Search screen dimens
-  val MINIMUM_HEIGHT_OF_SEARCH_ITEM = 64.dp
   val SEARCH_ITEM_TEXT_SIZE = 16.sp
   val LOAD_MORE_PROGRESS_BAR_SIZE = 40.dp
 
