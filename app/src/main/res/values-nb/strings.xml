@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Johshh
+* Jon Harald Søby
 * TorgeirS
 -->
 <resources>
@@ -11,4 +12,7 @@
   <string name="receive_files_title">Motta filer</string>
   <string name="no_app_found_to_open">Ingen app funnet for å velge ZIM-fil!</string>
   <string name="select_zim_file">Velg ZIM-fil som skal leses</string>
+  <string name="swipe_down_to_scan_storage">Sveip ned for å skanne enheten din etter nye bøker.</string>
+  <string name="auto_detect_books">Oppdag bøkene dine automatisk</string>
+  <string name="auto_detect_books_description">Ved første oppstart vil du bli spurt om appen kan skanne lagringsplassen din. Hvis du tillater det, vil vi automatisk oppdage ZIM-filene dine uten at du trenger å legge dem til manuelt.</string>
 </resources>

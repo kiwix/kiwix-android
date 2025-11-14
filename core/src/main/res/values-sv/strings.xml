@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Apq
 * Jopparn
 * Larsa
 * Marcusjehrlander
@@ -32,6 +33,7 @@
   <string name="save_media_saved">Sparade media som %s i Downloads/org.kiwix…/</string>
   <string name="search_label">Sök</string>
   <string name="searched_list">Sökt lista</string>
+  <string name="more_options">Fler alternativ</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
   <string name="hotspot_service_channel_name">Hotspotservicekanal</string>
@@ -59,20 +61,24 @@
   <string name="start_server_label">Starta server</string>
   <string name="stop_server_label">Stoppa server</string>
   <string name="error_server_already_running">Servern körs redan. Stäng av den och försök igen.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">Kunde inte hitta ip-adressen.</string>
-  <string name="server_started_message" fuzzy="true">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
+  <string name="error_ip_address_not_found">Kunde inte hitta IP-adressen.</string>
+  <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="qr_code">Renderad QR-kod</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas. %s</string>
   <string name="unable_to_read_zim_file">Kunde inte läsa denna ZIM-fil!</string>
   <string name="zim_not_opened">Kunde inte öppna ZIM-fil</string>
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil. %s</string>
-  <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
+  <string name="error_article_url_not_found">Fel: Inläsning av artikel (Url: %1$s) misslyckades.</string>
   <string name="error_loading_random_article_zim_not_loaded">Det gick inte att ladda artikeln. ZIM-filen är inte korrekt laddad.</string>
   <string name="could_not_find_random_article">Det gick inte att hitta en slumpmässig artikel. Försök igen senare.</string>
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">System</string>
+  <string name="theme_light">Ljust</string>
+  <string name="theme_dark">Mörkt</string>
   <string name="pref_theme_summary">Visa artiklar med inverterade färger</string>
   <string name="pref_back_to_top">Tillbaka till toppen</string>
   <string name="pref_back_to_top_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
@@ -136,6 +142,7 @@
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
   <string name="download">Ladda ned</string>
   <string name="download_notification_channel_name">Kanalnamn för nedladdningsnotifikationer</string>
+  <string name="download_notification_channel_description">Laddar ned ZIM-filer…</string>
   <string name="space_available">Tillgängligt utrymme:</string>
   <string name="move_no_space">Otillräckligt utrymme för att flytta/kopiera.</string>
   <string name="zim_simple">Enkelt</string>
@@ -189,13 +196,15 @@
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
   <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
   <string name="external_link_popup_dialog_title">Går till extern länk!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
+  <string name="external_link_popup_dialog_message">Du följer en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
+  <string name="your_language">Valt språk: %s</string>
   <string name="other_languages">Andra språk:</string>
+  <string name="downloading">Laddar ned</string>
   <string name="no_items_msg">Inga tillgängliga objekt</string>
   <string name="crash_title">Ajdå… det här är pinsam</string>
-  <string name="crash_description" fuzzy="true">Det verkar som att vi kraschade.\n\nSkulle du vilja hjälpa oss att fixa detta problem genom att skicka följande information?</string>
+  <string name="crash_description">Det verkar som att vi kraschade.\n\nSkulle du vilja hjälpa oss att fixa detta problem genom att skicka krashrapporten?</string>
   <string name="crash_checkbox_language">Dina språkinställningar</string>
   <string name="crash_checkbox_zimfiles">En lista över dina ZIM-filer</string>
   <string name="crash_checkbox_exception">Kraschdetaljer</string>
@@ -219,11 +228,14 @@
   <string name="go_to_previous_page">Gå till föregående sida</string>
   <string name="go_to_next_page">Gå till nästa sida</string>
   <string name="table_of_contents">Innehållsförteckning</string>
+  <string name="select_language">Välj språk</string>
   <string name="save_languages">Spara språk</string>
+  <string name="all_languages">Samtliga språk</string>
+  <string name="no_language_available">Inga språk tillgängliga</string>
   <string name="expand">Utvidga</string>
   <string name="history">Historik</string>
   <string name="history_from_current_book">Visa historik från alla böcker</string>
-  <string name="search_history">Söka i historiken</string>
+  <string name="search_history">Sök i historiken</string>
   <string name="selected_items">%1$d markerade</string>
   <string name="bookmarks_from_current_book">Visa bokmärken från alla böcker</string>
   <string name="search_bookmarks">Sök bokmärken</string>
@@ -236,14 +248,14 @@
   <string name="complete">Färdig</string>
   <string name="paused_state">Pausad</string>
   <string name="failed_state">Misslyckades: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">ZIM-filen kunde inte laddas ner. Testa att ominstallera applikationen från Play Store.</string>
+  <string name="custom_download_error_message_for_authentication_failed">ZIM-filen kunde inte laddas ner. Försök att ominstallera applikationen från Play Store.</string>
   <string name="save">Spara</string>
   <string name="note">Anteckning</string>
   <string name="take_notes">Gör anteckningar</string>
   <string name="wiki_article_title">Wikiartikelns titel</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Lagringsåtkomst krävs för att exportera bokmärken</string>
-  <string name="ext_storage_write_permission_denied_export_bookmark">Bokmärken kan inte exportera utan åtkomst till lagringen</string>
-  <string name="export_bookmark_error">Ett fel uppstod när bokmärken skulle exporteras!</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Bokmärken kan inte exporteras utan åtkomst till lagringen</string>
+  <string name="export_bookmark_error">Ett fel uppstod när bokmärket skulle exporteras!</string>
   <string name="ext_storage_permission_rationale_add_note">Lagringsåtkomst krävs för anteckningar</string>
   <string name="ext_storage_write_permission_denied_add_note">Anteckningar kan inte användas utan lagringsåtkomst</string>
   <string name="note_save_unsuccessful">Anteckning sparades</string>
@@ -261,18 +273,18 @@
   <string name="books_count">%d bok/böcker</string>
   <string name="discovery_initiated">Inleder upptäckt</string>
   <string name="discovery_failed">Upptäckt misslyckades</string>
-  <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
+  <string name="severe_loss_error">Allvarligt fel! Försök att avaktivera/aktivera WiFi P2P</string>
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_rationale_location">Platsåtkomst krävs från Android för att låta appen söka efter närliggande enheter.</string>
-  <string name="permission_rationale_nearby">Behörigheten för enheter i närheten krävs av Android för att låta appen upptäcka peer-enheter</string>
-  <string name="permission_refused_location">Kan inte hitta närliggande enheter utan platsåtkomst.</string>
+  <string name="permission_rationale_nearby">Behörighet för enheter i närheten krävs av Android för att låta appen upptäcka närliggande enheter</string>
+  <string name="permission_refused_location">Kan inte lokalisera närliggande enheter utan platsåtkomstbehörighet</string>
   <string name="permission_refused_storage">Kan inte komma åt ZIM-filer utan lagringsbehörighet</string>
-  <string name="request_enable_location">Aktivera plats för att tillåta sökning efter närliggande enheter</string>
+  <string name="request_enable_location">Aktivera platsåtkomst för att tillåta sökning efter närliggande enheter</string>
   <string name="discovery_needs_location">Kan inte hitta närliggande enheter utan platstjänster</string>
   <string name="request_enable_wifi">Aktivera WiFi P2P i systeminställningar</string>
   <string name="discovery_needs_wifi">Kan inte hitta närliggande enheter utan WiFi</string>
   <string name="transfer_to">Överför filer till %s?</string>
-  <string name="device_not_cooperating">Valda enheter samarbetar inte för överföring</string>
+  <string name="device_not_cooperating">Vald enhet samarbetar inte för överföring</string>
   <string name="file_transfer_complete">Filöverföring slutfördes</string>
   <string name="error_during_transfer">Ett fel uppstod under överförning</string>
   <string name="error_transferring">Fel uppstod när filen %s överfördes</string>
@@ -280,7 +292,7 @@
   <string name="search_for_peers">Sök efter enheter</string>
   <string name="your_device">Din enhet:</string>
   <string name="device_name">Enhetsnamn</string>
-  <string name="nearby_devices">ENHETER I NÄRHETEN</string>
+  <string name="nearby_devices">NÄRLIGGANDE ENHETER</string>
   <string name="no_devices_found">Inga enheter hittades. Tryck på sökknappen för att söka igen.</string>
   <string name="files_for_transfer">FILER ATT ÖVERFÖRA</string>
   <string name="preparing_files">Förbereder filer för att överföras…</string>
@@ -308,15 +320,15 @@
   <string name="delete_selected_bookmarks">Radera valda bokmärken?</string>
   <string name="import_bookmarks_dialog_title">Importera bokmärken?</string>
   <string name="export_all_bookmarks_dialog_title">Exportera alla bokmärken?</string>
-  <string name="export_all_bookmarks_dialog_message">Exportering kommer generera bokmärke.xml-fil i mappen Download/org.kiwix…/.</string>
+  <string name="export_all_bookmarks_dialog_message">Exportering kommer generera en bookmark.xml-fil i mappen Download/org.kiwix…/</string>
   <string name="bookmark_imported_message">Alla bokmärken har importerats.</string>
-  <string name="error_invalid_bookmark_file">Fel: De valda filerna är inte en giltigt bokmärke-fil.</string>
+  <string name="error_invalid_bookmark_file">Fel: Den valda filen är inte en giltig bokmärkesfil.</string>
   <string name="send_report">Skicka diagnostisk rapport</string>
   <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>
-  <string name="diagnostic_report_message" fuzzy="true">Vänligen skicka följande detaljer så vi kan diagnostisera problemet.</string>
+  <string name="diagnostic_report_message">För att hjälpa oss att diagnostisera problemet, återskapa först problemet och skicka sedan rapporten.</string>
   <string name="percentage">%d%%</string>
-  <string name="pref_text_zoom_title">Text-zoomning</string>
+  <string name="pref_text_zoom_title">Text-zoom</string>
   <string name="search_open_in_new_tab">Öppna i ny flik</string>
   <string name="reader">Läsare</string>
   <string name="no_open_book">Inga öppnade böcker</string>
@@ -325,46 +337,49 @@
   <string name="tabs_restored">Flikar återställdes</string>
   <string name="open_drawer">Öppna sidomeny</string>
   <string name="close_drawer">Stäng sidomeny</string>
-  <string name="preparing_file_for_copy">Förbereder för kopiering/flyttning</string>
+  <string name="preparing_file_for_copy">Förbereder kopiering/flytt</string>
   <string name="action_copy">Kopiera</string>
   <string name="move">Flytta</string>
-  <string name="copying_zim_file" fuzzy="true">Kopierar ZIM-fil %s…</string>
-  <string name="moving_zim_file" fuzzy="true">Flyttar ZIM-fil %s…</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix kräver att ZIM-filen finns i sin egen datakatalog. Vill du kopiera eller flytta den dit?</string>
+  <string name="copying_zim_file">Kopierar ZIM-fil %s…</string>
+  <string name="moving_zim_file">Flyttar ZIM-fil %s…</string>
+  <string name="copy_move_files_dialog_description">Kiwix kräver att ZIM-filen finns i sin egen datakatalog. Vill du kopiera eller flytta den dit?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix kräver att ZIM-filen finns i sin egen datakatalog. Vill du kopiera eller flytta den dit?</string>
   <string name="copy_file_error_message">Fel vid kopiering av ZIM-filen: %s .</string>
-  <string name="verify_zim_chunk_dialog_title">Var försiktig: Se till att alla ZIM-bitar har flyttats/kopierats på rätt sätt!</string>
+  <string name="verify_zim_chunk_dialog_title">Var försiktig: Se till att alla ZIM-delar har flyttats/kopierats korrekt!</string>
   <string name="verify_zim_chunks_dialog_message">Du kan verifiera dem i mappen “Android/media/org.kiwix…/”.\nNär du är klar uppdaterar du biblioteksskärmen genom att svepa nedåt. Den delade ZIM-filen visas sedan i ditt bibliotek.</string>
   <string name="why_copy_move_files_to_app_directory">Varför kopiera/flytta filer till appens offentliga katalog?</string>
   <string name="copy_move_files_to_app_directory_description">På grund av Google Plays policyer på Android 11 och senare kan vår app inte längre direkt komma åt filer som lagras någon annanstans på din enhet. För att du ska kunna se dina valda filer måste vi flytta eller kopiera dem till en speciell mapp i vår applikationskatalog. Detta gör att vi kan komma åt och öppna filerna.</string>
   <string name="choose_storage_to_copy_move_zim_file">Välj lagringsutrymme för att kopiera/flytta ZIM-fil</string>
   <string name="move_file_error_message">Fel vid flyttning av ZIM-filen: %s .</string>
+  <string name="file_copy_move_error_dialog_message">%s\nVill du fortsätta med andra ZIM-filer?</string>
+  <string name="your_selected_files_added_to_library">Dina valda ZIM-filer är tillagda i biblioteket.</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
-  <string name="update_content_description">För att uppdatera innehåll (en ZIM-fil) behöver du ladda ned den fullständiga senaste versionen av samma innehåll. Du kan göra det via nedladdningssektionen.</string>
+  <string name="update_content_description">För att uppdatera innehåll (en ZIM-fil) behöver du ladda ned den senaste fullständiga versionen av samma innehåll. Du kan göra det via nedladdningssektionen.</string>
   <string name="all_files_permission_needed">Behörighet för alla filer behövs</string>
   <string name="all_files_permission_needed_message">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet till alla filer</string>
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
   <string name="denied_internet_permission_message">Aktivera wifi för att ladda ner innehåll</string>
-  <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge tillstånd!</string>
+  <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge behörighet!</string>
   <string name="allow">Tillåt</string>
   <string name="swipe_down_for_library">Svep nedåt för bibliotek</string>
-  <string name="reaching_remote_library">Nå fjärrbiblioteket</string>
+  <string name="reaching_remote_library">Når ut till fjärrbibliotek</string>
   <string name="parsing_remote_library">Bearbetar fjärrbibliotek</string>
   <string name="starting_downloading_remote_library">Startar nedladdning av onlinebiblioteket</string>
-  <string name="downloading_library">Nedladdningsbibliotek\n%s</string>
+  <string name="downloading_library">Laddar ner bibliotek \n%s</string>
   <string name="no_notes">Inga anteckningar</string>
   <string name="notes_from_all_books">Visa anteckningar från alla böcker</string>
   <string name="search_notes">Sök i anteckningar</string>
   <string name="choose_your_action">Välj din åtgärd</string>
   <string name="open_note">Öppna anteckning</string>
   <string name="open_article">Öppna artikel</string>
-  <string name="delete_note_dialog_message">Obs: Noter raderas inte från ditt utrymme</string>
+  <string name="delete_note_dialog_message">Obs: Anteckningar raderas inte från ditt lagringsutrymme</string>
   <string name="delete_selected_notes">Radera markerade anteckningar?</string>
   <string name="download_tts_language_title">Ladda ned detta språk för uppläsningsfunktionalitet</string>
   <string name="download_tts_language_message">Klicka på nedladdningsknappen. Det kommer automatiskt att ladda ned det önskade språket.</string>
   <string name="external_link_copied_message">Extern länk kopierades till urklipp</string>
   <string name="read_aloud_service_channel_name">Läs upp tjänstkanal</string>
-  <string name="read_aloud_channel_description">Text-till-tal-kontroller.</string>
+  <string name="read_aloud_channel_description">Uppläsningskontroller.</string>
   <string name="read_aloud_running">Uppläsning körs</string>
   <string name="backward_history">Bakåthistorik</string>
   <string name="forward_history">Framåthistorik</string>
@@ -374,15 +389,21 @@
   <string name="request_notification_permission_message">Bevilja meddelandeåtkomst för att utföra denna åtgärd</string>
   <string name="click_nearby_devices_message">Klicka här för att söka efter enheter i närheten.</string>
   <string name="your_device_name_message">Ditt enhetsnamn kommer att visas här.</string>
-  <string name="nearby_devices_list_message">Här hittar du en lista över enheter i närheten. Tryck på en enhets namn för att påbörja filöverföring.</string>
+  <string name="nearby_devices_list_message">Här hittar du en lista över närliggande enheter. Tryck på en enhets namn för att påbörja filöverföring.</string>
   <string name="transfer_zim_files_list_message">Här hittar du en lista över tillgängliga ZIM-filer för överföring.</string>
   <string name="storage_selection_dialog_accessibility_description">Välj lagring för att ladda ned ZIM-filer.</string>
-  <string name="zim_file_content_description">ZIM-filer som har läsningsinnehållet</string>
-  <string name="select_language_content_description">Välj detta språk för att prioritera att visa det längst upp bland nedladdningsbara böcker.</string>
+  <string name="zim_file_content_description">ZIM-fil som har läsinnehållet</string>
+  <string name="select_language_content_description">Om du väljer det här språket prioriteras visning av nedladdningsbara böcker på det språket högst upp.</string>
   <string name="toolbar_back_button_content_description">Gå till föregående vy</string>
-  <string name="save_or_open_unsupported_files_dialog_title">Spara eller öppna den här filen?</string>
-  <string name="save_or_open_unsupported_files_dialog_message">Att välja Öppna kommer öppna den här filen i externa läsarapplikationer.</string>
-  <string name="donation_dialog_title">Donera idag</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Spara eller öppna denna fil?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Om du väljer Öppna så öppnas filen i ett externt läsarprogram.</string>
+  <string name="donation_dialog_title">Skänk idag</string>
   <string name="donation_dialog_description">%s behöver din hjälp.</string>
-  <string name="make_donation">Gör en donation</string>
+  <string name="make_donation">Skänk</string>
+  <string name="resuming_state">Återupptar</string>
+  <string name="downloading_state">Laddar ned</string>
+  <string name="download_failed_state">Misslyckades</string>
+  <string name="searchview_description_clear">Rensa förfrågan</string>
+  <string name="file_system_scan_dialog_title">Skanna lagringen efter böcker?</string>
+  <string name="file_system_scan_dialog_message">Kiwix kommer att skanna din enhets lagring och listar tillgängliga böcker här.</string>
 </resources>

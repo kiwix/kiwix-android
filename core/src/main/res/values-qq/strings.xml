@@ -28,12 +28,15 @@
   <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
   <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the “Read aloud (Text to speech is reading the current page data)” and if the user clicks on this button “Read Aloud” will stop reading the current page data.</string>
   <string name="menu_support_kiwix">This is for the “Navigation Item” button text on the main page of the “Kiwix app”, clicking on this button leads to opening the “Kiwix support” website page.</string>
+  <string name="menu_support_kiwix_for_custom_apps">Button title, opening the external browser to support the app. The app name will replace %s, e.g., "Support Kiwix".</string>
+  <string name="menu_about_app">Button for showing information about the app. The app name will replace %s.</string>
   <string name="menu_wifi_hotspot">* English : it maps to some “hotspot” feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité “hotspot” l’anglais “host books” n’est pas particulièrement satisfaisant à la base.</string>
   <string name="save_media">This appears in a dialog window when we long-click on any image/pdf/video. By clicking on this button, it will save the data into phone storage.</string>
   <string name="save_media_error">This error message shows to the user in an “Android Toast”, when there is an error while saving the file in phone storage.</string>
   <string name="save_media_saved">This appears in an “Android Toast” when a file is successfully saved in the “Downloads/org.kiwix/” directory of the phone storage. Here “%s” will be replaced by the saved file name on runtime.</string>
   <string name="search_label">{{Identical|Search}}</string>
   <string name="searched_list">Needs documentation in order to be translated</string>
+  <string name="more_options">Tooltip shown when hovering the mouse over the logo that indicates the More actions dropdown menu.</string>
   <string name="choose_file">This is a text message to inform the user please select a file .zim file.</string>
   <string name="open_in_new_tab">This message appears in a dialog window when a user long clicks on any URL/pageURL on the current page. This message is to indicate to the user if he wants to open the current URL in a new window.</string>
   <string name="hotspot_service_channel_name">Name of the notification channel used for the hotspot persistent notification.\nCan be found in Android notification settings for Kiwix app.</string>
@@ -60,6 +63,8 @@
   <string name="hotspot_notification_content_title">This message appears in “Android Notification” to inform the user “Kiwix server” is running.</string>
   <string name="start_server_label">This message shows as the button text, by clicking on this button “Kiwix server” starts.</string>
   <string name="stop_server_label">This message shows as the button text, by clicking on this button “Kiwix server” stops.</string>
+  <string name="error_server_already_running">Standard error message</string>
+  <string name="error_ip_address_not_found">Standard error message when the IP address could not be resolved.</string>
   <string name="server_started_message">This message appears in “Android TextView” as a text message. When the “Kiwix server” is successfully started, in this message %s will be replaced with the IP address on which the server is running. It shows the details of the server IP address to the user.</string>
   <string name="share_host_address">This message is the content description of “Android ImageView”, this appears when the “Kiwix server” is running and the IP address is visible to the user on which server is running. By clicking on this it will share the IP address with other applications.</string>
   <string name="error_file_not_found">This message appears in “Android Toast” as an error message when the user tries to open a Zim file but the file was moved to another directory or deleted. So this message informs the user this file could not be found. Here %s will be replaced with the ZIM file path which is failed to open.</string>

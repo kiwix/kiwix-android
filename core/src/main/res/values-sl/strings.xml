@@ -199,7 +199,7 @@
   <string name="downloading">Prenašanje</string>
   <string name="no_items_msg">Na voljo ni noben predmet</string>
   <string name="crash_title">No… To je neprijetno</string>
-  <string name="crash_description" fuzzy="true">Zdi se, da smo se zrušili.\n\nSte nam pripravljeni pomagati tako, da pošljete naslednje informacije?</string>
+  <string name="crash_description">Zdi se, da smo se zrušili.\n\nSte nam pripravljeni pomagati tako, da pošljete poročilo o zrušitvi?</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
   <string name="crash_checkbox_zimfiles">Seznam vaših datotek ZIM</string>
   <string name="crash_checkbox_exception">Podrobnosti o sesutju</string>
@@ -321,7 +321,7 @@
   <string name="send_report">Pošlji diagnostično poročilo</string>
   <string name="crash_checkbox_file_system">Podatki o datotečnem sistemu</string>
   <string name="diagnostic_report">Diagnostično poročilo</string>
-  <string name="diagnostic_report_message" fuzzy="true">Prosimo, pošljite vse naslednje podatke, da bomo lahko diagnosticirali težavo</string>
+  <string name="diagnostic_report_message">Da nam pomagate diagnosticirati težavo, najprej reproducirajte napako in nam nato pošljite diagnostično poročilo.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Povečava besedila</string>
   <string name="search_open_in_new_tab">Odpri na novem zavihku</string>
