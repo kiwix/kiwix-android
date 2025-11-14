@@ -46,7 +46,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -75,11 +74,13 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LOAD_MORE_PROGRESS_BAR_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.OPEN_IN_NEW_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
 const val NO_SEARCH_RESULT_TESTING_TAG = "noSearchResultTestingTag"
@@ -224,10 +225,10 @@ private fun SpellingSuggestionItem(
     modifier = Modifier
       .fillMaxSize()
       .clickable { onSuggestionClick(suggestionText) }
-      .padding(horizontal = TEN_DP)
-      .padding(top = EIGHT_DP)
+      .padding(horizontal = EIGHT_DP)
+      .padding(top = SEVEN_DP)
       .background(
-        shape = RoundedCornerShape(TWELVE_DP),
+        shape = RoundedCornerShape(EIGHT_DP),
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
       ),
     verticalAlignment = Alignment.CenterVertically
@@ -242,13 +243,18 @@ private fun SpellingSuggestionItem(
       maxLines = 1,
       overflow = Ellipsis
     )
-    Icon(
-      painter = painterResource(id = R.drawable.action_search),
-      contentDescription = stringResource(id = R.string.search_label),
+
+    IconButton(
+      onClick = { },
       modifier = Modifier
-        .padding(start = EIGHT_DP)
-        .minimumInteractiveComponentSize()
-    )
+        .size(OPEN_IN_NEW_TAB_ICON_SIZE)
+        .padding(end = SIX_DP)
+    ) {
+      Icon(
+        painter = painterResource(id = R.drawable.action_search),
+        contentDescription = stringResource(id = R.string.search_label) + index,
+      )
+    }
   }
 }
 
@@ -309,10 +315,10 @@ private fun SearchListItem(
   Row(
     modifier = Modifier
       .fillMaxSize()
-      .padding(horizontal = TEN_DP)
-      .padding(top = EIGHT_DP)
+      .padding(horizontal = EIGHT_DP)
+      .padding(top = SEVEN_DP)
       .background(
-        shape = RoundedCornerShape(TWELVE_DP),
+        shape = RoundedCornerShape(EIGHT_DP),
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
       ),
     verticalAlignment = Alignment.CenterVertically
@@ -332,7 +338,10 @@ private fun SearchListItem(
 
     IconButton(
       onClick = { onNewTabIconClick(searchListItem) },
-      modifier = Modifier.testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+      modifier = Modifier
+        .testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+        .size(OPEN_IN_NEW_TAB_ICON_SIZE)
+        .padding(end = SIX_DP)
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
