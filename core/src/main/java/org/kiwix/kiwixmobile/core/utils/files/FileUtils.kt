@@ -58,14 +58,43 @@ import java.io.IOException
 
 object FileUtils {
   private val fileOperationMutex = Mutex()
+  private const val SPELLING_DB_CACHED_DIRECTORY = "SpellingsDBCachedDir"
+  private const val ASSET_LOADING_CACHED_DIRECTORY = "AssetLoadingCachedDir"
 
   @JvmStatic
-  fun getFileCacheDir(context: Context): File? =
-    if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+  fun getSpellingDBDir(context: Context): File? {
+    val baseCacheDir = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
       context.externalCacheDir
     } else {
       context.cacheDir
     }
+
+    val spellingDBCacheDir = File(baseCacheDir, SPELLING_DB_CACHED_DIRECTORY).apply {
+      if (!exists()) mkdirs()
+    }
+
+    // Clean up any incomplete `.tmp` folders inside the spelling DB directory
+    spellingDBCacheDir.listFiles()?.forEach { file ->
+      if (file.isDirectory && file.name.endsWith(".tmp")) {
+        file.deleteRecursively()
+        Log.w(TAG_KIWIX, "Deleted incomplete SpellingsDB folder: ${file.absolutePath}")
+      }
+    }
+
+    return spellingDBCacheDir
+  }
+
+  @JvmStatic
+  fun getFileCacheDir(context: Context): File? {
+    val baseCacheDir = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+      context.externalCacheDir
+    } else {
+      context.cacheDir
+    }
+    return File(baseCacheDir, ASSET_LOADING_CACHED_DIRECTORY).apply {
+      if (!exists()) mkdirs()
+    }
+  }
 
   @JvmStatic
   @Synchronized

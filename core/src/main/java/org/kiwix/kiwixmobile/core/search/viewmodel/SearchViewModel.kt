@@ -69,6 +69,7 @@ import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 const val DEBOUNCE_DELAY = 150L
+const val MAX_SUGGEST_WORD_COUNT = 1
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel @Inject constructor(
@@ -103,6 +104,9 @@ class SearchViewModel @Inject constructor(
     viewModelScope.launch { actionMapper() }
     viewModelScope.launch { debouncedSearchQuery() }
   }
+
+  suspend fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
+    zimReaderContainer.zimFileReader?.getSuggestedSpelledWords(word, maxCount).orEmpty()
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
@@ -233,7 +237,7 @@ class SearchViewModel @Inject constructor(
   suspend fun loadMoreSearchResults(
     startIndex: Int,
     existingSearchList: List<SearchListItem>?
-  ): List<SearchListItem.RecentSearchListItem>? {
+  ): List<SearchListItem>? {
     val searchResults = state.value.getVisibleResults(startIndex)
 
     return searchResults?.filter { newItem ->

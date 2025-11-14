@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.MAX_SUGGEST_WORD_COUNT
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
@@ -102,7 +103,9 @@ class SearchFragment : BaseFragment() {
       onLoadMore = { loadMoreSearchResult() },
       onKeyboardSubmitButtonClick = {
         getSearchListItemForQuery(it)?.let(::onItemClick)
-      }
+      },
+      spellingCorrectionSuggestions = emptyList(),
+      onSuggestionClick = { onSuggestionItemClick(it) }
     )
   )
 
@@ -247,6 +250,11 @@ class SearchFragment : BaseFragment() {
     searchViewModel.searchResults(searchText.trim())
   }
 
+  private fun onSuggestionItemClick(suggestionText: String) {
+    searchScreenState.update { copy(spellingCorrectionSuggestions = emptyList()) }
+    onSearchValueChanged(suggestionText)
+  }
+
   private fun actionMenuItems() = listOfNotNull(
     // Check if the `FIND_IN_PAGE` is visible or not.
     // If visible then show it in menu.
@@ -304,9 +312,32 @@ class SearchFragment : BaseFragment() {
             "Error in getting searched result\nOriginal exception ${ignore.message}"
           )
         } finally {
-          searchScreenState.update { copy(isLoading = false) }
+          updateSuggestedWords()
         }
       }
+  }
+
+  /**
+   * Updates the suggested word list using the libkiwix spellings database.
+   */
+  private suspend fun updateSuggestedWords() {
+    val onlyRecentSearches =
+      searchScreenState.value.searchList.all { it is SearchListItem.RecentSearchListItem }
+
+    if (onlyRecentSearches && searchScreenState.value.searchText.isNotEmpty()) {
+      val suggestedWords = searchViewModel.getSuggestedSpelledWords(
+        searchScreenState.value.searchText,
+        MAX_SUGGEST_WORD_COUNT
+      )
+
+      searchScreenState.update {
+        copy(spellingCorrectionSuggestions = suggestedWords, isLoading = false)
+      }
+    } else {
+      searchScreenState.update {
+        copy(spellingCorrectionSuggestions = emptyList(), isLoading = false)
+      }
+    }
   }
 
   private fun setIsPageSearchEnabled(searchText: String) {

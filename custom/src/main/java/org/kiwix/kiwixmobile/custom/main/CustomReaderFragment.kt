@@ -396,6 +396,17 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
+  /**
+   * Overrides the method to configure and display corrected spellings in search
+   * when the feature is enabled for custom apps.
+   */
+  override suspend fun openAndSetInContainer(
+    zimReaderSource: ZimReaderSource,
+    showSearchSuggestionsSpellChecked: Boolean
+  ) {
+    super.openAndSetInContainer(zimReaderSource, BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED)
+  }
+
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
       externalLinkOpener?.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)

@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 
@@ -62,7 +63,7 @@ internal class SearchStateTest {
           emptyList(),
           FromWebView
         ).getVisibleResults(0)
-      ).isEqualTo(listOf(RecentSearchListItem(searchTerm, "")))
+      ).isEqualTo(listOf(SearchListItem.ZimSearchResultListItem(searchTerm, "")))
     }
 
   @Test
@@ -122,8 +123,8 @@ internal class SearchStateTest {
       val searchResultsWithTerm =
         SearchResultsWithTerm(searchTerm, suggestionSearchWrapper, mockk())
       val searchState = SearchState(searchTerm, searchResultsWithTerm, emptyList(), FromWebView)
-      var list: List<RecentSearchListItem>? = emptyList()
-      var list1: List<RecentSearchListItem>? = emptyList()
+      var list: List<SearchListItem>? = emptyList()
+      var list1: List<SearchListItem>? = emptyList()
       val job =
         launch(Dispatchers.IO) {
           delay(1000)

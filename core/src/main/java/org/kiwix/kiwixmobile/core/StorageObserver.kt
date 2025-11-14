@@ -63,7 +63,7 @@ class StorageObserver @Inject constructor(
     downloads.none { file.absolutePath.endsWith(it.fileNameFromUrl) }
 
   private suspend fun convertToLibkiwixBook(file: File) =
-    zimReaderFactory.create(ZimReaderSource(file))
+    zimReaderFactory.create(ZimReaderSource(file), false)
       ?.let { zimFileReader ->
         libkiwixBookFactory.create().apply {
           update(zimFileReader.jniKiwixReader)

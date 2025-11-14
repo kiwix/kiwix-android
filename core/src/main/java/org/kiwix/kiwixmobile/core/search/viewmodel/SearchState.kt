@@ -38,7 +38,7 @@ data class SearchState(
     startIndex: Int,
     job: Job? = null,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-  ): List<SearchListItem.RecentSearchListItem>? {
+  ): List<SearchListItem>? {
     if (searchTerm.isEmpty()) return recentResults
     return searchResultsWithTerm.searchMutex.withLock {
       searchResultsWithTerm.suggestionSearch?.let {
@@ -57,8 +57,8 @@ data class SearchState(
     suggestionSearch: SuggestionSearch,
     startIndex: Int,
     job: Job?
-  ): List<SearchListItem.RecentSearchListItem>? {
-    val results = mutableListOf<SearchListItem.RecentSearchListItem>()
+  ): List<SearchListItem.ZimSearchResultListItem>? {
+    val results = mutableListOf<SearchListItem.ZimSearchResultListItem>()
 
     // if the previous job is cancel then do not execute the code
     if (job?.isActive == false) return results
@@ -73,7 +73,7 @@ data class SearchState(
         if (job?.isActive == false) break
         yield()
         val entry = searchIterator.next()
-        results.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
+        results.add(SearchListItem.ZimSearchResultListItem(entry.title, entry.path))
       }
     }.onFailure {
       Log.e(

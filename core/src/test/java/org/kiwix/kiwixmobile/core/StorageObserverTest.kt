@@ -72,7 +72,7 @@ class StorageObserverTest {
     every { downloadRoomDao.downloads() } returns downloads
     coEvery { libkiwixBookmarks.addBookToLibrary(any()) } returns Unit
     every { zimFileReader.jniKiwixReader } returns mockk()
-    every { runBlocking { readerFactory.create(zimReaderSource) } } returns zimFileReader
+    every { runBlocking { readerFactory.create(zimReaderSource, false) } } returns zimFileReader
     every { libkiwixBookFactory.create() } returns libkiwixBook
     storageObserver = StorageObserver(
       downloadRoomDao,

@@ -48,6 +48,10 @@ fun ProductFlavors.create(customApps: List<CustomApp>) {
       buildConfigField("String", "ENFORCED_LANG", "\"${customApp.enforcedLanguage}\"")
       buildConfigField("String", "ABOUT_APP_URL", "\"${customApp.aboutAppUrl}\"")
       buildConfigField("String", "SUPPORT_URL", "\"${customApp.supportUrl}\"")
+      buildConfigField(
+        "Boolean",
+        "SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED", "${customApp.showSearchSuggestionsSpellChecked}"
+      )
       buildConfigField("Boolean", "DISABLE_SIDEBAR", "${customApp.disableSideBar}")
       buildConfigField("Boolean", "DISABLE_TABS", "${customApp.disableTabs}")
       buildConfigField("Boolean", "DISABLE_READ_ALOUD", "${customApp.disableReadAloud}")

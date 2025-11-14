@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
@@ -60,7 +61,7 @@ class ZimReaderSource(
     return when {
       file != null -> file.isFileExist()
       assetFileDescriptorList?.isNotEmpty() == true ->
-        assetFileDescriptorList[0].parcelFileDescriptor.fileDescriptor.valid()
+        assetFileDescriptorList.first().parcelFileDescriptor.fileDescriptor.valid()
 
       else -> false
     }
@@ -69,7 +70,7 @@ class ZimReaderSource(
   suspend fun canOpenInLibkiwix(): Boolean {
     return when {
       file?.canReadFile() == true -> true
-      assetFileDescriptorList?.get(0)?.parcelFileDescriptor?.fd
+      assetFileDescriptorList?.first()?.parcelFileDescriptor?.fd
         ?.let(::isFileDescriptorCanOpenWithLibkiwix) == true -> true
 
       else -> false
@@ -109,12 +110,25 @@ class ZimReaderSource(
 
   fun toDatabase(): String = file?.canonicalPath ?: uri.toString()
 
+  /**
+   * Compares two sources for equality based on the underlying file, URI,
+   * or descriptor list.
+   */
   override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is ZimReaderSource) return false
     return when {
-      file != null && other is ZimReaderSource && other.file != null ->
+      file != null && other.file != null ->
         file.canonicalPath == other.file.canonicalPath
 
-      uri != null && other is ZimReaderSource && other.uri != null -> uri == other.uri
+      uri != null && other.uri != null -> uri == other.uri
+
+      !assetFileDescriptorList.isNullOrEmpty() && !other.assetFileDescriptorList.isNullOrEmpty() ->
+        assetFileDescriptorList.size == other.assetFileDescriptorList.size &&
+          assetFileDescriptorList.zip(other.assetFileDescriptorList).all { (a, b) ->
+            a.startOffset == b.startOffset && a.length == b.length
+          }
+
       else -> false
     }
   }
@@ -133,5 +147,12 @@ class ZimReaderSource(
     }
   }
 
-  override fun hashCode(): Int = file?.hashCode() ?: assetFileDescriptorList.hashCode()
+  override fun hashCode(): Int = when {
+    file != null -> file.canonicalPath.hashCode()
+    uri != null -> uri.hashCode()
+    !assetFileDescriptorList.isNullOrEmpty() ->
+      assetFileDescriptorList.sumOf { it.startOffset.hashCode() + it.length.hashCode() }
+
+    else -> ZERO
+  }
 }

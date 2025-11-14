@@ -35,13 +35,16 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
     }
 
   @Suppress("InjectDispatcher")
-  suspend fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
+  suspend fun setZimReaderSource(
+    zimReaderSource: ZimReaderSource?,
+    showSearchSuggestionsSpellChecked: Boolean = false
+  ) {
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return
     }
     zimFileReader = withContext(Dispatchers.IO) {
       if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix()) {
-        zimFileReaderFactory.create(zimReaderSource)
+        zimFileReaderFactory.create(zimReaderSource, showSearchSuggestionsSpellChecked)
       } else {
         null
       }

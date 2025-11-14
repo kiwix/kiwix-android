@@ -19,22 +19,27 @@
 package org.kiwix.kiwixmobile.core.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,9 +58,12 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
@@ -63,11 +71,15 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LOAD_MORE_PROGRESS_BAR_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_SEARCH_ITEM
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.OPEN_IN_NEW_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 
 const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
@@ -132,30 +144,117 @@ private fun SearchScreenContent(
       ),
     contentAlignment = Alignment.Center
   ) {
-    if (searchScreenState.searchList.isEmpty()) {
-      NoSearchResultView()
-    } else {
-      LazyColumn(
-        modifier = Modifier
-          .fillMaxSize(),
-        state = lazyListState
-      ) {
-        items(searchScreenState.searchList) { item ->
-          SearchListItem(
-            searchListItem = item,
-            onItemClick = { searchScreenState.onItemClick(item) },
-            onNewTabIconClick = { searchScreenState.onNewTabIconClick(item) },
-            onItemLongClick = if (item is SearchListItem.RecentSearchListItem) {
-              { searchScreenState.onItemLongClick(item) }
-            } else {
-              null
-            }
-          )
+    when {
+      searchScreenState.spellingCorrectionSuggestions.isNotEmpty() -> {
+        SpellingCorrectionSuggestions(
+          searchScreenState.spellingCorrectionSuggestions,
+          searchScreenState.onSuggestionClick
+        )
+      }
+
+      searchScreenState.searchList.isEmpty() -> NoSearchResultView()
+
+      else -> {
+        LazyColumn(
+          modifier = Modifier
+            .fillMaxSize(),
+          state = lazyListState
+        ) {
+          item {
+            Spacer(modifier = Modifier.height(FOUR_DP))
+          }
+          items(searchScreenState.searchList) { item ->
+            SearchListItem(
+              searchListItem = item,
+              onItemClick = { searchScreenState.onItemClick(item) },
+              onNewTabIconClick = { searchScreenState.onNewTabIconClick(item) },
+              onItemLongClick = if (item is SearchListItem.RecentSearchListItem) {
+                { searchScreenState.onItemLongClick(item) }
+              } else {
+                null
+              }
+            )
+          }
+          showLoadMoreProgressBar(searchScreenState, progressBarTrackColor)
         }
-        showLoadMoreProgressBar(searchScreenState, progressBarTrackColor)
       }
     }
     ShowLoadingProgressBar(searchScreenState.isLoading, progressBarTrackColor)
+  }
+}
+
+@Composable
+private fun SpellingCorrectionSuggestions(
+  spellingCorrectionSuggestions: List<String>,
+  onSuggestionClick: (String) -> Unit
+) {
+  LazyColumn(modifier = Modifier.fillMaxSize()) {
+    spellingCorrectionHeader()
+    itemsIndexed(spellingCorrectionSuggestions) { index, item ->
+      SpellingSuggestionItem(
+        index = index,
+        suggestionText = item,
+        onSuggestionClick = onSuggestionClick
+      )
+    }
+  }
+}
+
+private fun LazyListScope.spellingCorrectionHeader() {
+  item {
+    Text(
+      text = stringResource(R.string.do_you_mean),
+      fontSize = SEARCH_ITEM_TEXT_SIZE,
+      fontWeight = FontWeight.Companion.W700,
+      color = MaterialTheme.colorScheme.onBackground,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = TEN_DP)
+        .padding(top = FIFTEEN_DP)
+    )
+  }
+}
+
+@Composable
+private fun SpellingSuggestionItem(
+  index: Int,
+  suggestionText: String,
+  onSuggestionClick: (String) -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxSize()
+      .clickable { onSuggestionClick(suggestionText) }
+      .padding(horizontal = EIGHT_DP)
+      .padding(top = SEVEN_DP)
+      .background(
+        shape = RoundedCornerShape(EIGHT_DP),
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+      ),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = suggestionText,
+      modifier = Modifier
+        .weight(1f)
+        .padding(horizontal = EIGHT_DP)
+        .semantics { contentDescription = "$suggestionText$index" },
+      fontSize = SEARCH_ITEM_TEXT_SIZE,
+      maxLines = 1,
+      overflow = Ellipsis
+    )
+
+    IconButton(
+      onClick = { },
+      modifier = Modifier
+        .size(OPEN_IN_NEW_TAB_ICON_SIZE)
+        .padding(end = SIX_DP)
+    ) {
+      Icon(
+        painter = painterResource(id = R.drawable.action_search),
+        contentDescription = stringResource(id = R.string.search_label) + index,
+      )
+    }
   }
 }
 
@@ -215,8 +314,13 @@ private fun SearchListItem(
 ) {
   Row(
     modifier = Modifier
-      .fillMaxWidth()
-      .heightIn(min = MINIMUM_HEIGHT_OF_SEARCH_ITEM),
+      .fillMaxSize()
+      .padding(horizontal = EIGHT_DP)
+      .padding(top = SEVEN_DP)
+      .background(
+        shape = RoundedCornerShape(EIGHT_DP),
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+      ),
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
@@ -234,7 +338,10 @@ private fun SearchListItem(
 
     IconButton(
       onClick = { onNewTabIconClick(searchListItem) },
-      modifier = Modifier.testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+      modifier = Modifier
+        .testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+        .size(OPEN_IN_NEW_TAB_ICON_SIZE)
+        .padding(end = SIX_DP)
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
