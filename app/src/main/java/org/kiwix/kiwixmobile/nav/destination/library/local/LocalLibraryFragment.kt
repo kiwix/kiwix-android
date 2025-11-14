@@ -43,6 +43,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
@@ -218,6 +219,14 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
           )
         }
         DialogHost(dialogShower as AlertDialogShower)
+        DisposableEffect(Unit) {
+          onDispose {
+            // Dispose UI resources when this Compose view is removed. Compose disposes
+            // its content before Fragment.onDestroyView(), so callback and listener cleanup
+            // should happen here.
+            destroyViews()
+          }
+        }
       }
     }
   }
@@ -611,6 +620,10 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    destroyViews()
+  }
+
+  private fun destroyViews() {
     actionMode = null
     coroutineJobs.forEach {
       it.cancel()
