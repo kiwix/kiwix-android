@@ -66,7 +66,7 @@ import org.kiwix.kiwixmobile.ui.TagsView
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 
 const val ONLINE_BOOK_ITEM_TESTING_TAG = "onlineBookItemTestingTag"
 const val ONLINE_BOOK_SIZE_TEXT_TESTING_TAG = "onlineBookSizeTextTestingTag"

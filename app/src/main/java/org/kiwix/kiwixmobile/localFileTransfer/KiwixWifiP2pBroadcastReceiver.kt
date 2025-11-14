@@ -52,6 +52,7 @@ class KiwixWifiP2pBroadcastReceiver(
         val wifiP2pState = intent.getIntExtra(EXTRA_WIFI_STATE, -1)
         p2pEventListener.onWifiP2pStateChanged(wifiP2pState == WIFI_P2P_STATE_ENABLED)
       }
+
       WIFI_P2P_PEERS_CHANGED_ACTION -> p2pEventListener.onPeersChanged()
       WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
         val networkInfo =
@@ -67,6 +68,7 @@ class KiwixWifiP2pBroadcastReceiver(
           p2pEventListener.onConnectionChanged(networkInfo.isConnected)
         }
       }
+
       WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
         val userDevice =
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

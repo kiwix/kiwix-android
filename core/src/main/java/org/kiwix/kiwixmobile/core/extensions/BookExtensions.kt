@@ -20,43 +20,8 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.util.Base64
 import android.util.Log
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
-import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.libkiwix.Book
-
-fun LibkiwixBook.calculateSearchMatches(
-  filter: String,
-  bookUtils: BookUtils
-) {
-  val searchableText = buildSearchableText(bookUtils)
-  searchMatches = filter.split("\\s+")
-    .foldRight(
-      0
-    ) { filterWord, acc ->
-      if (searchableText.contains(filterWord, true)) {
-        acc + 1
-      } else {
-        acc
-      }
-    }
-}
-
-fun LibkiwixBook.buildSearchableText(bookUtils: BookUtils): String =
-  StringBuilder().apply {
-    append(title)
-    append("|")
-    append(description)
-    append("|")
-    append(NetworkUtils.parseURL(CoreApp.instance, url))
-    append("|")
-    if (bookUtils.localeMap.containsKey(language)) {
-      append(bookUtils.localeMap[language]?.displayLanguage)
-      append("|")
-    }
-  }.toString()
 
 fun Book?.getFavicon(): String? =
   runCatching {

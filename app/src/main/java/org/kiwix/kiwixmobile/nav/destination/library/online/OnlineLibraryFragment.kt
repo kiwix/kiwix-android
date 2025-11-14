@@ -96,7 +96,7 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import javax.inject.Inject
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"

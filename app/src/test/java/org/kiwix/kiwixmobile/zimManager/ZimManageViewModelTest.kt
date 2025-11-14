@@ -87,7 +87,7 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.libkiwix.Book
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.MOCK_BASE_URL

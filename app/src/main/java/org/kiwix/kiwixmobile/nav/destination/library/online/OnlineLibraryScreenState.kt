@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 import androidx.compose.material3.SnackbarHostState
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 
 data class OnlineLibraryScreenState(
   /**

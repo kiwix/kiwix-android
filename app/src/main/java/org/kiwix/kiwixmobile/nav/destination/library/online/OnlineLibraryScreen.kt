@@ -83,8 +83,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 
 const val ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG = "onlineLibrarySearchViewTestingTag"
 const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG =

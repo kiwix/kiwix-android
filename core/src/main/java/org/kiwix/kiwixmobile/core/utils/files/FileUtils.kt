@@ -148,13 +148,13 @@ object FileUtils {
               getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
             }
           "$sdCardOrUsbMainPath/${documentId[1]}"
-        } catch (ignore: Exception) {
+        } catch (_: Exception) {
           null
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority) {
         return try {
           documentProviderContentQuery(context, uri)
-        } catch (ignore: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
           null
         }
       }
@@ -305,7 +305,7 @@ object FileUtils {
       } else {
         null
       }
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       null
     } finally {
       cursor?.close()
@@ -392,7 +392,7 @@ object FileUtils {
     val actualDocumentId =
       try {
         documentId.toLong()
-      } catch (ignore: NumberFormatException) {
+      } catch (_: NumberFormatException) {
         0L
       }
     return queryForActualPath(
@@ -487,7 +487,7 @@ object FileUtils {
           it.read(buffer)
           return@readContentFromLocales String(buffer)
         }
-    } catch (ignored: IOException) {
+    } catch (_: IOException) {
       return ""
     }
   }
@@ -694,9 +694,9 @@ object FileUtils {
       } else {
         null
       }
-    } catch (ignore: FileNotFoundException) {
+    } catch (_: FileNotFoundException) {
       null
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // It may throw a SecurityException in the Play Store variant
       // since we have limited access to storage and URIs in the Play Store variant.
       // If the user opens the ZIM file via app linking and closes the application,

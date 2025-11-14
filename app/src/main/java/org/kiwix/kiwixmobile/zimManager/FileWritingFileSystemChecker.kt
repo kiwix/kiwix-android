@@ -32,6 +32,7 @@ class FileWritingFileSystemChecker : FileSystemChecker {
       when (val capability = readCapability(resultFile)) {
         CAN_WRITE_4GB,
         CANNOT_WRITE_4GB -> return capability
+
         else -> {}
       }
     }
@@ -57,7 +58,7 @@ class FileWritingFileSystemChecker : FileSystemChecker {
   private fun readCapability(resultFile: File) =
     try {
       FileSystemCapability.valueOf(resultFile.readText())
-    } catch (illegalArgumentException: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
       INCONCLUSIVE
     }
 

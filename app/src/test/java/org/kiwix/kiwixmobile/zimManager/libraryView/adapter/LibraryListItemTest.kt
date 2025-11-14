@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4Gb
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 
 internal class LibraryListItemTest {
   private val book = mockk<LibkiwixBook>()
