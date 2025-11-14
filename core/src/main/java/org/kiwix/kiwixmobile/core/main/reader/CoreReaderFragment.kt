@@ -56,6 +56,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -480,6 +481,14 @@ abstract class CoreReaderFragment :
           navHostController = (requireActivity() as CoreMainActivity).navController
         )
         DialogHost(alertDialogShower as AlertDialogShower)
+        DisposableEffect(Unit) {
+          onDispose {
+            // Dispose UI resources when this Compose view is removed. Compose disposes
+            // its content before Fragment.onDestroyView(), so callback and listener cleanup
+            // should happen here.
+            destroyViews()
+          }
+        }
       }
     }
     addAlertDialogToDialogHost()
@@ -1053,8 +1062,27 @@ abstract class CoreReaderFragment :
     }
   }
 
+  private fun stopReadAloudSafely() {
+    runCatching {
+      tts?.apply {
+        setActionAndStartTTSService(ACTION_STOP_TTS)
+        shutdown()
+        tts = null
+      }
+    }.onFailure {
+      Log.e(
+        TAG_KIWIX,
+        "Could not stop read aloud service. Original exception = $it"
+      )
+    }
+  }
+
   override fun onDestroyView() {
     super.onDestroyView()
+    destroyViews()
+  }
+
+  private fun destroyViews() {
     libkiwixBook = null
     findInPageTitle = null
     searchItemToOpen = null
@@ -1074,11 +1102,7 @@ abstract class CoreReaderFragment :
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
     activity?.let(::deleteCachedFiles)
-    tts?.apply {
-      setActionAndStartTTSService(ACTION_STOP_TTS)
-      shutdown()
-      tts = null
-    }
+    stopReadAloudSafely()
     tempWebViewForUndo = null
     // to fix IntroFragmentTest see https://github.com/kiwix/kiwix-android/pull/3217
     try {
@@ -1095,7 +1119,6 @@ abstract class CoreReaderFragment :
     composeView = null
   }
 
-  @SuppressLint("ClickableViewAccessibility")
   private fun unBindViewsAndBinding() {
     compatCallback?.finish()
     compatCallback = null

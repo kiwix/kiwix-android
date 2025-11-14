@@ -137,6 +137,14 @@ class SearchFragment : BaseFragment() {
           isDataLoading.value
         )
         DialogHost(dialogShower as AlertDialogShower)
+        DisposableEffect(Unit) {
+          onDispose {
+            // Dispose UI resources when this Compose view is removed. Compose disposes
+            // its content before Fragment.onDestroyView(), so callback and listener cleanup
+            // should happen here.
+            destroyViews()
+          }
+        }
       }
     }
     searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
@@ -217,6 +225,10 @@ class SearchFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    destroyViews()
+  }
+
+  private fun destroyViews() {
     renderingJob?.cancel()
     renderingJob = null
     activity?.intent?.action = null
