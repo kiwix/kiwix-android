@@ -28,7 +28,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
@@ -70,6 +71,8 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarksChanged: Boolean = false
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
+  private val initMutex = Mutex()
+  private var initialized: Boolean = false
 
   @Suppress("InjectDispatcher")
   private val bookmarkListFlow: MutableStateFlow<List<LibkiwixBookmarkItem>> by lazy {
@@ -101,17 +104,29 @@ class LibkiwixBookmarks @Inject constructor(
     File("$bookmarksFolderPath/library.xml")
   }
 
-  init {
-    // Check if bookmark folder exist if not then create the folder first.
-    if (runBlocking { !File(bookmarksFolderPath).isFileExist() }) File(bookmarksFolderPath).mkdir()
-    // Check if library file exist if not then create the file to save the library with book information.
-    if (runBlocking { !libraryFile.isFileExist() }) libraryFile.createNewFile()
-    // set up manager to read the library from this file
-    manager.readFile(libraryFile.canonicalPath)
-    // Check if bookmark file exist if not then create the file to save the bookmarks.
-    if (runBlocking { !bookmarkFile.isFileExist() }) bookmarkFile.createNewFile()
-    // set up manager to read the bookmarks from this file
-    manager.readBookmarkFile(bookmarkFile.canonicalPath)
+  /**
+   * Ensure initialization runs once. This method performs all file I/O and manager setup
+   * on Dispatchers.IO so it won't block the main thread. It is safe to call multiple times.
+   */
+  private suspend fun ensureInitialized(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    if (initialized) return
+
+    initMutex.withLock {
+      if (initialized) return
+      withContext(dispatcher) {
+        // Check if bookmark folder exist if not then create the folder first.
+        if (!File(bookmarksFolderPath).isFileExist()) File(bookmarksFolderPath).mkdir()
+        // Check if library file exist if not then create the file to save the library with book information.
+        if (!libraryFile.isFileExist()) libraryFile.createNewFile()
+        // set up manager to read the library from this file
+        manager.readFile(libraryFile.canonicalPath)
+        // Check if bookmark file exist if not then create the file to save the bookmarks.
+        if (!bookmarkFile.isFileExist()) bookmarkFile.createNewFile()
+        // set up manager to read the bookmarks from this file
+        manager.readBookmarkFile(bookmarkFile.canonicalPath)
+        initialized = true
+      }
+    }
   }
 
   fun bookmarks(): Flow<List<Page>> =
@@ -124,14 +139,16 @@ class LibkiwixBookmarks @Inject constructor(
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
 
   @Suppress("InjectDispatcher")
-  suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> =
-    withContext(Dispatchers.IO) {
-      return@withContext zimFileReader?.let { reader ->
+  suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
+    ensureInitialized()
+    return withContext(Dispatchers.IO) {
+      zimFileReader?.let { reader ->
         getBookmarksList()
           .filter { it.zimId == reader.id }
           .map(LibkiwixBookmarkItem::bookmarkUrl)
       }.orEmpty()
     }
+  }
 
   @Suppress("InjectDispatcher")
   fun bookmarkUrlsForCurrentBook(zimId: String): Flow<List<String>> =
@@ -150,6 +167,7 @@ class LibkiwixBookmarks @Inject constructor(
     libkiwixBookmarkItem: LibkiwixBookmarkItem,
     shouldWriteBookmarkToFile: Boolean = true
   ) {
+    ensureInitialized()
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
       addBookToLibraryIfNotExist(libkiwixBookmarkItem.libKiwixBook)
       val bookmark =
@@ -178,7 +196,8 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   suspend fun addBookToLibrary(file: File? = null, archive: Archive? = null) {
-    try {
+    ensureInitialized()
+    runCatching {
       bookmarksChanged = true
       val book =
         Book().apply {
@@ -190,10 +209,10 @@ class LibkiwixBookmarks @Inject constructor(
         }
       addBookToLibraryIfNotExist(book)
       updateFlowBookmarkList()
-    } catch (ignore: Exception) {
+    }.onFailure {
       Log.e(
         TAG,
-        "Error: Couldn't add the book to library.\nOriginal exception = $ignore"
+        "Error: Couldn't add the book to library.\nOriginal exception = $it"
       )
     }
   }
@@ -228,14 +247,13 @@ class LibkiwixBookmarks @Inject constructor(
     bookmarks: List<LibkiwixBookmarkItem>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) {
-    bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
-      .also {
-        CoroutineScope(dispatcher).launch {
-          writeBookMarksAndSaveLibraryToFile()
-          updateFlowBookmarkList()
-          removeBookFromLibraryIfNoRelatedBookmarksAreStored(dispatcher, bookmarks)
-        }
-      }
+    CoroutineScope(dispatcher).launch {
+      ensureInitialized()
+      bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
+      writeBookMarksAndSaveLibraryToFile()
+      updateFlowBookmarkList()
+      removeBookFromLibraryIfNoRelatedBookmarksAreStored(dispatcher, bookmarks)
+    }
   }
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
@@ -255,6 +273,7 @@ class LibkiwixBookmarks @Inject constructor(
     dispatcher: CoroutineDispatcher,
     deletedBookmarks: List<LibkiwixBookmarkItem>
   ) {
+    ensureInitialized()
     withContext(dispatcher) {
       val currentBookmarks = getBookmarksList()
       val deletedZimIds = deletedBookmarks.map { it.zimId }.distinct()
@@ -263,6 +282,7 @@ class LibkiwixBookmarks @Inject constructor(
         val stillExists = currentBookmarks.any { it.zimId == zimId }
         if (!stillExists) {
           library.removeBookById(zimId)
+          libraryBooksList = library.booksIds.toList()
           Log.d(TAG, "Removed book from library since no bookmarks exist for: $zimId")
         }
       }
@@ -275,6 +295,7 @@ class LibkiwixBookmarks @Inject constructor(
    * to prevent potential data loss and ensures that the library holds the updated ZIM file paths and favicons.
    */
   private suspend fun writeBookMarksAndSaveLibraryToFile() {
+    ensureInitialized()
     // Save the library, which contains ZIM file paths and favicons, to a file.
     library.writeToFile(libraryFile.canonicalPath)
 
@@ -286,6 +307,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   @Suppress("ReturnCount")
   private suspend fun getBookmarksList(): List<LibkiwixBookmarkItem> {
+    ensureInitialized()
     if (!bookmarksChanged && bookmarkList.isNotEmpty()) {
       // No changes, return the cached data
       return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
@@ -400,6 +422,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   // Export the `bookmark.xml` file to the `Download/org.kiwix/` directory of internal storage.
   suspend fun exportBookmark() {
+    ensureInitialized()
     try {
       val bookmarkDestinationFile = exportedFile("bookmark.xml")
       bookmarkFile.inputStream().use { inputStream ->
@@ -438,6 +461,7 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   suspend fun importBookmarks(bookmarkFile: File) {
+    ensureInitialized()
     // Create a temporary library manager to import the bookmarks.
     val tempLibrary = Library()
     Manager(tempLibrary).apply {
