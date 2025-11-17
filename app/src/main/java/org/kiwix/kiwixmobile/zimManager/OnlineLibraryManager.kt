@@ -24,21 +24,14 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.di.modules.ONLINE_BOOKS_LIBRARY
-import org.kiwix.kiwixmobile.di.modules.ONLINE_BOOKS_MANAGER
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
 import javax.inject.Inject
-import javax.inject.Named
 
-@Suppress("UnusedPrivateProperty")
-class OnlineLibraryManager @Inject constructor(
-  @Named(ONLINE_BOOKS_LIBRARY) private val library: Library,
-  @Named(ONLINE_BOOKS_MANAGER) private val manager: Manager,
-) {
+class OnlineLibraryManager @Inject constructor() {
   var totalResult = 0
   suspend fun parseOPDSStreamAndGetBooks(
     content: String?,
