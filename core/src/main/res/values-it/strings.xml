@@ -386,4 +386,5 @@
   <string name="downloading_state">Download in corso</string>
   <string name="download_failed_state">Non riuscito</string>
   <string name="searchview_description_clear">Pulisci query</string>
+  <string name="do_you_mean">Vuoi dire:</string>
 </resources>
