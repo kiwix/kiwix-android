@@ -256,9 +256,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     super.onStart()
     externalLinkOpener.setAlertDialogShower(alertDialogShower)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
+    rateDialogHandler.checkForRateDialog(getIconResId())
+  }
+
+  override fun onResume() {
+    super.onResume()
+    // Resume in-app download monitoring now that the app is visible again.
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
-    rateDialogHandler.checkForRateDialog(getIconResId())
   }
 
   /**
@@ -276,10 +281,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  override fun onStop() {
+  override fun onPause() {
+    // Start the DownloadService as the app is about to enter the background,
+    // so downloads can continue even if the app is no longer in the foreground.
     startMonitoringDownloads()
     downloadMonitor.stopListeningDownloads()
-    super.onStop()
+    super.onPause()
   }
 
   /**
