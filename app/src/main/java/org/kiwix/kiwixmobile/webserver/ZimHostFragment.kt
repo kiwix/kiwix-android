@@ -459,13 +459,21 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun launchTetheringSettingsScreen() {
-    startActivity(
-      Intent(Intent.ACTION_MAIN, null).apply {
-        addCategory(Intent.CATEGORY_LAUNCHER)
-        component = ComponentName("com.android.settings", "com.android.settings.TetherSettings")
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      }
-    )
+    runCatching {
+      // Try to open the device's dedicated hotspot/tethering screen.
+      // Most AOSP-based devices support this explicit Settings component.
+      startActivity(
+        Intent(Intent.ACTION_MAIN, null).apply {
+          addCategory(Intent.CATEGORY_LAUNCHER)
+          component = ComponentName("com.android.settings", "com.android.settings.TetherSettings")
+          flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+      )
+    }.onFailure {
+      // Some OEMs remove or rename the tethering activity, so the direct intent may fail.
+      // As a fallback, open the Wireless settings screen—this reliably contains the Hotspot option.
+      startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
+    }
   }
 
   @Suppress("NestedBlockDepth")
