@@ -38,8 +38,10 @@ import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -108,6 +110,25 @@ class DownloadMonitorService : Service() {
       stopForegroundServiceForDownloads()
     }
     return START_STICKY
+  }
+
+  /**
+   * Called when the foreground service is about to reach its timeout limit.
+   *
+   * Starting from Android 15, foreground services can run for only 6 hours per day
+   * in the background unless the user explicitly opens the application again,
+   * which resets this timer.
+   *
+   * To avoid the system killing our service and throwing a
+   * `ForegroundServiceDidNotStopInTimeException`, we proactively stop the
+   * download service here. When the user opens the app again, the download
+   * process will resume normally.
+   *
+   * More details: https://developer.android.com/develop/background-work/services/fgs/timeout
+   */
+  override fun onTimeout(startId: Int, fgsType: Int) {
+    stopForegroundServiceForDownloads()
+    super.onTimeout(startId, fgsType)
   }
 
   /**
@@ -358,7 +379,10 @@ class DownloadMonitorService : Service() {
   /**
    * Stops the foreground service, disposes of resources, and removes the Fetch listener.
    */
+  @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
+    taskFlow.resetReplayCache()
+    scope.coroutineContext.cancelChildren()
     updaterJob?.cancel()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_REMOVE)
