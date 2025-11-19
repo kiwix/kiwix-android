@@ -28,8 +28,8 @@
   <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
   <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the “Read aloud (Text to speech is reading the current page data)” and if the user clicks on this button “Read Aloud” will stop reading the current page data.</string>
   <string name="menu_support_kiwix">This is for the “Navigation Item” button text on the main page of the “Kiwix app”, clicking on this button leads to opening the “Kiwix support” website page.</string>
-  <string name="menu_support_kiwix_for_custom_apps">Button title, opening the external browser to support the app. The App Name being the argument, eg: Support Kiwix</string>
-  <string name="menu_about_app">Button for showing information about the app.</string>
+  <string name="menu_support_kiwix_for_custom_apps">Button title, opening the external browser to support the app. The app name will replace %s, e.g., Support Kiwix.</string>
+  <string name="menu_about_app">Button for showing information about the app. The app name will replace %s.</string>
   <string name="menu_wifi_hotspot">* English : it maps to some “hotspot” feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité “hotspot” l’anglais “host books” n’est pas particulièrement satisfaisant à la base.</string>
   <string name="save_media">This appears in a dialog window when we long-click on any image/pdf/video. By clicking on this button, it will save the data into phone storage.</string>
   <string name="save_media_error">This error message shows to the user in an “Android Toast”, when there is an error while saving the file in phone storage.</string>
