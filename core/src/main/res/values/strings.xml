@@ -416,4 +416,5 @@
   <string name="suggested_search_icon_description">Tap to use this suggestion and automatically correct your search</string>
   <string name="file_system_scan_dialog_title">Scan storage for books?</string>
   <string name="file_system_scan_dialog_message">Kiwix will scan your device storage and list the available books here.</string>
+  <string name="download_timeout_resume_message">Android’s background download has timed-out. Do you want to resume?</string>
 </resources>

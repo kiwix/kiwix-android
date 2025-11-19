@@ -23,6 +23,8 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Intent
 import android.os.Build
@@ -33,6 +35,7 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
+import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
@@ -57,6 +60,11 @@ import javax.inject.Inject
 const val THIRTY_TREE = 33
 const val DOWNLOAD_SERVICE_NOTIFICATION_ID = 1
 const val APP_NAME_KEY = "appNameKey"
+const val DOWNLOAD_TIMEOUT_RESUME_INTENT = "downloadTimeoutResumeIntent"
+const val BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION = "backgroundDownloadLimitReachAction"
+const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
+const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
+const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 
 @Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
@@ -127,8 +135,83 @@ class DownloadMonitorService : Service() {
    * More details: https://developer.android.com/develop/background-work/services/fgs/timeout
    */
   override fun onTimeout(startId: Int, fgsType: Int) {
+    showDownloadBackgroundLimitReachNotification()
     stopForegroundServiceForDownloads()
     super.onTimeout(startId, fgsType)
+  }
+
+  /**
+   * Shows the notification when the download background limit reached.
+   * It has 2 buttons(Yes, No). By clicking on "Yes" button it will launch the application, and
+   * the limit restores for 6 hours. Clicking on "No" button simply dismiss the notification.
+   * User can again open the application and the download again restarts.
+   *
+   * It dismisses any paused notification was showing, because when this limit reaches then
+   * user can not resume the download by notification. So showing those notification confuse users.
+   */
+  private fun showDownloadBackgroundLimitReachNotification() {
+    fetch.getDownloadsWithStatus(
+      listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
+    ) { downloads ->
+      downloads.forEach { download ->
+        // Remove all ongoing notification along with paused notifications.
+        // Also, pause the ongoing downloads.
+        runCatching {
+          fetch.pause(download.id)
+          notificationManager.cancel(download.id)
+        }
+      }
+      notificationManager.notify(
+        DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID,
+        buildTimeoutNotification()
+      )
+    }
+  }
+
+  private fun buildTimeoutNotification(): Notification {
+    val yesIntent = Intents.internal(CoreMainActivity::class.java).apply {
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      // on clicking on yes button it will open the "Download" screen.
+      // For custom apps, it will simply open the app, and the rest custom reader fragment
+      // automatically handles it.
+      putExtra(DOWNLOAD_TIMEOUT_RESUME_INTENT, true)
+    }
+    val yesPendingIntent = PendingIntent.getActivity(
+      this,
+      DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE,
+      yesIntent,
+      FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+    )
+
+    val noIntent = Intent(this, javaClass).apply {
+      action = BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION
+    }
+    val noPendingIntent = PendingIntent.getService(
+      this,
+      DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE,
+      noIntent,
+      FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+    )
+
+    return NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+      .setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+      .setSmallIcon(android.R.drawable.stat_sys_warning)
+      .setContentTitle(appName)
+      .setContentText(getString(R.string.download_timeout_resume_message))
+      .setAutoCancel(true)
+      .setOngoing(false)
+      .setOnlyAlertOnce(true)
+      .addAction(
+        drawable.fetch_notification_resume,
+        getString(R.string.yes),
+        yesPendingIntent
+      )
+      .addAction(
+        drawable.fetch_notification_cancel,
+        getString(R.string.no),
+        noPendingIntent
+      )
+      .build()
   }
 
   /**
