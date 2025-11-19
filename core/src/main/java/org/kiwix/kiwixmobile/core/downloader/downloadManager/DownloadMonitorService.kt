@@ -183,10 +183,10 @@ class DownloadMonitorService : Service() {
       FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
     )
 
-    val noIntent = Intent(this, javaClass).apply {
+    val noIntent = Intent(this, DownloadTimeoutDismissReceiver::class.java).apply {
       action = BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION
     }
-    val noPendingIntent = PendingIntent.getService(
+    val noPendingIntent = PendingIntent.getBroadcast(
       this,
       DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE,
       noIntent,
