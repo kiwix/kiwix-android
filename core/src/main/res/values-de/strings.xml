@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1233qwer1234qwer4
+* Ameisenigel
 * AnnaTheProgrammer777
 * Brettchenweber
 * Caro
@@ -43,7 +44,7 @@
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="menu_support_kiwix">Kiwix unterstützen</string>
-  <string name="menu_support_kiwix_for_custom_apps">Unterstützen Sie %s</string>
+  <string name="menu_support_kiwix_for_custom_apps">Unterstütze %s</string>
   <string name="menu_about_app">Über %s App</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Medium speichern</string>
@@ -189,7 +190,7 @@
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
-  <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
+  <string name="confirm_stop_download_msg">Bist du sicher, dass du diesen Download abbrechen möchtest?</string>
   <string name="tts_not_enabled">Die Vorlesefunktion ist für diese ZIM-Datei nicht aktiviert</string>
   <string name="texttospeech_initialization_failed">Die Initialisierung der Vorlesefunktion ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
   <string name="texttospeech_error">Unerwarteter Fehler in der Vorlesefunktion. Bitte versuchen Sie es noch einmal</string>

@@ -149,4 +149,5 @@
   <string name="choose_your_action">আপনার কার্য চয়ন করুন</string>
   <string name="open_note">টীকা খুলুন</string>
   <string name="open_article">নিবন্ধ খুলুন</string>
+  <string name="do_you_mean">আপনি কি বোঝাতে চেয়েছেন:</string>
 </resources>

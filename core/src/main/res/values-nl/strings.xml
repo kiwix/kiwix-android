@@ -402,6 +402,8 @@
   <string name="downloading_state">Downloaden</string>
   <string name="download_failed_state">Mislukt</string>
   <string name="searchview_description_clear">Zoekopdracht wissen</string>
+  <string name="do_you_mean">Bedoelt u:</string>
+  <string name="suggested_search_icon_description">Tik om deze suggestie te gebruiken en uw zoekopdracht automatisch te corrigeren</string>
   <string name="file_system_scan_dialog_title">De opslag op boeken doorlichten?</string>
   <string name="file_system_scan_dialog_message">Kiwix tast de opslagruimte van uw apparaat af en geeft hier een overzicht van de beschikbare boeken.</string>
 </resources>

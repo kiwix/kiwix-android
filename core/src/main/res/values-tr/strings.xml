@@ -17,6 +17,7 @@
 * MuratTheTurkish
 * Rapsar
 * Rofiatmustapha12
+* SaldırganSincap
 * Sayginer
 * Slickdaddy
 * Stonecy
@@ -383,7 +384,7 @@
   <string name="download_tts_language_message">Lütfen İndir düğmesine tıklayın. Gerekli dili otomatik olarak indirecektir.</string>
   <string name="external_link_copied_message">Kalıcı bağlantısı panoya kopyalandı</string>
   <string name="read_aloud_service_channel_name">Yüksek Sesle Okuma Servis Kanalı</string>
-  <string name="read_aloud_channel_description" fuzzy="true">Metinden konuşmaya kontroller.</string>
+  <string name="read_aloud_channel_description">Sesli Okuma kontrolleri.</string>
   <string name="read_aloud_running">Sesli Okumayı Çalıştırma</string>
   <string name="backward_history">Birikmiş iş geçmişi</string>
   <string name="forward_history">İleri tarih</string>

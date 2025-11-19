@@ -204,7 +204,7 @@
   <string name="downloading">正在下載</string>
   <string name="no_items_msg">沒有可用的項目</string>
   <string name="crash_title">唔…真是丟臉</string>
-  <string name="crash_description" fuzzy="true">看起來是我們這邊出了問題。\n\n您是否願意透過發送以下資訊，來協助我們修正此問題？</string>
+  <string name="crash_description">看起來是我們這邊發生當機。\n\n您是否願意發送當機報告，來協助我們修正此問題？</string>
   <string name="crash_checkbox_language">您的語言設定</string>
   <string name="crash_checkbox_zimfiles">您的 ZIM 檔案清單</string>
   <string name="crash_checkbox_exception">當機詳情</string>
@@ -326,7 +326,7 @@
   <string name="send_report">傳送診斷報告</string>
   <string name="crash_checkbox_file_system">檔案系統詳細資訊</string>
   <string name="diagnostic_report">診斷報告</string>
-  <string name="diagnostic_report_message" fuzzy="true">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
+  <string name="diagnostic_report_message">為了協助我們診斷問題，請先試著重現出該問題的情境，然後再發送診斷報告。</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
   <string name="search_open_in_new_tab">在新分頁開啟</string>
@@ -404,6 +404,8 @@
   <string name="downloading_state">正在下載</string>
   <string name="download_failed_state">失敗</string>
   <string name="searchview_description_clear">清除查詢</string>
+  <string name="do_you_mean">請問您是指：</string>
+  <string name="suggested_search_icon_description">點擊來使用此建議，並自動更正您的搜尋。</string>
   <string name="file_system_scan_dialog_title">掃描儲存裝置的書籍？</string>
   <string name="file_system_scan_dialog_message">Kiwix 將掃描您的設備儲存空間並在此處列出可用的書籍。</string>
 </resources>
