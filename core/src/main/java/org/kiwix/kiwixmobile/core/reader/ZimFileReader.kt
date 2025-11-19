@@ -57,7 +57,6 @@ import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
 
-@Suppress("LongParameterList")
 class ZimFileReader constructor(
   val zimReaderSource: ZimReaderSource,
   val jniKiwixReader: Archive,
@@ -150,15 +149,14 @@ class ZimFileReader constructor(
   val date: String get() = getSafeMetaData("Date", "")
   val description: String get() = getSafeMetaData("Description", "")
   val favicon: String?
-    get() =
-      if (jniKiwixReader.hasIllustration(ILLUSTRATION_SIZE)) {
-        Base64.encodeToString(
-          jniKiwixReader.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
-          Base64.DEFAULT
-        )
-      } else {
-        null
-      }
+    get() = runCatching {
+      Base64.encodeToString(
+        jniKiwixReader.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
+        Base64.DEFAULT
+      )
+    }.onFailure {
+      Log.e(TAG, "Could not get the favicon for $title. Original exception: $it")
+    }.getOrNull()
   val language: String get() = getSafeMetaData("Language", "")
 
   val tags: String
