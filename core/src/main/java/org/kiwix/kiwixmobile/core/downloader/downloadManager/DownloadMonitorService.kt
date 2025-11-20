@@ -124,13 +124,13 @@ class DownloadMonitorService : Service() {
    * Called when the foreground service is about to reach its timeout limit.
    *
    * Starting from Android 15, foreground services can run for only 6 hours per day
-   * in the background unless the user explicitly opens the application again,
-   * which resets this timer.
+   * while running in the background, unless the user explicitly opens the app
+   * again, which resets this timer.
    *
-   * To avoid the system killing our service and throwing a
+   * To prevent the system from killing the service and throwing
    * `ForegroundServiceDidNotStopInTimeException`, we proactively stop the
-   * download service here. When the user opens the app again, the download
-   * process will resume normally.
+   * download service here. When the user returns to the app, the download
+   * process will resume automatically.
    *
    * More details: https://developer.android.com/develop/background-work/services/fgs/timeout
    */
@@ -140,13 +140,16 @@ class DownloadMonitorService : Service() {
   }
 
   /**
-   * Shows the notification when the download background limit reached.
-   * It has 2 buttons(Yes, No). By clicking on "Yes" button it will launch the application, and
-   * the limit restores for 6 hours. Clicking on "No" button simply dismiss the notification.
-   * User can again open the application and the download again restarts.
+   * Shows a notification when the download background limit is reached.
    *
-   * It dismisses any paused notification was showing, because when this limit reaches then
-   * user can not resume the download by notification. So showing those notification confuse users.
+   * The notification contains two buttons: "Yes" and "No".
+   * - Tapping "Yes" launches the app, which resets the 6-hour background limit.
+   * - Tapping "No" simply dismisses the notification. The user can still open
+   *   the app later to resume the download.
+   *
+   * This method also dismisses any ongoing or paused download notifications,
+   * because once this limit is reached, the user can no longer resume downloads
+   * from notifications. Keeping those notifications visible can be confusing.
    */
   private fun showDownloadBackgroundLimitReachNotification() {
     fetch.getDownloadsWithStatus(
@@ -171,6 +174,13 @@ class DownloadMonitorService : Service() {
     }
   }
 
+  /**
+   * Updates the pause reason of a download in the database.
+   *
+   * This marks the download as paused due to the service (i.e., Android's background
+   * timeout limit). By storing this information, we can later identify and automatically
+   * resume only those downloads when the app returns to the foreground.
+   */
   private fun updatePauseReasonInDatabase(downloadId: Long) {
     taskFlow.tryEmit {
       // Update the download entity in database so that we can resume all downloads

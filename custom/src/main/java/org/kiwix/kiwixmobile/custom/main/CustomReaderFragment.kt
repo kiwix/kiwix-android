@@ -411,8 +411,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.openAndSetInContainer(zimReaderSource, BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED)
   }
 
-  override suspend fun invalidZimFile() {
-    openDownloadScreen()
+  override suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
+    runCatching { openDownloadScreen() }
   }
 
   override fun openKiwixSupportUrl() {

@@ -145,7 +145,14 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   /**
-   * Resume the downloads paused by the service when Android's background timeout limit reached.
+   * Resumes all downloads that were previously paused by the service due to Android's
+   * background timeout limitation.
+   *
+   * This method:
+   * 1. Fetches all downloads marked with `PauseReason.SERVICE`.
+   * 2. Resumes each download using Fetch.
+   * 3. Resets their `pauseReason` to `NONE` and updates the status to `QUEUED`
+   *    so they can continue downloading normally.
    */
   private fun startPausedDownloadsDueToAndroidServiceLimitation(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     CoroutineScope(dispatcher).launch {
