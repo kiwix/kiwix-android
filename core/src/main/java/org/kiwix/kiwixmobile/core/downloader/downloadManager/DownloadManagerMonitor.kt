@@ -23,7 +23,9 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
+import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2core.DownloadBlock
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,6 +33,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import javax.inject.Inject
 
@@ -52,15 +55,12 @@ class DownloadManagerMonitor @Inject constructor(
   private var updaterJob: Job? = null
   private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-  @Suppress("TooGenericExceptionCaught")
   private fun setupUpdater() {
     updaterJob = coroutineScope.launch {
       taskFlow.collect { task ->
-        try {
+        runCatching {
           task.invoke()
-        } catch (e: Exception) {
-          e.printStackTrace()
-        }
+        }.onFailure { it.printStackTrace() }
       }
     }
   }
@@ -144,9 +144,28 @@ class DownloadManagerMonitor @Inject constructor(
     taskFlow.tryEmit { downloadRoomDao.delete(download) }
   }
 
+  /**
+   * Resume the downloads paused by the service when Android's background timeout limit reached.
+   */
+  private fun startPausedDownloadsDueToAndroidServiceLimitation(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    CoroutineScope(dispatcher).launch {
+      downloadRoomDao.getDownloadsPausedByService()
+        .forEach {
+          fetch.resume(it.downloadId.toInt())
+          // Reset the PauseReason.
+          downloadRoomDao.getEntityForDownloadId(it.downloadId)?.let { downloadRoomEntity ->
+            downloadRoomDao.updateDownloadItem(
+              downloadRoomEntity.copy(pauseReason = PauseReason.NONE, status = Status.QUEUED)
+            )
+          }
+        }
+    }
+  }
+
   override fun startMonitoringDownload() {
     fetch.addListener(fetchListener, true)
     setupUpdater()
+    startPausedDownloadsDueToAndroidServiceLimitation()
   }
 
   override fun stopListeningDownloads() {

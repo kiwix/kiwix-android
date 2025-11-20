@@ -302,4 +302,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun createNewTab() {
     newMainPageTab()
   }
+
+  override suspend fun invalidZimFile() {
+    // Do nothing since all the things are handles in CoreReaderFragment.
+  }
 }

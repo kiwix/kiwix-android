@@ -44,7 +44,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -53,6 +52,7 @@ import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import javax.inject.Inject
@@ -136,7 +136,6 @@ class DownloadMonitorService : Service() {
    */
   override fun onTimeout(startId: Int, fgsType: Int) {
     showDownloadBackgroundLimitReachNotification()
-    stopForegroundServiceForDownloads()
     super.onTimeout(startId, fgsType)
   }
 
@@ -157,7 +156,10 @@ class DownloadMonitorService : Service() {
         // Remove all ongoing notification along with paused notifications.
         // Also, pause the ongoing downloads.
         runCatching {
-          fetch.pause(download.id)
+          if (!download.isPaused()) {
+            fetch.pause(download.id)
+            updatePauseReasonInDatabase(download.id.toLong())
+          }
           notificationManager.cancel(download.id)
         }
       }
@@ -165,6 +167,19 @@ class DownloadMonitorService : Service() {
         DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID,
         buildTimeoutNotification()
       )
+      stopForegroundServiceForDownloads()
+    }
+  }
+
+  private fun updatePauseReasonInDatabase(downloadId: Long) {
+    taskFlow.tryEmit {
+      // Update the download entity in database so that we can resume all downloads
+      // once app become visible in foreground
+      downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
+        downloadRoomDao.updateDownloadItem(
+          downloadRoomEntity.copy(pauseReason = PauseReason.SERVICE, status = Status.PAUSED)
+        )
+      }
     }
   }
 
@@ -464,8 +479,6 @@ class DownloadMonitorService : Service() {
    */
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
-    taskFlow.resetReplayCache()
-    scope.coroutineContext.cancelChildren()
     updaterJob?.cancel()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_REMOVE)

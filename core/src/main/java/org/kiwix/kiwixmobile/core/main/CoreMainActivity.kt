@@ -267,6 +267,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     // Resume in-app download monitoring now that the app is visible again.
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
+    cancelBackgroundTimeoutNotification()
   }
 
   /**
@@ -463,7 +464,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate("$readerFragmentRoute?$FIND_IN_PAGE_SEARCH_STRING=$searchString")
   }
 
-  fun cancelBackgroundTimeoutNotification() {
+  private fun cancelBackgroundTimeoutNotification() {
     runCatching {
       val notificationManager =
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

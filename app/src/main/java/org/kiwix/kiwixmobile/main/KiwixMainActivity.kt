@@ -222,7 +222,6 @@ class KiwixMainActivity : CoreMainActivity() {
           popUpTo(navController.graph.findStartDestination().id)
         }
       }
-      (this as? CoreMainActivity)?.cancelBackgroundTimeoutNotification()
     }
   }
 

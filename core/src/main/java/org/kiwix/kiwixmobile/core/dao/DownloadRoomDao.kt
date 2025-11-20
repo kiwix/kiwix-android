@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
@@ -106,6 +107,11 @@ abstract class DownloadRoomDao {
 
   @Insert
   abstract fun saveDownload(downloadRoomEntity: DownloadRoomEntity)
+
+  @Query("SELECT * FROM DownloadRoomEntity WHERE pauseReason = :reason")
+  abstract fun getDownloadsPausedByService(
+    reason: PauseReason = PauseReason.SERVICE
+  ): List<DownloadRoomEntity>
 
   fun delete(download: Download) {
     deleteDownloadByDownloadId(download.id.toLong())

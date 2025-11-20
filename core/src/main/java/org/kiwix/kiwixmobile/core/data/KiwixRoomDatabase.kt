@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.ErrorConverter
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.PauseReasonConverter
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.StatusConverter
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
@@ -50,7 +51,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     DownloadRoomEntity::class,
     WebViewHistoryEntity::class
   ],
-  version = 9,
+  version = 10,
   exportSchema = false
 )
 @TypeConverters(
@@ -58,7 +59,8 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
   ZimSourceRoomConverter::class,
   BundleRoomConverter::class,
   StatusConverter::class,
-  ErrorConverter::class
+  ErrorConverter::class,
+  PauseReasonConverter::class
 )
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
@@ -83,7 +85,8 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               MIGRATION_5_6,
               MIGRATION_6_7,
               MIGRATION_7_8,
-              MIGRATION_8_9
+              MIGRATION_8_9,
+              MIGRATION_9_10
             )
             .build().also { db = it }
       }
@@ -361,6 +364,16 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
           db.execSQL("DROP TABLE DownloadRoomEntity")
           db.execSQL("ALTER TABLE DownloadRoomEntity_new RENAME TO DownloadRoomEntity")
+        }
+      }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_9_10 =
+      object : Migration(9, 10) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            "ALTER TABLE DownloadRoomEntity ADD COLUMN pauseReason INTEGER NOT NULL DEFAULT 0"
+          )
         }
       }
 

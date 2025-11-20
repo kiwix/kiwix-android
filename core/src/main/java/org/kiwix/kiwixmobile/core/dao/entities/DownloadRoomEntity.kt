@@ -54,6 +54,8 @@ data class DownloadRoomEntity(
   val size: String,
   val name: String?,
   val favIcon: String,
+  @TypeConverters(PauseReasonConverter::class)
+  val pauseReason: PauseReason = PauseReason.NONE,
   val tags: String? = null
 ) {
   constructor(downloadId: Long, book: LibkiwixBook) : this(
@@ -118,4 +120,18 @@ class ErrorConverter {
 
   @TypeConverter
   fun convertToDatabaseValue(error: Error): Int = error.ordinal
+}
+
+class PauseReasonConverter {
+  @TypeConverter
+  fun toEnum(value: Int): PauseReason = PauseReason.entries[value]
+
+  @TypeConverter
+  fun toInt(reason: PauseReason): Int = reason.ordinal
+}
+
+enum class PauseReason {
+  NONE,
+  USER,
+  SERVICE
 }

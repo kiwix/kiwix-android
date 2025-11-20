@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -38,7 +37,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
@@ -259,13 +257,6 @@ class CustomMainActivity : CoreMainActivity() {
       if (it.id == "new_tab") {
         ShortcutManagerCompat.removeDynamicShortcuts(this, arrayListOf(it.id))
       }
-    }
-  }
-
-  override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
-    super.onNewIntent(intent, caller)
-    if (intent.hasExtra(DOWNLOAD_TIMEOUT_RESUME_INTENT)) {
-      (this as? CoreMainActivity)?.cancelBackgroundTimeoutNotification()
     }
   }
 }
