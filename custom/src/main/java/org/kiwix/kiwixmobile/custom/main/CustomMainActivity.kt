@@ -55,7 +55,6 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.CustomApp
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import kotlin.lazy
 
 class CustomMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }

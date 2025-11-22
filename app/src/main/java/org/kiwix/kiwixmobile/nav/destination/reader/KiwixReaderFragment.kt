@@ -302,4 +302,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun createNewTab() {
     newMainPageTab()
   }
+
+  override suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
+    // Invoke the function so that it can show toast message to user.
+    runCatching { onInvalidZimFileFound.invoke() }
+  }
 }

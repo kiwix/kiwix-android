@@ -66,6 +66,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -206,6 +207,21 @@ class KiwixMainActivity : CoreMainActivity() {
       handleNotificationIntent(intent)
       handleGetContentIntent(intent)
       safelyHandleDeepLink(intent)
+      handleBackgroundTimeoutLimitIntent(intent)
+    }
+  }
+
+  private fun handleBackgroundTimeoutLimitIntent(intent: Intent?) {
+    if (intent?.hasExtra(DOWNLOAD_TIMEOUT_RESUME_INTENT) == true) {
+      val currentId = navController.currentDestination?.id
+      val targetId = navController.graph.findNode(KiwixDestination.Downloads.route)?.id
+
+      if (currentId != targetId) {
+        navigate(KiwixDestination.Downloads.route) {
+          launchSingleTop = true
+          popUpTo(navController.graph.findStartDestination().id)
+        }
+      }
     }
   }
 

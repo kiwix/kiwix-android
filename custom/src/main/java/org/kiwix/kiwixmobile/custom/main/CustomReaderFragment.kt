@@ -278,19 +278,23 @@ class CustomReaderFragment : CoreReaderFragment() {
       },
       onNoFilesFound = {
         if (sharedPreferenceUtil?.prefIsTest == false) {
-          delay(OPENING_DOWNLOAD_SCREEN_DELAY)
-          coreReaderLifeCycleScope?.launch(Dispatchers.Main.immediate) {
-            val navOptions = NavOptions.Builder()
-              .setPopUpTo(CustomDestination.Reader.route, true)
-              .build()
-            (activity as? CoreMainActivity)?.navigate(
-              CustomDestination.Downloads.route,
-              navOptions
-            )
-          }
+          openDownloadScreen()
         }
       }
     )
+  }
+
+  private suspend fun openDownloadScreen() {
+    delay(OPENING_DOWNLOAD_SCREEN_DELAY)
+    coreReaderLifeCycleScope?.launch(Dispatchers.Main.immediate) {
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(CustomDestination.Reader.route, true)
+        .build()
+      (activity as? CoreMainActivity)?.navigate(
+        CustomDestination.Downloads.route,
+        navOptions
+      )
+    }
   }
 
   private suspend fun createDemoFile() =
@@ -405,6 +409,10 @@ class CustomReaderFragment : CoreReaderFragment() {
     showSearchSuggestionsSpellChecked: Boolean
   ) {
     super.openAndSetInContainer(zimReaderSource, BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED)
+  }
+
+  override suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
+    runCatching { openDownloadScreen() }
   }
 
   override fun openKiwixSupportUrl() {

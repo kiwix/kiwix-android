@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
@@ -55,6 +57,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -264,6 +267,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     // Resume in-app download monitoring now that the app is visible again.
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
+    cancelBackgroundTimeoutNotification()
   }
 
   /**
@@ -458,6 +462,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   fun findInPage(searchString: String) {
     navigate("$readerFragmentRoute?$FIND_IN_PAGE_SEARCH_STRING=$searchString")
+  }
+
+  private fun cancelBackgroundTimeoutNotification() {
+    runCatching {
+      val notificationManager =
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+      notificationManager.cancel(DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID)
+    }
   }
 
   private val bookRelatedDrawerGroup by lazy {

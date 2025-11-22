@@ -23,6 +23,8 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Intent
 import android.os.Build
@@ -33,11 +35,13 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
+import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -48,6 +52,7 @@ import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import javax.inject.Inject
@@ -55,6 +60,11 @@ import javax.inject.Inject
 const val THIRTY_TREE = 33
 const val DOWNLOAD_SERVICE_NOTIFICATION_ID = 1
 const val APP_NAME_KEY = "appNameKey"
+const val DOWNLOAD_TIMEOUT_RESUME_INTENT = "downloadTimeoutResumeIntent"
+const val BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION = "backgroundDownloadLimitReachAction"
+const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
+const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
+const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 
 @Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
@@ -108,6 +118,125 @@ class DownloadMonitorService : Service() {
       stopForegroundServiceForDownloads()
     }
     return START_STICKY
+  }
+
+  /**
+   * Called when the foreground service is about to reach its timeout limit.
+   *
+   * Starting from Android 15, foreground services can run for only 6 hours per day
+   * while running in the background, unless the user explicitly opens the app
+   * again, which resets this timer.
+   *
+   * To prevent the system from killing the service and throwing
+   * `ForegroundServiceDidNotStopInTimeException`, we proactively stop the
+   * download service here. When the user returns to the app, the download
+   * process will resume automatically.
+   *
+   * More details: https://developer.android.com/develop/background-work/services/fgs/timeout
+   */
+  override fun onTimeout(startId: Int, fgsType: Int) {
+    showDownloadBackgroundLimitReachNotification()
+    super.onTimeout(startId, fgsType)
+  }
+
+  /**
+   * Shows a notification when the download background limit is reached.
+   *
+   * The notification contains two buttons: "Yes" and "No".
+   * - Tapping "Yes" launches the app, which resets the 6-hour background limit.
+   * - Tapping "No" simply dismisses the notification. The user can still open
+   *   the app later to resume the download.
+   *
+   * This method also dismisses any ongoing or paused download notifications,
+   * because once this limit is reached, the user can no longer resume downloads
+   * from notifications. Keeping those notifications visible can be confusing.
+   */
+  private fun showDownloadBackgroundLimitReachNotification() {
+    fetch.getDownloadsWithStatus(
+      listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
+    ) { downloads ->
+      downloads.forEach { download ->
+        // Remove all ongoing notification along with paused notifications.
+        // Also, pause the ongoing downloads.
+        runCatching {
+          if (!download.isPaused()) {
+            fetch.pause(download.id)
+            updatePauseReasonInDatabase(download.id.toLong())
+          }
+          notificationManager.cancel(download.id)
+        }
+      }
+      notificationManager.notify(
+        DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID,
+        buildTimeoutNotification()
+      )
+      stopForegroundServiceForDownloads()
+    }
+  }
+
+  /**
+   * Updates the pause reason of a download in the database.
+   *
+   * This marks the download as paused due to the service (i.e., Android's background
+   * timeout limit). By storing this information, we can later identify and automatically
+   * resume only those downloads when the app returns to the foreground.
+   */
+  private fun updatePauseReasonInDatabase(downloadId: Long) {
+    taskFlow.tryEmit {
+      // Update the download entity in database so that we can resume all downloads
+      // once app become visible in foreground
+      downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
+        downloadRoomDao.updateDownloadItem(
+          downloadRoomEntity.copy(pauseReason = PauseReason.SERVICE, status = Status.PAUSED)
+        )
+      }
+    }
+  }
+
+  private fun buildTimeoutNotification(): Notification {
+    val yesIntent = Intents.internal(CoreMainActivity::class.java).apply {
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      // on clicking on yes button it will open the "Download" screen.
+      // For custom apps, it will simply open the app, and the rest custom reader fragment
+      // automatically handles it.
+      putExtra(DOWNLOAD_TIMEOUT_RESUME_INTENT, true)
+    }
+    val yesPendingIntent = PendingIntent.getActivity(
+      this,
+      DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE,
+      yesIntent,
+      FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+    )
+
+    val noIntent = Intent(this, DownloadTimeoutDismissReceiver::class.java).apply {
+      action = BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION
+    }
+    val noPendingIntent = PendingIntent.getBroadcast(
+      this,
+      DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE,
+      noIntent,
+      FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+    )
+
+    return NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+      .setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+      .setSmallIcon(android.R.drawable.stat_sys_warning)
+      .setContentTitle(appName)
+      .setContentText(getString(R.string.download_timeout_resume_message))
+      .setAutoCancel(true)
+      .setOngoing(false)
+      .setOnlyAlertOnce(true)
+      .addAction(
+        drawable.fetch_notification_resume,
+        getString(R.string.yes),
+        yesPendingIntent
+      )
+      .addAction(
+        drawable.fetch_notification_cancel,
+        getString(R.string.no),
+        noPendingIntent
+      )
+      .build()
   }
 
   /**
@@ -358,6 +487,7 @@ class DownloadMonitorService : Service() {
   /**
    * Stops the foreground service, disposes of resources, and removes the Fetch listener.
    */
+  @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
     updaterJob?.cancel()
     fetch.removeListener(fetchListener)

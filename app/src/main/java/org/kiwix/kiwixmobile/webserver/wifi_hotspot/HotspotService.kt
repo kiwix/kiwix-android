@@ -70,6 +70,25 @@ class HotspotService :
     hotspotStateReceiver?.let(::registerReceiver)
   }
 
+  /**
+   * Called when the foreground service is about to reach its timeout limit.
+   *
+   * Starting from Android 15, foreground services can run for only 6 hours per day
+   * in the background unless the user explicitly opens the application again,
+   * which resets this timer.
+   *
+   * To avoid the system killing our service and throwing a
+   * `ForegroundServiceDidNotStopInTimeException`, we proactively stop the
+   * download service here. When the user opens the app again, the download
+   * process will resume normally.
+   *
+   * More details: https://developer.android.com/develop/background-work/services/fgs/timeout
+   */
+  override fun onTimeout(startId: Int, fgsType: Int) {
+    stopHotspotAndDismissNotification()
+    super.onTimeout(startId, fgsType)
+  }
+
   override fun onDestroy() {
     hotspotStateReceiver?.let(::unregisterReceiver)
     super.onDestroy()

@@ -1533,11 +1533,13 @@ abstract class CoreReaderFragment :
         updateTitle()
       } else {
         exitBook()
+        invalidZimFileFound {
+          requireActivity().toast(
+            getString(string.error_file_not_found, zimReaderSource.toDatabase()),
+            Toast.LENGTH_LONG
+          )
+        }
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
-        requireActivity().toast(
-          getString(string.error_file_not_found, zimReaderSource.toDatabase()),
-          Toast.LENGTH_LONG
-        )
       }
     } else {
       this.zimReaderSource = zimReaderSource
@@ -1593,10 +1595,12 @@ abstract class CoreReaderFragment :
         // disable all controls for this ZIM file. This prevents potential crashes.
         // See issue #4161 for more details.
         exitBook()
-        requireActivity().toast(
-          getString(string.error_file_invalid, zimReaderSource.toDatabase()),
-          Toast.LENGTH_LONG
-        )
+        invalidZimFileFound {
+          requireActivity().toast(
+            getString(string.error_file_invalid, zimReaderSource.toDatabase()),
+            Toast.LENGTH_LONG
+          )
+        }
       }
     }
   }
@@ -2641,6 +2645,13 @@ abstract class CoreReaderFragment :
    * when handling invalid JSON scenarios.
    */
   abstract suspend fun restoreViewStateOnInvalidWebViewHistory()
+
+  /**
+   * Called when the provided ZIM file is invalid and cannot be opened in the reader.
+   * Accepts a callback that will be invoked in the child fragments.
+   */
+
+  abstract suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit)
 }
 
 enum class RestoreOrigin {
