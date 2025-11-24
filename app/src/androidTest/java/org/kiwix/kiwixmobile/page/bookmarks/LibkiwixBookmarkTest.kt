@@ -247,6 +247,37 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     }
   }
 
+  @Test
+  fun testBookmarkToggleForCurrentPages() {
+    // Test the scenario where bookmark toggle shows the current opened page is bookmarked or not.
+    openZimFileInReader()
+    bookmarks {
+      openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      clickOnTrashIcon(composeTestRule)
+      assertDeleteBookmarksDialogDisplayed(composeTestRule)
+      clickOnDeleteButton(composeTestRule)
+      assertNoBookMarkTextDisplayed(composeTestRule)
+      pressBack()
+      waitComposeToSettleViews()
+      assertZimFileLoadedIntoTheReader(composeTestRule)
+      clickOnAndroidArticle(composeTestRule)
+      waitComposeToSettleViews()
+      assertAndroidArticleLoadedInReader(composeTestRule)
+      waitComposeToSettleViews()
+      // Save bookmark
+      clickOnSaveBookmarkImage(composeTestRule)
+      topLevel {
+        // open settings screen
+        clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
+          pressBack()
+          waitComposeToSettleViews()
+          assertZimFileLoadedIntoTheReader(composeTestRule)
+          assertCurrentPageIsBookmarked(composeTestRule)
+        }
+      }
+    }
+  }
+
   private fun openZimFileInReader() {
     val zimFile = getZimFile()
     composeTestRule.apply {

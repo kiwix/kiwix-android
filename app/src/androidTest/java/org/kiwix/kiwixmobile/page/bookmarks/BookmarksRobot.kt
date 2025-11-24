@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -262,5 +263,18 @@ class BookmarksRobot : BaseRobot() {
         onAllNodesWithTag(PAGE_ITEM_TESTING_TAG)[0].performClick()
       }
     })
+  }
+
+  fun assertCurrentPageIsBookmarked(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntilTimeout()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      composeTestRule
+        .onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
+        .assertIsEnabled()
+    }
   }
 }
