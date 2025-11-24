@@ -49,6 +49,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -328,6 +329,9 @@ abstract class CoreReaderFragment :
       }
       return readerLifeCycleScope
     }
+
+  @VisibleForTesting
+  fun getIsBookmarked() = isBookmarked
 
   /**
    * Handles actions that require the ZIM file to be fully loaded in the reader

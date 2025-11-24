@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
-import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -44,6 +43,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
@@ -152,14 +152,6 @@ class BookmarksRobot : BaseRobot() {
     })
   }
 
-  fun assertBookmarkRemoved(composeTestRule: ComposeTestRule) {
-    pauseForBetterTestPerformance()
-    composeTestRule.apply {
-      waitForIdle()
-      composeTestRule.onNodeWithText("Test Zim").assertDoesNotExist()
-    }
-  }
-
   private fun pauseForBetterTestPerformance() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
@@ -256,6 +248,19 @@ class BookmarksRobot : BaseRobot() {
     }
   }
 
+  fun clickOnHomeButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      // wait for disappearing the snack-bar after removing the bookmark
+      waitUntilTimeout(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onNodeWithTag(READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG).isDisplayed()
+      }
+      onNodeWithTag(READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG)
+        .performClick()
+    }
+  }
+
   fun openBookmarkInReader(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
@@ -263,18 +268,5 @@ class BookmarksRobot : BaseRobot() {
         onAllNodesWithTag(PAGE_ITEM_TESTING_TAG)[0].performClick()
       }
     })
-  }
-
-  fun assertCurrentPageIsBookmarked(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      waitUntilTimeout()
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
-      }
-      composeTestRule
-        .onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
-        .assertIsEnabled()
-    }
   }
 }
