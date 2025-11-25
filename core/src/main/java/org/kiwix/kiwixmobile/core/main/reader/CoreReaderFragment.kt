@@ -49,6 +49,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -328,6 +329,9 @@ abstract class CoreReaderFragment :
       }
       return readerLifeCycleScope
     }
+
+  @VisibleForTesting
+  fun getIsBookmarked() = isBookmarked
 
   /**
    * Handles actions that require the ZIM file to be fully loaded in the reader
@@ -1640,23 +1644,35 @@ abstract class CoreReaderFragment :
 
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     if (!isAdded) return
-    safelyCancelBookmarkJob()
-    val zimFileReaderId = zimFileReader.id
-    bookmarkingJob = viewLifecycleOwner.lifecycleScope.launch {
-      combine(
-        libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReaderId) ?: emptyFlow(),
-        webUrlsFlow,
-        List<String?>::contains
-      ).collect { isBookmarked ->
-        this@CoreReaderFragment.isBookmarked = isBookmarked
-        readerScreenState.update {
-          copy(
-            bookmarkButtonItem = bookmarkButtonItem.copy(third = getBookMarkButtonIcon(isBookmarked))
-          )
+    runCatching {
+      safelyCancelBookmarkJob()
+      val zimFileReaderId = zimFileReader.id
+      bookmarkingJob = viewLifecycleOwner.lifecycleScope.launch {
+        combine(
+          libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReaderId) ?: emptyFlow(),
+          webUrlsFlow,
+          List<String?>::contains
+        ).collect { isBookmarked ->
+          this@CoreReaderFragment.isBookmarked = isBookmarked
+          readerScreenState.update {
+            copy(
+              bookmarkButtonItem = bookmarkButtonItem.copy(
+                third = getBookMarkButtonIcon(isBookmarked)
+              )
+            )
+          }
         }
       }
+      updateUrlFlow()
+    }.onFailure {
+      // Since everything runs on the IO thread, cancelling the ongoing job when the fragment
+      // detaches from the window may take some time. To avoid crashes during this transition,
+      // we safely catch and log any exceptions that occur.
+      Log.e(
+        TAG_KIWIX,
+        "Could not set up the bookmark flow. Original exception $it"
+      )
     }
-    updateUrlFlow()
   }
 
   private fun getBookMarkButtonIcon(isBookmarked: Boolean) =
@@ -2454,6 +2470,11 @@ abstract class CoreReaderFragment :
         currentTab,
         restoreOrigin
       ) {
+        // Set up the bookmark for the currently opened book after all pages are restored.
+        // This is especially important for custom apps, where the ZIM file is now loaded
+        // only if it's not already open in the reader. So when the user navigates to another
+        // screen and returns, we ensure the bookmark is restored correctly.
+        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
         // This lambda is executed after the tabs have been restored. It checks if there is a
         // search item to open. If `searchItemToOpen` is not null, it calls `openSearchItem`
         // to open the specified item, then sets `searchItemToOpen` to null to prevent
