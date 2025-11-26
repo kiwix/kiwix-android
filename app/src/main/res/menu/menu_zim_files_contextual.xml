@@ -18,6 +18,14 @@
     app:iconifiedByDefault="true"
     app:showAsAction="ifRoom" />
 
+  <item
+    android:id="@+id/zim_file_validate_item"
+    android:icon="@drawable/file_validate"
+    android:title="@string/validate_zim_files"
+    android:visible="true"
+    app:iconifiedByDefault="true"
+    app:showAsAction="ifRoom" />
+
 </menu>
 
   <!-- Menu layout for Contextual Action Bar in response to file selection in the library (ZimFileSelectFragment.java) -->

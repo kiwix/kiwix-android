@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 
 data class StartMultiSelection(
   private val fileSelectActions: MutableSharedFlow<FileSelectActions>
@@ -46,6 +47,11 @@ data class StartMultiSelection(
         R.id.zim_file_share_item to {
           activity.lifecycleScope.launch {
             fileSelectActions.emit(RequestShareMultiSelection)
+          }
+        },
+        R.id.zim_file_validate_item to {
+          activity.lifecycleScope.launch {
+            fileSelectActions.emit(RequestValidateZimFiles)
           }
         }
       )

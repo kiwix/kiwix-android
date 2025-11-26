@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -60,6 +61,7 @@ import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixShowCaseView
@@ -83,7 +85,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -257,8 +258,8 @@ private fun TransferFilesSection(
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-      items(transferFileList) { file ->
-        TransferFileItem(file)
+      itemsIndexed(transferFileList) { index, file ->
+        TransferFileItem(index, file)
       }
     }
   }
@@ -301,6 +302,7 @@ private fun YourDeviceHeader(
 
 @Composable
 fun TransferFileItem(
+  index: Int,
   fileItem: FileItem
 ) {
   Row(
@@ -328,15 +330,15 @@ fun TransferFileItem(
       SENT,
       ERROR -> {
         val iconRes = when (fileItem.fileStatus) {
-          FileItem.FileStatus.TO_BE_SENT -> drawable.ic_baseline_wait_24px
+          FileItem.FileStatus.TO_BE_SENT -> R.drawable.ic_baseline_wait_24px
           FileItem.FileStatus.SENT -> drawable.ic_baseline_check_24px
-          FileItem.FileStatus.ERROR -> drawable.ic_baseline_error_24px
+          FileItem.FileStatus.ERROR -> R.drawable.ic_baseline_error_24px
           else -> error("Unhandled status: ${fileItem.fileStatus}")
         }
 
         Icon(
           painter = painterResource(iconRes),
-          contentDescription = stringResource(R.string.status),
+          contentDescription = stringResource(R.string.status) + index,
           modifier = modifier
         )
       }

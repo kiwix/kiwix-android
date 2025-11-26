@@ -417,4 +417,8 @@
   <string name="file_system_scan_dialog_title">Scan storage for books?</string>
   <string name="file_system_scan_dialog_message">Kiwix will scan your device storage and list the available books here.</string>
   <string name="download_timeout_resume_message">Android’s background download has timed-out. Do you want to resume?</string>
+  <string name="validate_zim_files">Validate ZIM files</string>
+  <string name="confirmation_validate_zim_files">Are you sure you want to validate the following ZIM files?\n\n%s</string>
+  <string name="validating_zim_file">Validating ZIM file…</string>
+  <string name="validating_zim_files">Validating ZIM files…</string>
 </resources>

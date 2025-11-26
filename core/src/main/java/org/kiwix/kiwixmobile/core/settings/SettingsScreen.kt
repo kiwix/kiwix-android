@@ -104,7 +104,7 @@ const val SEEKBAR_PREFERENCE_TESTING_TAG = "seekBarPreferenceTestingTag"
 const val DIALOG_PREFERENCE_ITEM_TESTING_TAG = "dialogPreferenceItemTestingTag"
 const val SETTINGS_LIST_TESTING_TAG = "settingsListTestingTag"
 
-private const val DIALOG_LIST_MAX_HEIGHT_RATIO = 0.8f
+const val DIALOG_LIST_MAX_HEIGHT_RATIO = 0.8f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")

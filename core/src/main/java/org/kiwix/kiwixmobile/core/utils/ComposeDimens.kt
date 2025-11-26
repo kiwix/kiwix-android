@@ -203,4 +203,8 @@ object ComposeDimens {
 
   // Copy move dialog dimens
   val COPY_MOVE_DIALOG_TITLE_TEXT_SIZE = 16.sp
+
+  // ZIM file validation dialog dimens
+  val VALIDATION_BOOK_TITLE_TEXT = 16.sp
+  val VALIDATION_BOOK_ICON_SIZE = 30.dp
 }
