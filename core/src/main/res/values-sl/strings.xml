@@ -399,6 +399,8 @@
   <string name="downloading_state">Prenašanje</string>
   <string name="download_failed_state">Neuspešno</string>
   <string name="searchview_description_clear">Počisti poizvedbo</string>
+  <string name="do_you_mean">Ste mislili:</string>
+  <string name="suggested_search_icon_description">Tapnite ta predlog, če ga želite uporabiti in samodejno popraviti iskanje.</string>
   <string name="file_system_scan_dialog_title">Pregled shrambe za knjige?</string>
   <string name="file_system_scan_dialog_message">Kixix bo pregledal pomnilnik vaše naprave in tukaj navedel razpoložljive knjige.</string>
 </resources>

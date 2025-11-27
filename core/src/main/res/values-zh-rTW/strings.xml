@@ -408,4 +408,5 @@
   <string name="suggested_search_icon_description">點擊來使用此建議，並自動更正您的搜尋。</string>
   <string name="file_system_scan_dialog_title">掃描儲存裝置的書籍？</string>
   <string name="file_system_scan_dialog_message">Kiwix 將掃描您的設備儲存空間並在此處列出可用的書籍。</string>
+  <string name="download_timeout_resume_message">Android 的背景下載已逾時。您是否要繼續？</string>
 </resources>
