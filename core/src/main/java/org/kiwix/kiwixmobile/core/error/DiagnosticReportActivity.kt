@@ -34,7 +34,8 @@ class DiagnosticReportActivity : ErrorActivity() {
       R.string.crash_checkbox_logs,
       R.string.crash_checkbox_zimfiles,
       R.string.crash_checkbox_device,
-      R.string.crash_checkbox_file_system
+      R.string.crash_checkbox_file_system,
+      R.string.validate_zim_files
     )
 
   override fun restartApp() {

@@ -25,10 +25,24 @@ import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -38,10 +52,21 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActiv
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Failed
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.InProgress
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Pending
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Success
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
+import org.kiwix.kiwixmobile.core.utils.dialog.ValidateZimDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import java.io.PrintWriter
@@ -70,7 +95,12 @@ open class ErrorActivity : BaseActivity() {
 
   open val crashTitle: Int = R.string.crash_title
   open val crashDescription: Int = R.string.crash_description
-  private lateinit var diagnosticDetailsItems: List<Int>
+  private val showValidationDialog = MutableStateFlow(false)
+
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  private val validateZimViewModel by lazy {
+    viewModel<ValidateZimViewModel>(viewModelFactory)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     coreComponent.inject(this)
@@ -93,15 +123,42 @@ open class ErrorActivity : BaseActivity() {
       null
     }
     setContent {
-      diagnosticDetailsItems = remember { getDiagnosticDetailsItems() }
+      val showDialog by showValidationDialog.collectAsState()
       ErrorActivityScreen(
         crashTitle,
         crashDescription,
-        diagnosticDetailsItems,
+        getDiagnosticDetailsItems(),
         { restartApp() },
         { sendDetailsOnMail() }
       )
+      ShowValidatingZimFilesDialog(showDialog)
     }
+  }
+
+  @Composable
+  private fun ShowValidatingZimFilesDialog(showDialog: Boolean) {
+    if (!showDialog) return
+    val items by validateZimViewModel.items.collectAsState()
+    KiwixBasicDialogFrame(
+      onDismissRequest = { dismissVerificationDialog() },
+      cancelable = false,
+    ) {
+      ValidateZimDialog(items = items)
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+      ) {
+        DialogConfirmButton(
+          stringResource(R.string.cancel),
+          { dismissVerificationDialog() },
+          null
+        )
+      }
+    }
+  }
+
+  private fun dismissVerificationDialog() {
+    showValidationDialog.value = false
   }
 
   /**
@@ -124,17 +181,32 @@ open class ErrorActivity : BaseActivity() {
 
   private fun sendDetailsOnMail() {
     lifecycleScope.launch {
-      val emailIntent = emailIntent()
-      val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
-      val targetedIntents = createEmailIntents(emailIntent, activities)
-      if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
-        val chooserIntent =
-          Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
-        sendEmailLauncher.launch(chooserIntent)
-      } else {
-        toast(getString(R.string.no_email_application_installed))
-      }
+      startValidatingZIMFiles()
+      validateZimViewModel.allZIMValidated
+        .filter { it }
+        .collect {
+          dismissVerificationDialog()
+          // Generate and send send report when all ZIM files are validated.
+          val emailIntent = emailIntent()
+          val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
+          val targetedIntents = createEmailIntents(emailIntent, activities)
+          if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
+            val chooserIntent =
+              Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
+            sendEmailLauncher.launch(chooserIntent)
+          } else {
+            toast(getString(R.string.no_email_application_installed))
+          }
+        }
+    }
+  }
+
+  private suspend fun startValidatingZIMFiles(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    val zimBooks = withContext(dispatcher) { libkiwixBookOnDisk.getBooks() }
+    showValidationDialog.value = true
+    CoroutineScope(dispatcher).launch {
+      validateZimViewModel.startValidation(zimBooks, isCustomApp())
     }
   }
 
@@ -224,7 +296,7 @@ open class ErrorActivity : BaseActivity() {
     """ 
     $initialBody
       
-    ${if (diagnosticDetailsItems.contains(R.string.crash_checkbox_exception) && exception != null) exceptionDetails() else ""}
+    ${if (getDiagnosticDetailsItems().contains(R.string.crash_checkbox_exception) && exception != null) exceptionDetails() else ""}
     ${zimFiles()}
     ${languageLocale()}
     ${deviceDetails()}
@@ -239,14 +311,14 @@ open class ErrorActivity : BaseActivity() {
     """.trimIndent()
 
   private suspend fun zimFiles(): String {
-    val allZimFiles =
-      libkiwixBookOnDisk.getBooks().joinToString {
-        """
-        ${it.book.title}:
-        Articles: [${it.book.articleCount}]
-        Creator: [${it.book.creator}]
-        """.trimIndent()
-      }
+    val allZimFiles = validateZimViewModel.items.value.joinToString(separator = ",\n") {
+      """
+        ${it.book.book.title}:
+        Articles: [${it.book.book.articleCount}]
+        Creator: [${it.book.book.creator}]
+        Validation status: [${it.status.getValidationStatus()}]
+      """.trimIndent()
+    }
     return """
       Current Zim File:
       ${zimReaderContainer.zimReaderSource?.toDatabase()}
@@ -255,6 +327,20 @@ open class ErrorActivity : BaseActivity() {
       
       """.trimIndent()
   }
+
+  /**
+   * Returns the ZIM file validation status.
+   *
+   * These messages are intentionally hardcoded in English because they must always be shown in English,
+   * so we are not using string resources here.
+   */
+  private fun ValidationStatus.getValidationStatus() =
+    when (this) {
+      Pending -> "Pending"
+      InProgress -> "In Progress"
+      Success -> "Valid ZIM file"
+      is Failed -> "Invalid ZIM file; Error $error"
+    }
 
   private fun languageLocale(): String =
     """

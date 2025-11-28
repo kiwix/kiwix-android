@@ -56,15 +56,13 @@ data class ValidateZIMFiles(
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) {
     CoroutineScope(dispatcher).launch {
-      validateZimViewModel.startValidation(booksOnDiskListItems)
+      validateZimViewModel.startValidation(booksOnDiskListItems, false)
     }
     dialogShower.show(
       KiwixDialog.ValidatingZimFiles(
         customGetView = {
           val items by validateZimViewModel.items.collectAsStateWithLifecycle()
-          ValidateZimDialog(items) {
-            // Do nothing here when the validation process completed.
-          }
+          ValidateZimDialog(items)
         }
       )
     )

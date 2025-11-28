@@ -42,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidateZimItemState
-import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Complete
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Failed
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.InProgress
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Pending
@@ -60,26 +59,18 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.VALIDATION_BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.VALIDATION_BOOK_TITLE_TEXT
 
 @Composable
-fun ValidateZimDialog(items: List<ValidateZimItemState>, onValidationComplete: () -> Unit) {
+fun ValidateZimDialog(items: List<ValidateZimItemState>) {
   BoxWithConstraints {
     val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
     Column(modifier = Modifier.fillMaxWidth()) {
       DialogTitle(getTitle(items.size == 1))
-      ValidateZimList(
-        items = items,
-        maxHeight = listMaxHeight,
-        onValidationComplete = onValidationComplete
-      )
+      ValidateZimList(items = items, maxHeight = listMaxHeight)
     }
   }
 }
 
 @Composable
-private fun ValidateZimList(
-  items: List<ValidateZimItemState>,
-  maxHeight: Dp,
-  onValidationComplete: () -> Unit
-) {
+private fun ValidateZimList(items: List<ValidateZimItemState>, maxHeight: Dp) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
@@ -87,7 +78,7 @@ private fun ValidateZimList(
       .verticalScroll(rememberScrollState())
   ) {
     items.forEachIndexed { index, item ->
-      ValidateZimItemRow(index, item, onValidationComplete)
+      ValidateZimItemRow(index, item)
     }
   }
 }
@@ -100,11 +91,7 @@ private fun getTitle(isSingleFile: Boolean) = if (isSingleFile) {
 }
 
 @Composable
-private fun ValidateZimItemRow(
-  index: Int,
-  item: ValidateZimItemState,
-  onValidationComplete: () -> Unit
-) {
+private fun ValidateZimItemRow(index: Int, item: ValidateZimItemState) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -125,10 +112,6 @@ private fun ValidateZimItemRow(
       .size(VALIDATION_BOOK_ICON_SIZE)
       .padding(horizontal = FIVE_DP, vertical = ONE_DP)
     when (item.status) {
-      Complete -> {
-        onValidationComplete.invoke()
-      }
-
       InProgress -> {
         ContentLoadingProgressBar(modifier)
       }

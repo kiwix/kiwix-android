@@ -21,25 +21,55 @@ package org.kiwix.kiwixmobile.core.reader.integrity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
-class ZimIntegrityChecker @Inject constructor(private val zimReaderFactory: ZimFileReader.Factory) {
+class ZimIntegrityChecker @Inject constructor(private val zimReaderContainer: ZimReaderContainer) {
+  /**
+   * Validates a ZIM file and returns its verification result.
+   *
+   * For custom apps:
+   * - Custom apps always contain a single ZIM file.
+   * - They typically use `AssetPlayDeliveryMode`, which does not expose a real file path.
+   * - Attempting to create an Archive from a missing file path would fail.
+   * - Therefore, for custom apps we reuse the same ZIM archive already opened by the reader
+   *   (`zimReaderContainer.zimFileReader?.zimReaderSource?.createArchive()`).
+   *
+   * ZIM verification logic:
+   * - Normally, `Archive.check()` should validate the integrity of a ZIM file.
+   * - However, for *split/multipart ZIM files* or in *custom apps* (which also use
+   *   `AssetPlayDeliveryMode` and often ship split ZIM files), the `Archive.check()` method
+   *   cannot reliably validate the file due to a known libzim issue:
+   *   https://github.com/openzim/libzim/issues/812
+   *
+   * - In these cases (multipart ZIM, custom app, or when `check()` fails), we fall back
+   *   to a safe verification method by checking whether the archive has a valid `mainEntry`.
+   *   If `archive.hasMainEntry()` returns true, we consider the ZIM file valid.
+   */
   suspend fun validateZIMFile(
     zimReaderSource: ZimReaderSource,
+    isCustomApp: Boolean,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ): ZimFileValidationResult =
     withContext(dispatcher) {
-      var zimFileReader: ZimFileReader? = null
+      var archive: Archive? = null
       try {
-        zimFileReader = zimReaderFactory.create(zimReaderSource, false)
-        val isZIMFileValid = zimFileReader?.jniKiwixReader?.check() == true
+        archive = if (isCustomApp) {
+          zimReaderContainer.zimFileReader?.zimReaderSource?.createArchive()
+        } else {
+          zimReaderSource.createArchive()
+        }
+        var isZIMFileValid = archive?.check() == true
+        if (archive?.isMultiPart == true || isCustomApp || !isZIMFileValid) {
+          isZIMFileValid = archive?.hasMainEntry() == true
+        }
         ZimFileValidationResult(zimReaderSource, isZIMFileValid)
       } catch (ignore: Exception) {
         ZimFileValidationResult(zimReaderSource, false, ignore.message)
       } finally {
-        zimFileReader?.dispose()
+        archive?.dispose()
       }
     }
 }

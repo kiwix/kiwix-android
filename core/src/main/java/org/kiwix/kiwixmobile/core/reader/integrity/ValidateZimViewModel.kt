@@ -37,19 +37,22 @@ class ValidateZimViewModel @Inject constructor(
     data object InProgress : ValidationStatus()
     data object Success : ValidationStatus()
     data class Failed(val error: String?) : ValidationStatus()
-    data object Complete : ValidationStatus()
   }
 
   private val _items = MutableStateFlow<List<ValidateZimItemState>>(emptyList())
   val items: StateFlow<List<ValidateZimItemState>> = _items
 
-  suspend fun startValidation(list: List<BookOnDisk>) {
+  private val _allZIMValidated = MutableStateFlow(false)
+  val allZIMValidated: StateFlow<Boolean> = _allZIMValidated
+
+  suspend fun startValidation(list: List<BookOnDisk>, isCustomApp: Boolean) {
     _items.value = list.map { ValidateZimItemState(it) }
 
     list.forEach { book ->
       updateStatus(book, ValidationStatus.InProgress)
 
-      val result = zimIntegrityChecker.validateZIMFile(book.zimReaderSource)
+      val result =
+        zimIntegrityChecker.validateZIMFile(book.zimReaderSource, isCustomApp)
 
       if (result.isValid) {
         updateStatus(book, ValidationStatus.Success)
@@ -57,9 +60,7 @@ class ValidateZimViewModel @Inject constructor(
         updateStatus(book, ValidationStatus.Failed(result.error))
       }
     }
-    _items.value = _items.value.map {
-      it.copy(status = ValidationStatus.Complete)
-    }
+    _allZIMValidated.value = true
   }
 
   private fun updateStatus(book: BookOnDisk, status: ValidationStatus) {
