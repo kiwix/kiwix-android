@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -47,6 +48,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LOCAL_FILE_TRANSFER_M
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -227,6 +229,40 @@ class LibraryRobot : BaseRobot() {
           .assertTextEquals(context.getString(R.string.swipe_down_to_scan_storage))
       }
     })
+  }
+
+  fun validateZIMFiles(composeTestRule: ComposeContentTestRule) {
+    val zimFileNodes = composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)
+    val itemCount = zimFileNodes.fetchSemanticsNodes().size
+    repeat(itemCount) { index ->
+      zimFileNodes[index].performTouchInput { longClick() }
+    }
+    clickOnValidateZimFileIcon()
+    clickOnYesDialogButton(composeTestRule)
+    pauseForBetterTestPerformance()
+    assertZIMFileValidatingDialogDisplayed(composeTestRule)
+    clickOnYesDialogButton(composeTestRule)
+  }
+
+  private fun assertZIMFileValidatingDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG).isDisplayed()
+        }
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.validating_zim_file))
+      }
+    })
+  }
+
+  private fun clickOnValidateZimFileIcon() {
+    pauseForBetterTestPerformance()
+    testFlakyView({ clickOn(ViewId(R.id.zim_file_validate_item)) })
+  }
+
+  private fun clickOnYesDialogButton(composeTestRule: ComposeContentTestRule) {
+    clickOnDialogConfirmButton(composeTestRule)
   }
 
   private fun pauseForBetterTestPerformance() {

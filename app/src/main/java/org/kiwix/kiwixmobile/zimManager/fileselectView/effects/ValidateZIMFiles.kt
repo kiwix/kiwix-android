@@ -26,9 +26,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ValidateZimFilesConfirmation
@@ -62,7 +64,21 @@ data class ValidateZIMFiles(
       KiwixDialog.ValidatingZimFiles(
         customGetView = {
           val items by validateZimViewModel.items.collectAsStateWithLifecycle()
-          ValidateZimDialog(items)
+          val allValidated by validateZimViewModel.allZIMValidated.collectAsStateWithLifecycle()
+          ValidateZimDialog(
+            items,
+            android.R.string.ok,
+            {
+              if (allValidated) {
+                (dialogShower as AlertDialogShower).dismiss()
+              }
+            },
+            cancelButtonText = R.string.cancel,
+            onCancelButtonClick = {
+              validateZimViewModel.cancelValidation()
+              (dialogShower as AlertDialogShower).dismiss()
+            }
+          )
         }
       )
     )

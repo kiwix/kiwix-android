@@ -45,22 +45,32 @@ class ValidateZimViewModel @Inject constructor(
   private val _allZIMValidated = MutableStateFlow(false)
   val allZIMValidated: StateFlow<Boolean> = _allZIMValidated
 
+  private var isCancelled = false
+
+  fun cancelValidation() {
+    isCancelled = true
+  }
+
   suspend fun startValidation(list: List<BookOnDisk>, isCustomApp: Boolean) {
+    isCancelled = false
     _items.value = list.map { ValidateZimItemState(it) }
 
     list.forEach { book ->
+      if (isCancelled) return
       updateStatus(book, ValidationStatus.InProgress)
 
       val result =
         zimIntegrityChecker.validateZIMFile(book.zimReaderSource, isCustomApp)
-
+      if (isCancelled) return
       if (result.isValid) {
         updateStatus(book, ValidationStatus.Success)
       } else {
         updateStatus(book, ValidationStatus.Failed(result.error))
       }
     }
-    _allZIMValidated.value = true
+    if (!isCancelled) {
+      _allZIMValidated.value = true
+    }
   }
 
   private fun updateStatus(book: BookOnDisk, status: ValidationStatus) {

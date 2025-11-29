@@ -291,8 +291,8 @@ sealed class KiwixDialog(
   data class ValidatingZimFiles(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
     null,
     null,
-    android.R.string.ok,
-    R.string.cancel,
+    R.string.empty_string,
+    null,
     customComposeView = customGetView
   )
 

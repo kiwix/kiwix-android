@@ -59,12 +59,31 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.VALIDATION_BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.VALIDATION_BOOK_TITLE_TEXT
 
 @Composable
-fun ValidateZimDialog(items: List<ValidateZimItemState>) {
+fun ValidateZimDialog(
+  items: List<ValidateZimItemState>,
+  confirmButtonText: Int,
+  onConfirmButtonClick: () -> Unit,
+  cancelButtonText: Int? = null,
+  onCancelButtonClick: (() -> Unit)? = null
+) {
   BoxWithConstraints {
     val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
     Column(modifier = Modifier.fillMaxWidth()) {
       DialogTitle(getTitle(items.size == 1))
       ValidateZimList(items = items, maxHeight = listMaxHeight)
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+      ) {
+        cancelButtonText?.let {
+          DialogDismissButton(it, onCancelButtonClick, null)
+        }
+        DialogConfirmButton(
+          stringResource(confirmButtonText),
+          onConfirmButtonClick,
+          null
+        )
+      }
     }
   }
 }

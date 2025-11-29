@@ -25,17 +25,14 @@ import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +61,6 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.Validati
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Success
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.ValidateZimDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -133,6 +129,13 @@ open class ErrorActivity : BaseActivity() {
       )
       ShowValidatingZimFilesDialog(showDialog)
     }
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        validateZimViewModel.allZIMValidated
+          .filter { it }
+          .collect { onAllZimValidated() }
+      }
+    }
   }
 
   @Composable
@@ -143,17 +146,14 @@ open class ErrorActivity : BaseActivity() {
       onDismissRequest = { dismissVerificationDialog() },
       cancelable = false,
     ) {
-      ValidateZimDialog(items = items)
-      Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-      ) {
-        DialogConfirmButton(
-          stringResource(R.string.cancel),
-          { dismissVerificationDialog() },
-          null
-        )
-      }
+      ValidateZimDialog(
+        items = items,
+        R.string.cancel,
+        {
+          validateZimViewModel.cancelValidation()
+          dismissVerificationDialog()
+        }
+      )
     }
   }
 
@@ -180,25 +180,22 @@ open class ErrorActivity : BaseActivity() {
     )
 
   private fun sendDetailsOnMail() {
-    lifecycleScope.launch {
-      startValidatingZIMFiles()
-      validateZimViewModel.allZIMValidated
-        .filter { it }
-        .collect {
-          dismissVerificationDialog()
-          // Generate and send send report when all ZIM files are validated.
-          val emailIntent = emailIntent()
-          val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
-          val targetedIntents = createEmailIntents(emailIntent, activities)
-          if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
-            val chooserIntent =
-              Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
-            sendEmailLauncher.launch(chooserIntent)
-          } else {
-            toast(getString(R.string.no_email_application_installed))
-          }
-        }
+    lifecycleScope.launch { startValidatingZIMFiles() }
+  }
+
+  private suspend fun onAllZimValidated() {
+    dismissVerificationDialog()
+    // Generate and send send report when all ZIM files are validated.
+    val emailIntent = emailIntent()
+    val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
+    val targetedIntents = createEmailIntents(emailIntent, activities)
+    if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
+      val chooserIntent =
+        Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
+      chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
+      sendEmailLauncher.launch(chooserIntent)
+    } else {
+      toast(getString(R.string.no_email_application_installed))
     }
   }
 

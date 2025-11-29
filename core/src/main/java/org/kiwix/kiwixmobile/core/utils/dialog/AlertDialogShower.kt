@@ -218,15 +218,15 @@ fun DialogConfirmButton(
 }
 
 @Composable
-private fun DialogDismissButton(
-  dialog: KiwixDialog,
+fun DialogDismissButton(
+  dismissButtonTextId: Int?,
   dismissButtonClick: (() -> Unit)?,
-  alertDialogShower: AlertDialogShower
+  alertDialogShower: AlertDialogShower?
 ) {
-  dialog.dismissButtonText?.let {
+  dismissButtonTextId?.let {
     TextButton(
       onClick = {
-        alertDialogShower.dismiss()
+        alertDialogShower?.dismiss()
         dismissButtonClick?.invoke()
       },
       modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG },
@@ -296,7 +296,11 @@ private fun ShowDialogButtons(
       alertDialogShower
     )
     Spacer(modifier = Modifier.weight(1f))
-    DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
+    DialogDismissButton(
+      dialog.dismissButtonText,
+      clickListeners.getOrNull(1),
+      alertDialogShower
+    )
     DialogConfirmButton(
       stringResource(dialog.confirmButtonText),
       clickListeners.getOrNull(0),
