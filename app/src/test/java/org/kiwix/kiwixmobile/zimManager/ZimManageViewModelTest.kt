@@ -60,6 +60,7 @@ import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -81,12 +82,18 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.libkiwix.Book
 import org.kiwix.sharedFunctions.InstantExecutorExtension
@@ -112,6 +119,7 @@ class ZimManageViewModelTest {
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
   private val alertDialogShower: AlertDialogShower = mockk()
+  private val validateZimViewModel: ValidateZimViewModel = mockk()
 
   @Suppress("DEPRECATION")
   private val networkCapabilities: NetworkCapabilities = mockk()
@@ -206,6 +214,7 @@ class ZimManageViewModelTest {
       ).apply {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)
+        setValidateZimViewModel(validateZimViewModel)
       }
     viewModel.fileSelectListStates.value = FileSelectListState(emptyList())
     runBlocking { viewModel.networkLibrary.emit(emptyList()) }
@@ -463,6 +472,18 @@ class ZimManageViewModelTest {
   @Nested
   inner class SideEffects {
     @Test
+    fun `RequestNavigateTo offers OpenFileWithNavigation with selected books`() = runTest {
+      val selectedBook = bookOnDisk().apply { isSelected = true }
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RequestNavigateTo(selectedBook)) },
+        assert = { assertThat(awaitItem()).isEqualTo(OpenFileWithNavigation(selectedBook)) }
+      )
+    }
+
+    @Test
     fun `RequestMultiSelection offers StartMultiSelection and selects a book`() = runTest {
       val bookToSelect = bookOnDisk(databaseId = 0L)
       val unSelectedBook = bookOnDisk(databaseId = 1L)
@@ -520,6 +541,27 @@ class ZimManageViewModelTest {
     }
 
     @Test
+    fun `RequestValidateZimFiles offers ValidateZIMFiles with selected books`() = runTest {
+      val selectedBook = bookOnDisk().apply { isSelected = true }
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RequestValidateZimFiles) },
+        assert = {
+          assertThat(awaitItem())
+            .isEqualTo(
+              ValidateZIMFiles(
+                listOf(selectedBook),
+                alertDialogShower,
+                validateZimViewModel
+              )
+            )
+        }
+      )
+    }
+
+    @Test
     fun `MultiModeFinished offers None`() = runTest {
       val selectedBook = bookOnDisk().apply { isSelected = true }
       viewModel.fileSelectListStates.value =
@@ -565,6 +607,15 @@ class ZimManageViewModelTest {
         flow = viewModel.sideEffects,
         triggerAction = { viewModel.fileSelectActions.emit(RestartActionMode) },
         assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
+      )
+    }
+
+    @Test
+    fun `UserClickedDownloadBooksButton offers NavigateToDownloads`() = runTest {
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(UserClickedDownloadBooksButton) },
+        assert = { assertThat(awaitItem()).isEqualTo(NavigateToDownloads) }
       )
     }
   }

@@ -300,11 +300,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   private fun startMonitoringDownloads() {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
-      startService(
-        Intent(this, DownloadMonitorService::class.java).apply {
-          putExtra(APP_NAME_KEY, appName)
-        }
-      )
+      runCatching {
+        startService(
+          Intent(this, DownloadMonitorService::class.java).apply {
+            putExtra(APP_NAME_KEY, appName)
+          }
+        )
+      }
     }
   }
 

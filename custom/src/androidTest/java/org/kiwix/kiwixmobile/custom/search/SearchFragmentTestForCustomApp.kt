@@ -100,7 +100,7 @@ class SearchFragmentTestForCustomApp {
   private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
 
   private val scientificAllianceZIMUrl =
-    "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2024-06.zim"
+    "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2025-06.zim"
   private val rayCharlesZIMFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 

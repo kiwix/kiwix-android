@@ -41,10 +41,14 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 class ErrorActivityTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -101,6 +105,20 @@ class ErrorActivityTest : BaseActivityTest() {
   @Test
   fun verifyErrorActivity() {
     activityScenario.onActivity {
+      it.navigate(KiwixDestination.Library.route)
+    }
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+    loadZimFileInReader("testzim.zim")
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      assertLibraryListDisplayed(composeTestRule)
+    }
+    activityScenario.onActivity {
       it.navigate(KiwixDestination.Help.route)
     }
     errorActivity {
@@ -122,7 +140,27 @@ class ErrorActivityTest : BaseActivityTest() {
       assertDetailsIncludedInErrorReportDisplayed(composeTestRule)
       // Click on "Send details" button.
       clickOnSendDetailsButton(composeTestRule)
+      // Assert ZIM file validation dialog displayed.
+      assertZimFileValidationDialogDisplayed(composeTestRule)
     }
     composeTestRule.onRoot().tryPerformAccessibilityChecks()
+  }
+
+  private fun loadZimFileInReader(zimFileName: String) {
+    val loadFileStream =
+      ErrorActivityTest::class.java.classLoader.getResourceAsStream(zimFileName)
+    val zimFile = File(context.getExternalFilesDirs(null)[0], zimFileName)
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
   }
 }

@@ -82,6 +82,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -104,6 +105,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -111,6 +113,7 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
@@ -142,6 +145,7 @@ class ZimManageViewModel @Inject constructor(
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    object RequestValidateZimFiles : FileSelectActions()
     object RequestDeleteMultiSelection : FileSelectActions()
     object RequestShareMultiSelection : FileSelectActions()
     object MultiModeFinished : FileSelectActions()
@@ -163,6 +167,8 @@ class ZimManageViewModel @Inject constructor(
     val onlineLibraryRequest: OnlineLibraryRequest,
     val books: List<LibkiwixBook>
   )
+
+  private lateinit var validateZimViewModel: ValidateZimViewModel
 
   @Suppress("InjectDispatcher")
   private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -215,6 +221,10 @@ class ZimManageViewModel @Inject constructor(
   init {
     observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
+  }
+
+  fun setValidateZimViewModel(validateZimViewModel: ValidateZimViewModel) {
+    this.validateZimViewModel = validateZimViewModel
   }
 
   fun setIsUnitTestCase() {
@@ -413,6 +423,9 @@ class ZimManageViewModel @Inject constructor(
               is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
               RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
               RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+              RequestValidateZimFiles ->
+                ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
+
               MultiModeFinished -> noSideEffectAndClearSelectionState()
               is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
               RestartActionMode -> StartMultiSelection(fileSelectActions)

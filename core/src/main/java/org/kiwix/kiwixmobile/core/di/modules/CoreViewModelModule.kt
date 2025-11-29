@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.settings.viewmodel.SettingsViewModel
 
@@ -60,4 +61,9 @@ abstract class CoreViewModelModule {
   @IntoMap
   @ViewModelKey(SettingsViewModel::class)
   abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(ValidateZimViewModel::class)
+  abstract fun bindValidateZimViewModel(validateZimViewModel: ValidateZimViewModel): ViewModel
 }
