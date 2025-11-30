@@ -49,6 +49,17 @@ sealed class KiwixDialog(
     constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
+  data class ValidateZimFilesConfirmation(override val args: List<Any>) :
+    KiwixDialog(
+      null,
+      R.string.confirmation_validate_zim_files,
+      R.string.yes,
+      R.string.no
+    ),
+    HasBodyFormatArgs {
+    constructor(zimNameList: String) : this(listOf(zimNameList))
+  }
+
   data class FileCopyMoveError(override val args: List<Any>) :
     KiwixDialog(
       null,
@@ -275,6 +286,14 @@ sealed class KiwixDialog(
     message = null,
     confirmButtonText = R.string.delete,
     dismissButtonText = R.string.cancel
+  )
+
+  data class ValidatingZimFiles(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
+    null,
+    null,
+    R.string.empty_string,
+    null,
+    customComposeView = customGetView
   )
 
   data class OpenCredits(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(

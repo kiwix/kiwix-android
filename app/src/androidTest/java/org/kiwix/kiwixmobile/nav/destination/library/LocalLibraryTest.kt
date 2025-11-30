@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.note.NoteFragmentTest
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -122,29 +121,12 @@ class LocalLibraryTest : BaseActivityTest() {
       deleteZimIfExists(composeTestRule)
     }
     // load a zim file to test, After downloading zim file library list is visible or not
-    val loadFileStream =
-      LocalLibraryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        "testzim.zim"
-      )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
+    loadZimFileInReader("testzim.zim")
     library {
       refreshList(composeTestRule)
       waitUntilZimFilesRefreshing(composeTestRule)
       assertLibraryListDisplayed(composeTestRule)
+      validateZIMFiles(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }
@@ -207,7 +189,7 @@ class LocalLibraryTest : BaseActivityTest() {
 
   private fun loadZimFileInReader(zimFileName: String) {
     val loadFileStream =
-      NoteFragmentTest::class.java.classLoader.getResourceAsStream(zimFileName)
+      LocalLibraryTest::class.java.classLoader.getResourceAsStream(zimFileName)
     val zimFile = File(context.getExternalFilesDirs(null)[0], zimFileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()

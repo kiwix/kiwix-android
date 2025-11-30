@@ -81,6 +81,7 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -158,6 +159,10 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
+  }
+
+  private val validateZimViewModel by lazy {
+    requireActivity().viewModel<ValidateZimViewModel>(viewModelFactory)
   }
 
   private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
@@ -305,6 +310,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       selectedZimFileCallback = this@LocalLibraryFragment
     )
     zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
+    zimManageViewModel.setValidateZimViewModel(validateZimViewModel)
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
     coroutineJobs.apply {
       add(sideEffects())
