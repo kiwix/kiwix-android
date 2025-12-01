@@ -288,13 +288,17 @@ sealed class KiwixDialog(
     dismissButtonText = R.string.cancel
   )
 
-  data class ValidatingZimFiles(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
-    null,
-    null,
-    R.string.empty_string,
-    null,
-    customComposeView = customGetView
-  )
+  data class ValidatingZimFiles(
+    private val customViewBottomPadding: Dp,
+    private val customGetView: @Composable (() -> Unit)?
+  ) : KiwixDialog(
+      null,
+      null,
+      R.string.empty_string,
+      null,
+      customComposeView = customGetView,
+      customComposeViewBottomPadding = customViewBottomPadding
+    )
 
   data class OpenCredits(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
     null,
