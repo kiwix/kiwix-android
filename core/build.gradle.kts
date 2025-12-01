@@ -62,4 +62,6 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+
+  implementation("androidx.work:work-runtime-ktx:2.11.0")
 }
