@@ -32,4 +32,5 @@ object PreferencesKeys {
   val PREF_EXTERNAL_LINK_POPUP =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP)
   val PREF_WIFI_ONLY = booleanPreferencesKey(SharedPreferenceUtil.PREF_WIFI_ONLY)
+  val PREF_THEME = stringPreferencesKey(SharedPreferenceUtil.PREF_THEME)
 }

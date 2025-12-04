@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.settings.viewmodel
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -40,13 +41,16 @@ const val ZOOM_SCALE = 25
 
 class SettingsViewModel @Inject constructor(
   private val context: Application,
-  val sharedPreferenceUtil: SharedPreferenceUtil,
   val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
-  private val appTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.appThemes()
-    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.appTheme)
+  private val appTheme: StateFlow<ThemeConfig.Theme> = kiwixDataStore.appTheme
+    .stateIn(
+      viewModelScope,
+      SharingStarted.Companion.Eagerly,
+      from(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    )
 
   val themeLabel: StateFlow<String> = appTheme
     .map { mode ->
@@ -59,7 +63,7 @@ class SettingsViewModel @Inject constructor(
     .stateIn(
       viewModelScope,
       SharingStarted.Companion.Eagerly,
-      getLabelFor(sharedPreferenceUtil.appTheme)
+      getLabelFor(ThemeConfig.Theme.SYSTEM)
     )
 
   val backToTopEnabled = kiwixDataStore.backToTop
@@ -111,7 +115,9 @@ class SettingsViewModel @Inject constructor(
   }
 
   fun setAppTheme(selectedMode: String) {
-    sharedPreferenceUtil.updateAppTheme(selectedMode)
+    viewModelScope.launch {
+      kiwixDataStore.updateAppTheme(selectedMode)
+    }
   }
 
   fun setBackToTop(enabled: Boolean) {

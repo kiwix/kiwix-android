@@ -275,11 +275,13 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
       maxHeightInPx
     )
     view.loadUrl("file:///android_asset/credits.html")
-    if (themeConfig?.isDarkTheme() == true) {
-      view.settings.javaScriptEnabled = true
-      view.setBackgroundColor(0)
+    lifecycleScope.launch {
+      if (themeConfig?.isDarkTheme() == true) {
+        view.settings.javaScriptEnabled = true
+        view.setBackgroundColor(0)
+      }
+      alertDialogShower?.show(OpenCredits { AndroidView(factory = { view }) })
     }
-    alertDialogShower?.show(OpenCredits { AndroidView(factory = { view }) })
   }
 
   @Suppress("NestedBlockDepth")

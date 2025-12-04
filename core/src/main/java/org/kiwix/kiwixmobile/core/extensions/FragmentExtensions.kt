@@ -29,6 +29,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
@@ -66,11 +69,13 @@ val Fragment.coreMainActivity get() = activity as CoreMainActivity
  * contrast with dark mode or light mode.
  */
 fun Fragment.setStatusBarColor() {
-  val isDarkTheme = CoreApp.instance.themeConfig.isDarkTheme()
-  val windowBackGroundColor = if (isDarkTheme) {
-    Color.BLACK
-  } else {
-    Color.WHITE
+  CoroutineScope(Dispatchers.Main).launch {
+    val isDarkTheme = CoreApp.instance.themeConfig.isDarkTheme()
+    val windowBackGroundColor = if (isDarkTheme) {
+      Color.BLACK
+    } else {
+      Color.WHITE
+    }
+    activity?.window?.decorView?.setBackgroundColor(windowBackGroundColor)
   }
-  activity?.window?.decorView?.setBackgroundColor(windowBackGroundColor)
 }

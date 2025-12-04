@@ -19,10 +19,13 @@
 package org.kiwix.kiwixmobile.core.utils.datastore
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.kiwix.kiwixmobile.core.ThemeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -111,6 +114,20 @@ class KiwixDataStore @Inject constructor(val context: Context) {
   suspend fun setWifiOnly(wifiOnly: Boolean) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_WIFI_ONLY] = wifiOnly
+    }
+  }
+
+  val appTheme: Flow<ThemeConfig.Theme> =
+    context.kiwixDataStore.data.map { prefs ->
+      from(
+        prefs[PreferencesKeys.PREF_THEME]?.toInt()
+          ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+      )
+    }
+
+  suspend fun updateAppTheme(selectedTheme: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_THEME] = selectedTheme
     }
   }
 }
