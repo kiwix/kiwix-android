@@ -18,12 +18,18 @@
 
 package org.kiwix.kiwixmobile.core.utils.datastore
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.TEXT_ZOOM_KEY
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 object PreferencesKeys {
-  val TEXT_ZOOM = intPreferencesKey(TEXT_ZOOM_KEY)
+  val TEXT_ZOOM = intPreferencesKey(SharedPreferenceUtil.TEXT_ZOOM)
   val TAG_CURRENT_FILE = stringPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE)
   val TAG_CURRENT_TAB = intPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB)
+  val PREF_BACK_TO_TOP = booleanPreferencesKey(SharedPreferenceUtil.PREF_BACK_TO_TOP)
+  val PREF_NEW_TAB_BACKGROUND = booleanPreferencesKey(SharedPreferenceUtil.PREF_NEW_TAB_BACKGROUND)
+  val PREF_EXTERNAL_LINK_POPUP =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP)
+  val PREF_WIFI_ONLY = booleanPreferencesKey(SharedPreferenceUtil.PREF_WIFI_ONLY)
 }
