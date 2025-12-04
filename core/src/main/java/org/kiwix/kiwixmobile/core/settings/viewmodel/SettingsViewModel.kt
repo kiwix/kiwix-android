@@ -32,6 +32,8 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import javax.inject.Inject
 
 const val ZOOM_OFFSET = 2
@@ -39,7 +41,8 @@ const val ZOOM_SCALE = 25
 
 class SettingsViewModel @Inject constructor(
   private val context: Application,
-  val sharedPreferenceUtil: SharedPreferenceUtil
+  val sharedPreferenceUtil: SharedPreferenceUtil,
+  val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
@@ -64,11 +67,11 @@ class SettingsViewModel @Inject constructor(
 
   var externalLinkPopup = mutableStateOf(sharedPreferenceUtil.prefExternalLinkPopup)
 
-  val textZoom: StateFlow<Int> = sharedPreferenceUtil.textZooms
+  val textZoom: StateFlow<Int> = kiwixDataStore.textZoom
     .stateIn(
       scope = viewModelScope,
-      started = SharingStarted.Companion.Eagerly,
-      initialValue = sharedPreferenceUtil.textZoom
+      started = SharingStarted.Eagerly,
+      initialValue = DEFAULT_ZOOM
     )
 
   var newTabInBackground = mutableStateOf(sharedPreferenceUtil.prefNewTabBackground)
@@ -103,7 +106,9 @@ class SettingsViewModel @Inject constructor(
   }
 
   fun setTextZoom(position: Int) {
-    sharedPreferenceUtil.textZoom = (position + ZOOM_OFFSET) * ZOOM_SCALE
+    viewModelScope.launch {
+      kiwixDataStore.setTextZoom((position + ZOOM_OFFSET) * ZOOM_SCALE)
+    }
   }
 
   fun setNewTabInBackground(enabled: Boolean) {

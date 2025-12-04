@@ -370,4 +370,6 @@ object Libs {
   const val COIL3_OKHTTP_COMPOSE = "io.coil-kt.coil3:coil-network-okhttp:${Versions.COIL_COMPOSE}"
   const val COMPOSE_NAVIGATION =
     "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
+
+  const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
 }
