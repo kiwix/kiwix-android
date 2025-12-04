@@ -250,4 +250,8 @@
   <string name="donation_dialog_description">%s brauch Är Hëllef.</string>
   <string name="make_donation">En Don maachen</string>
   <string name="downloading_state">Eroflueden</string>
+  <string name="validate_zim_files">ZIM-Fichier gëtt validéiert …</string>
+  <string name="confirmation_validate_zim_files">Sidd Dir sécher, datt Dir de follgende ZIM-Fichier validéiere wëllt?\n\n%s</string>
+  <string name="validating_zim_file">ZIM-Fichier gëtt validéiert …</string>
+  <string name="validating_zim_files">ZIM-Fichier gëtt validéiert …</string>
 </resources>

@@ -394,6 +394,9 @@
   <string name="downloading_state">Discargante</string>
   <string name="download_failed_state">Fallite</string>
   <string name="searchview_description_clear">Rader consulta</string>
+  <string name="do_you_mean">Vole tu dicer:</string>
+  <string name="suggested_search_icon_description">Tocca pro usar iste suggestion e corriger automaticamente tu recerca</string>
   <string name="file_system_scan_dialog_title">Cercar libros in le immagazinage?</string>
   <string name="file_system_scan_dialog_message">Kiwix perquirera le immagazinage de tu apparato e listara hic le libros disponibile.</string>
+  <string name="download_timeout_resume_message">Le discargamento in secunde plano de Android ha expirate. Vole tu reprender lo?</string>
 </resources>
