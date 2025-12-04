@@ -22,24 +22,25 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class ThemeConfig @Inject constructor(
-  val sharedPreferenceUtil: SharedPreferenceUtil,
+  val kiwixDataStore: KiwixDataStore,
   val context: Context
 ) {
   fun init() {
     CoroutineScope(Dispatchers.Main).launch {
-      sharedPreferenceUtil.appThemes().collect {
+      kiwixDataStore.appTheme.collect {
         setMode(it)
       }
     }
   }
 
-  fun isDarkTheme() =
-    when (sharedPreferenceUtil.appTheme) {
+  suspend fun isDarkTheme() =
+    when (kiwixDataStore.appTheme.first()) {
       Theme.DARK -> true
       Theme.LIGHT -> false
       Theme.SYSTEM -> uiMode() == UiMode.DARK
