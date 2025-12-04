@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Singleton
 
 @Singleton
@@ -77,6 +78,7 @@ interface CoreComponent {
   fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
+  fun kiwixDataStore(): KiwixDataStore
   fun zimFileReaderFactory(): ZimFileReader.Factory
   fun libkiwixBookFactory(): LibkiwixBookFactory
   fun storageObserver(): StorageObserver
