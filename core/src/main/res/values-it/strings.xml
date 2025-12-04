@@ -387,4 +387,6 @@
   <string name="download_failed_state">Non riuscito</string>
   <string name="searchview_description_clear">Pulisci query</string>
   <string name="do_you_mean">Vuoi dire:</string>
+  <string name="confirmation_validate_zim_files">Sei sicuro di voler convalidare i seguenti file ZIM? \n\n%s</string>
+  <string name="validating_zim_file">Convalida del file ZIM in corso…</string>
 </resources>

@@ -189,10 +189,10 @@
   <string name="your_languages">Избрани јазици:</string>
   <string name="your_language">Избран јазик: %s</string>
   <string name="other_languages">Други јазици:</string>
-  <string name="downloading" fuzzy="true">Преземање</string>
+  <string name="downloading">Преземање</string>
   <string name="no_items_msg">Нема ставки</string>
   <string name="crash_title">Ова е незгодно</string>
-  <string name="crash_description" fuzzy="true">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>
+  <string name="crash_description">Се чини дека се урнавме.\n\nБи сакале ли да ни го испратите извештајот од уривањето за да го поправиме проблемот?</string>
   <string name="crash_checkbox_language">Ваши јазични поставки</string>
   <string name="crash_checkbox_zimfiles">Список на ваши ZIM-податотеки</string>
   <string name="crash_checkbox_exception">Поединости за уривањето</string>
@@ -314,7 +314,7 @@
   <string name="send_report">Испрати дијагностички извештај</string>
   <string name="crash_checkbox_file_system">Поединости за податотечниот систем</string>
   <string name="diagnostic_report">Дијагностички извештај</string>
-  <string name="diagnostic_report_message" fuzzy="true">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
+  <string name="diagnostic_report_message">За да можеме да го дијагностицираме проблемот, најпрвин репродуцирајте го проблемот, а потоа испратете ни го дијагностичкиот извештај.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
   <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
@@ -392,6 +392,13 @@
   <string name="downloading_state">Се презема</string>
   <string name="download_failed_state">Неуспешно</string>
   <string name="searchview_description_clear">Исчисти барање</string>
+  <string name="do_you_mean">Дали мислевте на:</string>
+  <string name="suggested_search_icon_description">Допрете за да го употребите овој предлог и автоматски да го поправите поребарувањето</string>
   <string name="file_system_scan_dialog_title">Да го отчитам складот за да најдам книги?</string>
   <string name="file_system_scan_dialog_message">Кивикс ќе ви го отчита уредот и ќе ги овде ќе ги наведе расположливите книги.</string>
+  <string name="download_timeout_resume_message">Позадинското преземање на Андроид истече. Дали сакате да продолжите?</string>
+  <string name="validate_zim_files">Провери ZIM-податотеки</string>
+  <string name="confirmation_validate_zim_files">Дали сигурно сакате да ги проверите следниве ZIM-податотеки?\n\n%s</string>
+  <string name="validating_zim_file">Проверувам ZIM-податотека…</string>
+  <string name="validating_zim_files">Проверувам ZIM-податотеки…</string>
 </resources>

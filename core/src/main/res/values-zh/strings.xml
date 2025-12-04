@@ -18,6 +18,7 @@
 * Lynzrand
 * McDutchie
 * MohitMali
+* Peterxy12
 * Prmsh
 * Shuiwater
 * SomeyaMako
@@ -427,4 +428,9 @@
   <string name="suggested_search_icon_description">点击以采用此建议并自动更正搜索</string>
   <string name="file_system_scan_dialog_title">要扫描存储中的书籍吗？</string>
   <string name="file_system_scan_dialog_message">Kiwix 将扫描您的设备存储并在此处列出可用的书籍。</string>
+  <string name="download_timeout_resume_message">Android后台下载已超时。是否继续？</string>
+  <string name="validate_zim_files">验证ZIM文件</string>
+  <string name="confirmation_validate_zim_files">您确定要验证以下ZIM文件吗？\n\n%s</string>
+  <string name="validating_zim_file">正在验证ZIM文件…</string>
+  <string name="validating_zim_files">正在验证ZIM文件…</string>
 </resources>

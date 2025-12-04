@@ -8,6 +8,7 @@
 * Kenrick95
 * McDutchie
 * MohitMali
+* Penyuwangi
 * Polos
 * Relly Komaruzaman
 * Rizkiahmadz
@@ -388,4 +389,8 @@
   <string name="downloading_state">Mengunduh</string>
   <string name="download_failed_state">Gagal</string>
   <string name="searchview_description_clear">Hapus kueri</string>
+  <string name="validate_zim_files">Sahkan berkas ZIM</string>
+  <string name="confirmation_validate_zim_files">Apakah Anda yakin ingin mengesahkan berkas ZIM berikut?\n\n %s</string>
+  <string name="validating_zim_file">Mengesahkan berkas ZIM…</string>
+  <string name="validating_zim_files">Mengesahkan berkas-berkas ZIM…</string>
 </resources>
