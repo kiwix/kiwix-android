@@ -30,6 +30,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
@@ -152,7 +153,13 @@ class CustomMainActivity : CoreMainActivity() {
         true,
         onClick = {
           closeNavigationDrawer()
-          externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+          lifecycleScope.launch {
+            externalLinkOpener.openExternalUrl(
+              BuildConfig.SUPPORT_URL.toUri().browserIntent(),
+              false,
+              this
+            )
+          }
         },
         testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
       )
@@ -180,10 +187,13 @@ class CustomMainActivity : CoreMainActivity() {
         true,
         onClick = {
           closeNavigationDrawer()
-          externalLinkOpener.openExternalUrl(
-            BuildConfig.ABOUT_APP_URL.toUri().browserIntent(),
-            false
-          )
+          lifecycleScope.launch {
+            externalLinkOpener.openExternalUrl(
+              BuildConfig.ABOUT_APP_URL.toUri().browserIntent(),
+              false,
+              this
+            )
+          }
         },
         testingTag = LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
       )

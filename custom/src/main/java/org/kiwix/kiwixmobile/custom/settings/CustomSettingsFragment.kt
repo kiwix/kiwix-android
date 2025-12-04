@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.custom.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
@@ -57,6 +59,8 @@ class CustomSettingsFragment : CoreSettingsFragment() {
    */
   private fun hideExternalLinksPreference() {
     settingsScreenState.value.update { copy(shouldShowExternalLinkPreference = false) }
-    sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+    lifecycleScope.launch {
+      kiwixDataStore?.setExternalLinkPopup(false)
+    }
   }
 }

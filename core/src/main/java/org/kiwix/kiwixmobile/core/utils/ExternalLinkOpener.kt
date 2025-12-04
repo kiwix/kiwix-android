@@ -21,15 +21,19 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import android.content.Intent
 import android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import javax.inject.Inject
 
 class ExternalLinkOpener @Inject constructor(
   private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val kiwixDataStore: KiwixDataStore
 ) {
   private lateinit var alertDialogShower: AlertDialogShower
 
@@ -37,13 +41,15 @@ class ExternalLinkOpener @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
-  fun openExternalUrl(
+  suspend fun openExternalUrl(
     intent: Intent,
-    showExternalLinkPopup: Boolean = sharedPreferenceUtil.prefExternalLinkPopup
+    showExternalLinkPopup: Boolean? = null,
+    lifecycleScope: CoroutineScope
   ) {
+    val externalLinkPopup = showExternalLinkPopup ?: kiwixDataStore.externalLinkPopup.first()
     if (intent.resolveActivity(activity.packageManager) != null) {
-      if (showExternalLinkPopup) {
-        requestOpenLink(intent)
+      if (externalLinkPopup) {
+        requestOpenLink(intent, lifecycleScope)
       } else {
         openLink(intent)
       }
@@ -56,14 +62,16 @@ class ExternalLinkOpener @Inject constructor(
     activity.startActivity(intent)
   }
 
-  private fun requestOpenLink(intent: Intent) {
+  private fun requestOpenLink(intent: Intent, lifecycleScope: CoroutineScope) {
     alertDialogShower.show(
       KiwixDialog.ExternalLinkPopup,
       { openLink(intent) },
       { },
       {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        openLink(intent)
+        lifecycleScope.launch {
+          kiwixDataStore.setExternalLinkPopup(false)
+          openLink(intent)
+        }
       },
       uri = intent.data
     )

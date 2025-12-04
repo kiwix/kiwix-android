@@ -67,6 +67,7 @@ import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -92,6 +93,10 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
   @JvmField
   @Inject
   var sharedPreferenceUtil: SharedPreferenceUtil? = null
+
+  @JvmField
+  @Inject
+  var kiwixDataStore: KiwixDataStore? = null
 
   @JvmField
   @Inject
