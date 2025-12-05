@@ -35,6 +35,8 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -47,6 +49,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -110,16 +113,10 @@ class KiwixSplashActivityTest {
     }, 10)
 
     // Verify that the value of the "intro shown" boolean inside
-    // the SharedPreferences Database is not changed until
+    // the DataStore Database is not changed until
     // the "Get started" button is pressed
-    val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-    Assert.assertEquals(
-      true,
-      preferences.getBoolean(
-        SharedPreferenceUtil.PREF_SHOW_INTRO,
-        true
-      )
-    )
+    val showIntro = runBlocking { KiwixDataStore(context).showIntro.first() }
+    Assert.assertEquals(true, showIntro)
     LeakAssertions.assertNoLeaks()
   }
 
@@ -148,9 +145,8 @@ class KiwixSplashActivityTest {
         context
       ).edit()
     preferencesEditor.putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true).commit()
-    preferencesEditor.putBoolean(
-      SharedPreferenceUtil.PREF_SHOW_INTRO,
-      value
-    ).commit()
+    runBlocking {
+      KiwixDataStore(context).setIntroShown(value)
+    }
   }
 }

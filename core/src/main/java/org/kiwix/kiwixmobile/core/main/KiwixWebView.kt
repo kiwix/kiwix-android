@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.videowebview.VideoEnabledWebChromeClient.ToggledFullscreenCallback
@@ -61,7 +62,8 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   attrs: AttributeSet,
   videoView: ViewGroup?,
   private val coreWebViewClient: CoreWebViewClient,
-  val sharedPreferenceUtil: SharedPreferenceUtil
+  val sharedPreferenceUtil: SharedPreferenceUtil,
+  val kiwixDataStore: KiwixDataStore
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
@@ -144,7 +146,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     super.onAttachedToWindow()
     // cancel any previous running job.
     textZoomJob?.cancel()
-    textZoomJob = sharedPreferenceUtil.textZooms
+    textZoomJob = kiwixDataStore.textZoom
       .onEach { settings.textZoom = it }
       .launchIn(CoroutineScope(SupervisorJob() + Dispatchers.Main))
   }

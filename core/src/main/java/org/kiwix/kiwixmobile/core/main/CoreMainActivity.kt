@@ -388,7 +388,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   fun openSupportKiwixExternalLink() {
     closeNavigationDrawer()
-    externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent(), false)
+    lifecycleScope.launch {
+      externalLinkOpener.openExternalUrl(
+        KIWIX_SUPPORT_URL.toUri().browserIntent(),
+        false,
+        this
+      )
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

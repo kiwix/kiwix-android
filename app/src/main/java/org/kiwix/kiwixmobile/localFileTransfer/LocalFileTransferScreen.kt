@@ -41,6 +41,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -57,6 +59,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -84,7 +88,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -105,7 +109,8 @@ fun LocalFileTransferScreen(
   transferFileList: List<FileItem>,
   actionMenuItems: List<ActionMenuItem>,
   onDeviceItemClick: (WifiP2pDevice) -> Unit,
-  sharedPreferenceUtil: SharedPreferenceUtil,
+  kiwixDataStore: KiwixDataStore,
+  lifeCycleScope: CoroutineScope,
   navigationIcon: @Composable () -> Unit
 ) {
   val targets = remember { mutableStateMapOf<String, ShowcaseProperty>() }
@@ -153,18 +158,22 @@ fun LocalFileTransferScreen(
         TransferFilesSection(transferFileList, context, targets)
       }
     }
-    ShowShowCaseToUserIfNotShown(targets, sharedPreferenceUtil)
+    ShowShowCaseToUserIfNotShown(targets, kiwixDataStore, lifeCycleScope)
   }
 }
 
 @Composable
 fun ShowShowCaseToUserIfNotShown(
   targets: SnapshotStateMap<String, ShowcaseProperty>,
-  sharedPreferenceUtil: SharedPreferenceUtil
+  kiwixDataStore: KiwixDataStore,
+  lifeCycleScope: CoroutineScope
 ) {
-  if (sharedPreferenceUtil.prefShowShowCaseToUser) {
+  val shouldShowShowCase by kiwixDataStore.showShowCaseToUser.collectAsState(false)
+  if (shouldShowShowCase) {
     KiwixShowCaseView(targets = targets) {
-      sharedPreferenceUtil.showCaseViewForFileTransferShown()
+      lifeCycleScope.launch {
+        kiwixDataStore.setShowCaseViewForFileTransferShown()
+      }
     }
   }
 }

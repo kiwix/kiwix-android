@@ -121,6 +121,8 @@ object Versions {
   const val COIL_COMPOSE = "3.2.0"
 
   const val COMPOSE_NAVIGATION = "2.7.7"
+
+  const val DATASTORE = "1.2.0"
 }
 
 /**

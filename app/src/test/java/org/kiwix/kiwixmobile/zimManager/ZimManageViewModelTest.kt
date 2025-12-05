@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -63,6 +64,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
@@ -124,6 +126,7 @@ class ZimManageViewModelTest {
   @Suppress("DEPRECATION")
   private val networkCapabilities: NetworkCapabilities = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   lateinit var viewModel: ZimManageViewModel
 
   private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
@@ -168,7 +171,7 @@ class ZimManageViewModelTest {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
-    every { sharedPreferenceUtil.prefWifiOnly } returns true
+    coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
     every { sharedPreferenceUtil.onlineContentLanguage } returns onlineContentLanguage
     every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns ""
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
@@ -210,7 +213,8 @@ class ZimManageViewModelTest {
         dataSource,
         connectivityManager,
         sharedPreferenceUtil,
-        onlineLibraryManager
+        onlineLibraryManager,
+        kiwixDataStore
       ).apply {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)
