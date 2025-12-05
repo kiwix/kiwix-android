@@ -73,13 +73,13 @@ class TopLevelDestinationTest : BaseActivityTest() {
         setWifiOnly(false)
         setExternalLinkPopup(true)
         setIntroShown()
+        setShowCaseViewForFileTransferShown()
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
