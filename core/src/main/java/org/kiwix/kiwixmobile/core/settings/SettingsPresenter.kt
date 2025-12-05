@@ -24,13 +24,14 @@ import org.kiwix.kiwixmobile.core.settings.SettingsContract.View
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
-internal class SettingsPresenter @Inject constructor(private val dataSource: DataSource) :
-  BasePresenter<View?>(), Presenter {
-    override suspend fun clearHistory() {
-      runCatching {
-        dataSource.clearHistory()
-      }.onFailure {
-        Log.e("SettingsPresenter", it.message, it)
-      }
+internal class SettingsPresenter @Inject constructor(
+  private val dataSource: DataSource
+) : BasePresenter<View?>(), Presenter {
+  override suspend fun clearHistory() {
+    runCatching {
+      dataSource.clearHistory()
+    }.onFailure {
+      Log.e("SettingsPresenter", it.message, it)
     }
   }
+}

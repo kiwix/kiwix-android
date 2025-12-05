@@ -18,15 +18,15 @@
 package org.kiwix.kiwixmobile.intro
 
 import org.kiwix.kiwixmobile.core.base.BasePresenter
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.intro.IntroContract.Presenter
 import org.kiwix.kiwixmobile.intro.IntroContract.View
 import javax.inject.Inject
 
 class IntroPresenter @Inject internal constructor(
-  private val preferences: SharedPreferenceUtil
+  private val kiwixDataStore: KiwixDataStore
 ) : BasePresenter<View?>(), Presenter {
-  override fun setIntroShown() {
-    preferences.setIntroShown()
+  override suspend fun setIntroShown() {
+    kiwixDataStore.setIntroShown()
   }
 }

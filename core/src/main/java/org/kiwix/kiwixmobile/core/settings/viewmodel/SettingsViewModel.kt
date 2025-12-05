@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.settings.viewmodel
 
 import android.app.Application
-import androidx.compose.runtime.mutableStateOf
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,9 +29,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.ThemeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val ZOOM_OFFSET = 2
@@ -39,12 +41,16 @@ const val ZOOM_SCALE = 25
 
 class SettingsViewModel @Inject constructor(
   private val context: Application,
-  val sharedPreferenceUtil: SharedPreferenceUtil
+  val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
-  private val appTheme: StateFlow<ThemeConfig.Theme> = sharedPreferenceUtil.appThemes()
-    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.appTheme)
+  private val appTheme: StateFlow<ThemeConfig.Theme> = kiwixDataStore.appTheme
+    .stateIn(
+      viewModelScope,
+      SharingStarted.Companion.Eagerly,
+      from(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    )
 
   val themeLabel: StateFlow<String> = appTheme
     .map { mode ->
@@ -57,27 +63,42 @@ class SettingsViewModel @Inject constructor(
     .stateIn(
       viewModelScope,
       SharingStarted.Companion.Eagerly,
-      getLabelFor(sharedPreferenceUtil.appTheme)
+      getLabelFor(ThemeConfig.Theme.SYSTEM)
     )
 
-  var backToTopEnabled = mutableStateOf(sharedPreferenceUtil.prefBackToTop)
+  val backToTopEnabled = kiwixDataStore.backToTop
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.Eagerly,
+      initialValue = false
+    )
 
-  var externalLinkPopup = mutableStateOf(sharedPreferenceUtil.prefExternalLinkPopup)
+  val externalLinkPopup = kiwixDataStore.externalLinkPopup
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.Eagerly,
+      initialValue = true
+    )
 
-  val textZoom: StateFlow<Int> = sharedPreferenceUtil.textZooms
+  val textZoom: StateFlow<Int> = kiwixDataStore.textZoom
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.Eagerly,
+      initialValue = DEFAULT_ZOOM
+    )
+
+  val newTabInBackground = kiwixDataStore.openNewTabInBackground
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.Eagerly,
+      initialValue = false
+    )
+
+  val wifiOnly: StateFlow<Boolean> = kiwixDataStore.wifiOnly
     .stateIn(
       scope = viewModelScope,
       started = SharingStarted.Companion.Eagerly,
-      initialValue = sharedPreferenceUtil.textZoom
-    )
-
-  var newTabInBackground = mutableStateOf(sharedPreferenceUtil.prefNewTabBackground)
-
-  val wifiOnly: StateFlow<Boolean> = sharedPreferenceUtil.prefWifiOnlys
-    .stateIn(
-      scope = viewModelScope,
-      started = SharingStarted.Companion.Eagerly,
-      initialValue = sharedPreferenceUtil.prefWifiOnly
+      initialValue = true
     )
 
   fun sendAction(action: Action) =
@@ -94,29 +115,38 @@ class SettingsViewModel @Inject constructor(
   }
 
   fun setAppTheme(selectedMode: String) {
-    sharedPreferenceUtil.updateAppTheme(selectedMode)
+    viewModelScope.launch {
+      kiwixDataStore.updateAppTheme(selectedMode)
+    }
   }
 
   fun setBackToTop(enabled: Boolean) {
-    sharedPreferenceUtil.prefBackToTop = enabled
-    backToTopEnabled.value = enabled
+    viewModelScope.launch {
+      kiwixDataStore.setPrefBackToTop(enabled)
+    }
   }
 
   fun setTextZoom(position: Int) {
-    sharedPreferenceUtil.textZoom = (position + ZOOM_OFFSET) * ZOOM_SCALE
+    viewModelScope.launch {
+      kiwixDataStore.setTextZoom((position + ZOOM_OFFSET) * ZOOM_SCALE)
+    }
   }
 
   fun setNewTabInBackground(enabled: Boolean) {
-    sharedPreferenceUtil.prefNewTabBackground = enabled
-    newTabInBackground.value = enabled
+    viewModelScope.launch {
+      kiwixDataStore.setOpenNewInBackground(enabled)
+    }
   }
 
   fun setExternalLinkPopup(enabled: Boolean) {
-    sharedPreferenceUtil.putPrefExternalLinkPopup(enabled)
-    externalLinkPopup.value = enabled
+    viewModelScope.launch {
+      kiwixDataStore.setExternalLinkPopup(enabled)
+    }
   }
 
   fun setWifiOnly(wifiOnly: Boolean) {
-    sharedPreferenceUtil.putPrefWifiOnly(wifiOnly)
+    viewModelScope.launch {
+      kiwixDataStore.setWifiOnly(wifiOnly)
+    }
   }
 }
