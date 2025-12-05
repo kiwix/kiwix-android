@@ -70,10 +70,10 @@ class SharedPreferenceToDatastoreMigratorTest {
     KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
+        setIntroShown()
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
@@ -118,6 +118,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
       .putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       .putString(SharedPreferenceUtil.PREF_THEME, "2")
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -139,6 +140,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_NEW_TAB_BACKGROUND])
     assertEquals(true, prefs[PreferencesKeys.PREF_EXTERNAL_LINK_POPUP])
     assertEquals(false, prefs[PreferencesKeys.PREF_WIFI_ONLY])
+    assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_INTRO])
     assertEquals("2", prefs[PreferencesKeys.PREF_THEME])
   }
 }

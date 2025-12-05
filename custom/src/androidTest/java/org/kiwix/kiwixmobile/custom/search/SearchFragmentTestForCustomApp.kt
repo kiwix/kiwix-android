@@ -122,10 +122,10 @@ class SearchFragmentTestForCustomApp {
     KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
+        setIntroShown()
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(

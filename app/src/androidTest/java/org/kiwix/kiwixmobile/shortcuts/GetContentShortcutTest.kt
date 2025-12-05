@@ -86,12 +86,12 @@ class GetContentShortcutTest {
     ).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
+        setIntroShown()
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       instrumentation.targetContext.applicationContext
     ).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)

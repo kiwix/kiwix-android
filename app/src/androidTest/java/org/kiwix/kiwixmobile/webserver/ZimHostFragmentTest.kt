@@ -111,11 +111,11 @@ class ZimHostFragmentTest {
       KiwixDataStore(it).apply {
         lifeCycleScope.launch {
           setWifiOnly(false)
+          setIntroShown()
         }
       }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
-          setIntroShown()
           setIsPlayStoreBuildType(true)
           prefIsTest = true
           putPrefLanguage("en")

@@ -71,10 +71,10 @@ class SearchWidgetTest : BaseActivityTest() {
       KiwixDataStore(it).apply {
         lifeCycleScope.launch {
           setWifiOnly(false)
+          setIntroShown()
         }
       }
       SharedPreferenceUtil(it).apply {
-        setIntroShown()
         setIsPlayStoreBuildType(true)
         prefIsTest = true
         putPrefLanguage("en")

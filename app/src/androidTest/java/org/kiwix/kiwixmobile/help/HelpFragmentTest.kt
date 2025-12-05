@@ -153,11 +153,11 @@ class HelpFragmentTest : BaseActivityTest() {
       KiwixDataStore(it).apply {
         lifeCycleScope.launch {
           setWifiOnly(false)
+          setIntroShown()
         }
       }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
-          setIntroShown()
           setIsPlayStoreBuildType(showRestriction)
           prefIsTest = true
           putPrefLanguage("en")

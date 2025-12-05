@@ -86,12 +86,12 @@ class DeepLinksTest : BaseActivityTest() {
     ).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
+        setIntroShown()
       }
     }
     context.let {
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
-          setIntroShown()
           setIsPlayStoreBuildType(true)
           putPrefIsFirstRun(false)
           prefIsScanFileSystemDialogShown = true

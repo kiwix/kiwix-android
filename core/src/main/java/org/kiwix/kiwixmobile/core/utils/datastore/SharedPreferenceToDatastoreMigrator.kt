@@ -41,6 +41,7 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         SharedPreferenceUtil.Companion.PREF_EXTERNAL_LINK_POPUP,
         SharedPreferenceUtil.Companion.PREF_WIFI_ONLY,
         SharedPreferenceUtil.Companion.PREF_THEME,
+        SharedPreferenceUtil.PREF_SHOW_INTRO,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)

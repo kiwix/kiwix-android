@@ -130,4 +130,19 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       prefs[PreferencesKeys.PREF_THEME] = selectedTheme
     }
   }
+
+  val showIntro: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_INTRO] ?: true
+    }
+
+  /**
+   * Marks the intro as shown. The parameter is mainly used for test cases.
+   * By default, `false` is stored, indicating that the intro has already been shown.
+   */
+  suspend fun setIntroShown(isShown: Boolean = false) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_INTRO] = isShown
+    }
+  }
 }
