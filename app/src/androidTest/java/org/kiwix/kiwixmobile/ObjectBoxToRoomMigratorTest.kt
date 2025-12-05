@@ -30,7 +30,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
@@ -47,6 +51,7 @@ import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
@@ -64,6 +69,7 @@ class ObjectBoxToRoomMigratorTest {
   private lateinit var boxStore: BoxStore
   private lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
   private val migrationMaxTime = 25000
+  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @Before
   fun setup() {
@@ -73,6 +79,11 @@ class ObjectBoxToRoomMigratorTest {
         TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
+    }
+    KiwixDataStore(context).apply {
+      lifeCycleScope.launch {
+        setWifiOnly(false)
+      }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)

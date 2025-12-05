@@ -34,6 +34,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.launch
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -50,6 +51,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -81,9 +83,13 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
+    KiwixDataStore(context).apply {
+      lifeCycleScope.launch {
+        setWifiOnly(false)
+      }
+    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)

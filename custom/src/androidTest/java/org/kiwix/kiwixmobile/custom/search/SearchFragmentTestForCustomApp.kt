@@ -34,7 +34,11 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -58,6 +62,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.testutils.RetryRule
@@ -78,6 +83,7 @@ class SearchFragmentTestForCustomApp {
       Manifest.permission.READ_EXTERNAL_STORAGE,
       Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
+  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @get:Rule
   var permissionRules: GrantPermissionRule =
@@ -113,9 +119,13 @@ class SearchFragmentTestForCustomApp {
         }
         waitForIdle()
       }
+    KiwixDataStore(context).apply {
+      lifeCycleScope.launch {
+        setWifiOnly(false)
+      }
+    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(

@@ -35,6 +35,10 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
@@ -47,6 +51,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.download.downloadRobot
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -79,6 +84,7 @@ class LanguageFragmentTest {
 
   lateinit var kiwixMainActivity: KiwixMainActivity
   private val instrumentation: Instrumentation by lazy(InstrumentationRegistry::getInstrumentation)
+  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @Before
   fun setUp() {
@@ -88,10 +94,16 @@ class LanguageFragmentTest {
       }
       waitForIdle()
     }
+    KiwixDataStore(
+      instrumentation.targetContext.applicationContext
+    ).apply {
+      lifeCycleScope.launch {
+        setWifiOnly(false)
+      }
+    }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
       .edit {
         putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-        putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
         putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
         putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
         putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
