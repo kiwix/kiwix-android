@@ -36,6 +36,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.launch
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
@@ -48,6 +49,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.OPENING_ZIM_FILE_DELAY
@@ -79,11 +81,17 @@ class DeepLinksTest : BaseActivityTest() {
       }
       waitForIdle()
     }
+    KiwixDataStore(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).apply {
+      lifeCycleScope.launch {
+        setWifiOnly(false)
+      }
+    }
     context.let {
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIntroShown()
-          putPrefWifiOnly(false)
           setIsPlayStoreBuildType(true)
           putPrefIsFirstRun(false)
           prefIsScanFileSystemDialogShown = true

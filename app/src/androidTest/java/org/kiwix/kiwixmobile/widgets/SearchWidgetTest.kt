@@ -32,6 +32,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.launch
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixSearchWidget
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -66,9 +68,13 @@ class SearchWidgetTest : BaseActivityTest() {
         waitForIdle()
       }
     context.let {
+      KiwixDataStore(it).apply {
+        lifeCycleScope.launch {
+          setWifiOnly(false)
+        }
+      }
       SharedPreferenceUtil(it).apply {
         setIntroShown()
-        putPrefWifiOnly(false)
         setIsPlayStoreBuildType(true)
         prefIsTest = true
         putPrefLanguage("en")
