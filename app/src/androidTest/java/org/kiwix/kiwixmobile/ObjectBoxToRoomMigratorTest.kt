@@ -125,7 +125,7 @@ class ObjectBoxToRoomMigratorTest {
     objectBoxToRoomMigrator.notesRoomDao = kiwixRoomDatabase.notesRoomDao()
     objectBoxToRoomMigrator.recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
     objectBoxToRoomMigrator.boxStore = boxStore
-    objectBoxToRoomMigrator.sharedPreferenceUtil = SharedPreferenceUtil(context)
+    objectBoxToRoomMigrator.kiwixDataStore = KiwixDataStore(context)
   }
 
   @After

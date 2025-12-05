@@ -234,14 +234,14 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {
-    if (!sharedPreferenceUtil.prefIsAppDirectoryMigrated) {
+    if (!kiwixDataStore.isAppDirectoryMigrated.first()) {
       val storagePath =
         getStorageDeviceList()
           .getOrNull(sharedPreferenceUtil.storagePosition)
           ?.name
       storagePath?.let {
         sharedPreferenceUtil.putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(it))
-        sharedPreferenceUtil.putPrefAppDirectoryMigrated(true)
+        kiwixDataStore.setAppDirectoryMigrated(true)
       }
     }
   }

@@ -120,6 +120,12 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putString(SharedPreferenceUtil.PREF_THEME, "2")
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
+      .putBoolean(SharedPreferenceUtil.PREF_BOOKMARKS_MIGRATED, true)
+      .putBoolean(SharedPreferenceUtil.PREF_RECENT_SEARCH_MIGRATED, true)
+      .putBoolean(SharedPreferenceUtil.PREF_NOTES_MIGRATED, true)
+      .putBoolean(SharedPreferenceUtil.PREF_HISTORY_MIGRATED, true)
+      .putBoolean(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
+      .putBoolean(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED, true)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -143,6 +149,12 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_WIFI_ONLY])
     assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_INTRO])
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_SHOWCASE])
+    assertEquals(true, prefs[PreferencesKeys.PREF_BOOKMARKS_MIGRATED])
+    assertEquals(true, prefs[PreferencesKeys.PREF_RECENT_SEARCH_MIGRATED])
+    assertEquals(true, prefs[PreferencesKeys.PREF_NOTES_MIGRATED])
+    assertEquals(true, prefs[PreferencesKeys.PREF_HISTORY_MIGRATED])
+    assertEquals(false, prefs[PreferencesKeys.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED])
+    assertEquals(true, prefs[PreferencesKeys.PREF_BOOK_ON_DISK_MIGRATED])
     assertEquals("2", prefs[PreferencesKeys.PREF_THEME])
   }
 }
