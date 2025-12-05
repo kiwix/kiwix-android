@@ -75,12 +75,12 @@ class LocalLibraryTest : BaseActivityTest() {
     ).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
+        setIntroShown()
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       // set PREF_MANAGE_EXTERNAL_FILES false for hiding
       // manage external storage permission dialog on android 11 and above

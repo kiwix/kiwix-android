@@ -76,10 +76,10 @@ class DonationDialogTest : BaseActivityTest() {
     KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
+        setIntroShown()
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
