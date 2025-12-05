@@ -87,14 +87,14 @@ class GetContentShortcutTest {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setShowCaseViewForFileTransferShown()
+        setExternalLinkPopup(true)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       instrumentation.targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")

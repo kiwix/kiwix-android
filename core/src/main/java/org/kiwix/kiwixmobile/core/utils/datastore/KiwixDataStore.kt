@@ -145,4 +145,19 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       prefs[PreferencesKeys.PREF_SHOW_INTRO] = isShown
     }
   }
+
+  val showShowCaseToUser: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_SHOWCASE] ?: true
+    }
+
+  /**
+   * Marks the showCaseView as shown. The parameter is mainly used for test cases.
+   * By default, `false` is stored, indicating that the showCaseView has already been shown.
+   */
+  suspend fun setShowCaseViewForFileTransferShown(isShown: Boolean = false) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_SHOWCASE] = isShown
+    }
+  }
 }

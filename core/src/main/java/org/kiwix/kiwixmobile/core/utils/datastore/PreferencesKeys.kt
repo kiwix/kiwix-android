@@ -34,4 +34,5 @@ object PreferencesKeys {
   val PREF_WIFI_ONLY = booleanPreferencesKey(SharedPreferenceUtil.PREF_WIFI_ONLY)
   val PREF_THEME = stringPreferencesKey(SharedPreferenceUtil.PREF_THEME)
   val PREF_SHOW_INTRO = booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_INTRO)
+  val PREF_SHOW_SHOWCASE = booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_SHOWCASE)
 }
