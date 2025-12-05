@@ -117,7 +117,7 @@ abstract class DownloadRoomDao {
     deleteDownloadByDownloadId(download.id.toLong())
   }
 
-  fun addIfDoesNotExist(
+  suspend fun addIfDoesNotExist(
     url: String,
     book: LibkiwixBook,
     downloadRequester: DownloadRequester

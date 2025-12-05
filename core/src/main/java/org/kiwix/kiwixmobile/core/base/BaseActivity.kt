@@ -25,11 +25,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject
+  lateinit var kiwixDataStore: KiwixDataStore
 
   /**
    * Apply the currently selected language to the base context

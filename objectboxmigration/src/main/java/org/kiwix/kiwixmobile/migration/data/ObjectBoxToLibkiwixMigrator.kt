@@ -21,13 +21,14 @@ package org.kiwix.kiwixmobile.migration.data
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
@@ -42,7 +43,7 @@ class ObjectBoxToLibkiwixMigrator {
   lateinit var boxStore: BoxStore
 
   @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject
   lateinit var libkiwixBookmarks: LibkiwixBookmarks
@@ -52,10 +53,10 @@ class ObjectBoxToLibkiwixMigrator {
   private val migrationMutex = Mutex()
 
   suspend fun migrateObjectBoxDataToLibkiwix() {
-    if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
+    if (!kiwixDataStore.isBookmarksMigrated.first()) {
       migrateBookMarks(boxStore.boxFor())
     }
-    if (!sharedPreferenceUtil.prefIsBookOnDiskMigrated) {
+    if (!kiwixDataStore.isBookOnDiskMigrated.first()) {
       migrateLocalBooks(boxStore.boxFor())
     }
     // TODO we will migrate here for other entities
@@ -95,7 +96,7 @@ class ObjectBoxToLibkiwixMigrator {
         )
       }
     }
-    sharedPreferenceUtil.putPrefBookOnDiskMigrated(true)
+    kiwixDataStore.setBookOnDiskMigrated(true)
   }
 
   suspend fun migrateBookMarks(box: Box<BookmarkEntity>) {
@@ -160,6 +161,6 @@ class ObjectBoxToLibkiwixMigrator {
         }
       }
     }
-    sharedPreferenceUtil.putPrefBookMarkMigrated(true)
+    kiwixDataStore.setBookMarkMigrated(true)
   }
 }

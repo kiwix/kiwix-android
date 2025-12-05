@@ -86,6 +86,7 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
@@ -139,7 +140,8 @@ class ZimManageViewModel @Inject constructor(
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  val onlineLibraryManager: OnlineLibraryManager
+  val onlineLibraryManager: OnlineLibraryManager,
+  private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -556,7 +558,7 @@ class ZimManageViewModel @Inject constructor(
       )
     } else {
       flow {
-        val wifiOnly = sharedPreferenceUtil.prefWifiOnlys.first()
+        val wifiOnly = kiwixDataStore.wifiOnly.first()
         if (wifiOnly) {
           onlineLibraryDownloading.emit(false to false)
           shouldShowWifiOnlyDialog.postValue(true)

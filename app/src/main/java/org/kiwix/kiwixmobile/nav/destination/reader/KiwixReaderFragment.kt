@@ -28,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
@@ -53,8 +55,6 @@ import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -252,9 +252,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
     when (restoreOrigin) {
       FromExternalLaunch -> {
         if (!isAdded) return
-        val settings =
-          activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-        val zimReaderSource = fromDatabaseValue(settings?.getString(TAG_CURRENT_FILE, null))
+        val zimReaderSource =
+          kiwixDataStore?.currentZimFile?.map { value ->
+            fromDatabaseValue(value)
+          }?.first()
         if (zimReaderSource?.canOpenInLibkiwix() == true) {
           if (zimReaderContainer?.zimReaderSource == null) {
             openZimFile(zimReaderSource, isFromManageExternalLaunch = true)

@@ -64,6 +64,7 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -103,6 +104,9 @@ class LocalFileTransferFragment :
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
+  @Inject
+  lateinit var kiwixDataStore: KiwixDataStore
+
   private val deviceName = mutableStateOf("")
   private val isPeerSearching = mutableStateOf(false)
   private val peerDeviceList = mutableStateOf(emptyList<WifiP2pDevice>())
@@ -136,7 +140,8 @@ class LocalFileTransferFragment :
         transferFileList = transferFileList.value,
         actionMenuItems = actionMenuItem(),
         onDeviceItemClick = { wifiDirectManager.sendToDevice(it) },
-        sharedPreferenceUtil = sharedPreferenceUtil,
+        kiwixDataStore = kiwixDataStore,
+        lifeCycleScope = lifecycleScope,
         navigationIcon = {
           NavigationIcon(
             iconItem = IconItem.Drawable(drawable.ic_close_white_24dp),

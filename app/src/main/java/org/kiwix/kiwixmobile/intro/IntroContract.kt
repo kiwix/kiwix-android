@@ -23,6 +23,6 @@ interface IntroContract {
   interface View : BaseContract.View<Presenter?>
 
   interface Presenter : BaseContract.Presenter<View?> {
-    fun setIntroShown()
+    suspend fun setIntroShown()
   }
 }

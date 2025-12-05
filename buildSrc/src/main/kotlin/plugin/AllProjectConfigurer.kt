@@ -250,6 +250,9 @@ class AllProjectConfigurer {
       implementation(Libs.COIL3_OKHTTP_COMPOSE)
       implementation(Libs.COMPOSE_NAVIGATION)
 
+      // Jetpack Datastore
+      implementation(Libs.DATASTORE)
+
       // Compose UI test implementation
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT_ACCESSIBILITY)

@@ -23,18 +23,14 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
-import org.kiwix.kiwixmobile.core.ThemeConfig
-import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -54,15 +50,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _prefStorages = MutableStateFlow("")
   val prefStorages
     get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
-  private val _textZooms = MutableStateFlow(textZoom)
-  val textZooms get() = _textZooms.asStateFlow()
-  private val appThemes = MutableStateFlow(ThemeConfig.Theme.SYSTEM)
-  private val _prefWifiOnlys = MutableStateFlow(true)
-  val prefWifiOnlys
-    get() = _prefWifiOnlys.onStart { emit(prefWifiOnly) }
-
-  val prefWifiOnly: Boolean
-    get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
 
   private val _onlineContentLanguage = MutableStateFlow("")
   val onlineContentLanguage = _onlineContentLanguage.asStateFlow()
@@ -82,24 +69,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       sharedPreferences.edit { putBoolean(PREF_IS_SCAN_FILE_SYSTEM_TEST, prefIsScanFileSystemTest) }
     }
 
-  val prefShowShowCaseToUser: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SHOW_SHOWCASE, true)
-
-  var prefBackToTop: Boolean
-    get() = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false)
-    set(backToTop) {
-      sharedPreferences.edit { putBoolean(PREF_BACK_TO_TOP, backToTop) }
-    }
-
-  var prefNewTabBackground: Boolean
-    get() = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false)
-    set(newTabInBackground) {
-      sharedPreferences.edit { putBoolean(PREF_NEW_TAB_BACKGROUND, newTabInBackground) }
-    }
-
-  val prefExternalLinkPopup: Boolean
-    get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
-
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
 
@@ -108,24 +77,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   val prefDeviceDefaultLanguage: String
     get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "").orEmpty()
-
-  val prefIsBookmarksMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_BOOKMARKS_MIGRATED, false)
-
-  val prefIsRecentSearchMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_RECENT_SEARCH_MIGRATED, false)
-
-  val prefIsNotesMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_NOTES_MIGRATED, false)
-
-  val prefIsHistoryMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_HISTORY_MIGRATED, false)
-
-  val prefIsAppDirectoryMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
-
-  val prefIsBookOnDiskMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_BOOK_ON_DISK_MIGRATED, false)
 
   var prefIsScanFileSystemDialogShown: Boolean
     get() = sharedPreferences.getBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, false)
@@ -165,28 +116,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
 
-  fun showCaseViewForFileTransferShown() {
-    sharedPreferences.edit { putBoolean(PREF_SHOW_SHOWCASE, false) }
-  }
-
-  fun putPrefBookMarkMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
-
-  fun putPrefRecentSearchMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_RECENT_SEARCH_MIGRATED, isMigrated) }
-
-  fun putPrefHistoryMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_HISTORY_MIGRATED, isMigrated) }
-
-  fun putPrefNotesMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_NOTES_MIGRATED, isMigrated) }
-
-  fun putPrefAppDirectoryMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, isMigrated) }
-
-  fun putPrefBookOnDiskMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_BOOK_ON_DISK_MIGRATED, isMigrated) }
-
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
 
@@ -195,11 +124,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
-
-  fun putPrefWifiOnly(wifiOnly: Boolean) {
-    sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
-    _prefWifiOnlys.tryEmit(wifiOnly)
-  }
 
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
@@ -213,9 +137,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
     sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
-
-  fun putPrefExternalLinkPopup(externalLinkPopup: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup) }
 
   fun saveLanguageList(languages: List<Language>) {
     runCatching {
@@ -251,10 +172,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       }
     }.onFailure { it.printStackTrace() }.getOrNull()
 
-  fun showIntro(): Boolean = sharedPreferences.getBoolean(PREF_SHOW_INTRO, true)
-
-  fun setIntroShown() = sharedPreferences.edit { putBoolean(PREF_SHOW_INTRO, false) }
-
   var showHistoryAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true)
     set(prefShowHistoryAllBooks) {
@@ -282,20 +199,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
       }
 
-  val appTheme: ThemeConfig.Theme
-    get() =
-      from(
-        sharedPreferences.getString(PREF_THEME, null)?.toInt()
-          ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-      )
-
-  fun appThemes(): Flow<ThemeConfig.Theme> = appThemes.onStart { emit(appTheme) }
-
-  fun updateAppTheme(selectedTheme: String) {
-    sharedPreferences.edit { putString(PREF_THEME, selectedTheme) }
-    appThemes.tryEmit(appTheme)
-  }
-
   var manageExternalFilesPermissionDialog: Boolean
     get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)
     set(prefManageExternalFilesPermissionDialog) =
@@ -319,13 +222,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
     set(hostedBooks) {
       sharedPreferences.edit { putStringSet(PREF_HOSTED_BOOKS, hostedBooks) }
-    }
-
-  var textZoom: Int
-    get() = sharedPreferences.getInt(TEXT_ZOOM, DEFAULT_ZOOM)
-    set(textZoom) {
-      sharedPreferences.edit { putInt(TEXT_ZOOM, textZoom) }
-      _textZooms.tryEmit(textZoom)
     }
 
   var shouldShowStorageSelectionDialog: Boolean
@@ -390,8 +286,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_SHOW_INTRO = "showIntro"
     const val PREF_IS_TEST = "is_test"
     const val PREF_SHOW_SHOWCASE = "showShowCase"
-    private const val PREF_BACK_TO_TOP = "pref_backtotop"
-    private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
+    const val PREF_BACK_TO_TOP = "pref_backtotop"
+    const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     const val PREF_IS_FIRST_RUN = "isFirstRun"
@@ -400,8 +296,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_THEME = "pref_dark_mode"
-    private const val TEXT_ZOOM = "true_text_zoom"
-    private const val DEFAULT_ZOOM = 100
+    const val TEXT_ZOOM = "true_text_zoom"
+    const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH = "pref_show_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"

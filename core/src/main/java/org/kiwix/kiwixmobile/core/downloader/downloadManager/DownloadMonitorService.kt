@@ -253,18 +253,23 @@ class DownloadMonitorService : Service() {
    * until there are no active downloads, at which point the service is stopped.
    */
   private fun showDownloadServiceForegroundNotification() {
-    // Start the foreground service immediately before going to background.
-    downloadNotificationChannel()
-    startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
-    fetch.getDownloadsWithStatus(
-      listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
-    ) { activeDownloads ->
-      if (activeDownloads.isNotEmpty()) {
-        // Update the notification.
-        notificationManager.notify(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
-      } else {
-        // Stop the foreground service if no active downloads.
-        stopForegroundServiceForDownloads()
+    runCatching {
+      // Start the foreground service immediately before going to background.
+      downloadNotificationChannel()
+      startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
+      fetch.getDownloadsWithStatus(
+        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
+      ) { activeDownloads ->
+        if (activeDownloads.isNotEmpty()) {
+          // Update the notification.
+          notificationManager.notify(
+            DOWNLOAD_SERVICE_NOTIFICATION_ID,
+            buildForegroundNotification()
+          )
+        } else {
+          // Stop the foreground service if no active downloads.
+          stopForegroundServiceForDownloads()
+        }
       }
     }
   }
