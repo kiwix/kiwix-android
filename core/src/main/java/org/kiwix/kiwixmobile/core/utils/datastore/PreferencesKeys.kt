@@ -35,4 +35,13 @@ object PreferencesKeys {
   val PREF_THEME = stringPreferencesKey(SharedPreferenceUtil.PREF_THEME)
   val PREF_SHOW_INTRO = booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_INTRO)
   val PREF_SHOW_SHOWCASE = booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_SHOWCASE)
+  val PREF_BOOKMARKS_MIGRATED = booleanPreferencesKey(SharedPreferenceUtil.PREF_BOOKMARKS_MIGRATED)
+  val PREF_RECENT_SEARCH_MIGRATED =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_RECENT_SEARCH_MIGRATED)
+  val PREF_NOTES_MIGRATED = booleanPreferencesKey(SharedPreferenceUtil.PREF_NOTES_MIGRATED)
+  val PREF_HISTORY_MIGRATED = booleanPreferencesKey(SharedPreferenceUtil.PREF_HISTORY_MIGRATED)
+  val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED)
+  val PREF_BOOK_ON_DISK_MIGRATED =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED)
 }
