@@ -32,6 +32,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.launch
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -43,6 +44,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -148,10 +150,14 @@ class HelpFragmentTest : BaseActivityTest() {
 
   private fun setShowCopyMoveToPublicDirectory(showRestriction: Boolean) {
     context.let {
+      KiwixDataStore(it).apply {
+        lifeCycleScope.launch {
+          setWifiOnly(false)
+        }
+      }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIntroShown()
-          putPrefWifiOnly(false)
           setIsPlayStoreBuildType(showRestriction)
           prefIsTest = true
           putPrefLanguage("en")

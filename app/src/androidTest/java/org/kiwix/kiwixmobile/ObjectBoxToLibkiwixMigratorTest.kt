@@ -29,6 +29,7 @@ import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -44,6 +45,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.migration.di.component.DaggerMigrationComponent
@@ -120,6 +122,11 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
+    }
+    KiwixDataStore(context).apply {
+      lifeCycleScope.launch {
+        setWifiOnly(false)
+      }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)

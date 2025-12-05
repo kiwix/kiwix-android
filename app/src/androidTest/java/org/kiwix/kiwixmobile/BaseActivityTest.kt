@@ -24,6 +24,9 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
@@ -32,6 +35,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
+  val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
   open lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
   private val permissions =
