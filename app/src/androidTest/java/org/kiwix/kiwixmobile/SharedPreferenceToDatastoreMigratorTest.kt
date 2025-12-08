@@ -45,6 +45,10 @@ import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -113,14 +117,13 @@ class SharedPreferenceToDatastoreMigratorTest {
       .apply()
 
     // DEFAULT SharedPreferences (SharedPreferenceUtil)
-
     val jsonArray = JSONArray().apply {
       put(
         JSONObject().apply {
-          put("languageCode", "en")
-          put("occurencesOfLanguage", 5)
-          put("active", true)
-          put("id", 100L)
+          put(KEY_LANGUAGE_CODE, "en")
+          put(KEY_OCCURRENCES_OF_LANGUAGE, 5)
+          put(KEY_LANGUAGE_ACTIVE, true)
+          put(KEY_LANGUAGE_ID, 100L)
         }
       )
     }
@@ -180,10 +183,10 @@ class SharedPreferenceToDatastoreMigratorTest {
     val migratedArray = JSONArray(migratedJson!!)
     assertEquals(1, migratedArray.length())
     val obj = migratedArray.getJSONObject(0)
-    assertEquals("en", obj.getString("languageCode"))
-    assertEquals(5, obj.getInt("occurencesOfLanguage"))
-    assertEquals(true, obj.getBoolean("active"))
-    assertEquals(100L, obj.getLong("id"))
+    assertEquals("en", obj.getString(KEY_LANGUAGE_CODE))
+    assertEquals(5, obj.getInt(KEY_OCCURRENCES_OF_LANGUAGE))
+    assertEquals(true, obj.getBoolean(KEY_LANGUAGE_ACTIVE))
+    assertEquals(100L, obj.getLong(KEY_LANGUAGE_ID))
     // End of cached migration.
     assertEquals("eng", prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE])
   }
