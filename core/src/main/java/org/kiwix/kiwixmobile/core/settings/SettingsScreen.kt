@@ -48,6 +48,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -491,6 +492,10 @@ fun ListPreference(
 ) {
   var showDialog by remember { mutableStateOf(false) }
   var selected by remember { mutableStateOf(selectedOption) }
+
+  LaunchedEffect(selectedOption) {
+    selected = selectedOption
+  }
 
   Column(
     modifier = Modifier

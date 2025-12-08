@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.settings.viewmodel
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,7 +30,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
-import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -45,24 +43,12 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
-  private val appTheme: StateFlow<ThemeConfig.Theme> = kiwixDataStore.appTheme
-    .stateIn(
-      viewModelScope,
-      SharingStarted.Companion.Eagerly,
-      from(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-    )
 
-  val themeLabel: StateFlow<String> = appTheme
-    .map { mode ->
-      when (mode) {
-        ThemeConfig.Theme.DARK -> context.getString(R.string.theme_dark)
-        ThemeConfig.Theme.LIGHT -> context.getString(R.string.theme_light)
-        ThemeConfig.Theme.SYSTEM -> context.getString(R.string.theme_system)
-      }
-    }
+  val themeLabel: StateFlow<String> = kiwixDataStore.appTheme
+    .map { theme -> getLabelFor(theme) }
     .stateIn(
       viewModelScope,
-      SharingStarted.Companion.Eagerly,
+      SharingStarted.Eagerly,
       getLabelFor(ThemeConfig.Theme.SYSTEM)
     )
 
