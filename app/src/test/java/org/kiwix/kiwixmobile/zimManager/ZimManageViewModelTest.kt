@@ -63,7 +63,6 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
@@ -82,20 +81,20 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.libkiwix.Book
 import org.kiwix.sharedFunctions.InstantExecutorExtension
@@ -125,7 +124,6 @@ class ZimManageViewModelTest {
 
   @Suppress("DEPRECATION")
   private val networkCapabilities: NetworkCapabilities = mockk()
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   lateinit var viewModel: ZimManageViewModel
 
@@ -172,8 +170,7 @@ class ZimManageViewModelTest {
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
     coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
-    every { sharedPreferenceUtil.onlineContentLanguage } returns onlineContentLanguage
-    every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns ""
+    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
     every {
       onlineLibraryManager.buildLibraryUrl(
@@ -212,7 +209,6 @@ class ZimManageViewModelTest {
         fat32Checker,
         dataSource,
         connectivityManager,
-        sharedPreferenceUtil,
         onlineLibraryManager,
         kiwixDataStore
       ).apply {

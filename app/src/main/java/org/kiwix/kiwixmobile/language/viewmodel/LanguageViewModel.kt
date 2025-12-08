@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -47,10 +48,12 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_LANGUAGE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -69,7 +72,7 @@ import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
   private val context: Application,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private var kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
@@ -93,7 +96,6 @@ class LanguageViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  @Suppress("MagicNumber")
   private fun fetchLanguagesFlow() = flow {
     kiwixService =
       KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
@@ -105,9 +107,9 @@ class LanguageViewModel @Inject constructor(
       runCatching {
         Language(
           languageCode = entry.languageCode,
-          active = sharedPreferenceUtil.selectedOnlineContentLanguage == entry.languageCode,
+          active = kiwixDataStore.selectedOnlineContentLanguage.first() == entry.languageCode,
           occurrencesOfLanguage = entry.count,
-          id = (index + 1).toLong()
+          id = (index + ONE).toLong()
         )
       }.onFailure {
         Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", it)
@@ -118,15 +120,15 @@ class LanguageViewModel @Inject constructor(
       add(
         Language(
           languageCode = "",
-          active = sharedPreferenceUtil.selectedOnlineContentLanguage.isEmpty(),
+          active = kiwixDataStore.selectedOnlineContentLanguage.first().isEmpty(),
           occurrencesOfLanguage = allBooksCount,
-          id = 0L
+          id = ZERO.toLong()
         )
       )
       addAll(languages)
     }
     emit(languageList)
-  }.retry(5)
+  }.retry(FIVE.toLong())
     .catch { e ->
       e.printStackTrace()
       emit(emptyList())
@@ -135,7 +137,7 @@ class LanguageViewModel @Inject constructor(
   private fun observeLanguages() = viewModelScope.launch {
     state.value = Loading
 
-    val cachedLanguageList = sharedPreferenceUtil.getCachedLanguageList()
+    val cachedLanguageList = kiwixDataStore.cachedLanguageList.first()
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
 
     if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
@@ -146,7 +148,7 @@ class LanguageViewModel @Inject constructor(
     if (isOnline) {
       fetchLanguagesFlow().collect { languages ->
         if (languages.isNotEmpty()) {
-          sharedPreferenceUtil.saveLanguageList(languages)
+          kiwixDataStore.saveLanguageList(languages)
           LanguageSessionCache.hasFetched = true
           actions.emit(UpdateLanguages(languages))
         } else {
@@ -225,7 +227,7 @@ class LanguageViewModel @Inject constructor(
     effects.tryEmit(
       SaveLanguagesAndFinish(
         selectedLanguage,
-        sharedPreferenceUtil,
+        kiwixDataStore,
         viewModelScope
       )
     )

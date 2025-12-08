@@ -51,6 +51,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R
@@ -299,7 +300,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun getOnlineLibraryRequest(): OnlineLibraryRequest = OnlineLibraryRequest(
     null,
     null,
-    sharedPreferenceUtil.selectedOnlineContentLanguage.takeUnless { it.isBlank() },
+    runBlocking {
+      kiwixDataStore.selectedOnlineContentLanguage.first().takeUnless { it.isBlank() }
+    },
     false,
     1
   )

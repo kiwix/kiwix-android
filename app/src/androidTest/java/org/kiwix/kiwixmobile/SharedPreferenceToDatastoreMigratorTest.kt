@@ -34,7 +34,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -110,6 +113,18 @@ class SharedPreferenceToDatastoreMigratorTest {
       .apply()
 
     // DEFAULT SharedPreferences (SharedPreferenceUtil)
+
+    val jsonArray = JSONArray().apply {
+      put(
+        JSONObject().apply {
+          put("languageCode", "en")
+          put("occurencesOfLanguage", 5)
+          put("active", true)
+          put("id", 100L)
+        }
+      )
+    }
+
     val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
     defaultPrefs.edit()
       .putInt(SharedPreferenceUtil.TEXT_ZOOM, 120)
@@ -126,6 +141,8 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_HISTORY_MIGRATED, true)
       .putBoolean(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
       .putBoolean(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED, true)
+      .putString(SharedPreferenceUtil.CACHED_LANGUAGE_CODES, jsonArray.toString())
+      .putString(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE, "eng")
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -156,5 +173,18 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED])
     assertEquals(true, prefs[PreferencesKeys.PREF_BOOK_ON_DISK_MIGRATED])
     assertEquals("2", prefs[PreferencesKeys.PREF_THEME])
+
+    // Test cached language migration.
+    val migratedJson = prefs[PreferencesKeys.CACHED_LANGUAGE_CODES]
+    assertNotNull(migratedJson)
+    val migratedArray = JSONArray(migratedJson!!)
+    assertEquals(1, migratedArray.length())
+    val obj = migratedArray.getJSONObject(0)
+    assertEquals("en", obj.getString("languageCode"))
+    assertEquals(5, obj.getInt("occurencesOfLanguage"))
+    assertEquals(true, obj.getBoolean("active"))
+    assertEquals(100L, obj.getLong("id"))
+    // End of cached migration.
+    assertEquals("eng", prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE])
   }
 }

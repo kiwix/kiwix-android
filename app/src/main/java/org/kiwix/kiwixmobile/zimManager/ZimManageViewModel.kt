@@ -85,7 +85,6 @@ import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -139,7 +138,6 @@ class ZimManageViewModel @Inject constructor(
   private val fat32Checker: Fat32Checker,
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
   val onlineLibraryManager: OnlineLibraryManager,
   private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
@@ -367,7 +365,7 @@ class ZimManageViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun observeLanguageChanges() =
-    sharedPreferenceUtil.onlineContentLanguage
+    kiwixDataStore.selectedOnlineContentLanguage
       .onEach {
         updateOnlineLibraryFilters(
           OnlineLibraryRequest(lang = it, page = ZERO, isLoadMoreItem = false)
@@ -664,7 +662,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   @Suppress("UnsafeCallOnNullableType")
-  private fun combineLibrarySources(
+  private suspend fun combineLibrarySources(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
     onlineBooks: List<LibkiwixBook>,
@@ -676,7 +674,7 @@ class ZimManageViewModel @Inject constructor(
         allBooks.firstOrNull { it.id == download.book.id } ?: download.book
       }
     val filteredBooks = allBooks - downloadingBooks.toSet()
-    val selectedLanguage = sharedPreferenceUtil.selectedOnlineContentLanguage
+    val selectedLanguage = kiwixDataStore.selectedOnlineContentLanguage.first()
     val onlineLibrarySectionTitle =
       if (selectedLanguage.isBlank()) {
         context.getString(R.string.all_languages)

@@ -2499,9 +2499,7 @@ abstract class CoreReaderFragment :
   }
 
   private suspend fun safelyGetCurrentTab(): Int =
-    max(kiwixDataStore?.currentTab?.first() ?: 0, 0).also {
-      android.util.Log.e("CURRENT_TAB", "setCurrentTab set: ${kiwixDataStore?.currentTab?.first()}")
-    }
+    max(kiwixDataStore?.currentTab?.first() ?: 0, 0)
 
   /**
    * Restores the tabs based on the provided webViewHistoryItemList.
