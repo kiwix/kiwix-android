@@ -69,9 +69,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefLanguage: String
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
-  val prefDeviceDefaultLanguage: String
-    get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "").orEmpty()
-
   var prefIsScanFileSystemDialogShown: Boolean
     get() = sharedPreferences.getBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, false)
     set(isFileScanFileSystemDialogShown) {
@@ -112,9 +109,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
-
-  fun putPrefDeviceDefaultLanguage(language: String) =
-    sharedPreferences.edit { putString(PREF_DEVICE_DEFAULT_LANG, language) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }

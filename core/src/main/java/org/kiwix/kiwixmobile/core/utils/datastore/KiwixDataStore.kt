@@ -29,12 +29,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -278,6 +280,28 @@ class KiwixDataStore @Inject constructor(val context: Context) {
 
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.CACHED_LANGUAGE_CODES] = jsonArray.toString()
+    }
+  }
+
+  val deviceDefaultLanguage: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG].orEmpty()
+    }
+
+  suspend fun setDeviceDefaultLanguage(language: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG] = language
+    }
+  }
+
+  val prefLanguage: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_LANG] ?: Locale.ROOT.toString()
+    }
+
+  suspend fun setPrefLanguage(language: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_LANG] = language
     }
   }
 }

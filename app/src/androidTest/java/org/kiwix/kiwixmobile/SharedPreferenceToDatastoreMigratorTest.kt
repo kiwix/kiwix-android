@@ -146,6 +146,8 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED, true)
       .putString(SharedPreferenceUtil.CACHED_LANGUAGE_CODES, jsonArray.toString())
       .putString(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE, "eng")
+      .putString(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG, "eng")
+      .putString(SharedPreferenceUtil.PREF_LANG, "fr")
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -189,5 +191,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(100L, obj.getLong(KEY_LANGUAGE_ID))
     // End of cached migration.
     assertEquals("eng", prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE])
+    assertEquals("eng", prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG])
+    assertEquals("fr", prefs[PreferencesKeys.PREF_LANG])
   }
 }

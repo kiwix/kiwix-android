@@ -51,6 +51,8 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED,
         SharedPreferenceUtil.CACHED_LANGUAGE_CODES,
         SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE,
+        SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG,
+        SharedPreferenceUtil.PREF_LANG,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)

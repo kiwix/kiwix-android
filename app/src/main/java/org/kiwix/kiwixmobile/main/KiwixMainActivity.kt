@@ -52,6 +52,7 @@ import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -268,19 +269,21 @@ class KiwixMainActivity : CoreMainActivity() {
     if (!sharedPreferenceUtil.prefIsTest) {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
     }
-    setDefaultDeviceLanguage()
+    lifecycleScope.launch {
+      setDefaultDeviceLanguage()
+    }
   }
 
-  private fun setDefaultDeviceLanguage() {
-    if (sharedPreferenceUtil.prefDeviceDefaultLanguage.isEmpty()) {
+  private suspend fun setDefaultDeviceLanguage() {
+    if (kiwixDataStore.deviceDefaultLanguage.first().isEmpty()) {
       ConfigurationCompat.getLocales(
         applicationContext.resources.configuration
       )[0]?.language?.let {
-        sharedPreferenceUtil.putPrefDeviceDefaultLanguage(it)
+        kiwixDataStore.setDeviceDefaultLanguage(it)
         handleLocaleChange(
           this,
-          sharedPreferenceUtil.prefLanguage,
-          sharedPreferenceUtil
+          kiwixDataStore.prefLanguage.first(),
+          kiwixDataStore
         )
       }
     }

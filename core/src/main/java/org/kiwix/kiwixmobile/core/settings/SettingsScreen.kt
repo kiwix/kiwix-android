@@ -49,6 +49,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,6 +65,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.SIX
@@ -205,9 +207,12 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
       listOf(Locale.ROOT.language) + LanguageUtils(context).keys
     }
 
+    val prefLanguage by settingScreenState.kiwixDataStore.prefLanguage
+      .collectAsState(initial = "en")
+
     val selectedCode = remember {
-      if (languageCodes.contains(settingScreenState.sharedPreferenceUtil.prefLanguage)) {
-        settingScreenState.sharedPreferenceUtil.prefLanguage
+      if (languageCodes.contains(prefLanguage)) {
+        prefLanguage
       } else {
         "en"
       }
@@ -232,10 +237,11 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
       ) { selectedDisplay ->
         val index = languageDisplayNames.indexOf(selectedDisplay)
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference
-
-        settingScreenState.sharedPreferenceUtil.putPrefLanguage(selectedLangCode)
-        handleLocaleChange(context, selectedLangCode, settingScreenState.sharedPreferenceUtil)
-        settingScreenState.onLanguageChanged()
+        settingScreenState.lifeCycleScope.launch {
+          settingScreenState.kiwixDataStore.setPrefLanguage(selectedLangCode)
+          handleLocaleChange(context, selectedLangCode, settingScreenState.kiwixDataStore)
+          settingScreenState.onLanguageChanged()
+        }
       }
     }
   }

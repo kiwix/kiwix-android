@@ -90,6 +90,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -119,6 +120,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject lateinit var dialogShower: DialogShower
 
@@ -196,8 +198,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    LanguageUtils(requireActivity())
-      .changeFont(requireActivity(), sharedPreferenceUtil)
+    safelyChangeFont()
     return ComposeView(requireContext()).apply {
       setContent {
         val lazyListState = rememberLazyListState()
@@ -232,6 +233,15 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
             destroyViews()
           }
         }
+      }
+    }
+  }
+
+  private fun safelyChangeFont() {
+    runCatching {
+      lifecycleScope.launch {
+        LanguageUtils(requireActivity())
+          .changeFont(requireActivity(), kiwixDataStore)
       }
     }
   }

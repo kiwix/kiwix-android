@@ -69,18 +69,18 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    if (enforcedLanguage()) {
-      return
-    }
+    coreReaderLifeCycleScope?.launch {
+      if (enforcedLanguage()) {
+        return@launch
+      }
 
-    if (isAdded) {
-      enableLeftDrawer()
-      loadPageFromNavigationArguments()
-      if (BuildConfig.DISABLE_EXTERNAL_LINK) {
-        // If "external links" are disabled in a custom app,
-        // this sets the shared preference to not show the external link popup
-        // when opening external links.
-        coreReaderLifeCycleScope?.launch {
+      if (isAdded) {
+        enableLeftDrawer()
+        loadPageFromNavigationArguments()
+        if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+          // If "external links" are disabled in a custom app,
+          // this sets the shared preference to not show the external link popup
+          // when opening external links.
           kiwixDataStore?.setExternalLinkPopup(false)
         }
       }
@@ -304,16 +304,16 @@ class CustomReaderFragment : CoreReaderFragment() {
       if (!it.isFileExist()) it.createNewFile()
     }
 
-  private fun enforcedLanguage(): Boolean {
+  private suspend fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
-      sharedPreferenceUtil?.let { sharedPreferenceUtil ->
+      kiwixDataStore?.let { kiwixDataStore ->
         LanguageUtils.handleLocaleChange(
           requireActivity(),
           BuildConfig.ENFORCED_LANG,
-          sharedPreferenceUtil
+          kiwixDataStore
         )
-        sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG)
+        kiwixDataStore.setPrefLanguage(BuildConfig.ENFORCED_LANG)
       }
       activity?.recreate()
       return true
