@@ -22,7 +22,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -59,11 +61,13 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   }
 
   private fun navigateToLibrary() {
-    presenter.setIntroShown()
-    val navOptions = NavOptions.Builder()
-      .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
-      .build()
-    (requireActivity() as CoreMainActivity).navigate(KiwixDestination.Library.route, navOptions)
+    lifecycleScope.launch {
+      presenter.setIntroShown()
+      val navOptions = NavOptions.Builder()
+        .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
+        .build()
+      (requireActivity() as CoreMainActivity).navigate(KiwixDestination.Library.route, navOptions)
+    }
   }
 
   override fun onDestroyView() {

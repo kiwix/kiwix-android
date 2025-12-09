@@ -56,7 +56,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
@@ -139,7 +141,7 @@ class KiwixMainActivity : CoreMainActivity() {
       uiCoroutineScope = rememberCoroutineScope()
       bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
       val startDestination = remember {
-        if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
+        if (runBlocking { kiwixDataStore.showIntro.first() } && !isIntroScreenNotVisible()) {
           KiwixDestination.Intro.route
         } else {
           KiwixDestination.Reader.route
