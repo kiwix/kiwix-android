@@ -34,6 +34,7 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidView
@@ -131,7 +132,8 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         versionInformation = "",
         shouldShowStorageCategory = false,
         shouldShowExternalLinkPreference = false,
-        shouldShowPrefWifiOnlyPreference = false
+        shouldShowPrefWifiOnlyPreference = false,
+        kiwixDataStore = kiwixDataStore ?: throw IllegalStateException("")
       )
     )
   }
@@ -147,16 +149,18 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
           NavigationIcon(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() })
         }
         DialogHost(alertDialogShower as AlertDialogShower)
+        LaunchedEffect(Unit) {
+          kiwixDataStore?.let {
+            LanguageUtils(requireActivity()).changeFont(
+              requireActivity(),
+              it
+            )
+          }
+        }
       }
     }
     settingsScreenState.value.update {
       copy(versionInformation = "$versionName Build: $versionCode")
-    }
-    sharedPreferenceUtil?.let {
-      LanguageUtils(requireActivity()).changeFont(
-        requireActivity(),
-        it
-      )
     }
     settingViewModel.actions.onEach {
       when (it) {

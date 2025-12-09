@@ -28,7 +28,6 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore

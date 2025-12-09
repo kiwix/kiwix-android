@@ -29,7 +29,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE

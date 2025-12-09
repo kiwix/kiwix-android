@@ -42,6 +42,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
@@ -49,7 +50,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
@@ -86,10 +87,11 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
@@ -97,7 +99,6 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -108,11 +109,13 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         moveToState(Lifecycle.State.RESUMED)
         sharedPreferenceUtil = SharedPreferenceUtil(context)
         onActivity {
-          LanguageUtils.handleLocaleChange(
-            it,
-            "en",
-            sharedPreferenceUtil
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              kiwixDataStore
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {

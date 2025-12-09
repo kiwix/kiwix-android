@@ -35,6 +35,7 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -83,27 +84,29 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              kiwixDataStore
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)

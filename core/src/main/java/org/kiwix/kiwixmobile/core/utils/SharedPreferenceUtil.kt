@@ -32,7 +32,6 @@ import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import java.io.File
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,9 +64,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
-
-  val prefLanguage: String
-    get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
   var prefIsScanFileSystemDialogShown: Boolean
     get() = sharedPreferences.getBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, false)
@@ -106,9 +102,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun defaultPublicStorage(): String =
     ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
-
-  fun putPrefLanguage(language: String) =
-    sharedPreferences.edit { putString(PREF_LANG, language) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }

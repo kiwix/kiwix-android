@@ -69,9 +69,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    coreReaderLifeCycleScope?.launch {
+    runSafelyInCoreReaderLifecycleScope {
       if (enforcedLanguage()) {
-        return@launch
+        return@runSafelyInCoreReaderLifecycleScope
       }
 
       if (isAdded) {
@@ -160,7 +160,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     } else {
       isWebViewHistoryRestoring = true
       isFromManageExternalLaunch = true
-      coreReaderLifeCycleScope?.launch {
+      runSafelyInCoreReaderLifecycleScope {
         if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
         } else {
@@ -287,8 +287,8 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private suspend fun openDownloadScreen() {
-    delay(OPENING_DOWNLOAD_SCREEN_DELAY)
-    coreReaderLifeCycleScope?.launch(Dispatchers.Main.immediate) {
+    runSafelyInCoreReaderLifecycleScope {
+      delay(OPENING_DOWNLOAD_SCREEN_DELAY)
       val navOptions = NavOptions.Builder()
         .setPopUpTo(CustomDestination.Reader.route, true)
         .build()
@@ -414,12 +414,12 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   override suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
-    runCatching { openDownloadScreen() }
+    openDownloadScreen()
   }
 
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
-      coreReaderLifeCycleScope?.launch {
+      runSafelyInCoreReaderLifecycleScope {
         externalLinkOpener?.openExternalUrl(
           BuildConfig.SUPPORT_URL.toUri().browserIntent(),
           false,
@@ -438,7 +438,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (appSettingsLaunched) {
       appSettingsLaunched = false
       isWebViewHistoryRestoring = true
-      coreReaderLifeCycleScope?.launch {
+      runSafelyInCoreReaderLifecycleScope {
         if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
         } else {

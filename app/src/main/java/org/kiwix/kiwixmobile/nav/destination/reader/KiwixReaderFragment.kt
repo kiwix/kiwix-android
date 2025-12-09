@@ -30,7 +30,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -92,7 +91,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val zimFileUri = getNavigationResult(ZIM_FILE_URI_KEY, kiwixMainActivity)
     val pageUrl = getNavigationResult(PAGE_URL_KEY, kiwixMainActivity)
     val searchItemTitle = getNavigationResult(SEARCH_ITEM_TITLE_KEY, kiwixMainActivity)
-    coreReaderLifeCycleScope?.launch {
+    runSafelyInCoreReaderLifecycleScope {
       if (pageUrl.isNotEmpty()) {
         if (zimFileUri.isNotEmpty()) {
           tryOpeningZimFile(zimFileUri)

@@ -120,6 +120,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
   @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject lateinit var dialogShower: DialogShower

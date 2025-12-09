@@ -29,6 +29,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
@@ -74,17 +75,17 @@ class IntroFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown(true)
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -94,11 +95,13 @@ class IntroFragmentTest : BaseActivityTest() {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              kiwixDataStore
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {

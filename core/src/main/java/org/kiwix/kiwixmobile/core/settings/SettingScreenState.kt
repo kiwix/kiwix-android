@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.settings
 
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
@@ -39,7 +38,6 @@ data class SettingScreenState(
   val storageCalculator: StorageCalculator,
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val kiwixDataStore: KiwixDataStore,
-  val lifeCycleScope: CoroutineScope,
   /**
    * Controls the visibility and summary of the "Permission" preference.
    *

@@ -39,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
@@ -81,7 +82,7 @@ class GetContentShortcutTest {
       }
       waitForIdle()
     }
-    KiwixDataStore(
+    val kiwixDataStore = KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).apply {
       lifeCycleScope.launch {
@@ -89,6 +90,7 @@ class GetContentShortcutTest {
         setIntroShown()
         setShowCaseViewForFileTransferShown()
         setExternalLinkPopup(true)
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
@@ -97,7 +99,6 @@ class GetContentShortcutTest {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -107,11 +108,13 @@ class GetContentShortcutTest {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
         kiwixMainActivity = it
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(instrumentation.targetContext.applicationContext)
-        )
+        runBlocking {
+          handleLocaleChange(
+            it,
+            "en",
+            kiwixDataStore
+          )
+        }
       }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)

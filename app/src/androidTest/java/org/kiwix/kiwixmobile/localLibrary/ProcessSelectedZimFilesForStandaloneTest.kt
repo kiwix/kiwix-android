@@ -30,13 +30,14 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
@@ -72,16 +73,16 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -91,11 +92,13 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
       kiwixMainActivity = activity
       runOnUiThread {
         sharedPreferenceUtil = SharedPreferenceUtil(kiwixMainActivity)
-        LanguageUtils.handleLocaleChange(
-          kiwixMainActivity,
-          "en",
-          sharedPreferenceUtil
-        )
+        runBlocking {
+          handleLocaleChange(
+            kiwixMainActivity,
+            "en",
+            kiwixDataStore
+          )
+        }
         parentFile = File(sharedPreferenceUtil.prefStorage)
       }
       waitForIdle()

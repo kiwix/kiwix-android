@@ -40,6 +40,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
@@ -121,11 +122,13 @@ class LocalFileTransferTest {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           kiwixMainActivity = it
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              KiwixDataStore(it)
+            )
+          }
         }
       }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
@@ -156,11 +159,13 @@ class LocalFileTransferTest {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           kiwixMainActivity = it
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              KiwixDataStore(it)
+            )
+          }
           it.navigate(KiwixDestination.Library.route)
         }
       }
@@ -214,13 +219,13 @@ class LocalFileTransferTest {
         setWifiOnly(false)
         setIntroShown()
         setShowCaseViewForFileTransferShown(shouldShowShowCase)
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
   }
 }

@@ -80,10 +80,11 @@ class ObjectBoxToRoomMigratorTest {
       }
       waitForIdle()
     }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
@@ -91,7 +92,6 @@ class ObjectBoxToRoomMigratorTest {
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -100,11 +100,13 @@ class ObjectBoxToRoomMigratorTest {
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+        runBlocking {
+          LanguageUtils.handleLocaleChange(
+            it,
+            "en",
+            kiwixDataStore
+          )
+        }
         it.navigate(KiwixDestination.Library.route)
       }
     }

@@ -31,6 +31,7 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
@@ -66,7 +67,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(
+    val kiwixDataStore = KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).apply {
       lifeCycleScope.launch {
@@ -74,6 +75,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
         setExternalLinkPopup(true)
         setIntroShown()
         setShowCaseViewForFileTransferShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
@@ -82,7 +84,6 @@ class TopLevelDestinationTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -93,11 +94,13 @@ class TopLevelDestinationTest : BaseActivityTest() {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           kiwixMainActivity = it
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              kiwixMainActivity,
+              "en",
+              kiwixDataStore
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)

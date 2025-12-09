@@ -119,15 +119,15 @@ class SearchFragmentTestForCustomApp {
         }
         waitForIdle()
       }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -137,11 +137,13 @@ class SearchFragmentTestForCustomApp {
       ActivityScenario.launch(CustomMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          LanguageUtils.handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            LanguageUtils.handleLocaleChange(
+              it,
+              "en",
+              kiwixDataStore
+            )
+          }
         }
       }
   }
