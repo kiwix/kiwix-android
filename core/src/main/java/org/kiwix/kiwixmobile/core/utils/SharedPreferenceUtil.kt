@@ -390,8 +390,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_SHOW_INTRO = "showIntro"
     const val PREF_IS_TEST = "is_test"
     const val PREF_SHOW_SHOWCASE = "showShowCase"
-    private const val PREF_BACK_TO_TOP = "pref_backtotop"
-    private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
+    const val PREF_BACK_TO_TOP = "pref_backtotop"
+    const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     const val PREF_IS_FIRST_RUN = "isFirstRun"
@@ -401,7 +401,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_THEME = "pref_dark_mode"
     const val TEXT_ZOOM = "true_text_zoom"
-    private const val DEFAULT_ZOOM = 100
+    const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH = "pref_show_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"

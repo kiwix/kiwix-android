@@ -48,7 +48,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +62,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.SIX
@@ -308,9 +308,9 @@ private fun ExtrasCategory(
   settingsViewModel: SettingsViewModel,
   settingScreenState: SettingScreenState
 ) {
-  val newTabInBackground by settingsViewModel.newTabInBackground
-  val externalLinkPopup by settingsViewModel.externalLinkPopup
-  val wifiOnly by settingsViewModel.wifiOnly.collectAsState()
+  val newTabInBackground by settingsViewModel.newTabInBackground.collectAsStateWithLifecycle()
+  val externalLinkPopup by settingsViewModel.externalLinkPopup.collectAsStateWithLifecycle()
+  val wifiOnly by settingsViewModel.wifiOnly.collectAsStateWithLifecycle()
   SettingsCategory(stringResource(R.string.pref_extras)) {
     SwitchPreference(
       title = stringResource(R.string.pref_newtab_background_title),
@@ -339,9 +339,9 @@ private fun ExtrasCategory(
 
 @Composable
 private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
-  val themeLabel by settingsViewModel.themeLabel.collectAsState()
-  val backToTopEnabled by settingsViewModel.backToTopEnabled
-  val textZoom by settingsViewModel.textZoom.collectAsState()
+  val themeLabel by settingsViewModel.themeLabel.collectAsStateWithLifecycle()
+  val backToTopEnabled by settingsViewModel.backToTopEnabled.collectAsStateWithLifecycle()
+  val textZoom by settingsViewModel.textZoom.collectAsStateWithLifecycle()
   val textZoomPosition = (textZoom / ZOOM_SCALE) - ZOOM_OFFSET
   SettingsCategory(stringResource(R.string.pref_display_title)) {
     AppThemePreference(themeLabel = themeLabel, settingsViewModel = settingsViewModel)

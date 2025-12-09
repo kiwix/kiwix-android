@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 
 interface DownloadRequester {
-  fun enqueue(downloadRequest: DownloadRequest): Long
+  suspend fun enqueue(downloadRequest: DownloadRequest): Long
   fun cancel(downloadId: Long)
   fun retryDownload(downloadId: Long)
   fun pauseResumeDownload(downloadId: Long, isPause: Boolean)

@@ -1513,7 +1513,9 @@ abstract class CoreReaderFragment :
   }
 
   override fun openExternalUrl(intent: Intent) {
-    externalLinkOpener?.openExternalUrl(intent)
+    coreReaderLifeCycleScope?.launch {
+      externalLinkOpener?.openExternalUrl(intent, lifecycleScope = this)
+    }
   }
 
   override fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?) {
@@ -2146,10 +2148,12 @@ abstract class CoreReaderFragment :
   }
 
   private fun loadPrefs() {
-    isBackToTopEnabled = sharedPreferenceUtil?.prefBackToTop == true
-    isOpenNewTabInBackground = sharedPreferenceUtil?.prefNewTabBackground == true
-    if (!isBackToTopEnabled) {
-      hideBackToTopButton()
+    coreReaderLifeCycleScope?.launch {
+      isBackToTopEnabled = kiwixDataStore?.backToTop?.first() == true
+      isOpenNewTabInBackground = kiwixDataStore?.openNewTabInBackground?.first() == true
+      if (!isBackToTopEnabled) {
+        hideBackToTopButton()
+      }
     }
   }
 

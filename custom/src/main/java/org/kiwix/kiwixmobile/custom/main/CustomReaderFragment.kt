@@ -80,7 +80,9 @@ class CustomReaderFragment : CoreReaderFragment() {
         // If "external links" are disabled in a custom app,
         // this sets the shared preference to not show the external link popup
         // when opening external links.
-        sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+        coreReaderLifeCycleScope?.launch {
+          kiwixDataStore?.setExternalLinkPopup(false)
+        }
       }
     }
   }
@@ -417,7 +419,13 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
-      externalLinkOpener?.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+      coreReaderLifeCycleScope?.launch {
+        externalLinkOpener?.openExternalUrl(
+          BuildConfig.SUPPORT_URL.toUri().browserIntent(),
+          false,
+          this
+        )
+      }
     }
   }
 

@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.datastore.migrations.SharedPreferencesMigration
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.Preferences
+import androidx.preference.PreferenceManager
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 class SharedPreferenceToDatastoreMigrator(private val context: Context) {
@@ -31,22 +32,17 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         context = context,
         sharedPreferencesName = SharedPreferenceUtil.PREF_KIWIX_MOBILE
       )
-    // SharedPreferencesMigration(
-    //   produceSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(context) },
-    //   keysToMigrate = setOf(
-    //     SharedPreferenceUtil.Companion.TEXT_ZOOM,
-    //   ),
-    //   migrate = { prefs ->
-    //     // currentPreferences.toMutablePreferences().apply {
-    //     //   if (!contains(PreferencesKeys.TEXT_ZOOM)) {
-    //     //     put(
-    //     //       PreferencesKeys.TEXT_ZOOM,
-    //     //       prefs.getInt(SharedPreferenceUtil.Companion.TEXT_ZOOM, DEFAULT_ZOOM)
-    //     //     )
-    //     //   }
-    //     // }
-    //   }
-    // )
-    return listOf(kiwixMobileMigration)
+    val kiwixDefaultMigration = SharedPreferencesMigration(
+      produceSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(context) },
+      keysToMigrate = setOf(
+        SharedPreferenceUtil.Companion.TEXT_ZOOM,
+        SharedPreferenceUtil.Companion.PREF_BACK_TO_TOP,
+        SharedPreferenceUtil.Companion.PREF_NEW_TAB_BACKGROUND,
+        SharedPreferenceUtil.Companion.PREF_EXTERNAL_LINK_POPUP,
+        SharedPreferenceUtil.Companion.PREF_WIFI_ONLY,
+        SharedPreferenceUtil.Companion.PREF_THEME,
+      )
+    )
+    return listOf(kiwixMobileMigration, kiwixDefaultMigration)
   }
 }

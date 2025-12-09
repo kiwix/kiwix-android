@@ -19,11 +19,14 @@
 package org.kiwix.kiwixmobile.core.utils.datastore
 
 import android.content.Context
-import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.kiwix.kiwixmobile.core.ThemeConfig
+import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,11 +71,63 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.TAG_CURRENT_TAB] = currentTab
     }
-    Log.e("CURRENT_TAB", "setCurrentTab: $currentTab")
   }
 
-  companion object {
-    const val DEFAULT_ZOOM = 100
-    const val TEXT_ZOOM_KEY = "text_zoom_key"
+  val backToTop: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_BACK_TO_TOP] ?: false
+    }
+
+  suspend fun setPrefBackToTop(backToTop: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_BACK_TO_TOP] = backToTop
+    }
+  }
+
+  val openNewTabInBackground: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_NEW_TAB_BACKGROUND] ?: false
+    }
+
+  suspend fun setOpenNewInBackground(openInNewTab: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_NEW_TAB_BACKGROUND] = openInNewTab
+    }
+  }
+
+  val externalLinkPopup: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_EXTERNAL_LINK_POPUP] ?: true
+    }
+
+  suspend fun setExternalLinkPopup(externalLinkPopup: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_EXTERNAL_LINK_POPUP] = externalLinkPopup
+    }
+  }
+
+  val wifiOnly: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_WIFI_ONLY] ?: true
+    }
+
+  suspend fun setWifiOnly(wifiOnly: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_WIFI_ONLY] = wifiOnly
+    }
+  }
+
+  val appTheme: Flow<ThemeConfig.Theme> =
+    context.kiwixDataStore.data.map { prefs ->
+      from(
+        prefs[PreferencesKeys.PREF_THEME]?.toInt()
+          ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+      )
+    }
+
+  suspend fun updateAppTheme(selectedTheme: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_THEME] = selectedTheme
+    }
   }
 }

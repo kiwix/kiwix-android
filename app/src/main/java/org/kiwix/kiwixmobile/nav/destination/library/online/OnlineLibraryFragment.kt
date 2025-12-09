@@ -47,6 +47,7 @@ import androidx.lifecycle.lifecycleScope
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -84,6 +85,7 @@ import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -101,12 +103,15 @@ import javax.inject.Inject
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
 
+@Suppress("LargeClass")
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
 
   @Inject lateinit var downloader: Downloader
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -190,8 +195,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     zimManageViewModel.requestFiltering.tryEmit(searchText.trim())
   }
 
-  private val noWifiWithWifiOnlyPreferenceSet
-    get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
+  private suspend fun noWifiWithWifiOnlyPreferenceSet() =
+    kiwixDataStore.wifiOnly.first() && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected: Boolean
     get() = !NetworkUtils.isNetworkAvailable(requireActivity())
@@ -407,12 +412,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       KiwixDialog.YesNoDialog.WifiOnly,
       {
         showRecyclerviewAndHideSwipeDownForLibraryErrorText()
-        sharedPreferenceUtil.putPrefWifiOnly(false)
-        zimManageViewModel.shouldShowWifiOnlyDialog.value = false
-        // User allowed downloading over mobile data.
-        // Since the download flow now triggers only when appropriate,
-        // we start the library download explicitly after updating the preference.
-        startDownloadingLibrary(getOnlineLibraryRequest())
+        lifecycleScope.launch {
+          kiwixDataStore.setWifiOnly(false)
+          zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+          // User allowed downloading over mobile data.
+          // Since the download flow now triggers only when appropriate,
+          // we start the library download explicitly after updating the preference.
+          startDownloadingLibrary(getOnlineLibraryRequest())
+        }
       },
       {
         context.toast(
@@ -500,29 +507,31 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onNetworkStateChange(networkState: NetworkState?) {
-    when (networkState) {
-      NetworkState.CONNECTED -> {
-        when {
-          NetworkUtils.isWiFi(requireContext()) -> {
-            refreshFragment(false)
-          }
+    lifecycleScope.launch {
+      when (networkState) {
+        NetworkState.CONNECTED -> {
+          when {
+            NetworkUtils.isWiFi(requireContext()) -> {
+              refreshFragment(false)
+            }
 
-          noWifiWithWifiOnlyPreferenceSet -> {
-            hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
-          }
+            noWifiWithWifiOnlyPreferenceSet() -> {
+              hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
+            }
 
-          onlineLibraryScreenState.value.value.onlineLibraryList.isNullOrEmpty() -> {
-            startDownloadingLibrary(getOnlineLibraryRequest())
-            showProgressBarOfFetchingOnlineLibrary()
+            onlineLibraryScreenState.value.value.onlineLibraryList.isNullOrEmpty() -> {
+              startDownloadingLibrary(getOnlineLibraryRequest())
+              showProgressBarOfFetchingOnlineLibrary()
+            }
           }
         }
-      }
 
-      NetworkState.NOT_CONNECTED -> {
-        showNoInternetConnectionError()
-      }
+        NetworkState.NOT_CONNECTED -> {
+          showNoInternetConnectionError()
+        }
 
-      else -> {}
+        else -> {}
+      }
     }
   }
 
@@ -689,7 +698,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permission
     ) == PackageManager.PERMISSION_GRANTED
 
-  @Suppress("NestedBlockDepth")
+  @Suppress("NestedBlockDepth", "LongMethod")
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
     lifecycleScope.launch {
       if (checkExternalStorageWritePermission()) {
@@ -701,10 +710,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               return@launch
             }
 
-            noWifiWithWifiOnlyPreferenceSet -> {
+            noWifiWithWifiOnlyPreferenceSet() -> {
               alertDialogShower.show(KiwixDialog.YesNoDialog.WifiOnly, {
-                sharedPreferenceUtil.putPrefWifiOnly(false)
-                clickOnBookItem()
+                lifecycleScope.launch {
+                  kiwixDataStore.setWifiOnly(false)
+                  clickOnBookItem()
+                }
               })
               return@launch
             }
