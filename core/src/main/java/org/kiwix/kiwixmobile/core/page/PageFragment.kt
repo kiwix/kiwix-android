@@ -53,6 +53,7 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import javax.inject.Inject
@@ -66,6 +67,8 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var actionMode: ActionMode? = null
@@ -165,6 +168,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       )
     }
     pageViewModel.alertDialogShower = alertDialogShower
+    pageViewModel.lifeCycleScope = lifecycleScope
   }
 
   override fun onCreateView(

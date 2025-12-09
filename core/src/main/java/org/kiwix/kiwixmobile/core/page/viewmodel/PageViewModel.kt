@@ -48,17 +48,18 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 
 abstract class PageViewModel<T : Page, S : PageState<T>>(
   protected val pageDao: PageDao,
-  val sharedPreferenceUtil: SharedPreferenceUtil,
+  val kiwixDataStore: KiwixDataStore,
   val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
-  abstract fun initialState(): S
+  abstract suspend fun initialState(): S
 
   lateinit var alertDialogShower: AlertDialogShower
+  lateinit var lifeCycleScope: CoroutineScope
 
   private lateinit var pageViewModelClickListener: PageViewModelClickListener
   private val _state = MutableStateFlow(initialState())

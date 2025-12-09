@@ -29,6 +29,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
@@ -301,6 +302,17 @@ class KiwixDataStore @Inject constructor(val context: Context) {
   suspend fun setPrefLanguage(language: String) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_LANG] = language
+    }
+  }
+
+  val showHistoryOfAllBooks: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS] ?: true
+    }
+
+  suspend fun setShowHistoryOfAllBooks(showHistoryOfAllBooks: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS] = showHistoryOfAllBooks
     }
   }
 }

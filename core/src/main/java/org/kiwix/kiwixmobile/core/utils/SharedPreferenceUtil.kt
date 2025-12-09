@@ -227,7 +227,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
-    private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
+    const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
     private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_THEME = "pref_dark_mode"

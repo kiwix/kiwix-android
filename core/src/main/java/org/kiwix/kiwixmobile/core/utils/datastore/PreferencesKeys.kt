@@ -49,4 +49,6 @@ object PreferencesKeys {
     stringPreferencesKey(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE)
   val PREF_DEVICE_DEFAULT_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG)
   val PREF_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_LANG)
+  val PREF_SHOW_HISTORY_ALL_BOOKS =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS)
 }

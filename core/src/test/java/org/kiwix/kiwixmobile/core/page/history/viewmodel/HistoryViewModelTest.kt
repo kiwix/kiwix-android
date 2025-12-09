@@ -91,7 +91,7 @@ internal class HistoryViewModelTest {
       },
       assert = {
         assertThat(awaitItem()).isEqualTo(
-          UpdateAllHistoryPreference(sharedPreferenceUtil, false)
+          UpdateAllHistoryPreference(sharedPreferenceUtil, false, lifeCycleScope)
         )
       }
     )
