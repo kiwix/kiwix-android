@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
-import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkerFactory
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
