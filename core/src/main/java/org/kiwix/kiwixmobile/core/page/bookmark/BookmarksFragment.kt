@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.bookmark
 
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -16,7 +17,7 @@ class BookmarksFragment : PageFragment() {
   override val deleteIconTitle: Int by lazy {
     R.string.pref_clear_all_bookmarks_title
   }
-  override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showBookmarksAllBooks }
+  override val switchIsCheckedFlow: Flow<Boolean> by lazy { kiwixDataStore.showBookmarksOfAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)

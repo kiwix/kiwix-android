@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect

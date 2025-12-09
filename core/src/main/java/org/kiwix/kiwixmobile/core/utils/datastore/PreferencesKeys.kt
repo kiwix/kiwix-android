@@ -51,4 +51,8 @@ object PreferencesKeys {
   val PREF_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_LANG)
   val PREF_SHOW_HISTORY_ALL_BOOKS =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS)
+  val PREF_SHOW_BOOKMARKS_ALL_BOOKS =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS)
+  val PREF_SHOW_NOTES_ALL_BOOKS =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS)
 }

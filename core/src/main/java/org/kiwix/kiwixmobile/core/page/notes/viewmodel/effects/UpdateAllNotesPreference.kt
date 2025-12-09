@@ -19,14 +19,19 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 data class UpdateAllNotesPreference(
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val isChecked: Boolean
+  private val kiwixDataStore: KiwixDataStore,
+  private val isChecked: Boolean,
+  private val lifeCycleScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    sharedPreferenceUtil.showNotesAllBooks = isChecked
+    lifeCycleScope.launch {
+      kiwixDataStore.setShowNotesOfAllBooks(isChecked)
+    }
   }
 }

@@ -40,6 +40,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -172,6 +174,7 @@ fun PageSwitchRow(
   val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
   if (!context.isCustomApp()) {
+    val isChecked by state.switchIsCheckedFlow.collectAsState(true)
     Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
       Row(
         modifier = Modifier
@@ -188,7 +191,7 @@ fun PageSwitchRow(
           modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
         )
         Switch(
-          checked = state.switchIsChecked,
+          checked = isChecked,
           onCheckedChange = { state.onSwitchCheckedChanged(it) },
           enabled = state.switchIsEnabled,
           modifier = Modifier

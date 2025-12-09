@@ -152,6 +152,8 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putString(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG, "eng")
       .putString(SharedPreferenceUtil.PREF_LANG, "fr")
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS, false)
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS, false)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -198,5 +200,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals("eng", prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG])
     assertEquals("fr", prefs[PreferencesKeys.PREF_LANG])
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS])
+    assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_BOOKMARKS_ALL_BOOKS])
+    assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_NOTES_ALL_BOOKS])
   }
 }

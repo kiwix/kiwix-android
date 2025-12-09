@@ -1,11 +1,13 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -22,7 +24,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
@@ -31,7 +33,7 @@ import org.kiwix.sharedFunctions.InstantExecutorExtension
 internal class HistoryViewModelTest {
   private val historyRoomDao: HistoryRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
@@ -46,11 +48,12 @@ internal class HistoryViewModelTest {
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
-    every { sharedPreferenceUtil.showHistoryAllBooks } returns true
+    coEvery { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { historyRoomDao.history() } returns itemsFromDb
     every { historyRoomDao.pages() } returns historyRoomDao.history()
-    viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, sharedPreferenceUtil).apply {
+    viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore).apply {
       alertDialogShower = dialogShower
+      lifeCycleScope = viewModelScope
     }
   }
 
@@ -91,7 +94,7 @@ internal class HistoryViewModelTest {
       },
       assert = {
         assertThat(awaitItem()).isEqualTo(
-          UpdateAllHistoryPreference(sharedPreferenceUtil, false, lifeCycleScope)
+          UpdateAllHistoryPreference(kiwixDataStore, false, viewModelScope)
         )
       }
     )

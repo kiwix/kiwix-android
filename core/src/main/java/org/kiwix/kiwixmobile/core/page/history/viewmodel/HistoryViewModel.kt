@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
@@ -35,8 +36,10 @@ class HistoryViewModel @Inject constructor(
   zimReaderContainer: ZimReaderContainer,
   kiwixDataStore: KiwixDataStore
 ) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, kiwixDataStore, zimReaderContainer) {
-  override suspend fun initialState(): HistoryState =
-    HistoryState(emptyList(), kiwixDataStore.showHistoryOfAllBooks.first(), zimReaderContainer.id)
+  override fun initialState(): HistoryState {
+    val showAll = runBlocking { kiwixDataStore.showHistoryOfAllBooks.first() }
+    return HistoryState(emptyList(), showAll, zimReaderContainer.id)
+  }
 
   override fun updatePagesBasedOnFilter(
     state: HistoryState,

@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.history
 
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -16,7 +17,7 @@ class HistoryFragment : PageFragment() {
   override val deleteIconTitle: Int by lazy {
     R.string.pref_clear_all_history_title
   }
-  override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showHistoryAllBooks }
+  override val switchIsCheckedFlow: Flow<Boolean> by lazy { kiwixDataStore.showHistoryOfAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)

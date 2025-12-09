@@ -56,7 +56,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   val kiwixDataStore: KiwixDataStore,
   val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
-  abstract suspend fun initialState(): S
+  abstract fun initialState(): S
 
   lateinit var alertDialogShower: AlertDialogShower
   lateinit var lifeCycleScope: CoroutineScope

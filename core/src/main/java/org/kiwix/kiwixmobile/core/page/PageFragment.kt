@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.R
@@ -77,7 +79,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val noItemsString: String
   abstract val switchString: String
   abstract val searchQueryHint: String
-  abstract val switchIsChecked: Boolean
+  abstract val switchIsCheckedFlow: Flow<Boolean>
   abstract val deleteIconTitle: Int
   private val pageState: MutableState<PageState<*>> =
     mutableStateOf(
@@ -103,7 +105,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       screenTitle = ZERO,
       noItemsString = "",
       switchString = "",
-      switchIsChecked = true,
+      switchIsCheckedFlow = flowOf(true),
       switchIsEnabled = true,
       onSwitchCheckedChanged = {},
       deleteIconTitle = ZERO,
@@ -146,7 +148,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
         screenTitle = this@PageFragment.screenTitle,
         noItemsString = this@PageFragment.noItemsString,
         switchString = this@PageFragment.switchString,
-        switchIsChecked = this@PageFragment.switchIsChecked,
+        switchIsCheckedFlow = this@PageFragment.switchIsCheckedFlow,
         onSwitchCheckedChanged = { onSwitchChanged(it).invoke() },
         deleteIconTitle = this@PageFragment.deleteIconTitle
       )
@@ -214,13 +216,11 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   /**
    * Returns a lambda to handle switch toggle changes.
-   * - Updates the UI state to reflect the new checked status.
    * - Sends an action to the ViewModel to handle the toggle event (e.g., show all items or filter).
    *
    * @param isChecked The new checked state of the switch.
    */
   private fun onSwitchChanged(isChecked: Boolean): () -> Unit = {
-    pageScreenState.update { copy(switchIsChecked = isChecked) }
     pageViewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
   }
 
