@@ -23,18 +23,14 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
-import org.kiwix.kiwixmobile.core.ThemeConfig
-import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -54,15 +50,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _prefStorages = MutableStateFlow("")
   val prefStorages
     get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
-  private val _textZooms = MutableStateFlow(textZoom)
-  val textZooms get() = _textZooms.asStateFlow()
-  private val appThemes = MutableStateFlow(ThemeConfig.Theme.SYSTEM)
-  private val _prefWifiOnlys = MutableStateFlow(true)
-  val prefWifiOnlys
-    get() = _prefWifiOnlys.onStart { emit(prefWifiOnly) }
-
-  val prefWifiOnly: Boolean
-    get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
 
   private val _onlineContentLanguage = MutableStateFlow("")
   val onlineContentLanguage = _onlineContentLanguage.asStateFlow()
@@ -81,24 +68,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     set(prefIsScanFileSystemTest) {
       sharedPreferences.edit { putBoolean(PREF_IS_SCAN_FILE_SYSTEM_TEST, prefIsScanFileSystemTest) }
     }
-
-  val prefShowShowCaseToUser: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SHOW_SHOWCASE, true)
-
-  var prefBackToTop: Boolean
-    get() = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false)
-    set(backToTop) {
-      sharedPreferences.edit { putBoolean(PREF_BACK_TO_TOP, backToTop) }
-    }
-
-  var prefNewTabBackground: Boolean
-    get() = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false)
-    set(newTabInBackground) {
-      sharedPreferences.edit { putBoolean(PREF_NEW_TAB_BACKGROUND, newTabInBackground) }
-    }
-
-  val prefExternalLinkPopup: Boolean
-    get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
@@ -165,10 +134,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
 
-  fun showCaseViewForFileTransferShown() {
-    sharedPreferences.edit { putBoolean(PREF_SHOW_SHOWCASE, false) }
-  }
-
   fun putPrefBookMarkMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
 
@@ -196,11 +161,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
 
-  fun putPrefWifiOnly(wifiOnly: Boolean) {
-    sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
-    _prefWifiOnlys.tryEmit(wifiOnly)
-  }
-
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
     _prefStorages.tryEmit(storage)
@@ -213,9 +173,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
     sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
-
-  fun putPrefExternalLinkPopup(externalLinkPopup: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup) }
 
   fun saveLanguageList(languages: List<Language>) {
     runCatching {
@@ -282,20 +239,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
       }
 
-  val appTheme: ThemeConfig.Theme
-    get() =
-      from(
-        sharedPreferences.getString(PREF_THEME, null)?.toInt()
-          ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-      )
-
-  fun appThemes(): Flow<ThemeConfig.Theme> = appThemes.onStart { emit(appTheme) }
-
-  fun updateAppTheme(selectedTheme: String) {
-    sharedPreferences.edit { putString(PREF_THEME, selectedTheme) }
-    appThemes.tryEmit(appTheme)
-  }
-
   var manageExternalFilesPermissionDialog: Boolean
     get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)
     set(prefManageExternalFilesPermissionDialog) =
@@ -319,13 +262,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
     set(hostedBooks) {
       sharedPreferences.edit { putStringSet(PREF_HOSTED_BOOKS, hostedBooks) }
-    }
-
-  var textZoom: Int
-    get() = sharedPreferences.getInt(TEXT_ZOOM, DEFAULT_ZOOM)
-    set(textZoom) {
-      sharedPreferences.edit { putInt(TEXT_ZOOM, textZoom) }
-      _textZooms.tryEmit(textZoom)
     }
 
   var shouldShowStorageSelectionDialog: Boolean

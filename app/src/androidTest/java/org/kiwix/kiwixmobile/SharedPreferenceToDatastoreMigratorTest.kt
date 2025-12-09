@@ -119,6 +119,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       .putString(SharedPreferenceUtil.PREF_THEME, "2")
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -141,6 +142,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(true, prefs[PreferencesKeys.PREF_EXTERNAL_LINK_POPUP])
     assertEquals(false, prefs[PreferencesKeys.PREF_WIFI_ONLY])
     assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_INTRO])
+    assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_SHOWCASE])
     assertEquals("2", prefs[PreferencesKeys.PREF_THEME])
   }
 }
