@@ -78,24 +78,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefDeviceDefaultLanguage: String
     get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "").orEmpty()
 
-  val prefIsBookmarksMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_BOOKMARKS_MIGRATED, false)
-
-  val prefIsRecentSearchMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_RECENT_SEARCH_MIGRATED, false)
-
-  val prefIsNotesMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_NOTES_MIGRATED, false)
-
-  val prefIsHistoryMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_HISTORY_MIGRATED, false)
-
-  val prefIsAppDirectoryMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
-
-  val prefIsBookOnDiskMigrated: Boolean
-    get() = sharedPreferences.getBoolean(PREF_BOOK_ON_DISK_MIGRATED, false)
-
   var prefIsScanFileSystemDialogShown: Boolean
     get() = sharedPreferences.getBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, false)
     set(isFileScanFileSystemDialogShown) {
@@ -133,24 +115,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun defaultPublicStorage(): String =
     ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
-
-  fun putPrefBookMarkMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
-
-  fun putPrefRecentSearchMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_RECENT_SEARCH_MIGRATED, isMigrated) }
-
-  fun putPrefHistoryMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_HISTORY_MIGRATED, isMigrated) }
-
-  fun putPrefNotesMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_NOTES_MIGRATED, isMigrated) }
-
-  fun putPrefAppDirectoryMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, isMigrated) }
-
-  fun putPrefBookOnDiskMigrated(isMigrated: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_BOOK_ON_DISK_MIGRATED, isMigrated) }
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
@@ -207,10 +171,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         )
       }
     }.onFailure { it.printStackTrace() }.getOrNull()
-
-  fun showIntro(): Boolean = sharedPreferences.getBoolean(PREF_SHOW_INTRO, true)
-
-  fun setIntroShown() = sharedPreferences.edit { putBoolean(PREF_SHOW_INTRO, false) }
 
   var showHistoryAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true)

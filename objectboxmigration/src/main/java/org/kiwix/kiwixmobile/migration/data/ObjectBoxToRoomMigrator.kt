@@ -21,13 +21,14 @@ package org.kiwix.kiwixmobile.migration.data
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
 import org.kiwix.kiwixmobile.migration.entities.NotesEntity
 import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
@@ -42,16 +43,16 @@ class ObjectBoxToRoomMigrator {
 
   @Inject lateinit var boxStore: BoxStore
 
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   suspend fun migrateObjectBoxDataToRoom() {
-    if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
+    if (!kiwixDataStore.isRecentSearchMigrated.first()) {
       migrateRecentSearch(boxStore.boxFor())
     }
-    if (!sharedPreferenceUtil.prefIsHistoryMigrated) {
+    if (!kiwixDataStore.isHistoryMigrated.first()) {
       migrateHistory(boxStore.boxFor())
     }
-    if (!sharedPreferenceUtil.prefIsNotesMigrated) {
+    if (!kiwixDataStore.isNotesMigrated.first()) {
       migrateNotes(boxStore.boxFor())
     }
     // TODO we will migrate here for other entities
@@ -69,7 +70,7 @@ class ObjectBoxToRoomMigrator {
       // removing the single entity from the object box after migration.
       box.remove(recentSearchEntity.id)
     }
-    sharedPreferenceUtil.putPrefRecentSearchMigrated(true)
+    kiwixDataStore.setRecentSearchMigrated(true)
   }
 
   suspend fun migrateHistory(box: Box<HistoryEntity>) {
@@ -99,7 +100,7 @@ class ObjectBoxToRoomMigrator {
       // removing the single entity from the object box after migration.
       box.remove(historyEntity.id)
     }
-    sharedPreferenceUtil.putPrefHistoryMigrated(true)
+    kiwixDataStore.setHistoryMigrated(true)
   }
 
   suspend fun migrateNotes(box: Box<NotesEntity>) {
@@ -125,6 +126,6 @@ class ObjectBoxToRoomMigrator {
       // removing the single entity from the object box after migration.
       box.remove(notesEntity.id)
     }
-    sharedPreferenceUtil.putPrefNotesMigrated(true)
+    kiwixDataStore.setNotesMigrated(true)
   }
 }

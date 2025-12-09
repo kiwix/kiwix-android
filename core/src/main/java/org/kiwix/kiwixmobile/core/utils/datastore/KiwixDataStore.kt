@@ -160,4 +160,70 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       prefs[PreferencesKeys.PREF_SHOW_SHOWCASE] = isShown
     }
   }
+
+  val isBookmarksMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_BOOKMARKS_MIGRATED] ?: false
+    }
+
+  suspend fun setBookMarkMigrated(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_BOOKMARKS_MIGRATED] = isMigrated
+    }
+  }
+
+  val isRecentSearchMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_RECENT_SEARCH_MIGRATED] ?: false
+    }
+
+  suspend fun setRecentSearchMigrated(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_RECENT_SEARCH_MIGRATED] = isMigrated
+    }
+  }
+
+  val isNotesMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_NOTES_MIGRATED] ?: false
+    }
+
+  suspend fun setNotesMigrated(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_NOTES_MIGRATED] = isMigrated
+    }
+  }
+
+  val isHistoryMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_HISTORY_MIGRATED] ?: false
+    }
+
+  suspend fun setHistoryMigrated(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_HISTORY_MIGRATED] = isMigrated
+    }
+  }
+
+  val isAppDirectoryMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED] ?: false
+    }
+
+  suspend fun setAppDirectoryMigrated(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED] = isMigrated
+    }
+  }
+
+  val isBookOnDiskMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_BOOK_ON_DISK_MIGRATED] ?: false
+    }
+
+  suspend fun setBookOnDiskMigrated(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_BOOK_ON_DISK_MIGRATED] = isMigrated
+    }
+  }
 }
