@@ -43,6 +43,7 @@ import javax.inject.Singleton
  * Manager for the Default Shared Preferences of the application.
  */
 
+@Suppress()
 @Singleton
 class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val sharedPreferences: SharedPreferences =
@@ -240,6 +241,16 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       }
     }
 
+  // update version value
+
+  /*var latestAppVersion: String
+    get() = sharedPreferences.getString(LATEST_APP_VERSION, "").orEmpty()
+    set(value) {
+      sharedPreferences.edit {
+        putString(LATEST_APP_VERSION, value)
+      }
+    }*/
+
   var laterClickedMilliSeconds: Long
     get() = sharedPreferences.getLong(PREF_LATER_CLICKED_MILLIS, 0L)
     set(value) {
@@ -319,5 +330,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val KEY_LANGUAGE_ID = "languageId"
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
+    // const val LATEST_APP_VERSION = "latest_app_version"
   }
 }

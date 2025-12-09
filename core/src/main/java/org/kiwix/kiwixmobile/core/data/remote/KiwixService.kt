@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile.core.data.remote
 
 import okhttp3.OkHttpClient
+import org.kiwix.kiwixmobile.core.data.remote.update.UpdateFeed
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -41,6 +42,9 @@ interface KiwixService {
 
   @GET("catalog/v2/languages")
   suspend fun getLanguages(): LanguageFeed
+
+  @GET("/kiwix/release/kiwix-android/feed")
+  suspend fun getUpdates(): UpdateFeed
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
