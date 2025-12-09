@@ -24,7 +24,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.media.AudioManager
@@ -68,7 +67,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -83,12 +81,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
@@ -153,11 +151,10 @@ import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -195,6 +192,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var sharedPreferenceUtil: SharedPreferenceUtil? = null
+
+  @JvmField
+  @Inject
+  var kiwixDataStore: KiwixDataStore? = null
 
   @JvmField
   @Inject
@@ -1196,7 +1197,8 @@ abstract class CoreReaderFragment :
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
       requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      requireNotNull(sharedPreferenceUtil)
+      requireNotNull(sharedPreferenceUtil),
+      requireNotNull(kiwixDataStore)
     )
   }
 
@@ -2191,11 +2193,6 @@ abstract class CoreReaderFragment :
   private fun saveTabStates(onComplete: () -> Unit = {}) {
     CoroutineScope(Dispatchers.Main).launch {
       savingTabsMutex.withLock {
-        val coreApp = sharedPreferenceUtil?.context as CoreApp
-        val settings = coreApp.getSharedPreferences(
-          SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-          0
-        )
         val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
         webViewList.forEachIndexed { index, view ->
           if (view.url == null) return@forEachIndexed
@@ -2207,9 +2204,9 @@ abstract class CoreReaderFragment :
           // Store new history in database.
           repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
         }
-        settings.edit {
-          putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
-          putInt(TAG_CURRENT_TAB, currentWebViewIndex)
+        kiwixDataStore?.apply {
+          setCurrentZimFile(zimReaderContainer?.zimReaderSource?.toDatabase().orEmpty())
+          setCurrentTab(currentWebViewIndex)
         }
         Log.d(
           TAG_KIWIX,
@@ -2449,11 +2446,7 @@ abstract class CoreReaderFragment :
     dispatchersToGetWebViewHistoryFromDatabase: CoroutineDispatcher = Dispatchers.IO
   ) {
     runCatching {
-      val settings = requireActivity().getSharedPreferences(
-        SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-        0
-      )
-      val currentTab = safelyGetCurrentTab(settings)
+      val currentTab = safelyGetCurrentTab()
       val webViewHistoryList = withContext(dispatchersToGetWebViewHistoryFromDatabase) {
         // perform database operation on IO thread.
         repositoryActions?.loadWebViewPagesHistory().orEmpty()
@@ -2501,8 +2494,10 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun safelyGetCurrentTab(settings: SharedPreferences): Int =
-    max(settings.getInt(TAG_CURRENT_TAB, 0), 0)
+  private suspend fun safelyGetCurrentTab(): Int =
+    max(kiwixDataStore?.currentTab?.first() ?: 0, 0).also {
+      android.util.Log.e("CURRENT_TAB", "setCurrentTab set: ${kiwixDataStore?.currentTab?.first()}")
+    }
 
   /**
    * Restores the tabs based on the provided webViewHistoryItemList.
