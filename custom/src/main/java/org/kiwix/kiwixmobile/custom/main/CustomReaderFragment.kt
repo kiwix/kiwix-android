@@ -253,9 +253,11 @@ class CustomReaderFragment : CoreReaderFragment() {
                 // Check if the file is not null. If the file is null,
                 // it means we have created zimFileReader with a fileDescriptor,
                 // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-                val file = it.file ?: createDemoFile()
-                val book = Book().apply { update(zimFileReader.jniKiwixReader) }
-                repositoryActions?.saveBook(book)
+                runSafelyInCoreReaderLifecycleScope {
+                  val file = it.file ?: createDemoFile()
+                  val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+                  repositoryActions?.saveBook(book)
+                }
               }
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.

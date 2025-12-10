@@ -205,69 +205,62 @@ class DownloadTest : BaseActivityTest() {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Library.route)
     }
-    try {
-      // delete all the ZIM files showing in the LocalLibrary
-      // screen to properly test the scenario.
-      library {
-        refreshList(composeTestRule)
-        waitUntilZimFilesRefreshing(composeTestRule)
-        deleteZimIfExists(composeTestRule)
-      }
-      downloadRobot {
-        // change the application language
-        topLevel {
-          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-            selectDeviceDefaultLanguage(composeTestRule)
-            // Advance the main clock to settle the frame of compose.
-            composeTestRule.mainClock.advanceTimeByFrame()
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-            selectAlbanianLanguage(composeTestRule)
-            // Advance the main clock to settle the frame of compose.
-            composeTestRule.mainClock.advanceTimeByFrame()
-            composeTestRule.waitForIdle()
-            activityScenario.onActivity {
-              kiwixMainActivity = it
-              it.onBackPressedDispatcher.onBackPressed()
-            }
-          }
-        }
-        clickDownloadOnBottomNav(composeTestRule)
-        waitForDataToLoad(composeTestRule = composeTestRule)
-        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        downloadZimFile(composeTestRule)
-        assertDownloadStart(composeTestRule)
-        pauseDownload(composeTestRule)
-        assertDownloadPaused(composeTestRule, kiwixMainActivity)
-        resumeDownload(composeTestRule)
-        assertDownloadResumed(composeTestRule, kiwixMainActivity)
-        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        // select the default device language to perform other test cases.
-        topLevel {
-          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-            selectDeviceDefaultLanguage(composeTestRule)
-            // Advance the main clock to settle the frame of compose.
-            composeTestRule.mainClock.advanceTimeByFrame()
-            activityScenario.onActivity {
-              kiwixMainActivity = it
-            }
-            // check if the device default language is selected or not.
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            // close the language dialog.
-            composeTestRule.runOnUiThread {
-              kiwixMainActivity.onBackPressedDispatcher.onBackPressed()
-            }
+    // delete all the ZIM files showing in the LocalLibrary
+    // screen to properly test the scenario.
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+    downloadRobot {
+      // change the application language
+      topLevel {
+        clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          selectDeviceDefaultLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          selectAlbanianLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          activityScenario.onActivity {
+            kiwixMainActivity = it
+            it.onBackPressedDispatcher.onBackPressed()
           }
         }
       }
-    } catch (e: Exception) {
-      Assert.fail(
-        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
-      )
+      clickDownloadOnBottomNav(composeTestRule)
+      waitForDataToLoad(composeTestRule = composeTestRule)
+      stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+      downloadZimFile(composeTestRule)
+      assertDownloadStart(composeTestRule)
+      pauseDownload(composeTestRule)
+      assertDownloadPaused(composeTestRule, kiwixMainActivity)
+      resumeDownload(composeTestRule)
+      assertDownloadResumed(composeTestRule, kiwixMainActivity)
+      stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+      // select the default device language to perform other test cases.
+      topLevel {
+        clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          selectDeviceDefaultLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          activityScenario.onActivity {
+            kiwixMainActivity = it
+          }
+          // check if the device default language is selected or not.
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          // close the language dialog.
+          composeTestRule.runOnUiThread {
+            kiwixMainActivity.onBackPressedDispatcher.onBackPressed()
+          }
+        }
+      }
     }
   }
 

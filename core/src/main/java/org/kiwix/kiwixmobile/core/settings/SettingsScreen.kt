@@ -54,7 +54,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -204,7 +203,6 @@ private fun PermissionCategory(
 @Composable
 private fun LanguageCategory(settingScreenState: SettingScreenState) {
   if (settingScreenState.shouldShowLanguageCategory) {
-    val uiCoroutineScope = rememberCoroutineScope()
     val context = LocalActivity.current ?: return
     val languageCodes = remember {
       listOf(Locale.ROOT.language) + LanguageUtils(context).keys
@@ -239,9 +237,11 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
       ) { selectedDisplay ->
         val index = languageDisplayNames.indexOf(selectedDisplay)
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference
-        uiCoroutineScope.launch {
-          settingScreenState.kiwixDataStore.setPrefLanguage(selectedLangCode)
-          handleLocaleChange(context, selectedLangCode, settingScreenState.kiwixDataStore)
+        settingScreenState.lifeCycleScope?.launch {
+          settingScreenState.kiwixDataStore.apply {
+            setPrefLanguage(selectedLangCode)
+            handleLocaleChange(context, selectedLangCode, this)
+          }
           settingScreenState.onLanguageChanged()
         }
       }
