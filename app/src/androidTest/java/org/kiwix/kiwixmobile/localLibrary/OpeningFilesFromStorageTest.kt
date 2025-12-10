@@ -162,7 +162,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Test
   fun testOpeningFileFromFileManager() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
     ) {
       activityScenario.onActivity {
         kiwixMainActivity = it
