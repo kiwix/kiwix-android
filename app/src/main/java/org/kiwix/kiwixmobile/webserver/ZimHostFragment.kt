@@ -43,6 +43,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
@@ -65,6 +66,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -92,6 +94,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject
+  lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject
   lateinit var zimReaderFactory: ZimFileReader.Factory
@@ -347,7 +352,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   override fun onResume() {
     super.onResume()
     lifecycleScope.launch {
-      presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+      presenter.loadBooks(kiwixDataStore.hostedBooks.first())
     }
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.serverAddress
@@ -358,12 +363,14 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
-    sharedPreferenceUtil.hostedBooks =
-      booksList.asSequence()
-        .filter(BooksOnDiskListItem::isSelected)
-        .filterIsInstance<BookOnDisk>()
-        .map { it.book.title }
-        .toSet()
+    val hostedBooks = booksList.asSequence()
+      .filter(BooksOnDiskListItem::isSelected)
+      .filterIsInstance<BookOnDisk>()
+      .map { it.book.title }
+      .toSet()
+    lifecycleScope.launch {
+      kiwixDataStore.setHostedBooks(hostedBooks)
+    }
   }
 
   private fun layoutServerStarted() {

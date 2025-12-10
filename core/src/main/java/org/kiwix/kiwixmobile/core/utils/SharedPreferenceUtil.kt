@@ -145,12 +145,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         )
       }
 
-  var hostedBooks: Set<String>
-    get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
-    set(hostedBooks) {
-      sharedPreferences.edit { putStringSet(PREF_HOSTED_BOOKS, hostedBooks) }
-    }
-
   var shouldShowStorageSelectionDialog: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, true)
     set(value) {
@@ -209,7 +203,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
     const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
-    private const val PREF_HOSTED_BOOKS = "hosted_books"
+    const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_THEME = "pref_dark_mode"
     const val TEXT_ZOOM = "true_text_zoom"
     const val DEFAULT_ZOOM = 100

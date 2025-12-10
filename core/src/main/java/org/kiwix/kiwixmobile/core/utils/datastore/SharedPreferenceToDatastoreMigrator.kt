@@ -56,6 +56,7 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS,
         SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS,
         SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS,
+        SharedPreferenceUtil.PREF_HOSTED_BOOKS,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)

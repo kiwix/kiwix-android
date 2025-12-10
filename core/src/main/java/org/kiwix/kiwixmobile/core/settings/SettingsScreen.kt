@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -210,7 +209,6 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
 
     val prefLanguage by settingScreenState.kiwixDataStore.prefLanguage
       .collectAsState(initial = "en")
-    Log.e("PREF_LANGUAGE", "LanguageCategory: $prefLanguage")
     val selectedCode =
       if (languageCodes.contains(prefLanguage)) {
         prefLanguage

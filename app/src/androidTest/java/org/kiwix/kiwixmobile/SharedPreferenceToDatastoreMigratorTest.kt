@@ -131,6 +131,11 @@ class SharedPreferenceToDatastoreMigratorTest {
       )
     }
 
+    val hostedBooksSet = HashSet<String>().apply {
+      add("Alpine Linux Wiki")
+      add("Wikipedia")
+    }
+
     val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
     defaultPrefs.edit()
       .putInt(SharedPreferenceUtil.TEXT_ZOOM, 120)
@@ -154,6 +159,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS, false)
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS, false)
+      .putStringSet(SharedPreferenceUtil.PREF_HOSTED_BOOKS, hostedBooksSet)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -202,5 +208,6 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS])
     assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_BOOKMARKS_ALL_BOOKS])
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_NOTES_ALL_BOOKS])
+    assertEquals(hostedBooksSet, prefs[PreferencesKeys.PREF_HOSTED_BOOKS])
   }
 }
