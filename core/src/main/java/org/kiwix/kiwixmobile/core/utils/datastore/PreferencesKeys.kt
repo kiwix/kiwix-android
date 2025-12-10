@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils.datastore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -57,4 +58,7 @@ object PreferencesKeys {
   val PREF_SHOW_NOTES_ALL_BOOKS =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS)
   val PREF_HOSTED_BOOKS = stringSetPreferencesKey(SharedPreferenceUtil.PREF_HOSTED_BOOKS)
+  val PREF_LATER_CLICKED_MILLIS = longPreferencesKey(SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS)
+  val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
+    longPreferencesKey(SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS)
 }

@@ -29,6 +29,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
@@ -345,6 +346,29 @@ class KiwixDataStore @Inject constructor(val context: Context) {
   suspend fun setHostedBooks(hostedBooks: Set<String>) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_HOSTED_BOOKS] = hostedBooks
+    }
+  }
+
+  val laterClickedMilliSeconds: Flow<Long> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_LATER_CLICKED_MILLIS] ?: ZERO.toLong()
+    }
+
+  suspend fun setLaterClickedMilliSeconds(laterClickedMilliSeconds: Long) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_LATER_CLICKED_MILLIS] = laterClickedMilliSeconds
+    }
+  }
+
+  val lastDonationPopupShownInMilliSeconds: Flow<Long> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS] ?: ZERO.toLong()
+    }
+
+  suspend fun setLastDonationPopupShownInMilliSeconds(lastDonationPopupShownInMilliSeconds: Long) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS] =
+        lastDonationPopupShownInMilliSeconds
     }
   }
 }

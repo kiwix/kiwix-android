@@ -124,14 +124,11 @@ class SearchFragmentTestForCustomApp {
         setWifiOnly(false)
         setIntroShown()
         setPrefLanguage("en")
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putLong(
-        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-        System.currentTimeMillis()
-      )
     }
     activityScenario =
       ActivityScenario.launch(CustomMainActivity::class.java).apply {

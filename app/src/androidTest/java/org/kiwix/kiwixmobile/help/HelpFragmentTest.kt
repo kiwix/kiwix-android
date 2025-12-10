@@ -71,16 +71,19 @@ class HelpFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
+    KiwixDataStore(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).apply {
+      lifeCycleScope.launch {
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+      }
+    }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putLong(
-        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-        System.currentTimeMillis()
-      )
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

@@ -78,15 +78,12 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
         setWifiOnly(false)
         setIntroShown()
         setPrefLanguage("en")
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
-      putLong(
-        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-        System.currentTimeMillis()
-      )
     }
     composeTestRule.apply {
       kiwixMainActivity = activity

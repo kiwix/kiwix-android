@@ -451,15 +451,8 @@ abstract class CoreReaderFragment :
               readerScreenTitle = context.getString(string.reader),
               tocButtonItem = getTocButtonStateAndAction(),
               appName = (requireActivity() as CoreMainActivity).appName,
-              donateButtonClick = {
-                donationDialogHandler?.updateLastDonationPopupShownTime()
-                openKiwixSupportUrl()
-                readerScreenState.update { copy(shouldShowDonationPopup = false) }
-              },
-              laterButtonClick = {
-                donationDialogHandler?.donateLater()
-                readerScreenState.update { copy(shouldShowDonationPopup = false) }
-              }
+              donateButtonClick = { donationButtonClick() },
+              laterButtonClick = { donateLaterButtonClick() }
             )
           }
           // Update the title when Compose is ready to fix the issue
@@ -556,6 +549,21 @@ abstract class CoreReaderFragment :
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT
       )
+    }
+  }
+
+  private fun donationButtonClick() {
+    runSafelyInCoreReaderLifecycleScope {
+      donationDialogHandler?.updateLastDonationPopupShownTime()
+      openKiwixSupportUrl()
+      readerScreenState.update { copy(shouldShowDonationPopup = false) }
+    }
+  }
+
+  private fun donateLaterButtonClick() {
+    runSafelyInCoreReaderLifecycleScope {
+      donationDialogHandler?.donateLater()
+      readerScreenState.update { copy(shouldShowDonationPopup = false) }
     }
   }
 

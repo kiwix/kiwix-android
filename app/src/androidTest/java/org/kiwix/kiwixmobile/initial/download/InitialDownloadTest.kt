@@ -79,6 +79,7 @@ class InitialDownloadTest : BaseActivityTest() {
         setWifiOnly(false)
         setIntroShown()
         setPrefLanguage("en")
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
@@ -87,10 +88,6 @@ class InitialDownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putLong(
-        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-        System.currentTimeMillis()
-      )
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

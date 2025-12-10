@@ -19,17 +19,19 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val THREE_MONTHS_IN_MILLISECONDS = 90 * 24 * 60 * 60 * 1000L
 
 class DonationDialogHandler @Inject constructor(
   private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk
 ) {
   private var showDonationDialogCallback: ShowDonationDialogCallback? = null
@@ -40,7 +42,7 @@ class DonationDialogHandler @Inject constructor(
 
   suspend fun attemptToShowDonationPopup() {
     val currentMilliSeconds = System.currentTimeMillis()
-    val lastPopupMillis = sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
+    val lastPopupMillis = kiwixDataStore.lastDonationPopupShownInMilliSeconds.first()
 
     val shouldShowPopup =
       (lastPopupMillis == 0L && shouldShowInitialPopup(currentMilliSeconds)) ||
@@ -61,8 +63,8 @@ class DonationDialogHandler @Inject constructor(
     return isThreeMonthsElapsed(currentMillis, appInstallTime)
   }
 
-  fun isTimeToShowDonation(currentMillis: Long): Boolean {
-    val lastLaterClick = sharedPreferenceUtil.laterClickedMilliSeconds
+  suspend fun isTimeToShowDonation(currentMillis: Long): Boolean {
+    val lastLaterClick = kiwixDataStore.laterClickedMilliSeconds.first()
     return lastLaterClick == 0L ||
       isThreeMonthsElapsed(currentMillis, lastLaterClick)
   }
@@ -76,16 +78,16 @@ class DonationDialogHandler @Inject constructor(
   suspend fun isZimFilesAvailableInLibrary(): Boolean =
     if (activity.isCustomApp()) true else libkiwixBookOnDisk.getBooks().isNotEmpty()
 
-  fun updateLastDonationPopupShownTime() {
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+  suspend fun updateLastDonationPopupShownTime() {
+    kiwixDataStore.setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
   }
 
-  fun donateLater(currentMillis: Long = System.currentTimeMillis()) {
-    sharedPreferenceUtil.laterClickedMilliSeconds = currentMillis
+  suspend fun donateLater(currentMillis: Long = System.currentTimeMillis()) {
+    kiwixDataStore.setLaterClickedMilliSeconds(currentMillis)
   }
 
-  fun resetDonateLater() {
-    sharedPreferenceUtil.laterClickedMilliSeconds = 0L
+  suspend fun resetDonateLater() {
+    kiwixDataStore.setLaterClickedMilliSeconds(0L)
   }
 
   interface ShowDonationDialogCallback {
