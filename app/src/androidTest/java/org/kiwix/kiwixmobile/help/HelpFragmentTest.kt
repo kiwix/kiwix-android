@@ -33,6 +33,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -76,18 +77,22 @@ class HelpFragmentTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putLong(
+        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
+        System.currentTimeMillis()
+      )
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context).apply {
-              lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
-            }
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              KiwixDataStore(context)
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
@@ -154,13 +159,13 @@ class HelpFragmentTest : BaseActivityTest() {
         lifeCycleScope.launch {
           setWifiOnly(false)
           setIntroShown()
+          setPrefLanguage("en")
         }
       }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIsPlayStoreBuildType(showRestriction)
           prefIsTest = true
-          putPrefLanguage("en")
         }
     }
   }

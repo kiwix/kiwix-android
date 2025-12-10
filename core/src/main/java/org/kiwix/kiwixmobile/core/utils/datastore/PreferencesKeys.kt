@@ -44,4 +44,15 @@ object PreferencesKeys {
     booleanPreferencesKey(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED)
   val PREF_BOOK_ON_DISK_MIGRATED =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED)
+  val CACHED_LANGUAGE_CODES = stringPreferencesKey(SharedPreferenceUtil.CACHED_LANGUAGE_CODES)
+  val SELECTED_ONLINE_CONTENT_LANGUAGE =
+    stringPreferencesKey(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE)
+  val PREF_DEVICE_DEFAULT_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG)
+  val PREF_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_LANG)
+  val PREF_SHOW_HISTORY_ALL_BOOKS =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS)
+  val PREF_SHOW_BOOKMARKS_ALL_BOOKS =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS)
+  val PREF_SHOW_NOTES_ALL_BOOKS =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS)
 }

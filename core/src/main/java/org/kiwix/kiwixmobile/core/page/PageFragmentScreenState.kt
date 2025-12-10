@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page
 
 import androidx.annotation.StringRes
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 /**
@@ -38,7 +39,7 @@ data class PageFragmentScreenState(
   @StringRes val screenTitle: Int,
   val noItemsString: String,
   val switchString: String,
-  val switchIsChecked: Boolean,
+  val switchIsCheckedFlow: Flow<Boolean>,
   val switchIsEnabled: Boolean = true,
   val onSwitchCheckedChanged: (Boolean) -> Unit,
   @StringRes val deleteIconTitle: Int

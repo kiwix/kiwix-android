@@ -27,8 +27,10 @@ import android.os.Looper
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.locale
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.text.Collator
 import java.util.Locale
@@ -64,8 +66,8 @@ class LanguageUtils(private val context: Context) {
     return languageCodesFromAssets
   }
 
-  private fun haveToChangeFont(sharedPreferenceUtil: SharedPreferenceUtil): Boolean {
-    if (sharedPreferenceUtil.prefLanguage == Locale.ROOT.toString()) {
+  private suspend fun haveToChangeFont(kiwixDataStore: KiwixDataStore): Boolean {
+    if (kiwixDataStore.prefLanguage.first() == Locale.ROOT.toString()) {
       return false
     }
     return Locale.getAvailableLocales().none { locale ->
@@ -81,11 +83,11 @@ class LanguageUtils(private val context: Context) {
   // which also sets a Factory on the LayoutInflator, we have to access the private field of the
   // LayoutInflater, that handles this restriction via Java's reflection API
   // and make it accessible set it to false again.
-  fun changeFont(
+  suspend fun changeFont(
     activity: Activity,
-    sharedPreferenceUtil: SharedPreferenceUtil
+    kiwixDataStore: KiwixDataStore
   ) {
-    if (!haveToChangeFont(sharedPreferenceUtil)) {
+    if (!haveToChangeFont(kiwixDataStore)) {
       return
     }
 
@@ -146,23 +148,23 @@ class LanguageUtils(private val context: Context) {
       )
 
     @JvmStatic
-    fun handleLocaleChange(
+    suspend fun handleLocaleChange(
       context: Context,
-      sharedPreferenceUtil: SharedPreferenceUtil
+      kiwixDataStore: KiwixDataStore
     ): Context {
-      return sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
-        handleLocaleChange(context, it, sharedPreferenceUtil)
+      return kiwixDataStore.prefLanguage.first().takeIf { it != Locale.ROOT.toString() }?.let {
+        handleLocaleChange(context, it, kiwixDataStore)
       } ?: run { context }
     }
 
     @JvmStatic
-    fun handleLocaleChange(
+    suspend fun handleLocaleChange(
       context: Context,
       language: String,
-      sharedPreferenceUtil: SharedPreferenceUtil
+      kiwixDataStore: KiwixDataStore
     ): Context {
       val locale = if (language == Locale.ROOT.toString()) {
-        sharedPreferenceUtil.prefDeviceDefaultLanguage.convertToLocal()
+        kiwixDataStore.deviceDefaultLanguage.first().convertToLocal()
       } else {
         language.convertToLocal()
       }

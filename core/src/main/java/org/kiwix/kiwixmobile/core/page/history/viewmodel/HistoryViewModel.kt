@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
@@ -26,16 +28,18 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistor
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
   historyRoomDao: HistoryRoomDao,
   zimReaderContainer: ZimReaderContainer,
-  sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, sharedPrefs, zimReaderContainer) {
-  override fun initialState(): HistoryState =
-    HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
+  kiwixDataStore: KiwixDataStore
+) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, kiwixDataStore, zimReaderContainer) {
+  override fun initialState(): HistoryState {
+    val showAll = runBlocking { kiwixDataStore.showHistoryOfAllBooks.first() }
+    return HistoryState(emptyList(), showAll, zimReaderContainer.id)
+  }
 
   override fun updatePagesBasedOnFilter(
     state: HistoryState,
@@ -53,7 +57,7 @@ class HistoryViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: HistoryState
   ): HistoryState {
-    effects.tryEmit(UpdateAllHistoryPreference(sharedPreferenceUtil, action.isChecked))
+    effects.tryEmit(UpdateAllHistoryPreference(kiwixDataStore, action.isChecked, lifeCycleScope))
     return state.copy(showAll = action.isChecked)
   }
 

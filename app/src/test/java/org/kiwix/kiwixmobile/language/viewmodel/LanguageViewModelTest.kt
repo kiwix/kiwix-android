@@ -25,12 +25,14 @@ import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -43,7 +45,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.LanguageEntry
 import org.kiwix.kiwixmobile.core.data.remote.LanguageFeed
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
@@ -65,7 +67,7 @@ fun languageItem(language: Language = language()) =
 @ExtendWith(InstantExecutorExtension::class)
 class LanguageViewModelTest {
   private val application: Application = mockk()
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   private val kiwixService: KiwixService = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
@@ -87,12 +89,12 @@ class LanguageViewModelTest {
     languages.value = null
     networkStates.value = NetworkState.CONNECTED
     LanguageSessionCache.hasFetched = true
-    every { sharedPreferenceUtil.getCachedLanguageList() } returns languages.value
-    every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns "eng"
+    coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
+    every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
     languageViewModel =
       LanguageViewModel(
         application,
-        sharedPreferenceUtil,
+        kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
       )
@@ -151,7 +153,7 @@ class LanguageViewModelTest {
       LanguageSessionCache.hasFetched = false
       languages.value = emptyList()
 
-      every { sharedPreferenceUtil.getCachedLanguageList() } returns null
+      every { kiwixDataStore.cachedLanguageList } returns flowOf(null)
       coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply {
         entries = fetchedLanguages.map {
           LanguageEntry().apply {
@@ -161,8 +163,8 @@ class LanguageViewModelTest {
           }
         }
       }
-      every { sharedPreferenceUtil.selectedOnlineContentLanguage } returns ""
-      every { sharedPreferenceUtil.saveLanguageList(any()) } just Runs
+      every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+      coEvery { kiwixDataStore.saveLanguageList(any()) } just Runs
 
       testFlow(
         languageViewModel.actions,
@@ -170,7 +172,7 @@ class LanguageViewModelTest {
         assert = {
           val result = awaitItem()
           assertThat(result).isInstanceOf(UpdateLanguages::class.java)
-          verify { sharedPreferenceUtil.saveLanguageList(any()) }
+          coVerify { kiwixDataStore.saveLanguageList(any()) }
         }
       )
     }
@@ -298,7 +300,7 @@ class LanguageViewModelTest {
         assertThat(awaitItem()).isEqualTo(
           SaveLanguagesAndFinish(
             languages.first(),
-            sharedPreferenceUtil,
+            kiwixDataStore,
             languageViewModel.viewModelScope
           )
         )

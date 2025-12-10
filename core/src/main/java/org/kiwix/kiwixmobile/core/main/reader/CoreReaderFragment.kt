@@ -373,6 +373,12 @@ abstract class CoreReaderFragment :
       }
     }
 
+  fun runSafelyInCoreReaderLifecycleScope(func: suspend CoroutineScope.() -> Unit) {
+    runCatching {
+      coreReaderLifeCycleScope?.launch { func.invoke(this) }
+    }.onFailure { it.printStackTrace() }
+  }
+
   override fun onActionModeStarted(
     mode: ActionMode,
     appCompatActivity: AppCompatActivity
@@ -1061,9 +1067,11 @@ abstract class CoreReaderFragment :
 
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
   private fun handleLocaleCheck() {
-    sharedPreferenceUtil?.let {
-      handleLocaleChange(requireActivity(), it)
-      LanguageUtils(requireActivity()).changeFont(requireActivity(), it)
+    runSafelyInCoreReaderLifecycleScope {
+      kiwixDataStore?.let {
+        handleLocaleChange(requireActivity(), it)
+        LanguageUtils(requireActivity()).changeFont(requireActivity(), it)
+      }
     }
   }
 
@@ -1513,7 +1521,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun openExternalUrl(intent: Intent) {
-    coreReaderLifeCycleScope?.launch {
+    runSafelyInCoreReaderLifecycleScope {
       externalLinkOpener?.openExternalUrl(intent, lifecycleScope = this)
     }
   }
@@ -1702,7 +1710,7 @@ abstract class CoreReaderFragment :
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          coreReaderLifeCycleScope?.launch {
+          runSafelyInCoreReaderLifecycleScope {
             zimReaderSource?.let { openZimFile(it) }
           }
         } else {
@@ -2148,7 +2156,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun loadPrefs() {
-    coreReaderLifeCycleScope?.launch {
+    runSafelyInCoreReaderLifecycleScope {
       isBackToTopEnabled = kiwixDataStore?.backToTop?.first() == true
       isOpenNewTabInBackground = kiwixDataStore?.openNewTabInBackground?.first() == true
       if (!isBackToTopEnabled) {
@@ -2499,9 +2507,7 @@ abstract class CoreReaderFragment :
   }
 
   private suspend fun safelyGetCurrentTab(): Int =
-    max(kiwixDataStore?.currentTab?.first() ?: 0, 0).also {
-      android.util.Log.e("CURRENT_TAB", "setCurrentTab set: ${kiwixDataStore?.currentTab?.first()}")
-    }
+    max(kiwixDataStore?.currentTab?.first() ?: 0, 0)
 
   /**
    * Restores the tabs based on the provided webViewHistoryItemList.

@@ -19,17 +19,21 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 internal class UpdateAllBookmarksPreferenceTest {
   @Test
-  fun `UpdateAllBookmarkPreference updates shared preferences`() {
-    val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
+  fun `UpdateAllBookmarkPreference updates shared preferences`() = runTest {
+    val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
     val activity: AppCompatActivity = mockk()
-    UpdateAllBookmarksPreference(sharedPreferenceUtil, true).invokeWith(activity)
-    verify { sharedPreferenceUtil.showBookmarksAllBooks = true }
+    val lifecycleScope = TestScope(testScheduler)
+    UpdateAllBookmarksPreference(kiwixDataStore, true, lifecycleScope).invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+    coVerify { kiwixDataStore.setShowBookmarksOfAllBooks(true) }
   }
 }

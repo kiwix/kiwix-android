@@ -23,10 +23,19 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import org.json.JSONArray
+import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -224,6 +233,107 @@ class KiwixDataStore @Inject constructor(val context: Context) {
   suspend fun setBookOnDiskMigrated(isMigrated: Boolean) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_BOOK_ON_DISK_MIGRATED] = isMigrated
+    }
+  }
+
+  val selectedOnlineContentLanguage: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE].orEmpty()
+    }
+
+  suspend fun setSelectedOnlineContentLanguage(selectedOnlineContentLanguage: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE] = selectedOnlineContentLanguage
+    }
+  }
+
+  val cachedLanguageList: Flow<List<Language>?> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.CACHED_LANGUAGE_CODES]?.let { jsonString ->
+        val jsonArray = JSONArray(jsonString)
+        List(jsonArray.length()) { i ->
+          val obj = jsonArray.getJSONObject(i)
+          Language(
+            languageCode = obj.getString(KEY_LANGUAGE_CODE),
+            occurrencesOfLanguage = obj.getInt(KEY_OCCURRENCES_OF_LANGUAGE),
+            active = selectedOnlineContentLanguage.first() == obj.getString(KEY_LANGUAGE_CODE),
+            id = obj.getLong(KEY_LANGUAGE_ID)
+          )
+        }
+      }
+    }
+
+  suspend fun saveLanguageList(languages: List<Language>) {
+    val jsonArray = JSONArray().apply {
+      languages.forEach { lang ->
+        put(
+          JSONObject().apply {
+            put(KEY_LANGUAGE_CODE, lang.languageCode)
+            put(KEY_OCCURRENCES_OF_LANGUAGE, lang.occurencesOfLanguage)
+            put(KEY_LANGUAGE_ACTIVE, lang.active)
+            put(KEY_LANGUAGE_ID, lang.id)
+          }
+        )
+      }
+    }
+
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.CACHED_LANGUAGE_CODES] = jsonArray.toString()
+    }
+  }
+
+  val deviceDefaultLanguage: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG].orEmpty()
+    }
+
+  suspend fun setDeviceDefaultLanguage(language: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG] = language
+    }
+  }
+
+  val prefLanguage: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_LANG] ?: Locale.ROOT.toString()
+    }
+
+  suspend fun setPrefLanguage(language: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_LANG] = language
+    }
+  }
+
+  val showHistoryOfAllBooks: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS] ?: true
+    }
+
+  suspend fun setShowHistoryOfAllBooks(showHistoryOfAllBooks: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS] = showHistoryOfAllBooks
+    }
+  }
+
+  val showBookmarksOfAllBooks: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_BOOKMARKS_ALL_BOOKS] ?: true
+    }
+
+  suspend fun setShowBookmarksOfAllBooks(showBookmarksAllBooks: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_BOOKMARKS_ALL_BOOKS] = showBookmarksAllBooks
+    }
+  }
+
+  val showNotesOfAllBooks: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_NOTES_ALL_BOOKS] ?: true
+    }
+
+  suspend fun setShowNotesOfAllBooks(showNotesAllBooks: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_NOTES_ALL_BOOKS] = showNotesAllBooks
     }
   }
 }

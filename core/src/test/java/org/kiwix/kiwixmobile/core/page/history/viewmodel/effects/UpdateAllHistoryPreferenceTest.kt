@@ -19,17 +19,21 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 internal class UpdateAllHistoryPreferenceTest {
   @Test
-  fun `UpdateAllHistoryPreference updates shared preferences`() {
-    val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
+  fun `UpdateAllHistoryPreference updates shared preferences`() = runTest {
+    val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
     val activity: AppCompatActivity = mockk()
-    UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
-    verify { sharedPreferenceUtil.showHistoryAllBooks = true }
+    val lifeCycleScope = TestScope(testScheduler)
+    UpdateAllHistoryPreference(kiwixDataStore, true, lifeCycleScope).invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+    coVerify { kiwixDataStore.setShowHistoryOfAllBooks(true) }
   }
 }

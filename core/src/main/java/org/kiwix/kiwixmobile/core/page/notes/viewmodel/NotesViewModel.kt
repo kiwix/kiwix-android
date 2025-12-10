@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -29,21 +31,23 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModelClickListener
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class NotesViewModel @Inject constructor(
   notesRoomDao: NotesRoomDao,
   zimReaderContainer: ZimReaderContainer,
-  sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<NoteListItem, NotesState>(notesRoomDao, sharedPrefs, zimReaderContainer),
+  kiwixDataStore: KiwixDataStore
+) : PageViewModel<NoteListItem, NotesState>(notesRoomDao, kiwixDataStore, zimReaderContainer),
   PageViewModelClickListener {
   init {
     setOnItemClickListener(this)
   }
 
-  override fun initialState(): NotesState =
-    NotesState(emptyList(), sharedPreferenceUtil.showNotesAllBooks, zimReaderContainer.id)
+  override fun initialState(): NotesState {
+    val showAll = runBlocking { kiwixDataStore.showNotesOfAllBooks.first() }
+    return NotesState(emptyList(), showAll, zimReaderContainer.id)
+  }
 
   override fun updatePagesBasedOnFilter(state: NotesState, action: Action.Filter): NotesState =
     state.copy(searchTerm = action.searchTerm)
@@ -55,7 +59,7 @@ class NotesViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: NotesState
   ): NotesState {
-    effects.tryEmit(UpdateAllNotesPreference(sharedPreferenceUtil, action.isChecked))
+    effects.tryEmit(UpdateAllNotesPreference(kiwixDataStore, action.isChecked, lifeCycleScope))
     return state.copy(showAll = action.isChecked)
   }
 

@@ -37,6 +37,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
@@ -87,6 +88,7 @@ class DeepLinksTest : BaseActivityTest() {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     context.let {
@@ -96,7 +98,6 @@ class DeepLinksTest : BaseActivityTest() {
           putPrefIsFirstRun(false)
           prefIsScanFileSystemDialogShown = true
           prefIsTest = true
-          putPrefLanguage("en")
           shouldShowStorageSelectionDialog = false
           lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
         }
@@ -168,11 +169,13 @@ class DeepLinksTest : BaseActivityTest() {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              KiwixDataStore(context)
+            )
+          }
         }
       }
     activityScenario.onActivity {

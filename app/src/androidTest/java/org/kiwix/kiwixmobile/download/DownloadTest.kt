@@ -41,6 +41,7 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -89,12 +90,13 @@ class DownloadTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(
+    val kiwixDataStore = KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
@@ -103,7 +105,6 @@ class DownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putLong(
@@ -115,11 +116,13 @@ class DownloadTest : BaseActivityTest() {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(context)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              kiwixDataStore
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
@@ -202,69 +205,70 @@ class DownloadTest : BaseActivityTest() {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Library.route)
     }
-    try {
-      // delete all the ZIM files showing in the LocalLibrary
-      // screen to properly test the scenario.
-      library {
-        refreshList(composeTestRule)
-        waitUntilZimFilesRefreshing(composeTestRule)
-        deleteZimIfExists(composeTestRule)
-      }
-      downloadRobot {
-        // change the application language
-        topLevel {
-          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-            selectDeviceDefaultLanguage(composeTestRule)
-            // Advance the main clock to settle the frame of compose.
-            composeTestRule.mainClock.advanceTimeByFrame()
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-            selectAlbanianLanguage(composeTestRule)
-            // Advance the main clock to settle the frame of compose.
-            composeTestRule.mainClock.advanceTimeByFrame()
-            composeTestRule.waitForIdle()
-            activityScenario.onActivity {
-              kiwixMainActivity = it
-              it.onBackPressedDispatcher.onBackPressed()
-            }
+    // delete all the ZIM files showing in the LocalLibrary
+    // screen to properly test the scenario.
+    library {
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
+    }
+    downloadRobot {
+      // change the application language
+      topLevel {
+        clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          selectDeviceDefaultLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          selectAlbanianLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          composeTestRule.waitForIdle()
+          composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
           }
-        }
-        clickDownloadOnBottomNav(composeTestRule)
-        waitForDataToLoad(composeTestRule = composeTestRule)
-        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        downloadZimFile(composeTestRule)
-        assertDownloadStart(composeTestRule)
-        pauseDownload(composeTestRule)
-        assertDownloadPaused(composeTestRule, kiwixMainActivity)
-        resumeDownload(composeTestRule)
-        assertDownloadResumed(composeTestRule, kiwixMainActivity)
-        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        // select the default device language to perform other test cases.
-        topLevel {
-          clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-            selectDeviceDefaultLanguage(composeTestRule)
-            // Advance the main clock to settle the frame of compose.
-            composeTestRule.mainClock.advanceTimeByFrame()
-            activityScenario.onActivity {
-              kiwixMainActivity = it
-            }
-            // check if the device default language is selected or not.
-            clickLanguagePreference(composeTestRule, kiwixMainActivity)
-            // close the language dialog.
-            composeTestRule.runOnUiThread {
-              kiwixMainActivity.onBackPressedDispatcher.onBackPressed()
-            }
+          activityScenario.onActivity {
+            kiwixMainActivity = it
+            it.onBackPressedDispatcher.onBackPressed()
           }
         }
       }
-    } catch (e: Exception) {
-      Assert.fail(
-        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
-      )
+      clickDownloadOnBottomNav(composeTestRule)
+      waitForDataToLoad(composeTestRule = composeTestRule)
+      stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+      downloadZimFile(composeTestRule)
+      assertDownloadStart(composeTestRule)
+      pauseDownload(composeTestRule)
+      assertDownloadPaused(composeTestRule, kiwixMainActivity)
+      resumeDownload(composeTestRule)
+      assertDownloadResumed(composeTestRule, kiwixMainActivity)
+      stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+      // select the default device language to perform other test cases.
+      topLevel {
+        clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          selectDeviceDefaultLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          composeTestRule.waitForIdle()
+          composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
+          }
+          activityScenario.onActivity {
+            kiwixMainActivity = it
+          }
+          // check if the device default language is selected or not.
+          clickLanguagePreference(composeTestRule, kiwixMainActivity)
+          // close the language dialog.
+          composeTestRule.runOnUiThread {
+            kiwixMainActivity.onBackPressedDispatcher.onBackPressed()
+          }
+        }
+      }
     }
   }
 

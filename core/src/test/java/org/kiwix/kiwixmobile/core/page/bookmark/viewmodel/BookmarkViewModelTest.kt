@@ -24,6 +24,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -40,7 +41,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
@@ -50,7 +51,7 @@ import java.util.UUID
 internal class BookmarkViewModelTest {
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   private val dialogShower: AlertDialogShower = mockk()
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
@@ -64,12 +65,13 @@ internal class BookmarkViewModelTest {
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
-    every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
+    every { kiwixDataStore.showBookmarksOfAllBooks } returns flowOf(true)
     every { libkiwixBookMarks.bookmarks() } returns itemsFromDb
     every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
     viewModel =
-      BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, sharedPreferenceUtil).apply {
+      BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, kiwixDataStore).apply {
         alertDialogShower = dialogShower
+        lifeCycleScope = viewModelScope
       }
   }
 
@@ -115,8 +117,9 @@ internal class BookmarkViewModelTest {
       assert = {
         assertThat(awaitItem()).isEqualTo(
           UpdateAllBookmarksPreference(
-            sharedPreferenceUtil,
-            false
+            kiwixDataStore,
+            false,
+            viewModelScope
           )
         )
       }

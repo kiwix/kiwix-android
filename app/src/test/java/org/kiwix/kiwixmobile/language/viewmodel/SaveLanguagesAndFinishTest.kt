@@ -20,28 +20,32 @@ package org.kiwix.kiwixmobile.language.viewmodel
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 class SaveLanguagesAndFinishTest {
   @Test
   fun `invoke saves and finishes`() = runTest {
-    val sharedPreferenceUtil = mockk<SharedPreferenceUtil>()
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage(any()) } just Runs
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
     val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
     every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
     every { onBackPressedDispatcher.onBackPressed() } answers { }
     val language = Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
-    SaveLanguagesAndFinish(language, sharedPreferenceUtil, lifeCycleScope).invokeWith(activity)
+    SaveLanguagesAndFinish(language, kiwixDataStore, lifeCycleScope).invokeWith(activity)
     testScheduler.advanceUntilIdle()
-    every { sharedPreferenceUtil.selectedOnlineContentLanguage == language.languageCode }
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("eng") }
     testScheduler.advanceUntilIdle()
     verify { onBackPressedDispatcher.onBackPressed() }
   }

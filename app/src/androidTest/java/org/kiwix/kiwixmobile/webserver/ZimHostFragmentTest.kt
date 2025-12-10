@@ -37,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -112,13 +113,13 @@ class ZimHostFragmentTest {
         lifeCycleScope.launch {
           setWifiOnly(false)
           setIntroShown()
+          setPrefLanguage("en")
         }
       }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIsPlayStoreBuildType(true)
           prefIsTest = true
-          putPrefLanguage("en")
           lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
           prefIsScanFileSystemDialogShown = true
           putPrefIsFirstRun(false)
@@ -128,11 +129,13 @@ class ZimHostFragmentTest {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          handleLocaleChange(
-            it,
-            "en",
-            SharedPreferenceUtil(it)
-          )
+          runBlocking {
+            handleLocaleChange(
+              it,
+              "en",
+              KiwixDataStore(it)
+            )
+          }
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {

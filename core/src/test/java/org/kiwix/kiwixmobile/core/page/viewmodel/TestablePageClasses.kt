@@ -26,13 +26,13 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.page.pageState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 class TestablePageViewModel(
   zimReaderContainer: ZimReaderContainer,
-  sharedPreferenceUtil: SharedPreferenceUtil,
+  kiwixDataStore: KiwixDataStore,
   val dao: PageDao
-) : PageViewModel<Page, TestablePageState>(dao, sharedPreferenceUtil, zimReaderContainer) {
+) : PageViewModel<Page, TestablePageState>(dao, kiwixDataStore, zimReaderContainer) {
   var createDeletePageDialogEffectCalled = false
 
   override fun initialState(): TestablePageState = pageState()

@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.R
@@ -53,6 +55,7 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import javax.inject.Inject
@@ -67,6 +70,8 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
+
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var actionMode: ActionMode? = null
   private val coroutineJobs = mutableListOf<Job>()
@@ -74,7 +79,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val noItemsString: String
   abstract val switchString: String
   abstract val searchQueryHint: String
-  abstract val switchIsChecked: Boolean
+  abstract val switchIsCheckedFlow: Flow<Boolean>
   abstract val deleteIconTitle: Int
   private val pageState: MutableState<PageState<*>> =
     mutableStateOf(
@@ -100,7 +105,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       screenTitle = ZERO,
       noItemsString = "",
       switchString = "",
-      switchIsChecked = true,
+      switchIsCheckedFlow = flowOf(true),
       switchIsEnabled = true,
       onSwitchCheckedChanged = {},
       deleteIconTitle = ZERO,
@@ -143,7 +148,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
         screenTitle = this@PageFragment.screenTitle,
         noItemsString = this@PageFragment.noItemsString,
         switchString = this@PageFragment.switchString,
-        switchIsChecked = this@PageFragment.switchIsChecked,
+        switchIsCheckedFlow = this@PageFragment.switchIsCheckedFlow,
         onSwitchCheckedChanged = { onSwitchChanged(it).invoke() },
         deleteIconTitle = this@PageFragment.deleteIconTitle
       )
@@ -165,6 +170,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       )
     }
     pageViewModel.alertDialogShower = alertDialogShower
+    pageViewModel.lifeCycleScope = lifecycleScope
   }
 
   override fun onCreateView(
@@ -210,13 +216,11 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   /**
    * Returns a lambda to handle switch toggle changes.
-   * - Updates the UI state to reflect the new checked status.
    * - Sends an action to the ViewModel to handle the toggle event (e.g., show all items or filter).
    *
    * @param isChecked The new checked state of the switch.
    */
   private fun onSwitchChanged(isChecked: Boolean): () -> Unit = {
-    pageScreenState.update { copy(switchIsChecked = isChecked) }
     pageViewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
   }
 

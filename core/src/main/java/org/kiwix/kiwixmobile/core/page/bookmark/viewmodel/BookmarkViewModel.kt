@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
@@ -26,20 +28,22 @@ import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookm
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class BookmarkViewModel @Inject constructor(
   libkiwixBookmarks: LibkiwixBookmarks,
   zimReaderContainer: ZimReaderContainer,
-  sharedPrefs: SharedPreferenceUtil
+  kiwixDataStore: KiwixDataStore
 ) : PageViewModel<LibkiwixBookmarkItem, BookmarkState>(
     libkiwixBookmarks,
-    sharedPrefs,
+    kiwixDataStore,
     zimReaderContainer
   ) {
-  override fun initialState(): BookmarkState =
-    BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
+  override fun initialState(): BookmarkState {
+    val showAll = runBlocking { kiwixDataStore.showBookmarksOfAllBooks.first() }
+    return BookmarkState(emptyList(), showAll, zimReaderContainer.id)
+  }
 
   override fun updatePagesBasedOnFilter(
     state: BookmarkState,
@@ -57,7 +61,7 @@ class BookmarkViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: BookmarkState
   ): BookmarkState {
-    effects.tryEmit(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
+    effects.tryEmit(UpdateAllBookmarksPreference(kiwixDataStore, action.isChecked, lifeCycleScope))
     return state.copy(showAll = action.isChecked)
   }
 

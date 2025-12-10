@@ -39,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
@@ -94,12 +95,13 @@ class LanguageFragmentTest {
       }
       waitForIdle()
     }
-    KiwixDataStore(
+    val kiwixDataStore = KiwixDataStore(
       instrumentation.targetContext.applicationContext
     ).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
@@ -107,7 +109,6 @@ class LanguageFragmentTest {
         putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
         putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
         putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-        putString(SharedPreferenceUtil.PREF_LANG, "en")
         putLong(
           SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
           System.currentTimeMillis()
@@ -117,11 +118,13 @@ class LanguageFragmentTest {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
         kiwixMainActivity = it
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(instrumentation.targetContext.applicationContext)
-        )
+        runBlocking {
+          handleLocaleChange(
+            it,
+            "en",
+            kiwixDataStore
+          )
+        }
       }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)

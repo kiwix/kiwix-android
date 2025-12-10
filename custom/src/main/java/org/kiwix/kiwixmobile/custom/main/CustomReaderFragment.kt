@@ -69,18 +69,18 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    if (enforcedLanguage()) {
-      return
-    }
+    runSafelyInCoreReaderLifecycleScope {
+      if (enforcedLanguage()) {
+        return@runSafelyInCoreReaderLifecycleScope
+      }
 
-    if (isAdded) {
-      enableLeftDrawer()
-      loadPageFromNavigationArguments()
-      if (BuildConfig.DISABLE_EXTERNAL_LINK) {
-        // If "external links" are disabled in a custom app,
-        // this sets the shared preference to not show the external link popup
-        // when opening external links.
-        coreReaderLifeCycleScope?.launch {
+      if (isAdded) {
+        enableLeftDrawer()
+        loadPageFromNavigationArguments()
+        if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+          // If "external links" are disabled in a custom app,
+          // this sets the shared preference to not show the external link popup
+          // when opening external links.
           kiwixDataStore?.setExternalLinkPopup(false)
         }
       }
@@ -160,7 +160,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     } else {
       isWebViewHistoryRestoring = true
       isFromManageExternalLaunch = true
-      coreReaderLifeCycleScope?.launch {
+      runSafelyInCoreReaderLifecycleScope {
         if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
         } else {
@@ -253,9 +253,11 @@ class CustomReaderFragment : CoreReaderFragment() {
                 // Check if the file is not null. If the file is null,
                 // it means we have created zimFileReader with a fileDescriptor,
                 // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-                val file = it.file ?: createDemoFile()
-                val book = Book().apply { update(zimFileReader.jniKiwixReader) }
-                repositoryActions?.saveBook(book)
+                runSafelyInCoreReaderLifecycleScope {
+                  val file = it.file ?: createDemoFile()
+                  val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+                  repositoryActions?.saveBook(book)
+                }
               }
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
@@ -287,8 +289,8 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private suspend fun openDownloadScreen() {
-    delay(OPENING_DOWNLOAD_SCREEN_DELAY)
-    coreReaderLifeCycleScope?.launch(Dispatchers.Main.immediate) {
+    runSafelyInCoreReaderLifecycleScope {
+      delay(OPENING_DOWNLOAD_SCREEN_DELAY)
       val navOptions = NavOptions.Builder()
         .setPopUpTo(CustomDestination.Reader.route, true)
         .build()
@@ -304,16 +306,16 @@ class CustomReaderFragment : CoreReaderFragment() {
       if (!it.isFileExist()) it.createNewFile()
     }
 
-  private fun enforcedLanguage(): Boolean {
+  private suspend fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
-      sharedPreferenceUtil?.let { sharedPreferenceUtil ->
+      kiwixDataStore?.let { kiwixDataStore ->
         LanguageUtils.handleLocaleChange(
           requireActivity(),
           BuildConfig.ENFORCED_LANG,
-          sharedPreferenceUtil
+          kiwixDataStore
         )
-        sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG)
+        kiwixDataStore.setPrefLanguage(BuildConfig.ENFORCED_LANG)
       }
       activity?.recreate()
       return true
@@ -414,12 +416,12 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   override suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
-    runCatching { openDownloadScreen() }
+    openDownloadScreen()
   }
 
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
-      coreReaderLifeCycleScope?.launch {
+      runSafelyInCoreReaderLifecycleScope {
         externalLinkOpener?.openExternalUrl(
           BuildConfig.SUPPORT_URL.toUri().browserIntent(),
           false,
@@ -438,7 +440,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (appSettingsLaunched) {
       appSettingsLaunched = false
       isWebViewHistoryRestoring = true
-      coreReaderLifeCycleScope?.launch {
+      runSafelyInCoreReaderLifecycleScope {
         if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
         } else {

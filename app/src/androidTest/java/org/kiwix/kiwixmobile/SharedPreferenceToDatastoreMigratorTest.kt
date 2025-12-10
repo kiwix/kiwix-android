@@ -33,8 +33,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,6 +46,10 @@ import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -67,10 +75,11 @@ class SharedPreferenceToDatastoreMigratorTest {
       }
       waitForIdle()
     }
-    KiwixDataStore(context).apply {
+    val kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
+        setPrefLanguage("en")
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
@@ -78,7 +87,6 @@ class SharedPreferenceToDatastoreMigratorTest {
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         System.currentTimeMillis()
@@ -87,11 +95,13 @@ class SharedPreferenceToDatastoreMigratorTest {
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+        runBlocking {
+          LanguageUtils.handleLocaleChange(
+            it,
+            "en",
+            kiwixDataStore
+          )
+        }
         it.navigate(KiwixDestination.Library.route)
       }
     }
@@ -110,6 +120,17 @@ class SharedPreferenceToDatastoreMigratorTest {
       .apply()
 
     // DEFAULT SharedPreferences (SharedPreferenceUtil)
+    val jsonArray = JSONArray().apply {
+      put(
+        JSONObject().apply {
+          put(KEY_LANGUAGE_CODE, "en")
+          put(KEY_OCCURRENCES_OF_LANGUAGE, 5)
+          put(KEY_LANGUAGE_ACTIVE, true)
+          put(KEY_LANGUAGE_ID, 100L)
+        }
+      )
+    }
+
     val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
     defaultPrefs.edit()
       .putInt(SharedPreferenceUtil.TEXT_ZOOM, 120)
@@ -126,6 +147,13 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_HISTORY_MIGRATED, true)
       .putBoolean(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
       .putBoolean(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED, true)
+      .putString(SharedPreferenceUtil.CACHED_LANGUAGE_CODES, jsonArray.toString())
+      .putString(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE, "eng")
+      .putString(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG, "eng")
+      .putString(SharedPreferenceUtil.PREF_LANG, "fr")
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS, false)
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
+      .putBoolean(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS, false)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -156,5 +184,23 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED])
     assertEquals(true, prefs[PreferencesKeys.PREF_BOOK_ON_DISK_MIGRATED])
     assertEquals("2", prefs[PreferencesKeys.PREF_THEME])
+
+    // Test cached language migration.
+    val migratedJson = prefs[PreferencesKeys.CACHED_LANGUAGE_CODES]
+    assertNotNull(migratedJson)
+    val migratedArray = JSONArray(migratedJson!!)
+    assertEquals(1, migratedArray.length())
+    val obj = migratedArray.getJSONObject(0)
+    assertEquals("en", obj.getString(KEY_LANGUAGE_CODE))
+    assertEquals(5, obj.getInt(KEY_OCCURRENCES_OF_LANGUAGE))
+    assertEquals(true, obj.getBoolean(KEY_LANGUAGE_ACTIVE))
+    assertEquals(100L, obj.getLong(KEY_LANGUAGE_ID))
+    // End of cached migration.
+    assertEquals("eng", prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE])
+    assertEquals("eng", prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG])
+    assertEquals("fr", prefs[PreferencesKeys.PREF_LANG])
+    assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS])
+    assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_BOOKMARKS_ALL_BOOKS])
+    assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_NOTES_ALL_BOOKS])
   }
 }

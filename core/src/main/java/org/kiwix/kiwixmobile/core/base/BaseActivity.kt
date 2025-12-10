@@ -23,6 +23,8 @@ import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -40,12 +42,14 @@ open class BaseActivity : AppCompatActivity() {
    * so that Compose can properly localize everything.
    */
   override fun attachBaseContext(newBase: Context) {
-    val sharedPreferenceUtil = SharedPreferenceUtil(newBase)
-    val localizedContext = LanguageUtils.handleLocaleChange(
-      newBase,
-      sharedPreferenceUtil.prefLanguage,
-      sharedPreferenceUtil
-    )
+    val kiwixDataStore = KiwixDataStore(newBase)
+    val localizedContext = runBlocking {
+      LanguageUtils.handleLocaleChange(
+        newBase,
+        kiwixDataStore.prefLanguage.first(),
+        kiwixDataStore
+      )
+    }
     super.attachBaseContext(localizedContext)
   }
 

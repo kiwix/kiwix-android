@@ -72,12 +72,12 @@ class SearchWidgetTest : BaseActivityTest() {
         lifeCycleScope.launch {
           setWifiOnly(false)
           setIntroShown()
+          setPrefLanguage("en")
         }
       }
       SharedPreferenceUtil(it).apply {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
-        putPrefLanguage("en")
         lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
         prefIsScanFileSystemDialogShown = true
         putPrefIsFirstRun(false)

@@ -19,11 +19,13 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -51,7 +53,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 
@@ -60,7 +62,7 @@ import org.kiwix.sharedFunctions.InstantExecutorExtension
 internal class PageViewModelTest {
   private val pageDao: PageDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
 
   private lateinit var viewModel: TestablePageViewModel
   private val itemsFromDb: MutableSharedFlow<List<Page>> =
@@ -72,9 +74,9 @@ internal class PageViewModelTest {
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
-    every { sharedPreferenceUtil.showHistoryAllBooks } returns true
+    coEvery { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { pageDao.pages() } returns itemsFromDb
-    viewModel = TestablePageViewModel(zimReaderContainer, sharedPreferenceUtil, pageDao)
+    viewModel = TestablePageViewModel(zimReaderContainer, kiwixDataStore, pageDao)
   }
 
   @AfterEach
