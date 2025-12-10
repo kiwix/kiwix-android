@@ -24,12 +24,13 @@ import android.content.pm.PackageManager
 import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.spyk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -39,11 +40,12 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInform
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 @ExperimentalCoroutinesApi
 class DonationDialogHandlerTest {
   private lateinit var activity: Activity
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
   private lateinit var donationDialogHandler: DonationDialogHandler
   private lateinit var showDonationDialogCallback: DonationDialogHandler.ShowDonationDialogCallback
@@ -55,11 +57,11 @@ class DonationDialogHandlerTest {
     packageManager = mockk(relaxed = true)
     every { activity.packageManager } returns packageManager
     every { activity.packageName } returns "org.kiwix.kiwixmobile"
-    sharedPreferenceUtil = mockk(relaxed = true)
+    kiwixDataStore = mockk(relaxed = true)
     libkiwixBookOnDisk = mockk(relaxed = true)
     showDonationDialogCallback = mockk(relaxed = true)
     donationDialogHandler =
-      DonationDialogHandler(activity, sharedPreferenceUtil, libkiwixBookOnDisk)
+      DonationDialogHandler(activity, kiwixDataStore, libkiwixBookOnDisk)
     donationDialogHandler.setDonationDialogCallBack(showDonationDialogCallback)
   }
 
@@ -67,20 +69,20 @@ class DonationDialogHandlerTest {
   fun `should show initial donation popup when app is three month old`() =
     runTest {
       donationDialogHandler = spyk(donationDialogHandler)
-      every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
-      every { sharedPreferenceUtil.laterClickedMilliSeconds } returns 0L
+      coEvery { kiwixDataStore.lastDonationPopupShownInMilliSeconds } returns flowOf(0L)
+      coEvery { kiwixDataStore.laterClickedMilliSeconds } returns flowOf(0L)
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
       every {
         donationDialogHandler.shouldShowInitialPopup(any())
       } returns true
       donationDialogHandler.attemptToShowDonationPopup()
-      verify { showDonationDialogCallback.showDonationDialog() }
+      coVerify { showDonationDialogCallback.showDonationDialog() }
     }
 
   @Test
   fun `should not show donation popup if app is not three month old`() =
     runTest {
-      every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
+      coEvery { kiwixDataStore.lastDonationPopupShownInMilliSeconds } returns flowOf(0L)
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
       val currentMillis = System.currentTimeMillis()
       val installTime = currentMillis - 1000
@@ -92,13 +94,13 @@ class DonationDialogHandlerTest {
         packageManager.getPackageInformation(activity.packageName, ZERO)
       } returns packageInfo
       donationDialogHandler.attemptToShowDonationPopup()
-      verify { showDonationDialogCallback wasNot Called }
+      coVerify { showDonationDialogCallback wasNot Called }
     }
 
   @Test
   fun `should not show donation popup when no ZIM files available in library`() =
     runTest {
-      every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
+      coEvery { kiwixDataStore.lastDonationPopupShownInMilliSeconds } returns flowOf(0L)
       coEvery { libkiwixBookOnDisk.getBooks() } returns emptyList()
       val currentMillis = System.currentTimeMillis()
       val threeMonthsAgo = currentMillis - THREE_MONTHS_IN_MILLISECONDS
@@ -109,31 +111,32 @@ class DonationDialogHandlerTest {
 
       every { packageManager.getPackageInformation(activity.packageName, ZERO) } returns packageInfo
       donationDialogHandler.attemptToShowDonationPopup()
-      verify { showDonationDialogCallback wasNot Called }
+      coVerify { showDonationDialogCallback wasNot Called }
     }
 
   @Test
   fun `should not show popup if time since last popup is less than three month`() =
     runTest {
       val currentMilliSeconds = System.currentTimeMillis()
-      every {
-        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-      } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS / 2)
+      coEvery {
+        kiwixDataStore.lastDonationPopupShownInMilliSeconds
+      } returns flowOf(currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS / 2))
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
       donationDialogHandler.attemptToShowDonationPopup()
-      verify(exactly = 0) { showDonationDialogCallback.showDonationDialog() }
+      coVerify(exactly = 0) { showDonationDialogCallback.showDonationDialog() }
     }
 
   @Test
   fun `should show donation popup if time since last popup exceeds three months`() =
     runTest {
       val currentMilliSeconds = System.currentTimeMillis()
-      every {
-        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-      } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+      coEvery {
+        kiwixDataStore.lastDonationPopupShownInMilliSeconds
+      } returns flowOf(currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000))
+      coEvery { kiwixDataStore.laterClickedMilliSeconds } returns flowOf(0L)
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
       donationDialogHandler.attemptToShowDonationPopup()
-      verify { showDonationDialogCallback.showDonationDialog() }
+      coVerify { showDonationDialogCallback.showDonationDialog() }
     }
 
   @Test
@@ -141,16 +144,16 @@ class DonationDialogHandlerTest {
     runTest {
       donationDialogHandler = spyk(donationDialogHandler)
       val currentMilliSeconds = System.currentTimeMillis()
-      every {
-        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-      } returns 0L
+      coEvery {
+        kiwixDataStore.lastDonationPopupShownInMilliSeconds
+      } returns flowOf(0L)
       every { donationDialogHandler.shouldShowInitialPopup(any()) } returns true
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
-      every {
-        sharedPreferenceUtil.laterClickedMilliSeconds
-      } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+      coEvery {
+        kiwixDataStore.laterClickedMilliSeconds
+      } returns flowOf(currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000))
       donationDialogHandler.attemptToShowDonationPopup()
-      verify { showDonationDialogCallback.showDonationDialog() }
+      coVerify { showDonationDialogCallback.showDonationDialog() }
     }
 
   @Test
@@ -158,58 +161,59 @@ class DonationDialogHandlerTest {
     runTest {
       donationDialogHandler = spyk(donationDialogHandler)
       val currentMilliSeconds = System.currentTimeMillis()
-      every {
-        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-      } returns 0L
+      coEvery {
+        kiwixDataStore.lastDonationPopupShownInMilliSeconds
+      } returns flowOf(0L)
       every { donationDialogHandler.shouldShowInitialPopup(any()) } returns true
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
-      every {
-        sharedPreferenceUtil.laterClickedMilliSeconds
-      } returns currentMilliSeconds - 10000L
+      coEvery {
+        kiwixDataStore.laterClickedMilliSeconds
+      } returns flowOf(currentMilliSeconds - 10000L)
       donationDialogHandler.attemptToShowDonationPopup()
-      verify { showDonationDialogCallback wasNot Called }
+      coVerify { showDonationDialogCallback wasNot Called }
     }
 
   @Test
-  fun `donate later saves the correct time`() {
+  fun `donate later saves the correct time`() = runTest {
     val currentMilliSeconds = System.currentTimeMillis()
-    every { sharedPreferenceUtil.laterClickedMilliSeconds = any() } just Runs
+    coEvery { kiwixDataStore.setLaterClickedMilliSeconds(any()) } just Runs
     donationDialogHandler.donateLater(currentMilliSeconds)
-    verify { sharedPreferenceUtil.laterClickedMilliSeconds = currentMilliSeconds }
+    coVerify { kiwixDataStore.setLaterClickedMilliSeconds(currentMilliSeconds) }
   }
 
   @Test
-  fun `reset donate later sets value to zero`() {
-    every { sharedPreferenceUtil.laterClickedMilliSeconds = 0L } just Runs
+  fun `reset donate later sets value to zero`() = runTest {
+    coEvery { kiwixDataStore.setLaterClickedMilliSeconds(0L) } just Runs
     donationDialogHandler.resetDonateLater()
-    verify { sharedPreferenceUtil.laterClickedMilliSeconds = 0L }
+    coVerify { kiwixDataStore.setLaterClickedMilliSeconds(0L) }
   }
 
   @Test
-  fun `updateLastDonationPopupShownTime sets correct time`() {
-    every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = any() } just Runs
+  fun `updateLastDonationPopupShownTime sets correct time`() = runTest {
+    coEvery { kiwixDataStore.setLastDonationPopupShownInMilliSeconds(any()) } just Runs
     val currentTime = System.currentTimeMillis()
     donationDialogHandler.updateLastDonationPopupShownTime()
-    verify { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = more(currentTime - 1000) }
+    coVerify { kiwixDataStore.setLastDonationPopupShownInMilliSeconds(more(currentTime - 1000)) }
   }
 
   @Test
-  fun `isTimeToShowDonation should returns false when laterClicked time is recent`() {
+  fun `isTimeToShowDonation should returns false when laterClicked time is recent`() = runTest {
     val currentMillis = System.currentTimeMillis()
-    every { sharedPreferenceUtil.laterClickedMilliSeconds } returns currentMillis - 1000
+    coEvery { kiwixDataStore.laterClickedMilliSeconds } returns flowOf(currentMillis - 1000)
     val result = donationDialogHandler.isTimeToShowDonation(currentMillis)
     assertFalse(result)
   }
 
   @Test
-  fun `test isTimeToShowDonation should returns true if laterClicked time is over three month`() {
-    val currentMillis = System.currentTimeMillis()
-    every {
-      sharedPreferenceUtil.laterClickedMilliSeconds
-    } returns currentMillis - THREE_MONTHS_IN_MILLISECONDS
-    val result = donationDialogHandler.isTimeToShowDonation(currentMillis)
-    assertTrue(result)
-  }
+  fun `test isTimeToShowDonation should returns true if laterClicked time is over three month`() =
+    runTest {
+      val currentMillis = System.currentTimeMillis()
+      coEvery {
+        kiwixDataStore.laterClickedMilliSeconds
+      } returns flowOf(currentMillis - THREE_MONTHS_IN_MILLISECONDS)
+      val result = donationDialogHandler.isTimeToShowDonation(currentMillis)
+      assertTrue(result)
+    }
 
   @Test
   fun `isThreeMonthsElapsed should return false when lastPopupMillis is zero`() {

@@ -73,12 +73,12 @@ class SearchWidgetTest : BaseActivityTest() {
           setWifiOnly(false)
           setIntroShown()
           setPrefLanguage("en")
+          setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         }
       }
       SharedPreferenceUtil(it).apply {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
-        lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
         prefIsScanFileSystemDialogShown = true
         putPrefIsFirstRun(false)
       }

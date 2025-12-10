@@ -64,7 +64,7 @@ class DonationDialogTest : BaseActivityTest() {
   val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  private lateinit var kiwixDataStore: KiwixDataStore
 
   @Before
   override fun waitForIdle() {
@@ -74,7 +74,7 @@ class DonationDialogTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(context).apply {
+    kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
@@ -86,7 +86,6 @@ class DonationDialogTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
-    sharedPreferenceUtil = SharedPreferenceUtil(context)
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
@@ -113,15 +112,17 @@ class DonationDialogTest : BaseActivityTest() {
   @Test
   fun showDonationPopupWhenApplicationIsThreeMonthOldAndHaveAtleastOneZIMFile() {
     loadZIMFileInApplication()
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = 0L
-    sharedPreferenceUtil.laterClickedMilliSeconds = 0L
+    runBlocking {
+      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L)
+      kiwixDataStore.setLaterClickedMilliSeconds(0L)
+    }
     openReaderFragment()
     donation { assertDonationDialogDisplayed(composeTestRule) }
   }
 
   @Test
   fun shouldNotShowDonationPopupWhenApplicationIsThreeMonthOldAndDoNotHaveAnyZIMFile() {
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = 0L
+    runBlocking { kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L) }
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -133,8 +134,11 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun shouldNotShowPopupIfTimeSinceLastPopupIsLessThanThreeMonth() {
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds =
-      System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS / 2)
+    runBlocking {
+      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(
+        System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS / 2)
+      )
+    }
     loadZIMFileInApplication()
     openReaderFragment()
     donation { assertDonationDialogIsNotDisplayed(composeTestRule) }
@@ -142,8 +146,11 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun shouldShowDonationPopupIfTimeSinceLastPopupExceedsThreeMonths() {
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds =
-      System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+    runBlocking {
+      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(
+        System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+      )
+    }
     loadZIMFileInApplication()
     openReaderFragment()
     donation { assertDonationDialogDisplayed(composeTestRule) }
@@ -151,9 +158,10 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun testShouldShowDonationPopupWhenLaterClickedTimeExceedsThreeMonths() {
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = 0L
-    sharedPreferenceUtil.laterClickedMilliSeconds =
-      System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+    runBlocking {
+      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L)
+      kiwixDataStore.setLaterClickedMilliSeconds(System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000))
+    }
     loadZIMFileInApplication()
     openReaderFragment()
     donation { assertDonationDialogDisplayed(composeTestRule) }
@@ -161,9 +169,10 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun testShouldNotShowPopupIfLaterClickedTimeIsLessThanThreeMonths() {
-    sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = 0L
-    sharedPreferenceUtil.laterClickedMilliSeconds =
-      System.currentTimeMillis() - 10000L
+    runBlocking {
+      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L)
+      kiwixDataStore.setLaterClickedMilliSeconds(System.currentTimeMillis() - 10000L)
+    }
     loadZIMFileInApplication()
     openReaderFragment()
     donation { assertDonationDialogIsNotDisplayed(composeTestRule) }

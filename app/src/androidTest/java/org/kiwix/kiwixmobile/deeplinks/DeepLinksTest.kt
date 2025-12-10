@@ -89,6 +89,7 @@ class DeepLinksTest : BaseActivityTest() {
         setWifiOnly(false)
         setIntroShown()
         setPrefLanguage("en")
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
       }
     }
     context.let {
@@ -99,7 +100,6 @@ class DeepLinksTest : BaseActivityTest() {
           prefIsScanFileSystemDialogShown = true
           prefIsTest = true
           shouldShowStorageSelectionDialog = false
-          lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
         }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {

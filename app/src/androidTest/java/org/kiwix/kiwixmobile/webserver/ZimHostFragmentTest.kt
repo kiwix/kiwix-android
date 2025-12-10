@@ -114,13 +114,13 @@ class ZimHostFragmentTest {
           setWifiOnly(false)
           setIntroShown()
           setPrefLanguage("en")
+          setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         }
       }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIsPlayStoreBuildType(true)
           prefIsTest = true
-          lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
           prefIsScanFileSystemDialogShown = true
           putPrefIsFirstRun(false)
         }

@@ -90,10 +90,6 @@ class KiwixSettingsFragmentTest {
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
-      putLong(
-        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-        System.currentTimeMillis()
-      )
     }
     val activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -102,7 +98,9 @@ class KiwixSettingsFragmentTest {
           handleLocaleChange(
             it,
             "en",
-            KiwixDataStore(it)
+            KiwixDataStore(it).apply {
+              setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+            }
           )
         }
       }
