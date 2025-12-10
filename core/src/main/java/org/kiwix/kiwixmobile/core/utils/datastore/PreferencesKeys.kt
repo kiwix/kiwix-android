@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils.datastore
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 object PreferencesKeys {
@@ -55,4 +56,5 @@ object PreferencesKeys {
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS)
   val PREF_SHOW_NOTES_ALL_BOOKS =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS)
+  val PREF_HOSTED_BOOKS = stringSetPreferencesKey(SharedPreferenceUtil.PREF_HOSTED_BOOKS)
 }
