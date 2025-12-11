@@ -399,6 +399,13 @@
   <string name="downloading_state">Prenašanje</string>
   <string name="download_failed_state">Neuspešno</string>
   <string name="searchview_description_clear">Počisti poizvedbo</string>
+  <string name="do_you_mean">Ste mislili:</string>
+  <string name="suggested_search_icon_description">Tapnite ta predlog, če ga želite uporabiti in samodejno popraviti iskanje.</string>
   <string name="file_system_scan_dialog_title">Pregled shrambe za knjige?</string>
   <string name="file_system_scan_dialog_message">Kixix bo pregledal pomnilnik vaše naprave in tukaj navedel razpoložljive knjige.</string>
+  <string name="download_timeout_resume_message">Časovna omejitev za prenos v ozadju v sistemu Android je potekla. Ali želite nadaljevati?</string>
+  <string name="validate_zim_files">Preverjanje datotek ZIM</string>
+  <string name="confirmation_validate_zim_files">Ali ste prepričani, da želite preveriti naslednje datoteke ZIM?\n\n%s</string>
+  <string name="validating_zim_file">Preverjanje datoteke ZIM …</string>
+  <string name="validating_zim_files">Preverjanje datotek ZIM …</string>
 </resources>

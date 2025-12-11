@@ -8,6 +8,7 @@
 * Kenrick95
 * McDutchie
 * MohitMali
+* Penyuwangi
 * Polos
 * Relly Komaruzaman
 * Rizkiahmadz
@@ -35,9 +36,9 @@
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
   <string name="hotspot_service_channel_name">Saluran Servis Hotspot</string>
   <string name="hotspot_failed_title">Hotspot gagal dihidupkan</string>
-  <string name="hotspot_failed_message">Tampaknya hotspot Anda telah hidup. Silakan memutuskan koneksi hotspot wifi Anda untuk lanjut.</string>
+  <string name="hotspot_failed_message">Tampaknya hotspot Anda telah hidup. Silakan putuskan sambungan hotspot wifi Anda untuk lanjut.</string>
   <string name="go_to_wifi_settings_label">Ke pengaturan WIFI</string>
-  <string name="connection_refused">Koneksi ditolak.</string>
+  <string name="connection_refused">Sambungan ditolak.</string>
   <string name="hotspot_running">Hotspot Berjalan</string>
   <string name="no_books_selected_toast_message">Silakan pilih buku terlebih dahulu</string>
   <string name="server_failed_message">Server tidak dapat dihidupkan. Silakan menyalakan hotspot Anda.</string>
@@ -45,11 +46,11 @@
   <string name="server_started_successfully_toast_message">Server berhasil dinyalakan.</string>
   <string name="server_stopped_successfully_toast_message">Server berhasil dimatikan.</string>
   <string name="hotspot_turned_on">Hotspot sudah menyala.</string>
-  <string name="hotspot_details_message">Berikut adalah detil hotspot lokal Anda.\nSSID : %1$s\nPass : %2$s</string>
+  <string name="hotspot_details_message">Berikut adalah rincian hotspot setempat Anda.\nSSID : %1$s\nPass : %2$s</string>
   <string name="server_textview_default_message">Pilih file yang ingin Anda host di server</string>
   <string name="progress_dialog_starting_server">Menyalakan server</string>
   <string name="hotspot_dialog_title">Petunjuk untuk hosting buku</string>
-  <string name="wifi_dialog_title">Koneksi Wifi telah terdeteksi</string>
+  <string name="wifi_dialog_title">Sambungan Wifi telah terdeteksi</string>
   <string name="wifi_dialog_body">Untuk dapat melihat buku dengan alat elektronik lainnya, pastikan semua alat elektronik Anda terhubung ke jaringan Wifi yang sama.</string>
   <string name="hotspot_dialog_message">Agar fitur ini berfungsi, Anda perlu terlebih dahulu menyalakan hotspot Wi-Fi Anda secara manual atau memastikan perangkat host dan perangkat penerima berada di jaringan Wi-Fi yang sama</string>
   <string name="hotspot_dialog_neutral_button">LANJUT</string>
@@ -260,15 +261,15 @@
   <string name="books_count">%d buku</string>
   <string name="discovery_initiated">Penemuan dimulai</string>
   <string name="discovery_failed">Penemuan gagal</string>
-  <string name="severe_loss_error">Kesalahan parah! Coba nonaktifkan/aktifkan kembali WiFi P2P</string>
-  <string name="connection_failed">Koneksi gagal</string>
+  <string name="severe_loss_error">Galat parah! Coba matikan/nyalakan kembali WiFi P2P</string>
+  <string name="connection_failed">Sambungan gagal</string>
   <string name="permission_rationale_location">Izin lokasi diperlukan oleh Android agar aplikasi dapat mendeteksi perangkat terdekat</string>
   <string name="permission_rationale_nearby">Izin perangkat di sekitar diperlukan oleh Android agar aplikasi dapat mendeteksi perangkat terdekat</string>
   <string name="permission_refused_location">Tidak dapat menemukan perangkat terdekat tanpa izin lokasi</string>
   <string name="permission_refused_storage">Tidak dapat mengakses file ZIM tanpa izin penyimpanan</string>
-  <string name="request_enable_location">Aktifkan lokasi untuk memungkinkan deteksi perangkat sekitar</string>
+  <string name="request_enable_location">Nyalakan lokasi untuk memungkinkan deteksi perangkat sekitar</string>
   <string name="discovery_needs_location">Tidak dapat menemukan perangkat sekitar tanpa layanan lokasi</string>
-  <string name="request_enable_wifi">Aktifkan WiFi P2P dari pengaturan sistem</string>
+  <string name="request_enable_wifi">Nyalakan WiFi P2P dari pengaturan sistem</string>
   <string name="discovery_needs_wifi">Tidak dapat menemukan perangkat sekitar tanpa WiFi AKTIF</string>
   <string name="transfer_to">Transfer berkas ke %s?</string>
   <string name="device_not_cooperating">Perangkat yang dipilih tidak bekerja sama untuk transfer</string>
@@ -343,7 +344,7 @@
   <string name="all_files_permission_needed_message">Untuk mengakses semua berkas ZIM di seluruh perangkat, kami perlu memiliki Izin Semua Berkas</string>
   <string name="allowed">Izinkan</string>
   <string name="not_allowed">Jangan izinkan</string>
-  <string name="denied_internet_permission_message">Harap aktifkan wifi untuk mengunduh konten</string>
+  <string name="denied_internet_permission_message">Harap nyalakan wifi untuk mengunduh konten</string>
   <string name="system_unable_to_grant_permission_message">Sistem tidak dapat memberikan izin!</string>
   <string name="allow">Izinkan</string>
   <string name="swipe_down_for_library">Geser ke Bawah untuk Perpustakaan</string>
@@ -388,4 +389,8 @@
   <string name="downloading_state">Mengunduh</string>
   <string name="download_failed_state">Gagal</string>
   <string name="searchview_description_clear">Hapus kueri</string>
+  <string name="validate_zim_files">Sahkan berkas ZIM</string>
+  <string name="confirmation_validate_zim_files">Apakah Anda yakin ingin mengesahkan berkas ZIM berikut?\n\n %s</string>
+  <string name="validating_zim_file">Mengesahkan berkas ZIM…</string>
+  <string name="validating_zim_files">Mengesahkan berkas-berkas ZIM…</string>
 </resources>

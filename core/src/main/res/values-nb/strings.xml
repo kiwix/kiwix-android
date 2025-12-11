@@ -8,6 +8,7 @@
 * MohitMali
 * SuperPotato
 * TorgeirS
+* Yupik
 -->
 <resources>
   <string name="menu_help">Hjelp</string>
@@ -172,6 +173,7 @@
   <string name="go_to_previous_page">Gå til forrige side</string>
   <string name="go_to_next_page">Gå til neste side</string>
   <string name="table_of_contents">Innholdfortegnelse</string>
+  <string name="select_language">Velg språk</string>
   <string name="save_languages">Lagre språk</string>
   <string name="expand">Utvid</string>
   <string name="history">Historie</string>
