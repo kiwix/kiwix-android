@@ -78,6 +78,7 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
@@ -86,7 +87,6 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =

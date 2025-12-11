@@ -61,4 +61,8 @@ object PreferencesKeys {
   val PREF_LATER_CLICKED_MILLIS = longPreferencesKey(SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS)
   val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
     longPreferencesKey(SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS)
+  val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN)
+  val PREF_IS_SCAN_FILE_SYSTEM_TEST =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_IS_SCAN_FILE_SYSTEM_TEST)
 }

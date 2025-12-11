@@ -79,6 +79,7 @@ class LocalLibraryTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
@@ -92,7 +93,6 @@ class LocalLibraryTest : BaseActivityTest() {
       // the manage external storage permission dialog on Android 11 and above
       // while refreshing the content in LocalLibraryFragment.
       putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, false)
-      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
@@ -219,18 +219,21 @@ class LocalLibraryTest : BaseActivityTest() {
     showManagePermissionDialog: Boolean,
     isPlayStoreBuild: Boolean
   ) {
+    KiwixDataStore(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).apply {
+      lifeCycleScope.launch {
+        setIsScanFileSystemDialogShown(scanFileSystemDialogShown)
+        setIsScanFileSystemTest(true)
+      }
+    }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, isTest)
-      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, scanFileSystemDialogShown)
       putBoolean(
         SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH,
         showManagePermissionDialog
-      )
-      putBoolean(
-        SharedPreferenceUtil.PREF_IS_SCAN_FILE_SYSTEM_TEST,
-        true
       )
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, isPlayStoreBuild)
     }

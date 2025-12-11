@@ -90,6 +90,7 @@ class DeepLinksTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
       }
     }
     context.let {
@@ -97,7 +98,6 @@ class DeepLinksTest : BaseActivityTest() {
         SharedPreferenceUtil(it).apply {
           setIsPlayStoreBuildType(true)
           putPrefIsFirstRun(false)
-          prefIsScanFileSystemDialogShown = true
           prefIsTest = true
           shouldShowStorageSelectionDialog = false
         }
