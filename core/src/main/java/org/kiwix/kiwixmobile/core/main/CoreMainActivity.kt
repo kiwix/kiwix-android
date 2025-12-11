@@ -49,11 +49,13 @@ import androidx.navigation.navOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
@@ -63,6 +65,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServ
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -120,6 +123,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
+
+  @Inject
+  lateinit var downloadRoomDao: DownloadRoomDao
 
   /**
    * We have migrated the UI in compose, so providing the compose based navigation to activity
@@ -294,18 +300,32 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   /**
-   * Starts monitoring the downloads by ensuring that the `DownloadMonitorService` is running.
-   * This service keeps the Fetch instance alive when the application is in the background
-   *  or has been killed by the user or system, allowing downloads to continue in the background.
+   * Ensures that the `DownloadMonitorService` is running whenever there are ongoing downloads.
+   *
+   * This method is typically called from lifecycle events (e.g., `onPause()`).
+   * It checks for active downloads on a background thread and starts the
+   * `DownloadMonitorService` only if:
+   *  - the service is not already running, and
+   *  - there are ongoings downloads in the database.
+   *
+   * The `DownloadMonitorService` keeps the Fetch instance alive in the background,
+   * allowing downloads to continue even when the app is minimized, backgrounded,
+   * or terminated by the system.
    */
+  @Suppress("InjectDispatcher")
   private fun startMonitoringDownloads() {
     if (!isServiceRunning(DownloadMonitorService::class.java)) {
-      runCatching {
-        startService(
-          Intent(this, DownloadMonitorService::class.java).apply {
-            putExtra(APP_NAME_KEY, appName)
+      lifecycleScope.runSafelyInLifecycleScope {
+        withContext(Dispatchers.IO) {
+          val downloads = downloadRoomDao.getOngoingDownloads()
+          if (downloads.isNotEmpty()) {
+            startService(
+              Intent(this@CoreMainActivity, DownloadMonitorService::class.java).apply {
+                putExtra(APP_NAME_KEY, appName)
+              }
+            )
           }
-        )
+        }
       }
     }
   }

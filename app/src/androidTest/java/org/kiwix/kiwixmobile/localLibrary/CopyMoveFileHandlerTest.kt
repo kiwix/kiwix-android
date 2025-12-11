@@ -75,6 +75,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
   private lateinit var destinationFile: File
@@ -88,7 +89,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(context).apply {
+    kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
@@ -141,7 +142,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitUntilTimeout() // to properly load the library screen.
       }
       // test with first launch
-      sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
+      runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
@@ -207,7 +208,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitUntilTimeout() // to properly load the library screen.
       }
       // test with first launch
-      sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
+      runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
@@ -327,6 +328,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     val copyMoveFileHandler = CopyMoveFileHandler(
       kiwixMainActivity,
       sharedPreferenceUtil,
+      kiwixDataStore,
       StorageCalculator(sharedPreferenceUtil),
       Fat32Checker(sharedPreferenceUtil, listOf(FileWritingFileSystemChecker()))
     ).apply {
@@ -377,8 +379,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitForIdle()
         waitUntilTimeout() // to properly load the library screen.
       }
+      runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(false) }
       sharedPreferenceUtil.apply {
-        shouldShowStorageSelectionDialog = false
         setIsPlayStoreBuildType(true)
       }
       // test opening images

@@ -604,7 +604,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private suspend fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {
-    sharedPreferenceUtil.showStorageOption = false
+    kiwixDataStore.setShowStorageOption(false)
     sharedPreferenceUtil.putPrefStorage(
       sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
     )
@@ -725,14 +725,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             }
 
             else ->
-              if (sharedPreferenceUtil.showStorageOption) {
+              if (kiwixDataStore.showStorageOption.first()) {
                 // Show the storage selection dialog for configuration if there is an SD card available.
                 if (getStorageDeviceList().size > 1) {
                   showStorageSelectDialog(getStorageDeviceList())
                 } else {
                   // If only internal storage is available, proceed with the ZIM file download directly.
                   // Displaying a configuration dialog is unnecessary in this case.
-                  sharedPreferenceUtil.showStorageOption = false
+                  kiwixDataStore.setShowStorageOption(false)
                   onBookItemClick(item)
                 }
               } else if (!requireActivity().isManageExternalStoragePermissionGranted(
