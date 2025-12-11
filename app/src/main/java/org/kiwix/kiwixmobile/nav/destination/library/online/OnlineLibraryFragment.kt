@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificat
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -600,7 +601,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun storeDeviceInPreferences(
+  private suspend fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {
     sharedPreferenceUtil.showStorageOption = false
@@ -715,7 +716,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
             noWifiWithWifiOnlyPreferenceSet() -> {
               alertDialogShower.show(KiwixDialog.YesNoDialog.WifiOnly, {
-                lifecycleScope.launch {
+                lifecycleScope.runSafelyInLifecycleScope {
                   kiwixDataStore.setWifiOnly(false)
                   clickOnBookItem()
                 }
@@ -735,7 +736,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                   onBookItemClick(item)
                 }
               } else if (!requireActivity().isManageExternalStoragePermissionGranted(
-                  sharedPreferenceUtil
+                  sharedPreferenceUtil,
+                  kiwixDataStore
                 )
               ) {
                 showManageExternalStoragePermissionDialog()
@@ -778,8 +780,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
       .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 
-  private fun clickOnBookItem() {
-    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+  private suspend fun clickOnBookItem() {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(
+        sharedPreferenceUtil,
+        kiwixDataStore
+      )
+    ) {
       showManageExternalStoragePermissionDialog()
     } else {
       downloadBookItem?.let(::onBookItemClick)

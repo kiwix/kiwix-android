@@ -80,19 +80,19 @@ class LocalLibraryTest : BaseActivityTest() {
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        // set `setShowManageExternalFilesPermissionDialog` false for hiding
+        // manage external storage permission dialog on android 11 and above
+        setShowManageExternalFilesPermissionDialog(false)
+        // Set setManageExternalFilesPermissionDialogOnRefresh to false to hide
+        // the manage external storage permission dialog on Android 11 and above
+        // while refreshing the content in LocalLibraryFragment.
+        setManageExternalFilesPermissionDialogOnRefresh(false)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      // set PREF_MANAGE_EXTERNAL_FILES false for hiding
-      // manage external storage permission dialog on android 11 and above
-      putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, false)
-      // Set PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH to false to hide
-      // the manage external storage permission dialog on Android 11 and above
-      // while refreshing the content in LocalLibraryFragment.
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
@@ -225,16 +225,13 @@ class LocalLibraryTest : BaseActivityTest() {
       lifeCycleScope.launch {
         setIsScanFileSystemDialogShown(scanFileSystemDialogShown)
         setIsScanFileSystemTest(true)
+        setManageExternalFilesPermissionDialogOnRefresh(showManagePermissionDialog)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, isTest)
-      putBoolean(
-        SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH,
-        showManagePermissionDialog
-      )
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, isPlayStoreBuild)
     }
   }

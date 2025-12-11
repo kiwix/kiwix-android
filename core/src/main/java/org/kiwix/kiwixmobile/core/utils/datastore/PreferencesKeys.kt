@@ -65,4 +65,8 @@ object PreferencesKeys {
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN)
   val PREF_IS_SCAN_FILE_SYSTEM_TEST =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_IS_SCAN_FILE_SYSTEM_TEST)
+  val PREF_MANAGE_EXTERNAL_FILES =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES)
+  val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH)
 }
