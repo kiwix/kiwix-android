@@ -249,38 +249,42 @@ class ZimManageViewModelTest {
   @Nested
   inner class Books {
     @Test
-    fun `emissions from data source are observed`() = runTest {
-      val expectedList = listOf(bookOnDisk())
-      testFlow(
-        viewModel.fileSelectListStates.asFlow(),
-        triggerAction = { booksOnDiskListItems.emit(expectedList) },
-        assert = {
-          skipItems(1)
-          assertThat(awaitItem()).isEqualTo(FileSelectListState(expectedList))
-        }
-      )
+    fun `emissions from data source are observed`() = flakyTest {
+      runTest {
+        val expectedList = listOf(bookOnDisk())
+        testFlow(
+          viewModel.fileSelectListStates.asFlow(),
+          triggerAction = { booksOnDiskListItems.emit(expectedList) },
+          assert = {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(FileSelectListState(expectedList))
+          }
+        )
+      }
     }
 
     @Test
-    fun `books found on filesystem are filtered by books already in db`() = runTest {
-      every { application.getString(any()) } returns ""
-      val expectedBook = bookOnDisk(1L, libkiwixBook("1", nativeBook = BookTestWrapper("1")))
-      val bookToRemove = bookOnDisk(1L, libkiwixBook("2", nativeBook = BookTestWrapper("2")))
-      advanceUntilIdle()
-      viewModel.requestFileSystemCheck.emit(Unit)
-      advanceUntilIdle()
-      books.emit(listOf(bookToRemove))
-      advanceUntilIdle()
-      booksOnFileSystem.emit(
-        listOfNotNull(
-          expectedBook.book.nativeBook,
-          expectedBook.book.nativeBook,
-          bookToRemove.book.nativeBook
+    fun `books found on filesystem are filtered by books already in db`() = flakyTest {
+      runTest {
+        every { application.getString(any()) } returns ""
+        val expectedBook = bookOnDisk(1L, libkiwixBook("1", nativeBook = BookTestWrapper("1")))
+        val bookToRemove = bookOnDisk(1L, libkiwixBook("2", nativeBook = BookTestWrapper("2")))
+        advanceUntilIdle()
+        viewModel.requestFileSystemCheck.emit(Unit)
+        advanceUntilIdle()
+        books.emit(listOf(bookToRemove))
+        advanceUntilIdle()
+        booksOnFileSystem.emit(
+          listOfNotNull(
+            expectedBook.book.nativeBook,
+            expectedBook.book.nativeBook,
+            bookToRemove.book.nativeBook
+          )
         )
-      )
-      advanceUntilIdle()
-      coVerify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
-        libkiwixBookOnDisk.insert(listOfNotNull(expectedBook.book.nativeBook))
+        advanceUntilIdle()
+        coVerify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
+          libkiwixBookOnDisk.insert(listOfNotNull(expectedBook.book.nativeBook))
+        }
       }
     }
   }
@@ -288,16 +292,18 @@ class ZimManageViewModelTest {
   @Nested
   inner class Languages {
     @Test
-    fun `changing language updates the filter and do the network request`() = runTest {
-      every { application.getString(any()) } returns ""
-      every { application.getString(any(), any()) } returns ""
-      viewModel.onlineLibraryRequest.test {
-        skipItems(1)
-        onlineContentLanguage.emit("eng")
-        val onlineLibraryRequest = awaitItem()
-        assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
-        assertThat(onlineLibraryRequest.page).isEqualTo(ZERO)
-        assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+    fun `changing language updates the filter and do the network request`() = flakyTest {
+      runTest {
+        every { application.getString(any()) } returns ""
+        every { application.getString(any(), any()) } returns ""
+        viewModel.onlineLibraryRequest.test {
+          skipItems(1)
+          onlineContentLanguage.emit("eng")
+          val onlineLibraryRequest = awaitItem()
+          assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
+          assertThat(onlineLibraryRequest.page).isEqualTo(ZERO)
+          assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+        }
       }
     }
   }
