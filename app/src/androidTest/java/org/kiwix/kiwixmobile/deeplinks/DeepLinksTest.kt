@@ -91,6 +91,7 @@ class DeepLinksTest : BaseActivityTest() {
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        setShowStorageSelectionDialogOnCopyMove(false)
       }
     }
     context.let {
@@ -99,7 +100,6 @@ class DeepLinksTest : BaseActivityTest() {
           setIsPlayStoreBuildType(true)
           putPrefIsFirstRun(false)
           prefIsTest = true
-          shouldShowStorageSelectionDialog = false
         }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {

@@ -73,6 +73,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   val composeTestRule = createComposeRule()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var uiDevice: UiDevice
   private val fileName = "testzim.zim"
@@ -87,7 +88,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(context).apply {
+    kiwixDataStore = KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
@@ -135,7 +136,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
+        runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
         // open file picker to select a file to test the real scenario.
         composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
         TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
@@ -168,7 +169,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
+        runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
         openFileManager()
         TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
         copyMoveFileHandler {
@@ -207,7 +208,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
-    sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
+    runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
     ).onActivity {}

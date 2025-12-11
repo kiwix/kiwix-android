@@ -104,21 +104,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
 
-  var showStorageOption: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, true)
-    set(prefShowStorageOption) =
-      sharedPreferences.edit {
-        putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
-      }
-
-  var shouldShowStorageSelectionDialog: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, true)
-    set(value) {
-      sharedPreferences.edit {
-        putBoolean(PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, value)
-      }
-    }
-
   fun getPublicDirectoryPath(path: String): String =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       path

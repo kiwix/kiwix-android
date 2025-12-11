@@ -24,10 +24,12 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.tonyodev.fetch2.Download
+import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.COMPLETED
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -112,6 +114,14 @@ abstract class DownloadRoomDao {
   abstract fun getDownloadsPausedByService(
     reason: PauseReason = PauseReason.SERVICE
   ): List<DownloadRoomEntity>
+
+  suspend fun getOngoingDownloads(): List<DownloadModel> = allDownloads().first()
+    .filter {
+      it.state == Status.QUEUED ||
+        it.state == Status.DOWNLOADING ||
+        it.state == Status.NONE ||
+        it.state == Status.ADDED
+    }
 
   fun delete(download: Download) {
     deleteDownloadByDownloadId(download.id.toLong())

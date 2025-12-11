@@ -418,4 +418,26 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       prefs[PreferencesKeys.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH] = showOnRefresh
     }
   }
+
+  val showStorageOption: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_SHOW_STORAGE_OPTION] ?: true
+    }
+
+  suspend fun setShowStorageOption(showStorageOption: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_STORAGE_OPTION] = showStorageOption
+    }
+  }
+
+  val shouldShowStorageSelectionDialogOnCopyMove: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG] ?: true
+    }
+
+  suspend fun setShowStorageSelectionDialogOnCopyMove(showStorageOption: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG] = showStorageOption
+    }
+  }
 }

@@ -33,6 +33,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -45,6 +46,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
@@ -60,6 +62,7 @@ class CopyMoveFileHandlerTest {
 
   private val activity: Activity = mockk(relaxed = true)
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
+  private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val storageCalculator: StorageCalculator = mockk(relaxed = true)
   private val fat32Checker: Fat32Checker = mockk(relaxed = true)
@@ -79,6 +82,7 @@ class CopyMoveFileHandlerTest {
     fileHandler = CopyMoveFileHandler(
       activity,
       sharedPreferenceUtil,
+      kiwixDataStore,
       storageCalculator,
       fat32Checker
     ).apply {
@@ -211,7 +215,7 @@ class CopyMoveFileHandlerTest {
     val storageDeviceList = listOf<StorageDevice>(mockk(), mockk())
     every { fileHandler.showStorageSelectDialog(storageDeviceList) } just Runs
 
-    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
+    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
     coEvery { fileHandler.getStorageDeviceList() } returns storageDeviceList
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
@@ -234,7 +238,7 @@ class CopyMoveFileHandlerTest {
   @Test
   fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runBlocking {
     fileHandler = spyk(fileHandler)
-    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
+    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
     coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk())
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
@@ -256,7 +260,7 @@ class CopyMoveFileHandlerTest {
   @Test
   fun showDirectlyCopyMoveDialogAfterFirstLaunch() = runBlocking {
     fileHandler = spyk(fileHandler)
-    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
+    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
     coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     prepareFileSystemAndFileForMockk()
@@ -281,7 +285,7 @@ class CopyMoveFileHandlerTest {
     val negativeButtonClickSlot = slot<() -> Unit>()
     fileHandler = spyk(fileHandler)
     coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
-    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
+    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
     every {
       alertDialogShower.show(
         KiwixDialog.CopyMoveFileToPublicDirectoryDialog(""),

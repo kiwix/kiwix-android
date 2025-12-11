@@ -450,7 +450,7 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
     }
   }
 
-  private fun setShowStorageOption() {
-    sharedPreferenceUtil?.showStorageOption = false
+  private suspend fun setShowStorageOption() {
+    kiwixDataStore?.setShowStorageOption(false)
   }
 }

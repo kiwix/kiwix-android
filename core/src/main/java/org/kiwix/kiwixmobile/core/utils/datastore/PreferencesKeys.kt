@@ -69,4 +69,8 @@ object PreferencesKeys {
     booleanPreferencesKey(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES)
   val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH =
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH)
+  val PREF_SHOW_STORAGE_OPTION =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION)
+  val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG =
+    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG)
 }

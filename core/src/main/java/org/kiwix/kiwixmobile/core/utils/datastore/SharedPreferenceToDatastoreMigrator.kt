@@ -61,6 +61,8 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
         SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN,
         SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES,
+        SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION,
+        SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)
