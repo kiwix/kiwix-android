@@ -28,10 +28,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -40,7 +42,7 @@ import javax.inject.Inject
 val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16.sp
 
 class StorageSelectDialog : DialogFragment() {
-  var onSelectAction: ((StorageDevice) -> Unit)? = null
+  var onSelectAction: (suspend (StorageDevice) -> Unit)? = null
   var titleSize: TextUnit? = null
 
   private var composeView: ComposeView? = null
@@ -77,8 +79,10 @@ class StorageSelectDialog : DialogFragment() {
           sharedPreferenceUtil,
           shouldShowCheckboxSelected
         ) {
-          onSelectAction?.invoke(it)
-          dismiss()
+          lifecycleScope.runSafelyInLifecycleScope {
+            onSelectAction?.invoke(it)
+            dismiss()
+          }
         }
       }
     }.also {

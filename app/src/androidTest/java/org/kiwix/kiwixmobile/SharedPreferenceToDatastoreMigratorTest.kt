@@ -160,6 +160,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putLong(SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS, 120L)
       .putLong(SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS, 100L)
       .putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
+      .putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, true)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -212,5 +213,6 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(120L, prefs[PreferencesKeys.PREF_LATER_CLICKED_MILLIS])
     assertEquals(100L, prefs[PreferencesKeys.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS])
     assertEquals(true, prefs[PreferencesKeys.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN])
+    assertEquals(true, prefs[PreferencesKeys.PREF_MANAGE_EXTERNAL_FILES])
   }
 }

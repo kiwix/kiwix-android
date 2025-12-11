@@ -100,6 +100,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservabl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -375,7 +376,7 @@ abstract class CoreReaderFragment :
 
   fun runSafelyInCoreReaderLifecycleScope(func: suspend CoroutineScope.() -> Unit) {
     runCatching {
-      coreReaderLifeCycleScope?.launch { func.invoke(this) }
+      coreReaderLifeCycleScope?.runSafelyInLifecycleScope { func.invoke(this) }
     }.onFailure { it.printStackTrace() }
   }
 

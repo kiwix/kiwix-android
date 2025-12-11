@@ -22,7 +22,6 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
-import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,25 +109,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     set(prefShowStorageOption) =
       sharedPreferences.edit {
         putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
-      }
-
-  var manageExternalFilesPermissionDialog: Boolean
-    get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)
-    set(prefManageExternalFilesPermissionDialog) =
-      sharedPreferences.edit {
-        putBoolean(PREF_MANAGE_EXTERNAL_FILES, prefManageExternalFilesPermissionDialog)
-      }
-
-  // this is only used for test cases
-  @VisibleForTesting
-  var manageExternalFilesPermissionDialogOnRefresh: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, true)
-    set(manageExternalFilesPermissionDialogOnRefresh) =
-      sharedPreferences.edit {
-        putBoolean(
-          PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH,
-          manageExternalFilesPermissionDialogOnRefresh
-        )
       }
 
   var shouldShowStorageSelectionDialog: Boolean

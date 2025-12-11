@@ -395,4 +395,27 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       prefs[PreferencesKeys.PREF_IS_SCAN_FILE_SYSTEM_TEST] = isScanFileSystemTest
     }
   }
+
+  val showManageExternalFilesPermissionDialog: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_MANAGE_EXTERNAL_FILES] ?: true
+    }
+
+  suspend fun setShowManageExternalFilesPermissionDialog(isScanFileSystemTest: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_MANAGE_EXTERNAL_FILES] = isScanFileSystemTest
+    }
+  }
+
+  val showManageExternalFilesPermissionDialogOnRefresh: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH] ?: true
+    }
+
+  @VisibleForTesting
+  suspend fun setManageExternalFilesPermissionDialogOnRefresh(showOnRefresh: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH] = showOnRefresh
+    }
+  }
 }
