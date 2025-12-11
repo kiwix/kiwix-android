@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils.datastore
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
@@ -369,6 +370,29 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS] =
         lastDonationPopupShownInMilliSeconds
+    }
+  }
+
+  val isScanFileSystemDialogShown: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN] ?: false
+    }
+
+  suspend fun setIsScanFileSystemDialogShown(isFileScanFileSystemDialogShown: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN] = isFileScanFileSystemDialogShown
+    }
+  }
+
+  val isScanFileSystemTest: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_IS_SCAN_FILE_SYSTEM_TEST] ?: false
+    }
+
+  @VisibleForTesting
+  suspend fun setIsScanFileSystemTest(isScanFileSystemTest: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_IS_SCAN_FILE_SYSTEM_TEST] = isScanFileSystemTest
     }
   }
 }

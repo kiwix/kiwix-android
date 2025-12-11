@@ -56,22 +56,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       sharedPreferences.edit { putBoolean(PREF_IS_TEST, prefIsTest) }
     }
 
-  var prefIsScanFileSystemTest: Boolean
-    get() = sharedPreferences.getBoolean(PREF_IS_SCAN_FILE_SYSTEM_TEST, false)
-    set(prefIsScanFileSystemTest) {
-      sharedPreferences.edit { putBoolean(PREF_IS_SCAN_FILE_SYSTEM_TEST, prefIsScanFileSystemTest) }
-    }
-
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
-
-  var prefIsScanFileSystemDialogShown: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, false)
-    set(isFileScanFileSystemDialogShown) {
-      sharedPreferences.edit {
-        putBoolean(PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, isFileScanFileSystemDialogShown)
-      }
-    }
 
   val prefStorage: String
     get() {

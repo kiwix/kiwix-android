@@ -103,12 +103,12 @@ class LanguageFragmentTest {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
       .edit {
         putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-        putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
         putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       }
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {

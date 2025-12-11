@@ -81,12 +81,12 @@ class SharedPreferenceToDatastoreMigratorTest {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
-      putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
@@ -159,6 +159,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putStringSet(SharedPreferenceUtil.PREF_HOSTED_BOOKS, hostedBooksSet)
       .putLong(SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS, 120L)
       .putLong(SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS, 100L)
+      .putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -210,5 +211,6 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(hostedBooksSet, prefs[PreferencesKeys.PREF_HOSTED_BOOKS])
     assertEquals(120L, prefs[PreferencesKeys.PREF_LATER_CLICKED_MILLIS])
     assertEquals(100L, prefs[PreferencesKeys.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS])
+    assertEquals(true, prefs[PreferencesKeys.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN])
   }
 }
