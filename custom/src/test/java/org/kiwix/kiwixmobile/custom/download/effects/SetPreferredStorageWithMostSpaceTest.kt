@@ -21,25 +21,26 @@ package org.kiwix.kiwixmobile.custom.download.effects
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.io.File
 
 internal class SetPreferredStorageWithMostSpaceTest {
   @Test
-  fun `invokeWith sets the storage with the most space as preferred`() {
+  fun `invokeWith sets the storage with the most space as preferred`() = runTest {
     val storageCalculator = mockk<StorageCalculator>()
-    val sharedPreferenceUtil = mockk<SharedPreferenceUtil>()
+    val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val directoryWithMoreStorage = mockk<File>()
     val directoryWithLessStorage = mockk<File>()
-    val sut = SetPreferredStorageWithMostSpace(storageCalculator, sharedPreferenceUtil)
+    val sut = SetPreferredStorageWithMostSpace(storageCalculator, kiwixDataStore)
     mockkConstructor(ContextWrapper::class)
     every {
       anyConstructed<ContextWrapper>().externalMediaDirs
@@ -51,8 +52,8 @@ internal class SetPreferredStorageWithMostSpaceTest {
     runBlocking {
       sut.findAndSetPreferredStorage(activity)
     }
-    verify {
-      sharedPreferenceUtil.putPrefStorage(expectedStorage)
+    coVerify {
+      kiwixDataStore.setSelectedStorage(expectedStorage)
     }
   }
 }

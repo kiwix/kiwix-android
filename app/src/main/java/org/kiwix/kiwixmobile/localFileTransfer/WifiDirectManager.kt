@@ -39,10 +39,11 @@ import android.os.Build.VERSION_CODES
 import android.os.Looper.getMainLooper
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.FileTransferConfirmation
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -60,7 +61,7 @@ import javax.inject.Inject
 @SuppressWarnings("MissingPermission", "ProtectedMemberInFinalClass")
 class WifiDirectManager @Inject constructor(
   private val context: Context,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private val manager: WifiP2pManager?
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
@@ -260,7 +261,7 @@ class WifiDirectManager @Inject constructor(
     filesForTransfer = fileItems
   }
 
-  val zimStorageRootPath get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
+  suspend fun zimStorageRootPath() = kiwixDataStore.selectedStorage.first() + "/Kiwix/"
 
   private suspend fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
     if (groupInfo.groupFormed) {

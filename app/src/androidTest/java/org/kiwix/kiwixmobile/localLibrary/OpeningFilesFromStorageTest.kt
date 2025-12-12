@@ -41,6 +41,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
@@ -151,7 +152,9 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
-        deleteAllFilesInDirectory(File(sharedPreferenceUtil.prefStorage))
+        deleteAllFilesInDirectory(
+          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
+        )
         deleteZimFileFromDownloadsFolder(uri!!)
       }
     }
@@ -182,7 +185,9 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
-        deleteAllFilesInDirectory(File(sharedPreferenceUtil.prefStorage))
+        deleteAllFilesInDirectory(
+          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
+        )
         deleteZimFileFromDownloadsFolder(uri!!)
       }
     }

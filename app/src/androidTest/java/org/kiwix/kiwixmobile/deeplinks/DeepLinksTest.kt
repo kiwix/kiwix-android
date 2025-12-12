@@ -73,6 +73,7 @@ class DeepLinksTest : BaseActivityTest() {
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  private lateinit var kiwixDataStore: KiwixDataStore
 
   @Before
   override fun waitForIdle() {
@@ -82,7 +83,7 @@ class DeepLinksTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    KiwixDataStore(
+    kiwixDataStore = KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).apply {
       lifeCycleScope.launch {
@@ -222,7 +223,7 @@ class DeepLinksTest : BaseActivityTest() {
   private fun loadZimFileInApplicationAndReturnSchemeTypeUri(schemeType: String): Uri? {
     val loadFileStream =
       DeepLinksTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(sharedPreferenceUtil.defaultStorage(), "testzim.zim")
+    val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), "testzim.zim") }
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

@@ -26,10 +26,12 @@ import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
@@ -37,6 +39,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -59,6 +62,7 @@ import javax.inject.Inject
  */
 class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private val activity: Activity,
   private val copyMoveFileHandler: CopyMoveFileHandler,
   private val storageCalculator: StorageCalculator
@@ -119,7 +123,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     storeSelectedFiles(uris)
     val totalSelectedFileSize = getTotalSizeOfSelectedZIMFiles(uris)
     val availableSpaceInStorage =
-      storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
+      storageCalculator.availableBytes(File(kiwixDataStore.selectedStorage.first()))
     if (availableSpaceInStorage < totalSelectedFileSize) {
       // Not enough storage → show storage selection dialog/snackbar
       insufficientSpaceInStorage(availableSpaceInStorage)
@@ -261,17 +265,17 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {
-    lifecycleScope?.launch {
-      sharedPreferenceUtil.putPrefStorage(
-        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-      )
-      sharedPreferenceUtil.putStoragePosition(
-        if (storageDevice.isInternal) {
-          INTERNAL_SELECT_POSITION
-        } else {
-          EXTERNAL_SELECT_POSITION
-        }
-      )
+    lifecycleScope.runSafelyInLifecycleScope {
+      kiwixDataStore.apply {
+        setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
+        setSelectedStoragePosition(
+          if (storageDevice.isInternal) {
+            INTERNAL_SELECT_POSITION
+          } else {
+            EXTERNAL_SELECT_POSITION
+          }
+        )
+      }
       // after selecting the storage try to copy/move the zim file.
       copyMoveFileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
     }

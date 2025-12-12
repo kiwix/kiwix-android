@@ -20,9 +20,10 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 suspend fun StorageDevice.getFreeSpace(
   context: Context,
@@ -51,7 +52,7 @@ suspend fun StorageDevice.usedPercentage(storageCalculator: StorageCalculator): 
 suspend fun StorageDevice.storagePathAndTitle(
   context: Context,
   index: Int,
-  sharedPreferenceUtil: SharedPreferenceUtil,
+  kiwixDataStore: KiwixDataStore,
   storageCalculator: StorageCalculator
 ): String {
   val storageName = if (isInternal) {
@@ -59,21 +60,21 @@ suspend fun StorageDevice.storagePathAndTitle(
   } else {
     context.getString(R.string.external_storage)
   }
-  val storagePath = if (index == sharedPreferenceUtil.storagePosition) {
-    sharedPreferenceUtil.prefStorage
+  val storagePath = if (index == kiwixDataStore.selectedStoragePosition.first()) {
+    kiwixDataStore.selectedStorage
   } else {
-    getStoragePathForNonSelectedStorage(this, sharedPreferenceUtil)
+    getStoragePathForNonSelectedStorage(this, kiwixDataStore)
   }
   val totalSpace = storageCalculator.calculateTotalSpace(file)
   return "$storageName - $totalSpace\n$storagePath/Kiwix"
 }
 
-private fun getStoragePathForNonSelectedStorage(
+private suspend fun getStoragePathForNonSelectedStorage(
   storageDevice: StorageDevice,
-  sharedPreferenceUtil: SharedPreferenceUtil
+  kiwixDataStore: KiwixDataStore
 ): String =
   if (storageDevice.isInternal) {
-    sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+    kiwixDataStore.getPublicDirectoryPath(storageDevice.name)
   } else {
     storageDevice.name
   }

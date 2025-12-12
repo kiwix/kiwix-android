@@ -24,12 +24,12 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class SetPreferredStorageWithMostSpace @Inject constructor(
   private val storageCalculator: StorageCalculator,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.lifecycleScope.launch {
@@ -41,6 +41,6 @@ class SetPreferredStorageWithMostSpace @Inject constructor(
     ContextWrapper(activity).externalMediaDirs
       .filterNotNull()
       .maxBy { storageCalculator.availableBytes(it) }
-      .let { sharedPreferenceUtil.putPrefStorage(it.path) }
+      .let { kiwixDataStore.setSelectedStorage(it.path) }
   }
 }

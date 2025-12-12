@@ -44,7 +44,7 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
       withContext(Dispatchers.IO) {
         ServerSocket(WifiDirectManager.fileTransferPort).use { serverSocket ->
           Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.fileTransferPort)
-          val zimStorageRootPath = wifiDirectManager.zimStorageRootPath
+          val zimStorageRootPath = wifiDirectManager.zimStorageRootPath()
           val fileItems = wifiDirectManager.getFilesForTransfer()
           var isTransferErrorFree = true
           Log.d(TAG, "Expecting " + fileItems.size + " files")

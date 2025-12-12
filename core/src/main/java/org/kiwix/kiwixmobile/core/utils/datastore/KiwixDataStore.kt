@@ -19,8 +19,11 @@
 package org.kiwix.kiwixmobile.core.utils.datastore
 
 import android.content.Context
+import android.content.ContextWrapper
+import android.os.Build
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -28,15 +31,19 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.json.JSONArray
 import org.json.JSONObject
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.STORAGE_POSITION
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -438,6 +445,57 @@ class KiwixDataStore @Inject constructor(val context: Context) {
   suspend fun setShowStorageSelectionDialogOnCopyMove(showStorageOption: Boolean) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG] = showStorageOption
+    }
+  }
+
+  val selectedStorage: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      val storage = prefs[PreferencesKeys.PREF_STORAGE]
+      return@map when {
+        storage == null ->
+          getPublicDirectoryPath(defaultPublicStorage()).also {
+            setSelectedStorage(it)
+            setSelectedStoragePosition(0)
+          }
+
+        !File(storage).isFileExist() ->
+          getPublicDirectoryPath(defaultPublicStorage()).also {
+            setSelectedStoragePosition(0)
+          }
+
+        else -> storage
+      }
+    }
+
+  suspend fun setSelectedStorage(selectedStorage: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_STORAGE] = selectedStorage
+    }
+  }
+
+  suspend fun getPublicDirectoryPath(path: String): String =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      path
+    } else {
+      path.substringBefore(context.getString(R.string.android_directory_seperator))
+    }
+
+  suspend fun defaultStorage(): String =
+    context.getExternalFilesDirs(null)[0]?.path
+      ?: context.filesDir.path // a workaround for emulators
+
+  private suspend fun defaultPublicStorage(): String =
+    ContextWrapper(context).externalMediaDirs[0]?.path
+      ?: context.filesDir.path // a workaround for emulators
+
+  val selectedStoragePosition: Flow<Int> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.STORAGE_POSITION] ?: 0
+    }
+
+  suspend fun setSelectedStoragePosition(pos: Int) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.STORAGE_POSITION] = pos
     }
   }
 }

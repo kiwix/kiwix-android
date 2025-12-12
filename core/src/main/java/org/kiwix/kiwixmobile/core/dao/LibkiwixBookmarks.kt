@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
@@ -60,7 +60,7 @@ import javax.inject.Named
 class LibkiwixBookmarks @Inject constructor(
   @Named(BOOKMARK_LIBRARY) private val library: Library,
   @Named(BOOKMARK_MANAGER) private val manager: Manager,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
@@ -85,24 +85,22 @@ class LibkiwixBookmarks @Inject constructor(
       }
     }
   }
-  private val bookmarksFolderPath: String by lazy {
+
+  private suspend fun bookmarksFolderPath(): String =
     if (Build.DEVICE.contains("generic")) {
       // Workaround for emulators: Emulators have limited memory and
       // restrictions on creating folders, so we will use the default
       // path for saving the bookmark file.
-      sharedPreferenceUtil.context.filesDir.path
+      kiwixDataStore.context.filesDir.path
     } else {
-      "${sharedPreferenceUtil.defaultStorage()}/Bookmarks/"
+      "${kiwixDataStore.defaultStorage()}/Bookmarks/"
     }
-  }
 
-  private val bookmarkFile: File by lazy {
-    File("$bookmarksFolderPath/bookmark.xml")
-  }
+  private suspend fun bookmarkFile(): File =
+    File("${bookmarksFolderPath()}/bookmark.xml")
 
-  private val libraryFile: File by lazy {
-    File("$bookmarksFolderPath/library.xml")
-  }
+  private suspend fun libraryFile(): File =
+    File("${bookmarksFolderPath()}/library.xml")
 
   /**
    * Ensure initialization runs once. This method performs all file I/O and manager setup
@@ -115,15 +113,15 @@ class LibkiwixBookmarks @Inject constructor(
       if (initialized) return
       withContext(dispatcher) {
         // Check if bookmark folder exist if not then create the folder first.
-        if (!File(bookmarksFolderPath).isFileExist()) File(bookmarksFolderPath).mkdir()
+        if (!File(bookmarksFolderPath()).isFileExist()) File(bookmarksFolderPath()).mkdir()
         // Check if library file exist if not then create the file to save the library with book information.
-        if (!libraryFile.isFileExist()) libraryFile.createNewFile()
+        if (!libraryFile().isFileExist()) libraryFile().createNewFile()
         // set up manager to read the library from this file
-        manager.readFile(libraryFile.canonicalPath)
+        manager.readFile(libraryFile().canonicalPath)
         // Check if bookmark file exist if not then create the file to save the bookmarks.
-        if (!bookmarkFile.isFileExist()) bookmarkFile.createNewFile()
+        if (!bookmarkFile().isFileExist()) bookmarkFile().createNewFile()
         // set up manager to read the bookmarks from this file
-        manager.readBookmarkFile(bookmarkFile.canonicalPath)
+        manager.readBookmarkFile(bookmarkFile().canonicalPath)
         initialized = true
       }
     }
@@ -297,10 +295,10 @@ class LibkiwixBookmarks @Inject constructor(
   private suspend fun writeBookMarksAndSaveLibraryToFile() {
     ensureInitialized()
     // Save the library, which contains ZIM file paths and favicons, to a file.
-    library.writeToFile(libraryFile.canonicalPath)
+    library.writeToFile(libraryFile().canonicalPath)
 
     // Save the bookmarks data to a separate file.
-    library.writeBookmarksToFile(bookmarkFile.canonicalPath)
+    library.writeBookmarksToFile(bookmarkFile().canonicalPath)
     // set the bookmark change to true so that libkiwix will return the new data.
     bookmarksChanged = true
   }
@@ -372,7 +370,7 @@ class LibkiwixBookmarks @Inject constructor(
       .forEach { (_, value) ->
         value.forEach { bookmarkItem ->
           // This is a special case where two urls have the same title in a zim file.
-          val coreApp = sharedPreferenceUtil.context as CoreApp
+          val coreApp = kiwixDataStore.context as CoreApp
           val zimFileReader = getZimFileReaderFromBookmark(bookmarkItem, coreApp)
           // get the redirect entry so that we can delete the other bookmark.
           zimFileReader?.getPageUrlFrom(bookmarkItem.title)?.let {
@@ -425,18 +423,18 @@ class LibkiwixBookmarks @Inject constructor(
     ensureInitialized()
     try {
       val bookmarkDestinationFile = exportedFile("bookmark.xml")
-      bookmarkFile.inputStream().use { inputStream ->
+      bookmarkFile().inputStream().use { inputStream ->
         bookmarkDestinationFile.outputStream().use(inputStream::copyTo)
       }
-      sharedPreferenceUtil.context.toast(
-        sharedPreferenceUtil.context.getString(
+      kiwixDataStore.context.toast(
+        kiwixDataStore.context.getString(
           R.string.export_bookmark_saved,
           bookmarkDestinationFile.name
         )
       )
     } catch (ignore: Exception) {
       Log.e(TAG, "Error: bookmark couldn't export.\n Original exception = $ignore")
-      sharedPreferenceUtil.context.toast(R.string.export_bookmark_error)
+      kiwixDataStore.context.toast(R.string.export_bookmark_error)
     }
   }
 
@@ -476,7 +474,7 @@ class LibkiwixBookmarks @Inject constructor(
     tempLibrary.getBookmarks(false)?.toList()?.forEach {
       saveBookmark(LibkiwixBookmarkItem(it, null, null))
     }
-    sharedPreferenceUtil.context.toast(R.string.bookmark_imported_message)
+    kiwixDataStore.context.toast(R.string.bookmark_imported_message)
 
     if (bookmarkFile.exists()) {
       bookmarkFile.deleteFile()

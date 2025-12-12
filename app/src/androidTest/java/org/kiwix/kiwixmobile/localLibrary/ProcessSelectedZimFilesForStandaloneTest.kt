@@ -29,6 +29,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
@@ -96,7 +97,7 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
             kiwixDataStore
           )
         }
-        parentFile = File(sharedPreferenceUtil.prefStorage)
+        parentFile = runBlocking { File(kiwixDataStore.selectedStorage.first()) }
       }
       waitForIdle()
     }

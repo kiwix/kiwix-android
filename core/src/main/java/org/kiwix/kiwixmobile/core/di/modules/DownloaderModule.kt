@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequ
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -56,10 +55,9 @@ object DownloaderModule {
   @Singleton
   fun providesDownloadRequester(
     fetch: Fetch,
-    sharedPreferenceUtil: SharedPreferenceUtil,
     kiwixDataStore: KiwixDataStore
   ): DownloadRequester =
-    DownloadManagerRequester(fetch, sharedPreferenceUtil, kiwixDataStore)
+    DownloadManagerRequester(fetch, kiwixDataStore)
 
   @Provides
   @Singleton

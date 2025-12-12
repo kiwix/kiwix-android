@@ -26,18 +26,16 @@ import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class DownloadManagerRequester @Inject constructor(
   private val fetch: Fetch,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val kiwixDataStore: KiwixDataStore
 ) : DownloadRequester {
   override suspend fun enqueue(downloadRequest: DownloadRequest): Long {
     val isWifiOnlyNetwork = kiwixDataStore.wifiOnly.first()
-    val request = downloadRequest.toFetchRequest(sharedPreferenceUtil, isWifiOnlyNetwork)
+    val request = downloadRequest.toFetchRequest(kiwixDataStore, isWifiOnlyNetwork)
     fetch.enqueue(request)
     return request.id.toLong()
   }
@@ -59,11 +57,11 @@ class DownloadManagerRequester @Inject constructor(
   }
 }
 
-private fun DownloadRequest.toFetchRequest(
-  sharedPreferenceUtil: SharedPreferenceUtil,
+private suspend fun DownloadRequest.toFetchRequest(
+  kiwixDataStore: KiwixDataStore,
   isWifiOnlyNetwork: Boolean
 ) =
-  Request("$uri", getDestination(sharedPreferenceUtil)).apply {
+  Request("$uri", getDestination(kiwixDataStore)).apply {
     networkType = if (isWifiOnlyNetwork) WIFI_ONLY else ALL
     autoRetryMaxAttempts = AUTO_RETRY_MAX_ATTEMPTS
   }

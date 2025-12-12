@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16.sp
@@ -51,7 +51,7 @@ class StorageSelectDialog : DialogFragment() {
   lateinit var storageCalculator: StorageCalculator
 
   @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  lateinit var kiwixDataStore: KiwixDataStore
   private var aTitle: String? = null
   private val storageDeviceList = arrayListOf<StorageDevice>()
   private var shouldShowCheckboxSelected: Boolean = true
@@ -76,7 +76,7 @@ class StorageSelectDialog : DialogFragment() {
           titleSize,
           storageDeviceList,
           storageCalculator,
-          sharedPreferenceUtil,
+          kiwixDataStore,
           shouldShowCheckboxSelected
         ) {
           lifecycleScope.runSafelyInLifecycleScope {

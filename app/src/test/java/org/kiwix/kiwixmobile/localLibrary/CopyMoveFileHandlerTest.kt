@@ -45,7 +45,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -61,8 +60,7 @@ class CopyMoveFileHandlerTest {
   private lateinit var fileHandler: CopyMoveFileHandler
 
   private val activity: Activity = mockk(relaxed = true)
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
-  private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
+  private var kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val storageCalculator: StorageCalculator = mockk(relaxed = true)
   private val fat32Checker: Fat32Checker = mockk(relaxed = true)
@@ -79,9 +77,9 @@ class CopyMoveFileHandlerTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
+    kiwixDataStore = mockk(relaxed = true)
     fileHandler = CopyMoveFileHandler(
       activity,
-      sharedPreferenceUtil,
       kiwixDataStore,
       storageCalculator,
       fat32Checker
@@ -153,7 +151,6 @@ class CopyMoveFileHandlerTest {
     prepareFileSystemAndFileForMockk(fileSystemState = CannotWrite4GbFile)
 
     val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
-
     assertFalse(result)
     coVerify { fileHandler.handleCannotWrite4GbFileState() }
   }
@@ -316,6 +313,8 @@ class CopyMoveFileHandlerTest {
     availableStorageSize: Long = 1000L,
     fileSystemState: Fat32Checker.FileSystemState = CanWrite4GbFile
   ) {
+    every { kiwixDataStore.selectedStorage } returns flowOf(storagePath)
+    every { kiwixDataStore.selectedStorage } answers { flowOf(storagePath) }
     every { storageFile.exists() } returns storageFileExist
     every { storageFile.freeSpace } returns freeSpaceInStorage
     every { storageFile.path } returns storagePath

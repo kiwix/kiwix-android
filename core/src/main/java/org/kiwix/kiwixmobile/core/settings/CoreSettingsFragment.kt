@@ -124,8 +124,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         isLoadingStorageDetails = true,
         storageCalculator = storageCalculator
           ?: throw IllegalStateException("Storage calculator is null"),
-        sharedPreferenceUtil = sharedPreferenceUtil
-          ?: throw IllegalStateException("SharedPreferenceUtils is null"),
         permissionItem = false to "",
         shouldShowLanguageCategory = false,
         onLanguageChanged = { restartActivity() },
@@ -433,11 +431,11 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
   @Suppress("NestedBlockDepth")
   private fun onStorageDeviceSelected(storageDevice: StorageDevice) {
     lifecycleScope.launch {
-      sharedPreferenceUtil?.let { sharedPreferenceUtil ->
-        sharedPreferenceUtil.putPrefStorage(
-          sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+      kiwixDataStore?.let { kiwixDataStore ->
+        kiwixDataStore.setSelectedStorage(
+          kiwixDataStore.getPublicDirectoryPath(storageDevice.name)
         )
-        sharedPreferenceUtil.putStoragePosition(
+        kiwixDataStore.setSelectedStoragePosition(
           if (storageDevice.isInternal) {
             INTERNAL_SELECT_POSITION
           } else {

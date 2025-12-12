@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
 class Fat32Checker constructor(
-  sharedPreferenceUtil: SharedPreferenceUtil,
+  kiwixDataStore: KiwixDataStore,
   private val fileSystemCheckers: List<FileSystemChecker>
 ) {
   private val _fileSystemStates =
@@ -56,7 +56,7 @@ class Fat32Checker constructor(
 
   init {
     scope.launch {
-      sharedPreferenceUtil.prefStorages
+      kiwixDataStore.selectedStorage
         .onEach { _fileSystemStates.emit(FileSystemState.DetectingFileSystem) }
         .combine(requestCheckSystemFileType) { storage, _ -> storage }
         .collectLatest { storage ->
