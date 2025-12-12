@@ -23,12 +23,13 @@ import android.content.ContextWrapper
 import android.os.Build
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.edit
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.R
@@ -41,7 +42,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGU
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.STORAGE_POSITION
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.io.File
 import java.util.Locale
@@ -455,12 +455,12 @@ class KiwixDataStore @Inject constructor(val context: Context) {
         storage == null ->
           getPublicDirectoryPath(defaultPublicStorage()).also {
             setSelectedStorage(it)
-            setSelectedStoragePosition(0)
+            setSelectedStoragePosition(ZERO)
           }
 
         !File(storage).isFileExist() ->
           getPublicDirectoryPath(defaultPublicStorage()).also {
-            setSelectedStoragePosition(0)
+            setSelectedStoragePosition(ZERO)
           }
 
         else -> storage
@@ -480,17 +480,21 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       path.substringBefore(context.getString(R.string.android_directory_seperator))
     }
 
-  suspend fun defaultStorage(): String =
-    context.getExternalFilesDirs(null)[0]?.path
+  @Suppress("InjectDispatcher")
+  suspend fun defaultStorage(): String = withContext(Dispatchers.IO) {
+    context.getExternalFilesDirs(null)[ZERO]?.path
       ?: context.filesDir.path // a workaround for emulators
+  }
 
-  private suspend fun defaultPublicStorage(): String =
-    ContextWrapper(context).externalMediaDirs[0]?.path
+  @Suppress("InjectDispatcher")
+  private suspend fun defaultPublicStorage(): String = withContext(Dispatchers.IO) {
+    ContextWrapper(context).externalMediaDirs[ZERO]?.path
       ?: context.filesDir.path // a workaround for emulators
+  }
 
   val selectedStoragePosition: Flow<Int> =
     context.kiwixDataStore.data.map { pref ->
-      pref[PreferencesKeys.STORAGE_POSITION] ?: 0
+      pref[PreferencesKeys.STORAGE_POSITION] ?: ZERO
     }
 
   suspend fun setSelectedStoragePosition(pos: Int) {

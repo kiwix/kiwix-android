@@ -29,6 +29,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +44,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.flow.first
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
 import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
 import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
@@ -73,9 +74,8 @@ fun StorageDeviceItem(
   var usedSpace by remember { mutableStateOf("") }
   var freeSpace by remember { mutableStateOf("") }
   var progress by remember { mutableIntStateOf(0) }
-  var isStorageSelected by remember { mutableStateOf(false) }
   val context = LocalContext.current
-
+  val currentStorageIndex by kiwixDataStore.selectedStoragePosition.collectAsState(ZERO)
   LaunchedEffect(storageDevice) {
     usedSpace = storageDevice.getUsedSpace(context, storageCalculator)
     freeSpace = storageDevice.getFreeSpace(context, storageCalculator)
@@ -86,7 +86,6 @@ fun StorageDeviceItem(
       kiwixDataStore,
       storageCalculator
     )
-    isStorageSelected = index == kiwixDataStore.selectedStoragePosition.first()
   }
   Row(
     modifier = Modifier
@@ -99,7 +98,7 @@ fun StorageDeviceItem(
       .padding(vertical = EIGHT_DP)
   ) {
     RadioButton(
-      selected = shouldShowCheckboxSelected && isStorageSelected,
+      selected = shouldShowCheckboxSelected && currentStorageIndex == index,
       onClick = null
     )
     Column(

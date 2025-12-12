@@ -233,12 +233,12 @@ class CopyMoveFileHandler @Inject constructor(
     }
     return when (fat32Checker.fileSystemStates.value) {
       DetectingFileSystem -> {
-        handleDetectingFileSystemState()
+        handleDetectingFileSystemState(storageFile)
         false
       }
 
       CannotWrite4GbFile -> {
-        handleCannotWrite4GbFileState()
+        handleCannotWrite4GbFileState(storageFile)
         false
       }
 
@@ -246,18 +246,18 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  suspend fun handleDetectingFileSystemState() {
+  suspend fun handleDetectingFileSystemState(storageFile: File) {
     if (isBookLessThan4GB()) {
-      performCopyMoveOperationIfSufficientSpaceAvailable()
+      performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
     } else {
       showPreparingCopyMoveDialog()
       observeFileSystemState()
     }
   }
 
-  suspend fun handleCannotWrite4GbFileState() {
+  suspend fun handleCannotWrite4GbFileState(storageFile: File) {
     if (isBookLessThan4GB()) {
-      performCopyMoveOperationIfSufficientSpaceAvailable()
+      performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
     } else {
       // Show an error dialog indicating the file system limitation
       fileCopyMoveCallback?.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
@@ -276,9 +276,8 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  suspend fun performCopyMoveOperationIfSufficientSpaceAvailable() {
-    val availableSpace =
-      storageCalculator.availableBytes(File(kiwixDataStore.selectedStorage.first()))
+  suspend fun performCopyMoveOperationIfSufficientSpaceAvailable(storageFile: File) {
+    val availableSpace = storageCalculator.availableBytes(storageFile)
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
     } else {

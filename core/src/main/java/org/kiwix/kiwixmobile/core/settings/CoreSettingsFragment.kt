@@ -55,6 +55,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
@@ -430,12 +431,10 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
 
   @Suppress("NestedBlockDepth")
   private fun onStorageDeviceSelected(storageDevice: StorageDevice) {
-    lifecycleScope.launch {
-      kiwixDataStore?.let { kiwixDataStore ->
-        kiwixDataStore.setSelectedStorage(
-          kiwixDataStore.getPublicDirectoryPath(storageDevice.name)
-        )
-        kiwixDataStore.setSelectedStoragePosition(
+    lifecycleScope.runSafelyInLifecycleScope {
+      kiwixDataStore?.apply {
+        setSelectedStorage(getPublicDirectoryPath(storageDevice.name))
+        setSelectedStoragePosition(
           if (storageDevice.isInternal) {
             INTERNAL_SELECT_POSITION
           } else {

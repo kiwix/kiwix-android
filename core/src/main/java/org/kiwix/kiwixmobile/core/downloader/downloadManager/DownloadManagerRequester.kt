@@ -34,8 +34,7 @@ class DownloadManagerRequester @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) : DownloadRequester {
   override suspend fun enqueue(downloadRequest: DownloadRequest): Long {
-    val isWifiOnlyNetwork = kiwixDataStore.wifiOnly.first()
-    val request = downloadRequest.toFetchRequest(kiwixDataStore, isWifiOnlyNetwork)
+    val request = downloadRequest.toFetchRequest(kiwixDataStore)
     fetch.enqueue(request)
     return request.id.toLong()
   }
@@ -57,11 +56,8 @@ class DownloadManagerRequester @Inject constructor(
   }
 }
 
-private suspend fun DownloadRequest.toFetchRequest(
-  kiwixDataStore: KiwixDataStore,
-  isWifiOnlyNetwork: Boolean
-) =
+private suspend fun DownloadRequest.toFetchRequest(kiwixDataStore: KiwixDataStore) =
   Request("$uri", getDestination(kiwixDataStore)).apply {
-    networkType = if (isWifiOnlyNetwork) WIFI_ONLY else ALL
+    networkType = if (kiwixDataStore.wifiOnly.first()) WIFI_ONLY else ALL
     autoRetryMaxAttempts = AUTO_RETRY_MAX_ATTEMPTS
   }
