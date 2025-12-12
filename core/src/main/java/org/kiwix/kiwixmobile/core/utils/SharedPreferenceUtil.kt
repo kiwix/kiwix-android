@@ -18,19 +18,11 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.runBlocking
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,9 +34,6 @@ import javax.inject.Singleton
 class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
-  private val _prefStorages = MutableStateFlow("")
-  val prefStorages
-    get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
 
   val prefIsFirstRun: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
@@ -58,58 +47,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
 
-  val prefStorage: String
-    get() {
-      val storage = sharedPreferences.getString(PREF_STORAGE, null)
-      return when {
-        storage == null ->
-          getPublicDirectoryPath(defaultPublicStorage()).also {
-            putPrefStorage(it)
-            putStoragePosition(0)
-          }
-
-        runBlocking { !File(storage).isFileExist() } ->
-          getPublicDirectoryPath(defaultPublicStorage()).also {
-            putStoragePosition(0)
-          }
-
-        else -> storage
-      }
-    }
-
-  val storagePosition: Int
-    get() = sharedPreferences.getInt(STORAGE_POSITION, 0)
-
-  fun defaultStorage(): String =
-    context.getExternalFilesDirs(null)[0]?.path
-      ?: context.filesDir.path // a workaround for emulators
-
-  fun defaultPublicStorage(): String =
-    ContextWrapper(context).externalMediaDirs[0]?.path
-      ?: context.filesDir.path // a workaround for emulators
-
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
-
-  fun putPrefStorage(storage: String) {
-    sharedPreferences.edit { putString(PREF_STORAGE, storage) }
-    _prefStorages.tryEmit(storage)
-  }
-
-  fun putStoragePosition(pos: Int) {
-    sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
-  }
 
   fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
     sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
-
-  fun getPublicDirectoryPath(path: String): String =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      path
-    } else {
-      path.substringBefore(context.getString(R.string.android_directory_seperator))
-    }
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
   fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =

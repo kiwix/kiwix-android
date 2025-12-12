@@ -19,31 +19,37 @@
 package org.kiwix.kiwixmobile.core.settings
 
 import eu.mhutti1.utils.storage.Bytes
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.extensions.freeSpace
-import org.kiwix.kiwixmobile.core.extensions.totalSpace
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.extensions.totalSpace
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.io.File
 import javax.inject.Inject
 
 class StorageCalculator @Inject constructor(
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val kiwixDataStore: KiwixDataStore
 ) {
-  suspend fun calculateAvailableSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
-    Bytes(availableBytes(file)).humanReadable
+  private suspend fun getStorageFile(file: File? = null) =
+    file ?: File(kiwixDataStore.selectedStorage.first())
 
-  suspend fun calculateTotalSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
-    Bytes(totalBytes(file)).humanReadable
+  suspend fun calculateAvailableSpace(file: File? = null): String =
+    Bytes(availableBytes(getStorageFile(file))).humanReadable
+
+  suspend fun calculateTotalSpace(file: File? = null): String =
+    Bytes(totalBytes(getStorageFile(file))).humanReadable
 
   suspend fun calculateUsedSpace(file: File): String =
     Bytes(totalBytes(file) - availableBytes(file)).humanReadable
 
-  suspend fun availableBytes(file: File = File(sharedPreferenceUtil.prefStorage)) =
-    if (file.isFileExist()) {
-      file.freeSpace()
+  suspend fun availableBytes(file: File? = null): Long {
+    val storageFile = getStorageFile(file)
+    return if (storageFile.isFileExist()) {
+      storageFile.freeSpace()
     } else {
       0L
     }
+  }
 
   suspend fun totalBytes(file: File) = if (file.isFileExist()) file.totalSpace() else 0L
 }

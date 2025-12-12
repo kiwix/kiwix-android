@@ -133,6 +133,8 @@ class SharedPreferenceToDatastoreMigratorTest {
       add("Wikipedia")
     }
 
+    val storagePath = "/storage/emulated/0/Kiwix"
+
     val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
     defaultPrefs.edit()
       .putInt(SharedPreferenceUtil.TEXT_ZOOM, 120)
@@ -163,6 +165,8 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, true)
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, false)
+      .putString(SharedPreferenceUtil.PREF_STORAGE, storagePath)
+      .putInt(SharedPreferenceUtil.STORAGE_POSITION, 1)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -218,5 +222,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(true, prefs[PreferencesKeys.PREF_MANAGE_EXTERNAL_FILES])
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_STORAGE_OPTION])
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG])
+    assertEquals(storagePath, prefs[PreferencesKeys.PREF_STORAGE])
+    assertEquals(1, prefs[PreferencesKeys.STORAGE_POSITION])
   }
 }

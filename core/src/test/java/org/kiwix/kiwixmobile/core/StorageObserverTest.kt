@@ -26,6 +26,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -37,7 +38,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
@@ -47,7 +48,7 @@ import org.kiwix.sharedFunctions.libkiwixBook
 import java.io.File
 
 class StorageObserverTest {
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   private val downloadRoomDao: DownloadRoomDao = mockk()
   private val fileSearch: FileSearch = mockk()
   private val downloadModel: DownloadModel = mockk()
@@ -67,7 +68,7 @@ class StorageObserverTest {
 
   @BeforeEach fun init() {
     clearAllMocks()
-    every { sharedPreferenceUtil.prefStorage } returns "a"
+    coEvery { kiwixDataStore.selectedStorage } returns flowOf("a")
     every { fileSearch.scan(scanningProgressListener) } returns files
     every { downloadRoomDao.downloads() } returns downloads
     coEvery { libkiwixBookmarks.addBookToLibrary(any()) } returns Unit

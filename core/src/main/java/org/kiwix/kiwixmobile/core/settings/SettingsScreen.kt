@@ -301,7 +301,7 @@ private fun LazyListScope.storageCategory(
               true,
               { settingsViewModel.sendAction(OnStorageItemClick(it)) },
               settingScreenState.storageCalculator,
-              settingScreenState.sharedPreferenceUtil
+              settingScreenState.kiwixDataStore
             )
           }
         }

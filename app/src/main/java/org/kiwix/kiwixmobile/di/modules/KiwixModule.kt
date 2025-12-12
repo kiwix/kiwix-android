@@ -24,7 +24,7 @@ import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
@@ -41,11 +41,11 @@ object KiwixModule {
   @Provides
   @KiwixScope
   internal fun provideFat32Checker(
-    sharedPreferenceUtil: SharedPreferenceUtil,
+    kiwixDataStore: KiwixDataStore,
     mountPointProducer: MountPointProducer
   ): Fat32Checker =
     Fat32Checker(
-      sharedPreferenceUtil,
+      kiwixDataStore,
       listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker())
     )
 

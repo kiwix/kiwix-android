@@ -33,10 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG = "storageSelectionDialogTestingTag"
 
@@ -46,7 +46,7 @@ fun StorageSelectDialogScreen(
   titleSize: TextUnit?,
   storageDeviceList: List<StorageDevice>,
   storageCalculator: StorageCalculator,
-  sharedPreferenceUtil: SharedPreferenceUtil,
+  kiwixDataStore: KiwixDataStore,
   shouldShowCheckboxSelected: Boolean,
   onSelectAction: (StorageDevice) -> Unit
 ) {
@@ -62,7 +62,7 @@ fun StorageSelectDialogScreen(
         storageDeviceList,
         onSelectAction,
         storageCalculator,
-        sharedPreferenceUtil
+        kiwixDataStore
       )
     }
   }
@@ -74,7 +74,7 @@ fun StorageDeviceList(
   storageDeviceList: List<StorageDevice>,
   onSelectAction: (StorageDevice) -> Unit,
   storageCalculator: StorageCalculator,
-  sharedPreferenceUtil: SharedPreferenceUtil
+  kiwixDataStore: KiwixDataStore
 ) {
   LazyColumn {
     itemsIndexed(storageDeviceList) { index, item ->
@@ -84,7 +84,7 @@ fun StorageDeviceList(
         shouldShowCheckboxSelected,
         onSelectAction,
         storageCalculator,
-        sharedPreferenceUtil
+        kiwixDataStore
       )
     }
   }

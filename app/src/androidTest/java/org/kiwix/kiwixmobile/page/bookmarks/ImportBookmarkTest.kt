@@ -136,13 +136,12 @@ class ImportBookmarkTest : BaseActivityTest() {
         }
       }
     boxStore = DatabaseModule.boxStore
-    val sharedPreferenceUtils = SharedPreferenceUtil(context)
-    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, sharedPreferenceUtils)
+    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore)
     libkiwixBookmarks =
       LibkiwixBookmarks(
         library,
         manager,
-        sharedPreferenceUtils,
+        kiwixDataStore,
         libkiwixBookOnDisk,
         null
       )

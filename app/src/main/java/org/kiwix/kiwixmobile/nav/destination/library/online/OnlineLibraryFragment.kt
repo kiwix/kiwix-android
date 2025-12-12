@@ -604,17 +604,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private suspend fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {
-    kiwixDataStore.setShowStorageOption(false)
-    sharedPreferenceUtil.putPrefStorage(
-      sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-    )
-    sharedPreferenceUtil.putStoragePosition(
-      if (storageDevice.isInternal) {
-        INTERNAL_SELECT_POSITION
-      } else {
-        EXTERNAL_SELECT_POSITION
-      }
-    )
+    kiwixDataStore.apply {
+      setShowStorageOption(false)
+      setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
+      setSelectedStoragePosition(
+        if (storageDevice.isInternal) {
+          INTERNAL_SELECT_POSITION
+        } else {
+          EXTERNAL_SELECT_POSITION
+        }
+      )
+    }
     clickOnBookItem()
   }
 

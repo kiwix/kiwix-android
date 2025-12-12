@@ -29,7 +29,9 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,6 +44,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
 import eu.mhutti1.utils.storage.StorageDevice
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
 import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
 import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
@@ -54,7 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FREE_SPACE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PROGRESS_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.STORAGE_TITLE_TEXTVIEW_SIZE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val STORAGE_DEVICE_ITEM_TESTING_TAG = "storageDeviceItemTestingTag"
 
@@ -65,14 +68,14 @@ fun StorageDeviceItem(
   shouldShowCheckboxSelected: Boolean,
   onClick: (StorageDevice) -> Unit,
   storageCalculator: StorageCalculator,
-  sharedPreferenceUtil: SharedPreferenceUtil,
+  kiwixDataStore: KiwixDataStore,
 ) {
   var storagePathAndTitle by remember { mutableStateOf("") }
   var usedSpace by remember { mutableStateOf("") }
   var freeSpace by remember { mutableStateOf("") }
-  var progress by remember { mutableStateOf(0) }
+  var progress by remember { mutableIntStateOf(0) }
   val context = LocalContext.current
-
+  val currentStorageIndex by kiwixDataStore.selectedStoragePosition.collectAsState(ZERO)
   LaunchedEffect(storageDevice) {
     usedSpace = storageDevice.getUsedSpace(context, storageCalculator)
     freeSpace = storageDevice.getFreeSpace(context, storageCalculator)
@@ -80,7 +83,7 @@ fun StorageDeviceItem(
     storagePathAndTitle = storageDevice.storagePathAndTitle(
       context,
       index,
-      sharedPreferenceUtil,
+      kiwixDataStore,
       storageCalculator
     )
   }
@@ -95,7 +98,7 @@ fun StorageDeviceItem(
       .padding(vertical = EIGHT_DP)
   ) {
     RadioButton(
-      selected = shouldShowCheckboxSelected && index == sharedPreferenceUtil.storagePosition,
+      selected = shouldShowCheckboxSelected && currentStorageIndex == index,
       onClick = null
     )
     Column(

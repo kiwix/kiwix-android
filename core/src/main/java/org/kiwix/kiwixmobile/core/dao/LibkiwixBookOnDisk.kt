@@ -37,7 +37,7 @@ import org.kiwix.kiwixmobile.core.di.modules.LOCAL_BOOKS_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.LOCAL_BOOKS_MANAGER
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.libkiwix.Book
@@ -50,7 +50,7 @@ import javax.inject.Named
 class LibkiwixBookOnDisk @Inject constructor(
   @Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
   @Named(LOCAL_BOOKS_MANAGER) private val manager: Manager,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val kiwixDataStore: KiwixDataStore
 ) {
   private val initMutex = Mutex()
   private var isManagerInitialized = false
@@ -62,20 +62,18 @@ class LibkiwixBookOnDisk @Inject constructor(
    * return the previous data to avoid unnecessary data load on Libkiwix.
    */
   private var booksChanged: Boolean = false
-  private val localBookFolderPath: String by lazy {
+  private suspend fun localBookFolderPath(): String =
     if (Build.DEVICE.contains("generic")) {
       // Workaround for emulators: Emulators have limited memory and
       // restrictions on creating folders, so we will use the default
       // path for saving the bookmark file.
-      sharedPreferenceUtil.context.filesDir.path
+      kiwixDataStore.context.filesDir.path
     } else {
-      "${sharedPreferenceUtil.defaultStorage()}/ZIMFiles/"
+      "${kiwixDataStore.defaultStorage()}/ZIMFiles/"
     }
-  }
 
-  private val libraryFile: File by lazy {
-    File("$localBookFolderPath/library.xml")
-  }
+  private suspend fun libraryFile(): File =
+    File("${localBookFolderPath()}/library.xml")
 
   private suspend fun ensureInitialized(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     if (isManagerInitialized) return
@@ -83,15 +81,15 @@ class LibkiwixBookOnDisk @Inject constructor(
       if (isManagerInitialized) return@withLock true
       withContext(dispatcher) {
         // Check if ZIM files folder exist if not then create the folder first.
-        if (!File(localBookFolderPath).isFileExist()) {
-          File(localBookFolderPath).mkdirs()
+        if (!File(localBookFolderPath()).isFileExist()) {
+          File(localBookFolderPath()).mkdirs()
         }
         // Check if library file exist if not then create the file to save the library with book information.
-        if (!libraryFile.isFileExist()) {
-          libraryFile.createNewFile()
+        if (!libraryFile().isFileExist()) {
+          libraryFile().createNewFile()
         }
         // set up manager to read the library from this file
-        manager.readFile(libraryFile.canonicalPath)
+        manager.readFile(libraryFile().canonicalPath)
         isManagerInitialized = true
       }
     }
@@ -259,7 +257,7 @@ class LibkiwixBookOnDisk @Inject constructor(
   private suspend fun writeBookMarksAndSaveLibraryToFile() {
     ensureInitialized()
     // Save the library, which contains ZIM file data.
-    library.writeToFile(libraryFile.canonicalPath)
+    library.writeToFile(libraryFile().canonicalPath)
     // set the bookmark change to true so that libkiwix will return the new data.
     booksChanged = true
   }

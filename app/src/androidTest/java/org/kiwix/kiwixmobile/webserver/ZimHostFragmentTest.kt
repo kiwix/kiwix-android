@@ -70,6 +70,7 @@ class ZimHostFragmentTest {
   val composeTestRule = createComposeRule()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  private lateinit var kiwixDataStore: KiwixDataStore
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
@@ -109,7 +110,7 @@ class ZimHostFragmentTest {
       waitForIdle()
     }
     context?.let {
-      KiwixDataStore(it).apply {
+      kiwixDataStore = KiwixDataStore(it).apply {
         lifeCycleScope.launch {
           setWifiOnly(false)
           setIntroShown()
@@ -253,7 +254,7 @@ class ZimHostFragmentTest {
   private fun loadZimFileInApplication(zimFileName: String) {
     val loadFileStream =
       ZimHostFragmentTest::class.java.classLoader.getResourceAsStream(zimFileName)
-    val zimFile = File(sharedPreferenceUtil.defaultStorage(), zimFileName)
+    val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), zimFileName) }
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

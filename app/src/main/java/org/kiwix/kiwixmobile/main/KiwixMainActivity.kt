@@ -237,10 +237,10 @@ class KiwixMainActivity : CoreMainActivity() {
     if (!kiwixDataStore.isAppDirectoryMigrated.first()) {
       val storagePath =
         getStorageDeviceList()
-          .getOrNull(sharedPreferenceUtil.storagePosition)
+          .getOrNull(kiwixDataStore.selectedStoragePosition.first())
           ?.name
       storagePath?.let {
-        sharedPreferenceUtil.putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(it))
+        kiwixDataStore.setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(it))
         kiwixDataStore.setAppDirectoryMigrated(true)
       }
     }

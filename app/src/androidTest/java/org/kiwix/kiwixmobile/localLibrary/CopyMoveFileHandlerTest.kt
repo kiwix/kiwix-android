@@ -33,6 +33,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -114,7 +115,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
             kiwixDataStore
           )
         }
-        parentFile = File(sharedPreferenceUtil.prefStorage)
+        parentFile = runBlocking { File(kiwixDataStore.selectedStorage.first()) }
       }
       waitForIdle()
     }
@@ -327,10 +328,9 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     val copyMoveFileHandler = CopyMoveFileHandler(
       kiwixMainActivity,
-      sharedPreferenceUtil,
       kiwixDataStore,
-      StorageCalculator(sharedPreferenceUtil),
-      Fat32Checker(sharedPreferenceUtil, listOf(FileWritingFileSystemChecker()))
+      StorageCalculator(kiwixDataStore),
+      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()))
     ).apply {
       setAlertDialogShower(AlertDialogShower())
     }
