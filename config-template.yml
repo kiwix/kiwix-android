@@ -1,0 +1,11 @@
+---
+repo_url: https://download.kiwix.org/fdroid/repo
+repo_name: Kiwix repository for fdroid nightly.
+repo_description: |-
+  This is a nightly server for fdroid nightly build.
+archive_older: 0
+repo_icon: icon.png
+repo_keyalias: ${KEY_ALIAS}
+keystorepass: ${KEY_STORE_PASSWORD}
+keypass: ${KEY_PASSWORD}
+keystore: ../kiwix-android.keystore
