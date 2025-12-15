@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
-import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkerFactory
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
@@ -72,7 +72,6 @@ abstract class CoreApp : Application() {
 
   override fun onCreate() {
     super.onCreate()
-    UpdateWorkManager.startPeriodicWork(this)
     instance = this
     coreComponent = DaggerCoreComponent.builder()
       .context(this)
