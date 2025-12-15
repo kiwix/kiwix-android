@@ -47,6 +47,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.navOptions
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,6 +72,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -190,6 +193,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
+    WorkManager.getInstance(this).enqueue(
+      OneTimeWorkRequestBuilder<UpdateWorkManager>().build()
+    )
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext

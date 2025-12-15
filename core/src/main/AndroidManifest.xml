@@ -78,6 +78,13 @@
       android:exported="false"
       android:process=":error_activity" />
 
+    <!-- disable default provider -->
+    <provider
+      android:name="androidx.startup.InitializationProvider"
+      android:authorities="${applicationId}.androidx-startup"
+      tools:node="remove"
+      />
+
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"

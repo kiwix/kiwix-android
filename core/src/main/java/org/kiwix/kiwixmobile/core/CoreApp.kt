@@ -25,12 +25,14 @@ import android.os.Environment.getExternalStorageState
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
-import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkerFactory
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
@@ -65,15 +67,23 @@ abstract class CoreApp : Application() {
     }
   }
 
+  @Inject
+  lateinit var sampleWorkerFactory: UpdateWorkerFactory
+
   override fun onCreate() {
     super.onCreate()
-    UpdateWorkManager.startPeriodicWork(this)
     instance = this
     coreComponent = DaggerCoreComponent.builder()
       .context(this)
       .build()
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
+    // use our custom factory so that work manager will use it to create our worker
+    val workManagerConfig = Configuration.Builder()
+      .setWorkerFactory(sampleWorkerFactory)
+      .build()
+    WorkManager.initialize(this, workManagerConfig)
+    serviceWorkerInitialiser.init(this)
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()
