@@ -44,7 +44,6 @@ import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -62,7 +61,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   attrs: AttributeSet,
   videoView: ViewGroup?,
   private val coreWebViewClient: CoreWebViewClient,
-  val sharedPreferenceUtil: SharedPreferenceUtil,
   val kiwixDataStore: KiwixDataStore
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
@@ -135,7 +133,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer, sharedPreferenceUtil).obtainMessage()
+        val msg = SaveHandler(zimReaderContainer, kiwixDataStore).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -167,7 +165,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
   internal class SaveHandler(
     private val zimReaderContainer: ZimReaderContainer,
-    private val sharedPreferenceUtil: SharedPreferenceUtil
+    private val kiwixDataStore: KiwixDataStore
   ) :
     Handler(Looper.getMainLooper()) {
     @SuppressWarnings("InjectDispatcher")
@@ -177,7 +175,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       if (url == null && src == null) return
       CoroutineScope(Dispatchers.IO).launch {
         val savedFile =
-          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
+          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, kiwixDataStore)
 
         withContext(Dispatchers.Main) {
           savedFile?.let {

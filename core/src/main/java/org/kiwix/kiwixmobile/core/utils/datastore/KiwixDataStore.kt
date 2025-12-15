@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils.datastore
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
@@ -37,11 +38,6 @@ import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.DEFAULT_ZOOM
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.io.File
 import java.util.Locale
@@ -512,5 +508,81 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_IS_FIRST_RUN] = isFirstRun
     }
+  }
+
+  val isPlayStoreBuild: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.IS_PLAY_STORE_BUILD] ?: false
+    }
+
+  suspend fun setIsPlayStoreBuild(isPlayStoreBuild: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.IS_PLAY_STORE_BUILD] = isPlayStoreBuild
+    }
+  }
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
+  suspend fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    isPlayStoreBuild.first() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
+  suspend fun isNotPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    !isPlayStoreBuild.first() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
+  val prefIsTest: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_IS_TEST] ?: false
+    }
+
+  suspend fun setPrefIsTest(prefIsTest: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_IS_TEST] = prefIsTest
+    }
+  }
+
+  companion object {
+    // Prefs
+    const val PREF_LANG = "pref_language_chooser"
+    const val PREF_DEVICE_DEFAULT_LANG = "pref_device_default_language"
+    const val PREF_STORAGE = "pref_select_folder"
+    const val STORAGE_POSITION = "storage_position"
+    const val PREF_WIFI_ONLY = "pref_wifi_only"
+    const val PREF_KIWIX_MOBILE = "kiwix-mobile"
+    const val PREF_SHOW_INTRO = "showIntro"
+    const val PREF_IS_TEST = "is_test"
+    const val PREF_SHOW_SHOWCASE = "showShowCase"
+    const val PREF_BACK_TO_TOP = "pref_backtotop"
+    const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
+    const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
+    const val PREF_IS_FIRST_RUN = "isFirstRun"
+    const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
+    const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
+    const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
+    const val PREF_HOSTED_BOOKS = "hosted_books"
+    const val PREF_THEME = "pref_dark_mode"
+    const val TEXT_ZOOM = "true_text_zoom"
+    const val DEFAULT_ZOOM = 100
+    const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    const val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH = "pref_show_manage_external_files"
+    const val IS_PLAY_STORE_BUILD = "is_play_store_build"
+    const val PREF_BOOKMARKS_MIGRATED = "pref_bookmarks_migrated"
+    const val PREF_RECENT_SEARCH_MIGRATED = "pref_recent_search_migrated"
+    const val PREF_HISTORY_MIGRATED = "pref_history_migrated"
+    const val PREF_NOTES_MIGRATED = "pref_notes_migrated"
+    const val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED = "pref_app_directory_to_public_migrated"
+    const val PREF_BOOK_ON_DISK_MIGRATED = "pref_book_on_disk_migrated"
+    const val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG = "pref_show_copy_move_storage_dialog"
+    const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
+    const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
+      "pref_last_donation_shown_in_milliseconds"
+    const val SELECTED_ONLINE_CONTENT_LANGUAGE = "selectedOnlineContentLanguage"
+    const val CACHED_LANGUAGE_CODES = "cachedLanguageCodes"
+    const val KEY_LANGUAGE_CODE = "languageCode"
+    const val KEY_OCCURRENCES_OF_LANGUAGE = "occurrencesOfLanguage"
+    const val KEY_LANGUAGE_ACTIVE = "languageActive"
+    const val KEY_LANGUAGE_ID = "languageId"
+    const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
+    const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
   }
 }

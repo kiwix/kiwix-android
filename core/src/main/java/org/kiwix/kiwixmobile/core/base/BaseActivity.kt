@@ -26,14 +26,10 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
-  @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
 

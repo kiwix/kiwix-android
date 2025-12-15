@@ -36,12 +36,10 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 class ThemeConfigTest {
   private lateinit var themeConfig: ThemeConfig
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var context: Context
 
@@ -52,7 +50,6 @@ class ThemeConfigTest {
   @BeforeEach
   fun setUp() {
     Dispatchers.setMain(testDispatcher)
-    sharedPreferenceUtil = mockk()
     kiwixDataStore = mockk()
     context = mockk()
     themeConfig = ThemeConfig(kiwixDataStore, context)

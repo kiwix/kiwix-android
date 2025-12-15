@@ -47,7 +47,6 @@ import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -72,7 +71,6 @@ class DeepLinksTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixDataStore: KiwixDataStore
 
   @Before
@@ -94,14 +92,9 @@ class DeepLinksTest : BaseActivityTest() {
         setIsScanFileSystemDialogShown(true)
         setShowStorageSelectionDialogOnCopyMove(false)
         setIsFirstRun(false)
+        setIsPlayStoreBuild(true)
+        setPrefIsTest(true)
       }
-    }
-    context.let {
-      sharedPreferenceUtil =
-        SharedPreferenceUtil(it).apply {
-          setIsPlayStoreBuildType(true)
-          prefIsTest = true
-        }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
       setSuppressingResultMatcher(

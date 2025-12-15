@@ -23,57 +23,58 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 object PreferencesKeys {
-  val TEXT_ZOOM = intPreferencesKey(SharedPreferenceUtil.TEXT_ZOOM)
+  val TEXT_ZOOM = intPreferencesKey(KiwixDataStore.TEXT_ZOOM)
   val TAG_CURRENT_FILE = stringPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE)
   val TAG_CURRENT_TAB = intPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB)
-  val PREF_BACK_TO_TOP = booleanPreferencesKey(SharedPreferenceUtil.PREF_BACK_TO_TOP)
-  val PREF_NEW_TAB_BACKGROUND = booleanPreferencesKey(SharedPreferenceUtil.PREF_NEW_TAB_BACKGROUND)
+  val PREF_BACK_TO_TOP = booleanPreferencesKey(KiwixDataStore.PREF_BACK_TO_TOP)
+  val PREF_NEW_TAB_BACKGROUND = booleanPreferencesKey(KiwixDataStore.PREF_NEW_TAB_BACKGROUND)
   val PREF_EXTERNAL_LINK_POPUP =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP)
-  val PREF_WIFI_ONLY = booleanPreferencesKey(SharedPreferenceUtil.PREF_WIFI_ONLY)
-  val PREF_THEME = stringPreferencesKey(SharedPreferenceUtil.PREF_THEME)
-  val PREF_SHOW_INTRO = booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_INTRO)
-  val PREF_SHOW_SHOWCASE = booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_SHOWCASE)
-  val PREF_BOOKMARKS_MIGRATED = booleanPreferencesKey(SharedPreferenceUtil.PREF_BOOKMARKS_MIGRATED)
+    booleanPreferencesKey(KiwixDataStore.PREF_EXTERNAL_LINK_POPUP)
+  val PREF_WIFI_ONLY = booleanPreferencesKey(KiwixDataStore.PREF_WIFI_ONLY)
+  val PREF_THEME = stringPreferencesKey(KiwixDataStore.PREF_THEME)
+  val PREF_SHOW_INTRO = booleanPreferencesKey(KiwixDataStore.PREF_SHOW_INTRO)
+  val PREF_SHOW_SHOWCASE = booleanPreferencesKey(KiwixDataStore.PREF_SHOW_SHOWCASE)
+  val PREF_BOOKMARKS_MIGRATED = booleanPreferencesKey(KiwixDataStore.PREF_BOOKMARKS_MIGRATED)
   val PREF_RECENT_SEARCH_MIGRATED =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_RECENT_SEARCH_MIGRATED)
-  val PREF_NOTES_MIGRATED = booleanPreferencesKey(SharedPreferenceUtil.PREF_NOTES_MIGRATED)
-  val PREF_HISTORY_MIGRATED = booleanPreferencesKey(SharedPreferenceUtil.PREF_HISTORY_MIGRATED)
+    booleanPreferencesKey(KiwixDataStore.PREF_RECENT_SEARCH_MIGRATED)
+  val PREF_NOTES_MIGRATED = booleanPreferencesKey(KiwixDataStore.PREF_NOTES_MIGRATED)
+  val PREF_HISTORY_MIGRATED = booleanPreferencesKey(KiwixDataStore.PREF_HISTORY_MIGRATED)
   val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED)
+    booleanPreferencesKey(KiwixDataStore.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED)
   val PREF_BOOK_ON_DISK_MIGRATED =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED)
-  val CACHED_LANGUAGE_CODES = stringPreferencesKey(SharedPreferenceUtil.CACHED_LANGUAGE_CODES)
+    booleanPreferencesKey(KiwixDataStore.PREF_BOOK_ON_DISK_MIGRATED)
+  val CACHED_LANGUAGE_CODES = stringPreferencesKey(KiwixDataStore.CACHED_LANGUAGE_CODES)
   val SELECTED_ONLINE_CONTENT_LANGUAGE =
-    stringPreferencesKey(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE)
-  val PREF_DEVICE_DEFAULT_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG)
-  val PREF_LANG = stringPreferencesKey(SharedPreferenceUtil.PREF_LANG)
+    stringPreferencesKey(KiwixDataStore.SELECTED_ONLINE_CONTENT_LANGUAGE)
+  val PREF_DEVICE_DEFAULT_LANG = stringPreferencesKey(KiwixDataStore.PREF_DEVICE_DEFAULT_LANG)
+  val PREF_LANG = stringPreferencesKey(KiwixDataStore.PREF_LANG)
   val PREF_SHOW_HISTORY_ALL_BOOKS =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS)
+    booleanPreferencesKey(KiwixDataStore.PREF_SHOW_HISTORY_ALL_BOOKS)
   val PREF_SHOW_BOOKMARKS_ALL_BOOKS =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS)
+    booleanPreferencesKey(KiwixDataStore.PREF_SHOW_BOOKMARKS_ALL_BOOKS)
   val PREF_SHOW_NOTES_ALL_BOOKS =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS)
-  val PREF_HOSTED_BOOKS = stringSetPreferencesKey(SharedPreferenceUtil.PREF_HOSTED_BOOKS)
-  val PREF_LATER_CLICKED_MILLIS = longPreferencesKey(SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS)
+    booleanPreferencesKey(KiwixDataStore.PREF_SHOW_NOTES_ALL_BOOKS)
+  val PREF_HOSTED_BOOKS = stringSetPreferencesKey(KiwixDataStore.PREF_HOSTED_BOOKS)
+  val PREF_LATER_CLICKED_MILLIS = longPreferencesKey(KiwixDataStore.PREF_LATER_CLICKED_MILLIS)
   val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
-    longPreferencesKey(SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS)
+    longPreferencesKey(KiwixDataStore.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS)
   val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN)
+    booleanPreferencesKey(KiwixDataStore.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN)
   val PREF_IS_SCAN_FILE_SYSTEM_TEST =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_IS_SCAN_FILE_SYSTEM_TEST)
+    booleanPreferencesKey(KiwixDataStore.PREF_IS_SCAN_FILE_SYSTEM_TEST)
   val PREF_MANAGE_EXTERNAL_FILES =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES)
+    booleanPreferencesKey(KiwixDataStore.PREF_MANAGE_EXTERNAL_FILES)
   val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH)
+    booleanPreferencesKey(KiwixDataStore.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH)
   val PREF_SHOW_STORAGE_OPTION =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION)
+    booleanPreferencesKey(KiwixDataStore.PREF_SHOW_STORAGE_OPTION)
   val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG =
-    booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG)
-  val PREF_STORAGE = stringPreferencesKey(SharedPreferenceUtil.PREF_STORAGE)
-  val STORAGE_POSITION = intPreferencesKey(SharedPreferenceUtil.STORAGE_POSITION)
-  val PREF_IS_FIRST_RUN = booleanPreferencesKey(SharedPreferenceUtil.PREF_IS_FIRST_RUN)
+    booleanPreferencesKey(KiwixDataStore.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG)
+  val PREF_STORAGE = stringPreferencesKey(KiwixDataStore.PREF_STORAGE)
+  val STORAGE_POSITION = intPreferencesKey(KiwixDataStore.STORAGE_POSITION)
+  val PREF_IS_FIRST_RUN = booleanPreferencesKey(KiwixDataStore.PREF_IS_FIRST_RUN)
+  val IS_PLAY_STORE_BUILD = booleanPreferencesKey(KiwixDataStore.IS_PLAY_STORE_BUILD)
+  val PREF_IS_TEST = booleanPreferencesKey(KiwixDataStore.PREF_IS_TEST)
 }

@@ -35,6 +35,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
@@ -98,7 +99,7 @@ class CustomMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
-      if (!sharedPreferenceUtil.prefIsTest) {
+      if (!kiwixDataStore.prefIsTest.first()) {
         (applicationContext as CustomApp).customComponent
           .provideObjectBoxDataMigrationHandler()
           .migrate()

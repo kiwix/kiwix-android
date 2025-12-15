@@ -25,8 +25,8 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 import javax.inject.Inject
@@ -36,7 +36,7 @@ import javax.inject.Inject
  * for the Standalone (non-Play Store) variant of the app.
  */
 class ProcessSelectedZimFilesForStandalone @Inject constructor(
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private val activity: Activity
 ) {
   private var selectedZimFileCallback: SelectedZimFileCallback? = null
@@ -49,7 +49,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
    * Returns whether this handler can process URIs.
    * Standalone builds (non-Play Store) handle them directly.
    */
-  fun canHandleUris(): Boolean = !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
+  suspend fun canHandleUris(): Boolean = !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
 
   /**
    * Entry point for processing selected files.

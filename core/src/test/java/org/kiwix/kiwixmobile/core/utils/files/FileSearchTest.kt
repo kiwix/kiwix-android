@@ -28,6 +28,7 @@ import app.cash.turbine.test
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import io.mockk.clearMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -60,7 +61,7 @@ class FileSearchTest {
     every { Environment.getExternalStorageDirectory() } returns externalStorageDirectory
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
-    every { StorageDeviceUtils.getReadableStorage(context) } returns
+    coEvery { StorageDeviceUtils.getReadableStorage(context) } returns
       arrayListOf(
         storageDevice
       )

@@ -195,7 +195,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
-      if (!sharedPreferenceUtil.prefIsTest) {
+      if (!kiwixDataStore.prefIsTest.first()) {
         (applicationContext as KiwixApp).kiwixComponent
           .provideObjectBoxDataMigrationHandler()
           .migrate()
@@ -265,10 +265,10 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onStart() {
     super.onStart()
-    if (!sharedPreferenceUtil.prefIsTest) {
-      sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
-    }
     lifecycleScope.launch {
+      if (!kiwixDataStore.prefIsTest.first()) {
+        kiwixDataStore.setIsPlayStoreBuild(BuildConfig.IS_PLAYSTORE)
+      }
       setDefaultDeviceLanguage()
     }
   }

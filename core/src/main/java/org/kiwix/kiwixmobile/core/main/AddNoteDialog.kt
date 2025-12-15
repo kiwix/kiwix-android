@@ -42,6 +42,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
@@ -56,7 +57,7 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -96,7 +97,7 @@ class AddNoteDialog : DialogFragment() {
   private var zimNotesDirectory: String? = null
 
   @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
@@ -344,7 +345,7 @@ class AddNoteDialog : DialogFragment() {
           requireContext(),
           Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) != PackageManager.PERMISSION_GRANTED &&
-        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+        runBlocking { !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } &&
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
       ) {
         Log.d(

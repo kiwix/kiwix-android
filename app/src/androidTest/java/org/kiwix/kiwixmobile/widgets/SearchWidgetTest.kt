@@ -39,7 +39,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -76,11 +75,9 @@ class SearchWidgetTest : BaseActivityTest() {
           setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
           setIsScanFileSystemDialogShown(true)
           setIsFirstRun(false)
+          setIsPlayStoreBuild(true)
+          setPrefIsTest(true)
         }
-      }
-      SharedPreferenceUtil(it).apply {
-        setIsPlayStoreBuildType(true)
-        prefIsTest = true
       }
     }
     activityScenario =

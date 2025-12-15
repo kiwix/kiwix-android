@@ -22,7 +22,6 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
@@ -47,7 +46,6 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -61,15 +59,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class ZimHostFragmentTest {
+class ZimHostFragmentTest(rule: androidx.compose.ui.test.junit4.ComposeContentTestRule) {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
-
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  val composeTestRule = rule
   private lateinit var kiwixDataStore: KiwixDataStore
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
@@ -118,13 +114,10 @@ class ZimHostFragmentTest {
           setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
           setIsScanFileSystemDialogShown(true)
           setIsFirstRun(false)
+          setIsPlayStoreBuild(true)
+          setPrefIsTest(true)
         }
       }
-      sharedPreferenceUtil =
-        SharedPreferenceUtil(it).apply {
-          setIsPlayStoreBuildType(true)
-          prefIsTest = true
-        }
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

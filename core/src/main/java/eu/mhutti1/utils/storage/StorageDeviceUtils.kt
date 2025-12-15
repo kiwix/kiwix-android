@@ -24,8 +24,9 @@ import android.os.Build
 import android.os.Environment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.io.File
 import java.io.FileFilter
 import java.io.RandomAccessFile
@@ -40,8 +41,8 @@ object StorageDeviceUtils {
   }
 
   @JvmStatic
-  fun getReadableStorage(context: Context): List<StorageDevice> {
-    var sharedPreferenceUtil: SharedPreferenceUtil? = SharedPreferenceUtil(context)
+  suspend fun getReadableStorage(context: Context): List<StorageDevice> {
+    var kiwixDataStore: KiwixDataStore? = KiwixDataStore(context)
     val storageDevices =
       ArrayList<StorageDevice>().apply {
         add(environmentDevices(context))
@@ -58,13 +59,13 @@ object StorageDeviceUtils {
         // In the Play Store variant, we can only access app-specific directories,
         // so scanning other directories is unnecessary, wastes resources,
         // and increases the scanning time.
-        if (sharedPreferenceUtil?.isPlayStoreBuild == false ||
+        if (kiwixDataStore?.isPlayStoreBuild?.first() == false ||
           Build.VERSION.SDK_INT < Build.VERSION_CODES.R
         ) {
           addAll(externalMountPointDevices())
           addAll(externalFilesDirsDevices(context, false))
         }
-        sharedPreferenceUtil = null
+        kiwixDataStore = null
       }
     return validate(storageDevices, false)
   }
@@ -124,7 +125,7 @@ object StorageDeviceUtils {
             }
           }
         }
-      } catch (ignore: Exception) {
+      } catch (_: Exception) {
         false
       } finally {
         File(it).delete()

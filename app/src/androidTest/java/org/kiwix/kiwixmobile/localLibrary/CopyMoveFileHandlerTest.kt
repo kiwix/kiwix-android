@@ -22,10 +22,8 @@ import android.net.Uri
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.core.content.edit
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -48,7 +46,6 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -74,8 +71,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
-
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
@@ -98,16 +93,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
         setIsFirstRun(false)
+        setIsPlayStoreBuild(true)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
     }
     composeTestRule.apply {
       kiwixMainActivity = activity
       runOnUiThread {
-        sharedPreferenceUtil = SharedPreferenceUtil(kiwixMainActivity)
         runBlocking {
           handleLocaleChange(
             kiwixMainActivity,
@@ -379,9 +371,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitForIdle()
         waitUntilTimeout() // to properly load the library screen.
       }
-      runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(false) }
-      sharedPreferenceUtil.apply {
-        setIsPlayStoreBuildType(true)
+      runBlocking {
+        kiwixDataStore.apply {
+          setShowStorageSelectionDialogOnCopyMove(false)
+          setIsPlayStoreBuild(true)
+        }
       }
       // test opening images
       showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".jpg")))

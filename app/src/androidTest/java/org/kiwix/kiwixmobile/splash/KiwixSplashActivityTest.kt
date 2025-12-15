@@ -23,7 +23,6 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
@@ -46,7 +45,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -140,13 +138,11 @@ class KiwixSplashActivityTest {
   }
 
   private fun shouldShowIntro(value: Boolean) {
-    val preferencesEditor =
-      PreferenceManager.getDefaultSharedPreferences(
-        context
-      ).edit()
-    preferencesEditor.putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true).commit()
     runBlocking {
-      KiwixDataStore(context).setIntroShown(value)
+      KiwixDataStore(context).apply {
+        setIntroShown(value)
+        setPrefIsTest(true)
+      }
     }
   }
 }

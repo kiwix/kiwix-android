@@ -46,8 +46,8 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathForAndroid10AndAbove
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
@@ -670,11 +670,11 @@ object FileUtils {
     url: String?,
     src: String?,
     zimReaderContainer: ZimReaderContainer,
-    sharedPreferenceUtil: SharedPreferenceUtil
+    kiwixDataStore: KiwixDataStore
   ): File? {
     val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src) ?: return null
     var root: File? = null
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
+    if (kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     ) {
       if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {

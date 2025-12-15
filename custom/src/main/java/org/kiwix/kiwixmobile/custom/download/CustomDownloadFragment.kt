@@ -34,11 +34,12 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -59,7 +60,7 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   @JvmField
   @Inject
-  var sharedPreferenceUtil: SharedPreferenceUtil? = null
+  var kiwixDataStore: KiwixDataStore? = null
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private var composeView: ComposeView? = null
@@ -101,18 +102,22 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun downloadButtonClick() {
-    if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-      performAction(ClickedDownload)
-    } else {
-      requestNotificationPermission()
+    lifecycleScope.runSafelyInLifecycleScope {
+      if (requireActivity().hasNotificationPermission(kiwixDataStore)) {
+        performAction(ClickedDownload)
+      } else {
+        requestNotificationPermission()
+      }
     }
   }
 
   private fun retryButtonClick() {
-    if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-      performAction(ClickedRetry)
-    } else {
-      requestNotificationPermission()
+    lifecycleScope.runSafelyInLifecycleScope {
+      if (requireActivity().hasNotificationPermission(kiwixDataStore)) {
+        performAction(ClickedRetry)
+      } else {
+        requestNotificationPermission()
+      }
     }
   }
 
