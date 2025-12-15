@@ -93,13 +93,13 @@ class DeepLinksTest : BaseActivityTest() {
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
         setShowStorageSelectionDialogOnCopyMove(false)
+        setIsFirstRun(false)
       }
     }
     context.let {
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIsPlayStoreBuildType(true)
-          putPrefIsFirstRun(false)
           prefIsTest = true
         }
     }

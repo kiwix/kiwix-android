@@ -117,13 +117,13 @@ class ZimHostFragmentTest {
           setPrefLanguage("en")
           setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
           setIsScanFileSystemDialogShown(true)
+          setIsFirstRun(false)
         }
       }
       sharedPreferenceUtil =
         SharedPreferenceUtil(it).apply {
           setIsPlayStoreBuildType(true)
           prefIsTest = true
-          putPrefIsFirstRun(false)
         }
     }
     activityScenario =

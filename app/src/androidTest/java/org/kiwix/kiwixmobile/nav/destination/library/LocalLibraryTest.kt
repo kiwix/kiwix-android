@@ -87,13 +87,13 @@ class LocalLibraryTest : BaseActivityTest() {
         // the manage external storage permission dialog on Android 11 and above
         // while refreshing the content in LocalLibraryFragment.
         setManageExternalFilesPermissionDialogOnRefresh(false)
+        setIsFirstRun(false)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

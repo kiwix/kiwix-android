@@ -2288,9 +2288,11 @@ abstract class CoreReaderFragment :
   }
 
   override fun webViewUrlLoading() {
-    if (sharedPreferenceUtil?.prefIsFirstRun == true && !BuildConfig.DEBUG) {
-      contentsDrawerHint()
-      sharedPreferenceUtil?.putPrefIsFirstRun(false) // It is no longer the first run
+    runSafelyInCoreReaderLifecycleScope {
+      if (kiwixDataStore?.isFirstRun?.first() == true && !BuildConfig.DEBUG) {
+        contentsDrawerHint()
+        kiwixDataStore?.setIsFirstRun(false) // It is no longer the first run
+      }
     }
   }
 

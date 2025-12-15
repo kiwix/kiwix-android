@@ -75,12 +75,12 @@ class SearchWidgetTest : BaseActivityTest() {
           setPrefLanguage("en")
           setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
           setIsScanFileSystemDialogShown(true)
+          setIsFirstRun(false)
         }
       }
       SharedPreferenceUtil(it).apply {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
-        putPrefIsFirstRun(false)
       }
     }
     activityScenario =

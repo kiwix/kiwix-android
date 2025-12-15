@@ -65,6 +65,7 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG,
         SharedPreferenceUtil.PREF_STORAGE,
         SharedPreferenceUtil.STORAGE_POSITION,
+        SharedPreferenceUtil.PREF_IS_FIRST_RUN,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)

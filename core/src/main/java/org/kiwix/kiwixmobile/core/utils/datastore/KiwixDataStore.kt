@@ -502,4 +502,15 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       prefs[PreferencesKeys.STORAGE_POSITION] = pos
     }
   }
+
+  val isFirstRun: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PREF_IS_FIRST_RUN] ?: true
+    }
+
+  suspend fun setIsFirstRun(isFirstRun: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_IS_FIRST_RUN] = isFirstRun
+    }
+  }
 }

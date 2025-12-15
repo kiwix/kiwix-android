@@ -167,6 +167,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, false)
       .putString(SharedPreferenceUtil.PREF_STORAGE, storagePath)
       .putInt(SharedPreferenceUtil.STORAGE_POSITION, 1)
+      .putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -224,5 +225,6 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG])
     assertEquals(storagePath, prefs[PreferencesKeys.PREF_STORAGE])
     assertEquals(1, prefs[PreferencesKeys.STORAGE_POSITION])
+    assertEquals(false, prefs[PreferencesKeys.PREF_IS_FIRST_RUN])
   }
 }

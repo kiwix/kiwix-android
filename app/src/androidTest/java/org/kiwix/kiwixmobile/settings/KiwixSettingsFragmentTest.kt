@@ -83,10 +83,18 @@ class KiwixSettingsFragmentTest {
       }
       waitForIdle()
     }
+    val kiwixDataStore = KiwixDataStore(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).apply {
+      runBlocking {
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
+      }
+    }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
     }
@@ -97,10 +105,7 @@ class KiwixSettingsFragmentTest {
           handleLocaleChange(
             it,
             "en",
-            KiwixDataStore(it).apply {
-              setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-              setIsScanFileSystemDialogShown(true)
-            }
+            kiwixDataStore
           )
         }
       }

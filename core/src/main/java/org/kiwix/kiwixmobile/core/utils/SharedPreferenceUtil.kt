@@ -35,9 +35,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
 
-  val prefIsFirstRun: Boolean
-    get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
-
   var prefIsTest: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_TEST, false)
     set(prefIsTest) {
@@ -46,9 +43,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
-
-  fun putPrefIsFirstRun(isFirstRun: Boolean) =
-    sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
 
   fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
     sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }

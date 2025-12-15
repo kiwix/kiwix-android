@@ -77,12 +77,12 @@ class HelpFragmentTest : BaseActivityTest() {
       lifeCycleScope.launch {
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
     activityScenario =

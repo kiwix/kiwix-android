@@ -80,11 +80,11 @@ class DonationDialogTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
       }
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

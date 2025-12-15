@@ -75,4 +75,5 @@ object PreferencesKeys {
     booleanPreferencesKey(SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG)
   val PREF_STORAGE = stringPreferencesKey(SharedPreferenceUtil.PREF_STORAGE)
   val STORAGE_POSITION = intPreferencesKey(SharedPreferenceUtil.STORAGE_POSITION)
+  val PREF_IS_FIRST_RUN = booleanPreferencesKey(SharedPreferenceUtil.PREF_IS_FIRST_RUN)
 }
