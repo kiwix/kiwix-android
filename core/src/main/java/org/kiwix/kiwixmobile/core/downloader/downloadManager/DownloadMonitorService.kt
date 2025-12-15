@@ -39,6 +39,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,6 +48,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
@@ -55,6 +57,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
 const val THIRTY_TREE = 33
@@ -93,9 +96,10 @@ class DownloadMonitorService : Service() {
       .build()
       .inject(this)
     super.onCreate()
-    setupUpdater()
     fetch.addListener(fetchListener, true)
-    showDownloadServiceForegroundNotification()
+    setupUpdater()
+    startForegroundService()
+    isDownloadMonitorServiceRunning = true
   }
 
   private fun setupUpdater() {
@@ -135,7 +139,11 @@ class DownloadMonitorService : Service() {
    * More details: https://developer.android.com/develop/background-work/services/fgs/timeout
    */
   override fun onTimeout(startId: Int, fgsType: Int) {
-    showDownloadBackgroundLimitReachNotification()
+    // We have to use runBlocking otherwise it will call `super.onTimeout` immediately
+    // and our service will not properly stop.
+    runBlocking {
+      showDownloadBackgroundLimitReachNotification()
+    }
     super.onTimeout(startId, fgsType)
   }
 
@@ -151,27 +159,23 @@ class DownloadMonitorService : Service() {
    * because once this limit is reached, the user can no longer resume downloads
    * from notifications. Keeping those notifications visible can be confusing.
    */
-  private fun showDownloadBackgroundLimitReachNotification() {
-    fetch.getDownloadsWithStatus(
-      listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
-    ) { downloads ->
-      downloads.forEach { download ->
-        // Remove all ongoing notification along with paused notifications.
-        // Also, pause the ongoing downloads.
-        runCatching {
-          if (!download.isPaused()) {
-            fetch.pause(download.id)
-            updatePauseReasonInDatabase(download.id.toLong())
-          }
-          notificationManager.cancel(download.id)
+  private suspend fun showDownloadBackgroundLimitReachNotification() {
+    downloadRoomDao.getOngoingDownloads().forEach { downloadModel ->
+      // Remove all ongoing notification along with paused notifications.
+      // Also, pause the ongoing downloads.
+      runCatching {
+        if (!downloadModel.isPaused) {
+          fetch.pause(downloadModel.downloadId.toInt())
+          updatePauseReasonInDatabase(downloadModel.downloadId)
         }
-      }
-      notificationManager.notify(
-        DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID,
-        buildTimeoutNotification()
-      )
-      stopForegroundServiceForDownloads()
+        notificationManager.cancel(downloadModel.downloadId.toInt())
+      }.onFailure { it.printStackTrace() }
     }
+    notificationManager.notify(
+      DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID,
+      buildTimeoutNotification()
+    )
+    stopForegroundServiceForDownloads()
   }
 
   /**
@@ -239,39 +243,12 @@ class DownloadMonitorService : Service() {
       .build()
   }
 
-  /**
-   * Shows a persistent foreground notification while at least one download is active.
-   * The notification remains visible until all downloads are complete or stopped.
-   *
-   * Keeping this notification active ensures that the DownloadMonitorService
-   * stays alive and prevents common issues such as
-   * [android.app.ForegroundServiceStartNotAllowedException] that can occur
-   * when trying to set a new foreground notification for another download
-   * after one has completed while the app is in the background.
-   *
-   * In short, this method ensures a foreground notification is maintained
-   * until there are no active downloads, at which point the service is stopped.
-   */
-  private fun showDownloadServiceForegroundNotification() {
+  private fun startForegroundService() {
     runCatching {
-      // Start the foreground service immediately before going to background.
       downloadNotificationChannel()
       startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
-      fetch.getDownloadsWithStatus(
-        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
-      ) { activeDownloads ->
-        if (activeDownloads.isNotEmpty()) {
-          // Update the notification.
-          notificationManager.notify(
-            DOWNLOAD_SERVICE_NOTIFICATION_ID,
-            buildForegroundNotification()
-          )
-        } else {
-          // Stop the foreground service if no active downloads.
-          stopForegroundServiceForDownloads()
-        }
-      }
-    }
+      startPausedDownloadsDueToAndroidServiceLimitation()
+    }.onFailure { it.printStackTrace() }
   }
 
   private fun buildForegroundNotification(): Notification =
@@ -284,6 +261,31 @@ class DownloadMonitorService : Service() {
 
   private fun cancelNotificationForId(downloadId: Int) {
     notificationManager.cancel(downloadId)
+  }
+
+  /**
+   * Resumes all downloads that were previously paused by the service due to Android's
+   * background timeout limitation.
+   *
+   * This method:
+   * 1. Fetches all downloads marked with `PauseReason.SERVICE`.
+   * 2. Resumes each download using Fetch.
+   * 3. Resets their `pauseReason` to `NONE` and updates the status to `QUEUED`
+   *    so they can continue downloading normally.
+   */
+  private fun startPausedDownloadsDueToAndroidServiceLimitation(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    CoroutineScope(dispatcher).launch {
+      downloadRoomDao.getDownloadsPausedByService()
+        .forEach {
+          fetch.resume(it.downloadId.toInt())
+          // Reset the PauseReason.
+          downloadRoomDao.getEntityForDownloadId(it.downloadId)?.let { downloadRoomEntity ->
+            downloadRoomDao.updateDownloadItem(
+              downloadRoomEntity.copy(pauseReason = PauseReason.NONE, status = Status.QUEUED)
+            )
+          }
+        }
+    }
   }
 
   private val fetchListener = object : FetchListener {
@@ -386,9 +388,6 @@ class DownloadMonitorService : Service() {
 
   private fun stopForegroundServiceIfNoActiveDownloads(fetch: Fetch) {
     taskFlow.tryEmit {
-      // Check if there are any ongoing downloads.
-      // If the list is empty, it means no other downloads are running,
-      // so we need to promote this download to a foreground service.
       fetch.getDownloadsWithStatus(
         listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING)
       ) { activeDownloads ->
@@ -498,9 +497,12 @@ class DownloadMonitorService : Service() {
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
+    isDownloadMonitorServiceRunning = false
   }
 
   companion object {
     const val STOP_DOWNLOAD_SERVICE = "stop_download_service"
+
+    @JvmField var isDownloadMonitorServiceRunning = false
   }
 }

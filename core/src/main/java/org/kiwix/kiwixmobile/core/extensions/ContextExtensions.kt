@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import android.app.ActivityManager
-import android.app.Service
 import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
@@ -65,11 +63,3 @@ fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Inte
 
 val Context.locale: Locale
   get() = resources.configuration.locales.get(0)
-
-@Suppress("Deprecation")
-fun Context.isServiceRunning(serviceClass: Class<out Service>): Boolean {
-  val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-  val services = activityManager.getRunningServices(Int.MAX_VALUE)
-
-  return services.any { it.service.className == serviceClass.name }
-}

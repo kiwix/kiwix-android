@@ -38,6 +38,8 @@ data class DownloadModel(
   val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
   val fileNameFromUrl: String by lazy { StorageUtils.getFileNameFromUrl(book.url) }
 
+  val isPaused: Boolean = state == Status.PAUSED
+
   constructor(downloadEntity: DownloadRoomEntity) : this(
     downloadEntity.id,
     downloadEntity.downloadId,

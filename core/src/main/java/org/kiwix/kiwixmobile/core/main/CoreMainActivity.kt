@@ -49,7 +49,6 @@ import androidx.navigation.navOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
@@ -57,15 +56,13 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
-import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
-import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -177,9 +174,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
 
-  @Inject
-  lateinit var downloadMonitor: DownloadMonitor
-
   /**
    * Manages the visibility of the left drawer by tracking its state.
    * In Compose, when the screen rotates and the screen width is above 600dp,
@@ -270,9 +264,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onResume() {
     super.onResume()
-    // Resume in-app download monitoring now that the app is visible again.
-    downloadMonitor.startMonitoringDownload()
-    stopDownloadServiceIfRunning()
+    startDownloadMonitorServiceIfOngoingDownloads(true)
     cancelBackgroundTimeoutNotification()
   }
 
@@ -281,7 +273,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * as the application is now in the foreground and can handle downloads directly.
    */
   private fun stopDownloadServiceIfRunning() {
-    if (isServiceRunning(DownloadMonitorService::class.java)) {
+    if (isDownloadMonitorServiceRunning) {
       startService(
         Intent(
           this,
@@ -291,39 +283,31 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  override fun onPause() {
-    // Start the DownloadService as the app is about to enter the background,
-    // so downloads can continue even if the app is no longer in the foreground.
-    startMonitoringDownloads()
-    downloadMonitor.stopListeningDownloads()
-    super.onPause()
-  }
-
   /**
-   * Ensures that the `DownloadMonitorService` is running whenever there are ongoing downloads.
+   * Starts the [DownloadMonitorService] if there are any ongoing downloads.
    *
-   * This method is typically called from lifecycle events (e.g., `onPause()`).
-   * It checks for active downloads on a background thread and starts the
-   * `DownloadMonitorService` only if:
-   *  - the service is not already running, and
-   *  - there are ongoings downloads in the database.
-   *
-   * The `DownloadMonitorService` keeps the Fetch instance alive in the background,
-   * allowing downloads to continue even when the app is minimized, backgrounded,
-   * or terminated by the system.
+   * This method checks whether the download monitoring service is already running.
+   * If not, it queries the database for ongoing downloads on a background thread.
+   * When at least one active download is found, the service is started with the
+   * required app metadata. If no ongoing downloads exist, the service is stopped
+   * to avoid unnecessary background work.
    */
   @Suppress("InjectDispatcher")
-  private fun startMonitoringDownloads() {
-    if (!isServiceRunning(DownloadMonitorService::class.java)) {
-      lifecycleScope.runSafelyInLifecycleScope {
-        withContext(Dispatchers.IO) {
-          val downloads = downloadRoomDao.getOngoingDownloads()
-          if (downloads.isNotEmpty()) {
+  fun startDownloadMonitorServiceIfOngoingDownloads(isAppStart: Boolean = false) {
+    if (!isDownloadMonitorServiceRunning) {
+      CoroutineScope(Dispatchers.IO).launch {
+        runCatching {
+          if (downloadRoomDao.getOngoingDownloads().isNotEmpty() || !isAppStart) {
             startService(
-              Intent(this@CoreMainActivity, DownloadMonitorService::class.java).apply {
+              Intent(
+                this@CoreMainActivity,
+                DownloadMonitorService::class.java
+              ).apply {
                 putExtra(APP_NAME_KEY, appName)
               }
             )
+          } else {
+            stopDownloadServiceIfRunning()
           }
         }
       }

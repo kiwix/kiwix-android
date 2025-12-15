@@ -68,8 +68,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.SIX
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.utils.SIX
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllNotes

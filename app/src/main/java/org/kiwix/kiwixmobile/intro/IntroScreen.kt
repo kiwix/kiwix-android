@@ -37,10 +37,10 @@ import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.intro.composable.IndicatorColumn
 import org.kiwix.kiwixmobile.intro.composable.IntroPage
 import org.kiwix.kiwixmobile.zimManager.THREE
