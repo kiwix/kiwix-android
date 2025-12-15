@@ -43,14 +43,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.utils.KiwixDataStore.Companion.KEY_LANGUAGE_ACTIVE
-import org.kiwix.kiwixmobile.core.utils.KiwixDataStore.Companion.KEY_LANGUAGE_CODE
-import org.kiwix.kiwixmobile.core.utils.KiwixDataStore.Companion.KEY_LANGUAGE_ID
-import org.kiwix.kiwixmobile.core.utils.KiwixDataStore.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_ACTIVE
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_CODE
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_ID
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.datastore.PreferencesKeys
 import org.kiwix.kiwixmobile.core.utils.datastore.SharedPreferenceToDatastoreMigrator
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -224,7 +224,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(storagePath, prefs[PreferencesKeys.PREF_STORAGE])
     assertEquals(1, prefs[PreferencesKeys.STORAGE_POSITION])
     assertEquals(false, prefs[PreferencesKeys.PREF_IS_FIRST_RUN])
-    assertEquals(true, prefs[KiwixDataStore.Companion.IS_PLAY_STORE_BUILD])
-    assertEquals(true, prefs[KiwixDataStore.Companion.PREF_IS_TEST])
+    assertEquals(true, prefs[PreferencesKeys.IS_PLAY_STORE_BUILD])
+    assertEquals(true, prefs[PreferencesKeys.PREF_IS_TEST])
   }
 }
