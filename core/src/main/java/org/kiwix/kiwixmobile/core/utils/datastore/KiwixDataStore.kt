@@ -342,12 +342,12 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
-  val hostedBooks: Flow<Set<String>> =
+  val hostedBookIds: Flow<Set<String>> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_HOSTED_BOOKS] ?: HashSet()
     }
 
-  suspend fun setHostedBooks(hostedBooks: Set<String>) {
+  suspend fun setHostedBookIds(hostedBooks: Set<String>) {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.PREF_HOSTED_BOOKS] = hostedBooks
     }
