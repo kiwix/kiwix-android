@@ -68,7 +68,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -91,10 +90,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
   @JvmField
   @Inject
   internal var presenter: SettingsPresenter? = null
-
-  @JvmField
-  @Inject
-  var sharedPreferenceUtil: SharedPreferenceUtil? = null
 
   @JvmField
   @Inject
@@ -239,17 +234,24 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
   }
 
   private fun showClearAllNotesDialog() {
-    alertDialogShower?.show(KiwixDialog.ClearAllNotes, ::clearAllNotes)
+    alertDialogShower?.show(
+      KiwixDialog.ClearAllNotes,
+      {
+        lifecycleScope.launch {
+          clearAllNotes()
+        }
+      }
+    )
   }
 
-  private fun clearAllNotes() {
+  private suspend fun clearAllNotes() {
     if (instance.isExternalStorageWritable) {
       if (ContextCompat.checkSelfPermission(
           requireActivity(),
           Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
         != PackageManager.PERMISSION_GRANTED &&
-        sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+        kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
       ) {
         Snackbar.make(
@@ -292,9 +294,9 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
   }
 
   @Suppress("NestedBlockDepth")
-  private fun requestExternalStorageWritePermissionForExportBookmark(): Boolean {
+  private suspend fun requestExternalStorageWritePermissionForExportBookmark(): Boolean {
     var isPermissionGranted = false
-    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+    if (kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
     ) {
       if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)

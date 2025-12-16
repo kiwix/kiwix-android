@@ -22,7 +22,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -41,22 +44,22 @@ class KiwixSettingsFragment : CoreSettingsFragment() {
         shouldShowPrefWifiOnlyPreference = true,
       )
     }
-    setMangeExternalStoragePermission()
+    lifecycleScope.launch {
+      setMangeExternalStoragePermission()
+    }
   }
 
   override suspend fun setStorage() {
     settingsScreenState.value.update { copy(shouldShowStorageCategory = true) }
-    sharedPreferenceUtil?.let {
-      if (storageDeviceList.isNotEmpty()) {
-        // update the storage when user switch to other storage.
-        setUpStoragePreference()
-        return@setStorage
-      }
-      showHideProgressBarWhileFetchingStorageInfo(true)
-      storageDeviceList = (requireActivity() as KiwixMainActivity).getStorageDeviceList()
-      showHideProgressBarWhileFetchingStorageInfo(false)
+    if (storageDeviceList.isNotEmpty()) {
+      // update the storage when user switch to other storage.
       setUpStoragePreference()
+      return
     }
+    showHideProgressBarWhileFetchingStorageInfo(true)
+    storageDeviceList = (requireActivity() as KiwixMainActivity).getStorageDeviceList()
+    showHideProgressBarWhileFetchingStorageInfo(false)
+    setUpStoragePreference()
   }
 
   private fun setUpStoragePreference() {
@@ -77,9 +80,9 @@ class KiwixSettingsFragment : CoreSettingsFragment() {
     settingsScreenState.value.update { copy(isLoadingStorageDetails = show) }
   }
 
-  private fun setMangeExternalStoragePermission() {
+  private suspend fun setMangeExternalStoragePermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-      sharedPreferenceUtil?.isPlayStoreBuild == false
+      kiwixDataStore?.isPlayStoreBuild?.first() == false
     ) {
       val externalStorageManager = Environment.isExternalStorageManager()
       val permissionSummary = if (externalStorageManager) {

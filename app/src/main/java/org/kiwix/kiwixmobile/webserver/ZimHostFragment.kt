@@ -66,7 +66,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
 import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -92,9 +91,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   @Inject
   internal lateinit var alertDialogShower: AlertDialogShower
-
-  @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
@@ -231,7 +227,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     lifecycleScope.runSafelyInLifecycleScope {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
       ) {
-        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+        if (requireActivity().hasNotificationPermission(kiwixDataStore)) {
           handleStoragePermissionAndServer()
         } else {
           notificationPermissionListener.launch(POST_NOTIFICATIONS)
@@ -244,7 +240,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   private suspend fun handleStoragePermissionAndServer() {
     // we does not require any permission for playStore variant.
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+    if (kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       startStopServer()
       return
     }
@@ -272,11 +268,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private suspend fun handleManageExternalStoragePermissionAndServer() {
-    if (!requireActivity().isManageExternalStoragePermissionGranted(
-        sharedPreferenceUtil,
-        kiwixDataStore
-      )
-    ) {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(kiwixDataStore)) {
       showManageExternalStoragePermissionDialog()
     } else {
       startStopServer()

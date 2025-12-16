@@ -18,11 +18,10 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
@@ -38,7 +37,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -83,12 +81,16 @@ class KiwixSettingsFragmentTest {
       }
       waitForIdle()
     }
-    PreferenceManager.getDefaultSharedPreferences(
+    val kiwixDataStore = KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
+    ).apply {
+      runBlocking {
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
+        setIsPlayStoreBuild(true)
+        setPrefIsTest(true)
+      }
     }
     val activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -97,10 +99,7 @@ class KiwixSettingsFragmentTest {
           handleLocaleChange(
             it,
             "en",
-            KiwixDataStore(it).apply {
-              setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-              setIsScanFileSystemDialogShown(true)
-            }
+            kiwixDataStore
           )
         }
       }
@@ -138,7 +137,13 @@ class KiwixSettingsFragmentTest {
       toggleExternalLinkWarningPref(composeTestRule)
       toggleWifiDownloadsOnlyPref(composeTestRule)
       clickExternalStoragePreference(composeTestRule)
+      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        assertExternalStorageSelected(composeTestRule)
+      }
       clickInternalStoragePreference(composeTestRule)
+      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        assertInternalStorageSelected(composeTestRule)
+      }
       clickClearHistoryPreference(composeTestRule)
       assertHistoryDialogDisplayed(composeTestRule)
       dismissDialog()

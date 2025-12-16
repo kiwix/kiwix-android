@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.utils
 import android.app.Activity
 import android.webkit.WebResourceResponse
 import android.widget.Toast
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -35,7 +36,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
@@ -45,7 +46,7 @@ import java.io.InputStream
 class UnsupportedMimeTypeHandlerTest {
   private val demoUrl = "content://demoPdf.pdf"
   private val demoFileName = "demoPdf.pdf"
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val savedFile: File = mockk(relaxed = true)
@@ -56,7 +57,7 @@ class UnsupportedMimeTypeHandlerTest {
   private val unsupportedMimeTypeHandler =
     UnsupportedMimeTypeHandler(
       activity,
-      sharedPreferenceUtil,
+      kiwixDataStore,
       zimReaderContainer
     ).apply {
       setAlertDialogShower(alertDialogShower)
@@ -65,7 +66,7 @@ class UnsupportedMimeTypeHandlerTest {
   @Before
   fun before() {
     every { savedFile.name } returns demoFileName
-    every { sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() } returns true
+    coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
     every { inputStream.read(array()) } returns 1024
     every { webResourceResponse.data } returns inputStream
     every {
@@ -198,7 +199,7 @@ class UnsupportedMimeTypeHandlerTest {
     val downloadOrOpenEpubAndPdfHandler =
       UnsupportedMimeTypeHandler(
         activity,
-        sharedPreferenceUtil,
+        kiwixDataStore,
         zimReaderContainer
       ).apply {
         setAlertDialogShower(alertDialogShower)

@@ -23,48 +23,50 @@ import androidx.datastore.migrations.SharedPreferencesMigration
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.Preferences
 import androidx.preference.PreferenceManager
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 class SharedPreferenceToDatastoreMigrator(private val context: Context) {
   fun createMigration(): List<SharedPreferencesMigration<Preferences>> {
     val kiwixMobileMigration =
       SharedPreferencesMigration(
         context = context,
-        sharedPreferencesName = SharedPreferenceUtil.PREF_KIWIX_MOBILE
+        sharedPreferencesName = KiwixDataStore.PREF_KIWIX_MOBILE
       )
     val kiwixDefaultMigration = SharedPreferencesMigration(
       produceSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(context) },
       keysToMigrate = setOf(
-        SharedPreferenceUtil.Companion.TEXT_ZOOM,
-        SharedPreferenceUtil.Companion.PREF_BACK_TO_TOP,
-        SharedPreferenceUtil.Companion.PREF_NEW_TAB_BACKGROUND,
-        SharedPreferenceUtil.Companion.PREF_EXTERNAL_LINK_POPUP,
-        SharedPreferenceUtil.Companion.PREF_WIFI_ONLY,
-        SharedPreferenceUtil.Companion.PREF_THEME,
-        SharedPreferenceUtil.PREF_SHOW_INTRO,
-        SharedPreferenceUtil.PREF_SHOW_SHOWCASE,
-        SharedPreferenceUtil.PREF_BOOKMARKS_MIGRATED,
-        SharedPreferenceUtil.PREF_RECENT_SEARCH_MIGRATED,
-        SharedPreferenceUtil.PREF_NOTES_MIGRATED,
-        SharedPreferenceUtil.PREF_HISTORY_MIGRATED,
-        SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED,
-        SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED,
-        SharedPreferenceUtil.CACHED_LANGUAGE_CODES,
-        SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE,
-        SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG,
-        SharedPreferenceUtil.PREF_LANG,
-        SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS,
-        SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS,
-        SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS,
-        SharedPreferenceUtil.PREF_HOSTED_BOOKS,
-        SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS,
-        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-        SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN,
-        SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES,
-        SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION,
-        SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG,
-        SharedPreferenceUtil.PREF_STORAGE,
-        SharedPreferenceUtil.STORAGE_POSITION,
+        KiwixDataStore.TEXT_ZOOM,
+        KiwixDataStore.PREF_BACK_TO_TOP,
+        KiwixDataStore.PREF_NEW_TAB_BACKGROUND,
+        KiwixDataStore.PREF_EXTERNAL_LINK_POPUP,
+        KiwixDataStore.PREF_WIFI_ONLY,
+        KiwixDataStore.PREF_THEME,
+        KiwixDataStore.PREF_SHOW_INTRO,
+        KiwixDataStore.PREF_SHOW_SHOWCASE,
+        KiwixDataStore.PREF_BOOKMARKS_MIGRATED,
+        KiwixDataStore.PREF_RECENT_SEARCH_MIGRATED,
+        KiwixDataStore.PREF_NOTES_MIGRATED,
+        KiwixDataStore.PREF_HISTORY_MIGRATED,
+        KiwixDataStore.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED,
+        KiwixDataStore.PREF_BOOK_ON_DISK_MIGRATED,
+        KiwixDataStore.CACHED_LANGUAGE_CODES,
+        KiwixDataStore.SELECTED_ONLINE_CONTENT_LANGUAGE,
+        KiwixDataStore.PREF_DEVICE_DEFAULT_LANG,
+        KiwixDataStore.PREF_LANG,
+        KiwixDataStore.PREF_SHOW_HISTORY_ALL_BOOKS,
+        KiwixDataStore.PREF_SHOW_BOOKMARKS_ALL_BOOKS,
+        KiwixDataStore.PREF_SHOW_NOTES_ALL_BOOKS,
+        KiwixDataStore.PREF_HOSTED_BOOKS,
+        KiwixDataStore.PREF_LATER_CLICKED_MILLIS,
+        KiwixDataStore.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
+        KiwixDataStore.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN,
+        KiwixDataStore.PREF_MANAGE_EXTERNAL_FILES,
+        KiwixDataStore.PREF_SHOW_STORAGE_OPTION,
+        KiwixDataStore.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG,
+        KiwixDataStore.PREF_STORAGE,
+        KiwixDataStore.STORAGE_POSITION,
+        KiwixDataStore.PREF_IS_FIRST_RUN,
+        KiwixDataStore.IS_PLAY_STORE_BUILD,
+        KiwixDataStore.PREF_IS_TEST,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)

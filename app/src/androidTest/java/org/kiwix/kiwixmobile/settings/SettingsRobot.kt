@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.settings
 
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasContentDescription
@@ -126,6 +127,23 @@ class SettingsRobot : BaseRobot() {
     composeTestRule.apply {
       waitForIdle()
       onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
+    }
+  }
+
+  fun assertInternalStorageSelected(composeTestRule: ComposeContentTestRule) {
+    assertStorageSelected(0, composeTestRule)
+  }
+
+  fun assertExternalStorageSelected(composeTestRule: ComposeContentTestRule) {
+    assertStorageSelected(1, composeTestRule)
+  }
+
+  private fun assertStorageSelected(position: Int, composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntilTimeout()
+      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+        .assertIsSelected()
     }
   }
 

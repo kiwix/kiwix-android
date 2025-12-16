@@ -98,11 +98,9 @@ class CustomMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
-      if (!sharedPreferenceUtil.prefIsTest) {
-        (applicationContext as CustomApp).customComponent
-          .provideObjectBoxDataMigrationHandler()
-          .migrate()
-      }
+      (applicationContext as CustomApp).customComponent
+        .provideObjectBoxDataMigrationHandler()
+        .migrate()
     }
   }
 

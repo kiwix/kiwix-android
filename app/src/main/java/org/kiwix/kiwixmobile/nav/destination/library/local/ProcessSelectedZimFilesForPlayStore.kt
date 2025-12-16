@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -61,7 +60,6 @@ import javax.inject.Inject
  * - Sequential handling of multiple ZIM files.
  */
 class ProcessSelectedZimFilesForPlayStore @Inject constructor(
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val kiwixDataStore: KiwixDataStore,
   private val activity: Activity,
   private val copyMoveFileHandler: CopyMoveFileHandler,
@@ -107,7 +105,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * Returns whether this handler can process URIs in Play Store builds
    * (restricted to Android 11+ due to storage changes).
    */
-  fun canHandleUris(): Boolean = sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
+  suspend fun canHandleUris(): Boolean = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
 
   /** Stores the selected ZIM file URIs internally for processing. */
   private fun storeSelectedFiles(uris: List<Uri>) {
@@ -219,7 +217,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         when (uri.scheme) {
           "file" -> DocumentFile.fromFile(File("$uri"))
           else -> {
-            DocumentFile.fromSingleUri(sharedPreferenceUtil.context, uri)
+            DocumentFile.fromSingleUri(kiwixDataStore.context, uri)
           }
         }
       totalFilesSize = totalFilesSize.plus(documentFile?.length() ?: ZERO.toLong())

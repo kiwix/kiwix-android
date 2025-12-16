@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile
 
 import android.content.Context
-import androidx.core.content.edit
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -45,14 +44,13 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ACTIVE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_CODE
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_LANGUAGE_ID
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_ACTIVE
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_CODE
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_ID
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.datastore.PreferencesKeys
 import org.kiwix.kiwixmobile.core.utils.datastore.SharedPreferenceToDatastoreMigrator
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -82,12 +80,10 @@ class SharedPreferenceToDatastoreMigratorTest {
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        setIsPlayStoreBuild(true)
+        setIsFirstRun(false)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -108,7 +104,7 @@ class SharedPreferenceToDatastoreMigratorTest {
   fun testSharedPreferencesAreMigratedToDataStore() = runTest {
     // PREF_KIWIX_MOBILE
     val mobilePrefs = context.getSharedPreferences(
-      SharedPreferenceUtil.PREF_KIWIX_MOBILE,
+      KiwixDataStore.PREF_KIWIX_MOBILE,
       Context.MODE_PRIVATE
     )
     mobilePrefs.edit()
@@ -116,7 +112,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putInt(TAG_CURRENT_TAB, 3)
       .apply()
 
-    // DEFAULT SharedPreferences (SharedPreferenceUtil)
+    // DEFAULT SharedPreferences (KiwixDataStore)
     val jsonArray = JSONArray().apply {
       put(
         JSONObject().apply {
@@ -137,36 +133,39 @@ class SharedPreferenceToDatastoreMigratorTest {
 
     val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
     defaultPrefs.edit()
-      .putInt(SharedPreferenceUtil.TEXT_ZOOM, 120)
-      .putBoolean(SharedPreferenceUtil.PREF_BACK_TO_TOP, true)
-      .putBoolean(SharedPreferenceUtil.PREF_NEW_TAB_BACKGROUND, false)
-      .putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
-      .putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      .putString(SharedPreferenceUtil.PREF_THEME, "2")
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
-      .putBoolean(SharedPreferenceUtil.PREF_BOOKMARKS_MIGRATED, true)
-      .putBoolean(SharedPreferenceUtil.PREF_RECENT_SEARCH_MIGRATED, true)
-      .putBoolean(SharedPreferenceUtil.PREF_NOTES_MIGRATED, true)
-      .putBoolean(SharedPreferenceUtil.PREF_HISTORY_MIGRATED, true)
-      .putBoolean(SharedPreferenceUtil.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
-      .putBoolean(SharedPreferenceUtil.PREF_BOOK_ON_DISK_MIGRATED, true)
-      .putString(SharedPreferenceUtil.CACHED_LANGUAGE_CODES, jsonArray.toString())
-      .putString(SharedPreferenceUtil.SELECTED_ONLINE_CONTENT_LANGUAGE, "eng")
-      .putString(SharedPreferenceUtil.PREF_DEVICE_DEFAULT_LANG, "eng")
-      .putString(SharedPreferenceUtil.PREF_LANG, "fr")
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_HISTORY_ALL_BOOKS, false)
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_NOTES_ALL_BOOKS, false)
-      .putStringSet(SharedPreferenceUtil.PREF_HOSTED_BOOKS, hostedBooksSet)
-      .putLong(SharedPreferenceUtil.PREF_LATER_CLICKED_MILLIS, 120L)
-      .putLong(SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS, 100L)
-      .putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
-      .putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, true)
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
-      .putBoolean(SharedPreferenceUtil.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, false)
-      .putString(SharedPreferenceUtil.PREF_STORAGE, storagePath)
-      .putInt(SharedPreferenceUtil.STORAGE_POSITION, 1)
+      .putInt(KiwixDataStore.TEXT_ZOOM, 120)
+      .putBoolean(KiwixDataStore.PREF_BACK_TO_TOP, true)
+      .putBoolean(KiwixDataStore.PREF_NEW_TAB_BACKGROUND, false)
+      .putBoolean(KiwixDataStore.PREF_EXTERNAL_LINK_POPUP, true)
+      .putBoolean(KiwixDataStore.PREF_WIFI_ONLY, false)
+      .putString(KiwixDataStore.PREF_THEME, "2")
+      .putBoolean(KiwixDataStore.PREF_SHOW_INTRO, true)
+      .putBoolean(KiwixDataStore.PREF_SHOW_SHOWCASE, false)
+      .putBoolean(KiwixDataStore.PREF_BOOKMARKS_MIGRATED, true)
+      .putBoolean(KiwixDataStore.PREF_RECENT_SEARCH_MIGRATED, true)
+      .putBoolean(KiwixDataStore.PREF_NOTES_MIGRATED, true)
+      .putBoolean(KiwixDataStore.PREF_HISTORY_MIGRATED, true)
+      .putBoolean(KiwixDataStore.PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
+      .putBoolean(KiwixDataStore.PREF_BOOK_ON_DISK_MIGRATED, true)
+      .putString(KiwixDataStore.CACHED_LANGUAGE_CODES, jsonArray.toString())
+      .putString(KiwixDataStore.SELECTED_ONLINE_CONTENT_LANGUAGE, "eng")
+      .putString(KiwixDataStore.PREF_DEVICE_DEFAULT_LANG, "eng")
+      .putString(KiwixDataStore.PREF_LANG, "fr")
+      .putBoolean(KiwixDataStore.PREF_SHOW_HISTORY_ALL_BOOKS, false)
+      .putBoolean(KiwixDataStore.PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
+      .putBoolean(KiwixDataStore.PREF_SHOW_NOTES_ALL_BOOKS, false)
+      .putStringSet(KiwixDataStore.PREF_HOSTED_BOOKS, hostedBooksSet)
+      .putLong(KiwixDataStore.PREF_LATER_CLICKED_MILLIS, 120L)
+      .putLong(KiwixDataStore.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS, 100L)
+      .putBoolean(KiwixDataStore.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
+      .putBoolean(KiwixDataStore.PREF_MANAGE_EXTERNAL_FILES, true)
+      .putBoolean(KiwixDataStore.PREF_SHOW_STORAGE_OPTION, false)
+      .putBoolean(KiwixDataStore.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, false)
+      .putString(KiwixDataStore.PREF_STORAGE, storagePath)
+      .putInt(KiwixDataStore.STORAGE_POSITION, 1)
+      .putBoolean(KiwixDataStore.PREF_IS_FIRST_RUN, false)
+      .putBoolean(KiwixDataStore.IS_PLAY_STORE_BUILD, true)
+      .putBoolean(KiwixDataStore.PREF_IS_TEST, true)
       .apply()
 
     val testDataStore = PreferenceDataStoreFactory.create(
@@ -224,5 +223,8 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG])
     assertEquals(storagePath, prefs[PreferencesKeys.PREF_STORAGE])
     assertEquals(1, prefs[PreferencesKeys.STORAGE_POSITION])
+    assertEquals(false, prefs[PreferencesKeys.PREF_IS_FIRST_RUN])
+    assertEquals(true, prefs[PreferencesKeys.IS_PLAY_STORE_BUILD])
+    assertEquals(true, prefs[PreferencesKeys.PREF_IS_TEST])
   }
 }

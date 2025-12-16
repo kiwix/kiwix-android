@@ -18,9 +18,7 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -37,7 +35,6 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -116,11 +113,9 @@ class ImportBookmarkTest : BaseActivityTest() {
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

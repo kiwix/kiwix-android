@@ -58,7 +58,7 @@ const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionT
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun HelpScreen(
-  data: List<HelpScreenItemDataClass>,
+  data: MutableList<HelpScreenItemDataClass>,
   onSendReportButtonClick: () -> Unit,
   navigationIcon: @Composable () -> Unit
 ) {

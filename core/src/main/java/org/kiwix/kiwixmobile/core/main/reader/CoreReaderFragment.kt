@@ -150,7 +150,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
@@ -189,10 +188,6 @@ abstract class CoreReaderFragment :
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
-
-  @JvmField
-  @Inject
-  var sharedPreferenceUtil: SharedPreferenceUtil? = null
 
   @JvmField
   @Inject
@@ -1214,7 +1209,6 @@ abstract class CoreReaderFragment :
       attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
       requireNotNull(readerScreenState.value.fullScreenItem.second),
       CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
-      requireNotNull(sharedPreferenceUtil),
       requireNotNull(kiwixDataStore)
     )
   }
@@ -1390,30 +1384,32 @@ abstract class CoreReaderFragment :
 
   @Suppress("NestedBlockDepth")
   override fun onReadAloudMenuClicked() {
-    if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-      if (readerScreenState.value.showTtsControls) {
-        // currently TTS is running
-        if (isBackToTopEnabled) {
-          showBackToTopButton()
-        }
-        tts?.stop()
-      } else {
-        // TTS is not running.
-        if (isBackToTopEnabled) {
-          hideBackToTopButton()
-        }
-        readerScreenState.update {
-          copy(pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty())
-        }
-        if (tts?.isInitialized == false) {
-          isReadSelection = false
-          tts?.initializeTTS()
+    runSafelyInCoreReaderLifecycleScope {
+      if (requireActivity().hasNotificationPermission(kiwixDataStore)) {
+        if (readerScreenState.value.showTtsControls) {
+          // currently TTS is running
+          if (isBackToTopEnabled) {
+            showBackToTopButton()
+          }
+          tts?.stop()
         } else {
-          startReadAloud()
+          // TTS is not running.
+          if (isBackToTopEnabled) {
+            hideBackToTopButton()
+          }
+          readerScreenState.update {
+            copy(pauseTtsButtonText = context?.getString(string.tts_pause).orEmpty())
+          }
+          if (tts?.isInitialized == false) {
+            isReadSelection = false
+            tts?.initializeTTS()
+          } else {
+            startReadAloud()
+          }
         }
+      } else {
+        requestNotificationPermission()
       }
-    } else {
-      requestNotificationPermission()
     }
   }
 
@@ -1437,8 +1433,10 @@ abstract class CoreReaderFragment :
   }
 
   override fun onAddNoteMenuClicked() {
-    if (requestExternalStorageWritePermissionForNotes()) {
-      showAddNoteDialog()
+    runSafelyInCoreReaderLifecycleScope {
+      if (requestExternalStorageWritePermissionForNotes()) {
+        showAddNoteDialog()
+      }
     }
   }
 
@@ -1483,9 +1481,9 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("NestedBlockDepth")
-  private fun requestExternalStorageWritePermissionForNotes(): Boolean {
+  private suspend fun requestExternalStorageWritePermissionForNotes(): Boolean {
     var isPermissionGranted = false
-    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+    if (kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
     ) {
       if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -1572,8 +1570,8 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun hasPermission(permission: String): Boolean {
-    return if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == true ||
+  private suspend fun hasPermission(permission: String): Boolean {
+    return if (kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == true ||
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     ) {
       true
@@ -1718,24 +1716,24 @@ abstract class CoreReaderFragment :
   ) {
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
-        if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          runSafelyInCoreReaderLifecycleScope {
+        runSafelyInCoreReaderLifecycleScope {
+          if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             zimReaderSource?.let { openZimFile(it) }
+          } else {
+            readerScreenState.value.snackBarHostState.snack(
+              context?.getString(string.request_storage).orEmpty(),
+              context?.getString(string.menu_settings),
+              snackbarDuration = SnackbarDuration.Long,
+              actionClick = {
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+              },
+              lifecycleScope = lifecycleScope
+            )
           }
-        } else {
-          readerScreenState.value.snackBarHostState.snack(
-            context?.getString(string.request_storage).orEmpty(),
-            context?.getString(string.menu_settings),
-            snackbarDuration = SnackbarDuration.Long,
-            actionClick = {
-              val intent = Intent()
-              intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-              val uri = Uri.fromParts("package", requireActivity().packageName, null)
-              intent.data = uri
-              startActivity(intent)
-            },
-            lifecycleScope = lifecycleScope
-          )
         }
       }
 
@@ -2288,9 +2286,11 @@ abstract class CoreReaderFragment :
   }
 
   override fun webViewUrlLoading() {
-    if (sharedPreferenceUtil?.prefIsFirstRun == true && !BuildConfig.DEBUG) {
-      contentsDrawerHint()
-      sharedPreferenceUtil?.putPrefIsFirstRun(false) // It is no longer the first run
+    runSafelyInCoreReaderLifecycleScope {
+      if (kiwixDataStore?.isFirstRun?.first() == true && !BuildConfig.DEBUG) {
+        contentsDrawerHint()
+        kiwixDataStore?.setIsFirstRun(false) // It is no longer the first run
+      }
     }
   }
 

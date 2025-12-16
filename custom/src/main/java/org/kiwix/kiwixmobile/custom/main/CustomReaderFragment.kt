@@ -28,6 +28,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -281,7 +282,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       },
       onNoFilesFound = {
-        if (sharedPreferenceUtil?.prefIsTest == false) {
+        if (kiwixDataStore?.prefIsTest?.first() == false) {
           openDownloadScreen()
         }
       }

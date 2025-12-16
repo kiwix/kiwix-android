@@ -24,9 +24,7 @@ import android.content.res.AssetFileDescriptor
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -59,7 +57,6 @@ import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -125,10 +122,8 @@ class SearchFragmentTestForCustomApp {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
     activityScenario =
       ActivityScenario.launch(CustomMainActivity::class.java).apply {

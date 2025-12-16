@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
@@ -40,13 +39,11 @@ const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 @ActivityScope
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk
 ) {
   private var alertDialogShower: AlertDialogShower? = null
   private var visitCounterPref: RateAppCounter? = null
   private var tempVisitCount = 0
-  private var isFirstRun = false
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
@@ -72,7 +69,6 @@ class RateDialogHandler @Inject constructor(
   fun checkForRateDialog(
     @IdRes iconResId: Int
   ) {
-    isFirstRun = sharedPreferenceUtil.prefIsFirstRun
     visitCounterPref = RateAppCounter(activity)
     tempVisitCount = visitCounterPref?.count ?: 0
     ++tempVisitCount

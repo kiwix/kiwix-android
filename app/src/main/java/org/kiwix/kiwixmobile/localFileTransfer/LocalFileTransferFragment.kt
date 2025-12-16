@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.drawable
@@ -63,7 +64,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -100,9 +100,6 @@ class LocalFileTransferFragment :
 
   @Inject
   lateinit var locationManager: LocationManager
-
-  @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
@@ -170,28 +167,27 @@ class LocalFileTransferFragment :
     )
   )
 
-  private fun onSearchMenuClicked(): Boolean =
-    when {
-      !checkFineLocationAccessPermission() ->
-        true
+  private fun onSearchMenuClicked() =
+    lifecycleScope.launch {
+      when {
+        !checkFineLocationAccessPermission() ->
+          true
 
-      !checkExternalStorageWritePermission() ->
-        true
-      // Initiate discovery
-      !wifiDirectManager.isWifiP2pEnabled -> {
-        requestEnableWifiP2pServices()
-        true
-      }
+        !checkExternalStorageWritePermission() ->
+          true
+        // Initiate discovery
+        !wifiDirectManager.isWifiP2pEnabled -> {
+          requestEnableWifiP2pServices()
+        }
 
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
-        requestEnableLocationServices()
-        true
-      }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
+          requestEnableLocationServices()
+        }
 
-      else -> {
-        showPeerDiscoveryProgressBar()
-        wifiDirectManager.discoverPeerDevices()
-        true
+        else -> {
+          showPeerDiscoveryProgressBar()
+          wifiDirectManager.discoverPeerDevices()
+        }
       }
     }
 
@@ -300,8 +296,8 @@ class LocalFileTransferFragment :
     requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSION_REQUEST_FINE_LOCATION)
   }
 
-  private fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+  private suspend fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
+    if (!kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
     ) {
       return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->

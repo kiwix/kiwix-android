@@ -78,7 +78,7 @@ class FileSearch @Inject constructor(private val context: Context) {
         null
       )
 
-  private fun scanFileSystem(scanningProgressListener: ScanningProgressListener): List<File> {
+  private suspend fun scanFileSystem(scanningProgressListener: ScanningProgressListener): List<File> {
     val directoryRoots = directoryRoots()
     val totalDirectories = directoryRoots.size
     var processedDirectories = 0
@@ -96,7 +96,7 @@ class FileSearch @Inject constructor(private val context: Context) {
     }.distinctBy { it.canonicalPath }
   }
 
-  private fun directoryRoots() =
+  private suspend fun directoryRoots() =
     StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name)
 
   private fun scanDirectory(directory: String): List<File> {

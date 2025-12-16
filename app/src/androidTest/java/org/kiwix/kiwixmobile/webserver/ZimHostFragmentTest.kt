@@ -47,7 +47,6 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -68,8 +67,6 @@ class ZimHostFragmentTest {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixDataStore: KiwixDataStore
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
@@ -117,14 +114,11 @@ class ZimHostFragmentTest {
           setPrefLanguage("en")
           setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
           setIsScanFileSystemDialogShown(true)
+          setIsFirstRun(false)
+          setIsPlayStoreBuild(true)
+          setPrefIsTest(true)
         }
       }
-      sharedPreferenceUtil =
-        SharedPreferenceUtil(it).apply {
-          setIsPlayStoreBuildType(true)
-          prefIsTest = true
-          putPrefIsFirstRun(false)
-        }
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

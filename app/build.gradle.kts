@@ -132,8 +132,9 @@ dependencies {
   testImplementation(Libs.TURBINE_FLOW_TEST)
   // inject migration module in test cases.
   androidTestImplementation(project(":objectboxmigration"))
+  // Inject the migration module for the debug variant, as it is used by the test module.
+  debugImplementation(project(":objectboxmigration"))
   // inject default module for all variant.
-  debugImplementation(project(":defaultmigration"))
   releaseImplementation(project(":defaultmigration"))
   add("nightlyImplementation", project(":defaultmigration"))
   add("standaloneImplementation", project(":defaultmigration"))

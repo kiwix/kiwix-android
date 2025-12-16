@@ -21,9 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -40,7 +38,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -80,14 +77,10 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
         setShowStorageOption(false)
+        setIsFirstRun(false)
+        setIsPlayStoreBuild(true)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).edit {
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

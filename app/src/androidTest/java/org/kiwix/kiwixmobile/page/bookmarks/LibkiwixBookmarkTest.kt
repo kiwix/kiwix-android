@@ -25,10 +25,8 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -51,7 +49,6 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -94,11 +91,9 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     kiwixMainActivity = composeTestRule.activity
 

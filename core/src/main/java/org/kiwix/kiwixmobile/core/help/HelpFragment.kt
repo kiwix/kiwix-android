@@ -23,6 +23,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.platform.ComposeView
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -30,16 +32,18 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
 abstract class HelpFragment : BaseFragment() {
   @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  lateinit var kiwixDataStore: KiwixDataStore
+
+  private val helpScreenData = mutableStateListOf<HelpScreenItemDataClass>()
 
   // Each subclass is responsible for providing its own raw data.
-  protected open fun rawTitleDescriptionMap(): List<Pair<Int, Any>> = emptyList()
+  protected open suspend fun rawTitleDescriptionMap(): List<Pair<Int, Any>> = emptyList()
 
   override fun inject(baseActivity: BaseActivity) {
     (baseActivity as CoreMainActivity).cachedComponent.inject(this)
@@ -51,11 +55,16 @@ abstract class HelpFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? = ComposeView(requireContext()).apply {
     setContent {
-      // Create the helpScreen data using your rawTitleDescriptionMap.
-      val helpScreenData = transformToHelpScreenData(
-        requireContext(),
-        rawTitleDescriptionMap()
-      )
+      LaunchedEffect(Unit) {
+        // Create the helpScreen data using your rawTitleDescriptionMap.
+        helpScreenData.clear()
+        helpScreenData.addAll(
+          transformToHelpScreenData(
+            requireContext(),
+            rawTitleDescriptionMap()
+          )
+        )
+      }
       // Call your HelpScreen composable.
       HelpScreen(data = helpScreenData, { onSendReportButtonClick() }) {
         NavigationIcon(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() })

@@ -27,14 +27,14 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.downloadFileFromUrl
 import java.io.File
 import javax.inject.Inject
 
 class UnsupportedMimeTypeHandler @Inject constructor(
   private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val kiwixDataStore: KiwixDataStore,
   private val zimReaderContainer: ZimReaderContainer
 ) {
   private var alertDialogShower: AlertDialogShower? = null
@@ -68,7 +68,7 @@ class UnsupportedMimeTypeHandler @Inject constructor(
         url,
         null,
         zimReaderContainer,
-        sharedPreferenceUtil
+        kiwixDataStore
       )?.let { savedFile ->
         if (openFile) {
           openFile(savedFile, documentType)

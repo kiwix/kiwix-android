@@ -18,9 +18,7 @@
 
 package org.kiwix.kiwixmobile
 
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
@@ -44,7 +42,6 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
@@ -130,12 +127,10 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
+        setIsPlayStoreBuild(true)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
     }
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {

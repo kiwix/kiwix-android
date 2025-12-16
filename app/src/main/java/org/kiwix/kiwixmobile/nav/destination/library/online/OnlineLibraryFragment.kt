@@ -86,7 +86,6 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -110,8 +109,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
 
   @Inject lateinit var downloader: Downloader
-
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   @Inject lateinit var kiwixDataStore: KiwixDataStore
 
@@ -629,8 +626,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun checkExternalStorageWritePermission(): Boolean {
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+  private suspend fun checkExternalStorageWritePermission(): Boolean {
+    if (!kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         true
       } else {
@@ -682,8 +679,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
       if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-          checkExternalStorageWritePermission()
+        lifecycleScope.launch {
+          if (!kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
+            checkExternalStorageWritePermission()
+          }
         }
       }
     } else if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION &&
@@ -707,7 +706,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     lifecycleScope.launch {
       if (checkExternalStorageWritePermission()) {
         downloadBookItem = item
-        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+        if (requireActivity().hasNotificationPermission(kiwixDataStore)) {
           when {
             isNotConnected -> {
               noInternetSnackbar()
@@ -735,11 +734,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                   kiwixDataStore.setShowStorageOption(false)
                   onBookItemClick(item)
                 }
-              } else if (!requireActivity().isManageExternalStoragePermissionGranted(
-                  sharedPreferenceUtil,
-                  kiwixDataStore
-                )
-              ) {
+              } else if (!requireActivity().isManageExternalStoragePermissionGranted(kiwixDataStore)) {
                 showManageExternalStoragePermissionDialog()
               } else {
                 availableSpaceCalculator.hasAvailableSpaceFor(
@@ -781,11 +776,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 
   private suspend fun clickOnBookItem() {
-    if (!requireActivity().isManageExternalStoragePermissionGranted(
-        sharedPreferenceUtil,
-        kiwixDataStore
-      )
-    ) {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(kiwixDataStore)) {
       showManageExternalStoragePermissionDialog()
     } else {
       downloadBookItem?.let(::onBookItemClick)

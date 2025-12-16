@@ -21,9 +21,7 @@ package org.kiwix.kiwixmobile.localLibrary
 import android.net.Uri
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
@@ -39,7 +37,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -61,8 +58,6 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
-
-  private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var parentFile: File
 
@@ -80,16 +75,13 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsPlayStoreBuild(false)
+        setPrefIsTest(true)
       }
-    }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
     }
     composeTestRule.apply {
       kiwixMainActivity = activity
       runOnUiThread {
-        sharedPreferenceUtil = SharedPreferenceUtil(kiwixMainActivity)
         runBlocking {
           handleLocaleChange(
             kiwixMainActivity,
