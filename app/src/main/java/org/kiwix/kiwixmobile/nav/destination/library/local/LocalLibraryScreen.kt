@@ -69,7 +69,7 @@ import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar

@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
-import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -99,7 +98,6 @@ interface CoreComponent {
   fun notificationManager(): NotificationManager
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
-  fun provideDownloadMonitor(): DownloadMonitor
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)

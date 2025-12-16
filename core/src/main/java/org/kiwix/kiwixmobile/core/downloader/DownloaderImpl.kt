@@ -37,6 +37,7 @@ class DownloaderImpl @Inject constructor(
       runCatching {
         urlProvider(book)?.let {
           downloadRoomDao.addIfDoesNotExist(it, book, downloadRequester)
+          downloadRequester.startDownloadMonitorService()
         }
       }.onFailure {
         it.printStackTrace()

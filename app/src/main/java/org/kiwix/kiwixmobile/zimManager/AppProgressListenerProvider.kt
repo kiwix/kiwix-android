@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.zimManager
 
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.NINE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.NINE
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
 
 class AppProgressListenerProvider(
   private val zimManageViewModel: ZimManageViewModel

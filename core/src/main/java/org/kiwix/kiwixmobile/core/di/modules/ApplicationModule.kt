@@ -24,8 +24,6 @@ import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import javax.inject.Singleton
@@ -50,12 +48,6 @@ class ApplicationModule {
   @Provides
   @Singleton
   internal fun provideBookUtils(): BookUtils = BookUtils()
-
-  @Provides
-  @Singleton
-  internal fun provideDownloadMonitor(
-    downloadManagerMonitor: DownloadManagerMonitor
-  ): DownloadMonitor = downloadManagerMonitor
 
   @Provides
   @Singleton

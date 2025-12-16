@@ -55,9 +55,10 @@ object DownloaderModule {
   @Singleton
   fun providesDownloadRequester(
     fetch: Fetch,
-    kiwixDataStore: KiwixDataStore
+    kiwixDataStore: KiwixDataStore,
+    context: Context
   ): DownloadRequester =
-    DownloadManagerRequester(fetch, kiwixDataStore)
+    DownloadManagerRequester(fetch, kiwixDataStore, context)
 
   @Provides
   @Singleton

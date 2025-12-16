@@ -25,8 +25,8 @@ import okio.BufferedSource
 import okio.ForwardingSource
 import okio.Source
 import okio.buffer
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 class ProgressResponseBody(
   private val responseBody: ResponseBody,

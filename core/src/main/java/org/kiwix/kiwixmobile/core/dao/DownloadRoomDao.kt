@@ -120,7 +120,8 @@ abstract class DownloadRoomDao {
       it.state == Status.QUEUED ||
         it.state == Status.DOWNLOADING ||
         it.state == Status.NONE ||
-        it.state == Status.ADDED
+        it.state == Status.ADDED ||
+        it.state == Status.PAUSED
     }
 
   fun delete(download: Download) {

@@ -231,7 +231,7 @@ class SearchFragmentTestForCustomApp {
         customMainActivity = it
       }
       // test with a large ZIM file to properly test the scenario
-      downloadingZimFile = getDownloadingZimFile()
+      downloadingZimFile = getDownloadingZimFileFromDataFolder()
       getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
         if (response.isSuccessful) {
           response.body?.let { responseBody ->
@@ -368,13 +368,6 @@ class SearchFragmentTestForCustomApp {
     Request.Builder()
       .url(URI.create(zimUrl).toURL())
       .build()
-
-  private fun getDownloadingZimFile(): File {
-    val zimFile = File(context.getExternalFilesDirs(null)[0], "ray_charles.zim")
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    return zimFile
-  }
 
   private fun getDownloadingZimFileFromDataFolder(): File {
     val zimFile = File(context.getExternalFilesDirs(null)[0], "ray_charles.zim")

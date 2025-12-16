@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
 
 sealed class IconItem {
   data class Vector(val imageVector: ImageVector) : IconItem()
