@@ -31,13 +31,21 @@ import javax.inject.Inject
 class ZimHostPresenter @Inject internal constructor(
   private val dataSource: DataSource
 ) : BasePresenter<View>(), Presenter {
-  override suspend fun loadBooks(previouslyHostedBooks: Set<String>) {
+  override suspend fun loadBooks(previouslyHostedBookIds: Set<String>) {
     runCatching {
       val books = dataSource.getLanguageCategorizedBooks().first()
       books.forEach { item ->
         if (item is BooksOnDiskListItem.BookOnDisk) {
-          item.isSelected =
-            previouslyHostedBooks.contains(item.book.title) || previouslyHostedBooks.isEmpty()
+          item.isSelected = when {
+            // Hosted books are now saved using the unique book ID.
+            previouslyHostedBookIds.contains(item.book.id) -> true
+            // Backward compatibility: for users who have not been migrated to the new logic yet,
+            // fall back to checking only the title.
+            previouslyHostedBookIds.contains(item.book.title) -> true
+            // If no previously hosted books are saved, select all books by default.
+            previouslyHostedBookIds.isEmpty() -> true
+            else -> false
+          }
         }
       }
       view?.addBooks(books)

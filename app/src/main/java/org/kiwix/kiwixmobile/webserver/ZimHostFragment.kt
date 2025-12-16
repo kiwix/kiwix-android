@@ -351,7 +351,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   override fun onResume() {
     super.onResume()
     lifecycleScope.launch {
-      presenter.loadBooks(kiwixDataStore.hostedBooks.first())
+      presenter.loadBooks(kiwixDataStore.hostedBookIds.first())
     }
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.serverAddress
@@ -365,10 +365,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     val hostedBooks = booksList.asSequence()
       .filter(BooksOnDiskListItem::isSelected)
       .filterIsInstance<BookOnDisk>()
-      .map { it.book.title }
+      .map { it.book.id }
       .toSet()
     lifecycleScope.launch {
-      kiwixDataStore.setHostedBooks(hostedBooks)
+      kiwixDataStore.setHostedBookIds(hostedBooks)
     }
   }
 
