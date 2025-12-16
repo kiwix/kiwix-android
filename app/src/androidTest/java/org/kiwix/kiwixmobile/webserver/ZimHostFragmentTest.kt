@@ -22,6 +22,7 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
@@ -59,13 +60,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class ZimHostFragmentTest(rule: androidx.compose.ui.test.junit4.ComposeContentTestRule) {
+class ZimHostFragmentTest {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = rule
+  val composeTestRule = createComposeRule()
   private lateinit var kiwixDataStore: KiwixDataStore
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>

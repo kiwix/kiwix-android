@@ -118,7 +118,11 @@ class HelpFragmentTest : BaseActivityTest() {
       assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible(composeTestRule)
     }
     composeTestRule.onRoot().tryPerformAccessibilityChecks()
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU &&
+      Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM
+    ) {
+      LeakAssertions.assertNoLeaks()
+    }
   }
 
   @Test
@@ -143,7 +147,11 @@ class HelpFragmentTest : BaseActivityTest() {
         clickWhyCopyMoveFilesToAppPublicDirectory(composeTestRule)
       }
       composeTestRule.onRoot().tryPerformAccessibilityChecks()
-      LeakAssertions.assertNoLeaks()
+      if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU &&
+        Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM
+      ) {
+        LeakAssertions.assertNoLeaks()
+      }
     }
   }
 

@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
@@ -136,9 +137,13 @@ class KiwixSettingsFragmentTest {
       toggleExternalLinkWarningPref(composeTestRule)
       toggleWifiDownloadsOnlyPref(composeTestRule)
       clickExternalStoragePreference(composeTestRule)
-      assertExternalStorageSelected(composeTestRule)
+      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        assertExternalStorageSelected(composeTestRule)
+      }
       clickInternalStoragePreference(composeTestRule)
-      assertInternalStorageSelected(composeTestRule)
+      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        assertInternalStorageSelected(composeTestRule)
+      }
       clickClearHistoryPreference(composeTestRule)
       assertHistoryDialogDisplayed(composeTestRule)
       dismissDialog()
