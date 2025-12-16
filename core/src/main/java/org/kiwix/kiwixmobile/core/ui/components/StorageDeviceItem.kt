@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -91,10 +91,11 @@ fun StorageDeviceItem(
     modifier = Modifier
       .fillMaxWidth()
       .padding(horizontal = SIXTEEN_DP)
-      .semantics { testTag = STORAGE_DEVICE_ITEM_TESTING_TAG }
-      .then(
-        Modifier.clickable { onClick(storageDevice) }
+      .selectable(
+        selected = shouldShowCheckboxSelected && currentStorageIndex == index,
+        onClick = { onClick(storageDevice) }
       )
+      .semantics { testTag = STORAGE_DEVICE_ITEM_TESTING_TAG }
       .padding(vertical = EIGHT_DP)
   ) {
     RadioButton(
