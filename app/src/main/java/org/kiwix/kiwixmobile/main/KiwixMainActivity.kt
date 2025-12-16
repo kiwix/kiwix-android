@@ -195,11 +195,9 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
-      if (!kiwixDataStore.prefIsTest.first()) {
-        (applicationContext as KiwixApp).kiwixComponent
-          .provideObjectBoxDataMigrationHandler()
-          .migrate()
-      }
+      (applicationContext as KiwixApp).kiwixComponent
+        .provideObjectBoxDataMigrationHandler()
+        .migrate()
     }
   }
 
