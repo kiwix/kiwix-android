@@ -66,6 +66,7 @@ class SharedPreferenceToDatastoreMigrator(private val context: Context) {
         KiwixDataStore.STORAGE_POSITION,
         KiwixDataStore.PREF_IS_FIRST_RUN,
         KiwixDataStore.IS_PLAY_STORE_BUILD,
+        KiwixDataStore.PREF_IS_TEST,
       )
     )
     return listOf(kiwixMobileMigration, kiwixDefaultMigration)
