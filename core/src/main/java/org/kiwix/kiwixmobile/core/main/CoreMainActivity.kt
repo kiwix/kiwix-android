@@ -59,9 +59,10 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -447,11 +448,26 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     isVoice: Boolean = false
   )
 
-  abstract fun openPage(
+  fun openPage(
     pageUrl: String,
     zimReaderSource: ZimReaderSource? = null,
     shouldOpenInNewTab: Boolean = false
-  )
+  ) {
+    var zimFileUri = ""
+    if (zimReaderSource != null) {
+      zimFileUri = zimReaderSource.toDatabase()
+    }
+    val navOptions = NavOptions.Builder()
+      .setLaunchSingleTop(true)
+      .setPopUpTo(readerFragmentRoute, inclusive = true)
+      .build()
+    // Navigate to reader screen.
+    navigate(readerFragmentRoute, navOptions)
+    // Set arguments on current destination(reader).
+    setNavigationResultOnCurrent(zimFileUri, ZIM_FILE_URI_KEY)
+    setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
+    setNavigationResultOnCurrent(shouldOpenInNewTab, SHOULD_OPEN_IN_NEW_TAB)
+  }
 
   private fun openBookmarks() {
     handleDrawerOnNavigation()
@@ -470,10 +486,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   private fun setMainActivityToCoreApp() {
     (applicationContext as CoreApp).setMainActivity(this)
-  }
-
-  fun findInPage(searchString: String) {
-    navigate("$readerFragmentRoute?$FIND_IN_PAGE_SEARCH_STRING=$searchString")
   }
 
   private fun cancelBackgroundTimeoutNotification() {

@@ -95,7 +95,6 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
@@ -154,6 +153,7 @@ import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -430,6 +430,13 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    // Initialize TTS as early as possible in the screen lifecycle.
+    // The reader can create WebView instances from multiple code paths (tabs, bookmarks,
+    // history restore, etc.). Since the `TTSJavaScriptInterface` is attached at WebView
+    // creation time for the Read Aloud feature, the TTS engine must be initialized before
+    // any suspend or asynchronous operation that may create or load a WebView. This ensures
+    // the TTS interface is available before any page JavaScript is executed.
+    setUpTTS()
     readerMenuState = createMainMenu()
     composeView?.apply {
       setContent {
@@ -503,7 +510,6 @@ abstract class CoreReaderFragment :
     activity?.let {
       compatCallback = CompatFindActionModeCallback(it)
     }
-    setUpTTS()
     setupDocumentParser()
     loadPrefs()
     updateTitle()
@@ -1796,12 +1802,15 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
-    Handler(Looper.getMainLooper()).postDelayed({
-      if (webViewList.isEmpty()) {
-        createNewTab()
-        hideTabSwitcher()
-      }
-    }, 300)
+    runSafelyInCoreReaderLifecycleScope {
+      // Run safely because it is runs after 300 MS.
+      Handler(Looper.getMainLooper()).postDelayed({
+        if (webViewList.isEmpty()) {
+          createNewTab()
+          hideTabSwitcher()
+        }
+      }, 300)
+    }
   }
 
   @Suppress("NestedBlockDepth")

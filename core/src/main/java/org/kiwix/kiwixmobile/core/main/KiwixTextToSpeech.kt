@@ -31,7 +31,6 @@ import android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED
 import android.speech.tts.TextToSpeech.QUEUE_ADD
 import android.speech.tts.TextToSpeech.SUCCESS
 import android.speech.tts.UtteranceProgressListener
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast
@@ -40,6 +39,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -74,7 +74,7 @@ class KiwixTextToSpeech internal constructor(
       ) { status: Int ->
         if (status == TextToSpeech.SUCCESS) {
           Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
-          this.isInitialized = true
+          isInitialized = true
           onInitSucceedListener.onInitSucceed()
         } else {
           Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")

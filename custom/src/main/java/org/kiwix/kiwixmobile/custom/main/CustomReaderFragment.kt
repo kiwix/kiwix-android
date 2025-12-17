@@ -67,7 +67,6 @@ class CustomReaderFragment : CoreReaderFragment() {
   lateinit var customFileValidator: CustomFileValidator
   private var appSettingsLaunched = false
 
-  @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     runSafelyInCoreReaderLifecycleScope {

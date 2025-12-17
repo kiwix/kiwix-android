@@ -69,7 +69,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
-import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -80,12 +79,10 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
-import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
-import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -436,27 +433,6 @@ class KiwixMainActivity : CoreMainActivity() {
       ),
       NavOptions.Builder().setPopUpTo(searchFragmentRoute, inclusive = true).build()
     )
-  }
-
-  override fun openPage(
-    pageUrl: String,
-    zimReaderSource: ZimReaderSource?,
-    shouldOpenInNewTab: Boolean
-  ) {
-    var zimFileUri = ""
-    if (zimReaderSource != null) {
-      zimFileUri = zimReaderSource.toDatabase()
-    }
-    val navOptions = NavOptions.Builder()
-      .setLaunchSingleTop(true)
-      .setPopUpTo(readerFragmentRoute, inclusive = true)
-      .build()
-    // Navigate to reader screen.
-    navigate(KiwixDestination.Reader.route, navOptions)
-    // Set arguments on current destination(reader).
-    setNavigationResultOnCurrent(zimFileUri, ZIM_FILE_URI_KEY)
-    setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
-    setNavigationResultOnCurrent(shouldOpenInNewTab, SHOULD_OPEN_IN_NEW_TAB)
   }
 
   override fun hideBottomAppBar() {
