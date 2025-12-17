@@ -67,9 +67,9 @@ import java.io.OutputStream
 import java.net.URI
 
 class KiwixReaderFragmentTest : BaseActivityTest() {
-  // @Rule(order = RETRY_RULE_ORDER)
-  // @JvmField
-  // val retryRule = RetryRule()
+  @Rule(order = RETRY_RULE_ORDER)
+  @JvmField
+  val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()

@@ -19,12 +19,9 @@
 package org.kiwix.kiwixmobile.reader
 
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.filter
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -35,7 +32,6 @@ import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READ_ALOUD_MENU_ITEM_TESTING_TAG
@@ -46,7 +42,6 @@ import org.kiwix.kiwixmobile.core.main.reader.TTS_CONTROL_STOP_BUTTON_TESTING_TA
 import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.OVERFLOW_MENU_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
