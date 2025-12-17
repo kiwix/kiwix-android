@@ -175,6 +175,7 @@ const val READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG =
 const val READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG = "readerBottomBarHomeButtonTestingTag"
 const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
   "readerBottomBarTableContentButtonTestingTag"
+const val TTS_CONTROL_STOP_BUTTON_TESTING_TAG = "ttsControlStopButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
@@ -633,6 +634,7 @@ private fun TtsControls(state: ReaderScreenState) {
         modifier = Modifier
           .weight(1f)
           .alpha(TTS_BUTTONS_CONTROL_ALPHA)
+          .semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
       ) {
         Text(
           text = stringResource(R.string.stop).uppercase(),
@@ -977,7 +979,9 @@ private fun TabItemCard(
           addView(clickableView)
         }
       },
-      modifier = Modifier.fillMaxSize().semantics { hideFromAccessibility() }
+      modifier = Modifier
+        .fillMaxSize()
+        .semantics { hideFromAccessibility() }
     )
   }
 }
