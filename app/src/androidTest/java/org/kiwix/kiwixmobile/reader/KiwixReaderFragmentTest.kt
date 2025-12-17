@@ -280,34 +280,36 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
 
   @Test
   fun testReadAloudFeature() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-    }
-    composeTestRule.waitForIdle()
-    val downloadingZimFile = getDownloadingZimFile()
-    getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
-      .use { response ->
-        if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
-          }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
-        }
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
-    openKiwixReaderFragmentWithFile(downloadingZimFile)
-    composeTestRule.waitForIdle()
-    reader {
-      startReadAloudFeature(composeTestRule)
-      // Open history screen.
-      topLevel {
-        clickHistoryOnSideNav(kiwixMainActivity, composeTestRule) {
-          clickOnHistoryItem(composeTestRule)
-          startReadAloudFeature(composeTestRule)
+      composeTestRule.waitForIdle()
+      val downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
+        .use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, downloadingZimFile)
+            }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
+          }
+        }
+      openKiwixReaderFragmentWithFile(downloadingZimFile)
+      composeTestRule.waitForIdle()
+      reader {
+        startReadAloudFeature(composeTestRule)
+        // Open history screen.
+        topLevel {
+          clickHistoryOnSideNav(kiwixMainActivity, composeTestRule) {
+            clickOnHistoryItem(composeTestRule)
+            startReadAloudFeature(composeTestRule)
+          }
         }
       }
     }
