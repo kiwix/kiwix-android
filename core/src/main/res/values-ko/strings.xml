@@ -37,6 +37,7 @@
   <string name="save_media_saved">미디어를 %s(으)로 Downloads/org.kiwix…/에 저장했습니다</string>
   <string name="search_label">검색</string>
   <string name="searched_list">검색 목록</string>
+  <string name="more_options">더 많은 옵션</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
   <string name="open_in_new_tab">새 탭에서 링크를 여시겠습니까?</string>
   <string name="hotspot_service_channel_name">핫스팟 서비스 채널</string>
@@ -78,6 +79,10 @@
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
+  <string name="pref_theme">테마</string>
+  <string name="theme_system">시스템</string>
+  <string name="theme_light">라이트</string>
+  <string name="theme_dark">다크</string>
   <string name="pref_theme_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>

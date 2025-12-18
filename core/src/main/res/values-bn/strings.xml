@@ -7,6 +7,7 @@
 * Greatder
 * San1joy23
 * Sohom Datta
+* Synopses4252
 * Titodutta
 * Yahya
 * আজিজ
@@ -23,17 +24,37 @@
   <string name="menu_read_aloud">জোরে পড়ুন</string>
   <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
   <string name="menu_support_kiwix">কিউইক্সকে সমর্থন করুন</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s সমর্থন করুন</string>
+  <string name="menu_about_app">%s অ্যাপ সম্পর্কে</string>
   <string name="menu_wifi_hotspot">ওয়াইফাই হটস্পট</string>
   <string name="save_media">মিডিয়া সংরক্ষণ করুন</string>
   <string name="save_media_error">মিডিয়া সংরক্ষণের চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
   <string name="save_media_saved">%s হিসাবে Downloads/org.kiwix…/ এ মিডিয়া সংরক্ষিত হয়েছে</string>
   <string name="search_label">অনুসন্ধান</string>
+  <string name="searched_list">অনুসন্ধান করা তালিকা</string>
+  <string name="more_options">আরো বিকল্প</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
+  <string name="hotspot_service_channel_name">হটস্পট পরিষেবা চ্যানেল</string>
   <string name="hotspot_failed_title">হটস্পট চালু করা যায় নি</string>
   <string name="hotspot_failed_message">মনে হচ্ছে হটস্পট আগে থেকেই চালু করা। চালিয়ে যেতে দয়া করে ওয়াইফাই হটস্পট বন্ধ করুন।</string>
   <string name="go_to_wifi_settings_label">ওয়াইফাই সেটিংসে যান</string>
   <string name="connection_refused">সংযোগ প্রত্যাখান করা হয়েছে।</string>
+  <string name="hotspot_running">হটস্পট চলছে</string>
+  <string name="no_books_selected_toast_message">প্রথমে বই নির্বাচন করুন</string>
+  <string name="server_failed_message">সার্ভার শুরু করা যায়নি। দয়া করে আপনার হটস্পট চালু করুন</string>
+  <string name="server_failed_toast_message">সার্ভার শুরু করা যায়নি।</string>
+  <string name="server_started_successfully_toast_message">সার্ভার সফলভাবে শুরু হয়েছে।</string>
+  <string name="server_stopped_successfully_toast_message">সার্ভার সফলভাবে বন্ধ হয়েছে।</string>
+  <string name="hotspot_turned_on">হটস্পট চালু করা হয়েছে</string>
+  <string name="hotspot_details_message">আপনার স্থানীয় হটস্পটের বিবরণ নিচে দেওয়া হল। \nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">সার্ভারে আপনি যে ফাইলগুলি হোস্ট করতে চান তা নির্বাচন করুন</string>
+  <string name="progress_dialog_starting_server">সার্ভার শুরু করা হচ্ছে</string>
+  <string name="hotspot_dialog_title">বই রাখার নির্দেশাবলী</string>
+  <string name="wifi_dialog_body">অন্যান্য ডিভাইসে বই দেখার জন্য, দয়া করে নিশ্চিত করুন যে সমস্ত ডিভাইস একই ওয়াইফাই নেটওয়ার্কের সাথে সংযুক্ত।</string>
+  <string name="hotspot_dialog_message">এই বৈশিষ্ট্যটি কাজ করার জন্য আপনাকে প্রথমে আপনার ওয়াইফাই হটস্পটটি ম্যানুয়ালি চালু করতে হবে অথবা হোস্ট ডিভাইস এবং রিসিভার ডিভাইসটি একই ওয়াইফাই নেটওয়ার্কে রয়েছে কিনা তা নিশ্চিত করতে হবে।</string>
+  <string name="hotspot_dialog_neutral_button">এগিয়ে যান</string>
+  <string name="hotspot_channel_description">আপনার হটস্পট/সার্ভারের অবস্থা সম্পর্কে আপডেট।</string>
   <string name="error_server_already_running">সার্ভার ইতিমধ্যেই চলছে। দয়া করে এটি বন্ধ করে আবার চেষ্টা করুন।</string>
   <string name="error_ip_address_not_found" fuzzy="true">আইপি ঠিকানা খুঁজে পাওয়া যায়নি।</string>
   <string name="error_file_not_found">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি। %s</string>

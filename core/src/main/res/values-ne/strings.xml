@@ -4,6 +4,7 @@
 * Macofe
 * McDutchie
 * Nirajan pant
+* Surit
 * पर्वत सुबेदी
 * बडा काजी
 * राम प्रसाद जोशी
@@ -19,10 +20,20 @@
   <string name="menu_random_article">कुनै लेख</string>
   <string name="menu_read_aloud">पढेर सुनाउनुहोस्</string>
   <string name="menu_read_aloud_stop">पढेर सुनाउन बन्द गर्नुहोस्</string>
+  <string name="menu_support_kiwix">किविक्सलाई समर्थन गर्नुहोस्</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s लाई समर्थन गर्नुहोस्</string>
+  <string name="menu_about_app">%s एपको बारेमा</string>
+  <string name="menu_wifi_hotspot">वाइफाइ हटस्पट</string>
   <string name="save_media">मेडियालाई यसरूपमा सङ्ग्रह गर्नुहोस्…</string>
+  <string name="save_media_error">मिडियालाई बचत गर्ने प्रयास गर्दा त्रुटि भयो!</string>
+  <string name="save_media_saved">Downloads/org.kiwix…/ मा %s को रूपमा मिडिया बचत गरियो।</string>
   <string name="search_label">खोज्नुहोस्</string>
+  <string name="searched_list">खोजिएको सूची</string>
+  <string name="more_options">थप विकल्पहरू</string>
   <string name="choose_file">सामग्री फाइल छान्नुहोस् (*.zim)</string>
   <string name="open_in_new_tab">लिङ्कलाई नयाँ ट्याबमा खोल्ने?</string>
+  <string name="hotspot_service_channel_name">हटस्पट सेवा च्यानल</string>
+  <string name="hotspot_failed_title">हटस्पट सुरु गर्न असफल</string>
   <string name="error_file_not_found">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन। %s</string>
   <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन। %s</string>
   <string name="error_article_url_not_found">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>

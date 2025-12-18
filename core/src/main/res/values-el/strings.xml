@@ -5,6 +5,7 @@
 * Geraki
 * Giorgos456
 * Glavkos
+* Jimkats
 * MohitMali
 * NikosLikomitros
 * Nikosgranturismogt
@@ -20,17 +21,22 @@
   <string name="menu_read_aloud">Διάβασε δυνατά</string>
   <string name="menu_read_aloud_stop">Σταμάτα να διαβάζεις δυνατά</string>
   <string name="menu_support_kiwix">Υποστήριξη Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Υποστηρίξτε το %s</string>
+  <string name="menu_about_app">Σχετικά με την εφαρμογή %s</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Αποθήκευση μέσων</string>
   <string name="save_media_error">Προέκυψε σφάλμα κατά την προσπάθεια αποθήκευσης του αρχείου πολυμέσων!</string>
-  <string name="save_media_saved" fuzzy="true">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Αποθήκευση πολυμέσων ως %s στο Downloads/org.kiwix…/</string>
   <string name="search_label">Αναζήτηση</string>
+  <string name="searched_list">Αναζητούμενη λίστα</string>
+  <string name="more_options">Περισσότερες επιλογές</string>
   <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>
   <string name="hotspot_service_channel_name">Κανάλι σημείου πρόσβασης</string>
   <string name="hotspot_failed_title">Η εκκίνηση του σημείου πρόσβασης απέτυχε</string>
   <string name="hotspot_failed_message">Φαίνεται ότι το σημείο πρόσβασης είναι ήδη ενεργοποιημένο. Απενεργοποιήστε το σημείο πρόσβασης Wi-Fi σας για να συνεχίσετε.</string>
   <string name="go_to_wifi_settings_label">Μετάβαση στις ρυθμίσεις WIFI</string>
+  <string name="connection_refused">Η σύνδεση απορρίφθηκε.</string>
   <string name="hotspot_running">Εκτέλεση σημείου πρόσβασης</string>
   <string name="no_books_selected_toast_message">Παρακαλούμε επιλέξτε βιβλία πρώτα</string>
   <string name="server_failed_message">Ο διακομιστής δεν μπορεί να ξεκινήσει. Ενεργοποιήστε το σημείο πρόσβασης</string>
@@ -48,14 +54,22 @@
   <string name="hotspot_notification_content_title">Σημείο πρόσβασης Kiwix</string>
   <string name="start_server_label">Έναρξη διακομιστή</string>
   <string name="stop_server_label">Τερματισμός διακομιστή</string>
+  <string name="error_ip_address_not_found">Δεν ήταν δυνατή η εύρεση της διεύθυνσης IP.</string>
   <string name="server_started_message" fuzzy="true">Εισάγετε την διεύθυνση ip στον περιηγητής σας, για πρόσβαση στον διακομιστή %s</string>
   <string name="error_file_not_found" fuzzy="true">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί. %s</string>
-  <string name="zim_not_opened" fuzzy="true">Δεν μπόρεσε να ανοιχθεί το αρχείο zim</string>
-  <string name="error_file_invalid" fuzzy="true">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM. %s</string>
+  <string name="unable_to_read_zim_file">Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου ZIM!</string>
+  <string name="zim_not_opened">Δεν είναι δυνατό το άνοιγμα του αρχείου ZIM</string>
+  <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM. %s</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Δεν είναι δυνατή η φόρτωση του άρθρου. Το αρχείο ZIM δεν έχει φορτωθεί σωστά.</string>
+  <string name="could_not_find_random_article">Δεν ήταν δυνατή η εύρεση ενός τυχαίου άρθρου. Δοκιμάστε ξανά αργότερα.</string>
   <string name="pref_display_title">Εμφάνιση</string>
   <string name="pref_info_title">Πληροφορίες</string>
   <string name="pref_info_version">Έκδοση</string>
+  <string name="pref_theme">Θέμα</string>
+  <string name="theme_system">Σύστημα</string>
+  <string name="theme_light">Φωτεινό</string>
+  <string name="theme_dark">Σκοτεινό</string>
   <string name="pref_theme_summary">Προβολή λημμάτων με ανεστραμμένα χρώματα</string>
   <string name="pref_back_to_top">Επιστροφή στην κορυφή</string>
   <string name="pref_back_to_top_summary">Εμφάνιση κουμπιού στο τέλος της σελίδας για να μετακινηθείτε στην κορυφή</string>
@@ -65,14 +79,23 @@
   <string name="pref_credits_title">Συντελεστές</string>
   <string name="tts_lang_not_supported" fuzzy="true">Η γλώσσα αυτής της σελίδας δεν υποστηρίζεται, ή κατάλληλα γλωσσικά δεδομένα δεν εγκαταστάθηκαν. Το άρθρο μπορεί να μην αναγνωστεί σωστά.</string>
   <string name="no_section_info">Δεν βρέθηκαν επικεφαλίδες περιεχομένου</string>
+  <string name="request_write_storage">Για να κατεβάσουμε αρχεία ZIM, χρειαζόμαστε πρόσβαση εγγραφής στον αποθηκευτικό σας χώρο.</string>
   <string name="clear_recent_and_tabs_history_dialog">Είστε σίγουροι ότι θέλετε να διαγράψετε το ιστορικό αναζητήσεων σας και να επαναφέρετε όλες τις ενεργές καρτέλες;</string>
   <string name="delete_recent_search_item">Διαγραφή αυτού του αντικειμένου;</string>
   <string name="pref_clear_all_history_title">Εκκαθάριση ιστορικού</string>
   <string name="pref_clear_all_history_summary">Εκκαθάριση ιστορικού πρόσφατων αναζητήσεων και ετικετών</string>
   <string name="pref_notes">Σημειώσεις</string>
+  <string name="pref_permission">Άδειες</string>
+  <string name="pref_import_bookmark_title">Εισαγωγή σελιδοδεικτών</string>
+  <string name="pref_import_bookmark_summary">Εισαγωγή των αποθηκευμένων σελιδοδεικτών</string>
+  <string name="pref_export_bookmark_title">Εξαγωγή σελιδοδεικτών</string>
+  <string name="pref_export_bookmark_summary">Εξαγωγή όλων των αποθηκευμένων σελιδοδεικτών</string>
+  <string name="export_bookmark_saved">Οι σελιδοδείκτες εξάγονται στο αρχείο %s</string>
   <string name="all_history_cleared">Όλο το ιστορικό καθαρίστηκε</string>
+  <string name="pref_clear_all_bookmarks_title">Διαγραφή σελιδοδεικτών</string>
   <string name="clear_all_history_dialog_title">Εκκαθάριση όλου του ιστορικού;</string>
   <string name="share">Κοινοποίηση</string>
+  <string name="selected_file_cab_app_chooser_title">Κοινοποίηση αρχείων ZIM με:</string>
   <string name="delete">Διαγραφή</string>
   <string name="cancel">Ακύρωση</string>
   <string name="delete_specific_search_toast">Η πρόσφατη αναζήτηση αφαιρέθηκε</string>
@@ -80,6 +103,7 @@
   <string name="did_you_know">Γνωρίζατε ότι;</string>
   <string name="undo">Αναίρεση</string>
   <string name="tab_closed">Η ετικέτα έκλεισε</string>
+  <string name="tabs_closed">Οι καρτέλες έκλεισαν</string>
   <string name="bookmark_added">Προστέθηκε σελιδοδείκτης</string>
   <string name="rate_dialog_title">Παρακαλώ αξιολογήστε μας</string>
   <string name="rate_dialog_positive">Βαθμολόγηση!</string>
@@ -113,16 +137,22 @@
   <string name="fetching_storage_info">Λήψη λεπτομερειών αποθήκευσης…</string>
   <string name="pref_storage">Αποθηκευτικός χώρος</string>
   <string name="pref_current_folder">Τρέχων φάκελος</string>
+  <string name="pref_storage_used">%s χρησιμοποιήθηκαν</string>
+  <string name="pref_free_storage">%s ελεύθερα</string>
+  <string name="choose_storage_to_download_book">Επιλέξτε χώρο αποθήκευσης για να κατεβάσετε το βιβλίο</string>
   <string name="delete_zim_failed">Λυπούμαστε, δεν ήταν δυνατή η διαγραφή ορισμένων αρχείων. Θα πρέπει να χρησιμοποιήσετε έναν διαχειριστή αρχείων.</string>
   <string name="tts_pause">παύση</string>
   <string name="tts_resume">συνέχεια</string>
   <string name="stop">Διακοπή</string>
+  <string name="notification_pause_button_text">Παύση</string>
+  <string name="notification_resume_button_text">Συνέχιση</string>
   <string name="internal_storage">Εξωτερικό</string>
   <string name="external_storage">Εξωτερική</string>
   <string name="yes">Ναι</string>
   <string name="no">Όχι</string>
   <string name="confirm_stop_download_title">Σταμάτημα λήψης;</string>
   <string name="confirm_stop_download_msg">Είστε σίγουροι ότι θέλετε να σταματήσετε αυτή τη λήψη;</string>
+  <string name="change_storage">Αλλαγή</string>
   <string name="tts_not_enabled" fuzzy="true">Το κείμενο σε ομιλία δεν είναι ενεργοποιημένο για αυτό το αρχείο ZIM</string>
   <string name="next">Επόμενο</string>
   <string name="previous">Προηγούμενο</string>
@@ -134,17 +164,113 @@
   <string name="time_minute">λεπτά</string>
   <string name="time_second">δ</string>
   <string name="time_left">έμεινε</string>
+  <string name="time_today">Σήμερα</string>
+  <string name="time_yesterday">Χθες</string>
   <string name="pref_external_link_popup_title">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
   <string name="external_link_popup_dialog_title" fuzzy="true">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
   <string name="your_languages">Επιλεγμένες γλώσσες:</string>
+  <string name="your_language">Επιλεγμένη γλώσσα: %s</string>
   <string name="other_languages">Άλλες γλώσσες:</string>
+  <string name="downloading">Γίνεται λήψη</string>
+  <string name="no_items_msg">Δεν υπάρχουν διαθέσιμα στοιχεία</string>
+  <string name="crash_title">Λοιπόν… Αυτό είναι ντροπιαστικό</string>
+  <string name="crash_checkbox_language">Οι ρυθμίσεις γλώσσας σας</string>
+  <string name="crash_checkbox_zimfiles">Μια λίστα με τα αρχεία ZIM σας</string>
+  <string name="crash_checkbox_device">Λεπτομέρειες συσκευής</string>
+  <string name="new_tab_shortcut_label">Νέα καρτέλα</string>
+  <string name="get_content_shortcut_label">Λήψη περιεχομένου</string>
+  <string name="articleCount">%s άρθρα</string>
+  <string name="get_started">Ξεκινήστε</string>
+  <string name="download_books">Λήψη βιβλίων</string>
+  <string name="humankind_knowledge">Η γνώση της ανθρωπότητας, στο τηλέφωνό σας.</string>
+  <string name="welcome_to_the_family">Καλωσήρθατε στην οικογένεια</string>
+  <string name="save_books_offline">Αποθηκεύστε βιβλία εκτός σύνδεσης</string>
+  <string name="download_books_message">Κατεβάστε βιβλία και διαβάστε τα όπου κι αν βρίσκεστε.</string>
+  <string name="save_books_in_desired_storage">Αποθηκεύστε βιβλία στον επιθυμητό χώρο αποθήκευσης</string>
+  <string name="storage_location_hint">Μπορείτε να επιλέξετε την προτιμώμενη τοποθεσία αποθήκευσης, είτε κάρτα SD είτε εσωτερικό χώρο αποθήκευσης, για τη λήψη αρχείων ZIM από την οθόνη Ρυθμίσεις.</string>
+  <string name="unable_to_add_to_bookmarks">Δεν είναι δυνατή η προσθήκη στους σελιδοδείκτες</string>
+  <string name="go_to_previous_page">Μετάβαση στην προηγούμενη σελίδα</string>
+  <string name="go_to_next_page">Μετάβαση στην επόμενη σελίδα</string>
+  <string name="table_of_contents">Πίνακας περιεχομένων</string>
+  <string name="select_language">Επιλέξτε γλώσσα</string>
+  <string name="save_languages">Αποθήκευση γλωσσών</string>
+  <string name="all_languages">Όλες οι γλώσσες</string>
+  <string name="no_language_available">Δεν υπάρχουν διαθέσιμες γλώσσες</string>
+  <string name="expand">Επέκταση</string>
+  <string name="history">Ιστορικό</string>
+  <string name="history_from_current_book">Δείτε το ιστορικό από όλα τα βιβλία</string>
+  <string name="search_history">Αναζήτηση ιστορικού</string>
+  <string name="selected_items">%1$d επιλεγμένα</string>
+  <string name="bookmarks_from_current_book">Προβολή σελιδοδεικτών από όλα τα βιβλία</string>
+  <string name="search_bookmarks">Αναζήτηση σελιδοδεικτών</string>
+  <string name="switch_tabs">Εναλλαγή καρτελών</string>
+  <string name="close_all_tabs">Κλείσιμο όλων των καρτελών</string>
+  <string name="close_tab">Κλείσιμο καρτέλας</string>
+  <string name="could_not_restore_tabs">Δεν ήταν δυνατή η αποκατάσταση καρτελών.</string>
+  <string name="pending_state">Σε εκκρεμότητα</string>
+  <string name="running_state">Σε εξέλιξη</string>
+  <string name="complete">Ολοκληρώθηκε</string>
+  <string name="paused_state">Σε παύση</string>
+  <string name="failed_state">Αποτυχία: %s</string>
+  <string name="save">Αποθήκευση</string>
+  <string name="note">Σημείωση</string>
+  <string name="take_notes">Κρατήστε σημειώσεις</string>
+  <string name="books_count">%d βιβλίο(α)</string>
+  <string name="connection_failed">Η σύνδεση απέτυχε</string>
+  <string name="transfer_to">Μεταφορά αρχείων στο %s;</string>
+  <string name="device_not_cooperating">Η επιλεγμένη συσκευή δεν συνεργάζεται για μεταφορά</string>
+  <string name="file_transfer_complete">Η μεταφορά αρχείων ολοκληρώθηκε</string>
+  <string name="error_during_transfer">Παρουσιάστηκε σφάλμα κατά τη μεταφορά</string>
+  <string name="error_transferring">Σφάλμα μεταφοράς αρχείου %s</string>
+  <string name="get_content_from_nearby_device">Λήψη περιεχομένου από κοντινή συσκευή</string>
+  <string name="your_device">Η συσκευή σας:</string>
+  <string name="device_name">Όνομα συσκευής</string>
+  <string name="no_devices_found">Δεν εντοπίστηκαν συσκευές. Πατήστε το κουμπί αναζήτησης για να προσπαθήσετε ξανά.</string>
+  <string name="preparing_files">Προετοιμασία αρχείων για μεταφορά…</string>
+  <string name="performing_handshake">Εκτέλεση χειραψίας…</string>
+  <string name="status">Κατάσταση</string>
+  <string name="pref_clear_all_notes_summary">Καθαρίζει όλες τις σημειώσεις σε όλα τα άρθρα</string>
+  <string name="pref_clear_all_notes_title">Εκκαθάριση όλων των σημειώσεων</string>
+  <string name="pref_clear_notes">Εκκαθάριση σημειώσεων</string>
+  <string name="no_results">Κανένα αποτέλεσμα</string>
   <string name="no_bookmarks">Χωρίς σελιδοδείκτες</string>
+  <string name="no_history">Κανένα ιστορικό</string>
   <string name="delete_history">Διαγραφή όλου του ιστορικού;</string>
   <string name="delete_selected_history">Διαγραφή επιλεγμένου ιστορικού;</string>
   <string name="delete_bookmarks">Διαγραφή όλων των σελιδοδεικτών;</string>
   <string name="delete_selected_bookmarks">Διαγραφή επιλεγμένων σελιδοδεικτών;</string>
+  <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Μεγέθυνση κειμένου</string>
+  <string name="search_open_in_new_tab">Άνοιγμα σε νέα καρτέλα</string>
   <string name="reader">Αναγνώστης</string>
+  <string name="no_open_book">Κανένα ανοιχτό βιβλίο</string>
+  <string name="open_library">Άνοιγμα βιβλιοθήκης</string>
+  <string name="tab_restored">Η καρτέλα αποκαταστάθηκε</string>
+  <string name="tabs_restored">Οι καρτέλες αποκαταστάθηκαν</string>
+  <string name="preparing_file_for_copy">Προετοιμασία για αντιγραφή/μετακίνηση</string>
+  <string name="action_copy">Αντιγραφή</string>
+  <string name="move">Μετακίνηση</string>
+  <string name="copying_zim_file">Αντιγραφή αρχείου ZIM %s…</string>
+  <string name="moving_zim_file">Μετακίνηση αρχείου ZIM %s…</string>
+  <string name="copy_file_error_message">Σφάλμα κατά την αντιγραφή του αρχείου ZIM: %s.</string>
+  <string name="move_file_error_message">Σφάλμα κατά τη μετακίνηση του αρχείου ZIM: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nΘέλετε να συνεχίσετε με άλλα αρχεία ZIM;</string>
+  <string name="your_selected_files_added_to_library">Τα επιλεγμένα αρχεία ZIM προστέθηκαν στη βιβλιοθήκη.</string>
+  <string name="how_to_update_content">Πώς να ενημερώσω το περιεχόμενο;</string>
+  <string name="downloading_library">Γίνεται λήψη της βιβλιοθήκης \n%s</string>
+  <string name="no_notes">Χωρίς σημειώσεις</string>
+  <string name="notes_from_all_books">Προβολή σημειώσεων από όλα τα βιβλία</string>
+  <string name="search_notes">Αναζήτηση σημειώσεων</string>
+  <string name="choose_your_action">Επιλέξτε την Ενέργειά σας</string>
+  <string name="open_note">Άνοιγμα σημείωσης</string>
+  <string name="open_article">Άνοιγμα άρθρου</string>
+  <string name="delete_selected_notes">Διαγραφή επιλεγμένων σημειώσεων;</string>
+  <string name="donation_dialog_title">Κάντε δωρεά σήμερα</string>
+  <string name="make_donation">Κάντε μια δωρεά</string>
+  <string name="resuming_state">Συνέχιση</string>
+  <string name="downloading_state">Γίνεται λήψη</string>
+  <string name="download_failed_state">Απέτυχε</string>
+  <string name="searchview_description_clear">Εκκαθάριση ερωτήματος</string>
 </resources>

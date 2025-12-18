@@ -7,6 +7,7 @@
 * McDutchie
 * Minisarm
 * MohitMali
+* SZ475
 * Turbojet
 -->
 <resources>
@@ -54,7 +55,7 @@
   <string name="start_server_label">Pornește server</string>
   <string name="stop_server_label">Oprește server</string>
   <string name="error_server_already_running">Serverul rulează deja. Opriți-l și încercați din nou.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">Nu am putut găsi adresa ip.</string>
+  <string name="error_ip_address_not_found">Nu s-a putut găsi adresa IP.</string>
   <string name="server_started_message" fuzzy="true">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
   <string name="qr_code">Cod QR redat</string>
   <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>

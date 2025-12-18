@@ -411,6 +411,9 @@
   <string name="downloading_state">جاري التحميل</string>
   <string name="download_failed_state">فشل</string>
   <string name="searchview_description_clear">مسح الاستعلام</string>
+  <string name="do_you_mean">هل تقصد:</string>
+  <string name="suggested_search_icon_description">انقر هنا لاستخدام هذا الاقتراح وتصحيح بحثك تلقائيًا</string>
   <string name="file_system_scan_dialog_title">مسح تخزين الكتب؟</string>
   <string name="file_system_scan_dialog_message">سيقوم Kiwix بفحص مساحة تخزين جهازك وإدراج الكتب المتوفرة هنا.</string>
+  <string name="download_timeout_resume_message">تحميل خلفية أندرويد انتهى هل تريد الاستئناف؟</string>
 </resources>
