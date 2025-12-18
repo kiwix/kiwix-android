@@ -162,11 +162,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun openHomeScreen() {
-    Handler(Looper.getMainLooper()).postDelayed({
-      if (webViewList.isEmpty()) {
-        hideTabSwitcher(false)
-      }
-    }, HIDE_TAB_SWITCHER_DELAY)
+    runSafelyInCoreReaderLifecycleScope {
+      // Run safely because it is runs after 300 MS.
+      Handler(Looper.getMainLooper()).postDelayed({
+        if (webViewList.isEmpty()) {
+          hideTabSwitcher(false)
+        }
+      }, HIDE_TAB_SWITCHER_DELAY)
+    }
   }
 
   /**
@@ -184,7 +187,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
    */
   override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
     enableLeftDrawer()
-    (requireActivity() as CoreMainActivity).showBottomAppBar()
+    (requireActivity() as? CoreMainActivity)?.showBottomAppBar()
     if (webViewList.isEmpty()) {
       readerMenuState?.hideTabSwitcher()
       exitBook(shouldCloseZimBook)

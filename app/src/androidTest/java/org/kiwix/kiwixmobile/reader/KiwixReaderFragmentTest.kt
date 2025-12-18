@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.reader
 
 import android.os.Build
+import androidx.compose.ui.test.ComposeTimeoutException
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
@@ -51,6 +53,7 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -72,6 +75,8 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
+  private val rayCharlesZimFileUrl =
+    "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
   @Before
   override fun waitForIdle() {
@@ -273,13 +278,56 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     }
   }
 
-  private fun downloadRequest() =
-    Request.Builder()
-      .url(
-        URI.create(
-          "https://download.kiwix.org/zim/wikipedia_fr_climate-change_mini.zim"
-        ).toURL()
-      ).build()
+  @Test
+  fun testReadAloudFeature() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+      }
+      composeTestRule.waitForIdle()
+      val downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
+        .use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, downloadingZimFile)
+            }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
+          }
+        }
+      openKiwixReaderFragmentWithFile(downloadingZimFile)
+      composeTestRule.waitForIdle()
+      reader {
+        startReadAloudFeature(composeTestRule)
+        // Open history screen.
+        topLevel {
+          clickHistoryOnSideNav(kiwixMainActivity, composeTestRule) {
+            clickOnHistoryItem(composeTestRule)
+            startReadAloudFeature(composeTestRule)
+          }
+        }
+      }
+    }
+  }
+
+  private fun ReaderRobot.startReadAloudFeature(composeTestRule: ComposeContentTestRule) {
+    checkZimFileLoadedSuccessful(composeTestRule)
+    clickOnReadAloudMenuItem(composeTestRule)
+    try {
+      assertTTSLanguageIsNotSupportedDialogDisplayed(composeTestRule)
+    } catch (_: ComposeTimeoutException) {
+      assertTTSControlsVisible(composeTestRule)
+      clickOnTTSStopButton(composeTestRule)
+    }
+  }
+
+  private fun downloadRequest(zimUrl: String = "https://download.kiwix.org/zim/wikipedia_fr_climate-change_mini.zim") =
+    Request.Builder().url(URI.create(zimUrl).toURL()).build()
 
   private fun getDownloadingZimFile(): File {
     val zimFile = File(context.cacheDir, "klimawandel.zim")
