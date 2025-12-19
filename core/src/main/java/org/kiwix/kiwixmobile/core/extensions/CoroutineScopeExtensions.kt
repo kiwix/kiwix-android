@@ -18,10 +18,13 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Safely runs a suspend function inside a lifecycle-aware CoroutineScope.
@@ -35,16 +38,33 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
  * Use this method when you want to launch work in a lifecycle scope without
  * risking crashes due to calling `launch` after the lifecycle has already ended.
  *
+ * @param context Optional [CoroutineContext] used to launch the coroutine.
  * @param func The suspend function to run within the active CoroutineScope.
  */
-fun CoroutineScope?.runSafelyInLifecycleScope(func: suspend CoroutineScope.() -> Unit) {
-  // If lifecycleScope is null or already cancelled, skip execution safely.
+fun CoroutineScope?.runSafelyInLifecycleScope(
+  context: CoroutineContext = EmptyCoroutineContext,
+  func: suspend CoroutineScope.() -> Unit
+) {
   if (this == null || !this.isActive) {
     Log.w("Lifecycle", "Skipping execution: lifecycle not active")
     return
   }
-  // Launch the block normally. Errors inside this coroutine are not swallowed.
-  launch {
-    func(this)
+  runCatching {
+    launch(context) {
+      func(this)
+    }
+  }.onFailure {
+    when (it) {
+      is CancellationException -> {
+        // Expected lifecycle cancellation → ignore
+        Log.d("Lifecycle", "Coroutine cancelled", it)
+      }
+
+      else -> {
+        // Real bug
+        Log.e("Lifecycle", "Unhandled coroutine error", it)
+        throw it
+      }
+    }
   }
 }

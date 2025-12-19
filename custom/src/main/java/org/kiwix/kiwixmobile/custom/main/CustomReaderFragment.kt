@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.compose.material.icons.Icons
@@ -29,13 +30,13 @@ import androidx.navigation.NavOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
@@ -47,6 +48,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -65,7 +67,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   @Inject
   lateinit var customFileValidator: CustomFileValidator
-  private var appSettingsLaunched = false
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -238,7 +239,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            coreReaderLifeCycleScope?.launch(Dispatchers.Main.immediate) {
+            coreReaderLifeCycleScope?.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
               openZimFile(
                 ZimReaderSource(
                   file = it.file,
@@ -248,32 +249,23 @@ class CustomReaderFragment : CoreReaderFragment() {
                 true,
                 shouldManageExternalLaunch
               )
-              // Save book in the database to display it in `ZimHostFragment`.
-              zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-                // Check if the file is not null. If the file is null,
-                // it means we have created zimFileReader with a fileDescriptor,
-                // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-                runSafelyInCoreReaderLifecycleScope {
-                  val file = it.file ?: createDemoFile()
-                  val book = Book().apply { update(zimFileReader.jniKiwixReader) }
-                  repositoryActions?.saveBook(book)
-                }
-              }
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
                 manageExternalLaunchAndRestoringViewState()
               }
+              saveBookToLibrary(it.file)
             }
           }
 
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            coreReaderLifeCycleScope?.launch(Dispatchers.Main.immediate) {
+            coreReaderLifeCycleScope?.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
               openZimFile(ZimReaderSource(it.obbFile), true, shouldManageExternalLaunch)
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
                 manageExternalLaunchAndRestoringViewState()
               }
+              saveBookToLibrary(it.obbFile)
             }
           }
 
@@ -286,6 +278,31 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       }
     )
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private suspend fun saveBookToLibrary(zimFile: File?) {
+    coreReaderLifeCycleScope?.runSafelyInLifecycleScope {
+      zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+        try {
+          // Save book in the database to display it in `ZimHostFragment`.
+          // Check if the file is not null. If the file is null,
+          // it means we have created zimFileReader with a fileDescriptor,
+          // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
+          val file = zimFile ?: createDemoFile()
+          // Wrapped in try-catch because if the reader scope is cancelled (for example,
+          // when the user navigates to another screen), the scope and related variables
+          // may be cleared from the Fragment. Accessing them would then throw an error.
+          // The `Book.update()` method is not a suspend function, and coroutine
+          // cancellation is only checked at suspension points. As a result, this
+          // block may still execute even after the lifecycle scope has been cancelled.
+          val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+          repositoryActions?.saveBook(book)
+        } catch (e: Exception) {
+          Log.e(TAG_KIWIX, "Could not save book in library. Original exception = $e")
+        }
+      }
+    }
   }
 
   private suspend fun openDownloadScreen() {
@@ -301,10 +318,13 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
-  private suspend fun createDemoFile() =
-    File(getDemoFilePathForCustomApp(CoreApp.instance)).also {
-      if (!it.isFileExist()) it.createNewFile()
+  private suspend fun createDemoFile() {
+    runCatching {
+      File(getDemoFilePathForCustomApp(CoreApp.instance)).also {
+        if (!it.isFileExist()) it.createNewFile()
+      }
     }
+  }
 
   private suspend fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
@@ -427,25 +447,6 @@ class CustomReaderFragment : CoreReaderFragment() {
           false,
           this
         )
-      }
-    }
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-  }
-
-  override fun onResume() {
-    super.onResume()
-    if (appSettingsLaunched) {
-      appSettingsLaunched = false
-      isWebViewHistoryRestoring = true
-      runSafelyInCoreReaderLifecycleScope {
-        if (isZimFileAlreadyOpenedInReader()) {
-          manageExternalLaunchAndRestoringViewState()
-        } else {
-          openObbOrZim(true)
-        }
       }
     }
   }
