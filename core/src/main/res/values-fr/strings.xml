@@ -23,6 +23,7 @@
 * McDutchie
 * MohitMali
 * Méthodes Bulebe Hangi
+* Rwobweats
 * SleaY
 * Stephane
 * Terio legale
@@ -421,4 +422,8 @@
   <string name="downloading_state">Téléchargement en cours</string>
   <string name="download_failed_state">Échec</string>
   <string name="searchview_description_clear">Effacer la requête</string>
+  <string name="validate_zim_files">Valider les fichiers ZIM</string>
+  <string name="confirmation_validate_zim_files">Êtes-vous sûr de vouloir valider les fichiers ZIM suivants?\n\n%s</string>
+  <string name="validating_zim_file">Validation des fichiers ZIM…</string>
+  <string name="validating_zim_files">Validation des fichiers ZIM…</string>
 </resources>
