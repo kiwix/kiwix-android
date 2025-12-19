@@ -352,12 +352,12 @@ abstract class CoreReaderFragment :
            *  1) User has previously checked on "Don't ask me again", and/or
            *  2) Permission has been disabled on device
            */
-          requireActivity().toast(
+          context?.toast(
             string.ext_storage_permission_rationale_add_note,
             Toast.LENGTH_LONG
           )
         } else {
-          requireActivity().toast(
+          context?.toast(
             string.ext_storage_write_permission_denied_add_note,
             Toast.LENGTH_LONG
           )
@@ -2649,7 +2649,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun createReadAloudIntent(action: String, isPauseTTS: Boolean): Intent =
-    Intent(requireActivity(), ReadAloudService::class.java).apply {
+    Intent(context, ReadAloudService::class.java).apply {
       setAction(action)
       putExtra(
         ReadAloudService.IS_TTS_PAUSE_OR_RESUME,
@@ -2658,7 +2658,7 @@ abstract class CoreReaderFragment :
     }
 
   private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
-    requireActivity().startService(
+    context?.startService(
       createReadAloudIntent(action, isPauseTTS)
     ).also {
       isReadAloudServiceRunning = action == ACTION_PAUSE_OR_RESUME_TTS

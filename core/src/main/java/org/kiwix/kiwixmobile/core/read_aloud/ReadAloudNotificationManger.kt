@@ -89,10 +89,6 @@ class ReadAloudNotificationManger @Inject constructor(
       .build()
   }
 
-  fun notifyNotification(notification: Notification) {
-    notificationManager.notify(READ_ALOUD_NOTIFICATION_ID, notification)
-  }
-
   private fun getPauseOrResumeTitle(isPauseTTS: Boolean) = if (isPauseTTS) {
     context.getString(R.string.tts_resume)
   } else {
