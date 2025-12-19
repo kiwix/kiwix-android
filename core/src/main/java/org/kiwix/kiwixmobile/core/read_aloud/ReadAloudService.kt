@@ -58,20 +58,29 @@ class ReadAloudService : Service() {
 
   private fun stopReadAloudAndDismissNotification() {
     readAloudCallbacks?.onReadAloudStop()
+    stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     readAloudNotificationManager?.dismissNotification()
   }
 
   private fun startForegroundNotificationHelper(isPauseTTS: Boolean) {
-    readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)?.let {
-      readAloudNotificationManager?.notifyNotification(it)
-    }
+    runCatching {
+      readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)?.let {
+        startForeground(ReadAloudNotificationManger.READ_ALOUD_NOTIFICATION_ID, it)
+      }
+    }.onFailure { it.printStackTrace() }
   }
 
   override fun onBind(p0: Intent?): IBinder = serviceBinder
 
   fun registerCallBack(readAloudCallbacks: ReadAloudCallbacks?) {
     this.readAloudCallbacks = readAloudCallbacks
+  }
+
+  override fun onTimeout(startId: Int) {
+    // stop the service if the foreground service time is about to reach.
+    stopReadAloudAndDismissNotification()
+    super.onTimeout(startId)
   }
 
   class ReadAloudBinder(readAloudService: ReadAloudService) : Binder() {

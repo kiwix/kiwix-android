@@ -17,6 +17,7 @@
   <!-- Device with versions >= Pie need this permission -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
   <queries>
     <intent>
@@ -93,7 +94,8 @@
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
 
-    <service android:name=".read_aloud.ReadAloudService" />
+    <service android:name=".read_aloud.ReadAloudService"
+      android:foregroundServiceType="mediaPlayback" />
     <service
       android:name=".downloader.downloadManager.DownloadMonitorService"
       android:foregroundServiceType="dataSync" />
