@@ -206,6 +206,7 @@ class CategoryViewModelTest {
   fun `UpdateCategory Action changes state to Content when Loading`() = flakyTest {
     runTest {
       every { application.getString(any()) } returns ""
+      categories.value = null
       testFlow(
         categoryViewModel.state,
         triggerAction = { categoryViewModel.actions.emit(UpdateCategory(listOf())) },
