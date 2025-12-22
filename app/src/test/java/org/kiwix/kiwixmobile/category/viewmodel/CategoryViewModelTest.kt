@@ -24,12 +24,14 @@ import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -42,7 +44,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.data.remote.CategoryEntry
 import org.kiwix.kiwixmobile.core.data.remote.CategoryFeed
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
@@ -68,7 +70,7 @@ fun categoryItem(category: Category = category()) =
 @ExtendWith(InstantExecutorExtension::class)
 class CategoryViewModelTest {
   private val application: Application = mockk()
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
   private val kiwixService: KiwixService = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
@@ -90,12 +92,12 @@ class CategoryViewModelTest {
     categories.value = null
     networkStates.value = NetworkState.CONNECTED
     CategorySessionCache.hasFetched = true
-    every { sharedPreferenceUtil.getCachedCategoryList() } returns categories.value
-    every { sharedPreferenceUtil.selectedOnlineContentCategory } returns "wikipedia"
+    coEvery { kiwixDataStore.cachedOnlineCategoryList } returns categories
+    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("wikipedia")
     categoryViewModel =
       CategoryViewModel(
         application,
-        sharedPreferenceUtil,
+        kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
       )
@@ -154,7 +156,7 @@ class CategoryViewModelTest {
       CategorySessionCache.hasFetched = false
       categories.value = emptyList()
 
-      every { sharedPreferenceUtil.getCachedLanguageList() } returns null
+      coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(null)
       coEvery { kiwixService.getCategories() } returns CategoryFeed().apply {
         entries = fetchedLanguages.map {
           CategoryEntry().apply {
@@ -166,8 +168,8 @@ class CategoryViewModelTest {
           }
         }
       }
-      every { sharedPreferenceUtil.selectedOnlineContentCategory } returns ""
-      every { sharedPreferenceUtil.saveCategoryList(any()) } just Runs
+      coEvery { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
+      coEvery { kiwixDataStore.saveOnlineCategoryList(any()) } just Runs
 
       testFlow(
         categoryViewModel.actions,
@@ -175,7 +177,7 @@ class CategoryViewModelTest {
         assert = {
           val result = awaitItem()
           assertThat(result).isInstanceOf(UpdateCategory::class.java)
-          verify { sharedPreferenceUtil.saveCategoryList(any()) }
+          coVerify { kiwixDataStore.saveOnlineCategoryList(any()) }
         }
       )
     }

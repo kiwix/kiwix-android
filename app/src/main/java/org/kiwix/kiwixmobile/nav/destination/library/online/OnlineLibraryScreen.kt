@@ -97,7 +97,7 @@ const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 const val LOAD_MORE_DELAY = 150L
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
+@Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
