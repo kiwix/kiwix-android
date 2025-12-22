@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.libkiwix.Book
@@ -97,6 +98,12 @@ fun language(
   languageCode,
   languageCodeISO2
 )
+
+fun category(
+  id: Long = 0,
+  isActive: Boolean = false,
+  category: String = ""
+) = Category(id, isActive, category)
 
 fun metaLinkNetworkEntity() =
   MetaLinkNetworkEntity().apply {
