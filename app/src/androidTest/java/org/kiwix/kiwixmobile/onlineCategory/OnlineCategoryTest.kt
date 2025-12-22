@@ -20,32 +20,30 @@ package org.kiwix.kiwixmobile.onlineCategory
 
 import android.Manifest
 import android.app.Instrumentation
+import android.os.Build
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
-import org.hamcrest.Matchers.allOf
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.download.downloadRobot
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -77,21 +75,6 @@ class OnlineCategoryTest {
   lateinit var kiwixMainActivity: KiwixMainActivity
   private val instrumentation: Instrumentation by lazy(InstrumentationRegistry::getInstrumentation)
 
-  init {
-    AccessibilityChecks.enable().apply {
-      setRunChecksFromRootView(true)
-      setSuppressingResultMatcher(
-        anyOf(
-          allOf(
-            matchesCheck(TouchTargetSizeCheck::class.java),
-            matchesViews(withContentDescription("More options"))
-          ),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    }
-  }
-
   @Before
   fun setUp() {
     UiDevice.getInstance(instrumentation).apply {
@@ -100,30 +83,46 @@ class OnlineCategoryTest {
       }
       waitForIdle()
     }
-    PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
-      .edit {
-        putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-        putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-        putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-        putBoolean(SharedPreferenceUtil.PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN, true)
-        putBoolean(SharedPreferenceUtil.PREF_IS_FIRST_RUN, false)
-        putString(SharedPreferenceUtil.PREF_LANG, "en")
-        putLong(
-          SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
-          System.currentTimeMillis()
-        )
+    val kiwixDataStore = KiwixDataStore(instrumentation.targetContext.applicationContext).apply {
+      runBlocking {
+        setIntroShown(false)
+        setWifiOnly(false)
+        setPrefIsTest(true)
+        setIsScanFileSystemDialogShown(true)
+        setIsFirstRun(false)
+        setPrefLanguage("en")
+        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
       }
+    }
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
         kiwixMainActivity = it
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(instrumentation.targetContext.applicationContext)
-        )
+        runBlocking {
+          handleLocaleChange(
+            it,
+            "en",
+            kiwixDataStore
+          )
+        }
       }
     }
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      accessibilityValidator.setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
+    } else {
+      accessibilityValidator.setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java)
+        )
+      )
+    }
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test

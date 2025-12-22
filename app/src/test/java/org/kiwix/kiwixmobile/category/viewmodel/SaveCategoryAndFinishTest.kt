@@ -20,29 +20,30 @@ package org.kiwix.kiwixmobile.category.viewmodel
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.SaveCategoryAndFinish
 
 class SaveCategoryAndFinishTest {
   @Test
   fun `invoke saves category and finishes`() = runTest {
-    val sharedPreferenceUtil = mockk<SharedPreferenceUtil>()
+    val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
     val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
     every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
     every { onBackPressedDispatcher.onBackPressed() } answers { }
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(category, sharedPreferenceUtil, lifeCycleScope).invokeWith(activity)
+    SaveCategoryAndFinish(category, kiwixDataStore, lifeCycleScope).invokeWith(activity)
     testScheduler.advanceUntilIdle()
-    every { sharedPreferenceUtil.selectedOnlineContentCategory == category.category }
+    coEvery { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
     testScheduler.advanceUntilIdle()
     verify { onBackPressedDispatcher.onBackPressed() }
   }
