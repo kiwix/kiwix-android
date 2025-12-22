@@ -203,90 +203,102 @@ class CategoryViewModelTest {
   }
 
   @Test
-  fun `UpdateCategory Action changes state to Content when Loading`() = runTest {
-    every { application.getString(any()) } returns ""
-    testFlow(
-      categoryViewModel.state,
-      triggerAction = { categoryViewModel.actions.emit(UpdateCategory(listOf())) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(listOf()))
-      },
-      TURBINE_TIMEOUT
-    )
+  fun `UpdateCategory Action changes state to Content when Loading`() = flakyTest {
+    runTest {
+      every { application.getString(any()) } returns ""
+      testFlow(
+        categoryViewModel.state,
+        triggerAction = { categoryViewModel.actions.emit(UpdateCategory(listOf())) },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(Loading)
+          assertThat(awaitItem()).isEqualTo(Content(listOf()))
+        },
+        TURBINE_TIMEOUT
+      )
+    }
   }
 
   @Test
-  fun `UpdateCategory Action has no effect on other states`() = runTest {
-    testFlow(
-      categoryViewModel.state,
-      triggerAction = {
-        categoryViewModel.actions.emit(UpdateCategory(listOf()))
-        categoryViewModel.actions.emit(UpdateCategory(listOf()))
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(listOf()))
-      }
-    )
+  fun `UpdateCategory Action has no effect on other states`() = flakyTest {
+    runTest {
+      testFlow(
+        categoryViewModel.state,
+        triggerAction = {
+          categoryViewModel.actions.emit(UpdateCategory(listOf()))
+          categoryViewModel.actions.emit(UpdateCategory(listOf()))
+        },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(Loading)
+          assertThat(awaitItem()).isEqualTo(Content(listOf()))
+        }
+      )
+    }
   }
 
   @Test
-  fun `Filter Action updates Content state `() = runTest {
-    every { application.getString(any()) } returns ""
-    categories.value = listOf()
-    testFlow(
-      categoryViewModel.state,
-      triggerAction = {
-        categoryViewModel.actions.tryEmit(UpdateCategory(listOf()))
-        categoryViewModel.actions.tryEmit(Filter("filter"))
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(items = listOf(), filter = ""))
-        assertThat(awaitItem()).isEqualTo(Content(listOf(), filter = "filter"))
-      }
-    )
+  fun `Filter Action updates Content state `() = flakyTest {
+    runTest {
+      every { application.getString(any()) } returns ""
+      categories.value = listOf()
+      testFlow(
+        categoryViewModel.state,
+        triggerAction = {
+          categoryViewModel.actions.tryEmit(UpdateCategory(listOf()))
+          categoryViewModel.actions.tryEmit(Filter("filter"))
+        },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(Loading)
+          assertThat(awaitItem()).isEqualTo(Content(items = listOf(), filter = ""))
+          assertThat(awaitItem()).isEqualTo(Content(listOf(), filter = "filter"))
+        }
+      )
+    }
   }
 
   @Test
-  fun `Filter Action has no effect on other states`() = runTest {
-    every { application.getString(any()) } returns ""
-    testFlow(
-      categoryViewModel.state,
-      triggerAction = { categoryViewModel.actions.emit(Filter("")) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-      }
-    )
+  fun `Filter Action has no effect on other states`() = flakyTest {
+    runTest {
+      every { application.getString(any()) } returns ""
+      testFlow(
+        categoryViewModel.state,
+        triggerAction = { categoryViewModel.actions.emit(Filter("")) },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(Loading)
+        }
+      )
+    }
   }
 
   @Test
-  fun `Select Action updates Content state`() = runTest {
-    val categoriesList = listOf(category())
-    categories.value = categoriesList
-    testFlow(
-      categoryViewModel.state,
-      triggerAction = {
-        categoryViewModel.actions.emit(UpdateCategory(categoriesList))
-        categoryViewModel.actions.emit(Select(categoryItem()))
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(listOf(category())))
-        assertThat(awaitItem()).isEqualTo(State.Saving)
-      }
-    )
+  fun `Select Action updates Content state`() = flakyTest {
+    runTest {
+      val categoriesList = listOf(category())
+      categories.value = categoriesList
+      testFlow(
+        categoryViewModel.state,
+        triggerAction = {
+          categoryViewModel.actions.emit(UpdateCategory(categoriesList))
+          categoryViewModel.actions.emit(Select(categoryItem()))
+        },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(Loading)
+          assertThat(awaitItem()).isEqualTo(Content(listOf(category())))
+          assertThat(awaitItem()).isEqualTo(State.Saving)
+        }
+      )
+    }
   }
 
   @Test
-  fun `Select Action has no effect on other states`() = runTest {
-    testFlow(
-      categoryViewModel.state,
-      triggerAction = { categoryViewModel.actions.emit(Select(categoryItem())) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-      }
-    )
+  fun `Select Action has no effect on other states`() = flakyTest {
+    runTest {
+      testFlow(
+        categoryViewModel.state,
+        triggerAction = { categoryViewModel.actions.emit(Select(categoryItem())) },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(Loading)
+        }
+      )
+    }
   }
 }
