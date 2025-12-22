@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -131,6 +130,7 @@ class ZimManageViewModelTest {
   private val booksOnFileSystem = MutableStateFlow<List<Book>>(emptyList())
   private val books = MutableStateFlow<List<BookOnDisk>>(emptyList())
   private val onlineContentLanguage = MutableStateFlow("")
+  private val onlineCategoryContent = MutableStateFlow("")
   private val fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
@@ -171,6 +171,7 @@ class ZimManageViewModelTest {
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
     coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
     coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
+    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
     every {
       onlineLibraryManager.buildLibraryUrl(
@@ -292,18 +293,33 @@ class ZimManageViewModelTest {
   @Nested
   inner class Languages {
     @Test
-    fun `changing language updates the filter and do the network request`() = flakyTest {
-      runTest {
-        every { application.getString(any()) } returns ""
-        every { application.getString(any(), any()) } returns ""
-        viewModel.onlineLibraryRequest.test {
-          skipItems(1)
-          onlineContentLanguage.emit("eng")
-          val onlineLibraryRequest = awaitItem()
-          assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
-          assertThat(onlineLibraryRequest.page).isEqualTo(ZERO)
-          assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
-        }
+    fun `changing language updates the filter and do the network request`() = runTest {
+      every { application.getString(any()) } returns ""
+      every { application.getString(any(), any()) } returns ""
+      viewModel.onlineLibraryRequest.test {
+        skipItems(1)
+        onlineContentLanguage.emit("eng")
+        val onlineLibraryRequest = awaitItem()
+        assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
+        assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
+        assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+      }
+    }
+  }
+
+  @Nested
+  inner class Categories {
+    @Test
+    fun `changing category updates the filter and do the network request`() = runTest {
+      every { application.getString(any()) } returns ""
+      every { application.getString(any(), any()) } returns ""
+      viewModel.onlineLibraryRequest.test {
+        skipItems(1)
+        onlineCategoryContent.emit("wikipedia")
+        val onlineLibraryRequest = awaitItem()
+        assertThat(onlineLibraryRequest.category).isEqualTo("wikipedia")
+        assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
+        assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
       }
     }
   }
