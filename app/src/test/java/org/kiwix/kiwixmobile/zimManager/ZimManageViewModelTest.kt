@@ -87,6 +87,8 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryResult
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -217,7 +219,20 @@ class ZimManageViewModelTest {
         setValidateZimViewModel(validateZimViewModel)
       }
     viewModel.fileSelectListStates.value = FileSelectListState(emptyList())
-    runBlocking { viewModel.networkLibrary.emit(emptyList()) }
+    runBlocking {
+      viewModel.networkLibrary.emit(
+        OnlineLibraryResult(
+          OnlineLibraryRequest(
+            query = null,
+            category = null,
+            lang = null,
+            isLoadMoreItem = false,
+            page = ZERO
+          ),
+          emptyList()
+        )
+      )
+    }
   }
 
   @Nested
@@ -356,9 +371,9 @@ class ZimManageViewModelTest {
         advanceUntilIdle()
 
         val items = awaitItem()
-        val bookItems = items.filterIsInstance<LibraryListItem.BookItem>()
+        val bookItems = items.items.filterIsInstance<LibraryListItem.BookItem>()
         if (bookItems.size >= 2 && bookItems[0].fileSystemState == CanWrite4GbFile) {
-          assertThat(items).isEqualTo(
+          assertThat(items.items).isEqualTo(
             listOf(
               LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading:"),
               LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
@@ -398,9 +413,9 @@ class ZimManageViewModelTest {
         advanceUntilIdle()
 
         val item = awaitItem()
-        val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+        val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
         if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-          assertThat(item).isEqualTo(
+          assertThat(item.items).isEqualTo(
             listOf(
               LibraryListItem.DividerItem(Long.MIN_VALUE, "All languages"),
               LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
@@ -424,9 +439,9 @@ class ZimManageViewModelTest {
         advanceUntilIdle()
 
         val item = awaitItem()
-        val bookItem = item.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+        val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
         if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-          assertThat(item).isEqualTo(
+          assertThat(item.items).isEqualTo(
             listOf(
               LibraryListItem.DividerItem(Long.MIN_VALUE, "Selected language: English"),
               LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
@@ -460,9 +475,9 @@ class ZimManageViewModelTest {
         advanceUntilIdle()
 
         val items = awaitItem()
-        val bookItems = items.filterIsInstance<LibraryListItem.BookItem>()
+        val bookItems = items.items.filterIsInstance<LibraryListItem.BookItem>()
         if (bookItems.size >= 2) {
-          assertThat(items).isEqualTo(
+          assertThat(items.items).isEqualTo(
             listOf(
               LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading"),
               LibraryListItem.LibraryDownloadItem(downloadModel),
