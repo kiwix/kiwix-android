@@ -28,10 +28,6 @@ object Versions {
 
   const val kotlin_ksp: String = "2.0.0-1.0.24"
 
-  const val androidx_navigation: String = "2.5.3"
-
-  const val navigation_ui_ktx: String = "2.4.1"
-
   const val com_google_dagger: String = "2.53.1"
 
   const val androidx_test: String = "1.6.1"
@@ -55,10 +51,6 @@ object Versions {
   const val javax_annotation_api: String = "1.3.2"
 
   const val leakcanary_android: String = "2.14"
-
-  const val constraintlayout: String = "2.2.0"
-
-  const val swipe_refresh_layout: String = "1.1.0"
 
   const val collection_ktx: String = "1.4.5"
 
