@@ -190,8 +190,7 @@ fun PauseStopButtonsRow(
 
 @Composable
 private fun getPauseResumeButtonIcon(item: LibraryDownloadItem): IconItem {
-  val context = LocalContext.current
-  return if (item.downloadState.toReadableState(context) == context.getString(string.paused_state)) {
+  return if (item.downloadState == DownloadState.Paused) {
     IconItem.Drawable(R.drawable.ic_play_24dp)
   } else {
     IconItem.Drawable(R.drawable.ic_pause_24dp)
