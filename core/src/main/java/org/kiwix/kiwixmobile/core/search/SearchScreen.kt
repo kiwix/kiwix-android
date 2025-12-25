@@ -317,13 +317,13 @@ private fun SearchListItem(
       .fillMaxSize()
       .padding(horizontal = EIGHT_DP)
       .padding(top = SEVEN_DP)
-      .combinedClickable(
-        onClick = { onItemClick(searchListItem) },
-        onLongClick = { onItemLongClick?.invoke(searchListItem) }
-      )
       .background(
         shape = RoundedCornerShape(EIGHT_DP),
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+      )
+      .combinedClickable(
+        onClick = { onItemClick(searchListItem) },
+        onLongClick = { onItemLongClick?.invoke(searchListItem) }
       ),
     verticalAlignment = Alignment.CenterVertically
   ) {
