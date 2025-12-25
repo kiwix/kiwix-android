@@ -27,10 +27,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,18 +49,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
@@ -200,18 +195,14 @@ fun DialogConfirmButton(
         dialogConfirmButtonClick?.invoke()
       },
       modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG },
-      contentPadding = PaddingValues(
-        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
-        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
-        start = ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current),
-        end = ZERO.dp
-      )
+      contentPadding = ButtonDefaults.TextButtonContentPadding
     ) {
       Text(
         text = confirmButtonText.uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
+        textAlign = TextAlign.Center
       )
     }
   }
@@ -230,18 +221,14 @@ fun DialogDismissButton(
         dismissButtonClick?.invoke()
       },
       modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG },
-      contentPadding = PaddingValues(
-        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
-        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
-        start = ZERO.dp,
-        end = ZERO.dp
-      )
+      contentPadding = ButtonDefaults.TextButtonContentPadding
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
+        textAlign = TextAlign.Center
       )
     }
   }
@@ -261,18 +248,14 @@ private fun DialogNaturalButton(
       },
       modifier = Modifier
         .semantics { testTag = ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG },
-      contentPadding = PaddingValues(
-        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
-        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
-        start = ZERO.dp,
-        end = ZERO.dp
-      )
+      contentPadding = ButtonDefaults.TextButtonContentPadding
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
+        textAlign = TextAlign.Center
       )
     }
   }
