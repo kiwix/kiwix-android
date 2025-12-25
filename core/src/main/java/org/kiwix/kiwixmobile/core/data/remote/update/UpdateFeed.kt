@@ -24,25 +24,28 @@ import org.simpleframework.xml.Namespace
 import org.simpleframework.xml.Root
 
 @Root(name = "rss", strict = false)
-@Namespace(reference = "http://www.w3.org/2005/Atom")
+@Namespace(reference = "http://www.w3.org/2005/Atom", prefix = "atom")
 class UpdateFeed {
-  @field:ElementList(name = "channel", inline = true, required = false)
+  @field:Element(name = "channel", required = false)
   var channel: Channel? = null
 }
 
 @Root(name = "channel", strict = false)
-@Namespace(reference = "http://www.w3.org/2005/Atom")
+@Namespace(reference = "http://www.w3.org/2005/Atom", prefix = "atom")
 class Channel {
   @field:ElementList(name = "item", inline = true, required = false)
-  var channels: List<Items>? = null
+  var items: List<Items>? = null // Also renamed from 'channels' to 'items' for clarity
 }
 
 @Root(name = "item", strict = false)
-@Namespace(reference = "http://www.w3.org/2005/Atom")
+@Namespace(reference = "http://www.w3.org/2005/Atom", prefix = "atom")
 class Items {
   @field:Element(name = "title", required = false)
   var title: String = ""
 
   @field:Element(name = "link", required = false)
   var link: String = ""
+
+  @field:Element(name = "pubDate", required = false)
+  var pubDate: String = "" // Optional: if you want to capture the publish date
 }
