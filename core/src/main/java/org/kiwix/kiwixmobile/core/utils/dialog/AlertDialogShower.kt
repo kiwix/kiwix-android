@@ -284,28 +284,48 @@ private fun ShowDialogButtons(
   clickListeners: Array<out () -> Unit>,
   alertDialogShower: AlertDialogShower
 ) {
-  Row(
-    verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(bottom = DIALOG_BUTTON_ROW_BOTTOM_PADDING)
-  ) {
-    DialogNaturalButton(
-      dialog,
-      clickListeners.getOrNull(2),
-      alertDialogShower
-    )
-    Spacer(modifier = Modifier.weight(1f))
-    DialogDismissButton(
-      dialog.dismissButtonText,
-      clickListeners.getOrNull(1),
-      alertDialogShower
-    )
-    DialogConfirmButton(
-      stringResource(dialog.confirmButtonText),
-      clickListeners.getOrNull(0),
-      alertDialogShower
-    )
+  val hasOnlyConfirmButton =
+    dialog.dismissButtonText == null && dialog.neutralButtonText == null
+
+  if (hasOnlyConfirmButton) {
+    // Centre the single button in the dialog
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = DIALOG_BUTTON_ROW_BOTTOM_PADDING),
+      contentAlignment = Alignment.Center
+    ) {
+      DialogConfirmButton(
+        stringResource(dialog.confirmButtonText),
+        clickListeners.getOrNull(0),
+        alertDialogShower
+      )
+    }
+  } else {
+    // Default behaviour right alignment for more than one buttons
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = DIALOG_BUTTON_ROW_BOTTOM_PADDING)
+    ) {
+      DialogNaturalButton(
+        dialog,
+        clickListeners.getOrNull(2),
+        alertDialogShower
+      )
+      Spacer(modifier = Modifier.weight(1f))
+      DialogDismissButton(
+        dialog.dismissButtonText,
+        clickListeners.getOrNull(1),
+        alertDialogShower
+      )
+      DialogConfirmButton(
+        stringResource(dialog.confirmButtonText),
+        clickListeners.getOrNull(0),
+        alertDialogShower
+      )
+    }
   }
 }
 
