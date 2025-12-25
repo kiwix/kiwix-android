@@ -153,6 +153,8 @@ fun PauseStopButtonsRow(
   onStopClick: (LibraryDownloadItem) -> Unit
 ) {
   val context = LocalContext.current
+  val isPaused = item.downloadState == DownloadState.Paused
+
   Row(
     modifier = Modifier
       .fillMaxHeight(),
@@ -168,7 +170,7 @@ fun PauseStopButtonsRow(
       val contentDescription = context.getString(string.tts_pause) +
         "/${context.getString(string.tts_resume)}/${item.hashCode()}"
       Icon(
-        painter = getPauseResumeButtonIcon(item).toPainter(),
+        painter = getPauseResumeButtonIcon(isPaused).toPainter(),
         contentDescription = contentDescription
       )
     }
@@ -189,9 +191,8 @@ fun PauseStopButtonsRow(
 }
 
 @Composable
-private fun getPauseResumeButtonIcon(item: LibraryDownloadItem): IconItem {
-  val context = LocalContext.current
-  return if (item.downloadState.toReadableState(context) == context.getString(string.paused_state)) {
+private fun getPauseResumeButtonIcon(isPaused: Boolean): IconItem {
+  return if (isPaused) {
     IconItem.Drawable(R.drawable.ic_play_24dp)
   } else {
     IconItem.Drawable(R.drawable.ic_pause_24dp)
