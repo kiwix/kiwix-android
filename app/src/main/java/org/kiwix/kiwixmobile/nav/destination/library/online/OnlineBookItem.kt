@@ -80,7 +80,7 @@ fun OnlineBookItem(
   onBookItemClick: (BookItem) -> Unit
 ) {
   var hasAvailableSpaceInStorage by remember { mutableStateOf(false) }
-  LaunchedEffect(item, availableSpaceCalculator) {
+  LaunchedEffect(item.book, item.fileSystemState, availableSpaceCalculator) {
     hasAvailableSpaceInStorage =
       availableSpaceCalculator.hasAvailableSpaceForBook(item.book)
   }
