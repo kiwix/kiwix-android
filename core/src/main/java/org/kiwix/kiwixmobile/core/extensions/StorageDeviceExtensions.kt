@@ -61,7 +61,7 @@ suspend fun StorageDevice.storagePathAndTitle(
     context.getString(R.string.external_storage)
   }
   val storagePath = if (index == kiwixDataStore.selectedStoragePosition.first()) {
-    kiwixDataStore.selectedStorage
+    kiwixDataStore.selectedStorage.first()
   } else {
     getStoragePathForNonSelectedStorage(this, kiwixDataStore)
   }

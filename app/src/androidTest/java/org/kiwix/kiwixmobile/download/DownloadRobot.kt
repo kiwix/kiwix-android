@@ -194,14 +194,16 @@ class DownloadRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
-    composeTestRule.apply {
-      waitUntilTimeout(TestUtils.TEST_PAUSE_MS.toLong())
-      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-          .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
-          .isDisplayed()
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
+            .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+            .isDisplayed()
+        }
       }
-    }
+    })
   }
 
   fun resumeDownload(composeTestRule: ComposeContentTestRule) {
