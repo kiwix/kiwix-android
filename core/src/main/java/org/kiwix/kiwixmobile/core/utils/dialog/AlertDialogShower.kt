@@ -201,8 +201,7 @@ fun DialogConfirmButton(
         text = confirmButtonText.uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        textAlign = TextAlign.Center
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
@@ -227,8 +226,7 @@ fun DialogDismissButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        textAlign = TextAlign.Center
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
@@ -254,8 +252,7 @@ private fun DialogNaturalButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        textAlign = TextAlign.Center
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
