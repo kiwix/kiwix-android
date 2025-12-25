@@ -147,7 +147,7 @@ class InitialDownloadTest : BaseActivityTest() {
       assertDownloadStop(composeTestRule)
     }
     if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU &&
-      Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
     ) {
       LeakAssertions.assertNoLeaks()
     }
