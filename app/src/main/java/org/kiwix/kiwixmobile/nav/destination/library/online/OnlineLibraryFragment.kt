@@ -86,6 +86,7 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -302,14 +303,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       kiwixDataStore.selectedOnlineContentLanguage.first().takeUnless { it.isBlank() }
     },
     false,
-    1
+    ZERO
   )
 
   private fun observeViewModelData() {
     zimManageViewModel.apply {
       // Observe when library items changes.
       libraryItems
-        .onEach { onLibraryItemsChange(it) }
+        .onEach { onLibraryItemsChange(it.items) }
         .launchIn(viewLifecycleOwner.lifecycleScope)
       // Observe when online library downloading.
       onlineLibraryDownloading

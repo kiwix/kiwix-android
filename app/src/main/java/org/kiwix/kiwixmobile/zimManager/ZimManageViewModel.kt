@@ -77,14 +77,14 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_OPDS_LIBRARY_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
-import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
+import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -103,9 +103,9 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -168,14 +168,20 @@ class ZimManageViewModel @Inject constructor(
     val books: List<LibkiwixBook>
   )
 
+  data class LibraryListItemWrapper(
+    val items: List<LibraryListItem>,
+    val version: Long = System.nanoTime()
+  )
+
   private lateinit var validateZimViewModel: ValidateZimViewModel
 
   @Suppress("InjectDispatcher")
   private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
-  private val _libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
-  val libraryItems: StateFlow<List<LibraryListItem>> = _libraryItems.asStateFlow()
+  private val _libraryItems =
+    MutableStateFlow<LibraryListItemWrapper>(LibraryListItemWrapper(emptyList()))
+  val libraryItems: StateFlow<LibraryListItemWrapper> = _libraryItems.asStateFlow()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
@@ -193,7 +199,18 @@ class ZimManageViewModel @Inject constructor(
   val onlineLibraryDownloading = MutableStateFlow(false to false)
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-  val networkLibrary = MutableStateFlow<List<LibkiwixBook>>(emptyList())
+  val networkLibrary = MutableStateFlow<OnlineLibraryResult>(
+    OnlineLibraryResult(
+      OnlineLibraryRequest(
+        query = null,
+        category = null,
+        lang = null,
+        isLoadMoreItem = false,
+        page = ZERO
+      ),
+      emptyList()
+    )
+  )
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
   private val requestDownloadLibrary = MutableSharedFlow<OnlineLibraryRequest>(
@@ -208,7 +225,7 @@ class ZimManageViewModel @Inject constructor(
         category = null,
         lang = null,
         isLoadMoreItem = false,
-        page = 0
+        page = ZERO
       )
     )
   val requestFiltering = MutableStateFlow("")
@@ -357,7 +374,7 @@ class ZimManageViewModel @Inject constructor(
     requestFiltering
       .onEach {
         updateOnlineLibraryFilters(
-          OnlineLibraryRequest(query = it, page = ONE, isLoadMoreItem = false)
+          OnlineLibraryRequest(query = it, page = ZERO, isLoadMoreItem = false)
         )
       }
       .debounce(500)
@@ -500,7 +517,7 @@ class ZimManageViewModel @Inject constructor(
 
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun requestsAndConnectivityChangesToLibraryRequests(
-    library: MutableStateFlow<List<LibkiwixBook>>
+    onlineLibraryResult: MutableStateFlow<OnlineLibraryResult>
   ) = requestDownloadLibrary.onEach { onlineLibraryRequest ->
     onlineLibraryFetchingJob?.cancel()
 
@@ -519,19 +536,23 @@ class ZimManageViewModel @Inject constructor(
         .catch {
           it.printStackTrace()
           resetDownloadState()
-          if (library.value.isEmpty()) {
-            library.emit(emptyList())
+          if (onlineLibraryResult.value.books.isEmpty()) {
+            onlineLibraryResult.emit(
+              OnlineLibraryResult(onlineLibraryResult.value.onlineLibraryRequest, emptyList())
+            )
           }
         }
         .collect { result ->
           resetDownloadState()
-          library.emit(
+          val newResult = OnlineLibraryResult(
+            result.onlineLibraryRequest,
             if (result.onlineLibraryRequest.isLoadMoreItem) {
-              library.value + result.books
+              onlineLibraryResult.value.books + result.books
             } else {
               result.books
             }
           )
+          onlineLibraryResult.emit(newResult)
         }
     }
   }.flowOn(ioDispatcher)
@@ -540,7 +561,7 @@ class ZimManageViewModel @Inject constructor(
   private fun shouldProceedWithDownload(onlineLibraryRequest: OnlineLibraryRequest): Flow<KiwixService> {
     val baseUrl = KIWIX_OPDS_LIBRARY_URL
     val start =
-      onlineLibraryManager.getStartOffset(onlineLibraryRequest.page.minus(ONE), ITEMS_PER_PAGE)
+      onlineLibraryManager.getStartOffset(onlineLibraryRequest.page, ITEMS_PER_PAGE)
     val shouldTrackProgress = !onlineLibraryRequest.isLoadMoreItem
     return if (connectivityManager.isWifi()) {
       flowOf(
@@ -587,7 +608,7 @@ class ZimManageViewModel @Inject constructor(
       R.string.starting_downloading_remote_library
     )
     val start =
-      onlineLibraryManager.getStartOffset(request.page.minus(ONE), ITEMS_PER_PAGE)
+      onlineLibraryManager.getStartOffset(request.page, ITEMS_PER_PAGE)
     val buildUrl = onlineLibraryManager.buildLibraryUrl(
       KIWIX_OPDS_LIBRARY_URL,
       start,
@@ -633,7 +654,7 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLibraryItems(
     localBooksFromLibkiwix: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
-    library: MutableStateFlow<List<LibkiwixBook>>
+    library: MutableStateFlow<OnlineLibraryResult>
   ) = viewModelScope.launch(ioDispatcher) {
     combine(
       localBooksFromLibkiwix,
@@ -643,12 +664,12 @@ class ZimManageViewModel @Inject constructor(
     ) { args ->
       val books = args[ZERO] as List<Book>
       val activeDownloads = args[ONE] as List<DownloadModel>
-      val libraryNetworkEntity = args[TWO] as List<LibkiwixBook>
+      val onlineLibraryResult = args[TWO] as OnlineLibraryResult
       val fileSystemState = args[THREE] as FileSystemState
       combineLibrarySources(
         booksOnFileSystem = books,
         activeDownloads = activeDownloads,
-        onlineBooks = libraryNetworkEntity,
+        onlineLibraryResult = onlineLibraryResult,
         fileSystemState = fileSystemState
       )
     }
@@ -658,17 +679,17 @@ class ZimManageViewModel @Inject constructor(
         throwable.printStackTrace()
         Log.e("ZimManageViewModel", "Error----$throwable")
       }
-      .collect { _libraryItems.emit(it) }
+      .collect { _libraryItems.emit(LibraryListItemWrapper(it)) }
   }
 
   @Suppress("UnsafeCallOnNullableType")
   private suspend fun combineLibrarySources(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
-    onlineBooks: List<LibkiwixBook>,
+    onlineLibraryResult: OnlineLibraryResult,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
-    val allBooks = onlineBooks - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
+    val allBooks = onlineLibraryResult.books - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
     val downloadingBooks =
       activeDownloads.map { download ->
         allBooks.firstOrNull { it.id == download.book.id } ?: download.book
