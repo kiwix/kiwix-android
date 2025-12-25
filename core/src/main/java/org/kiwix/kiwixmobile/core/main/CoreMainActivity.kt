@@ -99,6 +99,7 @@ private const val ADAPTIVE_ICON_INSET_DP = 36
 // Fragments names for compose based navigation.
 const val READER_FRAGMENT = "readerFragment"
 const val LOCAL_LIBRARY_SCREEN = "localLibraryScreen"
+const val UPDATE_SCREEN = "updateScreen"
 const val DOWNLOAD_SCREEN = "downloadsScreen"
 const val BOOKMARK_SCREEN = "bookmarkScreen"
 const val NOTES_SCREEN = "notesScreen"

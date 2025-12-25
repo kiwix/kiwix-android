@@ -118,6 +118,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.main.UpdateDialog
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -224,6 +225,10 @@ fun ReaderScreen(
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
       ) { paddingValues ->
+        ShowUpdateDialog(
+          state,
+          navHostController
+        )
         OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
           state,
@@ -712,6 +717,19 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
         state.laterButtonClick
       )
     }
+  }
+}
+
+@Composable
+private fun ShowUpdateDialog(
+  state: ReaderScreenState,
+  navHostController: NavHostController
+) {
+  if (state.shouldShowUpdatePopup) {
+    UpdateDialog(
+      onConfirm = { navHostController.navigate("updateScreen") },
+      onDismiss = {}
+    )
   }
 }
 

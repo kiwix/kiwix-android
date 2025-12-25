@@ -12,9 +12,13 @@ plugins {
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
+fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
+
 android {
   defaultConfig {
     buildConfigField("long", "VERSION_CODE", "".getVersionCode().toString())
+    buildConfigField("String", "VERSION_NAME", "\"${generateVersionName()}\"")
+    resValue("string", "app_name", "Kiwix")
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
   buildTypes {

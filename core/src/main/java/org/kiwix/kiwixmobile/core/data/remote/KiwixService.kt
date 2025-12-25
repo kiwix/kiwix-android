@@ -46,7 +46,7 @@ interface KiwixService {
   @GET("catalog/v2/categories")
   suspend fun getCategories(): CategoryFeed
 
-  @GET("/kiwix/release/kiwix-android/feed")
+  @GET("kiwix/release/kiwix-android/feed.xml")
   suspend fun getUpdates(): UpdateFeed
 
   /******** Helper class that sets up new services  */
