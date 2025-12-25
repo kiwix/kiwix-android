@@ -35,6 +35,7 @@ class KiwixConfigurationPlugin : Plugin<Project> {
         is LibraryPlugin -> {
           doDefaultConfiguration(target, true)
         }
+
         is AppPlugin -> {
           doDefaultConfiguration(target, false)
           appConfigurer.configure(target)
