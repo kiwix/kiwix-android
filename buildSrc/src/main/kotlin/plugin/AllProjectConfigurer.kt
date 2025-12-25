@@ -43,7 +43,6 @@ class AllProjectConfigurer {
     target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")
-    target.plugins.apply("androidx.navigation.safeargs")
   }
 
   fun configureBaseExtension(target: Project, isLibrary: Boolean) {
@@ -208,13 +207,7 @@ class AllProjectConfigurer {
       implementation(Libs.kotlin_stdlib_jdk8)
       implementation(Libs.appcompat)
       implementation(Libs.material)
-      implementation(Libs.constraintlayout)
-      implementation(Libs.swipe_refresh_layout)
       implementation(Libs.multidex)
-      // navigation
-      implementation(Libs.navigation_fragment_ktx)
-      implementation(Libs.navigation_ui_ktx)
-      androidTestImplementation(Libs.navigation_testing)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
       testImplementation(Libs.junit_jupiter)

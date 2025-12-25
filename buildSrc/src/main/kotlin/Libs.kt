@@ -102,30 +102,6 @@ object Libs {
     "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:" + Versions.kotlin_ksp
 
   /**
-   * https://developer.android.com/topic/libraries/architecture/index.html
-   */
-  const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +
-    Versions.androidx_navigation
-
-  /**
-   * https://developer.android.com/topic/libraries/architecture/index.html
-   */
-  const val navigation_safe_args_gradle_plugin: String =
-    "androidx.navigation:navigation-safe-args-gradle-plugin:" + Versions.androidx_navigation
-
-  /**
-   * https://developer.android.com/topic/libraries/architecture/index.html
-   */
-  const val navigation_testing: String = "androidx.navigation:navigation-testing:" +
-    Versions.androidx_navigation
-
-  /**
-   * https://developer.android.com/topic/libraries/architecture/index.html
-   */
-  const val navigation_ui_ktx: String = "androidx.navigation:navigation-ui-ktx:" +
-    Versions.navigation_ui_ktx
-
-  /**
    * https://github.com/google/dagger
    */
   const val dagger: String = "com.google.dagger:dagger:" + Versions.com_google_dagger
@@ -217,15 +193,6 @@ object Libs {
   const val leakcanary_android_instrumentation: String =
     "com.squareup.leakcanary:leakcanary-android-instrumentation:" +
       Versions.leakcanary_android
-
-  /**
-   * http://tools.android.com
-   */
-  const val constraintlayout: String = "androidx.constraintlayout:constraintlayout:" +
-    Versions.constraintlayout
-
-  const val swipe_refresh_layout: String = "androidx.swiperefreshlayout:swiperefreshlayout:" +
-    Versions.swipe_refresh_layout
 
   /**
    * http://developer.android.com/tools/extras/support-library.html

@@ -27,9 +27,7 @@ import kotlin.collections.List
 
 class DocumentParser(private var listener: DocumentParser.SectionsListener) {
   private var title: String = ""
-
-  @Suppress("DoubleMutabilityForCollection")
-  private var sections = ArrayList<DocumentSection>()
+  private val sections = mutableListOf<DocumentSection>()
 
   fun initInterface(webView: WebView) {
     webView.addJavascriptInterface(ParserCallback(), "DocumentParser")
@@ -58,12 +56,12 @@ class DocumentParser(private var listener: DocumentParser.SectionsListener) {
 
     @JavascriptInterface fun start() {
       title = ""
-      sections = ArrayList()
+      sections.clear()
       Handler(Looper.getMainLooper()).post(Runnable(listener::clearSections))
     }
 
     @JavascriptInterface fun stop() {
-      val listToBeSentToMainThread: List<DocumentSection> = ArrayList(sections)
+      val listToBeSentToMainThread: List<DocumentSection> = sections.toList()
       Handler(Looper.getMainLooper()).post {
         listener.sectionsLoaded(
           title,
