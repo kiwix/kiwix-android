@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
@@ -221,7 +222,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
       downloader.pauseResumeDownload(
         item.downloadId,
-        item.downloadState.toReadableState(context) == getString(string.paused_state)
+        item.downloadState == DownloadState.Paused
       )
     }
   }
