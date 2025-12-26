@@ -22,7 +22,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -209,7 +208,7 @@ private fun LazyListScope.spellingCorrectionHeader() {
     Text(
       text = stringResource(R.string.do_you_mean),
       fontSize = SEARCH_ITEM_TEXT_SIZE,
-      fontWeight = FontWeight.Companion.W700,
+      fontWeight = FontWeight.W700,
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier
         .fillMaxWidth()
@@ -360,7 +359,6 @@ private fun SearchListItem(
           stringResource(R.string.search_open_in_new_tab) + searchListItem.hashCode()
       )
     }
-
   }
 }
 
