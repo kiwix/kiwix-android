@@ -23,11 +23,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -205,7 +208,7 @@ private fun LazyListScope.spellingCorrectionHeader() {
     Text(
       text = stringResource(R.string.do_you_mean),
       fontSize = SEARCH_ITEM_TEXT_SIZE,
-      fontWeight = FontWeight.Companion.W700,
+      fontWeight = FontWeight.W700,
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier
         .fillMaxWidth()
@@ -314,27 +317,34 @@ private fun SearchListItem(
 ) {
   Row(
     modifier = Modifier
-      .fillMaxSize()
+      .fillMaxWidth()
+      .height(IntrinsicSize.Min)
       .padding(horizontal = EIGHT_DP)
       .padding(top = SEVEN_DP)
       .background(
         shape = RoundedCornerShape(EIGHT_DP),
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
-      ),
+      )
+      .clip(RoundedCornerShape(EIGHT_DP)),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Text(
-      text = searchListItem.value,
+    Box(
       modifier = Modifier
         .weight(1f)
-        .padding(horizontal = EIGHT_DP)
+        .fillMaxHeight()
         .combinedClickable(
           onClick = { onItemClick(searchListItem) },
           onLongClick = { onItemLongClick?.invoke(searchListItem) }
         )
-        .semantics { testTag = SEARCH_ITEM_TESTING_TAG },
-      fontSize = SEARCH_ITEM_TEXT_SIZE,
-    )
+        .semantics { testTag = SEARCH_ITEM_TESTING_TAG }
+        .padding(horizontal = EIGHT_DP),
+      contentAlignment = Alignment.CenterStart
+    ) {
+      Text(
+        text = searchListItem.value,
+        fontSize = SEARCH_ITEM_TEXT_SIZE
+      )
+    }
 
     IconButton(
       onClick = { onNewTabIconClick(searchListItem) },
@@ -345,7 +355,8 @@ private fun SearchListItem(
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-        contentDescription = stringResource(id = R.string.search_open_in_new_tab) + searchListItem.hashCode(),
+        contentDescription =
+          stringResource(R.string.search_open_in_new_tab) + searchListItem.hashCode()
       )
     }
   }
