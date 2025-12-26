@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -62,7 +63,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
@@ -77,6 +77,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
 const val ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG = "alertDialogConfirmButtonTestingTag"
@@ -204,14 +205,14 @@ fun DialogConfirmButton(
         top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
         bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
         start = ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current),
-        end = ZERO.dp
+        end = ButtonDefaults.TextButtonContentPadding.calculateEndPadding(LocalLayoutDirection.current)
       )
     ) {
       Text(
         text = confirmButtonText.uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
       )
     }
   }
