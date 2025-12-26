@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_UPDATE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Suppress("all")
@@ -44,7 +43,6 @@ class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted private val params: WorkerParameters,
   private var kiwixService: KiwixService,
-  private val kiwixDataStore: KiwixDataStore,
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     kiwixService =
@@ -52,19 +50,11 @@ class UpdateWorkManager @AssistedInject constructor(
         okHttpClient = getOkHttpClient(),
         KIWIX_UPDATE_URL
       )
-    val updates = kiwixService.getUpdates().channel
-    val version = updates?.items?.first()?.title
-    version.let {
-      val appVersion = it!!.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
-      kiwixDataStore.setLatestAppVersion(appVersion)
-    }
+    val updates = kiwixService.getUpdates().channel?.items?.first()?.title
+    val appVersion = updates?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
     return Result.success()
   }
 
-  /**
-   * class annotate with @AssistedFactory will available in the dependency graph, you don't need
-   * additional binding
-   */
   @AssistedFactory
   interface Factory {
     fun create(appContext: Context, params: WorkerParameters): UpdateWorkManager
