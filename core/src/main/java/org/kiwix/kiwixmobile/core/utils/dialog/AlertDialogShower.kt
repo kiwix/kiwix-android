@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -204,7 +205,7 @@ fun DialogConfirmButton(
         top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
         bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
         start = ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current),
-        end = ZERO.dp
+        end = ButtonDefaults.TextButtonContentPadding.calculateEndPadding(LocalLayoutDirection.current)
       )
     ) {
       Text(
@@ -212,7 +213,6 @@ fun DialogConfirmButton(
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        textAlign = TextAlign.Center,
       )
     }
   }
@@ -242,8 +242,7 @@ fun DialogDismissButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        textAlign = TextAlign.Center,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
@@ -274,8 +273,7 @@ private fun DialogNaturalButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        textAlign = TextAlign.Center,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
