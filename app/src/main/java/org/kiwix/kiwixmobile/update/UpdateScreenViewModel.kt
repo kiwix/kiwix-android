@@ -22,8 +22,8 @@ import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 class UpdateScreenViewModel @Inject constructor(
-  /*private val context: Application,
-  private val kiwixDataStore: KiwixDataStore,
-  private var kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver*/
+  /*  private val context: Application,
+    private val kiwixDataStore: KiwixDataStore,
+    private var kiwixService: KiwixService,
+    private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver*/
 ) : ViewModel()
