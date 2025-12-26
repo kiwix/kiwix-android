@@ -29,6 +29,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
+import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
@@ -43,6 +45,7 @@ class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted private val params: WorkerParameters,
   private var kiwixService: KiwixService,
+  private val appUpdateDao: AppUpdateDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     kiwixService =
@@ -52,6 +55,13 @@ class UpdateWorkManager @AssistedInject constructor(
       )
     val updates = kiwixService.getUpdates().channel?.items?.first()?.title
     val appVersion = updates?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
+    appUpdateDao.updateLatestAppUpdate(
+      AppUpdateEntity(
+        name = "kiwix apk",
+        version = appVersion!!,
+        url = "www.test.com"
+      )
+    )
     return Result.success()
   }
 
