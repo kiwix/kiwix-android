@@ -25,12 +25,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BundleRoomConverter
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.ErrorConverter
@@ -49,9 +51,10 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     HistoryRoomEntity::class,
     NotesRoomEntity::class,
     DownloadRoomEntity::class,
-    WebViewHistoryEntity::class
+    WebViewHistoryEntity::class,
+    AppUpdateEntity::class
   ],
-  version = 10,
+  version = 11,
   exportSchema = false
 )
 @TypeConverters(
@@ -68,6 +71,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun notesRoomDao(): NotesRoomDao
   abstract fun downloadRoomDao(): DownloadRoomDao
   abstract fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
+  abstract fun appUpdateDao(): AppUpdateDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null

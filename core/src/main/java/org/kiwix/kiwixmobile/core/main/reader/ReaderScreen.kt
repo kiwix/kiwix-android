@@ -124,6 +124,7 @@ import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.main.UpdateDialog
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -217,6 +218,10 @@ fun ReaderScreen(
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
       ) { paddingValues ->
+        ShowUpdateDialog(
+          state,
+          navHostController
+        )
         OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
           state,
@@ -512,7 +517,7 @@ fun SearchPlaceholder(hint: String, searchPlaceHolderClick: () -> Unit) {
     )
     Spacer(modifier = Modifier.width(TEN_DP))
     Icon(
-      painter = IconItem.Drawable(R.drawable.action_search).toPainter(),
+      painter = Drawable(R.drawable.action_search).toPainter(),
       contentDescription = stringResource(R.string.search_label),
       tint = White
     )
@@ -556,8 +561,8 @@ private fun ShowZIMFileContent(
           FrameLayout(context).apply {
             (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
             selectedWebView.layoutParams = FrameLayout.LayoutParams(
-              FrameLayout.LayoutParams.MATCH_PARENT,
-              FrameLayout.LayoutParams.MATCH_PARENT
+              MATCH_PARENT,
+              MATCH_PARENT
             )
             addView(selectedWebView)
           }
@@ -777,6 +782,19 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
         state.laterButtonClick
       )
     }
+  }
+}
+
+@Composable
+private fun ShowUpdateDialog(
+  state: ReaderScreenState,
+  navHostController: NavHostController
+) {
+  if (state.shouldShowUpdatePopup) {
+    UpdateDialog(
+      onConfirm = { navHostController.navigate("updateScreen") },
+      onDismiss = {}
+    )
   }
 }
 

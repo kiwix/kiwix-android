@@ -165,6 +165,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
+import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
 import org.kiwix.libkiwix.Book
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -272,6 +273,7 @@ abstract class CoreReaderFragment :
       onOpenLibraryButtonClicked = {},
       pageLoadingItem = false to ZERO,
       shouldShowDonationPopup = false,
+      shouldShowUpdatePopup = false,
       fullScreenItem = false to null,
       showBackToTopButton = false,
       backToTopButtonClick = { backToTop() },
@@ -461,6 +463,7 @@ abstract class CoreReaderFragment :
           // Update the title when Compose is ready to fix the issue
           // where the user opens pages from history, notes, or bookmarks.
           updateTitle()
+          fetchUpdate()
         }
         LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
           readerScreenState.update {
@@ -2595,6 +2598,16 @@ abstract class CoreReaderFragment :
       zimReaderContainer?.zimFileReader?.let {
         webView.loadUrl(redirectOrOriginal(contentUrl("${it.mainPage}")))
       }
+    }
+  }
+
+  // update comparison
+  private suspend fun fetchUpdate() {
+    // BuildConfig.VERSION_NAME
+    val currentVersion = VersionId("3.9.11")
+    val available = VersionId("3.9.11")
+    if (available > currentVersion) {
+      readerScreenState.update { copy(shouldShowUpdatePopup = true) }
     }
   }
 
