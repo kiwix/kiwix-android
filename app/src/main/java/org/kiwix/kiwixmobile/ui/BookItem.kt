@@ -48,7 +48,6 @@ import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
@@ -73,31 +72,29 @@ fun BookItem(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   selectionMode: SelectionMode = SelectionMode.NORMAL,
 ) {
-  KiwixTheme {
-    Card(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(FIVE_DP)
-        .combinedClickable(
-          onClick = {
-            when (selectionMode) {
-              SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
-              SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
-            }
-          },
-          onLongClick = {
-            if (selectionMode == SelectionMode.NORMAL) {
-              onLongClick?.invoke(bookOnDisk)
-            }
+  Card(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(FIVE_DP)
+      .combinedClickable(
+        onClick = {
+          when (selectionMode) {
+            SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
+            SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
           }
-        )
-        .testTag(BOOK_ITEM_TESTING_TAG),
-      shape = MaterialTheme.shapes.extraSmall,
-      elevation = CardDefaults.elevatedCardElevation(),
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-    ) {
-      BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
-    }
+        },
+        onLongClick = {
+          if (selectionMode == SelectionMode.NORMAL) {
+            onLongClick?.invoke(bookOnDisk)
+          }
+        }
+      )
+      .testTag(BOOK_ITEM_TESTING_TAG),
+    shape = MaterialTheme.shapes.extraSmall,
+    elevation = CardDefaults.elevatedCardElevation(),
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+  ) {
+    BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
   }
 }
 
