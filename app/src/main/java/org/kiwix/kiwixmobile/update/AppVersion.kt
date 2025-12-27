@@ -21,7 +21,5 @@ package org.kiwix.kiwixmobile.update
 data class AppVersion(
   val name: String,
   val version: String,
-  val apkSize: Long,
-  val apkUrl: String,
-  val description: String,
+  val apkUrl: String
 )

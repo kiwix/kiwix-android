@@ -18,12 +18,53 @@
 
 package org.kiwix.kiwixmobile.update
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
+import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
+import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
 
 class UpdateScreenViewModel @Inject constructor(
-  /*  private val context: Application,
-    private val kiwixDataStore: KiwixDataStore,
-    private var kiwixService: KiwixService,
-    private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver*/
-) : ViewModel()
+  private val appUpdateDao: AppUpdateDao,
+  private val downloader: Downloader
+) : ViewModel() {
+  private val _state = mutableStateOf(UpdateStates())
+  val state: State<UpdateStates> = _state
+
+  init {
+    getLatestAppVersion()
+  }
+
+  private fun getLatestAppVersion() {
+    val latestAppVersion: AppUpdateEntity = appUpdateDao.getLatestAppUpdate()
+    _state.value = _state.value.copy(
+      apkVersion = AppVersion(
+        apkUrl = latestAppVersion.version,
+        name = latestAppVersion.name,
+        version = latestAppVersion.version
+      )
+    )
+  }
+
+  private fun downloadApp(url: String) {
+    downloader.downloadApk(url)
+  }
+
+  fun event(event: UpdateEvents) {
+    when (event) {
+      is UpdateEvents.DownloadApp -> {
+        downloadApp(event.url)
+      }
+
+      is UpdateEvents.CancelDownload -> {
+        // downloader.cancelDownload()
+      }
+
+      is UpdateEvents.RetrieveLatestAppVersion -> {
+        getLatestAppVersion()
+      }
+    }
+  }
+}
