@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import javax.inject.Inject
 
@@ -34,6 +35,19 @@ class DownloaderImpl @Inject constructor(
   @OPDSKiwixService private val kiwixService: KiwixService,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : Downloader {
+  @Suppress("InjectDispatcher")
+  override fun downloadApk(url: String) {
+    CoroutineScope(ioDispatcher).launch {
+      runCatching {
+        downloadRequester.enqueue(DownloadRequest(url))
+        downloadRequester.startDownloadMonitorService()
+      }.onFailure {
+        it.printStackTrace()
+      }
+    }
+  }
+
+  @Suppress("InjectDispatcher")
   override fun download(book: LibkiwixBook) {
     CoroutineScope(ioDispatcher).launch {
       runCatching {
