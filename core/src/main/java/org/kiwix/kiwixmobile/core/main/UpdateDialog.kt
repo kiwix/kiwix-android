@@ -16,10 +16,35 @@
  *
  */
 
-package org.kiwix.kiwixmobile.update
+package org.kiwix.kiwixmobile.core.main
 
-sealed class UpdateEvents {
-  data class DownloadApp(val url: String) : UpdateEvents()
-  data object CancelDownload : UpdateEvents()
-  data object RetrieveLatestAppVersion : UpdateEvents()
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+
+@Composable
+fun UpdateDialog(
+  onDismiss: () -> Unit,
+  onConfirm: () -> Unit
+) {
+  AlertDialog(
+    onDismissRequest = onDismiss,
+    title = {
+      Text(text = "Update Available")
+    },
+    text = {
+      Text(text = "A new version of the application is available. Would you like to update now?")
+    },
+    confirmButton = {
+      TextButton(onClick = onConfirm) {
+        Text("Yes")
+      }
+    },
+    dismissButton = {
+      TextButton(onClick = onDismiss) {
+        Text("No")
+      }
+    }
+  )
 }
