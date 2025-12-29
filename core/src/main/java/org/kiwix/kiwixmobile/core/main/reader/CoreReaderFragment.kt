@@ -2671,7 +2671,7 @@ abstract class CoreReaderFragment :
   }
 
   // update comparison
-  private suspend fun fetchUpdate() {
+  private fun fetchUpdate() {
     // BuildConfig.VERSION_NAME
     val currentVersion = VersionId("3.9.11")
     val available = VersionId("3.9.12")
@@ -2709,7 +2709,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun onUpdateIconClick() {
-    requireActivity().navigate(UPDATE_FRAGMENT)
+    activity?.navigate(UPDATE_FRAGMENT)
   }
 
   private fun bindService() {
