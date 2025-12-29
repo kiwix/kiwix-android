@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.update
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ fun UpdateScreen() {
     color = Color.White,
   ) {
     Column(
+      modifier = Modifier.background(color = Color.White),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center
     ) {
@@ -63,5 +65,5 @@ fun UpdateScreen() {
 @Preview
 @Composable
 fun UpdateScreenPreview() {
-  UpdateScreen()
+  // UpdateScreen(updateViewModel)
 }

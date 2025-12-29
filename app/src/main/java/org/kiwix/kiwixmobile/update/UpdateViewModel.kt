@@ -21,13 +21,11 @@ package org.kiwix.kiwixmobile.update
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
-import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
 
-class UpdateScreenViewModel @Inject constructor(
-  private val appUpdateDao: AppUpdateDao,
+class UpdateViewModel @Inject constructor(
+  // private val appUpdateDao: AppUpdateDao,
   private val downloader: Downloader
 ) : ViewModel() {
   private val _state = mutableStateOf(UpdateStates())
@@ -38,14 +36,14 @@ class UpdateScreenViewModel @Inject constructor(
   }
 
   private fun getLatestAppVersion() {
-    val latestAppVersion: AppUpdateEntity = appUpdateDao.getLatestAppUpdate()
+    /*val latestAppVersion: AppUpdateEntity = appUpdateDao.getLatestAppUpdate()
     _state.value = _state.value.copy(
       apkVersion = AppVersion(
         apkUrl = latestAppVersion.version,
         name = latestAppVersion.name,
         version = latestAppVersion.version
       )
-    )
+    )*/
   }
 
   private fun downloadApp(url: String) {

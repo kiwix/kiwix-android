@@ -113,6 +113,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
@@ -136,6 +137,9 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
+import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
+import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
@@ -502,7 +506,8 @@ abstract class CoreReaderFragment :
           documentSections = documentSections,
           showTableOfContentDrawer = shouldTableOfContentDrawer,
           onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
-          navHostController = (requireActivity() as CoreMainActivity).navController
+          navHostController = (requireActivity() as CoreMainActivity).navController,
+          onUpdateIconClick = { onUpdateIconClick() }
         )
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
@@ -2669,7 +2674,7 @@ abstract class CoreReaderFragment :
   private suspend fun fetchUpdate() {
     // BuildConfig.VERSION_NAME
     val currentVersion = VersionId("3.9.11")
-    val available = VersionId("3.9.11")
+    val available = VersionId("3.9.12")
     if (available > currentVersion) {
       readerScreenState.update { copy(shouldShowUpdatePopup = true) }
     }
@@ -2701,6 +2706,10 @@ abstract class CoreReaderFragment :
 
   override fun showDonationDialog() {
     showDonationLayout()
+  }
+
+  private fun onUpdateIconClick() {
+    requireActivity().navigate(UPDATE_FRAGMENT)
   }
 
   private fun bindService() {
