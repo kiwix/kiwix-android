@@ -2603,7 +2603,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun onUpdateIconClick() {
-    activity?.navigate(UPDATE_FRAGMENT)
+    requireActivity().navigate(UPDATE_FRAGMENT)
   }
 
   private fun bindService() {
