@@ -189,7 +189,8 @@ fun ReaderScreen(
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  navigationIcon: @Composable () -> Unit
+  onUpdateIconClick: () -> Unit,
+  navigationIcon: @Composable () -> Unit,
 ) {
   // For managing the scroll event handling of webView.
   val shouldUpdateTopAppBarAndBottomAppBarOnScrolling = remember { mutableStateOf(true) }
@@ -231,7 +232,7 @@ fun ReaderScreen(
       ) { paddingValues ->
         ShowUpdateDialog(
           state,
-          navHostController
+          onUpdateIconClick
         )
         OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
@@ -790,11 +791,11 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
 @Composable
 private fun ShowUpdateDialog(
   state: ReaderScreenState,
-  navHostController: NavHostController
+  onUpdateIconClick: () -> Unit
 ) {
   if (state.shouldShowUpdatePopup) {
     UpdateDialog(
-      onConfirm = { navHostController.navigate("updateScreen") },
+      onConfirm = onUpdateIconClick,
       onDismiss = {}
     )
   }

@@ -48,6 +48,7 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(localFileTransferFragment: LocalFileTransferFragment)
   fun inject(zimHostFragment: ZimHostFragment)
+  fun inject(updateFragment: UpdateFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
   fun inject(onlineCategoryDialog: OnlineCategoryDialog)
