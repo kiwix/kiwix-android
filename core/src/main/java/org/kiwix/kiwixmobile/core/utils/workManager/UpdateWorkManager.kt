@@ -53,13 +53,13 @@ class UpdateWorkManager @AssistedInject constructor(
         okHttpClient = getOkHttpClient(),
         KIWIX_UPDATE_URL
       )
-    val updates = kiwixService.getUpdates().channel?.items?.first()?.title
-    val appVersion = updates?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
+    val updates = kiwixService.getUpdates().channel?.items?.first()
+    val appVersion = updates?.title?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
     appUpdateDao.updateLatestAppUpdate(
       AppUpdateEntity(
-        name = "kiwix apk",
+        name = updates!!.title,
         version = appVersion!!,
-        url = "www.test.com"
+        url = updates.link
       )
     )
     return Result.success()

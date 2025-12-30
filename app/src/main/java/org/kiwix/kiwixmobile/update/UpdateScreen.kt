@@ -33,7 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun UpdateScreen() {
+fun UpdateScreen(
+  states: UpdateStates,
+  events: (UpdateEvents) -> Unit
+) {
   Surface(
     modifier = Modifier
       .fillMaxSize(),
@@ -44,11 +47,21 @@ fun UpdateScreen() {
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center
     ) {
-      Text("apk version name: ")
-      Text("url: ")
+      Text(
+        "apk version name:${states.apkVersion.name}",
+        color = Color.Black
+      )
+      Text(
+        "url: ${states.apkVersion.apkUrl}",
+        color = Color.Black
+      )
       Row {
         Button(
-          onClick = {}
+          onClick = {
+            events(
+              UpdateEvents.DownloadApp("")
+            )
+          }
         ) {
           Text("download")
         }
