@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.main
 data class BottomNavItem(
   val route: String,
   val title: String,
-  val iconRes: Int,
+  val selectedIcon: Int,
+  val unselectedIcon: Int,
   val testingTag: String
 )

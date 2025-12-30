@@ -20,8 +20,11 @@ package org.kiwix.kiwixmobile.main
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -33,12 +36,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -151,6 +154,75 @@ private fun OnUserBackPressed(
   }
 }
 
+@Composable
+private fun bottomNavItemList(): List<BottomNavItem> = listOf(
+  BottomNavItem(
+    route = KiwixDestination.Reader.route,
+    title = stringResource(id = R.string.reader),
+    selectedIcon = drawable.ic_reader_navigation_white_24px,
+    unselectedIcon = drawable.ic_navigation_reader_unfilled,
+    testingTag = BOTTOM_NAV_READER_ITEM_TESTING_TAG
+  ),
+  BottomNavItem(
+    route = KiwixDestination.Library.route,
+    title = stringResource(id = R.string.library),
+    selectedIcon = drawable.ic_library_navigation_white_24dp,
+    unselectedIcon = drawable.ic_navigation_library_unfilled,
+    testingTag = BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
+  ),
+  BottomNavItem(
+    route = KiwixDestination.Downloads.route,
+    title = stringResource(id = R.string.download),
+    selectedIcon = drawable.ic_download_navigation_white_24dp,
+    unselectedIcon = drawable.ic_navigation_download_unfilled,
+    testingTag = BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
+  )
+)
+
+@Composable
+private fun RowScope.BottomNavItemView(
+  item: BottomNavItem,
+  selected: Boolean,
+  navController: NavHostController,
+  leftDrawerState: DrawerState,
+  uiCoroutineScope: CoroutineScope
+) {
+  val scale by animateFloatAsState(
+    targetValue = if (selected) 1.15f else 1f,
+    animationSpec = tween(durationMillis = 200),
+    label = "BottomNavBounce"
+  )
+  val icon = if (selected) item.selectedIcon else item.unselectedIcon
+
+  NavigationBarItem(
+    selected = selected,
+    onClick = {
+      uiCoroutineScope.launch {
+        leftDrawerState.close()
+        navController.navigate(item.route) {
+          launchSingleTop = true
+          popUpTo(navController.graph.findStartDestination().id) {
+            saveState = item.route != KiwixDestination.Reader.route
+          }
+          restoreState = item.route != KiwixDestination.Reader.route
+        }
+      }
+    },
+    icon = {
+      Icon(
+        painter = painterResource(icon),
+        contentDescription = item.title,
+        modifier = Modifier.graphicsLayer {
+          scaleX = scale
+          scaleY = scale
+        }
+      )
+    },
+    label = { Text(item.title) },
+    modifier = Modifier.semantics { testTag = item.testingTag }
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar(
@@ -160,26 +232,8 @@ fun BottomNavigationBar(
   leftDrawerState: DrawerState,
   uiCoroutineScope: CoroutineScope
 ) {
-  val bottomNavItems = listOf(
-    BottomNavItem(
-      route = KiwixDestination.Reader.route,
-      title = stringResource(id = R.string.reader),
-      iconRes = drawable.ic_reader_navigation_white_24px,
-      testingTag = BOTTOM_NAV_READER_ITEM_TESTING_TAG
-    ),
-    BottomNavItem(
-      route = KiwixDestination.Library.route,
-      title = stringResource(id = R.string.library),
-      iconRes = drawable.ic_library_navigation_white_24dp,
-      testingTag = BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
-    ),
-    BottomNavItem(
-      route = KiwixDestination.Downloads.route,
-      title = stringResource(id = R.string.download),
-      iconRes = drawable.ic_download_navigation_white_24dp,
-      testingTag = BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
-    )
-  )
+  // Retrieve BottomNav Tabs Here
+  val bottomNavItems = bottomNavItemList()
   val currentDestinationRoute = navBackStackEntry?.destination?.route
   BottomAppBar(
     containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -187,37 +241,16 @@ fun BottomNavigationBar(
     scrollBehavior = bottomAppBarScrollBehaviour
   ) {
     bottomNavItems.forEach { item ->
-      NavigationBarItem(
-        selected = currentDestinationRoute == item.route,
-        onClick = {
-          uiCoroutineScope.launch {
-            leftDrawerState.close()
-            navController.navigate(item.route) {
-              // Avoid multiple copies of the same destination
-              launchSingleTop = true
 
-              // Pop up to the start destination of the graph to avoid building up a large stack
-              popUpTo(navController.graph.findStartDestination().id) {
-                // Bug fix #4392
-                saveState = item.route != KiwixDestination.Reader.route
-              }
+      val isSelected = currentDestinationRoute == item.route
 
-              // Restore state when reselecting a previously selected tab
-              restoreState = item.route != KiwixDestination.Reader.route
-            }
-          }
-        },
-        icon = {
-          Icon(
-            painter = painterResource(id = item.iconRes),
-            contentDescription = item.title,
-            tint = MaterialTheme.colorScheme.onBackground
-          )
-        },
-        label = { Text(item.title, color = MaterialTheme.colorScheme.onBackground) },
-        modifier = Modifier.semantics { testTag = item.testingTag },
-        colors = NavigationBarItemDefaults.colors()
-          .copy(selectedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f))
+      // Helper function to add BottomNav items
+      BottomNavItemView(
+        item = item,
+        selected = isSelected,
+        navController = navController,
+        leftDrawerState = leftDrawerState,
+        uiCoroutineScope = uiCoroutineScope
       )
     }
   }
