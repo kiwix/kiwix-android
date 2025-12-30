@@ -44,10 +44,21 @@ class UpdateViewModel @Inject constructor(
         version = latestAppVersion.version
       )
     )*/
+    _state.value = _state.value.copy(
+      apkVersion = AppVersion(
+        apkUrl = "https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk",
+        name = "3.14.0",
+        version = "kiwixmobile-3.14.0.apk"
+      )
+    )
   }
 
   private fun downloadApp(url: String) {
     downloader.downloadApk(url)
+  }
+
+  private fun cancelDownloadApp(downloadId: Long) {
+    downloader.cancelDownload(downloadId)
   }
 
   fun event(event: UpdateEvents) {
@@ -57,7 +68,7 @@ class UpdateViewModel @Inject constructor(
       }
 
       is UpdateEvents.CancelDownload -> {
-        // downloader.cancelDownload()
+        cancelDownloadApp(event.downloadId)
       }
 
       is UpdateEvents.RetrieveLatestAppVersion -> {

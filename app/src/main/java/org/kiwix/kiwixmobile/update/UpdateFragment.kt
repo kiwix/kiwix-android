@@ -43,8 +43,10 @@ class UpdateFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
-      updateViewModel.state.value
-      UpdateScreen()
+      UpdateScreen(
+        states = updateViewModel.state.value,
+        events = updateViewModel::event
+      )
     }
   }
 

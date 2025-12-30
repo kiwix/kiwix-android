@@ -118,7 +118,7 @@ fun KiwixNavGraph(
       }
     }
     composable(route = KiwixDestination.Update.route) {
-      FragmentContainer(R.id.readerFragmentContainer) {
+      FragmentContainer(R.id.updateFragmentContainer) {
         UpdateFragment()
       }
     }
