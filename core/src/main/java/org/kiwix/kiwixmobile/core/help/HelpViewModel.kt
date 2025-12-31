@@ -38,9 +38,7 @@ class HelpViewModel(
   fun getHelpItems(context: Context) {
     viewModelScope.launch {
       try {
-        android.util.Log.d("HelpViewModel", "Fetching help items...")
         val result = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-        android.util.Log.d("HelpViewModel", "isPlayStoreBuildWithAndroid11OrAbove: $result")
 
         val rawTitleDescriptionMap = when (result) {
           true -> listOf(

@@ -48,7 +48,7 @@ internal fun DependencyHandlerScope.compileOnly(dependency: String) =
 internal fun DependencyHandlerScope.kapt(dependency: String) =
   addDependency("kapt", dependency)
 
-fun DependencyHandlerScope.ksp(dependency: String) =
+internal fun DependencyHandlerScope.ksp(dependency: String) =
   addDependency("ksp", dependency)
 
 internal fun DependencyHandlerScope.testImplementation(dependency: String) =

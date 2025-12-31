@@ -145,7 +145,7 @@ fun SendReportRow(onSendReportButtonClick: () -> Unit) {
 @Composable
 fun HelpItemList(data: List<HelpScreenItemDataClass>, dividerColor: Color) {
   LazyColumn(modifier = Modifier.fillMaxWidth()) {
-    itemsIndexed(data, key = { _, item -> item.title }) { index, item ->
+    itemsIndexed(data, key = { _, item -> item.title }) { _, item ->
       HelpScreenItem(data = item)
       HorizontalDivider(color = dividerColor, thickness = HELP_SCREEN_DIVIDER_HEIGHT)
     }
