@@ -49,7 +49,7 @@ fun CustomMainActivityScreen(
   leftDrawerState: DrawerState,
   enableLeftDrawer: Boolean,
   customBackHandler: MutableState<(() -> FragmentActivityExtensions.Super)?>,
-  uiCoroutineScope: CoroutineScope
+  uiCoroutineScope: CoroutineScope,
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -84,7 +84,7 @@ fun CustomMainActivityScreen(
         Box(modifier = Modifier.padding(paddingValues)) {
           CustomNavGraph(
             navController = navController,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
           )
         }
       }

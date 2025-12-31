@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
-import org.kiwix.kiwixmobile.custom.help.CustomHelpFragment
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
 
 @Suppress("LongMethod")
@@ -88,9 +87,9 @@ fun CustomNavGraph(
       }
     }
     composable(CustomDestination.Help.route) {
-      FragmentContainer(R.id.helpFragmentContainer) {
-        CustomHelpFragment()
-      }
+      HelpScreenRoute(
+        navigateBack = navController::popBackStack
+      )
     }
     composable(CustomDestination.Settings.route) {
       FragmentContainer(R.id.settingsFragmentContainer) {

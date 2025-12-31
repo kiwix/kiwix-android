@@ -141,6 +141,7 @@ dependencies {
   // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
 }
+
 tasks.register("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
   if (!file.exists()) file.createNewFile()

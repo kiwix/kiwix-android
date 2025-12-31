@@ -339,4 +339,26 @@ object Libs {
     "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
 
   const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
+
+  /**
+   * https://developer.android.com/jetpack/androidx/releases/lifecycle
+   */
+  const val LIFECYCLE_VIEWMODEL_COMPOSE =
+    "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.LIFECYCLE_VERSION}"
+
+  /**
+   * https://developer.android.com/jetpack/androidx/releases/lifecycle
+   */
+  const val LIFECYCLE_VIEWMODEL_KTX =
+    "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VERSION}"
+
+  /**
+   * https://github.com/InsertKoinIO/koin
+   */
+  const val KOIN_ANDROID = "io.insert-koin:koin-android:${Versions.KOIN_VERSION}"
+
+  /**
+   * https://github.com/InsertKoinIO/koin
+   */
+  const val KOIN_COMPOSE = "io.insert-koin:koin-androidx-compose:${Versions.KOIN_VERSION}"
 }

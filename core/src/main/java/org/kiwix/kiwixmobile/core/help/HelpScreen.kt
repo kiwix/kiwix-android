@@ -18,6 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.help
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -35,15 +39,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.R
+import org.koin.androidx.compose.koinViewModel
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
+import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
@@ -54,10 +68,29 @@ const val SEND_DIAGNOSTIC_REPORT_TESTING_TAG = "sendDiagnosticReportTestingTag"
 const val HELP_SCREEN_ITEM_TITLE_TESTING_TAG = "helpScreenItemTitleTestingTag"
 const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionTestingTag"
 
+@Composable
+fun HelpScreenRoute(
+  navigateBack: () -> Unit,
+  viewModel: HelpViewModel = koinViewModel()
+) {
+  val helpItems by viewModel.helpItems.collectAsStateWithLifecycle()
+  val context = LocalContext.current
+
+  LaunchedEffect(Unit) {
+    viewModel.getHelpItems(context)
+  }
+
+  HelpScreen(
+    data = helpItems.toMutableList(),
+    onSendReportButtonClick = { onSendReportButtonClick(context) },
+    navigationIcon = { NavigationIcon(onClick = navigateBack) }
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
-fun HelpScreen(
+internal fun HelpScreen(
   data: MutableList<HelpScreenItemDataClass>,
   onSendReportButtonClick: () -> Unit,
   navigationIcon: @Composable () -> Unit
@@ -112,9 +145,20 @@ fun SendReportRow(onSendReportButtonClick: () -> Unit) {
 @Composable
 fun HelpItemList(data: List<HelpScreenItemDataClass>, dividerColor: Color) {
   LazyColumn(modifier = Modifier.fillMaxWidth()) {
-    itemsIndexed(data, key = { _, item -> item.title }) { _, item ->
+    itemsIndexed(data, key = { _, item -> item.title }) { index, item ->
       HelpScreenItem(data = item)
       HorizontalDivider(color = dividerColor, thickness = HELP_SCREEN_DIVIDER_HEIGHT)
     }
   }
+}
+
+private fun onSendReportButtonClick(context: Context) {
+  val activity = context as? Activity ?: return
+  val appName = (activity as? CoreMainActivity)?.appName
+  val intent = Intent(context, DiagnosticReportActivity::class.java)
+  val extras = Bundle().apply {
+    putString(APP_NAME_KEY, appName)
+  }
+  intent.putExtras(extras)
+  context.startActivity(intent)
 }
