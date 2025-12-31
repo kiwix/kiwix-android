@@ -75,6 +75,9 @@ import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DrawerMenuItem
+import org.kiwix.kiwixmobile.core.main.KIWIX_ABOUT_APP_URL
+import org.kiwix.kiwixmobile.core.main.KIWIX_SUPPORT_URL
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
@@ -399,7 +402,7 @@ class KiwixMainActivity : CoreMainActivity() {
       title = getString(string.menu_support_kiwix),
       iconRes = drawable.ic_support_24px,
       visible = true,
-      onClick = { openSupportKiwixExternalLink() },
+      onClick = { openExternalLinkWithDialog(KIWIX_SUPPORT_URL) },
       testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
     )
   }
@@ -407,7 +410,18 @@ class KiwixMainActivity : CoreMainActivity() {
   /**
    * In kiwix app we are not showing the "About app" item so returning null.
    */
-  override val aboutAppDrawerMenuItem: DrawerMenuItem? = null
+  override val aboutAppDrawerMenuItem: DrawerMenuItem? by lazy {
+    DrawerMenuItem(
+      title = getString(
+        org.kiwix.kiwixmobile.core.R.string.menu_about_app,
+        getString(R.string.app_name)
+      ),
+      iconRes = drawable.ic_about_app_24px,
+      visible = true,
+      onClick = { openExternalLinkWithDialog(KIWIX_ABOUT_APP_URL) },
+      testingTag = LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
+    )
+  }
 
   private fun openZimHostFragment() {
     disableLeftDrawer()

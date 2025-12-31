@@ -68,11 +68,13 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
+const val KIWIX_ABOUT_APP_URL = "https://www.kiwix.org/about"
 const val PAGE_URL_KEY = "pageUrl"
 const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
 const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"
@@ -400,6 +402,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         this
       )
     }
+  }
+
+  fun openExternalLinkWithDialog(url: String) {
+    closeNavigationDrawer()
+
+    alertDialogShower.show(
+      KiwixDialog.ExternalRedirectDialog(url),
+      {
+        startActivity(url.toUri().browserIntent())
+      }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
