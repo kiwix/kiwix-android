@@ -37,6 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT

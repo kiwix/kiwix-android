@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.help
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +36,7 @@ class HelpViewModel(
   val helpItems: StateFlow<List<HelpScreenItemDataClass>> = _helpItems.asStateFlow()
 
   fun getHelpItems(context: Context) {
-    viewModelScope.launch(Dispatchers.IO) {
+    viewModelScope.launch {
       try {
         android.util.Log.d("HelpViewModel", "Fetching help items...")
         val result = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
@@ -63,7 +62,7 @@ class HelpViewModel(
 
         val items = transformToHelpScreenData(context, rawTitleDescriptionMap)
         _helpItems.value = items
-      } catch (e: Exception) {
+      } catch (e: IllegalArgumentException) {
         e.printStackTrace()
       }
     }
