@@ -398,7 +398,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     lifecycleScope.launch {
       externalLinkOpener.openExternalUrl(
         KIWIX_SUPPORT_URL.toUri().browserIntent(),
-        false,
+        true,
         this
       )
     }
