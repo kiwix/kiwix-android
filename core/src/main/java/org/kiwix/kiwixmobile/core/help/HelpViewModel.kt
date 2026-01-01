@@ -27,8 +27,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import javax.inject.Inject
 
-class HelpViewModel(
+class HelpViewModel @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
 ) : ViewModel() {
   private val _helpItems: MutableStateFlow<List<HelpScreenItemDataClass>> =

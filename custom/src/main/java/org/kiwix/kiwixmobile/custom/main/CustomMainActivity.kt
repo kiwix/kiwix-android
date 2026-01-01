@@ -30,6 +30,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
@@ -51,8 +52,11 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.CustomApp
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import javax.inject.Inject
 
 class CustomMainActivity : CoreMainActivity() {
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
@@ -84,6 +88,7 @@ class CustomMainActivity : CoreMainActivity() {
         enableLeftDrawer = enableLeftDrawer.value,
         uiCoroutineScope = uiCoroutineScope,
         customBackHandler = customBackHandler,
+        viewModelFactory = viewModelFactory
       )
       DialogHost(alertDialogShower)
       LaunchedEffect(Unit) {

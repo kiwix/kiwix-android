@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +51,7 @@ fun CustomMainActivityScreen(
   enableLeftDrawer: Boolean,
   customBackHandler: MutableState<(() -> FragmentActivityExtensions.Super)?>,
   uiCoroutineScope: CoroutineScope,
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -85,6 +87,7 @@ fun CustomMainActivityScreen(
           CustomNavGraph(
             navController = navController,
             modifier = Modifier.fillMaxSize(),
+            viewModelFactory = viewModelFactory
           )
         }
       }

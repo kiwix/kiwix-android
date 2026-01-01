@@ -41,6 +41,7 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -99,6 +100,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
@@ -155,7 +157,8 @@ class KiwixMainActivity : CoreMainActivity() {
         uiCoroutineScope = uiCoroutineScope,
         enableLeftDrawer = enableLeftDrawer.value,
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
-        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
+        viewModelFactory = viewModelFactory
       )
       LaunchedEffect(Unit) {
         // Load the menu when UI is attached to screen.

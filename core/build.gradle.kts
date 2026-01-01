@@ -27,10 +27,6 @@ android {
 fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
 
 dependencies {
-  // Koin
-  implementation(Libs.KOIN_ANDROID)
-  implementation(Libs.KOIN_COMPOSE)
-
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
   implementation(Libs.threetenabp)
 

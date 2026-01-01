@@ -52,7 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.R
-import org.koin.androidx.compose.koinViewModel
+import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -71,7 +71,8 @@ const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionT
 @Composable
 fun HelpScreenRoute(
   navigateBack: () -> Unit,
-  viewModel: HelpViewModel = koinViewModel()
+  viewModelFactory: ViewModelFactory,
+  viewModel: HelpViewModel = viewModel(factory = viewModelFactory)
 ) {
   val helpItems by viewModel.helpItems.collectAsStateWithLifecycle()
   val context = LocalContext.current

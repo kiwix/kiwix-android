@@ -31,12 +31,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
@@ -60,7 +62,8 @@ import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
 @Composable
 fun CustomNavGraph(
   navController: NavHostController,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   NavHost(
     navController = navController,
@@ -89,7 +92,8 @@ fun CustomNavGraph(
     }
     composable(CustomDestination.Help.route) {
       HelpScreenRoute(
-        navigateBack = navController::popBackStack
+        navigateBack = navController::popBackStack,
+        viewModelFactory = viewModelFactory as ViewModelFactory
       )
     }
     composable(CustomDestination.Settings.route) {

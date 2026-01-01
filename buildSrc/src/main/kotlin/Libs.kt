@@ -351,14 +351,4 @@ object Libs {
    */
   const val LIFECYCLE_VIEWMODEL_KTX =
     "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VERSION}"
-
-  /**
-   * https://github.com/InsertKoinIO/koin
-   */
-  const val KOIN_ANDROID = "io.insert-koin:koin-android:${Versions.KOIN_VERSION}"
-
-  /**
-   * https://github.com/InsertKoinIO/koin
-   */
-  const val KOIN_COMPOSE = "io.insert-koin:koin-androidx-compose:${Versions.KOIN_VERSION}"
 }

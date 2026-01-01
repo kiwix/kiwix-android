@@ -28,14 +28,8 @@ import androidx.multidex.MultiDex
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
-import org.kiwix.kiwixmobile.core.help.HelpViewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
@@ -89,18 +83,6 @@ abstract class CoreApp : Application() {
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()
-
-    startKoin {
-      androidContext(this@CoreApp)
-      modules(
-        module {
-          viewModelOf(::HelpViewModel)
-          single<KiwixDataStore> {
-            coreComponent.kiwixDataStore()
-          }
-        }
-      )
-    }
   }
 
   private fun configureStrictMode() {
