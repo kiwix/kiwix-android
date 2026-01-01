@@ -100,6 +100,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   override val mainActivity: AppCompatActivity by lazy { this }
