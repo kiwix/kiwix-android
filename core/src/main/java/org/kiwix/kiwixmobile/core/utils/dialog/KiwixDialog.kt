@@ -327,6 +327,18 @@ sealed class KiwixDialog(
       customComposeView = customGetView
     )
 
+  data class ExternalRedirectDialog(
+    override val args: List<Any>
+  ) : KiwixDialog(
+      title = null,
+      message = R.string.external_redirect_message,
+      confirmButtonText = R.string.ok,
+      dismissButtonText = R.string.cancel
+    ),
+    HasBodyFormatArgs {
+    constructor(destination: String) : this(listOf(destination))
+  }
+
   object NotesDiscardConfirmation : KiwixDialog(
     null,
     R.string.confirmation_alert_dialog_message,

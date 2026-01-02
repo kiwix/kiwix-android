@@ -21,10 +21,12 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import android.content.Intent
 import android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -86,6 +88,18 @@ class ExternalLinkOpener @Inject constructor(
             action = ACTION_INSTALL_TTS_DATA
           }
         )
+      }
+    )
+  }
+
+  fun openExternalLinkWithDialog(
+    url: String,
+    destinationText: String
+  ) {
+    alertDialogShower.show(
+      KiwixDialog.ExternalRedirectDialog(destinationText),
+      {
+        activity.startActivity(url.toUri().browserIntent())
       }
     )
   }
