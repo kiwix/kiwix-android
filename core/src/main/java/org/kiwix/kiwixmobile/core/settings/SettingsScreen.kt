@@ -515,24 +515,26 @@ fun ListPreference(
     KiwixBasicDialogFrame(
       onDismissRequest = { showDialog = false }
     ) {
-      DialogTitle(titleId)
-      BoxWithConstraints {
-        val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
-        ListOptions(
-          modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = listMaxHeight)
-            .verticalScroll(rememberScrollState()),
-          options = options,
-          selected = selected,
-          onOptionSelected = {
-            selected = it
-            onOptionSelected(it)
-            showDialog = false
-          }
-        )
+      Column(Modifier.padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)) {
+        DialogTitle(titleId)
+        BoxWithConstraints {
+          val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
+          ListOptions(
+            modifier = Modifier
+              .fillMaxWidth()
+              .heightIn(max = listMaxHeight)
+              .verticalScroll(rememberScrollState()),
+            options = options,
+            selected = selected,
+            onOptionSelected = {
+              selected = it
+              onOptionSelected(it)
+              showDialog = false
+            }
+          )
+        }
+        Spacer(modifier = Modifier.height(DIALOG_DEFAULT_PADDING_FOR_CONTENT))
       }
-      Spacer(modifier = Modifier.height(DIALOG_DEFAULT_PADDING_FOR_CONTENT))
       Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
@@ -540,7 +542,7 @@ fun ListPreference(
         DialogConfirmButton(
           confirmButtonText = stringResource(R.string.cancel),
           dialogConfirmButtonClick = { showDialog = false },
-          null
+          alertDialogShower = null
         )
       }
     }

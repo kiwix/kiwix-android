@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,7 +37,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,18 +49,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
@@ -77,6 +74,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
 const val ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG = "alertDialogConfirmButtonTestingTag"
@@ -109,15 +107,17 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
       onDismissRequest = { alertDialogShower.dismiss() },
       cancelable = dialog.cancelable,
     ) {
-      Row(
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        DialogIcon(dialog)
-        DialogTitle(dialog.title)
+      Column(Modifier.padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)) {
+        Row(
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          DialogIcon(dialog)
+          DialogTitle(dialog.title)
+        }
+        DialogMessage(dialog)
+        ShowUri(uri)
+        ShowCustomComposeView(dialog)
       }
-      DialogMessage(dialog)
-      ShowUri(uri)
-      ShowCustomComposeView(dialog)
       ShowDialogButtons(dialog, clickListeners, alertDialogShower)
     }
   }
@@ -148,7 +148,6 @@ fun KiwixBasicDialogFrame(
       ) {
         Column(
           modifier = Modifier
-            .padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
             .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT),
           content = content
         )
@@ -191,6 +190,7 @@ fun DialogIcon(dialog: KiwixDialog) {
 fun DialogConfirmButton(
   confirmButtonText: String,
   dialogConfirmButtonClick: (() -> Unit)?,
+  startEndPadding: Dp = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
   alertDialogShower: AlertDialogShower?
 ) {
   if (confirmButtonText.isNotEmpty()) {
@@ -200,12 +200,7 @@ fun DialogConfirmButton(
         dialogConfirmButtonClick?.invoke()
       },
       modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG },
-      contentPadding = PaddingValues(
-        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
-        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
-        start = ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current),
-        end = ZERO.dp
-      )
+      contentPadding = PaddingValues(horizontal = startEndPadding)
     ) {
       Text(
         text = confirmButtonText.uppercase(),
@@ -230,12 +225,7 @@ fun DialogDismissButton(
         dismissButtonClick?.invoke()
       },
       modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG },
-      contentPadding = PaddingValues(
-        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
-        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
-        start = ZERO.dp,
-        end = ZERO.dp
-      )
+      contentPadding = PaddingValues(horizontal = ZERO.dp)
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
@@ -251,6 +241,7 @@ fun DialogDismissButton(
 private fun DialogNaturalButton(
   dialog: KiwixDialog,
   neutralButtonClick: (() -> Unit)?,
+  startEndPadding: Dp = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
   alertDialogShower: AlertDialogShower
 ) {
   dialog.neutralButtonText?.let {
@@ -261,12 +252,7 @@ private fun DialogNaturalButton(
       },
       modifier = Modifier
         .semantics { testTag = ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG },
-      contentPadding = PaddingValues(
-        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
-        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
-        start = ZERO.dp,
-        end = ZERO.dp
-      )
+      contentPadding = PaddingValues(horizontal = startEndPadding)
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
@@ -293,7 +279,7 @@ private fun ShowDialogButtons(
     DialogNaturalButton(
       dialog,
       clickListeners.getOrNull(2),
-      alertDialogShower
+      alertDialogShower = alertDialogShower
     )
     Spacer(modifier = Modifier.weight(1f))
     DialogDismissButton(
@@ -304,7 +290,7 @@ private fun ShowDialogButtons(
     DialogConfirmButton(
       stringResource(dialog.confirmButtonText),
       clickListeners.getOrNull(0),
-      alertDialogShower
+      alertDialogShower = alertDialogShower
     )
   }
 }

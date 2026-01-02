@@ -296,6 +296,7 @@ sealed class KiwixDialog(
       null,
       R.string.empty_string,
       null,
+      cancelable = false,
       customComposeView = customGetView,
       customComposeViewBottomPadding = customViewBottomPadding
     )
