@@ -18,53 +18,44 @@
 
 package org.kiwix.kiwixmobile.core.help
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import javax.inject.Inject
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
+import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
-class HelpViewModel @Inject constructor(
-  private val kiwixDataStore: KiwixDataStore,
-) : ViewModel() {
+abstract class HelpViewModel : ViewModel() {
+  abstract suspend fun rawTitleDescriptionMap(context: Context): List<Pair<Int, Any>>
   private val _helpItems: MutableStateFlow<List<HelpScreenItemDataClass>> =
     MutableStateFlow(emptyList())
   val helpItems: StateFlow<List<HelpScreenItemDataClass>> = _helpItems.asStateFlow()
 
   fun getHelpItems(context: Context) {
     viewModelScope.launch {
-      try {
-        val result = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-
-        val rawTitleDescriptionMap = when (result) {
-          true -> listOf(
-            R.string.help_2 to R.array.description_help_2,
-            R.string.help_5 to R.array.description_help_5,
-            R.string.how_to_update_content to R.array.update_content_description,
-            R.string.why_copy_move_files_to_app_directory to
-              context.getString(R.string.copy_move_files_to_app_directory_description)
-          )
-
-          false -> listOf(
-            R.string.help_2 to R.array.description_help_2,
-            R.string.help_5 to R.array.description_help_5,
-            R.string.how_to_update_content to R.array.update_content_description,
-            R.string.why_copy_move_files_to_app_directory to
-              context.getString(R.string.copy_move_files_to_app_directory_description)
-          )
-        }
-
-        val items = transformToHelpScreenData(context, rawTitleDescriptionMap)
-        _helpItems.value = items
-      } catch (e: IllegalArgumentException) {
-        e.printStackTrace()
-      }
+      _helpItems.value = transformToHelpScreenData(
+        context,
+        rawTitleDescriptionMap(context)
+      )
     }
+  }
+
+  fun onSendReportButtonClick(context: Context) {
+    val activity = context as? Activity ?: return
+    val appName = (activity as? CoreMainActivity)?.appName
+    val intent = Intent(context, DiagnosticReportActivity::class.java)
+    val extras = Bundle().apply {
+      putString(APP_NAME_KEY, appName)
+    }
+    intent.putExtras(extras)
+    context.startActivity(intent)
   }
 
   private fun transformToHelpScreenData(

@@ -32,13 +32,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
+import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
 
 @Suppress("LongMethod")
@@ -91,9 +92,10 @@ fun CustomNavGraph(
       }
     }
     composable(CustomDestination.Help.route) {
+      val customHelpViewModel: CustomHelpViewModel = viewModel(factory = viewModelFactory)
       HelpScreenRoute(
         navigateBack = navController::popBackStack,
-        viewModelFactory = viewModelFactory as ViewModelFactory
+        helpViewModel = customHelpViewModel
       )
     }
     composable(CustomDestination.Settings.route) {

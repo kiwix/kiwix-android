@@ -21,7 +21,7 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
 
-// val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
+val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
 
 android {
   // Added namespace in response to Gradle 8.0 and above.

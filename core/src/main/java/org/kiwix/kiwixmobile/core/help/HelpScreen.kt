@@ -18,10 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.help
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -50,12 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ViewModelFactory
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
-import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -71,19 +62,18 @@ const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionT
 @Composable
 fun HelpScreenRoute(
   navigateBack: () -> Unit,
-  viewModelFactory: ViewModelFactory,
-  viewModel: HelpViewModel = viewModel(factory = viewModelFactory)
+  helpViewModel: HelpViewModel
 ) {
-  val helpItems by viewModel.helpItems.collectAsStateWithLifecycle()
+  val helpItems by helpViewModel.helpItems.collectAsStateWithLifecycle()
   val context = LocalContext.current
 
   LaunchedEffect(Unit) {
-    viewModel.getHelpItems(context)
+    helpViewModel.getHelpItems(context)
   }
 
   HelpScreen(
     data = helpItems.toMutableList(),
-    onSendReportButtonClick = { onSendReportButtonClick(context) },
+    onSendReportButtonClick = { helpViewModel.onSendReportButtonClick(context) },
     navigationIcon = { NavigationIcon(onClick = navigateBack) }
   )
 }
@@ -151,15 +141,4 @@ fun HelpItemList(data: List<HelpScreenItemDataClass>, dividerColor: Color) {
       HorizontalDivider(color = dividerColor, thickness = HELP_SCREEN_DIVIDER_HEIGHT)
     }
   }
-}
-
-private fun onSendReportButtonClick(context: Context) {
-  val activity = context as? Activity ?: return
-  val appName = (activity as? CoreMainActivity)?.appName
-  val intent = Intent(context, DiagnosticReportActivity::class.java)
-  val extras = Bundle().apply {
-    putString(APP_NAME_KEY, appName)
-  }
-  intent.putExtras(extras)
-  context.startActivity(intent)
 }

@@ -25,6 +25,7 @@ import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadViewModel
+import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
 
 @Module(includes = [CoreViewModelModule::class])
 abstract class CustomViewModelModule {
@@ -32,4 +33,9 @@ abstract class CustomViewModelModule {
   @IntoMap
   @ViewModelKey(CustomDownloadViewModel::class)
   abstract fun bindCustomDownloadViewModel(zimManageViewModel: CustomDownloadViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(CustomHelpViewModel::class)
+  abstract fun bindCustomHelpViewModel(customHelpViewModel: CustomHelpViewModel): ViewModel
 }

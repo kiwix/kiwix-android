@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 
+@Suppress("LongParameterList")
 @Composable
 fun CustomMainActivityScreen(
   navController: NavHostController,
