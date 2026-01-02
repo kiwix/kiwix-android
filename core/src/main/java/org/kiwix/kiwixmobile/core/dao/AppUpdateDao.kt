@@ -22,12 +22,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
 
 @Dao
 interface AppUpdateDao {
   @Query("SELECT * FROM appupdateentity LIMIT 1")
-  fun getLatestAppUpdate(): AppUpdateEntity
+  fun getLatestAppUpdate(): Flow<AppUpdateEntity>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun updateLatestAppUpdate(appUpdateEntity: AppUpdateEntity)

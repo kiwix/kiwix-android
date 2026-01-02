@@ -18,14 +18,20 @@
 
 package org.kiwix.kiwixmobile.update
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
 
 class UpdateViewModel @Inject constructor(
-  // private val appUpdateDao: AppUpdateDao,
+  private val appUpdateDao: AppUpdateDao,
+  private val downloadRoomDao: DownloadRoomDao,
   private val downloader: Downloader
 ) : ViewModel() {
   private val _state = mutableStateOf(UpdateStates())
@@ -35,40 +41,37 @@ class UpdateViewModel @Inject constructor(
     getLatestAppVersion()
   }
 
-  private fun getLatestAppVersion() {
-    /*val latestAppVersion: AppUpdateEntity = appUpdateDao.getLatestAppUpdate()
-    _state.value = _state.value.copy(
-      apkVersion = AppVersion(
-        apkUrl = latestAppVersion.version,
-        name = latestAppVersion.name,
-        version = latestAppVersion.version
+  private fun getLatestAppVersion() = viewModelScope.launch {
+    appUpdateDao.getLatestAppUpdate().collect { latestAppVersion ->
+      _state.value = _state.value.copy(
+        apkVersion = AppVersion(
+          apkUrl = latestAppVersion.url,
+          name = latestAppVersion.name,
+          version = latestAppVersion.version
+        )
       )
-    )*/
-    _state.value = _state.value.copy(
-      apkVersion = AppVersion(
-        apkUrl = "https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk",
-        name = "3.14.0",
-        version = "kiwixmobile-3.14.0.apk"
-      )
-    )
+    }
   }
 
-  private fun downloadApp(url: String) {
-    downloader.downloadApk(url)
+  private fun downloadApp() {
+    downloader.downloadApk("")
   }
 
-  private fun cancelDownloadApp(downloadId: Long) {
-    downloader.cancelDownload(downloadId)
+  private fun cancelDownloadApp() = viewModelScope.launch {
+    downloadRoomDao.getOngoingDownloads().forEach { downloads ->
+      Log.d("TAG", "cancelDownloadApp: cancel download clicked")
+      downloader.cancelDownload(downloads.downloadId)
+    }
   }
 
   fun event(event: UpdateEvents) {
     when (event) {
       is UpdateEvents.DownloadApp -> {
-        downloadApp(event.url)
+        downloadApp()
       }
 
       is UpdateEvents.CancelDownload -> {
-        cancelDownloadApp(event.downloadId)
+        cancelDownloadApp()
       }
 
       is UpdateEvents.RetrieveLatestAppVersion -> {
