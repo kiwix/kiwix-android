@@ -27,4 +27,5 @@ data class UpdateStates(
   val loading: Boolean = false,
   val success: Boolean = false,
   val dialogShown: Boolean? = null,
+  // val progress: Float
 )

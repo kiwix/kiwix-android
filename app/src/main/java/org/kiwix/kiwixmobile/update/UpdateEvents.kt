@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.update
 
 sealed class UpdateEvents {
-  data class DownloadApp(val url: String) : UpdateEvents()
-  data class CancelDownload(val downloadId: Long) : UpdateEvents()
+  data object DownloadApp : UpdateEvents()
+  data object CancelDownload : UpdateEvents()
   data object RetrieveLatestAppVersion : UpdateEvents()
 }
