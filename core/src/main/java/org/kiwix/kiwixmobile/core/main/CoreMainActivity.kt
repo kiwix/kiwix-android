@@ -40,6 +40,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.NavHostController
@@ -111,6 +112,7 @@ const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingT
 const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   abstract val searchFragmentRoute: String
 
   @Inject lateinit var alertDialogShower: AlertDialogShower

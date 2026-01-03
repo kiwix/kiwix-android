@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,13 +15,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package org.kiwix.kiwixmobile.intro
 
-import dagger.Binds
-import dagger.Module
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import javax.inject.Inject
 
-@Module
-abstract class IntroModule {
-  @Binds
-  abstract fun bindsPresenter(presenter: IntroPresenter): IntroContract.Presenter
+class KiwixIntroViewModel @Inject constructor(
+  private val kiwixDataStore: KiwixDataStore
+) : ViewModel() {
+
+  fun setIntroShown() {
+    viewModelScope.launch {
+      kiwixDataStore.setIntroShown(true)
+    }
+  }
 }
