@@ -37,11 +37,12 @@ jobs:
       - name: Retrieve secrets to files
         env:
           KEYSTORE: ${{ secrets.keystore }}
-          SSH_KEY: ${{ secrets.ssh_key }}
+          KIWIX_FILE_UPLOAD_SSH_KEY: ${{ secrets.KIWIX_FILE_UPLOAD_SSH_KEY }}
+          KIWIX_FILE_UPLOAD_SSH_KEY_PATH: kiwix_file_upload_ssh_key
         run: |
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
-          echo "$SSH_KEY" | base64 -d > ssh_key
-          chmod 600 ssh_key
+          echo "$KIWIX_FILE_UPLOAD_SSH_KEY" | base64 -d > $KIWIX_FILE_UPLOAD_SSH_KEY_PATH
+          chmod 600 $KIWIX_FILE_UPLOAD_SSH_KEY_PATH
 
       - name: Publish APK to download.kiwix.org
         env:
@@ -55,14 +56,14 @@ jobs:
         run: |
           ./gradlew assembleStandalone
           cp ${UNIVERSAL_RELEASE_APK} ${ARCHIVE_NAME}
-          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no "$ARCHIVE_NAME" ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+          scp -P 30022 -vrp -i $KIWIX_FILE_UPLOAD_SSH_KEY_PATH -o StrictHostKeyChecking=no "$ARCHIVE_NAME" ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
 #      This is temporary, once we will publish 3.7.0 then we will uncommented this code.
 #      # This is necessary for F-Droid
 #      - name: Publish "versionInfo" to download.kiwix.org
 #        run: |
 #          ./gradlew generateVersionCodeAndName
-#          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+#          scp -P 30022 -vrp -i $KIWIX_FILE_UPLOAD_SSH_KEY_PATH -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
       - name: Upload APKs to Release
         uses: ncipollo/release-action@v1
