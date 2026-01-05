@@ -41,6 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
@@ -97,7 +98,7 @@ fun KiwixShowCaseView(
   onShowCaseCompleted: () -> Unit
 ) {
   val orderedTargets = targets.values.sortedBy { it.index }
-  var currentIndex by remember { mutableStateOf(ZERO) }
+  var currentIndex by rememberSaveable { mutableStateOf(ZERO) }
   val currentTarget = orderedTargets.getOrNull(currentIndex)
 
   currentTarget?.let {
