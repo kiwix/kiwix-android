@@ -19,11 +19,8 @@
 package org.kiwix.kiwixmobile.language
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,11 +35,8 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.language.viewmodel.Action
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import javax.inject.Inject
 
@@ -65,50 +59,49 @@ class LanguageFragment : BaseFragment() {
       var searchText by remember { mutableStateOf("") }
       var isSearchActive by remember { mutableStateOf(false) }
 
-      fun resetSearchState() {
-        // clears the search text and resets the filter
-        searchText = ""
-        languageViewModel.actions.tryEmit(Action.Filter(searchText))
-      }
-
-      KiwixTheme {
-        LanguageScreen(
-          searchText = searchText,
-          isSearchActive = isSearchActive,
-          languageViewModel = languageViewModel,
-          actionMenuItemList = appBarActionMenuList(
-            isSearchActive = isSearchActive,
-            onSearchClick = { isSearchActive = true },
-            onSaveClick = {
-              languageViewModel.actions.tryEmit(Action.Save)
-            }
-          ),
-          onClearClick = { resetSearchState() },
-          onAppBarValueChange = {
-            searchText = it
-            languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
-          },
-          navigationIcon = {
-            NavigationIcon(
-              iconItem = if (isSearchActive) {
-                IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
-              } else {
-                IconItem.Drawable(
-                  R.drawable.ic_close_white_24dp
-                )
-              },
-              onClick = {
-                if (isSearchActive) {
-                  isSearchActive = false
-                  resetSearchState()
-                } else {
-                  activity.onBackPressedDispatcher.onBackPressed()
-                }
-              }
-            )
-          }
-        )
-      }
+      // fun resetSearchState() {
+      //   // clears the search text and resets the filter
+      //   searchText = ""
+      //   languageViewModel.actions.tryEmit(Action.Filter(searchText))
+      // }
+      //
+      // KiwixTheme {
+      //   LanguageScreen(
+      //     searchText = searchText,
+      //     isSearchActive = isSearchActive,
+      //     languageViewModel = languageViewModel,
+      //     actionMenuItemList = appBarActionMenuList(
+      //       isSearchActive = isSearchActive,
+      //       onSearchClick = { isSearchActive = true },
+      //       onSaveClick = {
+      //         languageViewModel.actions.tryEmit(Action.Save)
+      //       }
+      //     ),
+      //     onClearClick = { resetSearchState() },
+      //     onAppBarValueChange = {
+      //       searchText = it
+      //       languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
+      //     },
+      //     navigationIcon = {
+      //       NavigationIcon(
+      //         iconItem = if (isSearchActive) {
+      //           IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
+      //         } else {
+      //           IconItem.Drawable(
+      //             R.drawable.ic_close_white_24dp
+      //           )
+      //         },
+      //         onClick = {
+      //           if (isSearchActive) {
+      //             isSearchActive = false
+      //             resetSearchState()
+      //           } else {
+      //             activity.onBackPressedDispatcher.onBackPressed()
+      //           }
+      //         }
+      //       )
+      //     }
+      //   )
     }
   }
 
@@ -136,21 +129,21 @@ class LanguageFragment : BaseFragment() {
         testingTag = SAVE_ICON_TESTING_TAG
       )
     )
-  }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View {
-    return ComposeView(requireContext()).also {
-      composeView = it
-    }
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    composeView?.disposeComposition()
-    composeView = null
+// override fun onCreateView(
+//   inflater: LayoutInflater,
+//   container: ViewGroup?,
+//   savedInstanceState: Bundle?
+// ): View {
+//   return ComposeView(requireContext()).also {
+//     composeView = it
+//   }
+// }
+//
+// override fun onDestroyView() {
+//   super.onDestroyView()
+//   composeView?.disposeComposition()
+//   composeView = null
+// }
   }
 }

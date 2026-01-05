@@ -40,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT
@@ -64,7 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.help.KiwixHelpFragment
 import org.kiwix.kiwixmobile.intro.IntroFragment
-import org.kiwix.kiwixmobile.language.LanguageFragment
+import org.kiwix.kiwixmobile.language.LanguageScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
@@ -78,7 +79,8 @@ import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 fun KiwixNavGraph(
   navController: NavHostController,
   startDestination: String,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  viewModelFactory: ViewModelFactory,
 ) {
   NavHost(
     navController = navController,
@@ -135,9 +137,10 @@ fun KiwixNavGraph(
       }
     }
     composable(KiwixDestination.Language.route) {
-      FragmentContainer(R.id.languageFragmentContainer) {
-        LanguageFragment()
-      }
+      LanguageScreenRoute(
+        viewModelFactory = viewModelFactory,
+        navigateBack = navController::popBackStack
+      )
     }
     composable(
       KiwixDestination.ZimHost.route,

@@ -46,4 +46,5 @@ interface KiwixComponent {
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun providesOnlineLibraryManager(): OnlineLibraryManager
   fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
+  fun viewModelFactory(): androidx.lifecycle.ViewModelProvider.Factory
 }

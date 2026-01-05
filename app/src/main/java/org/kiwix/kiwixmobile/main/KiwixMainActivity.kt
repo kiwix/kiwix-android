@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
@@ -155,7 +156,8 @@ class KiwixMainActivity : CoreMainActivity() {
         uiCoroutineScope = uiCoroutineScope,
         enableLeftDrawer = enableLeftDrawer.value,
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
-        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
+        viewModelFactory = viewModelFactory as ViewModelFactory
       )
       LaunchedEffect(Unit) {
         // Load the menu when UI is attached to screen.
