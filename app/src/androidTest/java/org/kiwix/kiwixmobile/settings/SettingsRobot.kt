@@ -209,18 +209,20 @@ class SettingsRobot : BaseRobot() {
   }
 
   private fun clickPreferenceItem(title: String, composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
-        .performScrollToNode(
-          hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
-        )
-      composeTestRule
-        .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG + title, true)
-        .onFirst()
-        .performScrollTo()
-        .performClick()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+          .performScrollToNode(
+            hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
+          )
+        composeTestRule
+          .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG + title, true)
+          .onFirst()
+          .performScrollTo()
+          .performClick()
+      }
+    })
   }
 
   fun assertNightModeDialogDisplayed(composeTestRule: ComposeContentTestRule) {

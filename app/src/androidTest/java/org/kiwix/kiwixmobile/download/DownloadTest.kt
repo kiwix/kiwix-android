@@ -223,10 +223,10 @@ class DownloadTest : BaseActivityTest() {
           selectAlbanianLanguage(composeTestRule)
           // Advance the main clock to settle the frame of compose.
           composeTestRule.mainClock.advanceTimeByFrame()
-          composeTestRule.waitForIdle()
           composeTestRule.waitUntil(timeoutMillis = 5_000) {
             activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
           }
+          composeTestRule.waitForIdle()
           activityScenario.onActivity {
             kiwixMainActivity = it
             it.onBackPressedDispatcher.onBackPressed()
@@ -251,10 +251,10 @@ class DownloadTest : BaseActivityTest() {
           selectDeviceDefaultLanguage(composeTestRule)
           // Advance the main clock to settle the frame of compose.
           composeTestRule.mainClock.advanceTimeByFrame()
-          composeTestRule.waitForIdle()
           composeTestRule.waitUntil(timeoutMillis = 5_000) {
             activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
           }
+          composeTestRule.waitForIdle()
           activityScenario.onActivity {
             kiwixMainActivity = it
           }
