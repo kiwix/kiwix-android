@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: temurin
@@ -69,13 +69,13 @@ jobs:
           echo "apk_dir=$APK_DIR" >> $GITHUB_ENV
 
       - name: Upload Bundle as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.bundle_name }}
           path: ${{ env.bundle_path }}
 
       - name: Upload All Release APKs as artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ReleaseApks
           path: ${{ env.apk_dir }}*.apk
