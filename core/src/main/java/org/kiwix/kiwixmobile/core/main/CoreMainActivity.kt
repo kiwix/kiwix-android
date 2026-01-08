@@ -69,6 +69,7 @@ import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
@@ -343,6 +344,22 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
             stopDownloadServiceIfRunning()
           }
         }
+      }
+    }
+  }
+
+  @Suppress("InjectDispatcher")
+  fun startDownloadApkService() {
+    CoroutineScope(Dispatchers.IO).launch {
+      runCatching {
+        startService(
+          Intent(
+            this@CoreMainActivity,
+            DownloadApkService::class.java
+          ).apply {
+            putExtra(APP_NAME_KEY, appName)
+          }
+        )
       }
     }
   }

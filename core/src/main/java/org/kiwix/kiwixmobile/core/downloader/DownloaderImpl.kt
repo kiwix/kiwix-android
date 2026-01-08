@@ -40,7 +40,7 @@ class DownloaderImpl @Inject constructor(
     CoroutineScope(ioDispatcher).launch {
       runCatching {
         downloadRequester.enqueue(DownloadRequest(url))
-        downloadRequester.startDownloadMonitorService()
+        downloadRequester.startApkDownloadService()
       }.onFailure {
         it.printStackTrace()
       }
