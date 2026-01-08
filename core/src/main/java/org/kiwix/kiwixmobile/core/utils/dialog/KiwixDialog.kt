@@ -332,8 +332,8 @@ sealed class KiwixDialog(
   ) : KiwixDialog(
       title = null,
       message = R.string.external_redirect_message,
-      confirmButtonText = R.string.ok,
-      dismissButtonText = R.string.cancel
+      confirmButtonText = android.R.string.ok,
+      dismissButtonText = android.R.string.cancel
     ),
     HasBodyFormatArgs {
     constructor(destination: String) : this(listOf(destination))

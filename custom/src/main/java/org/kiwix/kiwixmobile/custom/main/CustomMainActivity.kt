@@ -148,10 +148,9 @@ class CustomMainActivity : CoreMainActivity() {
         onClick = {
           closeNavigationDrawer()
           lifecycleScope.launch {
-            externalLinkOpener.openExternalUrl(
-              BuildConfig.SUPPORT_URL.toUri().browserIntent(),
-              false,
-              this
+            externalLinkOpener.openExternalLinkWithDialog(
+              intent = BuildConfig.SUPPORT_URL.toUri().browserIntent(),
+              destinationText = getString(string.support_donation_platform)
             )
           }
         },
@@ -177,14 +176,14 @@ class CustomMainActivity : CoreMainActivity() {
           string.menu_about_app,
           getString(R.string.app_name)
         ),
-        iconRes = drawable.ic_about_app_24px,
+        iconRes = drawable.ic_baseline_info,
         visible = true,
         onClick = {
           closeNavigationDrawer()
           lifecycleScope.launch {
             externalLinkOpener.openExternalLinkWithDialog(
-              url = BuildConfig.ABOUT_APP_URL,
-              destinationText = getString(org.kiwix.kiwixmobile.core.R.string.about_app_page),
+              intent = BuildConfig.ABOUT_APP_URL.toUri().browserIntent(),
+              destinationText = getString(string.about_app_page),
             )
           }
         },

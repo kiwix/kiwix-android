@@ -21,12 +21,10 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import android.content.Intent
 import android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
-import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -45,10 +43,9 @@ class ExternalLinkOpener @Inject constructor(
 
   suspend fun openExternalUrl(
     intent: Intent,
-    showExternalLinkPopup: Boolean? = null,
     lifecycleScope: CoroutineScope
   ) {
-    val externalLinkPopup = showExternalLinkPopup ?: kiwixDataStore.externalLinkPopup.first()
+    val externalLinkPopup = kiwixDataStore.externalLinkPopup.first()
     if (intent.resolveActivity(activity.packageManager) != null) {
       if (externalLinkPopup) {
         requestOpenLink(intent, lifecycleScope)
@@ -93,13 +90,17 @@ class ExternalLinkOpener @Inject constructor(
   }
 
   fun openExternalLinkWithDialog(
-    url: String,
+    intent: Intent,
     destinationText: String
   ) {
     alertDialogShower.show(
       KiwixDialog.ExternalRedirectDialog(destinationText),
       {
-        activity.startActivity(url.toUri().browserIntent())
+        if (intent.resolveActivity(activity.packageManager) != null) {
+          activity.startActivity(intent)
+        } else {
+          activity.toast(R.string.no_reader_application_installed)
+        }
       }
     )
   }
