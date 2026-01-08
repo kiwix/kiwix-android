@@ -156,7 +156,7 @@ class DownloadTest : BaseActivityTest() {
         try {
           assertDownloadStart(composeTestRule)
           pauseDownload(composeTestRule)
-          assertDownloadPaused(composeTestRule, kiwixMainActivity)
+          assertDownloadPaused(composeTestRule, activityScenario)
           resumeDownload(composeTestRule)
           assertDownloadResumed(composeTestRule, kiwixMainActivity)
           waitUntilDownloadComplete(
@@ -206,20 +206,27 @@ class DownloadTest : BaseActivityTest() {
       // change the application language
       topLevel {
         clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
-          clickLanguagePreference(composeTestRule, kiwixMainActivity)
-          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          clickLanguagePreference(composeTestRule, activityScenario)
+          assertLanguagePrefDialogDisplayed(composeTestRule, activityScenario)
           selectDeviceDefaultLanguage(composeTestRule)
           // Advance the main clock to settle the frame of compose.
           composeTestRule.mainClock.advanceTimeByFrame()
-          clickLanguagePreference(composeTestRule, kiwixMainActivity)
-          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
-          selectAlbanianLanguage(composeTestRule)
-          // Advance the main clock to settle the frame of compose.
-          composeTestRule.mainClock.advanceTimeByFrame()
-          composeTestRule.waitForIdle()
           composeTestRule.waitUntil(timeoutMillis = 5_000) {
             activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
           }
+          composeTestRule.waitForIdle()
+          activityScenario.onActivity {
+            kiwixMainActivity = it
+          }
+          clickLanguagePreference(composeTestRule, activityScenario)
+          assertLanguagePrefDialogDisplayed(composeTestRule, activityScenario)
+          selectAlbanianLanguage(composeTestRule)
+          // Advance the main clock to settle the frame of compose.
+          composeTestRule.mainClock.advanceTimeByFrame()
+          composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
+          }
+          composeTestRule.waitForIdle()
           activityScenario.onActivity {
             kiwixMainActivity = it
             it.onBackPressedDispatcher.onBackPressed()
@@ -232,27 +239,25 @@ class DownloadTest : BaseActivityTest() {
       downloadZimFile(composeTestRule)
       assertDownloadStart(composeTestRule)
       pauseDownload(composeTestRule)
-      assertDownloadPaused(composeTestRule, kiwixMainActivity)
+      assertDownloadPaused(composeTestRule, activityScenario)
       resumeDownload(composeTestRule)
       assertDownloadResumed(composeTestRule, kiwixMainActivity)
       stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
       // select the default device language to perform other test cases.
       topLevel {
         clickSettingsOnSideNav(kiwixMainActivity as CoreMainActivity, composeTestRule, true) {
-          clickLanguagePreference(composeTestRule, kiwixMainActivity)
-          assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+          clickLanguagePreference(composeTestRule, activityScenario)
+          assertLanguagePrefDialogDisplayed(composeTestRule, activityScenario)
           selectDeviceDefaultLanguage(composeTestRule)
           // Advance the main clock to settle the frame of compose.
           composeTestRule.mainClock.advanceTimeByFrame()
-          composeTestRule.waitForIdle()
           composeTestRule.waitUntil(timeoutMillis = 5_000) {
             activityScenario.state.isAtLeast(Lifecycle.State.RESUMED)
           }
+          composeTestRule.waitForIdle()
           activityScenario.onActivity {
             kiwixMainActivity = it
           }
-          // check if the device default language is selected or not.
-          clickLanguagePreference(composeTestRule, kiwixMainActivity)
           // close the language dialog.
           composeTestRule.runOnUiThread {
             kiwixMainActivity.onBackPressedDispatcher.onBackPressed()

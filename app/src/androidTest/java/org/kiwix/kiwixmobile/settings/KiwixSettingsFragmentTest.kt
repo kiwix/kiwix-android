@@ -57,6 +57,7 @@ class KiwixSettingsFragmentTest {
   val composeTestRule = createComposeRule()
 
   lateinit var kiwixMainActivity: KiwixMainActivity
+  lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
   private val permissions =
     arrayOf(
@@ -92,7 +93,7 @@ class KiwixSettingsFragmentTest {
         setPrefIsTest(true)
       }
     }
-    val activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
         runBlocking {
@@ -156,8 +157,8 @@ class KiwixSettingsFragmentTest {
       clickOnImportBookmarkPreference(composeTestRule)
       assertImportBookmarkDialogDisplayed(composeTestRule)
       dismissDialog()
-      clickLanguagePreference(composeTestRule, kiwixMainActivity)
-      assertLanguagePrefDialogDisplayed(composeTestRule, kiwixMainActivity)
+      clickLanguagePreference(composeTestRule, activityScenario)
+      assertLanguagePrefDialogDisplayed(composeTestRule, activityScenario)
       dismissDialog()
       assertVersionTextViewPresent(composeTestRule)
       clickCredits(composeTestRule)
