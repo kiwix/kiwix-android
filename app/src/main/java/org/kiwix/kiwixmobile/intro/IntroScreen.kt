@@ -113,7 +113,7 @@ private fun IntroScreen(
 /**
  * Returns the page.
  * If it is a playStore version(bundle) it will returns the [PAGE_COUNT_IN_BUNDLE_VERSION]
- * Otherwise; returns the [PAGE_COUNT_IN_APK_VERSION].
+ * Otherwise; returns the [PAGE_COUNT_IN_APK_VERSION]
  */
 private fun getPageCount() = if (BuildConfig.IS_PLAYSTORE) {
   PAGE_COUNT_IN_BUNDLE_VERSION

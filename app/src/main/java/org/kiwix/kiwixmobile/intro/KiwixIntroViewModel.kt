@@ -27,7 +27,6 @@ import javax.inject.Inject
 class KiwixIntroViewModel @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
-
   fun setIntroShown() {
     viewModelScope.launch {
       kiwixDataStore.setIntroShown(true)
