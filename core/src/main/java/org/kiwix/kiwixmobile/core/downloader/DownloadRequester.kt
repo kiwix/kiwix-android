@@ -25,4 +25,5 @@ interface DownloadRequester {
   fun retryDownload(downloadId: Long)
   fun pauseResumeDownload(downloadId: Long, isPause: Boolean)
   fun startDownloadMonitorService()
+  fun startApkDownloadService()
 }

@@ -18,20 +18,18 @@
 
 package org.kiwix.kiwixmobile.update
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
-import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
 
 class UpdateViewModel @Inject constructor(
   private val appUpdateDao: AppUpdateDao,
-  private val downloadRoomDao: DownloadRoomDao,
+  // private val downloadRoomDao: DownloadRoomDao,
   private val downloader: Downloader
 ) : ViewModel() {
   private val _state = mutableStateOf(UpdateStates())
@@ -57,11 +55,8 @@ class UpdateViewModel @Inject constructor(
     downloader.downloadApk("")
   }
 
-  private fun cancelDownloadApp() = viewModelScope.launch {
-    downloadRoomDao.getOngoingDownloads().forEach { downloads ->
-      Log.d("TAG", "cancelDownloadApp: cancel download clicked")
-      downloader.cancelDownload(downloads.downloadId)
-    }
+  private fun cancelDownloadApp() {
+    downloader.cancelDownload(1)
   }
 
   fun event(event: UpdateEvents) {

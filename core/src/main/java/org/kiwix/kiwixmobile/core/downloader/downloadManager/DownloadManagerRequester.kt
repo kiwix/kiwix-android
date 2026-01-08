@@ -64,6 +64,10 @@ class DownloadManagerRequester @Inject constructor(
   override fun startDownloadMonitorService() {
     (context as CoreApp).getMainActivity().startDownloadMonitorServiceIfOngoingDownloads()
   }
+
+  override fun startApkDownloadService() {
+    (context as CoreApp).getMainActivity().startDownloadApkService()
+  }
 }
 
 private suspend fun DownloadRequest.toFetchRequest(kiwixDataStore: KiwixDataStore) =
