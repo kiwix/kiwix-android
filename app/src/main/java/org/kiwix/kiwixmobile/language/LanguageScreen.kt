@@ -69,6 +69,8 @@ import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
 
+const val SAVE_ICON_TESTING_TAG = "saveLanguages"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LanguageScreenRoute(
