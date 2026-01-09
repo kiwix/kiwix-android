@@ -45,9 +45,8 @@ class ExternalLinkOpener @Inject constructor(
     intent: Intent,
     lifecycleScope: CoroutineScope
   ) {
-    val externalLinkPopup = kiwixDataStore.externalLinkPopup.first()
     if (intent.resolveActivity(activity.packageManager) != null) {
-      if (externalLinkPopup) {
+      if (kiwixDataStore.externalLinkPopup.first()) {
         requestOpenLink(intent, lifecycleScope)
       } else {
         openLink(intent)
@@ -93,14 +92,15 @@ class ExternalLinkOpener @Inject constructor(
     intent: Intent,
     destinationText: String
   ) {
+    if (intent.resolveActivity(activity.packageManager) == null) {
+      activity.toast(R.string.no_reader_application_installed)
+      return
+    }
+
     alertDialogShower.show(
       KiwixDialog.ExternalRedirectDialog(destinationText),
       {
-        if (intent.resolveActivity(activity.packageManager) != null) {
-          activity.startActivity(intent)
-        } else {
-          activity.toast(R.string.no_reader_application_installed)
-        }
+        activity.startActivity(intent)
       }
     )
   }

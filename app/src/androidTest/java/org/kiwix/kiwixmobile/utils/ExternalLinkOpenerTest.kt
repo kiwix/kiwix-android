@@ -166,4 +166,46 @@ internal class ExternalLinkOpenerTest {
     externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
     coVerify { activity.toast(R.string.no_reader_application_installed) }
   }
+
+  @Test
+  internal fun openExternalLinkWithDialog_showsDialogIfIntentIsResolvable() {
+    every { intent.resolveActivity(activity.packageManager) } returns mockk()
+    val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
+    externalLinkOpener.openExternalLinkWithDialog(
+      intent,
+      "donation platform"
+    )
+    verify {
+      alertDialogShower.show(
+        KiwixDialog.ExternalRedirectDialog("donation platform"),
+        any()
+      )
+    }
+  }
+
+  @Test
+  internal fun openExternalLinkWithDialog_showsToastIfIntentIsNotResolvable() {
+    every { intent.resolveActivity(activity.packageManager) } returns null
+    mockkStatic(Toast::class)
+    justRun {
+      Toast.makeText(
+        activity,
+        R.string.no_reader_application_installed,
+        Toast.LENGTH_LONG
+      ).show()
+    }
+    val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
+    externalLinkOpener.openExternalLinkWithDialog(
+      intent,
+      "donation platform"
+    )
+    verify { activity.toast(R.string.no_reader_application_installed) }
+    verify(exactly = 0) {
+      alertDialogShower.show(any(), any())
+    }
+  }
 }
