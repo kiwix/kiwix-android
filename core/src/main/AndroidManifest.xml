@@ -106,6 +106,9 @@
     <service
       android:name=".downloader.downloadManager.DownloadMonitorService"
       android:foregroundServiceType="dataSync" />
+    <service
+      android:name=".downloader.downloadManager.DownloadApkService"
+      android:foregroundServiceType="dataSync" />
     <receiver
       android:name=".downloader.downloadManager.DownloadTimeoutDismissReceiver"
       android:exported="false" />

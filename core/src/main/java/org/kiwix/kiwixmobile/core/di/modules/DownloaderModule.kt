@@ -27,6 +27,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
