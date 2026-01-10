@@ -72,7 +72,7 @@ class DownloadApkService : Service() {
   lateinit var fetchDownloadNotificationManager: FetchDownloadNotificationManager
 
   @Inject
-  lateinit var downloadRoomDao: DownloadApkDao
+  lateinit var downloadApkDao: DownloadApkDao
   private var appName: String? = "kiwix"
 
   override fun onCreate() {
@@ -199,13 +199,13 @@ class DownloadApkService : Service() {
       updateForeGroundService: Boolean = false
     ) {
       taskFlow.tryEmit {
-        downloadRoomDao.update(download)
+        downloadApkDao.update(download)
         if (download.status == Status.COMPLETED) {
-          downloadRoomDao.getApkDownload().let {
+          downloadApkDao.getApkDownload().let {
             showDownloadCompletedNotification(download)
             // to move these downloads in LibkiwixBookOnDisk.
             @Suppress("IgnoredReturnValue")
-            downloadRoomDao.getApkDownload()
+            downloadApkDao.getApkDownload()
           }
         }
         // If someone pause the Download then post a notification since fetch removes the
@@ -221,7 +221,7 @@ class DownloadApkService : Service() {
 
     private fun delete(download: Download) {
       taskFlow.tryEmit {
-        downloadRoomDao.delete(download)
+        downloadApkDao.delete(download)
         stopForegroundServiceIfNoActiveDownloads(fetch)
       }
     }

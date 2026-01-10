@@ -24,6 +24,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tonyodev.fetch2.Download
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
+import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 
 @Dao
 interface DownloadApkDao {
@@ -31,8 +33,23 @@ interface DownloadApkDao {
     getApkDownload().let { downloadApkEntity ->
       downloadApkEntity?.updateWith(download)
         .takeIf { updatedEntity -> updatedEntity != downloadApkEntity }
-        ?.let { ::updateApkDownload }
+        ?.let { updateApkDownload(it) }
     }
+  }
+
+  suspend fun addDownload(
+    url: String,
+    downloadRequester: DownloadRequester
+  ) {
+    updateApkDownload(
+      DownloadApkEntity(
+        downloadId = downloadRequester.enqueue(DownloadRequest(url)),
+        name = "",
+        version = "",
+        url = "",
+        file = ""
+      )
+    )
   }
 
   fun delete(download: Download) {
