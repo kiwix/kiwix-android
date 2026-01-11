@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.update
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,6 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
+import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.update.viewmodel.UpdateEvents
+import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
 @Composable
 fun UpdateScreen(
@@ -68,7 +74,6 @@ fun UpdateScreen(
         }
         Button(
           onClick = {
-            Log.d("TAG", "UpdateScreen: button pressed")
             events(
               UpdateEvents.CancelDownload
             )
@@ -76,7 +81,23 @@ fun UpdateScreen(
         ) {
           Text("cancel")
         }
+        Button(
+          onClick = {
+            events(
+              UpdateEvents.UpdateProgress
+            )
+          }
+        ) {
+          Text("update")
+        }
       }
+
+      ContentLoadingProgressBar(
+        progressBarStyle = ProgressBarStyle.HORIZONTAL,
+        modifier = Modifier
+          .padding(horizontal = ONE_DP, vertical = FIVE_DP),
+        progress = states.progress
+      )
     }
   }
 }
@@ -84,5 +105,5 @@ fun UpdateScreen(
 @Preview
 @Composable
 fun UpdateScreenPreview() {
-  // UpdateScreen(updateViewModel)
+  UpdateScreen(UpdateStates()) {}
 }

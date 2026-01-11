@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.update.viewmodel.UpdateViewModel
 import javax.inject.Inject
 
 class UpdateFragment : BaseFragment() {

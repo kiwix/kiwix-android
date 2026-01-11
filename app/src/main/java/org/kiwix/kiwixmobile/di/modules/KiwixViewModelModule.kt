@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 import org.kiwix.kiwixmobile.update.UpdateViewModel
+import org.kiwix.kiwixmobile.update.viewmodel.UpdateViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 
 @Module(includes = [CoreViewModelModule::class])
