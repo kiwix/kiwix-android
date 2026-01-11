@@ -76,6 +76,10 @@ class DownloaderImpl @Inject constructor(
     downloadRequester.cancel(downloadId)
   }
 
+  override fun cancelApkDownload(downloadId: Long) {
+    downloadRequester.cancelApk(downloadId)
+  }
+
   override fun retryDownload(downloadId: Long) {
     downloadRequester.retryDownload(downloadId)
   }

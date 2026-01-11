@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -96,6 +97,7 @@ interface CoreComponent {
   fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
   fun noteRoomDao(): NotesRoomDao
   fun appUpdateDao(): AppUpdateDao
+  fun downloadApkDao(): DownloadApkDao
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager

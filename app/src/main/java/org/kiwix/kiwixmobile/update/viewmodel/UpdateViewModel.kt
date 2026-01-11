@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.update
+package org.kiwix.kiwixmobile.update.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 class UpdateViewModel @Inject constructor(
   private val appUpdateDao: AppUpdateDao,
-  // private val downloadRoomDao: DownloadRoomDao,
+  // private val downloadApkDao: DownloadApkDao,
   private val downloader: Downloader
 ) : ViewModel() {
   private val _state = mutableStateOf(UpdateStates())
@@ -55,8 +55,14 @@ class UpdateViewModel @Inject constructor(
     downloader.downloadApk("")
   }
 
-  private fun cancelDownloadApp() {
-    downloader.cancelDownload(1)
+  private fun updateDownloadItem() = viewModelScope.launch {
+    /*_state.value = _state.value.copy(
+      progress = downloadApkDao.getApkDownload()!!.progress
+    )*/
+  }
+
+  private fun cancelDownloadApp() = viewModelScope.launch {
+    // downloader.cancelApkDownload(downloadApkDao.getApkDownload()!!.downloadId)
   }
 
   fun event(event: UpdateEvents) {
@@ -71,6 +77,10 @@ class UpdateViewModel @Inject constructor(
 
       is UpdateEvents.RetrieveLatestAppVersion -> {
         getLatestAppVersion()
+      }
+
+      is UpdateEvents.UpdateProgress -> {
+        updateDownloadItem()
       }
     }
   }

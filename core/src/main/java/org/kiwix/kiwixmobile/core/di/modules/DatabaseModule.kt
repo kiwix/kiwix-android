@@ -49,7 +49,7 @@ open class DatabaseModule {
 
   @Provides
   @Singleton
-  fun provideApkDownloadDao(db: KiwixRoomDatabase) = db.downloadApkDao()
+  fun provideDownloadApkDao(db: KiwixRoomDatabase) = db.downloadApkDao()
 
   @Provides
   @Singleton
