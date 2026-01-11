@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,10 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.update
+package org.kiwix.kiwixmobile.update.viewmodel
 
 sealed class UpdateEvents {
   data object DownloadApp : UpdateEvents()
   data object CancelDownload : UpdateEvents()
+  data object UpdateProgress : UpdateEvents()
   data object RetrieveLatestAppVersion : UpdateEvents()
 }
