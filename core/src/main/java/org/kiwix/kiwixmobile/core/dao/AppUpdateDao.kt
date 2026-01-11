@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,16 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.downloader
 
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
+package org.kiwix.kiwixmobile.core.dao
 
-interface DownloadRequester {
-  suspend fun enqueue(downloadRequest: DownloadRequest): Long
-  fun cancel(downloadId: Long)
-  fun cancelApk(downloadId: Long)
-  fun retryDownload(downloadId: Long)
-  fun pauseResumeDownload(downloadId: Long, isPause: Boolean)
-  fun startDownloadMonitorService()
-  fun startApkDownloadService()
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
+
+@Dao
+interface AppUpdateDao {
+  @Query("SELECT * FROM appupdateentity LIMIT 1")
+  fun getLatestAppUpdate(): Flow<AppUpdateEntity>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun updateLatestAppUpdate(appUpdateEntity: AppUpdateEntity)
 }

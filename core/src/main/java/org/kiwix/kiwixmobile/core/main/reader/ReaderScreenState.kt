@@ -55,6 +55,10 @@ data class ReaderScreenState(
    */
   val shouldShowDonationPopup: Boolean,
   /**
+   * Manages the showing of "Update" dialog.
+   */
+  val shouldShowUpdatePopup: Boolean,
+  /**
    * Manages the showing of "Full screen view" of webView's video.
    *
    * A [Pair] containing:

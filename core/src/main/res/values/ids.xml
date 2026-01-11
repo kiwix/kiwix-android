@@ -7,6 +7,7 @@
   <item type="id" name="notesFragmentContainer" />
   <item type="id" name="introFragmentContainer" />
   <item type="id" name="historyFragmentContainer" />
+  <item type="id" name="updateFragmentContainer" />
   <item type="id" name="languageFragmentContainer" />
   <item type="id" name="zimHostFragmentContainer" />
   <item type="id" name="helpFragmentContainer" />

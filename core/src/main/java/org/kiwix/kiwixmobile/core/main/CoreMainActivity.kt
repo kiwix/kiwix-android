@@ -46,6 +46,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.navOptions
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,6 +60,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
@@ -69,6 +72,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -85,6 +89,7 @@ const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 const val READER_FRAGMENT = "readerFragment"
 const val LOCAL_LIBRARY_FRAGMENT = "localLibraryFragment"
 const val DOWNLOAD_FRAGMENT = "downloadsFragment"
+const val UPDATE_FRAGMENT = "updateFragment"
 const val BOOKMARK_FRAGMENT = "bookmarkFragment"
 const val NOTES_FRAGMENT = "notesFragment"
 const val INTRO_FRAGMENT = "introFragment"
@@ -188,6 +193,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
+    WorkManager.getInstance(this).enqueue(
+      OneTimeWorkRequestBuilder<UpdateWorkManager>().build()
+    )
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
@@ -311,6 +319,22 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
             stopDownloadServiceIfRunning()
           }
         }
+      }
+    }
+  }
+
+  @Suppress("InjectDispatcher")
+  fun startDownloadApkService() {
+    CoroutineScope(Dispatchers.IO).launch {
+      runCatching {
+        startService(
+          Intent(
+            this@CoreMainActivity,
+            DownloadApkService::class.java
+          ).apply {
+            putExtra(APP_NAME_KEY, appName)
+          }
+        )
       }
     }
   }

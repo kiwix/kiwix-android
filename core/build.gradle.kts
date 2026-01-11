@@ -12,9 +12,13 @@ plugins {
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
+fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
+
 android {
   defaultConfig {
     buildConfigField("long", "VERSION_CODE", "".getVersionCode().toString())
+    buildConfigField("String", "VERSION_NAME", "\"${generateVersionName()}\"")
+    resValue("string", "app_name", "Kiwix")
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
   buildTypes {
@@ -62,4 +66,6 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+
+  implementation("androidx.work:work-runtime-ktx:2.11.0")
 }

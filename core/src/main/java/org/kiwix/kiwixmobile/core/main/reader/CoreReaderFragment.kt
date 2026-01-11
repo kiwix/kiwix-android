@@ -97,6 +97,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
@@ -118,6 +119,7 @@ import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
+import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
@@ -165,6 +167,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
+import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
 import org.kiwix.libkiwix.Book
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -272,6 +275,7 @@ abstract class CoreReaderFragment :
       onOpenLibraryButtonClicked = {},
       pageLoadingItem = false to ZERO,
       shouldShowDonationPopup = false,
+      shouldShowUpdatePopup = false,
       fullScreenItem = false to null,
       showBackToTopButton = false,
       backToTopButtonClick = { backToTop() },
@@ -461,6 +465,7 @@ abstract class CoreReaderFragment :
           // Update the title when Compose is ready to fix the issue
           // where the user opens pages from history, notes, or bookmarks.
           updateTitle()
+          fetchUpdate()
         }
         LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
           readerScreenState.update {
@@ -485,7 +490,8 @@ abstract class CoreReaderFragment :
           documentSections = documentSections,
           showTableOfContentDrawer = shouldTableOfContentDrawer,
           onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
-          navHostController = (requireActivity() as CoreMainActivity).navController
+          navHostController = (requireActivity() as CoreMainActivity).navController,
+          onUpdateIconClick = { onUpdateIconClick() }
         )
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
@@ -2598,6 +2604,16 @@ abstract class CoreReaderFragment :
     }
   }
 
+  // update comparison
+  private fun fetchUpdate() {
+    // BuildConfig.VERSION_NAME
+    val currentVersion = VersionId("3.9.11")
+    val available = VersionId("3.9.12")
+    if (available > currentVersion) {
+      readerScreenState.update { copy(shouldShowUpdatePopup = true) }
+    }
+  }
+
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
     tts?.currentTTSTask?.let {
       if (it.paused != isPauseTTS) {
@@ -2624,6 +2640,10 @@ abstract class CoreReaderFragment :
 
   override fun showDonationDialog() {
     showDonationLayout()
+  }
+
+  private fun onUpdateIconClick() {
+    requireActivity().navigate(UPDATE_FRAGMENT)
   }
 
   private fun bindService() {
