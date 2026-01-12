@@ -29,6 +29,7 @@
   <string name="save_media_saved">המדיה נשמרה בתור %s לתיקייה Android/media/org.kiwix…/‎</string>
   <string name="search_label">חיפוש</string>
   <string name="searched_list">באיזו רשימה נעשה החיפוש</string>
+  <string name="more_options">אפשרויות נוספות</string>
   <string name="choose_file">בחירת קובץ תוכן (‎*.zim)</string>
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
   <string name="hotspot_service_channel_name">ערוץ שירות נקודת חיבור</string>
@@ -56,8 +57,8 @@
   <string name="start_server_label">הרצת השרת</string>
   <string name="stop_server_label">כיבוי השרת</string>
   <string name="error_server_already_running">השרת כבר פעיל. נא לכבות אותו ולנסות שוב.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">לא ניתן למצוא כתובת IP.</string>
-  <string name="server_started_message" fuzzy="true">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
+  <string name="error_ip_address_not_found">לא ניתן למצוא כתובת IP.</string>
+  <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
   <string name="qr_code">קוד QR מתוצג</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא. %s</string>
@@ -70,6 +71,10 @@
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
+  <string name="pref_theme">ערכת עיצוב</string>
+  <string name="theme_system">כמו המערכת</string>
+  <string name="theme_light">בהירה</string>
+  <string name="theme_dark">כהה</string>
   <string name="pref_theme_summary">הצגת ערכים עם צבעים הפוכים</string>
   <string name="pref_back_to_top">חזרה למעלה</string>
   <string name="pref_back_to_top_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
@@ -195,7 +200,7 @@
   <string name="downloading">מתבצעת הורדה</string>
   <string name="no_items_msg">אין פריטים זמינים</string>
   <string name="crash_title">טוב… זה מביך</string>
-  <string name="crash_description" fuzzy="true">נראה שקרסנו.\n\nהאם ברצונך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת המידע הבא?</string>
+  <string name="crash_description">נראה שקרסנו.\n\nמתחשק לך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת דוח הקריסה?</string>
   <string name="crash_checkbox_language">הגדרות השפה שלך</string>
   <string name="crash_checkbox_zimfiles">רשימה של קובצי ה־ZIM שלך</string>
   <string name="crash_checkbox_exception">פרטים על הקריסה</string>
@@ -317,7 +322,7 @@
   <string name="send_report">שליחת דוח אבחון</string>
   <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
   <string name="diagnostic_report">דוח אבחון</string>
-  <string name="diagnostic_report_message" fuzzy="true">נא לשלוח את כל הפרטים הבאים כדי שנוכל לאבחן את התקלה</string>
+  <string name="diagnostic_report_message">כדי לסייע לנו לאבחן את התקלה, יש לנסות לשחזר אותה קודם ואז לשלוח את דוח האבחון.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">תקריב טקסט</string>
   <string name="search_open_in_new_tab">פתיחה בלשונית חדשה</string>

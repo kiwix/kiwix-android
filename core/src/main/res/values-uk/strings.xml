@@ -58,7 +58,7 @@
   <string name="hotspot_notification_content_title">Точка Доступу Kiwix</string>
   <string name="start_server_label">Запустити сервер</string>
   <string name="stop_server_label">Зупинити сервер</string>
-  <string name="server_started_message" fuzzy="true">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
+  <string name="server_started_message">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
   <string name="share_host_address">Поділіться URL-адресою за допомогою інших програм</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти. %s</string>
   <string name="unable_to_read_zim_file">Неможливо прочитати цей файл ZIM!</string>
@@ -176,7 +176,7 @@
   <string name="other_languages">Інші мови:</string>
   <string name="no_items_msg">Немає елементів</string>
   <string name="crash_title">Хммм… Це збентежує</string>
-  <string name="crash_description" fuzzy="true">Схоже, наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надавши наступну інформацію?</string>
+  <string name="crash_description">Схоже наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надіславши звіт про збій?</string>
   <string name="crash_checkbox_language">Ваші налаштування мави</string>
   <string name="crash_checkbox_zimfiles">Перелік ваших ZIM-файлів</string>
   <string name="crash_checkbox_exception">Деталі помилки</string>
@@ -276,10 +276,10 @@
   <string name="delete_selected_history">Видалити обрану історію?</string>
   <string name="delete_bookmarks">Видалити всі закладки?</string>
   <string name="delete_selected_bookmarks">Видалити обрані закладки?</string>
-  <string name="send_report">Відправити звіт діагностики</string>
+  <string name="send_report">Відправити діагностичний звіт</string>
   <string name="crash_checkbox_file_system">Інформація про файлову систему</string>
   <string name="diagnostic_report">Діагностичний звіт</string>
-  <string name="diagnostic_report_message" fuzzy="true">Будь ласка, надішліть наступні подробиці, аби ми змогли діагностувати проблему</string>
+  <string name="diagnostic_report_message">Щоб допомогти нам діагностувати проблему, спочатку відтворіть її, а потім надішліть діагностичний звіт.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Збільшити текст</string>
   <string name="search_open_in_new_tab">Відкрити у новій вкладці</string>
