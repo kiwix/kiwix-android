@@ -83,7 +83,8 @@ class CustomMainActivity : CoreMainActivity() {
         leftDrawerState = leftDrawerState,
         enableLeftDrawer = enableLeftDrawer.value,
         uiCoroutineScope = uiCoroutineScope,
-        customBackHandler = customBackHandler
+        customBackHandler = customBackHandler,
+        viewModelFactory = viewModelFactory
       )
       DialogHost(alertDialogShower)
       LaunchedEffect(Unit) {

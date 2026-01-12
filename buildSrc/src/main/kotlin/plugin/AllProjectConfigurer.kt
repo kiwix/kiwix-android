@@ -242,6 +242,8 @@ class AllProjectConfigurer {
       implementation(Libs.COIL3_COMPOSE)
       implementation(Libs.COIL3_OKHTTP_COMPOSE)
       implementation(Libs.COMPOSE_NAVIGATION)
+      implementation(Libs.LIFECYCLE_VIEWMODEL_COMPOSE)
+      implementation(Libs.LIFECYCLE_VIEWMODEL_KTX)
 
       // Jetpack Datastore
       implementation(Libs.DATASTORE)

@@ -35,15 +35,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
@@ -54,10 +59,29 @@ const val SEND_DIAGNOSTIC_REPORT_TESTING_TAG = "sendDiagnosticReportTestingTag"
 const val HELP_SCREEN_ITEM_TITLE_TESTING_TAG = "helpScreenItemTitleTestingTag"
 const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionTestingTag"
 
+@Composable
+fun HelpScreenRoute(
+  navigateBack: () -> Unit,
+  helpViewModel: HelpViewModel
+) {
+  val helpItems by helpViewModel.helpItems.collectAsStateWithLifecycle()
+  val context = LocalContext.current
+
+  LaunchedEffect(Unit) {
+    helpViewModel.getHelpItems(context)
+  }
+
+  HelpScreen(
+    data = helpItems.toMutableList(),
+    onSendReportButtonClick = { helpViewModel.onSendReportButtonClick(context) },
+    navigationIcon = { NavigationIcon(onClick = navigateBack) }
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
-fun HelpScreen(
+private fun HelpScreen(
   data: MutableList<HelpScreenItemDataClass>,
   onSendReportButtonClick: () -> Unit,
   navigationIcon: @Composable () -> Unit

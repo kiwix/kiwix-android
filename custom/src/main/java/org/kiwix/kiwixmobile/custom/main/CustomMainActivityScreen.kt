@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 
+@Suppress("LongParameterList")
 @Composable
 fun CustomMainActivityScreen(
   navController: NavHostController,
@@ -49,7 +51,8 @@ fun CustomMainActivityScreen(
   leftDrawerState: DrawerState,
   enableLeftDrawer: Boolean,
   customBackHandler: MutableState<(() -> FragmentActivityExtensions.Super)?>,
-  uiCoroutineScope: CoroutineScope
+  uiCoroutineScope: CoroutineScope,
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -84,7 +87,8 @@ fun CustomMainActivityScreen(
         Box(modifier = Modifier.padding(paddingValues)) {
           CustomNavGraph(
             navController = navController,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            viewModelFactory = viewModelFactory
           )
         }
       }

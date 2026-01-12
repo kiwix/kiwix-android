@@ -18,10 +18,11 @@
 
 package org.kiwix.kiwixmobile.localLibrary
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -33,8 +34,9 @@ import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
@@ -59,7 +61,9 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.OutputStream
 
 class OpeningFilesFromStorageTest : BaseActivityTest() {
@@ -121,7 +125,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @Test
   fun testOpeningFileWithFilePicker() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Build.VERSION.SDK_INT != Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)
@@ -130,10 +134,15 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
         runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+        intending(hasAction(Intent.ACTION_CHOOSER))
+          .respondWith(
+            Instrumentation.ActivityResult(
+              Activity.RESULT_OK,
+              Intent().setData(uri)
+            )
+          )
         // open file picker to select a file to test the real scenario.
         composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
-        TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
-
         copyMoveFileHandler {
           assertCopyMoveDialogDisplayed(composeTestRule)
           clickOnMove(composeTestRule)
@@ -147,16 +156,14 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         deleteAllFilesInDirectory(
           runBlocking { File(kiwixDataStore.selectedStorage.first()) }
         )
-        deleteZimFileFromDownloadsFolder(uri!!)
+        deleteZimFileFromDownloadsFolder(uri)
       }
     }
   }
 
   @Test
   fun testOpeningFileFromFileManager() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
-    ) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)
@@ -165,8 +172,13 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
         runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
-        openFileManager()
-        TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
+        val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+          setDataAndType(uri, "application/octet-stream")
+          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+          setPackage(context.packageName)
+        }
+        ActivityScenario.launch<KiwixMainActivity>(viewIntent).onActivity {}
+        composeTestRule.waitForIdle()
         copyMoveFileHandler {
           assertCopyMoveDialogDisplayed(composeTestRule)
           clickOnMove(composeTestRule)
@@ -180,7 +192,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         deleteAllFilesInDirectory(
           runBlocking { File(kiwixDataStore.selectedStorage.first()) }
         )
-        deleteZimFileFromDownloadsFolder(uri!!)
+        deleteZimFileFromDownloadsFolder(uri)
       }
     }
   }
@@ -241,13 +253,6 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     }
   }
 
-  private fun openFileManager() {
-    val intent =
-      context.packageManager.getLaunchIntentForPackage("com.android.documentsui")
-    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-    context.startActivity(intent)
-  }
-
   private fun getSelectedFile(): File {
     val loadFileStream =
       CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
@@ -275,32 +280,25 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     context: Context,
     fileName: String,
     content: ByteArray = getSelectedFile().readBytes()
-  ): Uri? {
+  ): Uri {
     val contentValues =
       ContentValues().apply {
         put(MediaStore.Downloads.DISPLAY_NAME, fileName)
         put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
-        put(MediaStore.Downloads.IS_PENDING, true)
+        put(MediaStore.Downloads.IS_PENDING, 1)
       }
 
     val resolver = context.contentResolver
     val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+      ?: throw FileNotFoundException("Could not write file in Download folder")
 
-    uri?.let {
-      resolver.openOutputStream(uri).use { outputStream ->
-        outputStream?.write(content)
-      }
+    resolver.openOutputStream(uri)?.use {
+      it.write(content)
+    } ?: throw IOException("Could not write content in file")
 
-      contentValues.clear()
-      contentValues.put(MediaStore.Downloads.IS_PENDING, false)
-      resolver.update(uri, contentValues, null, null)
-      MediaScannerConnection.scanFile(
-        context,
-        arrayOf(uri.toString()),
-        arrayOf("application/octet-stream"),
-        null
-      )
-    }
+    contentValues.clear()
+    contentValues.put(MediaStore.Downloads.IS_PENDING, 0)
+    resolver.update(uri, contentValues, null, null)
 
     return uri
   }
