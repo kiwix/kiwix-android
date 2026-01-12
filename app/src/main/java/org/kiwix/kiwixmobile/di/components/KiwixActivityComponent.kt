@@ -25,8 +25,6 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
-import org.kiwix.kiwixmobile.intro.IntroFragment
-import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageFragment
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -41,8 +39,7 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 @Subcomponent(
   modules = [
     KiwixActivityModule::class,
-    ZimHostModule::class,
-    IntroModule::class
+    ZimHostModule::class
   ]
 )
 interface KiwixActivityComponent : CoreActivityComponent {
@@ -54,7 +51,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(languageFragment: LanguageFragment)
   fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixSettingsFragment: KiwixSettingsFragment)
-  fun inject(introActivity: IntroFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
 

@@ -66,7 +66,7 @@ fun getViewHierarchy(v: View) =
 fun attempt(count: Int, function: () -> Unit): Unit =
   try {
     function.invoke()
-  } catch (e: Exception) {
+  } catch (e: AssertionError) {
     if (count - 1 == 0) {
       throw e
     } else {
