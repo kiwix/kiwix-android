@@ -45,8 +45,8 @@
   <string name="start_server_label">Start tjener</string>
   <string name="stop_server_label">Stopp tjener</string>
   <string name="error_server_already_running">Tjeneren kjører allerede. Stopp den og forsøk på nytt.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">Klarte ikke å finne IP adressen.</string>
-  <string name="server_started_message" fuzzy="true">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
+  <string name="error_ip_address_not_found">Klarte ikke å finne IP adresse.</string>
+  <string name="server_started_message">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
   <string name="qr_code">Generert QR-kode</string>
   <string name="share_host_address">Del webadresse via andre programmer</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet \n. %s</string>
@@ -59,6 +59,10 @@
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
   <string name="pref_info_version">Versjon</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">System</string>
+  <string name="theme_light">Lys</string>
+  <string name="theme_dark">Mørk</string>
   <string name="pref_theme_summary">Vis artikler med inverterte farger</string>
   <string name="pref_back_to_top">Tilbake til toppen</string>
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
@@ -75,16 +79,19 @@
   <string name="request_write_storage">For å laste ned ZIM-filer trenger vi skrivetilgang til lagringsplassen din</string>
   <string name="delete_recent_search_item">Slette dette elementet?</string>
   <string name="pref_clear_all_history_title">Tøm logg</string>
+  <string name="pref_clear_all_history_summary">Tøm historikken for nylige søk og faner</string>
   <string name="pref_notes">Notater</string>
   <string name="pref_permission">Tillatelser</string>
   <string name="pref_import_bookmark_title">Importer bokmerker</string>
   <string name="pref_import_bookmark_summary">Importer de lagrede bokmerkene</string>
   <string name="pref_export_bookmark_title">Eksporter bokmerker</string>
   <string name="pref_export_bookmark_summary">Eksporter alle lagrede bokmerker</string>
+  <string name="pref_clear_all_bookmarks_title">Fjern bokmerker</string>
   <string name="share">Del</string>
   <string name="selected_file_cab_app_chooser_title">Del ZIM-filer med:</string>
   <string name="delete">Slett</string>
   <string name="cancel">Avbryt</string>
+  <string name="delete_specific_search_toast">Nylig søk fjernet</string>
   <string name="got_it">Skjønner</string>
   <string name="did_you_know">Visste du at?</string>
   <string name="undo">Angre</string>
@@ -107,9 +114,13 @@
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliotek</string>
+  <string name="delete_zims_toast">Filer slettet</string>
   <string name="no_files_here">Ingen filer her</string>
+  <string name="download_no_space">For lite lagringsplass til å laste ned.</string>
   <string name="download">Last ned</string>
+  <string name="download_notification_channel_description">Laster ned ZIM-filer…</string>
   <string name="space_available">Ledig plass:</string>
+  <string name="move_no_space">For lite lagringsplass til å flytte/kopiere.</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Ingen bilder</string>
   <string name="zim_no_vid">Ingen videoer</string>
@@ -154,7 +165,7 @@
   <string name="do_not_ask_anymore">Ikke spør igjen</string>
   <string name="other_languages">Andre språk:</string>
   <string name="crash_title">Vel … Dette er pinlig</string>
-  <string name="crash_description" fuzzy="true">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
+  <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende krasjrapporten?</string>
   <string name="crash_checkbox_language">Dine språkinnstillinger</string>
   <string name="crash_checkbox_zimfiles">En liste over ZIM-filene dine</string>
   <string name="crash_checkbox_logs">Applikasjonslogger</string>
@@ -188,6 +199,13 @@
   <string name="paused_state">Pauset</string>
   <string name="failed_state">Mislyktes: %s</string>
   <string name="save">Lagre</string>
+  <string name="note">Notat</string>
+  <string name="take_notes">Ta notater</string>
+  <string name="note_save_unsuccessful">Lagring av notat mislyktes</string>
+  <string name="note_delete_successful">Notatet ble slettet</string>
+  <string name="note_delete_unsuccessful">Notatet ble ikke slettet</string>
+  <string name="note_save_successful">Notat lagret</string>
+  <string name="delete_notes_confirmation_msg">Slett alle notater?</string>
   <string name="notes_deletion_unsuccessful">Noen filer ble ikke slettet</string>
   <string name="connection_failed">Tilkobling mislyktes</string>
   <string name="your_device">Din enhet:</string>
@@ -215,7 +233,7 @@
   <string name="send_report">Send diagnoserapport</string>
   <string name="crash_checkbox_file_system">Filsystemdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>
-  <string name="diagnostic_report_message" fuzzy="true">Vennligst send alle følgende detaljer slik at vi kan diagnostisere problemet</string>
+  <string name="diagnostic_report_message">For å hjelpe oss å diagnostisere problemet, gjenskap problemet først og send deretter rapporten.</string>
   <string name="percentage">%d%%</string>
   <string name="search_open_in_new_tab">Åpne i ny fane</string>
   <string name="reader">Leser</string>
@@ -224,8 +242,8 @@
   <string name="tabs_restored">Faner gjenopprettet</string>
   <string name="action_copy">Kopier</string>
   <string name="move">Flytt</string>
-  <string name="copying_zim_file" fuzzy="true">Kopierer ZIM-fil %s…</string>
-  <string name="moving_zim_file" fuzzy="true">Flytter ZIM-fil %s…</string>
+  <string name="copying_zim_file">Kopierer ZIM-fil %s…</string>
+  <string name="moving_zim_file">Flytter ZIM-fil %s…</string>
   <string name="move_file_error_message">Feil ved flytting av ZIM-filen: %s.</string>
   <string name="allowed">Tillatt</string>
   <string name="not_allowed">Ikke tillatt</string>

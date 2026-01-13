@@ -416,4 +416,8 @@
   <string name="file_system_scan_dialog_title">مسح تخزين الكتب؟</string>
   <string name="file_system_scan_dialog_message">سيقوم Kiwix بفحص مساحة تخزين جهازك وإدراج الكتب المتوفرة هنا.</string>
   <string name="download_timeout_resume_message">تحميل خلفية أندرويد انتهى هل تريد الاستئناف؟</string>
+  <string name="validate_zim_files">التحقق من صحة ملفات ZIM</string>
+  <string name="confirmation_validate_zim_files">هل أنت متأكد من رغبتك في التحقق من صحة ملفات ZIM التالية؟! لا! لا! %s</string>
+  <string name="validating_zim_file">جارٍ التحقق من صحة ملف ZIM…</string>
+  <string name="validating_zim_files">جارٍ التحقق من صحة ملفات ZIM…</string>
 </resources>
