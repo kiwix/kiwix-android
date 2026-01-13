@@ -396,10 +396,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   fun openSupportKiwixExternalLink() {
     closeNavigationDrawer()
     lifecycleScope.launch {
-      externalLinkOpener.openExternalUrl(
+      externalLinkOpener.openExternalLinkWithDialog(
         KIWIX_SUPPORT_URL.toUri().browserIntent(),
-        false,
-        this
+        getString(R.string.support_donation_platform)
       )
     }
   }

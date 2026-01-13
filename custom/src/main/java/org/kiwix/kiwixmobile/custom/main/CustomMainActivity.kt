@@ -148,10 +148,9 @@ class CustomMainActivity : CoreMainActivity() {
         onClick = {
           closeNavigationDrawer()
           lifecycleScope.launch {
-            externalLinkOpener.openExternalUrl(
-              BuildConfig.SUPPORT_URL.toUri().browserIntent(),
-              false,
-              this
+            externalLinkOpener.openExternalLinkWithDialog(
+              intent = BuildConfig.SUPPORT_URL.toUri().browserIntent(),
+              destinationText = getString(string.support_donation_platform)
             )
           }
         },
@@ -178,14 +177,13 @@ class CustomMainActivity : CoreMainActivity() {
           getString(R.string.app_name)
         ),
         iconRes = drawable.ic_baseline_info,
-        true,
+        visible = true,
         onClick = {
           closeNavigationDrawer()
           lifecycleScope.launch {
-            externalLinkOpener.openExternalUrl(
-              BuildConfig.ABOUT_APP_URL.toUri().browserIntent(),
-              false,
-              this
+            externalLinkOpener.openExternalLinkWithDialog(
+              intent = BuildConfig.ABOUT_APP_URL.toUri().browserIntent(),
+              destinationText = getString(string.about_app_page),
             )
           }
         },

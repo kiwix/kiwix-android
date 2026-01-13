@@ -442,10 +442,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
       runSafelyInCoreReaderLifecycleScope {
-        externalLinkOpener?.openExternalUrl(
+        externalLinkOpener?.openExternalLinkWithDialog(
           BuildConfig.SUPPORT_URL.toUri().browserIntent(),
-          false,
-          this
+          getString(org.kiwix.kiwixmobile.core.R.string.support_donation_platform)
         )
       }
     }
