@@ -19,9 +19,11 @@ package org.kiwix.kiwixmobile.splash
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
@@ -64,16 +66,18 @@ class KiwixSplashActivityTest {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-  private val permissions =
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
 
   @Rule
   @JvmField
-  var permissionRules: GrantPermissionRule =
-    GrantPermissionRule.grant(*permissions)
+  val permissionRule: GrantPermissionRule? =
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      GrantPermissionRule.grant(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+      )
+    } else {
+      null
+    }
   private lateinit var context: Context
 
   @Before
@@ -101,7 +105,17 @@ class KiwixSplashActivityTest {
     shouldShowIntro(true)
     ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
     }
-    composeTestRule.waitForIdle()
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(timeoutMillis = 5_000) {
+          onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.get_started).uppercase())
+      }
+    }, 10)
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
