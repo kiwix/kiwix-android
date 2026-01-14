@@ -20,14 +20,15 @@ package org.kiwix.kiwixmobile.splash
 import android.Manifest
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
@@ -36,12 +37,9 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +47,6 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -102,61 +99,50 @@ class KiwixSplashActivityTest {
 
   @Test
   fun testFirstRun() {
-    shouldShowIntro(true)
-    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-    }
-    testFlakyView({
-      composeTestRule.apply {
-        waitUntil(timeoutMillis = 5_000) {
-          onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-            .fetchSemanticsNodes().isNotEmpty()
-        }
+    ActivityScenario.launch(KiwixMainActivity::class.java)
 
-        onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-          .assertTextEquals(context.getString(R.string.get_started).uppercase())
-      }
-    }, 10)
     testFlakyView({
-      composeTestRule.apply {
-        waitForIdle()
-        onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-          .assertTextEquals(context.getString(R.string.get_started).uppercase())
+      composeTestRule.waitUntil(timeoutMillis = 5_000) {
+        composeTestRule
+          .onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+          .fetchSemanticsNodes()
+          .isNotEmpty()
       }
+
+      composeTestRule
+        .onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.get_started).uppercase())
     }, 10)
 
-    // Verify that the value of the "intro shown" boolean inside
-    // the DataStore Database is not changed until
-    // the "Get started" button is pressed
-    val showIntro = runBlocking { KiwixDataStore(context).showIntro.first() }
-    Assert.assertEquals(true, showIntro)
     LeakAssertions.assertNoLeaks()
   }
 
   @Test
   fun testNormalRun() {
-    shouldShowIntro(false)
-    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+    val scenario = ActivityScenario.launch(KiwixMainActivity::class.java)
+
+    composeTestRule.waitUntil(timeoutMillis = 5_000) {
+      composeTestRule
+        .onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+        .fetchSemanticsNodes()
+        .isNotEmpty()
     }
-    composeTestRule.waitForIdle()
-    Intents.intended(
-      IntentMatchers.hasComponent(
-        KiwixMainActivity::class.java.canonicalName
-      )
-    )
+
+    composeTestRule
+      .onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+      .performClick()
+
+    scenario.recreate()
+
+    composeTestRule
+      .onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+      .assertCountEquals(0)
+
     LeakAssertions.assertNoLeaks()
   }
 
   @After
   fun endTest() {
     Intents.release()
-  }
-
-  private fun shouldShowIntro(value: Boolean) {
-    runBlocking {
-      KiwixDataStore(context).apply {
-        setIntroShown(value)
-        setPrefIsTest(true)
-      }
-    }
   }
 }
