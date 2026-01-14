@@ -61,7 +61,7 @@ jobs:
       - name: Get Bundle and APKs name and path
         id: get-bundle-and-apk-paths
         run: |
-          BUNDLE_PATH="app/build/outputs/bundle/playStore/kiwix-playStore.aab"
+          BUNDLE_PATH="app/build/outputs/bundle/playStore/app-playStore.aab"
           BUNDLE_NAME="PlayStoreDummyBundle.aab"
           echo "bundle_path=$BUNDLE_PATH" >> $GITHUB_ENV
           echo "bundle_name=$BUNDLE_NAME" >> $GITHUB_ENV
