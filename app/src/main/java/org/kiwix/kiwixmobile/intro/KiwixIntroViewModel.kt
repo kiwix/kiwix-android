@@ -30,7 +30,6 @@ class KiwixIntroViewModel @Inject constructor(
   fun setIntroShown() {
     viewModelScope.launch {
       kiwixDataStore.setIntroShown(false)
-      kiwixDataStore.setIsFirstRun(false)
     }
   }
 }

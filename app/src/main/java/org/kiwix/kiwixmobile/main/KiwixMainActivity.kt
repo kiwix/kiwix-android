@@ -135,20 +135,18 @@ class KiwixMainActivity : CoreMainActivity() {
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
       bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
-      val showIntroState = kiwixDataStore.showIntro.collectAsState(initial = null)
-      val isFirstRunState = kiwixDataStore.isFirstRun.collectAsState(initial = null)
+      val showIntro = kiwixDataStore.showIntro.collectAsState(initial = null).value
 
-      val showIntro = showIntroState.value
-      val isFirstRun = isFirstRunState.value
-
-      if (showIntro != null && isFirstRun != null) {
-        val shouldShowIntro = isFirstRun && showIntro && !isIntroScreenVisible
+      if (showIntro != null) {
+        val shouldShowIntro = showIntro && !isIntroScreenVisible
 
         val startDestination = if (shouldShowIntro) {
           KiwixDestination.Intro.route
         } else {
           KiwixDestination.Reader.route
         }
+        RestoreDrawerStateOnOrientationChange()
+        PersistDrawerStateOnChange()
 
         KiwixMainActivityScreen(
           navController = navController,
