@@ -23,8 +23,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tonyodev.fetch2.Download
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 
 @Dao
@@ -36,6 +40,11 @@ interface DownloadApkDao {
         ?.let { updateApkDownload(it) }
     }
   }
+
+  fun downloads(): Flow<DownloadApkModel> =
+    getActiveDownload()
+      .distinctUntilChanged()
+      .map { it.let(::DownloadApkModel) }
 
   suspend fun addDownload(
     url: String,
@@ -59,9 +68,12 @@ interface DownloadApkDao {
   @Query("SELECT * FROM downloadapkentity LIMIT 1")
   fun getApkDownload(): DownloadApkEntity?
 
+  @Query("SELECT * FROM downloadapkentity LIMIT 1")
+  fun getActiveDownload(): Flow<DownloadApkEntity>
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun updateApkDownload(downloadApkEntity: DownloadApkEntity)
 
-  @Query("DELETE FROM downloadapkentity WHERE downloadId=:downloadId")
+  @Query("DELETE FROM DownloadApkEntity WHERE downloadId=:downloadId")
   fun deleteApkDownloadByDownloadId(downloadId: Long)
 }

@@ -45,12 +45,16 @@ data class DownloadApkEntity(
 ) {
   fun updateWith(download: Download) =
     copy(
+      name = "",
+      version = "",
+      url = download.url,
+      downloadId = download.id.toLong(),
       file = download.file,
       etaInMilliSeconds = download.etaInMilliSeconds,
       bytesDownloaded = download.downloaded,
       totalSizeOfDownload = download.total,
+      progress = download.progress,
       status = download.status,
       error = download.error,
-      progress = download.progress
     )
 }

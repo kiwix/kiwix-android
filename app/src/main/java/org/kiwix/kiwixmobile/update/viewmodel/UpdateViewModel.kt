@@ -23,46 +23,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
 
 class UpdateViewModel @Inject constructor(
-  private val appUpdateDao: AppUpdateDao,
-  // private val downloadApkDao: DownloadApkDao,
+  // private val appUpdateDao: AppUpdateDao,
+  private val downloadApkDao: DownloadApkDao,
   private val downloader: Downloader
 ) : ViewModel() {
   private val _state = mutableStateOf(UpdateStates())
   val state: State<UpdateStates> = _state
 
-  init {
-    getLatestAppVersion()
+  private fun downloadApp() {
+    downloader.downloadApk("")
+    updateDownload()
   }
 
-  private fun getLatestAppVersion() = viewModelScope.launch {
-    appUpdateDao.getLatestAppUpdate().collect { latestAppVersion ->
-      _state.value = _state.value.copy(
-        apkVersion = AppVersion(
-          apkUrl = latestAppVersion.url,
-          name = latestAppVersion.name,
-          version = latestAppVersion.version
-        )
-      )
+  private fun updateDownload() = viewModelScope.launch {
+    downloadApkDao.downloads().collect { download ->
+      _state.value = UpdateStates(download)
     }
   }
 
-  private fun downloadApp() {
-    downloader.downloadApk("")
-  }
-
-  private fun updateDownloadItem() = viewModelScope.launch {
-    /*_state.value = _state.value.copy(
-      progress = downloadApkDao.getApkDownload()!!.progress
-    )*/
-  }
-
-  private fun cancelDownloadApp() = viewModelScope.launch {
-    // downloader.cancelApkDownload(downloadApkDao.getApkDownload()!!.downloadId)
+  private fun cancelDownload() {
+    downloader.cancelDownload(state.value.downloadId)
   }
 
   fun event(event: UpdateEvents) {
@@ -72,15 +57,15 @@ class UpdateViewModel @Inject constructor(
       }
 
       is UpdateEvents.CancelDownload -> {
-        cancelDownloadApp()
+        cancelDownload()
       }
 
       is UpdateEvents.RetrieveLatestAppVersion -> {
-        getLatestAppVersion()
+        // getLatestAppVersion()
       }
 
       is UpdateEvents.UpdateProgress -> {
-        updateDownloadItem()
+        //  updateDownload()
       }
     }
   }

@@ -55,11 +55,11 @@ fun UpdateScreen(
       verticalArrangement = Arrangement.Center
     ) {
       Text(
-        "apk version name:${states.apkVersion.name}",
+        states.readableEta.toString(),
         color = Color.Black
       )
       Text(
-        "url: ${states.apkVersion.apkUrl}",
+        "",
         color = Color.Black
       )
       Row {
