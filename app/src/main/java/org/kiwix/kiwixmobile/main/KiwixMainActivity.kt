@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -58,6 +59,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
@@ -139,32 +141,27 @@ class KiwixMainActivity : CoreMainActivity() {
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
       bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
-      val showIntro = kiwixDataStore.showIntro.collectAsState(initial = null).value
-
-      if (showIntro != null) {
-        val shouldShowIntro = showIntro && !isIntroScreenVisible
-
-        val startDestination = if (shouldShowIntro) {
+      val startDestination = remember {
+        if (runBlocking { kiwixDataStore.showIntro.first() } && !isIntroScreenNotVisible()) {
           KiwixDestination.Intro.route
         } else {
           KiwixDestination.Reader.route
         }
-        RestoreDrawerStateOnOrientationChange()
-        PersistDrawerStateOnChange()
-
-        KiwixMainActivityScreen(
-          navController = navController,
-          leftDrawerContent = leftDrawerMenu,
-          startDestination = startDestination,
-          topLevelDestinationsRoute = topLevelDestinationsRoute,
-          leftDrawerState = leftDrawerState,
-          uiCoroutineScope = uiCoroutineScope,
-          enableLeftDrawer = enableLeftDrawer.value,
-          shouldShowBottomAppBar = shouldShowBottomAppBar.value,
-          bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-          viewModelFactory = viewModelFactory
-        )
       }
+      RestoreDrawerStateOnOrientationChange()
+      PersistDrawerStateOnChange()
+      KiwixMainActivityScreen(
+        navController = navController,
+        leftDrawerContent = leftDrawerMenu,
+        startDestination = startDestination,
+        topLevelDestinationsRoute = topLevelDestinationsRoute,
+        leftDrawerState = leftDrawerState,
+        uiCoroutineScope = uiCoroutineScope,
+        enableLeftDrawer = enableLeftDrawer.value,
+        shouldShowBottomAppBar = shouldShowBottomAppBar.value,
+        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
+        viewModelFactory = viewModelFactory
+      )
       LaunchedEffect(Unit) {
         // Load the menu when UI is attached to screen.
         leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
@@ -284,6 +281,11 @@ class KiwixMainActivity : CoreMainActivity() {
       }
     }
   }
+
+  private fun isIntroScreenNotVisible(): Boolean =
+    isIntroScreenVisible.also {
+      isIntroScreenVisible = true
+    }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
