@@ -50,16 +50,21 @@ jobs:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
         run: |
-          OUTPUT=$(./gradlew publishPlayStoreBundle --scan 2>&1)
-          echo "$OUTPUT" > gradle_output.log
-          if echo "$OUTPUT" | grep -q "BUILD SUCCESSFUL"; then
-            echo "$OUTPUT"
+          set +e
+          ./gradlew publishPlayStoreBundle --scan 2>&1 | tee gradle_output.log
+          EXIT_CODE=${PIPESTATUS[0]}
+          set -e
+
+          if grep -q "BUILD SUCCESSFUL" gradle_output.log; then
+            echo "Gradle build successful."
             exit 0
           fi
-          
-          if echo "$OUTPUT" | grep -q "Try another version code."; then
-            echo "Upload skipped because very same version. $OUTPUT"
+
+          if grep -q "Try another version code." gradle_output.log; then
+            echo "Upload skipped because very same version."
             exit 0
           fi
-          echo "$OUTPUT"
-          exit 1
+
+          echo "Gradle publish failed with an unexpected error:"
+          cat gradle_output.log
+          exit $EXIT_CODE
