@@ -540,6 +540,17 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
+  val perAppLanguageMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PER_APP_LANGUAGE_MIGRATION] ?: false
+    }
+
+  suspend fun putPerAppLanguageMigration(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PER_APP_LANGUAGE_MIGRATION] = isMigrated
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -584,5 +595,6 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     const val KEY_LANGUAGE_ID = "languageId"
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
+    const val PER_APP_LANGUAGE_MIGRATION = "per_app_language_migration"
   }
 }
