@@ -241,8 +241,8 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference
         settingScreenState.lifecycleScope?.launch {
           settingScreenState.kiwixDataStore.setPrefLanguage(selectedLangCode)
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLangCode))
         }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLangCode))
       }
     }
   }

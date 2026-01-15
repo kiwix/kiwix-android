@@ -26,6 +26,7 @@ import android.os.Looper
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -65,13 +66,20 @@ class LanguageUtils(private val context: Context) {
   }
 
   private suspend fun haveToChangeFont(kiwixDataStore: KiwixDataStore): Boolean {
-    if (kiwixDataStore.prefLanguage.first() == Locale.ROOT.toString()) {
+    if (getCurrentLanguage(kiwixDataStore) == Locale.ROOT.toString()) {
       return false
     }
     return Locale.getAvailableLocales().none { locale ->
       locale.language == Locale.getDefault().toString()
     }
   }
+
+  private suspend fun getCurrentLanguage(kiwixDataStore: KiwixDataStore) =
+    if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
+      AppCompatDelegate.getApplicationLocales()[0]?.language ?: kiwixDataStore.prefLanguage.first()
+    } else {
+      kiwixDataStore.prefLanguage.first()
+    }
 
   // Change the font of all the TextViews and its subclasses in our whole app by attaching a custom
   // Factory to the LayoutInflater of the Activity.
