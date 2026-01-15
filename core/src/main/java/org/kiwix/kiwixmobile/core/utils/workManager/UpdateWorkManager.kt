@@ -29,8 +29,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.core.BuildConfig
-import org.kiwix.kiwixmobile.core.dao.AppUpdateDao
-import org.kiwix.kiwixmobile.core.dao.entities.AppUpdateEntity
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
+import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_UPDATE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Suppress("all")
@@ -45,7 +46,7 @@ class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted private val params: WorkerParameters,
   private var kiwixService: KiwixService,
-  private val appUpdateDao: AppUpdateDao
+  private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     kiwixService =
@@ -55,11 +56,14 @@ class UpdateWorkManager @AssistedInject constructor(
       )
     val updates = kiwixService.getUpdates().channel?.items?.first()
     val appVersion = updates?.title?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
-    appUpdateDao.updateLatestAppUpdate(
-      AppUpdateEntity(
-        name = updates!!.title,
-        version = appVersion!!,
-        url = updates.link
+    apkDao.updateApkDownload(
+      DownloadApkEntity(
+        downloadId = 0,
+        apkInfo = ApkInfo(
+          name = updates?.title.orEmpty(),
+          version = appVersion.orEmpty(),
+          apkUrl = updates?.link!!
+        )
       )
     )
     return Result.success()

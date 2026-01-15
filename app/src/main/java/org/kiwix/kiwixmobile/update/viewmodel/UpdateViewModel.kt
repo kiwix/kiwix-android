@@ -25,47 +25,51 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import javax.inject.Inject
 
 class UpdateViewModel @Inject constructor(
-  // private val appUpdateDao: AppUpdateDao,
   private val downloadApkDao: DownloadApkDao,
   private val downloader: Downloader
 ) : ViewModel() {
   private val _state = mutableStateOf(UpdateStates())
   val state: State<UpdateStates> = _state
 
-  private fun downloadApp() {
-    downloader.downloadApk("")
-    updateDownload()
+  init {
+    fetchApkInfo()
   }
 
-  private fun updateDownload() = viewModelScope.launch {
+  private fun fetchApkInfo() = viewModelScope.launch {
     downloadApkDao.downloads().collect { download ->
-      _state.value = UpdateStates(download)
+      _state.value = UpdateStates(
+        downloadApkState = DownloadApkState(download)
+      )
     }
   }
 
+  private fun downloadApk() {
+    val apkUrl = _state.value.downloadApkState.url
+    downloader.downloadApk(
+      apkInfo = ApkInfo(
+        name = _state.value.downloadApkState.name,
+        version = _state.value.downloadApkState.version,
+        apkUrl = apkUrl
+      )
+    )
+  }
+
   private fun cancelDownload() {
-    downloader.cancelDownload(state.value.downloadId)
+    downloader.cancelDownload(_state.value.downloadApkState.downloadId)
   }
 
   fun event(event: UpdateEvents) {
     when (event) {
-      is UpdateEvents.DownloadApp -> {
-        downloadApp()
+      is UpdateEvents.DownloadApk -> {
+        downloadApk()
       }
 
       is UpdateEvents.CancelDownload -> {
         cancelDownload()
-      }
-
-      is UpdateEvents.RetrieveLatestAppVersion -> {
-        // getLatestAppVersion()
-      }
-
-      is UpdateEvents.UpdateProgress -> {
-        //  updateDownload()
       }
     }
   }

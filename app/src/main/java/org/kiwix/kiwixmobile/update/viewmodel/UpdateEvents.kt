@@ -19,8 +19,6 @@
 package org.kiwix.kiwixmobile.update.viewmodel
 
 sealed class UpdateEvents {
-  data object DownloadApp : UpdateEvents()
+  data object DownloadApk : UpdateEvents()
   data object CancelDownload : UpdateEvents()
-  data object UpdateProgress : UpdateEvents()
-  data object RetrieveLatestAppVersion : UpdateEvents()
 }

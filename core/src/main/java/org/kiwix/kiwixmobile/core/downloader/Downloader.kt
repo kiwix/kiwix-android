@@ -17,10 +17,11 @@
  */
 package org.kiwix.kiwixmobile.core.downloader
 
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 
 interface Downloader {
-  fun downloadApk(url: String)
+  fun downloadApk(apkInfo: ApkInfo)
   fun download(book: LibkiwixBook)
   fun cancelDownload(downloadId: Long)
   fun cancelApkDownload(downloadId: Long)

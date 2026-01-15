@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import org.kiwix.kiwixmobile.cachedComponent
@@ -45,7 +46,7 @@ class UpdateFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
       UpdateScreen(
-        states = updateViewModel.state.value,
+        state = updateViewModel.state.value,
         events = updateViewModel::event
       )
     }

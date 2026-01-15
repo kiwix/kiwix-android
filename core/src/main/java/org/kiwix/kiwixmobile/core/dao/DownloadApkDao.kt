@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 
 @Dao
 interface DownloadApkDao {
@@ -47,16 +48,13 @@ interface DownloadApkDao {
       .map { it.let(::DownloadApkModel) }
 
   suspend fun addDownload(
-    url: String,
+    apkInfo: ApkInfo,
     downloadRequester: DownloadRequester
   ) {
     updateApkDownload(
       DownloadApkEntity(
-        downloadId = downloadRequester.enqueue(DownloadRequest(url)),
-        name = "",
-        version = "",
-        url = "",
-        file = ""
+        downloadId = downloadRequester.enqueue(DownloadRequest(apkInfo.apkUrl)),
+        apkInfo = apkInfo
       )
     )
   }

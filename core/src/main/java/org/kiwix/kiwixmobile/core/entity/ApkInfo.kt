@@ -16,9 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.update.viewmodel
+package org.kiwix.kiwixmobile.core.entity
 
-data class AppVersion(
+data class ApkInfo(
   val name: String,
   val version: String,
   val apkUrl: String

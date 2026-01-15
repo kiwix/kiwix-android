@@ -36,13 +36,14 @@ import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.update.viewmodel.DownloadApkState
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateEvents
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
 @Composable
 fun UpdateScreen(
-  states: UpdateStates,
-  events: (UpdateEvents) -> Unit
+  state: UpdateStates,
+  events: (UpdateEvents) -> Unit = {}
 ) {
   Surface(
     modifier = Modifier
@@ -55,18 +56,18 @@ fun UpdateScreen(
       verticalArrangement = Arrangement.Center
     ) {
       Text(
-        states.readableEta.toString(),
+        "${state.downloadApkState.name} ${state.downloadApkState.version}",
         color = Color.Black
       )
       Text(
-        "",
+        "${state.downloadApkState.readableEta}",
         color = Color.Black
       )
       Row {
         Button(
           onClick = {
             events(
-              UpdateEvents.DownloadApp
+              UpdateEvents.DownloadApk
             )
           }
         ) {
@@ -81,22 +82,13 @@ fun UpdateScreen(
         ) {
           Text("cancel")
         }
-        Button(
-          onClick = {
-            events(
-              UpdateEvents.UpdateProgress
-            )
-          }
-        ) {
-          Text("update")
-        }
       }
 
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier
           .padding(horizontal = ONE_DP, vertical = FIVE_DP),
-        progress = states.progress
+        progress = state.downloadApkState.progress,
       )
     }
   }
@@ -105,5 +97,5 @@ fun UpdateScreen(
 @Preview
 @Composable
 fun UpdateScreenPreview() {
-  UpdateScreen(UpdateStates()) {}
+  UpdateScreen(state = UpdateStates(downloadApkState = DownloadApkState()))
 }

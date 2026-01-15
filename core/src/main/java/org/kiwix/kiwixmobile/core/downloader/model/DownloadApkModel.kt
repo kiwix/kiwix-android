@@ -35,18 +35,18 @@ data class DownloadApkModel(
   val state: Status,
   val error: Error,
 ) {
-  constructor(downloadApkEntity: DownloadApkEntity?) : this(
-    downloadApkEntity?.id ?: 0,
-    downloadApkEntity?.name ?: "test",
-    downloadApkEntity?.version ?: "test",
-    downloadApkEntity?.url ?: "test",
-    downloadApkEntity?.downloadId ?: 0,
-    downloadApkEntity?.file ?: "test",
-    downloadApkEntity?.etaInMilliSeconds ?: 0,
-    downloadApkEntity?.bytesDownloaded ?: 0,
-    downloadApkEntity?.totalSizeOfDownload ?: 0,
-    downloadApkEntity?.progress ?: 0,
-    downloadApkEntity?.status ?: Status.NONE,
-    downloadApkEntity?.error ?: Error.NONE,
+  constructor(downloadApkEntity: DownloadApkEntity) : this(
+    downloadApkEntity.id,
+    downloadApkEntity.name,
+    downloadApkEntity.version,
+    downloadApkEntity.url,
+    downloadApkEntity.downloadId,
+    downloadApkEntity.file,
+    downloadApkEntity.etaInMilliSeconds,
+    downloadApkEntity.bytesDownloaded,
+    downloadApkEntity.totalSizeOfDownload,
+    downloadApkEntity.progress,
+    downloadApkEntity.status,
+    downloadApkEntity.error,
   )
 }
