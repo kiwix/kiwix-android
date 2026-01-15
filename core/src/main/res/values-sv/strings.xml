@@ -28,6 +28,9 @@
   <string name="menu_support_kiwix">Stöd Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Stöd %s</string>
   <string name="menu_about_app">Om appen %s</string>
+  <string name="external_redirect_message">Du kommer nu att omdirigeras till vår %s.</string>
+  <string name="support_donation_platform">donationsplattform</string>
+  <string name="about_app_page">om appsidan</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
