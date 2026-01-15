@@ -31,6 +31,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.CoreApp
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
@@ -47,7 +49,6 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -330,10 +331,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
       kiwixDataStore?.let { kiwixDataStore ->
-        LanguageUtils.handleLocaleChange(
-          requireActivity(),
-          BuildConfig.ENFORCED_LANG,
-          kiwixDataStore
+        AppCompatDelegate.setApplicationLocales(
+          LocaleListCompat.forLanguageTags(BuildConfig.ENFORCED_LANG)
         )
         kiwixDataStore.setPrefLanguage(BuildConfig.ENFORCED_LANG)
       }

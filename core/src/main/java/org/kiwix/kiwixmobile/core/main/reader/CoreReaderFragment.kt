@@ -146,7 +146,6 @@ import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialog
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
@@ -1079,7 +1078,6 @@ abstract class CoreReaderFragment :
   private fun handleLocaleCheck() {
     runSafelyInCoreReaderLifecycleScope {
       kiwixDataStore?.let {
-        handleLocaleChange(requireActivity(), it)
         LanguageUtils(requireActivity()).changeFont(requireActivity(), it)
       }
     }

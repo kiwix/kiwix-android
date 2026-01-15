@@ -287,17 +287,6 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
-  val deviceDefaultLanguage: Flow<String> =
-    context.kiwixDataStore.data.map { prefs ->
-      prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG].orEmpty()
-    }
-
-  suspend fun setDeviceDefaultLanguage(language: String) {
-    context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG] = language
-    }
-  }
-
   val prefLanguage: Flow<String> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_LANG] ?: Locale.ROOT.toString()
@@ -540,10 +529,20 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
+  val perAppLanguageMigrated: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.PER_APP_LANGUAGE_MIGRATION] ?: false
+    }
+
+  suspend fun putPerAppLanguageMigration(isMigrated: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PER_APP_LANGUAGE_MIGRATION] = isMigrated
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
-    const val PREF_DEVICE_DEFAULT_LANG = "pref_device_default_language"
     const val PREF_STORAGE = "pref_select_folder"
     const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
@@ -584,5 +583,6 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     const val KEY_LANGUAGE_ID = "languageId"
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
+    const val PER_APP_LANGUAGE_MIGRATION = "per_app_language_migration"
   }
 }

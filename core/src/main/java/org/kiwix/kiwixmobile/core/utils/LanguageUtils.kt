@@ -20,15 +20,14 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -67,13 +66,20 @@ class LanguageUtils(private val context: Context) {
   }
 
   private suspend fun haveToChangeFont(kiwixDataStore: KiwixDataStore): Boolean {
-    if (kiwixDataStore.prefLanguage.first() == Locale.ROOT.toString()) {
+    if (getCurrentLanguage(kiwixDataStore) == Locale.ROOT.toString()) {
       return false
     }
     return Locale.getAvailableLocales().none { locale ->
       locale.language == Locale.getDefault().toString()
     }
   }
+
+  private suspend fun getCurrentLanguage(kiwixDataStore: KiwixDataStore) =
+    if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
+      AppCompatDelegate.getApplicationLocales()[0]?.language ?: kiwixDataStore.prefLanguage.first()
+    } else {
+      kiwixDataStore.prefLanguage.first()
+    }
 
   // Change the font of all the TextViews and its subclasses in our whole app by attaching a custom
   // Factory to the LayoutInflater of the Activity.
@@ -127,7 +133,7 @@ class LanguageUtils(private val context: Context) {
       Locale.getAvailableLocales().associateBy {
         try {
           it.isO3Language.uppercase(Locale.ROOT)
-        } catch (ignore: MissingResourceException) {
+        } catch (_: MissingResourceException) {
           it.language.uppercase(Locale.ROOT)
         }
       }
@@ -146,34 +152,6 @@ class LanguageUtils(private val context: Context) {
         // Link above shows that we are allowed to distribute this font
         "chr" to "fonts/Digohweli.ttf"
       )
-
-    @JvmStatic
-    suspend fun handleLocaleChange(
-      context: Context,
-      kiwixDataStore: KiwixDataStore
-    ): Context {
-      return kiwixDataStore.prefLanguage.first().takeIf { it != Locale.ROOT.toString() }?.let {
-        handleLocaleChange(context, it, kiwixDataStore)
-      } ?: run { context }
-    }
-
-    @JvmStatic
-    suspend fun handleLocaleChange(
-      context: Context,
-      language: String,
-      kiwixDataStore: KiwixDataStore
-    ): Context {
-      val locale = if (language == Locale.ROOT.toString()) {
-        kiwixDataStore.deviceDefaultLanguage.first().convertToLocal()
-      } else {
-        language.convertToLocal()
-      }
-      Locale.setDefault(locale)
-      val config = Configuration(context.resources.configuration)
-      config.setLocale(locale)
-      config.setLayoutDirection(locale)
-      return context.createConfigurationContext(config)
-    }
 
     /**
      * Converts ISO3 language code to [java.util.Locale].
