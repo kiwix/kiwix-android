@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import javax.inject.Inject
 
@@ -35,14 +35,13 @@ class DownloaderImpl @Inject constructor(
   private val kiwixService: KiwixService
 ) : Downloader {
   @Suppress("InjectDispatcher")
-  override fun downloadApk(url: String) {
+  override fun downloadApk(apkInfo: ApkInfo) {
     CoroutineScope(Dispatchers.IO).launch {
       runCatching {
         downloadApkDao.addDownload(
-          url = url,
           downloadRequester = downloadRequester,
+          apkInfo = apkInfo
         )
-        downloadRequester.enqueue(DownloadRequest(url))
         downloadRequester.startApkDownloadService()
       }.onFailure {
         it.printStackTrace()

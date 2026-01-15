@@ -488,7 +488,8 @@ abstract class CoreReaderFragment :
           showTableOfContentDrawer = shouldTableOfContentDrawer,
           onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
           navHostController = (requireActivity() as CoreMainActivity).navController,
-          onUpdateIconClick = { onUpdateIconClick() }
+          onUpdateIconClick = { onUpdateIconClick() },
+          onLaterIconClick = { onLaterIconClick() }
         )
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
@@ -2604,6 +2605,10 @@ abstract class CoreReaderFragment :
 
   private fun onUpdateIconClick() {
     requireActivity().navigate(UPDATE_FRAGMENT)
+  }
+
+  private fun onLaterIconClick() {
+    readerScreenState.update { copy(shouldShowUpdatePopup = false) }
   }
 
   private fun bindService() {

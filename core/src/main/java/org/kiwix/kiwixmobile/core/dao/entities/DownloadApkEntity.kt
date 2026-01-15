@@ -24,14 +24,17 @@ import androidx.room.TypeConverters
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 
 @Entity
 data class DownloadApkEntity(
+  // Only one instance of download apk remains in the db at a time
   @PrimaryKey
   val id: Int = 1,
   val name: String,
   val version: String,
   val url: String,
+  var lastDialogShownInMilliSeconds: Long = -1L,
   var downloadId: Long,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
@@ -43,12 +46,18 @@ data class DownloadApkEntity(
   @TypeConverters(ErrorConverter::class)
   val error: com.tonyodev.fetch2.Error = Error.NONE,
 ) {
+  constructor(
+    downloadId: Long,
+    apkInfo: ApkInfo
+  ) : this(
+    downloadId = downloadId,
+    name = apkInfo.name,
+    version = apkInfo.version,
+    url = apkInfo.apkUrl
+  )
+
   fun updateWith(download: Download) =
     copy(
-      name = "",
-      version = "",
-      url = download.url,
-      downloadId = download.id.toLong(),
       file = download.file,
       etaInMilliSeconds = download.etaInMilliSeconds,
       bytesDownloaded = download.downloaded,

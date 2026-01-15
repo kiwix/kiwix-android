@@ -190,6 +190,7 @@ fun ReaderScreen(
   navHostController: NavHostController,
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUpdateIconClick: () -> Unit,
+  onLaterIconClick: () -> Unit,
   navigationIcon: @Composable () -> Unit,
 ) {
   // For managing the scroll event handling of webView.
@@ -231,8 +232,9 @@ fun ReaderScreen(
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
       ) { paddingValues ->
         ShowUpdateDialog(
-          state,
-          onUpdateIconClick
+          state = state,
+          onClickUpdate = onUpdateIconClick,
+          onClickLater = onLaterIconClick
         )
         OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
@@ -791,12 +793,13 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
 @Composable
 private fun ShowUpdateDialog(
   state: ReaderScreenState,
-  onUpdateIconClick: () -> Unit
+  onClickUpdate: () -> Unit,
+  onClickLater: () -> Unit
 ) {
   if (state.shouldShowUpdatePopup) {
     UpdateDialog(
-      onConfirm = onUpdateIconClick,
-      onDismiss = {}
+      onConfirm = onClickUpdate,
+      onDismiss = onClickLater
     )
   }
 }

@@ -18,29 +18,8 @@
 
 package org.kiwix.kiwixmobile.update.viewmodel
 
-import com.tonyodev.fetch2.Error
-import com.tonyodev.fetch2.Status
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
-import org.kiwix.kiwixmobile.core.downloader.model.Seconds
-
 data class UpdateStates(
-  val downloadId: Long = 0,
-  val bytesDownloaded: Long = 0,
-  val totalSizeBytes: Long = 0,
-  val progress: Int = 0,
-  val eta: Seconds = Seconds(0),
-  val currentDownloadState: Status = Status.NONE,
-  val downloadError: Error = Error.NONE
-) {
-  val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
-
-  constructor(downloadModel: DownloadApkModel) : this(
-    downloadModel.downloadId,
-    downloadModel.bytesDownloaded,
-    downloadModel.totalSizeOfDownload,
-    downloadModel.progress,
-    Seconds(downloadModel.etaInMilliSeconds),
-    downloadModel.state,
-    downloadModel.error
-  )
-}
+  var loading: Boolean = false,
+  val isSuccess: Boolean = false,
+  val downloadApkState: DownloadApkState = DownloadApkState(),
+)
