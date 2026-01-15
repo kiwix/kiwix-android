@@ -18,7 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.downloader.model
 
-import org.kiwix.kiwixmobile.core.CoreApp
+import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import java.util.Locale
 import kotlin.math.roundToLong
@@ -30,7 +31,11 @@ value class Seconds(val seconds: Long) {
     val hours = 60 * minutes
     val days = 24 * hours
 
-    val context = CoreApp.instance
+    // Whenever the language changes, it returns the context
+    // for the selected language. Since per-app language settings do not update the context
+    // outside of AppCompatActivity, we need to retrieve the correct context manually.
+    // See: https://issuetracker.google.com/issues/243457462?hl=pl
+    val context = ContextCompat.getContextForLanguage(instance)
     return when {
       (seconds / days).roundToLong() > 0 ->
         String.format(

@@ -29,7 +29,7 @@ class KiwixIntroViewModel @Inject constructor(
 ) : ViewModel() {
   fun setIntroShown() {
     viewModelScope.launch {
-      kiwixDataStore.setIntroShown(true)
+      kiwixDataStore.setIntroShown()
     }
   }
 }

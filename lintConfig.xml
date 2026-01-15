@@ -52,4 +52,5 @@
     <ignore path="**/androidTest/**.kt" />
   </issue>
   <issue id="PrivateResource" severity="warning" />
+  <issue id="UnusedTranslation" severity="warning" />
 </lint>
