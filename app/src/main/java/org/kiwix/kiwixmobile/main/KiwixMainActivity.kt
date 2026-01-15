@@ -24,6 +24,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.ActionMode
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerValue
@@ -40,6 +41,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -190,6 +192,7 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun runMigrations() {
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
+      migratedToPerAppLanguage()
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
@@ -239,6 +242,15 @@ class KiwixMainActivity : CoreMainActivity() {
         kiwixDataStore.setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(it))
         kiwixDataStore.setAppDirectoryMigrated(true)
       }
+    }
+  }
+
+  private suspend fun migratedToPerAppLanguage() {
+    if (!kiwixDataStore.perAppLanguageMigrated.first()) {
+      AppCompatDelegate.setApplicationLocales(
+        LocaleListCompat.forLanguageTags(kiwixDataStore.prefLanguage.first())
+      )
+      kiwixDataStore.putPerAppLanguageMigration(true)
     }
   }
 
