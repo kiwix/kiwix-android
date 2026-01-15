@@ -84,6 +84,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -99,6 +100,9 @@ class KiwixMainActivity : CoreMainActivity() {
   override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
+  @Inject
+  lateinit var kiwixDataStore: KiwixDataStore
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
