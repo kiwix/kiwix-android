@@ -153,7 +153,7 @@ private fun CategoryList(
 }
 
 @Composable
-fun CategoryHeaderText(modifier: Modifier, item: HeaderItem) {
+private fun CategoryHeaderText(modifier: Modifier, item: HeaderItem) {
   Text(
     text = when (item.id) {
       HeaderItem.SELECTED -> stringResource(R.string.your_selected_category)
@@ -170,7 +170,7 @@ fun CategoryHeaderText(modifier: Modifier, item: HeaderItem) {
 }
 
 @Composable
-fun CategoryItemRow(
+private fun CategoryItemRow(
   context: Context,
   modifier: Modifier,
   item: CategoryItem,
@@ -193,8 +193,16 @@ fun CategoryItemRow(
       }
     )
     Text(
-      text = category.category.ifEmpty { context.getString(R.string.all_categories) },
+      text = category.category.ifEmpty { context.getString(R.string.all_categories) }
+        .toSentenceCaseCategory(),
       style = MaterialTheme.typography.bodyLarge
     )
   }
 }
+
+fun String.toSentenceCaseCategory(): String =
+  replace("_", " ")
+    .lowercase()
+    .replaceFirstChar { word ->
+      if (word.isLowerCase()) word.titlecase() else word.toString()
+    }

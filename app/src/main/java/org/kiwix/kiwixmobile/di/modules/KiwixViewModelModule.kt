@@ -52,6 +52,8 @@ abstract class KiwixViewModelModule {
   @ViewModelKey(KiwixIntroViewModel::class)
   abstract fun bindIntroViewModel(introViewModel: KiwixIntroViewModel): ViewModel
 
+  @Binds
+  @IntoMap
   @ViewModelKey(CategoryViewModel::class)
   abstract fun bindCategoryViewModel(categoryViewModel: CategoryViewModel): ViewModel
 }

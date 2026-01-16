@@ -21,8 +21,10 @@ package org.kiwix.kiwixmobile.onlineCategory
 import android.Manifest
 import android.app.Instrumentation
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -40,7 +42,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -83,7 +84,7 @@ class OnlineCategoryTest {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(instrumentation.targetContext.applicationContext).apply {
+    KiwixDataStore(instrumentation.targetContext.applicationContext).apply {
       runBlocking {
         setIntroShown(false)
         setWifiOnly(false)
@@ -98,13 +99,7 @@ class OnlineCategoryTest {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
         kiwixMainActivity = it
-        runBlocking {
-          handleLocaleChange(
-            it,
-            "en",
-            kiwixDataStore
-          )
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
       }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
