@@ -94,6 +94,9 @@ class CategoryViewModelTest {
     CategorySessionCache.hasFetched = true
     coEvery { kiwixDataStore.cachedOnlineCategoryList } returns categories
     coEvery { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("wikipedia")
+    coEvery { kiwixService.getCategories() } returns CategoryFeed().apply {
+      entries = emptyList()
+    }
     categoryViewModel =
       CategoryViewModel(
         application,
