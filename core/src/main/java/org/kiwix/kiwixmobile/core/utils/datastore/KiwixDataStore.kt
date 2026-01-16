@@ -24,6 +24,7 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.Dispatchers
@@ -38,11 +39,13 @@ import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.get
 
 private const val KIWIX_DATASTORE_NAME = "kiwix_datastore_preferences"
 
@@ -540,6 +543,46 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
+  val selectedOnlineContentCategory: Flow<String> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.SELECTED_ONLINE_CONTENT_CATEGORY].orEmpty()
+    }
+
+  suspend fun setSelectedOnlineContentCategory(selectedOnlineContentCategory: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_CATEGORY] = selectedOnlineContentCategory
+    }
+  }
+
+  val cachedOnlineCategoryList: Flow<List<Category>?> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.CACHED_ONLINE_CATEGORIES]?.let { jsonString ->
+        val jsonArray = JSONArray(jsonString)
+        List(jsonArray.length()) { i ->
+          val obj = jsonArray.getJSONObject(i)
+          Category(
+            category = obj.getString(KEY_ONLINE_CATEGORY_NAME),
+            active = selectedOnlineContentCategory.first() == obj.getString(KEY_ONLINE_CATEGORY_NAME),
+            id = obj.getLong(KEY_ONLINE_CATEGORY_ID)
+          )
+        }
+      }
+    }
+
+  suspend fun saveOnlineCategoryList(categories: List<Category>) {
+    val jsonArray = JSONArray()
+    categories.forEach { category ->
+      val obj = JSONObject().apply {
+        put(KEY_ONLINE_CATEGORY_NAME, category.category)
+        put(KEY_ONLINE_CATEGORY_ID, category.id)
+      }
+      jsonArray.put(obj)
+    }
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.CACHED_ONLINE_CATEGORIES] = jsonArray.toString()
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -584,5 +627,9 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
     const val PER_APP_LANGUAGE_MIGRATION = "per_app_language_migration"
+    const val SELECTED_ONLINE_CONTENT_CATEGORY = "selectedOnlineContentCategory"
+    const val CACHED_ONLINE_CATEGORIES = "cachedOnlineCategories"
+    private const val KEY_ONLINE_CATEGORY_NAME = "onlineCategoryName"
+    private const val KEY_ONLINE_CATEGORY_ID = "onlineCategoryId"
   }
 }
