@@ -202,7 +202,6 @@ private fun CategoryItemRow(
 
 fun String.toSentenceCaseCategory(): String =
   replace("_", " ")
-    .lowercase()
     .replaceFirstChar { word ->
       if (word.isLowerCase()) word.titlecase() else word.toString()
     }
