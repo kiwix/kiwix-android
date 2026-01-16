@@ -37,6 +37,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -47,6 +48,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -99,7 +101,7 @@ class KiwixSplashActivityTest {
 
   @Test
   fun testFirstRun() {
-    ActivityScenario.launch(KiwixMainActivity::class.java)
+    shouldShowIntro(true)
 
     testFlakyView({
       composeTestRule.waitUntil(timeoutMillis = 5_000) {
@@ -119,6 +121,7 @@ class KiwixSplashActivityTest {
 
   @Test
   fun testNormalRun() {
+    shouldShowIntro(true)
     val scenario = ActivityScenario.launch(KiwixMainActivity::class.java)
 
     composeTestRule.waitUntil(timeoutMillis = 5_000) {
@@ -144,5 +147,13 @@ class KiwixSplashActivityTest {
   @After
   fun endTest() {
     Intents.release()
+  }
+
+  private fun shouldShowIntro(value: Boolean) {
+    val dataStore = KiwixDataStore(context)
+    runBlocking {
+      dataStore.setIntroShown(value)
+      dataStore.setPrefIsTest(true)
+    }
   }
 }
