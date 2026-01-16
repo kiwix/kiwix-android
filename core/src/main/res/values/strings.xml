@@ -424,4 +424,5 @@
   <string name="confirmation_validate_zim_files">Are you sure you want to validate the following ZIM files?\n\n%s</string>
   <string name="validating_zim_file">Validating ZIM file…</string>
   <string name="validating_zim_files">Validating ZIM files…</string>
+  <string name="select_category">Select category</string>
 </resources>
