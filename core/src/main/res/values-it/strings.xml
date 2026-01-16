@@ -30,6 +30,7 @@
   <string name="menu_support_kiwix">Sostieni Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Supporto %s</string>
   <string name="menu_about_app">Informazioni sull’app %s</string>
+  <string name="support_donation_platform">piattaforma di donazione</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Salva file multimediale</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
