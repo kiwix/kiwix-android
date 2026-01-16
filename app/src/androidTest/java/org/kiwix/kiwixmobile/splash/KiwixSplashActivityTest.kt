@@ -102,7 +102,7 @@ class KiwixSplashActivityTest {
   @Test
   fun testFirstRun() {
     shouldShowIntro(true)
-
+    ActivityScenario.launch(KiwixMainActivity::class.java)
     testFlakyView({
       composeTestRule.waitUntil(timeoutMillis = 5_000) {
         composeTestRule
