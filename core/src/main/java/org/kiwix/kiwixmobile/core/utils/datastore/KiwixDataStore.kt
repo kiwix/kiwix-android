@@ -540,6 +540,17 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
+  val selectedOnlineContentCategory: Flow<String> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.SELECTED_ONLINE_CONTENT_CATEGORY].orEmpty()
+    }
+
+  suspend fun setSelectedOnlineContentCategory(selectedOnlineContentCategory: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_CATEGORY] = selectedOnlineContentCategory
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -584,5 +595,6 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     const val PREF_SCAN_FILE_SYSTEM_DIALOG_SHOWN = "prefScanFileSystemDialogShown"
     const val PREF_IS_SCAN_FILE_SYSTEM_TEST = "prefIsScanFileSystemTest"
     const val PER_APP_LANGUAGE_MIGRATION = "per_app_language_migration"
+    const val SELECTED_ONLINE_CONTENT_CATEGORY = "selectedOnlineContentCategory"
   }
 }
