@@ -551,7 +551,7 @@ fun ListPreference(
 }
 
 @Composable
-fun ListOptions(
+private fun ListOptions(
   modifier: Modifier,
   options: List<String>,
   selected: String,

@@ -21,16 +21,11 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -50,11 +45,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,13 +60,10 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
-import org.kiwix.kiwixmobile.core.settings.DIALOG_LIST_MAX_HEIGHT_RATIO
-import org.kiwix.kiwixmobile.core.settings.ListOptions
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
@@ -86,7 +73,6 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_MESSAGE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESSBAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN
@@ -99,9 +85,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 
@@ -119,7 +102,6 @@ const val LOAD_MORE_DELAY = 150L
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  showOnlineCategoryDialog: MutableState<Boolean>,
   listState: LazyListState,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
@@ -162,7 +144,6 @@ fun OnlineLibraryScreen(
       ) {
         OnBackPressed(onUserBackPressed, navHostController)
         OnlineLibraryScreenContent(state, listState)
-        ShowOnlineCategoryDialog(showOnlineCategoryDialog)
       }
     }
   }
@@ -345,50 +326,6 @@ private fun ShowFetchingLibraryLayout(message: String) {
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(top = EIGHT_DP)
       )
-    }
-  }
-}
-
-@Composable
-private fun ShowOnlineCategoryDialog(
-  showOnlineCategoryDialog: MutableState<Boolean>,
-  categories: List<String> = emptyList(),
-  selectedCategory: String = "",
-  onCategorySelected: (String) -> Unit = {}
-) {
-  if (showOnlineCategoryDialog.value) {
-    var selected by remember { mutableStateOf(selectedCategory) }
-    KiwixBasicDialogFrame(
-      onDismissRequest = { showOnlineCategoryDialog.value = false }
-    ) {
-      DialogTitle(R.string.select_category)
-      BoxWithConstraints {
-        val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
-        ListOptions(
-          modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = listMaxHeight)
-            .verticalScroll(rememberScrollState()),
-          options = categories,
-          selected = selected,
-          onOptionSelected = {
-            selected = it
-            onCategorySelected(it)
-            showOnlineCategoryDialog.value = false
-          }
-        )
-      }
-      Spacer(modifier = Modifier.height(DIALOG_DEFAULT_PADDING_FOR_CONTENT))
-      Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-      ) {
-        DialogConfirmButton(
-          confirmButtonText = stringResource(R.string.cancel),
-          dialogConfirmButtonClick = { showOnlineCategoryDialog.value = false },
-          alertDialogShower = null
-        )
-      }
     }
   }
 }

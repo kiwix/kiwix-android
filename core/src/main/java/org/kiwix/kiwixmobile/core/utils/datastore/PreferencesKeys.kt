@@ -79,4 +79,5 @@ object PreferencesKeys {
   val PER_APP_LANGUAGE_MIGRATION = booleanPreferencesKey(KiwixDataStore.PER_APP_LANGUAGE_MIGRATION)
   val SELECTED_ONLINE_CONTENT_CATEGORY =
     stringPreferencesKey(KiwixDataStore.SELECTED_ONLINE_CONTENT_CATEGORY)
+  val CACHED_ONLINE_CATEGORIES = stringPreferencesKey(KiwixDataStore.CACHED_ONLINE_CATEGORIES)
 }

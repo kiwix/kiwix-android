@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
 import org.kiwix.kiwixmobile.intro.KiwixIntroViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 
 @Module(includes = [CoreViewModelModule::class])
@@ -50,4 +51,7 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(KiwixIntroViewModel::class)
   abstract fun bindIntroViewModel(introViewModel: KiwixIntroViewModel): ViewModel
+
+  @ViewModelKey(CategoryViewModel::class)
+  abstract fun bindCategoryViewModel(categoryViewModel: CategoryViewModel): ViewModel
 }

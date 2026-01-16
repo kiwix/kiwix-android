@@ -16,21 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library.online
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.ViewModel
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import javax.inject.Inject
+import org.kiwix.kiwixmobile.core.zim_manager.Category
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 
-@Suppress("UnusedPrivateProperty")
-class CategoryViewModel @Inject constructor(
-  private val context: Application,
-  private val kiwixDataStore: KiwixDataStore,
-  private var kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
-) : ViewModel() {
-  // Prepare the category based data here.
+sealed class Action {
+  data class UpdateCategory(val categories: List<Category>) : Action()
+  data class Filter(val filter: String) : Action()
+  data class Select(val category: CategoryItem) : Action()
+  data class Error(val errorMessage: String) : Action()
 }
