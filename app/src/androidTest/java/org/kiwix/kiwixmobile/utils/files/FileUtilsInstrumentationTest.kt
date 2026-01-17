@@ -22,12 +22,15 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -36,7 +39,9 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.DocumentResolverWrapper
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.documentProviderContentQuery
@@ -323,6 +328,60 @@ class FileUtilsInstrumentationTest {
         FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(it.url, it.src)?.second,
         it.expectedUrl
       )
+    }
+  }
+
+  @Test
+  fun testDecodeBase64DataUri() {
+    val base64Png =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
+
+    val result = FileUtils.decodeBase64DataUri(base64Png)
+
+    Assertions.assertNotNull(result)
+    Assertions.assertEquals("png", result!!.first)
+    Assertions.assertTrue(result.second.isNotEmpty())
+  }
+
+  @Test
+  fun testDownloadBase64Image() = runTest {
+    val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
+    val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
+    coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
+    val base64Png =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
+
+    val file = FileUtils.downloadFileFromUrl(
+      url = null,
+      src = base64Png,
+      zimReaderContainer = zimReaderContainer,
+      kiwixDataStore = kiwixDataStore
+    )
+
+    Assertions.assertNotNull(file)
+    Assertions.assertTrue(file!!.exists())
+    Assertions.assertTrue(file.name.endsWith(".png"))
+    Assertions.assertTrue(file.length() > 0)
+  }
+
+  @Test
+  fun testBase64DoesNotUseZimReader() = runTest {
+    val base64Jpeg =
+      "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+
+    val zimReader = mockk<ZimReaderContainer>(relaxed = true)
+    val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
+    coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
+
+    FileUtils.downloadFileFromUrl(
+      url = null,
+      src = base64Jpeg,
+      zimReaderContainer = zimReader,
+      kiwixDataStore = kiwixDataStore
+    )
+
+    verify(exactly = 0) {
+      zimReader.load(any(), any())
     }
   }
 
