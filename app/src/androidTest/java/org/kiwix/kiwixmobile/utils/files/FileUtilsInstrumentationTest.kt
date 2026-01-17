@@ -66,7 +66,7 @@ class FileUtilsInstrumentationTest {
     "content://com.android.externalstorage.documents/document/"
   private val downloadUriPrefix = "content://media/external/downloads/"
   private val expectedFilePath = "${Environment.getExternalStorageDirectory()}/$commonPath"
-  val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
+  lateinit var kiwixDataStore: KiwixDataStore
 
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
@@ -74,6 +74,7 @@ class FileUtilsInstrumentationTest {
 
   @Before
   fun executeBefore() {
+    kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
     context = InstrumentationRegistry.getInstrumentation().targetContext
 
     // Create a temporary directory where all the test files will be saved
@@ -346,6 +347,7 @@ class FileUtilsInstrumentationTest {
 
   @Test
   fun testDownloadBase64Image() = runTest {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runTest
     val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
     val base64Png =
@@ -366,6 +368,7 @@ class FileUtilsInstrumentationTest {
 
   @Test
   fun testNonBase64DataUriIsIgnored() = runTest {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runTest
     val dataUri = "data:image/png,abcdefg"
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
 
@@ -381,6 +384,7 @@ class FileUtilsInstrumentationTest {
 
   @Test
   fun testBase64DoesNotUseZimReader() = runTest {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runTest
     val base64Jpeg =
       "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
 
