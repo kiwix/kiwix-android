@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_TEXT_ALPHA
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
@@ -64,13 +65,17 @@ fun ValidateZimDialog(
   confirmButtonText: Int,
   onConfirmButtonClick: () -> Unit,
   cancelButtonText: Int? = null,
+  modifier: Modifier,
+  startEndPaddingForConfirmButton: Dp = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
   onCancelButtonClick: (() -> Unit)? = null
 ) {
   BoxWithConstraints {
     val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
     Column(modifier = Modifier.fillMaxWidth()) {
-      DialogTitle(getTitle(items.size == 1))
-      ValidateZimList(items = items, maxHeight = listMaxHeight)
+      Column(modifier) {
+        DialogTitle(getTitle(items.size == 1))
+        ValidateZimList(items = items, maxHeight = listMaxHeight)
+      }
       Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
@@ -81,6 +86,7 @@ fun ValidateZimDialog(
         DialogConfirmButton(
           stringResource(confirmButtonText),
           onConfirmButtonClick,
+          startEndPadding = startEndPaddingForConfirmButton,
           null
         )
       }

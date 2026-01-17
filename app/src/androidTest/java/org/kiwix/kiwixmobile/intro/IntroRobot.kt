@@ -56,16 +56,16 @@ class IntroRobot : BaseRobot() {
           .assertTextEquals(context.getString(string.humankind_knowledge))
       }
       composeTestRule.onRoot().tryPerformAccessibilityChecks()
-      scrollToPage(ONE, composeTestRule)
       attempt(10) {
+        scrollToPage(ONE, composeTestRule)
         onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.save_books_offline))
         onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.download_books_message))
       }
       composeTestRule.onRoot().tryPerformAccessibilityChecks()
-      scrollToPage(TWO, composeTestRule)
       attempt(10) {
+        scrollToPage(TWO, composeTestRule)
         onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.save_books_in_desired_storage))
         onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
@@ -73,8 +73,8 @@ class IntroRobot : BaseRobot() {
       }
       composeTestRule.onRoot().tryPerformAccessibilityChecks()
       if (!BuildConfig.IS_PLAYSTORE) {
-        scrollToPage(THREE, composeTestRule)
         attempt(10) {
+          scrollToPage(THREE, composeTestRule)
           onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
             .assertTextEquals(context.getString(R.string.auto_detect_books))
           onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)

@@ -296,6 +296,7 @@ sealed class KiwixDialog(
       null,
       R.string.empty_string,
       null,
+      cancelable = false,
       customComposeView = customGetView,
       customComposeViewBottomPadding = customViewBottomPadding
     )
@@ -325,6 +326,18 @@ sealed class KiwixDialog(
       cancelable = false,
       customComposeView = customGetView
     )
+
+  data class ExternalRedirectDialog(
+    override val args: List<Any>
+  ) : KiwixDialog(
+      title = null,
+      message = R.string.external_redirect_message,
+      confirmButtonText = android.R.string.ok,
+      dismissButtonText = android.R.string.cancel
+    ),
+    HasBodyFormatArgs {
+    constructor(destination: String) : this(listOf(destination))
+  }
 
   object NotesDiscardConfirmation : KiwixDialog(
     null,

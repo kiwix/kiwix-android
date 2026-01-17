@@ -136,6 +136,7 @@ internal fun LanguageScreenRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")
+@Suppress("LongParameterList")
 @Composable
 private fun LanguageScreen(
   searchText: String,
@@ -195,7 +196,7 @@ private fun LanguageScreen(
           )
         }
 
-        is State.Error -> ShowErrorMessage((state as State.Error).errorMessage)
+        is State.Error -> ShowErrorMessage(state.errorMessage)
       }
     }
   }

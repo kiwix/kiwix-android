@@ -12,6 +12,7 @@
 * Sfic
 * Siddhartha Ghai
 * Suyash.dwivedi
+* Synopses4252
 * गोपाल
 * संजीव कुमार
 -->
@@ -33,6 +34,7 @@
   <string name="save_media_saved">मीडिया को %s के रूप में  Downloads/org.kiwix/ में सहेजा गया</string>
   <string name="search_label">खोजें</string>
   <string name="searched_list">खोजी गई सूची</string>
+  <string name="more_options">अधिक विकल्प</string>
   <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
   <string name="hotspot_service_channel_name">हॉटस्पॉट सेवा चैनल</string>
@@ -74,6 +76,10 @@
   <string name="pref_display_title">प्रदर्शन</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
+  <string name="pref_theme">थीम</string>
+  <string name="theme_system">सिस्टम</string>
+  <string name="theme_light">रोशनी</string>
+  <string name="theme_dark">अँधेरा</string>
   <string name="pref_theme_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
   <string name="pref_back_to_top">वापस शीर्ष पे जाएँ</string>
   <string name="pref_back_to_top_summary">उपर तक खिसकाने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
@@ -137,6 +143,7 @@
   <string name="download_no_space">डाउनलोड करने के लिए अपर्याप्त स्टोरेज।</string>
   <string name="download">डाउनलोड</string>
   <string name="download_notification_channel_name">अधिसूचना चैनल का नाम डाउनलोड करें</string>
+  <string name="download_notification_channel_description">ZIM फ़ाइलें डाउनलोड हो रही हैं…</string>
   <string name="space_available">उपलब्ध जगह:</string>
   <string name="move_no_space">स्थानांतरित/कॉपी करने के लिए अपर्याप्त स्थान.</string>
   <string name="zim_simple">साधारण</string>
@@ -193,11 +200,12 @@
   <string name="external_link_popup_dialog_message">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप जारी रखना चाहते हैं?</string>
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
+  <string name="your_language">चुनी गई भाषा: %s</string>
   <string name="other_languages">अन्य भाषाएँ</string>
-  <string name="downloading" fuzzy="true">डाउनलोड हो रहा है</string>
+  <string name="downloading">डाउनलोड हो रहा है</string>
   <string name="no_items_msg">कोई आइटम उपलब्ध नहीं है</string>
   <string name="crash_title">खैर, यह शर्मनाक है</string>
-  <string name="crash_description" fuzzy="true">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
+  <string name="crash_description">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
   <string name="crash_checkbox_language">अधिक भाषा सेटिंग्स</string>
   <string name="crash_checkbox_zimfiles">आपकी ZIM फ़ाइलों की सूची</string>
   <string name="crash_checkbox_exception">दुर्घटना का विवरण</string>
@@ -221,7 +229,10 @@
   <string name="go_to_previous_page">पिछले पृष्ठ पर जाएं</string>
   <string name="go_to_next_page">अगले पृष्ठ पर जाएँ</string>
   <string name="table_of_contents">विषयसूची</string>
+  <string name="select_language">भाषा चुनें</string>
   <string name="save_languages">भाषाएँ सहेजें</string>
+  <string name="all_languages">सभी भाषाएँ</string>
+  <string name="no_language_available">कोई भाषाएँ उपलब्ध नहीं हैं</string>
   <string name="expand">विस्तार करें</string>
   <string name="history">इतिहास</string>
   <string name="history_from_current_book">सभी पुस्तकों में से इतिहास देखें</string>
@@ -316,7 +327,7 @@
   <string name="send_report">निदान रिपोर्ट भेजें</string>
   <string name="crash_checkbox_file_system">फ़ाइल सिस्टम विवरण</string>
   <string name="diagnostic_report">डायग्नोस्टिक रिपोर्ट</string>
-  <string name="diagnostic_report_message" fuzzy="true">कृपया निम्नलिखित सभी विवरण भेजें ताकि हम समस्या का निदान कर सकें</string>
+  <string name="diagnostic_report_message">समस्या का निदान करने में हमारी मदद करने के लिए, पहले समस्या को पुनः उत्पन्न करें, फिर नैदानिक रिपोर्ट भेजें।</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">पाठ ज़ूम करें</string>
   <string name="search_open_in_new_tab">नए टैब में खोलें</string>
@@ -330,7 +341,8 @@
   <string name="preparing_file_for_copy">प्रतिलिपि/स्थानांतरण की तैयारी</string>
   <string name="action_copy">प्रतिलिपि बनाएँ</string>
   <string name="move">स्थानांतरित करें</string>
-  <string name="copying_zim_file" fuzzy="true">ZIM फ़ाइल कॉपी की जा रही है %s…</string>
+  <string name="copying_zim_file">ZIM फ़ाइल %s की कॉपी बनाई जा रही है…</string>
+  <string name="moving_zim_file">ZIM फ़ाइल %s को स्थानांतरित किया जा रहा है…</string>
   <string name="copy_move_files_dialog_description">किवीक्स को ZIM फ़ाइल को अपनी डेटा निर्देशिका में रखने की आवश्यकता है।\nक्या आप इसे कॉपी करना चाहते हैं या वहाँ ले जाना चाहते हैं?</string>
   <string name="copy_file_error_message">ZIM फ़ाइल की प्रतिलिपि बनाने में त्रुटि: %s .</string>
   <string name="verify_zim_chunk_dialog_title">सावधान रहें: सुनिश्चित करें कि ZIM के सभी खंड ठीक से स्थानांतरित/कॉपी किए गए हैं!</string>
@@ -339,6 +351,8 @@
   <string name="copy_move_files_to_app_directory_description">Android 11 और उसके बाद के वर्शन पर Google Play की नीतियों के कारण, हमारा ऐप अब आपके डिवाइस पर कहीं और संग्रहीत फ़ाइलों तक सीधे पहुँच नहीं सकता है। आपको अपनी चुनी हुई फ़ाइलें देखने देने के लिए, हमें उन्हें हमारी एप्लिकेशन निर्देशिका के भीतर एक विशेष फ़ोल्डर में ले जाना या कॉपी करना होगा। इससे हमें फ़ाइलों तक पहुँचने और उन्हें खोलने की अनुमति मिलती है।</string>
   <string name="choose_storage_to_copy_move_zim_file">ZIM फ़ाइल को कॉपी/स्थानांतरित करने के लिए संग्रहण चुनें</string>
   <string name="move_file_error_message">ZIM फ़ाइल को स्थानांतरित करने में त्रुटि: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nक्या आप अन्य ZIM फ़ाइलों के साथ जारी रखना चाहते हैं?</string>
+  <string name="your_selected_files_added_to_library">आपके द्वारा चयनित ZIM फ़ाइलें लाइब्रेरी में जोड़ दी गई हैं।</string>
   <string name="how_to_update_content">सामग्री कैसे अद्यतन करें?</string>
   <string name="update_content_description">सामग्री (एक ZIM फ़ाइल) को अपडेट करने के लिए आपको उसी सामग्री का पूरा नवीनतम संस्करण डाउनलोड करना होगा। आप इसे डाउनलोड अनुभाग के माध्यम से कर सकते हैं।</string>
   <string name="all_files_permission_needed">सभी फ़ाइलों की अनुमति आवश्यक है</string>
@@ -377,4 +391,20 @@
   <string name="your_device_name_message">आपके उपकरण का नाम यहाँ दिखाई देगा।</string>
   <string name="nearby_devices_list_message">यहाँ, आपको आस-पास के डिवाइस की सूची मिलेगी। फ़ाइल ट्रांसफ़र प्रारम्भ हेतु डिवाइस के नाम पर टैप करें।</string>
   <string name="transfer_zim_files_list_message">यहाँ आपको स्थानांतरण के लिए उपलब्ध ज़िम फ़ाइलों की सूची मिलेगी।</string>
+  <string name="storage_selection_dialog_accessibility_description">ZIM फ़ाइलों को डाउनलोड करने के लिए संग्रहण स्थान चुनें।</string>
+  <string name="zim_file_content_description">ZIM फ़ाइल जिसमें पढ़ने योग्य सामग्री है</string>
+  <string name="toolbar_back_button_content_description">पिछली स्क्रीन पर जाएँ</string>
+  <string name="save_or_open_unsupported_files_dialog_message">\'खोलें\' चुनने पर यह फ़ाइल बाहरी रीडर एप्लिकेशन में खुल जाएगी।</string>
+  <string name="donation_dialog_title">आज दान करें</string>
+  <string name="donation_dialog_description">%s को आपकी मदद की जरूरत है।</string>
+  <string name="make_donation">दान करें</string>
+  <string name="resuming_state">फिर से शुरू हो रहा है</string>
+  <string name="downloading_state">डाउनलोड हो रहा है</string>
+  <string name="download_failed_state">असफल</string>
+  <string name="searchview_description_clear">क्वेरी साफ़ करें</string>
+  <string name="do_you_mean">क्या आपका मतलब है:</string>
+  <string name="suggested_search_icon_description">इस सुझाव का उपयोग करने और अपनी खोज को स्वचालित रूप से सही करने के लिए टैप करें।</string>
+  <string name="file_system_scan_dialog_title">किताबों के लिए स्टोरेज स्कैन करें?</string>
+  <string name="file_system_scan_dialog_message">Kiwix आपके डिवाइस की स्टोरेज को स्कैन करेगा और यहां उपलब्ध पुस्तकों की सूची देगा।</string>
+  <string name="download_timeout_resume_message">एंड्रॉइड का बैकग्राउंड डाउनलोड समय समाप्त हो गया है। क्या आप इसे फिर से शुरू करना चाहते हैं?</string>
 </resources>

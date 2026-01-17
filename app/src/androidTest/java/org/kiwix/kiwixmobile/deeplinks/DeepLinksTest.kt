@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.deeplinks
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
@@ -29,6 +30,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -46,7 +48,6 @@ import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -163,13 +164,7 @@ class DeepLinksTest : BaseActivityTest() {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          runBlocking {
-            handleLocaleChange(
-              it,
-              "en",
-              KiwixDataStore(context)
-            )
-          }
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         }
       }
     activityScenario.onActivity {

@@ -24,6 +24,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.ActionMode
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerValue
@@ -39,7 +40,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -65,7 +66,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
@@ -84,7 +84,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -100,6 +100,9 @@ class KiwixMainActivity : CoreMainActivity() {
   override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
+  @Inject
+  lateinit var kiwixDataStore: KiwixDataStore
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
@@ -157,7 +160,7 @@ class KiwixMainActivity : CoreMainActivity() {
         enableLeftDrawer = enableLeftDrawer.value,
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-        viewModelFactory = viewModelFactory as ViewModelFactory
+        viewModelFactory = viewModelFactory
       )
       LaunchedEffect(Unit) {
         // Load the menu when UI is attached to screen.
@@ -191,6 +194,7 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun runMigrations() {
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
+      migratedToPerAppLanguage()
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
@@ -243,6 +247,15 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  private suspend fun migratedToPerAppLanguage() {
+    if (!kiwixDataStore.perAppLanguageMigrated.first()) {
+      AppCompatDelegate.setApplicationLocales(
+        LocaleListCompat.forLanguageTags(kiwixDataStore.prefLanguage.first())
+      )
+      kiwixDataStore.putPerAppLanguageMigration(true)
+    }
+  }
+
   /**
    * Fetches the storage device list once in the main activity and reuses it across all fragments.
    * This is necessary because retrieving the storage device list, especially on devices with large SD cards,
@@ -265,22 +278,6 @@ class KiwixMainActivity : CoreMainActivity() {
     lifecycleScope.launch {
       if (!kiwixDataStore.prefIsTest.first()) {
         kiwixDataStore.setIsPlayStoreBuild(BuildConfig.IS_PLAYSTORE)
-      }
-      setDefaultDeviceLanguage()
-    }
-  }
-
-  private suspend fun setDefaultDeviceLanguage() {
-    if (kiwixDataStore.deviceDefaultLanguage.first().isEmpty()) {
-      ConfigurationCompat.getLocales(
-        applicationContext.resources.configuration
-      )[0]?.language?.let {
-        kiwixDataStore.setDeviceDefaultLanguage(it)
-        handleLocaleChange(
-          this,
-          kiwixDataStore.prefLanguage.first(),
-          kiwixDataStore
-        )
       }
     }
   }

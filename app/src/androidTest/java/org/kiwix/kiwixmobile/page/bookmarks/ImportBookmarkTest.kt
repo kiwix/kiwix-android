@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -34,7 +36,6 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -121,13 +122,7 @@ class ImportBookmarkTest : BaseActivityTest() {
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
-          runBlocking {
-            handleLocaleChange(
-              it,
-              "en",
-              kiwixDataStore
-            )
-          }
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         }
       }
     boxStore = DatabaseModule.boxStore

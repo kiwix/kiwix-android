@@ -11,6 +11,9 @@
   <string name="menu_support_kiwix">Support Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Support %s</string>
   <string name="menu_about_app">About %s app</string>
+  <string name="external_redirect_message">You will now be redirected to our %s.</string>
+  <string name="support_donation_platform">donation platform</string>
+  <string name="about_app_page">about app page</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>

@@ -59,10 +59,10 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
@@ -493,151 +493,169 @@ class ZimManageViewModelTest {
   @Nested
   inner class SideEffects {
     @Test
-    fun `RequestNavigateTo offers OpenFileWithNavigation with selected books`() = runTest {
-      val selectedBook = bookOnDisk().apply { isSelected = true }
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RequestNavigateTo(selectedBook)) },
-        assert = { assertThat(awaitItem()).isEqualTo(OpenFileWithNavigation(selectedBook)) }
-      )
+    fun `RequestNavigateTo offers OpenFileWithNavigation with selected books`() = flakyTest {
+      runTest {
+        val selectedBook = bookOnDisk().apply { isSelected = true }
+        viewModel.fileSelectListStates.value =
+          FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RequestNavigateTo(selectedBook)) },
+          assert = { assertThat(awaitItem()).isEqualTo(OpenFileWithNavigation(selectedBook)) }
+        )
+      }
     }
 
     @Test
-    fun `RequestMultiSelection offers StartMultiSelection and selects a book`() = runTest {
-      val bookToSelect = bookOnDisk(databaseId = 0L)
-      val unSelectedBook = bookOnDisk(databaseId = 1L)
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(
-          listOf(
-            bookToSelect,
-            unSelectedBook
-          ),
-          NORMAL
-        )
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RequestMultiSelection(bookToSelect)) },
-        assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
-      )
-      viewModel.fileSelectListStates.test()
-        .assertValue(
+    fun `RequestMultiSelection offers StartMultiSelection and selects a book`() = flakyTest {
+      runTest {
+        val bookToSelect = bookOnDisk(databaseId = 0L)
+        val unSelectedBook = bookOnDisk(databaseId = 1L)
+        viewModel.fileSelectListStates.value =
           FileSelectListState(
-            listOf(bookToSelect.apply { isSelected = !isSelected }, unSelectedBook),
-            MULTI
+            listOf(
+              bookToSelect,
+              unSelectedBook
+            ),
+            NORMAL
           )
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RequestMultiSelection(bookToSelect)) },
+          assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
         )
-    }
-
-    @Test
-    fun `RequestDeleteMultiSelection offers DeleteFiles with selected books`() = runTest {
-      val selectedBook = bookOnDisk().apply { isSelected = true }
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RequestDeleteMultiSelection) },
-        assert = {
-          assertThat(awaitItem()).isEqualTo(
-            DeleteFiles(
-              listOf(selectedBook),
-              alertDialogShower
+        viewModel.fileSelectListStates.test()
+          .assertValue(
+            FileSelectListState(
+              listOf(bookToSelect.apply { isSelected = !isSelected }, unSelectedBook),
+              MULTI
             )
           )
-        }
-      )
+      }
     }
 
     @Test
-    fun `RequestShareMultiSelection offers ShareFiles with selected books`() = runTest {
-      val selectedBook = bookOnDisk().apply { isSelected = true }
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RequestShareMultiSelection) },
-        assert = { assertThat(awaitItem()).isEqualTo(ShareFiles(listOf(selectedBook))) }
-      )
-    }
-
-    @Test
-    fun `RequestValidateZimFiles offers ValidateZIMFiles with selected books`() = runTest {
-      val selectedBook = bookOnDisk().apply { isSelected = true }
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RequestValidateZimFiles) },
-        assert = {
-          assertThat(awaitItem())
-            .isEqualTo(
-              ValidateZIMFiles(
+    fun `RequestDeleteMultiSelection offers DeleteFiles with selected books`() = flakyTest {
+      runTest {
+        val selectedBook = bookOnDisk().apply { isSelected = true }
+        viewModel.fileSelectListStates.value =
+          FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RequestDeleteMultiSelection) },
+          assert = {
+            assertThat(awaitItem()).isEqualTo(
+              DeleteFiles(
                 listOf(selectedBook),
-                alertDialogShower,
-                validateZimViewModel
+                alertDialogShower
               )
             )
-        }
-      )
+          }
+        )
+      }
     }
 
     @Test
-    fun `MultiModeFinished offers None`() = runTest {
-      val selectedBook = bookOnDisk().apply { isSelected = true }
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(MultiModeFinished) },
-        assert = { assertThat(awaitItem()).isEqualTo(None) }
-      )
-      viewModel.fileSelectListStates.test().assertValue(
-        FileSelectListState(
-          listOf(
-            selectedBook.apply { isSelected = false },
-            bookOnDisk()
+    fun `RequestShareMultiSelection offers ShareFiles with selected books`() = flakyTest {
+      runTest {
+        val selectedBook = bookOnDisk().apply { isSelected = true }
+        viewModel.fileSelectListStates.value =
+          FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RequestShareMultiSelection) },
+          assert = { assertThat(awaitItem()).isEqualTo(ShareFiles(listOf(selectedBook))) }
+        )
+      }
+    }
+
+    @Test
+    fun `RequestValidateZimFiles offers ValidateZIMFiles with selected books`() = flakyTest {
+      runTest {
+        val selectedBook = bookOnDisk().apply { isSelected = true }
+        viewModel.fileSelectListStates.value =
+          FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RequestValidateZimFiles) },
+          assert = {
+            assertThat(awaitItem())
+              .isEqualTo(
+                ValidateZIMFiles(
+                  listOf(selectedBook),
+                  alertDialogShower,
+                  validateZimViewModel
+                )
+              )
+          }
+        )
+      }
+    }
+
+    @Test
+    fun `MultiModeFinished offers None`() = flakyTest {
+      runTest {
+        val selectedBook = bookOnDisk().apply { isSelected = true }
+        viewModel.fileSelectListStates.value =
+          FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(MultiModeFinished) },
+          assert = { assertThat(awaitItem()).isEqualTo(None) }
+        )
+        viewModel.fileSelectListStates.test().assertValue(
+          FileSelectListState(
+            listOf(
+              selectedBook.apply { isSelected = false },
+              bookOnDisk()
+            )
           )
         )
-      )
+      }
     }
 
     @Test
-    fun `RequestSelect offers None and inverts selection`() = runTest {
-      val selectedBook = bookOnDisk(0L).apply { isSelected = true }
-      viewModel.fileSelectListStates.value =
-        FileSelectListState(listOf(selectedBook, bookOnDisk(1L)), NORMAL)
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RequestSelect(selectedBook)) },
-        assert = { assertThat(awaitItem()).isEqualTo(None) }
-      )
-      viewModel.fileSelectListStates.test().assertValue(
-        FileSelectListState(
-          listOf(
-            selectedBook.apply { isSelected = false },
-            bookOnDisk(1L)
+    fun `RequestSelect offers None and inverts selection`() = flakyTest {
+      runTest {
+        val selectedBook = bookOnDisk(0L).apply { isSelected = true }
+        viewModel.fileSelectListStates.value =
+          FileSelectListState(listOf(selectedBook, bookOnDisk(1L)), NORMAL)
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RequestSelect(selectedBook)) },
+          assert = { assertThat(awaitItem()).isEqualTo(None) }
+        )
+        viewModel.fileSelectListStates.test().assertValue(
+          FileSelectListState(
+            listOf(
+              selectedBook.apply { isSelected = false },
+              bookOnDisk(1L)
+            )
           )
         )
-      )
+      }
     }
 
     @Test
-    fun `RestartActionMode offers StartMultiSelection`() = runTest {
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(RestartActionMode) },
-        assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
-      )
+    fun `RestartActionMode offers StartMultiSelection`() = flakyTest {
+      runTest {
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(RestartActionMode) },
+          assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
+        )
+      }
     }
 
     @Test
-    fun `UserClickedDownloadBooksButton offers NavigateToDownloads`() = runTest {
-      testFlow(
-        flow = viewModel.sideEffects,
-        triggerAction = { viewModel.fileSelectActions.emit(UserClickedDownloadBooksButton) },
-        assert = { assertThat(awaitItem()).isEqualTo(NavigateToDownloads) }
-      )
+    fun `UserClickedDownloadBooksButton offers NavigateToDownloads`() = flakyTest {
+      runTest {
+        testFlow(
+          flow = viewModel.sideEffects,
+          triggerAction = { viewModel.fileSelectActions.emit(UserClickedDownloadBooksButton) },
+          assert = { assertThat(awaitItem()).isEqualTo(NavigateToDownloads) }
+        )
+      }
     }
   }
 }

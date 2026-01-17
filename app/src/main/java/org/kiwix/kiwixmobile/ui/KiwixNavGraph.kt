@@ -33,7 +33,10 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,6 +44,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ViewModelFactory
+import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT
@@ -63,8 +67,8 @@ import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
-import org.kiwix.kiwixmobile.help.KiwixHelpFragment
-import org.kiwix.kiwixmobile.intro.IntroFragment
+import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
+import org.kiwix.kiwixmobile.intro.IntroScreenRoute
 import org.kiwix.kiwixmobile.language.LanguageScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
@@ -80,7 +84,7 @@ fun KiwixNavGraph(
   navController: NavHostController,
   startDestination: String,
   modifier: Modifier = Modifier,
-  viewModelFactory: ViewModelFactory,
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   NavHost(
     navController = navController,
@@ -127,9 +131,15 @@ fun KiwixNavGraph(
       }
     }
     composable(KiwixDestination.Intro.route) {
-      FragmentContainer(R.id.introFragmentContainer) {
-        IntroFragment()
-      }
+      IntroScreenRoute(
+        viewModelFactory = viewModelFactory as ViewModelFactory,
+        navigateToLibrary = {
+          val navOptions = NavOptions.Builder()
+            .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
+            .build()
+          navController.navigate(KiwixDestination.Library.route, navOptions)
+        }
+      )
     }
     composable(KiwixDestination.History.route) {
       FragmentContainer(R.id.historyFragmentContainer) {
@@ -151,9 +161,11 @@ fun KiwixNavGraph(
       }
     }
     composable(KiwixDestination.Help.route) {
-      FragmentContainer(R.id.helpFragmentContainer) {
-        KiwixHelpFragment()
-      }
+      val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)
+      HelpScreenRoute(
+        navigateBack = navController::popBackStack,
+        helpViewModel = kiwixHelpViewModel
+      )
     }
     composable(KiwixDestination.Settings.route) {
       FragmentContainer(R.id.settingsFragmentContainer) {

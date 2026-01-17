@@ -32,11 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -51,7 +53,22 @@ private const val PAGE_COUNT_IN_APK_VERSION = 4
 const val HORIZONTAL_PAGER_TESTING_TAG = "horizontalPagerTestingTag"
 
 @Composable
-fun IntroScreen(
+fun IntroScreenRoute(
+  viewModelFactory: ViewModelFactory,
+  navigateToLibrary: () -> Unit
+) {
+  val viewModel: KiwixIntroViewModel = viewModel(factory = viewModelFactory)
+
+  IntroScreen(
+    onButtonClick = {
+      viewModel.setIntroShown()
+      navigateToLibrary()
+    }
+  )
+}
+
+@Composable
+private fun IntroScreen(
   onButtonClick: () -> Unit
 ) {
   KiwixTheme {
@@ -96,7 +113,7 @@ fun IntroScreen(
 /**
  * Returns the page.
  * If it is a playStore version(bundle) it will returns the [PAGE_COUNT_IN_BUNDLE_VERSION]
- * Otherwise; returns the [PAGE_COUNT_IN_APK_VERSION].
+ * Otherwise; returns the [PAGE_COUNT_IN_APK_VERSION]
  */
 private fun getPageCount() = if (BuildConfig.IS_PLAYSTORE) {
   PAGE_COUNT_IN_BUNDLE_VERSION

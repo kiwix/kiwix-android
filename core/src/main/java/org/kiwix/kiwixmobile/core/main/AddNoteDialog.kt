@@ -163,6 +163,10 @@ class AddNoteDialog : DialogFragment() {
 
   private fun isZimFileExist() = zimFileName != null
 
+  private fun showNoteSaveError() {
+    context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+  }
+
   private fun onFailureToCreateAddNoteDialog() {
     context.toast(getString(R.string.error_file_not_found, zimFileName), Toast.LENGTH_LONG)
     parentFragmentManager.beginTransaction().remove(this).commit()
@@ -352,7 +356,7 @@ class AddNoteDialog : DialogFragment() {
           TAG,
           "WRITE_EXTERNAL_STORAGE permission not granted"
         )
-        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+        showNoteSaveError()
         return
       }
       val notesFolder = File(zimNotesDirectory)
@@ -376,10 +380,10 @@ class AddNoteDialog : DialogFragment() {
           disableSaveNoteMenuItem()
         } catch (e: IOException) {
           e.printStackTrace()
-            .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
+            .also { showNoteSaveError() }
         }
       } else {
-        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+        showNoteSaveError()
         Log.d(TAG, "Required folder doesn't exist")
       }
     } else {

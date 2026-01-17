@@ -254,6 +254,8 @@ object Libs {
    */
   const val appcompat: String = "androidx.appcompat:appcompat:" + Versions.appcompat
 
+  const val appcompat_resource = "androidx.appcompat:appcompat-resources:" + Versions.appcompat
+
   /**
    * https://developer.android.com/jetpack/androidx
    */
@@ -339,4 +341,16 @@ object Libs {
     "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
 
   const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
+
+  /**
+   * https://developer.android.com/jetpack/androidx/releases/lifecycle
+   */
+  const val LIFECYCLE_VIEWMODEL_COMPOSE =
+    "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.LIFECYCLE_VERSION}"
+
+  /**
+   * https://developer.android.com/jetpack/androidx/releases/lifecycle
+   */
+  const val LIFECYCLE_VIEWMODEL_KTX =
+    "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VERSION}"
 }

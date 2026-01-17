@@ -25,9 +25,11 @@ import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -60,6 +62,7 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.Validati
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Pending
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.ValidationStatus.Success
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.ValidateZimDialog
@@ -152,7 +155,8 @@ open class ErrorActivity : BaseActivity() {
         {
           validateZimViewModel.cancelValidation()
           dismissVerificationDialog()
-        }
+        },
+        modifier = Modifier.padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT),
       )
     }
   }

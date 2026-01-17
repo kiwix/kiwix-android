@@ -53,13 +53,11 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action
@@ -68,6 +66,7 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -122,13 +121,12 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
           ?: throw IllegalStateException("Storage calculator is null"),
         permissionItem = false to "",
         shouldShowLanguageCategory = false,
-        onLanguageChanged = { restartActivity() },
         versionInformation = "",
         shouldShowStorageCategory = false,
         shouldShowExternalLinkPreference = false,
         shouldShowPrefWifiOnlyPreference = false,
         kiwixDataStore = kiwixDataStore ?: throw IllegalStateException(""),
-        lifeCycleScope = null
+        lifecycleScope = null
       )
     )
   }
@@ -146,7 +144,7 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         DialogHost(alertDialogShower as AlertDialogShower)
         LaunchedEffect(Unit) {
           settingsScreenState.value.update {
-            copy(lifeCycleScope = lifecycleScope)
+            copy(lifecycleScope = lifecycleScope)
           }
           kiwixDataStore?.let {
             LanguageUtils(requireActivity()).changeFont(
@@ -188,13 +186,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
     savedInstanceState: Bundle?
   ): View? = ComposeView(requireContext()).also {
     composeView = it
-  }
-
-  /**
-   * Restarts the current activity so that the language change apply correctly.
-   */
-  private fun restartActivity() {
-    (activity as? CoreMainActivity)?.recreate()
   }
 
   private val versionCode: Int

@@ -43,12 +43,10 @@ class ExternalLinkOpener @Inject constructor(
 
   suspend fun openExternalUrl(
     intent: Intent,
-    showExternalLinkPopup: Boolean? = null,
     lifecycleScope: CoroutineScope
   ) {
-    val externalLinkPopup = showExternalLinkPopup ?: kiwixDataStore.externalLinkPopup.first()
     if (intent.resolveActivity(activity.packageManager) != null) {
-      if (externalLinkPopup) {
+      if (kiwixDataStore.externalLinkPopup.first()) {
         requestOpenLink(intent, lifecycleScope)
       } else {
         openLink(intent)
@@ -86,6 +84,23 @@ class ExternalLinkOpener @Inject constructor(
             action = ACTION_INSTALL_TTS_DATA
           }
         )
+      }
+    )
+  }
+
+  fun openExternalLinkWithDialog(
+    intent: Intent,
+    destinationText: String
+  ) {
+    if (intent.resolveActivity(activity.packageManager) == null) {
+      activity.toast(R.string.no_reader_application_installed)
+      return
+    }
+
+    alertDialogShower.show(
+      KiwixDialog.ExternalRedirectDialog(destinationText),
+      {
+        activity.startActivity(intent)
       }
     )
   }

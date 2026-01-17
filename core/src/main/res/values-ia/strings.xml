@@ -399,4 +399,8 @@
   <string name="file_system_scan_dialog_title">Cercar libros in le immagazinage?</string>
   <string name="file_system_scan_dialog_message">Kiwix perquirera le immagazinage de tu apparato e listara hic le libros disponibile.</string>
   <string name="download_timeout_resume_message">Le discargamento in secunde plano de Android ha expirate. Vole tu reprender lo?</string>
+  <string name="validate_zim_files">Validar files ZIM</string>
+  <string name="confirmation_validate_zim_files">Es tu secur de voler validar le sequente files ZIM?\n\n%s</string>
+  <string name="validating_zim_file">Validation del file ZIM in curso…</string>
+  <string name="validating_zim_files">Validation del files ZIM in curso…</string>
 </resources>

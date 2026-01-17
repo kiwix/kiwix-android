@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,13 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
 
-import dagger.Binds
-import dagger.Module
+package org.kiwix.kiwixmobile.custom.help
 
-@Module
-abstract class IntroModule {
-  @Binds
-  abstract fun bindsPresenter(presenter: IntroPresenter): IntroContract.Presenter
+import android.content.Context
+import org.kiwix.kiwixmobile.core.help.HelpViewModel
+import javax.inject.Inject
+
+class CustomHelpViewModel @Inject constructor() : HelpViewModel() {
+  override suspend fun rawTitleDescriptionMap(context: Context): List<Pair<Int, Any>> = emptyList()
 }

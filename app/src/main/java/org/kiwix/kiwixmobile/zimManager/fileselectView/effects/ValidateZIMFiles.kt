@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineDispatcher
@@ -80,7 +81,9 @@ data class ValidateZIMFiles(
             onCancelButtonClick = {
               validateZimViewModel.cancelValidation()
               (dialogShower as AlertDialogShower).dismiss()
-            }
+            },
+            modifier = Modifier,
+            startEndPaddingForConfirmButton = ZERO.dp
           )
         }
       )

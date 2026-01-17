@@ -30,6 +30,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
@@ -99,19 +100,27 @@ class SettingsRobot : BaseRobot() {
 
   fun clickLanguagePreference(
     composeTestRule: ComposeContentTestRule,
-    kiwixMainActivity: KiwixMainActivity
+    scenario: ActivityScenario<KiwixMainActivity>
   ) {
-    clickPreferenceItem(kiwixMainActivity.getString(R.string.pref_language_title), composeTestRule)
+    var title = ""
+    scenario.onActivity { activity ->
+      title = activity.getString(R.string.pref_language_title)
+    }
+    clickPreferenceItem(title, composeTestRule)
   }
 
   fun assertLanguagePrefDialogDisplayed(
     composeTestRule: ComposeContentTestRule,
-    kiwixMainActivity: KiwixMainActivity
+    scenario: ActivityScenario<KiwixMainActivity>
   ) {
     composeTestRule.apply {
       waitForIdle()
+      var title = ""
+      scenario.onActivity { activity ->
+        title = activity.getString(R.string.pref_language_title)
+      }
       onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-        .assertTextEquals(kiwixMainActivity.getString(R.string.pref_language_title))
+        .assertTextEquals(title)
     }
   }
 
@@ -200,18 +209,20 @@ class SettingsRobot : BaseRobot() {
   }
 
   private fun clickPreferenceItem(title: String, composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
-        .performScrollToNode(
-          hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
-        )
-      composeTestRule
-        .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG + title, true)
-        .onFirst()
-        .performScrollTo()
-        .performClick()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+          .performScrollToNode(
+            hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
+          )
+        composeTestRule
+          .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG + title, true)
+          .onFirst()
+          .performScrollTo()
+          .performClick()
+      }
+    })
   }
 
   fun assertNightModeDialogDisplayed(composeTestRule: ComposeContentTestRule) {

@@ -43,7 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -52,7 +52,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -77,7 +76,7 @@ fun KiwixMainActivityScreen(
   enableLeftDrawer: Boolean,
   shouldShowBottomAppBar: Boolean,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  viewModelFactory: ViewModelFactory
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route

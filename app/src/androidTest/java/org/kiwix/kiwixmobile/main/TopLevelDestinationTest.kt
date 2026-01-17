@@ -18,8 +18,10 @@
 package org.kiwix.kiwixmobile.main
 
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -29,7 +31,6 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
@@ -37,7 +38,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -64,7 +64,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(
+    KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).apply {
       lifeCycleScope.launch {
@@ -84,13 +84,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           kiwixMainActivity = it
-          runBlocking {
-            handleLocaleChange(
-              kiwixMainActivity,
-              "en",
-              kiwixDataStore
-            )
-          }
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         }
       }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)

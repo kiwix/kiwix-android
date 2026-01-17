@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: temurin
@@ -37,11 +37,13 @@ jobs:
       - name: Retrieve secrets to files
         env:
           KEYSTORE: ${{ secrets.keystore }}
-          SSH_KEY: ${{ secrets.ssh_key }}
+          KIWIX_FILE_UPLOAD_SSH_KEY: ${{ secrets.KIWIX_FILE_UPLOAD_SSH_KEY }}
         run: |
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
-          echo "$SSH_KEY" | base64 -d > ssh_key
-          chmod 600 ssh_key
+          KEY_PATH=kiwix_file_upload_ssh_key
+          echo "$KIWIX_FILE_UPLOAD_SSH_KEY" > $KEY_PATH
+          chmod 600 $KEY_PATH
+          echo "KIWIX_FILE_UPLOAD_SSH_KEY_PATH=$KEY_PATH" >> $GITHUB_ENV
 
       - name: Publish APK to download.kiwix.org
         env:
@@ -55,14 +57,14 @@ jobs:
         run: |
           ./gradlew assembleStandalone
           cp ${UNIVERSAL_RELEASE_APK} ${ARCHIVE_NAME}
-          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no "$ARCHIVE_NAME" ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+          scp -P 30022 -vrp -i "$KIWIX_FILE_UPLOAD_SSH_KEY_PATH" -o StrictHostKeyChecking=no "$ARCHIVE_NAME" ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
 #      This is temporary, once we will publish 3.7.0 then we will uncommented this code.
 #      # This is necessary for F-Droid
 #      - name: Publish "versionInfo" to download.kiwix.org
 #        run: |
 #          ./gradlew generateVersionCodeAndName
-#          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+#          scp -P 30022 -vrp -i "$KIWIX_FILE_UPLOAD_SSH_KEY_PATH" -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
       - name: Upload APKs to Release
         uses: ncipollo/release-action@v1

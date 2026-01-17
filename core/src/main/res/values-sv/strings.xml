@@ -9,6 +9,7 @@
 * Rofiatmustapha12
 * Sabelöga
 * Skalman
+* Stefan2255
 * Susann Schweden
 * Teaparty
 * Technic2
@@ -404,6 +405,13 @@
   <string name="downloading_state">Laddar ned</string>
   <string name="download_failed_state">Misslyckades</string>
   <string name="searchview_description_clear">Rensa förfrågan</string>
+  <string name="do_you_mean">Menade du:</string>
+  <string name="suggested_search_icon_description">Tryck för att använda det här förslaget och korrigera din sökning automatiskt</string>
   <string name="file_system_scan_dialog_title">Skanna lagringen efter böcker?</string>
   <string name="file_system_scan_dialog_message">Kiwix kommer att skanna din enhets lagring och listar tillgängliga böcker här.</string>
+  <string name="download_timeout_resume_message">Androids bakgrundsnedladdning har gått ut. Vill du återuppta?</string>
+  <string name="validate_zim_files">Validera ZIM-filer</string>
+  <string name="confirmation_validate_zim_files">Är du säker på att du vill validera följande ZIM-filer?\n\n %s</string>
+  <string name="validating_zim_file">Validerar ZIM-filen…</string>
+  <string name="validating_zim_files">Validerar ZIM-filer…</string>
 </resources>

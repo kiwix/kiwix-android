@@ -406,4 +406,9 @@
   <string name="suggested_search_icon_description">Tik om deze suggestie te gebruiken en uw zoekopdracht automatisch te corrigeren</string>
   <string name="file_system_scan_dialog_title">De opslag op boeken doorlichten?</string>
   <string name="file_system_scan_dialog_message">Kiwix tast de opslagruimte van uw apparaat af en geeft hier een overzicht van de beschikbare boeken.</string>
+  <string name="download_timeout_resume_message">De achtergronddownload van Android is verlopen. Wilt u verdergaan?</string>
+  <string name="validate_zim_files">ZIM-bestanden valideren</string>
+  <string name="confirmation_validate_zim_files">Weet u zeker dat u de volgende ZIM-bestanden wilt valideren?\n\n%s</string>
+  <string name="validating_zim_file">ZIM-bestand valideren…</string>
+  <string name="validating_zim_files">ZIM-bestanden valideren…</string>
 </resources>
