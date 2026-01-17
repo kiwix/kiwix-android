@@ -60,6 +60,7 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.language.composables.LanguageList
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
@@ -93,45 +94,47 @@ internal fun LanguageScreenRoute(
     languageViewModel.actions.tryEmit(Action.Filter(searchText))
   }
 
-  LanguageScreen(
-    searchText = searchText,
-    isSearchActive = isSearchActive,
-    state = state,
-    actionMenuItemList = appBarActionMenuList(
+  KiwixTheme {
+    LanguageScreen(
+      searchText = searchText,
       isSearchActive = isSearchActive,
-      onSearchClick = { isSearchActive = true },
-      onSaveClick = {
-        languageViewModel.actions.tryEmit(Action.Save)
-      }
-    ),
-    onClearClick = { resetSearchState() },
-    onAppBarValueChange = {
-      searchText = it
-      languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
-    },
-    selectLanguageItem = { languageItem ->
-      languageViewModel.actions.tryEmit(Action.Select(languageItem))
-    },
-    navigationIcon = {
-      NavigationIcon(
-        iconItem = if (isSearchActive) {
-          IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
-        } else {
-          IconItem.Drawable(
-            R.drawable.ic_close_white_24dp
-          )
-        },
-        onClick = {
-          if (isSearchActive) {
-            isSearchActive = false
-            resetSearchState()
-          } else {
-            navigateBack()
-          }
+      state = state,
+      actionMenuItemList = appBarActionMenuList(
+        isSearchActive = isSearchActive,
+        onSearchClick = { isSearchActive = true },
+        onSaveClick = {
+          languageViewModel.actions.tryEmit(Action.Save)
         }
-      )
-    }
-  )
+      ),
+      onClearClick = { resetSearchState() },
+      onAppBarValueChange = {
+        searchText = it
+        languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
+      },
+      selectLanguageItem = { languageItem ->
+        languageViewModel.actions.tryEmit(Action.Select(languageItem))
+      },
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = if (isSearchActive) {
+            IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
+          } else {
+            IconItem.Drawable(
+              R.drawable.ic_close_white_24dp
+            )
+          },
+          onClick = {
+            if (isSearchActive) {
+              isSearchActive = false
+              resetSearchState()
+            } else {
+              navigateBack()
+            }
+          }
+        )
+      }
+    )
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
