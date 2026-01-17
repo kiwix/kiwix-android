@@ -66,6 +66,7 @@ class FileUtilsInstrumentationTest {
     "content://com.android.externalstorage.documents/document/"
   private val downloadUriPrefix = "content://media/external/downloads/"
   private val expectedFilePath = "${Environment.getExternalStorageDirectory()}/$commonPath"
+  val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
 
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
@@ -346,7 +347,6 @@ class FileUtilsInstrumentationTest {
   @Test
   fun testDownloadBase64Image() = runTest {
     val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
-    val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
     val base64Png =
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
@@ -365,12 +365,26 @@ class FileUtilsInstrumentationTest {
   }
 
   @Test
+  fun testNonBase64DataUriIsIgnored() = runTest {
+    val dataUri = "data:image/png,abcdefg"
+    coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
+
+    val file = FileUtils.downloadFileFromUrl(
+      url = null,
+      src = dataUri,
+      zimReaderContainer = mockk(relaxed = true),
+      kiwixDataStore = kiwixDataStore
+    )
+
+    Assertions.assertNull(file)
+  }
+
+  @Test
   fun testBase64DoesNotUseZimReader() = runTest {
     val base64Jpeg =
       "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
 
     val zimReader = mockk<ZimReaderContainer>(relaxed = true)
-    val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
 
     FileUtils.downloadFileFromUrl(

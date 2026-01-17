@@ -696,7 +696,7 @@ object FileUtils {
     return fileNameAndSource
   }
 
-  private suspend fun getDownloadRootDir(kiwixDataStore: KiwixDataStore): File? {
+  suspend fun getDownloadRootDir(kiwixDataStore: KiwixDataStore): File? {
     return if (
       kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
