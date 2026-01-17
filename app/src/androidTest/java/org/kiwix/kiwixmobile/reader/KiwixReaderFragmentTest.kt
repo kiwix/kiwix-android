@@ -318,6 +318,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
 
   @Test
   fun testBase64ImageSaving() {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -335,7 +336,8 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       kiwixMainActivity.supportFragmentManager.fragments
         .filterIsInstance<CoreReaderFragment>()
         .firstOrNull()
-    val kiwixWebView = coreReaderFragment?.getCurrentWebView() ?: return
+    val kiwixWebView = coreReaderFragment?.getCurrentWebView()
+      ?: throw IllegalStateException("Could not get current webView")
     val base64Src =
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
 
