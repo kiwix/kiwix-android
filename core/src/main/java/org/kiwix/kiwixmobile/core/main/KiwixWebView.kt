@@ -164,7 +164,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     callback.webViewPageChanged(page, pages)
   }
 
-  internal class SaveHandler(
+  class SaveHandler(
     private val zimReaderContainer: ZimReaderContainer,
     private val kiwixDataStore: KiwixDataStore
   ) :

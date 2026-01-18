@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.reader
 
 import android.os.Build
+import android.os.Bundle
+import android.os.Message
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -37,6 +39,7 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -45,13 +48,17 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Assertions
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
@@ -307,6 +314,66 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
         }
       }
     }
+  }
+
+  @Test
+  fun testBase64ImageSaving() {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+    }
+    composeTestRule.waitForIdle()
+    val zimFile = getLocalZIMFile()
+    openKiwixReaderFragmentWithFile(zimFile)
+    composeTestRule.waitForIdle()
+    reader {
+      checkZimFileLoadedSuccessful(composeTestRule)
+    }
+    // try to save the base64 image. Since there is no longClick method available
+    // in testing for webview so we are directly calling the method to verify the real behaviour.
+    val coreReaderFragment =
+      kiwixMainActivity.supportFragmentManager.fragments
+        .filterIsInstance<CoreReaderFragment>()
+        .firstOrNull()
+    val kiwixWebView = coreReaderFragment?.getCurrentWebView()
+      ?: throw IllegalStateException("Could not get current webView")
+    val base64Src =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
+
+    val msg = Message.obtain().apply {
+      data = Bundle().apply {
+        putString("src", base64Src)
+        putString("url", null)
+      }
+    }
+    val saveHandler = KiwixWebView.SaveHandler(
+      kiwixWebView.zimReaderContainer,
+      kiwixWebView.kiwixDataStore
+    )
+
+    // Must run on main thread because Handler uses MainLooper
+    InstrumentationRegistry.getInstrumentation().runOnMainSync {
+      saveHandler.handleMessage(msg)
+    }
+    val savedFile = runBlocking { waitForDownloadedImageFile(kiwixWebView.kiwixDataStore) }
+
+    Assertions.assertNotNull(savedFile)
+    Assertions.assertTrue(savedFile.exists())
+    Assertions.assertTrue(savedFile.length() > 0)
+    Assertions.assertTrue(savedFile.extension == "png")
+  }
+
+  private suspend fun waitForDownloadedImageFile(kiwixDataStore: KiwixDataStore): File {
+    val dir = FileUtils.getDownloadRootDir(kiwixDataStore)
+
+    repeat(20) {
+      dir?.listFiles()?.firstOrNull { it.name.startsWith("image_") }?.let {
+        return it
+      }
+      Thread.sleep(500)
+    }
+    throw AssertionError("Base64 image was not saved")
   }
 
   private fun ReaderRobot.startReadAloudFeature(composeTestRule: ComposeContentTestRule) {

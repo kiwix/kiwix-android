@@ -30,6 +30,8 @@ import android.os.storage.StorageManager
 import android.os.storage.StorageVolume
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Base64
+import android.webkit.MimeTypeMap
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
@@ -627,6 +629,36 @@ object FileUtils {
       .firstOrNull { it.path.contains(storageName) }
       ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
 
+  private fun isBase64DataUri(src: String?): Boolean {
+    return src?.startsWith("data:", ignoreCase = true) == true &&
+      src.contains(";base64,", ignoreCase = true)
+  }
+
+  private fun generateBase64FileName(extension: String): String =
+    "image_${System.currentTimeMillis()}.$extension"
+
+  fun decodeBase64DataUri(src: String?): Pair<String, ByteArray>? {
+    return try {
+      val headerAndData = src?.split(",", limit = 2)
+      if (headerAndData?.size != 2) return null
+
+      val header = headerAndData[0]
+      val base64Data = headerAndData[1]
+
+      val mimeType = header
+        .substringAfter("data:")
+        .substringBefore(";")
+
+      val extension = MimeTypeMap.getSingleton()
+        .getExtensionFromMimeType(mimeType) ?: "bin"
+
+      val bytes = Base64.decode(base64Data, Base64.DEFAULT)
+      extension to bytes
+    } catch (_: Exception) {
+      null
+    }
+  }
+
   /*
    * This method returns a file name guess from the url using URLUtils.guessFileName()
      method of android.webkit. which is using Uri.decode method to extract the filename
@@ -664,7 +696,22 @@ object FileUtils {
     return fileNameAndSource
   }
 
-  @Suppress("ReturnCount")
+  suspend fun getDownloadRootDir(kiwixDataStore: KiwixDataStore): File? {
+    return if (
+      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    ) {
+      CoreApp.instance.externalMediaDirs.firstOrNull()
+    } else {
+      File(
+        "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/org.kiwix"
+      ).apply {
+        if (!exists()) mkdir()
+      }
+    }
+  }
+
+  @Suppress("ReturnCount", "NestedBlockDepth")
   @JvmStatic
   suspend fun downloadFileFromUrl(
     url: String?,
@@ -672,34 +719,39 @@ object FileUtils {
     zimReaderContainer: ZimReaderContainer,
     kiwixDataStore: KiwixDataStore
   ): File? {
-    val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src) ?: return null
-    var root: File? = null
-    if (kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-    ) {
-      if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
-        root = CoreApp.instance.externalMediaDirs[0]
-      }
-    } else {
-      root =
-        File(
-          "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
-            "/org.kiwix"
-        )
-      if (!root.isFileExist()) root.mkdir()
-    }
-    val fileToSave = File(root, fileName.first)
-    if (fileToSave.isFileExist()) return fileToSave
-    return try {
-      fileName.second?.let {
-        zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
-          fileToSave.outputStream().use(inputStream::copyTo)
+    val root = getDownloadRootDir(kiwixDataStore) ?: return null
+    when {
+      isBase64DataUri(src) -> {
+        val decoded = decodeBase64DataUri(src) ?: return null
+        val (extension, bytes) = decoded
+        val file = File(root, generateBase64FileName(extension))
+
+        return try {
+          file.outputStream().use { it.write(bytes) }
+          file
+        } catch (e: IOException) {
+          Log.w("kiwix", "Couldn't save base64 file", e)
+          null
         }
-        fileToSave
       }
-    } catch (e: IOException) {
-      Log.w("kiwix", "Couldn't save file", e)
-      null
+
+      else -> {
+        val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src)
+        if (fileName?.first == null) return null
+        val fileToSave = File(root, fileName.first)
+        if (fileToSave.isFileExist()) return fileToSave
+        return try {
+          fileName.second?.let {
+            zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
+              fileToSave.outputStream().use(inputStream::copyTo)
+            }
+            fileToSave
+          }
+        } catch (e: IOException) {
+          Log.w("kiwix", "Couldn't save file", e)
+          null
+        }
+      }
     }
   }
 
