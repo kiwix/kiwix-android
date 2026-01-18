@@ -36,10 +36,10 @@ class BookmarkViewModel @Inject constructor(
   zimReaderContainer: ZimReaderContainer,
   kiwixDataStore: KiwixDataStore
 ) : PageViewModel<LibkiwixBookmarkItem, BookmarkState>(
-    libkiwixBookmarks,
-    kiwixDataStore,
-    zimReaderContainer
-  ) {
+  libkiwixBookmarks,
+  kiwixDataStore,
+  zimReaderContainer
+) {
   override fun initialState(): BookmarkState {
     val showAll = runBlocking { kiwixDataStore.showBookmarksOfAllBooks.first() }
     return BookmarkState(emptyList(), showAll, zimReaderContainer.id)
