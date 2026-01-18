@@ -54,6 +54,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -498,7 +499,7 @@ fun ListPreference(
   onOptionSelected: (String) -> Unit
 ) {
   var showDialog by remember { mutableStateOf(false) }
-  var selected by remember { mutableStateOf(selectedOption) }
+  var selected by rememberSaveable { mutableStateOf(selectedOption) }
 
   LaunchedEffect(selectedOption) {
     selected = selectedOption

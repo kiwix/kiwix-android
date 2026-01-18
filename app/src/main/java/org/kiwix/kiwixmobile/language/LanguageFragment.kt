@@ -27,7 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
@@ -62,8 +62,8 @@ class LanguageFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
     composeView?.setContent {
-      var searchText by remember { mutableStateOf("") }
-      var isSearchActive by remember { mutableStateOf(false) }
+      var searchText by rememberSaveable { mutableStateOf("") }
+      var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
       fun resetSearchState() {
         // clears the search text and resets the filter
