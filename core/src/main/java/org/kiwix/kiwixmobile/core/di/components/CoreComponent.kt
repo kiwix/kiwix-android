@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
+import org.kiwix.kiwixmobile.core.di.modules.KiwixPermissionModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
@@ -50,6 +51,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Singleton
 
@@ -62,7 +64,8 @@ import javax.inject.Singleton
     DataModule::class,
     CoreViewModelModule::class,
     SearchModule::class,
-    MutexModule::class
+    MutexModule::class,
+    KiwixPermissionModule::class
   ]
 )
 interface CoreComponent {
@@ -96,6 +99,7 @@ interface CoreComponent {
   fun notificationManager(): NotificationManager
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
+  fun kiwixPermissionChecker(): KiwixPermissionChecker
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)

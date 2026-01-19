@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.settings.viewmodel
+package org.kiwix.kiwixmobile.core.di.modules
 
-import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.CoroutineScope
+import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixmobile.core.utils.AndroidPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import javax.inject.Singleton
 
-sealed class Action {
-  object ClearAllHistory : Action()
-  object ClearAllNotes : Action()
-  object OpenCredits : Action()
-  object ExportBookmarks : Action()
-  object ImportBookmarks : Action()
-  object AllowPermission : Action()
-  data class OnStorageItemClick(val storageDevice: StorageDevice) : Action()
-  data class ShowSnackbar(val message: String, val lifecycleScope: CoroutineScope) : Action()
+@Module
+class KiwixPermissionModule {
+  @Singleton
+  @Provides
+  fun provideKiwixPermissionChecker(androidPermissionChecker: AndroidPermissionChecker): KiwixPermissionChecker =
+    androidPermissionChecker
 }

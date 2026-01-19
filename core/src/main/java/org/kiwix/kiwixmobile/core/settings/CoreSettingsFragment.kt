@@ -59,8 +59,6 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.navigateToSettings
-import org.kiwix.kiwixmobile.core.settings.viewmodel.Action
 import org.kiwix.kiwixmobile.core.settings.viewmodel.SettingsViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -155,29 +153,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         }
       }
     }
-    settingsScreenState.value.update {
-      copy(versionInformation = "$versionName Build: $versionCode")
-    }
-    settingViewModel.actions.onEach {
-      when (it) {
-        Action.AllowPermission -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-          requireActivity().navigateToSettings()
-        }
-
-        Action.ClearAllHistory -> clearAllHistoryDialog()
-        Action.ClearAllNotes -> showClearAllNotesDialog()
-        Action.ExportBookmarks -> if (requestExternalStorageWritePermissionForExportBookmark()) {
-          showExportBookmarkDialog()
-        }
-
-        Action.ImportBookmarks -> showImportBookmarkDialog()
-        is Action.OnStorageItemClick -> onStorageDeviceSelected(it.storageDevice)
-        Action.OpenCredits -> openCredits()
-      }
-    }.launchIn(lifecycleScope)
-    lifecycleScope.launch {
-      setStorage()
-    }
   }
 
   override fun onCreateView(
@@ -188,23 +163,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
     composeView = it
   }
 
-  private val versionCode: Int
-    @Suppress("TooGenericExceptionThrown")
-    get() = try {
-      requireActivity().packageManager
-        .getPackageInformation(requireActivity().packageName, ZERO).getVersionCode()
-    } catch (e: PackageManager.NameNotFoundException) {
-      throw RuntimeException(e)
-    }
-  private val versionName: String
-    @Suppress("TooGenericExceptionThrown")
-    get() = try {
-      requireActivity().packageManager
-        .getPackageInformation(requireActivity().packageName, ZERO).versionName.toString()
-    } catch (e: PackageManager.NameNotFoundException) {
-      throw RuntimeException(e)
-    }
-
   override fun onDestroyView() {
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
@@ -214,53 +172,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
   }
 
   protected abstract suspend fun setStorage()
-
-  private fun clearAllHistoryDialog() {
-    alertDialogShower?.show(KiwixDialog.ClearAllHistory, {
-      lifecycleScope.launch {
-        presenter?.clearHistory()
-        Snackbar.make(requireView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show()
-      }
-    })
-  }
-
-  private fun showClearAllNotesDialog() {
-    alertDialogShower?.show(
-      KiwixDialog.ClearAllNotes,
-      {
-        lifecycleScope.launch {
-          clearAllNotes()
-        }
-      }
-    )
-  }
-
-  private suspend fun clearAllNotes() {
-    if (instance.isExternalStorageWritable) {
-      if (ContextCompat.checkSelfPermission(
-          requireActivity(),
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        != PackageManager.PERMISSION_GRANTED &&
-        kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-      ) {
-        Snackbar.make(
-          requireView(),
-          R.string.ext_storage_permission_not_granted,
-          Snackbar.LENGTH_SHORT
-        )
-          .show()
-        return
-      }
-      if (File(AddNoteDialog.NOTES_DIRECTORY).deleteRecursively()) {
-        Snackbar.make(requireView(), R.string.notes_deletion_successful, Snackbar.LENGTH_SHORT)
-          .show()
-        return
-      }
-    }
-    Snackbar.make(requireView(), R.string.notes_deletion_unsuccessful, Snackbar.LENGTH_SHORT).show()
-  }
 
   @SuppressLint("SetJavaScriptEnabled")
   fun openCredits() {

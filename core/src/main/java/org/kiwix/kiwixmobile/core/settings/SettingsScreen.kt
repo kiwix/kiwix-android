@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
@@ -54,6 +55,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,9 +69,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
+import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllNotes
@@ -77,11 +86,15 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ImportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
-import org.kiwix.kiwixmobile.core.settings.viewmodel.SettingsViewModel
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
+import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
+import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.SettingsUiState
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_OFFSET
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_SCALE
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CATEGORY_TITLE_TEXT_SIZE
@@ -96,9 +109,13 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -110,16 +127,128 @@ const val SETTINGS_LIST_TESTING_TAG = "settingsListTestingTag"
 
 const val DIALOG_LIST_MAX_HEIGHT_RATIO = 0.8f
 
+@Composable
+fun SettingsScreenRoute(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  navigateBack: () -> Unit
+) {
+  val activity = LocalActivity.current as CoreMainActivity
+  val lifeCycleScope = rememberCoroutineScope()
+  // Setup viewModel data version name, observing the click events, etc.
+  SetUpViewModelData(activity, lifeCycleScope, coreSettingsViewModel)
+  // Attached DialogHost to screen to show our KiwixDialog.
+  DialogHost(coreSettingsViewModel.alertDialogShower as AlertDialogShower)
+  // Change font according to app language.
+  ChangeFontAccordingToLanguage(activity, coreSettingsViewModel.kiwixDataStore)
+  SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
+}
+
+@Composable
+private fun ChangeFontAccordingToLanguage(
+  activity: CoreMainActivity,
+  kiwixDataStore: KiwixDataStore
+) {
+  LaunchedEffect(Unit) {
+    LanguageUtils(activity).changeFont(
+      activity,
+      kiwixDataStore
+    )
+  }
+}
+
+@Composable
+private fun SetUpViewModelData(
+  activity: CoreMainActivity,
+  lifeCycleScope: CoroutineScope,
+  coreSettingsViewModel: CoreSettingsViewModel
+) {
+  LaunchedEffect(Unit) {
+    coreSettingsViewModel.apply {
+      setStorage()
+      setVersionCodeInformation()
+      actions.onEach { event ->
+        when (event) {
+          AllowPermission -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context.navigateToSettings()
+          }
+
+          ClearAllHistory -> clearAllHistoryDialog(coreSettingsViewModel, activity, lifeCycleScope)
+          ClearAllNotes -> showClearAllNotesDialog(coreSettingsViewModel, activity, lifeCycleScope)
+          ExportBookmarks -> if (requestExternalStorageWritePermissionForExportBookmark()) {
+            showExportBookmarkDialog()
+          }
+
+          ImportBookmarks -> showImportBookmarkDialog()
+          is OnStorageItemClick -> onStorageDeviceSelected(event.storageDevice)
+          OpenCredits -> openCredits()
+          is ShowSnackbar -> showSnackbar(
+            event.message,
+            event.lifecycleScope,
+            coreSettingsViewModel
+          )
+        }
+      }.launchIn(viewModelScope)
+    }
+  }
+}
+
+private fun showSnackbar(
+  message: String,
+  lifeCycleScope: CoroutineScope,
+  coreSettingsViewModel: CoreSettingsViewModel
+) {
+  coreSettingsViewModel.uiState.value.snackbarHostState.snack(
+    message = message,
+    lifecycleScope = lifeCycleScope
+  )
+}
+
+private fun clearAllHistoryDialog(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  activity: CoreMainActivity,
+  lifeCycleScope: CoroutineScope
+) {
+  coreSettingsViewModel.alertDialogShower.show(KiwixDialog.ClearAllHistory, {
+    coreSettingsViewModel.apply {
+      clearHistory()
+      sendAction(ShowSnackbar(activity.getString(R.string.all_history_cleared), lifeCycleScope))
+    }
+  })
+}
+
+private fun showClearAllNotesDialog(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  activity: CoreMainActivity,
+  lifeCycleScope: CoroutineScope
+) {
+  coreSettingsViewModel.alertDialogShower.show(
+    KiwixDialog.ClearAllNotes,
+    {
+      if (!instance.isExternalStorageWritable) {
+        coreSettingsViewModel.sendAction(
+          ShowSnackbar(
+            activity.getString(R.string.notes_deletion_unsuccessful),
+            lifeCycleScope
+          )
+        )
+        return@show
+      }
+      coreSettingsViewModel.clearAllNotes()
+    }
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")
 @Composable
-fun SettingsScreen(
-  settingScreenState: SettingScreenState,
-  settingsViewModel: SettingsViewModel,
+private fun SettingsScreen(
+  coreSettingsViewModel: CoreSettingsViewModel,
   navigationIcon: @Composable() () -> Unit
 ) {
+  val uiState = coreSettingsViewModel.uiState.collectAsStateWithLifecycle()
   KiwixTheme {
     Scaffold(
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.value.snackbarHostState) },
       topBar = {
         KiwixAppBar(
           title = stringResource(R.string.menu_settings),
@@ -135,80 +264,83 @@ fun SettingsScreen(
             testTag = SETTINGS_LIST_TESTING_TAG
           }
       ) {
-        item { DisplayCategory(settingsViewModel) }
-        item { ExtrasCategory(settingsViewModel, settingScreenState) }
-        storageCategory(settingScreenState, settingsViewModel)
-        item { HistoryCategory(settingsViewModel) }
-        item { NotesCategory(settingsViewModel) }
-        item { BookmarksCategory(settingsViewModel) }
-        item { PermissionCategory(settingsViewModel, settingScreenState) }
-        if (settingScreenState.shouldShowLanguageCategory) {
-          item { LanguageCategory(settingScreenState) }
+        item { DisplayCategory(coreSettingsViewModel) }
+        item { ExtrasCategory(coreSettingsViewModel, uiState.value) }
+        storageCategory(uiState.value, coreSettingsViewModel)
+        item { HistoryCategory(coreSettingsViewModel) }
+        item { NotesCategory(coreSettingsViewModel) }
+        item { BookmarksCategory(coreSettingsViewModel) }
+        item { PermissionCategory(coreSettingsViewModel, uiState.value) }
+        if (uiState.value.shouldShowLanguageCategory) {
+          item { LanguageCategory(uiState.value, coreSettingsViewModel) }
         }
-        informationCategory(settingsViewModel, settingScreenState)
+        informationCategory(coreSettingsViewModel, uiState.value)
       }
     }
   }
 }
 
 @Composable
-private fun HistoryCategory(settingsViewModel: SettingsViewModel) {
+private fun HistoryCategory(coreSettingsViewModel: CoreSettingsViewModel) {
   SettingsCategory(stringResource(R.string.history)) {
     PreferenceItem(
       stringResource(R.string.pref_clear_all_history_title),
       stringResource(R.string.pref_clear_all_history_summary)
-    ) { settingsViewModel.sendAction(ClearAllHistory) }
+    ) { coreSettingsViewModel.sendAction(ClearAllHistory) }
   }
 }
 
 @Composable
-private fun NotesCategory(settingsViewModel: SettingsViewModel) {
+private fun NotesCategory(coreSettingsViewModel: CoreSettingsViewModel) {
   SettingsCategory(stringResource(R.string.pref_notes)) {
     PreferenceItem(
       stringResource(R.string.pref_clear_all_notes_title),
       stringResource(R.string.pref_clear_all_notes_summary)
-    ) { settingsViewModel.sendAction(ClearAllNotes) }
+    ) { coreSettingsViewModel.sendAction(ClearAllNotes) }
   }
 }
 
 @Composable
-private fun BookmarksCategory(settingsViewModel: SettingsViewModel) {
+private fun BookmarksCategory(coreSettingsViewModel: CoreSettingsViewModel) {
   SettingsCategory(stringResource(R.string.bookmarks)) {
     PreferenceItem(
       stringResource(R.string.pref_import_bookmark_title),
       stringResource(R.string.pref_import_bookmark_summary)
-    ) { settingsViewModel.sendAction(ImportBookmarks) }
+    ) { coreSettingsViewModel.sendAction(ImportBookmarks) }
     PreferenceItem(
       stringResource(R.string.pref_export_bookmark_title),
       stringResource(R.string.pref_export_bookmark_summary)
-    ) { settingsViewModel.sendAction(ExportBookmarks) }
+    ) { coreSettingsViewModel.sendAction(ExportBookmarks) }
   }
 }
 
 @Composable
 private fun PermissionCategory(
-  settingsViewModel: SettingsViewModel,
-  settingScreenState: SettingScreenState
+  coreSettingsViewModel: CoreSettingsViewModel,
+  settingsUiState: SettingsUiState,
 ) {
-  if (settingScreenState.permissionItem.first) {
+  if (settingsUiState.permissionItem.first) {
     SettingsCategory(stringResource(R.string.pref_permission)) {
       PreferenceItem(
         stringResource(R.string.pref_allow_to_read_or_write_zim_files_on_sd_card),
-        settingScreenState.permissionItem.second
-      ) { settingsViewModel.sendAction(AllowPermission) }
+        settingsUiState.permissionItem.second
+      ) { coreSettingsViewModel.sendAction(AllowPermission) }
     }
   }
 }
 
 @Composable
-private fun LanguageCategory(settingScreenState: SettingScreenState) {
-  if (settingScreenState.shouldShowLanguageCategory) {
+private fun LanguageCategory(
+  settingsUiState: SettingsUiState,
+  coreSettingsViewModel: CoreSettingsViewModel
+) {
+  if (settingsUiState.shouldShowLanguageCategory) {
     val context = LocalActivity.current ?: return
     val languageCodes = remember {
       listOf(Locale.ROOT.language) + LanguageUtils(context).keys
     }
 
-    val prefLanguage by settingScreenState.kiwixDataStore.prefLanguage
+    val prefLanguage by coreSettingsViewModel.kiwixDataStore.prefLanguage
       .collectAsState(initial = "en")
     val selectedCode =
       when {
@@ -239,9 +371,7 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
       ) { selectedDisplay ->
         val index = languageDisplayNames.indexOf(selectedDisplay)
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference
-        settingScreenState.lifecycleScope?.launch {
-          settingScreenState.kiwixDataStore.setPrefLanguage(selectedLangCode)
-        }
+        coreSettingsViewModel.updateAppLanguage(selectedLangCode)
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLangCode))
       }
     }
@@ -249,19 +379,19 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
 }
 
 private fun LazyListScope.informationCategory(
-  settingsViewModel: SettingsViewModel,
-  settingScreenState: SettingScreenState
+  coreSettingsViewModel: CoreSettingsViewModel,
+  settingsUiState: SettingsUiState,
 ) {
   item {
     SettingsCategory(stringResource(R.string.pref_info_title)) {
       PreferenceItem(
         stringResource(R.string.pref_info_version),
-        settingScreenState.versionInformation
+        settingsUiState.versionInformation
       ) { }
       PreferenceItem(
         stringResource(R.string.pref_credits),
         stringResource(R.string.pref_credits_title),
-      ) { settingsViewModel.sendAction(OpenCredits) }
+      ) { coreSettingsViewModel.sendAction(OpenCredits) }
     }
   }
 }
@@ -285,24 +415,24 @@ private fun StorageLoadingPreference() {
 }
 
 private fun LazyListScope.storageCategory(
-  settingScreenState: SettingScreenState,
-  settingsViewModel: SettingsViewModel
+  settingsUiState: SettingsUiState,
+  coreSettingsViewModel: CoreSettingsViewModel
 ) {
-  if (!settingScreenState.shouldShowStorageCategory) return
+  if (!settingsUiState.shouldShowStorageCategory) return
   item {
     SettingsCategory(stringResource(R.string.pref_storage)) {
-      if (settingScreenState.isLoadingStorageDetails) {
+      if (settingsUiState.isLoadingStorageDetails) {
         StorageLoadingPreference()
       } else {
         Column {
-          settingScreenState.storageDeviceList.forEachIndexed { index, item ->
+          settingsUiState.storageDeviceList.forEachIndexed { index, item ->
             StorageDeviceItem(
               index,
               item,
               true,
-              { settingsViewModel.sendAction(OnStorageItemClick(it)) },
-              settingScreenState.storageCalculator,
-              settingScreenState.kiwixDataStore
+              { coreSettingsViewModel.sendAction(OnStorageItemClick(it)) },
+              coreSettingsViewModel.storageCalculator,
+              coreSettingsViewModel.kiwixDataStore
             )
           }
         }
@@ -313,57 +443,57 @@ private fun LazyListScope.storageCategory(
 
 @Composable
 private fun ExtrasCategory(
-  settingsViewModel: SettingsViewModel,
-  settingScreenState: SettingScreenState
+  coreSettingsViewModel: CoreSettingsViewModel,
+  settingsUiState: SettingsUiState
 ) {
-  val newTabInBackground by settingsViewModel.newTabInBackground.collectAsStateWithLifecycle()
-  val externalLinkPopup by settingsViewModel.externalLinkPopup.collectAsStateWithLifecycle()
-  val wifiOnly by settingsViewModel.wifiOnly.collectAsStateWithLifecycle()
+  val newTabInBackground by coreSettingsViewModel.newTabInBackground.collectAsStateWithLifecycle()
+  val externalLinkPopup by coreSettingsViewModel.externalLinkPopup.collectAsStateWithLifecycle()
+  val wifiOnly by coreSettingsViewModel.wifiOnly.collectAsStateWithLifecycle()
   SettingsCategory(stringResource(R.string.pref_extras)) {
     SwitchPreference(
       title = stringResource(R.string.pref_newtab_background_title),
       summary = stringResource(R.string.pref_newtab_background_summary),
       checked = newTabInBackground,
-      onCheckedChange = { settingsViewModel.setNewTabInBackground(it) }
+      onCheckedChange = { coreSettingsViewModel.setNewTabInBackground(it) }
     )
-    if (settingScreenState.shouldShowExternalLinkPreference) {
+    if (settingsUiState.shouldShowExternalLinkPreference) {
       SwitchPreference(
         title = stringResource(R.string.pref_external_link_popup_title),
         summary = stringResource(R.string.pref_external_link_popup_summary),
         checked = externalLinkPopup,
-        onCheckedChange = { settingsViewModel.setExternalLinkPopup(it) }
+        onCheckedChange = { coreSettingsViewModel.setExternalLinkPopup(it) }
       )
     }
-    if (settingScreenState.shouldShowPrefWifiOnlyPreference) {
+    if (settingsUiState.shouldShowPrefWifiOnlyPreference) {
       SwitchPreference(
         title = stringResource(R.string.pref_wifi_only),
         summary = stringResource(R.string.pref_wifi_only),
         checked = wifiOnly,
-        onCheckedChange = { settingsViewModel.setWifiOnly(it) }
+        onCheckedChange = { coreSettingsViewModel.setWifiOnly(it) }
       )
     }
   }
 }
 
 @Composable
-private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
-  val themeLabel by settingsViewModel.themeLabel.collectAsStateWithLifecycle()
-  val backToTopEnabled by settingsViewModel.backToTopEnabled.collectAsStateWithLifecycle()
-  val textZoom by settingsViewModel.textZoom.collectAsStateWithLifecycle()
+private fun DisplayCategory(coreSettingsViewModel: CoreSettingsViewModel) {
+  val themeLabel by coreSettingsViewModel.themeLabel.collectAsStateWithLifecycle()
+  val backToTopEnabled by coreSettingsViewModel.backToTopEnabled.collectAsStateWithLifecycle()
+  val textZoom by coreSettingsViewModel.textZoom.collectAsStateWithLifecycle()
   val textZoomPosition = (textZoom / ZOOM_SCALE) - ZOOM_OFFSET
   SettingsCategory(stringResource(R.string.pref_display_title)) {
-    AppThemePreference(themeLabel = themeLabel, settingsViewModel = settingsViewModel)
+    AppThemePreference(themeLabel = themeLabel, coreSettingsViewModel = coreSettingsViewModel)
     SwitchPreference(
       title = stringResource(R.string.pref_back_to_top),
       summary = stringResource(R.string.pref_back_to_top_summary),
       checked = backToTopEnabled,
-      onCheckedChange = { settingsViewModel.setBackToTop(it) }
+      onCheckedChange = { coreSettingsViewModel.setBackToTop(it) }
     )
     SeekBarPreference(
       title = stringResource(R.string.pref_text_zoom_title),
       summary = stringResource(R.string.percentage, textZoom),
       value = textZoomPosition,
-      onValueChange = { settingsViewModel.setTextZoom(it) },
+      onValueChange = { coreSettingsViewModel.setTextZoom(it) },
       valueRange = ZERO..SIX
     )
   }
@@ -373,7 +503,7 @@ private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
 fun AppThemePreference(
   context: Context = LocalContext.current,
   themeLabel: String,
-  settingsViewModel: SettingsViewModel,
+  coreSettingsViewModel: CoreSettingsViewModel,
 ) {
   val entries = remember {
     context.resources.getStringArray(R.array.pref_themes_entries).toList()
@@ -389,7 +519,7 @@ fun AppThemePreference(
     selectedOption = themeLabel,
     onOptionSelected = { selectedEntry ->
       val selectedValue = entries.indexOf(selectedEntry).let { values[it] }
-      settingsViewModel.setAppTheme(selectedValue)
+      coreSettingsViewModel.setAppTheme(selectedValue)
     }
   )
 }
