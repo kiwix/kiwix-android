@@ -21,5 +21,6 @@ package org.kiwix.kiwixmobile.update.viewmodel
 data class UpdateStates(
   var loading: Boolean = false,
   val isSuccess: Boolean = false,
+  val error: String = "",
   val downloadApkState: DownloadApkState = DownloadApkState(),
 )

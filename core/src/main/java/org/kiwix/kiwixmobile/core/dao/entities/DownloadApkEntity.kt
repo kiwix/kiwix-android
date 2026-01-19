@@ -35,6 +35,7 @@ data class DownloadApkEntity(
   val version: String,
   val url: String,
   var lastDialogShownInMilliSeconds: Long = -1L,
+  var laterClickedMilliSeconds: Long = -1L,
   var downloadId: Long,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
@@ -48,7 +49,7 @@ data class DownloadApkEntity(
 ) {
   constructor(
     downloadId: Long,
-    apkInfo: ApkInfo
+    apkInfo: ApkInfo,
   ) : this(
     downloadId = downloadId,
     name = apkInfo.name,

@@ -30,12 +30,11 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
-import org.kiwix.kiwixmobile.core.entity.ApkInfo
 
 @Dao
 interface DownloadApkDao {
   fun update(download: Download) {
-    getApkDownload().let { downloadApkEntity ->
+    getDownload().let { downloadApkEntity ->
       downloadApkEntity?.updateWith(download)
         .takeIf { updatedEntity -> updatedEntity != downloadApkEntity }
         ?.let { updateApkDownload(it) }
@@ -48,30 +47,36 @@ interface DownloadApkDao {
       .map { it.let(::DownloadApkModel) }
 
   suspend fun addDownload(
-    apkInfo: ApkInfo,
+    url: String,
     downloadRequester: DownloadRequester
   ) {
-    updateApkDownload(
-      DownloadApkEntity(
-        downloadId = downloadRequester.enqueue(DownloadRequest(apkInfo.apkUrl)),
-        apkInfo = apkInfo
-      )
+    addDownloadId(
+      downloadId = downloadRequester.enqueue(DownloadRequest(url))
     )
   }
 
-  fun delete(download: Download) {
-    deleteApkDownloadByDownloadId(download.id.toLong())
-  }
+  @Query("UPDATE downloadapkentity SET downloadId = :downloadId WHERE id = 1")
+  fun addDownloadId(downloadId: Long)
+
+  @Query("UPDATE downloadapkentity SET name = :name, version = :version, url = :url WHERE id = 1")
+  fun addDownloadApkInfo(
+    name: String,
+    version: String,
+    url: String
+  )
+
+  @Query("UPDATE downloadapkentity SET lastDialogShownInMilliSeconds = :lastDialogShownInMilliSeconds WHERE id = 1")
+  fun addLastDialogShownInfo(lastDialogShownInMilliSeconds: Long)
+
+  @Query("UPDATE downloadapkentity SET laterClickedMilliSeconds = :laterClickedMilliSeconds WHERE id = 1")
+  fun addLaterClickedInfo(laterClickedMilliSeconds: Long)
 
   @Query("SELECT * FROM downloadapkentity LIMIT 1")
-  fun getApkDownload(): DownloadApkEntity?
+  fun getDownload(): DownloadApkEntity?
 
   @Query("SELECT * FROM downloadapkentity LIMIT 1")
   fun getActiveDownload(): Flow<DownloadApkEntity>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun updateApkDownload(downloadApkEntity: DownloadApkEntity)
-
-  @Query("DELETE FROM DownloadApkEntity WHERE downloadId=:downloadId")
-  fun deleteApkDownloadByDownloadId(downloadId: Long)
 }

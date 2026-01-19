@@ -25,9 +25,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import javax.inject.Inject
 
+@Suppress("all")
 class UpdateViewModel @Inject constructor(
   private val downloadApkDao: DownloadApkDao,
   private val downloader: Downloader
@@ -36,30 +36,62 @@ class UpdateViewModel @Inject constructor(
   val state: State<UpdateStates> = _state
 
   init {
-    fetchApkInfo()
+    fetchDownloadInfo()
   }
 
-  private fun fetchApkInfo() = viewModelScope.launch {
-    downloadApkDao.downloads().collect { download ->
-      _state.value = UpdateStates(
-        downloadApkState = DownloadApkState(download)
+  private fun fetchDownloadInfo() = viewModelScope.launch {
+    _state.value = _state.value.copy(
+      loading = true
+    )
+    try {
+      downloadApkDao.downloads().collect { download ->
+        _state.value = UpdateStates(
+          loading = false,
+          downloadApkState = DownloadApkState(download)
+        )
+      }
+    } catch (e: Exception) {
+      _state.value = _state.value.copy(
+        loading = false,
+        error = e.message ?: "Unknown error"
       )
     }
   }
 
   private fun downloadApk() {
-    val apkUrl = _state.value.downloadApkState.url
-    downloader.downloadApk(
-      apkInfo = ApkInfo(
-        name = _state.value.downloadApkState.name,
-        version = _state.value.downloadApkState.version,
-        apkUrl = apkUrl
-      )
+    _state.value = _state.value.copy(
+      loading = true
     )
+    try {
+      _state.value = _state.value.copy(
+        loading = false
+      )
+      downloader.downloadApk(
+        url = _state.value.downloadApkState.url
+      )
+    } catch (e: Exception) {
+      _state.value = _state.value.copy(
+        loading = false,
+        error = e.message ?: "Unknown error"
+      )
+    }
   }
 
   private fun cancelDownload() {
-    downloader.cancelDownload(_state.value.downloadApkState.downloadId)
+    _state.value = _state.value.copy(
+      loading = true
+    )
+    try {
+      _state.value = _state.value.copy(
+        loading = false
+      )
+      downloader.cancelDownload(_state.value.downloadApkState.downloadId)
+    } catch (e: Exception) {
+      _state.value = _state.value.copy(
+        loading = false,
+        error = e.message ?: "Unknown error"
+      )
+    }
   }
 
   fun event(event: UpdateEvents) {

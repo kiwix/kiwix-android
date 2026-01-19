@@ -49,7 +49,7 @@ class DownloadManagerRequester @Inject constructor(
 
   override fun cancelApk(downloadId: Long) {
     fetch.delete(downloadId.toInt())
-    startApkDownloadService()
+    // startApkDownloadService()
   }
 
   override fun retryDownload(downloadId: Long) {

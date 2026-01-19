@@ -135,7 +135,7 @@ class DownloadApkService : Service() {
     }
 
     override fun onCancelled(download: Download) {
-      delete(download)
+      delete()
     }
 
     override fun onCompleted(download: Download) {
@@ -143,7 +143,7 @@ class DownloadApkService : Service() {
     }
 
     override fun onDeleted(download: Download) {
-      delete(download)
+      delete()
     }
 
     override fun onDownloadBlockUpdated(
@@ -175,7 +175,7 @@ class DownloadApkService : Service() {
     }
 
     override fun onRemoved(download: Download) {
-      delete(download)
+      delete()
     }
 
     override fun onResumed(download: Download) {
@@ -201,11 +201,11 @@ class DownloadApkService : Service() {
       taskFlow.tryEmit {
         downloadApkDao.update(download)
         if (download.status == Status.COMPLETED) {
-          downloadApkDao.getApkDownload().let {
+          downloadApkDao.getDownload().let {
             showDownloadCompletedNotification(download)
             // to move these downloads in LibkiwixBookOnDisk.
             @Suppress("IgnoredReturnValue")
-            downloadApkDao.getApkDownload()
+            downloadApkDao.getDownload()
           }
         }
         // If someone pause the Download then post a notification since fetch removes the
@@ -219,9 +219,9 @@ class DownloadApkService : Service() {
       }
     }
 
-    private fun delete(download: Download) {
+    private fun delete() {
       taskFlow.tryEmit {
-        downloadApkDao.delete(download)
+        // downloadApkDao.delete(download)
         stopForegroundServiceIfNoActiveDownloads(fetch)
       }
     }

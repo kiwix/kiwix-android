@@ -51,45 +51,52 @@ fun UpdateScreen(
     color = Color.White,
   ) {
     Column(
-      modifier = Modifier.background(color = Color.White),
+      modifier = Modifier.background(color = Color.White)
+        .fillMaxSize(),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center
     ) {
-      Text(
-        "${state.downloadApkState.name} ${state.downloadApkState.version}",
-        color = Color.Black
-      )
-      Text(
-        "${state.downloadApkState.readableEta}",
-        color = Color.Black
-      )
-      Row {
-        Button(
-          onClick = {
-            events(
-              UpdateEvents.DownloadApk
-            )
+      if (!state.loading) {
+        Text(
+          state.downloadApkState.name,
+          color = Color.Black
+        )
+        Text(
+          "${state.downloadApkState.readableEta}",
+          color = Color.Black
+        )
+        Row {
+          Button(
+            onClick = {
+              events(
+                UpdateEvents.DownloadApk
+              )
+            }
+          ) {
+            Text("download")
           }
-        ) {
-          Text("download")
-        }
-        Button(
-          onClick = {
-            events(
-              UpdateEvents.CancelDownload
-            )
+          Button(
+            onClick = {
+              events(
+                UpdateEvents.CancelDownload
+              )
+            }
+          ) {
+            Text("cancel")
           }
-        ) {
-          Text("cancel")
         }
-      }
 
-      ContentLoadingProgressBar(
-        progressBarStyle = ProgressBarStyle.HORIZONTAL,
-        modifier = Modifier
-          .padding(horizontal = ONE_DP, vertical = FIVE_DP),
-        progress = state.downloadApkState.progress,
-      )
+        ContentLoadingProgressBar(
+          progressBarStyle = ProgressBarStyle.HORIZONTAL,
+          modifier = Modifier
+            .padding(horizontal = ONE_DP, vertical = FIVE_DP),
+          progress = state.downloadApkState.progress,
+        )
+      } else {
+        ContentLoadingProgressBar(
+          progressBarStyle = ProgressBarStyle.CIRCLE,
+        )
+      }
     }
   }
 }

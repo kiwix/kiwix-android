@@ -43,7 +43,7 @@ fun UpdateDialog(
     },
     dismissButton = {
       TextButton(onClick = onDismiss) {
-        Text("No")
+        Text("Later")
       }
     }
   )

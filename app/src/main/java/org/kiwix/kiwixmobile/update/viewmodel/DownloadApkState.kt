@@ -22,6 +22,7 @@ import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 
+@Suppress("all")
 data class DownloadApkState(
   val downloadId: Long = 0,
   val name: String = "",
@@ -44,7 +45,7 @@ data class DownloadApkState(
     downloadModel.bytesDownloaded,
     downloadModel.totalSizeOfDownload,
     downloadModel.progress,
-    Seconds(downloadModel.etaInMilliSeconds),
+    Seconds(downloadModel.etaInMilliSeconds / 1000L),
     downloadModel.state,
     downloadModel.error
   )
