@@ -140,6 +140,7 @@ import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.UpdateDialogHandler
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
@@ -194,7 +195,6 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
-import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
 import org.kiwix.libkiwix.Book
 import java.io.File
 import java.io.IOException
@@ -217,6 +217,7 @@ abstract class CoreReaderFragment :
   FragmentActivityExtensions,
   WebViewProvider,
   ReadAloudCallbacks,
+  UpdateDialogHandler.ShowUpdateDialogCallback,
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
@@ -249,6 +250,11 @@ abstract class CoreReaderFragment :
   @Inject
   var donationDialogHandler: DonationDialogHandler? = null
   protected var currentWebViewIndex by mutableIntStateOf(0)
+
+  @JvmField
+  @Inject
+  var updateDialogHandler: UpdateDialogHandler? = null
+  protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
   private val savingTabsMutex = Mutex()
   private var searchItemToOpen: SearchItemToOpen? = null
@@ -481,7 +487,6 @@ abstract class CoreReaderFragment :
           // Update the title when Compose is ready to fix the issue
           // where the user opens pages from history, notes, or bookmarks.
           updateTitle()
-          fetchUpdate()
         }
         LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
           readerScreenState.update {
@@ -523,6 +528,7 @@ abstract class CoreReaderFragment :
     }
     addAlertDialogToDialogHost()
     donationDialogHandler?.setDonationDialogCallBack(this)
+    updateDialogHandler?.setUpdateDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
@@ -584,6 +590,21 @@ abstract class CoreReaderFragment :
     runSafelyInCoreReaderLifecycleScope {
       donationDialogHandler?.donateLater()
       readerScreenState.update { copy(shouldShowDonationPopup = false) }
+    }
+  }
+
+  private fun onUpdateIconClick() {
+    runSafelyInCoreReaderLifecycleScope {
+      updateDialogHandler?.updateLastUpdatePopupShownTime()
+      requireActivity().navigate(UPDATE_FRAGMENT)
+      readerScreenState.update { copy(shouldShowUpdatePopup = false) }
+    }
+  }
+
+  private fun onLaterIconClick() {
+    runSafelyInCoreReaderLifecycleScope {
+      updateDialogHandler?.updateLater()
+      readerScreenState.update { copy(shouldShowUpdatePopup = false) }
     }
   }
 
@@ -1155,6 +1176,8 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     donationDialogHandler?.setDonationDialogCallBack(null)
     donationDialogHandler = null
+    updateDialogHandler?.setUpdateDialogCallBack(null)
+    updateDialogHandler = null
     composeView?.disposeComposition()
     composeView = null
   }
@@ -1930,11 +1953,18 @@ abstract class CoreReaderFragment :
     if (tts == null) {
       setUpTTS()
     }
-    lifecycleScope.launch { donationDialogHandler?.attemptToShowDonationPopup() }
+    lifecycleScope.launch {
+      donationDialogHandler?.attemptToShowDonationPopup()
+      updateDialogHandler?.attemptToShowDonationPopup()
+    }
   }
 
   protected open fun showDonationLayout() {
     readerScreenState.update { copy(shouldShowDonationPopup = true) }
+  }
+
+  protected open fun showUpdateInfoDialog() {
+    readerScreenState.update { copy(shouldShowUpdatePopup = true) }
   }
 
   protected open fun openKiwixSupportUrl() {
@@ -2671,16 +2701,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  // update comparison
-  private fun fetchUpdate() {
-    // BuildConfig.VERSION_NAME
-    val currentVersion = VersionId("3.9.11")
-    val available = VersionId("3.9.12")
-    if (available > currentVersion) {
-      readerScreenState.update { copy(shouldShowUpdatePopup = true) }
-    }
-  }
-
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
     tts?.currentTTSTask?.let {
       if (it.paused != isPauseTTS) {
@@ -2709,12 +2729,8 @@ abstract class CoreReaderFragment :
     showDonationLayout()
   }
 
-  private fun onUpdateIconClick() {
-    requireActivity().navigate(UPDATE_FRAGMENT)
-  }
-
-  private fun onLaterIconClick() {
-    readerScreenState.update { copy(shouldShowUpdatePopup = false) }
+  override fun showUpdateDialog() {
+    showUpdateInfoDialog()
   }
 
   private fun bindService() {

@@ -40,12 +40,12 @@ class DownloaderImpl @Inject constructor(
   private val kiwixService: KiwixService
 ) : Downloader {
   @Suppress("InjectDispatcher")
-  override fun downloadApk(apkInfo: ApkInfo) {
+  override fun downloadApk(url: String) {
     CoroutineScope(ioDispatcher).launch {
       runCatching {
         downloadApkDao.addDownload(
           downloadRequester = downloadRequester,
-          apkInfo = apkInfo
+          url = url
         )
         downloadRequester.startApkDownloadService()
       }.onFailure {
