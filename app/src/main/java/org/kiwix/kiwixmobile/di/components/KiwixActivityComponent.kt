@@ -54,6 +54,8 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
 
+  fun viewModelFactory(): androidx.lifecycle.ViewModelProvider.Factory
+
   @Subcomponent.Builder
   interface Builder {
     @BindsInstance fun activity(activity: Activity): Builder
