@@ -47,10 +47,10 @@ import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.HELP_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.HELP_SCREEN
 import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.INTRO_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.LANGUAGE_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.INTRO_SCREEN
+import org.kiwix.kiwixmobile.core.main.LANGUAGE_SCREEN
 import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
@@ -277,11 +277,11 @@ sealed class KiwixDestination(val route: String) {
   object Downloads : KiwixDestination(DOWNLOAD_FRAGMENT)
   object Bookmarks : KiwixDestination(BOOKMARK_FRAGMENT)
   object Notes : KiwixDestination(NOTES_FRAGMENT)
-  object Intro : KiwixDestination(INTRO_FRAGMENT)
+  object Intro : KiwixDestination(INTRO_SCREEN)
   object History : KiwixDestination(HISTORY_FRAGMENT)
-  object Language : KiwixDestination(LANGUAGE_FRAGMENT)
+  object Language : KiwixDestination(LANGUAGE_SCREEN)
   object ZimHost : KiwixDestination(ZIM_HOST_FRAGMENT)
-  object Help : KiwixDestination(HELP_FRAGMENT)
+  object Help : KiwixDestination(HELP_SCREEN)
   object Settings : KiwixDestination(SETTINGS_FRAGMENT)
   object Search : KiwixDestination(
     SEARCH_FRAGMENT +
