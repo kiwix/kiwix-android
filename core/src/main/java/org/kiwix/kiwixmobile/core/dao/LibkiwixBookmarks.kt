@@ -343,16 +343,14 @@ class LibkiwixBookmarks @Inject constructor(
           bookmark,
           favicon,
           zimReaderSource
-        ).also {
-          // set the bookmark change to false to avoid reloading the data from libkiwix
-          bookmarksChanged = false
-        }
+        )
       }
+    bookmarksChanged = false
 
     // Delete duplicates bookmarks if any exist
     deleteDuplicateBookmarks()
 
-    return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
+    return bookmarkList.distinctBy { it.zimId to it.bookmarkUrl }
   }
 
   @Suppress("NestedBlockDepth")
