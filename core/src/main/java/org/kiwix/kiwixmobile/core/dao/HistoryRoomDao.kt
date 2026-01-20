@@ -57,8 +57,15 @@ abstract class HistoryRoomDao : PageDao {
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteHistory(pagesToDelete as List<HistoryListItem.HistoryItem>)
 
-  @Query("SELECT * FROM HistoryRoomEntity WHERE historyUrl LIKE :url AND dateString LIKE :date")
-  abstract fun getHistoryRoomEntity(url: String, date: String): HistoryRoomEntity?
+  @Query(
+    "SELECT * FROM HistoryRoomEntity WHERE historyUrl" +
+      " LIKE :url AND dateString LIKE :date AND zimReaderSource LIKE :zimReaderSource"
+  )
+  abstract fun getHistoryRoomEntity(
+    url: String,
+    date: String,
+    zimReaderSource: ZimReaderSource?
+  ): HistoryRoomEntity?
 
   @Update
   abstract fun updateHistoryItem(historyRoomEntity: HistoryRoomEntity)
@@ -73,7 +80,8 @@ abstract class HistoryRoomDao : PageDao {
     saveMutex.withLock {
       getHistoryRoomEntity(
         historyItem.historyUrl,
-        historyItem.dateString
+        historyItem.dateString,
+        historyItem.zimReaderSource
       )?.let {
         it.apply {
           // update the existing entity
