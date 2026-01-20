@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
 import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsViewModel
@@ -65,7 +66,8 @@ import org.kiwix.kiwixmobile.custom.settings.CustomSettingsViewModel
 fun CustomNavGraph(
   navController: NavHostController,
   modifier: Modifier = Modifier,
-  viewModelFactory: ViewModelProvider.Factory
+  viewModelFactory: ViewModelProvider.Factory,
+  alertDialogShower: AlertDialogShower
 ) {
   NavHost(
     navController = navController,
@@ -101,6 +103,7 @@ fun CustomNavGraph(
     }
     composable(CustomDestination.Settings.route) {
       val customSettingsViewModel: CustomSettingsViewModel = viewModel(factory = viewModelFactory)
+      customSettingsViewModel.setAlertDialog(alertDialogShower)
       SettingsScreenRoute(
         customSettingsViewModel,
         navController::popBackStack

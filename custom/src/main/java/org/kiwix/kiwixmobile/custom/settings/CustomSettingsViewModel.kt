@@ -28,7 +28,6 @@ import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import javax.inject.Inject
 
@@ -39,7 +38,6 @@ class CustomSettingsViewModel @Inject constructor(
   dataSource: DataSource,
   storageCalculator: StorageCalculator,
   themeConfig: ThemeConfig,
-  alertDialogShower: DialogShower,
   libkiwixBookmarks: LibkiwixBookmarks,
   kiwixPermissionChecker: KiwixPermissionChecker
 ) : CoreSettingsViewModel(
@@ -48,7 +46,6 @@ class CustomSettingsViewModel @Inject constructor(
     dataSource,
     storageCalculator,
     themeConfig,
-    alertDialogShower,
     libkiwixBookmarks,
     kiwixPermissionChecker
   ) {

@@ -62,6 +62,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -118,7 +119,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
@@ -144,7 +144,7 @@ fun SettingsScreenRoute(
   // Setup viewModel data version name, observing the click events, etc.
   SetUpViewModelAndPermissionLauncher(coreSettingsViewModel, activity)
   // Attached DialogHost to screen to show our KiwixDialog.
-  DialogHost(coreSettingsViewModel.alertDialogShower as AlertDialogShower)
+  DialogHost(coreSettingsViewModel.alertDialogShower)
   SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
   // Change font according to app language.
   ChangeFontAccordingToLanguage(activity, coreSettingsViewModel.kiwixDataStore)
@@ -203,10 +203,8 @@ private suspend fun handleSettingsAction(
     OpenCredits -> viewModel.openCredits()
     ClearAllHistory -> clearAllHistoryDialog(viewModel)
     ClearAllNotes -> showClearAllNotesDialog(viewModel)
-    ExportBookmarks -> {
-      if (viewModel.requestExternalStorageWritePermissionForExportBookmark()) {
-        showExportBookmarkDialog(viewModel)
-      }
+    ExportBookmarks -> if (viewModel.requestExternalStorageWritePermissionForExportBookmark()) {
+      showExportBookmarkDialog(viewModel)
     }
 
     ImportBookmarks ->
@@ -688,8 +686,8 @@ fun ListPreference(
   selectedOption: String,
   onOptionSelected: (String) -> Unit
 ) {
-  var showDialog by remember { mutableStateOf(false) }
-  var selected by remember { mutableStateOf(selectedOption) }
+  var showDialog by rememberSaveable { mutableStateOf(false) }
+  var selected by rememberSaveable { mutableStateOf(selectedOption) }
 
   LaunchedEffect(selectedOption) {
     selected = selectedOption

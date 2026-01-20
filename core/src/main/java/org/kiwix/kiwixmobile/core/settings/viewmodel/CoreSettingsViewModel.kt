@@ -24,7 +24,6 @@ import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Resources
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
@@ -66,7 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
@@ -84,7 +83,6 @@ abstract class CoreSettingsViewModel(
   val dataSource: DataSource,
   val storageCalculator: StorageCalculator,
   val themeConfig: ThemeConfig,
-  val alertDialogShower: DialogShower,
   val libkiwixBookmarks: LibkiwixBookmarks,
   val kiwixPermissionChecker: KiwixPermissionChecker
 ) : ViewModel() {
@@ -115,6 +113,7 @@ abstract class CoreSettingsViewModel(
   val uiState: StateFlow<SettingsUiState> = settingsUiState.asStateFlow()
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
+  lateinit var alertDialogShower: AlertDialogShower
 
   suspend fun initialize(activity: CoreMainActivity) {
     setStorage(activity)
@@ -123,6 +122,10 @@ abstract class CoreSettingsViewModel(
     showPermissionItem()
     showLanguageCategory()
     setVersionCodeInformation()
+  }
+
+  fun setAlertDialog(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
   }
 
   val themeLabel: StateFlow<String> = kiwixDataStore.appTheme
@@ -217,7 +220,7 @@ abstract class CoreSettingsViewModel(
     }
   }
 
-  fun setVersionCodeInformation() {
+  private fun setVersionCodeInformation() {
     settingsUiState.update { it.copy(versionInformation = "$versionName Build: $versionCode") }
   }
 
@@ -392,24 +395,28 @@ abstract class CoreSettingsViewModel(
 
   @SuppressLint("SetJavaScriptEnabled")
   fun openCredits() {
-    @SuppressLint("InflateParams") val view =
-      LayoutInflater.from(
-        context
-      ).inflate(R.layout.credits_webview, null) as WebView
-    val maxHeightInPx =
-      (Resources.getSystem().displayMetrics.heightPixels * ZERO_POINT_SEVEN).toInt()
-    view.layoutParams = ViewGroup.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT,
-      maxHeightInPx
-    )
-    view.loadUrl("file:///android_asset/credits.html")
-    viewModelScope.launch {
-      if (themeConfig.isDarkTheme()) {
-        view.settings.javaScriptEnabled = true
-        view.setBackgroundColor(0)
+    alertDialogShower.show(
+      OpenCredits {
+        AndroidView(factory = {
+          WebView(it).apply {
+            val maxHeightInPx =
+              (Resources.getSystem().displayMetrics.heightPixels * ZERO_POINT_SEVEN).toInt()
+
+            layoutParams = ViewGroup.LayoutParams(
+              ViewGroup.LayoutParams.MATCH_PARENT,
+              maxHeightInPx
+            )
+            viewModelScope.launch {
+              if (themeConfig.isDarkTheme()) {
+                settings.javaScriptEnabled = true
+                setBackgroundColor(0)
+              }
+              loadUrl("file:///android_asset/credits.html")
+            }
+          }
+        })
       }
-      alertDialogShower.show(OpenCredits { AndroidView(factory = { view }) })
-    }
+    )
   }
 
   @Suppress("NestedBlockDepth")

@@ -160,7 +160,8 @@ class KiwixMainActivity : CoreMainActivity() {
         enableLeftDrawer = enableLeftDrawer.value,
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-        viewModelFactory = viewModelFactory
+        viewModelFactory = viewModelFactory,
+        alertDialogShower = alertDialogShower
       )
       LaunchedEffect(Unit) {
         // Load the menu when UI is attached to screen.
