@@ -22,16 +22,15 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.webserver.ZimHostModule
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
-import org.kiwix.kiwixmobile.language.LanguageFragment
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsFragment
+import org.kiwix.kiwixmobile.webserver.ZimHostFragment
+import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 
@@ -48,7 +47,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(deleteFiles: DeleteFiles)
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(localFileTransferFragment: LocalFileTransferFragment)
-  fun inject(languageFragment: LanguageFragment)
   fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixSettingsFragment: KiwixSettingsFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
