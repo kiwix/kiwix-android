@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -31,7 +32,7 @@ object Intents {
 }
 
 @RequiresApi(Build.VERSION_CODES.R)
-fun Activity.navigateToSettings() {
+fun Context.navigateToSettings() {
   val intent =
     Intent().apply {
       action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
@@ -40,7 +41,7 @@ fun Activity.navigateToSettings() {
   startActivity(intent)
 }
 
-fun Activity.navigateToAppSettings() {
+fun Context.navigateToAppSettings() {
   startActivity(
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
       data = Uri.fromParts("package", packageName, null)

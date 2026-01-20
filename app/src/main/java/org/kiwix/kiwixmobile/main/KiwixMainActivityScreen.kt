@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 
@@ -76,7 +77,8 @@ fun KiwixMainActivityScreen(
   enableLeftDrawer: Boolean,
   shouldShowBottomAppBar: Boolean,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  viewModelFactory: ViewModelProvider.Factory
+  viewModelFactory: ViewModelProvider.Factory,
+  alertDialogShower: AlertDialogShower
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -119,7 +121,8 @@ fun KiwixMainActivityScreen(
             navController = navController,
             startDestination = startDestination,
             modifier = Modifier.fillMaxSize(),
-            viewModelFactory = viewModelFactory
+            viewModelFactory = viewModelFactory,
+            alertDialogShower = alertDialogShower
           )
         }
       }

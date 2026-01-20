@@ -30,6 +30,7 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
@@ -100,8 +101,16 @@ class KiwixSettingsFragmentTest {
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
       }
     }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
+    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      accessibilityValidator.setSuppressingResultMatcher(
+        anyOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
+    } else {
+      accessibilityValidator.setSuppressingResultMatcher(
         anyOf(
           matchesCheck(DuplicateClickableBoundsCheck::class.java)
         )

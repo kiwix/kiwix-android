@@ -93,7 +93,7 @@ const val HISTORY_FRAGMENT = "historyFragment"
 const val LANGUAGE_SCREEN = "languageScreen"
 const val ZIM_HOST_FRAGMENT = "zimHostFragment"
 const val HELP_SCREEN = "helpScreen"
-const val SETTINGS_FRAGMENT = "settingsFragment"
+const val SETTINGS_SCREEN = "settingsScreen"
 const val SEARCH_FRAGMENT = "searchFragment"
 const val LOCAL_FILE_TRANSFER_FRAGMENT = "localFileTransferFragment"
 

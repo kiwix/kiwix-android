@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadViewModel
 import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
+import org.kiwix.kiwixmobile.custom.settings.CustomSettingsViewModel
 
 @Module(includes = [CoreViewModelModule::class])
 abstract class CustomViewModelModule {
@@ -38,4 +39,9 @@ abstract class CustomViewModelModule {
   @IntoMap
   @ViewModelKey(CustomHelpViewModel::class)
   abstract fun bindCustomHelpViewModel(customHelpViewModel: CustomHelpViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(CustomSettingsViewModel::class)
+  abstract fun bindCustomSettingsViewModel(customSettingsViewModel: CustomSettingsViewModel): ViewModel
 }

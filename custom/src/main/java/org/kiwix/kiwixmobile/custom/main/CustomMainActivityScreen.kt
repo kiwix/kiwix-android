@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 
 @Suppress("LongParameterList")
 @Composable
@@ -52,7 +53,8 @@ fun CustomMainActivityScreen(
   enableLeftDrawer: Boolean,
   customBackHandler: MutableState<(() -> FragmentActivityExtensions.Super)?>,
   uiCoroutineScope: CoroutineScope,
-  viewModelFactory: ViewModelProvider.Factory
+  viewModelFactory: ViewModelProvider.Factory,
+  alertDialogShower: AlertDialogShower
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -88,7 +90,8 @@ fun CustomMainActivityScreen(
           CustomNavGraph(
             navController = navController,
             modifier = Modifier.fillMaxSize(),
-            viewModelFactory = viewModelFactory
+            viewModelFactory = viewModelFactory,
+            alertDialogShower = alertDialogShower
           )
         }
       }

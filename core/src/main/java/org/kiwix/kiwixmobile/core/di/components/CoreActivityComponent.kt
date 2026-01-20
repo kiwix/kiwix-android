@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDi
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowOpenNoteDialog
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
 
 @ActivityScope
 @Subcomponent(
@@ -47,7 +46,6 @@ interface CoreActivityComponent {
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)
   fun inject(showOpenNoteDialog: ShowOpenNoteDialog)
   fun inject(showDeleteNotesDialog: ShowDeleteNotesDialog)
-  fun inject(coreSettingsFragment: CoreSettingsFragment)
   fun inject(historyFragment: HistoryFragment)
   fun inject(bookmarksFragment: BookmarksFragment)
   fun inject(addNoteDialog: AddNoteDialog)
