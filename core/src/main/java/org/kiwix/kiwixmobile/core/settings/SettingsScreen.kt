@@ -120,7 +120,6 @@ import org.kiwix.kiwixmobile.core.utils.SIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -143,8 +142,6 @@ fun SettingsScreenRoute(
   val activity = LocalActivity.current as CoreMainActivity
   // Setup viewModel data version name, observing the click events, etc.
   SetUpViewModelAndPermissionLauncher(coreSettingsViewModel, activity)
-  // Attached DialogHost to screen to show our KiwixDialog.
-  DialogHost(coreSettingsViewModel.alertDialogShower)
   SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
   // Change font according to app language.
   ChangeFontAccordingToLanguage(activity, coreSettingsViewModel.kiwixDataStore)
