@@ -150,15 +150,11 @@ class LibkiwixBookmarks @Inject constructor(
 
   @Suppress("InjectDispatcher")
   fun bookmarkUrlsForCurrentBook(zimId: String): Flow<List<String>> =
-    kotlinx.coroutines.flow.flow {
-      ensureInitialized()
-      emit(
-        library.getBookmarks(false)
-          ?.filter { it.bookId == zimId }
-          ?.map { it.url }
-          .orEmpty()
-      )
-    }.flowOn(Dispatchers.IO)
+    bookmarkListFlow
+      .map { bookmarksList ->
+        bookmarksList.filter { it.zimId == zimId }
+          .map(LibkiwixBookmarkItem::bookmarkUrl)
+      }.flowOn(Dispatchers.IO)
 
   /**
    * Saves bookmarks in libkiwix. The use of `shouldWriteBookmarkToFile` is primarily
