@@ -23,13 +23,16 @@ import kotlinx.coroutines.flow.update
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.custom.BuildConfig
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class CustomSettingsViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,
@@ -40,21 +43,46 @@ class CustomSettingsViewModel @Inject constructor(
   libkiwixBookmarks: LibkiwixBookmarks,
   kiwixPermissionChecker: KiwixPermissionChecker
 ) : CoreSettingsViewModel(
-  context,
-  kiwixDataStore,
-  dataSource,
-  storageCalculator,
-  themeConfig,
-  alertDialogShower,
-  libkiwixBookmarks,
-  kiwixPermissionChecker
-) {
-  override suspend fun setStorage() {
-    _uiState.update {
+    context,
+    kiwixDataStore,
+    dataSource,
+    storageCalculator,
+    themeConfig,
+    alertDialogShower,
+    libkiwixBookmarks,
+    kiwixPermissionChecker
+  ) {
+  override suspend fun setStorage(coreMainActivity: CoreMainActivity) {
+    settingsUiState.update {
       it.copy(
         shouldShowStorageCategory = true,
         isLoadingStorageDetails = false
       )
     }
+  }
+
+  /**
+   * If "external links" are disabled in a custom app,
+   * this function hides the external links preference from settings
+   * and sets the kiwixDataStore to not show the external link popup
+   * when opening external links.
+   */
+  override suspend fun showExternalLinksPreference() {
+    settingsUiState.update { it.copy(shouldShowExternalLinkPreference = !BuildConfig.DISABLE_EXTERNAL_LINK) }
+    if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+      kiwixDataStore.setExternalLinkPopup(false)
+    }
+  }
+
+  override suspend fun showPrefWifiOnlyPreference() {
+    settingsUiState.update { it.copy(shouldShowPrefWifiOnlyPreference = false) }
+  }
+
+  override suspend fun showLanguageCategory() {
+    settingsUiState.update { it.copy(shouldShowLanguageCategory = BuildConfig.ENFORCED_LANG.isEmpty()) }
+  }
+
+  override suspend fun showPermissionItem() {
+    settingsUiState.update { it.copy(permissionItem = false to "") }
   }
 }

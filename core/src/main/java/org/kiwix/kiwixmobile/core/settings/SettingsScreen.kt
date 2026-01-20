@@ -18,10 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.settings
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,7 +62,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,12 +79,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllNotes
@@ -88,6 +95,7 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
+import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.PermissionLaunchersForSettingScreen
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.SettingsUiState
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_OFFSET
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_SCALE
@@ -133,14 +141,13 @@ fun SettingsScreenRoute(
   navigateBack: () -> Unit
 ) {
   val activity = LocalActivity.current as CoreMainActivity
-  val lifeCycleScope = rememberCoroutineScope()
   // Setup viewModel data version name, observing the click events, etc.
-  SetUpViewModelData(activity, lifeCycleScope, coreSettingsViewModel)
+  SetUpViewModelAndPermissionLauncher(coreSettingsViewModel, activity)
   // Attached DialogHost to screen to show our KiwixDialog.
   DialogHost(coreSettingsViewModel.alertDialogShower as AlertDialogShower)
+  SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
   // Change font according to app language.
   ChangeFontAccordingToLanguage(activity, coreSettingsViewModel.kiwixDataStore)
-  SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
 }
 
 @Composable
@@ -157,38 +164,90 @@ private fun ChangeFontAccordingToLanguage(
 }
 
 @Composable
-private fun SetUpViewModelData(
-  activity: CoreMainActivity,
-  lifeCycleScope: CoroutineScope,
-  coreSettingsViewModel: CoreSettingsViewModel
+private fun SetUpViewModelAndPermissionLauncher(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  coreMainActivity: CoreMainActivity
 ) {
+  val launchers = rememberPermissionLaunchers(
+    viewModel = coreSettingsViewModel,
+    activity = coreMainActivity
+  )
   LaunchedEffect(Unit) {
-    coreSettingsViewModel.apply {
-      setStorage()
-      setVersionCodeInformation()
-      actions.onEach { event ->
-        when (event) {
-          AllowPermission -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context.navigateToSettings()
-          }
+    coreSettingsViewModel.initialize(activity = coreMainActivity)
+    coreSettingsViewModel.actions
+      .onEach { action ->
+        handleSettingsAction(
+          action = action,
+          viewModel = coreSettingsViewModel,
+          activity = coreMainActivity,
+          launchers = launchers
+        )
+      }
+      .launchIn(coreSettingsViewModel.viewModelScope)
+  }
+}
 
-          ClearAllHistory -> clearAllHistoryDialog(coreSettingsViewModel, activity, lifeCycleScope)
-          ClearAllNotes -> showClearAllNotesDialog(coreSettingsViewModel, activity, lifeCycleScope)
-          ExportBookmarks -> if (requestExternalStorageWritePermissionForExportBookmark()) {
-            showExportBookmarkDialog()
-          }
-
-          ImportBookmarks -> showImportBookmarkDialog()
-          is OnStorageItemClick -> onStorageDeviceSelected(event.storageDevice)
-          OpenCredits -> openCredits()
-          is ShowSnackbar -> showSnackbar(
-            event.message,
-            event.lifecycleScope,
-            coreSettingsViewModel
-          )
-        }
-      }.launchIn(viewModelScope)
+private suspend fun handleSettingsAction(
+  action: Action,
+  viewModel: CoreSettingsViewModel,
+  activity: CoreMainActivity,
+  launchers: PermissionLaunchersForSettingScreen
+) {
+  when (action) {
+    AllowPermission -> {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        activity.navigateToSettings()
+      }
     }
+
+    OpenCredits -> viewModel.openCredits()
+    ClearAllHistory -> clearAllHistoryDialog(viewModel)
+    ClearAllNotes -> showClearAllNotesDialog(viewModel)
+    ExportBookmarks -> {
+      if (viewModel.requestExternalStorageWritePermissionForExportBookmark()) {
+        showExportBookmarkDialog(viewModel)
+      }
+    }
+
+    ImportBookmarks ->
+      showImportBookmarkDialog(viewModel, launchers.filePicker)
+
+    is OnStorageItemClick ->
+      viewModel.onStorageDeviceSelected(action.storageDevice, activity)
+
+    is ShowSnackbar ->
+      showSnackbar(action.message, action.lifecycleScope, viewModel)
+
+    Action.RequestWriteStoragePermission ->
+      launchers.writeStoragePermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    Action.NavigateToAppSettingsDialog ->
+      showNavigateToAppSettingsDialog(viewModel)
+  }
+}
+
+@Composable
+private fun rememberPermissionLaunchers(
+  viewModel: CoreSettingsViewModel,
+  activity: CoreMainActivity
+): PermissionLaunchersForSettingScreen {
+  val permissionLauncher =
+    rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+      viewModel.onStoragePermissionResult(it, activity)
+    }
+
+  val filePickerLauncher =
+    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      if (it.resultCode == RESULT_OK) {
+        viewModel.onBookmarkFileSelected(it)
+      }
+    }
+
+  return remember(permissionLauncher, filePickerLauncher) {
+    PermissionLaunchersForSettingScreen(
+      permissionLauncher,
+      filePickerLauncher
+    )
   }
 }
 
@@ -203,38 +262,40 @@ private fun showSnackbar(
   )
 }
 
-private fun clearAllHistoryDialog(
-  coreSettingsViewModel: CoreSettingsViewModel,
-  activity: CoreMainActivity,
-  lifeCycleScope: CoroutineScope
-) {
+private fun showNavigateToAppSettingsDialog(coreSettingsViewModel: CoreSettingsViewModel) {
+  coreSettingsViewModel.alertDialogShower.show(
+    KiwixDialog.ReadPermissionRequired,
+    coreSettingsViewModel.context::navigateToAppSettings
+  )
+}
+
+private fun clearAllHistoryDialog(coreSettingsViewModel: CoreSettingsViewModel) {
   coreSettingsViewModel.alertDialogShower.show(KiwixDialog.ClearAllHistory, {
-    coreSettingsViewModel.apply {
-      clearHistory()
-      sendAction(ShowSnackbar(activity.getString(R.string.all_history_cleared), lifeCycleScope))
-    }
+    coreSettingsViewModel.clearHistory()
   })
 }
 
-private fun showClearAllNotesDialog(
-  coreSettingsViewModel: CoreSettingsViewModel,
-  activity: CoreMainActivity,
-  lifeCycleScope: CoroutineScope
-) {
+private fun showClearAllNotesDialog(coreSettingsViewModel: CoreSettingsViewModel) {
   coreSettingsViewModel.alertDialogShower.show(
     KiwixDialog.ClearAllNotes,
-    {
-      if (!instance.isExternalStorageWritable) {
-        coreSettingsViewModel.sendAction(
-          ShowSnackbar(
-            activity.getString(R.string.notes_deletion_unsuccessful),
-            lifeCycleScope
-          )
-        )
-        return@show
-      }
-      coreSettingsViewModel.clearAllNotes()
-    }
+    { coreSettingsViewModel.clearAllNotes() }
+  )
+}
+
+private fun showImportBookmarkDialog(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  fileSelectLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
+) {
+  coreSettingsViewModel.alertDialogShower.show(
+    KiwixDialog.ImportBookmarks,
+    { coreSettingsViewModel.showFileChooser(fileSelectLauncher) }
+  )
+}
+
+private fun showExportBookmarkDialog(coreSettingsViewModel: CoreSettingsViewModel) {
+  coreSettingsViewModel.alertDialogShower.show(
+    KiwixDialog.YesNoDialog.ExportBookmarks,
+    { coreSettingsViewModel.exportBookmark() }
   )
 }
 

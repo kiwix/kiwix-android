@@ -19,17 +19,25 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.app.Application
+import android.os.Build
+import android.os.Environment
+import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class KiwixSettingsViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,
@@ -40,21 +48,60 @@ class KiwixSettingsViewModel @Inject constructor(
   libkiwixBookmarks: LibkiwixBookmarks,
   kiwixPermissionChecker: KiwixPermissionChecker
 ) : CoreSettingsViewModel(
-  context,
-  kiwixDataStore,
-  dataSource,
-  storageCalculator,
-  themeConfig,
-  alertDialogShower,
-  libkiwixBookmarks,
-  kiwixPermissionChecker
-) {
-  override suspend fun setStorage() {
-    _uiState.update { it.copy(shouldShowStorageCategory = true) }
-    if (_uiState.value.storageDeviceList.isNotEmpty()) {
-
+    context,
+    kiwixDataStore,
+    dataSource,
+    storageCalculator,
+    themeConfig,
+    alertDialogShower,
+    libkiwixBookmarks,
+    kiwixPermissionChecker
+  ) {
+  private var storageDeviceList: List<StorageDevice> = listOf()
+  override suspend fun setStorage(coreMainActivity: CoreMainActivity) {
+    settingsUiState.update { it.copy(shouldShowStorageCategory = true) }
+    if (storageDeviceList.isNotEmpty()) {
+      // update the storage when user switch to other storage.
+      setUpStoragePreference()
+      return
     }
     showHideProgressBarWhileFetchingStorageInfo(true)
+    storageDeviceList = (coreMainActivity as KiwixMainActivity).getStorageDeviceList()
+    showHideProgressBarWhileFetchingStorageInfo(false)
+    setUpStoragePreference()
+  }
+
+  private fun setUpStoragePreference() {
+    settingsUiState.value =
+      settingsUiState.value.copy(storageDeviceList = emptyList())
+    settingsUiState.value =
+      settingsUiState.value.copy(storageDeviceList = storageDeviceList)
+  }
+
+  override suspend fun showExternalLinksPreference() {
+    settingsUiState.update { it.copy(shouldShowExternalLinkPreference = true) }
+  }
+
+  override suspend fun showPrefWifiOnlyPreference() {
+    settingsUiState.update { it.copy(shouldShowPrefWifiOnlyPreference = true) }
+  }
+
+  override suspend fun showPermissionItem() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+      !kiwixDataStore.isPlayStoreBuild.first()
+    ) {
+      val externalStorageManager = Environment.isExternalStorageManager()
+      val permissionSummary = if (externalStorageManager) {
+        context.getString(R.string.allowed)
+      } else {
+        context.getString(R.string.not_allowed)
+      }
+      settingsUiState.update { it.copy(permissionItem = true to permissionSummary) }
+    }
+  }
+
+  override suspend fun showLanguageCategory() {
+    settingsUiState.update { it.copy(shouldShowLanguageCategory = true) }
   }
 
   /**
@@ -65,6 +112,6 @@ class KiwixSettingsViewModel @Inject constructor(
    * @param show If true, the progress bar will be displayed; otherwise, it will be hidden.
    */
   private fun showHideProgressBarWhileFetchingStorageInfo(show: Boolean) {
-    _uiState.update { it.copy(isLoadingStorageDetails = show) }
+    settingsUiState.update { it.copy(isLoadingStorageDetails = show) }
   }
 }

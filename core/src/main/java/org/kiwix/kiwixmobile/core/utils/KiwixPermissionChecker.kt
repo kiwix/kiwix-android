@@ -18,7 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import android.app.Activity
+
 interface KiwixPermissionChecker {
   suspend fun hasWriteExternalStoragePermission(): Boolean
   suspend fun hasReadExternalStoragePermission(): Boolean
+  fun shouldShowRationale(activity: Activity, permission: String): Boolean
 }

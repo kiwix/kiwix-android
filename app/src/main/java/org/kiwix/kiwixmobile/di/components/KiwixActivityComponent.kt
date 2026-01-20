@@ -28,7 +28,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.settings.KiwixSettingsFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
@@ -48,7 +47,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(localFileTransferFragment: LocalFileTransferFragment)
   fun inject(zimHostFragment: ZimHostFragment)
-  fun inject(kiwixSettingsFragment: KiwixSettingsFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
 

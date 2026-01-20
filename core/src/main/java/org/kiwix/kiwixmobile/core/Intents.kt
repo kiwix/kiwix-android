@@ -41,7 +41,7 @@ fun Context.navigateToSettings() {
   startActivity(intent)
 }
 
-fun Activity.navigateToAppSettings() {
+fun Context.navigateToAppSettings() {
   startActivity(
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
       data = Uri.fromParts("package", packageName, null)

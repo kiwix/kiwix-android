@@ -19,9 +19,11 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.Manifest
+import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -53,4 +55,7 @@ class AndroidPermissionChecker @Inject constructor(
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) == PackageManager.PERMISSION_GRANTED
     }
+
+  override fun shouldShowRationale(activity: Activity, permission: String): Boolean =
+    ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
 }

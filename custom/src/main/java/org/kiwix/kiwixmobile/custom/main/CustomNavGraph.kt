@@ -47,17 +47,18 @@ import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
 import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
-import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
+import org.kiwix.kiwixmobile.custom.settings.CustomSettingsViewModel
 
 @Suppress("LongMethod")
 @Composable
@@ -99,9 +100,11 @@ fun CustomNavGraph(
       )
     }
     composable(CustomDestination.Settings.route) {
-      FragmentContainer(R.id.settingsFragmentContainer) {
-        CustomSettingsFragment()
-      }
+      val customSettingsViewModel: CustomSettingsViewModel = viewModel(factory = viewModelFactory)
+      SettingsScreenRoute(
+        customSettingsViewModel,
+        navController::popBackStack
+      )
     }
     composable(CustomDestination.Downloads.route) {
       FragmentContainer(R.id.downloadFragmentContainer) {
@@ -181,7 +184,7 @@ sealed class CustomDestination(val route: String) {
   object Notes : CustomDestination(NOTES_FRAGMENT)
   object Bookmarks : CustomDestination(BOOKMARK_FRAGMENT)
   object Help : CustomDestination(HELP_SCREEN)
-  object Settings : CustomDestination(SETTINGS_FRAGMENT)
+  object Settings : CustomDestination(SETTINGS_SCREEN)
   object Downloads : CustomDestination(DOWNLOAD_FRAGMENT)
   object Search : CustomDestination(
     SEARCH_FRAGMENT +

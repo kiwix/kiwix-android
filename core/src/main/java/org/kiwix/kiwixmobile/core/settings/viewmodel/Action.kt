@@ -28,6 +28,8 @@ sealed class Action {
   object ExportBookmarks : Action()
   object ImportBookmarks : Action()
   object AllowPermission : Action()
+  object RequestWriteStoragePermission : Action()
+  object NavigateToAppSettingsDialog : Action()
   data class OnStorageItemClick(val storageDevice: StorageDevice) : Action()
   data class ShowSnackbar(val message: String, val lifecycleScope: CoroutineScope) : Action()
 }

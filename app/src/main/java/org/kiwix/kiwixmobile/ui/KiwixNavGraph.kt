@@ -56,7 +56,7 @@ import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
@@ -75,7 +76,7 @@ import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.settings.KiwixSettingsFragment
+import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 
 @Suppress("LongMethod")
@@ -168,9 +169,11 @@ fun KiwixNavGraph(
       )
     }
     composable(KiwixDestination.Settings.route) {
-      FragmentContainer(R.id.settingsFragmentContainer) {
-        KiwixSettingsFragment()
-      }
+      val kiwixViewModel: KiwixSettingsViewModel = viewModel(factory = viewModelFactory)
+      SettingsScreenRoute(
+        kiwixViewModel,
+        navController::popBackStack
+      )
     }
     composable(
       route = KiwixDestination.Search.route,
@@ -282,7 +285,7 @@ sealed class KiwixDestination(val route: String) {
   object Language : KiwixDestination(LANGUAGE_SCREEN)
   object ZimHost : KiwixDestination(ZIM_HOST_FRAGMENT)
   object Help : KiwixDestination(HELP_SCREEN)
-  object Settings : KiwixDestination(SETTINGS_FRAGMENT)
+  object Settings : KiwixDestination(SETTINGS_SCREEN)
   object Search : KiwixDestination(
     SEARCH_FRAGMENT +
       "?$NAV_ARG_SEARCH_STRING={$NAV_ARG_SEARCH_STRING}" +

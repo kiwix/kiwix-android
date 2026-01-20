@@ -18,12 +18,23 @@
 
 package org.kiwix.kiwixmobile.core.settings.viewmodel
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.res.Resources
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -34,26 +45,39 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.RequestWriteStoragePermission
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
+import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
+import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
+import java.io.InputStream
+import javax.xml.parsers.DocumentBuilderFactory
 
 const val ZOOM_OFFSET = 2
 const val ZOOM_SCALE = 25
+const val ZERO_POINT_SEVEN = 0.7
 
+@Suppress("LongParameterList")
 abstract class CoreSettingsViewModel(
   val context: Application,
   val kiwixDataStore: KiwixDataStore,
@@ -64,6 +88,11 @@ abstract class CoreSettingsViewModel(
   val libkiwixBookmarks: LibkiwixBookmarks,
   val kiwixPermissionChecker: KiwixPermissionChecker
 ) : ViewModel() {
+  data class PermissionLaunchersForSettingScreen(
+    val writeStoragePermission: ManagedActivityResultLauncher<String, Boolean>,
+    val filePicker: ManagedActivityResultLauncher<Intent, ActivityResult>
+  )
+
   data class SettingsUiState(
     val storageDeviceList: List<StorageDevice> = emptyList(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
@@ -76,11 +105,25 @@ abstract class CoreSettingsViewModel(
     val permissionItem: Pair<Boolean, String> = false to "",
   )
 
-  abstract suspend fun setStorage()
-  protected val _uiState = MutableStateFlow(SettingsUiState())
-  val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+  abstract suspend fun setStorage(coreMainActivity: CoreMainActivity)
+  abstract suspend fun showExternalLinksPreference()
+  abstract suspend fun showPrefWifiOnlyPreference()
+  abstract suspend fun showPermissionItem()
+  abstract suspend fun showLanguageCategory()
+
+  protected val settingsUiState = MutableStateFlow(SettingsUiState())
+  val uiState: StateFlow<SettingsUiState> = settingsUiState.asStateFlow()
   private val _actions = MutableSharedFlow<Action>()
   val actions: SharedFlow<Action> = _actions
+
+  suspend fun initialize(activity: CoreMainActivity) {
+    setStorage(activity)
+    showExternalLinksPreference()
+    showPrefWifiOnlyPreference()
+    showPermissionItem()
+    showLanguageCategory()
+    setVersionCodeInformation()
+  }
 
   val themeLabel: StateFlow<String> = kiwixDataStore.appTheme
     .map { theme -> getLabelFor(theme) }
@@ -175,7 +218,7 @@ abstract class CoreSettingsViewModel(
   }
 
   fun setVersionCodeInformation() {
-    _uiState.update { it.copy(versionInformation = "$versionName Build: $versionCode") }
+    settingsUiState.update { it.copy(versionInformation = "$versionName Build: $versionCode") }
   }
 
   private val versionCode: Int =
@@ -189,6 +232,12 @@ abstract class CoreSettingsViewModel(
   fun clearHistory() {
     runCatching {
       viewModelScope.launch { dataSource.clearHistory() }
+      sendAction(
+        ShowSnackbar(
+          context.getString(R.string.all_history_cleared),
+          viewModelScope
+        )
+      )
     }.onFailure {
       Log.e("SettingsPresenter", it.message, it)
     }
@@ -196,9 +245,18 @@ abstract class CoreSettingsViewModel(
 
   fun clearAllNotes() {
     viewModelScope.launch {
+      if (!instance.isExternalStorageWritable) {
+        sendAction(
+          ShowSnackbar(
+            context.getString(R.string.notes_deletion_unsuccessful),
+            viewModelScope
+          )
+        )
+        return@launch
+      }
       if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
         sendAction(
-          Action.ShowSnackbar(
+          ShowSnackbar(
             context.getString(R.string.ext_storage_permission_not_granted),
             viewModelScope
           )
@@ -207,7 +265,7 @@ abstract class CoreSettingsViewModel(
       }
       if (File(AddNoteDialog.NOTES_DIRECTORY).deleteRecursively()) {
         sendAction(
-          Action.ShowSnackbar(
+          ShowSnackbar(
             context.getString(R.string.notes_deletion_successful),
             viewModelScope
           )
@@ -220,5 +278,159 @@ abstract class CoreSettingsViewModel(
     viewModelScope.launch {
       kiwixDataStore.setPrefLanguage(selectedLangCode)
     }
+  }
+
+  fun exportBookmark() {
+    viewModelScope.launch {
+      libkiwixBookmarks.exportBookmark()
+    }
+  }
+
+  suspend fun requestExternalStorageWritePermissionForExportBookmark(): Boolean =
+    if (kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
+      true
+    } else {
+      sendAction(RequestWriteStoragePermission)
+      false
+    }
+
+  fun onStoragePermissionResult(isGranted: Boolean, coreMainActivity: CoreMainActivity) {
+    if (isGranted) {
+      // Successfully granted permission, so opening the export bookmark Dialog
+      sendAction(ExportBookmarks)
+      return
+    }
+    if (kiwixPermissionChecker.shouldShowRationale(
+        coreMainActivity,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+      )
+    ) {
+      /* shouldShowRationale() returns false when:
+       *  1) User has previously checked on "Don't ask me again", and/or
+       *  2) Permission has been disabled on device
+       */
+      context.toast(
+        R.string.ext_storage_permission_rationale_export_bookmark,
+        Toast.LENGTH_LONG
+      )
+    } else {
+      context.toast(
+        R.string.ext_storage_write_permission_denied_export_bookmark,
+        Toast.LENGTH_LONG
+      )
+      sendAction(Action.NavigateToAppSettingsDialog)
+    }
+  }
+
+  fun onBookmarkFileSelected(result: ActivityResult) {
+    result.data?.data?.let { uri ->
+      val contentResolver = context.contentResolver
+      if (!isValidBookmarkFile(contentResolver.getType(uri))) {
+        context.toast(
+          context.getString(R.string.error_invalid_bookmark_file),
+          Toast.LENGTH_SHORT
+        )
+        return@let
+      }
+
+      createTempFile(contentResolver.openInputStream(uri)).apply {
+        if (isValidXmlFile(this)) {
+          viewModelScope.launch {
+            libkiwixBookmarks.importBookmarks(this@apply)
+          }
+        } else {
+          context.toast(
+            context.getString(R.string.error_invalid_bookmark_file),
+            Toast.LENGTH_SHORT
+          )
+        }
+      }
+    }
+  }
+
+  private fun isValidXmlFile(file: File): Boolean {
+    return try {
+      DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
+      true
+    } catch (ignore: Exception) {
+      android.util.Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
+      false
+    }
+  }
+
+  private fun createTempFile(inputStream: InputStream?): File {
+    // create a temp file for importing the saved bookmarks
+    val tempFile = File(context.externalCacheDir, "bookmark.xml")
+    if (tempFile.exists()) {
+      tempFile.delete()
+    }
+    tempFile.createNewFile()
+    inputStream?.let {
+      tempFile.outputStream().use(inputStream::copyTo)
+    }
+    return tempFile
+  }
+
+  private fun isValidBookmarkFile(mimeType: String?) =
+    mimeType == "application/xml" || mimeType == "text/xml"
+
+  fun showFileChooser(fileSelectLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+    val intent = Intent().apply {
+      action = Intent.ACTION_GET_CONTENT
+      type = "*/*"
+      addCategory(Intent.CATEGORY_OPENABLE)
+    }
+    try {
+      fileSelectLauncher.launch(Intent.createChooser(intent, "Select a bookmark file"))
+    } catch (_: ActivityNotFoundException) {
+      context.toast(
+        context.getString(R.string.no_app_found_to_select_bookmark_file),
+        Toast.LENGTH_SHORT
+      )
+    }
+  }
+
+  @SuppressLint("SetJavaScriptEnabled")
+  fun openCredits() {
+    @SuppressLint("InflateParams") val view =
+      LayoutInflater.from(
+        context
+      ).inflate(R.layout.credits_webview, null) as WebView
+    val maxHeightInPx =
+      (Resources.getSystem().displayMetrics.heightPixels * ZERO_POINT_SEVEN).toInt()
+    view.layoutParams = ViewGroup.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT,
+      maxHeightInPx
+    )
+    view.loadUrl("file:///android_asset/credits.html")
+    viewModelScope.launch {
+      if (themeConfig.isDarkTheme()) {
+        view.settings.javaScriptEnabled = true
+        view.setBackgroundColor(0)
+      }
+      alertDialogShower.show(OpenCredits { AndroidView(factory = { view }) })
+    }
+  }
+
+  @Suppress("NestedBlockDepth")
+  fun onStorageDeviceSelected(storageDevice: StorageDevice, coreMainActivity: CoreMainActivity) {
+    viewModelScope.runSafelyInLifecycleScope {
+      kiwixDataStore.apply {
+        setSelectedStorage(getPublicDirectoryPath(storageDevice.name))
+        setSelectedStoragePosition(
+          if (storageDevice.isInternal) {
+            INTERNAL_SELECT_POSITION
+          } else {
+            EXTERNAL_SELECT_POSITION
+          }
+        )
+        setShowStorageOption()
+        setStorage(coreMainActivity)
+      }
+    }
+  }
+
+  private suspend fun setShowStorageOption() {
+    kiwixDataStore.setShowStorageOption(false)
   }
 }
