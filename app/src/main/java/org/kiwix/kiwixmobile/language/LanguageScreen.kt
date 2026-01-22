@@ -206,7 +206,7 @@ private fun LanguageScreen(
 }
 
 @Composable
-private fun ShowErrorMessage(errorMessage: String) {
+fun ShowErrorMessage(errorMessage: String) {
   Box(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center

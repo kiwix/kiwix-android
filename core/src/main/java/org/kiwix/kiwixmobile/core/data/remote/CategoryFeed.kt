@@ -24,6 +24,8 @@ import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Namespace
 import org.simpleframework.xml.Root
 
+@Root(name = "feed", strict = false)
+@Namespace(reference = "http://www.w3.org/2005/Atom")
 class CategoryFeed {
   @field:ElementList(name = "entry", inline = true, required = false)
   var entries: List<CategoryEntry>? = null
