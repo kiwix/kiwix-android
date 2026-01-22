@@ -66,7 +66,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Savi
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
-@Suppress("UnusedPrivateProperty")
 class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
