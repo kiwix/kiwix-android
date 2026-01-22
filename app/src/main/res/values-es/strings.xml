@@ -15,4 +15,7 @@
   <string name="receive_files_title">Recibir archivos</string>
   <string name="no_app_found_to_open">¡No se encontró ninguna aplicación para seleccionar el archivo ZIM!</string>
   <string name="select_zim_file">Seleccione el archivo zim para leer</string>
+  <string name="swipe_down_to_scan_storage">Desliza hacia abajo para escanear tu dispositivo en busca de libros nuevos…</string>
+  <string name="auto_detect_books">Detectar automáticamente tus libros</string>
+  <string name="auto_detect_books_description">Al primer lanzamiento, se le preguntará si la aplicación puede escanear su almacenamiento. Si lo permite, detectaremos automáticamente sus archivos ZIM sin necesidad de añadirlos manualmente.</string>
 </resources>
