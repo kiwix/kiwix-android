@@ -27,6 +27,9 @@
   <string name="menu_support_kiwix">支持 Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">支援%s</string>
   <string name="menu_about_app">關於%s應用程式</string>
+  <string name="external_redirect_message">您將會重新導向到%s。</string>
+  <string name="support_donation_platform">捐款平台</string>
+  <string name="about_app_page">關於應用程式頁面</string>
   <string name="menu_wifi_hotspot">託管書籍</string>
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>

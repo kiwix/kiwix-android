@@ -34,6 +34,9 @@
   <string name="menu_support_kiwix">دعم كيويكس</string>
   <string name="menu_support_kiwix_for_custom_apps">دعم %s</string>
   <string name="menu_about_app">تقريبا %s من التطبيق</string>
+  <string name="external_redirect_message">سيتم الآن إعادة توجيهك إلى موقعنا %s .</string>
+  <string name="support_donation_platform">منصة التبرعات</string>
+  <string name="about_app_page">صفحة حول التطبيق</string>
   <string name="menu_wifi_hotspot">كتب المضيف</string>
   <string name="save_media">حفظ الوسائط</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>

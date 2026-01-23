@@ -40,12 +40,16 @@
   <string name="menu_support_kiwix">Apoyar a Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Soporte %s</string>
   <string name="menu_about_app">Acerca de la aplicación %s</string>
+  <string name="external_redirect_message">Ahora se le redirigirá a nuestro %s.</string>
+  <string name="support_donation_platform">plataforma de donaciones</string>
+  <string name="about_app_page">Acerca de la página de la aplicación</string>
   <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Guardar medios</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Medios guardados en %s en Descargas/org.kiwix…/</string>
   <string name="search_label">Buscar</string>
   <string name="searched_list">Lista buscada</string>
+  <string name="more_options">Más opciones</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="hotspot_service_channel_name">Canal de servicio de punto de acceso</string>
@@ -73,8 +77,8 @@
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
   <string name="error_server_already_running">El servidor ya esta en funcionamiento. Por favor, apáguelo e inténtelo de nuevo.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">No se pudo encontrar la dirección IP.</string>
-  <string name="server_started_message" fuzzy="true">Introduce esta dirección IP en tu navegador para acceder al servidor %s</string>
+  <string name="error_ip_address_not_found">No se pudo encontrar la dirección IP.</string>
+  <string name="server_started_message">Introduzca esta dirección IP en su navegador para acceder al servidor %s</string>
   <string name="qr_code">Código QR renderizado</string>
   <string name="share_host_address">Compartir URL a través de otras aplicaciones</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado. %s</string>
@@ -87,6 +91,10 @@
   <string name="pref_display_title">Mostrar</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">Sistema</string>
+  <string name="theme_light">Claro</string>
+  <string name="theme_dark">Oscuro</string>
   <string name="pref_theme_summary">Mostrar artículos con colores invertidos</string>
   <string name="pref_back_to_top">Volver al principio</string>
   <string name="pref_back_to_top_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
@@ -209,10 +217,10 @@
   <string name="your_languages">Idiomas seleccionados:</string>
   <string name="your_language">Idioma seleccionado: %s</string>
   <string name="other_languages">Otros idiomas:</string>
-  <string name="downloading" fuzzy="true">Descargando:</string>
+  <string name="downloading">Descargando</string>
   <string name="no_items_msg">No hay ningún elemento disponible</string>
   <string name="crash_title">Bueno… esto es incomodo</string>
-  <string name="crash_description" fuzzy="true">Parece que nos colgamos.\n¿Te importaría ayudarnos a solucionar este problema enviándonos la siguiente información?</string>
+  <string name="crash_description">Parece que hemos fallado.\n¿Te importaría ayudarnos a solucionar este problema enviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">Su configuración de idioma</string>
   <string name="crash_checkbox_zimfiles">Una lista de todos sus archivos ZIM</string>
   <string name="crash_checkbox_exception">Detalles del problema</string>
@@ -334,7 +342,7 @@
   <string name="send_report">Enviar informe de diagnóstico</string>
   <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
   <string name="diagnostic_report">Informe de diagnóstico</string>
-  <string name="diagnostic_report_message" fuzzy="true">Por favor, envíe los siguientes detalles para que podamos diagnosticar el problema</string>
+  <string name="diagnostic_report_message">Para ayudarnos a diagnosticar el problema, primero reproduzca el problema y luego envíe el informe de diagnóstico.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="search_open_in_new_tab">Abrir en una pestaña nueva</string>
@@ -348,9 +356,10 @@
   <string name="preparing_file_for_copy">Preparando para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
-  <string name="copying_zim_file" fuzzy="true">Copiando el archivo ZIM %s…</string>
+  <string name="copying_zim_file">Copiando el archivo ZIM %s…</string>
   <string name="moving_zim_file">Moviendo el archivo ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix requiere que el archivo ZIM se encuentre en su propia carpeta.\n ¿Desea copiarlo o moverlo allí?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix requiere que el archivo ZIM se encuentre en su propia carpeta.\n¿Desea copiarlo o moverlo allí?</string>
   <string name="copy_file_error_message">Error al copiar el archivo ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Tenga cuidado: ¡asegúrese de que todos los grupos ZIM se hayan movido/copiado correctamente!</string>
   <string name="verify_zim_chunks_dialog_message">Puede verificarlos dentro de la carpeta “Android/media/org.kiwix…/”\nUna vez hecho refresque la pantalla de la biblioteca deslizando hacia abajo. El archivo ZIM dividido debería aparecer entonces en su biblioteca.</string>
@@ -358,6 +367,8 @@
   <string name="copy_move_files_to_app_directory_description">Debido a las políticas de Google Play en Android 11 y superior, nuestra aplicacion ya no podrá acceder a los archivos de tu dispositivo. Para que puedas ver los archivos seleccionados, tenemos que moverlos o copiarlos en una carpeta especial dentro del directorio de nuestra aplicación. Esto nos permite acceder a los archivos y abrirlos.</string>
   <string name="choose_storage_to_copy_move_zim_file">Elija el almacenamiento para copiar/mover el archivo ZIM</string>
   <string name="move_file_error_message">Error al mover el archivo ZIM: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \n¿Desea continuar con otros archivos ZIM?</string>
+  <string name="your_selected_files_added_to_library">Los archivos ZIM seleccionados se agregan a la biblioteca.</string>
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
   <string name="update_content_description">Para actualizar el contenido (un archivo ZIM), debe descargar la última versión completa de este mismo contenido. Puede hacerlo a través de la sección de descargas.</string>
   <string name="all_files_permission_needed">Se necesita permiso para todos los archivos</string>
@@ -409,4 +420,13 @@
   <string name="downloading_state">Descargando</string>
   <string name="download_failed_state">Fallido</string>
   <string name="searchview_description_clear">Borrar cola</string>
+  <string name="do_you_mean">Quizás quiso decir:</string>
+  <string name="suggested_search_icon_description">Toque para utilizar esta sugerencia y corregir automáticamente su búsqueda</string>
+  <string name="file_system_scan_dialog_title">¿Escanear el almacenamiento en busca de libros?</string>
+  <string name="file_system_scan_dialog_message">Kiwix escaneará el almacenamiento de su dispositivo y enumerará aquí los libros disponibles.</string>
+  <string name="download_timeout_resume_message">La descarga en segundo plano de Android ha expirado. ¿Quieres reanudarla?</string>
+  <string name="validate_zim_files">Validar archivos ZIM</string>
+  <string name="confirmation_validate_zim_files">¿Estás seguro de que deseas validar los siguientes archivos ZIM?\n\n %s</string>
+  <string name="validating_zim_file">Validando archivo ZIM…</string>
+  <string name="validating_zim_files">Validando archivos ZIM…</string>
 </resources>

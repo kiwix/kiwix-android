@@ -2,6 +2,7 @@
 <!-- Authors:
 * Ajeje Brazorf
 * Albano
+* Amedeo463
 * Beta16
 * CloeRiva
 * Clorofolle
@@ -30,11 +31,14 @@
   <string name="menu_support_kiwix">Sostieni Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Supporto %s</string>
   <string name="menu_about_app">Informazioni sull’app %s</string>
+  <string name="external_redirect_message">Ora verrai reindirizzato al nostro %s.</string>
+  <string name="support_donation_platform">piattaforma di donazione</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Salva file multimediale</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
   <string name="save_media_saved">File multimediale salvato come %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Cerca</string>
+  <string name="searched_list">Lista cercata</string>
   <string name="more_options">Altre opzioni</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Aprire il collegamento in una nuova scheda?</string>
@@ -77,6 +81,10 @@
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">Sistema</string>
+  <string name="theme_light">Chiaro</string>
+  <string name="theme_dark">Scuro</string>
   <string name="pref_theme_summary">Visualizza le voci con colori invertiti</string>
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
@@ -139,6 +147,8 @@
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per effettuare il download.</string>
   <string name="download">Scarica</string>
+  <string name="download_notification_channel_name">Scarica il Nome del Canale di Notifica</string>
+  <string name="download_notification_channel_description">Scaricamento dei file ZIM…</string>
   <string name="space_available">Spazio disponibile:</string>
   <string name="move_no_space">Spazio insufficiente per spostare/copiare.</string>
   <string name="zim_simple">Semplice</string>
@@ -339,6 +349,7 @@
   <string name="copying_zim_file">Copia del file ZIM %s…</string>
   <string name="moving_zim_file">Spostamento del file ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix richiede che il file ZIM sia nella sua directory dati.\nVuoi copiarlo o spostarlo lì?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix richiede i file ZIM di essere nella loro directory di dati. Vuoi copiarli o spostarli lì?</string>
   <string name="copy_file_error_message">Errore nella copia del file ZIM: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Attenzione: Assicurati che tutti i blocchi ZIM siano stati spostati/copiati correttamente!</string>
   <string name="verify_zim_chunks_dialog_message">Puoi verificarli nella cartella \"Android/media/org.kiwix…/\". Una volta fatto, aggiorna la schermata della libreria scorrendo verso il basso. Il file ZIM diviso apparirà in seguito nella tua libreria.</string>
@@ -347,6 +358,7 @@
   <string name="choose_storage_to_copy_move_zim_file">Scegli l\'archiviazione in cui copiare/spostare il file ZIM</string>
   <string name="move_file_error_message">Errore nello spostamento del file ZIM: %s.</string>
   <string name="file_copy_move_error_dialog_message">%s \nVuoi continuare con altri file ZIM?</string>
+  <string name="your_selected_files_added_to_library">I tuoi file ZIM selezionati sono stati aggiunti alla Libreria.</string>
   <string name="how_to_update_content">Come aggiornare i contenuti?</string>
   <string name="update_content_description">Per aggiornare un contenuto (un file ZIM), devi scaricare l’ultima versione completa di quello stesso contenuto. Puoi farlo nella sezione Scarica.</string>
   <string name="all_files_permission_needed">Accesso a tutti i file richiesto</string>
@@ -374,6 +386,7 @@
   <string name="read_aloud_service_channel_name">Canale del servizio di lettura ad alta voce</string>
   <string name="read_aloud_channel_description">Comandi della lettura ad alta voce.</string>
   <string name="read_aloud_running">Lettura ad alta voce in esecuzione</string>
+  <string name="clear_all_navigation_history_message">Cancella tutta la cronologia (indietro, davanti)</string>
   <string name="navigation_history_cleared">Cronologia di navigazione cancellata</string>
   <string name="go_to_settings_label">Vai alle impostazioni</string>
   <string name="request_notification_permission_message">Per eseguire questa azione, concedi l\'accesso alle notifiche</string>
@@ -381,6 +394,7 @@
   <string name="your_device_name_message">Il nome del tuo dispositivo apparirà qui.</string>
   <string name="nearby_devices_list_message">Qui troverai un elenco dei dispositivi nelle vicinanze. Tocca il nome di un dispositivo per avviare il trasferimento file.</string>
   <string name="transfer_zim_files_list_message">Qui troverai l\'elenco dei file ZIM disponibili per il trasferimento.</string>
+  <string name="storage_selection_dialog_accessibility_description">Seleziona lo spazio per scaricare file ZIM.</string>
   <string name="donation_dialog_title">Dona oggi</string>
   <string name="make_donation">Fai una donazione</string>
   <string name="downloading_state">Download in corso</string>

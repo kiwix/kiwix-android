@@ -3,6 +3,7 @@
 * Akmaie Ajam
 * Arifin.wijaya
 * Arifpedia
+* Bennylin
 * Esiahaan
 * Iwan Novirion
 * Kenrick95
@@ -114,7 +115,7 @@
   <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
   <string name="got_it">Paham</string>
   <string name="did_you_know">Tahukah Anda?</string>
-  <string name="undo">Urungkan</string>
+  <string name="undo">Batalkan</string>
   <string name="tab_closed">Tab ditutup</string>
   <string name="tabs_closed">Tab ditutup</string>
   <string name="bookmark_added">Markah ditambahkan</string>

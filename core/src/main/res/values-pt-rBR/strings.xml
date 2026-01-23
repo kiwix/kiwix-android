@@ -9,6 +9,7 @@
 * Harrymacdougat
 * HenriqueCrang
 * Klgor1803
+* Leosls
 * Maakhai
 * McDutchie
 * Mello25
@@ -36,12 +37,16 @@
   <string name="menu_support_kiwix">Apoie Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Apoie %s</string>
   <string name="menu_about_app">Sobre %s aplicativo</string>
+  <string name="external_redirect_message">Você será redirecionado para o nosso %s.</string>
+  <string name="support_donation_platform">plataforma de doações</string>
+  <string name="about_app_page">Sobre a página do aplicativo</string>
   <string name="menu_wifi_hotspot">Hotspot de Wi-Fi</string>
   <string name="save_media">Salvar mídia</string>
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Mídia salva como %s em Downloads/org.kiwix…/</string>
   <string name="search_label">Pesquisar</string>
   <string name="searched_list">Lista pesquisada</string>
+  <string name="more_options">Mais opções</string>
   <string name="choose_file">Selecione um arquivo de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir link em uma nova aba?</string>
   <string name="hotspot_service_channel_name">Canal de serviço de ponto de acesso</string>
@@ -69,8 +74,8 @@
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Parar servidor</string>
   <string name="error_server_already_running">O servidor já está sendo executado. Por favor desligue e tente novamente.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">Não foi possível encontrar o endereço ip.</string>
-  <string name="server_started_message" fuzzy="true">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
+  <string name="error_ip_address_not_found">Não foi possível encontrar o endereço IP.</string>
+  <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s.</string>
   <string name="qr_code">QR Code renderizado</string>
   <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado. %s</string>
@@ -83,6 +88,10 @@
   <string name="pref_display_title">Exibição</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">Sistema</string>
+  <string name="theme_light">Claro</string>
+  <string name="theme_dark">Escuro</string>
   <string name="pref_theme_summary">Mostrar artigos com cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Mostra um botão no fim da página para voltar ao topo</string>
@@ -146,6 +155,7 @@
   <string name="download_no_space">Espaço insuficiente para baixar o download.</string>
   <string name="download">Baixar</string>
   <string name="download_notification_channel_name">Nome do Canal de Notificação de Download</string>
+  <string name="download_notification_channel_description">Baixando arquivos ZIM…</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="move_no_space">Sem espaço suficiente para mover/copiar.</string>
   <string name="zim_simple">Simple</string>
@@ -181,9 +191,9 @@
   <string name="confirm_stop_download_title">Parar o download?</string>
   <string name="confirm_stop_download_msg">Tem certeza de que deseja parar esse download?</string>
   <string name="change_storage">Mudar</string>
-  <string name="tts_not_enabled" fuzzy="true">Texto para fala não está habilitado para este arquivo ZIM</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Falha na inicialização da leitura de texto. Por favor, tente novamente</string>
-  <string name="texttospeech_error" fuzzy="true">Erro inesperado na leitura de texto. Por favor, tente novamente</string>
+  <string name="tts_not_enabled">A função \"Ler em voz alta\" não está habilitada para este arquivo ZIM.</string>
+  <string name="texttospeech_initialization_failed">A inicialização da função Ler em Voz Alta falhou. Tente novamente.</string>
+  <string name="texttospeech_error">Ocorreu um erro inesperado na Leitura em Voz Alta. Tente novamente.</string>
   <string name="next">Próximo</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir o download de conteúdo via rede móvel?</string>
@@ -202,11 +212,12 @@
   <string name="external_link_popup_dialog_message">Você está acessando uma ligação externa. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Deseja continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
+  <string name="your_language">Idioma selecionado: %s</string>
   <string name="other_languages">Outros idiomas:</string>
-  <string name="downloading" fuzzy="true">Baixando</string>
+  <string name="downloading">Baixando</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isso é constrangedor</string>
-  <string name="crash_description" fuzzy="true">Parece que caímos.\n\nVocê se importaria em nos ajudar a corrigir esse problema enviando as seguintes informações?</string>
+  <string name="crash_description">Parece que ocorreu uma falha.\n\nVocê poderia nos ajudar a resolver esse problema enviando o relatório de falha?</string>
   <string name="crash_checkbox_language">Suas configurações de idioma</string>
   <string name="crash_checkbox_zimfiles">Uma lista de seus arquivos ZIM</string>
   <string name="crash_checkbox_exception">Detalhes do acidente</string>
@@ -230,7 +241,10 @@
   <string name="go_to_previous_page">Ir para a página anterior</string>
   <string name="go_to_next_page">Vá para a próxima página</string>
   <string name="table_of_contents">Índice de informações</string>
+  <string name="select_language">Selecione o idioma</string>
   <string name="save_languages">Salvar idiomas</string>
+  <string name="all_languages">Todos os idiomas</string>
+  <string name="no_language_available">Nenhum outro idioma disponível</string>
   <string name="expand">Expandir</string>
   <string name="history">Histórico</string>
   <string name="history_from_current_book">Ver histórico de todos os livros</string>
@@ -325,7 +339,7 @@
   <string name="send_report">Enviar relatório de diagnóstico</string>
   <string name="crash_checkbox_file_system">Detalhes do sistema de arquivos</string>
   <string name="diagnostic_report">Relatório de diagnóstico</string>
-  <string name="diagnostic_report_message" fuzzy="true">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
+  <string name="diagnostic_report_message">Para nos ajudar a diagnosticar o problema, primeiro reproduza o erro e depois envie o relatório de diagnóstico.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
@@ -339,17 +353,23 @@
   <string name="preparing_file_for_copy">Preparando-se para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
-  <string name="copying_zim_file" fuzzy="true">Copiando arquivo ZIM %s…</string>
+  <string name="copying_zim_file">Copiando o arquivo ZIM %s…</string>
   <string name="moving_zim_file">Movendo arquivo ZIM %s…</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">Você quer copiar ou mover o arquivo?</string>
-  <string name="copy_file_error_message" fuzzy="true">Erro ao copiar o arquivo zim: %s.</string>
-  <string name="why_copy_move_files_to_app_directory" fuzzy="true">Mover/Copiar arquivos para o diretório público do app?</string>
-  <string name="copy_move_files_to_app_directory_description" fuzzy="true">Devido às políticas do Google Play no Android 11 e acima, nosso app não pode mais acessar arquivos armazenados em outro lugar do seu dispositivo. Para você poder ver seus arquivos selecionados, nós precisamos mover ou copiar eles em uma pasta especial no diretório do app. Isso permite acessar e abrir os arquivos. Você concorda com isso?</string>
-  <string name="move_file_error_message" fuzzy="true">Erro ao mover o arquivo zim: %s.</string>
+  <string name="copy_move_files_dialog_description">O Kiwix exige que o arquivo ZIM esteja em seu próprio diretório de dados.\nVocê deseja copiá-lo ou movê-lo para lá?</string>
+  <string name="copy_move_multiple_files_dialog_description">O Kiwix exige que os arquivos ZIM estejam em seu próprio diretório de dados.\nVocê deseja copiá-los ou movê-los para lá?</string>
+  <string name="copy_file_error_message">Erro ao copiar o arquivo ZIM: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Atenção: Certifique-se de que todos os blocos ZIM foram movidos/copiados corretamente!</string>
+  <string name="verify_zim_chunks_dialog_message">Você pode verificá-los dentro da pasta “Android/media/org.kiwix…/”.\nDepois disso, atualize a tela da biblioteca deslizando para baixo. O arquivo ZIM dividido aparecerá na sua biblioteca.</string>
+  <string name="why_copy_move_files_to_app_directory">Por que copiar/mover arquivos para o diretório público do aplicativo?</string>
+  <string name="copy_move_files_to_app_directory_description">Devido às políticas do Google Play no Android 11 e versões superiores, nosso aplicativo não pode mais acessar diretamente arquivos armazenados em outros locais do seu dispositivo. Para que você possa visualizar os arquivos selecionados, precisamos movê-los ou copiá-los para uma pasta específica dentro do diretório do aplicativo. Isso nos permite acessar e abrir os arquivos.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Escolha o local de armazenamento para copiar/mover o arquivo ZIM.</string>
+  <string name="move_file_error_message">Erro ao mover o arquivo ZIM: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s\nDeseja continuar com outros arquivos ZIM?</string>
+  <string name="your_selected_files_added_to_library">Os arquivos ZIM selecionados foram adicionados à biblioteca.</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
-  <string name="update_content_description" fuzzy="true">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
+  <string name="update_content_description">Para atualizar o conteúdo (um arquivo ZIM), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de downloads.</string>
   <string name="all_files_permission_needed">Permissão necessária para todos os arquivos</string>
-  <string name="all_files_permission_needed_message" fuzzy="true">Para que os arquivos zim sejam acessados através do dispositivo, precisamos que TODOS os arquivos estejam com permissão de acesso.</string>
+  <string name="all_files_permission_needed_message">Para acessar todos os arquivos ZIM em diferentes dispositivos, precisamos ter permissão para acessar Todos os Arquivos.</string>
   <string name="allowed">Permitido</string>
   <string name="not_allowed">Não permitido</string>
   <string name="denied_internet_permission_message">Por favor, habilite o wi-fi para o download de conteúdo</string>
@@ -372,7 +392,7 @@
   <string name="download_tts_language_message">Favor clicar no botão de Download. Ele baixará automaticamente o idioma necessário.</string>
   <string name="external_link_copied_message">Link externo copiado para a área de transferência</string>
   <string name="read_aloud_service_channel_name">\nLeia em voz alta o canal de atendimento</string>
-  <string name="read_aloud_channel_description" fuzzy="true">Controle de texto para fala.</string>
+  <string name="read_aloud_channel_description">Controles de Leitura em Voz Alta.</string>
   <string name="read_aloud_running">Rodando o recurso Leitura Permitida</string>
   <string name="backward_history">Histórico de pendências</string>
   <string name="forward_history">Histórico à frente</string>
@@ -393,6 +413,17 @@
   <string name="donation_dialog_title">Doar Hoje</string>
   <string name="donation_dialog_description">%s precisa da sua ajuda.</string>
   <string name="make_donation">Fazer uma doação</string>
+  <string name="resuming_state">Retomando</string>
   <string name="downloading_state">Instalando</string>
   <string name="download_failed_state">Falha</string>
+  <string name="searchview_description_clear">Limpar consulta</string>
+  <string name="do_you_mean">Você quer dizer:</string>
+  <string name="suggested_search_icon_description">Toque para usar esta sugestão e corrigir automaticamente sua pesquisa.</string>
+  <string name="file_system_scan_dialog_title">Digitalize o espaço de armazenamento para livros?</string>
+  <string name="file_system_scan_dialog_message">O Kiwix irá analisar o armazenamento do seu dispositivo e listar os livros disponíveis aqui.</string>
+  <string name="download_timeout_resume_message">O download em segundo plano do Android expirou. Deseja retomar?</string>
+  <string name="validate_zim_files">Validar arquivos ZIM</string>
+  <string name="confirmation_validate_zim_files">Tem certeza de que deseja validar os seguintes arquivos ZIM?\n\n%s</string>
+  <string name="validating_zim_file">Validando o arquivo ZIM…</string>
+  <string name="validating_zim_files">Validando arquivos ZIM…</string>
 </resources>

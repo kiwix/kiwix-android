@@ -3,6 +3,7 @@
 * Eduardo Addad de Oliveira
 * Eduardoaddad
 * Klgor1803
+* Leosls
 * Maakhai
 * Obiru
 * YoReaper
@@ -15,4 +16,7 @@
   <string name="receive_files_title">Receber arquivos</string>
   <string name="no_app_found_to_open">Nenhum app encontrado para selecionar o arquivo ZIM!</string>
   <string name="select_zim_file">Selecione o arquivo ZIM para ler</string>
+  <string name="swipe_down_to_scan_storage">Deslize para baixo para escanear seu dispositivo em busca de novos livros…</string>
+  <string name="auto_detect_books">Detecção automática de seus livros</string>
+  <string name="auto_detect_books_description">Ao iniciar o aplicativo pela primeira vez, você será questionado se deseja que ele verifique seu armazenamento. Se você permitir, detectaremos automaticamente seus arquivos ZIM, sem a necessidade de adicioná-los manualmente.</string>
 </resources>
