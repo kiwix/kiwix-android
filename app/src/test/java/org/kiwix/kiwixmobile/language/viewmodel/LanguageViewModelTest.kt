@@ -313,6 +313,7 @@ class LanguageViewModelTest {
 
   @Test
   fun `Save has no effect on other states`() = runTest {
+    every { application.getString(any()) } returns ""
     languageViewModel.state.emit(Loading)
     testFlow(
       languageViewModel.state,

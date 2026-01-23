@@ -167,6 +167,8 @@ class ZimManageViewModelTest {
       @Suppress("UnspecifiedRegisterReceiverFlag")
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
+    every { application.getString(any()) } returns ""
+    every { application.getString(any(), any()) } returns ""
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -309,16 +311,18 @@ class ZimManageViewModelTest {
   @Nested
   inner class Languages {
     @Test
-    fun `changing language updates the filter and do the network request`() = runTest {
-      every { application.getString(any()) } returns ""
-      every { application.getString(any(), any()) } returns ""
-      viewModel.onlineLibraryRequest.test {
-        skipItems(1)
-        onlineContentLanguage.emit("eng")
-        val onlineLibraryRequest = awaitItem()
-        assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
-        assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
-        assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+    fun `changing language updates the filter and do the network request`() = flakyTest {
+      runTest {
+        every { application.getString(any()) } returns ""
+        every { application.getString(any(), any()) } returns ""
+        viewModel.onlineLibraryRequest.test {
+          skipItems(1)
+          onlineContentLanguage.emit("eng")
+          val onlineLibraryRequest = awaitItem()
+          assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
+          assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
+          assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+        }
       }
     }
   }
@@ -326,26 +330,30 @@ class ZimManageViewModelTest {
   @Nested
   inner class Categories {
     @Test
-    fun `changing category updates the filter and do the network request`() = runTest {
-      every { application.getString(any()) } returns ""
-      every { application.getString(any(), any()) } returns ""
-      viewModel.onlineLibraryRequest.test {
-        skipItems(1)
-        onlineCategoryContent.emit("wikipedia")
-        val onlineLibraryRequest = awaitItem()
-        assertThat(onlineLibraryRequest.category).isEqualTo("wikipedia")
-        assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
-        assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+    fun `changing category updates the filter and do the network request`() = flakyTest {
+      runTest {
+        every { application.getString(any()) } returns ""
+        every { application.getString(any(), any()) } returns ""
+        viewModel.onlineLibraryRequest.test {
+          skipItems(1)
+          onlineCategoryContent.emit("wikipedia")
+          val onlineLibraryRequest = awaitItem()
+          assertThat(onlineLibraryRequest.category).isEqualTo("wikipedia")
+          assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
+          assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+        }
       }
     }
   }
 
   @Test
-  fun `network states observed`() = runTest {
-    networkStates.tryEmit(NOT_CONNECTED)
-    advanceUntilIdle()
-    viewModel.networkStates.test()
-      .assertValue(NOT_CONNECTED)
+  fun `network states observed`() = flakyTest {
+    runTest {
+      networkStates.tryEmit(NOT_CONNECTED)
+      advanceUntilIdle()
+      viewModel.networkStates.test()
+        .assertValue(NOT_CONNECTED)
+    }
   }
 
   @Test

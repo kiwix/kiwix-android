@@ -92,8 +92,8 @@ class CategoryViewModelTest {
     categories.value = null
     networkStates.value = NetworkState.CONNECTED
     CategorySessionCache.hasFetched = true
-    coEvery { kiwixDataStore.cachedOnlineCategoryList } returns categories
-    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("wikipedia")
+    every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("wikipedia")
     categoryViewModel =
       CategoryViewModel(
         application,
@@ -101,7 +101,10 @@ class CategoryViewModelTest {
         kiwixService,
         connectivityBroadcastReceiver
       )
-    runBlocking { categoryViewModel.state.emit(Loading) }
+    runBlocking {
+      kiwixDataStore.saveOnlineCategoryList(listOf())
+      categoryViewModel.state.emit(Loading)
+    }
   }
 
   @Nested
@@ -156,7 +159,7 @@ class CategoryViewModelTest {
       CategorySessionCache.hasFetched = false
       categories.value = emptyList()
 
-      coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(null)
+      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(null)
       coEvery { kiwixService.getCategories() } returns CategoryFeed().apply {
         entries = fetchedLanguages.map {
           CategoryEntry().apply {
@@ -206,7 +209,6 @@ class CategoryViewModelTest {
   fun `UpdateCategory Action changes state to Content when Loading`() = flakyTest {
     runTest {
       every { application.getString(any()) } returns ""
-      categories.value = null
       testFlow(
         categoryViewModel.state,
         triggerAction = { categoryViewModel.actions.emit(UpdateCategory(listOf())) },
