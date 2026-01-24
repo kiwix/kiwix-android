@@ -23,7 +23,7 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
+import org.kiwix.kiwixmobile.di.modules.KiwixActivityViewModelModule
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 @Subcomponent(
   modules = [
     KiwixActivityModule::class,
+    KiwixActivityViewModelModule::class,
     ZimHostModule::class
   ]
 )
@@ -46,7 +47,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(localLibraryFragment: LocalLibraryFragment)
   fun inject(deleteFiles: DeleteFiles)
   fun inject(validateZIMFiles: ValidateZIMFiles)
-  fun inject(localFileTransferFragment: LocalFileTransferFragment)
   fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)

@@ -72,7 +72,9 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
 import org.kiwix.kiwixmobile.intro.IntroScreenRoute
 import org.kiwix.kiwixmobile.language.LanguageScreenRoute
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
@@ -209,6 +211,7 @@ fun KiwixNavGraph(
         }
       }
     }
+
     composable(
       route = KiwixDestination.LocalFileTransfer.route,
       arguments = listOf(
@@ -225,16 +228,17 @@ fun KiwixNavGraph(
           Uri.decode(it).toUri()
         }
 
-      FragmentContainer(R.id.localFileTransferFragmentContainer) {
-        LocalFileTransferFragment().apply {
-          arguments = Bundle().apply {
-            putParcelableArray(
-              URIS_KEY,
-              uris?.toTypedArray()
-            )
-          }
-        }
-      }
+      val filesForTransfer = uris?.map { FileItem(it) }.orEmpty()
+      val isReceiver = filesForTransfer.isEmpty()
+
+      val viewModel: LocalFileTransferViewModel = viewModel(factory = viewModelFactory)
+
+      LocalFileTransferScreenRoute(
+        isReceiver = isReceiver,
+        filesForTransfer = filesForTransfer,
+        navigateBack = navController::popBackStack,
+        viewModel = viewModel
+      )
     }
   }
 }

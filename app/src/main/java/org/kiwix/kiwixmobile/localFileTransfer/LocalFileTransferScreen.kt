@@ -18,8 +18,19 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.NEARBY_WIFI_DEVICES
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.R.attr.action
+import android.app.Activity
+import android.provider.Settings
 import android.content.Context
+import android.content.Intent
 import android.net.wifi.p2p.WifiP2pDevice
+import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,10 +52,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,18 +74,29 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixShowCaseView
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ShowcaseProperty
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_TEXT_ALPHA
@@ -89,6 +115,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -97,6 +125,222 @@ import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.TO_BE_SENT
 const val YOUR_DEVICE_SHOW_CASE_TAG = "yourDeviceShowCaseTag"
 const val PEER_DEVICE_LIST_SHOW_CASE_TAG = "peerDeviceListShowCaseTag"
 const val FILE_FOR_TRANSFER_SHOW_CASE_TAG = "fileForTransferShowCaseTag"
+const val URIS_KEY = "localFileTransferUriKey"
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun LocalFileTransferScreenRoute(
+  isReceiver: Boolean,
+  filesForTransfer: List<FileItem>,
+  navigateBack: () -> Unit,
+  viewModel: LocalFileTransferViewModel
+) {
+  val deviceName by viewModel.deviceName.collectAsStateWithLifecycle()
+  val isPeerSearching by viewModel.isPeerSearching.collectAsStateWithLifecycle()
+  val peerDeviceList by viewModel.peerDeviceList.collectAsStateWithLifecycle()
+  val transferFileList by viewModel.transferFileList.collectAsStateWithLifecycle()
+  val permissionState by viewModel.permissionAction.collectAsStateWithLifecycle()
+  val dialogEvent by viewModel.dialogState.collectAsStateWithLifecycle()
+  val navigationEvent by viewModel.navigationEvent.collectAsStateWithLifecycle()
+
+  val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
+  val context = LocalContext.current
+
+  LaunchedEffect(Unit) {
+    viewModel.initializeWifiDirectManager(filesForTransfer, lifecycleScope)
+  }
+
+  val locationPermissionState = rememberPermissionState(ACCESS_FINE_LOCATION)
+  val externalStoragePermissionState = rememberPermissionState(WRITE_EXTERNAL_STORAGE)
+  val nearbyWifiPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    rememberPermissionState(NEARBY_WIFI_DEVICES)
+  } else null
+
+  val enableLocationServicesLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.StartActivityForResult()
+  ) { result ->
+    if (result.resultCode != Activity.RESULT_OK) {
+      if (!viewModel.isLocationServiceEnabled) {
+        Toast.makeText(context, string.permission_refused_location, Toast.LENGTH_SHORT).show()
+      }
+    }
+  }
+
+  LaunchedEffect(
+    locationPermissionState.status,
+    externalStoragePermissionState.status,
+    nearbyWifiPermissionState?.status
+  ) {
+    // chheck if all required permissions are granted
+    val locationGranted = locationPermissionState.status.isGranted ||
+      (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        nearbyWifiPermissionState?.status?.isGranted == true)
+
+    val storageGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      true // not needed on android 13+
+    } else {
+      externalStoragePermissionState.status.isGranted
+    }
+
+    if (locationGranted && storageGranted) {
+      viewModel.onPermissionGranted()
+    }
+  }
+
+  LaunchedEffect(permissionState) {
+    when (val action = permissionState) {
+      is PermissionAction.RequestPermission -> {
+        val state = when (action.permission) {
+          NEARBY_WIFI_DEVICES -> nearbyWifiPermissionState
+          ACCESS_FINE_LOCATION -> locationPermissionState
+          WRITE_EXTERNAL_STORAGE -> externalStoragePermissionState
+          else -> null
+        }
+
+        state?.let {
+          when {
+            it.status.isGranted -> {
+              viewModel.onPermissionGranted()
+            }
+
+            it.status.shouldShowRationale -> {
+              val dialogEvent = when (action.permission) {
+                NEARBY_WIFI_DEVICES -> DialogEvent.ShowNearbyWifiRationale
+                ACCESS_FINE_LOCATION -> DialogEvent.ShowLocationRationale
+                WRITE_EXTERNAL_STORAGE -> DialogEvent.ShowStorageRationale
+                else -> null
+              }
+              dialogEvent?.let { event -> viewModel.showDialog(event) }
+            }
+
+            else -> {
+              // this gets called first time, when permission is not granted
+              it.launchPermissionRequest()
+            }
+          }
+        }
+
+        viewModel.clearPermissionAction()
+      }
+
+      null -> {}
+    }
+  }
+
+  LaunchedEffect(navigationEvent) {
+    when (navigationEvent) {
+      NavigationEvent.NavigateBack -> {
+        viewModel.clearNavigationEvent()
+        navigateBack()
+      }
+
+      null -> {}
+    }
+  }
+
+  LaunchedEffect(dialogEvent) {
+    when (dialogEvent) {
+      DialogEvent.ShowNearbyWifiRationale -> {
+        (context as? Activity)?.let { activity ->
+          viewModel.alertDialogShower.show(
+            KiwixDialog.NearbyWifiPermissionRationale,
+            {
+              activity.navigateToAppSettings()
+            },
+            {
+              Toast.makeText(context, string.discovery_needs_wifi, Toast.LENGTH_SHORT).show()
+            }
+          )
+        }
+        viewModel.clearDialogEvent()
+      }
+
+      DialogEvent.ShowLocationRationale -> {
+        (context as? Activity)?.let { activity ->
+          viewModel.alertDialogShower.show(
+            KiwixDialog.LocationPermissionRationale,
+            {
+              activity.navigateToAppSettings()
+            },
+            {
+              Toast.makeText(context, string.discovery_needs_location, Toast.LENGTH_SHORT).show()
+            }
+          )
+        }
+        viewModel.clearDialogEvent()
+      }
+
+      DialogEvent.ShowStorageRationale -> {
+        (context as? Activity)?.let { activity ->
+          viewModel.alertDialogShower.show(
+            KiwixDialog.StoragePermissionRationale,
+            {
+              activity.navigateToAppSettings()
+            },
+            {
+              Toast.makeText(context, string.storage_permission_denied, Toast.LENGTH_SHORT).show()
+            }
+          )
+        }
+        viewModel.clearDialogEvent()
+      }
+
+      DialogEvent.ShowEnableWifiP2p -> {
+        viewModel.alertDialogShower.show(
+          KiwixDialog.EnableWifiP2pServices,
+          {
+            context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+          },
+          {
+            Toast.makeText(context, string.discovery_needs_wifi, Toast.LENGTH_SHORT).show()
+          }
+        )
+        viewModel.clearDialogEvent()
+      }
+
+      DialogEvent.ShowEnableLocationServices -> {
+        viewModel.alertDialogShower.show(
+          KiwixDialog.EnableLocationServices,
+          {
+            enableLocationServicesLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+          },
+          {
+            Toast.makeText(context, string.discovery_needs_location, Toast.LENGTH_SHORT).show()
+          }
+        )
+        viewModel.clearDialogEvent()
+      }
+
+      null -> {}
+    }
+  }
+
+  KiwixTheme {
+    LocalFileTransferScreen(
+      deviceName = deviceName,
+      toolbarTitle = if (isReceiver) {
+        org.kiwix.kiwixmobile.R.string.receive_files_title
+      } else {
+        org.kiwix.kiwixmobile.R.string.send_files_title
+      },
+      isPeerSearching = isPeerSearching,
+      peerDeviceList = peerDeviceList,
+      transferFileList = transferFileList,
+      actionMenuItems = viewModel.actionMenuItem(),
+      onDeviceItemClick = { viewModel.wifiDirectManager.sendToDevice(it) },
+      kiwixDataStore = viewModel.kiwixDataStore,
+      lifeCycleScope = lifecycleScope,
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+          onClick = navigateBack
+        )
+      }
+    )
+  }
+
+  DialogHost(viewModel.alertDialogShower)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -380,3 +624,4 @@ fun PeerDeviceItem(
     )
   }
 }
+
