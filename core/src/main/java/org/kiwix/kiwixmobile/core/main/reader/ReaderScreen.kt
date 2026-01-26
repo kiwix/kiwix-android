@@ -423,7 +423,7 @@ private fun onTableOfContentSectionClick(
   if (hasItemForPositionInDocumentSectionsList(position, sections)) {
     val targetId = sections[position].id.replace("'", "\\'")
     selectedWebView?.evaluateJavascript(
-      "document.getElementById('$targetId')?.scrollIntoView();",
+      "document.getElementById('$targetId')?.scrollIntoView({ behavior: 'smooth', block: 'start' });",
       null
     )
   }
