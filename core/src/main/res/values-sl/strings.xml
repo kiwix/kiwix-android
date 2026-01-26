@@ -22,6 +22,9 @@
   <string name="menu_support_kiwix">Podprite Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Podprite %s</string>
   <string name="menu_about_app">O aplikaciji %s</string>
+  <string name="external_redirect_message">Zdaj boste preusmerjeni na našo %s.</string>
+  <string name="support_donation_platform">platformo za donacije</string>
+  <string name="about_app_page">stran o aplikaciji</string>
   <string name="menu_wifi_hotspot">Dostopna točka Wi-Fi</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja predstavnosti je prišlo do napake!</string>
