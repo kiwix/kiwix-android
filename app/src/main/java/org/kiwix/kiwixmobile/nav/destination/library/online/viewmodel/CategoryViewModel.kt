@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
@@ -51,6 +52,7 @@ import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
@@ -75,7 +77,7 @@ class CategoryViewModel @Inject constructor(
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
-
+  private var isUnitTestCase: Boolean = false
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
@@ -84,6 +86,11 @@ class CategoryViewModel @Inject constructor(
       add(observeActions())
       add(observeCategories())
     }
+  }
+
+  @VisibleForTesting
+  fun setIsUnitTestCase() {
+    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -134,8 +141,10 @@ class CategoryViewModel @Inject constructor(
 
   @Suppress("MagicNumber")
   private fun fetchCategoriesFlow() = flow {
-    kiwixService =
-      KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+    if (!isUnitTestCase) {
+      kiwixService =
+        ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+    }
     val feed = kiwixService.getCategories()
 
     val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
@@ -146,16 +155,20 @@ class CategoryViewModel @Inject constructor(
       )
     }
 
-    val categoryList = buildList {
-      add(
-        Category(
-          category = "",
-          active = kiwixDataStore.selectedOnlineContentCategory.first().isEmpty(),
-          id = 0L
-        )
-      )
-      addAll(categories)
-    }
+    val categoryList =
+      when {
+        categories.isEmpty() -> emptyList()
+        else -> buildList {
+          add(
+            Category(
+              category = "",
+              active = kiwixDataStore.selectedOnlineContentCategory.first().isEmpty(),
+              id = ZERO.toLong()
+            )
+          )
+          addAll(categories)
+        }
+      }
     emit(categoryList)
   }.retry(5)
     .catch { e ->

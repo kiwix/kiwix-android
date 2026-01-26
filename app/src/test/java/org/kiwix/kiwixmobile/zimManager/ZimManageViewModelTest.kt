@@ -447,6 +447,7 @@ class ZimManageViewModelTest {
             )
           )
         }
+        cancelAndConsumeRemainingEvents()
       }
 
       // test library items fetches for a particular language
@@ -473,6 +474,7 @@ class ZimManageViewModelTest {
             )
           )
         }
+        cancelAndConsumeRemainingEvents()
       }
     }
   }

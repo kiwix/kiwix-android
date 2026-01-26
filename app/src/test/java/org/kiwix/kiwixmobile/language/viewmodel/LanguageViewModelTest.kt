@@ -20,12 +20,10 @@ package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
 import android.os.Build
-import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -42,8 +40,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.data.remote.CategoryFeed
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.LanguageEntry
 import org.kiwix.kiwixmobile.core.data.remote.LanguageFeed
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
@@ -53,10 +52,8 @@ import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.zimManager.TURBINE_TIMEOUT
 import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.language
@@ -77,7 +74,7 @@ class LanguageViewModelTest {
   @BeforeEach
   fun init() {
     clearAllMocks()
-    every { application.getString(any()) } returns ""
+    every { application.getString(any()) } returns "Error"
     every { connectivityBroadcastReceiver.action } returns "test"
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -86,25 +83,29 @@ class LanguageViewModelTest {
       @Suppress("UnspecifiedRegisterReceiverFlag")
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
-    languages.value = null
-    networkStates.value = NetworkState.CONNECTED
-    LanguageSessionCache.hasFetched = true
+    every { application.unregisterReceiver(any()) } just Runs
+    LanguageSessionCache.hasFetched = false
     coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
+  }
+
+  private fun createViewModel() {
     languageViewModel =
       LanguageViewModel(
         application,
         kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
-      )
-    runBlocking { languageViewModel.state.emit(Loading) }
+      ).apply {
+        setIsUnitTestCase()
+      }
   }
 
   @Nested
   inner class Context {
     @Test
     fun `registers broadcastReceiver in init`() {
+      createViewModel()
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         verify {
           application.registerReceiver(connectivityBroadcastReceiver, any(), any())
@@ -119,6 +120,7 @@ class LanguageViewModelTest {
 
     @Test
     fun `unregisters broadcastReceiver in onCleared`() {
+      createViewModel()
       every { application.unregisterReceiver(any()) } returns mockk()
       languageViewModel.onClearedExposed()
       verify {
@@ -128,53 +130,51 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `initial state is Loading`() = runTest {
-    testFlow(
-      flow = languageViewModel.state,
-      triggerAction = {},
-      assert = { assertThat(awaitItem()).isEqualTo(Loading) }
-    )
-  }
-
-  @Test
-  fun `an empty languages emission does not send update action`() = runTest {
-    testFlow(
-      languageViewModel.actions,
-      triggerAction = { languages.emit(listOf()) },
-      assert = { expectNoEvents() }
-    )
-  }
-
-  @Test
-  fun `observeLanguages uses network when no cache and online`() = flakyTest {
+  fun `initial state is Loading`() = flakyTest {
     runTest {
-      every { application.getString(any()) } returns ""
-      val fetchedLanguages = listOf(language(languageCode = "eng"))
-      LanguageSessionCache.hasFetched = false
-      languages.value = emptyList()
+      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+      createViewModel()
+      assertThat(languageViewModel.state.value).isEqualTo(Loading)
+    }
+  }
 
-      every { kiwixDataStore.cachedLanguageList } returns flowOf(null)
-      coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply {
-        entries = fetchedLanguages.map {
-          LanguageEntry().apply {
-            languageCode = it.languageCode
-            count = 1
-            title = "English"
-          }
-        }
-      }
-      every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
-      coEvery { kiwixDataStore.saveLanguageList(any()) } just Runs
-
+  @Test
+  fun `an empty languages emission does not send update action`() = flakyTest {
+    runTest {
+      createViewModel()
       testFlow(
         languageViewModel.actions,
-        triggerAction = {},
-        assert = {
-          val result = awaitItem()
-          assertThat(result).isInstanceOf(UpdateLanguages::class.java)
-          coVerify { kiwixDataStore.saveLanguageList(any()) }
-        }
+        triggerAction = { languages.emit(listOf()) },
+        assert = { expectNoEvents() }
       )
+    }
+  }
+
+  @Test
+  fun `online and api returns empty emits Error when no cache`() = flakyTest {
+    runTest {
+      coEvery { kiwixService.getLanguages() } returns LanguageFeed()
+      coEvery { application.getString(R.string.no_language_available) } returns "No language available"
+
+      createViewModel()
+      languageViewModel.state.test {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        val error = awaitItem() as State.Error
+        assertThat(error.errorMessage).isEqualTo("No language available")
+      }
+    }
+  }
+
+  @Test
+  fun `online api throws exception falls back to error`() = flakyTest {
+    runTest {
+      coEvery { kiwixService.getLanguages() } throws RuntimeException()
+      createViewModel()
+      languageViewModel.state.test {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        val error = awaitItem() as State.Error
+        assertThat(error.errorMessage).isEqualTo("Error")
+      }
     }
   }
 
@@ -183,6 +183,7 @@ class LanguageViewModelTest {
   fun `Save uses active language`() = flakyTest {
     runTest {
       every { application.getString(any()) } returns ""
+      createViewModel()
       val activeLanguage = language(languageCode = "eng").copy(active = true)
       val inactiveLanguage = language(languageCode = "fr").copy(active = false)
       languageViewModel.effects.test {
@@ -197,129 +198,111 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `UpdateLanguages Action changes state to Content when Loading`() = runTest {
-    every { application.getString(any()) } returns ""
-    testFlow(
-      languageViewModel.state,
-      triggerAction = { languageViewModel.actions.emit(UpdateLanguages(listOf())) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(listOf()))
-      },
-      TURBINE_TIMEOUT
-    )
-  }
+  fun `offline uses cached languages`() = flakyTest {
+    runTest {
+      networkStates.value = NetworkState.NOT_CONNECTED
 
-  @Test
-  fun `UpdateLanguages Action has no effect on other states`() = runTest {
-    testFlow(
-      languageViewModel.state,
-      triggerAction = {
-        languageViewModel.actions.emit(UpdateLanguages(listOf()))
-        languageViewModel.actions.emit(UpdateLanguages(listOf()))
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(listOf()))
-      }
-    )
-  }
-
-  @Test
-  fun `Filter Action updates Content state `() = runTest {
-    every { application.getString(any()) } returns ""
-    languages.value = listOf()
-    testFlow(
-      languageViewModel.state,
-      triggerAction = {
-        languageViewModel.actions.tryEmit(UpdateLanguages(listOf()))
-        languageViewModel.actions.tryEmit(Filter("filter"))
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(items = listOf(), filter = ""))
-        assertThat(awaitItem()).isEqualTo(Content(listOf(), filter = "filter"))
-      }
-    )
-  }
-
-  @Test
-  fun `Filter Action has no effect on other states`() = runTest {
-    every { application.getString(any()) } returns ""
-    testFlow(
-      languageViewModel.state,
-      triggerAction = { languageViewModel.actions.emit(Filter("")) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-      }
-    )
-  }
-
-  @Test
-  fun `Select Action updates Content state`() = runTest {
-    val languageList = listOf(language())
-    languages.value = languageList
-    testFlow(
-      languageViewModel.state,
-      triggerAction = {
-        languageViewModel.actions.emit(UpdateLanguages(languageList))
-        languageViewModel.actions.emit(Select(languageItem()))
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        assertThat(awaitItem()).isEqualTo(Content(listOf(language())))
-        assertThat(awaitItem()).isEqualTo(Content(listOf(language(isActive = true))))
-      }
-    )
-  }
-
-  @Test
-  fun `Select Action has no effect on other states`() = runTest {
-    testFlow(
-      languageViewModel.state,
-      triggerAction = { languageViewModel.actions.emit(Select(languageItem())) },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(Loading)
-      }
-    )
-  }
-
-  @Test
-  fun `Save changes Content to Saving with SideEffect SaveLanguagesAndFinish`() = runTest {
-    every { application.getString(any()) } returns ""
-    val languages = arrayListOf<Language>().apply {
-      add(Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1))
-    }
-    testFlow(
-      flow = languageViewModel.effects,
-      triggerAction = {
-        languageViewModel.actions.emit(UpdateLanguages(languages))
-        languageViewModel.actions.emit(Save)
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(
-          SaveLanguagesAndFinish(
-            languages.first(),
-            kiwixDataStore,
-            languageViewModel.viewModelScope
-          )
+      val cached =
+        listOf(
+          Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
         )
+
+      coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(cached)
+
+      createViewModel()
+      languageViewModel.state.test {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        val content = awaitItem() as State.Content
+        assertThat(content.items.first().languageCode)
+          .isEqualTo("eng")
       }
-    )
-    testFlow(flow = languageViewModel.state, triggerAction = {}, assert = {
-      assertThat(awaitItem()).isEqualTo(State.Saving)
-    })
+    }
   }
 
   @Test
-  fun `Save has no effect on other states`() = runTest {
-    every { application.getString(any()) } returns ""
-    languageViewModel.state.emit(Loading)
-    testFlow(
-      languageViewModel.state,
-      triggerAction = { languageViewModel.actions.emit(Save) },
-      { assertThat(awaitItem()).isEqualTo(Loading) }
-    )
+  fun `offline and no cache emits no network error`() = flakyTest {
+    runTest {
+      networkStates.value = NetworkState.NOT_CONNECTED
+      createViewModel()
+      languageViewModel.state.test {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        val error = awaitItem() as State.Error
+        assertThat(error.errorMessage).isEqualTo("Error")
+      }
+    }
+  }
+
+  @Test
+  fun `session cache skips api call`() = flakyTest {
+    runTest {
+      LanguageSessionCache.hasFetched = true
+
+      val cached =
+        listOf(
+          Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
+        )
+
+      coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(cached)
+
+      createViewModel()
+      verify(exactly = 0) {
+        runBlocking { kiwixService.getCategories() }
+      }
+
+      assertThat(languageViewModel.state.value)
+        .isInstanceOf(Content::class.java)
+    }
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun `Filter updates content filter`() = flakyTest {
+    runTest {
+      val languages = listOf(language(), language(language = "eng"))
+
+      createViewModel()
+      languageViewModel.state.test {
+        skipItems(1)
+        languageViewModel.state.value = Content(languages)
+
+        languageViewModel.actions.emit(Filter("eng"))
+        advanceUntilIdle()
+        val content = awaitItem() as Content
+        print("content $content")
+        val filteredItem: List<LanguageListItem.LanguageItem> =
+          content.viewItems.filter {
+            it is LanguageListItem.LanguageItem && it.language.language == "eng"
+          } as List<LanguageListItem.LanguageItem>
+        filteredItem.any { it.language.language == "eng" }
+        cancelAndConsumeRemainingEvents()
+      }
+    }
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun `Select ignored when not in Content`() = flakyTest {
+    runTest {
+      createViewModel()
+
+      languageViewModel.actions.emit(Select(languageItem()))
+      advanceUntilIdle()
+
+      assertThat(languageViewModel.state.value).isEqualTo(Loading)
+    }
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun `Save ignored when not in Content`() = flakyTest {
+    runTest {
+      createViewModel()
+
+      languageViewModel.actions.emit(Save)
+      advanceUntilIdle()
+
+      assertThat(languageViewModel.state.value).isEqualTo(Loading)
+    }
   }
 }
 

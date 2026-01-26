@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
@@ -80,6 +81,7 @@ class LanguageViewModel @Inject constructor(
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private val coroutineJobs = mutableListOf<Job>()
+  private var isUnitTestCase: Boolean = false
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -87,6 +89,11 @@ class LanguageViewModel @Inject constructor(
       add(observeActions())
       add(observeLanguages())
     }
+  }
+
+  @VisibleForTesting
+  fun setIsUnitTestCase() {
+    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -97,8 +104,10 @@ class LanguageViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun fetchLanguagesFlow() = flow {
-    kiwixService =
-      KiwixService.ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+    if (!isUnitTestCase) {
+      kiwixService =
+        ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
+    }
     val feed = kiwixService.getLanguages()
     var allBooksCount = ZERO
 
@@ -116,17 +125,21 @@ class LanguageViewModel @Inject constructor(
       }.getOrNull()
     }
 
-    val languageList = buildList {
-      add(
-        Language(
-          languageCode = "",
-          active = kiwixDataStore.selectedOnlineContentLanguage.first().isEmpty(),
-          occurrencesOfLanguage = allBooksCount,
-          id = ZERO.toLong()
-        )
-      )
-      addAll(languages)
-    }
+    val languageList =
+      when {
+        languages.isEmpty() -> emptyList()
+        else -> buildList {
+          add(
+            Language(
+              languageCode = "",
+              active = kiwixDataStore.selectedOnlineContentLanguage.first().isEmpty(),
+              occurrencesOfLanguage = allBooksCount,
+              id = ZERO.toLong()
+            )
+          )
+          addAll(languages)
+        }
+      }
     emit(languageList)
   }.retry(FIVE.toLong())
     .catch { e ->
