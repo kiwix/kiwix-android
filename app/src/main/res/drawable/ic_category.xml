@@ -1,0 +1,30 @@
+<!--
+  ~ Kiwix Android
+  ~ Copyright (c) 2025 Kiwix <android.kiwix.org>
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="24dp"
+  android:height="24dp"
+  android:tint="#FFFFFF"
+  android:viewportWidth="960"
+  android:viewportHeight="960">
+
+  <path
+    android:fillColor="@android:color/white"
+    android:pathData="M260,440L480,80L700,440L260,440ZM700,880Q625,880 572.5,827.5Q520,775 520,700Q520,625 572.5,572.5Q625,520 700,520Q775,520 827.5,572.5Q880,625 880,700Q880,775 827.5,827.5Q775,880 700,880ZM120,860L120,540L440,540L440,860L120,860ZM700,800Q742,800 771,771Q800,742 800,700Q800,658 771,629Q742,600 700,600Q658,600 629,629Q600,658 600,700Q600,742 629,771Q658,800 700,800ZM200,780L360,780L360,620L200,620L200,780ZM402,360L558,360L480,234L402,360ZM480,360L480,360L480,360ZM360,620L360,620L360,620L360,620ZM700,700Q700,700 700,700Q700,700 700,700Q700,700 700,700Q700,700 700,700Q700,700 700,700Q700,700 700,700Q700,700 700,700Q700,700 700,700Z" />
+
+</vector>

@@ -105,6 +105,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import javax.inject.Inject
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
+const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 
 @Suppress("LargeClass")
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
@@ -299,7 +300,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun getOnlineLibraryRequest(): OnlineLibraryRequest = OnlineLibraryRequest(
     null,
-    null,
+    runBlocking {
+      kiwixDataStore.selectedOnlineContentCategory.first().takeUnless { it.isBlank() }
+    },
     runBlocking {
       kiwixDataStore.selectedOnlineContentLanguage.first().takeUnless { it.isBlank() }
     },
@@ -397,6 +400,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       else -> null // Handle the case when both conditions are false
     },
     ActionMenuItem(
+      IconItem.Drawable(drawable.ic_category),
+      org.kiwix.kiwixmobile.R.string.select_category,
+      { onCategoryMenuIconClick() },
+      isEnabled = true,
+      testingTag = CATEGORY_MENU_ICON_TESTING_TAG
+    ),
+    ActionMenuItem(
       IconItem.Drawable(drawable.ic_language_white_24dp),
       string.pref_language_chooser,
       { onLanguageMenuIconClick() },
@@ -404,6 +414,16 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       testingTag = LANGUAGE_MENU_ICON_TESTING_TAG
     )
   )
+
+  private fun onCategoryMenuIconClick() {
+    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+    val previousInstance =
+      requireActivity().supportFragmentManager.findFragmentByTag(ONLINE_CATEGORY_DIALOG_TAG)
+    if (previousInstance == null) {
+      val dialogFragment = OnlineCategoryDialog()
+      dialogFragment.show(fragmentTransaction, ONLINE_CATEGORY_DIALOG_TAG)
+    }
+  }
 
   private fun onLanguageMenuIconClick() {
     requireActivity().navigate(KiwixDestination.Language.route)

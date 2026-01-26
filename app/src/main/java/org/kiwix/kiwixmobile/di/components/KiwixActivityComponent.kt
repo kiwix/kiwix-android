@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
@@ -49,6 +50,7 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
+  fun inject(onlineCategoryDialog: OnlineCategoryDialog)
 
   @Subcomponent.Builder
   interface Builder {

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.language.viewmodel
+package org.kiwix.kiwixmobile.category.viewmodel
 
 import android.app.Application
 import android.os.Build
@@ -40,36 +40,36 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.data.remote.CategoryFeed
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.LanguageFeed
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.language.viewmodel.State.Content
-import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
+import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.UpdateCategory
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategorySessionCache
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.SaveCategoryAndFinish
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
-import org.kiwix.sharedFunctions.language
-
-fun languageItem(language: Language = language()) =
-  LanguageListItem.LanguageItem(language)
+import org.kiwix.sharedFunctions.category
 
 @ExtendWith(InstantExecutorExtension::class)
-class LanguageViewModelTest {
+class CategoryViewModelTest {
   private val application: Application = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val kiwixService: KiwixService = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
-  private lateinit var languageViewModel: LanguageViewModel
-  private var languages: MutableStateFlow<List<Language>?> = MutableStateFlow(null)
+  private lateinit var categoryViewModel: CategoryViewModel
+  private var categories: MutableStateFlow<List<Category>?> = MutableStateFlow(null)
 
   @BeforeEach
   fun init() {
@@ -84,14 +84,14 @@ class LanguageViewModelTest {
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
     every { application.unregisterReceiver(any()) } just Runs
-    LanguageSessionCache.hasFetched = false
-    coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
-    every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
+    CategorySessionCache.hasFetched = false
+    every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
   }
 
   private fun createViewModel() {
-    languageViewModel =
-      LanguageViewModel(
+    categoryViewModel =
+      CategoryViewModel(
         application,
         kiwixDataStore,
         kiwixService,
@@ -122,7 +122,7 @@ class LanguageViewModelTest {
     fun `unregisters broadcastReceiver in onCleared`() {
       createViewModel()
       every { application.unregisterReceiver(any()) } returns mockk()
-      languageViewModel.onClearedExposed()
+      categoryViewModel.onClearedExposed()
       verify {
         application.unregisterReceiver(connectivityBroadcastReceiver)
       }
@@ -134,33 +134,51 @@ class LanguageViewModelTest {
     runTest {
       coEvery { kiwixService.getCategories() } returns CategoryFeed()
       createViewModel()
-      assertThat(languageViewModel.state.value).isEqualTo(Loading)
+      assertThat(categoryViewModel.state.value).isEqualTo(Loading)
     }
   }
 
   @Test
-  fun `an empty languages emission does not send update action`() = flakyTest {
+  fun `an empty categories emission does not send update action`() = runTest {
+    createViewModel()
+    testFlow(
+      categoryViewModel.actions,
+      triggerAction = { categories.emit(listOf()) },
+      assert = { expectNoEvents() }
+    )
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun `Save uses active category`() = flakyTest {
     runTest {
+      every { application.getString(any()) } returns ""
       createViewModel()
-      testFlow(
-        languageViewModel.actions,
-        triggerAction = { languages.emit(listOf()) },
-        assert = { expectNoEvents() }
-      )
+      val activeCategory = category(category = "wikipedia").copy(active = true)
+      val inactiveCategory = category(category = "gutenburg").copy(active = false)
+      val categoryItem = CategoryListItem.CategoryItem(activeCategory)
+      categoryViewModel.effects.test {
+        categoryViewModel.state.value = Content(listOf(activeCategory, inactiveCategory))
+        categoryViewModel.actions.emit(Action.Select(categoryItem))
+        advanceUntilIdle()
+        advanceTimeBy(100)
+        val effect = awaitItem() as SaveCategoryAndFinish
+        assertThat(effect.category).isEqualTo(activeCategory)
+      }
     }
   }
 
   @Test
   fun `online and api returns empty emits Error when no cache`() = flakyTest {
     runTest {
-      coEvery { kiwixService.getLanguages() } returns LanguageFeed()
-      coEvery { application.getString(R.string.no_language_available) } returns "No language available"
+      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+      coEvery { application.getString(string.no_category_available) } returns "No category available"
 
       createViewModel()
-      languageViewModel.state.test {
+      categoryViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
-        assertThat(error.errorMessage).isEqualTo("No language available")
+        assertThat(error.errorMessage).isEqualTo("No category available")
       }
     }
   }
@@ -168,9 +186,10 @@ class LanguageViewModelTest {
   @Test
   fun `online api throws exception falls back to error`() = flakyTest {
     runTest {
-      coEvery { kiwixService.getLanguages() } throws RuntimeException()
+      coEvery { kiwixService.getCategories() } throws RuntimeException()
+
       createViewModel()
-      languageViewModel.state.test {
+      categoryViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
@@ -178,43 +197,25 @@ class LanguageViewModelTest {
     }
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `Save uses active language`() = flakyTest {
-    runTest {
-      every { application.getString(any()) } returns ""
-      createViewModel()
-      val activeLanguage = language(languageCode = "eng").copy(active = true)
-      val inactiveLanguage = language(languageCode = "fr").copy(active = false)
-      languageViewModel.effects.test {
-        languageViewModel.state.value = Content(listOf(activeLanguage, inactiveLanguage))
-        languageViewModel.actions.emit(Save)
-        advanceUntilIdle()
-        advanceTimeBy(100)
-        val effect = awaitItem() as SaveLanguagesAndFinish
-        assertThat(effect.languages).isEqualTo(activeLanguage)
-      }
-    }
-  }
-
-  @Test
-  fun `offline uses cached languages`() = flakyTest {
+  fun `offline uses cached categories`() = flakyTest {
     runTest {
       networkStates.value = NetworkState.NOT_CONNECTED
 
       val cached =
         listOf(
-          Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
+          Category(category = "Offline", active = true, id = 1)
         )
 
-      coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(cached)
+      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns
+        flowOf(cached)
 
       createViewModel()
-      languageViewModel.state.test {
+      categoryViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
-        val content = awaitItem() as State.Content
-        assertThat(content.items.first().languageCode)
-          .isEqualTo("eng")
+        val content = awaitItem() as Content
+        assertThat(content.items.first().category)
+          .isEqualTo("Offline")
       }
     }
   }
@@ -223,8 +224,9 @@ class LanguageViewModelTest {
   fun `offline and no cache emits no network error`() = flakyTest {
     runTest {
       networkStates.value = NetworkState.NOT_CONNECTED
+
       createViewModel()
-      languageViewModel.state.test {
+      categoryViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
@@ -235,45 +237,43 @@ class LanguageViewModelTest {
   @Test
   fun `session cache skips api call`() = flakyTest {
     runTest {
-      LanguageSessionCache.hasFetched = true
+      CategorySessionCache.hasFetched = true
 
       val cached =
         listOf(
-          Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
+          Category(1, true, "Cached")
         )
 
-      coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(cached)
+      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns
+        flowOf(cached)
 
       createViewModel()
       verify(exactly = 0) {
         runBlocking { kiwixService.getCategories() }
       }
 
-      assertThat(languageViewModel.state.value)
+      assertThat(categoryViewModel.state.value)
         .isInstanceOf(Content::class.java)
     }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `Filter updates content filter`() = flakyTest {
+  fun `UpdateCategory changes Loading to Content`() = flakyTest {
     runTest {
-      val languages = listOf(language(), language(language = "eng"))
+      CategorySessionCache.hasFetched = true
+      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(emptyList())
+      coEvery { kiwixService.getCategories() } returns CategoryFeed()
 
       createViewModel()
-      languageViewModel.state.test {
+      val categories = listOf(Category(1, false, "Test"))
+      categoryViewModel.state.test {
         skipItems(1)
-        languageViewModel.state.value = Content(languages)
 
-        languageViewModel.actions.emit(Filter("eng"))
+        categoryViewModel.actions.emit(UpdateCategory(categories))
         advanceUntilIdle()
-        val content = awaitItem() as Content
-        print("content $content")
-        val filteredItem: List<LanguageListItem.LanguageItem> =
-          content.viewItems.filter {
-            it is LanguageListItem.LanguageItem && it.language.language == "eng"
-          } as List<LanguageListItem.LanguageItem>
-        filteredItem.any { it.language.language == "eng" }
+
+        assertThat(awaitItem()).isEqualTo(Content(categories))
         cancelAndConsumeRemainingEvents()
       }
     }
@@ -281,48 +281,64 @@ class LanguageViewModelTest {
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `Select ignored when not in Content`() = flakyTest {
+  fun `Filter updates content`() = flakyTest {
     runTest {
+      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+
+      val categories =
+        listOf(
+          Category(1, false, "wikipedia"),
+          Category(2, false, "Gutenburg")
+        )
+
       createViewModel()
+      categoryViewModel.state.test {
+        skipItems(1)
+        categoryViewModel.actions.emit(UpdateCategory(categories))
+        advanceUntilIdle()
 
-      languageViewModel.actions.emit(Select(languageItem()))
-      advanceUntilIdle()
-
-      assertThat(languageViewModel.state.value).isEqualTo(Loading)
+        categoryViewModel.actions.emit(Action.Filter("wiki"))
+        advanceUntilIdle()
+        val content = awaitItem() as Content
+        val filteredItem: CategoryListItem.CategoryItem =
+          content.viewItems.first { it is CategoryListItem.CategoryItem } as CategoryListItem.CategoryItem
+        assertThat(filteredItem.category.category).isEqualTo("wikipedia")
+        cancelAndConsumeRemainingEvents()
+      }
     }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `Save ignored when not in Content`() = flakyTest {
+  fun `Select emits side effect and moves to Saving`() = flakyTest {
     runTest {
+      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+
+      val items =
+        listOf(
+          Category(0, true, ""),
+          Category(1, false, "Wikipedia")
+        )
+
       createViewModel()
-
-      languageViewModel.actions.emit(Save)
       advanceUntilIdle()
+      categoryViewModel.effects.test {
+        categoryViewModel.actions.emit(UpdateCategory(items))
+        advanceUntilIdle()
+        categoryViewModel.actions.emit(
+          Action.Select(
+            CategoryListItem.CategoryItem(
+              Category(1, false, "Wikipedia")
+            )
+          )
+        )
 
-      assertThat(languageViewModel.state.value).isEqualTo(Loading)
+        advanceUntilIdle()
+        assertThat(awaitItem())
+          .isInstanceOf(SaveCategoryAndFinish::class.java)
+
+        cancelAndConsumeRemainingEvents()
+      }
     }
   }
-}
-
-inline fun flakyTest(
-  maxRetries: Int = 10,
-  delayMillis: Long = 0,
-  block: () -> Unit
-) {
-  var lastError: Throwable? = null
-
-  repeat(maxRetries) { attempt ->
-    try {
-      block()
-      return
-    } catch (e: Throwable) {
-      lastError = e
-      println("Test attempt ${attempt + 1} failed: ${e.message}")
-      if (delayMillis > 0) Thread.sleep(delayMillis)
-    }
-  }
-
-  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
 }

@@ -77,4 +77,7 @@ object PreferencesKeys {
   val IS_PLAY_STORE_BUILD = booleanPreferencesKey(KiwixDataStore.IS_PLAY_STORE_BUILD)
   val PREF_IS_TEST = booleanPreferencesKey(KiwixDataStore.PREF_IS_TEST)
   val PER_APP_LANGUAGE_MIGRATION = booleanPreferencesKey(KiwixDataStore.PER_APP_LANGUAGE_MIGRATION)
+  val SELECTED_ONLINE_CONTENT_CATEGORY =
+    stringPreferencesKey(KiwixDataStore.SELECTED_ONLINE_CONTENT_CATEGORY)
+  val CACHED_ONLINE_CATEGORIES = stringPreferencesKey(KiwixDataStore.CACHED_ONLINE_CATEGORIES)
 }
