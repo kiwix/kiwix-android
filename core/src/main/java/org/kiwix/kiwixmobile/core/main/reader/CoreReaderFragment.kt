@@ -687,8 +687,10 @@ abstract class CoreReaderFragment :
           }
         }
       }
+
       @Suppress("EmptyFunctionBlock")
-      override fun clearSections() {}
+      override fun clearSections() {
+      }
     })
   }
 
