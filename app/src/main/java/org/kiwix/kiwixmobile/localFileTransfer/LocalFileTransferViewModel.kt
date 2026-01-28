@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
-import java.lang.Exception
 import javax.inject.Inject
 
 class LocalFileTransferViewModel @Inject constructor(
@@ -39,7 +38,6 @@ class LocalFileTransferViewModel @Inject constructor(
   val alertDialogShower: AlertDialogShower,
   private val locationManager: android.location.LocationManager
 ) : ViewModel(), WifiDirectManager.Callbacks {
-
   private val _deviceName = MutableStateFlow("")
   val deviceName: StateFlow<String> = _deviceName.asStateFlow()
 
@@ -152,7 +150,7 @@ class LocalFileTransferViewModel @Inject constructor(
         true
       } else {
         isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) ||
-            isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER)
+          isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER)
       }
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
@@ -291,5 +289,3 @@ sealed class DialogEvent {
   object ShowEnableWifiP2p : DialogEvent()
   object ShowEnableLocationServices : DialogEvent()
 }
-
-
