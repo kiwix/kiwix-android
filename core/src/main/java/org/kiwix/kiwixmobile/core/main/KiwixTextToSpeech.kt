@@ -166,7 +166,7 @@ class KiwixTextToSpeech internal constructor(
                 var body = content.cloneNode(true);
 
                 var toRemove = body.querySelectorAll(
-                    'nav, header, footer, aside, script, noscript, style, ' +
+                    'nav, aside, script, noscript, style, ' +
                     '.mw-editsection, .toc, #toc, .sidebar, .navbox, ' +
                     '[role="navigation"], [role="banner"], [role="contentinfo"], ' +
                     '.thumbcaption, sup.reference, .noprint'
