@@ -152,13 +152,35 @@ class KiwixTextToSpeech internal constructor(
     // changes in the page
     webView.loadUrl(
       """
-      javascript:
-      body = document.getElementsByTagName('body')[0].cloneNode(true);
-      toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, title, .navbox, style');
-      Array.prototype.forEach.call(toRemove, function(elem) {    
-        elem.parentElement.removeChild(elem);});
-      tts.speakAloud(body.innerText);
-      """.trimIndent()
+            javascript:
+            (function() {
+                var content = document.querySelector('main') ||
+                              document.querySelector('article') ||
+                              document.querySelector('#mw-content-text') ||
+                              document.querySelector('#content');
+
+                if (!content) {
+                    content = document.getElementsByTagName('body')[0];
+                }
+
+                var body = content.cloneNode(true);
+
+                var toRemove = body.querySelectorAll(
+                    'nav, aside, script, noscript, style, ' +
+                    '.mw-editsection, .toc, #toc, .sidebar, .navbox, ' +
+                    '[role="navigation"], [role="banner"], [role="contentinfo"], ' +
+                    '.thumbcaption, sup.reference, .noprint'
+                );
+
+                Array.prototype.forEach.call(toRemove, function(elem) {
+                    if (elem.parentElement) {
+                        elem.parentElement.removeChild(elem);
+                    }
+                });
+
+                tts.speakAloud(body.innerText);
+            })();
+            """.trimIndent()
     )
   }
 
