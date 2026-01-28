@@ -1,13 +1,24 @@
-function() {
-  window.onload = onLoad();
-
-  function onLoad() {
+(function() {
     window.DocumentParser.start();
-    for (i = 0; i < document.querySelectorAll('h1, h2, h3, h4, h5, h6').length; i++) {
-      headerObject = document.querySelectorAll('h1, h2, h3, h4, h5, h6')[i];
-        headerObject.id = "documentparserid" + i;
-      window.DocumentParser.parse(headerObject.textContent, headerObject.tagName, headerObject.id);
+    var headers = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    var usedIds = {};
+
+    for (var i = 0; i < headers.length; i++) {
+        var h = headers[i];
+
+        if (h.id === "") {
+            h.id = "documentparserid-" + i;
+        }
+
+        if (usedIds[h.id]) {
+            var original = h.id;
+            h.id = original + "-" + usedIds[original];
+            usedIds[original]++;
+        } else {
+            usedIds[h.id] = 1;
+        }
+
+        window.DocumentParser.parse(h.textContent.trim(), h.tagName, h.id);
     }
     window.DocumentParser.stop();
-  }
-}
+})();
