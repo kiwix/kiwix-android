@@ -317,25 +317,38 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(
-            state,
-            bottomAppBarScrollBehavior,
-            topAppBarScrollBehavior,
-            shouldUpdateTopAppBarAndBottomAppBarOnScrolling
-          )
-          ShowProgressBarIfZIMFilePageIsLoading(state)
-          Column(Modifier.align(Alignment.BottomCenter)) {
-            TtsControls(state)
-            ShowDonationLayout(state)
-            BottomAppBarOfReaderScreen(
-              state.bookmarkButtonItem,
-              state.previousPageButtonItem,
-              state.onHomeButtonClick,
-              state.nextPageButtonItem,
-              state.tocButtonItem,
-              state.shouldShowBottomAppBar,
-              bottomAppBarScrollBehavior
-            )
+          Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+              modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+            ) {
+              ShowZIMFileContent(
+                state,
+                bottomAppBarScrollBehavior,
+                topAppBarScrollBehavior,
+                shouldUpdateTopAppBarAndBottomAppBarOnScrolling
+              )
+              ShowProgressBarIfZIMFilePageIsLoading(state)
+            }
+            if (state.showTtsControls) {
+              TtsControls(state)
+            }
+            if (state.shouldShowDonationPopup) {
+              ShowDonationLayout(state)
+            }
+
+            if (state.shouldShowBottomAppBar) {
+              BottomAppBarOfReaderScreen(
+                state.bookmarkButtonItem,
+                state.previousPageButtonItem,
+                state.onHomeButtonClick,
+                state.nextPageButtonItem,
+                state.tocButtonItem,
+                state.shouldShowBottomAppBar,
+                bottomAppBarScrollBehavior
+              )
+            }
           }
         }
       }
