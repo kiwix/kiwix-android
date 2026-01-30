@@ -263,6 +263,54 @@ class DownloadTest : BaseActivityTest() {
   }
 
   @Test
+  fun testResumeDownloadAfterAppRestart() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        it.navigate(KiwixDestination.Library.route)
+      }
+      library {
+        refreshList(composeTestRule)
+        waitUntilZimFilesRefreshing(composeTestRule)
+        deleteZimIfExists(composeTestRule)
+      }
+      downloadRobot {
+        clickDownloadOnBottomNav(composeTestRule)
+        waitForDataToLoad(composeTestRule = composeTestRule)
+        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+        downloadZimFile(composeTestRule)
+        assertDownloadStart(composeTestRule)
+        pauseDownload(composeTestRule)
+        assertDownloadPaused(composeTestRule, activityScenario)
+      }
+
+      // Restart the application
+      val context = ApplicationProvider.getApplicationContext<Context>()
+      val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+      intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+      context.startActivity(intent)
+      InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        it.navigate(KiwixDestination.Library.route)
+      }
+
+      downloadRobot {
+        clickDownloadOnBottomNav(composeTestRule)
+        waitForDataToLoad(composeTestRule = composeTestRule)
+        assertDownloadPaused(composeTestRule, activityScenario)
+        resumeDownload(composeTestRule)
+        assertDownloadResumed(composeTestRule, kiwixMainActivity)
+        stopDownload(composeTestRule)
+        assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+        clickOnYesButton(composeTestRule)
+      }
+    }
+  }
+
+  @Test
   fun downloadZIMFileInBackground() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
