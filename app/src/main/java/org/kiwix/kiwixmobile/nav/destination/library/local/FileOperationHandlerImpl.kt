@@ -18,12 +18,16 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
-import android.app.Activity
+import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
+import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -31,7 +35,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 class FileOperationHandlerImpl @Inject constructor(
-  private val activity: Activity
+  private val context: Context
 ) : FileOperationHandler {
   @Suppress("MagicNumber", "InjectDispatcher")
   override suspend fun copy(
@@ -40,7 +44,7 @@ class FileOperationHandlerImpl @Inject constructor(
     onProgress: suspend (Int) -> Unit
   ) {
     withContext(Dispatchers.IO) {
-      val contentResolver = activity.contentResolver
+      val contentResolver = context.contentResolver
 
       val parcelFileDescriptor = contentResolver.openFileDescriptor(sourceUri, "r")
       val fileSize =
@@ -61,7 +65,7 @@ class FileOperationHandlerImpl @Inject constructor(
                 destinationChannel
               )
               totalBytesTransferred += bytesTransferred
-              val progress = (totalBytesTransferred * 100 / fileSize).toInt()
+              val progress = (totalBytesTransferred * HUNDERED / fileSize).toInt()
               onProgress.invoke(progress)
             }
           }
@@ -71,23 +75,73 @@ class FileOperationHandlerImpl @Inject constructor(
   }
 
   override suspend fun move(
+    selectedFile: DocumentFile?,
     sourceUri: Uri,
-    sourceParentUri: Uri?,
     destinationFolderUri: Uri,
     destinationFile: File,
     onProgress: suspend (Int) -> Unit
-  ): Boolean {
+  ): Boolean =
+    selectedFile?.parentFile?.uri?.let { parentUri ->
+      tryMoveWithDocumentContract(sourceUri, parentUri, destinationFolderUri)
+    } ?: run {
+      copy(sourceUri, destinationFile, onProgress)
+      true
+    }
+
+  @Suppress("UnsafeCallOnNullableType")
+  override fun rollbackMove(
+    destinationFile: File,
+    originalParentUri: Uri
+  ): Boolean = tryMoveWithDocumentContract(
+    destinationFile.toUri(),
+    destinationFile.parentFile.toUri(),
+    originalParentUri
+  )
+
+  private fun tryMoveWithDocumentContract(
+    sourceUri: Uri,
+    sourceParentUri: Uri,
+    destinationFolderUri: Uri
+  ): Boolean = runCatching {
+    val contentResolver = context.contentResolver
+    if (documentCanMove(sourceUri, contentResolver)) {
+      DocumentsContract.moveDocument(
+        contentResolver,
+        sourceUri,
+        sourceParentUri,
+        destinationFolderUri
+      )
+      true
+    } else {
+      false
+    }
+  }.onFailure { it.printStackTrace() }.getOrDefault(false)
+
+  private fun documentCanMove(uri: Uri, contentResolver: ContentResolver): Boolean {
+    if (!DocumentsContract.isDocumentUri(context, uri)) return false
+
+    val flags =
+      contentResolver.query(
+        uri,
+        arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
+        null,
+        null,
+        null
+      )
+        ?.use { cursor ->
+          if (cursor.moveToFirst()) cursor.getInt(ZERO) else ZERO
+        } ?: ZERO
+
+    return flags and DocumentsContract.Document.FLAG_SUPPORTS_MOVE != ZERO
   }
 
   @Suppress("InjectDispatcher")
   override suspend fun delete(uri: Uri, selectedFile: DocumentFile?) = withContext(Dispatchers.IO) {
-    try {
-      DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
-      true
-    } catch (ignore: Exception) {
+    runCatching {
+      DocumentsContract.deleteDocument(context.contentResolver, uri)
+    }.onFailure {
       selectedFile?.delete()
-      ignore.printStackTrace()
-      false
-    }
+      it.printStackTrace()
+    }.getOrDefault(false)
   }
 }
