@@ -294,18 +294,15 @@ class DownloadTest : BaseActivityTest() {
 
       activityScenario.onActivity {
         kiwixMainActivity = it
-        it.navigate(KiwixDestination.Library.route)
+        it.navigate(KiwixDestination.Downloads.route)
       }
 
       downloadRobot {
-        clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         assertDownloadPaused(composeTestRule, activityScenario)
         resumeDownload(composeTestRule)
         assertDownloadResumed(composeTestRule, kiwixMainActivity)
-        stopDownload(composeTestRule)
-        assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-        clickOnYesButton(composeTestRule)
+        stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
       }
     }
   }
