@@ -77,6 +77,10 @@ class CopyMoveFileHandlerTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
+    every { destinationFile.canRead() } returns true
+  }
+
+  private fun createCopyMoveFileHandler() {
     fileHandler = CopyMoveFileHandler(
       activity,
       kiwixDataStore,
@@ -88,7 +92,6 @@ class CopyMoveFileHandlerTest {
       setLifeCycleScope(testScope)
       setFileCopyMoveCallback(fileCopyMoveCallback)
     }
-    every { destinationFile.canRead() } returns true
   }
 
   @Test
@@ -191,8 +194,8 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() = runTest {
-    fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
+    createCopyMoveFileHandler()
     every { fileHandler.isBookLessThan4GB() } returns false
     every {
       fileCopyMoveCallback.filesystemDoesNotSupportedCopyMoveFilesOver4GB()

@@ -66,6 +66,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
@@ -86,7 +87,8 @@ class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
   private val kiwixDataStore: KiwixDataStore,
   private val storageCalculator: StorageCalculator,
-  private val fat32Checker: Fat32Checker
+  private val fat32Checker: Fat32Checker,
+  private val fileOperationHandler: FileOperationHandler
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
@@ -331,7 +333,14 @@ class CopyMoveFileHandler @Inject constructor(
       try {
         val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
         showProgressDialog()
-        copyFile(sourceUri, destinationFile)
+        fileOperationHandler.copy(
+          sourceUri,
+          destinationFile
+        ) { progress ->
+          withContext(Dispatchers.Main) {
+            updateProgress(progress)
+          }
+        }
         withContext(Dispatchers.Main) {
           notifyFileOperationSuccess(destinationFile, sourceUri)
         }
@@ -359,7 +368,14 @@ class CopyMoveFileHandler @Inject constructor(
             DocumentFile.fromFile(File(kiwixDataStore.selectedStorage.first())).uri
           )
         } ?: run {
-          copyFile(sourceUri, destinationFile)
+          fileOperationHandler.copy(
+            sourceUri,
+            destinationFile
+          ) { progress ->
+            withContext(Dispatchers.Main) {
+              updateProgress(progress)
+            }
+          }
           true
         }
         withContext(Dispatchers.Main) {
@@ -444,7 +460,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
     dismissCopyMoveProgressDialog()
     if (isMoveOperation) {
-      deleteSourceFile(sourceUri)
+      fileOperationHandler.delete(sourceUri, selectedFile)
       fileCopyMoveCallback?.onFileMoved(destinationFile)
     } else {
       fileCopyMoveCallback?.onFileCopied(destinationFile)
@@ -490,50 +506,6 @@ class CopyMoveFileHandler @Inject constructor(
       archive?.dispose()
     }
   }
-
-  @Suppress("InjectDispatcher")
-  suspend fun deleteSourceFile(uri: Uri) = withContext(Dispatchers.IO) {
-    try {
-      DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
-    } catch (ignore: Exception) {
-      selectedFile?.delete()
-      ignore.printStackTrace()
-    }
-  }
-
-  @Suppress("MagicNumber", "InjectDispatcher")
-  private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
-    withContext(Dispatchers.IO) {
-      val contentResolver = activity.contentResolver
-
-      val parcelFileDescriptor = contentResolver.openFileDescriptor(sourceUri, "r")
-      val fileSize =
-        parcelFileDescriptor?.fileDescriptor?.let { FileInputStream(it).channel.size() } ?: 0L
-      var totalBytesTransferred = 0L
-
-      parcelFileDescriptor?.use { pfd ->
-        val sourceFd = pfd.fileDescriptor
-        FileInputStream(sourceFd).channel.use { sourceChannel ->
-          FileOutputStream(destinationFile).channel.use { destinationChannel ->
-            var bytesTransferred: Long
-            val bufferSize = 1024 * 1024
-            while (totalBytesTransferred < fileSize) {
-              // Transfer data from source to destination in chunks
-              bytesTransferred = sourceChannel.transferTo(
-                totalBytesTransferred,
-                bufferSize.toLong(),
-                destinationChannel
-              )
-              totalBytesTransferred += bytesTransferred
-              val progress = (totalBytesTransferred * 100 / fileSize).toInt()
-              withContext(Dispatchers.Main) {
-                updateProgress(progress)
-              }
-            }
-          }
-        }
-      } ?: throw FileNotFoundException("The selected file could not be opened")
-    }
 
   suspend fun getDestinationFile(): File {
     val root = File(kiwixDataStore.selectedStorage.first())
