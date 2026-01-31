@@ -108,8 +108,12 @@ fun OnlineLibraryRoute(
   val lazyListState = rememberLazyListState()
   val lifecycleOwner = LocalLifecycleOwner.current
 
-  var isSearchActive by remember { mutableStateOf(false) }
-  var searchText by remember { mutableStateOf("") }
+  var isSearchActive by remember {
+    mutableStateOf(zimManageViewModel.onlineBooksSearchedQuery.value.isNotEmpty())
+  }
+  var searchText by remember {
+    mutableStateOf(zimManageViewModel.onlineBooksSearchedQuery.value)
+  }
   var isLoadingMoreItem by remember { mutableStateOf(false) }
   var scanningProgressItem by remember {
     mutableStateOf(Pair(false, ""))
