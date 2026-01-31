@@ -43,16 +43,18 @@ class UpdateDialogHandler @Inject constructor(
     val currentVersion = VersionId("3.9.11")
     val available = VersionId("3.9.12")
     val downloadApkEntity = apkDao.getActiveDownload().first()
-    val lastPopupMillis = downloadApkEntity.lastDialogShownInMilliSeconds
-    val shouldShowPopup =
-      (lastPopupMillis == 0L) ||
-        isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
-    if (shouldShowPopup &&
-      isTimeToShowUpdate(currentMilliSeconds) &&
-      available > currentVersion
-    ) {
-      showUpdateDialogCallback?.showUpdateDialog()
-      resetUpdateLater()
+    downloadApkEntity.let {
+      val lastPopupMillis = it.lastDialogShownInMilliSeconds
+      val shouldShowPopup =
+        (lastPopupMillis == 0L) ||
+          isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
+      if (shouldShowPopup &&
+        isTimeToShowUpdate(currentMilliSeconds) &&
+        available > currentVersion
+      ) {
+        showUpdateDialogCallback?.showUpdateDialog()
+        resetUpdateLater()
+      }
     }
   }
 

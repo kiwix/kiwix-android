@@ -29,6 +29,8 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateViewModel
 import javax.inject.Inject
 
@@ -36,6 +38,8 @@ class UpdateFragment : BaseFragment() {
   private val updateViewModel by lazy { viewModel<UpdateViewModel>(viewModelFactory) }
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+  @Inject lateinit var alertDialogShower: AlertDialogShower
   private var composeView: ComposeView? = null
 
   override fun inject(baseActivity: BaseActivity) {
@@ -49,6 +53,7 @@ class UpdateFragment : BaseFragment() {
         state = updateViewModel.state.value,
         events = updateViewModel::event
       )
+      DialogHost(alertDialogShower)
     }
   }
 

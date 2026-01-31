@@ -438,6 +438,13 @@ sealed class KiwixDialog(
     confirmButtonText = R.string.open_article,
     dismissButtonText = R.string.open_note
   )
+
+  object ShowUpdateDialog : KiwixDialog(
+    R.string.download_update_message,
+    null,
+    confirmButtonText = R.string.update_dialog,
+    dismissButtonText = R.string.rate_dialog_neutral
+  )
 }
 
 interface HasBodyFormatArgs {

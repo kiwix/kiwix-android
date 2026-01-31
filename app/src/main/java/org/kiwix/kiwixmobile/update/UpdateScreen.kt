@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.update
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +34,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
@@ -39,12 +44,16 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.update.viewmodel.DownloadApkState
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateEvents
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
+import java.io.File
 
+@Suppress("all")
 @Composable
 fun UpdateScreen(
   state: UpdateStates,
   events: (UpdateEvents) -> Unit = {}
 ) {
+  val context = LocalContext.current
+
   Surface(
     modifier = Modifier
       .fillMaxSize(),
@@ -84,6 +93,16 @@ fun UpdateScreen(
           ) {
             Text("cancel")
           }
+          Button(
+            onClick = {
+              installApk(
+                context = context,
+                states = state
+              )
+            }
+          ) {
+            Text("install")
+          }
         }
 
         ContentLoadingProgressBar(
@@ -99,6 +118,32 @@ fun UpdateScreen(
       }
     }
   }
+}
+
+@Suppress("all")
+@SuppressLint("RequestInstallPackagesPolicy")
+fun installApk(
+  context: Context,
+  states: UpdateStates
+) {
+  val apkFile =
+    File(states.downloadApkState.file!!)
+
+  val apkUri = FileProvider.getUriForFile(
+    context,
+    "${context.packageName}.fileprovider",
+    apkFile
+  )
+
+  @Suppress("DEPRECATION")
+  val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)
+  installerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+  installerIntent.setDataAndType(
+    apkUri,
+    "application/vnd.android.package-archive",
+  )
+  installerIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
+  context.startActivity(installerIntent)
 }
 
 @Preview
