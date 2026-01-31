@@ -723,6 +723,20 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
   }
 }
 
+/*@Composable
+private fun ShowUpdateDialog(
+  state: ReaderScreenState,
+  onClickUpdate: () -> Unit,
+  onClickLater: () -> Unit
+) {
+  if (state.shouldShowUpdatePopup) {
+    UpdateDialog(
+      onConfirm = onClickUpdate,
+      onDismiss = onClickLater
+    )
+  }
+}*/
+
 @Composable
 private fun ShowUpdateDialog(
   state: ReaderScreenState,

@@ -30,6 +30,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
+import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
@@ -55,9 +56,12 @@ class UpdateWorkManager @AssistedInject constructor(
     val updates = kiwixService.getUpdates().channel?.items?.first()
     val appVersion = updates?.title?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
     apkDao.addDownloadApkInfo(
-      name = updates?.title ?: "",
-      version = appVersion ?: "",
-      url = updates?.link ?: ""
+      DownloadApkEntity(
+        name = updates?.title ?: "",
+        version = appVersion ?: "",
+        url = updates?.link ?: "",
+        downloadId = -1
+      )
     )
     return Result.success()
   }

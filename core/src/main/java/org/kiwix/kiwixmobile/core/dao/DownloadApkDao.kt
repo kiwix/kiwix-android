@@ -58,11 +58,10 @@ interface DownloadApkDao {
   @Query("UPDATE downloadapkentity SET downloadId = :downloadId WHERE id = 1")
   fun addDownloadId(downloadId: Long)
 
-  @Query("UPDATE downloadapkentity SET name = :name, version = :version, url = :url WHERE id = 1")
+  // @Query("UPDATE downloadapkentity SET name = :name, version = :version, url = :url WHERE id = 1")
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun addDownloadApkInfo(
-    name: String,
-    version: String,
-    url: String
+    downloadApkEntity: DownloadApkEntity
   )
 
   @Query("UPDATE downloadapkentity SET lastDialogShownInMilliSeconds = :lastDialogShownInMilliSeconds WHERE id = 1")

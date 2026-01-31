@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.update.viewmodel
 
+import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
@@ -28,12 +29,13 @@ data class DownloadApkState(
   val name: String = "",
   val version: String = "",
   val url: String = "",
+  val file: String? = "",
   val bytesDownloaded: Long = 0,
   val totalSizeBytes: Long = 0,
   val progress: Int = 0,
   val eta: Seconds = Seconds(0),
   val currentDownloadState: Status = Status.NONE,
-  val downloadError: com.tonyodev.fetch2.Error = com.tonyodev.fetch2.Error.NONE
+  val downloadError: Error = Error.NONE
 ) {
   val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
 
@@ -42,6 +44,7 @@ data class DownloadApkState(
     downloadModel.name,
     downloadModel.version,
     downloadModel.url,
+    downloadModel.file,
     downloadModel.bytesDownloaded,
     downloadModel.totalSizeOfDownload,
     downloadModel.progress,

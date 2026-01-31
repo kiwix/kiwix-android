@@ -482,6 +482,13 @@ sealed class KiwixDialog(
     dismissButtonText = R.string.open_note
   )
 
+  object ShowUpdateDialog : KiwixDialog(
+    R.string.download_update_message,
+    null,
+    confirmButtonText = R.string.update_dialog,
+    dismissButtonText = R.string.rate_dialog_neutral
+  )
+
   object XiaomiShortcutPermission : KiwixDialog(
     R.string.add_shortcut_title,
     R.string.xiaomi_permission_required,

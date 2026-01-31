@@ -1964,7 +1964,15 @@ abstract class CoreReaderFragment :
   }
 
   protected open fun showUpdateInfoDialog() {
-    readerScreenState.update { copy(shouldShowUpdatePopup = true) }
+    alertDialogShower?.show(
+      KiwixDialog.ShowUpdateDialog,
+      {
+        onUpdateIconClick()
+      },
+      {
+        onLaterIconClick()
+      }
+    )
   }
 
   protected open fun openKiwixSupportUrl() {

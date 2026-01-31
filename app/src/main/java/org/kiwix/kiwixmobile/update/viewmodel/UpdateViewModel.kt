@@ -46,8 +46,7 @@ class UpdateViewModel @Inject constructor(
     try {
       downloadApkDao.downloads().collect { download ->
         _state.value = UpdateStates(
-          loading = false,
-          downloadApkState = DownloadApkState(download)
+          downloadApkState = DownloadApkState(download),
         )
       }
     } catch (e: Exception) {
@@ -93,6 +92,15 @@ class UpdateViewModel @Inject constructor(
       )
     }
   }
+
+  /*  fun onDownloadComplete() {
+      viewModelScope.launch {
+
+        _state.value = _state.value.copy(
+          installerIntent = installerIntent
+        )
+      }
+    }*/
 
   fun event(event: UpdateEvents) {
     when (event) {
