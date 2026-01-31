@@ -247,31 +247,9 @@ fun OnlineLibraryRoute(
           downloadFile()
         }
       } else if (!activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
-         // This dialog handling was implicit in Fragment logic via ActivityExtensions, 
-         // but here we can rely on data store state or standard dialogs if needed.
-         // Assuming standard permission flow covered by callers or specific dialogs if external storage manager needed.
-         // In original fragment: showManageExternalStoragePermissionDialog() logic was extension based.
-         // We will proceed to check space which is the standard next step.
-         
-         // If we strictly follow original fragment logic, it proceeds to check space if permission granted or implied.
-         downloadBookItem?.let { item ->
-           availableSpaceCalculator.hasAvailableSpaceFor(
-             item,
-             { downloadFile() },
-             { space ->
-               snackbarHostState.snack(
-                 message = "${context.getString(string.download_no_space)}\n${context.getString(string.space_available)} $space",
-                 actionLabel = context.getString(string.change_storage),
-                 actionClick = {
-                   scope.launch {
-                      showStorageSelectDialog(activity.getStorageDeviceList())
-                   }
-                 },
-                 lifecycleScope = scope
-               )
-             }
-           )
-         }
+        // Manage external storage permission is not granted; do not proceed with download.
+        // Direct the user to the app settings so they can grant the required permission.
+        navigateToAppSettings(context)
       } else {
         downloadBookItem?.let { item ->
            availableSpaceCalculator.hasAvailableSpaceFor(
