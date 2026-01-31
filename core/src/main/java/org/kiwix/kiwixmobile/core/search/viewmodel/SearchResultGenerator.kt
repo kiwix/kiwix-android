@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -32,21 +33,20 @@ interface SearchResultGenerator {
   ): SuggestionSearch?
 }
 
+@Suppress("InjectDispatcher")
+private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
-  @Suppress("InjectDispatcher")
-  override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
-    withContext(Dispatchers.IO) {
+  override suspend fun generateSearchResults(
+    searchTerm: String,
+    zimFileReader: ZimFileReader?
+  ): SuggestionSearch? =
+    withContext(ioDispatcher) {
       if (searchTerm.isNotEmpty()) {
-        readResultsFromZim(searchTerm, zimFileReader)
+        yield()
+        zimFileReader?.searchSuggestions(searchTerm)
       } else {
         null
       }
     }
-
-  private suspend fun readResultsFromZim(
-    searchTerm: String,
-    reader: ZimFileReader?
-  ) =
-    reader.also { yield() }
-      ?.searchSuggestions(searchTerm)
 }
