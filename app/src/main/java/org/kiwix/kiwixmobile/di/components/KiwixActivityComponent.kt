@@ -52,7 +52,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
 
   fun inject(onlineCategoryDialog: OnlineCategoryDialog)
 
-  fun connectivityManager(): android.net.ConnectivityManager
   fun downloader(): org.kiwix.kiwixmobile.core.downloader.Downloader
   fun kiwixDataStore(): org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
   fun bookUtils(): org.kiwix.kiwixmobile.core.utils.BookUtils
