@@ -194,6 +194,9 @@ object Libs {
     "com.squareup.leakcanary:leakcanary-android-instrumentation:" +
       Versions.leakcanary_android
 
+  const val shark_android: String =
+    "com.squareup.leakcanary:shark-android:" + Versions.leakcanary_android
+
   /**
    * http://developer.android.com/tools/extras/support-library.html
    */
