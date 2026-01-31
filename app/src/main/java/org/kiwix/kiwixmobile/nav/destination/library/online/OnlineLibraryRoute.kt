@@ -85,6 +85,8 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 
+const val LANGUAGE_MENU_ICON_TESTING_TAG = "LANGUAGE_MENU_ICON_TESTING_TAG"
+const val CATEGORY_MENU_ICON_TESTING_TAG = "CATEGORY_MENU_ICON_TESTING_TAG"
 @Suppress("LargeClass", "LongMethod", "ComplexMethod", "MagicNumber")
 @Composable
 fun OnlineLibraryRoute(
