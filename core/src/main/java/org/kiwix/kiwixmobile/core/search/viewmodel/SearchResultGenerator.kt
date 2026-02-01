@@ -33,10 +33,9 @@ interface SearchResultGenerator {
   ): SuggestionSearch?
 }
 
-@Suppress("InjectDispatcher")
-private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
+  @Suppress("InjectDispatcher")
+  private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   override suspend fun generateSearchResults(
     searchTerm: String,
     zimFileReader: ZimFileReader?

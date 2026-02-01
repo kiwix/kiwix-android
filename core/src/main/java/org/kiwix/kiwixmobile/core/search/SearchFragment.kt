@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.search
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -141,7 +140,7 @@ class SearchFragment : BaseFragment() {
               copy(
                 searchList = state.results,
                 isLoading = state.isLoading,
-                shouldShowLoadingMoreProgressBar = !state.canLoadMore,
+                shouldShowLoadingMoreProgressBar = state.searchTerm.isNotBlank() && state.canLoadMore,
                 searchText = state.searchTerm
               )
             }
@@ -158,8 +157,12 @@ class SearchFragment : BaseFragment() {
       }
     }
 
-    searchViewModel.voiceSearchResult.observe(viewLifecycleOwner) {
-      it?.let(::onSearchValueChanged)
+    viewLifecycleOwner.lifecycleScope.launch {
+      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        searchViewModel.voiceSearchResult.collect { result ->
+          result?.let(::onSearchValueChanged)
+        }
+      }
     }
   }
 
@@ -220,22 +223,4 @@ class SearchFragment : BaseFragment() {
         }
       )
     )
-
-  @Suppress("DEPRECATION")
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    searchViewModel.actions.trySend(
-      Action.ActivityResultReceived(requestCode, resultCode, data)
-    )
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    composeView?.disposeComposition()
-    composeView = null
-  }
 }

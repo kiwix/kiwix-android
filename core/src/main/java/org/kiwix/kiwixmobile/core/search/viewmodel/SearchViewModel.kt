@@ -18,14 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -63,22 +64,23 @@ class SearchViewModel @Inject constructor(
       results = emptyList(),
       recentResults = emptyList(),
       isLoading = false,
-      canLoadMore = true,
+      canLoadMore = false,
       searchOrigin = SearchOrigin.FromWebView
     )
   )
 
+  private val _voiceSearchResult = MutableStateFlow<String?>(null)
+  val voiceSearchResult = _voiceSearchResult.asStateFlow()
+
   val effects = Channel<SideEffect<*>>(Channel.UNLIMITED)
   val actions = Channel<Action>(Channel.UNLIMITED)
-
-  val voiceSearchResult = MutableLiveData<String?>(null)
 
   private lateinit var alertDialogShower: AlertDialogShower
 
   private val searchQuery = MutableStateFlow("")
   private var suggestionSearch: SuggestionSearch? = null
   private var currentIndex = 0
-  private var canLoadMore = true
+  private var canLoadMore = false
 
   @Suppress("InjectDispatcher")
   private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -93,14 +95,13 @@ class SearchViewModel @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
+  @OptIn(FlowPreview::class)
   private fun observeSearchQuery() {
     viewModelScope.launch {
       searchQuery
         .debounce(DEBOUNCE_DELAY)
         .distinctUntilChanged()
-        .collect { query ->
-          performNewSearch(query)
-        }
+        .collect { performNewSearch(it.trim()) }
     }
   }
 
@@ -113,11 +114,16 @@ class SearchViewModel @Inject constructor(
           is Action.OnOpenInNewTabClick -> openItem(action.searchListItem, true)
           is Action.OnItemLongClick -> showDeleteDialog(action)
           is Action.ConfirmedDelete -> deleteRecent(action)
+
           Action.ClickedSearchInText ->
             effects.trySend(SearchInPreviousScreen(state.value.searchTerm))
 
-          Action.ExitedSearch -> effects.trySend(PopFragmentBackstack)
-          is Action.VoiceSearchResult -> voiceSearchResult.value = action.term
+          Action.ExitedSearch ->
+            effects.trySend(PopFragmentBackstack)
+
+          is Action.VoiceSearchResult ->
+            _voiceSearchResult.value = action.term
+
           is Action.ScreenWasStartedFrom ->
             state.value = state.value.copy(searchOrigin = action.searchOrigin)
 
@@ -149,20 +155,21 @@ class SearchViewModel @Inject constructor(
       recentSearchRoomDao
         .recentSearches(zimReaderContainer.id)
         .collect { recents ->
-          // Only update recents; actual list rendering is decided in Fragment
           state.value = state.value.copy(
-            recentResults = recents
+            recentResults = recents,
+            results = if (state.value.searchTerm.isBlank()) recents else state.value.results
           )
         }
     }
   }
 
   private fun performNewSearch(query: String) {
-    currentIndex = 0
-    canLoadMore = true
-
     viewModelScope.launch {
       if (query.isBlank()) {
+        suggestionSearch = null
+        currentIndex = 0
+        canLoadMore = false
+
         state.value = state.value.copy(
           searchTerm = "",
           results = state.value.recentResults,
@@ -172,24 +179,28 @@ class SearchViewModel @Inject constructor(
         return@launch
       }
 
-      currentIndex = 0
-      canLoadMore = true
+      if (query != state.value.searchTerm) {
+        suggestionSearch =
+          searchResultGenerator.generateSearchResults(
+            query,
+            zimReaderContainer.zimFileReader
+          )
+        currentIndex = 0
+      }
+
       state.value = state.value.copy(
         searchTerm = query,
-        results = emptyList()
+        results = emptyList(),
+        isLoading = true
       )
 
-      suggestionSearch =
-        searchResultGenerator.generateSearchResults(
-          query,
-          zimReaderContainer.zimFileReader
-        )
-
       val firstPage = loadNextPage()
+      canLoadMore = firstPage.isNotEmpty()
 
       state.value = state.value.copy(
         results = firstPage,
-        canLoadMore = firstPage.isNotEmpty()
+        isLoading = false,
+        canLoadMore = canLoadMore
       )
     }
   }
@@ -199,7 +210,16 @@ class SearchViewModel @Inject constructor(
 
     viewModelScope.launch {
       val more = loadNextPage()
-      canLoadMore = more.isNotEmpty()
+
+      if (more.isEmpty()) {
+        canLoadMore = false
+        state.value = state.value.copy(canLoadMore = false)
+        return@launch
+      }
+
+      state.value = state.value.copy(
+        results = state.value.results + more
+      )
     }
   }
 
@@ -216,7 +236,7 @@ class SearchViewModel @Inject constructor(
       }
 
       currentIndex += list.size
-      list
+      list.distinctBy { it.url }
     }
 
   private fun openItem(item: SearchListItem, newTab: Boolean) {
@@ -250,5 +270,11 @@ class SearchViewModel @Inject constructor(
       )
     )
     effects.trySend(ShowToast(R.string.delete_specific_search_toast))
+
+    if (state.value.searchTerm.isBlank()) {
+      state.value = state.value.copy(
+        results = state.value.recentResults.filterNot { it == action.searchListItem }
+      )
+    }
   }
 }
