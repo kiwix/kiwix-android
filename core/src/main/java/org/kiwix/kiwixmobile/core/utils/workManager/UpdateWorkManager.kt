@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_UPDATE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Suppress("all")
@@ -55,12 +56,14 @@ class UpdateWorkManager @AssistedInject constructor(
       )
     val updates = kiwixService.getUpdates().channel?.items?.first()
     val appVersion = updates?.title?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
-    apkDao.addDownloadApkInfo(
+    apkDao.updateApkDownload(
       DownloadApkEntity(
-        name = updates?.title ?: "",
-        version = appVersion ?: "",
-        url = updates?.link ?: "",
-        downloadId = -1
+        downloadId = -1,
+        apkInfo = ApkInfo(
+          name = updates!!.title,
+          version = appVersion!!,
+          apkUrl = updates.link
+        )
       )
     )
     return Result.success()

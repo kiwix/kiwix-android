@@ -36,7 +36,7 @@ data class DownloadApkEntity(
   val url: String,
   var lastDialogShownInMilliSeconds: Long = -1L,
   var laterClickedMilliSeconds: Long = -1L,
-  var downloadId: Long,
+  var downloadId: Long = -1L,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
@@ -66,5 +66,16 @@ data class DownloadApkEntity(
       progress = download.progress,
       status = download.status,
       error = download.error,
+    )
+
+  fun resetDownloadSate() =
+    copy(
+      file = " ",
+      etaInMilliSeconds = 0,
+      bytesDownloaded = 0,
+      totalSizeOfDownload = 0,
+      progress = 0,
+      status = Status.NONE,
+      error = Error.NONE,
     )
 }

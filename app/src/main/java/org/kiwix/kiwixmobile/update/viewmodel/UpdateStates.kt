@@ -18,12 +18,9 @@
 
 package org.kiwix.kiwixmobile.update.viewmodel
 
-import android.content.Intent
-
 data class UpdateStates(
   var loading: Boolean = false,
   val isSuccess: Boolean = false,
   val error: String = "",
-  val downloadApkState: DownloadApkState = DownloadApkState(),
-  val installerIntent: Intent = Intent()
+  val downloadApkState: DownloadApkState = DownloadApkState()
 )

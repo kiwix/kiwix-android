@@ -93,14 +93,9 @@ class UpdateViewModel @Inject constructor(
     }
   }
 
-  /*  fun onDownloadComplete() {
-      viewModelScope.launch {
-
-        _state.value = _state.value.copy(
-          installerIntent = installerIntent
-        )
-      }
-    }*/
+  private fun resetDownloadState() {
+    downloadApkDao.resetDownloadInfoState()
+  }
 
   fun event(event: UpdateEvents) {
     when (event) {
@@ -110,6 +105,10 @@ class UpdateViewModel @Inject constructor(
 
       is UpdateEvents.CancelDownload -> {
         cancelDownload()
+      }
+
+      is UpdateEvents.ResetDownloadState -> {
+        resetDownloadState()
       }
     }
   }
