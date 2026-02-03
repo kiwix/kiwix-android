@@ -41,6 +41,12 @@ interface DownloadApkDao {
     }
   }
 
+  fun resetDownloadInfoState() {
+    getDownload().let { downloadApkEntity ->
+      downloadApkEntity?.resetDownloadSate()
+    }
+  }
+
   fun downloads(): Flow<DownloadApkModel> =
     getActiveDownload()
       .distinctUntilChanged()
@@ -57,12 +63,6 @@ interface DownloadApkDao {
 
   @Query("UPDATE downloadapkentity SET downloadId = :downloadId WHERE id = 1")
   fun addDownloadId(downloadId: Long)
-
-  // @Query("UPDATE downloadapkentity SET name = :name, version = :version, url = :url WHERE id = 1")
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun addDownloadApkInfo(
-    downloadApkEntity: DownloadApkEntity
-  )
 
   @Query("UPDATE downloadapkentity SET lastDialogShownInMilliSeconds = :lastDialogShownInMilliSeconds WHERE id = 1")
   fun addLastDialogShownInfo(lastDialogShownInMilliSeconds: Long)
