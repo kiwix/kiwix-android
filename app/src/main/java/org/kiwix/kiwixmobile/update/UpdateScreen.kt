@@ -21,23 +21,39 @@ package org.kiwix.kiwixmobile.update
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import com.tonyodev.fetch2.Status
+import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
@@ -52,72 +68,167 @@ fun UpdateScreen(
   state: UpdateStates,
   events: (UpdateEvents) -> Unit = {}
 ) {
-  val context = LocalContext.current
+  UpdateInfoCard(
+    state = state,
+    events = events
+  )
+}
 
-  Surface(
+@Suppress("all")
+@Composable
+fun UpdateInfoCard(
+  state: UpdateStates,
+  events: (UpdateEvents) -> Unit
+) {
+  val buttonText = if (state.downloadApkState.currentDownloadState == Status.COMPLETED) {
+    "INSTALL"
+  } else {
+    "UPDATE"
+  }
+  Column(
     modifier = Modifier
+      .padding(16.dp)
       .fillMaxSize(),
-    color = Color.White,
+    verticalArrangement = Arrangement.Center
   ) {
-    Column(
-      modifier = Modifier.background(color = Color.White)
-        .fillMaxSize(),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.Center
+    Row(
+      verticalAlignment = Alignment.Top
     ) {
-      if (!state.loading) {
-        Text(
-          state.downloadApkState.name,
+      Image(
+        modifier = Modifier.size(50.dp),
+        painter = painterResource(drawable.kiwix_icon),
+        contentDescription = null
+      )
+      Spacer(modifier = Modifier.width(16.dp))
+      Column {
+        LabelText(
+          label = "Update available for Kiwix",
+          style = MaterialTheme.typography.titleMedium,
           color = Color.Black
         )
-        Text(
-          "${state.downloadApkState.readableEta}",
-          color = Color.Black
-        )
-        Row {
-          Button(
-            onClick = {
-              events(
-                UpdateEvents.DownloadApk
-              )
-            }
-          ) {
-            Text("download")
-          }
-          Button(
-            onClick = {
-              events(
-                UpdateEvents.CancelDownload
-              )
-            }
-          ) {
-            Text("cancel")
-          }
-          Button(
-            onClick = {
-              installApk(
-                context = context,
-                states = state
-              )
-            }
-          ) {
-            Text("install")
-          }
-        }
-
-        ContentLoadingProgressBar(
-          progressBarStyle = ProgressBarStyle.HORIZONTAL,
-          modifier = Modifier
-            .padding(horizontal = ONE_DP, vertical = FIVE_DP),
-          progress = state.downloadApkState.progress,
-        )
-      } else {
-        ContentLoadingProgressBar(
-          progressBarStyle = ProgressBarStyle.CIRCLE,
+        Spacer(modifier = Modifier.height(4.dp))
+        LabelText(
+          label = "Download size: 1.4 MB",
+          style = MaterialTheme.typography.bodySmall,
+          color = Color.Gray
         )
       }
     }
+    Spacer(modifier = Modifier.height(16.dp))
+
+    LabelText(
+      label = "Download the latest version",
+      style = MaterialTheme.typography.bodyMedium,
+      color = Color.DarkGray
+    )
+    val context = LocalContext.current
+    if (state.downloadApkState.currentDownloadState == Status.DOWNLOADING) {
+      DownloadInfoRow(
+        state = state,
+        onCancel = {
+          events(
+            UpdateEvents.CancelDownload
+          )
+        }
+      )
+    } else {
+      KiwixButton(
+        modifier = Modifier.fillMaxWidth(),
+        clickListener = {
+          if (state.downloadApkState.currentDownloadState == Status.COMPLETED) {
+            installApk(
+              states = state,
+              context = context
+            )
+          } else {
+            events(
+              UpdateEvents.DownloadApk
+            )
+          }
+        },
+        buttonText = buttonText
+      )
+    }
   }
+}
+
+@Composable
+fun DownloadInfoRow(
+  state: UpdateStates,
+  onCancel: () -> Unit,
+  modifier: Modifier = Modifier
+) {
+  val contentColor = Color.Gray
+  Row(
+    modifier = modifier
+      .fillMaxWidth()
+      .padding(8.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Column(
+      modifier = Modifier.weight(1f)
+    ) {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+      ) {
+        DownloadText(
+          text = " ",
+          contentColor = contentColor
+        )
+        DownloadText(
+          text = " ",
+          contentColor = contentColor
+        )
+      }
+
+      Spacer(modifier = Modifier.height(4.dp))
+
+      ContentLoadingProgressBar(
+        progressBarStyle = ProgressBarStyle.HORIZONTAL,
+        modifier = Modifier
+          .padding(horizontal = ONE_DP, vertical = FIVE_DP),
+        progress = state.downloadApkState.progress,
+      )
+    }
+
+    Spacer(modifier = Modifier.width(16.dp))
+
+    Icon(
+      imageVector = Icons.Default.Close,
+      contentDescription = "Cancel upload",
+      tint = contentColor,
+      modifier = Modifier
+        .size(20.dp)
+        .clickable(onClick = onCancel)
+    )
+  }
+}
+
+@Composable
+fun LabelText(
+  label: String,
+  style: TextStyle = MaterialTheme.typography.bodyMedium,
+  color: Color = Color.DarkGray
+) {
+  Text(
+    text = label,
+    style = style,
+    color = color
+  )
+}
+
+@Composable
+fun DownloadText(
+  text: String,
+  contentColor: Color
+) {
+  Text(
+    text = text,
+    fontSize = 12.sp,
+    color = contentColor,
+    fontWeight = FontWeight.Medium
+  )
 }
 
 @Suppress("all")
@@ -127,7 +238,7 @@ fun installApk(
   states: UpdateStates
 ) {
   val apkFile =
-    File(states.downloadApkState.file!!)
+    File("/storage/emulated/0/Android/media/org.kiwix.kiwixmobile/Kiwix/org.kiwix.kiwixmobile.standalone-3.14.0.apk")
 
   val apkUri = FileProvider.getUriForFile(
     context,

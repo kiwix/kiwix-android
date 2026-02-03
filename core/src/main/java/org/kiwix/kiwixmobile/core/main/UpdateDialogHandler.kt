@@ -38,7 +38,7 @@ class UpdateDialogHandler @Inject constructor(
     this.showUpdateDialogCallback = showUpdateDialogCallback
   }
 
-  suspend fun attemptToShowDonationPopup() {
+  suspend fun attemptToShowUpdatePopup() {
     val currentMilliSeconds = System.currentTimeMillis()
     val currentVersion = VersionId("3.9.11")
     val available = VersionId("3.9.12")

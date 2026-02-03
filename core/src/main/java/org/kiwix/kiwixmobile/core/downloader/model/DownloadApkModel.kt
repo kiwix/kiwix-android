@@ -35,6 +35,8 @@ data class DownloadApkModel(
   val state: Status,
   val error: Error,
 ) {
+  val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
+
   constructor(downloadApkEntity: DownloadApkEntity) : this(
     downloadApkEntity.id,
     downloadApkEntity.name,

@@ -440,9 +440,9 @@ sealed class KiwixDialog(
   )
 
   object ShowUpdateDialog : KiwixDialog(
-    R.string.download_update_message,
+    R.string.yes,
     null,
-    confirmButtonText = R.string.update_dialog,
+    confirmButtonText = R.string.yes,
     dismissButtonText = R.string.rate_dialog_neutral
   )
 }
