@@ -20,21 +20,6 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.app.Activity
 import android.net.Uri
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
@@ -49,20 +34,13 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
-import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.COPY_MOVE_DIALOG_TITLE_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
@@ -78,31 +56,23 @@ import javax.inject.Inject
 
 const val COPY_MOVE_DIALOG_TITLE_TESTING_TAG = "copyMoveDialogTitleTestingTag"
 
+@Suppress("LongParameterList")
 class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
   private val kiwixDataStore: KiwixDataStore,
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker,
-  private val fileOperationHandler: FileOperationHandler
+  private val fileOperationHandler: FileOperationHandler,
+  private val copyMoveProgressBarController: CopyMoveProgressBarController
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
   private var selectedFile: DocumentFile? = null
   private var lifecycleScope: CoroutineScope? = null
   private var storageObservingJob: Job? = null
-
-  /**
-   * Holds the state for the copy/move progress bar.
-   *
-   * A [Pair] containing:
-   *  - [String]: The message to display below the progress bar.
-   *  - [Int]: The current progress value (0 to 100).
-   */
-  private var progressBarState = mutableStateOf(Pair("", ZERO))
   var isMoveOperation = false
   var shouldValidateZimFile: Boolean = false
   private lateinit var fragmentManager: FragmentManager
-  private lateinit var alertDialogShower: AlertDialogShower
   private var isSingleFileSelected = true
 
   private fun getCopyMoveTitle(): String =
@@ -113,14 +83,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
-    this.alertDialogShower = alertDialogShower
-  }
-
-  private fun updateProgress(progress: Int) {
-    synchronized(this) {
-      progressBarState.value =
-        activity.getString(R.string.percentage, progress) to progress
-    }
+    copyMoveProgressBarController.setAlertDialogShower(alertDialogShower)
   }
 
   suspend fun showMoveFileToPublicDirectoryDialog(
@@ -136,12 +99,12 @@ class CopyMoveFileHandler @Inject constructor(
     this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
     if (getStorageDeviceList().isEmpty()) {
-      showPreparingCopyMoveDialog()
+      copyMoveProgressBarController.showPreparingCopyMoveDialog()
     }
     if (kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove.first() && getStorageDeviceList().size > 1) {
       // Show dialog to select storage if more than one storage device is available, and user
       // have not configured the storage yet.
-      hidePreparingCopyMoveDialog()
+      copyMoveProgressBarController.hidePreparingCopyMoveDialog()
       showCopyMoveDialog(true)
     } else {
       if (getStorageDeviceList().size == 1) {
@@ -151,7 +114,7 @@ class CopyMoveFileHandler @Inject constructor(
         // This ensures they are prompted to configure storage settings upon SD card reinsertion.
         kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true)
       }
-      hidePreparingCopyMoveDialog()
+      copyMoveProgressBarController.hidePreparingCopyMoveDialog()
       if (validateZimFileCanCopyOrMove()) {
         when (multipleFilesProcessAction) {
           MultipleFilesProcessAction.Copy -> performCopyOperation()
@@ -220,7 +183,8 @@ class CopyMoveFileHandler @Inject constructor(
     file: File? = null
   ): Boolean {
     val storageFile = file ?: getSelectedStorageRoot()
-    hidePreparingCopyMoveDialog() // hide the dialog if already showing
+    // hide the dialog if already showing
+    copyMoveProgressBarController.hidePreparingCopyMoveDialog()
     val availableSpace = storageCalculator.availableBytes(storageFile)
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
@@ -245,7 +209,7 @@ class CopyMoveFileHandler @Inject constructor(
     if (isBookLessThan4GB()) {
       performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
     } else {
-      showPreparingCopyMoveDialog()
+      copyMoveProgressBarController.showPreparingCopyMoveDialog()
       observeFileSystemState()
     }
   }
@@ -263,7 +227,7 @@ class CopyMoveFileHandler @Inject constructor(
     if (storageObservingJob?.isActive == true) return
     storageObservingJob = lifecycleScope?.launch {
       fat32Checker.fileSystemStates.collect {
-        hidePreparingCopyMoveDialog()
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
         if (validateZimFileCanCopyOrMove()) {
           performCopyMoveOperation()
         }
@@ -281,10 +245,8 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
-    alertDialogShower.show(
-      KiwixDialog.CopyMoveFileToPublicDirectoryDialog(
-        getCopyMoveFilesToPublicDirectoryDialogMessage()
-      ),
+    copyMoveProgressBarController.showCopyMoveDialog(
+      getCopyMoveFilesToPublicDirectoryDialogMessage(),
       { onCopyClicked(showStorageSelectionDialog) },
       { onMoveClicked(showStorageSelectionDialog) }
     )
@@ -332,15 +294,12 @@ class CopyMoveFileHandler @Inject constructor(
     val destinationFile = getDestinationFile()
     try {
       val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
-      showProgressDialog()
+      copyMoveProgressBarController.showProgress(getCopyMoveTitle())
       fileOperationHandler.copy(
         sourceUri,
-        destinationFile
-      ) { progress ->
-        withContext(Dispatchers.Main) {
-          updateProgress(progress)
-        }
-      }
+        destinationFile,
+        copyMoveProgressBarController::updateProgress
+      )
       withContext(Dispatchers.Main) {
         notifyFileOperationSuccess(destinationFile, sourceUri)
       }
@@ -357,17 +316,14 @@ class CopyMoveFileHandler @Inject constructor(
     val destinationFile = getDestinationFile()
     try {
       val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
-      showProgressDialog()
+      copyMoveProgressBarController.showProgress(getCopyMoveTitle())
       val moveSuccess = fileOperationHandler.move(
         selectedFile = selectedFile,
         sourceUri = sourceUri,
         destinationFolderUri = DocumentFile.fromFile(getSelectedStorageRoot()).uri,
-        destinationFile = destinationFile
-      ) { progress ->
-        withContext(Dispatchers.Main) {
-          updateProgress(progress)
-        }
-      }
+        destinationFile = destinationFile,
+        copyMoveProgressBarController::updateProgress
+      )
       withContext(Dispatchers.Main) {
         if (moveSuccess) {
           notifyFileOperationSuccess(destinationFile, sourceUri)
@@ -391,7 +347,7 @@ class CopyMoveFileHandler @Inject constructor(
     errorMessage: String?,
     destinationFile: File
   ) {
-    dismissCopyMoveProgressDialog()
+    copyMoveProgressBarController.dismissCopyMoveProgressDialog()
     fileCopyMoveCallback?.onError("$errorMessage").also {
       // Clean up the destination file if an error occurs
       destinationFile.deleteFile()
@@ -403,7 +359,7 @@ class CopyMoveFileHandler @Inject constructor(
       handleInvalidZimFile(destinationFile, sourceUri)
       return
     }
-    dismissCopyMoveProgressDialog()
+    copyMoveProgressBarController.dismissCopyMoveProgressDialog()
     if (isMoveOperation) {
       fileOperationHandler.delete(sourceUri, selectedFile)
       fileCopyMoveCallback?.onFileMoved(destinationFile)
@@ -422,7 +378,7 @@ class CopyMoveFileHandler @Inject constructor(
 
       if (moveSuccessful) {
         // If files is moved back using the documentContract then show the error message to user
-        dismissCopyMoveProgressDialog()
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
         fileCopyMoveCallback?.onError(errorMessage)
       } else {
         // Show error message and delete the moved file if move failed.
@@ -463,55 +419,6 @@ class CopyMoveFileHandler @Inject constructor(
 
     destinationFile.createNewFile()
     return destinationFile
-  }
-
-  private fun showPreparingCopyMoveDialog() {
-    alertDialogShower.show(KiwixDialog.PreparingCopyingFilesDialog { ContentLoadingProgressBar() })
-  }
-
-  private fun hidePreparingCopyMoveDialog() {
-    alertDialogShower.dismiss()
-  }
-
-  private fun showProgressDialog() {
-    progressBarState.value =
-      activity.getString(R.string.percentage, ZERO) to ZERO
-    alertDialogShower.show(
-      KiwixDialog.CopyMoveProgressBarDialog(
-        customViewBottomPadding = ZERO.dp,
-        customGetView = { CopyMoveProgressDialog() }
-      )
-    )
-  }
-
-  @Composable
-  private fun CopyMoveProgressDialog() {
-    Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-      Text(
-        text = getCopyMoveTitle(),
-        style = MaterialTheme.typography.titleSmall.copy(
-          fontSize = COPY_MOVE_DIALOG_TITLE_TEXT_SIZE,
-          fontWeight = FontWeight.Medium
-        ),
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(bottom = DIALOG_TITLE_BOTTOM_PADDING)
-          .semantics { testTag = COPY_MOVE_DIALOG_TITLE_TESTING_TAG }
-      )
-      ContentLoadingProgressBar(
-        progress = progressBarState.value.second,
-        progressBarStyle = ProgressBarStyle.HORIZONTAL
-      )
-      Spacer(modifier = Modifier.height(EIGHT_DP))
-      Text(
-        progressBarState.value.first,
-        modifier = Modifier.padding(end = SIXTEEN_DP, bottom = SIXTEEN_DP)
-      )
-    }
-  }
-
-  fun dismissCopyMoveProgressDialog() {
-    hidePreparingCopyMoveDialog()
   }
 
   suspend fun getStorageDeviceList() =
