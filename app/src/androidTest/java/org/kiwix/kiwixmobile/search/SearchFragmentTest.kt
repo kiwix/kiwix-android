@@ -165,7 +165,6 @@ class SearchFragmentTest : BaseActivityTest() {
       search { checkZimFileSearchSuccessful(composeTestRule) }
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchFragment become visible on screen.
-      delay(2000)
       val searchFragment =
         waitForSearchFragment(kiwixMainActivity)
 
@@ -316,12 +315,12 @@ class SearchFragmentTest : BaseActivityTest() {
     while (System.currentTimeMillis() - start < timeoutMs) {
       val fragment =
         activity.supportFragmentManager.fragments
-          .firstOrNull { it is SearchFragment && it.isAdded }
-          as? SearchFragment
+          .filterIsInstance<SearchFragment>()
+          .firstOrNull { it.isAdded }
 
       if (fragment != null) return fragment
       Thread.sleep(50)
     }
-    throw IllegalStateException("SearchFragment not found after $timeoutMs ms")
+    error("SearchFragment not found after $timeoutMs ms")
   }
 }

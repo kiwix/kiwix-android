@@ -243,7 +243,6 @@ class SearchFragmentTestForCustomApp {
       openZimFileInReader(zimFile = downloadingZimFile)
       openSearchWithQuery(searchTerms[0])
       // wait for searchFragment become visible on screen.
-      delay(2000)
       val searchFragment =
         waitForSearchFragment(customMainActivity)
 
@@ -397,12 +396,12 @@ class SearchFragmentTestForCustomApp {
     while (System.currentTimeMillis() - start < timeoutMs) {
       val fragment =
         activity.supportFragmentManager.fragments
-          .firstOrNull { it is SearchFragment && it.isAdded }
-          as? SearchFragment
+          .filterIsInstance<SearchFragment>()
+          .firstOrNull { it.isAdded }
 
       if (fragment != null) return fragment
       Thread.sleep(50)
     }
-    throw IllegalStateException("SearchFragment not found after $timeoutMs ms")
+    error("SearchFragment not found after $timeoutMs ms")
   }
 }
