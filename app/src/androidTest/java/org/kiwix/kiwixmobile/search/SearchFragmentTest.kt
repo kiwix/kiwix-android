@@ -37,7 +37,6 @@ import com.google.android.apps.common.testing.accessibility.framework.integratio
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.hamcrest.Matchers.anyOf
