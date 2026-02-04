@@ -50,7 +50,7 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
       val picture = stringResource(R.string.tag_pic)
       TagChip(text = picture, contentDescription = "$picture$index")
     }
-    if (tags.isYesOrNotDefined<VideoTag>()) {
+    if (tags.isYes<VideoTag>()) {
       val video = stringResource(R.string.tag_vid)
       TagChip(text = video, contentDescription = "$video$index")
     }
