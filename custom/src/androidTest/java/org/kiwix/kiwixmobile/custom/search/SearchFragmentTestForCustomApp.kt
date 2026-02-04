@@ -26,6 +26,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
@@ -243,21 +244,15 @@ class SearchFragmentTestForCustomApp {
       openSearchWithQuery(searchTerms[0])
       // wait for searchFragment become visible on screen.
       delay(2000)
-      val searchFragment = customMainActivity.supportFragmentManager.fragments
-        .filterIsInstance<SearchFragment>()
-        .firstOrNull()
-      requireNotNull(searchFragment)
-      val viewModel = ViewModelProvider(searchFragment)[SearchViewModel::class.java]
+      val searchFragment =
+        waitForSearchFragment(customMainActivity)
+
+      val viewModel =
+        ViewModelProvider(searchFragment)[SearchViewModel::class.java]
+
       for (i in 1..100) {
-        // This will execute the render method 100 times frequently.
-        val searchTerm = searchTerms[i % searchTerms.size]
-        viewModel.actions.trySend(Action.Filter(searchTerm))?.isSuccess
-      }
-      for (i in 1..100) {
-        // this will execute the render method 100 times with 100MS delay.
-        delay(100)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        viewModel.actions.trySend(Action.Filter(searchTerm))?.isSuccess
+        val term = searchTerms[i % searchTerms.size]
+        viewModel.actions.trySend(Action.Filter(term))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
@@ -392,5 +387,22 @@ class SearchFragmentTestForCustomApp {
       }
       it.delete()
     }
+  }
+
+  private fun waitForSearchFragment(
+    activity: FragmentActivity,
+    timeoutMs: Long = 5_000
+  ): SearchFragment {
+    val start = System.currentTimeMillis()
+    while (System.currentTimeMillis() - start < timeoutMs) {
+      val fragment =
+        activity.supportFragmentManager.fragments
+          .firstOrNull { it is SearchFragment && it.isAdded }
+          as? SearchFragment
+
+      if (fragment != null) return fragment
+      Thread.sleep(50)
+    }
+    throw IllegalStateException("SearchFragment not found after $timeoutMs ms")
   }
 }

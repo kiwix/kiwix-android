@@ -23,6 +23,7 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
@@ -166,11 +167,11 @@ class SearchFragmentTest : BaseActivityTest() {
       // wait for searchFragment become visible on screen.
       delay(2000)
       val searchFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<SearchFragment>()
-          .firstOrNull()
-      requireNotNull(searchFragment)
-      val viewModel = ViewModelProvider(searchFragment)[SearchViewModel::class.java]
+        waitForSearchFragment(kiwixMainActivity)
+
+      val viewModel =
+        ViewModelProvider(searchFragment)[SearchViewModel::class.java]
+
       for (i in 1..100) {
         val term = searchTerms[i % searchTerms.size]
         viewModel.actions.trySend(Action.Filter(term))
@@ -305,5 +306,22 @@ class SearchFragmentTest : BaseActivityTest() {
       }
       it.delete()
     }
+  }
+
+  private fun waitForSearchFragment(
+    activity: FragmentActivity,
+    timeoutMs: Long = 5_000
+  ): SearchFragment {
+    val start = System.currentTimeMillis()
+    while (System.currentTimeMillis() - start < timeoutMs) {
+      val fragment =
+        activity.supportFragmentManager.fragments
+          .firstOrNull { it is SearchFragment && it.isAdded }
+          as? SearchFragment
+
+      if (fragment != null) return fragment
+      Thread.sleep(50)
+    }
+    throw IllegalStateException("SearchFragment not found after $timeoutMs ms")
   }
 }
