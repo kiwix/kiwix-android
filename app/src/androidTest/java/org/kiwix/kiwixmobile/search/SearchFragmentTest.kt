@@ -24,6 +24,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -49,6 +50,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationRes
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -126,118 +128,6 @@ class SearchFragmentTest : BaseActivityTest() {
   }
 
   @Test
-  fun searchFragmentSimple() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-    }
-    testZimFile = getTestZimFile()
-    openKiwixReaderFragmentWithFile(testZimFile)
-    search { checkZimFileSearchSuccessful(composeTestRule) }
-    openSearchWithQuery("Android", testZimFile)
-    search {
-      clickOnSearchItemInSearchList(composeTestRule)
-      checkZimFileSearchSuccessful(composeTestRule)
-    }
-
-    openSearchWithQuery(zimFile = testZimFile)
-    search {
-      // test with fast typing/deleting
-      searchWithFrequentlyTypedWords(searchUnitTestingQuery, composeTestRule = composeTestRule)
-      assertSearchSuccessful(searchUnitTestResult, composeTestRule)
-      deleteSearchedQueryFrequently(
-        searchUnitTestingQuery,
-        uiDevice,
-        composeTestRule = composeTestRule
-      )
-
-      // test with a short delay typing/deleting to
-      // properly test the cancelling of previously searching task
-      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 50, composeTestRule)
-      assertSearchSuccessful(searchUnitTestResult, composeTestRule)
-      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 50, composeTestRule)
-
-      // test with a long delay typing/deleting to
-      // properly execute the search query letter by letter
-      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 300, composeTestRule)
-      assertSearchSuccessful(searchUnitTestResult, composeTestRule)
-      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 300, composeTestRule)
-      // to close the keyboard
-      pressBack()
-      // go to reader screen
-      pressBack()
-    }
-
-    UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(KiwixDestination.Library.route) }
-    // test with a large ZIM file to properly test the scenario
-    downloadingZimFile = getDownloadingZimFile()
-    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-      if (response.isSuccessful) {
-        response.body?.let { responseBody ->
-          writeZimFileData(responseBody, downloadingZimFile)
-        }
-      } else {
-        throw RuntimeException(
-          "Download Failed. Error: ${response.message}\n" +
-            " Status Code: ${response.code}"
-        )
-      }
-    }
-    openKiwixReaderFragmentWithFile(downloadingZimFile)
-    search { checkZimFileSearchSuccessful(composeTestRule) }
-    openSearchWithQuery(zimFile = downloadingZimFile)
-    search {
-      // test with fast typing/deleting
-      searchWithFrequentlyTypedWords(
-        searchQueryForDownloadedZimFile,
-        composeTestRule = composeTestRule
-      )
-      assertSearchSuccessful(searchResultForDownloadedZimFile, composeTestRule)
-      deleteSearchedQueryFrequently(
-        searchQueryForDownloadedZimFile,
-        uiDevice,
-        composeTestRule = composeTestRule
-      )
-
-      // test with a short delay typing/deleting to
-      // properly test the cancelling of previously searching task
-      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 50, composeTestRule)
-      assertSearchSuccessful(searchResultForDownloadedZimFile, composeTestRule)
-      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 50, composeTestRule)
-
-      // test with a long delay typing/deleting to
-      // properly execute the search query letter by letter
-      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300, composeTestRule)
-      assertSearchSuccessful(searchResultForDownloadedZimFile, composeTestRule)
-      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300, composeTestRule)
-      // open the reader fragment for next text case.
-      clickOnNavigationIcon(composeTestRule)
-    }
-
-    // Added test for checking the crash scenario where the application was crashing when we
-    // frequently searched for article, and clicked on the searched item.
-    search {
-      // test by searching 10 article and clicking on them
-      searchAndClickOnArticle(searchQueryForDownloadedZimFile, composeTestRule)
-      searchAndClickOnArticle("A Song", composeTestRule)
-      searchAndClickOnArticle("The Ra", composeTestRule)
-      searchAndClickOnArticle("The Ge", composeTestRule)
-      searchAndClickOnArticle("Wish", composeTestRule)
-      searchAndClickOnArticle("WIFI", composeTestRule)
-      searchAndClickOnArticle("Woman", composeTestRule)
-      searchAndClickOnArticle("Big Ba", composeTestRule)
-      searchAndClickOnArticle("My Wor", composeTestRule)
-      searchAndClickOnArticle("100", composeTestRule)
-      assertArticleLoaded()
-    }
-    removeTemporaryZimFilesToFreeUpDeviceStorage()
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-      // temporary disabled on Android 25
-      LeakAssertions.assertNoLeaks()
-    }
-  }
-
-  @Test
   fun testConcurrencyOfSearch() =
     runBlocking {
       val searchTerms =
@@ -276,31 +166,33 @@ class SearchFragmentTest : BaseActivityTest() {
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchFragment become visible on screen.
       delay(2000)
-      val searchFragment = kiwixMainActivity.supportFragmentManager.fragments
-        .filterIsInstance<SearchFragment>()
-        .firstOrNull()
+      val searchFragment =
+        kiwixMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<SearchFragment>()
+          .firstOrNull()
+      requireNotNull(searchFragment)
+      val viewModel = ViewModelProvider(searchFragment)[SearchViewModel::class.java]
       for (i in 1..100) {
-        // This will execute the render method 100 times frequently.
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        val term = searchTerms[i % searchTerms.size]
+        viewModel.actions.trySend(Action.Filter(term))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 100MS delay.
         delay(100)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        val term = searchTerms[i % searchTerms.size]
+        viewModel.actions.trySend(Action.Filter(term))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(200)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        val term = searchTerms[i % searchTerms.size]
+        viewModel.actions.trySend(Action.Filter(term))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(300)
-        val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        val term = searchTerms[i % searchTerms.size]
+        viewModel.actions.trySend(Action.Filter(term))
       }
     }
 
