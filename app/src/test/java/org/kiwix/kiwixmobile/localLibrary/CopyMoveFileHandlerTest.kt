@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler.FileCopyMoveCallback
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -76,6 +77,7 @@ class CopyMoveFileHandlerTest {
   private val sourceUri = mockk<Uri>()
   private val fragmentManager = mockk<FragmentManager>()
   private val fileOperationHandler = mockk<FileOperationHandler>()
+  private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>()
 
   @BeforeEach
   fun setup() {
@@ -86,7 +88,8 @@ class CopyMoveFileHandlerTest {
       kiwixDataStore,
       storageCalculator,
       fat32Checker,
-      fileOperationHandler
+      fileOperationHandler,
+      copyMoveProgressBarController
     ).apply {
       setAlertDialogShower(alertDialogShower)
       setSelectedFileAndUri(null, selectedFile)
@@ -280,8 +283,8 @@ class CopyMoveFileHandlerTest {
     )
 
     verify {
-      alertDialogShower.show(
-        KiwixDialog.CopyMoveFileToPublicDirectoryDialog(""),
+      copyMoveProgressBarController.showCopyMoveDialog(
+        "",
         any(),
         any()
       )
@@ -347,7 +350,7 @@ class CopyMoveFileHandlerTest {
       fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
       verify { fileCopyMoveCallback.onFileMoved(destinationFile) }
-      verify { fileHandler.dismissCopyMoveProgressDialog() }
+      verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
       coVerify { fileOperationHandler.delete(sourceUri, selectedFile) }
     }
 
@@ -361,7 +364,7 @@ class CopyMoveFileHandlerTest {
       fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
       verify { fileCopyMoveCallback.onFileCopied(destinationFile) }
-      verify { fileHandler.dismissCopyMoveProgressDialog() }
+      verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
     }
 
   @Test
@@ -388,7 +391,7 @@ class CopyMoveFileHandlerTest {
 
       fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
 
-      verify { fileHandler.dismissCopyMoveProgressDialog() }
+      verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
       verify {
         fileCopyMoveCallback.onError(
           activity.getString(
