@@ -75,7 +75,7 @@ data class DownloadApkEntity(
       bytesDownloaded = 0,
       totalSizeOfDownload = 0,
       progress = 0,
-      status = Status.NONE,
+      status = Status.CANCELLED,
       error = Error.NONE,
     )
 }

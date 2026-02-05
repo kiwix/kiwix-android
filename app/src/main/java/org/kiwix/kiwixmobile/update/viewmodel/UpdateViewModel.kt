@@ -57,7 +57,7 @@ class UpdateViewModel @Inject constructor(
     }
   }
 
-  private fun downloadApk() {
+  fun downloadApk() {
     _state.value = _state.value.copy(
       loading = true
     )
@@ -76,7 +76,7 @@ class UpdateViewModel @Inject constructor(
     }
   }
 
-  private fun cancelDownload() {
+  fun cancelDownload() {
     _state.value = _state.value.copy(
       loading = true
     )
@@ -85,16 +85,13 @@ class UpdateViewModel @Inject constructor(
         loading = false
       )
       downloader.cancelDownload(_state.value.downloadApkState.downloadId)
+      downloadApkDao.resetDownloadInfoState()
     } catch (e: Exception) {
       _state.value = _state.value.copy(
         loading = false,
         error = e.message ?: "Unknown error"
       )
     }
-  }
-
-  private fun resetDownloadState() {
-    downloadApkDao.resetDownloadInfoState()
   }
 
   fun event(event: UpdateEvents) {
@@ -108,7 +105,7 @@ class UpdateViewModel @Inject constructor(
       }
 
       is UpdateEvents.ResetDownloadState -> {
-        resetDownloadState()
+        // resetDownloadState()
       }
     }
   }

@@ -44,6 +44,7 @@ interface DownloadApkDao {
   fun resetDownloadInfoState() {
     getDownload().let { downloadApkEntity ->
       downloadApkEntity?.resetDownloadSate()
+        ?.let { updateApkDownload(it) }
     }
   }
 
