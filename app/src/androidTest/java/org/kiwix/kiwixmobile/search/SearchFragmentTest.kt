@@ -63,10 +63,10 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
 import java.net.URI
 
 class SearchFragmentTest : BaseActivityTest() {
+
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
@@ -91,6 +91,7 @@ class SearchFragmentTest : BaseActivityTest() {
         }
         waitForIdle()
       }
+
     KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
@@ -102,6 +103,7 @@ class SearchFragmentTest : BaseActivityTest() {
         setPrefIsTest(true)
       }
     }
+
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
@@ -109,6 +111,7 @@ class SearchFragmentTest : BaseActivityTest() {
           AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         }
       }
+
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
       accessibilityValidator.setSuppressingResultMatcher(
@@ -119,9 +122,7 @@ class SearchFragmentTest : BaseActivityTest() {
       )
     } else {
       accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
+        anyOf(matchesCheck(DuplicateClickableBoundsCheck::class.java))
       )
     }
     composeTestRule.enableAccessibilityChecks(accessibilityValidator)
@@ -142,31 +143,27 @@ class SearchFragmentTest : BaseActivityTest() {
           "My Wor",
           "100"
         )
+
       activityScenario.onActivity {
         kiwixMainActivity = it
         kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
+
       composeTestRule.waitForIdle()
+
       downloadingZimFile = getDownloadingZimFile()
       getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
         if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
-          }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
+          response.body?.let { writeZimFileData(it, downloadingZimFile) }
         }
       }
+
       openKiwixReaderFragmentWithFile(downloadingZimFile)
       composeTestRule.waitForIdle()
-      search { checkZimFileSearchSuccessful(composeTestRule) }
+
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
-      // wait for searchFragment become visible on screen.
-      val searchFragment =
-        waitForSearchFragment(kiwixMainActivity)
+
+      val searchFragment = waitForSearchFragment(kiwixMainActivity)
 
       val viewModel =
         ViewModelProvider(searchFragment)[SearchViewModel::class.java]
@@ -175,20 +172,20 @@ class SearchFragmentTest : BaseActivityTest() {
         val term = searchTerms[i % searchTerms.size]
         viewModel.actions.trySend(Action.Filter(term))
       }
+
       for (i in 1..100) {
-        // this will execute the render method 100 times with 100MS delay.
         delay(100)
         val term = searchTerms[i % searchTerms.size]
         viewModel.actions.trySend(Action.Filter(term))
       }
+
       for (i in 1..100) {
-        // this will execute the render method 100 times with 200MS delay.
         delay(200)
         val term = searchTerms[i % searchTerms.size]
         viewModel.actions.trySend(Action.Filter(term))
       }
+
       for (i in 1..100) {
-        // this will execute the render method 100 times with 200MS delay.
         delay(300)
         val term = searchTerms[i % searchTerms.size]
         viewModel.actions.trySend(Action.Filter(term))
@@ -201,14 +198,18 @@ class SearchFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
+
     testZimFile = getTestZimFile()
     openKiwixReaderFragmentWithFile(testZimFile)
+
     search { checkZimFileSearchSuccessful(composeTestRule) }
+
     openSearchWithQuery("Android ", testZimFile)
     search {
       clickOnSearchItemInSearchList(composeTestRule)
       checkZimFileSearchSuccessful(composeTestRule)
     }
+
     openSearchWithQuery("   Unit test   ", testZimFile)
     search {
       clickOnSearchItemInSearchList(composeTestRule)
@@ -216,17 +217,14 @@ class SearchFragmentTest : BaseActivityTest() {
     }
   }
 
-  private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {
-    testZimFile.delete()
-  }
-
   private fun openKiwixReaderFragmentWithFile(zimFile: File) {
     UiThreadStatement.runOnUiThread {
-      val navOptions = NavOptions.Builder()
-        .setPopUpTo(KiwixDestination.Reader.route, false)
-        .build()
+      val navOptions =
+        NavOptions.Builder()
+          .setPopUpTo(KiwixDestination.Reader.route, false)
+          .build()
       kiwixMainActivity.apply {
-        kiwixMainActivity.navigate(KiwixDestination.Reader.route, navOptions)
+        navigate(KiwixDestination.Reader.route, navOptions)
         setNavigationResultOnCurrent(zimFile.toUri().toString(), ZIM_FILE_URI_KEY)
       }
     }
@@ -252,35 +250,22 @@ class SearchFragmentTest : BaseActivityTest() {
 
   private fun openSearchWithQuery(query: String = "", zimFile: File) {
     UiThreadStatement.runOnUiThread {
-      if (zimFile.canRead()) {
-        kiwixMainActivity.openSearch(searchString = query)
-      } else {
-        throw RuntimeException(
-          "File $zimFile is not readable." +
-            " Original File $zimFile is readable = ${zimFile.canRead()}" +
-            " Size ${zimFile.length()}"
-        )
-      }
+      kiwixMainActivity.openSearch(searchString = query)
     }
   }
 
   private fun getTestZimFile(): File {
-    val loadFileStream =
+    val input =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        "testzim.zim"
-      )
+    val zimFile = File(context.getExternalFilesDirs(null)[0], "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
+    input.use { inputStream ->
+      FileOutputStream(zimFile).use { output ->
+        val buffer = ByteArray(4096)
+        var len: Int
+        while (inputStream.read(buffer).also { len = it } > 0) {
+          output.write(buffer, 0, len)
         }
       }
     }
@@ -297,14 +282,7 @@ class SearchFragmentTest : BaseActivityTest() {
   @After
   fun finish() {
     TestUtils.deleteTemporaryFilesOfTestCases(context)
-    context.cacheDir?.let {
-      it.listFiles()?.let { files ->
-        for (child in files) {
-          child.delete()
-        }
-      }
-      it.delete()
-    }
+    context.cacheDir?.deleteRecursively()
   }
 
   private fun waitForSearchFragment(
@@ -317,7 +295,6 @@ class SearchFragmentTest : BaseActivityTest() {
         activity.supportFragmentManager.fragments
           .filterIsInstance<SearchFragment>()
           .firstOrNull { it.isAdded }
-
       if (fragment != null) return fragment
       Thread.sleep(50)
     }
