@@ -425,5 +425,8 @@
   <string name="validating_zim_file">Validating ZIM file…</string>
   <string name="validating_zim_files">Validating ZIM files…</string>
   <string name="new_update_available_message">New update available for kiwix</string>
-  <string name="update">UPDATE</string>
+  <string name="update">Update</string>
+  <string name="new_update_available_title">New Update available</string>
+  <string name="error_during_installing_apk">An error was encountered installation of apk. File no longer exists</string>
+  <string name="download_again">re-download</string>
 </resources>

@@ -18,20 +18,39 @@
 
 package org.kiwix.kiwixmobile.update
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateViewModel
+import java.io.File
 import javax.inject.Inject
 
 class UpdateFragment : BaseFragment() {
@@ -40,20 +59,125 @@ class UpdateFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
+
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
+
   private var composeView: ComposeView? = null
+
+  private val isNotConnected: Boolean
+    get() = !NetworkUtils.isNetworkAvailable(requireActivity())
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
   }
 
+  private fun requestNotificationPermission() {
+    if (!shouldShowRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
+    }
+  }
+
+  private fun shouldShowRationale(permission: String) =
+    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)
+
+  private fun noInternetSnackbar() {
+    updateViewModel.state.value.snackbarHostState.snack(
+      message = getString(string.no_network_connection),
+      actionLabel = getString(string.menu_settings),
+      lifecycleScope = lifecycleScope,
+      actionClick = { openNetworkSettings() }
+    )
+  }
+
+  private fun openNetworkSettings() {
+    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
+      val context = LocalContext.current
       UpdateScreen(
         state = updateViewModel.state.value,
-        events = updateViewModel::event
+        events = updateViewModel::event,
+        onUpdateClick = {
+          onUpdateClick()
+        },
+        onUpdateCancel = {
+          updateViewModel.cancelDownload()
+        },
+        onInstallApk = {
+          installApk(
+            context,
+            updateViewModel.state.value
+          )
+        }
       )
       DialogHost(alertDialogShower)
+    }
+  }
+
+  private fun onUpdateClick() {
+    lifecycleScope.launch {
+      if (requireActivity().hasNotificationPermission(kiwixDataStore)) {
+        when {
+          isNotConnected -> {
+            noInternetSnackbar()
+            return@launch
+          }
+
+          else -> updateViewModel.downloadApk()
+        }
+      } else {
+        requestNotificationPermission()
+      }
+    }
+  }
+
+  @Suppress("all")
+  @SuppressLint("RequestInstallPackagesPolicy")
+  fun installApk(
+    context: Context,
+    states: UpdateStates
+  ) {
+    val apkFile =
+      File("/storage/emulated/0/Android/media/org.kiwix.kiwixmobile/Kiwix/org.kiwix.kiwixmobile.standalone-3.14.0.apk")
+    val apkUri = FileProvider.getUriForFile(
+      context,
+      "${context.packageName}.fileprovider",
+      apkFile
+    )
+    if (canOpenApk(apkFile)) {
+      @Suppress("DEPRECATION")
+      val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)
+      installerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      installerIntent.setDataAndType(
+        apkUri,
+        "application/vnd.android.package-archive",
+      )
+      installerIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
+      context.startActivity(installerIntent)
+    } else {
+      alertDialogShower.show(
+        KiwixDialog.ShowReDownloadDialog,
+        {
+          updateViewModel.downloadApk()
+        },
+        {
+        }
+      )
+    }
+  }
+
+  private fun canOpenApk(apkFile: File): Boolean {
+    return when {
+      apkFile.exists() -> true
+      else -> false
     }
   }
 

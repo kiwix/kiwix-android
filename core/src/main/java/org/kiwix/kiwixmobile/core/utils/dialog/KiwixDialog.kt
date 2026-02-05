@@ -440,10 +440,17 @@ sealed class KiwixDialog(
   )
 
   object ShowUpdateDialog : KiwixDialog(
-    null,
+    R.string.new_update_available_title,
     R.string.new_update_available_message,
     confirmButtonText = R.string.update,
     dismissButtonText = R.string.rate_dialog_neutral
+  )
+
+  object ShowReDownloadDialog : KiwixDialog(
+    null,
+    R.string.error_during_installing_apk,
+    confirmButtonText = R.string.download_again,
+    dismissButtonText = R.string.cancel
   )
 }
 

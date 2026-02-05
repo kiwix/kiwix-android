@@ -221,7 +221,7 @@ class DownloadApkService : Service() {
 
     private fun delete() {
       taskFlow.tryEmit {
-        // downloadApkDao.delete(download)
+        downloadApkDao.resetDownloadInfoState()
         stopForegroundServiceIfNoActiveDownloads(fetch)
       }
     }

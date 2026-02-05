@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.update
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,64 +34,68 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
+import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.update.viewmodel.DownloadApkState
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateEvents
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
-import java.io.File
 
 @Suppress("all")
 @Composable
 fun UpdateScreen(
   state: UpdateStates,
-  events: (UpdateEvents) -> Unit = {}
+  events: (UpdateEvents) -> Unit = {},
+  onUpdateClick: () -> Unit = {},
+  onUpdateCancel: () -> Unit = {},
+  onInstallApk: () -> Unit = {}
 ) {
-  val context = LocalContext.current
   LaunchedEffect(state.downloadApkState.currentDownloadState) {
     if (state.downloadApkState.currentDownloadState == Status.COMPLETED) {
-      installApk(
-        context,
-        state
-      )
+      onInstallApk()
     }
   }
-  UpdateInfoCard(
-    state = state,
-    events = events
-  )
+  Scaffold(
+    snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackbarHostState) },
+  ) {
+    UpdateInfoCard(
+      state = state,
+      events = events,
+      onUpdateClick = onUpdateClick,
+      onUpdateCancel = onUpdateCancel,
+      onInstallApk = onInstallApk
+    )
+  }
 }
 
 @Suppress("all")
 @Composable
 fun UpdateInfoCard(
   state: UpdateStates,
-  events: (UpdateEvents) -> Unit
+  events: (UpdateEvents) -> Unit,
+  onUpdateClick: () -> Unit,
+  onUpdateCancel: () -> Unit = {},
+  onInstallApk: () -> Unit = {}
 ) {
-  val buttonText = if (state.downloadApkState.currentDownloadState == Status.COMPLETED) {
-    "INSTALL"
-  } else {
-    "UPDATE"
-  }
   Column(
     modifier = Modifier
       .padding(16.dp)
@@ -125,39 +126,45 @@ fun UpdateInfoCard(
       }
     }
     Spacer(modifier = Modifier.height(16.dp))
-
     LabelText(
       label = "Download the latest version",
       style = MaterialTheme.typography.bodyMedium,
       color = Color.DarkGray
     )
-    val context = LocalContext.current
-    if (state.downloadApkState.currentDownloadState == Status.DOWNLOADING) {
-      DownloadInfoRow(
-        state = state,
-        onCancel = {
-          events(
-            UpdateEvents.CancelDownload
-          )
-        }
-      )
-    } else {
-      KiwixButton(
-        modifier = Modifier.fillMaxWidth(),
-        clickListener = {
-          if (state.downloadApkState.currentDownloadState == Status.COMPLETED) {
-            installApk(
-              states = state,
-              context = context
-            )
-          } else {
-            events(
-              UpdateEvents.DownloadApk
-            )
-          }
-        },
-        buttonText = buttonText
-      )
+
+    val downloadApkState = state.downloadApkState
+    when (downloadApkState.currentDownloadState) {
+      Status.QUEUED, Status.DOWNLOADING -> {
+        DownloadInfoRow(
+          state = state,
+          onCancel = onUpdateCancel,
+        )
+      }
+
+      Status.NONE, Status.CANCELLED -> {
+        KiwixButton(
+          modifier = Modifier.fillMaxWidth(),
+          clickListener = onUpdateClick,
+          buttonText = "UPDATE"
+        )
+      }
+
+      Status.COMPLETED -> {
+        KiwixButton(
+          modifier = Modifier.fillMaxWidth(),
+          clickListener = {
+            onInstallApk()
+          },
+          buttonText = "Install"
+        )
+      }
+
+      Status.DOWNLOADING -> TODO()
+      Status.PAUSED -> TODO()
+      Status.FAILED -> TODO()
+      Status.REMOVED -> TODO()
+      Status.DELETED -> TODO()
+      Status.ADDED -> TODO()
     }
   }
 }
@@ -166,9 +173,29 @@ fun UpdateInfoCard(
 fun DownloadInfoRow(
   state: UpdateStates,
   onCancel: () -> Unit,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
 ) {
   val contentColor = Color.Gray
+  // Automatically invoke onStopClick if the download failed
+  LaunchedEffect(state.downloadApkState.currentDownloadState) {
+    if (state.downloadApkState.currentDownloadState == Status.FAILED) {
+      when (state.downloadApkState.downloadError) {
+        Error.UNKNOWN_IO_ERROR,
+        Error.CONNECTION_TIMED_OUT,
+        Error.UNKNOWN -> {
+          // Only retrigger the download for CONNECTION_TIMED_OUT or UNKNOWN_IO_ERROR.
+          // For other errors (e.g., REQUEST_DOES_NOT_EXIST, EMPTY_RESPONSE_FROM_SERVER, REQUEST_NOT_SUCCESSFUL),
+          // we inform the user because the download cannot be restarted in these cases.
+          onCancel.invoke()
+        }
+
+        else -> {
+          // Do nothing for remaining errors, since re-download is not possible due to the absence of the ZIM file.
+        }
+      }
+    }
+  }
+
   Row(
     modifier = modifier
       .fillMaxWidth()
@@ -239,32 +266,6 @@ fun DownloadText(
     color = contentColor,
     fontWeight = FontWeight.Medium
   )
-}
-
-@Suppress("all")
-@SuppressLint("RequestInstallPackagesPolicy")
-fun installApk(
-  context: Context,
-  states: UpdateStates
-) {
-  val apkFile =
-    File("/storage/emulated/0/Android/media/org.kiwix.kiwixmobile/Kiwix/org.kiwix.kiwixmobile.standalone-3.14.0.apk")
-
-  val apkUri = FileProvider.getUriForFile(
-    context,
-    "${context.packageName}.fileprovider",
-    apkFile
-  )
-
-  @Suppress("DEPRECATION")
-  val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)
-  installerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-  installerIntent.setDataAndType(
-    apkUri,
-    "application/vnd.android.package-archive",
-  )
-  installerIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
-  context.startActivity(installerIntent)
 }
 
 @Preview
