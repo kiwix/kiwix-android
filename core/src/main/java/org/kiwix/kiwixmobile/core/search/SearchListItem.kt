@@ -25,7 +25,7 @@ sealed class SearchListItem {
   data class RecentSearchListItem(override val value: String, override val url: String?) :
     SearchListItem()
 
-  data class ZimSearchResultListItem constructor(
+  data class ZimSearchResultListItem(
     override val value: String,
     override val url: String?
   ) : SearchListItem()
