@@ -32,8 +32,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
-import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -304,7 +302,7 @@ class ZimFileReader constructor(
 
   fun isRedirect(url: String) =
     when {
-      getRedirect(url).isEmpty() || url.endsWith(UNINITIALISER_ADDRESS) -> false
+      getRedirect(url).isEmpty() -> false
       else -> url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
     }
 
@@ -395,21 +393,18 @@ class ZimFileReader constructor(
       null
     }
 
-  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  @Suppress("InjectDispatcher")
   private suspend fun generateZimContentBytes(item: Item?, uri: String): ByteArrayInputStream =
     withContext(Dispatchers.IO) {
-      try {
+      runCatching {
         val output = ByteArrayOutputStream()
-        when {
-          uri.endsWith(UNINITIALISER_ADDRESS) -> output.write(UNINITIALISE_HTML.toByteArray())
-          item != null -> output.write(item.data.data)
+        if (item != null) {
+          output.write(item.data.data)
         }
 
         ByteArrayInputStream(output.toByteArray())
-      } catch (e: Exception) {
-        Log.e(TAG, "Error generating data for $uri", e)
-        ByteArrayInputStream(ByteArray(0))
-      }
+      }.onFailure { Log.e(TAG, "Error generating data for $uri", it) }
+        .getOrDefault(ByteArrayInputStream(ByteArray(0)))
     }
 
   fun getItem(url: String): Item? =

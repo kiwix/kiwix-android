@@ -161,7 +161,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
       isWebViewHistoryRestoring = true
-      isFromManageExternalLaunch = true
       runSafelyInCoreReaderLifecycleScope {
         if (isZimFileAlreadyOpenedInReader()) {
           manageExternalLaunchAndRestoringViewState()
@@ -247,8 +246,7 @@ class CustomReaderFragment : CoreReaderFragment() {
                   null,
                   it.assetFileDescriptorList
                 ),
-                true,
-                shouldManageExternalLaunch
+                true
               )
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
@@ -261,7 +259,7 @@ class CustomReaderFragment : CoreReaderFragment() {
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
             coreReaderLifeCycleScope?.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
-              openZimFile(ZimReaderSource(it.obbFile), true, shouldManageExternalLaunch)
+              openZimFile(ZimReaderSource(it.obbFile), true)
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
                 manageExternalLaunchAndRestoringViewState()

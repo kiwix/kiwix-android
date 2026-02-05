@@ -55,13 +55,6 @@ abstract class CoreApp : Application() {
   @Inject
   lateinit var fileLogger: FileLogger
 
-  /**
-   * The init of this class does the work of initializing,
-   * simply injecting it is all that there is to be done
-   */
-  @Inject
-  lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
-
   private lateinit var coreMainActivity: CoreMainActivity
 
   override fun attachBaseContext(base: Context) {
@@ -79,7 +72,6 @@ abstract class CoreApp : Application() {
       .build()
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
-    serviceWorkerInitialiser.init(this)
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()

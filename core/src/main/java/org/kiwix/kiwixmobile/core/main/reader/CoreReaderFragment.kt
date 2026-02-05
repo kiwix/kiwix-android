@@ -116,8 +116,6 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
-import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
-import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
@@ -144,6 +142,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
@@ -217,9 +216,6 @@ abstract class CoreReaderFragment :
   var donationDialogHandler: DonationDialogHandler? = null
   protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
-  private var isFirstTimeMainPageLoaded = true
-
-  @Volatile var isFromManageExternalLaunch = false
   private val savingTabsMutex = Mutex()
   private var searchItemToOpen: SearchItemToOpen? = null
   private var findInPageTitle: String? = null
@@ -1186,7 +1182,6 @@ abstract class CoreReaderFragment :
         }
         setUpWithTextToSpeech(it)
         documentParser?.initInterface(it)
-        ServiceWorkerUninitialiser(::openMainPage).initInterface(it)
       }
       return webView
     }
@@ -1545,12 +1540,7 @@ abstract class CoreReaderFragment :
     )
   }
 
-  suspend fun openZimFile(
-    zimReaderSource: ZimReaderSource,
-    isCustomApp: Boolean = false,
-    isFromManageExternalLaunch: Boolean = false
-  ) {
-    this.isFromManageExternalLaunch = isFromManageExternalLaunch
+  suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
     if (isCustomApp || hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
@@ -1611,10 +1601,7 @@ abstract class CoreReaderFragment :
       zimReaderContainer.setZimReaderSource(zimReaderSource, showSearchSuggestionsSpellChecked)
 
       zimReaderContainer.zimFileReader?.let { zimFileReader ->
-        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-        if (!isFromManageExternalLaunch) {
-          openArticle(UNINITIALISER_ADDRESS)
-        }
+        openMainPage()
         readerMenuState?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: run {
@@ -2304,31 +2291,6 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   override fun webViewUrlFinishedLoading() {
     if (isAdded) {
-      // Check whether the current loaded URL is the main page URL.
-      // If the URL is the main page URL, then clear the WebView history
-      // because WebView cannot clear the history for the current page.
-      // If the current URL is a service worker URL and we clear the history,
-      // it will not remove the service worker from the history, so it will remain in the history.
-      // To clear this, we are clearing the history when the main page is loaded for the first time.
-      val mainPageUrl = zimReaderContainer?.mainPage
-      if (isFirstTimeMainPageLoaded &&
-        !isFromManageExternalLaunch &&
-        mainPageUrl?.let { getCurrentWebView()?.url?.endsWith(it) } == true
-      ) {
-        // Set isFirstTimeMainPageLoaded to false. This ensures that if the user clicks
-        // on the home menu after visiting multiple pages, the history will not be erased.
-        isFirstTimeMainPageLoaded = false
-        getCurrentWebView()?.clearHistory()
-        updateBottomToolbarArrowsAlpha()
-        // Open the main page after clearing the history because some service worker ZIM files
-        // sometimes do not load properly.
-        Handler(Looper.getMainLooper()).postDelayed({ openMainPage() }, 300)
-      }
-      if (getCurrentWebView()?.url?.endsWith(UNINITIALISER_ADDRESS) == true) {
-        // Do not save this item in history since it is only for uninitializing the service worker.
-        // Simply skip the next step.
-        return
-      }
       updateTableOfContents()
       updateBottomToolbarArrowsAlpha()
       val zimFileReader = zimReaderContainer?.zimFileReader
@@ -2380,12 +2342,11 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @Suppress("MagicNumber")
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
       updateUrlFlow()
       showProgressBarWithProgress(progress)
-      if (progress == 100) {
+      if (progress == HUNDERED) {
         hideProgressBar()
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
       }
@@ -2552,7 +2513,6 @@ abstract class CoreReaderFragment :
     onComplete: () -> Unit
   ) {
     try {
-      isFromManageExternalLaunch = true
       currentWebViewIndex = 0
       webViewList.removeFirstOrNull()
       webViewHistoryItemList.forEach { webViewHistoryItem ->

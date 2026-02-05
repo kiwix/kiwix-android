@@ -109,7 +109,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
           tryOpeningZimFile(zimFileUri)
         } else {
           isWebViewHistoryRestoring = true
-          isFromManageExternalLaunch = true
           val restoreOrigin =
             if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
           manageExternalLaunchAndRestoringViewState(restoreOrigin)
@@ -260,7 +259,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           }?.first()
         if (zimReaderSource?.canOpenInLibkiwix() == true) {
           if (zimReaderContainer?.zimReaderSource == null) {
-            openZimFile(zimReaderSource, isFromManageExternalLaunch = true)
+            openZimFile(zimReaderSource)
             Log.d(
               TAG_KIWIX,
               "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
