@@ -219,7 +219,11 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
-
+  LaunchedEffect(state.onlineLibraryList) {
+    if (!state.isLoadingMoreItem) {
+      lazyListState.scrollToItem(ZERO)
+    }
+  }
   LaunchedEffect(lazyListState, state.onlineLibraryList) {
     snapshotFlow { lazyListState.layoutInfo }
       .combine(
