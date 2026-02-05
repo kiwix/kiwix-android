@@ -66,7 +66,6 @@ import java.io.FileOutputStream
 import java.net.URI
 
 class SearchFragmentTest : BaseActivityTest() {
-
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
