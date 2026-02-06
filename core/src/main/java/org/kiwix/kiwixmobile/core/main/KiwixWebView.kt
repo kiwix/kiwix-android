@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import org.kiwix.videowebview.VideoEnabledWebChromeClient.ToggledFullscreenCallback
 import org.kiwix.videowebview.VideoEnabledWebView
 import javax.inject.Inject
@@ -167,26 +168,46 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   class SaveHandler(
     private val zimReaderContainer: ZimReaderContainer,
     private val kiwixDataStore: KiwixDataStore
-  ) :
-    Handler(Looper.getMainLooper()) {
-    @SuppressWarnings("InjectDispatcher")
+  ) : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
-      val url = msg.data.getString("url", null)
-      val src = msg.data.getString("src", null)
+      val url = msg.data.getString("url")
+      val src = msg.data.getString("src")
       if (url == null && src == null) return
+      @Suppress("InjectDispatcher")
       CoroutineScope(Dispatchers.IO).launch {
-        val savedFile =
-          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, kiwixDataStore)
-        val applicationContextForLanguage = ContextCompat.getContextForLanguage(instance)
+        val result = FileUtils.downloadFileFromUrl(
+          context = instance,
+          url = url,
+          src = src,
+          zimReaderContainer = zimReaderContainer
+        )
+
         withContext(Dispatchers.Main) {
-          savedFile?.let {
-            applicationContextForLanguage.toast(
-              applicationContextForLanguage.getString(R.string.save_media_saved, it.name)
-            ).also {
-              Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
+          val appContext = ContextCompat.getContextForLanguage(instance)
+
+          when (result) {
+            is SaveResult.FileSaved -> {
+              appContext.toast(
+                appContext.getString(
+                  R.string.save_media_saved,
+                  result.file.name
+                )
+              )
             }
-          } ?: run {
-            applicationContextForLanguage.toast(R.string.save_media_error)
+
+            is SaveResult.MediaSaved -> {
+              appContext.toast(
+                appContext.getString(
+                  R.string.save_media_saved,
+                  result.displayName
+                )
+              )
+            }
+
+            is SaveResult.Error -> {
+              Log.e("MEDIA_SAVE", result.message, result.throwable)
+              appContext.toast(R.string.save_media_error)
+            }
           }
         }
       }

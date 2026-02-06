@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.documentProviderContentQuery
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
+import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import java.io.File
@@ -353,17 +354,15 @@ class FileUtilsInstrumentationTest {
     val base64Png =
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
 
-    val file = FileUtils.downloadFileFromUrl(
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
       url = null,
       src = base64Png,
-      zimReaderContainer = zimReaderContainer,
-      kiwixDataStore = kiwixDataStore
+      zimReaderContainer = zimReaderContainer
     )
-
-    Assertions.assertNotNull(file)
-    Assertions.assertTrue(file!!.exists())
-    Assertions.assertTrue(file.name.endsWith(".png"))
-    Assertions.assertTrue(file.length() > 0)
+    val media = result as SaveResult.MediaSaved
+    Assertions.assertTrue(media.displayName.endsWith(".png"))
+    Assertions.assertNotNull(media.uri)
   }
 
   @Test
@@ -372,14 +371,14 @@ class FileUtilsInstrumentationTest {
     val dataUri = "data:image/png,abcdefg"
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
 
-    val file = FileUtils.downloadFileFromUrl(
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
       url = null,
       src = dataUri,
-      zimReaderContainer = mockk(relaxed = true),
-      kiwixDataStore = kiwixDataStore
+      zimReaderContainer = mockk(relaxed = true)
     )
 
-    Assertions.assertNull(file)
+    Assertions.assertTrue(result is SaveResult.Error)
   }
 
   @Test
@@ -391,13 +390,14 @@ class FileUtilsInstrumentationTest {
     val zimReader = mockk<ZimReaderContainer>(relaxed = true)
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
 
-    FileUtils.downloadFileFromUrl(
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
       url = null,
       src = base64Jpeg,
-      zimReaderContainer = zimReader,
-      kiwixDataStore = kiwixDataStore
+      zimReaderContainer = zimReader
     )
 
+    Assertions.assertTrue(result is SaveResult.FileSaved || result is SaveResult.MediaSaved)
     verify(exactly = 0) {
       zimReader.load(any(), any())
     }
