@@ -15,10 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+@file:Suppress("LargeClass")
+
 package org.kiwix.kiwixmobile.core.utils.files
 
 import android.annotation.SuppressLint
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
@@ -41,16 +45,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
-import org.kiwix.kiwixmobile.core.extensions.hasContent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathForAndroid10AndAbove
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
@@ -697,63 +698,161 @@ object FileUtils {
     return fileNameAndSource
   }
 
-  suspend fun getDownloadRootDir(kiwixDataStore: KiwixDataStore): File? {
-    return if (
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-    ) {
-      CoreApp.instance.externalMediaDirs.firstOrNull()
-    } else {
-      File(
-        "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/org.kiwix"
-      ).apply {
-        if (!exists()) mkdir()
+  suspend fun getDownloadRootDir(
+    context: Context
+  ): File? {
+    val dir = context.getExternalFilesDir(null)
+      ?: return null
+
+    if (!dir.exists()) dir.mkdirs()
+    return dir
+  }
+
+  @Suppress("ReturnCount", "TooGenericExceptionCaught")
+  suspend fun downloadFileFromUrl(
+    context: Context,
+    url: String?,
+    src: String?,
+    zimReaderContainer: ZimReaderContainer
+  ): SaveResult {
+    val source = url ?: src
+    if (source == null) {
+      return SaveResult.Error("Both url and src are null")
+    }
+
+    Log.e("MEDIA_SAVE", "source=$source")
+
+    return try {
+      // Saves Base64 like SVG
+      if (isBase64DataUri(source)) {
+        return saveBase64Source(source, context)
       }
+
+      val mime = MimeTypeMap.getSingleton()
+        .getMimeTypeFromExtension(
+          MimeTypeMap.getFileExtensionFromUrl(source)
+        ) ?: "application/octet-stream"
+
+      Log.e("MEDIA_SAVE", "mime=$mime")
+
+      // Saves Images
+      if (mime.startsWith("image/") && mime != "image/svg+xml") {
+        val uri = saveImageFromUrl(
+          source,
+          mime,
+          context,
+          zimReaderContainer
+        ) ?: return SaveResult.Error("MediaStore image save failed")
+
+        val name = URLUtil.guessFileName(source, null, null)
+        return SaveResult.MediaSaved(uri, name)
+      }
+
+      // Saves Epub
+      val file = saveFileFromUrl(context, source, zimReaderContainer)
+        ?: return SaveResult.Error("File save failed")
+
+      SaveResult.FileSaved(file)
+    } catch (t: Throwable) {
+      SaveResult.Error("Unexpected save error", t)
     }
   }
 
-  @Suppress("ReturnCount", "NestedBlockDepth")
-  @JvmStatic
-  suspend fun downloadFileFromUrl(
-    url: String?,
-    src: String?,
-    zimReaderContainer: ZimReaderContainer,
-    kiwixDataStore: KiwixDataStore
-  ): File? {
-    val root = getDownloadRootDir(kiwixDataStore) ?: return null
-    when {
-      isBase64DataUri(src) -> {
-        val decoded = decodeBase64DataUri(src) ?: return null
-        val (extension, bytes) = decoded
-        val file = File(root, generateBase64FileName(extension))
+  @Suppress("ReturnCount")
+  private suspend fun saveBase64Source(
+    src: String,
+    context: Context
+  ): SaveResult {
+    val decoded = decodeBase64DataUri(src)
+      ?: return SaveResult.Error("Invalid base64 data")
 
-        return try {
-          file.outputStream().use { it.write(bytes) }
-          file
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save base64 file", e)
-          null
-        }
-      }
+    val (extension, bytes) = decoded
 
-      else -> {
-        val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src)
-        if (fileName?.first == null) return null
-        val fileToSave = File(root, fileName.first)
-        if (fileToSave.isFileExist()) return fileToSave
-        return try {
-          fileName.second?.let {
-            zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
-              fileToSave.outputStream().use(inputStream::copyTo)
-            }
-            if (fileToSave.hasContent()) fileToSave else null
-          }
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save file", e)
-          null
-        }
-      }
+    val mime = MimeTypeMap.getSingleton()
+      .getMimeTypeFromExtension(extension) ?: "application/octet-stream"
+
+    Log.e("MEDIA_SAVE", "base64 mime=$mime")
+
+    if (mime == "image/svg+xml") {
+      val dir = getDownloadRootDir(context)
+        ?: return SaveResult.Error("Download dir unavailable")
+
+      val file = File(dir, generateBase64FileName(extension))
+      file.writeBytes(bytes)
+      return SaveResult.FileSaved(file)
     }
+
+    val uri = saveImageToMediaStore(
+      context,
+      generateBase64FileName(extension),
+      mime,
+      bytes
+    ) ?: return SaveResult.Error("MediaStore insert failed")
+
+    return SaveResult.MediaSaved(uri, generateBase64FileName(extension))
+  }
+
+  private fun saveImageFromUrl(
+    source: String,
+    mime: String,
+    context: Context,
+    zimReaderContainer: ZimReaderContainer
+  ): Uri? {
+    val bytes = zimReaderContainer
+      .load(source, emptyMap())
+      .data
+      .readBytes()
+
+    return saveImageToMediaStore(
+      context,
+      URLUtil.guessFileName(source, null, null),
+      mime,
+      bytes
+    )
+  }
+
+  private fun saveImageToMediaStore(
+    context: Context,
+    fileName: String,
+    mime: String,
+    bytes: ByteArray
+  ): Uri? {
+    val resolver = context.contentResolver
+
+    val values = ContentValues().apply {
+      put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+      put(MediaStore.Images.Media.MIME_TYPE, mime)
+      put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Kiwix")
+      put(MediaStore.Images.Media.IS_PENDING, 1)
+    }
+
+    val uri = resolver.insert(
+      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+      values
+    ) ?: return null
+
+    resolver.openOutputStream(uri)?.use { it.write(bytes) }
+
+    values.clear()
+    values.put(MediaStore.Images.Media.IS_PENDING, 0)
+    resolver.update(uri, values, null, null)
+
+    return uri
+  }
+
+  private suspend fun saveFileFromUrl(
+    context: Context,
+    source: String,
+    zimReaderContainer: ZimReaderContainer
+  ): File? {
+    val root = getDownloadRootDir(context) ?: return null
+    val name = URLUtil.guessFileName(source, null, null)
+    val file = File(root, name)
+
+    zimReaderContainer.load(source, emptyMap()).data.use { input ->
+      file.outputStream().use(input::copyTo)
+    }
+    return file
   }
 
   @JvmStatic

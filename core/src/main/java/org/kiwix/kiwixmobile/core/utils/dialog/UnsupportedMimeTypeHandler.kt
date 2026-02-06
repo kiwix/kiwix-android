@@ -28,12 +28,14 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.downloadFileFromUrl
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import java.io.File
 import javax.inject.Inject
 
 class UnsupportedMimeTypeHandler @Inject constructor(
   private val activity: Activity,
+  @Suppress("UnusedPrivateProperty")
   private val kiwixDataStore: KiwixDataStore,
   private val zimReaderContainer: ZimReaderContainer
 ) {
@@ -64,21 +66,40 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     lifecycleScope: CoroutineScope?
   ) {
     lifecycleScope?.launch {
-      downloadFileFromUrl(
-        url,
-        null,
-        zimReaderContainer,
-        kiwixDataStore
-      )?.let { savedFile ->
-        if (openFile) {
-          openFile(savedFile, documentType)
-        } else {
-          activity.toast(activity.getString(R.string.save_media_saved, savedFile.name)).also {
-            Log.e("DownloadOrOpenEpubAndPdf", "File downloaded at = ${savedFile.path}")
+      val result = FileUtils.downloadFileFromUrl(
+        context = activity,
+        url = url,
+        src = null,
+        zimReaderContainer = zimReaderContainer
+      )
+
+      when (result) {
+        is SaveResult.FileSaved -> {
+          if (openFile) {
+            openFile(result.file, documentType)
+          } else {
+            activity.toast(
+              activity.getString(
+                R.string.save_media_saved,
+                result.file.name
+              )
+            )
           }
         }
-      } ?: run {
-        activity.toast(R.string.save_media_error)
+
+        is SaveResult.MediaSaved -> {
+          activity.toast(
+            activity.getString(
+              R.string.save_media_saved,
+              result.displayName
+            )
+          )
+        }
+
+        is SaveResult.Error -> {
+          Log.e("MEDIA_SAVE", result.message, result.throwable)
+          activity.toast(R.string.save_media_error)
+        }
       }
     }
   }
