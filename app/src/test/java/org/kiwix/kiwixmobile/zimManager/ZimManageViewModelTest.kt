@@ -147,6 +147,8 @@ class ZimManageViewModelTest {
     Dispatchers.resetMain()
   }
 
+  @Suppress("LongMethod")
+
   @BeforeEach
   fun init() {
     Dispatchers.setMain(testDispatcher)
@@ -411,6 +413,7 @@ class ZimManageViewModelTest {
     }
   }
 
+  @Suppress("LongMethod")
   @Test
   fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
     runTest {
