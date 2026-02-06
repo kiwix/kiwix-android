@@ -365,7 +365,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   }
 
   private suspend fun waitForDownloadedImageFile(kiwixDataStore: KiwixDataStore): File {
-    val dir = FileUtils.getDownloadRootDir(kiwixDataStore)
+    val dir = FileUtils.getDownloadRootDir(context)
 
     repeat(20) {
       dir?.listFiles()?.firstOrNull { it.name.startsWith("image_") }?.let {
