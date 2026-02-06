@@ -62,8 +62,14 @@ internal class LibraryListItemTest {
   }
 
   @Test
-  internal fun `CannotWrite4GB file system state can be downloaded`() {
+  internal fun `CannotWrite4GbFile file system state can be downloaded`() {
     assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue
+  }
+
+  @Test
+  internal fun `CannotWrite4GbFile file system state cannot be downloaded if file is too big`() {
+    every { book.size } returns (Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
+    assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isFalse
   }
 
   @Test

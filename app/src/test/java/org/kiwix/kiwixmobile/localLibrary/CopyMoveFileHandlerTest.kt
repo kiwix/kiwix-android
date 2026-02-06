@@ -534,7 +534,7 @@ class CopyMoveFileHandlerTest {
       coEvery { fileOperationHandler.delete(any(), any()) } returns true
       coEvery { fileHandler.isValidZimFile(destinationFile) } returns true
       fileHandler.isMoveOperation = true
-
+      coEvery { fileHandler.deleteSourceFile(any()) } returns Unit
       fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
       verify { fileCopyMoveCallback.onFileMoved(destinationFile) }
