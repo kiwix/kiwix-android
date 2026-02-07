@@ -48,13 +48,19 @@ sealed class LibraryListItem {
   ) : LibraryListItem() {
     val canBeDownloaded: Boolean =
       when (fileSystemState) {
-        DetectingFileSystem, CannotWrite4GbFile -> book.isLessThan4GB()
-        NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
+        DetectingFileSystem -> book.isLessThan4GB()
+
+        CannotWrite4GbFile,
+        NotEnoughSpaceFor4GbFile,
+        CanWrite4GbFile -> true
       }
 
     companion object {
-      private fun LibkiwixBook.isLessThan4GB() =
-        size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+      private fun LibkiwixBook.isLessThan4GB(): Boolean {
+        val parsedSize = size.toLongOrNull()
+        return parsedSize == null ||
+          parsedSize < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+      }
     }
   }
 

@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -70,6 +71,8 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 
 const val ONLINE_BOOK_ITEM_TESTING_TAG = "onlineBookItemTestingTag"
 const val ONLINE_BOOK_SIZE_TEXT_TESTING_TAG = "onlineBookSizeTextTestingTag"
+
+private const val STORAGE_CHECK_CLICK_THROTTLE_DELAY_MS = 1500L
 
 @Composable
 fun OnlineBookItem(
@@ -104,7 +107,6 @@ fun OnlineBookItem(
           isClickable,
           item,
           onBookItemClick,
-          hasAvailableSpaceInStorage,
           Modifier.matchParentSize()
         )
       }
@@ -118,10 +120,23 @@ private fun ShowDetectingFileSystemUi(
   isClickable: Boolean,
   item: BookItem,
   onBookItemClick: (BookItem) -> Unit,
-  hasAvailableSpaceInStorage: Boolean,
   modifier: Modifier
 ) {
   if (!isClickable) {
+    var isInteractionEnabled by remember { mutableStateOf(true) }
+    LaunchedEffect(isInteractionEnabled) {
+      if (!isInteractionEnabled) {
+        delay(STORAGE_CHECK_CLICK_THROTTLE_DELAY_MS)
+        isInteractionEnabled = true
+      }
+    }
+    val handleStorageCheckClick = {
+      if (isInteractionEnabled && item.canBeDownloaded) {
+        onBookItemClick.invoke(item)
+        isInteractionEnabled = false
+      }
+    }
+
     val context = LocalContext.current
     Box(
       modifier = modifier
@@ -138,15 +153,14 @@ private fun ShowDetectingFileSystemUi(
           contentDescription = context.getString(R.string.detecting_file_system)
         }
         .combinedClickable(
-          // Do nothing on normal click.
-          onClick = {},
+          onClick = { handleStorageCheckClick() },
           onLongClick = {
             when (item.fileSystemState) {
               CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
               DetectingFileSystem -> context.toast(R.string.detecting_file_system)
               else -> {
-                if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
-                  onBookItemClick.invoke(item)
+                if (item.canBeDownloaded) {
+                  handleStorageCheckClick()
                 } else {
                   throw IllegalStateException("impossible invalid state: ${item.fileSystemState}")
                 }
