@@ -39,6 +39,7 @@ import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -49,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -82,6 +84,8 @@ const val ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG = "alertDialogDismissButtonTes
 const val ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG = "alertDialogNaturalButtonTestingTag"
 const val ALERT_DIALOG_TITLE_TEXT_TESTING_TAG = "alertDialogTitleTextTestingTag"
 const val ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG = "alertDialogMessageTextTestingTag"
+const val ALERT_DIALOG_URI_TEXT_TESTING_TAG = "alertDialogUriTextTestingTag"
+const val ALERT_DIALOG_COPY_BUTTON_TESTING_TAG = "alertDialogCopyButtonTestingTag"
 
 @Suppress("UnusedPrivateProperty")
 class AlertDialogShower @Inject constructor() : DialogShower {
@@ -115,7 +119,7 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
           DialogTitle(dialog.title)
         }
         DialogMessage(dialog)
-        ShowUri(uri)
+        ShowUri(uri, clickListeners.getOrNull(0), alertDialogShower)
         ShowCustomComposeView(dialog)
       }
       ShowDialogButtons(dialog, clickListeners, alertDialogShower)
@@ -206,7 +210,9 @@ fun DialogConfirmButton(
         text = confirmButtonText.uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
+        maxLines = 1,
+        softWrap = false
       )
     }
   }
@@ -231,7 +237,9 @@ fun DialogDismissButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
+        maxLines = 1,
+        softWrap = false
       )
     }
   }
@@ -258,7 +266,9 @@ private fun DialogNaturalButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
+        maxLines = 1,
+        softWrap = false
       )
     }
   }
@@ -329,34 +339,59 @@ private fun DialogMessage(dialog: KiwixDialog) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ShowUri(uri: Uri?) {
+private fun ShowUri(
+  uri: Uri?,
+  onUriClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower?
+) {
   val context = LocalContext.current
+  val copyLink: () -> Unit = {
+    val clipboard =
+      ContextCompat.getSystemService(context, ClipboardManager::class.java)
+    val clip = ClipData.newPlainText("External Url", "$uri")
+    clipboard?.setPrimaryClip(clip)
+    Toast.makeText(
+      context,
+      R.string.external_link_copied_message,
+      Toast.LENGTH_SHORT
+    ).show()
+  }
+
   uri?.let {
-    Text(
-      text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
-      color = MaterialTheme.colorScheme.primary,
-      textDecoration = TextDecoration.Underline,
-      fontSize = DIALOG_URI_TEXT_SIZE,
-      textAlign = TextAlign.Center,
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier
         .fillMaxWidth()
-        .combinedClickable(
-          onClick = {
-            // nothing to do
-          },
-          onLongClick = {
-            val clipboard =
-              ContextCompat.getSystemService(context, ClipboardManager::class.java)
-            val clip = ClipData.newPlainText("External Url", "$uri")
-            clipboard?.setPrimaryClip(clip)
-            Toast.makeText(
-              context,
-              R.string.external_link_copied_message,
-              Toast.LENGTH_SHORT
-            ).show()
-          }
+        .padding(end = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+    ) {
+      Text(
+        text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
+        color = MaterialTheme.colorScheme.primary,
+        textDecoration = TextDecoration.Underline,
+        fontSize = DIALOG_URI_TEXT_SIZE,
+        textAlign = TextAlign.Start,
+        modifier = Modifier
+          .weight(1f)
+          .combinedClickable(
+            onClick = {
+              alertDialogShower?.dismiss()
+              onUriClick?.invoke()
+            },
+            onLongClick = { copyLink() }
+          )
+          .semantics { testTag = ALERT_DIALOG_URI_TEXT_TESTING_TAG }
+      )
+      IconButton(
+        onClick = { copyLink() },
+        modifier = Modifier.semantics { testTag = ALERT_DIALOG_COPY_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(R.drawable.ic_file_copy),
+          contentDescription = stringResource(R.string.action_copy),
+          tint = MaterialTheme.colorScheme.primary
         )
-    )
+      }
+    }
   }
 }
 
