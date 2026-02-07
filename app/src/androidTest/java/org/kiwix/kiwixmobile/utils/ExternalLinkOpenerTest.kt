@@ -33,7 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -207,5 +207,35 @@ internal class ExternalLinkOpenerTest {
     verify(exactly = 0) {
       alertDialogShower.show(any(), any())
     }
+  }
+
+  @Test
+  internal fun clickingUriTextOpensLinkSameAsConfirmButton() = runTest {
+    every { intent.resolveActivity(activity.packageManager) } returns mockk()
+    every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
+    justRun { activity.startActivity(intent) }
+
+    val url = URL("https://example.com/")
+    val uri = Uri.parse(url.toString())
+    every { intent.data } returns uri
+
+    val lambdaSlot = slot<() -> Unit>()
+    val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
+
+    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+
+    coVerify {
+      alertDialogShower.show(
+        KiwixDialog.ExternalLinkPopup,
+        capture(lambdaSlot),
+        any(),
+        any(),
+        uri = uri
+      )
+    }
+    lambdaSlot.captured.invoke()
+    verify { activity.startActivity(intent) }
   }
 }
