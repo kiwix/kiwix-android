@@ -292,9 +292,12 @@ class DownloadTest : BaseActivityTest() {
       context.startActivity(intent)
       InstrumentationRegistry.getInstrumentation().waitForIdleSync()
 
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        it.navigate(KiwixDestination.Downloads.route)
+      activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          kiwixMainActivity = it
+          it.navigate(KiwixDestination.Downloads.route)
+        }
       }
 
       downloadRobot {
