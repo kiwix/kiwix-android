@@ -285,21 +285,20 @@ class DownloadTest : BaseActivityTest() {
         assertDownloadPaused(composeTestRule, activityScenario)
       }
 
-      // Restart the application by relaunching the ActivityScenario
-      activityScenario =
-        ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-          moveToState(Lifecycle.State.RESUMED)
-        }
-      // Wait for the activity to be ready
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      // Restart the application
+      val context = ApplicationProvider.getApplicationContext<Context>()
+      val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+      intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+      context.startActivity(intent)
+      InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Downloads.route)
       }
-      // Wait for compose to be idle after navigation
-      composeTestRule.waitForIdle()
 
       downloadRobot {
+        waitForDataToLoad(composeTestRule = composeTestRule)
         assertDownloadPaused(composeTestRule, activityScenario)
         resumeDownload(composeTestRule)
         assertDownloadResumed(composeTestRule, kiwixMainActivity)
