@@ -95,6 +95,8 @@
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
+  <string name="share_article">Share article</string>
+  <string name="unable_to_share_article">Unable to share article</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
   <string name="cancel">Cancel</string>

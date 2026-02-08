@@ -173,6 +173,7 @@ import kotlin.math.max
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 const val HIDE_TAB_SWITCHER_DELAY: Long = 300
+private const val PDF_RESOLUTION_DPI = 300
 
 @Suppress("LargeClass")
 abstract class CoreReaderFragment :
@@ -1439,6 +1440,50 @@ abstract class CoreReaderFragment :
     }
   }
 
+  override fun onShareMenuClicked() {
+    runSafelyInCoreReaderLifecycleScope {
+      val webView = getCurrentWebView() ?: return@runSafelyInCoreReaderLifecycleScope
+      val title = webView.title ?: "Article"
+      val sanitizedTitle = title.replace(Regex("[^a-zA-Z0-9._\\- ]"), "").trim().ifEmpty {
+        "Article"
+      }
+      val pdfFile = java.io.File(requireContext().cacheDir, "$sanitizedTitle.pdf")
+      val printAdapter = webView.createPrintDocumentAdapter(title)
+      val printAttributes = android.print.PrintAttributes.Builder()
+        .setMediaSize(android.print.PrintAttributes.MediaSize.ISO_A4)
+        .setResolution(
+          android.print.PrintAttributes.Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
+        )
+        .setMinMargins(android.print.PrintAttributes.Margins.NO_MARGINS)
+        .build()
+
+      android.print.PdfPrint(printAttributes).print(
+        adapter = printAdapter,
+        outputFile = pdfFile,
+        onComplete = { sharePdfFile(it) },
+        onError = { context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT) }
+      )
+    }
+  }
+
+  private fun sharePdfFile(pdfFile: java.io.File) {
+    try {
+      val uri = androidx.core.content.FileProvider.getUriForFile(
+        requireContext(),
+        requireContext().packageName + ".fileprovider",
+        pdfFile
+      )
+      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "application/pdf"
+        putExtra(Intent.EXTRA_STREAM, uri)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+      }
+      startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+    } catch (e: IOException) {
+      context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
+    }
+  }
+
   override fun onHomeMenuClicked() {
     if (readerScreenState.value.showTabSwitcher) {
       hideTabSwitcher()
@@ -1785,7 +1830,6 @@ abstract class CoreReaderFragment :
     readerScreenState.update { copy(isNoBookOpenInReader = false) }
   }
 
-  @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
     runSafelyInCoreReaderLifecycleScope {
       // Run safely because it is runs after 300 MS.
@@ -1794,7 +1838,7 @@ abstract class CoreReaderFragment :
           createNewTab()
           hideTabSwitcher()
         }
-      }, 300)
+      }, HIDE_TAB_SWITCHER_DELAY)
     }
   }
 
