@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.extensions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.io.File
 
 suspend fun File.isFileExist(dispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean =
@@ -37,3 +38,6 @@ suspend fun File.canReadFile(dispatcher: CoroutineDispatcher = Dispatchers.IO): 
 
 suspend fun File.deleteFile(dispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean =
   withContext(dispatcher) { delete() }
+
+suspend fun File.hasContent(dispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean =
+  withContext(dispatcher) { isFileExist() && length() > ZERO }
