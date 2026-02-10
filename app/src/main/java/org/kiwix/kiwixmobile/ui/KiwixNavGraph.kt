@@ -19,7 +19,9 @@
 package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,6 +71,7 @@ import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
 import org.kiwix.kiwixmobile.intro.IntroScreenRoute
 import org.kiwix.kiwixmobile.language.LanguageScreenRoute
@@ -82,6 +85,7 @@ import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Suppress("LongMethod")
 @Composable
 fun KiwixNavGraph(
@@ -230,6 +234,9 @@ fun KiwixNavGraph(
 
       val filesForTransfer = uris?.map { FileItem(it) }.orEmpty()
       val isReceiver = filesForTransfer.isEmpty()
+
+      Log.e(LocalFileTransferViewModel.TAG, "Files for transfer size ${filesForTransfer.size}")
+      Log.e(LocalFileTransferViewModel.TAG, "Is Receiver - $isReceiver")
 
       val viewModel: LocalFileTransferViewModel = viewModel(factory = viewModelFactory)
 
