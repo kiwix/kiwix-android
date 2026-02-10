@@ -210,6 +210,17 @@ fun ReaderScreen(
             navigationIcon
           )
         },
+        bottomBar = {
+          BottomAppBarOfReaderScreen(
+            state.bookmarkButtonItem,
+            state.previousPageButtonItem,
+            state.onHomeButtonClick,
+            state.nextPageButtonItem,
+            state.tocButtonItem,
+            state.shouldShowBottomAppBar,
+            bottomAppBarScrollBehavior
+          )
+        },
         floatingActionButton = { BackToTopFab(state) },
         modifier = Modifier
           .systemBarsPadding()
@@ -327,15 +338,6 @@ private fun ReaderContentLayout(
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
             ShowDonationLayout(state)
-            BottomAppBarOfReaderScreen(
-              state.bookmarkButtonItem,
-              state.previousPageButtonItem,
-              state.onHomeButtonClick,
-              state.nextPageButtonItem,
-              state.tocButtonItem,
-              state.shouldShowBottomAppBar,
-              bottomAppBarScrollBehavior
-            )
           }
         }
       }
