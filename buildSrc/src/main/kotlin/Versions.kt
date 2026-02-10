@@ -80,7 +80,7 @@ object Versions {
 
   const val androidx_activity: String = "1.9.3"
 
-  const val libkiwix: String = "2.4.1"
+  const val libkiwix: String = "2.4.2"
 
   const val material: String = "1.12.0"
 
