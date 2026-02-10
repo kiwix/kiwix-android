@@ -203,9 +203,6 @@ class DownloadApkService : Service() {
         if (download.status == Status.COMPLETED) {
           downloadApkDao.getDownload().let {
             showDownloadCompletedNotification(download)
-            // to move these downloads in LibkiwixBookOnDisk.
-            @Suppress("IgnoredReturnValue")
-            downloadApkDao.getDownload()
           }
         }
         // If someone pause the Download then post a notification since fetch removes the
