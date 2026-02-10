@@ -22,10 +22,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.p2p.WifiP2pDevice
+import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -103,6 +105,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -115,10 +118,11 @@ const val PEER_DEVICE_LIST_SHOW_CASE_TAG = "peerDeviceListShowCaseTag"
 const val FILE_FOR_TRANSFER_SHOW_CASE_TAG = "fileForTransferShowCaseTag"
 const val URIS_KEY = "localFileTransferUriKey"
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Suppress("LongMethod")
 @Composable
-fun LocalFileTransferScreenRoute(
+internal fun LocalFileTransferScreenRoute(
   isReceiver: Boolean,
   filesForTransfer: List<FileItem>,
   navigateBack: () -> Unit,
@@ -132,9 +136,18 @@ fun LocalFileTransferScreenRoute(
   val dialogEvent by viewModel.dialogState.collectAsStateWithLifecycle()
   val navigationEvent by viewModel.navigationEvent.collectAsStateWithLifecycle()
 
+  val isWritePermissionRequired by viewModel.isWritePermissionRequired.collectAsStateWithLifecycle()
+
   val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
   val context = LocalContext.current
 
+  LaunchedEffect(filesForTransfer) {
+    Log.e(
+      LocalFileTransferViewModel.TAG,
+      "Inside - Files for transfer size ${filesForTransfer.size}"
+    )
+    Log.e(LocalFileTransferViewModel.TAG, "Inside - Is Receiver - $isReceiver")
+  }
   LaunchedEffect(Unit) {
     viewModel.initializeWifiDirectManager(filesForTransfer, lifecycleScope)
   }
@@ -164,7 +177,9 @@ fun LocalFileTransferScreenRoute(
     permissionState = permissionState,
     onPermissionGranted = { viewModel.onPermissionGranted() },
     showDialog = { viewModel.showDialog(it) },
-    clearPermissionAction = { viewModel.clearPermissionAction() }
+    clearPermissionAction = { viewModel.clearPermissionAction() },
+    isAndroid13orAbove = viewModel.android13OrAbove,
+    isWriteExternalStoragePermissionRequired = isWritePermissionRequired
   )
 
   FileTransferDialogComponent(

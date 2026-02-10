@@ -22,6 +22,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -29,41 +30,58 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import org.kiwix.kiwixmobile.localFileTransfer.DialogEvent
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.PermissionAction
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 internal fun HandlePermissionStateComponent(
   permissionState: PermissionAction?,
+  isAndroid13orAbove: Boolean,
+  isWriteExternalStoragePermissionRequired: Boolean,
   onPermissionGranted: () -> Unit,
   showDialog: (DialogEvent) -> Unit,
   clearPermissionAction: () -> Unit
 ) {
-  val locationPermissionState = rememberPermissionState(ACCESS_FINE_LOCATION)
-  val externalStoragePermissionState = rememberPermissionState(WRITE_EXTERNAL_STORAGE)
-  val nearbyWifiPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+  // we are not requesting external storage permission for android 13+ and play store variants
+  val externalStoragePermissionState = if (isWriteExternalStoragePermissionRequired) {
+    rememberPermissionState(WRITE_EXTERNAL_STORAGE)
+  } else null
+
+  // On Android < 13 we request ACCESS_FINE_LOCATION,
+  // while on Android 13+ we request NEARBY_WIFI_DEVICES
+  val locationOrWifiPermissionState = if (isAndroid13orAbove) {
     rememberPermissionState(NEARBY_WIFI_DEVICES)
   } else {
-    null
+    rememberPermissionState(ACCESS_FINE_LOCATION)
   }
 
   LaunchedEffect(
-    locationPermissionState.status,
-    externalStoragePermissionState.status,
-    nearbyWifiPermissionState?.status
+    locationOrWifiPermissionState.status,
+    externalStoragePermissionState?.status
   ) {
-    // chheck if all required permissions are granted
-    val locationGranted = locationPermissionState.status.isGranted ||
-      (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && nearbyWifiPermissionState?.status?.isGranted == true)
-
-    val storageGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      true // not needed on android 13+
-    } else {
-      externalStoragePermissionState.status.isGranted
-    }
+    val locationGranted = locationOrWifiPermissionState.status.isGranted
+    val storageGranted = externalStoragePermissionState?.status?.isGranted ?: true
 
     if (locationGranted && storageGranted) {
+      onPermissionGranted()
+    }
+  }
+
+  LaunchedEffect(
+    externalStoragePermissionState?.status,
+    locationOrWifiPermissionState.status
+  ) {
+    // check if all required permissions are granted
+    val locationOrWifiGranted = locationOrWifiPermissionState.status.isGranted
+
+    // value of param externalStoragePermissionState is null if this permission is not required
+    // in that case we set it to true
+    val storageGranted = externalStoragePermissionState?.status?.isGranted ?: true
+
+    if (locationOrWifiGranted && storageGranted) {
       onPermissionGranted()
     }
   }
@@ -72,8 +90,7 @@ internal fun HandlePermissionStateComponent(
     when (val action = permissionState) {
       is PermissionAction.RequestPermission -> {
         val state = when (action.permission) {
-          NEARBY_WIFI_DEVICES -> nearbyWifiPermissionState
-          ACCESS_FINE_LOCATION -> locationPermissionState
+          NEARBY_WIFI_DEVICES, ACCESS_FINE_LOCATION -> locationOrWifiPermissionState
           WRITE_EXTERNAL_STORAGE -> externalStoragePermissionState
           else -> null
         }
