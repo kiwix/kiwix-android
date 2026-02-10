@@ -101,6 +101,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
@@ -1444,10 +1445,8 @@ abstract class CoreReaderFragment :
     runSafelyInCoreReaderLifecycleScope {
       val webView = getCurrentWebView() ?: return@runSafelyInCoreReaderLifecycleScope
       val title = webView.title ?: "Article"
-      val sanitizedTitle = title.replace(Regex("[^a-zA-Z0-9._\\- ]"), "").trim().ifEmpty {
-        "Article"
-      }
-      val pdfFile = java.io.File(requireContext().cacheDir, "$sanitizedTitle.pdf")
+      val slugifiedTitle = title.toSlug().ifEmpty { "article" }
+      val pdfFile = java.io.File(requireContext().cacheDir, "$slugifiedTitle.pdf")
       val printAdapter = webView.createPrintDocumentAdapter(title)
       val printAttributes = android.print.PrintAttributes.Builder()
         .setMediaSize(android.print.PrintAttributes.MediaSize.ISO_A4)
