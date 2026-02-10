@@ -35,6 +35,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -43,6 +44,9 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -101,24 +105,34 @@ class UpdateFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
-      val context = LocalContext.current
-      UpdateScreen(
-        state = updateViewModel.state.value,
-        events = updateViewModel::event,
-        onUpdateClick = {
-          onUpdateClick()
-        },
-        onUpdateCancel = {
-          updateViewModel.cancelDownload()
-        },
-        onInstallApk = {
-          installApk(
-            context,
-            updateViewModel.state.value
-          )
-        }
-      )
-      DialogHost(alertDialogShower)
+      KiwixTheme {
+        val context = LocalContext.current
+        UpdateScreen(
+          state = updateViewModel.state.value,
+          events = updateViewModel::event,
+          onUpdateClick = {
+            onUpdateClick()
+          },
+          onUpdateCancel = {
+            updateViewModel.cancelDownload()
+          },
+          onInstallApk = {
+            installApk(
+              context,
+              updateViewModel.state.value
+            )
+          },
+          navigationIcon = {
+            NavigationIcon(
+              iconItem = IconItem.Drawable(
+                R.drawable.ic_close_white_24dp
+              ),
+              onClick = {}
+            )
+          }
+        )
+        DialogHost(alertDialogShower)
+      }
     }
   }
 
