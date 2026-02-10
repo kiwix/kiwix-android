@@ -3,14 +3,12 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.app.Application
-import android.content.pm.PackageManager
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,13 +16,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -32,11 +34,11 @@ import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDe
 import javax.inject.Inject
 
 class LocalFileTransferViewModel @Inject constructor(
-  private val application: Application,
   val kiwixDataStore: KiwixDataStore,
   val wifiDirectManager: WifiDirectManager,
   val alertDialogShower: AlertDialogShower,
-  private val locationManager: android.location.LocationManager
+  private val locationManager: android.location.LocationManager,
+  private val permissionChecker: KiwixPermissionChecker
 ) : ViewModel(), WifiDirectManager.Callbacks {
   private val _deviceName = MutableStateFlow("")
   val deviceName: StateFlow<String> = _deviceName.asStateFlow()
@@ -59,6 +61,16 @@ class LocalFileTransferViewModel @Inject constructor(
   private val _navigationEvent = MutableStateFlow<NavigationEvent?>(null)
   val navigationEvent: StateFlow<NavigationEvent?> = _navigationEvent.asStateFlow()
 
+  val isWritePermissionRequired = flow {
+    emit(permissionChecker.isWriteExternalStoragePermissionRequired())
+  }.stateIn(
+    viewModelScope,
+    SharingStarted.WhileSubscribed(5000),
+    false
+  )
+
+  val android13OrAbove = permissionChecker.isAndroid13orAbove()
+
   fun initializeWifiDirectManager(
     filesForTransfer: List<FileItem>,
     lifecycleScope: CoroutineScope
@@ -74,7 +86,7 @@ class LocalFileTransferViewModel @Inject constructor(
     }
   }
 
-  fun actionMenuItem() = listOf(
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU) fun actionMenuItem() = listOf(
     ActionMenuItem(
       Vector(Icons.Default.Search),
       string.search_label,
@@ -109,10 +121,11 @@ class LocalFileTransferViewModel @Inject constructor(
 
   private val customScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   private fun onSearchMenuClicked() {
     customScope.launch {
       if (!checkFineLocationAccessPermission()) {
-        Log.d(TAG, "Location permission not granted")
+        Log.d(TAG, "Location or wifi permission not granted")
         return@launch
       }
 
@@ -146,7 +159,7 @@ class LocalFileTransferViewModel @Inject constructor(
 
   val isLocationServiceEnabled: Boolean
     get() =
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (android13OrAbove) {
         true
       } else {
         isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) ||
@@ -173,6 +186,7 @@ class LocalFileTransferViewModel @Inject constructor(
     _dialogState.value = DialogEvent.ShowEnableLocationServices
   }
 
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   fun onPermissionGranted() {
     _permissionAction.value = null
     viewModelScope.launch {
@@ -180,53 +194,38 @@ class LocalFileTransferViewModel @Inject constructor(
     }
   }
 
-  fun onPermissionDenied() {
-    _permissionAction.value = null
-    _navigationEvent.value = NavigationEvent.NavigateBack
-  }
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private suspend fun checkFineLocationAccessPermission(): Boolean {
+    if (android13OrAbove) {
+      val hasWifiPerm = permissionChecker.hasNearbyWifiPermission()
 
-  private fun checkFineLocationAccessPermission(): Boolean {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      val isGranted = ContextCompat.checkSelfPermission(
-        application,
-        NEARBY_WIFI_DEVICES
-      ) == PackageManager.PERMISSION_GRANTED
-
-      if (!isGranted) {
+      if (!hasWifiPerm) {
         _permissionAction.value = PermissionAction.RequestPermission(NEARBY_WIFI_DEVICES)
       }
 
-      return isGranted
+      return hasWifiPerm
     }
 
-    val isGranted = ContextCompat.checkSelfPermission(
-      application,
-      ACCESS_FINE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED
+    val hasLocationPermission = permissionChecker.hasNearbyWifiPermission()
 
-    if (!isGranted) {
+    if (!hasLocationPermission) {
       _permissionAction.value = PermissionAction.RequestPermission(ACCESS_FINE_LOCATION)
     }
 
-    return isGranted
+    return hasLocationPermission
   }
 
   private suspend fun checkExternalStorageWritePermission(): Boolean {
-    if (!kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-    ) {
-      val isGranted = ContextCompat.checkSelfPermission(
-        application,
-        WRITE_EXTERNAL_STORAGE
-      ) == PackageManager.PERMISSION_GRANTED
+    val hasPermission = permissionChecker.hasWriteExternalStoragePermission()
 
-      if (!isGranted) {
+    return when (hasPermission) {
+      true -> true
+      false -> {
         _permissionAction.value = PermissionAction.RequestPermission(WRITE_EXTERNAL_STORAGE)
-      }
 
-      return isGranted
+        false
+      }
     }
-    return true
   }
 
   override fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?) {
