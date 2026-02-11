@@ -57,6 +57,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -75,7 +76,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
@@ -212,7 +212,8 @@ fun DialogConfirmButton(
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
         maxLines = 1,
-        softWrap = false
+        softWrap = false,
+        overflow = TextOverflow.Ellipsis
       )
     }
   }
@@ -239,7 +240,8 @@ fun DialogDismissButton(
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
         maxLines = 1,
-        softWrap = false
+        softWrap = false,
+        overflow = TextOverflow.Ellipsis
       )
     }
   }
@@ -268,7 +270,8 @@ private fun DialogNaturalButton(
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
         maxLines = 1,
-        softWrap = false
+        softWrap = false,
+        overflow = TextOverflow.Ellipsis
       )
     }
   }
@@ -365,11 +368,14 @@ private fun ShowUri(
         .padding(end = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
     ) {
       Text(
-        text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
+        text = "$uri",
         color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
         fontSize = DIALOG_URI_TEXT_SIZE,
+        fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Start,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = Modifier
           .weight(1f)
           .combinedClickable(
