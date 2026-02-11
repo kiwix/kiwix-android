@@ -72,10 +72,8 @@ fun StorageDeviceItem(
   var usedSpace by remember { mutableStateOf("") }
   var freeSpace by remember { mutableStateOf("") }
   var progress by remember { mutableIntStateOf(0) }
-
   val context = LocalContext.current
   val currentStorageIndex by kiwixDataStore.selectedStoragePosition.collectAsState(ZERO)
-
   LaunchedEffect(storageDevice) {
     usedSpace = storageDevice.getUsedSpace(context, storageCalculator)
     freeSpace = storageDevice.getFreeSpace(context, storageCalculator)
@@ -87,21 +85,6 @@ fun StorageDeviceItem(
       storageCalculator
     )
   }
-  val splitIndex = storagePathAndTitle.indexOf('\n')
-  val title =
-    if (splitIndex != -1) {
-      storagePathAndTitle.substring(0, splitIndex)
-    } else {
-      storagePathAndTitle
-    }
-
-  val path =
-    if (splitIndex != -1) {
-      storagePathAndTitle.substring(splitIndex + 1)
-    } else {
-      ""
-    }
-
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -122,22 +105,7 @@ fun StorageDeviceItem(
         .fillMaxWidth()
         .padding(start = EIGHT_DP)
     ) {
-      Text(
-        text = title,
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = STORAGE_TITLE_TEXTVIEW_SIZE
-      )
-      if (path.isNotEmpty()) {
-        Spacer(modifier = Modifier.height(FOUR_DP))
-        Text(
-          text = path,
-          style = MaterialTheme.typography.bodySmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-          fontSize = FREE_SPACE_TEXTVIEW_SIZE
-        )
-      }
-
+      StorageAndLocationTextComponent(storagePathAndTitle)
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         progress = progress,
@@ -175,6 +143,40 @@ private fun StorageSpaceRow(
       style = MaterialTheme.typography.bodySmall,
       modifier = Modifier.alignByBaseline(),
       color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+  }
+}
+
+@Composable
+private fun StorageAndLocationTextComponent(storagePathAndTitle: String) {
+  val splitIndex = storagePathAndTitle.indexOf('\n')
+  val title =
+    if (splitIndex != -1) {
+      storagePathAndTitle.substring(0, splitIndex)
+    } else {
+      storagePathAndTitle
+    }
+
+  val path =
+    if (splitIndex != -1) {
+      storagePathAndTitle.substring(splitIndex + 1)
+    } else {
+      ""
+    }
+
+  Text(
+    text = title,
+    style = MaterialTheme.typography.bodyLarge,
+    color = MaterialTheme.colorScheme.onSurface,
+    fontSize = STORAGE_TITLE_TEXTVIEW_SIZE
+  )
+  if (path.isNotEmpty()) {
+    Spacer(modifier = Modifier.height(FOUR_DP))
+    Text(
+      text = path,
+      style = MaterialTheme.typography.bodySmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      fontSize = FREE_SPACE_TEXTVIEW_SIZE
     )
   }
 }
