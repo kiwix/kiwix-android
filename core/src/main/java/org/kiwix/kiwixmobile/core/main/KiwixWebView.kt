@@ -27,7 +27,6 @@ import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -135,7 +134,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer, kiwixDataStore).obtainMessage()
+        val msg = SaveHandler(zimReaderContainer).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -166,26 +165,36 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   }
 
   class SaveHandler(
-    private val zimReaderContainer: ZimReaderContainer,
-    private val kiwixDataStore: KiwixDataStore
+    private val zimReaderContainer: ZimReaderContainer
   ) : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
       val url = msg.data.getString("url")
       val src = msg.data.getString("src")
+
       if (url == null && src == null) return
+
+      val appContext = instance.applicationContext
+
       @Suppress("InjectDispatcher")
       CoroutineScope(Dispatchers.IO).launch {
         val result = FileUtils.downloadFileFromUrl(
-          context = instance,
+          context = appContext,
           url = url,
           src = src,
           zimReaderContainer = zimReaderContainer
         )
 
         withContext(Dispatchers.Main) {
-          val appContext = ContextCompat.getContextForLanguage(instance)
-
           when (result) {
+            is SaveResult.MediaSaved -> {
+              appContext.toast(
+                appContext.getString(
+                  R.string.save_media_saved,
+                  result.displayName
+                )
+              )
+            }
+
             is SaveResult.FileSaved -> {
               appContext.toast(
                 appContext.getString(
@@ -195,11 +204,10 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
               )
             }
 
-            is SaveResult.MediaSaved -> {
+            is SaveResult.InvalidSource -> {
               appContext.toast(
                 appContext.getString(
-                  R.string.save_media_saved,
-                  result.displayName
+                  R.string.error_file_invalid,
                 )
               )
             }

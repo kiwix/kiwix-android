@@ -25,4 +25,5 @@ sealed class SaveResult {
   data class FileSaved(val file: File) : SaveResult()
   data class MediaSaved(val uri: Uri, val displayName: String) : SaveResult()
   data class Error(val message: String, val throwable: Throwable? = null) : SaveResult()
+  object InvalidSource : SaveResult()
 }

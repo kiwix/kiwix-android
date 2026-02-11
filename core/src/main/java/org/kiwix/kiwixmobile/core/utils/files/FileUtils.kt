@@ -698,64 +698,112 @@ object FileUtils {
     return fileNameAndSource
   }
 
+  @Suppress("Deprecation")
   suspend fun getDownloadRootDir(
     context: Context
   ): File? {
-    val dir = context.getExternalFilesDir(null)
+    val mediaDir = context.externalMediaDirs.firstOrNull()
       ?: return null
 
-    if (!dir.exists()) dir.mkdirs()
-    return dir
+    if (!mediaDir.exists()) {
+      mediaDir.mkdirs()
+    }
+
+    return mediaDir
   }
 
-  @Suppress("ReturnCount", "TooGenericExceptionCaught")
+  @Suppress("ReturnCount", "TooGenericExceptionCaught", "LongMethod")
   suspend fun downloadFileFromUrl(
     context: Context,
     url: String?,
     src: String?,
     zimReaderContainer: ZimReaderContainer
   ): SaveResult {
-    val source = url ?: src
-    if (source == null) {
-      return SaveResult.Error("Both url and src are null")
+    Log.d("MEDIA_SAVE", "downloadFileFromUrl called, url=$url, src=$src")
+
+    val fileNameAndSource =
+      getSafeFileNameAndSourceFromUrlOrSrc(url, src)
+
+    if (fileNameAndSource == null) {
+      Log.w("MEDIA_SAVE", "Invalid media source: url=$url, src=$src")
+      return SaveResult.InvalidSource
     }
 
-    Log.e("MEDIA_SAVE", "source=$source")
+    val fileName = fileNameAndSource.first
+    val source = fileNameAndSource.second
+
+    if (fileName.isNullOrEmpty() || source.isNullOrEmpty()) {
+      Log.w("MEDIA_SAVE", "Invalid media source after parsing")
+      return SaveResult.InvalidSource
+    }
 
     return try {
-      // Saves Base64 like SVG
-      if (isBase64DataUri(source)) {
-        return saveBase64Source(source, context)
+      when {
+        isBase64DataUri(source) -> {
+          Log.d("MEDIA_SAVE", "Detected base64 media")
+          saveBase64Source(source, context)
+        }
+
+        isImage(source) -> {
+          Log.d("MEDIA_SAVE", "Detected image: $fileName")
+
+          val bytes = zimReaderContainer
+            .load(source, emptyMap())
+            .data
+            .readBytes()
+
+          val mime = MimeTypeMap.getSingleton()
+            .getMimeTypeFromExtension(
+              MimeTypeMap.getFileExtensionFromUrl(source)
+            ) ?: "image/*"
+
+          val uri = saveImageToMediaStore(
+            context,
+            fileName,
+            mime,
+            bytes
+          )
+
+          if (uri == null) {
+            Log.e("MEDIA_SAVE", "Image save failed for $fileName")
+            SaveResult.Error("Image save failed")
+          } else {
+            Log.d("MEDIA_SAVE", "Image saved successfully: $uri")
+            SaveResult.MediaSaved(uri, fileName)
+          }
+        }
+
+        else -> {
+          Log.d("MEDIA_SAVE", "Saving non-image file: $fileName")
+
+          val file = saveFileFromUrl(
+            context,
+            source,
+            fileName,
+            zimReaderContainer
+          )
+
+          if (file == null) {
+            Log.e("MEDIA_SAVE", "File save failed for $fileName")
+            SaveResult.Error("File save failed")
+          } else {
+            Log.d("MEDIA_SAVE", "File saved successfully: ${file.absolutePath}")
+            SaveResult.FileSaved(file)
+          }
+        }
       }
-
-      val mime = MimeTypeMap.getSingleton()
-        .getMimeTypeFromExtension(
-          MimeTypeMap.getFileExtensionFromUrl(source)
-        ) ?: "application/octet-stream"
-
-      Log.e("MEDIA_SAVE", "mime=$mime")
-
-      // Saves Images
-      if (mime.startsWith("image/") && mime != "image/svg+xml") {
-        val uri = saveImageFromUrl(
-          source,
-          mime,
-          context,
-          zimReaderContainer
-        ) ?: return SaveResult.Error("MediaStore image save failed")
-
-        val name = URLUtil.guessFileName(source, null, null)
-        return SaveResult.MediaSaved(uri, name)
-      }
-
-      // Saves Epub
-      val file = saveFileFromUrl(context, source, zimReaderContainer)
-        ?: return SaveResult.Error("File save failed")
-
-      SaveResult.FileSaved(file)
-    } catch (t: Throwable) {
-      SaveResult.Error("Unexpected save error", t)
+    } catch (e: Exception) {
+      Log.e("MEDIA_SAVE", "Unexpected error while saving media", e)
+      SaveResult.Error("Unexpected error", e)
     }
+  }
+
+  private fun isImage(source: String): Boolean {
+    val extension = MimeTypeMap.getFileExtensionFromUrl(source)
+    val mime = MimeTypeMap.getSingleton()
+      .getMimeTypeFromExtension(extension)
+
+    return mime?.startsWith("image/") == true
   }
 
   @Suppress("ReturnCount")
@@ -764,51 +812,25 @@ object FileUtils {
     context: Context
   ): SaveResult {
     val decoded = decodeBase64DataUri(src)
-      ?: return SaveResult.Error("Invalid base64 data")
+      ?: return SaveResult.InvalidSource
 
-    val (extension, bytes) = decoded
+    val extension = decoded.first
+    val bytes = decoded.second
 
     val mime = MimeTypeMap.getSingleton()
-      .getMimeTypeFromExtension(extension) ?: "application/octet-stream"
+      .getMimeTypeFromExtension(extension)
+      ?: return SaveResult.InvalidSource
 
-    Log.e("MEDIA_SAVE", "base64 mime=$mime")
-
-    if (mime == "image/svg+xml") {
-      val dir = getDownloadRootDir(context)
-        ?: return SaveResult.Error("Download dir unavailable")
-
-      val file = File(dir, generateBase64FileName(extension))
-      file.writeBytes(bytes)
-      return SaveResult.FileSaved(file)
-    }
+    val fileName = generateBase64FileName(extension)
 
     val uri = saveImageToMediaStore(
       context,
-      generateBase64FileName(extension),
+      fileName,
       mime,
       bytes
-    ) ?: return SaveResult.Error("MediaStore insert failed")
+    ) ?: return SaveResult.Error("MediaStore image save failed")
 
-    return SaveResult.MediaSaved(uri, generateBase64FileName(extension))
-  }
-
-  private fun saveImageFromUrl(
-    source: String,
-    mime: String,
-    context: Context,
-    zimReaderContainer: ZimReaderContainer
-  ): Uri? {
-    val bytes = zimReaderContainer
-      .load(source, emptyMap())
-      .data
-      .readBytes()
-
-    return saveImageToMediaStore(
-      context,
-      URLUtil.guessFileName(source, null, null),
-      mime,
-      bytes
-    )
+    return SaveResult.MediaSaved(uri, fileName)
   }
 
   private fun saveImageToMediaStore(
@@ -843,11 +865,13 @@ object FileUtils {
   private suspend fun saveFileFromUrl(
     context: Context,
     source: String,
+    fileName: String,
     zimReaderContainer: ZimReaderContainer
   ): File? {
-    val root = getDownloadRootDir(context) ?: return null
-    val name = URLUtil.guessFileName(source, null, null)
-    val file = File(root, name)
+    val root = getDownloadRootDir(context)
+      ?: return null
+
+    val file = File(root, fileName)
 
     zimReaderContainer.load(source, emptyMap()).data.use { input ->
       file.outputStream().use(input::copyTo)
