@@ -96,6 +96,11 @@ class UnsupportedMimeTypeHandler @Inject constructor(
           )
         }
 
+        is SaveResult.InvalidSource -> {
+          Log.e("MEDIA_SAVE", R.string.invalid_media_source.toString())
+          activity.toast(R.string.invalid_media_source)
+        }
+
         is SaveResult.Error -> {
           Log.e("MEDIA_SAVE", result.message, result.throwable)
           activity.toast(R.string.save_media_error)
