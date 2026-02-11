@@ -148,12 +148,14 @@ class SettingsRobot : BaseRobot() {
   }
 
   private fun assertStorageSelected(position: Int, composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      waitUntilTimeout()
-      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
-        .assertIsSelected()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+          .assertIsSelected()
+      }
+    })
   }
 
   fun clickClearHistoryPreference(composeTestRule: ComposeContentTestRule) {
