@@ -43,7 +43,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -61,13 +60,10 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.BuildConfig.DEBUG
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
@@ -80,40 +76,16 @@ import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
-import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
@@ -128,31 +100,18 @@ const val MAX_PROGRESS = 100
 
 const val THREE = 3
 
+@Suppress("LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  private val storageObserver: StorageObserver,
   private var kiwixService: KiwixService,
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val fat32Checker: Fat32Checker,
-  private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   val onlineLibraryManager: OnlineLibraryManager,
   private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
-  sealed class FileSelectActions {
-    data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    object RequestValidateZimFiles : FileSelectActions()
-    object RequestDeleteMultiSelection : FileSelectActions()
-    object RequestShareMultiSelection : FileSelectActions()
-    object MultiModeFinished : FileSelectActions()
-    object RestartActionMode : FileSelectActions()
-    object UserClickedDownloadBooksButton : FileSelectActions()
-  }
-
   data class OnlineLibraryRequest(
     val query: String? = null,
     val category: String? = null,
@@ -173,17 +132,12 @@ class ZimManageViewModel @Inject constructor(
     val version: Long = System.nanoTime()
   )
 
-  private lateinit var validateZimViewModel: ValidateZimViewModel
-
   @Suppress("InjectDispatcher")
   private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   private var isUnitTestCase: Boolean = false
-  val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   private val _libraryItems =
     MutableStateFlow<LibraryListItemWrapper>(LibraryListItemWrapper(emptyList()))
   val libraryItems: StateFlow<LibraryListItemWrapper> = _libraryItems.asStateFlow()
-  val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
-  val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
 
   private var onlineLibraryFetchingJob: Job? = null
@@ -211,8 +165,7 @@ class ZimManageViewModel @Inject constructor(
       emptyList()
     )
   )
-  val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
-  val fileSelectActions = MutableSharedFlow<FileSelectActions>()
+
   private val requestDownloadLibrary = MutableSharedFlow<OnlineLibraryRequest>(
     replay = 0,
     extraBufferCapacity = 1,
@@ -233,23 +186,13 @@ class ZimManageViewModel @Inject constructor(
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   val downloadProgress = MutableLiveData<String>()
 
-  private lateinit var alertDialogShower: AlertDialogShower
-
   init {
     observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
-  fun setValidateZimViewModel(validateZimViewModel: ValidateZimViewModel) {
-    this.validateZimViewModel = validateZimViewModel
-  }
-
   fun setIsUnitTestCase() {
     isUnitTestCase = true
-  }
-
-  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
-    this.alertDialogShower = alertDialogShower
   }
 
   private fun createKiwixServiceWithProgressListener(
@@ -347,9 +290,6 @@ class ZimManageViewModel @Inject constructor(
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
     coroutineJobs.apply {
-      add(scanBooksFromStorage())
-      add(updateBookItems())
-      add(fileSelectActions())
       add(updateLibraryItems(booksFromDao, downloads, networkLibrary))
       add(updateNetworkStates())
       add(requestsAndConnectivityChangesToLibraryRequests(networkLibrary))
@@ -434,90 +374,6 @@ class ZimManageViewModel @Inject constructor(
       requestDownloadLibrary.tryEmit(request)
     }
     .launchIn(viewModelScope)
-
-  private fun scanBooksFromStorage() =
-    checkFileSystemForBooksOnRequest(books())
-      .catch { it.printStackTrace() }
-      .onEach { books -> libkiwixBookOnDisk.insert(books) }
-      .flowOn(ioDispatcher)
-      .launchIn(viewModelScope)
-
-  private fun fileSelectActions() =
-    fileSelectActions
-      .onEach { action ->
-        runCatching {
-          sideEffects.emit(
-            when (action) {
-              is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
-              is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
-              RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-              RequestShareMultiSelection -> ShareFiles(selectionsFromState())
-              RequestValidateZimFiles ->
-                ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
-
-              MultiModeFinished -> noSideEffectAndClearSelectionState()
-              is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
-              RestartActionMode -> StartMultiSelection(fileSelectActions)
-              UserClickedDownloadBooksButton -> NavigateToDownloads
-            }
-          )
-        }.onFailure {
-          it.printStackTrace()
-        }
-      }.launchIn(viewModelScope)
-
-  private fun startMultiSelectionAndSelectBook(
-    bookOnDisk: BookOnDisk
-  ): StartMultiSelection {
-    fileSelectListStates.value?.let {
-      fileSelectListStates.postValue(
-        it.copy(
-          bookOnDiskListItems = selectBook(it, bookOnDisk),
-          selectionMode = MULTI
-        )
-      )
-    }
-    return StartMultiSelection(fileSelectActions)
-  }
-
-  private fun selectBook(
-    it: FileSelectListState,
-    bookOnDisk: BookOnDisk
-  ): List<BooksOnDiskListItem> {
-    return it.bookOnDiskListItems.map { listItem ->
-      if (listItem.id == bookOnDisk.id) {
-        listItem.apply { isSelected = !isSelected }
-      } else {
-        listItem
-      }
-    }
-  }
-
-  private fun noSideEffectSelectBook(bookOnDisk: BookOnDisk): SideEffect<Unit> {
-    fileSelectListStates.value?.let {
-      fileSelectListStates.postValue(
-        it.copy(bookOnDiskListItems = selectBook(it, bookOnDisk))
-      )
-    }
-    return None
-  }
-
-  private fun selectionsFromState() = fileSelectListStates.value?.selectedBooks.orEmpty()
-
-  private fun noSideEffectAndClearSelectionState(): SideEffect<Unit> {
-    fileSelectListStates.value?.let {
-      fileSelectListStates.postValue(
-        it.copy(
-          bookOnDiskListItems =
-            it.bookOnDiskListItems.map { booksOnDiskListItem ->
-              booksOnDiskListItem.apply { isSelected = false }
-            },
-          selectionMode = NORMAL
-        )
-      )
-    }
-    return None
-  }
 
   private fun updateDownloadState(isInitial: Boolean) {
     onlineLibraryDownloading.tryEmit(isInitial to !isInitial)
@@ -756,78 +612,10 @@ class ZimManageViewModel @Inject constructor(
       ?: BookItem(book, fileSystemState)
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  private fun checkFileSystemForBooksOnRequest(
-    booksFromDao: Flow<List<Book>>
-  ): Flow<List<Book>> = requestFileSystemCheck
-    .flatMapLatest {
-      // Initial progress
-      deviceListScanningProgress.postValue(DEFAULT_PROGRESS)
-      booksFromStorageNotIn(
-        booksFromDao,
-        object : ScanningProgressListener {
-          override fun onProgressUpdate(scannedDirectory: Int, totalDirectory: Int) {
-            val overallProgress =
-              (scannedDirectory.toDouble() / totalDirectory.toDouble() * MAX_PROGRESS).toInt()
-            if (overallProgress != MAX_PROGRESS) {
-              deviceListScanningProgress.postValue(overallProgress)
-            }
-          }
-        }
-      )
-    }
-    .onEach {
-      deviceListScanningProgress.postValue(MAX_PROGRESS)
-    }
-    .filter { it.isNotEmpty() }
-    .map { books -> books.distinctBy { it.id } }
-
   private fun books(): Flow<List<Book>> =
     libkiwixBookOnDisk.books().map { bookOnDiskList ->
       bookOnDiskList
         .sortedBy { it.book.title }
         .mapNotNull { it.book.nativeBook }
     }
-
-  private fun booksFromStorageNotIn(
-    localBooksFromLibkiwix: Flow<List<Book>>,
-    scanningProgressListener: ScanningProgressListener
-  ): Flow<List<Book>> = flow {
-    val scannedBooks = storageObserver.getBooksOnFileSystem(scanningProgressListener).first()
-    val daoBookIds = localBooksFromLibkiwix.first().map { it.id }
-    emit(removeBooksAlreadyInDao(scannedBooks, daoBookIds))
-  }
-
-  private fun removeBooksAlreadyInDao(
-    booksFromFileSystem: Collection<Book>,
-    idsInDao: List<String>
-  ) = booksFromFileSystem.filterNot { idsInDao.contains(it.id) }
-
-  private fun updateBookItems() =
-    dataSource.booksOnDiskAsListItems()
-      .catch { it.printStackTrace() }
-      .onEach { newList ->
-        val currentState = fileSelectListStates.value
-        val updatedState = currentState?.let {
-          inheritSelections(it, newList.toMutableList())
-        } ?: FileSelectListState(newList)
-
-        fileSelectListStates.postValue(updatedState)
-      }.launchIn(viewModelScope)
-
-  private fun inheritSelections(
-    oldState: FileSelectListState,
-    newList: MutableList<BooksOnDiskListItem>
-  ): FileSelectListState {
-    return oldState.copy(
-      bookOnDiskListItems =
-        newList.map { newBookOnDisk ->
-          val firstOrNull =
-            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
-              oldBookOnDisk.id == newBookOnDisk.id
-            }
-          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected == true }
-        }
-    )
-  }
 }
