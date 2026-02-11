@@ -100,12 +100,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.libkiwix.Book
 import java.io.File
@@ -160,8 +158,8 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     )
   )
 
-  private val zimManageViewModel by lazy {
-    requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
+  private val localLibraryViewModel by lazy {
+    requireActivity().viewModel<LocalLibraryViewModel>(viewModelFactory)
   }
 
   private val validateZimViewModel by lazy {
@@ -330,14 +328,14 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       fragmentManager = parentFragmentManager,
       selectedZimFileCallback = this@LocalLibraryFragment
     )
-    zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
-    zimManageViewModel.setValidateZimViewModel(validateZimViewModel)
-    zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
+    localLibraryViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
+    localLibraryViewModel.setValidateZimViewModel(validateZimViewModel)
+    localLibraryViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
     coroutineJobs.apply {
       add(sideEffects())
       add(fileSelectActions())
     }
-    zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
+    localLibraryViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
       updateLibraryScreenState(
         // hide this progress bar when scanning is complete.
         scanningProgressItem = Pair(it != MAX_PROGRESS, it),
@@ -680,7 +678,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   private fun sideEffects() =
     lifecycleScope.launch {
-      zimManageViewModel.sideEffects
+      localLibraryViewModel.sideEffects
         .collect {
           val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
           if (effectResult is ActionMode) {
@@ -696,7 +694,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   private fun fileSelectActions() =
     lifecycleScope.launch {
-      zimManageViewModel.fileSelectActions
+      localLibraryViewModel.fileSelectActions
         .filter { it === RequestDeleteMultiSelection }
         .collect {
           animateBottomViewToOrigin()
@@ -794,13 +792,13 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
 
   private fun requestFileSystemCheck(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     CoroutineScope(dispatcher).launch {
-      zimManageViewModel.requestFileSystemCheck.emit(Unit)
+      localLibraryViewModel.requestFileSystemCheck.emit(Unit)
     }
   }
 
   private fun offerAction(action: FileSelectActions) {
     lifecycleScope.launch {
-      zimManageViewModel.fileSelectActions.emit(action)
+      localLibraryViewModel.fileSelectActions.emit(action)
     }
   }
 
