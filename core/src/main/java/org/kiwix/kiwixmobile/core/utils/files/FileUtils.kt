@@ -844,8 +844,11 @@ object FileUtils {
     val values = ContentValues().apply {
       put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
       put(MediaStore.Images.Media.MIME_TYPE, mime)
-      put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Kiwix")
-      put(MediaStore.Images.Media.IS_PENDING, 1)
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Kiwix")
+        put(MediaStore.Images.Media.IS_PENDING, 1)
+      }
     }
 
     val uri = resolver.insert(
@@ -853,11 +856,15 @@ object FileUtils {
       values
     ) ?: return null
 
-    resolver.openOutputStream(uri)?.use { it.write(bytes) }
+    resolver.openOutputStream(uri)?.use {
+      it.write(bytes)
+    }
 
-    values.clear()
-    values.put(MediaStore.Images.Media.IS_PENDING, 0)
-    resolver.update(uri, values, null, null)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      values.clear()
+      values.put(MediaStore.Images.Media.IS_PENDING, 0)
+      resolver.update(uri, values, null, null)
+    }
 
     return uri
   }
