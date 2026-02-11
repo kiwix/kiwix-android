@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.settings
 
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
@@ -44,6 +45,7 @@ import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -135,6 +137,8 @@ class SettingsRobot : BaseRobot() {
   private fun clickOnStorageItem(position: Int, composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
+      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+        .performScrollTo()
       onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
     }
   }
@@ -151,7 +155,11 @@ class SettingsRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
-        waitUntilTimeout()
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
+            .fetchSemanticsNodes()[position]
+            .config[SemanticsProperties.Selected]
+        }
         onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
           .assertIsSelected()
       }
