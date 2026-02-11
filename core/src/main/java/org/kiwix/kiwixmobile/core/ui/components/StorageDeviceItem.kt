@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,11 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.withStyle
 import eu.mhutti1.utils.storage.StorageDevice
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
 import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
 import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
@@ -57,6 +54,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FREE_SPACE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PROGRESS_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.STORAGE_TITLE_TEXTVIEW_SIZE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val STORAGE_DEVICE_ITEM_TESTING_TAG = "storageDeviceItemTestingTag"
@@ -74,8 +72,10 @@ fun StorageDeviceItem(
   var usedSpace by remember { mutableStateOf("") }
   var freeSpace by remember { mutableStateOf("") }
   var progress by remember { mutableIntStateOf(0) }
+
   val context = LocalContext.current
   val currentStorageIndex by kiwixDataStore.selectedStoragePosition.collectAsState(ZERO)
+
   LaunchedEffect(storageDevice) {
     usedSpace = storageDevice.getUsedSpace(context, storageCalculator)
     freeSpace = storageDevice.getFreeSpace(context, storageCalculator)
@@ -87,6 +87,21 @@ fun StorageDeviceItem(
       storageCalculator
     )
   }
+  val splitIndex = storagePathAndTitle.indexOf('\n')
+  val title =
+    if (splitIndex != -1) {
+      storagePathAndTitle.substring(0, splitIndex)
+    } else {
+      storagePathAndTitle
+    }
+
+  val path =
+    if (splitIndex != -1) {
+      storagePathAndTitle.substring(splitIndex + 1)
+    } else {
+      ""
+    }
+
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -108,10 +123,20 @@ fun StorageDeviceItem(
         .padding(start = EIGHT_DP)
     ) {
       Text(
-        text = resizeStoragePathAndTitle(storagePathAndTitle),
+        text = title,
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurface,
+        fontSize = STORAGE_TITLE_TEXTVIEW_SIZE
       )
+      if (path.isNotEmpty()) {
+        Spacer(modifier = Modifier.height(FOUR_DP))
+        Text(
+          text = path,
+          style = MaterialTheme.typography.bodySmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          fontSize = FREE_SPACE_TEXTVIEW_SIZE
+        )
+      }
 
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
@@ -152,25 +177,4 @@ private fun StorageSpaceRow(
       color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
   }
-}
-
-@Composable
-private fun resizeStoragePathAndTitle(storagePathAndTitle: String): AnnotatedString {
-  val splitIndex = storagePathAndTitle.indexOf('\n')
-
-  return AnnotatedString.Builder().apply {
-    if (splitIndex != -1) {
-      withStyle(style = SpanStyle(fontSize = STORAGE_TITLE_TEXTVIEW_SIZE)) {
-        append(storagePathAndTitle.substring(0, splitIndex))
-      }
-      append("\n")
-      withStyle(style = SpanStyle(fontSize = FREE_SPACE_TEXTVIEW_SIZE)) {
-        append(storagePathAndTitle.substring(splitIndex + 1))
-      }
-    } else {
-      withStyle(style = SpanStyle(fontSize = STORAGE_TITLE_TEXTVIEW_SIZE)) {
-        append(storagePathAndTitle)
-      }
-    }
-  }.toAnnotatedString()
 }
