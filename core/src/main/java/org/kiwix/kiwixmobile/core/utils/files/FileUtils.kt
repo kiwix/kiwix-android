@@ -273,12 +273,23 @@ object FileUtils {
    * @return A `HashSet<String>` containing paths of available storage volumes.
    */
   private fun getStorageVolumesList(context: Context): HashSet<String> {
-    val storageVolumes = context.getSystemService(Context.STORAGE_SERVICE) as StorageManager
-    val storageVolumesList = HashSet<String>()
-    storageVolumes.storageVolumes.filterNotNull().forEach {
-      storageVolumesList.add(getStoragePath(context, it))
+    return try {
+      val storageManager =
+        context.getSystemService(Context.STORAGE_SERVICE) as? StorageManager ?: return hashSetOf()
+
+      val storageVolumesList = HashSet<String>()
+
+      storageManager.storageVolumes.filterNotNull().forEach {
+        try {
+          storageVolumesList.add(getStoragePath(context, it))
+        } catch (_: Exception) {
+        }
+      }
+
+      storageVolumesList
+    } catch (_: Exception) {
+      hashSetOf()
     }
-    return storageVolumesList
   }
 
   /**
@@ -699,17 +710,18 @@ object FileUtils {
   }
 
   @Suppress("Deprecation")
-  suspend fun getDownloadRootDir(
+  private suspend fun getDownloadRootDir(
     context: Context
   ): File? {
-    val mediaDir = context.externalMediaDirs.firstOrNull()
+    return try {
+      val dir = context.getExternalFilesDir(null)
+        ?: context.filesDir
 
-    val root = mediaDir ?: context.getExternalFilesDir(null)
-    if (root != null && !root.exists()) {
-      root.mkdirs()
+      if (!dir.exists()) dir.mkdirs()
+      dir
+    } catch (_: Exception) {
+      context.filesDir
     }
-
-    return root
   }
 
   @Suppress("ReturnCount", "TooGenericExceptionCaught", "LongMethod")
