@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:inset="30dp"
+  android:drawable="@drawable/ic_file_download_blue_24dp"
+  tools:keep="@drawable/ic_shortcut_get_content_foreground" />
