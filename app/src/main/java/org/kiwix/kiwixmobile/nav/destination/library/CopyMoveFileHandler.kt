@@ -86,9 +86,9 @@ class CopyMoveFileHandler @Inject constructor(
 
   private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
-      activity.getString(R.string.moving_zim_file, selectedFile?.name)
+      activity.getString(R.string.moving_zim_file, requireSelectedFile().name)
     } else {
-      activity.getString(R.string.copying_zim_file, selectedFile?.name)
+      activity.getString(R.string.copying_zim_file, requireSelectedFile().name)
     }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
@@ -183,10 +183,10 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun isBookLessThan4GB(): Boolean =
-    (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
+    requireSelectedFile().length() < FOUR_GIGABYTES_IN_KILOBYTES
 
   private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
-    availableSpace < (selectedFile?.length() ?: 0L)
+    availableSpace < requireSelectedFile().length()
 
   suspend fun validateZimFileCanCopyOrMove(): Boolean {
     val storageFile = getSelectedStorageRoot()
@@ -300,15 +300,14 @@ class CopyMoveFileHandler @Inject constructor(
   private suspend fun copyZimFileToPublicAppDirectory() {
     val destinationFile = getDestinationFile()
     try {
-      val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
       copyMoveProgressBarController.showProgress(getCopyMoveTitle())
       fileOperationHandler.copy(
-        sourceUri,
+        requireSelectedFileUri(),
         destinationFile,
         copyMoveProgressBarController::updateProgress
       )
       withContext(Dispatchers.Main) {
-        notifyFileOperationSuccess(destinationFile, sourceUri)
+        notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
       }
     } catch (ignore: Exception) {
       ignore.printStackTrace()
@@ -322,18 +321,17 @@ class CopyMoveFileHandler @Inject constructor(
   private suspend fun moveZimFileToPublicAppDirectory() {
     val destinationFile = getDestinationFile()
     try {
-      val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
       copyMoveProgressBarController.showProgress(getCopyMoveTitle())
       val moveSuccess = fileOperationHandler.move(
-        selectedFile = selectedFile,
-        sourceUri = sourceUri,
+        selectedFile = requireSelectedFile(),
+        sourceUri = requireSelectedFileUri(),
         destinationFolderUri = DocumentFile.fromFile(getSelectedStorageRoot()).uri,
         destinationFile = destinationFile,
         copyMoveProgressBarController::updateProgress
       )
       withContext(Dispatchers.Main) {
         if (moveSuccess) {
-          notifyFileOperationSuccess(destinationFile, sourceUri)
+          notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
         } else {
           handleFileOperationError(
             activity.getString(R.string.move_file_error_message, "File move failed"),
@@ -368,7 +366,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
     copyMoveProgressBarController.dismissCopyMoveProgressDialog()
     if (isMoveOperation) {
-      fileOperationHandler.delete(sourceUri, selectedFile)
+      fileOperationHandler.delete(sourceUri, requireSelectedFile())
       fileCopyMoveCallback?.onFileMoved(destinationFile)
     } else {
       fileCopyMoveCallback?.onFileCopied(destinationFile)
@@ -416,7 +414,7 @@ class CopyMoveFileHandler @Inject constructor(
     // unit test cases.
     unitTestDestinationFile?.let { return it }
     val root = getSelectedStorageRoot()
-    val fileName = selectedFile?.name.orEmpty()
+    val fileName = requireSelectedFile().name.orEmpty()
 
     val destinationFile = sequence {
       yield(File(root, fileName))
@@ -436,6 +434,12 @@ class CopyMoveFileHandler @Inject constructor(
 
   private suspend fun getSelectedStorageRoot(): File =
     unitTestStorage ?: File(kiwixDataStore.selectedStorage.first())
+
+  private fun requireSelectedFileUri(): Uri =
+    selectedFileUri ?: throw FileNotFoundException("Selected file uri not found")
+
+  private fun requireSelectedFile(): DocumentFile =
+    selectedFile ?: throw FileNotFoundException("Selected file not found")
 
   fun dispose() {
     storageObservingJob?.cancel()

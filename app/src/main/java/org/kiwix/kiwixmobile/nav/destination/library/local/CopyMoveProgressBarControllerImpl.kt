@@ -56,8 +56,8 @@ class CopyMoveProgressBarControllerImpl @Inject constructor(
    * Holds the state for the copy/move progress bar.
    *
    * A [Pair] containing:
-   *  - [String]: The message to display below the progress bar.
-   *  - [Int]: The current progress value (0 to 100).
+   *  - [Pair.first] ([String]): The message displayed below the progress bar.
+   *  - [Pair.second] ([Int]): The current progress value (0–100).
    */
   private var progressBarState = mutableStateOf(Pair("", ZERO))
   private lateinit var alertDialogShower: AlertDialogShower
@@ -65,14 +65,25 @@ class CopyMoveProgressBarControllerImpl @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
+  private fun requireAlertDialogShower(): AlertDialogShower {
+    if (!::alertDialogShower.isInitialized) {
+      throw IllegalStateException(
+        "AlertDialogShower is not initialized. " +
+          "Call setAlertDialogShower(AlertDialogShower) " +
+          "before showing or updating the copy/move dialogs."
+      )
+    }
+    return alertDialogShower
+  }
+
   override fun showPreparingCopyMoveDialog() {
-    alertDialogShower.show(KiwixDialog.PreparingCopyingFilesDialog { ContentLoadingProgressBar() })
+    requireAlertDialogShower().show(KiwixDialog.PreparingCopyingFilesDialog { ContentLoadingProgressBar() })
   }
 
   override fun showProgress(title: String) {
     progressBarState.value =
       context.getString(R.string.percentage, ZERO) to ZERO
-    alertDialogShower.show(
+    requireAlertDialogShower().show(
       KiwixDialog.CopyMoveProgressBarDialog(
         customViewBottomPadding = ZERO.dp,
         customGetView = { CopyMoveProgressDialog(title) }
@@ -109,15 +120,13 @@ class CopyMoveProgressBarControllerImpl @Inject constructor(
   @Suppress("InjectDispatcher")
   override suspend fun updateProgress(progress: Int) {
     withContext(Dispatchers.Main) {
-      synchronized(this) {
-        progressBarState.value =
-          context.getString(R.string.percentage, progress) to progress
-      }
+      progressBarState.value =
+        context.getString(R.string.percentage, progress) to progress
     }
   }
 
   override fun dismissCopyMoveProgressDialog() {
-    alertDialogShower.dismiss()
+    requireAlertDialogShower().dismiss()
   }
 
   override fun hidePreparingCopyMoveDialog() {
@@ -129,7 +138,7 @@ class CopyMoveProgressBarControllerImpl @Inject constructor(
     onCopyClicked: () -> Unit,
     onMovedClicked: () -> Unit
   ) {
-    alertDialogShower.show(
+    requireAlertDialogShower().show(
       KiwixDialog.CopyMoveFileToPublicDirectoryDialog(title),
       onCopyClicked,
       onMovedClicked

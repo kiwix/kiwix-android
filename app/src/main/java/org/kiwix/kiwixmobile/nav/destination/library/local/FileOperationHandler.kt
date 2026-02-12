@@ -30,7 +30,7 @@ interface FileOperationHandler {
   )
 
   suspend fun move(
-    selectedFile: DocumentFile?,
+    selectedFile: DocumentFile,
     sourceUri: Uri,
     destinationFolderUri: Uri,
     destinationFile: File,
@@ -42,5 +42,5 @@ interface FileOperationHandler {
     originalParentUri: Uri
   ): Boolean
 
-  suspend fun delete(uri: Uri, selectedFile: DocumentFile?): Boolean
+  suspend fun delete(uri: Uri, selectedFile: DocumentFile): Boolean
 }

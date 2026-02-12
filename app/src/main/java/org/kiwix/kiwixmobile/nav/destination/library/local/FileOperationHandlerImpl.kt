@@ -45,16 +45,20 @@ class FileOperationHandlerImpl @Inject constructor(
   ) {
     withContext(Dispatchers.IO) {
       val contentResolver = context.contentResolver
-
-      val parcelFileDescriptor = contentResolver.openFileDescriptor(sourceUri, "r")
-      val fileSize =
-        parcelFileDescriptor?.fileDescriptor?.let { FileInputStream(it).channel.size() } ?: 0L
+      val parcelFileDescriptor =
+        contentResolver.openFileDescriptor(sourceUri, "r")
+          ?: throw FileNotFoundException("The selected file could not be opened")
       var totalBytesTransferred = 0L
-
-      parcelFileDescriptor?.use { pfd ->
-        val sourceFd = pfd.fileDescriptor
-        FileInputStream(sourceFd).channel.use { sourceChannel ->
+      parcelFileDescriptor.use { pfd ->
+        FileInputStream(pfd.fileDescriptor).channel.use { sourceChannel ->
           FileOutputStream(destinationFile).channel.use { destinationChannel ->
+            val fileSize = sourceChannel.size()
+            if (fileSize <= 0L) {
+              // if the file does not have any content simply returns.
+              onProgress(HUNDERED)
+              return@withContext
+            }
+
             var bytesTransferred: Long
             val bufferSize = 1024 * 1024
             while (totalBytesTransferred < fileSize) {
@@ -66,22 +70,22 @@ class FileOperationHandlerImpl @Inject constructor(
               )
               totalBytesTransferred += bytesTransferred
               val progress = (totalBytesTransferred * HUNDERED / fileSize).toInt()
-              onProgress.invoke(progress)
+              onProgress.invoke(progress.coerceAtMost(HUNDERED))
             }
           }
         }
-      } ?: throw FileNotFoundException("The selected file could not be opened")
+      }
     }
   }
 
   override suspend fun move(
-    selectedFile: DocumentFile?,
+    selectedFile: DocumentFile,
     sourceUri: Uri,
     destinationFolderUri: Uri,
     destinationFile: File,
     onProgress: suspend (Int) -> Unit
   ): Boolean =
-    selectedFile?.parentFile?.uri?.let { parentUri ->
+    selectedFile.parentFile?.uri?.let { parentUri ->
       tryMoveWithDocumentContract(sourceUri, parentUri, destinationFolderUri)
     } ?: run {
       copy(sourceUri, destinationFile, onProgress)
@@ -136,11 +140,11 @@ class FileOperationHandlerImpl @Inject constructor(
   }
 
   @Suppress("InjectDispatcher")
-  override suspend fun delete(uri: Uri, selectedFile: DocumentFile?) = withContext(Dispatchers.IO) {
+  override suspend fun delete(uri: Uri, selectedFile: DocumentFile) = withContext(Dispatchers.IO) {
     runCatching {
       DocumentsContract.deleteDocument(context.contentResolver, uri)
     }.onFailure {
-      selectedFile?.delete()
+      selectedFile.delete()
       it.printStackTrace()
     }.getOrDefault(false)
   }
