@@ -8,5 +8,5 @@
   tools:keep="@drawable/ic_file_download_blue_24dp">
   <path
     android:fillColor="#FF000000"
-    android:pathData="M18,9h-4V3H10v6H6l6,7 6,-7zM6,18v2h12v-2H6z" />
+    android:pathData="M19,9h-4V3H9v6H5l7,7 7,-7zM5,18v2h14v-2H5z" />
 </vector>
