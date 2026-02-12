@@ -725,18 +725,17 @@ object FileUtils {
   ): SaveResult {
     Log.d("MEDIA_SAVE", "downloadFileFromUrl called, url=$url, src=$src")
 
-    src?.let {
-      if (isBase64DataUri(it)) {
-        Log.d("MEDIA_SAVE", "Detected base64 media")
-        return saveBase64Source(it, context)
-      }
+    if (src != null && isBase64DataUri(src)) {
+      Log.d("MEDIA_SAVE", "Detected base64 media")
+      return saveBase64Source(src, context)
     }
+
     val fileNameAndSource =
       getSafeFileNameAndSourceFromUrlOrSrc(url, src)
 
     if (fileNameAndSource == null) {
       Log.w("MEDIA_SAVE", "Invalid media source: url=$url, src=$src")
-      return SaveResult.Error("Invalid media source")
+      return SaveResult.InvalidSource
     }
 
     val fileName = fileNameAndSource.first
@@ -744,7 +743,7 @@ object FileUtils {
 
     if (fileName.isNullOrEmpty() || source.isNullOrEmpty()) {
       Log.w("MEDIA_SAVE", "Invalid media source after parsing")
-      return SaveResult.Error("Invalid media source")
+      return SaveResult.InvalidSource
     }
 
     return try {
@@ -767,13 +766,11 @@ object FileUtils {
             fileName,
             mime,
             bytes
-          )
+          ) ?: return SaveResult.Error("Image save failed")
 
-          if (uri != null) {
-            SaveResult.MediaSaved(uri, fileName)
-          } else {
-            SaveResult.Error("Image save failed")
-          }
+          Log.d("MEDIA_SAVE", "Image saved: $uri")
+
+          SaveResult.MediaSaved(uri, fileName)
         }
 
         else -> {
@@ -784,13 +781,11 @@ object FileUtils {
             source,
             fileName,
             zimReaderContainer
-          )
+          ) ?: return SaveResult.Error("File save failed")
 
-          if (file != null) {
-            SaveResult.FileSaved(file)
-          } else {
-            SaveResult.Error("File save failed")
-          }
+          Log.d("MEDIA_SAVE", "File saved: ${file.absolutePath}")
+
+          SaveResult.FileSaved(file)
         }
       }
     } catch (e: Exception) {
@@ -813,14 +808,14 @@ object FileUtils {
     context: Context
   ): SaveResult {
     val decoded = decodeBase64DataUri(src)
-      ?: return SaveResult.Error("Invalid base64 data")
+      ?: return SaveResult.InvalidSource
 
     val extension = decoded.first
     val bytes = decoded.second
 
     val mime = MimeTypeMap.getSingleton()
       .getMimeTypeFromExtension(extension)
-      ?: return SaveResult.Error("Invalid mime type")
+      ?: return SaveResult.InvalidSource
 
     val fileName = generateBase64FileName(extension)
 
@@ -829,18 +824,11 @@ object FileUtils {
       fileName,
       mime,
       bytes
-    )
+    ) ?: return SaveResult.Error("MediaStore image save failed")
 
-    if (uri != null) {
-      return SaveResult.MediaSaved(uri, fileName)
-    }
-    val root = getDownloadRootDir(context)
-    if (root != null) {
-      val file = File(root, fileName)
-      file.outputStream().use { it.write(bytes) }
-      return SaveResult.FileSaved(file)
-    }
-    return SaveResult.Error("Media save failed")
+    Log.d("MEDIA_SAVE", "Base64 image saved: $uri")
+
+    return SaveResult.MediaSaved(uri, fileName)
   }
 
   private fun saveImageToMediaStore(
