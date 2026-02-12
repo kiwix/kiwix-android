@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.reader
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
+import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -58,7 +59,6 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
@@ -364,11 +364,30 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   }
 
   private suspend fun waitForDownloadedImageFile(kiwixDataStore: KiwixDataStore): File {
-    val dir = FileUtils.getDownloadRootDir(context)
-
     repeat(20) {
-      dir?.listFiles()?.firstOrNull { it.name.startsWith("image_") }?.let {
-        return it
+      val projection = arrayOf(
+        MediaStore.Images.Media.DATA
+      )
+
+      val selection = "${MediaStore.Images.Media.RELATIVE_PATH}=?"
+      val selectionArgs = arrayOf("Pictures/Kiwix/")
+
+      val cursor = context.contentResolver.query(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        projection,
+        selection,
+        selectionArgs,
+        null
+      )
+
+      cursor?.use {
+        if (it.moveToFirst()) {
+          val index = it.getColumnIndex(MediaStore.Images.Media.DATA)
+          if (index != -1) {
+            val path = it.getString(index)
+            return@waitForDownloadedImageFile File(path)
+          }
+        }
       }
       Thread.sleep(500)
     }
