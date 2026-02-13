@@ -34,8 +34,8 @@ data class DownloadApkEntity(
   val name: String,
   val version: String,
   val url: String,
-  var lastDialogShownInMilliSeconds: Long = -1L,
-  var laterClickedMilliSeconds: Long = -1L,
+  var lastDialogShownInMilliSeconds: Long? = -1,
+  var laterClickedMilliSeconds: Long? = -1,
   var downloadId: Long = -1L,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
@@ -43,9 +43,9 @@ data class DownloadApkEntity(
   val totalSizeOfDownload: Long = -1L,
   val progress: Int = -1,
   @TypeConverters(StatusConverter::class)
-  val status: Status = Status.NONE,
+  val status: Status? = null,
   @TypeConverters(ErrorConverter::class)
-  val error: com.tonyodev.fetch2.Error = Error.NONE,
+  val error: com.tonyodev.fetch2.Error? = null
 ) {
   constructor(
     downloadId: Long,

@@ -108,18 +108,20 @@ data class DownloadRoomEntity(
 
 class StatusConverter {
   @TypeConverter
-  fun convertToEntityProperty(databaseValue: Int): Status = Status.valueOf(databaseValue)
+  fun convertToEntityProperty(databaseValue: Int?): Status? =
+    databaseValue?.let { Status.valueOf(it) }
 
   @TypeConverter
-  fun convertToDatabaseValue(status: Status): Int = status.ordinal
+  fun convertToDatabaseValue(status: Status?): Int? = status?.ordinal
 }
 
 class ErrorConverter {
   @TypeConverter
-  fun convertToEntityProperty(databaseValue: Int) = Error.valueOf(databaseValue)
+  fun convertToEntityProperty(databaseValue: Int?): Error? =
+    databaseValue?.let { Error.valueOf(it) }
 
   @TypeConverter
-  fun convertToDatabaseValue(error: Error): Int = error.ordinal
+  fun convertToDatabaseValue(error: Error?): Int? = error?.ordinal
 }
 
 class PauseReasonConverter {

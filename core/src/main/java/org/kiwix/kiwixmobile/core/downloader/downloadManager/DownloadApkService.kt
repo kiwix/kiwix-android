@@ -120,7 +120,7 @@ class DownloadApkService : Service() {
   private fun buildForegroundNotification(): Notification =
     NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       .setContentTitle(appName)
-      .setContentText(getString(string.download_notification_channel_description))
+      .setContentText("Downloading update")
       .setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .build()
@@ -159,7 +159,7 @@ class DownloadApkService : Service() {
     }
 
     override fun onPaused(download: Download) {
-      update(download)
+      // Do nothing
     }
 
     override fun onProgress(
@@ -204,11 +204,6 @@ class DownloadApkService : Service() {
           downloadApkDao.getDownload().let {
             showDownloadCompletedNotification(download)
           }
-        }
-        // If someone pause the Download then post a notification since fetch removes the
-        // notification for ongoing download when pause so we needs to show our custom notification.
-        if (download.isPaused()) {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
         }
         if (updateForeGroundService) {
           stopForegroundServiceIfNoActiveDownloads(fetch)
