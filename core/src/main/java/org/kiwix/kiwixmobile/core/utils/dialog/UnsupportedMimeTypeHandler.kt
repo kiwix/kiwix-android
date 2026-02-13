@@ -93,8 +93,7 @@ class UnsupportedMimeTypeHandler @Inject constructor(
         )
       intent.apply {
         setDataAndType(uri, documentType)
-        flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
       }
       if (intent.resolveActivity(activity.packageManager) != null) {
         activity.startActivity(intent)
