@@ -30,7 +30,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import org.kiwix.kiwixmobile.localFileTransfer.DialogEvent
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.PermissionAction
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -48,7 +47,9 @@ internal fun HandlePermissionStateComponent(
   // we are not requesting external storage permission for android 13+ and play store variants
   val externalStoragePermissionState = if (isWriteExternalStoragePermissionRequired) {
     rememberPermissionState(WRITE_EXTERNAL_STORAGE)
-  } else null
+  } else {
+    null
+  }
 
   // On Android < 13 we request ACCESS_FINE_LOCATION,
   // while on Android 13+ we request NEARBY_WIFI_DEVICES
