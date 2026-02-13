@@ -45,10 +45,6 @@ open class DatabaseModule {
 
   @Provides
   @Singleton
-  fun provideAppUpdateDao(db: KiwixRoomDatabase) = db.appUpdateDao()
-
-  @Provides
-  @Singleton
   fun provideDownloadApkDao(db: KiwixRoomDatabase) = db.downloadApkDao()
 
   @Provides

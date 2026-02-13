@@ -143,12 +143,20 @@ fun UpdateInfoCard(
         )
       }
 
-      Status.DOWNLOADING -> TODO()
       Status.PAUSED -> TODO()
       Status.FAILED -> TODO()
       Status.REMOVED -> TODO()
       Status.DELETED -> TODO()
       Status.ADDED -> TODO()
+      else -> {
+        KiwixButton(
+          modifier = Modifier.fillMaxWidth(),
+          clickListener = {
+            onInstallApk()
+          },
+          buttonText = "UPDATE"
+        )
+      }
     }
   }
 }

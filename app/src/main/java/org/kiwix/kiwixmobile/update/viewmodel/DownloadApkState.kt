@@ -34,8 +34,8 @@ data class DownloadApkState(
   val totalSizeBytes: Long = 0,
   val progress: Int = 0,
   val eta: Seconds = Seconds(0),
-  val currentDownloadState: Status = Status.NONE,
-  val downloadError: Error = Error.NONE
+  val currentDownloadState: Status? = Status.NONE,
+  val downloadError: Error? = Error.NONE
 ) {
   val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
 

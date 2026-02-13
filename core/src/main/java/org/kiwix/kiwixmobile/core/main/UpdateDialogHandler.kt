@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 const val THREE_DAYS_IN_MILLISECONDS = 0L // 3 * 24 * 60 * 60 * 1000L
 
-@Suppress("InjectDispatcher")
+@Suppress("all")
 class UpdateDialogHandler @Inject constructor(
   private val apkDao: DownloadApkDao
 ) {
@@ -47,7 +47,7 @@ class UpdateDialogHandler @Inject constructor(
       val lastPopupMillis = it.lastDialogShownInMilliSeconds
       val shouldShowPopup =
         (lastPopupMillis == 0L) ||
-          isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
+          isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis!!)
       if (shouldShowPopup &&
         isTimeToShowUpdate(currentMilliSeconds) &&
         available > currentVersion
@@ -62,7 +62,7 @@ class UpdateDialogHandler @Inject constructor(
     val downloadApkEntity = apkDao.getActiveDownload().first()
     val lastLaterClick = downloadApkEntity.laterClickedMilliSeconds
     return lastLaterClick == 0L ||
-      isThreeDaysElapsed(currentMillis, lastLaterClick)
+      isThreeDaysElapsed(currentMillis, lastLaterClick!!)
   }
 
   private fun isThreeDaysElapsed(currentMilliSeconds: Long, lastPopupMillis: Long): Boolean {

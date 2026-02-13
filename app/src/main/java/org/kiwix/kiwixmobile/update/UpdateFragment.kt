@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationP
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -103,6 +104,7 @@ class UpdateFragment : BaseFragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    val activity = requireActivity() as CoreMainActivity
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
       KiwixTheme {
@@ -127,7 +129,9 @@ class UpdateFragment : BaseFragment() {
               iconItem = IconItem.Drawable(
                 R.drawable.ic_close_white_24dp
               ),
-              onClick = {}
+              onClick = {
+                activity.onBackPressedDispatcher.onBackPressed()
+              }
             )
           }
         )
