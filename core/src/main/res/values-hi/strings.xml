@@ -321,7 +321,7 @@
   <string name="delete_selected_bookmarks">चयनित बुकमार्क हटाएं?</string>
   <string name="import_bookmarks_dialog_title">बुकमार्क आयात करें?</string>
   <string name="export_all_bookmarks_dialog_title">सभी बुकमार्क निर्यात करें?</string>
-  <string name="export_all_bookmarks_dialog_message">निर्यात करने से Download/org.kiwix…/ फ़ोल्डर में bookmark.xml फ़ाइल बन जाएगी।</string>
+  <string name="export_all_bookmarks_dialog_message">निर्यात करने से %s फ़ोल्डर में bookmark.xml फ़ाइल बन जाएगी।</string>
   <string name="bookmark_imported_message">सभी बुकमार्क आयात कर लिए गए हैं।</string>
   <string name="error_invalid_bookmark_file">त्रुटि: चयनित फ़ाइल वैध बुकमार्क फ़ाइल नहीं है.</string>
   <string name="send_report">निदान रिपोर्ट भेजें</string>

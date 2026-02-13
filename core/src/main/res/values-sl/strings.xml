@@ -315,7 +315,7 @@
   <string name="delete_selected_bookmarks">Izbrišem izbrane zaznamke?</string>
   <string name="import_bookmarks_dialog_title">Uvozim zaznamke?</string>
   <string name="export_all_bookmarks_dialog_title">Izvozim vse zaznamke?</string>
-  <string name="export_all_bookmarks_dialog_message">Izvoz bo ustvaril datoteko bookmark.xml v mapi Download/org.kiwix…/.</string>
+  <string name="export_all_bookmarks_dialog_message">Izvoz bo ustvaril datoteko bookmark.xml v mapi %s.</string>
   <string name="bookmark_imported_message">Vsi zaznamki so uvoženi.</string>
   <string name="error_invalid_bookmark_file">Napaka: Izbrana datoteka ni veljavna datoteka zaznamkov.</string>
   <string name="send_report">Pošlji diagnostično poročilo</string>

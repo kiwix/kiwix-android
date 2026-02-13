@@ -326,7 +326,7 @@
   <string name="delete_selected_bookmarks">Vuoi cancellare i segnalibri selezionati?</string>
   <string name="import_bookmarks_dialog_title">Importare segnalibri?</string>
   <string name="export_all_bookmarks_dialog_title">Esportare tutti i segnalibri?</string>
-  <string name="export_all_bookmarks_dialog_message">L\'esportazione genererà il file bookmark.xml nella cartella Download/org.kiwix…/</string>
+  <string name="export_all_bookmarks_dialog_message">L\'esportazione genererà il file bookmark.xml nella cartella %s</string>
   <string name="bookmark_imported_message">Tutti i segnalibri sono stati importati.</string>
   <string name="error_invalid_bookmark_file">Errore: il file selezionato non è un file segnalibro valido.</string>
   <string name="send_report">Invia report di diagnostica</string>

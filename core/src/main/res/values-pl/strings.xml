@@ -311,7 +311,7 @@
   <string name="delete_selected_bookmarks">Usunąć wybrane zakładki?</string>
   <string name="import_bookmarks_dialog_title">Importować zakładki?</string>
   <string name="export_all_bookmarks_dialog_title">Eksportować wszystkie zakładki?</string>
-  <string name="export_all_bookmarks_dialog_message">Eksportowanie stworzy plik bookmark.xml w folderze Download/org.kiwix…/</string>
+  <string name="export_all_bookmarks_dialog_message">Eksportowanie stworzy plik bookmark.xml w folderze %s</string>
   <string name="bookmark_imported_message">Wszystkie zakładki zostały zaimportowane.</string>
   <string name="error_invalid_bookmark_file">Błąd: Wybrany plik nie jest prawidłowym plikiem zakładek.</string>
   <string name="send_report">Wyślij raport diagnostyczny</string>

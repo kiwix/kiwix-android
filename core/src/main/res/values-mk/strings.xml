@@ -308,7 +308,7 @@
   <string name="delete_selected_bookmarks">Да ги избришам избраните обележувачи?</string>
   <string name="import_bookmarks_dialog_title">Да увезам обележувачи?</string>
   <string name="export_all_bookmarks_dialog_title">Да ги извезам сите обележувачи?</string>
-  <string name="export_all_bookmarks_dialog_message">Извозот ќе создаде податотека bookmark.xml во папката Download/org.kiwix…/.</string>
+  <string name="export_all_bookmarks_dialog_message">Извозот ќе создаде податотека bookmark.xml во папката %s.</string>
   <string name="bookmark_imported_message">Сите обележувачи се увезени.</string>
   <string name="error_invalid_bookmark_file">Грешка: Избраната податотека не е важечка податотека со обележувачи.</string>
   <string name="send_report">Испрати дијагностички извештај</string>

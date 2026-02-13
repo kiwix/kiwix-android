@@ -24,6 +24,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Environment
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -284,8 +285,10 @@ private fun showImportBookmarkDialog(
 }
 
 private fun showExportBookmarkDialog(coreSettingsViewModel: CoreSettingsViewModel) {
+  val path =
+    "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/org.kiwix"
   coreSettingsViewModel.alertDialogShower.show(
-    KiwixDialog.YesNoDialog.ExportBookmarks,
+    KiwixDialog.YesNoDialog.ExportBookmarks(path),
     { coreSettingsViewModel.exportBookmark() }
   )
 }
