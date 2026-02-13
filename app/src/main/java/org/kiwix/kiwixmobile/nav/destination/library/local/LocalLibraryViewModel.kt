@@ -85,7 +85,7 @@ class LocalLibraryViewModel @Inject constructor(
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
-  val fileSelectActions = MutableSharedFlow<FileSelectActions>()
+  val fileSelectActions = MutableSharedFlow<FileSelectActions>(extraBufferCapacity = 1)
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
 
