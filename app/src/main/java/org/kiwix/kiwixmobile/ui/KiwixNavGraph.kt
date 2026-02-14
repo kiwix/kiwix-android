@@ -64,7 +64,6 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
-import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesScreenRoute
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
