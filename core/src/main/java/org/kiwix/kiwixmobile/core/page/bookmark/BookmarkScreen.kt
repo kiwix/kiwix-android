@@ -39,6 +39,7 @@ fun BookmarkScreenRoute(
     switchString = stringResource(R.string.bookmarks_from_current_book),
     searchQueryHint = stringResource(R.string.search_bookmarks),
     deleteIconTitle = R.string.pref_clear_all_bookmarks_title,
+    switchIsCheckedFlow = viewModel.kiwixDataStore.showBookmarksOfAllBooks,
     alertDialogShower = alertDialogShower,
     pageViewModelClickListener = null
   )

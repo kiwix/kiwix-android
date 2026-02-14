@@ -91,15 +91,18 @@ import org.threeten.bp.format.DateTimeParseException
 const val SWITCH_TEXT_TESTING_TAG = "switchTextTestingTag"
 const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"
 const val PAGE_LIST_TEST_TAG = "pageListTestingTag"
+const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
+const val DELETE_MENU_ICON_TESTING_TAG = "deleteMenuIconTestingTag"
 
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun <T : Page, S : PageState<T>> PageScreenRoute(
-  modifier: Modifier = Modifier,
   switchString: String,
   screenTitle: String,
   searchQueryHint: String,
   deleteIconTitle: Int,
   noItemsString: String,
+  switchIsCheckedFlow: Flow<Boolean>,
   alertDialogShower: AlertDialogShower,
   pageViewModelClickListener: PageViewModelClickListener? = null,
   navigateBack: () -> Unit,
@@ -110,14 +113,26 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
 
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
   var searchText by rememberSaveable { mutableStateOf("") }
-
+  var isInSelectionMode by rememberSaveable { mutableStateOf(state.isInSelectionState) }
+  val selectedCount = state.pageItems.count { it.isSelected }
 
   LaunchedEffect(alertDialogShower) {
     viewModel.alertDialogShower = alertDialogShower
     viewModel.lifeCycleScope = activity.lifecycleScope
   }
 
-  // LaunchedEffect(PageViewModelClickListener) { }
+  // stting up click listener if provided
+  LaunchedEffect(pageViewModelClickListener) {
+    pageViewModelClickListener?.let {
+      viewModel.setOnItemClickListener(it)
+    }
+  }
+
+  LaunchedEffect(viewModel.effects) {
+    viewModel.effects.collect { effect ->
+      effect.invokeWith(activity)
+    }
+  }
 
   PageScreen(
     state = state,
@@ -127,18 +142,47 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     noItemsString = noItemsString,
     searchQueryHint = searchQueryHint,
     isSearchBarActive = isSearchActive,
-    switchIsCheckedFlow = viewModel.kiwixDataStore.showNotesOfAllBooks,
-    navigationIcon = { NavigationIcon(onClick = navigateBack) },
-    actionMenuItems = actionMenuList(
-      deleteIconTitle = deleteIconTitle,
-      isSearchActive = isSearchActive,
-      onSearchClick = {
-        isSearchActive = true
-      },
-      onDeleteClick = {
-        viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
-      }
-    ),
+    isInSelectionMode = isInSelectionMode,
+    selectedCount = selectedCount,
+    switchIsCheckedFlow = switchIsCheckedFlow,
+    navigationIcon = {
+      NavigationIcon(
+        onClick = {
+          if (isSearchActive) {
+            isSearchActive = false
+            searchText = ""
+            viewModel.actions.tryEmit(Action.Filter(""))
+          } else if (isInSelectionMode) {
+            viewModel.actions.tryEmit(Action.ExitActionModeMenu)
+          } else {
+            navigateBack()
+          }
+        }
+      )
+    },
+    actionMenuItems = if (isInSelectionMode) {
+      listOf(
+        ActionMenuItem(
+          icon = IconItem.Vector(Icons.Default.Delete),
+          contentDescription = R.string.delete,
+          onClick = {
+            viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
+          },
+          testingTag = DELETE_MENU_ICON_TESTING_TAG
+        )
+      )
+    } else {
+      actionMenuList(
+        deleteIconTitle = deleteIconTitle,
+        isSearchActive = isSearchActive,
+        onSearchClick = {
+          isSearchActive = true
+        },
+        onDeleteClick = {
+          viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
+        }
+      )
+    },
     onClearSearch = {
       searchText = ""
       viewModel.actions.tryEmit(Action.Filter(""))
@@ -150,17 +194,16 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     onSwitchCheckedChange = { isChecked ->
       viewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
     },
-    onItemLongClick = {
-      viewModel.actions.tryEmit(Action.OnItemLongClick(it))
+    onItemLongClick = { page ->
+      viewModel.actions.tryEmit(Action.OnItemLongClick(page))
     },
-    //todo check logic
-    onItemClick = {
-      viewModel.actions.tryEmit(Action.OnItemClick(it))
+    onItemClick = { page ->
+      viewModel.actions.tryEmit(Action.OnItemClick(page))
     },
   )
 }
 
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList", "LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T : Page, S : PageState<T>> PageScreen(
@@ -171,6 +214,8 @@ fun <T : Page, S : PageState<T>> PageScreen(
   searchQueryHint: String,
   noItemsString: String,
   isSearchBarActive: Boolean,
+  isInSelectionMode: Boolean,
+  selectedCount: Int,
   switchIsCheckedFlow: Flow<Boolean>,
   onItemClick: (Page) -> Unit,
   onItemLongClick: (Page) -> Unit,
@@ -185,11 +230,15 @@ fun <T : Page, S : PageState<T>> PageScreen(
       topBar = {
         Column {
           KiwixAppBar(
-            title = screenTitle,
+            title = if (isInSelectionMode) {
+              stringResource(R.string.selected_items, selectedCount)
+            } else {
+              screenTitle
+            },
             navigationIcon = navigationIcon,
             actionMenuItems = actionMenuItems,
-            searchBar = {
-              if (isSearchBarActive) {
+            searchBar = if (isSearchBarActive && !isInSelectionMode) {
+              {
                 KiwixSearchView(
                   placeholder = searchQueryHint,
                   value = searchText,
@@ -197,15 +246,19 @@ fun <T : Page, S : PageState<T>> PageScreen(
                   onValueChange = onSearchTextChange,
                   onClearClick = onClearSearch
                 )
-              } else null
+              }
+            } else {
+              null
             }
           )
-          PageSwitchRow(
-            switchString = switchString,
-            switchIsEnabled = !state.isInSelectionState,
-            switchIsCheckedFlow = switchIsCheckedFlow,
-            onSwitchCheckedChange = onSwitchCheckedChange
-          )
+          if (!isInSelectionMode) {
+            PageSwitchRow(
+              switchString = switchString,
+              switchIsEnabled = !state.isInSelectionState,
+              switchIsCheckedFlow = switchIsCheckedFlow,
+              onSwitchCheckedChange = onSwitchCheckedChange
+            )
+          }
         }
       }
     ) { padding ->
@@ -358,7 +411,7 @@ private fun actionMenuList(
 ): List<ActionMenuItem> {
   return listOfNotNull(
     when {
-      isSearchActive -> ActionMenuItem(
+      !isSearchActive -> ActionMenuItem(
         icon = IconItem.Drawable(R.drawable.action_search),
         contentDescription = R.string.search_label,
         onClick = onSearchClick,
@@ -369,7 +422,6 @@ private fun actionMenuList(
     },
     ActionMenuItem(
       icon = IconItem.Vector(Icons.Default.Delete),
-      // Adding content description for #3825.
       contentDescription = deleteIconTitle,
       onClick = onDeleteClick,
       testingTag = DELETE_MENU_ICON_TESTING_TAG

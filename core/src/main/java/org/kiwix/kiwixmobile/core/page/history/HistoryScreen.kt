@@ -39,8 +39,8 @@ fun HistoryScreenRoute(
     switchString = stringResource(R.string.history_from_current_book),
     searchQueryHint = stringResource(R.string.search_history),
     deleteIconTitle = R.string.pref_clear_all_history_title,
+    switchIsCheckedFlow = viewModel.kiwixDataStore.showHistoryOfAllBooks,
     alertDialogShower = alertDialogShower,
     pageViewModelClickListener = null
   )
 }
-
