@@ -378,9 +378,7 @@ class FileUtilsInstrumentationTest {
       zimReaderContainer = mockk(relaxed = true)
     )
 
-    Assertions.assertTrue(
-      result is SaveResult.Error || result is SaveResult.InvalidSource
-    )
+    Assertions.assertTrue(result === SaveResult.InvalidSource)
   }
 
   @Test

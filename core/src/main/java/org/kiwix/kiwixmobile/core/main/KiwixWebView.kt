@@ -168,8 +168,8 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     private val zimReaderContainer: ZimReaderContainer
   ) : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
-      val url = msg.data.getString("url")
-      val src = msg.data.getString("src")
+      val url = msg.data.getString("url", null)
+      val src = msg.data.getString("src", null)
 
       if (url == null && src == null) return
 
