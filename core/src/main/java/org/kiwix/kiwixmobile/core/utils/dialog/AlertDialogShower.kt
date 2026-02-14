@@ -23,6 +23,7 @@ import android.content.ClipboardManager
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,7 +59,6 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -211,9 +212,6 @@ fun DialogConfirmButton(
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        maxLines = 1,
-        softWrap = false,
-        overflow = TextOverflow.Ellipsis
       )
     }
   }
@@ -239,9 +237,6 @@ fun DialogDismissButton(
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        maxLines = 1,
-        softWrap = false,
-        overflow = TextOverflow.Ellipsis
       )
     }
   }
@@ -269,9 +264,6 @@ private fun DialogNaturalButton(
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
-        maxLines = 1,
-        softWrap = false,
-        overflow = TextOverflow.Ellipsis
       )
     }
   }
@@ -361,21 +353,51 @@ private fun ShowUri(
   }
 
   uri?.let {
+    UriDisplayRow(
+      uri = it,
+      onUriClick = onUriClick,
+      alertDialogShower = alertDialogShower,
+      copyLink = copyLink
+    )
+  }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun UriDisplayRow(
+  uri: Uri,
+  onUriClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower?,
+  copyLink: () -> Unit
+) {
+  Surface(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(top = 12.dp, bottom = 8.dp)
+      .border(
+        width = 1.dp,
+        color = MaterialTheme.colorScheme.outlineVariant,
+        shape = RoundedCornerShape(8.dp)
+      ),
+    shape = RoundedCornerShape(8.dp),
+    color = MaterialTheme.colorScheme.surfaceContainerHigh
+  ) {
     Row(
       verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier
         .fillMaxWidth()
-        .padding(end = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+        .padding(
+          start = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
+          top = 8.dp,
+          bottom = 8.dp
+        )
     ) {
       Text(
         text = "$uri",
         color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
         fontSize = DIALOG_URI_TEXT_SIZE,
-        fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Start,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
         modifier = Modifier
           .weight(1f)
           .combinedClickable(
