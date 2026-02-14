@@ -177,23 +177,23 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   ): View? {
     return ComposeView(requireContext()).apply {
       setContent {
-        PageScreen(
-          state = pageScreenState.value,
-          itemClickListener = this@PageFragment,
-          navigationIcon = {
-            NavigationIcon(
-              onClick = navigationIconClick()
-            )
-          },
-          actionMenuItems = actionMenuList(
-            isSearchActive = pageScreenState.value.isSearchActive,
-            onSearchClick = {
-              // Set the `isSearchActive` when the search button is clicked.
-              pageScreenState.update { copy(isSearchActive = true) }
-            },
-            onDeleteClick = { pageViewModel.actions.tryEmit(Action.UserClickedDeleteButton) }
-          )
-        )
+        // PageScreen(
+        //   state = pageScreenState.value,
+        //   itemClickListener = this@PageFragment,
+        //   navigationIcon = {
+        //     NavigationIcon(
+        //       onClick = navigationIconClick()
+        //     )
+        //   },
+        //   actionMenuItems = actionMenuList(
+        //     isSearchActive = pageScreenState.value.isSearchActive,
+        //     onSearchClick = {
+        //       // Set the `isSearchActive` when the search button is clicked.
+        //       pageScreenState.update { copy(isSearchActive = true) }
+        //     },
+        //     onDeleteClick = { pageViewModel.actions.tryEmit(Action.UserClickedDeleteButton) }
+        //   )
+        // )
         DialogHost(alertDialogShower)
       }
     }
