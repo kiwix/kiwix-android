@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 
 sealed class State {
@@ -30,7 +29,7 @@ sealed class State {
   data class Content(
     val items: List<Category>,
     val filter: String = "",
-    val viewItems: List<CategoryListItem> =
+    val viewItems: List<CategoryItem> =
       createViewList(
         items,
         filter
@@ -38,9 +37,19 @@ sealed class State {
   ) : State() {
     fun select(category: CategoryItem) =
       Content(
-        items.map { it.copy(active = it.id == category.id) },
+        items.map {
+          if (it.id == category.id) {
+            it.copy(active = !it.active)
+          } else {
+            it
+          }
+        },
         filter
       )
+
+    fun clearAll() = Content(items.map { it.copy(active = false) }, filter)
+
+    fun selectAll() = Content(items.map { it.copy(active = true) }, filter)
 
     fun updateFilter(filter: String) =
       Content(items, filter)
@@ -64,8 +73,7 @@ sealed class State {
         createCategorySection(
           items,
           filter,
-          Category::active,
-          HeaderItem.SELECTED
+          Category::active
         )
 
       private fun otherItems(
@@ -75,19 +83,17 @@ sealed class State {
         createCategorySection(
           items,
           filter,
-          { !it.active },
-          HeaderItem.OTHER
+          { !it.active }
         )
 
       private fun createCategorySection(
         items: List<Category>,
         filter: String,
-        filterCondition: (Category) -> Boolean,
-        headerId: Long
+        filterCondition: (Category) -> Boolean
       ) = items.filter(filterCondition)
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
-        ?.let { listOf(HeaderItem(headerId)) + it.map { category -> CategoryItem(category) } }
+        ?.let { it.map { category -> CategoryItem(category) } }
         .orEmpty()
     }
   }

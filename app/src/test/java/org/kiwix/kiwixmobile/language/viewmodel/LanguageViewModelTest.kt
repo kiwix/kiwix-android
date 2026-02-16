@@ -28,17 +28,19 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.LanguageEntry
 import org.kiwix.kiwixmobile.core.data.remote.LanguageFeed
@@ -508,13 +510,124 @@ class LanguageViewModelTest {
                 it.languageCode == french.languageCode
               }
 
-            assertFalse(
+            assertTrue(
               updatedEnglish.active
             )
 
             assertTrue(
               updatedFrench.active
             )
+          }
+        }
+
+        @Nested
+        inner class ActionClearAll {
+          @Test
+          fun whenStateNotContent_returnsCurrentState() = runTest {
+            createViewModel()
+            advanceUntilIdle()
+            languageViewModel.state.value = Loading
+
+            languageViewModel.actions.emit(Action.ClearAll)
+
+            advanceUntilIdle()
+
+            assertEquals(
+              Loading,
+              languageViewModel.state.value
+            )
+          }
+
+          @Test
+          fun whenStateContent_clearsAllSelections() = runTest {
+            createViewModel()
+            advanceUntilIdle()
+            val english = createLanguage(code = "eng", active = true)
+            val french = createLanguage(code = "fr", active = true, id = 2)
+
+            languageViewModel.state.value = State.Content(listOf(english, french))
+
+            languageViewModel.actions.emit(Action.ClearAll)
+
+            advanceUntilIdle()
+
+            val content = languageViewModel.state.value as State.Content
+            assertTrue(content.items.none { it.active })
+          }
+        }
+
+        @Nested
+        inner class ActionSelectAll {
+          @Test
+          fun whenStateNotContent_returnsCurrentState() = runTest {
+            createViewModel()
+            advanceUntilIdle()
+            languageViewModel.state.value = Loading
+
+            languageViewModel.actions.emit(Action.SelectAll)
+
+            advanceUntilIdle()
+
+            assertEquals(
+              Loading,
+              languageViewModel.state.value
+            )
+          }
+
+          @Test
+          fun whenStateContent_selectAllSelections() = runTest {
+            createViewModel()
+            advanceUntilIdle()
+            val english = createLanguage(code = "eng", active = false)
+            val french = createLanguage(code = "fr", active = false, id = 2)
+
+            languageViewModel.state.value = State.Content(listOf(english, french))
+
+            languageViewModel.actions.emit(Action.SelectAll)
+
+            advanceUntilIdle()
+
+            val content = languageViewModel.state.value as State.Content
+            assertTrue(content.items.all { it.active })
+          }
+        }
+
+        @Nested
+        inner class ActionCancel {
+          @Test
+          fun whenStateNotContent_returnsCurrentState() = runTest {
+            createViewModel()
+            advanceUntilIdle()
+            languageViewModel.state.value = Loading
+
+            languageViewModel.actions.emit(Action.Cancel)
+
+            advanceUntilIdle()
+
+            assertEquals(
+              Loading,
+              languageViewModel.state.value
+            )
+          }
+
+          @Test
+          fun whenStateContent_emitsCancelSideEffect() = runTest {
+            createViewModel()
+            advanceUntilIdle()
+            languageViewModel.state.value = State.Content(listOf(createLanguage()))
+
+            var sideEffect: SideEffect<*>? = null
+            val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+              languageViewModel.effects.collect {
+                sideEffect = it
+              }
+            }
+
+            languageViewModel.actions.emit(Action.Cancel)
+            advanceUntilIdle()
+
+            assertThat(sideEffect).isNotNull
+            collectJob.cancel()
           }
         }
 
@@ -537,19 +650,33 @@ class LanguageViewModelTest {
           }
 
           @Test
-          fun whenStateContent_returnsSaving() = runTest {
+          fun whenStateContent_returnsSavingAndEmitsSideEffect() = runTest {
             createViewModel()
             advanceUntilIdle()
-            languageViewModel.state.value = State.Content(listOf(createLanguage()))
+            val english = createLanguage(code = "eng", active = true)
+            val french = createLanguage(code = "fr", active = false, id = 2)
+            languageViewModel.state.value = State.Content(listOf(english, french))
+
+            var sideEffect: SideEffect<*>? = null
+            val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+              languageViewModel.effects.collect {
+                sideEffect = it
+              }
+            }
 
             languageViewModel.actions.emit(Action.Save)
-
             advanceUntilIdle()
 
             assertEquals(
               State.Saving,
               languageViewModel.state.value
             )
+
+            assertThat(sideEffect).isInstanceOf(SaveLanguagesAndFinish::class.java)
+            val saveEffect = sideEffect as SaveLanguagesAndFinish
+            assertThat(saveEffect.languages.map { it.languageCode }).containsExactly("eng")
+
+            collectJob.cancel()
           }
         }
       }

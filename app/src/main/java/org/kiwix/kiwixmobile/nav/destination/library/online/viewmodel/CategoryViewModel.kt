@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatActivity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,7 +59,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Load
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 import javax.inject.Inject
 
-class CategoryViewModel @Inject constructor(
+open class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   @OPDSKiwixService private val kiwixService: KiwixService,
@@ -70,12 +71,19 @@ class CategoryViewModel @Inject constructor(
     data class Filter(val filter: String) : Action()
     data class Select(val category: CategoryItem) : Action()
     data class Error(val errorMessage: String) : Action()
+    object Save : Action()
+    object ClearAll : Action()
+    object SelectAll : Action()
+    object Cancel : Action()
   }
 
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private var onDismiss: (() -> Unit)? = null
+
+  @VisibleForTesting
+  open var isUnitTestCase: Boolean = false
   private val coroutineJobs = mutableListOf<Job>()
 
   fun setOnDismissCallback(onDismiss: () -> Unit) {
@@ -143,7 +151,10 @@ class CategoryViewModel @Inject constructor(
     val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
       Category(
         category = entry.title,
-        active = kiwixDataStore.selectedOnlineContentCategory.first() == entry.title,
+        active = kiwixDataStore.selectedOnlineContentCategory.first()
+          .split(",")
+          .filter { it.isNotEmpty() }
+          .contains(entry.title),
         id = (index + ONE).toLong()
       )
     }
@@ -172,31 +183,33 @@ class CategoryViewModel @Inject constructor(
   private fun reduce(action: Action, currentState: State): State {
     return when (action) {
       is Error -> State.Error(action.errorMessage)
-
-      is UpdateCategory ->
-        when (currentState) {
-          Loading -> Content(action.categories)
-          else -> currentState
-        }
-
-      is Filter -> {
-        when (currentState) {
-          is Content -> filterContent(action.filter, currentState)
-          else -> currentState
-        }
-      }
-
-      is Select ->
-        when (currentState) {
-          is Content -> {
-            val newState = updateSelection(action.category, currentState)
-            save(newState)
-          }
-
-          else -> currentState
-        }
+      is UpdateCategory -> updateCategory(action, currentState)
+      is Filter -> filter(action, currentState)
+      is Select -> select(action, currentState)
+      Action.Save -> saveAction(currentState)
+      Action.ClearAll -> clearAll(currentState)
+      Action.SelectAll -> selectAll(currentState)
+      Action.Cancel -> cancel(currentState)
     }
   }
+
+  private fun updateCategory(action: UpdateCategory, currentState: State): State =
+    if (currentState is Loading) Content(action.categories) else currentState
+
+  private fun filter(action: Filter, currentState: State): State =
+    if (currentState is Content) filterContent(action.filter, currentState) else currentState
+
+  private fun select(action: Select, currentState: State): State =
+    if (currentState is Content) updateSelection(action.category, currentState) else currentState
+
+  private fun saveAction(currentState: State): State =
+    if (currentState is Content) save(currentState) else currentState
+
+  private fun clearAll(currentState: State): State =
+    if (currentState is Content) currentState.clearAll() else currentState
+
+  private fun selectAll(currentState: State): State =
+    if (currentState is Content) currentState.selectAll() else currentState
 
   private fun filterContent(
     filter: String,
@@ -209,10 +222,10 @@ class CategoryViewModel @Inject constructor(
   ) = currentState.select(categoryItem)
 
   private fun save(currentState: Content): State {
-    val selectedCategory = currentState.items.first { it.active }
+    val selectedCategories = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveCategoryAndFinish(
-        selectedCategory,
+        selectedCategories,
         kiwixDataStore,
         viewModelScope,
         requireOnDismissCallBack()
@@ -231,6 +244,16 @@ class CategoryViewModel @Inject constructor(
     if (current is Saving) {
       state.value = current.items
     }
+  }
+
+  private fun cancel(currentState: State): State {
+    if (currentState !is Content) return currentState
+    effects.tryEmit(object : SideEffect<Unit> {
+      override fun invokeWith(activity: AppCompatActivity) {
+        activity.onBackPressedDispatcher.onBackPressed()
+      }
+    })
+    return currentState
   }
 
   @VisibleForTesting
