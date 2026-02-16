@@ -22,7 +22,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.sharedFunctions.category
 
@@ -34,9 +33,7 @@ class StateTest {
       val content = Content(listOf(category(), category(isActive = true)))
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MAX_VALUE),
           CategoryItem(category(isActive = true)),
-          HeaderItem(Long.MIN_VALUE),
           CategoryItem(category())
         )
       )
@@ -50,7 +47,6 @@ class StateTest {
         ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MIN_VALUE),
           CategoryItem(category(category = "matchesFilter"))
         )
       )
