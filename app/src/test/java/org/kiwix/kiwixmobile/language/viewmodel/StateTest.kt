@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.sharedFunctions.language
@@ -34,9 +33,7 @@ class StateTest {
       val content = Content(listOf(language(), language(isActive = true)))
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MAX_VALUE),
           LanguageItem(language(isActive = true)),
-          HeaderItem(Long.MIN_VALUE),
           LanguageItem(language())
         )
       )
@@ -50,7 +47,6 @@ class StateTest {
         ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MIN_VALUE),
           LanguageItem(language(language = "matchesFilter"))
         )
       )

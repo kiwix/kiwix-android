@@ -26,14 +26,15 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 
 data class SaveCategoryAndFinish(
-  val category: Category,
+  val categories: List<Category>,
   private val kiwixDataStore: KiwixDataStore,
   private val lifecycleScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
       runCatching {
-        kiwixDataStore.setSelectedOnlineContentCategory(category.category)
+        val categoryCodes = categories.joinToString(",") { it.category }
+        kiwixDataStore.setSelectedOnlineContentCategory(categoryCodes)
         activity.onBackPressedDispatcher.onBackPressed()
       }.onFailure {
         it.printStackTrace()

@@ -19,8 +19,6 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 sealed class State {
@@ -30,7 +28,7 @@ sealed class State {
   data class Content(
     val items: List<Language>,
     val filter: String = "",
-    val viewItems: List<LanguageListItem> =
+    val viewItems: List<LanguageItem> =
       createViewList(
         items,
         filter
@@ -38,9 +36,19 @@ sealed class State {
   ) : State() {
     fun select(languageItem: LanguageItem) =
       Content(
-        items.map { it.copy(active = it.id == languageItem.id) },
+        items.map {
+          if (it.id == languageItem.id) {
+            it.copy(active = !it.active)
+          } else {
+            it
+          }
+        },
         filter
       )
+
+    fun clearAll() = Content(items.map { it.copy(active = false) }, filter)
+
+    fun selectAll() = Content(items.map { it.copy(active = true) }, filter)
 
     fun updateFilter(filter: String) =
       Content(items, filter)
@@ -64,8 +72,7 @@ sealed class State {
         createLanguageSection(
           items,
           filter,
-          Language::active,
-          HeaderItem.SELECTED
+          Language::active
         )
 
       private fun otherItems(
@@ -75,19 +82,17 @@ sealed class State {
         createLanguageSection(
           items,
           filter,
-          { !it.active },
-          HeaderItem.OTHER
+          { !it.active }
         )
 
       private fun createLanguageSection(
         items: List<Language>,
         filter: String,
-        filterCondition: (Language) -> Boolean,
-        headerId: Long
+        filterCondition: (Language) -> Boolean
       ) = items.filter(filterCondition)
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
-        ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
+        ?.let { it.map { language -> LanguageItem(language) } }
         .orEmpty()
     }
   }

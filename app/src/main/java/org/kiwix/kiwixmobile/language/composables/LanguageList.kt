@@ -33,7 +33,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
@@ -60,37 +59,24 @@ fun LanguageList(
   ) {
     items(
       items = viewItem,
-      key = { item ->
-        when (item) {
-          is HeaderItem -> "header_${item.id}"
-          is LanguageItem -> "language_${item.language.id}"
-        }
-      }
+      key = { item -> "language_${item.language.id}" }
     ) { item ->
-      when (item) {
-        is HeaderItem -> HeaderText(
-          item = item,
-          modifier = Modifier
-            .animateItem()
-        )
-
-        is LanguageItem -> LanguageItemRow(
-          context = context,
-          modifier = Modifier
-            .animateItem()
-            .fillMaxWidth()
-            .height(ComposeDimens.SIXTY_FOUR_DP)
-            .semantics {
-              contentDescription =
-                context.getString(R.string.select_language_content_description)
-            }
-            .clickable {
-              selectLanguageItem(item)
-            },
-          item = item,
-          onCheckedChange = { selectLanguageItem(it) }
-        )
-      }
+      LanguageItemRow(
+        context = context,
+        modifier = Modifier
+          .animateItem()
+          .fillMaxWidth()
+          .height(ComposeDimens.SIXTY_FOUR_DP)
+          .semantics {
+            contentDescription =
+              context.getString(R.string.select_language_content_description)
+          }
+          .clickable {
+            selectLanguageItem(item)
+          },
+        item = item,
+        onCheckedChange = { selectLanguageItem(it) }
+      )
     }
   }
 }

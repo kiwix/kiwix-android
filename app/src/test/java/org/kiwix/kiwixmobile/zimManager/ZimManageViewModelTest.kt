@@ -35,14 +35,18 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.yield
 import okhttp3.HttpUrl
 import okhttp3.Response
 import org.assertj.core.api.Assertions.assertThat
@@ -59,6 +63,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -78,17 +83,15 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryResult
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -106,8 +109,6 @@ import org.kiwix.sharedFunctions.downloadModel
 import org.kiwix.sharedFunctions.libkiwixBook
 import java.util.Locale
 import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(InstantExecutorExtension::class)
@@ -141,6 +142,7 @@ class ZimManageViewModelTest {
 
   @RegisterExtension
   private val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher get() = mainDispatcherRule.dispatcher
   private val onlineLibraryManager = mockk<OnlineLibraryManager>(relaxed = true)
 
   @AfterAll
@@ -168,7 +170,7 @@ class ZimManageViewModelTest {
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
     every { application.getString(any()) } returns ""
-    every { application.getString(any(), any()) } returns ""
+    every { application.getString(any(), *anyVararg()) } returns ""
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -205,7 +207,7 @@ class ZimManageViewModelTest {
     networkStates.value = NOT_CONNECTED
     onlineContentLanguage.value = ""
     viewModel =
-      ZimManageViewModel(
+      TestZimManageViewModel(
         downloadRoomDao,
         libkiwixBookOnDisk,
         storageObserver,
@@ -270,7 +272,7 @@ class ZimManageViewModelTest {
   inner class Books {
     @Test
     fun `emissions from data source are observed`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val expectedList = listOf(bookOnDisk())
         testFlow(
           viewModel.fileSelectListStates.asFlow(),
@@ -285,7 +287,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `books found on filesystem are filtered by books already in db`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         every { application.getString(any()) } returns ""
         val expectedBook = bookOnDisk(1L, libkiwixBook("1", nativeBook = BookTestWrapper("1")))
         val bookToRemove = bookOnDisk(1L, libkiwixBook("2", nativeBook = BookTestWrapper("2")))
@@ -313,7 +315,8 @@ class ZimManageViewModelTest {
   inner class Languages {
     @Test
     fun `changing language updates the filter and do the network request`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
+        onlineContentLanguage.value = ""
         every { application.getString(any()) } returns ""
         every { application.getString(any(), any()) } returns ""
         viewModel.onlineLibraryRequest.test {
@@ -327,6 +330,70 @@ class ZimManageViewModelTest {
         }
       }
     }
+
+    @Test
+    fun `library section title adapts to selected language count`() = flakyTest {
+      runTest(testDispatcher) {
+        onlineContentLanguage.value = ""
+        val book = libkiwixBook(id = "0", url = "")
+        coEvery {
+          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+        } returns arrayListOf(book)
+        every { application.getString(any()) } returns ""
+        networkStates.value = CONNECTED
+        downloads.value = listOf()
+        books.value = listOf()
+        fileSystemStates.value = CanWrite4GbFile
+        every {
+          application.getString(R.string.your_language, any())
+        } answers {
+          val args = secondArg<Array<Any>>()
+          "Selected language: ${args[0]}"
+        }
+        every { application.getString(R.string.your_languages) } returns "Selected languages:"
+
+        viewModel.libraryItems.test {
+          cancelAndIgnoreRemainingEvents()
+        }
+
+        viewModel.libraryItems.test {
+          // Single language
+          awaitMatchingTitle("eng", listOf("Selected language: "))
+
+          // Multiple languages
+          awaitMatchingTitle("eng,fra,deu", listOf("Selected languages:", "eng", "fra", "deu"))
+
+          // More languages
+          awaitMatchingTitle(
+            "eng,fra,deu,ita",
+            listOf("Selected languages:", "eng", "fra", "deu", "ita")
+          )
+        }
+      }
+    }
+
+    private suspend fun TurbineTestContext<LibraryListItemWrapper>.awaitMatchingTitle(
+      languageValue: String,
+      expectedSubstrings: List<String>
+    ) {
+      onlineContentLanguage.value = languageValue
+      yield()
+      fileSystemStates.emit(FileSystemState.DetectingFileSystem)
+      fileSystemStates.emit(CanWrite4GbFile)
+      var matched = false
+      while (!matched) {
+        val item = awaitItem()
+        val title = item.items.filterIsInstance<LibraryListItem.DividerItem>()
+          .firstOrNull { it.id == Long.MIN_VALUE }
+          ?.sectionTitle.orEmpty()
+        if (expectedSubstrings.all { sub ->
+            title.contains(sub, ignoreCase = true)
+          }
+        ) {
+          matched = true
+        }
+      }
+    }
   }
 
   @Nested
@@ -334,7 +401,8 @@ class ZimManageViewModelTest {
     @Disabled("We will refactor this in migration PR")
     @Test
     fun `changing category updates the filter and do the network request`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
+        onlineCategoryContent.value = ""
         every { application.getString(any()) } returns ""
         every { application.getString(any(), any()) } returns ""
         onlineCategoryContent.emit("wikipedia")
@@ -353,7 +421,7 @@ class ZimManageViewModelTest {
 
   @Test
   fun `network states observed`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       networkStates.tryEmit(NOT_CONNECTED)
       advanceUntilIdle()
       viewModel.networkStates.test()
@@ -363,9 +431,9 @@ class ZimManageViewModelTest {
 
   @Test
   fun `updateOnlineLibraryFilters updates onlineLibraryRequest`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       viewModel.setIsUnitTestCase()
-      val newRequest = ZimManageViewModel.OnlineLibraryRequest(
+      val newRequest = OnlineLibraryRequest(
         query = "test",
         category = "cat",
         lang = "en",
@@ -382,7 +450,7 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library update removes from sources and maps to list items`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       val book = BookTestWrapper("0")
       val bookAlreadyOnDisk =
         libkiwixBook(id = "0", url = "", language = Locale.ENGLISH.language, nativeBook = book)
@@ -407,7 +475,7 @@ class ZimManageViewModelTest {
             listOf(
               LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading:"),
               LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
-              LibraryListItem.DividerItem(Long.MAX_VALUE - 1, "All languages"),
+              LibraryListItem.DividerItem(Long.MAX_VALUE - 1, ""),
               LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
             )
           )
@@ -419,7 +487,8 @@ class ZimManageViewModelTest {
   @Disabled("We will refactor this in migration PR")
   @Test
   fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
+      onlineContentLanguage.value = ""
       val bookOver4Gb =
         libkiwixBook(
           id = "0",
@@ -485,11 +554,57 @@ class ZimManageViewModelTest {
         cancelAndConsumeRemainingEvents()
       }
     }
+
+    @Test
+    fun `library shows selected language section title correctly`() = flakyTest {
+      runTest(testDispatcher) {
+        val bookOver4Gb =
+          libkiwixBook(
+            id = "0",
+            url = "",
+            size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
+          )
+        every { application.getString(any()) } answers { "" }
+        every { application.getString(any(), any()) } answers { "" }
+        every { application.getString(any(), *anyVararg()) } answers { "Selected language: English" }
+
+        // test libraryItems fetches for all language.
+        viewModel.libraryItems.test {
+          coEvery {
+            onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+          } returns arrayListOf(bookOver4Gb)
+          networkStates.value = CONNECTED
+          downloads.value = listOf()
+          books.value = listOf()
+          onlineContentLanguage.value = "eng"
+          yield()
+          fileSystemStates.emit(FileSystemState.DetectingFileSystem)
+          fileSystemStates.emit(CannotWrite4GbFile)
+          advanceUntilIdle()
+
+          var matched = false
+          while (!matched) {
+            val item = awaitItem()
+            val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+            if (bookItem?.fileSystemState == CannotWrite4GbFile) {
+              assertThat(item.items).isEqualTo(
+                listOf(
+                  LibraryListItem.DividerItem(Long.MIN_VALUE, "Selected language: English"),
+                  LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
+                )
+              )
+              matched = true
+            }
+          }
+          cancelAndConsumeRemainingEvents()
+        }
+      }
+    }
   }
 
   @Test
   fun `library shows downloading books even when not in online source`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       val downloadingBook = libkiwixBook(id = "10", url = "")
       val bookInOnlineList = libkiwixBook(id = "20", url = "")
       val downloadModel = downloadModel(book = downloadingBook)
@@ -529,7 +644,7 @@ class ZimManageViewModelTest {
   inner class SideEffects {
     @Test
     fun `RequestNavigateTo offers OpenFileWithNavigation with selected books`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val selectedBook = bookOnDisk().apply { isSelected = true }
         viewModel.fileSelectListStates.value =
           FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
@@ -543,7 +658,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RequestMultiSelection offers StartMultiSelection and selects a book`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val bookToSelect = bookOnDisk(databaseId = 0L)
         val unSelectedBook = bookOnDisk(databaseId = 1L)
         viewModel.fileSelectListStates.value =
@@ -571,7 +686,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RequestDeleteMultiSelection offers DeleteFiles with selected books`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val selectedBook = bookOnDisk().apply { isSelected = true }
         viewModel.fileSelectListStates.value =
           FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
@@ -592,7 +707,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RequestShareMultiSelection offers ShareFiles with selected books`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val selectedBook = bookOnDisk().apply { isSelected = true }
         viewModel.fileSelectListStates.value =
           FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
@@ -614,7 +729,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RequestValidateZimFiles offers ValidateZIMFiles with selected books`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val selectedBook = bookOnDisk().apply { isSelected = true }
         viewModel.fileSelectListStates.value =
           FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
@@ -637,7 +752,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `MultiModeFinished offers None`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val selectedBook = bookOnDisk().apply { isSelected = true }
         viewModel.fileSelectListStates.value =
           FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
@@ -659,7 +774,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RequestSelect offers None and inverts selection`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         val selectedBook = bookOnDisk(0L).apply { isSelected = true }
         viewModel.fileSelectListStates.value =
           FileSelectListState(listOf(selectedBook, bookOnDisk(1L)), NORMAL)
@@ -681,7 +796,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RestartActionMode offers StartMultiSelection`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         testFlow(
           flow = viewModel.sideEffects,
           triggerAction = { viewModel.fileSelectActions.emit(RestartActionMode) },
@@ -692,7 +807,7 @@ class ZimManageViewModelTest {
 
     @Test
     fun `UserClickedDownloadBooksButton offers NavigateToDownloads`() = flakyTest {
-      runTest {
+      runTest(testDispatcher) {
         testFlow(
           flow = viewModel.sideEffects,
           triggerAction = { viewModel.fileSelectActions.emit(UserClickedDownloadBooksButton) },
@@ -729,5 +844,33 @@ class BookTestWrapper(private val id: String) : Book(0L) {
   override fun hashCode(): Int = getId().hashCode()
 }
 
-val TURBINE_TIMEOUT = 5000.toDuration(DurationUnit.MILLISECONDS)
 const val MOCKK_TIMEOUT_FOR_VERIFICATION = 1000L
+
+private class TestZimManageViewModel(
+  downloadDao: DownloadRoomDao,
+  libkiwixBookOnDisk: LibkiwixBookOnDisk,
+  storageObserver: StorageObserver,
+  kiwixService: KiwixService,
+  context: Application,
+  connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
+  fat32Checker: Fat32Checker,
+  dataSource: DataSource,
+  connectivityManager: ConnectivityManager,
+  onlineLibraryManager: OnlineLibraryManager,
+  kiwixDataStore: KiwixDataStore,
+  ioDispatcher: CoroutineDispatcher
+) : ZimManageViewModel(
+    downloadDao,
+    libkiwixBookOnDisk,
+    storageObserver,
+    kiwixService,
+    context,
+    connectivityBroadcastReceiver,
+    fat32Checker,
+    dataSource,
+    connectivityManager,
+    onlineLibraryManager,
+    kiwixDataStore,
+    ioDispatcher
+  )
+

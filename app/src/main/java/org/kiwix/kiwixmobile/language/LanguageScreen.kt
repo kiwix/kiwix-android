@@ -89,7 +89,6 @@ internal fun LanguageScreenRoute(
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
   fun resetSearchState() {
-    // clears the search text and resets the filter
     searchText = ""
     languageViewModel.actions.tryEmit(Action.Filter(searchText))
   }
@@ -177,7 +176,6 @@ private fun LanguageScreen(
     Column(
       modifier = Modifier
         .fillMaxSize()
-        // setting bottom padding to zero to avoid accounting for Bottom bar
         .padding(
           top = innerPadding.calculateTopPadding(),
           start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -245,9 +243,8 @@ private fun appBarActionMenuList(
         testingTag = SEARCH_ICON_TESTING_TAG
       )
 
-      else -> null // Handle the case when both conditions are false
+      else -> null
     },
-    // Second item: always included
     ActionMenuItem(
       icon = IconItem.Vector(Icons.Default.Check),
       contentDescription = R.string.save_languages,
