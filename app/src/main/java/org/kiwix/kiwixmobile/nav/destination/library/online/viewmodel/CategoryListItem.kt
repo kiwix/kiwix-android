@@ -23,15 +23,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 sealed class CategoryListItem {
   abstract val id: Long
 
-  data class HeaderItem constructor(
-    override val id: Long
-  ) : CategoryListItem() {
-    companion object {
-      const val SELECTED = Long.MAX_VALUE
-      const val OTHER = Long.MIN_VALUE
-    }
-  }
-
   data class CategoryItem(
     val category: Category,
     override val id: Long = category.id

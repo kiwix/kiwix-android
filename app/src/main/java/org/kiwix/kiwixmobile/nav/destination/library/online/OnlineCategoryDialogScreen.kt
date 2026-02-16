@@ -28,9 +28,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,22 +48,23 @@ import androidx.compose.ui.semantics.testTag
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.LoadingScreen
+import org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.ShowErrorMessage
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Error
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
-
-const val CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG = "categoryItemRadioButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -80,7 +83,17 @@ fun OnlineCategoryDialogScreen(
       topBar = {
         KiwixAppBar(
           title = stringResource(R.string.select_category),
-          navigationIcon = navigationIcon
+          navigationIcon = navigationIcon,
+          actionMenuItems = listOf(
+            ActionMenuItem(
+              icon = IconItem.Vector(Icons.Default.Check),
+              contentDescription = R.string.save_categories,
+              onClick = {
+                categoryViewModel.actions.tryEmit(Action.Save)
+              },
+              testingTag = SAVE_ICON_TESTING_TAG
+            )
+          )
         )
       }
     ) { paddingValues ->
@@ -118,55 +131,26 @@ private fun CategoryList(
   LazyColumn {
     items(
       items = viewItem,
-      key = { item ->
-        when (item) {
-          is HeaderItem -> "header_${item.id}"
-          is CategoryItem -> "language_${item.category.id}"
-        }
-      }
+      key = { item -> "category_${item.category.id}" }
     ) { item ->
-      when (item) {
-        is HeaderItem -> CategoryHeaderText(
-          item = item,
-          modifier = Modifier.animateItem()
-        )
-
-        is CategoryItem -> CategoryItemRow(
-          context = context,
-          modifier = Modifier
-            .animateItem()
-            .fillMaxWidth()
-            .height(ComposeDimens.SIXTY_FOUR_DP)
-            .semantics {
-              contentDescription =
-                context.getString(R.string.select_category_content_description)
-            }
-            .clickable {
-              selectCategoryItem(item)
-            },
-          item = item,
-          onCheckedChange = { selectCategoryItem(it) }
-        )
-      }
+      CategoryItemRow(
+        context = context,
+        modifier = Modifier
+          .animateItem()
+          .fillMaxWidth()
+          .height(ComposeDimens.SIXTY_FOUR_DP)
+          .semantics {
+            contentDescription =
+              context.getString(R.string.select_category_content_description)
+          }
+          .clickable {
+            selectCategoryItem(item)
+          },
+        item = item,
+        onCheckedChange = { selectCategoryItem(it) }
+      )
     }
   }
-}
-
-@Composable
-private fun CategoryHeaderText(modifier: Modifier, item: HeaderItem) {
-  Text(
-    text = when (item.id) {
-      HeaderItem.SELECTED -> stringResource(R.string.your_selected_category)
-
-      HeaderItem.OTHER -> stringResource(R.string.other_categories)
-      else -> ""
-    },
-    modifier = modifier
-      .padding(horizontal = ComposeDimens.SIXTEEN_DP, vertical = ComposeDimens.EIGHT_DP),
-    fontSize = ComposeDimens.FOURTEEN_SP,
-    style = MaterialTheme.typography.headlineMedium,
-    color = MaterialTheme.colorScheme.onSurfaceVariant
-  )
 }
 
 @Composable
@@ -181,14 +165,14 @@ private fun CategoryItemRow(
     modifier = modifier,
     verticalAlignment = Alignment.CenterVertically
   ) {
-    RadioButton(
+    Checkbox(
       modifier = Modifier
         .padding(ComposeDimens.SIXTEEN_DP)
         .semantics {
-          testTag = "$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG${category.category}"
+          testTag = "categoryItemCheckboxTestingTag${category.category}"
         },
-      selected = category.active,
-      onClick = {
+      checked = category.active,
+      onCheckedChange = {
         onCheckedChange(item)
       }
     )

@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.onlineCategory
 
 import androidx.compose.ui.test.ComposeTimeoutException
-import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -33,7 +33,6 @@ import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
-import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -67,7 +66,7 @@ class OnlineCategoryRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
   ) {
-    composeTestRule.onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
+    composeTestRule.onNodeWithTag("categoryItemCheckboxTestingTag$matchLanguage")
       .performClick()
   }
 
@@ -98,8 +97,8 @@ class OnlineCategoryRobot : BaseRobot() {
   fun assertCategorySelected(composeTestRule: ComposeContentTestRule, matchLanguage: String) {
     composeTestRule.apply {
       waitForIdle()
-      onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
-        .assertIsSelected()
+      onNodeWithTag("categoryItemCheckboxTestingTag$matchLanguage")
+        .assertIsOn()
     }
   }
 }

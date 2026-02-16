@@ -26,4 +26,8 @@ sealed class Action {
   data class Filter(val filter: String) : Action()
   data class Select(val category: CategoryItem) : Action()
   data class Error(val errorMessage: String) : Action()
+  object Save : Action()
+  object ClearAll : Action()
+  object SelectAll : Action()
+  object Cancel : Action()
 }

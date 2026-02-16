@@ -55,7 +55,6 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
@@ -63,14 +62,13 @@ import org.kiwix.kiwixmobile.BuildConfig.DEBUG
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
+
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
-import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
@@ -83,7 +81,6 @@ import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
-import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -97,15 +94,15 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -128,7 +125,7 @@ const val MAX_PROGRESS = 100
 
 const val THREE = 3
 
-class ZimManageViewModel @Inject constructor(
+open class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
@@ -141,42 +138,10 @@ class ZimManageViewModel @Inject constructor(
   val onlineLibraryManager: OnlineLibraryManager,
   private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
-  sealed class FileSelectActions {
-    data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    object RequestValidateZimFiles : FileSelectActions()
-    object RequestDeleteMultiSelection : FileSelectActions()
-    object RequestShareMultiSelection : FileSelectActions()
-    object MultiModeFinished : FileSelectActions()
-    object RestartActionMode : FileSelectActions()
-    object UserClickedDownloadBooksButton : FileSelectActions()
-  }
-
-  data class OnlineLibraryRequest(
-    val query: String? = null,
-    val category: String? = null,
-    val lang: String? = null,
-    val isLoadMoreItem: Boolean,
-    val page: Int,
-    // Bug Fix #4381
-    val version: Long = System.nanoTime()
-  )
-
-  data class OnlineLibraryResult(
-    val onlineLibraryRequest: OnlineLibraryRequest,
-    val books: List<LibkiwixBook>
-  )
-
-  data class LibraryListItemWrapper(
-    val items: List<LibraryListItem>,
-    val version: Long = System.nanoTime()
-  )
-
   private lateinit var validateZimViewModel: ValidateZimViewModel
 
   @Suppress("InjectDispatcher")
-  private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+  protected open val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   private val _libraryItems =
@@ -252,91 +217,25 @@ class ZimManageViewModel @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
-  private fun createKiwixServiceWithProgressListener(
-    baseUrl: String,
-    start: Int = ZERO,
-    count: Int = ITEMS_PER_PAGE,
-    query: String? = null,
-    lang: String? = null,
-    category: String? = null,
-    shouldTrackProgress: Boolean
-  ): KiwixService {
-    if (isUnitTestCase) return kiwixService
-    val contentLength =
-      getContentLengthOfLibraryXmlFile(baseUrl, start, count, query, lang, category)
-    val customOkHttpClient =
-      OkHttpClient().newBuilder()
-        .followRedirects(true)
-        .followSslRedirects(true)
-        .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-        .readTimeout(READ_TIMEOUT, SECONDS)
-        .callTimeout(CALL_TIMEOUT, SECONDS)
-        .addNetworkInterceptor(
-          HttpLoggingInterceptor().apply {
-            level = if (DEBUG) BASIC else NONE
-          }
-        )
-        .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-        .addNetworkInterceptor { chain ->
-          val originalResponse = chain.proceed(chain.request())
-          val body = originalResponse.body
-          if (shouldTrackProgress && body != null) {
-            originalResponse.newBuilder()
-              .body(ProgressResponseBody(body, appProgressListener, contentLength))
-              .build()
-          } else {
-            originalResponse
-          }
+  private fun createBaseOkHttpClient(): OkHttpClient =
+    OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+      .readTimeout(READ_TIMEOUT, SECONDS)
+      .callTimeout(CALL_TIMEOUT, SECONDS)
+      .addNetworkInterceptor(
+        HttpLoggingInterceptor().apply {
+          level = if (DEBUG) BASIC else NONE
         }
-        .build()
-    return KiwixService.ServiceCreator.newHackListService(
-      customOkHttpClient,
-      baseUrl
-    )
-      .also {
-        kiwixService = it
-      }
-  }
+      )
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .build()
 
-  private var appProgressListener: AppProgressListenerProvider? = AppProgressListenerProvider(this)
-
-  private fun getContentLengthOfLibraryXmlFile(
-    baseUrl: String,
-    start: Int = ZERO,
-    count: Int = ITEMS_PER_PAGE,
-    query: String? = null,
-    lang: String? = null,
-    category: String? = null
-  ): Long {
-    val requestUrl =
-      onlineLibraryManager.buildLibraryUrl(baseUrl, start, count, query, lang, category)
-    val headRequest =
-      Request.Builder()
-        .url(requestUrl)
-        .head()
-        .header("Accept-Encoding", "identity")
-        .build()
-    val client =
-      OkHttpClient().newBuilder()
-        .followRedirects(true)
-        .followSslRedirects(true)
-        .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-        .readTimeout(READ_TIMEOUT, SECONDS)
-        .callTimeout(CALL_TIMEOUT, SECONDS)
-        .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-        .build()
-    try {
-      client.newCall(headRequest).execute().use { response ->
-        if (response.isSuccessful) {
-          return@getContentLengthOfLibraryXmlFile response.header("content-length")?.toLongOrNull()
-            ?: DEFAULT_INT_VALUE.toLong()
-        }
-      }
-    } catch (_: Exception) {
-      // do nothing
+  private var appProgressListener: AppProgressListenerProvider? =
+    AppProgressListenerProvider(context) { message ->
+      downloadProgress.postValue(message)
     }
-    return DEFAULT_INT_VALUE.toLong()
-  }
 
   @VisibleForTesting
   fun onClearedExposed() {
@@ -575,17 +474,28 @@ class ZimManageViewModel @Inject constructor(
     val start =
       onlineLibraryManager.getStartOffset(onlineLibraryRequest.page, ITEMS_PER_PAGE)
     val shouldTrackProgress = !onlineLibraryRequest.isLoadMoreItem
+    val libraryUrl = onlineLibraryManager.buildLibraryUrl(
+      baseUrl,
+      start,
+      ITEMS_PER_PAGE,
+      onlineLibraryRequest.query,
+      onlineLibraryRequest.lang,
+      onlineLibraryRequest.category
+    )
+    val config = ServiceFactoryConfig(
+      shouldTrackProgress = shouldTrackProgress,
+      appProgressListener = appProgressListener,
+      baseOkHttpClient = createBaseOkHttpClient(),
+      isUnitTestCase = isUnitTestCase,
+      kiwixService = kiwixService
+    )
     return if (connectivityManager.isWifi()) {
       flowOf(
-        createKiwixServiceWithProgressListener(
+        OnlineLibraryServiceFactory.createKiwixServiceWithProgressListener(
           baseUrl,
-          start,
-          ITEMS_PER_PAGE,
-          onlineLibraryRequest.query,
-          onlineLibraryRequest.lang,
-          onlineLibraryRequest.category,
-          shouldTrackProgress
-        )
+          libraryUrl,
+          config
+        ).also { kiwixService = it }
       )
     } else {
       flow {
@@ -597,15 +507,11 @@ class ZimManageViewModel @Inject constructor(
           return@flow
         }
         emit(
-          createKiwixServiceWithProgressListener(
+          OnlineLibraryServiceFactory.createKiwixServiceWithProgressListener(
             baseUrl,
-            start,
-            ITEMS_PER_PAGE,
-            onlineLibraryRequest.query,
-            onlineLibraryRequest.lang,
-            onlineLibraryRequest.category,
-            shouldTrackProgress
-          )
+            libraryUrl,
+            config
+          ).also { kiwixService = it }
         )
       }
     }
@@ -709,14 +615,7 @@ class ZimManageViewModel @Inject constructor(
     val filteredBooks = allBooks - downloadingBooks.toSet()
     val selectedLanguage = kiwixDataStore.selectedOnlineContentLanguage.first()
     val onlineLibrarySectionTitle =
-      if (selectedLanguage.isBlank()) {
-        context.getString(R.string.all_languages)
-      } else {
-        context.getString(
-          R.string.your_language,
-          selectedLanguage.convertToLocal().displayLanguage
-        )
-      }
+      OnlineLibraryHeaderHelper.getOnlineLibrarySectionTitle(selectedLanguage, context)
     return createLibrarySection(
       downloadingBooks,
       activeDownloads,
