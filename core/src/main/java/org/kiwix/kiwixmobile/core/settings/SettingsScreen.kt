@@ -24,7 +24,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Environment
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -121,6 +120,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -285,10 +285,8 @@ private fun showImportBookmarkDialog(
 }
 
 private fun showExportBookmarkDialog(coreSettingsViewModel: CoreSettingsViewModel) {
-  val path =
-    "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/org.kiwix"
   coreSettingsViewModel.alertDialogShower.show(
-    KiwixDialog.YesNoDialog.ExportBookmarks(path),
+    KiwixDialog.YesNoDialog.ExportBookmarks(EXPORT_BOOK_MARK_PATH),
     { coreSettingsViewModel.exportBookmark() }
   )
 }
