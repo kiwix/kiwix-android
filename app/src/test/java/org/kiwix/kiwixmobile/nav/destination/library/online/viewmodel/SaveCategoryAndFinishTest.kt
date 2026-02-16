@@ -36,7 +36,7 @@ class SaveCategoryAndFinishTest {
     val lifeCycleScope = TestScope(testScheduler)
     val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(category, kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
+    SaveCategoryAndFinish(listOf(category), kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
     testScheduler.advanceUntilIdle()

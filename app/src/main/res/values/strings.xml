@@ -17,4 +17,5 @@
   <string name="other_categories" tools:keep="@string/other_categories">Other categories:</string>
   <string name="all_categories" tools:keep="@string/all_categories">All categories</string>
   <string name="select_category_content_description">Selecting this category will prioritize displaying downloadable books in that language at the top.</string>
+  <string name="save_categories" tools:keep="@string/save_categories">Save categories</string>
 </resources>

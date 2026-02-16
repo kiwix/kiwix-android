@@ -27,4 +27,7 @@ sealed class Action {
   data class Select(val language: LanguageItem) : Action()
   data class Error(val errorMessage: String) : Action()
   object Save : Action()
+  object ClearAll : Action()
+  object SelectAll : Action()
+  object Cancel : Action()
 }
