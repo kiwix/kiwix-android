@@ -19,10 +19,12 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.ActionMode
@@ -130,6 +132,7 @@ class KiwixMainActivity : CoreMainActivity() {
   private val storageDeviceList = arrayListOf<StorageDevice>()
   private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
