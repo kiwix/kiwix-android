@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
@@ -39,15 +38,15 @@ class UpdateDialogHandler @Inject constructor(
   }
 
   suspend fun attemptToShowUpdatePopup() {
-    val currentMilliSeconds = System.currentTimeMillis()
-    val currentVersion = VersionId("3.9.11")
-    val available = VersionId("3.9.12")
-    val downloadApkEntity = apkDao.getActiveDownload().first()
-    downloadApkEntity.let {
-      val lastPopupMillis = it.lastDialogShownInMilliSeconds
+    CoroutineScope(Dispatchers.IO).launch {
+      val currentMilliSeconds = System.currentTimeMillis()
+      // hardcoded values for testing
+      val currentVersion = VersionId("3.9.11")
+      val available = VersionId("3.9.12")
+      val lastPopupMillis = apkDao.getDownload()?.lastDialogShownInMilliSeconds ?: 0L
       val shouldShowPopup =
         (lastPopupMillis == 0L) ||
-          isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis!!)
+          isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
       if (shouldShowPopup &&
         isTimeToShowUpdate(currentMilliSeconds) &&
         available > currentVersion
@@ -58,11 +57,10 @@ class UpdateDialogHandler @Inject constructor(
     }
   }
 
-  private suspend fun isTimeToShowUpdate(currentMillis: Long): Boolean {
-    val downloadApkEntity = apkDao.getActiveDownload().first()
-    val lastLaterClick = downloadApkEntity.laterClickedMilliSeconds
+  private fun isTimeToShowUpdate(currentMillis: Long): Boolean {
+    val lastLaterClick = apkDao.getDownload()?.laterClickedMilliSeconds ?: 0L
     return lastLaterClick == 0L ||
-      isThreeDaysElapsed(currentMillis, lastLaterClick!!)
+      isThreeDaysElapsed(currentMillis, lastLaterClick)
   }
 
   private fun isThreeDaysElapsed(currentMilliSeconds: Long, lastPopupMillis: Long): Boolean {

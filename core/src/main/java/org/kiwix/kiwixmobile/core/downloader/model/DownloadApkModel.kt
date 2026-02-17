@@ -26,7 +26,7 @@ data class DownloadApkModel(
   val name: String,
   val version: String,
   val url: String,
-  val downloadId: Long,
+  val downloadId: Long?,
   val file: String?,
   val etaInMilliSeconds: Long,
   val bytesDownloaded: Long,

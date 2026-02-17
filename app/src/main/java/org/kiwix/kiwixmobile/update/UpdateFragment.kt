@@ -125,10 +125,10 @@ class UpdateFragment : BaseFragment() {
           onInstallApk = {
             installApk(
               context,
-              updateViewModel.state.value
+              state = state
             )
           },
-          navigationIcon = {
+          content = {
             NavigationIcon(
               iconItem = IconItem.Drawable(
                 R.drawable.ic_close_white_24dp
@@ -191,10 +191,11 @@ class UpdateFragment : BaseFragment() {
     }
   }
 
-  @Suppress("all")
   private fun onNavigationClick(state: UpdateStates, activity: CoreMainActivity) {
-    val downloadState = state.downloadApkItem
-    if (downloadState.currentDownloadState == Status.QUEUED || downloadState.currentDownloadState == Status.DOWNLOADING) {
+    val downloadState = state.downloadApkItem.currentDownloadState
+    if (downloadState == Status.QUEUED ||
+      downloadState == Status.DOWNLOADING
+    ) {
       showStopDownloadDialog()
     } else {
       activity.onBackPressedDispatcher.onBackPressed()
@@ -205,13 +206,15 @@ class UpdateFragment : BaseFragment() {
   @SuppressLint("RequestInstallPackagesPolicy")
   fun installApk(
     context: Context,
-    states: UpdateStates
+    state: UpdateStates
   ) {
+    val authority = "${context.packageName}.fileprovider"
+    val mimeType = "application/vnd.android.package-archive"
     val apkFile =
       File("/storage/emulated/0/Android/media/org.kiwix.kiwixmobile/Kiwix/org.kiwix.kiwixmobile.standalone-3.14.0.apk")
     val apkUri = FileProvider.getUriForFile(
       context,
-      "${context.packageName}.fileprovider",
+      authority,
       apkFile
     )
     if (canOpenApk(apkFile)) {
@@ -220,7 +223,7 @@ class UpdateFragment : BaseFragment() {
       installerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
       installerIntent.setDataAndType(
         apkUri,
-        "application/vnd.android.package-archive",
+        mimeType,
       )
       installerIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
       context.startActivity(installerIntent)

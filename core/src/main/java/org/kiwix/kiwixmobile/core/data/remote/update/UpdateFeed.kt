@@ -34,7 +34,7 @@ class UpdateFeed {
 @Namespace(reference = "http://www.w3.org/2005/Atom", prefix = "atom")
 class Channel {
   @field:ElementList(name = "item", inline = true, required = false)
-  var items: List<Items>? = null // Also renamed from 'channels' to 'items' for clarity
+  var items: List<Items>? = null
 }
 
 @Root(name = "item", strict = false)
@@ -45,7 +45,4 @@ class Items {
 
   @field:Element(name = "link", required = false)
   var link: String = ""
-
-  @field:Element(name = "pubDate", required = false)
-  var pubDate: String = "" // Optional: if you want to capture the publish date
 }

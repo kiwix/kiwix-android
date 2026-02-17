@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
 
-@Suppress("all")
 class UpdateViewModel @Inject constructor(
   private val downloadApkDao: DownloadApkDao,
   private val downloader: Downloader
@@ -53,9 +52,10 @@ class UpdateViewModel @Inject constructor(
     )
   }
 
+  @Suppress("all")
   fun cancelDownload() {
     try {
-      downloader.cancelDownload(_state.value.downloadApkItem.downloadId)
+      downloader.cancelDownload(_state.value.downloadApkItem.downloadId!!)
       downloadApkDao.resetDownloadInfoState()
     } catch (e: Exception) {
       _state.value = _state.value.copy(
