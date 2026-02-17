@@ -281,6 +281,7 @@ class DownloadTest : BaseActivityTest() {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+        searchZappingSauvageFile(composeTestRule)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
         pauseDownload(composeTestRule)
