@@ -22,8 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 
 data class UpdateStates(
   var loading: Boolean = false,
-  val isSuccess: Boolean = false,
   val error: String = "",
-  val downloadApkState: DownloadApkState = DownloadApkState(),
+  val downloadApkItem: DownloadApkItem = DownloadApkItem(),
   val snackbarHostState: SnackbarHostState = SnackbarHostState(),
 )

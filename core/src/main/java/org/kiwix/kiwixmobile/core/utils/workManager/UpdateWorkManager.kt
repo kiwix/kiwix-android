@@ -56,7 +56,7 @@ class UpdateWorkManager @AssistedInject constructor(
       )
     val updates = kiwixService.getUpdates().channel?.items?.first()
     val appVersion = updates?.title?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
-    apkDao.updateApkDownload(
+    apkDao.addApkDownload(
       DownloadApkEntity(
         downloadId = -1,
         apkInfo = ApkInfo(
