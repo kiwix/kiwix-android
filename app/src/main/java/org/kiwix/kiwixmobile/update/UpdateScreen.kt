@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.update
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,13 +41,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R.drawable
@@ -59,7 +59,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.update.viewmodel.UpdateEvents
+import org.kiwix.kiwixmobile.nav.destination.library.online.getDownloadedSizeText
+import org.kiwix.kiwixmobile.update.viewmodel.DownloadApkState
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,17 +68,11 @@ import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 @Composable
 fun UpdateScreen(
   state: UpdateStates,
-  events: (UpdateEvents) -> Unit = {},
   onUpdateClick: () -> Unit = {},
   onUpdateCancel: () -> Unit = {},
   onInstallApk: () -> Unit = {},
-  navigationIcon: @Composable() () -> Unit
+  navigationIcon: @Composable () -> Unit
 ) {
-  /*LaunchedEffect(state.downloadApkState.currentDownloadState) {
-    if (state.downloadApkState.currentDownloadState == Status.COMPLETED) {
-      onInstallApk()
-    }
-  }*/
   Scaffold(
     snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackbarHostState) },
     topBar = {
@@ -89,7 +84,6 @@ fun UpdateScreen(
   ) {
     UpdateInfoCard(
       state = state,
-      events = events,
       onUpdateClick = onUpdateClick,
       onUpdateCancel = onUpdateCancel,
       onInstallApk = onInstallApk
@@ -101,7 +95,6 @@ fun UpdateScreen(
 @Composable
 fun UpdateInfoCard(
   state: UpdateStates,
-  events: (UpdateEvents) -> Unit,
   onUpdateClick: () -> Unit,
   onUpdateCancel: () -> Unit = {},
   onInstallApk: () -> Unit = {}
@@ -115,17 +108,16 @@ fun UpdateInfoCard(
     AppInfoRow()
 
     Spacer(modifier = Modifier.height(16.dp))
-
-    val downloadApkState = state.downloadApkState
+    val downloadApkState = state.downloadApkItem
     when (downloadApkState.currentDownloadState) {
-      Status.QUEUED, Status.DOWNLOADING -> {
+      Status.QUEUED, Status.DOWNLOADING, Status.ADDED -> {
         DownloadInfoRow(
           state = state,
           onCancel = onUpdateCancel,
         )
       }
 
-      Status.NONE, Status.CANCELLED -> {
+      Status.NONE, Status.CANCELLED, Status.FAILED, Status.REMOVED, Status.DELETED -> {
         KiwixButton(
           modifier = Modifier.fillMaxWidth(),
           clickListener = onUpdateClick,
@@ -139,21 +131,18 @@ fun UpdateInfoCard(
           clickListener = {
             onInstallApk()
           },
-          buttonText = "Install"
+          buttonText = "INSTALL"
         )
       }
 
-      Status.PAUSED -> TODO()
-      Status.FAILED -> TODO()
-      Status.REMOVED -> TODO()
-      Status.DELETED -> TODO()
-      Status.ADDED -> TODO()
+      Status.PAUSED -> {
+        // pause implementation is not present in apk download
+      }
+
       else -> {
         KiwixButton(
           modifier = Modifier.fillMaxWidth(),
-          clickListener = {
-            onInstallApk()
-          },
+          clickListener = onUpdateClick,
           buttonText = "UPDATE"
         )
       }
@@ -174,16 +163,17 @@ fun AppInfoRow() {
     Spacer(modifier = Modifier.width(16.dp))
     Column {
       LabelText(
-        label = "Update available for Kiwix"
+        label = "Update Kiwix"
       )
       Spacer(modifier = Modifier.height(4.dp))
       DownloadText(
-        text = "Download size: 1.4 MB"
+        text = "A new version of Kiwix is available. You can update it now"
       )
     }
   }
 }
 
+@Suppress("all")
 @Composable
 fun DownloadInfoRow(
   state: UpdateStates,
@@ -191,9 +181,9 @@ fun DownloadInfoRow(
   modifier: Modifier = Modifier,
 ) {
   // Automatically invoke onStopClick if the download failed
-  LaunchedEffect(state.downloadApkState.currentDownloadState) {
-    if (state.downloadApkState.currentDownloadState == Status.FAILED) {
-      when (state.downloadApkState.downloadError) {
+  LaunchedEffect(state.downloadApkItem.downloadApkState) {
+    if (state.downloadApkItem.currentDownloadState == Status.FAILED) {
+      when (state.downloadApkItem.downloadError) {
         Error.UNKNOWN_IO_ERROR,
         Error.CONNECTION_TIMED_OUT,
         Error.UNKNOWN -> {
@@ -223,11 +213,15 @@ fun DownloadInfoRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
       ) {
+        val downloadState = getDownloadApkStateText(state, LocalContext.current)
         DownloadText(
-          text = "12/12"
+          text = getDownloadedSizeText(
+            state.downloadApkItem.bytesDownloaded,
+            state.downloadApkItem.totalSizeBytes
+          )
         )
         DownloadText(
-          text = "12 min"
+          text = downloadState
         )
       }
 
@@ -237,7 +231,7 @@ fun DownloadInfoRow(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier
           .padding(horizontal = ONE_DP, vertical = FIVE_DP),
-        progress = state.downloadApkState.progress,
+        progress = state.downloadApkItem.progress,
       )
     }
 
@@ -275,9 +269,8 @@ fun DownloadText(
 ) {
   Text(
     text = text,
-    fontSize = 12.sp,
-    color = MaterialTheme.colorScheme.onSurfaceVariant,
-    fontWeight = FontWeight.Medium
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary
   )
 }
 
@@ -286,10 +279,26 @@ fun DownloadText(
 fun UpdateScreenPreview() {
   UpdateScreen(
     state = UpdateStates(),
-    events = {},
     onUpdateClick = {},
     onUpdateCancel = {},
     onInstallApk = {},
     {}
   )
+}
+
+/**
+ * Returns the current download state text.
+ * If the download is "In Progress", it returns the ETA. Otherwise, it returns the current
+ * download state (e.g., Pending, Paused, or Complete).
+ */
+fun getDownloadApkStateText(
+  state: UpdateStates,
+  context: Context
+): String {
+  val currentDownloadState = state.downloadApkItem.downloadApkState
+  return if (currentDownloadState == DownloadApkState.Running) {
+    state.downloadApkItem.readableEta.toString()
+  } else {
+    currentDownloadState.toReadableState(context).toString()
+  }
 }

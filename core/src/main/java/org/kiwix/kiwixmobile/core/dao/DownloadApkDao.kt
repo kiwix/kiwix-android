@@ -22,6 +22,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.tonyodev.fetch2.Download
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -48,10 +49,16 @@ interface DownloadApkDao {
     }
   }
 
+  @Query("SELECT * FROM downloadapkentity LIMIT 1")
+  fun getActiveDownload(): Flow<DownloadApkEntity>
+
   fun downloads(): Flow<DownloadApkModel> =
     getActiveDownload()
       .distinctUntilChanged()
       .map { it.let(::DownloadApkModel) }
+
+  @Query("UPDATE downloadapkentity SET downloadId = :downloadId WHERE id = 1")
+  fun addDownloadId(downloadId: Long)
 
   suspend fun addDownload(
     url: String,
@@ -62,9 +69,6 @@ interface DownloadApkDao {
     )
   }
 
-  @Query("UPDATE downloadapkentity SET downloadId = :downloadId WHERE id = 1")
-  fun addDownloadId(downloadId: Long)
-
   @Query("UPDATE downloadapkentity SET lastDialogShownInMilliSeconds = :lastDialogShownInMilliSeconds WHERE id = 1")
   fun addLastDialogShownInfo(lastDialogShownInMilliSeconds: Long)
 
@@ -74,9 +78,9 @@ interface DownloadApkDao {
   @Query("SELECT * FROM downloadapkentity LIMIT 1")
   fun getDownload(): DownloadApkEntity?
 
-  @Query("SELECT * FROM downloadapkentity LIMIT 1")
-  fun getActiveDownload(): Flow<DownloadApkEntity>
+  @Update
+  fun updateApkDownload(downloadApkEntity: DownloadApkEntity)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun updateApkDownload(downloadApkEntity: DownloadApkEntity)
+  fun addApkDownload(downloadApkEntity: DownloadApkEntity)
 }

@@ -40,73 +40,28 @@ class UpdateViewModel @Inject constructor(
   }
 
   private fun fetchDownloadInfo() = viewModelScope.launch {
-    _state.value = _state.value.copy(
-      loading = true
-    )
-    try {
-      downloadApkDao.downloads().collect { download ->
-        _state.value = UpdateStates(
-          downloadApkState = DownloadApkState(download),
-        )
-      }
-    } catch (e: Exception) {
-      _state.value = _state.value.copy(
-        loading = false,
-        error = e.message ?: "Unknown error"
+    downloadApkDao.downloads().collect { download ->
+      _state.value = state.value.copy(
+        downloadApkItem = DownloadApkItem(download)
       )
     }
   }
 
   fun downloadApk() {
-    _state.value = _state.value.copy(
-      loading = true
+    downloader.downloadApk(
+      url = _state.value.downloadApkItem.url
     )
-    try {
-      _state.value = _state.value.copy(
-        loading = false
-      )
-      downloader.downloadApk(
-        url = _state.value.downloadApkState.url
-      )
-    } catch (e: Exception) {
-      _state.value = _state.value.copy(
-        loading = false,
-        error = e.message ?: "Unknown error"
-      )
-    }
   }
 
   fun cancelDownload() {
-    _state.value = _state.value.copy(
-      loading = true
-    )
     try {
-      _state.value = _state.value.copy(
-        loading = false
-      )
-      downloader.cancelDownload(_state.value.downloadApkState.downloadId)
+      downloader.cancelDownload(_state.value.downloadApkItem.downloadId)
       downloadApkDao.resetDownloadInfoState()
     } catch (e: Exception) {
       _state.value = _state.value.copy(
         loading = false,
         error = e.message ?: "Unknown error"
       )
-    }
-  }
-
-  fun event(event: UpdateEvents) {
-    when (event) {
-      is UpdateEvents.DownloadApk -> {
-        downloadApk()
-      }
-
-      is UpdateEvents.CancelDownload -> {
-        cancelDownload()
-      }
-
-      is UpdateEvents.ResetDownloadState -> {
-        // resetDownloadState()
-      }
     }
   }
 }

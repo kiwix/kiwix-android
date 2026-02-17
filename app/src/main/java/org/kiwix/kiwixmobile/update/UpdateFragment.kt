@@ -33,6 +33,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.tonyodev.fetch2.Error
+import com.tonyodev.fetch2.Status
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R
@@ -109,14 +111,16 @@ class UpdateFragment : BaseFragment() {
     composeView?.setContent {
       KiwixTheme {
         val context = LocalContext.current
+        val state = updateViewModel.state.value
         UpdateScreen(
-          state = updateViewModel.state.value,
-          events = updateViewModel::event,
+          state = state,
           onUpdateClick = {
             onUpdateClick()
           },
           onUpdateCancel = {
-            updateViewModel.cancelDownload()
+            onStopButtonClick(
+              state = state
+            )
           },
           onInstallApk = {
             installApk(
@@ -130,7 +134,10 @@ class UpdateFragment : BaseFragment() {
                 R.drawable.ic_close_white_24dp
               ),
               onClick = {
-                activity.onBackPressedDispatcher.onBackPressed()
+                onNavigationClick(
+                  state = state,
+                  activity = activity
+                )
               }
             )
           }
@@ -157,6 +164,43 @@ class UpdateFragment : BaseFragment() {
     }
   }
 
+  private fun onStopButtonClick(state: UpdateStates) {
+    val downloadState = state.downloadApkItem
+    if (downloadState.currentDownloadState == Status.FAILED) {
+      when (downloadState.downloadError) {
+        Error.UNKNOWN_IO_ERROR,
+        Error.CONNECTION_TIMED_OUT,
+        Error.UNKNOWN -> {
+          // Retry the download if it can be retried.
+          // For other failure reasons, retrying is not possible.
+          if (isNotConnected) {
+            noInternetSnackbar()
+          } else {
+            // downloader.retryDownload(item.downloadId)
+          }
+        }
+
+        // For other errors such as REQUEST_DOES_NOT_EXIST, EMPTY_RESPONSE_FROM_SERVER,
+        // REQUEST_NOT_SUCCESSFUL, etc., the download cannot be retried.
+        // In such cases, allow the user to stop the failed download manually.
+        else -> showStopDownloadDialog()
+      }
+    } else {
+      // If the download is not in FAILED state, simply show the stop dialog when user clicks on stop button.
+      showStopDownloadDialog()
+    }
+  }
+
+  @Suppress("all")
+  private fun onNavigationClick(state: UpdateStates, activity: CoreMainActivity) {
+    val downloadState = state.downloadApkItem
+    if (downloadState.currentDownloadState == Status.QUEUED || downloadState.currentDownloadState == Status.DOWNLOADING) {
+      showStopDownloadDialog()
+    } else {
+      activity.onBackPressedDispatcher.onBackPressed()
+    }
+  }
+
   @Suppress("all")
   @SuppressLint("RequestInstallPackagesPolicy")
   fun installApk(
@@ -173,7 +217,7 @@ class UpdateFragment : BaseFragment() {
     if (canOpenApk(apkFile)) {
       @Suppress("DEPRECATION")
       val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)
-      installerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      installerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
       installerIntent.setDataAndType(
         apkUri,
         "application/vnd.android.package-archive",
@@ -197,6 +241,13 @@ class UpdateFragment : BaseFragment() {
       apkFile.exists() -> true
       else -> false
     }
+  }
+
+  private fun showStopDownloadDialog() {
+    alertDialogShower.show(
+      KiwixDialog.YesNoDialog.StopDownload,
+      { updateViewModel.cancelDownload() }
+    )
   }
 
   override fun onCreateView(
