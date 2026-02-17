@@ -437,10 +437,7 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private suspend fun exportedFile(fileName: String): File {
-    val rootFolder =
-      File(
-        EXPORT_BOOK_MARK_PATH
-      )
+    val rootFolder = File(EXPORT_BOOK_MARK_PATH)
     if (!rootFolder.isFileExist()) rootFolder.mkdir()
     return sequence {
       yield(File(rootFolder, fileName))
