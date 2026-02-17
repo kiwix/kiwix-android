@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import java.util.concurrent.TimeUnit.SECONDS
 
-@Suppress("all")
 class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted private val params: WorkerParameters,
@@ -49,20 +48,21 @@ class UpdateWorkManager @AssistedInject constructor(
   private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
+    val appVersionRegex = """.*?(\d+(?:[.-]\d+)+).*""".toRegex()
     kiwixService =
       KiwixService.ServiceCreator.newHackListService(
         okHttpClient = getOkHttpClient(),
         KIWIX_UPDATE_URL
       )
-    val updates = kiwixService.getUpdates().channel?.items?.first()
-    val appVersion = updates?.title?.replace(""".*?(\d+(?:[.-]\d+)+).*""".toRegex(), "$1")
-    apkDao.addApkDownload(
+    val latestVersionItem =
+      kiwixService.getUpdates().channel?.items?.firstOrNull() ?: return Result.failure()
+    val appVersion = latestVersionItem.title.replace(appVersionRegex, "$1")
+    apkDao.addLatestVersionInfo(
       DownloadApkEntity(
-        downloadId = -1,
         apkInfo = ApkInfo(
-          name = updates!!.title,
-          version = appVersion!!,
-          apkUrl = updates.link
+          name = latestVersionItem.title,
+          version = appVersion,
+          apkUrl = latestVersionItem.link
         )
       )
     )
