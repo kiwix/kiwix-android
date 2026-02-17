@@ -105,7 +105,7 @@ fun StorageDeviceItem(
         .fillMaxWidth()
         .padding(start = EIGHT_DP)
     ) {
-      StorageAndLocationTextComponent(storagePathAndTitle)
+      StorageTitleAndPath(storagePathAndTitle)
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         progress = progress,
@@ -148,21 +148,10 @@ private fun StorageSpaceRow(
 }
 
 @Composable
-private fun StorageAndLocationTextComponent(storagePathAndTitle: String) {
-  val splitIndex = storagePathAndTitle.indexOf('\n')
-  val title =
-    if (splitIndex != -1) {
-      storagePathAndTitle.substring(0, splitIndex)
-    } else {
-      storagePathAndTitle
-    }
+private fun StorageTitleAndPath(storagePathAndTitle: String) {
 
-  val path =
-    if (splitIndex != -1) {
-      storagePathAndTitle.substring(splitIndex + 1)
-    } else {
-      ""
-    }
+  val (title, path) = storagePathAndTitle.split('\n', limit = 2)
+    .let { it.first() to it.getOrNull(1) }
 
   Text(
     text = title,
@@ -170,7 +159,7 @@ private fun StorageAndLocationTextComponent(storagePathAndTitle: String) {
     color = MaterialTheme.colorScheme.onSurface,
     fontSize = STORAGE_TITLE_TEXTVIEW_SIZE
   )
-  if (path.isNotEmpty()) {
+  if (!path.isNullOrEmpty()) {
     Spacer(modifier = Modifier.height(FOUR_DP))
     Text(
       text = path,
