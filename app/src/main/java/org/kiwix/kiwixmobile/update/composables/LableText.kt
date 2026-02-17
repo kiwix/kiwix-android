@@ -16,9 +16,30 @@
  *
  */
 
-package org.kiwix.kiwixmobile.update.viewmodel
+package org.kiwix.kiwixmobile.update.composables
 
-sealed class UpdateEvents {
-  data object DownloadApk : UpdateEvents()
-  data object CancelDownload : UpdateEvents()
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+
+@Composable
+fun LabelText(
+  label: String
+) {
+  Text(
+    text = label,
+    style = MaterialTheme.typography.titleMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant
+  )
+}
+
+@Composable
+fun DownloadText(
+  label: String,
+) {
+  Text(
+    text = label,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary
+  )
 }
