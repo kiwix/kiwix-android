@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,6 +32,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.R
@@ -78,24 +78,38 @@ class SearchViewModel @Inject constructor(
   private val searchResultGenerator: SearchResultGenerator,
   private val searchMutex: Mutex = Mutex()
 ) : ViewModel() {
-  private val initialState: SearchState =
-    SearchState(
-      "",
-      SearchResultsWithTerm(
-        "",
-        null,
-        searchMutex
-      ),
-      emptyList(),
-      FromWebView
-    )
-  val state: MutableStateFlow<SearchState> = MutableStateFlow(initialState)
+  private val initialState = SearchState(
+    "",
+    SearchResultsWithTerm("", null, searchMutex),
+    emptyList(),
+    FromWebView
+  )
+
+  val state = MutableStateFlow(initialState)
+
+  private var lastQuery: String = ""
+
+  private val _searchText = MutableStateFlow("")
+  val searchText = _searchText.asStateFlow()
+
+  private val _spellingSuggestions = MutableStateFlow<List<String>>(emptyList())
+  val spellingSuggestions = _spellingSuggestions.asStateFlow()
+
+  private val _isLoadingMore = MutableStateFlow(false)
+  val isLoadingMore = _isLoadingMore.asStateFlow()
+
+  private val _visibleResults = MutableStateFlow<List<SearchListItem>>(emptyList())
+  val visibleResults = _visibleResults.asStateFlow()
+
+  private val _showFindInPage = MutableStateFlow(false)
+  val showFindInPage = _showFindInPage.asStateFlow()
+
   private val _effects = Channel<SideEffect<*>>(Channel.UNLIMITED)
   val effects = _effects.receiveAsFlow()
+
   val actions = Channel<Action>(Channel.UNLIMITED)
   private val filter = MutableStateFlow("")
   private val searchOrigin = MutableStateFlow(FromWebView)
-  val voiceSearchResult: MutableLiveData<String?> = MutableLiveData(null)
   private lateinit var alertDialogShower: AlertDialogShower
   private val debouncedSearchQuery = MutableStateFlow("")
 
@@ -103,9 +117,17 @@ class SearchViewModel @Inject constructor(
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
     viewModelScope.launch { debouncedSearchQuery() }
+
+    viewModelScope.launch {
+      combine(searchOrigin, _searchText) { origin, text ->
+        origin == FromWebView && text.isNotBlank()
+      }.collect {
+        _showFindInPage.value = it
+      }
+    }
   }
 
-  suspend fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
+  private fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
     zimReaderContainer.zimFileReader?.getSuggestedSpelledWords(word, maxCount).orEmpty()
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
@@ -121,7 +143,7 @@ class SearchViewModel @Inject constructor(
       // Ensuring that only distinct search queries are processed
       .distinctUntilChanged()
       .collect { query ->
-        actions.trySend(Filter(query)).isSuccess
+        actions.trySend(Filter(query))
       }
   }
 
@@ -138,7 +160,23 @@ class SearchViewModel @Inject constructor(
         searchOrigin
       )
     }
-      .collect { state.value = it }
+      .distinctUntilChanged()
+      .collect {
+        state.value = it
+
+        if (it.searchTerm != lastQuery && !_isLoadingMore.value) {
+          lastQuery = it.searchTerm
+          val firstPage = it.getVisibleResults(0).orEmpty()
+          _visibleResults.value = firstPage
+        }
+
+        if (it.searchTerm.isNotBlank()) {
+          _spellingSuggestions.value =
+            getSuggestedSpelledWords(it.searchTerm, MAX_SUGGEST_WORD_COUNT)
+        } else {
+          _spellingSuggestions.value = emptyList()
+        }
+      }
   }
 
   private fun searchResults() =
@@ -154,7 +192,7 @@ class SearchViewModel @Inject constructor(
   private suspend fun actionMapper() =
     actions.consumeEach {
       when (it) {
-        ExitedSearch -> _effects.trySend(PopFragmentBackstack).isSuccess
+        ExitedSearch -> _effects.trySend(PopFragmentBackstack)
         is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
         is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
         is OnItemLongClick -> showDeleteDialog(it)
@@ -162,15 +200,14 @@ class SearchViewModel @Inject constructor(
         ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
         is ConfirmedDelete -> deleteItemAndShowToast(it)
         is CreatedWithArguments ->
-          _effects.trySend(
-            SearchArgumentProcessing(
-              it.arguments,
-              actions
-            )
-          ).isSuccess
+          _effects.trySend(SearchArgumentProcessing(it.arguments, actions))
 
-        ReceivedPromptForSpeechInput -> _effects.trySend(StartSpeechInput(actions)).isSuccess
-        StartSpeechInputFailed -> _effects.trySend(ShowToast(R.string.speech_not_supported)).isSuccess
+        ReceivedPromptForSpeechInput ->
+          _effects.trySend(StartSpeechInput(actions))
+
+        StartSpeechInputFailed ->
+          _effects.trySend(ShowToast(R.string.speech_not_supported))
+
         is ActivityResultReceived ->
           _effects.trySend(
             ProcessActivityResult(
@@ -179,26 +216,27 @@ class SearchViewModel @Inject constructor(
               it.data,
               actions
             )
-          ).isSuccess
+          )
 
-        is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
-        is VoiceSearchResult -> voiceSearchResult.value = it.term
+        is ScreenWasStartedFrom -> {
+          searchOrigin.tryEmit(it.searchOrigin)
+        }
+
+        is VoiceSearchResult -> {
+          updateSearchQuery(it.term)
+        }
       }
     }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
     _effects.trySend(
-      DeleteRecentSearch(
-        it.searchListItem,
-        recentSearchRoomDao,
-        viewModelScope
-      )
-    ).isSuccess
-    _effects.trySend(ShowToast(R.string.delete_specific_search_toast)).isSuccess
+      DeleteRecentSearch(it.searchListItem, recentSearchRoomDao, viewModelScope)
+    )
+    _effects.trySend(ShowToast(R.string.delete_specific_search_toast))
   }
 
   private fun searchPreviousScreenWhenStateIsValid(): Any =
-    _effects.trySend(SearchInPreviousScreen(state.value.searchTerm)).isSuccess
+    _effects.trySend(SearchInPreviousScreen(state.value.searchTerm))
 
   private fun showDeleteDialog(longClick: OnItemLongClick) {
     _effects.trySend(
@@ -207,7 +245,7 @@ class SearchViewModel @Inject constructor(
         actions,
         alertDialogShower
       )
-    ).isSuccess
+    )
   }
 
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
@@ -218,31 +256,35 @@ class SearchViewModel @Inject constructor(
         zimReaderContainer.id,
         viewModelScope
       )
-    ).isSuccess
+    )
     _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))
   }
 
-  fun searchResults(query: String) {
+  fun updateSearchQuery(query: String) {
+    _searchText.value = query
+    filter.value = query
     debouncedSearchQuery.value = query
   }
 
-  /**
-   * Loads more search results starting from a specified index.
-   *
-   * @param startIndex The index from which to start loading more results.
-   * @param existingSearchList The existing list of search results, if any, to check for duplicates.
-   *
-   * @return List of non-duplicate search results or null if there are no more results.
-   */
-  suspend fun loadMoreSearchResults(
-    startIndex: Int,
-    existingSearchList: List<SearchListItem>?
-  ): List<SearchListItem>? {
-    val searchResults = state.value.getVisibleResults(startIndex)
+  suspend fun loadMoreSearchResults(startIndex: Int) {
+    if (_isLoadingMore.value) return
 
-    return searchResults?.filter { newItem ->
-      existingSearchList?.none { it == newItem } ?: true
+    _isLoadingMore.value = true
+
+    val more = state.value.getVisibleResults(startIndex) ?: run {
+      _isLoadingMore.value = false
+      return@loadMoreSearchResults
     }
+
+    val current = _visibleResults.value
+    val newItems = more.filter { newItem ->
+      current.none { it == newItem }
+    }
+
+    _visibleResults.update { old ->
+      if (newItems.isEmpty()) old else old + newItems
+    }
+    _isLoadingMore.value = false
   }
 }
 
