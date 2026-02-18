@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HELP_SCREEN
 import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
@@ -64,7 +66,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.search.SearchContainer
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
@@ -195,19 +197,16 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-      val searchString = backStackEntry.arguments?.getString(NAV_ARG_SEARCH_STRING).orEmpty()
-      val isOpenedFromTabSwitcher =
-        backStackEntry.arguments?.getBoolean(TAG_FROM_TAB_SWITCHER) ?: false
-      val isVoice = backStackEntry.arguments?.getBoolean(EXTRA_IS_WIDGET_VOICE) ?: false
-      FragmentContainer(R.id.searchFragmentContainer) {
-        SearchFragment().apply {
-          arguments = Bundle().apply {
-            putString(NAV_ARG_SEARCH_STRING, searchString)
-            putBoolean(TAG_FROM_TAB_SWITCHER, isOpenedFromTabSwitcher)
-            putBoolean(EXTRA_IS_WIDGET_VOICE, isVoice)
-          }
-        }
-      }
+
+      val context = LocalActivity.current
+      val coreMainActivity = context as CoreMainActivity
+
+      SearchContainer(
+        viewModelFactory = viewModelFactory,
+        dialogShower = alertDialogShower,
+        arguments = backStackEntry.arguments,
+        coreMainActivity = coreMainActivity
+      )
     }
     composable(
       route = KiwixDestination.LocalFileTransfer.route,
@@ -319,4 +318,4 @@ sealed class KiwixDestination(val route: String) {
 }
 
 fun List<Uri>.toUriParam(): String =
-  joinToString(",") { Uri.encode(it.toString()) }
+  joinToString(",") { Uri.encode("$it") }
