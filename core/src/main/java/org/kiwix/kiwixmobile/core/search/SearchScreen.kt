@@ -40,7 +40,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -97,9 +96,9 @@ const val LOADING_ITEMS_BEFORE = 3
 fun SearchScreen(
   searchScreenState: SearchScreenState,
   actionMenuItemList: List<ActionMenuItem>,
-  isLoadingMoreResult: Boolean
+  isLoadingMoreResult: Boolean,
+  lazyListState: LazyListState
 ) {
-  val lazyListState = rememberLazyListState()
   KiwixTheme {
     Scaffold(
       topBar = {
