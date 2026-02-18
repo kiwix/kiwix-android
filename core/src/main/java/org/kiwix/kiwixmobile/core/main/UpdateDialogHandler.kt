@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
 import javax.inject.Inject
 
+// set at 0 for testing
 const val THREE_DAYS_IN_MILLISECONDS = 0L // 3 * 24 * 60 * 60 * 1000L
 
 @Suppress("all")

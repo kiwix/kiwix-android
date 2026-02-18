@@ -233,7 +233,8 @@ class DownloadApkService : Service() {
 
   private fun showDownloadCompletedNotification(download: Download) {
     val notificationBuilder = getNotificationBuilder(download.id)
-    val notificationTitle = "Kiwix apk"
+    //
+    val notificationTitle = downloadApkDao.getDownload()?.name ?: download.file
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
@@ -287,7 +288,7 @@ class DownloadApkService : Service() {
       getString(string.download_notification_channel_name),
       NotificationManager.IMPORTANCE_HIGH
     ).apply {
-      description = "Downloading New update"
+      description = getString(string.downloading_new_update)
       setSound(null, null)
       enableVibration(false)
     }

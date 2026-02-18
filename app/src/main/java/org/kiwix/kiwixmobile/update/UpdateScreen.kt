@@ -24,7 +24,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.update.composables.UpdateInfoCard
@@ -44,7 +45,8 @@ fun UpdateScreen(
     snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackbarHostState) },
     topBar = {
       KiwixAppBar(
-        title = "Update",
+        // first letter should be capital
+        title = stringResource(R.string.update),
         navigationIcon = content,
       )
     }
@@ -74,16 +76,4 @@ fun getDownloadApkStateText(
   } else {
     currentDownloadState.toReadableState(context).toString()
   }
-}
-
-@Preview
-@Composable
-fun UpdateScreenPreview() {
-  UpdateScreen(
-    state = UpdateStates(),
-    onUpdateClick = {},
-    onUpdateCancel = {},
-    onInstallApk = {},
-    {}
-  )
 }

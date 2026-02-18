@@ -57,15 +57,20 @@ class UpdateWorkManager @AssistedInject constructor(
     val latestVersionItem =
       kiwixService.getUpdates().channel?.items?.firstOrNull() ?: return Result.failure()
     val appVersion = latestVersionItem.title.replace(appVersionRegex, "$1")
-    apkDao.addLatestVersionInfo(
-      DownloadApkEntity(
-        apkInfo = ApkInfo(
-          name = latestVersionItem.title,
-          version = appVersion,
-          apkUrl = latestVersionItem.link
+    val previousStatus = apkDao.getDownload()
+    if (previousStatus != null) {
+      apkDao.addLatestAppVersion(version = appVersion)
+    } else {
+      apkDao.addApkInfoItem(
+        downloadApkEntity = DownloadApkEntity(
+          apkInfo = ApkInfo(
+            name = latestVersionItem.title,
+            version = appVersion,
+            apkUrl = latestVersionItem.link
+          )
         )
       )
-    )
+    }
     return Result.success()
   }
 

@@ -124,7 +124,7 @@ class UpdateFragment : BaseFragment() {
           },
           onInstallApk = {
             installApk(
-              context,
+              context = context,
               state = state
             )
           },
@@ -202,7 +202,6 @@ class UpdateFragment : BaseFragment() {
     }
   }
 
-  @Suppress("all")
   @SuppressLint("RequestInstallPackagesPolicy")
   fun installApk(
     context: Context,
@@ -210,13 +209,16 @@ class UpdateFragment : BaseFragment() {
   ) {
     val authority = "${context.packageName}.fileprovider"
     val mimeType = "application/vnd.android.package-archive"
+    val fileLoc = state.downloadApkItem.file ?: return
     val apkFile =
-      File("/storage/emulated/0/Android/media/org.kiwix.kiwixmobile/Kiwix/org.kiwix.kiwixmobile.standalone-3.14.0.apk")
+      File(fileLoc)
     val apkUri = FileProvider.getUriForFile(
       context,
       authority,
       apkFile
     )
+    /*this flag preverts user to install the apk,
+    if they removed the apk file from storage but the download status is set to COMPLETED*/
     if (canOpenApk(apkFile)) {
       @Suppress("DEPRECATION")
       val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)

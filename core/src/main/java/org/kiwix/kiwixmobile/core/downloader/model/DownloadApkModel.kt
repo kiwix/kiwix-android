@@ -26,14 +26,14 @@ data class DownloadApkModel(
   val name: String,
   val version: String,
   val url: String,
-  val downloadId: Long?,
+  val downloadId: Long,
   val file: String?,
   val etaInMilliSeconds: Long,
   val bytesDownloaded: Long,
   val totalSizeOfDownload: Long,
   val progress: Int,
-  val state: Status?,
-  val error: Error?,
+  val state: Status,
+  val error: Error,
 ) {
   val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
 

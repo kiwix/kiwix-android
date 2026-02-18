@@ -37,11 +37,11 @@ import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 
 @Suppress("all")
 data class DownloadApkItem(
-  val downloadId: Long? = 0,
-  val name: String = " ",
-  val version: String = " ",
-  val url: String = " ",
-  val file: String? = " ",
+  val downloadId: Long = 0,
+  val name: String = "",
+  val version: String = "",
+  val url: String = "",
+  val file: String? = "",
   val bytesDownloaded: Long = 0,
   val totalSizeBytes: Long = 0,
   val progress: Int = 0,
@@ -50,8 +50,8 @@ data class DownloadApkItem(
     state = Status.NONE,
     error = Error.NONE
   ),
-  val currentDownloadState: Status? = Status.NONE,
-  val downloadError: Error? = Error.NONE
+  val currentDownloadState: Status = Status.NONE,
+  val downloadError: Error = Error.NONE
 ) {
   val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
 

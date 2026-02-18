@@ -27,9 +27,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import com.tonyodev.fetch2.Status
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
 @Composable
@@ -42,13 +44,13 @@ fun UpdateInfoCard(
 ) {
   Column(
     modifier = modifier
-      .padding(16.dp)
+      .padding(SIXTEEN_DP)
       .fillMaxSize(),
     verticalArrangement = Arrangement.Center
   ) {
     AppInfoRow()
 
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(SIXTEEN_DP))
     val downloadApkState = state.downloadApkItem
     when (downloadApkState.currentDownloadState) {
       Status.QUEUED, Status.DOWNLOADING, Status.ADDED -> {
@@ -69,10 +71,6 @@ fun UpdateInfoCard(
       Status.PAUSED -> {
         // pause implementation is not present in apk download
       }
-
-      else -> {
-        UpdateButton(onUpdateClick)
-      }
     }
   }
 }
@@ -84,7 +82,7 @@ fun InstallButton(onInstallApk: () -> Unit) {
     clickListener = {
       onInstallApk()
     },
-    buttonText = "INSTALL"
+    buttonText = stringResource(R.string.install)
   )
 }
 
@@ -93,6 +91,6 @@ fun UpdateButton(onUpdateClick: () -> Unit) {
   KiwixButton(
     modifier = Modifier.fillMaxWidth(),
     clickListener = onUpdateClick,
-    buttonText = "UPDATE"
+    buttonText = stringResource(R.string.update)
   )
 }
