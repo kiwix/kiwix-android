@@ -29,8 +29,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import org.kiwix.kiwixmobile.R.drawable
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTY_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 @Composable
 fun AppInfoRow() {
@@ -38,18 +42,18 @@ fun AppInfoRow() {
     verticalAlignment = Alignment.Top
   ) {
     Image(
-      modifier = Modifier.size(50.dp),
+      modifier = Modifier.size(FIFTY_DP),
       painter = painterResource(drawable.kiwix_icon),
       contentDescription = null
     )
-    Spacer(modifier = Modifier.width(16.dp))
+    Spacer(modifier = Modifier.width(SIXTEEN_DP))
     Column {
       LabelText(
-        label = "Update Kiwix"
+        label = stringResource(R.string.new_update_available_title)
       )
-      Spacer(modifier = Modifier.height(4.dp))
+      Spacer(modifier = Modifier.height(FOUR_DP))
       DownloadText(
-        label = "A new version of Kiwix is available. You can update it now"
+        label = stringResource(R.string.new_update_available_message)
       )
     }
   }

@@ -55,12 +55,12 @@ class UpdateViewModel @Inject constructor(
   @Suppress("all")
   fun cancelDownload() {
     try {
-      downloader.cancelDownload(_state.value.downloadApkItem.downloadId!!)
+      downloader.cancelDownload(_state.value.downloadApkItem.downloadId)
       downloadApkDao.resetDownloadInfoState()
     } catch (e: Exception) {
       _state.value = _state.value.copy(
         loading = false,
-        error = e.message ?: "Unknown error"
+        error = e.message ?: ""
       )
     }
   }

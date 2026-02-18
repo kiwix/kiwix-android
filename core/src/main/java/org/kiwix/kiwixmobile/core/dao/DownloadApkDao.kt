@@ -22,7 +22,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.tonyodev.fetch2.Download
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,14 +37,15 @@ interface DownloadApkDao {
     getDownload().let { downloadApkEntity ->
       downloadApkEntity?.updateWith(download)
         .takeIf { updatedEntity -> updatedEntity != downloadApkEntity }
-        ?.let { updateApkDownload(it) }
+        ?.let { addApkInfoItem(it) }
     }
   }
 
+  // placeholder function, need better implementation for resetting states
   fun resetDownloadInfoState() {
     getDownload().let { downloadApkEntity ->
       downloadApkEntity?.resetDownloadSate()
-        ?.let { updateApkDownload(it) }
+        ?.let { addApkInfoItem(it) }
     }
   }
 
@@ -75,12 +75,12 @@ interface DownloadApkDao {
   @Query("UPDATE downloadapkentity SET laterClickedMilliSeconds = :laterClickedMilliSeconds WHERE id = 1")
   fun addLaterClickedInfo(laterClickedMilliSeconds: Long)
 
-  @Query("SELECT * FROM downloadapkentity LIMIT 1")
-  fun getDownload(): DownloadApkEntity?
-
-  @Update
-  fun updateApkDownload(downloadApkEntity: DownloadApkEntity)
+  @Query("UPDATE downloadapkentity SET version = :version WHERE id = 1")
+  fun addLatestAppVersion(version: String)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun addApkDownload(downloadApkEntity: DownloadApkEntity)
+  fun addApkInfoItem(downloadApkEntity: DownloadApkEntity)
+
+  @Query("SELECT * FROM downloadapkentity WHERE id = 1")
+  fun getDownload(): DownloadApkEntity?
 }

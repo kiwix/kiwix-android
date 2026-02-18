@@ -34,24 +34,22 @@ data class DownloadApkEntity(
   val name: String,
   val version: String,
   val url: String,
-  var lastDialogShownInMilliSeconds: Long? = -1,
-  var laterClickedMilliSeconds: Long? = -1,
-  var downloadId: Long = -1L,
+  var lastDialogShownInMilliSeconds: Long = -1L,
+  var laterClickedMilliSeconds: Long = -1L,
+  var downloadId: Long = 0,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
   val progress: Int = -1,
   @TypeConverters(StatusConverter::class)
-  val status: Status? = null,
+  val status: Status = Status.NONE,
   @TypeConverters(ErrorConverter::class)
-  val error: com.tonyodev.fetch2.Error? = null
+  val error: com.tonyodev.fetch2.Error = Error.NONE
 ) {
   constructor(
-    downloadId: Long,
     apkInfo: ApkInfo,
   ) : this(
-    downloadId = downloadId,
     name = apkInfo.name,
     version = apkInfo.version,
     url = apkInfo.apkUrl
@@ -70,7 +68,6 @@ data class DownloadApkEntity(
 
   fun resetDownloadSate() =
     copy(
-      file = " ",
       etaInMilliSeconds = 0,
       bytesDownloaded = 0,
       totalSizeOfDownload = 0,

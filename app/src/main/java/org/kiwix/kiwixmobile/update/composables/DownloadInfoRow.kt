@@ -35,17 +35,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.unit.dp
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
-import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.getDownloadedSizeText
 import org.kiwix.kiwixmobile.update.getDownloadApkStateText
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
@@ -56,10 +55,12 @@ fun DownloadInfoRow(
   state: UpdateStates,
   onCancel: () -> Unit
 ) {
+  val downloadState = state.downloadApkItem.currentDownloadState
+  val errorState = state.downloadApkItem.downloadError
   // Automatically invoke onStopClick if the download failed
-  LaunchedEffect(state.downloadApkItem.downloadApkState) {
-    if (state.downloadApkItem.currentDownloadState == Status.FAILED) {
-      when (state.downloadApkItem.downloadError) {
+  LaunchedEffect(downloadState) {
+    if (downloadState == Status.FAILED) {
+      when (errorState) {
         com.tonyodev.fetch2.Error.UNKNOWN_IO_ERROR,
         com.tonyodev.fetch2.Error.CONNECTION_TIMED_OUT,
         Error.UNKNOWN -> {
@@ -79,7 +80,7 @@ fun DownloadInfoRow(
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(8.dp),
+      .padding(EIGHT_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
     Column(
@@ -89,7 +90,6 @@ fun DownloadInfoRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
       ) {
-        val downloadState = getDownloadApkStateText(state, LocalContext.current)
         DownloadText(
           label = getDownloadedSizeText(
             state.downloadApkItem.bytesDownloaded,
@@ -97,11 +97,11 @@ fun DownloadInfoRow(
           )
         )
         DownloadText(
-          label = downloadState
+          label = getDownloadApkStateText(state, LocalContext.current)
         )
       }
 
-      Spacer(modifier = Modifier.height(4.dp))
+      Spacer(modifier = Modifier.height(FOUR_DP))
 
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
@@ -111,14 +111,13 @@ fun DownloadInfoRow(
       )
     }
 
-    Spacer(modifier = Modifier.width(16.dp))
+    Spacer(modifier = Modifier.width(SIXTEEN_DP))
 
     IconButton(
       onClick = onCancel,
       modifier = Modifier
         .minimumInteractiveComponentSize()
         .padding(horizontal = TWO_DP)
-        .semantics { testTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG }
     ) {
       Icon(
         painter = painterResource(id = org.kiwix.kiwixmobile.R.drawable.ic_stop_24dp),
