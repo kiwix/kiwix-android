@@ -406,6 +406,11 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
         }
       }
 
+    /*placeholder for migrations
+    @Suppress("MagicNumber")
+    private val MIGRATION_10_11 =
+      object : Migration(10, 11) {}*/
+
     fun destroyInstance() {
       db = null
     }

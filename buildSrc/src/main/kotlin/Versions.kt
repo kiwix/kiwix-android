@@ -93,12 +93,13 @@ object Versions {
   const val junit: String = "1.1.5"
 
   const val roomVersion = "2.5.2"
-
   const val zxing = "3.5.3"
 
   const val keeper = "0.16.1"
 
   const val fetch: String = "3.4.1"
+
+  const val WORK_MANAGER = "2.11.1"
 
   const val COMPOSE_ACTIVITY_VERSION = "1.10.0"
 
