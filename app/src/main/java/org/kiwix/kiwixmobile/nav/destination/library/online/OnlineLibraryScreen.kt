@@ -57,7 +57,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.kiwix.kiwixmobile.core.R.string
@@ -219,25 +218,23 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
-  LaunchedEffect(state.onlineLibraryList) {
-    if (!state.isLoadingMoreItem) {
+  LaunchedEffect(state.isSearchActive, state.searchText) {
+    if (state.isSearchActive) {
       lazyListState.scrollToItem(ZERO)
     }
   }
-  LaunchedEffect(lazyListState, state.onlineLibraryList) {
+  LaunchedEffect(lazyListState) {
     snapshotFlow { lazyListState.layoutInfo }
-      .combine(
-        snapshotFlow { state.onlineLibraryList.orEmpty() }
-      ) { layoutInfo, libraryList ->
-        val bookItems = libraryList.filterIsInstance<LibraryListItem.BookItem>()
-        val totalItems = layoutInfo.totalItemsCount
-        val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
-        Triple(bookItems, totalItems, lastVisibleItemIndex)
-      }
       .debounce(LOAD_MORE_DELAY)
       .distinctUntilChanged()
-      .collect { (bookItems, totalItems, lastVisibleItemIndex) ->
-        if (bookItems.isNotEmpty() && lastVisibleItemIndex >= totalItems.minus(FIVE)) {
+      .collect { layoutInfo ->
+        val totalItems = layoutInfo.totalItemsCount
+        val lastVisibleItemIndex =
+          layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
+
+        if (!state.isLoadingMoreItem &&
+          lastVisibleItemIndex >= totalItems - FIVE
+        ) {
           state.onLoadMore(totalItems)
         }
       }

@@ -531,7 +531,10 @@ class ZimManageViewModel @Inject constructor(
   private fun requestsAndConnectivityChangesToLibraryRequests(
     onlineLibraryResult: MutableStateFlow<OnlineLibraryResult>
   ) = requestDownloadLibrary.onEach { onlineLibraryRequest ->
-    onlineLibraryFetchingJob?.cancel()
+    // Don't cancel job for LoadMore else pagination is canceled.
+    if (!onlineLibraryRequest.isLoadMoreItem) {
+      onlineLibraryFetchingJob?.cancel()
+    }
 
     onlineLibraryFetchingJob = viewModelScope.launch(ioDispatcher) {
       connectivityBroadcastReceiver.networkStates
