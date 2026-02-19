@@ -59,6 +59,7 @@ import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -72,6 +73,7 @@ import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 
+@Suppress("all")
 class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
   private val downloadRoomDao: DownloadRoomDao
@@ -195,16 +197,25 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
     when {
       downloadNotification.isDownloading ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
-          .addAction(
-            drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
-          ).addAction(
-            drawable.fetch_notification_pause,
-            context.getString(R.string.notification_pause_button_text),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
-          )
+        if (downloadRoomDao.getDownload().firstOrNull() != null) {
+          notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+            .addAction(
+              drawable.fetch_notification_cancel,
+              context.getString(R.string.cancel),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+            ).addAction(
+              drawable.fetch_notification_pause,
+              context.getString(R.string.notification_pause_button_text),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
+            )
+        } else {
+          notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+            .addAction(
+              drawable.fetch_notification_cancel,
+              context.getString(R.string.cancel),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+            )
+        }
 
       downloadNotification.isPaused ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())

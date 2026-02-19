@@ -260,6 +260,7 @@ class DownloadApkService : Service() {
   }
 
   private fun getPendingIntentForDownloadedNotification(download: Download): PendingIntent {
+    // need to trigger the installation apk function here
     val internal =
       Intents.internal(CoreMainActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

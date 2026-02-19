@@ -19,7 +19,12 @@
 package org.kiwix.kiwixmobile.core.utils.workManager
 
 import android.content.Context
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,6 +45,8 @@ import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import java.util.concurrent.TimeUnit.SECONDS
+
+const val REPEAT_INTERVAL = 1L // in hours
 
 class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
@@ -93,5 +100,41 @@ class UpdateWorkManager @AssistedInject constructor(
       )
       .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()
+
+    fun startWork(appContext: Context?, workType: WorkType) {
+      val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+
+      appContext?.let { context ->
+        val workManager = WorkManager.getInstance(context)
+
+        when (workType) {
+          WorkType.PERIODIC -> {
+            /*val workRequest: PeriodicWorkRequest =
+              PeriodicWorkRequestBuilder<UpdateWorkManager>(REPEAT_INTERVAL, TimeUnit.HOURS)
+                .setInitialDelay(0L, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+
+            workManager.enqueue(workRequest)*/
+          }
+
+          WorkType.IMMEDIATE -> {
+            val workRequest: OneTimeWorkRequest =
+              OneTimeWorkRequestBuilder<UpdateWorkManager>()
+                .setConstraints(constraints)
+                .build()
+
+            workManager.beginWith(workRequest).enqueue()
+          }
+        }
+      }
+    }
   }
+}
+
+enum class WorkType {
+  PERIODIC,
+  IMMEDIATE
 }

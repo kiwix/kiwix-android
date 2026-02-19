@@ -217,7 +217,7 @@ class UpdateFragment : BaseFragment() {
       authority,
       apkFile
     )
-    /*this flag preverts user to install the apk,
+    /*This flag prevents user to install the apk,
     if they removed the apk file from storage but the download status is set to COMPLETED*/
     if (canOpenApk(apkFile)) {
       @Suppress("DEPRECATION")
