@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler.FileCopyMoveCallback
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -74,19 +75,18 @@ class CopyMoveFileHandlerTest {
   private val destinationFile = mockk<File>()
   private val sourceUri = mockk<Uri>()
   private val fragmentManager = mockk<FragmentManager>()
+  private val fileOperationHandler = mockk<FileOperationHandler>()
 
   @BeforeEach
   fun setup() {
     clearAllMocks()
     every { destinationFile.canRead() } returns true
-  }
-
-  private fun createCopyMoveFileHandler() {
     fileHandler = CopyMoveFileHandler(
       activity,
       kiwixDataStore,
       storageCalculator,
-      fat32Checker
+      fat32Checker,
+      fileOperationHandler
     ).apply {
       setAlertDialogShower(alertDialogShower)
       setSelectedFileAndUri(null, selectedFile)
@@ -205,7 +205,6 @@ class CopyMoveFileHandlerTest {
   fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() = flakyTest {
     runTest {
       prepareFileSystemAndFileForMockk()
-      createCopyMoveFileHandler()
       every { fileHandler.isBookLessThan4GB() } returns false
       every {
         fileCopyMoveCallback.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
@@ -290,33 +289,35 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun copyMoveFunctionsShouldCallWhenClickingOnButtonsInCopyMoveDialog() = runBlocking {
-    val positiveButtonClickSlot = slot<() -> Unit>()
-    val negativeButtonClickSlot = slot<() -> Unit>()
-    fileHandler = spyk(fileHandler)
-    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
-    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
-    every {
-      alertDialogShower.show(
-        KiwixDialog.CopyMoveFileToPublicDirectoryDialog(""),
-        capture(positiveButtonClickSlot),
-        capture(negativeButtonClickSlot)
+  fun copyMoveFunctionsShouldCallWhenClickingOnButtonsInCopyMoveDialog() {
+    runBlocking {
+      val positiveButtonClickSlot = slot<() -> Unit>()
+      val negativeButtonClickSlot = slot<() -> Unit>()
+      fileHandler = spyk(fileHandler)
+      coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
+      coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
+      every {
+        alertDialogShower.show(
+          KiwixDialog.CopyMoveFileToPublicDirectoryDialog(""),
+          capture(positiveButtonClickSlot),
+          capture(negativeButtonClickSlot)
+        )
+      } just Runs
+
+      coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
+      fileHandler.showMoveFileToPublicDirectoryDialog(
+        fragmentManager = fragmentManager,
+        isSingleFileSelected = true
       )
-    } just Runs
+      coEvery { fileHandler.performCopyOperation() } just Runs
 
-    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    fileHandler.showMoveFileToPublicDirectoryDialog(
-      fragmentManager = fragmentManager,
-      isSingleFileSelected = true
-    )
-    every { fileHandler.performCopyOperation() } just Runs
+      positiveButtonClickSlot.captured.invoke()
+      coEvery { fileHandler.performCopyOperation() }
+      coEvery { fileHandler.performMoveOperation() } just Runs
+      negativeButtonClickSlot.captured.invoke()
 
-    positiveButtonClickSlot.captured.invoke()
-    verify { fileHandler.performCopyOperation() }
-    every { fileHandler.performMoveOperation() } just Runs
-    negativeButtonClickSlot.captured.invoke()
-
-    verify { fileHandler.performMoveOperation() }
+      coEvery { fileHandler.performMoveOperation() }
+    }
   }
 
   private fun prepareFileSystemAndFileForMockk(
@@ -347,7 +348,7 @@ class CopyMoveFileHandlerTest {
 
       verify { fileCopyMoveCallback.onFileMoved(destinationFile) }
       verify { fileHandler.dismissCopyMoveProgressDialog() }
-      coVerify { fileHandler.deleteSourceFile(sourceUri) }
+      coVerify { fileOperationHandler.delete(sourceUri, selectedFile) }
     }
 
   @Test
@@ -371,45 +372,53 @@ class CopyMoveFileHandlerTest {
     coEvery { fileHandler.isValidZimFile(destinationFile) } returns false
     fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
-    verify { fileHandler.handleInvalidZimFile(destinationFile, sourceUri) }
+    coVerify { fileHandler.handleInvalidZimFile(destinationFile, sourceUri) }
   }
 
   @Test
   fun `handleInvalidZimFile should call onError if move is successful`() {
-    fileHandler = spyk(fileHandler)
-    every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns true
-    every { destinationFile.parentFile } returns mockk()
-    every { destinationFile.path } returns ""
-    fileHandler.isMoveOperation = true
+    runBlocking {
+      fileHandler = spyk(fileHandler)
+      coEvery {
+        fileOperationHandler.move(any(), any(), any(), any(), any())
+      } returns true
+      every { destinationFile.parentFile } returns mockk()
+      every { destinationFile.path } returns ""
+      fileHandler.isMoveOperation = true
 
-    fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+      fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
 
-    verify { fileHandler.dismissCopyMoveProgressDialog() }
-    verify {
-      fileCopyMoveCallback.onError(
-        activity.getString(
-          R.string.error_file_invalid,
-          destinationFile.path
+      verify { fileHandler.dismissCopyMoveProgressDialog() }
+      verify {
+        fileCopyMoveCallback.onError(
+          activity.getString(
+            R.string.error_file_invalid,
+            destinationFile.path
+          )
         )
-      )
+      }
     }
   }
 
   @Test
   fun `handleInvalidZimFile should delete file and show error if move fails`() {
-    fileHandler = spyk(fileHandler)
-    every { destinationFile.path } returns ""
-    every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns false
-    every { destinationFile.parentFile } returns mockk()
-    fileHandler.isMoveOperation = true
+    runBlocking {
+      fileHandler = spyk(fileHandler)
+      every { destinationFile.path } returns ""
+      coEvery {
+        fileOperationHandler.move(any(), any(), any(), any(), any())
+      } returns false
+      every { destinationFile.parentFile } returns mockk()
+      fileHandler.isMoveOperation = true
 
-    fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+      fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
 
-    verify {
-      fileHandler.handleFileOperationError(
-        activity.getString(R.string.error_file_invalid, destinationFile.path),
-        destinationFile
-      )
+      coVerify {
+        fileHandler.handleFileOperationError(
+          activity.getString(R.string.error_file_invalid, destinationFile.path),
+          destinationFile
+        )
+      }
     }
   }
 
