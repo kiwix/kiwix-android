@@ -76,10 +76,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -172,7 +169,7 @@ private fun SetUpViewModelAndPermissionLauncher(
   LaunchedEffect(Unit) {
     coreSettingsViewModel.initialize(activity = coreMainActivity)
     coreSettingsViewModel.actions
-      .onEach { action ->
+      .collect { action ->
         handleSettingsAction(
           action = action,
           viewModel = coreSettingsViewModel,
@@ -180,7 +177,6 @@ private fun SetUpViewModelAndPermissionLauncher(
           launchers = launchers
         )
       }
-      .launchIn(coreSettingsViewModel.viewModelScope)
   }
 }
 
