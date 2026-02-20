@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.di.modules.KiwixModule
 import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
 import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
 
@@ -46,4 +47,5 @@ interface KiwixComponent {
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun providesOnlineLibraryManager(): OnlineLibraryManager
   fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
+  fun provideFileOperationHandler(): FileOperationHandler
 }
