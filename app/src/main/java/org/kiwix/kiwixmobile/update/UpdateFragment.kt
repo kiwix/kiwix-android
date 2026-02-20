@@ -233,7 +233,7 @@ class UpdateFragment : BaseFragment() {
       alertDialogShower.show(
         KiwixDialog.ShowReDownloadDialog,
         {
-          updateViewModel.downloadApk()
+          onUpdateClick()
         },
         {
         }

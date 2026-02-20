@@ -68,7 +68,7 @@ abstract class CoreApp : Application() {
   }
 
   @Inject
-  lateinit var sampleWorkerFactory: UpdateWorkerFactory
+  lateinit var updateWorkerFactory: UpdateWorkerFactory
 
   override fun onCreate() {
     super.onCreate()
@@ -78,9 +78,9 @@ abstract class CoreApp : Application() {
       .build()
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
-    // use our custom factory so that work manager will use it to create our worker
+    // custom work manager is defined to be able to inject dependencies
     val workManagerConfig = Configuration.Builder()
-      .setWorkerFactory(sampleWorkerFactory)
+      .setWorkerFactory(updateWorkerFactory)
       .build()
     WorkManager.initialize(this, workManagerConfig)
     serviceWorkerInitialiser.init(this)

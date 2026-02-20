@@ -49,7 +49,9 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.navOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
@@ -194,7 +196,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
-    UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
+    // placeholder first run check function there's another isFirstRun as well
+    if (runBlocking { kiwixDataStore.showIntro.first() }) {
+      UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
+    } else {
+      UpdateWorkManager.startWork(this, WorkType.PERIODIC)
+    }
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
