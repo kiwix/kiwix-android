@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.app.Activity
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
@@ -74,6 +75,14 @@ class CopyMoveFileHandler @Inject constructor(
   var shouldValidateZimFile: Boolean = false
   private lateinit var fragmentManager: FragmentManager
   private var isSingleFileSelected = true
+  private var unitTestStorage: File? = null
+  private var unitTestDestinationFile: File? = null
+
+  @VisibleForTesting
+  fun setStorageFileForUnitTest(unitTestStorage: File, unitTestDestinationFile: File) {
+    this.unitTestStorage = unitTestStorage
+    this.unitTestDestinationFile = unitTestDestinationFile
+  }
 
   private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
@@ -179,10 +188,8 @@ class CopyMoveFileHandler @Inject constructor(
   private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
     availableSpace < (selectedFile?.length() ?: 0L)
 
-  suspend fun validateZimFileCanCopyOrMove(
-    file: File? = null
-  ): Boolean {
-    val storageFile = file ?: getSelectedStorageRoot()
+  suspend fun validateZimFileCanCopyOrMove(): Boolean {
+    val storageFile = getSelectedStorageRoot()
     // hide the dialog if already showing
     copyMoveProgressBarController.hidePreparingCopyMoveDialog()
     val availableSpace = storageCalculator.availableBytes(storageFile)
@@ -244,7 +251,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
+  private fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
     copyMoveProgressBarController.showCopyMoveDialog(
       getCopyMoveFilesToPublicDirectoryDialogMessage(),
       { onCopyClicked(showStorageSelectionDialog) },
@@ -405,6 +412,9 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun getDestinationFile(): File {
+    // We could not perform the file operations in unit test so we are passing the mockk file from
+    // unit test cases.
+    unitTestDestinationFile?.let { return it }
     val root = getSelectedStorageRoot()
     val fileName = selectedFile?.name.orEmpty()
 
@@ -425,7 +435,7 @@ class CopyMoveFileHandler @Inject constructor(
     (activity as? KiwixMainActivity)?.getStorageDeviceList().orEmpty()
 
   private suspend fun getSelectedStorageRoot(): File =
-    File(kiwixDataStore.selectedStorage.first())
+    unitTestStorage ?: File(kiwixDataStore.selectedStorage.first())
 
   fun dispose() {
     storageObservingJob?.cancel()
