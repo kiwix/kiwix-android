@@ -54,6 +54,7 @@ const val REPEAT_INTERVAL = 7L // in days
 const val PERIODIC_WORKER_TAG = "PeriodicAppConfigWorker"
 const val APP_VERSION_REGEX = """.*?(\d+(?:[.-]\d+)+).*"""
 
+@Suppress("all")
 class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted private val params: WorkerParameters,
@@ -61,29 +62,34 @@ class UpdateWorkManager @AssistedInject constructor(
   private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    kiwixService =
-      KiwixService.ServiceCreator.newHackListService(
-        okHttpClient = getOkHttpClient(),
-        KIWIX_UPDATE_URL
-      )
-    val latestVersionItem =
-      kiwixService.getUpdates().channel?.items?.firstOrNull() ?: return Result.failure()
-    val appVersion = latestVersionItem.title.replace(APP_VERSION_REGEX.toRegex(), "$1")
-    val previousStatus = apkDao.getDownload()
-    if (previousStatus != null) {
-      apkDao.addLatestAppVersion(version = appVersion)
-    } else {
-      apkDao.addApkInfoItem(
-        downloadApkEntity = DownloadApkEntity(
-          apkInfo = ApkInfo(
-            name = latestVersionItem.title,
-            version = appVersion,
-            apkUrl = latestVersionItem.link
+    return try {
+      kiwixService =
+        KiwixService.ServiceCreator.newHackListService(
+          okHttpClient = getOkHttpClient(),
+          KIWIX_UPDATE_URL
+        )
+      val latestVersionItem =
+        kiwixService.getUpdates().channel?.items?.firstOrNull() ?: return Result.failure()
+      val appVersion = latestVersionItem.title.replace(APP_VERSION_REGEX.toRegex(), "$1")
+      val previousStatus = apkDao.getDownload()
+      if (previousStatus != null) {
+        apkDao.addLatestAppVersion(version = appVersion)
+      } else {
+        apkDao.addApkInfoItem(
+          downloadApkEntity = DownloadApkEntity(
+            apkInfo = ApkInfo(
+              name = latestVersionItem.title,
+              version = appVersion,
+              apkUrl = latestVersionItem.link
+            )
           )
         )
-      )
+      }
+      Result.success()
+    } catch (e: Exception) {
+      e.printStackTrace()
+      Result.failure()
     }
-    return Result.success()
   }
 
   @AssistedFactory
