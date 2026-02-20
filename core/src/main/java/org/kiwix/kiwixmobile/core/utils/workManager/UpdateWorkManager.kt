@@ -21,9 +21,12 @@ package org.kiwix.kiwixmobile.core.utils.workManager
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
@@ -44,9 +47,12 @@ import org.kiwix.kiwixmobile.core.di.modules.KIWIX_UPDATE_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.entity.ApkInfo
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.SECONDS
 
-const val REPEAT_INTERVAL = 1L // in hours
+const val REPEAT_INTERVAL = 7L // in days
+const val PERIODIC_WORKER_TAG = "PeriodicAppConfigWorker"
+const val APP_VERSION_REGEX = """.*?(\d+(?:[.-]\d+)+).*"""
 
 class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
@@ -55,7 +61,6 @@ class UpdateWorkManager @AssistedInject constructor(
   private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    val appVersionRegex = """.*?(\d+(?:[.-]\d+)+).*""".toRegex()
     kiwixService =
       KiwixService.ServiceCreator.newHackListService(
         okHttpClient = getOkHttpClient(),
@@ -63,7 +68,7 @@ class UpdateWorkManager @AssistedInject constructor(
       )
     val latestVersionItem =
       kiwixService.getUpdates().channel?.items?.firstOrNull() ?: return Result.failure()
-    val appVersion = latestVersionItem.title.replace(appVersionRegex, "$1")
+    val appVersion = latestVersionItem.title.replace(APP_VERSION_REGEX.toRegex(), "$1")
     val previousStatus = apkDao.getDownload()
     if (previousStatus != null) {
       apkDao.addLatestAppVersion(version = appVersion)
@@ -111,13 +116,17 @@ class UpdateWorkManager @AssistedInject constructor(
 
         when (workType) {
           WorkType.PERIODIC -> {
-            /*val workRequest: PeriodicWorkRequest =
-              PeriodicWorkRequestBuilder<UpdateWorkManager>(REPEAT_INTERVAL, TimeUnit.HOURS)
-                .setInitialDelay(0L, TimeUnit.MINUTES)
+            val workRequest: PeriodicWorkRequest =
+              PeriodicWorkRequestBuilder<UpdateWorkManager>(REPEAT_INTERVAL, TimeUnit.DAYS)
+                .addTag(PERIODIC_WORKER_TAG)
                 .setConstraints(constraints)
                 .build()
 
-            workManager.enqueue(workRequest)*/
+            workManager.enqueueUniquePeriodicWork(
+              PERIODIC_WORKER_TAG,
+              existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.KEEP,
+              request = workRequest
+            )
           }
 
           WorkType.IMMEDIATE -> {
