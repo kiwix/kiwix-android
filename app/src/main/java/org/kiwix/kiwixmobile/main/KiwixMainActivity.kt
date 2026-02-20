@@ -39,7 +39,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -459,7 +458,7 @@ class KiwixMainActivity : CoreMainActivity() {
       ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
         .setShortLabel(getString(string.new_tab_shortcut_label))
         .setLongLabel(getString(string.new_tab_shortcut_label))
-        .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
+        .setIcon(createShortcutIcon(drawable.ic_add_blue_24dp))
         .setDisabledMessage(getString(string.shortcut_disabled_message))
         .setIntent(
           Intent(this, KiwixMainActivity::class.java).apply {
@@ -473,7 +472,7 @@ class KiwixMainActivity : CoreMainActivity() {
       ShortcutInfoCompat.Builder(this, GET_CONTENT_SHORTCUT_ID)
         .setShortLabel(getString(string.get_content_shortcut_label))
         .setLongLabel(getString(string.get_content_shortcut_label))
-        .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_get_content))
+        .setIcon(createShortcutIcon(drawable.ic_file_download_blue_24dp))
         .setDisabledMessage(getString(string.shortcut_disabled_message))
         .setIntent(
           Intent(this, KiwixMainActivity::class.java).apply {
