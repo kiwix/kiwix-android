@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
+import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.gestures.stopScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +47,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +66,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
@@ -185,6 +193,7 @@ private fun OnlineLibraryScreenContent(
   }
 }
 
+@Suppress("LongMethod")
 @OptIn(FlowPreview::class)
 @Composable
 private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: LazyListState) {
@@ -196,7 +205,7 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     state = lazyListState
   ) {
     state.onlineLibraryList?.let { libraryList ->
-      itemsIndexed(libraryList) { index, item ->
+      itemsIndexed(libraryList, key = { _, item -> item.id }) { index, item ->
         when (item) {
           is DividerItem -> ShowDividerItem(item)
           is LibraryListItem.BookItem -> OnlineBookItem(
@@ -218,10 +227,23 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
-  LaunchedEffect(state.isSearchActive, state.searchText) {
-    if (state.isSearchActive) {
-      lazyListState.scrollToItem(ZERO)
+  val scope = rememberCoroutineScope()
+  var lastQuery by remember { mutableStateOf("") }
+
+  LaunchedEffect(state.onlineLibraryList) {
+    val queryChanged = state.searchText != lastQuery
+
+    if (
+      lastQuery.isNotEmpty() &&
+      state.searchText.isNotEmpty() &&
+      queryChanged
+    ) {
+      scope.launch {
+        lazyListState.stopScroll(MutatePriority.PreventUserInput)
+        lazyListState.scrollToItem(ZERO)
+      }
     }
+    lastQuery = state.searchText
   }
   LaunchedEffect(lazyListState) {
     snapshotFlow { lazyListState.layoutInfo }
