@@ -167,6 +167,11 @@ object Libs {
   const val mockk_android: String = "io.mockk:mockk-android:" + Versions.io_mockk
 
   /**
+   * http://robolectric.org
+   */
+  const val robolectric: String = "org.robolectric:robolectric:" + Versions.ROBOLECTRIC
+
+  /**
    * https://developer.android.com/topic/libraries/architecture/index.html
    */
   const val android_arch_lifecycle_extensions: String = "android.arch.lifecycle:extensions:" +
@@ -211,6 +216,12 @@ object Libs {
    * https://junit.org/junit5/
    */
   const val junit_jupiter: String = "org.junit.jupiter:junit-jupiter:" + Versions.junit_jupiter
+
+  /**
+   * https://junit.org/junit5/
+   */
+  const val junit_vintage_engine: String =
+    "org.junit.vintage:junit-vintage-engine:" + Versions.junit_jupiter
 
   /**
    * https://assertj.github.io/doc/
