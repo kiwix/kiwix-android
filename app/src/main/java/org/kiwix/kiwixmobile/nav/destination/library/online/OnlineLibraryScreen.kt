@@ -50,7 +50,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -66,7 +65,6 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
@@ -227,7 +225,6 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
-  val scope = rememberCoroutineScope()
   var lastQuery by remember { mutableStateOf("") }
 
   LaunchedEffect(state.onlineLibraryList) {
@@ -238,10 +235,8 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
       state.searchText.isNotEmpty() &&
       queryChanged
     ) {
-      scope.launch {
-        lazyListState.stopScroll(MutatePriority.PreventUserInput)
-        lazyListState.scrollToItem(ZERO)
-      }
+      lazyListState.stopScroll(MutatePriority.PreventUserInput)
+      lazyListState.scrollToItem(ZERO)
     }
     lastQuery = state.searchText
   }
