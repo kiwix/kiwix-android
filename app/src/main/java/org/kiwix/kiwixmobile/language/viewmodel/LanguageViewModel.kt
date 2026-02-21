@@ -140,10 +140,13 @@ open class LanguageViewModel @Inject constructor(
         else -> buildList {
           add(
             Language(
-              languageCode = "",
+              id = ZERO.toLong(),
               active = kiwixDataStore.selectedOnlineContentLanguage.first().isEmpty(),
-              occurrencesOfLanguage = allBooksCount,
-              id = ZERO.toLong()
+              occurencesOfLanguage = allBooksCount,
+              language = "",
+              languageLocalized = "",
+              languageCode = "",
+              languageCodeISO2 = ""
             )
           )
           addAll(languages)

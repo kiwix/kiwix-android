@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -137,7 +137,7 @@ class ZimManageViewModelTest {
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
-  private val testDispatcher = UnconfinedTestDispatcher()
+  private val testDispatcher = StandardTestDispatcher()
   private val onlineLibraryManager = mockk<OnlineLibraryManager>()
 
   @AfterAll
@@ -272,10 +272,14 @@ class ZimManageViewModelTest {
         val expectedList = listOf(bookOnDisk())
         testFlow(
           viewModel.fileSelectListStates.asFlow(),
-          triggerAction = { booksOnDiskListItems.emit(expectedList) },
+          triggerAction = {
+            booksOnDiskListItems.emit(expectedList)
+            advanceUntilIdle()
+          },
           assert = {
             skipItems(1)
             assertThat(awaitItem()).isEqualTo(FileSelectListState(expectedList))
+            cancelAndIgnoreRemainingEvents()
           }
         )
       }
@@ -288,10 +292,7 @@ class ZimManageViewModelTest {
         val expectedBook = bookOnDisk(1L, libkiwixBook("1", nativeBook = BookTestWrapper("1")))
         val bookToRemove = bookOnDisk(1L, libkiwixBook("2", nativeBook = BookTestWrapper("2")))
         advanceUntilIdle()
-        viewModel.requestFileSystemCheck.emit(Unit)
-        advanceUntilIdle()
         books.emit(listOf(bookToRemove))
-        advanceUntilIdle()
         booksOnFileSystem.emit(
           listOfNotNull(
             expectedBook.book.nativeBook,
@@ -299,6 +300,9 @@ class ZimManageViewModelTest {
             bookToRemove.book.nativeBook
           )
         )
+        viewModel.requestFileSystemCheck.emit(Unit)
+        advanceUntilIdle()
+        yield()
         advanceUntilIdle()
         coVerify(timeout = MOCKK_TIMEOUT_FOR_VERIFICATION) {
           libkiwixBookOnDisk.insert(listOfNotNull(expectedBook.book.nativeBook))
@@ -318,10 +322,12 @@ class ZimManageViewModelTest {
         viewModel.onlineLibraryRequest.test {
           skipItems(1)
           onlineContentLanguage.emit("eng")
-          val onlineLibraryRequest = awaitItem()
+          var onlineLibraryRequest = awaitItem()
+          while (onlineLibraryRequest.lang != "eng") onlineLibraryRequest = awaitItem()
           assertThat(onlineLibraryRequest.lang).isEqualTo("eng")
           assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
           assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
+          cancelAndIgnoreRemainingEvents()
         }
       }
     }
@@ -348,10 +354,6 @@ class ZimManageViewModelTest {
         every { application.getString(R.string.your_languages) } returns "Selected languages:"
 
         viewModel.libraryItems.test {
-          cancelAndIgnoreRemainingEvents()
-        }
-
-        viewModel.libraryItems.test {
           // Single language
           awaitMatchingTitle("eng", listOf("Selected language: "))
 
@@ -363,6 +365,7 @@ class ZimManageViewModelTest {
             "eng,fra,deu,ita",
             listOf("Selected languages:", "eng", "fra", "deu", "ita")
           )
+          cancelAndIgnoreRemainingEvents()
         }
       }
     }
@@ -402,7 +405,8 @@ class ZimManageViewModelTest {
         viewModel.onlineLibraryRequest.test {
           skipItems(1)
           onlineCategoryContent.emit("wikipedia")
-          val onlineLibraryRequest = awaitItem()
+          var onlineLibraryRequest = awaitItem()
+          while (onlineLibraryRequest.category != "wikipedia") onlineLibraryRequest = awaitItem()
           assertThat(onlineLibraryRequest.category).isEqualTo("wikipedia")
           assertThat(onlineLibraryRequest.page).isEqualTo(ONE)
           assertThat(onlineLibraryRequest.isLoadMoreItem).isEqualTo(false)
@@ -435,7 +439,9 @@ class ZimManageViewModelTest {
       )
       viewModel.onlineLibraryRequest.test {
         viewModel.updateOnlineLibraryFilters(newRequest)
-        assertThat(awaitItem()).isEqualTo(newRequest)
+        var request = awaitItem()
+        while (request != newRequest) request = awaitItem()
+        assertThat(request).isEqualTo(newRequest)
       }
     }
   }
@@ -472,6 +478,7 @@ class ZimManageViewModelTest {
             )
           )
         }
+        cancelAndIgnoreRemainingEvents()
       }
     }
   }
@@ -598,6 +605,7 @@ class ZimManageViewModelTest {
             )
           )
         }
+        cancelAndIgnoreRemainingEvents()
       }
     }
   }

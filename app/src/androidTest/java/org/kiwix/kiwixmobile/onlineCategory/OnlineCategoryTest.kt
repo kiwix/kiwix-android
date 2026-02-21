@@ -134,10 +134,12 @@ class OnlineCategoryTest {
       waitForCategoryToLoad(composeTestRule)
       // Select the "All language" category to freshly run the test case.
       selectCategory(composeTestRule, "")
+      clickOnSaveCategoryIcon(composeTestRule)
       // Select "Gutenberg" category.
       clickOnCategoryMenuIcon(composeTestRule)
       assertCategoryDialogDisplayed(composeTestRule)
       selectCategory(composeTestRule, "gutenberg")
+      clickOnSaveCategoryIcon(composeTestRule)
       // assert category is selected.
       clickOnCategoryMenuIcon(composeTestRule)
       assertCategoryDialogDisplayed(composeTestRule)

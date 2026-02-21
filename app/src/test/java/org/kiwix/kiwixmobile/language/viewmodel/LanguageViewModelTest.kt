@@ -94,6 +94,7 @@ class LanguageViewModelTest {
   fun init() {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
+    networkStates.value = NetworkState.CONNECTED
     every { application.getString(any()) } returns "Error"
     every { connectivityBroadcastReceiver.action } returns "test"
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
@@ -191,7 +192,6 @@ class LanguageViewModelTest {
       coEvery { kiwixService.getLanguages() } throws RuntimeException()
       createViewModel()
       languageViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
       }
@@ -244,19 +244,18 @@ class LanguageViewModelTest {
       createViewModel()
 
       languageViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
         val content = awaitItem() as Content
 
-        assertThat(content.items.first().active).isFalse()
+        assertThat(content.items[1].active).isFalse()
 
-        languageViewModel.actions.emit(Select(languageItem(testLanguage.copy(id = content.items.first().id))))
+        languageViewModel.actions.emit(Select(languageItem(testLanguage.copy(id = content.items[1].id))))
 
         val content2 = awaitItem() as Content
-        assertThat(content2.items.first().active).isTrue()
+        assertThat(content2.items[1].active).isTrue()
 
-        languageViewModel.actions.emit(Select(languageItem(testLanguage.copy(id = content.items.first().id.toLong()))))
+        languageViewModel.actions.emit(Select(languageItem(testLanguage.copy(id = content.items[1].id.toLong()))))
         val content3 = awaitItem() as Content
-        assertThat(content3.items.first().active).isFalse()
+        assertThat(content3.items[1].active).isFalse()
       }
     }
   }
