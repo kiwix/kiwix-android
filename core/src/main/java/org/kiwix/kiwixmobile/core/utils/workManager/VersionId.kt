@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.utils.workManager
 
-@Suppress("all")
 data class VersionId(
   val major: Int,
   val minor: Int,
@@ -26,22 +25,11 @@ data class VersionId(
   val variantType: String,
   val variantNumber: Int,
 ) : Comparable<VersionId> {
-  override fun compareTo(other: VersionId): Int {
-    var diff = major.compareTo(other.major)
-    if (diff != 0) {
-      return diff
-    }
-    diff = minor.compareTo(other.minor)
-    if (diff != 0) {
-      return diff
-    }
-    diff = build.compareTo(other.build)
-    if (diff != 0) {
-      return diff
-    }
-
-    return variantNumber.compareTo(other.variantNumber)
-  }
+  override fun compareTo(other: VersionId): Int =
+    major.compareTo(other.major).takeIf { it != 0 }
+      ?: minor.compareTo(other.minor).takeIf { it != 0 }
+      ?: build.compareTo(other.build).takeIf { it != 0 }
+      ?: variantNumber.compareTo(other.variantNumber)
 }
 
 fun VersionId(versionName: String): VersionId {

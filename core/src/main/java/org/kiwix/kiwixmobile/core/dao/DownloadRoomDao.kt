@@ -86,9 +86,6 @@ abstract class DownloadRoomDao {
     }
   }
 
-  @Query("SELECT * FROM DownloadRoomEntity")
-  abstract fun getDownload(): List<DownloadRoomEntity?>
-
   @Update
   abstract fun updateDownloadItem(downloadRoomEntity: DownloadRoomEntity)
 

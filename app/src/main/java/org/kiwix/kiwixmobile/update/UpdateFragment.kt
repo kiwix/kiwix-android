@@ -27,6 +27,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
@@ -45,7 +46,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationP
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.viewModel
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -105,13 +105,23 @@ class UpdateFragment : BaseFragment() {
     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
   }
 
+  private lateinit var backPressedCallback: OnBackPressedCallback
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val activity = requireActivity() as CoreMainActivity
     super.onViewCreated(view, savedInstanceState)
+    backPressedCallback = object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        onNavigationBack(updateViewModel.state.value)
+      }
+    }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      backPressedCallback
+    )
     composeView?.setContent {
       KiwixTheme {
-        val context = LocalContext.current
         val state = updateViewModel.state.value
+        val context = LocalContext.current
         UpdateScreen(
           state = state,
           onUpdateClick = {
@@ -134,10 +144,7 @@ class UpdateFragment : BaseFragment() {
                 R.drawable.ic_close_white_24dp
               ),
               onClick = {
-                onNavigationClick(
-                  state = state,
-                  activity = activity
-                )
+                onNavigationBack(state)
               }
             )
           }
@@ -191,14 +198,15 @@ class UpdateFragment : BaseFragment() {
     }
   }
 
-  private fun onNavigationClick(state: UpdateStates, activity: CoreMainActivity) {
+  private fun onNavigationBack(state: UpdateStates) {
     val downloadState = state.downloadApkItem.currentDownloadState
     if (downloadState == Status.QUEUED ||
       downloadState == Status.DOWNLOADING
     ) {
       showStopDownloadDialog()
     } else {
-      activity.onBackPressedDispatcher.onBackPressed()
+      backPressedCallback.isEnabled = false
+      requireActivity().onBackPressedDispatcher.onBackPressed()
     }
   }
 

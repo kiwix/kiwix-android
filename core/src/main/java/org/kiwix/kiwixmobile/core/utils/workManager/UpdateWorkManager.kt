@@ -62,6 +62,7 @@ class UpdateWorkManager @AssistedInject constructor(
   private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
+    // clear the downloaded apk file here on work manager if it exists.
     return try {
       kiwixService =
         KiwixService.ServiceCreator.newHackListService(
