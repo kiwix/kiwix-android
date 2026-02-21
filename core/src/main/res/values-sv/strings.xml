@@ -324,7 +324,7 @@
   <string name="delete_selected_bookmarks">Radera valda bokmärken?</string>
   <string name="import_bookmarks_dialog_title">Importera bokmärken?</string>
   <string name="export_all_bookmarks_dialog_title">Exportera alla bokmärken?</string>
-  <string name="export_all_bookmarks_dialog_message">Exportering kommer generera en bookmark.xml-fil i mappen %s</string>
+  <string name="export_all_bookmarks_dialog_message">Exportering kommer generera en bookmark.xml-fil i mappen \n%s</string>
   <string name="bookmark_imported_message">Alla bokmärken har importerats.</string>
   <string name="error_invalid_bookmark_file">Fel: Den valda filen är inte en giltig bokmärkesfil.</string>
   <string name="send_report">Skicka diagnostisk rapport</string>

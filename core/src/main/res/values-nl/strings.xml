@@ -320,7 +320,7 @@
   <string name="delete_selected_bookmarks">Geselecteerde bladwijzers verwijderen?</string>
   <string name="import_bookmarks_dialog_title">Bladwijzers importeren?</string>
   <string name="export_all_bookmarks_dialog_title">Alle bladwijzers exporteren?</string>
-  <string name="export_all_bookmarks_dialog_message">Door het exporteren wordt in de map %s een bestand bookmark.xml aangemaakt.</string>
+  <string name="export_all_bookmarks_dialog_message">Door het exporteren wordt in de map \n%s een bestand bookmark.xml aangemaakt.</string>
   <string name="bookmark_imported_message">Alle bladwijzers zijn geïmporteerd.</string>
   <string name="error_invalid_bookmark_file">Fout: het geselecteerde bestand is geen geldig bladwijzerbestand.</string>
   <string name="send_report">Diagnostisch rapport verzenden</string>

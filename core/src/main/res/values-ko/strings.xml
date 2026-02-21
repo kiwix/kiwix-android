@@ -324,7 +324,7 @@
   <string name="delete_selected_bookmarks">선택한 북마크를 지울까요?</string>
   <string name="import_bookmarks_dialog_title">북마크를 가져올까요?</string>
   <string name="export_all_bookmarks_dialog_title">모든 북마크를 내보낼까요?</string>
-  <string name="export_all_bookmarks_dialog_message">내보내기를 하면 %s 폴더에 bookmark.xml 파일이 생성됩니다.</string>
+  <string name="export_all_bookmarks_dialog_message">내보내기를 하면 \n%s 폴더에 bookmark.xml 파일이 생성됩니다.</string>
   <string name="bookmark_imported_message">모든 북마크를 가져왔습니다.</string>
   <string name="error_invalid_bookmark_file">오류: 선택한 파일은 유효한 북마크 파일이 아닙니다.</string>
   <string name="send_report">진단 보고서 보내기</string>

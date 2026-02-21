@@ -323,7 +323,7 @@
   <string name="delete_selected_bookmarks">刪除所選的書籤？</string>
   <string name="import_bookmarks_dialog_title">匯入書籤？</string>
   <string name="export_all_bookmarks_dialog_title">匯出所有書籤？</string>
-  <string name="export_all_bookmarks_dialog_message">匯出時會在 %s 資料夾中產生 bookmark.xml 檔案。</string>
+  <string name="export_all_bookmarks_dialog_message">匯出時會在 \n%s 資料夾中產生 bookmark.xml 檔案。</string>
   <string name="bookmark_imported_message">已匯入所有書籤。</string>
   <string name="error_invalid_bookmark_file">錯誤：所選檔案不是有效的書籤檔案。</string>
   <string name="send_report">傳送診斷報告</string>
