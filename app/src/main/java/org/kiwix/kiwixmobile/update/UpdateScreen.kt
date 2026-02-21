@@ -45,8 +45,7 @@ fun UpdateScreen(
     snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackbarHostState) },
     topBar = {
       KiwixAppBar(
-        // first letter should be capital
-        title = stringResource(R.string.update),
+        title = stringResource(R.string.update_title),
         navigationIcon = content,
       )
     }

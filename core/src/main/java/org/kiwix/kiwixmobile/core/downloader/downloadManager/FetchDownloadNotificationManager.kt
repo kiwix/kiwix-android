@@ -74,7 +74,6 @@ import javax.inject.Inject
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 
-@Suppress("all")
 class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
   private val downloadRoomDao: DownloadRoomDao
@@ -166,6 +165,7 @@ class FetchDownloadNotificationManager @Inject constructor(
       enableVibration(false)
     }
 
+  @Suppress("LongMethod")
   override fun updateNotification(
     notificationBuilder: NotificationCompat.Builder,
     downloadNotification: DownloadNotification,
@@ -198,7 +198,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
     when {
       downloadNotification.isDownloading ->
-        if (downloadRoomDao.getDownload().firstOrNull() != null) {
+        if (runBlocking { downloadRoomDao.allDownloads().firstOrNull() != null }) {
           notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
             .addAction(
               drawable.fetch_notification_cancel,
