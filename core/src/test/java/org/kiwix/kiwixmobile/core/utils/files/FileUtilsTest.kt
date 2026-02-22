@@ -19,14 +19,22 @@
 package org.kiwix.kiwixmobile.core.utils.files
 
 import io.mockk.clearMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import java.io.File
 
 class FileUtilsTest {
@@ -38,6 +46,12 @@ class FileUtilsTest {
   @BeforeEach
   fun init() {
     clearMocks(mockFile)
+    mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
+  }
+
+  @AfterEach
+  fun tearDown() {
+    unmockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
   }
 
   @Test
@@ -101,5 +115,152 @@ class FileUtilsTest {
   private fun expect(extension: String, fileExists: Boolean) {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
+  }
+
+  @Test
+  fun getFileName_returnsOriginalName_whenFileExists() = runBlocking {
+    val path = "/storage/emulated/0/test.zimaa"
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      firstArg<File>().path == path
+    }
+    val result = FileUtils.getFileName(path)
+    assertEquals(path, result)
+  }
+
+  @Test
+  fun getFileName_returnsPartSuffix_whenOnlyPartFileExists() = runBlocking {
+    val path = "/storage/emulated/0/test.zimaa"
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      firstArg<File>().path == "$path.part"
+    }
+    val result = FileUtils.getFileName(path)
+    assertEquals("$path.part", result)
+  }
+
+  @Test
+  fun getFileName_returnsAaSuffix_whenNeitherExists() = runBlocking {
+    coEvery { any<File>().isFileExist(any()) } returns false
+    val path = "/storage/emulated/0/test.zimaa"
+    val result = FileUtils.getFileName(path)
+    assertEquals("${path}aa", result)
+  }
+
+  @Test
+  fun hasPart_returnsFalse_whenFileEndsWithZim() = runBlocking {
+    val path = "/storage/emulated/0/wiki.zim"
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      firstArg<File>().path == path
+    }
+    val result = FileUtils.hasPart(File(path))
+    assertFalse(result)
+  }
+
+  @Test
+  fun hasPart_returnsTrue_whenFileResolvesToPartFile() = runBlocking {
+    val path = "/storage/emulated/0/wiki.zimaa"
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      firstArg<File>().path == "$path.part"
+    }
+    val result = FileUtils.hasPart(File(path))
+    assertTrue(result)
+  }
+
+  @Test
+  fun hasPart_returnsTrue_whenSplitChunkHasPartFile() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val inputPath = "${basePath}aa"
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      val p = firstArg<File>().path
+      when (p) {
+        inputPath -> true
+        "${basePath}aa.part" -> true
+        else -> false
+      }
+    }
+    val result = FileUtils.hasPart(File(inputPath))
+    assertTrue(result)
+  }
+
+  @Test
+  fun hasPart_returnsFalse_whenAllChunksExistWithNoParts() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val inputPath = "${basePath}aa"
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      val p = firstArg<File>().path
+      when (p) {
+        inputPath -> true
+        "${basePath}aa.part" -> false
+        "${basePath}aa" -> true
+        "${basePath}ab.part" -> false
+        "${basePath}ab" -> false
+        else -> false
+      }
+    }
+    val result = FileUtils.hasPart(File(inputPath))
+    assertFalse(result)
+  }
+
+  @Test
+  fun deleteZimFile_deletesZimFileAndChecksPartFiles() = runBlocking {
+    val path = "/storage/emulated/0/wiki.zim"
+    coEvery { any<File>().deleteFile(any()) } returns true
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      val p = firstArg<File>().path
+      p == "$path.part"
+    }
+    FileUtils.deleteZimFile(path)
+  }
+
+  @Test
+  fun deleteZimFile_stripsPartPartSuffix_thenDeletesZimFile() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val pathWithPartPart = "$basePath.part.part"
+    coEvery { any<File>().deleteFile(any()) } returns true
+    coEvery { any<File>().isFileExist(any()) } returns false
+    FileUtils.deleteZimFile(pathWithPartPart)
+  }
+
+  @Test
+  fun deleteZimFile_deletesSplitChunksUntilMissing() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val path = "${basePath}aa"
+    coEvery { any<File>().deleteFile(any()) } returns true
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      val p = firstArg<File>().path
+      p == "${basePath}aa"
+    }
+    FileUtils.deleteZimFile(path)
+  }
+
+  @Test
+  fun deleteZimFile_deletesSplitChunksAndTheirPartFiles() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val path = "${basePath}aa"
+    coEvery { any<File>().deleteFile(any()) } returns true
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      val p = firstArg<File>().path
+      when (p) {
+        "${basePath}aa" -> true
+        "${basePath}ab" -> false
+        "${basePath}ab.part.part" -> true
+        "${basePath}ac" -> false
+        "${basePath}ac.part.part" -> false
+        "${basePath}ac.part" -> true
+        "${basePath}ad" -> false
+        "${basePath}ad.part.part" -> false
+        "${basePath}ad.part" -> false
+        else -> false
+      }
+    }
+    FileUtils.deleteZimFile(path)
+  }
+
+  @Test
+  fun deleteZimFile_handlesPartSuffixOnSplitFile() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val path = "${basePath}aa.part.part"
+    coEvery { any<File>().deleteFile(any()) } returns true
+    coEvery { any<File>().isFileExist(any()) } returns false
+    FileUtils.deleteZimFile(path)
   }
 }
