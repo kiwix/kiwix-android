@@ -55,6 +55,9 @@ import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
+const val DOWNLOAD_APK_COMPLETE_INTENT = "downloadTimeoutResumeIntent"
+const val DOWNLOAD_APK_COMPLETE_REQUEST_CODE = 2003
+
 @Suppress("InjectDispatcher")
 class DownloadApkService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
@@ -244,7 +247,7 @@ class DownloadApkService : Service() {
       .setGroupSummary(false)
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-      .setContentIntent(getPendingIntentForDownloadedNotification(download))
+      .setContentIntent(getPendingIntentForDownloadedNotification())
       .setAutoCancel(true)
     // Assigning a new ID to the notification because the same ID is used for the foreground
     // notification. If we use the same ID, changing the foreground notification for another
@@ -259,16 +262,15 @@ class DownloadApkService : Service() {
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
 
-  private fun getPendingIntentForDownloadedNotification(download: Download): PendingIntent {
-    // need to navigate to the update screen
+  private fun getPendingIntentForDownloadedNotification(): PendingIntent {
     val internal =
       Intents.internal(CoreMainActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putExtra(DOWNLOAD_NOTIFICATION_TITLE, getDownloadNotificationTitle(download))
+        putExtra(DOWNLOAD_APK_COMPLETE_INTENT, true)
       }
     return PendingIntent.getActivity(
       this,
-      download.id,
+      DOWNLOAD_APK_COMPLETE_REQUEST_CODE,
       internal,
       FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
     )

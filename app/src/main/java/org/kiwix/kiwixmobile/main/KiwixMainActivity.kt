@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_APK_COMPLETE_INTENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
@@ -212,6 +213,7 @@ class KiwixMainActivity : CoreMainActivity() {
       handleGetContentIntent(intent)
       safelyHandleDeepLink(intent)
       handleBackgroundTimeoutLimitIntent(intent)
+      handleOnApkCompleteIntent(intent)
     }
   }
 
@@ -222,6 +224,20 @@ class KiwixMainActivity : CoreMainActivity() {
 
       if (currentId != targetId) {
         navigate(KiwixDestination.Downloads.route) {
+          launchSingleTop = true
+          popUpTo(navController.graph.findStartDestination().id)
+        }
+      }
+    }
+  }
+
+  private fun handleOnApkCompleteIntent(intent: Intent?) {
+    if (intent?.hasExtra(DOWNLOAD_APK_COMPLETE_INTENT) == true) {
+      val currentId = navController.currentDestination?.id
+      val targetId = navController.graph.findNode(KiwixDestination.Update.route)?.id
+
+      if (currentId != targetId) {
+        navigate(KiwixDestination.Update.route) {
           launchSingleTop = true
           popUpTo(navController.graph.findStartDestination().id)
         }
