@@ -22,9 +22,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import javax.inject.Inject
@@ -54,13 +52,10 @@ class UpdateViewModel @Inject constructor(
     )
   }
 
-  @Suppress("InjectDispatcher")
   fun cancelDownload() {
-    viewModelScope.launch {
-      withContext(Dispatchers.IO) {
-        downloader.cancelDownload(_state.value.downloadApkItem.downloadId)
-        downloadApkDao.resetDownloadInfoState()
-      }
-    }
+    runCatching {
+      downloader.cancelDownload(_state.value.downloadApkItem.downloadId)
+      downloadApkDao.resetDownloadInfoState()
+    }.onFailure { it.printStackTrace() }
   }
 }

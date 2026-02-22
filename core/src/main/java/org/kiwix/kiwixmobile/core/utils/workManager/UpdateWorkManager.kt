@@ -63,6 +63,7 @@ class UpdateWorkManager @AssistedInject constructor(
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     // clear the downloaded apk file here on work manager if it exists.
+    // catch specific exceptions here
     return try {
       kiwixService =
         KiwixService.ServiceCreator.newHackListService(
