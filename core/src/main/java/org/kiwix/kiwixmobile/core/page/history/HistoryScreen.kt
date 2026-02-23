@@ -41,6 +41,5 @@ fun HistoryScreenRoute(
     deleteIconTitle = R.string.pref_clear_all_history_title,
     switchIsCheckedFlow = viewModel.kiwixDataStore.showHistoryOfAllBooks,
     alertDialogShower = alertDialogShower,
-    pageViewModelClickListener = null
   )
 }

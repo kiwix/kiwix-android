@@ -59,6 +59,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.bottomShadow
@@ -66,11 +68,11 @@ import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModelClickListener
+
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
@@ -104,7 +106,6 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
   noItemsString: String,
   switchIsCheckedFlow: Flow<Boolean>,
   alertDialogShower: AlertDialogShower,
-  pageViewModelClickListener: PageViewModelClickListener? = null,
   navigateBack: () -> Unit,
   viewModel: PageViewModel<T, S>
 ) {
@@ -113,25 +114,17 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
 
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
   var searchText by rememberSaveable { mutableStateOf("") }
-  var isInSelectionMode by rememberSaveable { mutableStateOf(state.isInSelectionState) }
+  val isInSelectionMode = state.isInSelectionState
   val selectedCount = state.pageItems.count { it.isSelected }
 
-  LaunchedEffect(alertDialogShower) {
-    viewModel.alertDialogShower = alertDialogShower
-    viewModel.lifeCycleScope = activity.lifecycleScope
+  LaunchedEffect(Unit) {
+    viewModel.setAlertDialogShower(alertDialogShower)
+    viewModel.setLifeCycleScope(activity.lifecycleScope)
   }
 
-  // stting up click listener if provided
-  LaunchedEffect(pageViewModelClickListener) {
-    pageViewModelClickListener?.let {
-      viewModel.setOnItemClickListener(it)
-    }
-  }
-
-  LaunchedEffect(viewModel.effects) {
-    viewModel.effects.collect { effect ->
-      effect.invokeWith(activity)
-    }
+  viewModel.effects.CollectSideEffectWithActivity { effect, coreActivity ->
+    @Suppress("UNCHECKED_CAST")
+    (effect as SideEffect<CoreMainActivity>).invokeWith(coreActivity)
   }
 
   PageScreen(
@@ -160,29 +153,20 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
         }
       )
     },
-    actionMenuItems = if (isInSelectionMode) {
-      listOf(
-        ActionMenuItem(
-          icon = IconItem.Vector(Icons.Default.Delete),
-          contentDescription = R.string.delete,
-          onClick = {
-            viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
-          },
-          testingTag = DELETE_MENU_ICON_TESTING_TAG
-        )
-      )
-    } else {
-      actionMenuList(
-        deleteIconTitle = deleteIconTitle,
-        isSearchActive = isSearchActive,
-        onSearchClick = {
-          isSearchActive = true
-        },
-        onDeleteClick = {
-          viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
-        }
-      )
-    },
+    actionMenuItems = actionMenuList(
+      deleteIconTitle = deleteIconTitle,
+      isSearchActive = isSearchActive,
+      isInSelectionMode = isInSelectionMode,
+      onSearchClick = {
+        isSearchActive = true
+      },
+      onDeleteClick = {
+        viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
+      },
+      onSelectionDeleteClick = {
+        viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
+      }
+    ),
     onClearSearch = {
       searchText = ""
       viewModel.actions.tryEmit(Action.Filter(""))
@@ -237,19 +221,14 @@ fun <T : Page, S : PageState<T>> PageScreen(
             },
             navigationIcon = navigationIcon,
             actionMenuItems = actionMenuItems,
-            searchBar = if (isSearchBarActive && !isInSelectionMode) {
-              {
-                KiwixSearchView(
-                  placeholder = searchQueryHint,
-                  value = searchText,
-                  searchViewTextFiledTestTag = "",
-                  onValueChange = onSearchTextChange,
-                  onClearClick = onClearSearch
-                )
-              }
-            } else {
-              null
-            }
+            searchBar = searchBarIfActive(
+              isSearchBarActive = isSearchBarActive,
+              isInSelectionMode = isInSelectionMode,
+              searchQueryHint = searchQueryHint,
+              searchText = searchText,
+              onSearchTextChange = onSearchTextChange,
+              onClearSearch = onClearSearch
+            )
           )
           if (!isInSelectionMode) {
             PageSwitchRow(
@@ -405,10 +384,22 @@ private fun parseDateSafely(dateString: String): LocalDate? {
  */
 private fun actionMenuList(
   isSearchActive: Boolean,
+  isInSelectionMode: Boolean,
   deleteIconTitle: Int,
   onSearchClick: () -> Unit,
   onDeleteClick: () -> Unit,
+  onSelectionDeleteClick: () -> Unit,
 ): List<ActionMenuItem> {
+  if (isInSelectionMode) {
+    return listOf(
+      ActionMenuItem(
+        icon = IconItem.Vector(Icons.Default.Delete),
+        contentDescription = R.string.delete,
+        onClick = onSelectionDeleteClick,
+        testingTag = DELETE_MENU_ICON_TESTING_TAG
+      )
+    )
+  }
   return listOfNotNull(
     when {
       !isSearchActive -> ActionMenuItem(
@@ -427,4 +418,32 @@ private fun actionMenuList(
       testingTag = DELETE_MENU_ICON_TESTING_TAG
     )
   )
+}
+
+/**
+ * Returns the search bar composable if the search is active and not in selection mode,
+ * otherwise returns null.
+ */
+@Composable
+private fun searchBarIfActive(
+  isSearchBarActive: Boolean,
+  isInSelectionMode: Boolean,
+  searchQueryHint: String,
+  searchText: String,
+  onSearchTextChange: (String) -> Unit,
+  onClearSearch: () -> Unit,
+): (@Composable () -> Unit)? {
+  return if (isSearchBarActive && !isInSelectionMode) {
+    {
+      KiwixSearchView(
+        placeholder = searchQueryHint,
+        value = searchText,
+        searchViewTextFiledTestTag = "",
+        onValueChange = onSearchTextChange,
+        onClearClick = onClearSearch
+      )
+    }
+  } else {
+    null
+  }
 }

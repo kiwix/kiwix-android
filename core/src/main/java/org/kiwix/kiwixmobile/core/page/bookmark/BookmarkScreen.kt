@@ -41,6 +41,5 @@ fun BookmarkScreenRoute(
     deleteIconTitle = R.string.pref_clear_all_bookmarks_title,
     switchIsCheckedFlow = viewModel.kiwixDataStore.showBookmarksOfAllBooks,
     alertDialogShower = alertDialogShower,
-    pageViewModelClickListener = null
   )
 }
