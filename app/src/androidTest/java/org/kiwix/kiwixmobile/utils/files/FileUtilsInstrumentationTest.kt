@@ -412,7 +412,7 @@ class FileUtilsInstrumentationTest {
     val fakeStream = "dummy pdf".byteInputStream()
 
     every {
-      zimReader.load(pdfUrl, any())
+      zimReader.load(pdfUrl, match { it.isEmpty() })
     } returns mockk {
       every { data } returns fakeStream
     }
