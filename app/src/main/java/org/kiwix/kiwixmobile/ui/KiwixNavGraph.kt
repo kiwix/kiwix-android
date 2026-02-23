@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.core.main.NOTES_SCREEN
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_SCREEN
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
-import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
@@ -90,10 +89,9 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.settings.KiwixSettingsFragment
-import org.kiwix.kiwixmobile.update.UpdateFragment
-import org.kiwix.kiwixmobile.update.UpdateScreen
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
+import org.kiwix.kiwixmobile.update.UpdateFragment
+import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 

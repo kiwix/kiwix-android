@@ -118,7 +118,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.main.UpdateDialog
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -184,9 +183,7 @@ fun ReaderScreen(
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  onUpdateIconClick: () -> Unit,
-  onLaterIconClick: () -> Unit,
-  navigationIcon: @Composable () -> Unit,
+  navigationIcon: @Composable () -> Unit
 ) {
   // For managing the scroll event handling of webView.
   val shouldUpdateTopAppBarAndBottomAppBarOnScrolling = rememberSaveable { mutableStateOf(true) }
@@ -227,11 +224,6 @@ fun ReaderScreen(
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
       ) { paddingValues ->
-        ShowUpdateDialog(
-          state = state,
-          onClickUpdate = onUpdateIconClick,
-          onClickLater = onLaterIconClick
-        )
         OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
           state,
@@ -720,34 +712,6 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
         state.laterButtonClick
       )
     }
-  }
-}
-
-/*@Composable
-private fun ShowUpdateDialog(
-  state: ReaderScreenState,
-  onClickUpdate: () -> Unit,
-  onClickLater: () -> Unit
-) {
-  if (state.shouldShowUpdatePopup) {
-    UpdateDialog(
-      onConfirm = onClickUpdate,
-      onDismiss = onClickLater
-    )
-  }
-}*/
-
-@Composable
-private fun ShowUpdateDialog(
-  state: ReaderScreenState,
-  onClickUpdate: () -> Unit,
-  onClickLater: () -> Unit
-) {
-  if (state.shouldShowUpdatePopup) {
-    UpdateDialog(
-      onConfirm = onClickUpdate,
-      onDismiss = onClickLater
-    )
   }
 }
 

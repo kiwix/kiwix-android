@@ -28,6 +28,9 @@ import javax.inject.Inject
 // set at 0 for testing
 const val THREE_DAYS_IN_MILLISECONDS = 0L // 3 * 24 * 60 * 60 * 1000L
 
+/*room throws error when you make a query suspend. it's not conclusive why it happens.
+* in research so far it is caused my version mismatch between kotlin and room
+* this is just a reminder */
 @Suppress("all")
 class UpdateDialogHandler @Inject constructor(
   private val apkDao: DownloadApkDao
@@ -38,7 +41,7 @@ class UpdateDialogHandler @Inject constructor(
     this.showUpdateDialogCallback = showUpdateDialogCallback
   }
 
-  suspend fun attemptToShowUpdatePopup() {
+  fun attemptToShowUpdatePopup() {
     CoroutineScope(Dispatchers.IO).launch {
       val currentMilliSeconds = System.currentTimeMillis()
       // hardcoded values for testing
