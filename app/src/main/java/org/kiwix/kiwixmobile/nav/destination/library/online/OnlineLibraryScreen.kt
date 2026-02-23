@@ -227,14 +227,10 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
   }
   var lastQuery by remember { mutableStateOf("") }
 
-  LaunchedEffect(state.onlineLibraryList) {
+  LaunchedEffect(state.version) {
     val queryChanged = state.searchText != lastQuery
 
-    if (
-      lastQuery.isNotEmpty() &&
-      state.searchText.isNotEmpty() &&
-      queryChanged
-    ) {
+    if (queryChanged && !state.isLoadingMoreItem) {
       lazyListState.stopScroll(MutatePriority.PreventUserInput)
       lazyListState.scrollToItem(ZERO)
     }

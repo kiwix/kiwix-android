@@ -103,5 +103,9 @@ data class OnlineLibraryScreenState(
   /**
    * Manages the showing of progressBar at the end of book list when more items is loading.
    */
-  val isLoadingMoreItem: Boolean
+  val isLoadingMoreItem: Boolean,
+  /**
+   * Gives Us Time so we detect list changes
+   */
+  val version: Long = System.nanoTime()
 )
