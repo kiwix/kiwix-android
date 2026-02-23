@@ -24,6 +24,7 @@ import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.net.Uri
@@ -709,11 +710,13 @@ object FileUtils {
   }
 
   @Suppress("ReturnCount")
-  private fun getDownloadRootDir(context: Context): File? {
-    val root = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+  private fun getKiwixFileDir(context: Context): File? {
+    val mediaDir = ContextWrapper(context)
+      .externalMediaDirs
+      .firstOrNull()
       ?: return null
 
-    val kiwixDir = File(root, "Kiwix")
+    val kiwixDir = File(mediaDir, "Kiwix")
 
     if (!kiwixDir.exists()) {
       val created = kiwixDir.mkdirs()
@@ -904,7 +907,7 @@ object FileUtils {
     fileName: String,
     zimReaderContainer: ZimReaderContainer
   ): File? {
-    val root = getDownloadRootDir(context)
+    val root = getKiwixFileDir(context)
       ?: return null
 
     val file = File(root, fileName)

@@ -397,10 +397,37 @@ class FileUtilsInstrumentationTest {
       zimReaderContainer = zimReader
     )
 
-    Assertions.assertTrue(result is SaveResult.FileSaved || result is SaveResult.MediaSaved)
+    Assertions.assertTrue(result is SaveResult.MediaSaved)
     verify(exactly = 0) {
       zimReader.load(any(), any())
     }
+  }
+
+  @Test
+  fun testDownloadPdfFileSaved() = runTest {
+    val pdfUrl = "https://kiwix.org/contributors/contributors_list.pdf"
+
+    val zimReader = mockk<ZimReaderContainer>()
+
+    val fakeStream = "dummy pdf".byteInputStream()
+
+    every {
+      zimReader.load(pdfUrl, any())
+    } returns mockk {
+      every { data } returns fakeStream
+    }
+
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
+      url = pdfUrl,
+      src = null,
+      zimReaderContainer = zimReader
+    )
+
+    Assertions.assertTrue(result is SaveResult.FileSaved)
+
+    val fileSaved = result as SaveResult.FileSaved
+    Assertions.assertTrue(fileSaved.file.exists())
   }
 
   @Test
