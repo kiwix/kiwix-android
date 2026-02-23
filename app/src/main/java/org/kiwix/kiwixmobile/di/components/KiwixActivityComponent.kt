@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
+import org.kiwix.kiwixmobile.update.UpdateFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles

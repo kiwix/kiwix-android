@@ -83,7 +83,6 @@ abstract class CoreApp : Application() {
       .setWorkerFactory(updateWorkerFactory)
       .build()
     WorkManager.initialize(this, workManagerConfig)
-    serviceWorkerInitialiser.init(this)
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()

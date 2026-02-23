@@ -116,7 +116,7 @@ class StatusConverter {
 
 class ErrorConverter {
   @TypeConverter
-  fun convertToEntityProperty(databaseValue: Int) = com.tonyodev.fetch2.Error.valueOf(databaseValue)
+  fun convertToEntityProperty(databaseValue: Int) = Error.valueOf(databaseValue)
 
   @TypeConverter
   fun convertToDatabaseValue(error: Error): Int = error.ordinal

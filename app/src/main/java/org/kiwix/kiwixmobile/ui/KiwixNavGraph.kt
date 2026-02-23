@@ -57,7 +57,6 @@ import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
-import org.kiwix.kiwixmobile.core.main.SETTINGS_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
@@ -79,10 +78,8 @@ import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.settings.KiwixSettingsFragment
-import org.kiwix.kiwixmobile.update.UpdateFragment
-import org.kiwix.kiwixmobile.update.UpdateScreen
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
+import org.kiwix.kiwixmobile.update.UpdateFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 
 @Suppress("LongMethod")

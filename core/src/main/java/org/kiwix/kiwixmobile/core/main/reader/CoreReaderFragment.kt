@@ -117,8 +117,6 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
-import org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiser
-import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.UpdateDialogHandler
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
@@ -277,7 +275,6 @@ abstract class CoreReaderFragment :
       onOpenLibraryButtonClicked = {},
       pageLoadingItem = false to ZERO,
       shouldShowDonationPopup = false,
-      shouldShowUpdatePopup = false,
       fullScreenItem = false to null,
       showBackToTopButton = false,
       backToTopButtonClick = { backToTop() },
@@ -491,9 +488,7 @@ abstract class CoreReaderFragment :
           documentSections = documentSections,
           showTableOfContentDrawer = shouldTableOfContentDrawer,
           onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
-          navHostController = (requireActivity() as CoreMainActivity).navController,
-          onUpdateIconClick = { onUpdateIconClick() },
-          onLaterIconClick = { onLaterIconClick() }
+          navHostController = (requireActivity() as CoreMainActivity).navController
         )
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
@@ -582,14 +577,12 @@ abstract class CoreReaderFragment :
     runSafelyInCoreReaderLifecycleScope {
       updateDialogHandler?.updateLastUpdatePopupShownTime()
       requireActivity().navigate(UPDATE_FRAGMENT)
-      readerScreenState.update { copy(shouldShowUpdatePopup = false) }
     }
   }
 
   private fun onLaterIconClick() {
     runSafelyInCoreReaderLifecycleScope {
       updateDialogHandler?.updateLater()
-      readerScreenState.update { copy(shouldShowUpdatePopup = false) }
     }
   }
 
