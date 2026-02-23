@@ -41,6 +41,5 @@ fun NotesScreenRoute(
     deleteIconTitle = R.string.pref_clear_notes,
     switchIsCheckedFlow = notesViewModel.kiwixDataStore.showNotesOfAllBooks,
     alertDialogShower = alertDialogShower,
-    pageViewModelClickListener = notesViewModel
   )
 }
