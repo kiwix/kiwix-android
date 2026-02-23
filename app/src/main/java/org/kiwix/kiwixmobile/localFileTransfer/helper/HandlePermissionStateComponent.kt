@@ -25,6 +25,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -44,6 +48,8 @@ internal fun HandlePermissionStateComponent(
   showDialog: (DialogEvent) -> Unit,
   clearPermissionAction: () -> Unit
 ) {
+  var isWaitingForPermissionResult by remember { mutableStateOf(false) }
+
   // we are not requesting external storage permission for android 13+ and play store variants
   val externalStoragePermissionState = if (isWriteExternalStoragePermissionRequired) {
     rememberPermissionState(WRITE_EXTERNAL_STORAGE)
@@ -66,23 +72,8 @@ internal fun HandlePermissionStateComponent(
     val locationGranted = locationOrWifiPermissionState.status.isGranted
     val storageGranted = externalStoragePermissionState?.status?.isGranted ?: true
 
-    if (locationGranted && storageGranted) {
-      onPermissionGranted()
-    }
-  }
-
-  LaunchedEffect(
-    externalStoragePermissionState?.status,
-    locationOrWifiPermissionState.status
-  ) {
-    // check if all required permissions are granted
-    val locationOrWifiGranted = locationOrWifiPermissionState.status.isGranted
-
-    // value of param externalStoragePermissionState is null if this permission is not required
-    // in that case we set it to true
-    val storageGranted = externalStoragePermissionState?.status?.isGranted ?: true
-
-    if (locationOrWifiGranted && storageGranted) {
+    if (isWaitingForPermissionResult && locationGranted && storageGranted) {
+      isWaitingForPermissionResult = false
       onPermissionGranted()
     }
   }
@@ -114,6 +105,7 @@ internal fun HandlePermissionStateComponent(
 
             else -> {
               // this gets called first time, when permission is not granted
+              isWaitingForPermissionResult = true
               it.launchPermissionRequest()
             }
           }

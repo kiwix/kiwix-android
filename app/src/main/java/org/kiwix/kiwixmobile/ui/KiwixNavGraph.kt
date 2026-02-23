@@ -318,7 +318,7 @@ sealed class KiwixDestination(val route: String) {
     }
   }
 
-  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY={uris}") {
+  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY={$URIS_KEY}") {
     fun createRoute(uris: String? = null): String {
       return if (uris != null) {
         "$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY=${Uri.encode(uris)}"
