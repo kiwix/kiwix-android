@@ -23,6 +23,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.os.Process
+import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -40,6 +41,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -426,7 +428,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   fun navigate(route: String, navOptions: NavOptions? = null) {
-    navController.navigate(route, navOptions)
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+      navController.navigate(route, navOptions)
+    } else {
+      Log.w("Kiwix", "Skipping navigation to $route because activity is not in STARTED state")
+    }
   }
 
   fun navigate(route: String, builder: NavOptionsBuilder.() -> Unit) {
