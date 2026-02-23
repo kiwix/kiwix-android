@@ -125,6 +125,18 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     return super.performLongClick()
   }
 
+  /**
+   * We override performClick() because we attach an OnTouchListener
+   * to this WebView in KiwixWebViewWithAppBarScrolling.
+   *
+   * When a View uses setOnTouchListener(), Android expects performClick()
+   * to be overridden for proper accessibility support.
+   *
+   * We simply call super.performClick(), but keeping this override
+   * prevents accessibility issues and avoids Lint warnings.
+   */
+  @Suppress("RedundantOverride")
+  override fun performClick(): Boolean = super.performClick()
   override fun onCreateContextMenu(menu: ContextMenu) {
     super.onCreateContextMenu(menu)
     val result = hitTestResult
