@@ -21,6 +21,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.webkit.WebResourceResponse
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.coEvery
 import io.mockk.every
@@ -411,11 +412,15 @@ class FileUtilsInstrumentationTest {
 
     val fakeStream = "dummy pdf".byteInputStream()
 
+    val webResponse = WebResourceResponse(
+      "application/pdf",
+      "utf-8",
+      fakeStream
+    )
+
     every {
-      zimReader.load(pdfUrl, match { it.isEmpty() })
-    } returns mockk {
-      every { data } returns fakeStream
-    }
+      zimReader.load(any<String>(), any<Map<String, String>>())
+    } returns webResponse
 
     val result = FileUtils.downloadFileFromUrl(
       context = context!!,
