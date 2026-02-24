@@ -24,7 +24,7 @@ import android.app.Activity
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.FragmentManager
+
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -64,7 +64,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
   private val storageCalculator: StorageCalculator = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
-  private val fragmentManager: FragmentManager = mockk(relaxed = true)
+
   private val selectedZimFileCallback: SelectedZimFileCallback = mockk(relaxed = true)
 
   private lateinit var testScope: TestScope
@@ -89,7 +89,6 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       testScope,
       alertDialogShower,
       snackBarHostState,
-      fragmentManager,
       selectedZimFileCallback
     )
 
@@ -136,7 +135,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
 
       coVerify(exactly = 0) {
-        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any(), any())
+        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any())
       }
     }
 
@@ -153,7 +152,6 @@ class ProcessSelectedZimFilesForPlayStoreTest {
           uri,
           documentFile,
           false,
-          fragmentManager,
           null,
           true
         )
@@ -188,7 +186,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     val uri2 = createValidUri("test2.zim", availableSpace = 10000L)
 
     coEvery {
-      copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any(), any())
+      copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any())
     } coAnswers {
       processSelectedZimFiles.onFileCopied(mockk<File>(relaxed = true))
     }
@@ -216,7 +214,6 @@ class ProcessSelectedZimFilesForPlayStoreTest {
         uri,
         documentFile,
         false,
-        fragmentManager,
         null,
         true
       )
@@ -238,7 +235,6 @@ class ProcessSelectedZimFilesForPlayStoreTest {
         uri,
         documentFile,
         false,
-        fragmentManager,
         null,
         true
       )
