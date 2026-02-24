@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +60,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
@@ -123,8 +123,23 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
   }
 
   viewModel.effects.CollectSideEffectWithActivity { effect, coreActivity ->
-    @Suppress("UNCHECKED_CAST")
-    (effect as SideEffect<CoreMainActivity>).invokeWith(coreActivity)
+    effect.invokeWith(coreActivity)
+  }
+
+  val onBackPress: () -> Unit = {
+    if (isSearchActive) {
+      isSearchActive = false
+      searchText = ""
+      viewModel.actions.tryEmit(Action.Filter(""))
+    } else if (isInSelectionMode) {
+      viewModel.actions.tryEmit(Action.ExitActionModeMenu)
+    } else {
+      navigateBack()
+    }
+  }
+
+  BackHandler {
+    onBackPress()
   }
 
   PageScreen(
@@ -140,17 +155,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     switchIsCheckedFlow = switchIsCheckedFlow,
     navigationIcon = {
       NavigationIcon(
-        onClick = {
-          if (isSearchActive) {
-            isSearchActive = false
-            searchText = ""
-            viewModel.actions.tryEmit(Action.Filter(""))
-          } else if (isInSelectionMode) {
-            viewModel.actions.tryEmit(Action.ExitActionModeMenu)
-          } else {
-            navigateBack()
-          }
-        }
+        onClick = onBackPress
       )
     },
     actionMenuItems = actionMenuList(
@@ -230,14 +235,12 @@ fun <T : Page, S : PageState<T>> PageScreen(
               onClearSearch = onClearSearch
             )
           )
-          if (!isInSelectionMode) {
-            PageSwitchRow(
-              switchString = switchString,
-              switchIsEnabled = !state.isInSelectionState,
-              switchIsCheckedFlow = switchIsCheckedFlow,
-              onSwitchCheckedChange = onSwitchCheckedChange
-            )
-          }
+          PageSwitchRow(
+            switchString = switchString,
+            switchIsEnabled = !state.isInSelectionState,
+            switchIsCheckedFlow = switchIsCheckedFlow,
+            onSwitchCheckedChange = onSwitchCheckedChange
+          )
         }
       }
     ) { padding ->
@@ -375,12 +378,15 @@ private fun parseDateSafely(dateString: String): LocalDate? {
  * Builds the list of action menu items for the app bar.
  *
  * @param isSearchActive Whether the search mode is currently active.
+ * @param isInSelectionMode Whether the screen is in selection mode.
+ * @param deleteIconTitle The string resource ID for the delete icon content description.
  * @param onSearchClick Callback to invoke when the search icon is clicked.
  * @param onDeleteClick Callback to invoke when the delete icon is clicked.
+ * @param onSelectionDeleteClick Callback to invoke when the delete selected items icon is clicked.
  * @return A list of [ActionMenuItem]s to be displayed in the app bar.
  *
- * - Shows the search icon only when search is not active.
- * - Always includes the delete icon, with a content description for accessibility (#3825).
+ * - If in selection mode, shows only the delete selected items icon.
+ * - Otherwise, shows the search icon only when search is not active, and always includes the delete icon.
  */
 private fun actionMenuList(
   isSearchActive: Boolean,
@@ -389,18 +395,16 @@ private fun actionMenuList(
   onSearchClick: () -> Unit,
   onDeleteClick: () -> Unit,
   onSelectionDeleteClick: () -> Unit,
-): List<ActionMenuItem> {
-  if (isInSelectionMode) {
-    return listOf(
-      ActionMenuItem(
-        icon = IconItem.Vector(Icons.Default.Delete),
-        contentDescription = R.string.delete,
-        onClick = onSelectionDeleteClick,
-        testingTag = DELETE_MENU_ICON_TESTING_TAG
-      )
+): List<ActionMenuItem> = when {
+  isInSelectionMode -> listOf(
+    ActionMenuItem(
+      icon = IconItem.Vector(Icons.Default.Delete),
+      contentDescription = R.string.delete,
+      onClick = onSelectionDeleteClick,
+      testingTag = DELETE_MENU_ICON_TESTING_TAG
     )
-  }
-  return listOfNotNull(
+  )
+  else -> listOfNotNull(
     when {
       !isSearchActive -> ActionMenuItem(
         icon = IconItem.Drawable(R.drawable.action_search),
