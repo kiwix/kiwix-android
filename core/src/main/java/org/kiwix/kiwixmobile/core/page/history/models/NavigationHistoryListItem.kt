@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.adapter
+package org.kiwix.kiwixmobile.core.page.history.models
 
 data class NavigationHistoryListItem(
   val title: String,

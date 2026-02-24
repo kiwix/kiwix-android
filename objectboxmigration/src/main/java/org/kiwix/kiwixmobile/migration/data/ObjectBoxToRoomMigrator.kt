@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.migration.entities.HistoryEntity

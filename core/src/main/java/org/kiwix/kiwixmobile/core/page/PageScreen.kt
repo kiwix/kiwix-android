@@ -138,7 +138,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     }
   }
 
-  BackHandler {
+  BackHandler(enabled = isSearchActive || isInSelectionMode) {
     onBackPress()
   }
 

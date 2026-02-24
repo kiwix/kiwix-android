@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationRes
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER

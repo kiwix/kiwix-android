@@ -22,7 +22,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity(indices = [Index(value = ["noteTitle"], unique = true)])
