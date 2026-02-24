@@ -191,6 +191,8 @@ internal fun LocalFileTransferScreenRoute(
     }
   )
 
+  val actionMenuItems = remember { viewModel.actionMenuItem() }
+
   KiwixTheme {
     LocalFileTransferScreen(
       deviceName = deviceName,
@@ -202,7 +204,7 @@ internal fun LocalFileTransferScreenRoute(
       isPeerSearching = isPeerSearching,
       peerDeviceList = peerDeviceList,
       transferFileList = transferFileList,
-      actionMenuItems = viewModel.actionMenuItem(),
+      actionMenuItems = actionMenuItems,
       onDeviceItemClick = { viewModel.wifiDirectManager.sendToDevice(it) },
       kiwixDataStore = viewModel.kiwixDataStore,
       lifeCycleScope = lifecycleScope,
