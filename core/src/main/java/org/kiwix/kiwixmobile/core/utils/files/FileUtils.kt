@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.hasContent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -745,7 +746,7 @@ object FileUtils {
             zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
               fileToSave.outputStream().use(inputStream::copyTo)
             }
-            fileToSave
+            if (fileToSave.hasContent()) fileToSave else null
           }
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save file", e)

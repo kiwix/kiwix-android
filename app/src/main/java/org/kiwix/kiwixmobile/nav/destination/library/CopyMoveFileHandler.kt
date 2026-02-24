@@ -19,25 +19,8 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.net.Uri
-import android.provider.DocumentsContract
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
@@ -48,24 +31,18 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
-import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.COPY_MOVE_DIALOG_TITLE_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
@@ -75,55 +52,47 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.libzim.Archive
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 const val COPY_MOVE_DIALOG_TITLE_TESTING_TAG = "copyMoveDialogTitleTestingTag"
 
+@Suppress("LongParameterList")
 class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
   private val kiwixDataStore: KiwixDataStore,
   private val storageCalculator: StorageCalculator,
-  private val fat32Checker: Fat32Checker
+  private val fat32Checker: Fat32Checker,
+  private val fileOperationHandler: FileOperationHandler,
+  private val copyMoveProgressBarController: CopyMoveProgressBarController
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
   private var selectedFile: DocumentFile? = null
   private var lifecycleScope: CoroutineScope? = null
   private var storageObservingJob: Job? = null
-
-  /**
-   * Holds the state for the copy/move progress bar.
-   *
-   * A [Pair] containing:
-   *  - [String]: The message to display below the progress bar.
-   *  - [Int]: The current progress value (0 to 100).
-   */
-  private var progressBarState = mutableStateOf(Pair("", ZERO))
   var isMoveOperation = false
   var shouldValidateZimFile: Boolean = false
   private lateinit var fragmentManager: FragmentManager
-  private lateinit var alertDialogShower: AlertDialogShower
   private var isSingleFileSelected = true
+  private var unitTestStorage: File? = null
+  private var unitTestDestinationFile: File? = null
+
+  @VisibleForTesting
+  fun setStorageFileForUnitTest(unitTestStorage: File, unitTestDestinationFile: File) {
+    this.unitTestStorage = unitTestStorage
+    this.unitTestDestinationFile = unitTestDestinationFile
+  }
 
   private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
-      activity.getString(R.string.moving_zim_file, selectedFile?.name)
+      activity.getString(R.string.moving_zim_file, requireSelectedFile().name)
     } else {
-      activity.getString(R.string.copying_zim_file, selectedFile?.name)
+      activity.getString(R.string.copying_zim_file, requireSelectedFile().name)
     }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
-    this.alertDialogShower = alertDialogShower
-  }
-
-  private fun updateProgress(progress: Int) {
-    synchronized(this) {
-      progressBarState.value =
-        activity.getString(R.string.percentage, progress) to progress
-    }
+    copyMoveProgressBarController.setAlertDialogShower(alertDialogShower)
   }
 
   suspend fun showMoveFileToPublicDirectoryDialog(
@@ -139,12 +108,12 @@ class CopyMoveFileHandler @Inject constructor(
     this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
     if (getStorageDeviceList().isEmpty()) {
-      showPreparingCopyMoveDialog()
+      copyMoveProgressBarController.showPreparingCopyMoveDialog()
     }
     if (kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove.first() && getStorageDeviceList().size > 1) {
       // Show dialog to select storage if more than one storage device is available, and user
       // have not configured the storage yet.
-      hidePreparingCopyMoveDialog()
+      copyMoveProgressBarController.hidePreparingCopyMoveDialog()
       showCopyMoveDialog(true)
     } else {
       if (getStorageDeviceList().size == 1) {
@@ -154,7 +123,7 @@ class CopyMoveFileHandler @Inject constructor(
         // This ensures they are prompted to configure storage settings upon SD card reinsertion.
         kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true)
       }
-      hidePreparingCopyMoveDialog()
+      copyMoveProgressBarController.hidePreparingCopyMoveDialog()
       if (validateZimFileCanCopyOrMove()) {
         when (multipleFilesProcessAction) {
           MultipleFilesProcessAction.Copy -> performCopyOperation()
@@ -188,26 +157,24 @@ class CopyMoveFileHandler @Inject constructor(
       }
       .show(fragmentManager, activity.getString(R.string.choose_storage_to_copy_move_zim_file))
 
-  fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
-    lifecycleScope?.launch {
-      kiwixDataStore.apply {
-        setShowStorageSelectionDialogOnCopyMove(false)
-        setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
-        setSelectedStoragePosition(
-          if (storageDevice.isInternal) {
-            INTERNAL_SELECT_POSITION
-          } else {
-            EXTERNAL_SELECT_POSITION
-          }
-        )
-      }
-      if (validateZimFileCanCopyOrMove()) {
-        performCopyMoveOperation()
-      }
+  suspend fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
+    kiwixDataStore.apply {
+      setShowStorageSelectionDialogOnCopyMove(false)
+      setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
+      setSelectedStoragePosition(
+        if (storageDevice.isInternal) {
+          INTERNAL_SELECT_POSITION
+        } else {
+          EXTERNAL_SELECT_POSITION
+        }
+      )
+    }
+    if (validateZimFileCanCopyOrMove()) {
+      performCopyMoveOperation()
     }
   }
 
-  private fun performCopyMoveOperation() {
+  private suspend fun performCopyMoveOperation() {
     if (isMoveOperation) {
       performMoveOperation()
     } else {
@@ -216,16 +183,15 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun isBookLessThan4GB(): Boolean =
-    (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
+    requireSelectedFile().length() < FOUR_GIGABYTES_IN_KILOBYTES
 
   private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
-    availableSpace < (selectedFile?.length() ?: 0L)
+    availableSpace < requireSelectedFile().length()
 
-  suspend fun validateZimFileCanCopyOrMove(
-    file: File? = null
-  ): Boolean {
-    val storageFile = file ?: File(kiwixDataStore.selectedStorage.first())
-    hidePreparingCopyMoveDialog() // hide the dialog if already showing
+  suspend fun validateZimFileCanCopyOrMove(): Boolean {
+    val storageFile = getSelectedStorageRoot()
+    // hide the dialog if already showing
+    copyMoveProgressBarController.hidePreparingCopyMoveDialog()
     val availableSpace = storageCalculator.availableBytes(storageFile)
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
@@ -250,7 +216,7 @@ class CopyMoveFileHandler @Inject constructor(
     if (isBookLessThan4GB()) {
       performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
     } else {
-      showPreparingCopyMoveDialog()
+      copyMoveProgressBarController.showPreparingCopyMoveDialog()
       observeFileSystemState()
     }
   }
@@ -268,7 +234,7 @@ class CopyMoveFileHandler @Inject constructor(
     if (storageObservingJob?.isActive == true) return
     storageObservingJob = lifecycleScope?.launch {
       fat32Checker.fileSystemStates.collect {
-        hidePreparingCopyMoveDialog()
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
         if (validateZimFileCanCopyOrMove()) {
           performCopyMoveOperation()
         }
@@ -285,14 +251,24 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
-    alertDialogShower.show(
-      KiwixDialog.CopyMoveFileToPublicDirectoryDialog(
-        getCopyMoveFilesToPublicDirectoryDialogMessage()
-      ),
-      { performCopyOperation(showStorageSelectionDialog) },
-      { performMoveOperation(showStorageSelectionDialog) }
+  private fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
+    copyMoveProgressBarController.showCopyMoveDialog(
+      getCopyMoveFilesToPublicDirectoryDialogMessage(),
+      { onCopyClicked(showStorageSelectionDialog) },
+      { onMoveClicked(showStorageSelectionDialog) }
     )
+  }
+
+  private fun onCopyClicked(showStorageSelectionDialog: Boolean) {
+    lifecycleScope?.launch {
+      performCopyOperation(showStorageSelectionDialog)
+    }
+  }
+
+  private fun onMoveClicked(showStorageSelectionDialog: Boolean) {
+    lifecycleScope?.launch {
+      performMoveOperation(showStorageSelectionDialog)
+    }
   }
 
   private fun getCopyMoveFilesToPublicDirectoryDialogMessage() = if (isSingleFileSelected) {
@@ -301,139 +277,85 @@ class CopyMoveFileHandler @Inject constructor(
     activity.getString(R.string.copy_move_multiple_files_dialog_description)
   }
 
-  fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
+  suspend fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = false
-    lifecycleScope?.launch {
-      fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
-      if (showStorageSelectionDialog) {
-        showStorageSelectDialog(getStorageDeviceList())
-      } else {
-        copyZimFileToPublicAppDirectory()
-      }
+    fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
+    if (showStorageSelectionDialog) {
+      showStorageSelectDialog(getStorageDeviceList())
+    } else {
+      copyZimFileToPublicAppDirectory()
     }
   }
 
-  fun performMoveOperation(showStorageSelectionDialog: Boolean = false) {
+  suspend fun performMoveOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = true
-    lifecycleScope?.launch {
-      fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
-      if (showStorageSelectionDialog) {
-        showStorageSelectDialog(getStorageDeviceList())
-      } else {
-        moveZimFileToPublicAppDirectory()
-      }
+    fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
+    if (showStorageSelectionDialog) {
+      showStorageSelectDialog(getStorageDeviceList())
+    } else {
+      moveZimFileToPublicAppDirectory()
     }
   }
 
-  private fun copyZimFileToPublicAppDirectory() {
-    lifecycleScope?.launch {
-      val destinationFile = getDestinationFile()
-      try {
-        val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
-        showProgressDialog()
-        copyFile(sourceUri, destinationFile)
-        withContext(Dispatchers.Main) {
-          notifyFileOperationSuccess(destinationFile, sourceUri)
-        }
-      } catch (ignore: Exception) {
-        ignore.printStackTrace()
-        handleFileOperationError(
-          activity.getString(R.string.copy_file_error_message, ignore.message),
-          destinationFile
-        )
-      }
-    }
-  }
-
-  @Suppress("UnsafeCallOnNullableType")
-  private fun moveZimFileToPublicAppDirectory() {
-    lifecycleScope?.launch {
-      val destinationFile = getDestinationFile()
-      try {
-        val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
-        showProgressDialog()
-        val moveSuccess = selectedFile?.parentFile?.uri?.let { parentUri ->
-          tryMoveWithDocumentContract(
-            sourceUri,
-            parentUri,
-            DocumentFile.fromFile(File(kiwixDataStore.selectedStorage.first())).uri
-          )
-        } ?: run {
-          copyFile(sourceUri, destinationFile)
-          true
-        }
-        withContext(Dispatchers.Main) {
-          if (moveSuccess) {
-            notifyFileOperationSuccess(destinationFile, sourceUri)
-          } else {
-            handleFileOperationError(
-              activity.getString(R.string.move_file_error_message, "File move failed"),
-              destinationFile
-            )
-          }
-        }
-      } catch (ignore: Exception) {
-        ignore.printStackTrace()
-        handleFileOperationError(
-          activity.getString(R.string.move_file_error_message, ignore.message),
-          destinationFile
-        )
-      }
-    }
-  }
-
-  fun tryMoveWithDocumentContract(
-    selectedUri: Uri,
-    sourceParentFolderUri: Uri,
-    destinationFolderUri: Uri
-  ): Boolean {
-    return try {
-      val contentResolver = activity.contentResolver
-      if (documentCanMove(selectedUri, contentResolver)) {
-        DocumentsContract.moveDocument(
-          contentResolver,
-          selectedUri,
-          sourceParentFolderUri,
-          destinationFolderUri
-        )
-        true
-      } else {
-        false
+  private suspend fun copyZimFileToPublicAppDirectory() {
+    val destinationFile = getDestinationFile()
+    try {
+      copyMoveProgressBarController.showProgress(getCopyMoveTitle())
+      fileOperationHandler.copy(
+        requireSelectedFileUri(),
+        destinationFile,
+        copyMoveProgressBarController::updateProgress
+      )
+      withContext(Dispatchers.Main) {
+        notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
       }
     } catch (ignore: Exception) {
       ignore.printStackTrace()
-      false
+      handleFileOperationError(
+        activity.getString(R.string.copy_file_error_message, ignore.message),
+        destinationFile
+      )
     }
   }
 
-  private fun documentCanMove(uri: Uri, contentResolver: ContentResolver): Boolean {
-    if (!DocumentsContract.isDocumentUri(activity, uri)) return false
-
-    val flags =
-      contentResolver.query(
-        uri,
-        arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
-        null,
-        null,
-        null
+  private suspend fun moveZimFileToPublicAppDirectory() {
+    val destinationFile = getDestinationFile()
+    try {
+      copyMoveProgressBarController.showProgress(getCopyMoveTitle())
+      val moveSuccess = fileOperationHandler.move(
+        selectedFile = requireSelectedFile(),
+        sourceUri = requireSelectedFileUri(),
+        destinationFolderUri = DocumentFile.fromFile(getSelectedStorageRoot()).uri,
+        destinationFile = destinationFile,
+        copyMoveProgressBarController::updateProgress
       )
-        ?.use { cursor ->
-          if (cursor.moveToFirst()) cursor.getInt(0) else 0
-        } ?: 0
-
-    return flags and DocumentsContract.Document.FLAG_SUPPORTS_MOVE != 0
+      withContext(Dispatchers.Main) {
+        if (moveSuccess) {
+          notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
+        } else {
+          handleFileOperationError(
+            activity.getString(R.string.move_file_error_message, "File move failed"),
+            destinationFile
+          )
+        }
+      }
+    } catch (ignore: Exception) {
+      ignore.printStackTrace()
+      handleFileOperationError(
+        activity.getString(R.string.move_file_error_message, ignore.message),
+        destinationFile
+      )
+    }
   }
 
-  fun handleFileOperationError(
+  suspend fun handleFileOperationError(
     errorMessage: String?,
     destinationFile: File
   ) {
-    dismissCopyMoveProgressDialog()
+    copyMoveProgressBarController.dismissCopyMoveProgressDialog()
     fileCopyMoveCallback?.onError("$errorMessage").also {
       // Clean up the destination file if an error occurs
-      lifecycleScope?.launch {
-        destinationFile.deleteFile()
-      }
+      destinationFile.deleteFile()
     }
   }
 
@@ -442,9 +364,9 @@ class CopyMoveFileHandler @Inject constructor(
       handleInvalidZimFile(destinationFile, sourceUri)
       return
     }
-    dismissCopyMoveProgressDialog()
+    copyMoveProgressBarController.dismissCopyMoveProgressDialog()
     if (isMoveOperation) {
-      deleteSourceFile(sourceUri)
+      fileOperationHandler.delete(sourceUri, requireSelectedFile())
       fileCopyMoveCallback?.onFileMoved(destinationFile)
     } else {
       fileCopyMoveCallback?.onFileCopied(destinationFile)
@@ -454,18 +376,14 @@ class CopyMoveFileHandler @Inject constructor(
   suspend fun isValidZimFile(destinationFile: File): Boolean =
     FileUtils.isSplittedZimFile(destinationFile.name) || validateZimFileValid(destinationFile)
 
-  fun handleInvalidZimFile(destinationFile: File, sourceUri: Uri) {
+  suspend fun handleInvalidZimFile(destinationFile: File, sourceUri: Uri) {
     val errorMessage = activity.getString(R.string.error_file_invalid, destinationFile.path)
     if (isMoveOperation) {
-      val moveSuccessful = tryMoveWithDocumentContract(
-        destinationFile.toUri(),
-        destinationFile.parentFile.toUri(),
-        sourceUri
-      )
+      val moveSuccessful = fileOperationHandler.rollbackMove(destinationFile, sourceUri)
 
       if (moveSuccessful) {
         // If files is moved back using the documentContract then show the error message to user
-        dismissCopyMoveProgressDialog()
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
         fileCopyMoveCallback?.onError(errorMessage)
       } else {
         // Show error message and delete the moved file if move failed.
@@ -491,53 +409,12 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  @Suppress("InjectDispatcher")
-  suspend fun deleteSourceFile(uri: Uri) = withContext(Dispatchers.IO) {
-    try {
-      DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
-    } catch (ignore: Exception) {
-      selectedFile?.delete()
-      ignore.printStackTrace()
-    }
-  }
-
-  @Suppress("MagicNumber", "InjectDispatcher")
-  private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
-    withContext(Dispatchers.IO) {
-      val contentResolver = activity.contentResolver
-
-      val parcelFileDescriptor = contentResolver.openFileDescriptor(sourceUri, "r")
-      val fileSize =
-        parcelFileDescriptor?.fileDescriptor?.let { FileInputStream(it).channel.size() } ?: 0L
-      var totalBytesTransferred = 0L
-
-      parcelFileDescriptor?.use { pfd ->
-        val sourceFd = pfd.fileDescriptor
-        FileInputStream(sourceFd).channel.use { sourceChannel ->
-          FileOutputStream(destinationFile).channel.use { destinationChannel ->
-            var bytesTransferred: Long
-            val bufferSize = 1024 * 1024
-            while (totalBytesTransferred < fileSize) {
-              // Transfer data from source to destination in chunks
-              bytesTransferred = sourceChannel.transferTo(
-                totalBytesTransferred,
-                bufferSize.toLong(),
-                destinationChannel
-              )
-              totalBytesTransferred += bytesTransferred
-              val progress = (totalBytesTransferred * 100 / fileSize).toInt()
-              withContext(Dispatchers.Main) {
-                updateProgress(progress)
-              }
-            }
-          }
-        }
-      } ?: throw FileNotFoundException("The selected file could not be opened")
-    }
-
   suspend fun getDestinationFile(): File {
-    val root = File(kiwixDataStore.selectedStorage.first())
-    val fileName = selectedFile?.name.orEmpty()
+    // We could not perform the file operations in unit test so we are passing the mockk file from
+    // unit test cases.
+    unitTestDestinationFile?.let { return it }
+    val root = getSelectedStorageRoot()
+    val fileName = requireSelectedFile().name.orEmpty()
 
     val destinationFile = sequence {
       yield(File(root, fileName))
@@ -552,57 +429,17 @@ class CopyMoveFileHandler @Inject constructor(
     return destinationFile
   }
 
-  private fun showPreparingCopyMoveDialog() {
-    alertDialogShower.show(KiwixDialog.PreparingCopyingFilesDialog { ContentLoadingProgressBar() })
-  }
-
-  private fun hidePreparingCopyMoveDialog() {
-    alertDialogShower.dismiss()
-  }
-
-  private fun showProgressDialog() {
-    progressBarState.value =
-      activity.getString(R.string.percentage, ZERO) to ZERO
-    alertDialogShower.show(
-      KiwixDialog.CopyMoveProgressBarDialog(
-        customViewBottomPadding = ZERO.dp,
-        customGetView = { CopyMoveProgressDialog() }
-      )
-    )
-  }
-
-  @Composable
-  private fun CopyMoveProgressDialog() {
-    Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-      Text(
-        text = getCopyMoveTitle(),
-        style = MaterialTheme.typography.titleSmall.copy(
-          fontSize = COPY_MOVE_DIALOG_TITLE_TEXT_SIZE,
-          fontWeight = FontWeight.Medium
-        ),
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(bottom = DIALOG_TITLE_BOTTOM_PADDING)
-          .semantics { testTag = COPY_MOVE_DIALOG_TITLE_TESTING_TAG }
-      )
-      ContentLoadingProgressBar(
-        progress = progressBarState.value.second,
-        progressBarStyle = ProgressBarStyle.HORIZONTAL
-      )
-      Spacer(modifier = Modifier.height(EIGHT_DP))
-      Text(
-        progressBarState.value.first,
-        modifier = Modifier.padding(end = SIXTEEN_DP, bottom = SIXTEEN_DP)
-      )
-    }
-  }
-
-  fun dismissCopyMoveProgressDialog() {
-    hidePreparingCopyMoveDialog()
-  }
-
   suspend fun getStorageDeviceList() =
     (activity as? KiwixMainActivity)?.getStorageDeviceList().orEmpty()
+
+  private suspend fun getSelectedStorageRoot(): File =
+    unitTestStorage ?: File(kiwixDataStore.selectedStorage.first())
+
+  private fun requireSelectedFileUri(): Uri =
+    selectedFileUri ?: throw FileNotFoundException("Selected file uri not found")
+
+  private fun requireSelectedFile(): DocumentFile =
+    selectedFile ?: throw FileNotFoundException("Selected file not found")
 
   fun dispose() {
     storageObservingJob?.cancel()
