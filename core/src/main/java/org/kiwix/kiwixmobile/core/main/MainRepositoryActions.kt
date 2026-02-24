@@ -23,10 +23,10 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject

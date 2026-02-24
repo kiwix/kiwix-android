@@ -24,7 +24,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 
 @Entity
 data class WebViewHistoryEntity(

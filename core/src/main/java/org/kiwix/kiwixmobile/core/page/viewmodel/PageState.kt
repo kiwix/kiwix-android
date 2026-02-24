@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 
 abstract class PageState<T : Page> {
   abstract val pageItems: List<T>
