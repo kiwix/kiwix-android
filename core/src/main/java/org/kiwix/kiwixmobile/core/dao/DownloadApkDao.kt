@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 
 @Dao
 interface DownloadApkDao {
-  fun update(download: Download) {
+  suspend fun update(download: Download) {
     getDownload().let { downloadApkEntity ->
       downloadApkEntity?.updateWith(download)
         .takeIf { updatedEntity -> updatedEntity != downloadApkEntity }
@@ -42,7 +42,7 @@ interface DownloadApkDao {
   }
 
   // placeholder function, need better implementation for resetting states
-  fun resetDownloadInfoState() {
+  suspend fun resetDownloadInfoState() {
     getDownload().let { downloadApkEntity ->
       downloadApkEntity?.resetDownloadSate()
         ?.let { addApkInfoItem(it) }
@@ -70,10 +70,10 @@ interface DownloadApkDao {
   }
 
   @Query("UPDATE downloadapkentity SET lastDialogShownInMilliSeconds = :lastDialogShownInMilliSeconds WHERE id = 1")
-  fun addLastDialogShownInfo(lastDialogShownInMilliSeconds: Long)
+  suspend fun addLastDialogShownInfo(lastDialogShownInMilliSeconds: Long)
 
   @Query("UPDATE downloadapkentity SET laterClickedMilliSeconds = :laterClickedMilliSeconds WHERE id = 1")
-  fun addLaterClickedInfo(laterClickedMilliSeconds: Long)
+  suspend fun addLaterClickedInfo(laterClickedMilliSeconds: Long)
 
   @Query("UPDATE downloadapkentity SET version = :version WHERE id = 1")
   fun addLatestAppVersion(version: String)
@@ -82,5 +82,5 @@ interface DownloadApkDao {
   fun addApkInfoItem(downloadApkEntity: DownloadApkEntity)
 
   @Query("SELECT * FROM downloadapkentity WHERE id = 1")
-  fun getDownload(): DownloadApkEntity?
+  suspend fun getDownload(): DownloadApkEntity?
 }

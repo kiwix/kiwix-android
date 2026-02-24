@@ -52,7 +52,7 @@ class UpdateViewModel @Inject constructor(
     )
   }
 
-  fun cancelDownload() {
+  fun cancelDownload() = viewModelScope.launch {
     runCatching {
       downloader.cancelDownload(_state.value.downloadApkItem.downloadId)
       downloadApkDao.resetDownloadInfoState()

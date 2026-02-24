@@ -89,6 +89,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
+import org.kiwix.kiwixmobile.core.utils.workManager.WorkType
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -143,6 +145,10 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
+    /* If the app is running for the first time, we run the WorkManager immediately.
+    For consecutive runs after that, we initialize a periodic WorkManager,
+    which only queues unique requests with a tag name. */
+    initializeWorkManager()
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       snackBarHostState = remember { SnackbarHostState() }
@@ -257,6 +263,14 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun safelyHandleDeepLink(intent: Intent) {
     if (intent.data != null && intent.extras != null) {
       navController.handleDeepLink(intent)
+    }
+  }
+
+  fun initializeWorkManager() {
+    if (runBlocking { kiwixDataStore.showIntro.first() }) {
+      UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
+    } else {
+      UpdateWorkManager.startWork(this, WorkType.PERIODIC)
     }
   }
 

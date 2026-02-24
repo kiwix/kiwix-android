@@ -123,7 +123,7 @@ class DownloadApkService : Service() {
   private fun buildForegroundNotification(): Notification =
     NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       .setContentTitle(appName)
-      .setContentText("Downloading update")
+      .setContentText(getString(string.downloading_new_update))
       .setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .build()
@@ -234,7 +234,7 @@ class DownloadApkService : Service() {
     }
   }
 
-  private fun showDownloadCompletedNotification(download: Download) {
+  private suspend fun showDownloadCompletedNotification(download: Download) {
     val notificationBuilder = getNotificationBuilder(download.id)
     //
     val notificationTitle = downloadApkDao.getDownload()?.name ?: download.file
