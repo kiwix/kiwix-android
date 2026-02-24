@@ -92,7 +92,7 @@ object Versions {
 
   const val junit: String = "1.1.5"
 
-  const val roomVersion = "2.5.2"
+  const val roomVersion = "2.7.1"
   const val zxing = "3.5.3"
 
   const val keeper = "0.16.1"

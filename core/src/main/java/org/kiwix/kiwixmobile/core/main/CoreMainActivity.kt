@@ -71,8 +71,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
-import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
-import org.kiwix.kiwixmobile.core.utils.workManager.WorkType
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -194,12 +192,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
-    /*placeholder first run check function there's another isFirstRun as well
-    instance of kiwixDataStore no longer exists
-    if (runBlocking { kiwixDataStore.showIntro.first() }) {
-      UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
-    } else { }*/
-    UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext

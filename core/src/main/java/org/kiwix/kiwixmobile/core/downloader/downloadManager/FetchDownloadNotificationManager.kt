@@ -197,7 +197,15 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
     when {
       downloadNotification.isDownloading ->
-        if (runBlocking { downloadRoomDao.allDownloads().firstOrNull() != null }) {
+        // check if we are downloading apk file or a zim file and managing button state accordingly
+        if (runBlocking { downloadRoomDao.getAllDownloads().firstOrNull().isNullOrEmpty() }) {
+          notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+            .addAction(
+              drawable.fetch_notification_cancel,
+              context.getString(R.string.cancel),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+            )
+        } else {
           notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
             .addAction(
               drawable.fetch_notification_cancel,
@@ -207,13 +215,6 @@ class FetchDownloadNotificationManager @Inject constructor(
               drawable.fetch_notification_pause,
               context.getString(R.string.notification_pause_button_text),
               getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
-            )
-        } else {
-          notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
-            .addAction(
-              drawable.fetch_notification_cancel,
-              context.getString(R.string.cancel),
-              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
             )
         }
 
