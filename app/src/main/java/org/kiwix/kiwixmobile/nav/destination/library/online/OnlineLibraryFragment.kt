@@ -29,15 +29,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -82,6 +88,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
@@ -95,8 +102,9 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
@@ -122,9 +130,18 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
+
+  @Inject lateinit var storageCalculator: StorageCalculator
   private val lock = Any()
   private var downloadBookItem: LibraryListItem.BookItem? = null
   private var composeView: ComposeView? = null
+  private val showStorageDialogState = mutableStateOf<StorageSelectDialogParams?>(null)
+  private val showCategoryDialog = mutableStateOf(false)
+  private val categoryViewModel by lazy {
+    requireActivity().viewModel<CategoryViewModel>(viewModelFactory).also {
+      it.onDismiss = { showCategoryDialog.value = false }
+    }
+  }
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
@@ -262,6 +279,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   @OptIn(ExperimentalMaterial3Api::class)
+  @Suppress("LongMethod")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     composeView?.setContent {
@@ -293,6 +311,50 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         zimManageViewModel = zimManageViewModel
       )
       DialogHost(alertDialogShower)
+      showStorageDialogState.value?.let { params ->
+        StorageSelectDialog(
+          title = params.title,
+          titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE,
+          storageDeviceList = params.storageDeviceList,
+          storageCalculator = params.storageCalculator,
+          kiwixDataStore = kiwixDataStore,
+          shouldShowCheckboxSelected = false,
+          onDismiss = { showStorageDialogState.value = null },
+          onSelectAction = { storageDevice ->
+            showStorageDialogState.value = null
+            params.onSelectAction(storageDevice)
+          }
+        )
+      }
+      // Full-screen OnlineCategoryDialog composable
+      if (showCategoryDialog.value) {
+        Dialog(
+          onDismissRequest = { showCategoryDialog.value = false },
+          properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
+          )
+        ) {
+          Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.surface
+          ) {
+            OnlineCategoryDialogScreen(
+              categoryViewModel = categoryViewModel,
+              navigationIcon = {
+                NavigationIcon(
+                  iconItem = IconItem.Drawable(
+                    R.drawable.ic_close_white_24dp
+                  ),
+                  onClick = { showCategoryDialog.value = false },
+                  testingTag =
+                  ONLINE_CATEGORY_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
+                )
+              }
+            )
+          }
+        }
+      }
     }
     observeViewModelData()
     showPreviouslySearchedTextInSearchView()
@@ -417,13 +479,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   )
 
   private fun onCategoryMenuIconClick() {
-    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-    val previousInstance =
-      requireActivity().supportFragmentManager.findFragmentByTag(ONLINE_CATEGORY_DIALOG_TAG)
-    if (previousInstance == null) {
-      val dialogFragment = OnlineCategoryDialog()
-      dialogFragment.show(fragmentTransaction, ONLINE_CATEGORY_DIALOG_TAG)
-    }
+    categoryViewModel.resetStateIfNeeded()
+    showCategoryDialog.value = true
   }
 
   private fun onLanguageMenuIconClick() {
@@ -788,15 +845,28 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) =
-    StorageSelectDialog()
-      .apply {
-        onSelectAction = ::storeDeviceInPreferences
-        titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-        setStorageDeviceList(storageDeviceList)
-        setShouldShowStorageSelected(false)
+  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) {
+    showStorageDialogState.value = StorageSelectDialogParams(
+      storageDeviceList = storageDeviceList,
+      title = getString(string.choose_storage_to_download_book),
+      storageCalculator = storageCalculator,
+      onSelectAction = { storageDevice ->
+        lifecycleScope.launch {
+          storeDeviceInPreferences(storageDevice)
+        }
       }
-      .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
+    )
+  }
+
+  /**
+   * Configuration for showing the StorageSelectDialog composable from OnlineLibraryFragment.
+   */
+  private data class StorageSelectDialogParams(
+    val storageDeviceList: List<StorageDevice>,
+    val title: String,
+    val storageCalculator: StorageCalculator,
+    val onSelectAction: (StorageDevice) -> Unit
+  )
 
   private suspend fun clickOnBookItem() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(kiwixDataStore)) {

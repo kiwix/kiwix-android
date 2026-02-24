@@ -84,6 +84,18 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
+  fun selectInternalStorageIfDialogShown(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      // If the storage selection dialog is shown, select internal storage.
+      // If it's not shown (auto-selected storage), just proceed.
+      val storageDialog = onAllNodesWithTag(STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG)
+      if (storageDialog.fetchSemanticsNodes().isNotEmpty()) {
+        clickOnInternalStorage(composeTestRule)
+      }
+    }
+  }
+
   fun clickOnInternalStorage(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
