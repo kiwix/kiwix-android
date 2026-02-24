@@ -58,7 +58,7 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -134,7 +134,6 @@ fun OnlineLibraryRoute(
   HandleEffects(
     zimManageViewModel = zimManageViewModel,
     onlineLibraryViewModel = onlineLibraryViewModel,
-    alertDialogShower = alertDialogShower,
     isListEmpty = onlineLibraryList.isNullOrEmpty(),
     onNoContentChanged = { noContentViewItem = it },
     onRefreshingChanged = { isRefreshing = it }
@@ -296,7 +295,6 @@ fun OnlineLibraryRoute(
     }
   )
 
-  DialogHost(alertDialogShower)
 }
 
 @Composable
@@ -361,7 +359,6 @@ private fun HandleUiEvents(
 private fun HandleEffects(
   zimManageViewModel: ZimManageViewModel,
   onlineLibraryViewModel: OnlineLibraryViewModel,
-  alertDialogShower: AlertDialogShower,
   isListEmpty: Boolean,
   onNoContentChanged: (Pair<String, Boolean>) -> Unit,
   onRefreshingChanged: (Boolean) -> Unit
@@ -378,9 +375,9 @@ private fun HandleEffects(
   // Handle wifi-only dialog
   LaunchedEffect(shouldShowWifiOnly) {
     if (shouldShowWifiOnly && !NetworkUtils.isWiFi(context)) {
-      alertDialogShower.show(
+      onlineLibraryViewModel.emitDialog(
         KiwixDialog.YesNoDialog.WifiOnly,
-        {
+        positiveAction = {
           onNoContentChanged("" to false)
           scope.launch {
             onlineLibraryViewModel.kiwixDataStore.setWifiOnly(false)
@@ -390,7 +387,7 @@ private fun HandleEffects(
             )
           }
         },
-        {
+        negativeAction = {
           context.toast(
             context.getString(string.denied_internet_permission_message),
             Toast.LENGTH_SHORT
