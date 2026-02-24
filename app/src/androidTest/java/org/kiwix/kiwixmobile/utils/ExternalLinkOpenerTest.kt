@@ -34,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -53,7 +54,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 @OptIn(ExperimentalMaterial3Api::class)
 internal class ExternalLinkOpenerTest {
   private val kiwixDataStore: KiwixDataStore = mockk()
-  private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
+  private val alertDialogShower = AlertDialogShower()
   private val packageManager: PackageManager = mockk()
   private val activity: Activity = mockk(relaxed = true)
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -195,12 +196,10 @@ internal class ExternalLinkOpenerTest {
       intent,
       "donation platform"
     )
-    verify {
-      alertDialogShower.show(
-        KiwixDialog.ExternalRedirectDialog("donation platform"),
-        any()
-      )
-    }
+    val dialogData = alertDialogShower.dialogState.value
+    assertNotNull(dialogData)
+    val (dialog, _, _) = dialogData!!
+    assert(dialog == KiwixDialog.ExternalRedirectDialog("donation platform"))
   }
 
   @Test
@@ -227,9 +226,8 @@ internal class ExternalLinkOpenerTest {
       "donation platform"
     )
     verify(exactly = 0) { activity.startActivity(any()) }
-    verify(exactly = 0) {
-      alertDialogShower.show(any(), any())
-    }
+    val dialogData = alertDialogShower.dialogState.value
+    assertNull(dialogData)
   }
 
   @Test
@@ -240,11 +238,10 @@ internal class ExternalLinkOpenerTest {
 
     val uri = Uri.parse("https://example.com/")
 
-    val realAlertDialogShower = AlertDialogShower()
     val dialog = KiwixDialog.ExternalLinkPopup
-    realAlertDialogShower.show(dialog, uri = uri)
+    alertDialogShower.show(dialog, uri = uri)
     composeTestRule.setContent {
-      DialogHost(realAlertDialogShower)
+      DialogHost(alertDialogShower)
     }
     composeTestRule
       .onNodeWithTag(ALERT_DIALOG_COPY_BUTTON_TESTING_TAG)
@@ -259,10 +256,9 @@ internal class ExternalLinkOpenerTest {
   fun testDialogButtonTextDoesNotWrap() {
     val longText = "This is a very long button text that would normally wrap to multiple lines"
     val dialog = KiwixDialog.ExternalRedirectDialog(longText)
-    val realAlertDialogShower = AlertDialogShower()
-    realAlertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
+    alertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
     composeTestRule.setContent {
-      DialogHost(realAlertDialogShower)
+      DialogHost(alertDialogShower)
     }
     composeTestRule
       .onNodeWithText(longText, substring = true)
@@ -281,13 +277,12 @@ internal class ExternalLinkOpenerTest {
 
     justRun { activity.startActivity(intent) }
 
-    val realAlertDialogShower = AlertDialogShower()
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
-      setAlertDialogShower(realAlertDialogShower)
+      setAlertDialogShower(alertDialogShower)
     }
     externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
     composeTestRule.setContent {
-      DialogHost(realAlertDialogShower)
+      DialogHost(alertDialogShower)
     }
     composeTestRule
       .onNodeWithTag(ALERT_DIALOG_URI_TEXT_TESTING_TAG)
