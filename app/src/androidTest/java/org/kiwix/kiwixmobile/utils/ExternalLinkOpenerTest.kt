@@ -259,9 +259,10 @@ internal class ExternalLinkOpenerTest {
   fun testDialogButtonTextDoesNotWrap() {
     val longText = "This is a very long button text that would normally wrap to multiple lines"
     val dialog = KiwixDialog.ExternalRedirectDialog(longText)
-    alertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
+    val realAlertDialogShower = AlertDialogShower()
+    realAlertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
     composeTestRule.setContent {
-      DialogHost(alertDialogShower)
+      DialogHost(realAlertDialogShower)
     }
     composeTestRule
       .onNodeWithText(longText, substring = true)
