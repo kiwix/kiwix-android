@@ -22,7 +22,6 @@ import android.app.Activity
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +44,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
-import org.kiwix.kiwixmobile.storage.StorageSelectDialog
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import java.io.File
 import javax.inject.Inject
 
@@ -62,12 +61,11 @@ import javax.inject.Inject
 class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val activity: Activity,
-  private val copyMoveFileHandler: CopyMoveFileHandler,
+  internal val copyMoveFileHandler: CopyMoveFileHandler,
   private val storageCalculator: StorageCalculator
 ) : CopyMoveFileHandler.FileCopyMoveCallback {
   private var snackBarHostState: SnackbarHostState? = null
   private var selectedZimFileCallback: SelectedZimFileCallback? = null
-  private lateinit var fragmentManager: FragmentManager
   private var lifecycleScope: CoroutineScope? = null
   private var alertDialogShower: AlertDialogShower? = null
   private var isSingleFileSelected = false
@@ -86,11 +84,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     lifecycleScope: CoroutineScope,
     alertDialogShower: AlertDialogShower,
     snackBarHostState: SnackbarHostState,
-    fragmentManager: FragmentManager,
     selectedZimFileCallback: SelectedZimFileCallback
   ) {
     this.lifecycleScope = lifecycleScope
-    this.fragmentManager = fragmentManager
     this.selectedZimFileCallback = selectedZimFileCallback
     this.alertDialogShower = alertDialogShower
     copyMoveFileHandler.apply {
@@ -165,7 +161,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       documentFile,
       // pass if fileName is null then we will validate it after copying/moving
       fileName == null,
-      fragmentManager,
       multipleFilesProcessAction,
       isSingleFileSelected
     )
@@ -247,14 +242,15 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   }
 
   /** Shows storage selection dialog to choose another storage device. */
-  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) =
-    StorageSelectDialog()
-      .apply {
-        onSelectAction = ::storeDeviceInPreferences
-        setStorageDeviceList(storageDeviceList)
-        setShouldShowStorageSelected(true)
-      }
-      .show(fragmentManager, activity.getString(string.pref_storage))
+  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) {
+    copyMoveFileHandler.storageSelectDialogState.value = StorageSelectDialogConfig(
+      storageDeviceList = storageDeviceList,
+      title = activity.getString(string.pref_storage),
+      shouldShowCheckboxSelected = true,
+      onSelectAction = ::storeDeviceInPreferences
+    )
+  }
+
 
   /**
    * Stores the newly selected storage path in preferences

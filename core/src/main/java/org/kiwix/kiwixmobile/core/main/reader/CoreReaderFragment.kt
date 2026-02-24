@@ -53,11 +53,14 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -69,7 +72,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -111,7 +118,8 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
+import org.kiwix.kiwixmobile.core.main.AddNoteDialogComposable
+import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
@@ -129,11 +137,13 @@ import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
-import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
+import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialogScreen
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
@@ -145,6 +155,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
@@ -199,6 +210,8 @@ abstract class CoreReaderFragment :
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
+  private val navigationHistoryDialogState = mutableStateOf<NavigationHistoryDialogState?>(null)
+  val addNoteDialogConfig = mutableStateOf<AddNoteDialogConfig?>(null)
 
   @JvmField
   @Inject
@@ -505,6 +518,68 @@ abstract class CoreReaderFragment :
           navHostController = (requireActivity() as CoreMainActivity).navController
         )
         DialogHost(alertDialogShower as AlertDialogShower)
+        // Full-screen NavigationHistoryDialog composable
+        navigationHistoryDialogState.value?.let { state ->
+          Dialog(
+            onDismissRequest = { navigationHistoryDialogState.value = null },
+            properties = DialogProperties(
+              usePlatformDefaultWidth = false,
+              decorFitsSystemWindows = false
+            )
+          ) {
+            Surface(
+              modifier = Modifier.fillMaxSize(),
+              color = MaterialTheme.colorScheme.surface
+            ) {
+              NavigationHistoryDialogScreen(
+                state.titleId,
+                state.historyList,
+                listOf(
+                  ActionMenuItem(
+                    IconItem.Drawable(R.drawable.ic_delete_white_24dp),
+                    R.string.pref_clear_all_history_title,
+                    {
+                      (alertDialogShower as AlertDialogShower).show(
+                        KiwixDialog.ClearAllNavigationHistory,
+                        {
+                          navigationHistoryDialogState.value = null
+                          clearHistory()
+                        }
+                      )
+                    },
+                    isEnabled = state.historyList.isNotEmpty(),
+                    testingTag = DELETE_MENU_ICON_TESTING_TAG
+                  )
+                ),
+                { item ->
+                  navigationHistoryDialogState.value = null
+                  onItemClicked(item)
+                },
+                {
+                  NavigationIcon(
+                    iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+                    onClick = { navigationHistoryDialogState.value = null }
+                  )
+                }
+              )
+              DialogHost(alertDialogShower as AlertDialogShower)
+            }
+          }
+        }
+        // Full-screen AddNoteDialog composable
+        addNoteDialogConfig.value?.let { config ->
+          val container = zimReaderContainer ?: return@let
+          val dataStore = kiwixDataStore ?: return@let
+          val repoActions = repositoryActions ?: return@let
+          AddNoteDialogComposable(
+            config = config,
+            zimReaderContainer = container,
+            kiwixDataStore = dataStore,
+            alertDialogShower = alertDialogShower as AlertDialogShower,
+            mainRepositoryActions = repoActions,
+            onDismiss = { addNoteDialogConfig.value = null }
+          )
+        }
         DisposableEffect(Unit) {
           onDispose {
             // Dispose UI resources when this Compose view is removed. Compose disposes
@@ -828,30 +903,25 @@ abstract class CoreReaderFragment :
     }
   }
 
-  /** Creates the full screen NavigationHistoryDialog, which is a DialogFragment  */
+  /** Shows the NavigationHistoryDialog as a composable full-screen Dialog */
   private fun showNavigationHistoryDialog(isForwardHistory: Boolean) {
-    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-    val previousInstance =
-      requireActivity().supportFragmentManager.findFragmentByTag(NavigationHistoryDialog.TAG)
-
-    // To prevent multiple instances of the DialogFragment
-    if (previousInstance == null) {
-      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
-       *  returning null means that the NavigationHistoryDialog is currently not on display (as doesn't exist)
-       **/
-      val dialogFragment = NavigationHistoryDialog(
-        if (isForwardHistory) {
-          string.forward_history
-        } else {
-          string.backward_history
-        },
-        navigationHistoryList,
-        this
-      )
-      dialogFragment.show(fragmentTransaction, NavigationHistoryDialog.TAG)
-      // For DialogFragments, show() handles the fragment commit and display
-    }
+    navigationHistoryDialogState.value = NavigationHistoryDialogState(
+      titleId = if (isForwardHistory) {
+        string.forward_history
+      } else {
+        string.backward_history
+      },
+      historyList = navigationHistoryList.toMutableList()
+    )
   }
+
+  /**
+   * State for showing the NavigationHistoryDialog composable.
+   */
+  private data class NavigationHistoryDialogState(
+    @StringRes val titleId: Int,
+    val historyList: MutableList<NavigationHistoryListItem>
+  )
 
   override fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
     loadUrlWithCurrentWebview(navigationHistoryListItem.pageUrl)
@@ -1532,21 +1602,23 @@ abstract class CoreReaderFragment :
    */
   protected abstract fun createNewTab()
 
-  /** Creates the full screen AddNoteDialog, which is a DialogFragment  */
+  /** Shows the AddNoteDialog as a composable full-screen Dialog */
   private fun showAddNoteDialog() {
-    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-    val previousInstance =
-      requireActivity().supportFragmentManager.findFragmentByTag(AddNoteDialog.TAG)
+    if (addNoteDialogConfig.value != null) return
+    val webView = (activity as? WebViewProvider)?.getCurrentWebView()
+    addNoteDialogConfig.value = AddNoteDialogConfig(
+      articleTitle = webView?.title,
+      currentWebViewUrl = webView?.url,
+      currentWebViewTitle = webView?.title
+    )
+  }
 
-    // To prevent multiple instances of the DialogFragment
-    if (previousInstance == null) {
-      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
-       *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
-       **/
-      val dialogFragment = AddNoteDialog()
-      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
-      // For DialogFragments, show() handles the fragment commit and display
-    }
+  /** Called by OpenNote SideEffect to show AddNoteDialog for a note item */
+  fun showAddNoteDialogForNote(noteListItem: NoteListItem) {
+    if (addNoteDialogConfig.value != null) return
+    addNoteDialogConfig.value = AddNoteDialogConfig(
+      noteListItem = noteListItem
+    )
   }
 
   @Suppress("NestedBlockDepth")

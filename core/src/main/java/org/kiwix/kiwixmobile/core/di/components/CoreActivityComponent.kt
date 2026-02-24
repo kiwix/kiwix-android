@@ -23,9 +23,7 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
-import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowOpenNoteDialog
@@ -43,8 +41,6 @@ interface CoreActivityComponent {
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)
   fun inject(showOpenNoteDialog: ShowOpenNoteDialog)
   fun inject(showDeleteNotesDialog: ShowDeleteNotesDialog)
-  fun inject(addNoteDialog: AddNoteDialog)
-  fun inject(navigationHistoryDialog: NavigationHistoryDialog)
 
   @Subcomponent.Builder
   interface Builder {
