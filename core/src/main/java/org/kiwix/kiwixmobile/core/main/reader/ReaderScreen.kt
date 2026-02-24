@@ -121,7 +121,6 @@ import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -412,7 +411,10 @@ private fun onTableOfContentHeaderClick(
   selectedWebView: KiwixWebView?,
   showTableOfContentDrawer: MutableState<Boolean>
 ) {
-  selectedWebView?.scrollY = ZERO
+  selectedWebView?.evaluateJavascript(
+    "document.querySelector('h1, h2, h3, h4, h5, h6')?.scrollIntoView({ behavior: 'smooth', block: 'start' });",
+    null
+  )
   showTableOfContentDrawer.update { false }
 }
 
@@ -425,7 +427,7 @@ private fun onTableOfContentSectionClick(
   if (hasItemForPositionInDocumentSectionsList(position, sections)) {
     val targetId = sections[position].id.replace("'", "\\'")
     selectedWebView?.evaluateJavascript(
-      "document.getElementById('$targetId')?.scrollIntoView();",
+      "document.getElementById('$targetId')?.scrollIntoView({ behavior: 'smooth', block: 'start' });",
       null
     )
   }

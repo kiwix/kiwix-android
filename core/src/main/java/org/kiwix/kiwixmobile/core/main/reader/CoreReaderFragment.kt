@@ -672,19 +672,19 @@ abstract class CoreReaderFragment :
 
   private fun setupDocumentParser() {
     documentParser = DocumentParser(object : SectionsListener {
-      override fun sectionsLoaded(
-        title: String,
-        sections: List<DocumentSection>
-      ) {
-        if (isAdded) {
-          documentSections?.addAll(sections)
-          readerScreenState.update { copy(tableOfContentTitle = title) }
+      override fun sectionsLoaded(title: String, sections: List<DocumentSection>) {
+        if (isAdded && sections.isNotEmpty()) {
+          documentSections?.apply {
+            clear()
+            addAll(sections)
+          }
+          readerScreenState.update {
+            copy(tableOfContentTitle = title.ifEmpty { zimReaderContainer?.zimFileTitle.orEmpty() })
+          }
         }
       }
-
-      override fun clearSections() {
-        documentSections?.clear()
-      }
+      @Suppress("EmptyFunctionBlock")
+      override fun clearSections() {}
     })
   }
 
@@ -1142,7 +1142,10 @@ abstract class CoreReaderFragment :
   }
 
   private fun updateTableOfContents() {
-    loadUrlWithCurrentWebview("javascript:($documentParserJs)()")
+    getCurrentWebView()?.let { webView ->
+      val script = "javascript:(function() { $documentParserJs })()"
+      webView.evaluateJavascript(script, null)
+    }
   }
 
   protected fun loadUrlWithCurrentWebview(url: String?) {
