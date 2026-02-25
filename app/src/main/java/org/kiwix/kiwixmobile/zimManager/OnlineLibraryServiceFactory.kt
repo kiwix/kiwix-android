@@ -2,10 +2,21 @@ package org.kiwix.kiwixmobile.zimManager
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.BuildConfig.DEBUG
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
+import java.util.concurrent.TimeUnit.SECONDS
+import javax.inject.Inject
 
 data class ServiceFactoryConfig(
   val shouldTrackProgress: Boolean,
@@ -15,7 +26,22 @@ data class ServiceFactoryConfig(
   val kiwixService: KiwixService
 )
 
-object OnlineLibraryServiceFactory {
+class OnlineLibraryServiceFactory @Inject constructor() {
+  fun createBaseOkHttpClient(): OkHttpClient =
+    OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+      .readTimeout(READ_TIMEOUT, SECONDS)
+      .callTimeout(CALL_TIMEOUT, SECONDS)
+      .addNetworkInterceptor(
+        HttpLoggingInterceptor().apply {
+          level = if (DEBUG) BASIC else NONE
+        }
+      )
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .build()
+
   fun createKiwixServiceWithProgressListener(
     baseUrl: String,
     libraryUrl: String,

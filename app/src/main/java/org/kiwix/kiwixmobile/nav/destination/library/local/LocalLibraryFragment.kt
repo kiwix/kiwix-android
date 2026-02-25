@@ -101,11 +101,11 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.libkiwix.Book
 import java.io.File

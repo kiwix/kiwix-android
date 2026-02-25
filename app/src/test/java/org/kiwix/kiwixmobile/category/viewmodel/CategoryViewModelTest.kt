@@ -327,7 +327,7 @@ class CategoryViewModelTest {
         advanceUntilIdle()
         val content = awaitItemOfType<Content>()
         val filteredItem: CategoryListItem.CategoryItem =
-          content.viewItems.first()
+          content.viewItems.filterIsInstance<CategoryListItem.CategoryItem>().first()
         assertThat(filteredItem.category.category).isEqualTo("wikipedia")
         cancelAndConsumeRemainingEvents()
       }
