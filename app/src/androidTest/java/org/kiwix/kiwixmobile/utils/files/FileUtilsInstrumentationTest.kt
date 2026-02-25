@@ -408,7 +408,7 @@ class FileUtilsInstrumentationTest {
   fun testDownloadPdfFileSaved() = runTest {
     val pdfUrl = "https://kiwix.org/contributors/contributors_list.pdf"
 
-    val zimReader = mockk<ZimReaderContainer>()
+    val zimReader = mockk<ZimReaderContainer>(relaxed = true)
 
     val fakeStream = "dummy pdf".byteInputStream()
 
@@ -418,7 +418,7 @@ class FileUtilsInstrumentationTest {
       fakeStream
     )
 
-    every {
+    coEvery {
       zimReader.load(any(), any())
     } returns webResponse
 
