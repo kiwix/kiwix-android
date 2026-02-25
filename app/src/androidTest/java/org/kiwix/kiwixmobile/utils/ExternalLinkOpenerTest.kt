@@ -31,10 +31,16 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -51,16 +57,27 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import java.net.URL
 import androidx.compose.material3.ExperimentalMaterial3Api
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterial3Api::class)
 internal class ExternalLinkOpenerTest {
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val alertDialogShower = AlertDialogShower()
   private val packageManager: PackageManager = mockk()
   private val activity: Activity = mockk(relaxed = true)
-  private val coroutineScope = CoroutineScope(Dispatchers.Main)
+  private val testDispatcher = StandardTestDispatcher()
+  private val coroutineScope = CoroutineScope(testDispatcher)
 
   @get:Rule
   val composeTestRule = createComposeRule()
+
+  @Before
+  fun setUp() {
+    Dispatchers.setMain(testDispatcher)
+  }
+
+  @After
+  fun tearDown() {
+    Dispatchers.resetMain()
+  }
 
   @Test
   internal fun alertDialogShowerOpensLinkIfConfirmButtonIsClicked() = runBlocking {
@@ -185,7 +202,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun openExternalLinkWithDialog_showsDialogIfIntentIsResolvable() {
+  internal fun openExternalLinkWithDialog_showsDialogIfIntentIsResolvable() = runBlocking {
     every { activity.packageManager } returns packageManager
     every { packageManager.resolveActivity(any(), any<Int>()) } returns ResolveInfo()
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
@@ -203,7 +220,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun openExternalLinkWithDialog_showsToastIfIntentIsNotResolvable() {
+  internal fun openExternalLinkWithDialog_showsToastIfIntentIsNotResolvable() = runBlocking {
     every { activity.packageManager } returns packageManager
     every { packageManager.resolveActivity(any(), any<Int>()) } returns null
 
@@ -231,7 +248,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun testCopyButtonCopiesUriToClipboard() {
+  fun testCopyButtonCopiesUriToClipboard() = runBlocking {
     val realContext = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
     val clipboardManager = realContext.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
     clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("", "")) // clear clipboard
@@ -253,7 +270,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun testDialogButtonTextDoesNotWrap() {
+  fun testDialogButtonTextDoesNotWrap() = runBlocking {
     val longText = "This is a very long button text that would normally wrap to multiple lines"
     val dialog = KiwixDialog.ExternalRedirectDialog(longText)
     alertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
