@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 sealed class State {
@@ -28,7 +30,7 @@ sealed class State {
   data class Content(
     val items: List<Language>,
     val filter: String = "",
-    val viewItems: List<LanguageItem> =
+    val viewItems: List<LanguageListItem> =
       createViewList(
         items,
         filter
@@ -72,7 +74,8 @@ sealed class State {
         createLanguageSection(
           items,
           filter,
-          Language::active
+          Language::active,
+          HeaderItem.SELECTED
         )
 
       private fun otherItems(
@@ -82,17 +85,19 @@ sealed class State {
         createLanguageSection(
           items,
           filter,
-          { !it.active }
+          { !it.active },
+          HeaderItem.OTHER
         )
 
       private fun createLanguageSection(
         items: List<Language>,
         filter: String,
-        filterCondition: (Language) -> Boolean
+        filterCondition: (Language) -> Boolean,
+        headerId: Long
       ) = items.filter(filterCondition)
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
-        ?.let { it.map { language -> LanguageItem(language) } }
+        ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
         .orEmpty()
     }
   }
