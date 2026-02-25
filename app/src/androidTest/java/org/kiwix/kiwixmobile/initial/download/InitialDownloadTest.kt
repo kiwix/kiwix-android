@@ -75,7 +75,7 @@ class InitialDownloadTest : BaseActivityTest() {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
-        setPrefLanguage("en")
+        setPrefLanguage("")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
         setShowStorageOption(true)
