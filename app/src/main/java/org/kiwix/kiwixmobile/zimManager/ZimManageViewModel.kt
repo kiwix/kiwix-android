@@ -161,6 +161,19 @@ class ZimManageViewModel @Inject constructor(
    */
   val onlineLibraryDownloading = MutableStateFlow(false to false)
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
+  val networkStates = MutableLiveData<NetworkState>()
+  val networkLibrary = MutableStateFlow<OnlineLibraryResult>(
+    OnlineLibraryResult(
+      OnlineLibraryRequest(
+        query = null,
+        category = null,
+        lang = null,
+        isLoadMoreItem = false,
+        page = ZERO
+      ),
+      emptyList()
+    )
+  )
   private val _onlineLibraryEvent = MutableSharedFlow<OnlineLibraryUiEvent>()
   val onlineLibraryEvent: SharedFlow<OnlineLibraryUiEvent> = _onlineLibraryEvent.asSharedFlow()
   private val requestDownloadLibrary = MutableSharedFlow<OnlineLibraryRequest>(
