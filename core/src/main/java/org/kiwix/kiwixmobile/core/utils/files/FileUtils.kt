@@ -15,11 +15,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+@file:Suppress("LargeClass")
+
 package org.kiwix.kiwixmobile.core.utils.files
 
 import android.annotation.SuppressLint
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.net.Uri
@@ -41,16 +46,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
-import org.kiwix.kiwixmobile.core.extensions.hasContent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathForAndroid10AndAbove
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
@@ -272,10 +274,20 @@ object FileUtils {
    * @return A `HashSet<String>` containing paths of available storage volumes.
    */
   private fun getStorageVolumesList(context: Context): HashSet<String> {
-    val storageVolumes = context.getSystemService(Context.STORAGE_SERVICE) as StorageManager
     val storageVolumesList = HashSet<String>()
-    storageVolumes.storageVolumes.filterNotNull().forEach {
-      storageVolumesList.add(getStoragePath(context, it))
+
+    val storageManager =
+      context.getSystemService(Context.STORAGE_SERVICE) as? StorageManager
+        ?: return storageVolumesList
+
+    storageManager.storageVolumes.filterNotNull().forEach { volume ->
+      try {
+        storageVolumesList.add(getStoragePath(context, volume))
+      } catch (e: SecurityException) {
+        Log.w("STORAGE_DEVICE", "Security issue for volume = $volume", e)
+      } catch (e: IllegalStateException) {
+        Log.w("STORAGE_DEVICE", "Illegal state for volume = $volume", e)
+      }
     }
     return storageVolumesList
   }
@@ -697,63 +709,221 @@ object FileUtils {
     return fileNameAndSource
   }
 
-  suspend fun getDownloadRootDir(kiwixDataStore: KiwixDataStore): File? {
-    return if (
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-    ) {
-      CoreApp.instance.externalMediaDirs.firstOrNull()
-    } else {
-      File(
-        "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/org.kiwix"
-      ).apply {
-        if (!exists()) mkdir()
+  @Suppress("ReturnCount")
+  private fun getKiwixFileDir(context: Context): File? {
+    val mediaDir = ContextWrapper(context)
+      .externalMediaDirs
+      .firstOrNull()
+      ?: return null
+
+    val kiwixDir = File(mediaDir, "Kiwix")
+
+    if (!kiwixDir.exists()) {
+      val created = kiwixDir.mkdirs()
+      if (!created) {
+        Log.e("MEDIA_SAVE", "Failed to create Kiwix directory: ${kiwixDir.absolutePath}")
+        return null
       }
+    }
+
+    return kiwixDir
+  }
+
+  @Suppress("ReturnCount", "TooGenericExceptionCaught", "LongMethod")
+  suspend fun downloadFileFromUrl(
+    context: Context,
+    url: String?,
+    src: String?,
+    zimReaderContainer: ZimReaderContainer
+  ): SaveResult {
+    Log.d("MEDIA_SAVE", "downloadFileFromUrl called, url=$url, src=$src")
+
+    if (src != null && isBase64DataUri(src)) {
+      Log.d("MEDIA_SAVE", "Detected base64 media")
+      return saveBase64Source(src, context)
+    }
+
+    val fileNameAndSource =
+      getSafeFileNameAndSourceFromUrlOrSrc(url, src)
+
+    if (fileNameAndSource == null) {
+      Log.w("MEDIA_SAVE", "Invalid media source: url=$url, src=$src")
+      return SaveResult.InvalidSource
+    }
+
+    val fileName = fileNameAndSource.first
+    val source = fileNameAndSource.second
+
+    if (fileName.isNullOrEmpty() || source.isNullOrEmpty()) {
+      Log.w("MEDIA_SAVE", "Invalid media source after parsing")
+      return SaveResult.InvalidSource
+    }
+
+    return try {
+      when {
+        isImage(source) -> {
+          Log.d("MEDIA_SAVE", "Detected image: $fileName")
+
+          val bytes = zimReaderContainer
+            .load(source, emptyMap())
+            .data
+            .readBytes()
+
+          if (bytes.isEmpty()) {
+            Log.w("MEDIA_SAVE", "Loaded image bytes are empty for source=$source")
+            return SaveResult.Error("Empty image data")
+          }
+
+          val mime = MimeTypeMap.getSingleton()
+            .getMimeTypeFromExtension(
+              MimeTypeMap.getFileExtensionFromUrl(source)
+            ) ?: "image/*"
+
+          val uri = saveImageToMediaStore(
+            context,
+            fileName,
+            mime,
+            bytes
+          ) ?: return SaveResult.Error("Image save failed")
+
+          Log.d("MEDIA_SAVE", "Image saved: $uri")
+
+          SaveResult.MediaSaved(uri, fileName)
+        }
+
+        else -> {
+          Log.d("MEDIA_SAVE", "Saving non-image file: $fileName")
+
+          val file = saveFileFromUrl(
+            context,
+            source,
+            fileName,
+            zimReaderContainer
+          ) ?: return SaveResult.Error("File save failed")
+
+          Log.d("MEDIA_SAVE", "File saved: ${file.absolutePath}")
+
+          SaveResult.FileSaved(file)
+        }
+      }
+    } catch (e: Exception) {
+      Log.e("MEDIA_SAVE", "Unexpected error while saving media", e)
+      SaveResult.Error("Unexpected error", e)
     }
   }
 
-  @Suppress("ReturnCount", "NestedBlockDepth")
-  @JvmStatic
-  suspend fun downloadFileFromUrl(
-    url: String?,
-    src: String?,
-    zimReaderContainer: ZimReaderContainer,
-    kiwixDataStore: KiwixDataStore
-  ): File? {
-    val root = getDownloadRootDir(kiwixDataStore) ?: return null
-    when {
-      isBase64DataUri(src) -> {
-        val decoded = decodeBase64DataUri(src) ?: return null
-        val (extension, bytes) = decoded
-        val file = File(root, generateBase64FileName(extension))
+  private fun isImage(source: String): Boolean {
+    val extension = MimeTypeMap.getFileExtensionFromUrl(source)
+    val mime = MimeTypeMap.getSingleton()
+      .getMimeTypeFromExtension(extension)
 
-        return try {
-          file.outputStream().use { it.write(bytes) }
-          file
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save base64 file", e)
-          null
-        }
-      }
+    return mime?.startsWith("image/") == true
+  }
 
-      else -> {
-        val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src)
-        if (fileName?.first == null) return null
-        val fileToSave = File(root, fileName.first)
-        if (fileToSave.isFileExist()) return fileToSave
-        return try {
-          fileName.second?.let {
-            zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
-              fileToSave.outputStream().use(inputStream::copyTo)
-            }
-            if (fileToSave.hasContent()) fileToSave else null
-          }
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save file", e)
-          null
-        }
+  @Suppress("ReturnCount")
+  private suspend fun saveBase64Source(
+    src: String,
+    context: Context
+  ): SaveResult {
+    val decoded = decodeBase64DataUri(src)
+      ?: return SaveResult.InvalidSource
+
+    val extension = decoded.first
+    val bytes = decoded.second
+
+    if (bytes.isEmpty()) {
+      Log.w("MEDIA_SAVE", "Decoded base64 bytes are empty")
+      return SaveResult.Error("Empty base64 data")
+    }
+
+    val mime = MimeTypeMap.getSingleton()
+      .getMimeTypeFromExtension(extension)
+      ?: return SaveResult.InvalidSource
+
+    val fileName = generateBase64FileName(extension)
+
+    val uri = saveImageToMediaStore(
+      context,
+      fileName,
+      mime,
+      bytes
+    ) ?: return SaveResult.Error("MediaStore image save failed")
+
+    Log.d("MEDIA_SAVE", "Base64 image saved: $uri")
+
+    return SaveResult.MediaSaved(uri, fileName)
+  }
+
+  @Suppress("ReturnCount")
+  private fun saveImageToMediaStore(
+    context: Context,
+    fileName: String,
+    mime: String,
+    bytes: ByteArray
+  ): Uri? {
+    if (bytes.isEmpty()) {
+      Log.w("MEDIA_SAVE", "Attempted to save empty image bytes")
+      return null
+    }
+
+    val resolver = context.contentResolver
+
+    val values = ContentValues().apply {
+      put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+      put(MediaStore.Images.Media.MIME_TYPE, mime)
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Kiwix")
+        put(MediaStore.Images.Media.IS_PENDING, 1)
       }
     }
+
+    val uri = resolver.insert(
+      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+      values
+    ) ?: return null
+
+    resolver.openOutputStream(uri)?.use {
+      it.write(bytes)
+    } ?: run {
+      Log.e("MEDIA_SAVE", "Failed to open output stream for uri=$uri")
+      resolver.delete(uri, null, null)
+      return@saveImageToMediaStore null
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      values.clear()
+      values.put(MediaStore.Images.Media.IS_PENDING, 0)
+      resolver.update(uri, values, null, null)
+    }
+
+    return uri
+  }
+
+  @Suppress("ReturnCount")
+  private suspend fun saveFileFromUrl(
+    context: Context,
+    source: String,
+    fileName: String,
+    zimReaderContainer: ZimReaderContainer
+  ): File? {
+    val root = getKiwixFileDir(context)
+      ?: return null
+
+    val file = File(root, fileName)
+
+    zimReaderContainer.load(source, emptyMap()).data.use { input ->
+      file.outputStream().use { output ->
+        input.copyTo(output)
+      }
+    }
+
+    if (!file.exists() || file.length() == 0L) {
+      Log.e("MEDIA_SAVE", "Saved file is empty or missing: ${file.absolutePath}")
+      file.delete()
+      return null
+    }
+    return file
   }
 
   @JvmStatic
