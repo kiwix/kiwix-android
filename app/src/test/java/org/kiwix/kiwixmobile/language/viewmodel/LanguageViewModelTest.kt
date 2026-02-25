@@ -170,10 +170,14 @@ class LanguageViewModelTest {
     runTest {
       coEvery { kiwixService.getLanguages() } throws RuntimeException()
       createViewModel()
+
+      advanceUntilIdle() // Wait for coroutines to settle
+
       languageViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
+        cancelAndConsumeRemainingEvents()
       }
     }
   }

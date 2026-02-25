@@ -49,18 +49,26 @@ class DownloadManagerRequester @Inject constructor(
 
   @Suppress("InjectDispatcher")
   override fun cancel(downloadId: Long) {
-    fetch.delete(downloadId.toInt(), null) {
-      CoroutineScope(Dispatchers.IO).launch {
-        downloadRoomDao.deleteDownloadByDownloadId(downloadId)
+    fetch.delete(
+      id = downloadId.toInt(),
+      func = null,
+      func2 = {
+        CoroutineScope(Dispatchers.IO).launch {
+          downloadRoomDao.deleteDownloadByDownloadId(downloadId)
+        }
       }
-    }
+    )
     startDownloadMonitorService()
   }
 
   override fun retryDownload(downloadId: Long) {
-    fetch.retry(downloadId.toInt(), null) {
-      reEnqueueStaleDownload(downloadId)
-    }
+    fetch.retry(
+      id = downloadId.toInt(),
+      func = null,
+      func2 = {
+        reEnqueueStaleDownload(downloadId)
+      }
+    )
     startDownloadMonitorService()
   }
 

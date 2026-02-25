@@ -407,6 +407,7 @@ class ZimManageViewModelTest {
             )
           )
         }
+        cancelAndConsumeRemainingEvents()
       }
     }
   }
@@ -513,6 +514,7 @@ class ZimManageViewModelTest {
             )
           )
         }
+        cancelAndConsumeRemainingEvents()
       }
     }
   }
