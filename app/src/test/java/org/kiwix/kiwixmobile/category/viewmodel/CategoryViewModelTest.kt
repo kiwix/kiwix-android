@@ -318,7 +318,7 @@ class CategoryViewModelTest {
         categoryViewModel.actions.emit(Action.Filter("wiki"))
         val content = awaitItem() as Content
         val filteredItem: CategoryListItem.CategoryItem =
-          content.viewItems.first()
+          content.viewItems.filterIsInstance<CategoryListItem.CategoryItem>().first()
         assertThat(filteredItem.category.category).isEqualTo("wikipedia")
         cancelAndConsumeRemainingEvents()
       }

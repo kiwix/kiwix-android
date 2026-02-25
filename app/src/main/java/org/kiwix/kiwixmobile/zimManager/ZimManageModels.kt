@@ -1,20 +1,7 @@
 package org.kiwix.kiwixmobile.zimManager
 
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
-
-sealed class FileSelectActions {
-  data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
-  data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
-  data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
-  object RequestValidateZimFiles : FileSelectActions()
-  object RequestDeleteMultiSelection : FileSelectActions()
-  object RequestShareMultiSelection : FileSelectActions()
-  object MultiModeFinished : FileSelectActions()
-  object RestartActionMode : FileSelectActions()
-  object UserClickedDownloadBooksButton : FileSelectActions()
-}
 
 data class OnlineLibraryRequest(
   val query: String? = null,

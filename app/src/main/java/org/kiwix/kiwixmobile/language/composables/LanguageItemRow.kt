@@ -40,6 +40,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
+const val LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG = "languageItemRadioButtonTestingTag"
+
 @Composable
 fun LanguageItemRow(
   context: Context,
@@ -64,7 +66,7 @@ fun LanguageItemRow(
       modifier = Modifier
         .padding(ComposeDimens.SIXTEEN_DP)
         .semantics {
-          testTag = "languageItemCheckboxTestingTag${language.language}"
+          testTag = "$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${language.language}"
           contentDescription =
             "${context.getString(R.string.select_language_content_description)}${language.language}"
         },

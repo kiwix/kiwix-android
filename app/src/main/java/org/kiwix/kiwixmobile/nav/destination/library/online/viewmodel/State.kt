@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import org.kiwix.kiwixmobile.core.zim_manager.Category
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 
 sealed class State {
@@ -29,7 +30,7 @@ sealed class State {
   data class Content(
     val items: List<Category>,
     val filter: String = "",
-    val viewItems: List<CategoryItem> =
+    val viewItems: List<CategoryListItem> =
       createViewList(
         items,
         filter
@@ -73,7 +74,8 @@ sealed class State {
         createCategorySection(
           items,
           filter,
-          Category::active
+          Category::active,
+          HeaderItem.SELECTED
         )
 
       private fun otherItems(
@@ -83,17 +85,19 @@ sealed class State {
         createCategorySection(
           items,
           filter,
-          { !it.active }
+          { !it.active },
+          HeaderItem.OTHER
         )
 
       private fun createCategorySection(
         items: List<Category>,
         filter: String,
-        filterCondition: (Category) -> Boolean
+        filterCondition: (Category) -> Boolean,
+        headerId: Long
       ) = items.filter(filterCondition)
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
-        ?.let { it.map { category -> CategoryItem(category) } }
+        ?.let { listOf(HeaderItem(headerId)) + it.map { category -> CategoryItem(category) } }
         .orEmpty()
     }
   }

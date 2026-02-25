@@ -386,7 +386,7 @@ class LanguageViewModelTest {
 
         val content = awaitItem() as Content
         val filteredItem: List<LanguageListItem.LanguageItem> =
-          content.viewItems.filter {
+          content.viewItems.filterIsInstance<LanguageListItem.LanguageItem>().filter {
             it.language.language == "eng"
           }
         assertThat(filteredItem).isNotEmpty

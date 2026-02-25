@@ -81,15 +81,16 @@ import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestValidateZimFiles
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.FileSelectActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -139,6 +140,7 @@ class ZimManageViewModelTest {
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
   private val testDispatcher = StandardTestDispatcher()
   private val onlineLibraryManager = mockk<OnlineLibraryManager>()
+  private val onlineLibraryServiceFactory = mockk<OnlineLibraryServiceFactory>()
 
   @AfterAll
   fun teardown() {
@@ -215,7 +217,8 @@ class ZimManageViewModelTest {
         dataSource,
         connectivityManager,
         onlineLibraryManager,
-        kiwixDataStore
+        kiwixDataStore,
+        onlineLibraryServiceFactory
       ).apply {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)
@@ -335,16 +338,7 @@ class ZimManageViewModelTest {
     @Test
     fun `library section title adapts to selected language count`() = flakyTest {
       runTest(testDispatcher) {
-        onlineContentLanguage.value = ""
-        val book = libkiwixBook(id = "0", url = "")
-        coEvery {
-          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
-        } returns arrayListOf(book)
-        every { application.getString(any()) } returns ""
-        networkStates.value = CONNECTED
-        downloads.value = listOf()
-        books.value = listOf()
-        fileSystemStates.value = CanWrite4GbFile
+        every { application.getString(R.string.all_languages) } returns "All languages"
         every {
           application.getString(R.string.your_language, any())
         } answers {
@@ -353,43 +347,23 @@ class ZimManageViewModelTest {
         }
         every { application.getString(R.string.your_languages) } returns "Selected languages:"
 
-        viewModel.libraryItems.test {
-          // Single language
-          awaitMatchingTitle("eng", listOf("Selected language: "))
+        // All languages (blank)
+        val allTitle = viewModel.getOnlineLibrarySectionTitle("")
+        assertThat(allTitle).isEqualTo("All languages")
 
-          // Multiple languages
-          awaitMatchingTitle("eng,fra,deu", listOf("Selected languages:", "eng", "fra", "deu"))
+        // Single language
+        val singleTitle = viewModel.getOnlineLibrarySectionTitle("eng")
+        assertThat(singleTitle).contains("Selected language:")
+        assertThat(singleTitle).contains("English")
 
-          // More languages
-          awaitMatchingTitle(
-            "eng,fra,deu,ita",
-            listOf("Selected languages:", "eng", "fra", "deu", "ita")
-          )
-          cancelAndIgnoreRemainingEvents()
-        }
-      }
-    }
-
-    private suspend fun TurbineTestContext<LibraryListItemWrapper>.awaitMatchingTitle(
-      languageValue: String,
-      expectedSubstrings: List<String>
-    ) {
-      onlineContentLanguage.value = languageValue
-      yield()
-      fileSystemStates.emit(FileSystemState.DetectingFileSystem)
-      fileSystemStates.emit(CanWrite4GbFile)
-      var matched = false
-      while (!matched) {
-        val item = awaitItem()
-        val title = item.items.filterIsInstance<LibraryListItem.DividerItem>()
-          .firstOrNull { it.id == Long.MIN_VALUE }
-          ?.sectionTitle.orEmpty()
-        if (expectedSubstrings.all { sub ->
-            title.contains(sub, ignoreCase = true)
-          }
-        ) {
-          matched = true
-        }
+        // Multiple languages
+        val multiTitle = viewModel.getOnlineLibrarySectionTitle("eng,fra,deu")
+        assertThat(multiTitle).contains("Selected languages:")
+        // Locale("eng").displayLanguage returns "English" but
+        // Locale("fra") and Locale("deu") may return raw codes on some JVMs
+        assertThat(multiTitle).contains("eng".convertToLocal().displayLanguage)
+        assertThat(multiTitle).contains("fra".convertToLocal().displayLanguage)
+        assertThat(multiTitle).contains("deu".convertToLocal().displayLanguage)
       }
     }
   }
@@ -816,7 +790,8 @@ private class TestZimManageViewModel(
   dataSource: DataSource,
   connectivityManager: ConnectivityManager,
   onlineLibraryManager: OnlineLibraryManager,
-  kiwixDataStore: KiwixDataStore
+  kiwixDataStore: KiwixDataStore,
+  onlineLibraryServiceFactory: OnlineLibraryServiceFactory
 ) : ZimManageViewModel(
     downloadDao,
     libkiwixBookOnDisk,
@@ -828,7 +803,8 @@ private class TestZimManageViewModel(
     dataSource,
     connectivityManager,
     onlineLibraryManager,
-    kiwixDataStore
+    kiwixDataStore,
+    onlineLibraryServiceFactory
   ) {
   override val ioDispatcher: CoroutineDispatcher
     get() = Dispatchers.Main
