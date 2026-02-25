@@ -88,10 +88,15 @@ class ObserveOnlineLibraryItems @Inject constructor(
     val filteredBooks = allBooks - downloadingBooks.toSet()
 
     val sectionTitle =
-      if (selectedLanguage.isBlank()) {
-        getSimpleString(R.string.all_languages)
-      } else {
-        getString(
+      when {
+        selectedLanguage.isBlank() -> getSimpleString(R.string.all_languages)
+        selectedLanguage.contains(",") -> {
+          val joinedLanguages = selectedLanguage.split(",")
+            .joinToString(", ") { it.trim().convertToLocal().displayLanguage }
+          "${getSimpleString(R.string.your_languages)} $joinedLanguages"
+        }
+
+        else -> getString(
           R.string.your_language,
           arrayOf(selectedLanguage.convertToLocal().displayLanguage)
         )
