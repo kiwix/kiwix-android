@@ -175,8 +175,8 @@ class ZimManageViewModelTest {
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
     coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
-    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
-    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
+    every { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
+    every { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
     every {
       onlineLibraryManager.buildLibraryUrl(
