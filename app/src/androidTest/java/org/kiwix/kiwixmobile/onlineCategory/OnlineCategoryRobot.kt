@@ -66,7 +66,7 @@ class OnlineCategoryRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
   ) {
-    composeTestRule.onNodeWithTag("categoryItemCheckboxTestingTag$matchLanguage")
+    composeTestRule.onNodeWithTag("categoryItemRadioButtonTestingTag$matchLanguage")
       .performClick()
   }
 
@@ -97,7 +97,7 @@ class OnlineCategoryRobot : BaseRobot() {
   fun assertCategorySelected(composeTestRule: ComposeContentTestRule, matchLanguage: String) {
     composeTestRule.apply {
       waitForIdle()
-      onNodeWithTag("categoryItemCheckboxTestingTag$matchLanguage")
+      onNodeWithTag("categoryItemRadioButtonTestingTag$matchLanguage")
         .assertIsOn()
     }
   }
