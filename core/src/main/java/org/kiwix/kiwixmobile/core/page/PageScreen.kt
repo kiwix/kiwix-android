@@ -45,8 +45,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -115,7 +117,11 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
   var searchText by rememberSaveable { mutableStateOf("") }
   val isInSelectionMode = state.isInSelectionState
-  val selectedCount = state.pageItems.count { it.isSelected }
+  val selectedCount by remember(state.pageItems) {
+    derivedStateOf {
+      state.pageItems.count { it.isSelected }
+    }
+  }
 
   LaunchedEffect(Unit) {
     viewModel.setAlertDialogShower(alertDialogShower)
@@ -126,21 +132,26 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     effect.invokeWith(coreActivity)
   }
 
-  val onBackPress: () -> Unit = {
-    if (isSearchActive) {
-      isSearchActive = false
-      searchText = ""
-      viewModel.actions.tryEmit(Action.Filter(""))
-    } else if (isInSelectionMode) {
-      viewModel.actions.tryEmit(Action.ExitActionModeMenu)
-    } else {
-      navigateBack()
+  val handleNavigationClick = remember(
+    isSearchActive,
+    isInSelectionMode,
+    searchText
+  ) {
+    {
+      when {
+        isSearchActive -> {
+          isSearchActive = false
+          searchText = ""
+          viewModel.actions.tryEmit(Action.Filter(""))
+        }
+
+        isInSelectionMode -> viewModel.actions.tryEmit(Action.ExitActionModeMenu)
+        else -> navigateBack()
+      }
     }
   }
 
-  BackHandler(enabled = isSearchActive || isInSelectionMode) {
-    onBackPress()
-  }
+  BackHandler(enabled = isSearchActive || isInSelectionMode) { handleNavigationClick() }
 
   PageScreen(
     state = state,
@@ -153,11 +164,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     isInSelectionMode = isInSelectionMode,
     selectedCount = selectedCount,
     switchIsCheckedFlow = switchIsCheckedFlow,
-    navigationIcon = {
-      NavigationIcon(
-        onClick = onBackPress
-      )
-    },
+    navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
     actionMenuItems = actionMenuList(
       deleteIconTitle = deleteIconTitle,
       isSearchActive = isSearchActive,
