@@ -419,7 +419,7 @@ class FileUtilsInstrumentationTest {
     )
 
     every {
-      zimReader.load(any<String>(), any<Map<String, String>>())
+      zimReader.load(any(), any())
     } returns webResponse
 
     val result = FileUtils.downloadFileFromUrl(
