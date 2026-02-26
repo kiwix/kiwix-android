@@ -69,7 +69,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.notes.NotesScreenRoute
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.search.SearchContainer
+import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
@@ -214,7 +214,7 @@ fun KiwixNavGraph(
       val context = LocalActivity.current
       val coreMainActivity = context as CoreMainActivity
 
-      SearchContainer(
+      SearchScreenRoute(
         viewModelFactory = viewModelFactory,
         dialogShower = alertDialogShower,
         arguments = backStackEntry.arguments,
