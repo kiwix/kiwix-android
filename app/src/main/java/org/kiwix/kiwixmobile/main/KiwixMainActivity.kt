@@ -68,7 +68,8 @@ import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_OPEN_FILE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -357,14 +358,18 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun handleNotificationIntent(intent: Intent?) {
-    if (intent?.hasExtra(DOWNLOAD_NOTIFICATION_TITLE) == true) {
-      lifecycleScope.launch {
-        delay(OPENING_ZIM_FILE_DELAY)
-        intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
-          libkiwixBookOnDisk.bookMatching(it)?.let { bookOnDiskEntity ->
-            openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
-          }
-        }
+    val openFileTitle = intent?.getStringExtra(DOWNLOAD_OPEN_FILE) ?: return
+    // Cancel the notification when user taps the "Open" action button
+    val notificationId = intent.getIntExtra(DOWNLOAD_NOTIFICATION_ID, -1)
+    if (notificationId != -1) {
+      val notificationManager =
+        getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
+      notificationManager.cancel(notificationId)
+    }
+    lifecycleScope.launch {
+      delay(OPENING_ZIM_FILE_DELAY)
+      libkiwixBookOnDisk.bookMatching(openFileTitle)?.let { bookOnDiskEntity ->
+        openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
       }
     }
   }
