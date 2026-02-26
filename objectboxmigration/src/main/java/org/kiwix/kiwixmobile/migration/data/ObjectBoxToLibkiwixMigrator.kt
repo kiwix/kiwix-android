@@ -26,7 +26,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
