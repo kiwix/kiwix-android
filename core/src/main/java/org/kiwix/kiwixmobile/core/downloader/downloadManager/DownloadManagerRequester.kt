@@ -71,8 +71,6 @@ class DownloadManagerRequester @Inject constructor(
     )
     startDownloadMonitorService()
   }
-
-  @Suppress("InjectDispatcher")
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
     if (isPause) {
       fetch.resume(downloadId.toInt(), null) {
