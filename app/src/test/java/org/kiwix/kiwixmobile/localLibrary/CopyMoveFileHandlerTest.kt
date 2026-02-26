@@ -110,6 +110,7 @@ class CopyMoveFileHandlerTest {
       setFileCopyMoveCallback(fileCopyMoveCallback)
       setStorageFileForUnitTest(storageFile, destinationFile)
     }
+    every { activity.getString(any()) } returns ""
     every { selectedFile.name } returns "test.zim"
     every { selectedFile.length() } returns 1024L
     every { storageFile.path } returns storagePath
