@@ -60,7 +60,7 @@ abstract class NotesRoomDao : PageDao {
 
   fun saveNote(noteItem: NoteListItem) {
     val notesEntity = NotesRoomEntity(noteItem)
-    if (count(notesEntity.id.toInt()) > 0) {
+    if (count(notesEntity.id) > 0) {
       // set the default id so that room will automatically generates the database id.
       notesEntity.id = 0
     }
@@ -68,7 +68,7 @@ abstract class NotesRoomDao : PageDao {
   }
 
   @Query("SELECT COUNT() FROM NotesRoomEntity WHERE id = :id")
-  abstract fun count(id: Int): Int
+  abstract fun count(id: Long): Int
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   abstract fun saveNote(notesRoomEntity: NotesRoomEntity)
