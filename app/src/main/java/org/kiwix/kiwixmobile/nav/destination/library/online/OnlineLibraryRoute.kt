@@ -616,10 +616,10 @@ private fun handleBackPress(
   } else {
     val decorView = activity.window.decorView
     val insets = androidx.core.view.ViewCompat.getRootWindowInsets(decorView)
-    val isKeyboardVisible =
-      insets?.isVisible(androidx.core.view.WindowInsetsCompat.Type.ime()) == true
-    if (isKeyboardVisible || isSearchActive) {
+    if (isKeyboardVisible) {
       activity.currentFocus?.closeKeyboard()
+      FragmentActivityExtensions.Super.ShouldNotCall
+    } else if (isSearchActive) {
       closeSearch()
       FragmentActivityExtensions.Super.ShouldNotCall
     } else {
