@@ -97,6 +97,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
@@ -116,6 +117,8 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.UPDATE_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.UpdateDialogHandler
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
@@ -183,7 +186,8 @@ abstract class CoreReaderFragment :
   WebViewProvider,
   ReadAloudCallbacks,
   NavigationHistoryClickListener,
-  ShowDonationDialogCallback {
+  ShowDonationDialogCallback,
+  UpdateDialogHandler.ShowUpdateDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
 
@@ -214,6 +218,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var donationDialogHandler: DonationDialogHandler? = null
+
+  @JvmField
+  @Inject
+  var updateDialogHandler: UpdateDialogHandler? = null
   protected var currentWebViewIndex by mutableStateOf(0)
   private var currentTtsWebViewIndex = 0
   private val savingTabsMutex = Mutex()
@@ -495,6 +503,7 @@ abstract class CoreReaderFragment :
     }
     addAlertDialogToDialogHost()
     donationDialogHandler?.setDonationDialogCallBack(this)
+    updateDialogHandler?.setUpdateDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
@@ -561,6 +570,19 @@ abstract class CoreReaderFragment :
     runSafelyInCoreReaderLifecycleScope {
       donationDialogHandler?.donateLater()
       readerScreenState.update { copy(shouldShowDonationPopup = false) }
+    }
+  }
+
+  private fun onUpdateIconClick() {
+    runSafelyInCoreReaderLifecycleScope {
+      updateDialogHandler?.updateLastUpdatePopupShownTime()
+      requireActivity().navigate(UPDATE_FRAGMENT)
+    }
+  }
+
+  private fun onLaterIconClick() {
+    runSafelyInCoreReaderLifecycleScope {
+      updateDialogHandler?.updateLater()
     }
   }
 
@@ -1132,6 +1154,8 @@ abstract class CoreReaderFragment :
     storagePermissionForNotesLauncher = null
     donationDialogHandler?.setDonationDialogCallBack(null)
     donationDialogHandler = null
+    updateDialogHandler?.setUpdateDialogCallBack(null)
+    updateDialogHandler = null
     composeView?.disposeComposition()
     composeView = null
   }
@@ -1855,11 +1879,26 @@ abstract class CoreReaderFragment :
     if (tts == null) {
       setUpTTS()
     }
-    lifecycleScope.launch { donationDialogHandler?.attemptToShowDonationPopup() }
+    lifecycleScope.launch {
+      donationDialogHandler?.attemptToShowDonationPopup()
+      updateDialogHandler?.attemptToShowUpdatePopup()
+    }
   }
 
   protected open fun showDonationLayout() {
     readerScreenState.update { copy(shouldShowDonationPopup = true) }
+  }
+
+  protected open fun showUpdateInfoDialog() {
+    alertDialogShower?.show(
+      KiwixDialog.ShowUpdateDialog,
+      {
+        onUpdateIconClick()
+      },
+      {
+        onLaterIconClick()
+      }
+    )
   }
 
   protected open fun openKiwixSupportUrl() {
@@ -2582,6 +2621,10 @@ abstract class CoreReaderFragment :
 
   override fun showDonationDialog() {
     showDonationLayout()
+  }
+
+  override fun showUpdateDialog() {
+    showUpdateInfoDialog()
   }
 
   private fun bindService() {

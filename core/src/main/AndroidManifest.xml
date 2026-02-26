@@ -18,6 +18,9 @@
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+  <uses-permission
+    android:name="android.permission.REQUEST_INSTALL_PACKAGES"
+    tools:ignore="RequestInstallPackagesPolicy" />
 
   <queries>
     <intent>
@@ -78,6 +81,13 @@
       android:exported="false"
       android:process=":error_activity" />
 
+    <!-- disable default provider -->
+    <provider
+      android:name="androidx.startup.InitializationProvider"
+      android:authorities="${applicationId}.androidx-startup"
+      tools:node="remove"
+      />
+
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"
@@ -98,6 +108,9 @@
       android:foregroundServiceType="mediaPlayback" />
     <service
       android:name=".downloader.downloadManager.DownloadMonitorService"
+      android:foregroundServiceType="dataSync" />
+    <service
+      android:name=".downloader.downloadManager.DownloadApkService"
       android:foregroundServiceType="dataSync" />
     <receiver
       android:name=".downloader.downloadManager.DownloadTimeoutDismissReceiver"

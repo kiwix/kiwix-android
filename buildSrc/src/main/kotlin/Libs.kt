@@ -301,6 +301,10 @@ object Libs {
    */
   const val zxing = "com.google.zxing:core:" + Versions.zxing
 
+  const val workManager = "androidx.work:work-runtime-ktx:" + Versions.WORK_MANAGER
+
+  const val workManagerTest = "androidx.work:work-testing:" + Versions.WORK_MANAGER
+
   /**
    * https://github.com/slackhq/keeper
    */

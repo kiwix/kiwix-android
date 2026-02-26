@@ -424,4 +424,12 @@
   <string name="confirmation_validate_zim_files">Are you sure you want to validate the following ZIM files?\n\n%s</string>
   <string name="validating_zim_file">Validating ZIM file…</string>
   <string name="validating_zim_files">Validating ZIM files…</string>
+  <string name="new_update_available_message">A new version of Kiwix is available. You can update it now.</string>
+  <string name="update">update</string>
+  <string name="update_title">Update</string>
+  <string name="install">install</string>
+  <string name="new_update_available_title">Update Kiwix</string>
+  <string name="error_during_installing_apk">An error was encountered while installing the apk. File no longer exists in storage</string>
+  <string name="download_again">re-download</string>
+  <string name="downloading_new_update">Downloading New update</string>
 </resources>

@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
@@ -95,6 +96,7 @@ private const val ADAPTIVE_ICON_INSET_DP = 36
 const val READER_FRAGMENT = "readerFragment"
 const val LOCAL_LIBRARY_FRAGMENT = "localLibraryFragment"
 const val DOWNLOAD_FRAGMENT = "downloadsFragment"
+const val UPDATE_FRAGMENT = "updateFragment"
 const val BOOKMARK_FRAGMENT = "bookmarkFragment"
 const val NOTES_FRAGMENT = "notesFragment"
 const val INTRO_SCREEN = "introScreen"
@@ -322,6 +324,23 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
             stopDownloadServiceIfRunning()
           }
         }
+      }
+    }
+  }
+
+  @Suppress("InjectDispatcher")
+  fun startDownloadApkService() {
+    // need to implement checks if the app is in foreground. stop the service for that
+    CoroutineScope(Dispatchers.IO).launch {
+      runCatching {
+        startService(
+          Intent(
+            this@CoreMainActivity,
+            DownloadApkService::class.java
+          ).apply {
+            putExtra(APP_NAME_KEY, appName)
+          }
+        )
       }
     }
   }

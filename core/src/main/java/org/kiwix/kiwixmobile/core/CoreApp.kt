@@ -25,11 +25,14 @@ import android.os.Environment.getExternalStorageState
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkerFactory
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
@@ -64,6 +67,9 @@ abstract class CoreApp : Application() {
     }
   }
 
+  @Inject
+  lateinit var updateWorkerFactory: UpdateWorkerFactory
+
   override fun onCreate() {
     super.onCreate()
     instance = this
@@ -72,6 +78,11 @@ abstract class CoreApp : Application() {
       .build()
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
+    // custom work manager is defined to be able to inject dependencies
+    val workManagerConfig = Configuration.Builder()
+      .setWorkerFactory(updateWorkerFactory)
+      .build()
+    WorkManager.initialize(this, workManagerConfig)
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()

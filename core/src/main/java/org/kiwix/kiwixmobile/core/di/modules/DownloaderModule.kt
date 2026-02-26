@@ -26,6 +26,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -47,9 +48,10 @@ object DownloaderModule {
   fun providesDownloader(
     downloadRequester: DownloadRequester,
     downloadRoomDao: DownloadRoomDao,
+    downloadApkDao: DownloadApkDao,
     kiwixService: KiwixService
   ): Downloader =
-    DownloaderImpl(downloadRequester, downloadRoomDao, kiwixService)
+    DownloaderImpl(downloadRequester, downloadRoomDao, downloadApkDao, kiwixService)
 
   @Provides
   @Singleton

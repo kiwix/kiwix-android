@@ -67,6 +67,7 @@ import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_APK_COMPLETE_INTENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
@@ -85,6 +86,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
+import org.kiwix.kiwixmobile.core.utils.workManager.WorkType
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
@@ -134,6 +137,10 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
+    /* If the app is running for the first time, we run the WorkManager immediately.
+    For consecutive runs after that, we initialize a periodic WorkManager,
+    which only queues unique requests with a tag name. */
+    initializeWorkManager()
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       navController = rememberNavController()
@@ -211,6 +218,7 @@ class KiwixMainActivity : CoreMainActivity() {
       handleGetContentIntent(intent)
       safelyHandleDeepLink(intent)
       handleBackgroundTimeoutLimitIntent(intent)
+      handleOnApkCompleteIntent(intent)
     }
   }
 
@@ -228,9 +236,31 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  private fun handleOnApkCompleteIntent(intent: Intent?) {
+    if (intent?.hasExtra(DOWNLOAD_APK_COMPLETE_INTENT) == true) {
+      val currentId = navController.currentDestination?.id
+      val targetId = navController.graph.findNode(KiwixDestination.Update.route)?.id
+
+      if (currentId != targetId) {
+        navigate(KiwixDestination.Update.route) {
+          launchSingleTop = true
+          popUpTo(navController.graph.findStartDestination().id)
+        }
+      }
+    }
+  }
+
   private fun safelyHandleDeepLink(intent: Intent) {
     if (intent.data != null && intent.extras != null) {
       navController.handleDeepLink(intent)
+    }
+  }
+
+  private fun initializeWorkManager() {
+    if (runBlocking { kiwixDataStore.showIntro.first() }) {
+      UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
+    } else {
+      UpdateWorkManager.startWork(this, WorkType.PERIODIC)
     }
   }
 

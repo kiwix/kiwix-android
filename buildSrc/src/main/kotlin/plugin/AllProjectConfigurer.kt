@@ -229,6 +229,8 @@ class AllProjectConfigurer {
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
       kapt(Libs.roomCompiler)
+      implementation(Libs.workManager)
+      implementation(Libs.workManagerTest)
       implementation(Libs.tracing)
       implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)
