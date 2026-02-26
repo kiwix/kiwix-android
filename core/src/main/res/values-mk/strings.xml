@@ -15,6 +15,9 @@
   <string name="menu_support_kiwix">Поддржете го Кивикс</string>
   <string name="menu_support_kiwix_for_custom_apps">Поддржете го %s</string>
   <string name="menu_about_app">За %s</string>
+  <string name="external_redirect_message">Ќе бидете пренасочени кон нашата %s.</string>
+  <string name="support_donation_platform">платформа за дарување</string>
+  <string name="about_app_page">страница за прилогот</string>
   <string name="menu_wifi_hotspot">Безжично жариште</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>

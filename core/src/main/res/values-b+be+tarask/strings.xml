@@ -2,6 +2,7 @@
 <!-- Authors:
 * Red Winged Duck
 * Renessaince
+* Ucukor
 -->
 <resources>
   <string name="menu_help">Дапамога</string>
@@ -79,8 +80,9 @@
   <string name="local_zims">Прылада</string>
   <string name="remote_zims">Анляйн</string>
   <string name="library">Бібліятэка</string>
+  <string name="download_notification_channel_name">Назва каналу абвесткаў сьцягваньня</string>
   <string name="help_2">Што робіць Kiwix?</string>
-  <string name="help_4">Хоць Kiwix першапачаткова быў распрацаваны для афляйнавай падтрымкі Вікіпэдыі, але можа чытаць іншыя віды зьместу.</string>
+  <string name="help_4">Хоць Kiwix пачаткова быў распрацаваны для афляйнавай падтрымкі Вікіпэдыі, але можа чытаць іншыя віды зьместу.</string>
   <string name="help_5">Дзе зьмест?</string>
   <string name="delete_zim_failed">Выбачайце, мы не змаглі выдаліць некаторыя файлы. Паспрабуйце скарыстацца файлавым кіраўніком.</string>
   <string name="confirm_stop_download_title">Спыніць загрузку?</string>

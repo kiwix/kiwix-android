@@ -13,4 +13,10 @@
   <string name="swipe_down_to_scan_storage">Povlecite navzdol, da poiščete nove knjige v napravi …</string>
   <string name="auto_detect_books">Samodejno zaznavanje knjig</string>
   <string name="auto_detect_books_description">Ob prvem zagonu boste vprašani, ali lahko aplikacija pregleda vaš pomnilnik. Če to dovolite, bomo samodejno zaznali vaše datoteke ZIM, ne da bi jih bilo treba ročno dodajati.</string>
+  <string name="select_category">Izberi kategorijo</string>
+  <string name="no_category_available">Kategorije niso na voljo</string>
+  <string name="your_selected_category">Izbrana kategorija:</string>
+  <string name="other_categories">Druge kategorije:</string>
+  <string name="all_categories">Vse kategorije</string>
+  <string name="select_category_content_description">Če boste izbrali to kategorijo, boste na vrhu prednostno prikazali knjige, ki jih je mogoče prenesti v tem jeziku.</string>
 </resources>
