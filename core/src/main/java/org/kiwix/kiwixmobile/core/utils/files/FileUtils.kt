@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.utils.files
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.content.ContentUris
 import android.content.Context
 import android.content.res.AssetFileDescriptor
