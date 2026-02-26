@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.core.downloader
 
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
+import com.tonyodev.fetch2.NetworkType
+import com.tonyodev.fetch2.Request
 import com.tonyodev.fetch2core.Func
 import io.mockk.Runs
 import io.mockk.every
@@ -28,13 +30,17 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 class DownloadManagerRequesterTest {
@@ -74,6 +80,7 @@ class DownloadManagerRequesterTest {
         func2 = any<Func<Error>>()
       )
     }
+    verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
   @Test
@@ -109,6 +116,7 @@ class DownloadManagerRequesterTest {
         func2 = any<Func<Error>>()
       )
     }
+    verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
   @Test
@@ -169,6 +177,7 @@ class DownloadManagerRequesterTest {
         func2 = any<Func<Error>>()
       )
     }
+    verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
   @Test
@@ -202,6 +211,7 @@ class DownloadManagerRequesterTest {
     requester.pauseResumeDownload(downloadId, isPause = false)
 
     verify { fetch.pause(id = downloadId.toInt()) }
+    verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
   @Test
@@ -225,5 +235,37 @@ class DownloadManagerRequesterTest {
     requester.pauseResumeDownload(downloadId, isPause = true)
 
     verify(exactly = 0) { downloadRoomDao.deleteDownloadByDownloadId(any<Long>()) }
+  }
+
+  @Test
+  fun `enqueue should create fetch request with WiFi only config`() = runTest {
+    val downloadRequest = mockk<DownloadRequest>(relaxed = true)
+
+    every { kiwixDataStore.wifiOnly } returns flowOf(true)
+
+    val requestSlot = slot<Request>()
+    every { fetch.enqueue(capture(requestSlot)) } returns fetch
+
+    val id = requester.enqueue(downloadRequest)
+
+    Assertions.assertEquals(requestSlot.captured.id.toLong(), id)
+    Assertions.assertEquals(NetworkType.WIFI_ONLY, requestSlot.captured.networkType)
+    Assertions.assertEquals(AUTO_RETRY_MAX_ATTEMPTS, requestSlot.captured.autoRetryMaxAttempts)
+  }
+
+  @Test
+  fun `enqueue should create fetch request with all network config`() = runTest {
+    val downloadRequest = mockk<DownloadRequest>(relaxed = true)
+
+    every { kiwixDataStore.wifiOnly } returns flowOf(false)
+
+    val requestSlot = slot<Request>()
+    every { fetch.enqueue(capture(requestSlot)) } returns fetch
+
+    val id = requester.enqueue(downloadRequest)
+
+    Assertions.assertEquals(requestSlot.captured.id.toLong(), id)
+    Assertions.assertEquals(NetworkType.ALL, requestSlot.captured.networkType)
+    Assertions.assertEquals(AUTO_RETRY_MAX_ATTEMPTS, requestSlot.captured.autoRetryMaxAttempts)
   }
 }
