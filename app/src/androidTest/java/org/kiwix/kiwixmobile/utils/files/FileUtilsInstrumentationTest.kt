@@ -420,10 +420,10 @@ class FileUtilsInstrumentationTest {
         }
       }
     }
-    // get the SD card path
+    // get the SD card path (use getOrNull to avoid crash on emulators without SD card)
     val sdCardPath =
       context?.getExternalFilesDirs("")
-        ?.get(1)?.path?.substringBefore("/Android")
+        ?.getOrNull(1)?.path?.substringBefore("/Android")
     val dummyUriData =
       arrayListOf(
         // test the download uri on older devices
@@ -458,18 +458,6 @@ class FileUtilsInstrumentationTest {
           null,
           Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
         ),
-        // // test with SD card uri
-        DummyUrlData(
-          null,
-          null,
-          "$sdCardPath/$commonPath",
-          null,
-          Uri.parse(
-            primaryStorageUriPrefix +
-              sdCardPath?.substringAfter("storage/") +
-              "%3A$commonUri"
-          )
-        ),
         // test with invalid uri
         DummyUrlData(
           null,
@@ -498,6 +486,22 @@ class FileUtilsInstrumentationTest {
           )
         )
       )
+    // Only add SD card test data when SD card is available on the emulator
+    if (sdCardPath != null) {
+      dummyUriData.add(
+        DummyUrlData(
+          null,
+          null,
+          "$sdCardPath/$commonPath",
+          null,
+          Uri.parse(
+            primaryStorageUriPrefix +
+              sdCardPath.substringAfter("storage/") +
+              "%3A$commonUri"
+          )
+        )
+      )
+    }
     // test with USB stick uri
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       dummyUriData.add(
@@ -511,6 +515,11 @@ class FileUtilsInstrumentationTest {
       )
     }
     val mockWrapper: DocumentResolverWrapper = mockk(relaxed = true)
+    every { mockWrapper.isDocumentUri(any(), any()) } answers {
+      val uriString = arg<Uri>(1).toString()
+      uriString.contains("com.android.providers.downloads.documents") ||
+        uriString.contains("com.android.externalstorage.documents")
+    }
     every { mockWrapper.query(any(), any(), any(), null, null, null) } answers {
       val uriString = arg<Uri>(1).toString()
       when {
