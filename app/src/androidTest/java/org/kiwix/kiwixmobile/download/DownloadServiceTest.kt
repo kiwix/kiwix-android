@@ -91,6 +91,8 @@ class DownloadServiceTest : BaseActivityTest() {
         setIsPlayStoreBuild(true)
         setPrefIsTest(true)
         setIsFirstRun(false)
+        setSelectedOnlineContentLanguage("")
+        setSelectedOnlineContentCategory("")
       }
     }
     activityScenario =

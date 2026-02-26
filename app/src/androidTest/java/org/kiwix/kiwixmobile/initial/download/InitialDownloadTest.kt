@@ -82,6 +82,7 @@ class InitialDownloadTest : BaseActivityTest() {
         setIsFirstRun(false)
         setIsPlayStoreBuild(true)
         setPrefIsTest(true)
+        setSelectedOnlineContentLanguage("")
         setSelectedOnlineContentCategory("")
       }
     }
