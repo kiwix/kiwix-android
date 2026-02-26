@@ -18,19 +18,18 @@
 
 package org.kiwix.kiwixmobile.core.main
 
+import kotlinx.coroutines.flow.first
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
 import javax.inject.Inject
 
-// set at 0 for testing
-const val THREE_DAYS_IN_MILLISECONDS = 0L // 3 * 24 * 60 * 60 * 1000L
+const val THREE_DAYS_IN_MILLISECONDS = 3 * 24 * 60 * 60 * 1000L
 
-/*room throws error when you make a query suspend. it's not conclusive why it happens.
-* in research so far it is caused my version mismatch between kotlin and room
-* this is just a reminder */
-@Suppress("all")
 class UpdateDialogHandler @Inject constructor(
-  private val apkDao: DownloadApkDao
+  private val apkDao: DownloadApkDao,
+  private val kiwixDataStore: KiwixDataStore
 ) {
   private var showUpdateDialogCallback: ShowUpdateDialogCallback? = null
 
@@ -38,18 +37,22 @@ class UpdateDialogHandler @Inject constructor(
     this.showUpdateDialogCallback = showUpdateDialogCallback
   }
 
+  // need more refinement here, maybe convert some conditions to a function.
+  @Suppress("ComplexCondition")
   suspend fun attemptToShowUpdatePopup() {
+    val apkInfo = apkDao.getDownload() ?: return
     val currentMilliSeconds = System.currentTimeMillis()
-    // hardcoded values for testing
-    val currentVersion = VersionId("3.9.11")
-    val available = VersionId("3.9.12")
-    val lastPopupMillis = apkDao.getDownload()?.lastDialogShownInMilliSeconds ?: 0L
+    val lastPopupMillis = apkInfo.lastDialogShownInMilliSeconds
+    val currentVersion = VersionId(BuildConfig.VERSION_NAME)
+    val available = VersionId(apkInfo.version)
     val shouldShowPopup =
       (lastPopupMillis == 0L) ||
         isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
-    if (shouldShowPopup &&
+    if (
+      shouldShowPopup &&
       isTimeToShowUpdate(currentMilliSeconds) &&
-      available > currentVersion
+      available > currentVersion &&
+      !kiwixDataStore.isPlayStoreBuild.first()
     ) {
       showUpdateDialogCallback?.showUpdateDialog()
       resetUpdateLater()

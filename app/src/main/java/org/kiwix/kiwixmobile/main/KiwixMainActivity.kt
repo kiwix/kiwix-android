@@ -257,7 +257,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  fun initializeWorkManager() {
+  private fun initializeWorkManager() {
     if (runBlocking { kiwixDataStore.showIntro.first() }) {
       UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
     } else {
