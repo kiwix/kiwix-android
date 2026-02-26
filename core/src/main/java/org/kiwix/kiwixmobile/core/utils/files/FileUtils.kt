@@ -160,7 +160,8 @@ object FileUtils {
   @JvmStatic
   suspend fun getLocalFilePathByUri(
     context: Context,
-    uri: Uri
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
   ): String? {
     Log.e(TAG_KIWIX, "Trying to get the ZIM file path for Uri = $uri")
     if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -185,14 +186,14 @@ object FileUtils {
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority) {
         return try {
-          documentProviderContentQuery(context, uri)
+          documentProviderContentQuery(context, uri, documentsContractWrapper)
         } catch (_: IllegalArgumentException) {
           null
         }
       }
     } else if (uri.scheme != null) {
       if ("content".equals(uri.scheme, ignoreCase = true)) {
-        return getFilePathOfContentUri(context, uri)
+        return getFilePathOfContentUri(context, uri, documentsContractWrapper)
       } else if ("file".equals(uri.scheme, ignoreCase = true)) {
         return uri.path
       }
@@ -232,8 +233,12 @@ object FileUtils {
    * 2. On devices below Android 11, when files are clicked directly in the file manager, the content
    *    resolver may not be able to retrieve the path for certain URIs.
    */
-  private suspend fun getFilePathOfContentUri(context: Context, uri: Uri): String? {
-    val filePath = contentQuery(context, uri)
+  private suspend fun getFilePathOfContentUri(
+    context: Context,
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
+  ): String? {
+    val filePath = contentQuery(context, uri, documentsContractWrapper)
     return if (!filePath.isNullOrEmpty()) {
       filePath
     } else {
