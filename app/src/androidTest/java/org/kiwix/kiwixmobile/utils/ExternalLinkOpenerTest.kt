@@ -241,10 +241,12 @@ internal class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
       setAlertDialogShower(alertDialogShower)
     }
-    externalLinkOpener.openExternalLinkWithDialog(
-      intent,
-      "donation platform"
-    )
+    composeTestRule.runOnUiThread {
+      externalLinkOpener.openExternalLinkWithDialog(
+        intent,
+        "donation platform"
+      )
+    }
     verify(exactly = 0) { activity.startActivity(any()) }
     val dialogData = alertDialogShower.dialogState.value
     assertNull(dialogData)
@@ -255,12 +257,14 @@ internal class ExternalLinkOpenerTest {
     val realContext = ApplicationProvider.getApplicationContext<Context>()
     val clipboardManager =
       realContext.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-    clipboardManager.setPrimaryClip(
-      android.content.ClipData.newPlainText(
-        "",
-        ""
+    composeTestRule.runOnUiThread {
+      clipboardManager.setPrimaryClip(
+        android.content.ClipData.newPlainText(
+          "",
+          ""
+        )
       )
-    )
+    }
 
     val uri = Uri.parse("https://example.com/")
 
