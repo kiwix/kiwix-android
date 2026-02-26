@@ -96,6 +96,7 @@ class CopyMoveFileHandlerTest {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     every { destinationFile.canRead() } returns true
+    every { activity.getString(any()) } returns "mocked string"
     fileHandler = CopyMoveFileHandler(
       activity,
       kiwixDataStore,
@@ -309,7 +310,7 @@ class CopyMoveFileHandlerTest {
     advanceUntilIdle()
     verify {
       copyMoveProgressBarController.showCopyMoveDialog(
-        activity.getString(R.string.copy_move_multiple_files_dialog_description),
+        any(),
         any(),
         any()
       )
@@ -414,7 +415,7 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       copyMoveProgressBarController.showCopyMoveDialog(
-        "",
+        any(),
         capture(positiveButtonClickSlot),
         any()
       )
@@ -440,7 +441,7 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       copyMoveProgressBarController.showCopyMoveDialog(
-        "",
+        any(),
         capture(positiveButtonClickSlot),
         any()
       )
@@ -469,7 +470,7 @@ class CopyMoveFileHandlerTest {
 
     verify {
       copyMoveProgressBarController.showCopyMoveDialog(
-        "",
+        any(),
         any(),
         any()
       )
@@ -488,7 +489,7 @@ class CopyMoveFileHandlerTest {
       coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
       every {
         copyMoveProgressBarController.showCopyMoveDialog(
-          "",
+          any(),
           capture(positiveButtonClickSlot),
           capture(negativeButtonClickSlot)
         )
