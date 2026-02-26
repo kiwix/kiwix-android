@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.search
 
+import android.content.Context
 import android.os.Bundle
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,21 +31,22 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
 
 @Suppress("LongMethod")
 @Composable
-fun SearchContainer(
+fun SearchScreenRoute(
   viewModelFactory: ViewModelProvider.Factory,
   dialogShower: DialogShower,
   arguments: Bundle?,
@@ -53,12 +54,11 @@ fun SearchContainer(
 ) {
   val context = LocalContext.current
   val coroutineScope = rememberCoroutineScope()
-  val listState = rememberLazyListState()
 
   val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
 
   // Voice Intent
-  DisposableEffect(coreMainActivity) {
+  DisposableEffect(Unit) {
     coreMainActivity.activityResultForwarder =
       { requestCode, resultCode, data ->
         viewModel.actions.trySend(
@@ -83,10 +83,8 @@ fun SearchContainer(
   val showFindInPage by viewModel.showFindInPage.collectAsStateWithLifecycle(initialValue = false)
 
   // Handles SideEffects
-  LaunchedEffect(viewModel) {
-    viewModel.effects.collect { effect ->
-      effect.invokeWith(coreMainActivity)
-    }
+  viewModel.effects.CollectSideEffectWithActivity { effect, activity ->
+    effect.invokeWith(activity)
   }
 
   // Search Results
@@ -147,33 +145,38 @@ fun SearchContainer(
 
   SearchScreen(
     screenState,
-    listOfNotNull(
-      ActionMenuItem(
-        contentDescription = R.string.search_label,
-        iconButtonText = context.getString(R.string.search_label),
-        testingTag = "voiceSearchTestingTag",
-        isEnabled = true,
-        onClick = {
-          viewModel.actions.trySend(Action.ReceivedPromptForSpeechInput)
-        }
-      ),
-      if (showFindInPage) {
-        ActionMenuItem(
-          contentDescription = R.string.menu_search_in_text,
-          iconButtonText = context.getString(R.string.menu_search_in_text),
-          testingTag = FIND_IN_PAGE_TESTING_TAG,
-          isEnabled = true,
-          onClick = {
-            viewModel.actions.trySend(Action.ClickedSearchInText)
-          }
-        )
-      } else {
-        null
+    buildActionMenuItems(viewModel, context, showFindInPage),
+    isLoadingMore
+  )
+}
+
+private fun buildActionMenuItems(
+  viewModel: SearchViewModel,
+  context: Context,
+  showFindInPage: Boolean
+): List<ActionMenuItem> {
+  return listOfNotNull(
+    ActionMenuItem(
+      contentDescription = R.string.search_label,
+      icon = IconItem.Drawable(R.drawable.ic_mic_black_24dp),
+      testingTag = VOICE_SEARCH_TESTING_TAG,
+      isEnabled = true,
+      onClick = {
+        viewModel.actions.trySend(Action.ReceivedPromptForSpeechInput)
       }
     ),
-    isLoadingMore,
-    lazyListState = listState
+    if (showFindInPage) {
+      ActionMenuItem(
+        contentDescription = R.string.menu_search_in_text,
+        iconButtonText = context.getString(R.string.menu_search_in_text),
+        testingTag = FIND_IN_PAGE_TESTING_TAG,
+        isEnabled = true,
+        onClick = {
+          viewModel.actions.trySend(Action.ClickedSearchInText)
+        }
+      )
+    } else {
+      null
+    }
   )
-
-  DialogHost(dialogShower as AlertDialogShower)
 }

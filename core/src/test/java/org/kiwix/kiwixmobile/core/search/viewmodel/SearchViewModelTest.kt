@@ -103,6 +103,9 @@ internal class SearchViewModelTest {
     clearAllMocks()
     recentsFromDb = Channel(Channel.UNLIMITED)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
+    every {
+      zimFileReader.getSuggestedSpelledWords(any(), any())
+    } returns emptyList()
     coEvery {
       searchResultGenerator.generateSearchResults("", zimFileReader)
     } returns null

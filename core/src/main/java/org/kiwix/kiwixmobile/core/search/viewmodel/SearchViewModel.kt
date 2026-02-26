@@ -87,8 +87,6 @@ class SearchViewModel @Inject constructor(
 
   val state = MutableStateFlow(initialState)
 
-  private var lastQuery: String = ""
-
   private val _searchText = MutableStateFlow("")
   val searchText = _searchText.asStateFlow()
 
@@ -156,7 +154,7 @@ class SearchViewModel @Inject constructor(
       SearchState(
         searchResultsWithTerm.searchTerm,
         searchResultsWithTerm,
-        recentResults as List<SearchListItem.RecentSearchListItem>,
+        recentResults,
         searchOrigin
       )
     }
@@ -164,11 +162,8 @@ class SearchViewModel @Inject constructor(
       .collect {
         state.value = it
 
-        if (it.searchTerm != lastQuery && !_isLoadingMore.value) {
-          lastQuery = it.searchTerm
-          val firstPage = it.getVisibleResults(0).orEmpty()
-          _visibleResults.value = firstPage
-        }
+        val firstPage = it.getVisibleResults(0).orEmpty()
+        _visibleResults.value = firstPage
 
         if (it.searchTerm.isNotBlank()) {
           _spellingSuggestions.value =
@@ -262,7 +257,6 @@ class SearchViewModel @Inject constructor(
 
   fun updateSearchQuery(query: String) {
     _searchText.value = query
-    filter.value = query
     debouncedSearchQuery.value = query
   }
 
