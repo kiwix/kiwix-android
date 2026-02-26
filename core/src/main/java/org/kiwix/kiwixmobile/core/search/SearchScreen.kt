@@ -40,6 +40,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -91,14 +92,16 @@ const val SEARCH_ITEM_TESTING_TAG = "searchItemTestingTag"
 const val OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG = "openItemInNewTagIconTestingTag"
 const val LOADING_ITEMS_BEFORE = 3
 
+const val VOICE_SEARCH_TESTING_TAG = "voiceSearchTestingTag"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
   searchScreenState: SearchScreenState,
   actionMenuItemList: List<ActionMenuItem>,
-  isLoadingMoreResult: Boolean,
-  lazyListState: LazyListState
+  isLoadingMoreResult: Boolean
 ) {
+  val lazyListState = rememberLazyListState()
   KiwixTheme {
     Scaffold(
       topBar = {
