@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.workManager
+package org.kiwix.kiwixmobile.update
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
 
 @RunWith(AndroidJUnit4::class)
 class UpdateWorkerTest {
+  // ask if more robust testing can be applied here
   private var context: Context = ApplicationProvider.getApplicationContext()
   private lateinit var workManager: UpdateWorkManager
 
