@@ -68,12 +68,12 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ram-size: 3072M
+          ram-size: 4096M
           force-avd-creation: false
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           channel: canary
           script: echo "Generated AVD snapshot for caching."
@@ -87,13 +87,13 @@ jobs:
           target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
-          ram-size: 3072M
+          ram-size: 4096M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           disable-animations: true
           force-avd-creation: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-boot-timeout: 1200
           script: bash contrib/instrumentation.sh
 
@@ -184,10 +184,10 @@ jobs:
           profile: pixel_2
           ram-size: 2048M
           force-avd-creation: false
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           channel: canary
           script: echo "Generated AVD snapshot for caching."
@@ -204,10 +204,10 @@ jobs:
           ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           disable-animations: true
           force-avd-creation: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-boot-timeout: 1200
           script: bash contrib/instrumentation-release.sh
 
@@ -273,10 +273,10 @@ jobs:
           profile: pixel_2
           ram-size: 2048M
           force-avd-creation: false
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           channel: canary
           script: echo "Generated AVD snapshot for caching."
@@ -295,9 +295,9 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           force-avd-creation: false
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           emulator-boot-timeout: 1200
-          heap-size: 512M
+          heap-size: 1024M
           script: bash contrib/instrumentation-customapps.sh
 
   automated-tests-on-tablet:
@@ -362,10 +362,10 @@ jobs:
           profile: pixel_2
           ram-size: 2048M
           force-avd-creation: false
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           channel: canary
           script: echo "Generated AVD snapshot for caching."
@@ -384,7 +384,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           force-avd-creation: true
-          sdcard-path-or-size: 1024M
+          sdcard-path-or-size: 2048M
           emulator-boot-timeout: 1200
-          heap-size: 512M
+          heap-size: 1024M
           script: bash contrib/instrumentation-file-opening-on-tablet.sh
