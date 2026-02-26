@@ -19,4 +19,10 @@
   <string name="swipe_down_to_scan_storage">向下滑动即可扫描您的设备以查找新书……</string>
   <string name="auto_detect_books">自动检测您的书籍</string>
   <string name="auto_detect_books_description">首次启动时，系统会询问您是否允许扫描您的存储空间。如果您允许，我们将自动检测您的 ZIM 文件，无需手动添加。</string>
+  <string name="select_category">选择分类</string>
+  <string name="no_category_available">没有可用的分类</string>
+  <string name="your_selected_category">所选分类：</string>
+  <string name="other_categories">其他分类：</string>
+  <string name="all_categories">所有分类</string>
+  <string name="select_category_content_description">选择此分类将优先在顶部显示该语言的可下载书籍。</string>
 </resources>

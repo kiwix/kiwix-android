@@ -8,4 +8,7 @@
   <string name="send_files_title">Fichiere schécken</string>
   <string name="receive_files_title">Fichiere kréien</string>
   <string name="select_zim_file">ZIM-Fichier fir ze liesen eraussichen</string>
+  <string name="no_category_available">Keng Kategorien disponibel</string>
+  <string name="other_categories">Aner Kategorien:</string>
+  <string name="all_categories">All Kategorien</string>
 </resources>

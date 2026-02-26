@@ -2,6 +2,7 @@
 <!-- Authors:
 * Elroy
 * McDutchie
+* Siebrand
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Uw bestandssysteem ondersteunt geen bestanden groter dan 4 GB</string>
@@ -14,4 +15,10 @@
   <string name="swipe_down_to_scan_storage">Veeg omlaag om uw apparaat op nieuwe boeken door te lichten…</string>
   <string name="auto_detect_books">Laat uw boeken automatisch opsporen</string>
   <string name="auto_detect_books_description">Bij de eerste keer opstarten wordt u gevraagd of de app uw opslagruimte mag doorlichten. Als u dat toestaat, sporen we uw ZIM-bestanden automatisch op. Zo hoeft u ze niet met de hand toe te voegen.</string>
+  <string name="select_category">Categorie selecteren</string>
+  <string name="no_category_available">Geen categorieën beschikbaar</string>
+  <string name="your_selected_category">Selecteer categorie:</string>
+  <string name="other_categories">Overige categorieën:</string>
+  <string name="all_categories">Alle categorieën</string>
+  <string name="select_category_content_description">Als u deze categorie kiest, worden downloadbare boeken in die taal bovenaan weergegeven.</string>
 </resources>

@@ -13,6 +13,7 @@
 * Kumkumuk
 * McAang
 * McDutchie
+* MesutTerzi
 * MohitMali
 * MuratTheTurkish
 * Rapsar
@@ -35,6 +36,9 @@
   <string name="menu_support_kiwix">Kiwix’i destekle</string>
   <string name="menu_support_kiwix_for_custom_apps">%s destek</string>
   <string name="menu_about_app">%s uygulaması hakkında</string>
+  <string name="external_redirect_message">Şimdi %s sayfamıza yönlendirileceksiniz.</string>
+  <string name="support_donation_platform">bağış platformu</string>
+  <string name="about_app_page">uygulama sayfası hakkında</string>
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
@@ -372,6 +376,9 @@
   <string name="allow">İzin ver</string>
   <string name="swipe_down_for_library">Kitaplık için Aşağı Kaydırın</string>
   <string name="reaching_remote_library">Uzak kütüphaneye bağlanılıyor</string>
+  <string name="parsing_remote_library">Uzak kütüphanenin ayrıştırılması</string>
+  <string name="starting_downloading_remote_library">Çevrimiçi kütüphanenin indirilmesi başlatılıyor</string>
+  <string name="downloading_library">Kütüphane indiriliyor %s</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>
@@ -396,5 +403,16 @@
   <string name="your_device_name_message">Cihazınızın adı burada görünecektir.</string>
   <string name="nearby_devices_list_message">Burada yakındaki cihazların bir listesini bulacaksınız. Dosya aktarımını başlatmak için bir cihazın adına dokunun.</string>
   <string name="transfer_zim_files_list_message">Burada aktarım için mevcut ZIM dosyalarının listesini bulacaksınız.</string>
+  <string name="storage_selection_dialog_accessibility_description">ZIM dosyalarını indirmek için depolama alanı seçin.</string>
+  <string name="zim_file_content_description">Okuma içeriğini içeren ZIM dosyası</string>
+  <string name="select_language_content_description">Bu dili seçmek, indirilebilir kitapların o dilde olanlarının en üstte görüntülenmesine öncelik verecektir.</string>
+  <string name="toolbar_back_button_content_description">Önceki sayfaya git</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Bu dosyayı kaydetmek mi yoksa açmak mı istiyorsunuz?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">\"Aç\" seçeneğini belirlemek, bu dosyayı harici bir okuyucu uygulamasında açacaktır.</string>
+  <string name="donation_dialog_title">Bugün Bağış Yapın</string>
+  <string name="donation_dialog_description">%s sizin yardımınıza ihtiyaç duyuyor.</string>
+  <string name="make_donation">Bir bağışta bulunun</string>
+  <string name="resuming_state">Devam ediyor</string>
   <string name="downloading_state">İndiriliyor</string>
+  <string name="download_failed_state">Başarısız</string>
 </resources>

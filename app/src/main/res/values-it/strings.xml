@@ -11,4 +11,9 @@
   <string name="receive_files_title">Ricevi file</string>
   <string name="no_app_found_to_open">Nessuna applicazione trovata per selezionare il file ZIM!</string>
   <string name="select_zim_file">Seleziona il file ZIM da leggere</string>
+  <string name="select_category">Seleziona categoria</string>
+  <string name="no_category_available">Nessuna categoria disponibile</string>
+  <string name="your_selected_category">Categoria selezionata:</string>
+  <string name="other_categories">Altre categorie:</string>
+  <string name="all_categories">Tutte le categorie</string>
 </resources>

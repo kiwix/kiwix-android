@@ -13,4 +13,10 @@
   <string name="swipe_down_to_scan_storage">Повлечете надолу за да отчитате нови книги…</string>
   <string name="auto_detect_books">Автоматско пронаоѓање на вашите книги</string>
   <string name="auto_detect_books_description">При првото пуштање ќе бидете прашани дали прилогот можа да го отчитува вашиот склад. Ако се согласите, ние автоматски ќе пронаоѓаме ZIM-податотеки без да треба да ги додавате рачно.</string>
+  <string name="select_category">Изберете категорија</string>
+  <string name="no_category_available">Нема категории на располагање</string>
+  <string name="your_selected_category">Избрана категорија:</string>
+  <string name="other_categories">Други категории:</string>
+  <string name="all_categories">Сите категории</string>
+  <string name="select_category_content_description">Ако ја изберете оваа категорија, тогаш најгоре предност ќе имаат преземливите книги на тој јазик.</string>
 </resources>
