@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -65,7 +66,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
+import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray850
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_ROW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
@@ -77,6 +80,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
@@ -339,6 +345,7 @@ private fun ShowUri(
   onUriClick: (() -> Unit)?,
   alertDialogShower: AlertDialogShower?
 ) {
+  if (uri == null) return
   val context = LocalContext.current
   val copyLink: () -> Unit = {
     val clipboard =
@@ -352,17 +359,15 @@ private fun ShowUri(
     ).show()
   }
 
-  uri?.let {
-    UriDisplayRow(
-      uri = it,
-      onUriClick = onUriClick,
-      alertDialogShower = alertDialogShower,
-      copyLink = copyLink
-    )
-  }
+  UriDisplayRow(
+    uri = uri,
+    onUriClick = onUriClick,
+    alertDialogShower = alertDialogShower,
+    copyLink = copyLink
+  )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun UriDisplayRow(
   uri: Uri,
@@ -370,17 +375,18 @@ private fun UriDisplayRow(
   alertDialogShower: AlertDialogShower?,
   copyLink: () -> Unit
 ) {
+  val surfaceColor = if (isSystemInDarkTheme()) MineShaftGray850 else AlabasterWhite
   Surface(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(top = 12.dp, bottom = 8.dp)
+      .padding(top = TWELVE_DP, bottom = EIGHT_DP)
       .border(
-        width = 1.dp,
+        width = ONE_DP,
         color = MaterialTheme.colorScheme.outlineVariant,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(EIGHT_DP)
       ),
-    shape = RoundedCornerShape(8.dp),
-    color = MaterialTheme.colorScheme.surfaceContainerHigh
+    shape = RoundedCornerShape(EIGHT_DP),
+    color = surfaceColor
   ) {
     Row(
       verticalAlignment = Alignment.CenterVertically,
@@ -388,8 +394,8 @@ private fun UriDisplayRow(
         .fillMaxWidth()
         .padding(
           start = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
-          top = 8.dp,
-          bottom = 8.dp
+          top = EIGHT_DP,
+          bottom = EIGHT_DP
         )
     ) {
       Text(

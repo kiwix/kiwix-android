@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.utils
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -56,6 +57,7 @@ import org.junit.Rule
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import java.net.URL
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.test.core.app.ApplicationProvider
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterial3Api::class)
 internal class ExternalLinkOpenerTest {
@@ -141,27 +143,28 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun alertDialogShowerOpensLinkAndSavesPreferencesIfNeutralButtonIsClicked() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
-    every { activity.packageManager } returns packageManager
-    every { packageManager.resolveActivity(any(), any<Int>()) } returns ResolveInfo()
-    every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
-    justRun { activity.startActivity(intent) }
-    val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
-      setAlertDialogShower(alertDialogShower)
+  internal fun alertDialogShowerOpensLinkAndSavesPreferencesIfNeutralButtonIsClicked() =
+    runBlocking {
+      if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
+      every { activity.packageManager } returns packageManager
+      every { packageManager.resolveActivity(any(), any<Int>()) } returns ResolveInfo()
+      every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
+      val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
+      justRun { activity.startActivity(intent) }
+      val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
+        setAlertDialogShower(alertDialogShower)
+      }
+      externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+      val dialogData = alertDialogShower.dialogState.value
+      assertNotNull(dialogData)
+      val (dialog, listeners, _) = dialogData!!
+      assert(dialog == KiwixDialog.ExternalLinkPopup)
+      listeners[2].invoke()
+      coVerify {
+        kiwixDataStore.setExternalLinkPopup(false)
+        activity.startActivity(intent)
+      }
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
-    val dialogData = alertDialogShower.dialogState.value
-    assertNotNull(dialogData)
-    val (dialog, listeners, _) = dialogData!!
-    assert(dialog == KiwixDialog.ExternalLinkPopup)
-    listeners[2].invoke()
-    coVerify {
-      kiwixDataStore.setExternalLinkPopup(false)
-      activity.startActivity(intent)
-    }
-  }
 
   @Test
   internal fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() = runBlocking {
@@ -184,7 +187,7 @@ internal class ExternalLinkOpenerTest {
     every { packageManager.resolveActivity(any(), any<Int>()) } returns null
 
     // Stub activity context methods to prevent Toast crash, since mockkStatic is unavailable on API 25
-    val realContext = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+    val realContext = ApplicationProvider.getApplicationContext<Context>()
     every { activity.resources } returns realContext.resources
     every { activity.applicationContext } returns realContext
     every { activity.getSystemService(any()) } answers { realContext.getSystemService(arg(0) as String) }
@@ -225,7 +228,7 @@ internal class ExternalLinkOpenerTest {
     every { packageManager.resolveActivity(any(), any<Int>()) } returns null
 
     // Stub activity context methods to prevent Toast crash, since mockkStatic is unavailable on API 25
-    val realContext = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+    val realContext = ApplicationProvider.getApplicationContext<Context>()
     every { activity.resources } returns realContext.resources
     every { activity.applicationContext } returns realContext
     every { activity.getSystemService(any()) } answers { realContext.getSystemService(arg(0) as String) }
@@ -249,9 +252,15 @@ internal class ExternalLinkOpenerTest {
 
   @Test
   fun testCopyButtonCopiesUriToClipboard() = runBlocking {
-    val realContext = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
-    val clipboardManager = realContext.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-    clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("", "")) // clear clipboard
+    val realContext = ApplicationProvider.getApplicationContext<Context>()
+    val clipboardManager =
+      realContext.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+    clipboardManager.setPrimaryClip(
+      android.content.ClipData.newPlainText(
+        "",
+        ""
+      )
+    )
 
     val uri = Uri.parse("https://example.com/")
 
@@ -270,16 +279,18 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun testDialogButtonTextDoesNotWrap() = runBlocking {
-    val longText = "This is a very long button text that would normally wrap to multiple lines"
-    val dialog = KiwixDialog.ExternalRedirectDialog(longText)
-    alertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
-    composeTestRule.setContent {
-      DialogHost(alertDialogShower)
+  fun testDialogButtonTextDoesNotWrap() {
+    runBlocking {
+      val longText = "This is a very long button text that would normally wrap to multiple lines"
+      val dialog = KiwixDialog.ExternalRedirectDialog(longText)
+      alertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
+      composeTestRule.setContent {
+        DialogHost(alertDialogShower)
+      }
+      composeTestRule
+        .onNodeWithText(longText, substring = true)
+        .assertExists()
     }
-    composeTestRule
-      .onNodeWithText(longText, substring = true)
-      .assertExists()
   }
 
   @Test
