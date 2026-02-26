@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServ
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -77,18 +76,13 @@ class DownloadServiceTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         kiwixMainActivity = it
-        it.navigate(KiwixDestination.Library.route)
-      }
-      library {
-        refreshList(composeTestRule)
-        waitUntilZimFilesRefreshing(composeTestRule)
-        deleteZimIfExists(composeTestRule)
+        it.navigate(KiwixDestination.Downloads.route)
       }
       downloadRobot {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        searchD3JsDocsFile(composeTestRule)
+        searchZappingSauvageFile(composeTestRule)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
       }
@@ -115,17 +109,15 @@ class DownloadServiceTest : BaseActivityTest() {
   }
 
   private fun assetDownloadService(isRunning: Boolean) {
+    composeTestRule.waitUntilTimeout(3000)
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
       AccessibilityService.GLOBAL_ACTION_HOME
     )
-    // Now we are downloading the small file so we need to check the service initialization fast.
-    repeat(20) {
-      Assertions.assertEquals(
-        isRunning,
-        DownloadMonitorService.isDownloadMonitorServiceRunning
-      )
-    }
+    Assertions.assertEquals(
+      isRunning,
+      DownloadMonitorService.isDownloadMonitorServiceRunning
+    )
     composeTestRule.waitUntilTimeout(3000)
   }
 
