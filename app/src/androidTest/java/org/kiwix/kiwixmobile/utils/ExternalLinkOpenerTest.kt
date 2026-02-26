@@ -253,11 +253,12 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun testCopyButtonCopiesUriToClipboard() = runBlocking {
-    val realContext = ApplicationProvider.getApplicationContext<Context>()
-    val clipboardManager =
-      realContext.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+  fun testCopyButtonCopiesUriToClipboard() {
+    lateinit var clipboardManager: android.content.ClipboardManager
     composeTestRule.runOnUiThread {
+      val realContext = ApplicationProvider.getApplicationContext<Context>()
+      clipboardManager =
+        realContext.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
       clipboardManager.setPrimaryClip(
         android.content.ClipData.newPlainText(
           "",
@@ -269,15 +270,21 @@ internal class ExternalLinkOpenerTest {
     val uri = Uri.parse("https://example.com/")
 
     val dialog = KiwixDialog.ExternalLinkPopup
-    alertDialogShower.show(dialog, uri = uri)
+    composeTestRule.runOnUiThread {
+      alertDialogShower.show(dialog, uri = uri)
+    }
     composeTestRule.setContent {
       DialogHost(alertDialogShower)
     }
     composeTestRule
       .onNodeWithTag(ALERT_DIALOG_COPY_BUTTON_TESTING_TAG)
       .performClick()
+    composeTestRule.waitForIdle()
 
-    val clip = clipboardManager.primaryClip
+    var clip: android.content.ClipData? = null
+    composeTestRule.runOnUiThread {
+      clip = clipboardManager.primaryClip
+    }
     assertNotNull(clip)
     assert(clip!!.getItemAt(0).text.toString() == "https://example.com/")
   }
