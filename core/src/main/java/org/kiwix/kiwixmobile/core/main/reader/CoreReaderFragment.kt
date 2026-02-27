@@ -33,6 +33,9 @@ import android.os.Build
 import android.os.Bundle
 import android.print.PdfPrint
 import android.print.PrintAttributes
+import android.print.PrintAttributes.Margins
+import android.print.PrintAttributes.MediaSize
+import android.print.PrintAttributes.Resolution
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
@@ -1454,11 +1457,11 @@ abstract class CoreReaderFragment :
       val pdfFile = File(requireContext().cacheDir, "$slugifiedTitle.pdf")
       val printAdapter = webView.createPrintDocumentAdapter(title)
       val printAttributes = PrintAttributes.Builder()
-        .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+        .setMediaSize(MediaSize.ISO_A4)
         .setResolution(
-          PrintAttributes.Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
+          Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
         )
-        .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+        .setMinMargins(Margins.NO_MARGINS)
         .build()
 
       PdfPrint(printAttributes).print(
