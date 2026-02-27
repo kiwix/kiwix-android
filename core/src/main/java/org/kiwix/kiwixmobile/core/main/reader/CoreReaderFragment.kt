@@ -165,6 +165,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -1467,7 +1468,9 @@ abstract class CoreReaderFragment :
       }
       val title = webView.title ?: "Article"
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
-      val pdfFile = File(requireContext().cacheDir, "$slugifiedTitle.pdf")
+      val cacheDir = FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
+      val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
+      pdfFile.delete()
       val printAdapter = webView.createPrintDocumentAdapter(title)
       pdfPrinter.print(
         adapter = printAdapter,
