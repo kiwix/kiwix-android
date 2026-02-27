@@ -1473,7 +1473,10 @@ abstract class CoreReaderFragment :
         adapter = printAdapter,
         outputFile = pdfFile,
         onComplete = { if (isAdded) sharePdfFile(it) },
-        onError = { if (isAdded) context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT) },
+        onError = {
+          Log.e(TAG_KIWIX, "Failed to generate PDF for sharing: $it")
+          if (isAdded) context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
+        },
       )
     }
   }
