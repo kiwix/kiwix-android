@@ -175,6 +175,7 @@ import kotlin.math.max
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 const val HIDE_TAB_SWITCHER_DELAY: Long = 300
+const val OPEN_HOME_SCREEN_DELAY: Long = 300
 private const val PDF_RESOLUTION_DPI = 300
 
 @Suppress("LargeClass")
@@ -1838,7 +1839,7 @@ abstract class CoreReaderFragment :
           createNewTab()
           hideTabSwitcher()
         }
-      }, HIDE_TAB_SWITCHER_DELAY)
+      }, OPEN_HOME_SCREEN_DELAY)
     }
   }
 
