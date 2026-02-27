@@ -268,17 +268,23 @@ internal class ExternalLinkOpenerTest {
     }
 
     val uri = Uri.parse("https://example.com/")
-
     val dialog = KiwixDialog.ExternalLinkPopup
-    composeTestRule.runOnUiThread {
-      alertDialogShower.show(dialog, uri = uri)
-    }
+
     composeTestRule.setContent {
       DialogHost(alertDialogShower)
     }
+
+    composeTestRule.runOnUiThread {
+      alertDialogShower.show(dialog, uri = uri)
+    }
+
+    // Wait for Compose to idle BEFORE performing actions
+    composeTestRule.waitForIdle()
+
     composeTestRule
       .onNodeWithTag(ALERT_DIALOG_COPY_BUTTON_TESTING_TAG)
       .performClick()
+
     composeTestRule.waitForIdle()
 
     var clip: android.content.ClipData? = null
