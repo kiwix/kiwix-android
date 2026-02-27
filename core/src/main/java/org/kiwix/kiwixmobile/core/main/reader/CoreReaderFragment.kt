@@ -31,6 +31,8 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.print.PdfPrint
+import android.print.PrintAttributes
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
@@ -66,6 +68,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -165,6 +168,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -1447,17 +1451,17 @@ abstract class CoreReaderFragment :
       val webView = getCurrentWebView() ?: return@runSafelyInCoreReaderLifecycleScope
       val title = webView.title ?: "Article"
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
-      val pdfFile = java.io.File(requireContext().cacheDir, "$slugifiedTitle.pdf")
+      val pdfFile = File(requireContext().cacheDir, "$slugifiedTitle.pdf")
       val printAdapter = webView.createPrintDocumentAdapter(title)
-      val printAttributes = android.print.PrintAttributes.Builder()
-        .setMediaSize(android.print.PrintAttributes.MediaSize.ISO_A4)
+      val printAttributes = PrintAttributes.Builder()
+        .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
         .setResolution(
-          android.print.PrintAttributes.Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
+          PrintAttributes.Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
         )
-        .setMinMargins(android.print.PrintAttributes.Margins.NO_MARGINS)
+        .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
         .build()
 
-      android.print.PdfPrint(printAttributes).print(
+      PdfPrint(printAttributes).print(
         adapter = printAdapter,
         outputFile = pdfFile,
         onComplete = { sharePdfFile(it) },
@@ -1466,9 +1470,9 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun sharePdfFile(pdfFile: java.io.File) {
+  private fun sharePdfFile(pdfFile: File) {
     try {
-      val uri = androidx.core.content.FileProvider.getUriForFile(
+      val uri = FileProvider.getUriForFile(
         requireContext(),
         requireContext().packageName + ".fileprovider",
         pdfFile

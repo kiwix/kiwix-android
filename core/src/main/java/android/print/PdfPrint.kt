@@ -21,6 +21,7 @@ package android.print
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import java.io.File
+import java.io.FileNotFoundException
 
 /**
  * Helper to generate a PDF from a [PrintDocumentAdapter].
@@ -47,7 +48,7 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
               outputFile,
               ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
             )
-          } catch (e: java.io.FileNotFoundException) {
+          } catch (e: FileNotFoundException) {
             onError(e.message)
             return
           }
