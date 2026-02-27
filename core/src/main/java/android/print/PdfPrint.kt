@@ -43,6 +43,11 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
       CancellationSignal(),
       object : PrintDocumentAdapter.LayoutResultCallback() {
         override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
+          if (info == null) {
+            adapter.onFinish()
+            onError("Layout failed: PrintDocumentInfo is null")
+            return
+          }
           val pfd = try {
             ParcelFileDescriptor.open(
               outputFile,
