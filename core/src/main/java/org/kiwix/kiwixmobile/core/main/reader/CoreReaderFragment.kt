@@ -31,6 +31,11 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.print.PdfPrint
+import android.print.PrintAttributes
+import android.print.PrintAttributes.Margins
+import android.print.PrintAttributes.MediaSize
+import android.print.PrintAttributes.Resolution
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
@@ -1450,12 +1455,12 @@ abstract class CoreReaderFragment :
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
       val pdfFile = java.io.File(requireContext().cacheDir, "$slugifiedTitle.pdf")
       val printAdapter = webView.createPrintDocumentAdapter(title)
-      val printAttributes = android.print.PrintAttributes.Builder()
-        .setMediaSize(android.print.PrintAttributes.MediaSize.ISO_A4)
+      val printAttributes = PrintAttributes.Builder()
+        .setMediaSize(MediaSize.ISO_A4)
         .setResolution(
-          android.print.PrintAttributes.Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
+          Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
         )
-        .setMinMargins(android.print.PrintAttributes.Margins.NO_MARGINS)
+        .setMinMargins(Margins.NO_MARGINS)
         .build()
 
       android.print.PdfPrint(printAttributes).print(
