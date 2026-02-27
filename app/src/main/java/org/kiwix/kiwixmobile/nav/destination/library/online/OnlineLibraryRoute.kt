@@ -104,7 +104,6 @@ fun OnlineLibraryRoute(
 
   val storagePermissionLauncher = rememberStoragePermissionLauncher(
     onlineLibraryViewModel,
-    alertDialogShower,
     activity,
     context
   )
@@ -431,7 +430,6 @@ private fun HandleEffects(
 @Composable
 private fun rememberStoragePermissionLauncher(
   onlineLibraryViewModel: OnlineLibraryViewModel,
-  alertDialogShower: AlertDialogShower,
   activity: KiwixMainActivity,
   context: android.content.Context
 ): ActivityResultLauncher<String> =
@@ -441,25 +439,11 @@ private fun rememberStoragePermissionLauncher(
         onlineLibraryViewModel.showStorageSelectDialog(activity)
       }
     } else {
-      val showRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-        activity,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-      )
-      if (showRationale) {
-        alertDialogShower.show(
-          KiwixDialog.WriteStoragePermissionRationale,
-          {
-            ActivityCompat.requestPermissions(
-              activity,
-              arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-              org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-            )
-          }
-        )
-      } else {
-        alertDialogShower.show(
-          KiwixDialog.WriteStoragePermissionRationale,
-          activity::navigateToAppSettings
+      onlineLibraryViewModel.handleStoragePermissionRationale(activity) {
+        ActivityCompat.requestPermissions(
+          activity,
+          arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+          org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
         )
       }
     }

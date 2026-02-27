@@ -262,6 +262,26 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
+  fun handleStoragePermissionRationale(activity: KiwixMainActivity, onRequestPermission: () -> Unit) {
+    viewModelScope.launch {
+      val showRationale = permissionChecker.shouldShowRationale(
+        activity,
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+      )
+      if (showRationale) {
+        emitDialog(
+          KiwixDialog.WriteStoragePermissionRationale,
+          positiveAction = onRequestPermission
+        )
+      } else {
+        emitDialog(
+          KiwixDialog.WriteStoragePermissionRationale,
+          positiveAction = { _uiEvents.tryEmit(UiEvent.NavigateToAppSettings) }
+        )
+      }
+    }
+  }
+
   fun showStorageSelectDialog(activity: KiwixMainActivity) {
     viewModelScope.launch {
       val dialog = StorageSelectDialog().apply {
