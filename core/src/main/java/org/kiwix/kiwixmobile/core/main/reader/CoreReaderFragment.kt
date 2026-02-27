@@ -1459,6 +1459,10 @@ abstract class CoreReaderFragment :
   override fun onShareMenuClicked() {
     runSafelyInCoreReaderLifecycleScope {
       val webView = getCurrentWebView() ?: return@runSafelyInCoreReaderLifecycleScope
+      if (webView.progress < HUNDERED) {
+        context?.toast(string.please_wait_for_page_to_load, Toast.LENGTH_SHORT)
+        return@runSafelyInCoreReaderLifecycleScope
+      }
       val title = webView.title ?: "Article"
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
       val pdfFile = java.io.File(requireContext().cacheDir, "$slugifiedTitle.pdf")
