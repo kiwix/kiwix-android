@@ -29,6 +29,9 @@ import org.kiwix.kiwixmobile.core.extensions.get
  * mocking is not feasible.
  */
 class DocumentResolverWrapper {
+  fun isDocumentUri(context: Context, uri: Uri): Boolean =
+    DocumentsContract.isDocumentUri(context, uri)
+
   fun getDocumentId(uri: Uri): String = DocumentsContract.getDocumentId(uri)
 
   @Suppress("LongParameterList")

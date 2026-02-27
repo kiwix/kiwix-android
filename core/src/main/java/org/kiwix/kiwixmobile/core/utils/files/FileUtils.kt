@@ -27,7 +27,6 @@ import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.os.storage.StorageManager
 import android.os.storage.StorageVolume
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.webkit.MimeTypeMap
@@ -164,7 +163,7 @@ object FileUtils {
   ): String? {
     Log.e(TAG_KIWIX, "Trying to get the ZIM file path for Uri = $uri")
     return when {
-      DocumentsContract.isDocumentUri(context, uri) ->
+      documentsContractWrapper.isDocumentUri(context, uri) ->
         getProviderDocumentPath(context, uri, documentsContractWrapper)
       uri.scheme != null -> getUriSchemePath(context, uri, documentsContractWrapper)
       else -> uri.path
@@ -177,13 +176,17 @@ object FileUtils {
     wrapper: DocumentResolverWrapper
   ): String? =
     when (uri.authority) {
-      "com.android.externalstorage.documents" -> getExternalStorageDocumentPath(context, uri)
+      "com.android.externalstorage.documents" -> getExternalStorageDocumentPath(context, uri, wrapper)
       "com.android.providers.downloads.documents" -> getDownloadsDocumentPath(context, uri, wrapper)
       else -> null
     }
 
-  private fun getExternalStorageDocumentPath(context: Context, uri: Uri): String? {
-    val documentId = DocumentsContract.getDocumentId(uri).split(":")
+  private fun getExternalStorageDocumentPath(
+    context: Context,
+    uri: Uri,
+    wrapper: DocumentResolverWrapper
+  ): String? {
+    val documentId = wrapper.getDocumentId(uri).split(":")
     if (documentId[0] == "primary") {
       return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
     }
