@@ -1472,8 +1472,8 @@ abstract class CoreReaderFragment :
       pdfPrinter.print(
         adapter = printAdapter,
         outputFile = pdfFile,
-        onComplete = { sharePdfFile(it) },
-        onError = { context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT) },
+        onComplete = { if (isAdded) sharePdfFile(it) },
+        onError = { if (isAdded) context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT) },
       )
     }
   }
