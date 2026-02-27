@@ -28,12 +28,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.reader.EncodedUrlTest
@@ -42,10 +44,6 @@ import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * These tests use the real `testzim.zim` resource file to construct actual
- * [ZimFileReader] instances with real [org.kiwix.libzim.Archive] objects.
- */
 class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
@@ -101,70 +99,49 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   }
 
   @Test
-  fun testMainPageReturnsNonNull() = runBlocking {
+  fun testZimFileReaderProperties() = runBlocking {
     val reader = createZimFileReader()
+
     assertNotNull(reader.mainPage)
-    reader.dispose()
-  }
-
-  @Test
-  fun testMediaCountReturnsValidCount() = runBlocking {
-    val reader = createZimFileReader()
-    val mediaCount = reader.mediaCount
-    assertNotNull(mediaCount)
-    assertTrue(mediaCount!! >= 0)
-    reader.dispose()
-  }
-
-  @Test
-  fun testArticleCountReturnsValidCount() = runBlocking {
-    val reader = createZimFileReader()
-    val articleCount = reader.articleCount
-    assertNotNull(articleCount)
-    assertTrue(articleCount!! >= 0)
-    reader.dispose()
-  }
-
-  @Test
-  fun testTitleReturnsNonEmpty() = runBlocking {
-    val reader = createZimFileReader()
-    assertTrue(reader.title.isNotEmpty())
-    reader.dispose()
-  }
-
-  @Test
-  fun testIdReturnsNonEmpty() = runBlocking {
-    val reader = createZimFileReader()
+    assertEquals("Test Zim", reader.title)
     assertTrue(reader.id.isNotEmpty())
+    assertEquals(16, reader.mediaCount)
+    assertEquals(4, reader.articleCount)
+    assertNotNull(reader.creator)
+    assertNotNull(reader.publisher)
+    assertNotNull(reader.name)
+    assertNotNull(reader.date)
+    assertNotNull(reader.description)
+    assertNotNull(reader.language)
+    assertNotNull(reader.tags)
+    assertTrue(reader.fileSize > 0)
+    assertNotNull(reader.favicon)
+    assertNotNull(reader.searchSuggestions("android"))
+    assertNotNull(reader.getRandomArticleUrl())
+    assertTrue(reader.getSuggestedSpelledWords("test", 5).isEmpty())
+
     reader.dispose()
   }
 
   @Test
-  fun testSearchSuggestionsReturnsNonNull() = runBlocking {
-    val reader = createZimFileReader()
-    val result = reader.searchSuggestions("android")
-    assertNotNull(result)
-    reader.dispose()
-  }
-
-  @Test
-  fun testGetRandomArticleUrlReturnsNonNull() = runBlocking {
-    val reader = createZimFileReader()
-    val url = reader.getRandomArticleUrl()
-    assertNotNull(url)
-    reader.dispose()
-  }
-
-  @Test
-  fun testToBookMapsFieldsCorrectly() = runBlocking {
+  fun testToBookMapsAllFieldsCorrectly() = runBlocking {
     val reader = createZimFileReader()
     val book = reader.toBook()
+
     assertEquals(reader.title, book.title)
     assertEquals(reader.id, book.id)
+    assertEquals("${reader.fileSize}", book.size)
+    assertEquals(reader.favicon.toString(), book.favicon)
     assertEquals(reader.creator, book.creator)
     assertEquals(reader.publisher, book.publisher)
     assertEquals(reader.date, book.date)
+    assertEquals(reader.description, book.description)
     assertEquals(reader.language, book.language)
+    assertEquals(reader.articleCount.toString(), book.articleCount)
+    assertEquals(reader.mediaCount.toString(), book.mediaCount)
+    assertEquals(reader.name, book.bookName)
+    assertEquals(reader.tags, book.tags)
+
     reader.dispose()
   }
 
@@ -175,32 +152,114 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   }
 
   @Test
-  fun testGetSuggestedSpelledWordsReturnsEmptyWhenNotInitialized() = runBlocking {
+  fun testAllPropertiesReturnDefaultsAfterDispose() = runBlocking {
     val reader = createZimFileReader()
-    val suggestions = reader.getSuggestedSpelledWords("test", 5)
-    assertTrue(suggestions.isEmpty())
     reader.dispose()
-  }
 
-  @Test
-  fun testMainPageReturnsNullAfterDispose() = runBlocking {
-    val reader = createZimFileReader()
-    reader.dispose()
     assertNull(reader.mainPage)
-  }
-
-  @Test
-  fun testMediaCountReturnsNullAfterDispose() = runBlocking {
-    val reader = createZimFileReader()
-    reader.dispose()
     assertNull(reader.mediaCount)
+    assertNull(reader.articleCount)
+    assertNull(reader.searchSuggestions("test"))
+    assertNull(reader.getRandomArticleUrl())
+    assertEquals("No Title Found", reader.title)
+    assertEquals("", reader.creator)
+    assertEquals("", reader.publisher)
+    assertEquals("", reader.date)
+    assertEquals("", reader.description)
+    assertEquals("", reader.language)
+    assertEquals("", reader.tags)
   }
 
   @Test
-  fun testArticleCountReturnsNullAfterDispose() = runBlocking {
+  fun testGetPageUrlFromForCorrectAndIncorrectTitle() = runBlocking {
     val reader = createZimFileReader()
+
+    assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
+
+    reader.mainPage?.let { mainPagePath ->
+      assertNotNull(reader.getPageUrlFrom(mainPagePath))
+    }
+
     reader.dispose()
-    assertNull(reader.articleCount)
+  }
+
+  @Test
+  fun testGetMimeTypeFromUrl() = runBlocking {
+    val reader = createZimFileReader()
+
+    assertEquals("text/html", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/index.html"))
+    assertEquals("text/css", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}-/assets/style1.css"))
+    assertNull(reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/non_existent_page.html"))
+
+    reader.dispose()
+  }
+
+  @Test
+  fun testIsRedirect() = runBlocking {
+    val reader = createZimFileReader()
+
+    assertFalse(reader.isRedirect("http://example.com/test"))
+    assertFalse(reader.isRedirect(""))
+
+    reader.dispose()
+  }
+
+  @Test
+  fun testGetRedirect() = runBlocking {
+    val reader = createZimFileReader()
+
+    val redirect = reader.getRedirect("${CONTENT_PREFIX}A/index.html")
+    assertNotNull(redirect)
+    assertTrue(redirect.isNotEmpty())
+
+    reader.dispose()
+  }
+
+  @Test
+  fun testLoadReturnsContentForValidUrl() = runBlocking {
+    val reader = createZimFileReader()
+
+    val inputStream = reader.load("${CONTENT_PREFIX}A/index.html")
+    assertNotNull(inputStream)
+    val content = inputStream?.bufferedReader()?.readText()
+    assertNotNull(content)
+    assertTrue(content!!.isNotEmpty())
+
+    reader.dispose()
+  }
+
+  @Test
+  fun testLoadReturnsContentForInvalidUrl() = runBlocking {
+    val reader = createZimFileReader()
+
+    val inputStream = reader.load("${CONTENT_PREFIX}A/non_existent_page_12345.html")
+    assertNotNull(inputStream)
+    val content = inputStream?.bufferedReader()?.readText()
+    assertTrue(content.isNullOrEmpty())
+
+    reader.dispose()
+  }
+
+  @Test
+  fun testGetItemReturnsValidItemForKnownUrl() = runBlocking {
+    val reader = createZimFileReader()
+
+    val item = reader.getItem("${CONTENT_PREFIX}A/index.html")
+    assertNotNull(item)
+
+    val nullItem = reader.getItem("${CONTENT_PREFIX}A/non_existent_12345.html")
+    assertNull(nullItem)
+
+    reader.dispose()
+  }
+
+  @Test
+  fun testPrepareSpellingsDBAndSuggestedWords() = runBlocking {
+    val reader = createZimFileReader()
+    reader.prepareSpellingsDB(reader.jniKiwixReader)
+    val suggestions = reader.getSuggestedSpelledWords("android", 5)
+    assertNotNull(suggestions)
+    reader.dispose()
   }
 
   @Test
@@ -211,25 +270,10 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   }
 
   @Test
-  fun testGetPageUrlFromReturnsNullForNonExistentTitle() = runBlocking {
-    val reader = createZimFileReader()
-    assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
-    reader.dispose()
-  }
-
-  @Test
-  fun testGetRandomArticleUrlReturnsNullAfterDispose() = runBlocking {
+  fun testGetPageUrlFromReturnsNullAfterDispose() = runBlocking {
     val reader = createZimFileReader()
     reader.dispose()
-    assertNull(reader.getRandomArticleUrl())
-  }
-
-  @Test
-  fun testGetSafeMetaDataReturnsDefaultAfterDispose() = runBlocking {
-    val reader = createZimFileReader()
-    reader.dispose()
-    // "No Title Found" is the hardcoded fallback value defined in ZimFileReader.title
-    assertEquals("No Title Found", reader.title)
+    assertNull(reader.getPageUrlFrom("index"))
   }
 
   @Test
