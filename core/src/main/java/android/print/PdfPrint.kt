@@ -47,13 +47,13 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
             onError("Layout failed: PrintDocumentInfo is null")
             return
           }
-          val pfd = try {
+          val pfd = runCatching {
             ParcelFileDescriptor.open(
               outputFile,
               ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
             )
-          } catch (e: java.io.FileNotFoundException) {
-            onError(e.message)
+          }.getOrElse {
+            onError(it.message)
             return
           }
           adapter.onWrite(
