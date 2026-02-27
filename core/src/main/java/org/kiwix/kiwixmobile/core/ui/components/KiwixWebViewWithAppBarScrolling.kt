@@ -116,15 +116,12 @@ private fun createTouchListener(
   scope: CoroutineScope,
   settleJob: MutableState<Job?>
 ): View.OnTouchListener {
-
   var lastY = 0f
 
   return View.OnTouchListener { _, event ->
-
     if (!shouldUpdateScroll.value) return@OnTouchListener false
 
     when (event.actionMasked) {
-
       MotionEvent.ACTION_DOWN -> {
         lastY = event.y
         settleJob.value?.cancel()
@@ -133,7 +130,7 @@ private fun createTouchListener(
       MotionEvent.ACTION_MOVE -> {
         val deltaY = event.y - lastY
         lastY = event.y
-        val accumulated = accumulatedScroll() - (-deltaY)
+        val accumulated = accumulatedScroll() + deltaY
 
         if (abs(accumulated) < MIN_SCROLL_DELTA) {
           updateAccumulatedScroll(accumulated)
