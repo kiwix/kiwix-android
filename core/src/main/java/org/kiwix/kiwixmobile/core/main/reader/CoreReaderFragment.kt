@@ -264,6 +264,15 @@ abstract class CoreReaderFragment :
   private var readAloudService: ReadAloudService? = null
   private val navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
+  private val pdfPrinter by lazy {
+    PdfPrint(
+      PrintAttributes.Builder()
+        .setMediaSize(MediaSize.ISO_A4)
+        .setResolution(Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI))
+        .setMinMargins(Margins.NO_MARGINS)
+        .build()
+    )
+  }
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
   private var shouldTableOfContentDrawer = mutableStateOf(false)
@@ -1456,19 +1465,11 @@ abstract class CoreReaderFragment :
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
       val pdfFile = File(requireContext().cacheDir, "$slugifiedTitle.pdf")
       val printAdapter = webView.createPrintDocumentAdapter(title)
-      val printAttributes = PrintAttributes.Builder()
-        .setMediaSize(MediaSize.ISO_A4)
-        .setResolution(
-          Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI)
-        )
-        .setMinMargins(Margins.NO_MARGINS)
-        .build()
-
-      PdfPrint(printAttributes).print(
+      pdfPrinter.print(
         adapter = printAdapter,
         outputFile = pdfFile,
         onComplete = { sharePdfFile(it) },
-        onError = { context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT) }
+        onError = { context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT) },
       )
     }
   }
