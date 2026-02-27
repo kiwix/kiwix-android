@@ -70,6 +70,3 @@ app/jacoco.exec
 
 # F-Droid auto-publish file
 VERSION_INFO
-objectboxmigration/objectbox-models/default.json
-core/src/main/res/values-b+be+tarask+old/strings.xml
-core/src/main/res/values-b+be+tarask/strings.xml
