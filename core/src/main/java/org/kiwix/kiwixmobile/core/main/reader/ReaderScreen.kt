@@ -210,15 +210,17 @@ fun ReaderScreen(
           )
         },
         bottomBar = {
-          BottomAppBarOfReaderScreen(
-            state.bookmarkButtonItem,
-            state.previousPageButtonItem,
-            state.onHomeButtonClick,
-            state.nextPageButtonItem,
-            state.tocButtonItem,
-            state.shouldShowBottomAppBar,
-            bottomAppBarScrollBehavior
-          )
+          if (!state.isNoBookOpenInReader) {
+            BottomAppBarOfReaderScreen(
+              state.bookmarkButtonItem,
+              state.previousPageButtonItem,
+              state.onHomeButtonClick,
+              state.nextPageButtonItem,
+              state.tocButtonItem,
+              state.shouldShowBottomAppBar,
+              bottomAppBarScrollBehavior
+            )
+          }
         },
         floatingActionButton = { BackToTopFab(state) },
         modifier = Modifier
