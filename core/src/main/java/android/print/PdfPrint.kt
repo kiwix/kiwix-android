@@ -28,6 +28,10 @@ import java.io.File
  * Placed in the `android.print` package so it can subclass the package-private
  * [PrintDocumentAdapter.LayoutResultCallback] and [PrintDocumentAdapter.WriteResultCallback].
  */
+private fun ParcelFileDescriptor.closeSafely() {
+  runCatching { close() }
+}
+
 class PdfPrint(private val printAttributes: PrintAttributes) {
   fun print(
     adapter: PrintDocumentAdapter,
@@ -63,19 +67,13 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
             cancellationSignal,
             object : PrintDocumentAdapter.WriteResultCallback() {
               override fun onWriteFinished(pages: Array<out PageRange>?) {
-                try {
-                  pfd.close()
-                } catch (_: Exception) {
-                }
+                pfd.closeSafely()
                 adapter.onFinish()
                 onComplete(outputFile)
               }
 
               override fun onWriteFailed(error: CharSequence?) {
-                try {
-                  pfd.close()
-                } catch (_: Exception) {
-                }
+                pfd.closeSafely()
                 adapter.onFinish()
                 onError(error)
               }
