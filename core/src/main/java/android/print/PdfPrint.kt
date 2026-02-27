@@ -33,7 +33,8 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
     adapter: PrintDocumentAdapter,
     outputFile: File,
     onComplete: (File) -> Unit,
-    onError: (CharSequence?) -> Unit
+    onError: (CharSequence?) -> Unit,
+    cancellationSignal: CancellationSignal = CancellationSignal()
   ) {
     adapter.onStart()
     adapter.onLayout(
@@ -59,7 +60,7 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
           adapter.onWrite(
             arrayOf(PageRange.ALL_PAGES),
             pfd,
-            CancellationSignal(),
+            cancellationSignal,
             object : PrintDocumentAdapter.WriteResultCallback() {
               override fun onWriteFinished(pages: Array<out PageRange>?) {
                 try {
