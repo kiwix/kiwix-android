@@ -58,6 +58,7 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
               ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
             )
           }.getOrElse {
+            adapter.onFinish()
             onError(it.message)
             return
           }
