@@ -76,7 +76,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @RunWith(AndroidJUnit4::class)
-class SearchFragmentTestForCustomApp {
+class SearchScreenTestForCustomApp {
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,

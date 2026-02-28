@@ -65,7 +65,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URI
 
-class SearchFragmentTest : BaseActivityTest() {
+class SearchScreenTest : BaseActivityTest() {
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
@@ -378,7 +378,7 @@ class SearchFragmentTest : BaseActivityTest() {
 
   private fun getTestZimFile(): File {
     val loadFileStream =
-      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      SearchScreenTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
       File(
         context.getExternalFilesDirs(null)[0],
