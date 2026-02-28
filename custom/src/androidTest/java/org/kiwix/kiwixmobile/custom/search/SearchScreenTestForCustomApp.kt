@@ -70,7 +70,7 @@ import java.io.FileOutputStream
 import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
-class SearchFragmentTestForCustomApp {
+class SearchScreenTestForCustomApp {
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
