@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class FileExtensionsTest {
-
   private val testDispatcher = StandardTestDispatcher()
   private lateinit var tempFile: File
 

@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.extensions.getFavicon
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class BookExtensionsTest {
-
   @Test
   fun getFaviconShouldReturnNullForNullBook() {
     val result = null.getFavicon()
