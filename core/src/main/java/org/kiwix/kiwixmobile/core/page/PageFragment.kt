@@ -186,10 +186,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
         },
         actionMenuItems = actionMenuList(
           isSearchActive = pageScreenState.value.isSearchActive,
-          onSearchClick = {
-            // Set the `isSearchActive` when the search button is clicked.
-            pageScreenState.update { copy(isSearchActive = true) }
-          },
+          onSearchClick = { pageScreenState.update { copy(isSearchActive = true) } },
           onDeleteClick = { pageViewModel.actions.tryEmit(Action.UserClickedDeleteButton) }
         )
       )

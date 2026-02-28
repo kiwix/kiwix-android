@@ -25,7 +25,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
@@ -36,7 +36,7 @@ class AndroidPermissionChecker @Inject constructor(
   override suspend fun hasWriteExternalStoragePermission(): Boolean =
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
       kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
-      kiwixDataStore.prefIsTest.first()
+      kiwixDataStore.prefIsTest.firstOrNull() == true
     ) {
       true
     } else {
@@ -49,7 +49,7 @@ class AndroidPermissionChecker @Inject constructor(
   override suspend fun hasReadExternalStoragePermission(): Boolean =
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
       kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
-      kiwixDataStore.prefIsTest.first()
+      kiwixDataStore.prefIsTest.firstOrNull() == true
     ) {
       true
     } else {
