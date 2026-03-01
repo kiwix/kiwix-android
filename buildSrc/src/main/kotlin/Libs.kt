@@ -354,6 +354,12 @@ object Libs {
   /**
    * https://developer.android.com/jetpack/androidx/releases/lifecycle
    */
+  const val LIFECYCLE_RUNTIME_COMPOSE =
+    "androidx.lifecycle:lifecycle-runtime-compose:${Versions.LIFECYCLE_VERSION}"
+
+  /**
+   * https://developer.android.com/jetpack/androidx/releases/lifecycle
+   */
   const val LIFECYCLE_VIEWMODEL_KTX =
     "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VERSION}"
 }

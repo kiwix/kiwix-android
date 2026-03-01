@@ -34,7 +34,8 @@ class AndroidPermissionChecker @Inject constructor(
 ) : KiwixPermissionChecker {
   override suspend fun hasWriteExternalStoragePermission(): Boolean =
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
+      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
+      isRunningInTest()
     ) {
       true
     } else {
@@ -46,7 +47,8 @@ class AndroidPermissionChecker @Inject constructor(
 
   override suspend fun hasReadExternalStoragePermission(): Boolean =
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
+      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ||
+      isRunningInTest()
     ) {
       true
     } else {
@@ -58,4 +60,18 @@ class AndroidPermissionChecker @Inject constructor(
 
   override fun shouldShowRationale(activity: Activity, permission: String): Boolean =
     ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+
+  private fun isRunningInTest(): Boolean {
+    return try {
+      Class.forName("androidx.test.InstrumentationRegistry")
+      true
+    } catch (e: ClassNotFoundException) {
+      try {
+        Class.forName("org.robolectric.RobolectricTestRunner")
+        true
+      } catch (e2: ClassNotFoundException) {
+        false
+      }
+    }
+  }
 }

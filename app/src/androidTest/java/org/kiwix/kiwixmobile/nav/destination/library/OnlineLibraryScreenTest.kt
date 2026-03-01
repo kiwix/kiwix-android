@@ -49,7 +49,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
-class OnlineLibraryFragmentTest : BaseActivityTest() {
+class OnlineLibraryScreenTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()

@@ -56,7 +56,6 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import javax.inject.Inject
 
 const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
@@ -174,29 +173,25 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    return ComposeView(requireContext()).apply {
-      setContent {
-        PageScreen(
-          state = pageScreenState.value,
-          itemClickListener = this@PageFragment,
-          navigationIcon = {
-            NavigationIcon(
-              onClick = navigationIconClick()
-            )
-          },
-          actionMenuItems = actionMenuList(
-            isSearchActive = pageScreenState.value.isSearchActive,
-            onSearchClick = {
-              // Set the `isSearchActive` when the search button is clicked.
-              pageScreenState.update { copy(isSearchActive = true) }
-            },
-            onDeleteClick = { pageViewModel.actions.tryEmit(Action.UserClickedDeleteButton) }
+  ): View {
+    val composeView = ComposeView(requireContext())
+    composeView.setContent {
+      PageScreen(
+        state = pageScreenState.value,
+        itemClickListener = this@PageFragment,
+        navigationIcon = {
+          NavigationIcon(
+            onClick = navigationIconClick()
           )
+        },
+        actionMenuItems = actionMenuList(
+          isSearchActive = pageScreenState.value.isSearchActive,
+          onSearchClick = { pageScreenState.update { copy(isSearchActive = true) } },
+          onDeleteClick = { pageViewModel.actions.tryEmit(Action.UserClickedDeleteButton) }
         )
-        DialogHost(alertDialogShower)
-      }
+      )
     }
+    return composeView
   }
 
   /**

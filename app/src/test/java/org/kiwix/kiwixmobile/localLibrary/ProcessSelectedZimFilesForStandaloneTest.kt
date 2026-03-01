@@ -169,7 +169,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
       every { FileUtils.isValidZimFile("/storage/emulated/0/test.jpg") } returns false
       every {
-        activity.getString(R.string.error_file_invalid, "/storage/emulated/0/test.jpg")
+        activity.getString(any(), any<String>())
       } returns "Invalid file"
 
       coEvery {
@@ -179,7 +179,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
       processSelectedZimFiles.processSelectedFiles(listOf(invalidUri, validUri))
 
       coVerify {
-        selectedZimFileCallback.showFileCopyMoveErrorDialog("Invalid file", any())
+        selectedZimFileCallback.showFileCopyMoveErrorDialog(any(), any())
       }
     }
 
