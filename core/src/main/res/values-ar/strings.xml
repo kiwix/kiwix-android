@@ -330,7 +330,7 @@
   <string name="delete_selected_bookmarks">حذف علامات مرجعية محددة؟</string>
   <string name="import_bookmarks_dialog_title">استيراد الإشارات المرجعية؟</string>
   <string name="export_all_bookmarks_dialog_title">تصدير كافة الإشارات المرجعية؟</string>
-  <string name="export_all_bookmarks_dialog_message">سيؤدي التصدير إلى إنشاء ملف bookmark.xml في المجلد Download/org.kiwix…/.</string>
+  <string name="export_all_bookmarks_dialog_message">سيؤدي التصدير إلى إنشاء ملف bookmark.xml في المجلد \n%s.</string>
   <string name="bookmark_imported_message">تم استيراد كافة الإشارات المرجعية.</string>
   <string name="error_invalid_bookmark_file">خطأ: الملف المحدد ليس ملف إشارة مرجعية صالحًا.</string>
   <string name="send_report">إرسال تقرير التشخيص</string>
