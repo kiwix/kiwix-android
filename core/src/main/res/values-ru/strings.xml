@@ -323,7 +323,7 @@
   <string name="delete_selected_bookmarks">Удалить выбранные закладки?</string>
   <string name="import_bookmarks_dialog_title">Импортировать закладки?</string>
   <string name="export_all_bookmarks_dialog_title">Экспортировать все закладки?</string>
-  <string name="export_all_bookmarks_dialog_message">Экспорт создаст файл bookmark.xml в папке Download/org.kiwix…/</string>
+  <string name="export_all_bookmarks_dialog_message">Экспорт создаст файл bookmark.xml в папке \n%s</string>
   <string name="bookmark_imported_message">Все закладки импортированы.</string>
   <string name="error_invalid_bookmark_file">Ошибка: Выбранный файл не является допустимым файлом закладок.</string>
   <string name="send_report">Отправить отчёт диагностики</string>
