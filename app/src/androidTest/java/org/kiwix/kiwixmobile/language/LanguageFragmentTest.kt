@@ -141,6 +141,10 @@ class LanguageFragmentTest {
       // search and de-select if german language already selected
       clickOnLanguageIcon(composeTestRule)
       waitForLanguageToLoad(composeTestRule)
+      selectLanguage(
+        composeTestRule = composeTestRule,
+        matchLanguage = kiwixMainActivity.getString(R.string.all_languages)
+      )
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -163,6 +167,10 @@ class LanguageFragmentTest {
 
       clickOnLanguageIcon(composeTestRule)
       waitForLanguageToLoad(composeTestRule)
+      selectLanguage(
+        composeTestRule = composeTestRule,
+        matchLanguage = kiwixMainActivity.getString(R.string.all_languages)
+      )
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,

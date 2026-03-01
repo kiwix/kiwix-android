@@ -36,11 +36,25 @@ sealed class State {
         filter
       )
   ) : State() {
-    fun select(languageItem: LanguageItem) =
-      Content(
-        items.map { it.copy(active = it.id == languageItem.id) },
+    fun select(languageItem: LanguageItem): Content {
+      val isAllLanguages = languageItem.id == 0L
+      return Content(
+        items.map {
+          when {
+            // Toggling the "All Languages" item
+            isAllLanguages && it.id == 0L -> it.copy(active = !it.active)
+            // Deselect all others when "All Languages" is toggled on
+            isAllLanguages -> it.copy(active = false)
+            // Toggling a specific language
+            it.id == languageItem.id -> it.copy(active = !it.active)
+            // Deselect "All Languages" when a specific language is selected
+            it.id == 0L -> it.copy(active = false)
+            else -> it
+          }
+        },
         filter
       )
+    }
 
     fun updateFilter(filter: String) =
       Content(items, filter)

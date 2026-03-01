@@ -93,13 +93,14 @@ class DownloadTest : BaseActivityTest() {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
-        setPrefLanguage("en")
+        setPrefLanguage("")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
         setShowStorageOption(false)
         setIsFirstRun(false)
         setIsPlayStoreBuild(true)
         setPrefIsTest(true)
+        setSelectedOnlineContentLanguage("")
         setSelectedOnlineContentCategory("")
       }
     }
