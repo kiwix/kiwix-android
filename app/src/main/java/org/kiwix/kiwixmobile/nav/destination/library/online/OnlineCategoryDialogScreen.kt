@@ -87,15 +87,8 @@ fun OnlineCategoryDialogScreen(
         KiwixAppBar(
           title = stringResource(R.string.select_category),
           navigationIcon = navigationIcon,
-          actionMenuItems = listOf(
-            ActionMenuItem(
-              icon = IconItem.Vector(Icons.Default.Check),
-              contentDescription = R.string.save_categories,
-              onClick = {
-                categoryViewModel.actions.tryEmit(Action.Save)
-              },
-              testingTag = SAVE_ICON_TESTING_TAG
-            )
+          actionMenuItems = categoryActionMenuItems(
+            onSaveClick = { categoryViewModel.actions.tryEmit(Action.Save) }
           )
         )
       }
@@ -221,3 +214,14 @@ fun String.toSentenceCaseCategory(): String =
     .replaceFirstChar { word ->
       if (word.isLowerCase()) word.titlecase() else word.toString()
     }
+
+private fun categoryActionMenuItems(
+  onSaveClick: () -> Unit
+): List<ActionMenuItem> = listOf(
+  ActionMenuItem(
+    icon = IconItem.Vector(Icons.Default.Check),
+    contentDescription = R.string.save_categories,
+    onClick = onSaveClick,
+    testingTag = SAVE_ICON_TESTING_TAG
+  )
+)
