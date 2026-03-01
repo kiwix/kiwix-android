@@ -24,6 +24,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -47,8 +48,8 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -64,7 +65,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URI
 
-class SearchFragmentTest : BaseActivityTest() {
+class SearchScreenTest : BaseActivityTest() {
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
@@ -276,31 +277,33 @@ class SearchFragmentTest : BaseActivityTest() {
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchFragment become visible on screen.
       delay(2000)
-      val searchFragment = kiwixMainActivity.supportFragmentManager.fragments
-        .filterIsInstance<SearchFragment>()
-        .firstOrNull()
+      val searchViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[SearchViewModel::class.java]
+
       for (i in 1..100) {
         // This will execute the render method 100 times frequently.
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 100MS delay.
         delay(100)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(200)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(300)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
     }
 
@@ -375,7 +378,7 @@ class SearchFragmentTest : BaseActivityTest() {
 
   private fun getTestZimFile(): File {
     val loadFileStream =
-      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      SearchScreenTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
       File(
         context.getExternalFilesDirs(null)[0],

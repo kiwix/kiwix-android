@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +41,7 @@ import androidx.navigation.navArgument
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.HELP_SCREEN
 import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
@@ -52,7 +53,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
@@ -131,19 +132,16 @@ fun CustomNavGraph(
         }
       )
     ) { backStackEntry ->
-      val isVoice = backStackEntry.arguments?.getBoolean(EXTRA_IS_WIDGET_VOICE) ?: false
-      val searchString = backStackEntry.arguments?.getString(NAV_ARG_SEARCH_STRING).orEmpty()
-      val isOpenedFromTabSwitcher =
-        backStackEntry.arguments?.getBoolean(TAG_FROM_TAB_SWITCHER) ?: false
-      FragmentContainer(R.id.searchFragmentContainer) {
-        SearchFragment().apply {
-          arguments = Bundle().apply {
-            putBoolean(EXTRA_IS_WIDGET_VOICE, isVoice)
-            putBoolean(TAG_FROM_TAB_SWITCHER, isOpenedFromTabSwitcher)
-            putString(NAV_ARG_SEARCH_STRING, searchString)
-          }
-        }
-      }
+
+      val context = LocalActivity.current
+      val coreMainActivity = context as CoreMainActivity
+
+      SearchScreenRoute(
+        viewModelFactory = viewModelFactory,
+        dialogShower = alertDialogShower,
+        arguments = backStackEntry.arguments,
+        coreMainActivity = coreMainActivity
+      )
     }
   }
 }
