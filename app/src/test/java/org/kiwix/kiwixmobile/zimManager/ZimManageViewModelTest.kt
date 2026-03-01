@@ -148,6 +148,7 @@ class ZimManageViewModelTest {
   }
 
   @BeforeEach
+  @Suppress("LongMethod", "MaxLineLength")
   fun init() {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
@@ -412,6 +413,7 @@ class ZimManageViewModelTest {
   }
 
   @Test
+  @Suppress("LongMethod", "MaxLineLength")
   fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
     runTest {
       val bookOver4Gb =

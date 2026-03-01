@@ -44,7 +44,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
@@ -155,7 +154,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       swipeRefreshItem = Pair(false, true),
       scanningProgressItem = Pair(false, ZERO),
       noFilesViewItem = Triple("", "", false),
-      actionMenuItems = listOf()
+      actionMenuItems = actionMenuItems()
     )
   )
 
@@ -202,9 +201,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     return ComposeView(requireContext()).apply {
       setContent {
         val lazyListState = rememberLazyListState()
-        LaunchedEffect(Unit) {
-          updateLibraryScreenState(actionMenuItems = actionMenuItems())
-        }
+
         LocalLibraryScreen(
           listState = lazyListState,
           state = libraryScreenState.value,

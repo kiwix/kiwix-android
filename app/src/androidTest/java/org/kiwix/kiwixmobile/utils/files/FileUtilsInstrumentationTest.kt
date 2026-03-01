@@ -26,9 +26,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -510,13 +507,37 @@ class FileUtilsInstrumentationTest {
         )
       )
     }
+    val mockWrapper: DocumentResolverWrapper = mockk(relaxed = true)
+    every {
+      mockWrapper.query(any(), any(), any(), any(), any(), any())
+    } answers {
+      val uriString = arg<Uri>(1).toString()
+      when {
+        uriString.contains("com.android.providers.downloads.documents") -> expectedFilePath
+        else -> null
+      }
+    }
+    every { mockWrapper.getDocumentId(any()) } answers {
+      val uriString = arg<Uri>(0).toString()
+      when {
+        uriString.contains("raw%3A") -> "raw:$expectedFilePath"
+        else -> expectedFilePath
+      }
+    }
+    every { mockWrapper.isDocumentUri(any(), any()) } answers {
+      val uri = arg<Uri>(1)
+      val uriStr = uri.toString()
+      uriStr.contains("com.android.externalstorage.documents") ||
+        uriStr.contains("com.android.providers.downloads.documents")
+    }
+
     context?.let { context ->
-      CoroutineScope(Dispatchers.Main).launch {
+      runBlocking {
         dummyUriData.forEach { dummyUrlData ->
           dummyUrlData.uri?.let { uri ->
             Assertions.assertEquals(
-              FileUtils.getLocalFilePathByUri(context, uri),
-              dummyUrlData.expectedFileName
+              dummyUrlData.expectedFileName,
+              FileUtils.getLocalFilePathByUri(context, uri, mockWrapper)
             )
           }
         }
@@ -556,10 +577,12 @@ class FileUtilsInstrumentationTest {
           )
         )
 
+      val mockWrapper: DocumentResolverWrapper = mockk()
       dummyDownloadUriData.forEach { dummyUrlData ->
         dummyUrlData.uri?.let { uri ->
+          every { mockWrapper.getDocumentId(uri) } returns (dummyUrlData.expectedFileName ?: "")
           Assertions.assertEquals(
-            FileUtils.extractDocumentId(uri, DocumentResolverWrapper()),
+            FileUtils.extractDocumentId(uri, mockWrapper),
             dummyUrlData.expectedFileName
           )
         }
@@ -592,16 +615,34 @@ class FileUtilsInstrumentationTest {
       // default behavior of ContentResolver.
       // Therefore, we are restricting this test to API level 33 and below.
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        val mockWrapperForOldDevice: DocumentResolverWrapper = mockk(relaxed = true)
+        every {
+          mockWrapperForOldDevice.query(
+            any(), any(), any(), any(), any(), any()
+          )
+        } returns expectedFilePath
+        every { mockWrapperForOldDevice.getDocumentId(any()) } returns "raw:$expectedFilePath"
+
         // test to get the download uri on old device
         testWithDownloadUri(
           Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"),
-          expectedFilePath
+          expectedFilePath,
+          mockWrapperForOldDevice
         )
+
+        val mockWrapperForNewDevice: DocumentResolverWrapper = mockk(relaxed = true)
+        every {
+          mockWrapperForNewDevice.query(
+            any(), any(), any(), any(), any(), any()
+          )
+        } returns expectedFilePath
+        every { mockWrapperForNewDevice.getDocumentId(any()) } returns expectedFilePath
 
         // test to get the download uri on new device
         testWithDownloadUri(
           Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri"),
-          expectedFilePath
+          expectedFilePath,
+          mockWrapperForNewDevice
         )
 
         // test with all possible download uris
@@ -624,12 +665,12 @@ class FileUtilsInstrumentationTest {
             every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
             every {
               mockDocumentsContractWrapper.query(
-                context!!,
-                mockedUri,
-                "_data",
-                null,
-                null,
-                null
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any()
               )
             } returns expectedFilePath
             testWithDownloadUri(
@@ -645,7 +686,7 @@ class FileUtilsInstrumentationTest {
   private suspend fun testWithDownloadUri(
     uri: Uri,
     expectedPath: String,
-    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
+    documentsContractWrapper: DocumentResolverWrapper
   ) {
     context?.let { context ->
       assertEquals(

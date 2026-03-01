@@ -23,5 +23,11 @@ import android.app.Activity
 interface KiwixPermissionChecker {
   suspend fun hasWriteExternalStoragePermission(): Boolean
   suspend fun hasReadExternalStoragePermission(): Boolean
+  suspend fun hasNearbyWifiPermission(): Boolean
+  suspend fun hasLocationPermission(): Boolean
+  suspend fun isWriteExternalStoragePermissionRequired(): Boolean
+
   fun shouldShowRationale(activity: Activity, permission: String): Boolean
+
+  fun isAndroid13orAbove(): Boolean
 }
