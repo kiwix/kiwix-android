@@ -40,8 +40,6 @@ import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -82,7 +80,6 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
           onDownloadClick = { downloadButtonClick() },
           onRetryClick = { retryButtonClick() }
         )
-        DialogHost(alertDialogShower as AlertDialogShower)
       }
     }
     val activity = requireActivity() as CoreMainActivity

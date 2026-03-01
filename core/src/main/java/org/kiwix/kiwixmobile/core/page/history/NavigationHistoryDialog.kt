@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import javax.inject.Inject
 
@@ -95,7 +94,6 @@ class NavigationHistoryDialog(
             )
           }
         )
-        DialogHost(alertDialogShower)
       }
     }.also {
       composeView = it

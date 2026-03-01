@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
@@ -136,7 +135,6 @@ class SearchFragment : BaseFragment() {
           actionMenuItems(),
           isDataLoading.value
         )
-        DialogHost(dialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
           onDispose {
             // Dispose UI resources when this Compose view is removed. Compose disposes
