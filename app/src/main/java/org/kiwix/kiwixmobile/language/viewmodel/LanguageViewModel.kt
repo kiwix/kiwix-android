@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatActivity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -65,9 +64,6 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.language.viewmodel.Action.ClearAll
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
-import org.kiwix.kiwixmobile.language.viewmodel.Action.SelectAll
 import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
@@ -75,7 +71,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
-open class LanguageViewModel @Inject constructor(
+class LanguageViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   private var kiwixService: KiwixService,
@@ -87,7 +83,7 @@ open class LanguageViewModel @Inject constructor(
   private val coroutineJobs = mutableListOf<Job>()
 
   @VisibleForTesting
-  open var isUnitTestCase: Boolean = false
+  var isUnitTestCase: Boolean = false
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -95,11 +91,6 @@ open class LanguageViewModel @Inject constructor(
       add(observeActions())
       add(observeLanguages())
     }
-  }
-
-  @VisibleForTesting
-  fun setIsUnitTestCase() {
-    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -223,9 +214,6 @@ open class LanguageViewModel @Inject constructor(
       is Filter -> filter(action, currentState)
       is Select -> select(action, currentState)
       Save -> saveAction(currentState)
-      ClearAll -> clearAll(currentState)
-      SelectAll -> selectAll(currentState)
-      Cancel -> cancel(currentState)
     }
   }
 
@@ -241,12 +229,6 @@ open class LanguageViewModel @Inject constructor(
   private fun saveAction(currentState: State): State =
     if (currentState is Content) save(currentState) else currentState
 
-  private fun clearAll(currentState: State): State =
-    if (currentState is Content) currentState.clearAll() else currentState
-
-  private fun selectAll(currentState: State): State =
-    if (currentState is Content) currentState.selectAll() else currentState
-
   private fun save(currentState: Content): State {
     val selectedLanguages = currentState.items.filter { it.active }
     effects.tryEmit(
@@ -257,16 +239,6 @@ open class LanguageViewModel @Inject constructor(
       )
     )
     return Saving
-  }
-
-  private fun cancel(currentState: State): State {
-    if (currentState !is Content) return currentState
-    effects.tryEmit(object : SideEffect<Unit> {
-      override fun invokeWith(activity: AppCompatActivity) {
-        activity.onBackPressedDispatcher.onBackPressed()
-      }
-    })
-    return currentState
   }
 
   private fun updateSelection(

@@ -18,4 +18,6 @@
   <string name="all_categories" tools:keep="@string/all_categories">All categories</string>
   <string name="select_category_content_description">Selecting this category will prioritize displaying downloadable books in that language at the top.</string>
   <string name="save_categories" tools:keep="@string/save_categories">Save categories</string>
+  <string name="your_selected_categories" tools:keep="@string/your_selected_categories">Selected categories:</string>
+  <string name="and_more" tools:keep="@string/and_more">and %d more</string>
 </resources>

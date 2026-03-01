@@ -57,9 +57,6 @@ import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.language.viewmodel.Action.ClearAll
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.zimManager.testFlow
@@ -113,12 +110,13 @@ class LanguageViewModelTest {
 
   private fun createViewModel() {
     languageViewModel =
-      TestLanguageViewModel(
+      LanguageViewModel(
         application,
         kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
       )
+    languageViewModel.isUnitTestCase = true
   }
 
   @Nested
@@ -261,55 +259,6 @@ class LanguageViewModelTest {
   }
 
   @Test
-  fun `ClearAll clears all selections`() = flakyTest {
-    runTest {
-      val activeLanguage = language(languageCode = "eng")
-      val entry = LanguageEntry().apply {
-        title = activeLanguage.language
-        languageCode = activeLanguage.languageCode
-        count = 1
-      }
-      coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply { entries = listOf(entry) }
-      every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
-      every { application.getString(any()) } returns "Error"
-
-      createViewModel()
-
-      languageViewModel.state.test {
-        val item = awaitItem()
-        val content = if (item is Loading) awaitItem() as Content else item as Content
-
-        languageViewModel.actions.emit(ClearAll)
-
-        val content2 = awaitItem() as Content
-        assertThat(content2.items.none { it.active }).isTrue()
-      }
-    }
-  }
-
-  @Test
-  fun `Cancel restores state (mocks back press)`() = flakyTest {
-    runTest {
-      val language = language().copy(active = true)
-      val entry = LanguageEntry().apply {
-        title = language.language
-        languageCode = language.languageCode
-      }
-      coEvery { kiwixService.getLanguages() } returns LanguageFeed().apply { entries = listOf(entry) }
-
-      createViewModel()
-
-      advanceUntilIdle()
-
-      languageViewModel.effects.test {
-        languageViewModel.actions.emit(Cancel)
-        val effect = awaitItem() // SideEffect
-        assertThat(effect).isInstanceOf(SideEffect::class.java)
-      }
-    }
-  }
-
-  @Test
   fun `offline uses cached languages`() = flakyTest {
     runTest {
       networkStates.value = NetworkState.NOT_CONNECTED
@@ -423,22 +372,6 @@ class LanguageViewModelTest {
       assertThat(languageViewModel.state.value).isEqualTo(Loading)
     }
   }
-}
-
-class TestLanguageViewModel(
-  context: Application,
-  kiwixDataStore: KiwixDataStore,
-  kiwixService: KiwixService,
-  connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
-) : LanguageViewModel(
-    context,
-    kiwixDataStore,
-    kiwixService,
-    connectivityBroadcastReceiver
-  ) {
-  override var isUnitTestCase: Boolean
-    get() = true
-    set(value) {}
 }
 
 inline fun flakyTest(
