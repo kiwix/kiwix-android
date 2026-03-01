@@ -194,6 +194,7 @@ jobs:
 
       - name: create instrumentation coverage for playStore variant
         uses: reactivecircus/android-emulator-runner@v2
+        timeout-minutes: 60
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:

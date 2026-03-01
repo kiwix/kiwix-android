@@ -23,7 +23,9 @@ import android.content.ClipboardManager
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -35,10 +37,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -49,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -61,7 +66,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
+import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray850
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_ROW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
@@ -73,7 +80,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
@@ -82,6 +91,8 @@ const val ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG = "alertDialogDismissButtonTes
 const val ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG = "alertDialogNaturalButtonTestingTag"
 const val ALERT_DIALOG_TITLE_TEXT_TESTING_TAG = "alertDialogTitleTextTestingTag"
 const val ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG = "alertDialogMessageTextTestingTag"
+const val ALERT_DIALOG_URI_TEXT_TESTING_TAG = "alertDialogUriTextTestingTag"
+const val ALERT_DIALOG_COPY_BUTTON_TESTING_TAG = "alertDialogCopyButtonTestingTag"
 
 @Suppress("UnusedPrivateProperty")
 class AlertDialogShower @Inject constructor() : DialogShower {
@@ -115,7 +126,7 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
           DialogTitle(dialog.title)
         }
         DialogMessage(dialog)
-        ShowUri(uri)
+        ShowUri(uri, clickListeners.getOrNull(0), alertDialogShower)
         ShowCustomComposeView(dialog)
       }
       ShowDialogButtons(dialog, clickListeners, alertDialogShower)
@@ -206,7 +217,7 @@ fun DialogConfirmButton(
         text = confirmButtonText.uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
       )
     }
   }
@@ -231,7 +242,7 @@ fun DialogDismissButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
       )
     }
   }
@@ -258,7 +269,7 @@ private fun DialogNaturalButton(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
-        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE,
       )
     }
   }
@@ -329,34 +340,92 @@ private fun DialogMessage(dialog: KiwixDialog) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ShowUri(uri: Uri?) {
+private fun ShowUri(
+  uri: Uri?,
+  onUriClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower?
+) {
+  if (uri == null) return
   val context = LocalContext.current
-  uri?.let {
-    Text(
-      text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
-      color = MaterialTheme.colorScheme.primary,
-      textDecoration = TextDecoration.Underline,
-      fontSize = DIALOG_URI_TEXT_SIZE,
-      textAlign = TextAlign.Center,
+  val copyLink: () -> Unit = {
+    val clipboard =
+      ContextCompat.getSystemService(context, ClipboardManager::class.java)
+    val clip = ClipData.newPlainText("External Url", "$uri")
+    clipboard?.setPrimaryClip(clip)
+    Toast.makeText(
+      context,
+      R.string.external_link_copied_message,
+      Toast.LENGTH_SHORT
+    ).show()
+  }
+
+  UriDisplayRow(
+    uri = uri,
+    onUriClick = onUriClick,
+    alertDialogShower = alertDialogShower,
+    copyLink = copyLink
+  )
+}
+
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun UriDisplayRow(
+  uri: Uri,
+  onUriClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower?,
+  copyLink: () -> Unit
+) {
+  val surfaceColor = if (isSystemInDarkTheme()) MineShaftGray850 else AlabasterWhite
+  Surface(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(top = TWELVE_DP, bottom = EIGHT_DP)
+      .border(
+        width = ONE_DP,
+        color = MaterialTheme.colorScheme.outlineVariant,
+        shape = RoundedCornerShape(EIGHT_DP)
+      ),
+    shape = RoundedCornerShape(EIGHT_DP),
+    color = surfaceColor
+  ) {
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier
         .fillMaxWidth()
-        .combinedClickable(
-          onClick = {
-            // nothing to do
-          },
-          onLongClick = {
-            val clipboard =
-              ContextCompat.getSystemService(context, ClipboardManager::class.java)
-            val clip = ClipData.newPlainText("External Url", "$uri")
-            clipboard?.setPrimaryClip(clip)
-            Toast.makeText(
-              context,
-              R.string.external_link_copied_message,
-              Toast.LENGTH_SHORT
-            ).show()
-          }
+        .padding(
+          start = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
+          top = EIGHT_DP,
+          bottom = EIGHT_DP
         )
-    )
+    ) {
+      Text(
+        text = "$uri",
+        color = MaterialTheme.colorScheme.primary,
+        textDecoration = TextDecoration.Underline,
+        fontSize = DIALOG_URI_TEXT_SIZE,
+        textAlign = TextAlign.Start,
+        modifier = Modifier
+          .weight(1f)
+          .combinedClickable(
+            onClick = {
+              alertDialogShower?.dismiss()
+              onUriClick?.invoke()
+            },
+            onLongClick = { copyLink() }
+          )
+          .semantics { testTag = ALERT_DIALOG_URI_TEXT_TESTING_TAG }
+      )
+      IconButton(
+        onClick = { copyLink() },
+        modifier = Modifier.semantics { testTag = ALERT_DIALOG_COPY_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(R.drawable.ic_file_copy),
+          contentDescription = stringResource(R.string.action_copy),
+          tint = MaterialTheme.colorScheme.primary
+        )
+      }
+    }
   }
 }
 

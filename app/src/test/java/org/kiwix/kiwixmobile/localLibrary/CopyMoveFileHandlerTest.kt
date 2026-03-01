@@ -96,6 +96,10 @@ class CopyMoveFileHandlerTest {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     every { destinationFile.canRead() } returns true
+    val mockContext = mockk<android.content.Context>(relaxed = true)
+    every { activity.applicationContext } returns mockContext
+    every { mockContext.getString(any<Int>()) } returns "Test String"
+    every { mockContext.getString(any<Int>(), *anyVararg()) } returns "Test String"
     fileHandler = CopyMoveFileHandler(
       activity,
       kiwixDataStore,
