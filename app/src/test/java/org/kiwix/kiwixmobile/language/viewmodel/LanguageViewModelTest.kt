@@ -85,8 +85,10 @@ class LanguageViewModelTest {
     }
     every { application.unregisterReceiver(any()) } just Runs
     LanguageSessionCache.hasFetched = false
-    coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
+    every { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
+    coEvery { kiwixService.getLanguages() } returns LanguageFeed()
+    every { application.getString(any<Int>()) } returns "Error"
   }
 
   private fun createViewModel() {

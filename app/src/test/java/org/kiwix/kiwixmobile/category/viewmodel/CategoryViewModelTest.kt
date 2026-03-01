@@ -87,6 +87,7 @@ class CategoryViewModelTest {
     CategorySessionCache.hasFetched = false
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
+    coEvery { kiwixService.getCategories() } returns CategoryFeed()
   }
 
   private fun createViewModel() {
