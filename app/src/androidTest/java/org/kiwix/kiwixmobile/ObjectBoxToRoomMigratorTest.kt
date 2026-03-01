@@ -48,7 +48,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator

@@ -30,7 +30,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Dao

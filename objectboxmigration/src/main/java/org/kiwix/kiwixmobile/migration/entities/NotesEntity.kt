@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.migration.entities
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity

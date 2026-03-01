@@ -52,8 +52,8 @@ internal class HistoryViewModelTest {
     every { historyRoomDao.history() } returns itemsFromDb
     every { historyRoomDao.pages() } returns historyRoomDao.history()
     viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore).apply {
-      alertDialogShower = dialogShower
-      lifeCycleScope = viewModelScope
+      setAlertDialogShower(dialogShower)
+      setLifeCycleScope(viewModelScope)
     }
   }
 

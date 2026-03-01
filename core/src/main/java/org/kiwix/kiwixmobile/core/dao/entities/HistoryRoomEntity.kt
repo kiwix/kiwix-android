@@ -22,7 +22,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import java.io.File
 

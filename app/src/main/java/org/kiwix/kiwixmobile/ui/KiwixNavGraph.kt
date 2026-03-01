@@ -60,9 +60,12 @@ import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
-import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
-import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
+import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
+import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
+import org.kiwix.kiwixmobile.core.page.notes.NotesScreenRoute
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
@@ -124,14 +127,20 @@ fun KiwixNavGraph(
       }
     }
     composable(KiwixDestination.Bookmarks.route) {
-      FragmentContainer(R.id.bookmarksFragmentContainer) {
-        BookmarksFragment()
-      }
+      val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
+      BookmarkScreenRoute(
+        navigateBack = navController::popBackStack,
+        viewModel = bookmarkViewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
     composable(KiwixDestination.Notes.route) {
-      FragmentContainer(R.id.notesFragmentContainer) {
-        NotesFragment()
-      }
+      val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
+      NotesScreenRoute(
+        navigateBack = navController::popBackStack,
+        notesViewModel = notesViewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
     composable(KiwixDestination.Intro.route) {
       IntroScreenRoute(
@@ -145,9 +154,12 @@ fun KiwixNavGraph(
       )
     }
     composable(KiwixDestination.History.route) {
-      FragmentContainer(R.id.historyFragmentContainer) {
-        HistoryFragment()
-      }
+      val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
+      HistoryScreenRoute(
+        navigateBack = navController::popBackStack,
+        viewModel = historyViewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
     composable(KiwixDestination.Language.route) {
       LanguageScreenRoute(

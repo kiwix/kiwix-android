@@ -51,7 +51,7 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX

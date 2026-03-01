@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
-import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -56,14 +55,15 @@ const val PAGE_ITEM_TESTING_TAG = "pageItemTestingTag"
 fun PageListItem(
   index: Int,
   page: Page,
-  itemClickListener: OnItemClickListener
+  onItemClick: (Page) -> Unit,
+  onItemLongClick: (Page) -> Unit,
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
       .combinedClickable(
-        onClick = { itemClickListener.onItemClick(page) },
-        onLongClick = { itemClickListener.onItemLongClick(page) }
+        onClick = { onItemClick(page) },
+        onLongClick = { onItemLongClick(page) }
       )
       .background(MaterialTheme.colorScheme.surface)
       .padding(

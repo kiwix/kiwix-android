@@ -50,7 +50,7 @@ import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_LIST_TEST_TAG
 import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG

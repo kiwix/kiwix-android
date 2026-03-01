@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class NotesState(

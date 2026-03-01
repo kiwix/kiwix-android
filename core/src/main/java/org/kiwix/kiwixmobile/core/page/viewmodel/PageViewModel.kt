@@ -58,8 +58,30 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
 ) : ViewModel() {
   abstract fun initialState(): S
 
-  lateinit var alertDialogShower: AlertDialogShower
-  lateinit var lifeCycleScope: CoroutineScope
+  private lateinit var alertDialogShower: AlertDialogShower
+  private lateinit var lifeCycleScope: CoroutineScope
+
+  fun setAlertDialogShower(shower: AlertDialogShower) {
+    alertDialogShower = shower
+  }
+
+  fun setLifeCycleScope(scope: CoroutineScope) {
+    lifeCycleScope = scope
+  }
+
+  fun requireAlertDialogShower(): AlertDialogShower {
+    require(::alertDialogShower.isInitialized) {
+      "AlertDialogShower is not initialized. Set the AlertDialogShower to viewModel"
+    }
+    return alertDialogShower
+  }
+
+  fun requireLifeCycleScope(): CoroutineScope {
+    require(::lifeCycleScope.isInitialized) {
+      "LifeCycleScope is not initialized. Set the LifeCycleScope to viewModel"
+    }
+    return lifeCycleScope
+  }
 
   private lateinit var pageViewModelClickListener: PageViewModelClickListener
   private val _state = MutableStateFlow(initialState())

@@ -22,7 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -57,7 +57,7 @@ class HistoryViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: HistoryState
   ): HistoryState {
-    effects.tryEmit(UpdateAllHistoryPreference(kiwixDataStore, action.isChecked, lifeCycleScope))
+    effects.tryEmit(UpdateAllHistoryPreference(kiwixDataStore, action.isChecked, requireLifeCycleScope()))
     return state.copy(showAll = action.isChecked)
   }
 
@@ -65,7 +65,7 @@ class HistoryViewModel @Inject constructor(
     state: HistoryState,
     viewModelScope: CoroutineScope
   ) =
-    ShowDeleteHistoryDialog(effects, state, pageDao, viewModelScope, alertDialogShower)
+    ShowDeleteHistoryDialog(effects, state, pageDao, viewModelScope, requireAlertDialogShower())
 
   override fun deselectAllPages(state: HistoryState): HistoryState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })

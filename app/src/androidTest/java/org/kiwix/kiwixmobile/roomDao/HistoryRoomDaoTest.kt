@@ -34,7 +34,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 
 @RunWith(AndroidJUnit4::class)
 class HistoryRoomDaoTest {

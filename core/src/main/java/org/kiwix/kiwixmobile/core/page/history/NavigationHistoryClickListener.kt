@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.history
 
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 
 interface NavigationHistoryClickListener {
   fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem)

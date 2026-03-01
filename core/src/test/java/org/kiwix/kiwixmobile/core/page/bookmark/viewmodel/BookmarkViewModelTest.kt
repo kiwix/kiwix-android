@@ -70,8 +70,8 @@ internal class BookmarkViewModelTest {
     every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
     viewModel =
       BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, kiwixDataStore).apply {
-        alertDialogShower = dialogShower
-        lifeCycleScope = viewModelScope
+        setAlertDialogShower(dialogShower)
+        setLifeCycleScope(viewModelScope)
       }
   }
 

@@ -34,7 +34,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 
 @RunWith(AndroidJUnit4::class)
 class NoteRoomDaoTest {

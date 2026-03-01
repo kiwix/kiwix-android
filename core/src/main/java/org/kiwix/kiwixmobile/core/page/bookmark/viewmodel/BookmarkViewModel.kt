@@ -22,7 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -61,7 +61,7 @@ class BookmarkViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: BookmarkState
   ): BookmarkState {
-    effects.tryEmit(UpdateAllBookmarksPreference(kiwixDataStore, action.isChecked, lifeCycleScope))
+    effects.tryEmit(UpdateAllBookmarksPreference(kiwixDataStore, action.isChecked, requireLifeCycleScope()))
     return state.copy(showAll = action.isChecked)
   }
 
@@ -69,7 +69,7 @@ class BookmarkViewModel @Inject constructor(
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   override fun createDeletePageDialogEffect(state: BookmarkState, viewModelScope: CoroutineScope) =
-    ShowDeleteBookmarksDialog(effects, state, pageDao, viewModelScope, alertDialogShower)
+    ShowDeleteBookmarksDialog(effects, state, pageDao, viewModelScope, requireAlertDialogShower())
 
   override fun copyWithNewItems(
     state: BookmarkState,

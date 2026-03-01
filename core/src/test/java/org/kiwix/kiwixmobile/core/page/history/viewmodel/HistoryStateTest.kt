@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
