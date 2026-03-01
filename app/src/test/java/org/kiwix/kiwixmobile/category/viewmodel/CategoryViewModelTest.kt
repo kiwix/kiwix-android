@@ -100,14 +100,15 @@ class CategoryViewModelTest {
     every { application.unregisterReceiver(any()) } just Runs
     CategorySessionCache.hasFetched = false
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
-    every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
     coEvery { kiwixDataStore.saveOnlineCategoryList(any()) } just Runs
+    coEvery { kiwixService.getCategories() } returns CategoryFeed()
   }
 
   private fun createViewModel() {
+    CategoryViewModel.isTest = true
     categoryViewModel =
-      TestCategoryViewModel(
+      CategoryViewModel(
         application,
         kiwixDataStore,
         kiwixService,
@@ -207,10 +208,12 @@ class CategoryViewModelTest {
       coEvery { kiwixService.getCategories() } throws RuntimeException()
 
       createViewModel()
-      advanceUntilIdle()
+
+      advanceUntilIdle() // Wait for coroutines to settle
       categoryViewModel.state.test {
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
+        cancelAndConsumeRemainingEvents()
       }
     }
   }
@@ -344,21 +347,5 @@ class CategoryViewModelTest {
         assertThat(effect.categories.map { it.category }).containsExactly("Wikipedia")
       }
     }
-  }
-
-  class TestCategoryViewModel(
-    context: Application,
-    kiwixDataStore: KiwixDataStore,
-    kiwixService: KiwixService,
-    connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
-  ) : CategoryViewModel(
-      context,
-      kiwixDataStore,
-      kiwixService,
-      connectivityBroadcastReceiver
-    ) {
-    override var isUnitTestCase: Boolean
-      get() = true
-      set(value) {}
   }
 }
