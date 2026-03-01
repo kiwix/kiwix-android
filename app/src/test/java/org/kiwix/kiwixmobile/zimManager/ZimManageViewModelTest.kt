@@ -150,6 +150,7 @@ class ZimManageViewModelTest {
     Dispatchers.resetMain()
   }
 
+  @Suppress("LongMethod")
   @BeforeEach
   fun init() {
     Dispatchers.setMain(testDispatcher)
@@ -170,16 +171,16 @@ class ZimManageViewModelTest {
       @Suppress("UnspecifiedRegisterReceiverFlag")
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
-    every { application.getString(any()) } returns ""
-    every { application.getString(any(), *anyVararg()) } returns ""
+    every { application.getString(any<Int>()) } returns ""
+    every { application.getString(any<Int>(), *anyVararg()) } returns ""
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
-    coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
-    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
-    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
+    every { kiwixDataStore.wifiOnly } returns flowOf(true)
+    every { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
+    every { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
     every {
       onlineLibraryManager.buildLibraryUrl(
@@ -454,11 +455,12 @@ class ZimManageViewModelTest {
             )
           )
         }
-        cancelAndIgnoreRemainingEvents()
+        cancelAndConsumeRemainingEvents()
       }
     }
   }
 
+  @Suppress("LongMethod")
   @Test
   fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
     runTest(testDispatcher) {
@@ -609,7 +611,7 @@ class ZimManageViewModelTest {
             )
           )
         }
-        cancelAndIgnoreRemainingEvents()
+        cancelAndConsumeRemainingEvents()
       }
     }
   }
@@ -816,6 +818,7 @@ class BookTestWrapper(private val id: String) : Book(0L) {
 
 const val MOCKK_TIMEOUT_FOR_VERIFICATION = 1000L
 
+@Suppress("LongParameterList")
 private class TestZimManageViewModel(
   downloadDao: DownloadRoomDao,
   libkiwixBookOnDisk: LibkiwixBookOnDisk,
