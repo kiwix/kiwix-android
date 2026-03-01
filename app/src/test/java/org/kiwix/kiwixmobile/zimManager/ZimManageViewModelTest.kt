@@ -148,6 +148,7 @@ class ZimManageViewModelTest {
     Dispatchers.resetMain()
   }
 
+  @Suppress("LongMethod")
   @BeforeEach
   fun init() {
     Dispatchers.setMain(testDispatcher)
@@ -779,6 +780,7 @@ class BookTestWrapper(private val id: String) : Book(0L) {
 
 const val MOCKK_TIMEOUT_FOR_VERIFICATION = 1000L
 
+@Suppress("LongParameterList")
 private class TestZimManageViewModel(
   downloadDao: DownloadRoomDao,
   libkiwixBookOnDisk: LibkiwixBookOnDisk,

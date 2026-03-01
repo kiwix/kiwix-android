@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatActivity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -69,7 +68,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Savi
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
-open class CategoryViewModel @Inject constructor(
+class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   private var kiwixService: KiwixService,
@@ -80,7 +79,7 @@ open class CategoryViewModel @Inject constructor(
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
 
   @VisibleForTesting
-  open var isUnitTestCase: Boolean = false
+  var isUnitTestCase: Boolean = false
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
@@ -89,11 +88,6 @@ open class CategoryViewModel @Inject constructor(
       add(observeActions())
       add(observeCategories())
     }
-  }
-
-  @VisibleForTesting
-  fun setIsUnitTestCase() {
-    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -192,9 +186,6 @@ open class CategoryViewModel @Inject constructor(
       is Filter -> filter(action, currentState)
       is Select -> select(action, currentState)
       Action.Save -> saveAction(currentState)
-      Action.ClearAll -> clearAll(currentState)
-      Action.SelectAll -> selectAll(currentState)
-      Action.Cancel -> cancel(currentState)
     }
   }
 
@@ -209,12 +200,6 @@ open class CategoryViewModel @Inject constructor(
 
   private fun saveAction(currentState: State): State =
     if (currentState is Content) save(currentState) else currentState
-
-  private fun clearAll(currentState: State): State =
-    if (currentState is Content) currentState.clearAll() else currentState
-
-  private fun selectAll(currentState: State): State =
-    if (currentState is Content) currentState.selectAll() else currentState
 
   private fun filterContent(
     filter: String,
@@ -236,16 +221,6 @@ open class CategoryViewModel @Inject constructor(
       )
     )
     return Saving
-  }
-
-  private fun cancel(currentState: State): State {
-    if (currentState !is Content) return currentState
-    effects.tryEmit(object : SideEffect<Unit> {
-      override fun invokeWith(activity: AppCompatActivity) {
-        activity.onBackPressedDispatcher.onBackPressed()
-      }
-    })
-    return currentState
   }
 
   private fun getOkHttpClient() = OkHttpClient().newBuilder()

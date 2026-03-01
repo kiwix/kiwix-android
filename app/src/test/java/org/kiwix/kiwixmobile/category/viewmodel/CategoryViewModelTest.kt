@@ -107,12 +107,13 @@ class CategoryViewModelTest {
 
   private fun createViewModel() {
     categoryViewModel =
-      TestCategoryViewModel(
+      CategoryViewModel(
         application,
         kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
       )
+    categoryViewModel.isUnitTestCase = true
   }
 
   @Nested
@@ -344,21 +345,5 @@ class CategoryViewModelTest {
         assertThat(effect.categories.map { it.category }).containsExactly("Wikipedia")
       }
     }
-  }
-
-  class TestCategoryViewModel(
-    context: Application,
-    kiwixDataStore: KiwixDataStore,
-    kiwixService: KiwixService,
-    connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
-  ) : CategoryViewModel(
-      context,
-      kiwixDataStore,
-      kiwixService,
-      connectivityBroadcastReceiver
-    ) {
-    override var isUnitTestCase: Boolean
-      get() = true
-      set(value) {}
   }
 }

@@ -36,21 +36,25 @@ sealed class State {
         filter
       )
   ) : State() {
-    fun select(category: CategoryItem) =
-      Content(
+    fun select(category: CategoryItem): Content {
+      val isAllCategories = category.id == 0L
+      return Content(
         items.map {
-          if (it.id == category.id) {
-            it.copy(active = !it.active)
-          } else {
-            it
+          when {
+            // Toggling the "All Categories" item
+            isAllCategories && it.id == 0L -> it.copy(active = !it.active)
+            // Deselect all others when "All Categories" is toggled on
+            isAllCategories -> it.copy(active = false)
+            // Toggling a specific category
+            it.id == category.id -> it.copy(active = !it.active)
+            // Deselect "All Categories" when a specific category is selected
+            it.id == 0L -> it.copy(active = false)
+            else -> it
           }
         },
         filter
       )
-
-    fun clearAll() = Content(items.map { it.copy(active = false) }, filter)
-
-    fun selectAll() = Content(items.map { it.copy(active = true) }, filter)
+    }
 
     fun updateFilter(filter: String) =
       Content(items, filter)

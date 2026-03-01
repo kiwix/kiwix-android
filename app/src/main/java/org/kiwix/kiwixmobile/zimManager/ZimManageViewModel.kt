@@ -222,30 +222,63 @@ open class ZimManageViewModel @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
-  internal fun getOnlineLibrarySectionTitle(
-    selectedLanguage: String
-  ): String {
-    return if (selectedLanguage.isBlank()) {
-      context.getString(R.string.all_languages)
+  @Suppress("ReturnCount")
+  internal fun getOnlineLibrarySectionTitle(selectedLanguage: String): String {
+    if (selectedLanguage.isBlank()) return context.getString(R.string.all_languages)
+    val languages = selectedLanguage.split(",").filter { it.isNotEmpty() }
+    if (languages.size == CONST_ONE) {
+      return context.getString(
+        R.string.your_language,
+        languages.first().convertToLocal().displayLanguage
+      )
+    }
+    val displayed =
+      languages.take(THREE).joinToString(", ") { it.convertToLocal().displayLanguage }
+    val remaining = languages.size - THREE
+    val prefix = context.getString(R.string.your_languages)
+    return if (remaining > 0) {
+      "$prefix $displayed ${context.resources.getQuantityString(
+        org.kiwix.kiwixmobile.R.plurals.and_more,
+        remaining,
+        remaining
+      )}"
     } else {
-      val languages = selectedLanguage.split(",").filter { it.isNotEmpty() }
-      val languageCount = languages.size
-      when {
-        languageCount == CONST_ONE -> {
-          context.getString(
-            R.string.your_language,
-            languages.first().convertToLocal().displayLanguage
-          )
-        }
-
-        else -> {
-          val joinedLanguages =
-            languages.joinToString(", ") { it.convertToLocal().displayLanguage }
-          "${context.getString(R.string.your_languages)} $joinedLanguages"
-        }
-      }
+      "$prefix $displayed"
     }
   }
+
+  @Suppress("ReturnCount")
+  internal fun getOnlineCategorySectionTitle(selectedCategory: String): String {
+    if (selectedCategory.isBlank()) {
+      return context.getString(
+        org.kiwix.kiwixmobile.R.string.all_categories
+      )
+    }
+    val categories = selectedCategory.split(",").filter { it.isNotEmpty() }
+    if (categories.size == CONST_ONE) {
+      return "${context.getString(
+        org.kiwix.kiwixmobile.R.string.your_selected_category
+      )} ${categories.first().toDisplayCategory()}"
+    }
+    val displayed =
+      categories.take(THREE).joinToString(", ") { it.toDisplayCategory() }
+    val remaining = categories.size - THREE
+    val prefix = context.getString(
+      org.kiwix.kiwixmobile.R.string.your_selected_categories
+    )
+    return if (remaining > 0) {
+      "$prefix $displayed ${context.resources.getQuantityString(
+        org.kiwix.kiwixmobile.R.plurals.and_more,
+        remaining,
+        remaining
+      )}"
+    } else {
+      "$prefix $displayed"
+    }
+  }
+
+  private fun String.toDisplayCategory(): String =
+    replace("_", " ").replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 
   private var appProgressListener: AppProgressListenerProvider? =
     AppProgressListenerProvider(context) { message ->
@@ -629,8 +662,12 @@ open class ZimManageViewModel @Inject constructor(
       }
     val filteredBooks = allBooks - downloadingBooks.toSet()
     val selectedLanguage = kiwixDataStore.selectedOnlineContentLanguage.first()
+    val selectedCategory = kiwixDataStore.selectedOnlineContentCategory.first()
     val onlineLibrarySectionTitle =
       getOnlineLibrarySectionTitle(selectedLanguage)
+    val onlineCategorySectionTitle =
+      getOnlineCategorySectionTitle(selectedCategory)
+    val combinedSectionTitle = "$onlineLibrarySectionTitle\n$onlineCategorySectionTitle"
     return createLibrarySection(
       downloadingBooks,
       activeDownloads,
@@ -642,7 +679,7 @@ open class ZimManageViewModel @Inject constructor(
         filteredBooks,
         emptyList(),
         fileSystemState,
-        onlineLibrarySectionTitle,
+        combinedSectionTitle,
         Long.MIN_VALUE
       )
   }
