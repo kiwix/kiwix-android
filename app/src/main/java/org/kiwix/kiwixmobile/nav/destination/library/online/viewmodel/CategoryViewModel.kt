@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatActivity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -57,7 +56,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Load
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 import javax.inject.Inject
 
-open class CategoryViewModel @Inject constructor(
+class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   @CategoryKiwixService private val kiwixService: KiwixService,
@@ -68,7 +67,7 @@ open class CategoryViewModel @Inject constructor(
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
 
   @VisibleForTesting
-  open var isUnitTestCase: Boolean = false
+  var isUnitTestCase: Boolean = isTest
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
@@ -171,9 +170,6 @@ open class CategoryViewModel @Inject constructor(
       is Filter -> filter(action, currentState)
       is Select -> select(action, currentState)
       Action.Save -> saveAction(currentState)
-      Action.ClearAll -> clearAll(currentState)
-      Action.SelectAll -> selectAll(currentState)
-      Action.Cancel -> cancel(currentState)
     }
   }
 
@@ -188,12 +184,6 @@ open class CategoryViewModel @Inject constructor(
 
   private fun saveAction(currentState: State): State =
     if (currentState is Content) save(currentState) else currentState
-
-  private fun clearAll(currentState: State): State =
-    if (currentState is Content) currentState.clearAll() else currentState
-
-  private fun selectAll(currentState: State): State =
-    if (currentState is Content) currentState.selectAll() else currentState
 
   private fun filterContent(
     filter: String,
@@ -227,6 +217,20 @@ open class CategoryViewModel @Inject constructor(
     return currentState
   }
 
+  private fun getOkHttpClient() = OkHttpClient().newBuilder()
+    .followRedirects(true)
+    .followSslRedirects(true)
+    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+    .readTimeout(READ_TIMEOUT, SECONDS)
+    .callTimeout(CALL_TIMEOUT, SECONDS)
+    .addNetworkInterceptor(
+      HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) BASIC else NONE
+      }
+    )
+    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+    .build()
+
   @VisibleForTesting
   fun onClearedExposed() {
     onCleared()
@@ -239,6 +243,11 @@ open class CategoryViewModel @Inject constructor(
     coroutineJobs.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
     super.onCleared()
+  }
+
+  companion object {
+    @VisibleForTesting
+    var isTest: Boolean = false
   }
 }
 
