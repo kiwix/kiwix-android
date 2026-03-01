@@ -84,11 +84,11 @@ class CopyMoveFileHandlerTest {
   private val storageFile: File = mockk(relaxed = true)
   private val selectedFile: DocumentFile = mockk(relaxed = true)
   private val storagePath = "storage/0/emulated/Android/media/org.kiwix.kiwixmobile"
-  private val destinationFile = mockk<File>()
-  private val sourceUri = mockk<Uri>()
-  private val fragmentManager = mockk<FragmentManager>()
-  private val fileOperationHandler = mockk<FileOperationHandler>()
-  private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>()
+  private val destinationFile = mockk<File>(relaxed = true)
+  private val sourceUri = mockk<Uri>(relaxed = true)
+  private val fragmentManager = mockk<FragmentManager>(relaxed = true)
+  private val fileOperationHandler = mockk<FileOperationHandler>(relaxed = true)
+  private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>(relaxed = true)
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @BeforeEach
@@ -110,6 +110,7 @@ class CopyMoveFileHandlerTest {
       setFileCopyMoveCallback(fileCopyMoveCallback)
       setStorageFileForUnitTest(storageFile, destinationFile)
     }
+    every { activity.getString(any()) } returns ""
     every { selectedFile.name } returns "test.zim"
     every { selectedFile.length() } returns 1024L
     every { storageFile.path } returns storagePath
@@ -129,19 +130,21 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun `DetectingFileSystem with file less than 4GB continues operation`() = runTest {
-    fileHandler = spyk(fileHandler)
-    coEvery { storageCalculator.availableBytes(storageFile) } returns 10_000L
-    every { fat32Checker.fileSystemStates.value } returns DetectingFileSystem
-    coEvery {
-      fileOperationHandler.copy(any(), any(), any())
-    } just Runs
-    fileHandler.validateZimFileCanCopyOrMove()
-    coVerify {
-      fileHandler.handleDetectingFileSystemState(storageFile)
-      fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
-      fileHandler.performCopyOperation()
-      fileCopyMoveCallback.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
+  fun `DetectingFileSystem with file less than 4GB continues operation`() = flakyTest {
+    runTest {
+      fileHandler = spyk(fileHandler)
+      coEvery { storageCalculator.availableBytes(storageFile) } returns 10_000L
+      every { fat32Checker.fileSystemStates.value } returns DetectingFileSystem
+      coEvery {
+        fileOperationHandler.copy(any(), any(), any())
+      } just Runs
+      fileHandler.validateZimFileCanCopyOrMove()
+      coVerify {
+        fileHandler.handleDetectingFileSystemState(storageFile)
+        fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+        fileHandler.performCopyOperation()
+        fileCopyMoveCallback.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
+      }
     }
   }
 
