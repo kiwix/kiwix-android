@@ -288,7 +288,7 @@
   <string name="delete_selected_bookmarks">Të fshihen Faqerojtësit e Përzgjedhur?</string>
   <string name="import_bookmarks_dialog_title">Të importohen Faqerojtës?</string>
   <string name="export_all_bookmarks_dialog_title">Të eksportohen Krejt Faqerojtësit?</string>
-  <string name="export_all_bookmarks_dialog_message">Eksportimi do të krijojë një kartelë bookmark.xml fte dosja Download/org.kiwix…/ folder.</string>
+  <string name="export_all_bookmarks_dialog_message">Eksportimi do të krijojë një kartelë bookmark.xml fte dosja \n%s folder.</string>
   <string name="bookmark_imported_message">Janë importuar krejt faqerojtësit.</string>
   <string name="error_invalid_bookmark_file">Gabim: Kartela e përzgjedhur s’është kartelë e vlefshme faqerojtësish.</string>
   <string name="send_report">Dërgo raport diagnostikimi</string>

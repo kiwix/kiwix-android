@@ -64,6 +64,10 @@ object FileUtils {
   private const val SPELLING_DB_CACHED_DIRECTORY = "SpellingsDBCachedDir"
   private const val ASSET_LOADING_CACHED_DIRECTORY = "AssetLoadingCachedDir"
 
+  val EXPORT_BOOK_MARK_PATH =
+    "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+      "/org.kiwix"
+
   @JvmStatic
   fun getSpellingDBDir(context: Context): File? {
     val baseCacheDir = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {

@@ -44,7 +44,7 @@ interface DataSource {
   fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>>
   suspend fun saveNote(noteListItem: NoteListItem)
   suspend fun deleteNote(noteTitle: String)
-  suspend fun deleteNotes(noteList: List<NoteListItem>)
+  suspend fun clearNotes()
   suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
   fun getAllWebViewPagesHistory(): Flow<List<WebViewHistoryEntity>>
   suspend fun clearWebViewPagesHistory()

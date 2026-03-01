@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -135,9 +136,10 @@ class Repository @Inject internal constructor(
     }
 
   @Suppress("InjectDispatcher")
-  override suspend fun deleteNotes(noteList: List<NoteListItem>) =
+  override suspend fun clearNotes() =
     withContext(Dispatchers.IO) {
-      notesRoomDao.deleteNotes(noteList)
+      val notesList = notesRoomDao.notes().first().map { it as NoteListItem }
+      notesRoomDao.deleteNotes(notesList)
     }
 
   override suspend fun insertWebViewPageHistoryItems(
