@@ -22,6 +22,11 @@ android {
       isMinifyEnabled = false
     }
   }
+  testOptions {
+    unitTests {
+      isIncludeAndroidResources = true
+    }
+  }
 }
 
 fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
@@ -62,4 +67,7 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+  testImplementation(Libs.robolectric)
+  testImplementation(Libs.androidx_test_core)
+  testImplementation(Libs.junit_vintage_engine)
 }
