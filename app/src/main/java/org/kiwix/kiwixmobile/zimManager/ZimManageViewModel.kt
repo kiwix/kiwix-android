@@ -33,7 +33,9 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -128,6 +130,7 @@ const val MAX_PROGRESS = 100
 
 const val THREE = 3
 
+@Suppress("LargeClass")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -151,6 +154,10 @@ class ZimManageViewModel @Inject constructor(
     object MultiModeFinished : FileSelectActions()
     object RestartActionMode : FileSelectActions()
     object UserClickedDownloadBooksButton : FileSelectActions()
+  }
+
+  sealed class OnlineLibraryUiEvent {
+    object ScrollToTop : OnlineLibraryUiEvent()
   }
 
   data class OnlineLibraryRequest(
@@ -213,6 +220,8 @@ class ZimManageViewModel @Inject constructor(
   )
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
+  private val _onlineLibraryEvent = MutableSharedFlow<OnlineLibraryUiEvent>()
+  val onlineLibraryEvent: SharedFlow<OnlineLibraryUiEvent> = _onlineLibraryEvent.asSharedFlow()
   private val requestDownloadLibrary = MutableSharedFlow<OnlineLibraryRequest>(
     replay = 0,
     extraBufferCapacity = 1,
@@ -251,6 +260,12 @@ class ZimManageViewModel @Inject constructor(
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
   }
+
+  // This method will be updated in OnlineLibraryScreen migration
+  fun sendUiEvent(uiEvent: OnlineLibraryUiEvent) =
+    viewModelScope.launch {
+      _onlineLibraryEvent.emit(uiEvent)
+    }
 
   private fun createKiwixServiceWithProgressListener(
     baseUrl: String,
@@ -565,6 +580,9 @@ class ZimManageViewModel @Inject constructor(
             }
           )
           onlineLibraryResult.emit(newResult)
+          if (!result.onlineLibraryRequest.isLoadMoreItem) {
+            sendUiEvent(OnlineLibraryUiEvent.ScrollToTop)
+          }
         }
     }
   }.flowOn(ioDispatcher)
