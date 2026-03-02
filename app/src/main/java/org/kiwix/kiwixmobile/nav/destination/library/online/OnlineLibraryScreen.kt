@@ -57,7 +57,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.kiwix.kiwixmobile.core.R.string
@@ -85,6 +84,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryUiEvent.ScrollToTop
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 
@@ -97,7 +98,7 @@ const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 const val LOAD_MORE_DELAY = 150L
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
@@ -106,10 +107,19 @@ fun OnlineLibraryScreen(
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
+  zimManageViewModel: ZimManageViewModel,
   navigationIcon: @Composable () -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
+  LaunchedEffect(Unit) {
+    zimManageViewModel.onlineLibraryEvent.collect {
+      when (it) {
+        ScrollToTop -> {
+          listState.scrollToItem(ZERO)
+        }
+      }
+    }
+  }
   KiwixTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
@@ -219,26 +229,24 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
-  LaunchedEffect(state.onlineLibraryList) {
-    if (!state.isLoadingMoreItem) {
-      lazyListState.scrollToItem(ZERO)
-    }
-  }
   LaunchedEffect(lazyListState, state.onlineLibraryList) {
-    snapshotFlow { lazyListState.layoutInfo }
-      .combine(
-        snapshotFlow { state.onlineLibraryList.orEmpty() }
-      ) { layoutInfo, libraryList ->
-        val bookItems = libraryList.filterIsInstance<LibraryListItem.BookItem>()
-        val totalItems = layoutInfo.totalItemsCount
-        val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
-        Triple(bookItems, totalItems, lastVisibleItemIndex)
+    snapshotFlow {
+      val layoutInfo = lazyListState.layoutInfo
+      val visibleIndexes = layoutInfo.visibleItemsInfo.map { it.index }
+      val list = state.onlineLibraryList.orEmpty()
+      val visibleBookIndexes = visibleIndexes.filter { index ->
+        list.getOrNull(index) is LibraryListItem.BookItem
       }
-      .debounce(LOAD_MORE_DELAY)
+      val lastVisibleBookIndex = visibleBookIndexes.maxOrNull() ?: -1
+      val totalBookCount = list.count { it is LibraryListItem.BookItem }
+
+      Pair(lastVisibleBookIndex, totalBookCount)
+    }
       .distinctUntilChanged()
-      .collect { (bookItems, totalItems, lastVisibleItemIndex) ->
-        if (bookItems.isNotEmpty() && lastVisibleItemIndex >= totalItems.minus(FIVE)) {
-          state.onLoadMore(totalItems)
+      .debounce(LOAD_MORE_DELAY)
+      .collect { (lastVisibleBookIndex, totalBookCount) ->
+        if (lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMoreItem) {
+          state.onLoadMore(totalBookCount)
         }
       }
   }
