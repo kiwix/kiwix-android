@@ -71,7 +71,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
-const val DOWNLOAD_OPEN_FILE = "DOWNLOAD_OPEN_FILE"
 const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 
 class FetchDownloadNotificationManager @Inject constructor(
@@ -269,35 +268,52 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  private fun getNotificationClickPendingIntent(
+  fun getNotificationClickPendingIntent(
     context: Context,
     downloadNotification: DownloadNotification
+  ): PendingIntent =
+    getNotificationClickPendingIntent(context, downloadNotification.notificationId)
+
+  fun getNotificationClickPendingIntent(
+    context: Context,
+    notificationId: Int
   ): PendingIntent {
     val internal = Intents.internal(CoreMainActivity::class.java).apply {
-      action = "GET_CONTENT"
+      action = DOWNLOAD_NOTIFICATION_TITLE
       addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
     return getActivity(
       context,
-      downloadNotification.notificationId,
+      notificationId,
       internal,
       FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
     )
   }
 
-  private fun getOpenActionPendingIntent(
+  fun getOpenActionPendingIntent(
     context: Context,
     downloadNotification: DownloadNotification
+  ): PendingIntent =
+    getOpenActionPendingIntent(
+      context,
+      downloadNotification.title,
+      downloadNotification.notificationId
+    )
+
+  fun getOpenActionPendingIntent(
+    context: Context,
+    title: String,
+    notificationId: Int
   ): PendingIntent {
     val internal =
       Intents.internal(CoreMainActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putExtra(DOWNLOAD_OPEN_FILE, downloadNotification.title)
-        putExtra(DOWNLOAD_NOTIFICATION_ID, downloadNotification.notificationId)
+        putExtra(DOWNLOAD_NOTIFICATION_TITLE, title)
+        putExtra(DOWNLOAD_NOTIFICATION_ID, notificationId)
       }
     return getActivity(
       context,
-      downloadNotification.notificationId + 1,
+      notificationId + 1,
       internal,
       FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
     )

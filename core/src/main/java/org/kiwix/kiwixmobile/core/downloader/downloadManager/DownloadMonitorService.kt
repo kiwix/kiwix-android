@@ -412,11 +412,22 @@ class DownloadMonitorService : Service() {
       .setGroupSummary(false)
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-      .setContentIntent(getPendingIntentForNotificationClick(download))
+      .setAutoCancel(true)
+      .setContentIntent(
+        fetchDownloadNotificationManager.getOpenActionPendingIntent(
+          this,
+          getDownloadNotificationTitle(download),
+          download.id + THIRTY_TREE
+        )
+      )
       .addAction(
         android.R.drawable.ic_menu_send,
         getString(R.string.open),
-        getPendingIntentForOpeningFile(download)
+        fetchDownloadNotificationManager.getOpenActionPendingIntent(
+          this,
+          getDownloadNotificationTitle(download),
+          download.id + THIRTY_TREE
+        )
       )
     // Assigning a new ID to the notification because the same ID is used for the foreground
     // notification. If we use the same ID, changing the foreground notification for another
@@ -429,35 +440,6 @@ class DownloadMonitorService : Service() {
     // Cancel the fetch related any notification if present.
     cancelNotificationForId(download.id)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
-  }
-
-  private fun getPendingIntentForNotificationClick(download: Download): PendingIntent {
-    val internal =
-      Intents.internal(CoreMainActivity::class.java).apply {
-        action = "GET_CONTENT"
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-      }
-    return PendingIntent.getActivity(
-      this,
-      download.id,
-      internal,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
-  }
-
-  private fun getPendingIntentForOpeningFile(download: Download): PendingIntent {
-    val internal =
-      Intents.internal(CoreMainActivity::class.java).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putExtra(DOWNLOAD_OPEN_FILE, getDownloadNotificationTitle(download))
-        putExtra(DOWNLOAD_NOTIFICATION_ID, download.id + THIRTY_TREE)
-      }
-    return PendingIntent.getActivity(
-      this,
-      download.id + 1,
-      internal,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
   }
 
   private fun downloadNotificationChannel() {

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.main
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -68,7 +69,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_OPEN_FILE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -87,6 +88,7 @@ import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
@@ -357,12 +359,12 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun handleNotificationIntent(intent: Intent?) {
-    val openFileTitle = intent?.getStringExtra(DOWNLOAD_OPEN_FILE) ?: return
+    val openFileTitle = intent?.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE) ?: return
     // Cancel the notification when user taps the "Open" action button
     val notificationId = intent.getIntExtra(DOWNLOAD_NOTIFICATION_ID, -1)
     if (notificationId != -1) {
       val notificationManager =
-        getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
+        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
       notificationManager.cancel(notificationId)
     }
     lifecycleScope.launch {
@@ -374,8 +376,18 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun openZimFromFilePath(path: String) {
-    navigate(KiwixDestination.Reader.route)
-    setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+    val isAlreadyOnReader =
+      navController.currentDestination?.route == KiwixDestination.Reader.route
+    if (isAlreadyOnReader) {
+      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+      supportFragmentManager.fragments
+        .filterIsInstance<KiwixReaderFragment>()
+        .firstOrNull()
+        ?.openPageInBookFromNavigationArguments()
+    } else {
+      navigate(KiwixDestination.Reader.route)
+      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+    }
   }
 
   override val zimHostDrawerMenuItem: DrawerMenuItem? by lazy {
