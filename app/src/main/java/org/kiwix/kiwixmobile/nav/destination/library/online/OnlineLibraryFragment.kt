@@ -314,7 +314,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     zimManageViewModel.apply {
       // Observe when library items changes.
       libraryItems
-        .onEach { onLibraryItemsChange(it.items) }
+        .onEach { onLibraryItemsChange(it.items, it.version) }
         .launchIn(viewLifecycleOwner.lifecycleScope)
       // Observe when online library downloading.
       onlineLibraryDownloading
@@ -582,11 +582,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
   }
 
-  private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
+  private fun onLibraryItemsChange(it: List<LibraryListItem>?, version: Long) {
     if (it != null) {
       onlineLibraryScreenState.value.update {
         copy(
           onlineLibraryList = it,
+          version = version,
           noContentViewItem = if (isNotConnected) {
             getString(string.no_network_connection)
           } else {
