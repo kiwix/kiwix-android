@@ -24,7 +24,6 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.edit
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +44,6 @@ import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.get
 
 private const val KIWIX_DATASTORE_NAME = "kiwix_datastore_preferences"
 
@@ -261,10 +259,11 @@ class KiwixDataStore @Inject constructor(val context: Context) {
         val jsonArray = JSONArray(jsonString)
         List(jsonArray.length()) { i ->
           val obj = jsonArray.getJSONObject(i)
+          val selectedLanguages = selectedOnlineContentLanguage.first().split(",").filter { it.isNotEmpty() }
           Language(
             languageCode = obj.getString(KEY_LANGUAGE_CODE),
             occurrencesOfLanguage = obj.getInt(KEY_OCCURRENCES_OF_LANGUAGE),
-            active = selectedOnlineContentLanguage.first() == obj.getString(KEY_LANGUAGE_CODE),
+            active = selectedLanguages.contains(obj.getString(KEY_LANGUAGE_CODE)),
             id = obj.getLong(KEY_LANGUAGE_ID)
           )
         }
@@ -461,7 +460,7 @@ class KiwixDataStore @Inject constructor(val context: Context) {
     }
   }
 
-  suspend fun getPublicDirectoryPath(path: String): String =
+  fun getPublicDirectoryPath(path: String): String =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       path
     } else {
@@ -560,9 +559,10 @@ class KiwixDataStore @Inject constructor(val context: Context) {
         val jsonArray = JSONArray(jsonString)
         List(jsonArray.length()) { i ->
           val obj = jsonArray.getJSONObject(i)
+          val selectedCategories = selectedOnlineContentCategory.first().split(",").filter { it.isNotEmpty() }
           Category(
             category = obj.getString(KEY_ONLINE_CATEGORY_NAME),
-            active = selectedOnlineContentCategory.first() == obj.getString(KEY_ONLINE_CATEGORY_NAME),
+            active = selectedCategories.contains(obj.getString(KEY_ONLINE_CATEGORY_NAME)),
             id = obj.getLong(KEY_ONLINE_CATEGORY_ID)
           )
         }

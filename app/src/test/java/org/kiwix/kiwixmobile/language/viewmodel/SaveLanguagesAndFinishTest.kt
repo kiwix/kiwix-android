@@ -43,7 +43,7 @@ class SaveLanguagesAndFinishTest {
     every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
     every { onBackPressedDispatcher.onBackPressed() } answers { }
     val language = Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
-    SaveLanguagesAndFinish(language, kiwixDataStore, lifeCycleScope).invokeWith(activity)
+    SaveLanguagesAndFinish(listOf(language), kiwixDataStore, lifeCycleScope).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("eng") }
     testScheduler.advanceUntilIdle()

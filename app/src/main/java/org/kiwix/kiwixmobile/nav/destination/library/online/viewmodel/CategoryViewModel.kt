@@ -77,7 +77,9 @@ class CategoryViewModel @Inject constructor(
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
-  private var isUnitTestCase: Boolean = false
+
+  @VisibleForTesting
+  var isUnitTestCase: Boolean = false
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
@@ -86,11 +88,6 @@ class CategoryViewModel @Inject constructor(
       add(observeActions())
       add(observeCategories())
     }
-  }
-
-  @VisibleForTesting
-  fun setIsUnitTestCase() {
-    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -150,7 +147,10 @@ class CategoryViewModel @Inject constructor(
     val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
       Category(
         category = entry.title,
-        active = kiwixDataStore.selectedOnlineContentCategory.first() == entry.title,
+        active = kiwixDataStore.selectedOnlineContentCategory.first()
+          .split(",")
+          .filter { it.isNotEmpty() }
+          .contains(entry.title),
         id = (index + ONE).toLong()
       )
     }
@@ -182,31 +182,24 @@ class CategoryViewModel @Inject constructor(
   ): State {
     return when (action) {
       is Error -> State.Error(action.errorMessage)
-
-      is UpdateCategory ->
-        when (currentState) {
-          Loading -> Content(action.categories)
-          else -> currentState
-        }
-
-      is Filter -> {
-        when (currentState) {
-          is Content -> filterContent(action.filter, currentState)
-          else -> currentState
-        }
-      }
-
-      is Select ->
-        when (currentState) {
-          is Content -> {
-            val newState = updateSelection(action.category, currentState)
-            save(newState)
-          }
-
-          else -> currentState
-        }
+      is UpdateCategory -> updateCategory(action, currentState)
+      is Filter -> filter(action, currentState)
+      is Select -> select(action, currentState)
+      Action.Save -> saveAction(currentState)
     }
   }
+
+  private fun updateCategory(action: UpdateCategory, currentState: State): State =
+    if (currentState is Loading) Content(action.categories) else currentState
+
+  private fun filter(action: Filter, currentState: State): State =
+    if (currentState is Content) filterContent(action.filter, currentState) else currentState
+
+  private fun select(action: Select, currentState: State): State =
+    if (currentState is Content) updateSelection(action.category, currentState) else currentState
+
+  private fun saveAction(currentState: State): State =
+    if (currentState is Content) save(currentState) else currentState
 
   private fun filterContent(
     filter: String,
@@ -219,10 +212,10 @@ class CategoryViewModel @Inject constructor(
   ) = currentState.select(categoryItem)
 
   private fun save(currentState: Content): State {
-    val selectedCategory = currentState.items.first { it.active }
+    val selectedCategories = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveCategoryAndFinish(
-        selectedCategory,
+        selectedCategories,
         kiwixDataStore,
         viewModelScope
       )

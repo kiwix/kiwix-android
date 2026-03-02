@@ -81,7 +81,9 @@ class LanguageViewModel @Inject constructor(
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private val coroutineJobs = mutableListOf<Job>()
-  private var isUnitTestCase: Boolean = false
+
+  @VisibleForTesting
+  var isUnitTestCase: Boolean = false
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -89,11 +91,6 @@ class LanguageViewModel @Inject constructor(
       add(observeActions())
       add(observeLanguages())
     }
-  }
-
-  @VisibleForTesting
-  fun setIsUnitTestCase() {
-    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -116,7 +113,10 @@ class LanguageViewModel @Inject constructor(
       runCatching {
         Language(
           languageCode = entry.languageCode,
-          active = kiwixDataStore.selectedOnlineContentLanguage.first() == entry.languageCode,
+          active = kiwixDataStore.selectedOnlineContentLanguage.first()
+            .split(",")
+            .filter { it.isNotEmpty() }
+            .contains(entry.languageCode),
           occurrencesOfLanguage = entry.count,
           id = (index + ONE).toLong()
         )
@@ -131,10 +131,13 @@ class LanguageViewModel @Inject constructor(
         else -> buildList {
           add(
             Language(
-              languageCode = "",
+              id = ZERO.toLong(),
               active = kiwixDataStore.selectedOnlineContentLanguage.first().isEmpty(),
-              occurrencesOfLanguage = allBooksCount,
-              id = ZERO.toLong()
+              occurencesOfLanguage = allBooksCount,
+              language = "",
+              languageLocalized = "",
+              languageCode = "",
+              languageCodeISO2 = ""
             )
           )
           addAll(languages)
@@ -207,39 +210,30 @@ class LanguageViewModel @Inject constructor(
   ): State {
     return when (action) {
       is Error -> State.Error(action.errorMessage)
-
-      is UpdateLanguages ->
-        when (currentState) {
-          Loading -> Content(action.languages)
-          else -> currentState
-        }
-
-      is Filter -> {
-        when (currentState) {
-          is Content -> filterContent(action.filter, currentState)
-          else -> currentState
-        }
-      }
-
-      is Select ->
-        when (currentState) {
-          is Content -> updateSelection(action.language, currentState)
-          else -> currentState
-        }
-
-      Save ->
-        when (currentState) {
-          is Content -> save(currentState)
-          else -> currentState
-        }
+      is UpdateLanguages -> updateLanguages(action, currentState)
+      is Filter -> filter(action, currentState)
+      is Select -> select(action, currentState)
+      Save -> saveAction(currentState)
     }
   }
 
+  private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
+    if (currentState is Loading) Content(action.languages) else currentState
+
+  private fun filter(action: Filter, currentState: State): State =
+    if (currentState is Content) filterContent(action.filter, currentState) else currentState
+
+  private fun select(action: Select, currentState: State): State =
+    if (currentState is Content) updateSelection(action.language, currentState) else currentState
+
+  private fun saveAction(currentState: State): State =
+    if (currentState is Content) save(currentState) else currentState
+
   private fun save(currentState: Content): State {
-    val selectedLanguage = currentState.items.first { it.active }
+    val selectedLanguages = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveLanguagesAndFinish(
-        selectedLanguage,
+        selectedLanguages,
         kiwixDataStore,
         viewModelScope
       )
