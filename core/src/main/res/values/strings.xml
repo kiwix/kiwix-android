@@ -322,7 +322,7 @@
   <string name="delete_selected_bookmarks">Delete Selected Bookmarks?</string>
   <string name="import_bookmarks_dialog_title">Import Bookmarks?</string>
   <string name="export_all_bookmarks_dialog_title">Export All Bookmarks?</string>
-  <string name="export_all_bookmarks_dialog_message">Exporting will generate bookmark.xml file in the Download/org.kiwix…/ folder.</string>
+  <string name="export_all_bookmarks_dialog_message">Exporting will generate bookmark.xml file in the \n%s folder.</string>
   <string name="bookmark_imported_message">All the bookmarks has been imported.</string>
   <string name="error_invalid_bookmark_file">Error: The selected file is not a valid bookmark file.</string>
   <string name="send_report">Send diagnostic report</string>

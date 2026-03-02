@@ -343,7 +343,7 @@
   <string name="delete_selected_bookmarks">要删除所选的书签吗？</string>
   <string name="import_bookmarks_dialog_title">导入书签？</string>
   <string name="export_all_bookmarks_dialog_title">导出所有书签？</string>
-  <string name="export_all_bookmarks_dialog_message">导出时会在 Download/org.kiwix…/ 文件夹中生成 bookmark.xml 文件。</string>
+  <string name="export_all_bookmarks_dialog_message">导出时会在 \n%s 文件夹中生成 bookmark.xml 文件。</string>
   <string name="bookmark_imported_message">所有书签已导入。</string>
   <string name="error_invalid_bookmark_file">错误：选定的文件不是有效的书签文件。</string>
   <string name="send_report">发送诊断报告</string>
