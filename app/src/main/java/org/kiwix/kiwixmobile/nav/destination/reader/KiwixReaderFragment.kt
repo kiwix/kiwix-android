@@ -46,7 +46,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.reader.HIDE_TAB_SWITCHER_DELAY
+import org.kiwix.kiwixmobile.core.main.reader.OPEN_HOME_SCREEN_DELAY
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
@@ -167,7 +167,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         if (webViewList.isEmpty()) {
           hideTabSwitcher(false)
         }
-      }, HIDE_TAB_SWITCHER_DELAY)
+      }, OPEN_HOME_SCREEN_DELAY)
     }
   }
 

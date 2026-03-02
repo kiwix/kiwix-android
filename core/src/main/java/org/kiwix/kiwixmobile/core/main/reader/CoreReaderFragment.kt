@@ -31,6 +31,11 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.print.PdfPrint
+import android.print.PrintAttributes
+import android.print.PrintAttributes.Margins
+import android.print.PrintAttributes.MediaSize
+import android.print.PrintAttributes.Resolution
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
@@ -66,6 +71,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -101,6 +107,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
@@ -158,12 +165,14 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -173,6 +182,8 @@ import kotlin.math.max
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 const val HIDE_TAB_SWITCHER_DELAY: Long = 300
+const val OPEN_HOME_SCREEN_DELAY: Long = 300
+private const val PDF_RESOLUTION_DPI = 300
 
 @Suppress("LargeClass")
 abstract class CoreReaderFragment :
@@ -254,6 +265,15 @@ abstract class CoreReaderFragment :
   private var readAloudService: ReadAloudService? = null
   private val navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
+  private val pdfPrinter by lazy {
+    PdfPrint(
+      PrintAttributes.Builder()
+        .setMediaSize(MediaSize.ISO_A4)
+        .setResolution(Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI))
+        .setMinMargins(Margins.NO_MARGINS)
+        .build()
+    )
+  }
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
   private var shouldTableOfContentDrawer = mutableStateOf(false)
@@ -1439,6 +1459,49 @@ abstract class CoreReaderFragment :
     }
   }
 
+  override fun onShareMenuClicked() {
+    runSafelyInCoreReaderLifecycleScope {
+      val webView = getCurrentWebView() ?: return@runSafelyInCoreReaderLifecycleScope
+      if (webView.progress < HUNDERED) {
+        context?.toast(string.please_wait_for_page_to_load, Toast.LENGTH_SHORT)
+        return@runSafelyInCoreReaderLifecycleScope
+      }
+      val title = webView.title ?: "Article"
+      val slugifiedTitle = title.toSlug().ifEmpty { "article" }
+      val cacheDir = FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
+      val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
+      pdfFile.delete()
+      val printAdapter = webView.createPrintDocumentAdapter(title)
+      pdfPrinter.print(
+        adapter = printAdapter,
+        outputFile = pdfFile,
+        onComplete = { if (isAdded) sharePdfFile(it) },
+        onError = {
+          Log.e(TAG_KIWIX, "Failed to generate PDF for sharing: $it")
+          if (isAdded) context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
+        },
+      )
+    }
+  }
+
+  private fun sharePdfFile(pdfFile: File) {
+    try {
+      val uri = FileProvider.getUriForFile(
+        requireContext(),
+        requireContext().packageName + ".fileprovider",
+        pdfFile
+      )
+      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "application/pdf"
+        putExtra(Intent.EXTRA_STREAM, uri)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+      }
+      startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+    } catch (e: IOException) {
+      context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
+    }
+  }
+
   override fun onHomeMenuClicked() {
     if (readerScreenState.value.showTabSwitcher) {
       hideTabSwitcher()
@@ -1785,7 +1848,6 @@ abstract class CoreReaderFragment :
     readerScreenState.update { copy(isNoBookOpenInReader = false) }
   }
 
-  @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
     runSafelyInCoreReaderLifecycleScope {
       // Run safely because it is runs after 300 MS.
@@ -1794,7 +1856,7 @@ abstract class CoreReaderFragment :
           createNewTab()
           hideTabSwitcher()
         }
-      }, 300)
+      }, OPEN_HOME_SCREEN_DELAY)
     }
   }
 
