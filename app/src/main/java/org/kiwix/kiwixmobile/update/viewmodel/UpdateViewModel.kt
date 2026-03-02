@@ -52,6 +52,12 @@ class UpdateViewModel @Inject constructor(
     )
   }
 
+  fun retryDownload() {
+    downloader.retryDownload(
+      _state.value.downloadApkItem.downloadId
+    )
+  }
+
   fun cancelDownload() = viewModelScope.launch {
     runCatching {
       downloader.cancelDownload(_state.value.downloadApkItem.downloadId)

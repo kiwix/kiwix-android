@@ -183,7 +183,7 @@ class UpdateFragment : BaseFragment() {
           if (isNotConnected) {
             noInternetSnackbar()
           } else {
-            // downloader.retryDownload(item.downloadId)
+            updateViewModel.retryDownload()
           }
         }
 

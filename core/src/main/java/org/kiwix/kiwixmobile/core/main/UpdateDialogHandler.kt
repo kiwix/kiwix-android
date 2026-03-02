@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -37,30 +38,34 @@ class UpdateDialogHandler @Inject constructor(
     this.showUpdateDialogCallback = showUpdateDialogCallback
   }
 
-  // need more refinement here, maybe convert some conditions to a function.
-  @Suppress("ComplexCondition")
   suspend fun attemptToShowUpdatePopup() {
     val apkInfo = apkDao.getDownload() ?: return
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = apkInfo.lastDialogShownInMilliSeconds
     val currentVersion = VersionId(BuildConfig.VERSION_NAME)
-    val available = VersionId(apkInfo.version)
+    val availableVersion = VersionId(apkInfo.version)
     val shouldShowPopup =
       (lastPopupMillis == 0L) ||
         isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
     if (
       shouldShowPopup &&
       isTimeToShowUpdate(currentMilliSeconds) &&
-      available > currentVersion &&
-      !kiwixDataStore.isPlayStoreBuild.first()
+      isUpdateAvailable(currentVersion, availableVersion, kiwixDataStore)
     ) {
       showUpdateDialogCallback?.showUpdateDialog()
       resetUpdateLater()
     }
   }
 
+  private fun isUpdateAvailable(
+    currentVersion: VersionId,
+    availableVersion: VersionId,
+    kiwixDataStore: KiwixDataStore
+  ): Boolean =
+    availableVersion > currentVersion && runBlocking { !kiwixDataStore.isPlayStoreBuild.first() }
+
   private suspend fun isTimeToShowUpdate(currentMillis: Long): Boolean {
-    val lastLaterClick = apkDao.getDownload()?.laterClickedMilliSeconds ?: 0L
+    val lastLaterClick = apkDao.getDownload()?.laterClickedMilliSeconds ?: return false
     return lastLaterClick == 0L ||
       isThreeDaysElapsed(currentMillis, lastLaterClick)
   }
@@ -85,7 +90,7 @@ class UpdateDialogHandler @Inject constructor(
 
   private suspend fun resetUpdateLater() {
     apkDao.addLaterClickedInfo(
-      laterClickedMilliSeconds = System.currentTimeMillis()
+      laterClickedMilliSeconds = 0L
     )
   }
 
