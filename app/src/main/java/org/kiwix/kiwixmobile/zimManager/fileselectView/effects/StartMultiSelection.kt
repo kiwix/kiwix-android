@@ -26,11 +26,11 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestValidateZimFiles
 
 data class StartMultiSelection(
   private val fileSelectActions: MutableSharedFlow<FileSelectActions>

@@ -41,6 +41,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
@@ -103,6 +104,7 @@ object FileUtils {
     }
   }
 
+  @Suppress("InjectDispatcher")
   @JvmStatic
   @Synchronized
   fun deleteCachedFiles(
@@ -716,22 +718,22 @@ object FileUtils {
     }
   }
 
-  @Suppress("ReturnCount", "NestedBlockDepth")
+  @Suppress("ReturnCount", "NestedBlockDepth", "InjectDispatcher")
   @JvmStatic
   suspend fun downloadFileFromUrl(
     url: String?,
     src: String?,
     zimReaderContainer: ZimReaderContainer,
     kiwixDataStore: KiwixDataStore
-  ): File? {
-    val root = getDownloadRootDir(kiwixDataStore) ?: return null
+  ): File? = withContext(Dispatchers.IO) {
+    val root = getDownloadRootDir(kiwixDataStore) ?: return@withContext null
     when {
       isBase64DataUri(src) -> {
-        val decoded = decodeBase64DataUri(src) ?: return null
+        val decoded = decodeBase64DataUri(src) ?: return@withContext null
         val (extension, bytes) = decoded
         val file = File(root, generateBase64FileName(extension))
 
-        return try {
+        return@withContext try {
           file.outputStream().use { it.write(bytes) }
           file
         } catch (e: IOException) {
@@ -742,10 +744,10 @@ object FileUtils {
 
       else -> {
         val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src)
-        if (fileName?.first == null) return null
+        if (fileName?.first == null) return@withContext null
         val fileToSave = File(root, fileName.first)
-        if (fileToSave.isFileExist()) return fileToSave
-        return try {
+        if (fileToSave.isFileExist()) return@withContext fileToSave
+        return@withContext try {
           fileName.second?.let {
             zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
               fileToSave.outputStream().use(inputStream::copyTo)

@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.di.ActivityScope
 import java.io.File
 import javax.inject.Inject
 
@@ -35,6 +36,7 @@ import javax.inject.Inject
  * Handles the process of validating and opening selected ZIM files
  * for the Standalone (non-Play Store) variant of the app.
  */
+@ActivityScope
 class ProcessSelectedZimFilesForStandalone @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val activity: Activity

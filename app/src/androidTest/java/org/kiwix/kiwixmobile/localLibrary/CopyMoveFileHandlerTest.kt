@@ -56,13 +56,13 @@ import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerImpl
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -270,11 +270,9 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   private fun showMoveFileToPublicDirectoryDialog(urisList: List<Uri>) {
     kiwixMainActivity.lifecycleScope.launch {
-      val localLibraryFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<LocalLibraryFragment>()
-          .firstOrNull()
-      localLibraryFragment?.handleSelectedFileUri(urisList)
+      val processSelectedZimFilesForStandalone =
+        kiwixMainActivity.kiwixActivityComponent.processSelectedZimFilesForStandalone()
+      processSelectedZimFilesForStandalone.processSelectedFiles(urisList)
     }
   }
 
