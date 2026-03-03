@@ -58,7 +58,7 @@ fun SearchScreenRoute(
   val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
 
   // Voice Intent
-  DisposableEffect(Unit) {
+  DisposableEffect(coreMainActivity) {
     coreMainActivity.activityResultForwarder =
       { requestCode, resultCode, data ->
         viewModel.actions.trySend(
@@ -88,7 +88,7 @@ fun SearchScreenRoute(
   }
 
   // Search Results
-  LaunchedEffect(Unit) {
+  LaunchedEffect(viewModel) {
     viewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
 
     arguments?.getString(NAV_ARG_SEARCH_STRING)?.let {
