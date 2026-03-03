@@ -174,6 +174,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
