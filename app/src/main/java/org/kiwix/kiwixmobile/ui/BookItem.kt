@@ -68,6 +68,7 @@ const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
 fun BookItem(
   index: Int,
   bookOnDisk: BookOnDisk,
+  isSelected: Boolean = bookOnDisk.isSelected,
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
@@ -96,7 +97,7 @@ fun BookItem(
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
-      BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
+      BookContent(bookOnDisk, isSelected, selectionMode, onMultiSelect, onClick, index)
     }
   }
 }
@@ -104,6 +105,7 @@ fun BookItem(
 @Composable
 private fun BookContent(
   bookOnDisk: BookOnDisk,
+  isSelected: Boolean,
   selectionMode: SelectionMode,
   onMultiSelect: ((BookOnDisk) -> Unit)?,
   onClick: ((BookOnDisk) -> Unit)?,
@@ -116,7 +118,7 @@ private fun BookContent(
     verticalAlignment = Alignment.CenterVertically
   ) {
     if (selectionMode == SelectionMode.MULTI) {
-      BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
+      BookCheckbox(bookOnDisk, isSelected, selectionMode, onMultiSelect, onClick, index)
     }
     BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
     BookDetails(Modifier.weight(1f), bookOnDisk, index)
@@ -126,13 +128,14 @@ private fun BookContent(
 @Composable
 private fun BookCheckbox(
   bookOnDisk: BookOnDisk,
+  isSelected: Boolean,
   selectionMode: SelectionMode,
   onMultiSelect: ((BookOnDisk) -> Unit)?,
   onClick: ((BookOnDisk) -> Unit)?,
   index: Int
 ) {
   Checkbox(
-    checked = bookOnDisk.isSelected,
+    checked = isSelected,
     onCheckedChange = {
       when (selectionMode) {
         SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)

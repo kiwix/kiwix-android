@@ -29,16 +29,13 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment
-import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 
 @ActivityScope
 @Subcomponent(
   modules = [
-    KiwixActivityModule::class,
-    ZimHostModule::class
+    KiwixActivityModule::class
   ]
 )
 interface KiwixActivityComponent : CoreActivityComponent {
@@ -47,7 +44,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(deleteFiles: DeleteFiles)
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(localFileTransferFragment: LocalFileTransferFragment)
-  fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
   fun inject(onlineCategoryDialog: OnlineCategoryDialog)

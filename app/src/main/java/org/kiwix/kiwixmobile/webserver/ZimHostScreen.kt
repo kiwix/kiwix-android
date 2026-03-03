@@ -82,6 +82,7 @@ fun ZimHostScreen(
   booksList: List<BooksOnDiskListItem>,
   startServerButtonItem: Triple<String, Color, () -> Unit>,
   selectionMode: SelectionMode,
+  selectedBookIds: Set<String>,
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
@@ -112,6 +113,7 @@ fun ZimHostScreen(
           BookItemList(
             booksList,
             selectionMode,
+            selectedBookIds,
             qrImageItem,
             onClick,
             onLongClick,
@@ -189,6 +191,7 @@ private fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
 private fun BookItemList(
   booksList: List<BooksOnDiskListItem>,
   selectionMode: SelectionMode,
+  selectedBookIds: Set<String>,
   qrImageItem: Pair<Boolean, IconItem>,
   onClick: ((BookOnDisk) -> Unit)?,
   onLongClick: ((BookOnDisk) -> Unit)?,
@@ -214,6 +217,7 @@ private fun BookItemList(
               index = index,
               bookOnDisk = bookItem,
               selectionMode = selectionMode,
+              isSelected = selectedBookIds.contains(bookItem.book.id),
               onClick = onClick,
               onLongClick = onLongClick,
               onMultiSelect = onMultiSelect
