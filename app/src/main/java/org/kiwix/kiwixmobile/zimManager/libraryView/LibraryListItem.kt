@@ -53,8 +53,11 @@ sealed class LibraryListItem {
       }
 
     companion object {
-      private fun LibkiwixBook.isLessThan4GB() =
-        size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+      private fun LibkiwixBook.isLessThan4GB(): Boolean {
+        val parsedSize = size.toLongOrNull()
+        return parsedSize == null ||
+          parsedSize < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+      }
     }
   }
 

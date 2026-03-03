@@ -18,10 +18,8 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +46,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.zIndex
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.extensions.throttledClickable
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.PureGrey
@@ -102,9 +101,9 @@ fun OnlineBookItem(
         OnlineBookContent(item, bookUtils, index)
         ShowDetectingFileSystemUi(
           isClickable,
+          hasAvailableSpaceInStorage,
           item,
           onBookItemClick,
-          hasAvailableSpaceInStorage,
           Modifier.matchParentSize()
         )
       }
@@ -112,17 +111,28 @@ fun OnlineBookItem(
   }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ShowDetectingFileSystemUi(
   isClickable: Boolean,
+  hasAvailableSpaceInStorage: Boolean,
   item: BookItem,
   onBookItemClick: (BookItem) -> Unit,
-  hasAvailableSpaceInStorage: Boolean,
   modifier: Modifier
 ) {
   if (!isClickable) {
     val context = LocalContext.current
+    val handleStorageCheckClick = {
+      when (item.fileSystemState) {
+        CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
+        DetectingFileSystem -> context.toast(R.string.detecting_file_system)
+        else -> {
+          if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
+            onBookItemClick.invoke(item)
+          }
+        }
+      }
+    }
+
     Box(
       modifier = modifier
         .background(color = PureGrey.copy(alpha = ONLINE_BOOK_DISABLED_COLOR_ALPHA))
@@ -137,22 +147,9 @@ private fun ShowDetectingFileSystemUi(
         .semantics {
           contentDescription = context.getString(R.string.detecting_file_system)
         }
-        .combinedClickable(
-          // Do nothing on normal click.
-          onClick = {},
-          onLongClick = {
-            when (item.fileSystemState) {
-              CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
-              DetectingFileSystem -> context.toast(R.string.detecting_file_system)
-              else -> {
-                if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
-                  onBookItemClick.invoke(item)
-                } else {
-                  throw IllegalStateException("impossible invalid state: ${item.fileSystemState}")
-                }
-              }
-            }
-          }
+        .throttledClickable(
+          onClick = handleStorageCheckClick,
+          onLongClick = handleStorageCheckClick
         )
     )
   }
