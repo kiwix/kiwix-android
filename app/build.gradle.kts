@@ -22,6 +22,46 @@ apply(from = rootProject.file("jacoco.gradle"))
 fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
 
 val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
+val autoModifiedTrackedFiles = listOf(
+  File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml"),
+  File("$rootDir/core/src/main/res/values-b+be+tarask+old/strings.xml"),
+  File("$rootDir/objectboxmigration/objectbox-models/default.json")
+)
+val trackedFileBackupDir = File("$rootDir/build/tracked-file-backups")
+
+fun backupTrackedFile(file: File) {
+  if (!trackedFileBackupDir.exists()) trackedFileBackupDir.mkdirs()
+
+  val fileKey = file.relativeTo(rootDir).path.replace("/", "_")
+  val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
+  val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
+  if (existsMarkerFile.exists()) return
+
+  existsMarkerFile.writeText(if (file.exists()) "1" else "0")
+  if (file.exists()) {
+    file.copyTo(backupFile, overwrite = true)
+  } else if (backupFile.exists()) {
+    backupFile.delete()
+  }
+}
+
+fun restoreTrackedFile(file: File) {
+  val fileKey = file.relativeTo(rootDir).path.replace("/", "_")
+  val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
+  val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
+  if (!existsMarkerFile.exists()) return
+
+  val existedBeforeBuild = existsMarkerFile.readText().trim() == "1"
+  if (existedBeforeBuild && backupFile.exists()) {
+    if (!file.parentFile.exists()) file.parentFile.mkdirs()
+    backupFile.copyTo(file, overwrite = true)
+  } else if (!existedBeforeBuild && file.exists()) {
+    file.delete()
+  }
+
+  backupFile.delete()
+  existsMarkerFile.delete()
+}
 
 android {
   // Added namespace in response to Gradle 8.0 and above.
@@ -152,32 +192,38 @@ tasks.register("generateVersionCodeAndName") {
 }
 
 tasks.register("renameTarakFile") {
-  val taraskFile = File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml")
-  val mainStringsFile = File("$rootDir/core/src/main/res/values/strings.xml")
+  doFirst {
+    autoModifiedTrackedFiles.forEach(::backupTrackedFile)
+  }
 
-  if (taraskFile.exists() && mainStringsFile.exists()) {
-    val taraskOldFile = File("core/src/main/res/values-b+be+tarask+old/strings.xml")
-    if (!taraskOldFile.exists()) taraskOldFile.createNewFile()
+  doLast {
+    val taraskFile = File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml")
+    val mainStringsFile = File("$rootDir/core/src/main/res/values/strings.xml")
 
-    // Parse the main strings.xml file and extract the string tags
-    val mainTags = getStringTags(mainStringsFile)
+    if (taraskFile.exists() && mainStringsFile.exists()) {
+      val taraskOldFile = File("$rootDir/core/src/main/res/values-b+be+tarask+old/strings.xml")
+      if (!taraskOldFile.exists()) taraskOldFile.createNewFile()
 
-    // Parse the tarask file and filter strings based on tags present in the main strings file
-    // This ensures that any string removed from the main strings file will not be
-    // added to the old file, and it prevents lint errors.
-    val filteredContent = filterStringsByTags(taraskFile, mainTags)
+      // Parse the main strings.xml file and extract the string tags
+      val mainTags = getStringTags(mainStringsFile)
 
-    // Write the filtered content to the taraskOldFile
-    taraskOldFile.printWriter().use { writer ->
-      writer.println("""<?xml version="1.0" encoding="utf-8"?>""")
-      writer.println("<resources>")
-      filteredContent.forEach { string ->
-        writer.println("  $string")
+      // Parse the tarask file and filter strings based on tags present in the main strings file
+      // This ensures that any string removed from the main strings file will not be
+      // added to the old file, and it prevents lint errors.
+      val filteredContent = filterStringsByTags(taraskFile, mainTags)
+
+      // Write the filtered content to the taraskOldFile
+      taraskOldFile.printWriter().use { writer ->
+        writer.println("""<?xml version="1.0" encoding="utf-8"?>""")
+        writer.println("<resources>")
+        filteredContent.forEach { string ->
+          writer.println("  $string")
+        }
+        writer.println("</resources>")
       }
-      writer.println("</resources>")
-    }
 
-    taraskFile.delete()
+      taraskFile.delete()
+    }
   }
 }
 
@@ -227,10 +273,19 @@ fun elementToString(element: Element): String {
   return result.writer.toString()
 }
 
+gradle.buildFinished {
+  autoModifiedTrackedFiles.forEach(::restoreTrackedFile)
+  if (trackedFileBackupDir.exists() && trackedFileBackupDir.listFiles().isNullOrEmpty()) {
+    trackedFileBackupDir.delete()
+  }
+}
+
 gradle.projectsEvaluated {
-  tasks.forEach { task ->
-    if (task.name != "renameTarakFile") {
-      task.dependsOn("renameTarakFile")
+  rootProject.allprojects.forEach { project ->
+    project.tasks.configureEach {
+      if (path != ":app:renameTarakFile") {
+        dependsOn(":app:renameTarakFile")
+      }
     }
   }
 }
