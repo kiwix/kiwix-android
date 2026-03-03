@@ -104,6 +104,8 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservabl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toSlug
@@ -1469,7 +1471,10 @@ abstract class CoreReaderFragment :
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
       val cacheDir = FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
       val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
-      pdfFile.delete()
+      if (pdfFile.isFileExist()) {
+        pdfFile.deleteFile()
+      }
+      pdfFile.createNewFile()
       val printAdapter = webView.createPrintDocumentAdapter(title)
       pdfPrinter.print(
         adapter = printAdapter,

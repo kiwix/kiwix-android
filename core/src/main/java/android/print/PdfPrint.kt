@@ -21,6 +21,8 @@ package android.print
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import java.io.File
+import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 
 /**
  * Helper to generate a PDF from a [PrintDocumentAdapter].
@@ -29,7 +31,9 @@ import java.io.File
  * [PrintDocumentAdapter.LayoutResultCallback] and [PrintDocumentAdapter.WriteResultCallback].
  */
 private fun ParcelFileDescriptor.closeSafely() {
-  runCatching { close() }
+  runCatching { close() }.onFailure {
+    Log.e(TAG_KIWIX, "Failed to close ParcelFileDescriptor. Original exception = $it")
+  }
 }
 
 class PdfPrint(private val printAttributes: PrintAttributes) {
@@ -44,7 +48,7 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
     adapter.onLayout(
       null,
       printAttributes,
-      CancellationSignal(),
+      cancellationSignal,
       object : PrintDocumentAdapter.LayoutResultCallback() {
         override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
           if (info == null) {
