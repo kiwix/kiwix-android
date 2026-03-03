@@ -418,7 +418,7 @@ class FileUtilsInstrumentationTest {
       fakeStream
     )
 
-    coEvery {
+    every {
       zimReader.load(any(), any())
     } returns webResponse
 
