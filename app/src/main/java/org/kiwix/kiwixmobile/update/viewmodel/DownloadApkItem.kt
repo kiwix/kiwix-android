@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadApkModel
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 
-@Suppress("all")
+@Suppress("MagicNumber")
 data class DownloadApkItem(
   val downloadId: Long = 0,
   val name: String = "",

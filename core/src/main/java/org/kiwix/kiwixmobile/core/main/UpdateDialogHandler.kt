@@ -43,10 +43,9 @@ class UpdateDialogHandler @Inject constructor(
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = apkInfo.lastDialogShownInMilliSeconds
     val currentVersion = VersionId(BuildConfig.VERSION_NAME)
-    val availableVersion = VersionId(apkInfo.version)
+    val availableVersion = VersionId("3.16.0")
     val shouldShowPopup =
-      (lastPopupMillis == 0L) ||
-        isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
+      lastPopupMillis == 0L || isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
     if (
       shouldShowPopup &&
       isTimeToShowUpdate(currentMilliSeconds) &&
@@ -64,13 +63,13 @@ class UpdateDialogHandler @Inject constructor(
   ): Boolean =
     availableVersion > currentVersion && runBlocking { !kiwixDataStore.isPlayStoreBuild.first() }
 
-  private suspend fun isTimeToShowUpdate(currentMillis: Long): Boolean {
+  suspend fun isTimeToShowUpdate(currentMillis: Long): Boolean {
     val lastLaterClick = apkDao.getDownload()?.laterClickedMilliSeconds ?: return false
     return lastLaterClick == 0L ||
       isThreeDaysElapsed(currentMillis, lastLaterClick)
   }
 
-  private fun isThreeDaysElapsed(currentMilliSeconds: Long, lastPopupMillis: Long): Boolean {
+  fun isThreeDaysElapsed(currentMilliSeconds: Long, lastPopupMillis: Long): Boolean {
     if (lastPopupMillis == 0L) return false
     val timeDifference = currentMilliSeconds - lastPopupMillis
     return timeDifference >= THREE_DAYS_IN_MILLISECONDS
@@ -82,13 +81,13 @@ class UpdateDialogHandler @Inject constructor(
     )
   }
 
-  suspend fun updateLater() {
+  suspend fun updateLater(currentMillis: Long = System.currentTimeMillis()) {
     apkDao.addLaterClickedInfo(
-      laterClickedMilliSeconds = System.currentTimeMillis()
+      laterClickedMilliSeconds = currentMillis
     )
   }
 
-  private suspend fun resetUpdateLater() {
+  suspend fun resetUpdateLater() {
     apkDao.addLaterClickedInfo(
       laterClickedMilliSeconds = 0L
     )
