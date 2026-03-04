@@ -177,4 +177,31 @@ class ChunkUtilsTest {
       listReturned[1].fileName
     )
   }
+
+  @Test
+  fun `getChunks returns correct count for exact multiple of CHUNK_SIZE`() {
+    val size = ChunkUtils.CHUNK_SIZE * 3
+    val listReturned = ChunkUtils.getChunks(url, size, 1)
+    assertEquals(
+      "exact multiple should not produce an extra chunk",
+      3,
+      listReturned.size
+    )
+  }
+
+  @Test
+  fun `getChunks returns single chunk for content length of 1`() {
+    val listReturned = ChunkUtils.getChunks(url, 1L, 5)
+    assertEquals(1, listReturned.size)
+    assertEquals("0-", listReturned[0].rangeHeader)
+    assertEquals(5, listReturned[0].notificationID)
+  }
+
+  @Test
+  fun `getChunks chunk sizes sum up to at least contentLength`() {
+    val contentLength = ChunkUtils.CHUNK_SIZE * 2 + 500L
+    val listReturned = ChunkUtils.getChunks(url, contentLength, 1)
+    val totalSize = listReturned.sumOf { it.size }
+    assertThat(totalSize).isGreaterThanOrEqualTo(contentLength)
+  }
 }
