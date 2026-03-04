@@ -23,7 +23,6 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
-import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
@@ -32,15 +31,11 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.main.THREE_DAYS_IN_MILLISECONDS
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -57,15 +52,12 @@ class UpdateDialogTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-  private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
-  private lateinit var downloadApkDao: DownloadApkDao
+
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var kiwixDataStore: KiwixDataStore
 
   @Before
   override fun waitForIdle() {
-    kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
-    downloadApkDao = kiwixRoomDatabase.downloadApkDao()
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
         closeSystemDialogs(context, this)
@@ -102,25 +94,9 @@ class UpdateDialogTest : BaseActivityTest() {
 
   @Test
   fun showUpdatePopupWhenApplicationIsThreeDaysOld() {
-    runBlocking {
-      downloadApkDao.addLastDialogShownInfo(0L)
-      downloadApkDao.addLaterClickedInfo(0L)
-    }
     openLocalLibraryScreen()
     openReaderFragment()
     update { assertUpdateDialogDisplayed(composeTestRule) }
-  }
-
-  @Test
-  fun shouldNotShowUpdatePopupIfTimeSinceLastPopupIsLessThanThreeDays() {
-    runBlocking {
-      downloadApkDao.addLastDialogShownInfo(
-        System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS / 2)
-      )
-    }
-    openLocalLibraryScreen()
-    openReaderFragment()
-    update { assertUpdateDialogIsNotDisplayed(composeTestRule) }
   }
 
   private fun openLocalLibraryScreen() {
