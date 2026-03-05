@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Chaduvari
 * Rishitha 1238
 -->
 <resources>
@@ -10,4 +11,6 @@
   <string name="receive_files_title">ఫైల్‌లను స్వీకరించండి</string>
   <string name="no_app_found_to_open" fuzzy="true">జిమ్ ఫైల్‌ని ఎంచుకోవడానికి యాప్ ఏదీ కనుగొనబడలేదు!</string>
   <string name="select_zim_file" fuzzy="true">చదవడానికి జిమ్ ఫైల్‌ని ఎంచుకోండి</string>
+  <string name="no_category_available">వర్గాలేమీ లేవు</string>
+  <string name="all_categories">వర్గాలన్నీ</string>
 </resources>
