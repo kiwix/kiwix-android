@@ -147,7 +147,6 @@ class ZimManageViewModelTest {
     Dispatchers.resetMain()
   }
 
-  @Suppress("LongMethod")
   @BeforeEach
   @Suppress("LongMethod")
   fun init() {
@@ -169,16 +168,16 @@ class ZimManageViewModelTest {
       @Suppress("UnspecifiedRegisterReceiverFlag")
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
-    every { application.getString(any<Int>()) } returns ""
-    every { application.getString(any<Int>(), *anyVararg()) } returns ""
+    every { application.getString(any()) } returns ""
+    every { application.getString(any(), any()) } returns ""
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
-    every { kiwixDataStore.wifiOnly } returns flowOf(true)
-    every { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
-    every { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
+    coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
+    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
+    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
     every {
       onlineLibraryManager.buildLibraryUrl(
@@ -413,7 +412,6 @@ class ZimManageViewModelTest {
     }
   }
 
-  @Suppress("LongMethod")
   @Test
   @Suppress("LongMethod", "MaxLineLength")
   fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
