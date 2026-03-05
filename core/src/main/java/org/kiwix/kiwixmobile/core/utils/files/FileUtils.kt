@@ -28,7 +28,7 @@ import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.os.storage.StorageManager
 import android.os.storage.StorageVolume
-import android.provider.DocumentsContract
+
 import android.provider.MediaStore
 import android.util.Base64
 import android.webkit.MimeTypeMap
@@ -164,48 +164,73 @@ object FileUtils {
   @JvmStatic
   suspend fun getLocalFilePathByUri(
     context: Context,
-    uri: Uri
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
   ): String? {
     Log.e(TAG_KIWIX, "Trying to get the ZIM file path for Uri = $uri")
-    if (DocumentsContract.isDocumentUri(context, uri)) {
-      if ("com.android.externalstorage.documents" == uri.authority) {
-        val documentId =
-          DocumentsContract.getDocumentId(uri)
-            .split(":")
+    return when {
+      documentsContractWrapper.isDocumentUri(context, uri) ->
+        getProviderDocumentPath(context, uri, documentsContractWrapper)
+      uri.scheme != null -> getUriSchemePath(context, uri, documentsContractWrapper)
+      else -> uri.path
+    }
+  }
 
-        if (documentId[0] == "primary") {
-          return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
-        }
-        return try {
-          val sdCardOrUsbMainPath =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-              getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
-            } else {
-              getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
-            }
-          "$sdCardOrUsbMainPath/${documentId[1]}"
-        } catch (_: Exception) {
-          null
-        }
-      } else if ("com.android.providers.downloads.documents" == uri.authority) {
-        return try {
-          documentProviderContentQuery(context, uri)
-        } catch (_: IllegalArgumentException) {
-          null
-        }
-      }
-    } else if (uri.scheme != null) {
-      if ("content".equals(uri.scheme, ignoreCase = true)) {
-        return getFilePathOfContentUri(context, uri)
-      } else if ("file".equals(uri.scheme, ignoreCase = true)) {
-        return uri.path
-      }
-    } else {
-      return uri.path
+  private suspend fun getProviderDocumentPath(
+    context: Context,
+    uri: Uri,
+    wrapper: DocumentResolverWrapper
+  ): String? =
+    when (uri.authority) {
+      "com.android.externalstorage.documents" -> getExternalStorageDocumentPath(context, uri, wrapper)
+      "com.android.providers.downloads.documents" -> getDownloadsDocumentPath(context, uri, wrapper)
+      else -> null
     }
 
-    return null
+  private fun getExternalStorageDocumentPath(
+    context: Context,
+    uri: Uri,
+    wrapper: DocumentResolverWrapper
+  ): String? {
+    val documentId = wrapper.getDocumentId(uri).split(":")
+    if (documentId[0] == "primary") {
+      return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
+    }
+    return try {
+      val sdCardOrUsbMainPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
+      } else {
+        getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
+      }
+      "$sdCardOrUsbMainPath/${documentId[1]}"
+    } catch (_: Exception) {
+      null
+    }
   }
+
+  private suspend fun getDownloadsDocumentPath(
+    context: Context,
+    uri: Uri,
+    wrapper: DocumentResolverWrapper
+  ): String? =
+    try {
+      documentProviderContentQuery(context, uri, wrapper)
+    } catch (_: IllegalArgumentException) {
+      null
+    }
+
+  private suspend fun getUriSchemePath(
+    context: Context,
+    uri: Uri,
+    wrapper: DocumentResolverWrapper
+  ): String? =
+    if ("content".equals(uri.scheme, ignoreCase = true)) {
+      getFilePathOfContentUri(context, uri, wrapper)
+    } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+      uri.path
+    } else {
+      uri.path
+    }
 
   /**
    * Retrieves the main storage path for a given external storage device (SD card, USB stick, or external hard drive).
@@ -236,8 +261,12 @@ object FileUtils {
    * 2. On devices below Android 11, when files are clicked directly in the file manager, the content
    *    resolver may not be able to retrieve the path for certain URIs.
    */
-  private suspend fun getFilePathOfContentUri(context: Context, uri: Uri): String? {
-    val filePath = contentQuery(context, uri)
+  private suspend fun getFilePathOfContentUri(
+    context: Context,
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
+  ): String? {
+    val filePath = contentQuery(context, uri, documentsContractWrapper)
     return if (!filePath.isNullOrEmpty()) {
       filePath
     } else {

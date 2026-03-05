@@ -420,10 +420,10 @@ class FileUtilsInstrumentationTest {
         }
       }
     }
-    // get the SD card path
+    // get the SD card path (use getOrNull to avoid crash on emulators without SD card)
     val sdCardPath =
       context?.getExternalFilesDirs("")
-        ?.get(1)?.path?.substringBefore("/Android")
+        ?.getOrNull(1)?.path?.substringBefore("/Android")
     val dummyUriData =
       arrayListOf(
         // test the download uri on older devices
@@ -458,18 +458,6 @@ class FileUtilsInstrumentationTest {
           null,
           Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
         ),
-        // // test with SD card uri
-        DummyUrlData(
-          null,
-          null,
-          "$sdCardPath/$commonPath",
-          null,
-          Uri.parse(
-            primaryStorageUriPrefix +
-              sdCardPath?.substringAfter("storage/") +
-              "%3A$commonUri"
-          )
-        ),
         // test with invalid uri
         DummyUrlData(
           null,
@@ -498,6 +486,22 @@ class FileUtilsInstrumentationTest {
           )
         )
       )
+    // Only add SD card test data when SD card is available on the emulator
+    if (sdCardPath != null) {
+      dummyUriData.add(
+        DummyUrlData(
+          null,
+          null,
+          "$sdCardPath/$commonPath",
+          null,
+          Uri.parse(
+            primaryStorageUriPrefix +
+              sdCardPath.substringAfter("storage/") +
+              "%3A$commonUri"
+          )
+        )
+      )
+    }
     // test with USB stick uri
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       dummyUriData.add(
@@ -510,13 +514,34 @@ class FileUtilsInstrumentationTest {
         )
       )
     }
+    val mockWrapper: DocumentResolverWrapper = mockk(relaxed = true)
+    every { mockWrapper.isDocumentUri(any(), any()) } answers {
+      val uriString = arg<Uri>(1).toString()
+      uriString.contains("com.android.providers.downloads.documents") ||
+        uriString.contains("com.android.externalstorage.documents")
+    }
+    every { mockWrapper.query(any(), any(), any(), null, null, null) } answers {
+      val uriString = arg<Uri>(1).toString()
+      when {
+        uriString.contains("com.android.providers.downloads.documents") -> expectedFilePath
+        else -> null
+      }
+    }
+    every { mockWrapper.getDocumentId(any()) } answers {
+      val uriString = arg<Uri>(0).toString()
+      when {
+        uriString.contains("raw%3A") -> "raw:$expectedFilePath"
+        else -> expectedFilePath
+      }
+    }
+
     context?.let { context ->
       CoroutineScope(Dispatchers.Main).launch {
         dummyUriData.forEach { dummyUrlData ->
           dummyUrlData.uri?.let { uri ->
             Assertions.assertEquals(
-              FileUtils.getLocalFilePathByUri(context, uri),
-              dummyUrlData.expectedFileName
+              dummyUrlData.expectedFileName,
+              FileUtils.getLocalFilePathByUri(context, uri, mockWrapper)
             )
           }
         }
@@ -592,16 +617,26 @@ class FileUtilsInstrumentationTest {
       // default behavior of ContentResolver.
       // Therefore, we are restricting this test to API level 33 and below.
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        val mockWrapperForOldDevice: DocumentResolverWrapper = mockk(relaxed = true)
+        every { mockWrapperForOldDevice.query(any(), any(), any(), null, null, null) } returns expectedFilePath
+        every { mockWrapperForOldDevice.getDocumentId(any()) } returns "raw:$expectedFilePath"
+
         // test to get the download uri on old device
         testWithDownloadUri(
           Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"),
-          expectedFilePath
+          expectedFilePath,
+          mockWrapperForOldDevice
         )
+
+        val mockWrapperForNewDevice: DocumentResolverWrapper = mockk(relaxed = true)
+        every { mockWrapperForNewDevice.query(any(), any(), any(), null, null, null) } returns expectedFilePath
+        every { mockWrapperForNewDevice.getDocumentId(any()) } returns expectedFilePath
 
         // test to get the download uri on new device
         testWithDownloadUri(
           Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri"),
-          expectedFilePath
+          expectedFilePath,
+          mockWrapperForNewDevice
         )
 
         // test with all possible download uris
@@ -624,9 +659,9 @@ class FileUtilsInstrumentationTest {
             every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
             every {
               mockDocumentsContractWrapper.query(
-                context!!,
-                mockedUri,
-                "_data",
+                any(),
+                any(),
+                any(),
                 null,
                 null,
                 null
