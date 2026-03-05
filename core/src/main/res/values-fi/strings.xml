@@ -7,6 +7,7 @@
 * Minilammas
 * MohitMali
 * Nike
+* Possuinen
 * Pyscowicz
 * Samoasambia
 * Silvonen
@@ -72,6 +73,8 @@
   <string name="pref_display_title">Näytä</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
+  <string name="theme_light">Kirkas</string>
+  <string name="theme_dark">Tumma</string>
   <string name="pref_theme_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
@@ -197,7 +200,7 @@
   <string name="downloading">Ladataan</string>
   <string name="no_items_msg">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>
-  <string name="crash_description" fuzzy="true">Näyttää siltä, että sovellus kaatui.\n\nVoisitko auttaa meitä korjaamaan tämän ongelman lähettämällä seuraavat tiedot?</string>
+  <string name="crash_description">Näyttää siltä, että sovellus kaatui.\n\nVoisitko auttaa meitä korjaamaan tämän ongelman lähettämällä kaatumisraportin?</string>
   <string name="crash_checkbox_language">Omat kieliasetukset</string>
   <string name="crash_checkbox_zimfiles">Luettelo ZIM-tiedostoistasi</string>
   <string name="crash_checkbox_exception">Tiedot kaatumisesta</string>
@@ -281,7 +284,9 @@
   <string name="your_device">Laitteesi:</string>
   <string name="device_name">Laitteen nimi</string>
   <string name="nearby_devices">LÄHELLÄ OLEVAT LAITTEET</string>
+  <string name="files_for_transfer">SIIRRETTÄVÄT TIEDOSTOT</string>
   <string name="preparing_files">Valmistellaan tiedostoja siirtoon…</string>
+  <string name="performing_handshake">Kättelyä suoritetaan…</string>
   <string name="status">Tila</string>
   <string name="pref_clear_all_notes_summary">Tyhjennä kaikki huomautukset kaikista artikkeleista</string>
   <string name="pref_clear_all_notes_title">Tyhjennä kaikki huomautukset</string>
@@ -322,10 +327,14 @@
   <string name="not_allowed">Ei sallittu</string>
   <string name="allow">Salli</string>
   <string name="downloading_library">Ladataan kirjastoa %s</string>
+  <string name="no_notes">Ei muistiinpanoja</string>
+  <string name="notes_from_all_books">Näytä muistiinpanot kaikista kirjoista</string>
   <string name="open_article">Avaa artikkeli</string>
   <string name="go_to_settings_label">Siirry asetuksiin</string>
   <string name="your_device_name_message">Laitteesi nimi näkyy tässä.</string>
   <string name="toolbar_back_button_content_description">Siirry edelliseen ruutuun</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Tallennetaanko vai avataanko tämä tiedosto?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Avaa-vaihtoehdon valitseminen avaa tiedoston ulkoisessa lukuohjelmassa.</string>
   <string name="donation_dialog_title">Lahjoita nyt</string>
   <string name="donation_dialog_description">%s tarvitsee apuasi.</string>
   <string name="make_donation">Tee lahjoitus</string>
@@ -333,4 +342,5 @@
   <string name="downloading_state">Ladataan</string>
   <string name="download_failed_state">Epäonnistui</string>
   <string name="searchview_description_clear">Tyhjennä kysely</string>
+  <string name="do_you_mean">Tarkoitatko:</string>
 </resources>
