@@ -116,8 +116,8 @@ class ZimManageViewModelTest {
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk()
   private val storageObserver: StorageObserver = mockk()
   private val kiwixService: KiwixService = mockk()
-  private val application: Application = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val application: Application = mockk(relaxed = true)
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk(relaxed = true)
   private val fat32Checker: Fat32Checker = mockk()
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
@@ -139,7 +139,7 @@ class ZimManageViewModelTest {
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
   private val testDispatcher = StandardTestDispatcher()
-  private val onlineLibraryManager = mockk<OnlineLibraryManager>()
+  private val onlineLibraryManager = mockk<OnlineLibraryManager>(relaxed = true)
 
   @AfterAll
   fun teardown() {
@@ -422,10 +422,9 @@ class ZimManageViewModelTest {
           url = "",
           size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
         )
-      every { application.getString(any()) } answers { "" }
-      every { application.getString(any(), any()) } answers { "" }
-      every { application.getString(any(), *anyVararg()) } answers { "" }
-
+      every { application.getString(any()) } returns "All languages"
+      every { application.getString(any(), any()) } returns "All languages"
+      every { application.getString(any(), *anyVararg()) } returns "All languages"
       // test libraryItems fetches for all language.
       viewModel.libraryItems.test {
         coEvery {
@@ -439,6 +438,7 @@ class ZimManageViewModelTest {
         fileSystemStates.emit(CannotWrite4GbFile)
         advanceUntilIdle()
 
+        awaitItem()
         val item = awaitItem()
         val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
         if (bookItem?.fileSystemState == CannotWrite4GbFile) {
@@ -457,7 +457,8 @@ class ZimManageViewModelTest {
         coEvery {
           onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
         } returns arrayListOf(bookOver4Gb)
-        every { application.getString(any(), any()) } answers { "Selected language: English" }
+        every { application.getString(any(), any()) } returns "Selected language: English"
+        every { application.getString(any(), *anyVararg()) } returns "Selected language: English"
         networkStates.value = CONNECTED
         downloads.value = listOf()
         books.value = listOf()
