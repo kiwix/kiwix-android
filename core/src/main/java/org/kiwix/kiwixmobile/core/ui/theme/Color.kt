@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 
 val White = Color(0xFFFFFFFF)
 val AlabasterWhite = Color(0xFFFAFAFA)
+val LightGrey = Color(0xFFF0F0F0)
 val MineShaftGray350 = Color(0xFFD6D6D6)
 val dimHighlightedTextDark = Color(0xFFBEBEBE)
 val MineShaftGray500 = Color(0xFF9E9E9E)
