@@ -18,13 +18,25 @@
 
 package org.kiwix.kiwixmobile.core.main
 
+import android.content.Context
 import android.os.Build
+import android.text.SpannableStringBuilder
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.view.ActionMode
 import androidx.test.core.app.ApplicationProvider
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -46,12 +58,12 @@ import org.robolectric.annotation.Config
  * used by the rest of the project.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+@Config(sdk = [Build.VERSION_CODES.R])
 class CompatFindActionModeCallbackTest {
   private lateinit var callback: CompatFindActionModeCallback
   private val mockWebView: WebView = mockk(relaxed = true)
   private val mockActionMode: ActionMode = mockk(relaxed = true)
-  private val mockMenu: android.view.Menu = mockk(relaxed = true)
+  private val mockMenu: Menu = mockk(relaxed = true)
 
   @Before
   fun setUp() {
@@ -77,16 +89,18 @@ class CompatFindActionModeCallbackTest {
   @Test
   fun `setWebView accepts non-null WebView`() {
     callback.setWebView(mockWebView)
+    assertThat(getPrivateWebView()).isEqualTo(mockWebView)
   }
 
   @Test
-  fun `setWebView sets a FindListener on the WebView`() {
+  fun `setWebView sets listener and shows result view`() {
     callback.setWebView(mockWebView)
     verify { mockWebView.setFindListener(any()) }
+    assertThat(getPrivateTextView().visibility).isEqualTo(View.VISIBLE)
   }
 
   @Test
-  fun `findAll with text calls findAllAsync on webView`() {
+  fun `findAll with text calls findAllAsync`() {
     callback.setWebView(mockWebView)
     callback.setText("test")
     callback.findAll()
@@ -107,104 +121,108 @@ class CompatFindActionModeCallbackTest {
     callback.findAll()
   }
 
+  @Test(expected = IllegalArgumentException::class)
+  fun `findNext throws when webView not set`() {
+    callback.onClick(mockk(relaxed = true))
+  }
+
   @Test
-  fun `finish calls actionMode finish and clears webView matches`() {
-    callback.onCreateActionMode(mockActionMode, mockMenu)
+  fun `onClick calls findNext forward`() {
     callback.setWebView(mockWebView)
-    callback.finish()
-    verify { mockActionMode.finish() }
-    verify { mockWebView.clearMatches() }
-  }
+    callback.onClick(mockk(relaxed = true))
 
-  @Test
-  fun `finish without actionMode or webView does not crash`() {
-    callback.finish()
-  }
-
-  @Test
-  fun `onCreateActionMode returns true`() {
-    val result = callback.onCreateActionMode(mockActionMode, mockMenu)
-    assertThat(result).isTrue()
-  }
-
-  @Test
-  fun `onCreateActionMode sets custom view on action mode`() {
-    callback.onCreateActionMode(mockActionMode, mockMenu)
-    verify { mockActionMode.customView = any() }
-  }
-
-  @Test
-  fun `onCreateActionMode inflates menu`() {
-    val mockMenuInflater: android.view.MenuInflater = mockk(relaxed = true)
-    every { mockActionMode.menuInflater } returns mockMenuInflater
-    callback.onCreateActionMode(mockActionMode, mockMenu)
-    verify { mockMenuInflater.inflate(R.menu.menu_webview, mockMenu) }
-  }
-
-  @Test
-  fun `onDestroyActionMode sets isActive to false`() {
-    callback.setActive()
-    callback.setWebView(mockWebView)
-    callback.onDestroyActionMode(mockActionMode)
-    assertThat(callback.isActive).isFalse()
-  }
-
-  @Test
-  fun `onDestroyActionMode clears webView matches`() {
-    callback.setWebView(mockWebView)
-    callback.onDestroyActionMode(mockActionMode)
-    verify { mockWebView.clearMatches() }
-  }
-
-  @Test
-  fun `onPrepareActionMode returns false`() {
-    val result = callback.onPrepareActionMode(mockActionMode, mockMenu)
-    assertThat(result).isFalse()
-  }
-
-  @Test
-  fun `onActionItemClicked with find_next calls findNext forward`() {
-    callback.setWebView(mockWebView)
-    val menuItem: MenuItem = mockk(relaxed = true)
-    every { menuItem.itemId } returns R.id.find_next
-    val result = callback.onActionItemClicked(mockActionMode, menuItem)
-    assertThat(result).isTrue()
     verify { mockWebView.findNext(true) }
   }
 
-  @Test
-  fun `onActionItemClicked with find_prev calls findNext backward`() {
-    callback.setWebView(mockWebView)
-    val menuItem: MenuItem = mockk(relaxed = true)
-    every { menuItem.itemId } returns R.id.find_prev
-    val result = callback.onActionItemClicked(mockActionMode, menuItem)
-    assertThat(result).isTrue()
-    verify { mockWebView.findNext(false) }
-  }
-
-  @Test
-  fun `onActionItemClicked with unknown id returns false`() {
-    callback.setWebView(mockWebView)
-    val menuItem: MenuItem = mockk(relaxed = true)
-    every { menuItem.itemId } returns -1
-    val result = callback.onActionItemClicked(mockActionMode, menuItem)
-    assertThat(result).isFalse()
-  }
-
   @Test(expected = IllegalArgumentException::class)
-  fun `onActionItemClicked without webView throws IllegalArgumentException`() {
-    val menuItem: MenuItem = mockk(relaxed = true)
-    every { menuItem.itemId } returns R.id.find_next
-    callback.onActionItemClicked(mockActionMode, menuItem)
+  fun `onClick throws when webView is null`() {
+    callback.onClick(mockk(relaxed = true))
   }
 
   @Test
-  fun `onTextChanged delegates to findAll`() {
+  fun `find listener updates result text`() {
+    val slot = slot<WebView.FindListener>()
+    every { mockWebView.setFindListener(capture(slot)) } just Runs
+
     callback.setWebView(mockWebView)
-    // Set text first, then call onTextChanged to simulate the watcher
     callback.setText("hello")
-    // The findAll method reads from editText.text, which is now "hello"
-    callback.findAll()
+
+    slot.captured.onFindResultReceived(0, 5, true)
+
+    assertThat(getPrivateTextView().text.toString()).isEqualTo("1/5")
+  }
+
+  @Test
+  fun `find listener shows zero results`() {
+    val slot = slot<WebView.FindListener>()
+    every { mockWebView.setFindListener(capture(slot)) } just Runs
+
+    callback.setWebView(mockWebView)
+    callback.setText("hello")
+
+    slot.captured.onFindResultReceived(0, 0, true)
+
+    assertThat(getPrivateTextView().text.toString()).isEqualTo("0/0")
+  }
+
+  @Test
+  fun `find listener clears text when input empty`() {
+    val slot = slot<WebView.FindListener>()
+    every { mockWebView.setFindListener(capture(slot)) } just Runs
+
+    callback.setWebView(mockWebView)
+    callback.setText("")
+
+    slot.captured.onFindResultReceived(0, 5, true)
+
+    assertThat(getPrivateTextView().text.toString()).isEqualTo("")
+  }
+
+  @Test
+  fun `find listener reacts to updated text`() {
+    val slot = slot<WebView.FindListener>()
+    every { mockWebView.setFindListener(capture(slot)) } just Runs
+
+    callback.setWebView(mockWebView)
+    callback.setText("first")
+    callback.setText("second")
+
+    slot.captured.onFindResultReceived(1, 2, true)
+
+    assertThat(getPrivateTextView().text.toString()).isEqualTo("2/2")
+  }
+
+  @Test
+  fun `setText handles null`() {
+    callback.setText(null)
+  }
+
+  @Test
+  fun `setText handles empty`() {
+    callback.setText("")
+  }
+
+  @Test
+  fun `setText handles non empty`() {
+    callback.setText("search term")
+  }
+
+  @Test
+  fun `setText sets cursor at end`() {
+    callback.setText("hello")
+
+    val editText = getPrivateEditText()
+    assertThat(editText.selectionStart).isEqualTo(5)
+    assertThat(editText.selectionEnd).isEqualTo(5)
+  }
+
+  @Test
+  fun `onTextChanged triggers findAll`() {
+    callback.setWebView(mockWebView)
+    callback.setText("hello")
+
+    callback.onTextChanged("hello", 0, 0, 5)
+
     verify { mockWebView.findAllAsync("hello") }
   }
 
@@ -215,28 +233,136 @@ class CompatFindActionModeCallbackTest {
 
   @Test
   fun `afterTextChanged does nothing`() {
-    callback.afterTextChanged(android.text.SpannableStringBuilder(""))
+    callback.afterTextChanged(SpannableStringBuilder(""))
   }
 
   @Test
-  fun `setText with null does not crash`() {
-    callback.setText(null)
+  fun `onCreateActionMode returns true`() {
+    assertThat(callback.onCreateActionMode(mockActionMode, mockMenu)).isTrue()
   }
 
   @Test
-  fun `setText with empty string does not crash`() {
-    callback.setText("")
+  fun `onCreateActionMode inflates menu`() {
+    val inflater = mockk<MenuInflater>(relaxed = true)
+    every { mockActionMode.menuInflater } returns inflater
+
+    callback.onCreateActionMode(mockActionMode, mockMenu)
+
+    verify { mockActionMode.customView = any() }
+    verify { inflater.inflate(R.menu.menu_webview, mockMenu) }
   }
 
   @Test
-  fun `setText with non-empty string does not crash`() {
-    callback.setText("search term")
+  fun `onPrepareActionMode returns false`() {
+    assertThat(callback.onPrepareActionMode(mockActionMode, mockMenu)).isFalse()
   }
 
   @Test
-  fun `onClick calls findNext forward on webView`() {
+  fun `onDestroyActionMode resets state and clears matches`() {
+    callback.setActive()
     callback.setWebView(mockWebView)
-    callback.onClick(mockk(relaxed = true))
+
+    callback.onDestroyActionMode(mockActionMode)
+
+    assertThat(callback.isActive).isFalse()
+    verify { mockWebView.clearMatches() }
+  }
+
+  @Test
+  fun `onDestroyActionMode hides keyboard`() {
+    val realContext = ApplicationProvider.getApplicationContext<Context>()
+    val spyContext = spyk(realContext)
+    val inputManager = mockk<InputMethodManager>(relaxed = true)
+
+    every {
+      spyContext.getSystemService(Context.INPUT_METHOD_SERVICE)
+    } returns inputManager
+
+    val callback = CompatFindActionModeCallback(spyContext)
+    callback.setWebView(mockWebView)
+
+    callback.onDestroyActionMode(mockActionMode)
+
+    verify { inputManager.hideSoftInputFromWindow(any(), 0) }
+  }
+
+  @Test
+  fun `finish clears matches and finishes action mode`() {
+    callback.onCreateActionMode(mockActionMode, mockMenu)
+    callback.setWebView(mockWebView)
+
+    callback.finish()
+
+    verify { mockActionMode.finish() }
+    verify { mockWebView.clearMatches() }
+  }
+
+  @Test
+  fun `finish without dependencies does not crash`() {
+    callback.finish()
+  }
+
+  @Test
+  fun `finish calls actionMode even if webView is null`() {
+    callback.onCreateActionMode(mockActionMode, mockMenu)
+
+    callback.finish()
+
+    verify { mockActionMode.finish() }
+  }
+
+  @Test
+  fun `find next menu action`() {
+    callback.setWebView(mockWebView)
+    val item = mockk<MenuItem>(relaxed = true)
+    every { item.itemId } returns R.id.find_next
+
+    assertThat(callback.onActionItemClicked(mockActionMode, item)).isTrue()
     verify { mockWebView.findNext(true) }
+  }
+
+  @Test
+  fun `find previous menu action`() {
+    callback.setWebView(mockWebView)
+    val item = mockk<MenuItem>(relaxed = true)
+    every { item.itemId } returns R.id.find_prev
+
+    assertThat(callback.onActionItemClicked(mockActionMode, item)).isTrue()
+    verify { mockWebView.findNext(false) }
+  }
+
+  @Test
+  fun `unknown menu action returns false`() {
+    callback.setWebView(mockWebView)
+    val item = mockk<MenuItem>(relaxed = true)
+    every { item.itemId } returns -1
+
+    assertThat(callback.onActionItemClicked(mockActionMode, item)).isFalse()
+  }
+
+  @Test(expected = IllegalArgumentException::class)
+  fun `menu action without webView throws`() {
+    val item = mockk<MenuItem>(relaxed = true)
+    every { item.itemId } returns R.id.find_next
+
+    callback.onActionItemClicked(mockActionMode, item)
+  }
+
+  private fun getPrivateTextView(): TextView {
+    val field = callback.javaClass.getDeclaredField("findResultsTextView")
+    field.isAccessible = true
+    return field.get(callback) as TextView
+  }
+
+  private fun getPrivateEditText(): EditText {
+    val field = callback.javaClass.getDeclaredField("editText")
+    field.isAccessible = true
+    return field.get(callback) as EditText
+  }
+
+  private fun getPrivateWebView(): WebView {
+    val field = callback.javaClass.getDeclaredField("webView")
+    field.isAccessible = true
+    return field.get(callback) as WebView
   }
 }
