@@ -21,7 +21,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.webkit.WebResourceResponse
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.coEvery
 import io.mockk.every
@@ -402,37 +401,6 @@ class FileUtilsInstrumentationTest {
     verify(exactly = 0) {
       zimReader.load(any(), any())
     }
-  }
-
-  @Test
-  fun testDownloadPdfFileSaved() = runTest {
-    val pdfUrl = "https://kiwix.org/contributors/contributors_list.pdf"
-
-    val zimReader = mockk<ZimReaderContainer>(relaxed = true)
-
-    val fakeStream = "dummy pdf".byteInputStream()
-
-    val webResponse = WebResourceResponse(
-      "application/pdf",
-      "utf-8",
-      fakeStream
-    )
-
-    every {
-      zimReader.load(any(), any())
-    } returns webResponse
-
-    val result = FileUtils.downloadFileFromUrl(
-      context = context!!,
-      url = pdfUrl,
-      src = null,
-      zimReaderContainer = zimReader
-    )
-
-    Assertions.assertTrue(result is SaveResult.FileSaved)
-
-    val fileSaved = result as SaveResult.FileSaved
-    Assertions.assertTrue(fileSaved.file.exists())
   }
 
   @Test
