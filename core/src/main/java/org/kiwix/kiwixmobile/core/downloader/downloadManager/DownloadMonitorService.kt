@@ -403,6 +403,11 @@ class DownloadMonitorService : Service() {
     val notificationTitle =
       downloadRoomDao.getEntityForFileName(getDownloadNotificationTitle(download))?.title
         ?: download.file
+    val openActionPendingIntent = fetchDownloadNotificationManager.getOpenActionPendingIntent(
+      this,
+      getDownloadNotificationTitle(download),
+      download.id + THIRTY_TREE
+    )
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
@@ -413,21 +418,11 @@ class DownloadMonitorService : Service() {
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
       .setAutoCancel(true)
-      .setContentIntent(
-        fetchDownloadNotificationManager.getOpenActionPendingIntent(
-          this,
-          getDownloadNotificationTitle(download),
-          download.id + THIRTY_TREE
-        )
-      )
+      .setContentIntent(openActionPendingIntent)
       .addAction(
         android.R.drawable.ic_menu_send,
         getString(R.string.open),
-        fetchDownloadNotificationManager.getOpenActionPendingIntent(
-          this,
-          getDownloadNotificationTitle(download),
-          download.id + THIRTY_TREE
-        )
+        openActionPendingIntent
       )
     // Assigning a new ID to the notification because the same ID is used for the foreground
     // notification. If we use the same ID, changing the foreground notification for another

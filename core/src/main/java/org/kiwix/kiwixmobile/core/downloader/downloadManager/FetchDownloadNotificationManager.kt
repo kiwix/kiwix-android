@@ -258,7 +258,7 @@ class FetchDownloadNotificationManager @Inject constructor(
   ) {
     if (downloadNotification.isCompleted) {
       notificationBuilder.setContentIntent(
-        getNotificationClickPendingIntent(context, downloadNotification)
+        getOpenActionPendingIntent(context, downloadNotification)
       )
       notificationBuilder.addAction(
         android.R.drawable.ic_menu_send,
@@ -266,28 +266,6 @@ class FetchDownloadNotificationManager @Inject constructor(
         getOpenActionPendingIntent(context, downloadNotification)
       )
     }
-  }
-
-  fun getNotificationClickPendingIntent(
-    context: Context,
-    downloadNotification: DownloadNotification
-  ): PendingIntent =
-    getNotificationClickPendingIntent(context, downloadNotification.notificationId)
-
-  fun getNotificationClickPendingIntent(
-    context: Context,
-    notificationId: Int
-  ): PendingIntent {
-    val internal = Intents.internal(CoreMainActivity::class.java).apply {
-      action = DOWNLOAD_NOTIFICATION_TITLE
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    return getActivity(
-      context,
-      notificationId,
-      internal,
-      FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
-    )
   }
 
   fun getOpenActionPendingIntent(
