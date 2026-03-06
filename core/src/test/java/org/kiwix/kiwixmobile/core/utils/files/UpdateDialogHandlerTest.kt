@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.main.THREE_DAYS_IN_MILLISECONDS
 import org.kiwix.kiwixmobile.core.main.UpdateDialogHandler
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.workManager.VersionId
 
 @ExperimentalCoroutinesApi
 class UpdateDialogHandlerTest {
@@ -67,7 +68,7 @@ class UpdateDialogHandlerTest {
   }
 
   @Test
-  fun `should show initial update popup when app is three days old`() =
+  fun `should show initial update popup when update is available`() =
     runTest {
       coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns 0L
       coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns 0L
@@ -78,28 +79,53 @@ class UpdateDialogHandlerTest {
     }
 
   @Test
-  fun `should not show update popup if app is not three days old`() =
+  fun `should not show initial update popup when update is not available`() =
     runTest {
-      val currentMilliSeconds = System.currentTimeMillis()
-      /*by setting the last popup shown to current time we make sure the time difference will remain 0 and not exceed the
-      3 days limit set by us*/
-      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns currentMilliSeconds
-      coEvery { apkDao.getDownload()!!.version } returns "10.10.10"
+      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns 0L
+      coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns 0L
+      coEvery { apkDao.getDownload()!!.version } returns "0.0.0"
       coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
       updateDialogHandler.attemptToShowUpdatePopup()
       coVerify { showUpdateDialogCallback wasNot Called }
     }
 
   @Test
-  fun `should show update popup if time since last popup exceeds three months`() =
+  fun `test should show update popup when update clicked time exceeds three days`() =
     runTest {
+      updateDialogHandler = spyk(updateDialogHandler)
       val currentMilliSeconds = System.currentTimeMillis()
-      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns currentMilliSeconds
       coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns 0L
       coEvery { apkDao.getDownload()!!.version } returns "10.10.10"
       coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns currentMilliSeconds - (THREE_DAYS_IN_MILLISECONDS + 1000)
       updateDialogHandler.attemptToShowUpdatePopup()
       coVerify { showUpdateDialogCallback.showUpdateDialog() }
+    }
+
+  @Test
+  fun `test should not show update popup when update clicked time is less than three days`() =
+    runTest {
+      updateDialogHandler = spyk(updateDialogHandler)
+      val currentMilliSeconds = System.currentTimeMillis()
+      coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns 0L
+      coEvery { apkDao.getDownload()!!.version } returns "10.10.10"
+      coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns currentMilliSeconds - (THREE_DAYS_IN_MILLISECONDS + 1000)
+      updateDialogHandler.attemptToShowUpdatePopup()
+      coVerify { showUpdateDialogCallback wasNot Called }
+    }
+
+  @Test
+  fun `test should not show update popup when update clicked time is less than three days and update is not available`() =
+    runTest {
+      updateDialogHandler = spyk(updateDialogHandler)
+      val currentMilliSeconds = System.currentTimeMillis()
+      coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns 0L
+      coEvery { apkDao.getDownload()!!.version } returns "0.0.0"
+      coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns currentMilliSeconds - (THREE_DAYS_IN_MILLISECONDS + 1000)
+      updateDialogHandler.attemptToShowUpdatePopup()
+      coVerify { showUpdateDialogCallback wasNot Called }
     }
 
   @Test
@@ -116,7 +142,7 @@ class UpdateDialogHandlerTest {
     }
 
   @Test
-  fun `test should not show update popup when later clicked time exceeds three days`() =
+  fun `test should not show update popup when later clicked time is less than three days`() =
     runTest {
       updateDialogHandler = spyk(updateDialogHandler)
       val currentMilliSeconds = System.currentTimeMillis()
@@ -124,6 +150,19 @@ class UpdateDialogHandlerTest {
       coEvery { apkDao.getDownload()!!.version } returns "10.10.10"
       coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns 0L
       coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns currentMilliSeconds - 10000L
+      updateDialogHandler.attemptToShowUpdatePopup()
+      coVerify { showUpdateDialogCallback wasNot Called }
+    }
+
+  @Test
+  fun `test should not show update popup when later clicked time exceeds three days and update is not available`() =
+    runTest {
+      updateDialogHandler = spyk(updateDialogHandler)
+      val currentMilliSeconds = System.currentTimeMillis()
+      coEvery { apkDao.getDownload()!!.lastDialogShownInMilliSeconds } returns 0L
+      coEvery { apkDao.getDownload()!!.version } returns "0.0.0"
+      coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+      coEvery { apkDao.getDownload()!!.laterClickedMilliSeconds } returns currentMilliSeconds - (THREE_DAYS_IN_MILLISECONDS + 1000)
       updateDialogHandler.attemptToShowUpdatePopup()
       coVerify { showUpdateDialogCallback wasNot Called }
     }
@@ -175,5 +214,17 @@ class UpdateDialogHandlerTest {
     assertFalse(result)
   }
 
-  // reminder check for is update available functions
+  @Test
+  fun `isUpdateAvailable should return false when current version is more than available version`() {
+    coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+    val result = updateDialogHandler.isUpdateAvailable(VersionId("0.0.0"))
+    assertFalse(result)
+  }
+
+  @Test
+  fun `isUpdateAvailable should return true when current version is less than available version`() {
+    coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+    val result = updateDialogHandler.isUpdateAvailable(VersionId("10.10.10"))
+    assertTrue(result)
+  }
 }
