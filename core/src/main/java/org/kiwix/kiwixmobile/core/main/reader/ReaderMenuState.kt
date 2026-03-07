@@ -44,7 +44,6 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_ICON_CORNER_RADIUS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
@@ -213,7 +212,7 @@ class ReaderMenuState(
           .clip(RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
           .background(MaterialTheme.colorScheme.onPrimary)
           .border(
-            ONE_DP,
+            TWO_DP,
             MaterialTheme.colorScheme.onBackground,
             RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS)
           )
