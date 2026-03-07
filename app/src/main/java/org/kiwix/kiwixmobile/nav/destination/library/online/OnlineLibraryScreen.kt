@@ -229,6 +229,7 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
+
   LaunchedEffect(lazyListState, state.onlineLibraryList) {
     snapshotFlow {
       val layoutInfo = lazyListState.layoutInfo
