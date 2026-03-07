@@ -21,9 +21,7 @@ package org.kiwix.kiwixmobile.localLibrary
 import android.app.Activity
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+
 import eu.mhutti1.utils.storage.StorageDevice
 import io.mockk.Runs
 import io.mockk.clearAllMocks
@@ -84,11 +82,10 @@ class CopyMoveFileHandlerTest {
   private val storageFile: File = mockk(relaxed = true)
   private val selectedFile: DocumentFile = mockk(relaxed = true)
   private val storagePath = "storage/0/emulated/Android/media/org.kiwix.kiwixmobile"
-  private val destinationFile = mockk<File>(relaxed = true)
-  private val sourceUri = mockk<Uri>(relaxed = true)
-  private val fragmentManager = mockk<FragmentManager>(relaxed = true)
-  private val fileOperationHandler = mockk<FileOperationHandler>(relaxed = true)
-  private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>(relaxed = true)
+  private val destinationFile = mockk<File>()
+  private val sourceUri = mockk<Uri>()
+  private val fileOperationHandler = mockk<FileOperationHandler>()
+  private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>()
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @BeforeEach
@@ -306,7 +303,6 @@ class CopyMoveFileHandlerTest {
       kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
     } returns MutableStateFlow(true)
     fileHandler.showMoveFileToPublicDirectoryDialog(
-      fragmentManager = fragmentManager,
       isSingleFileSelected = false
     )
     advanceUntilIdle()
@@ -405,11 +401,6 @@ class CopyMoveFileHandlerTest {
   fun showStorageConfigureDialogAtFirstLaunch() = runTest {
     fileHandler = spyk(fileHandler)
     fileHandler.setLifeCycleScope(this)
-    val transaction = mockk<FragmentTransaction>()
-    every { transaction.setReorderingAllowed(true) } returns mockk()
-    every { transaction.add(any<DialogFragment>(), any()) } returns transaction
-    every { fragmentManager.beginTransaction() } returns transaction
-    every { transaction.commit() } returns 1
     val storageDeviceList = listOf<StorageDevice>(mockk(), mockk())
 
     coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
@@ -424,7 +415,6 @@ class CopyMoveFileHandlerTest {
     } just Runs
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(
-      fragmentManager = fragmentManager,
       isSingleFileSelected = true
     )
     positiveButtonClickSlot.captured.invoke()
@@ -450,7 +440,6 @@ class CopyMoveFileHandlerTest {
     } just Runs
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(
-      fragmentManager = fragmentManager,
       isSingleFileSelected = true
     )
     positiveButtonClickSlot.captured.invoke()
@@ -466,7 +455,6 @@ class CopyMoveFileHandlerTest {
     prepareFileSystemAndFileForMockk()
     every { alertDialogShower.show(any(), any(), any()) } just Runs
     fileHandler.showMoveFileToPublicDirectoryDialog(
-      fragmentManager = fragmentManager,
       isSingleFileSelected = true
     )
 
@@ -499,15 +487,15 @@ class CopyMoveFileHandlerTest {
 
       coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
       fileHandler.showMoveFileToPublicDirectoryDialog(
-        fragmentManager = fragmentManager,
         isSingleFileSelected = true
       )
       coEvery { fileHandler.performCopyOperation() } just Runs
 
-      positiveButtonClickSlot.captured.invoke()
-      coEvery { fileHandler.performCopyOperation() }
-      coEvery { fileHandler.performMoveOperation() } just Runs
-      negativeButtonClickSlot.captured.invoke()
+      coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
+      fileHandler.showMoveFileToPublicDirectoryDialog(
+        isSingleFileSelected = true
+      )
+      coEvery { fileHandler.performCopyOperation() } just Runs
 
       coEvery { fileHandler.performMoveOperation() }
     }

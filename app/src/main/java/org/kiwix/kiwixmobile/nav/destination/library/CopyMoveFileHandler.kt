@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import android.app.Activity
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.mutableStateOf
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,8 +44,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
-import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -73,7 +71,14 @@ class CopyMoveFileHandler @Inject constructor(
   private var storageObservingJob: Job? = null
   var isMoveOperation = false
   var shouldValidateZimFile: Boolean = false
-  private lateinit var fragmentManager: FragmentManager
+  private lateinit var alertDialogShower: AlertDialogShower
+
+  /**
+   * Holds the state for showing the storage selection dialog.
+   * When non-null, the hosting composable should render [StorageSelectDialog].
+   * The Pair contains: (storageDeviceList, onSelectAction).
+   */
+  val storageSelectDialogState = mutableStateOf<StorageSelectDialogConfig?>(null)
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
   private var unitTestDestinationFile: File? = null
@@ -99,13 +104,11 @@ class CopyMoveFileHandler @Inject constructor(
     uri: Uri? = null,
     documentFile: DocumentFile? = null,
     shouldValidateZimFile: Boolean = false,
-    fragmentManager: FragmentManager,
     multipleFilesProcessAction: MultipleFilesProcessAction? = null,
     isSingleFileSelected: Boolean
   ) {
     this.isSingleFileSelected = isSingleFileSelected
     this.shouldValidateZimFile = shouldValidateZimFile
-    this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
     if (getStorageDeviceList().isEmpty()) {
       copyMoveProgressBarController.showPreparingCopyMoveDialog()
@@ -147,15 +150,22 @@ class CopyMoveFileHandler @Inject constructor(
     lifecycleScope = coroutineScope
   }
 
-  fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) =
-    StorageSelectDialog()
-      .apply {
-        onSelectAction = ::copyMoveZIMFileInSelectedStorage
-        titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-        setStorageDeviceList(storageDeviceList)
-        setShouldShowCheckboxSelected(false)
+  fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) {
+    storageSelectDialogState.value = StorageSelectDialogConfig(
+      storageDeviceList = storageDeviceList,
+      title = activity.getString(R.string.choose_storage_to_copy_move_zim_file),
+      shouldShowCheckboxSelected = false,
+      onSelectAction = { storageDevice ->
+        lifecycleScope?.launch {
+          copyMoveZIMFileInSelectedStorage(storageDevice)
+        }
       }
-      .show(fragmentManager, activity.getString(R.string.choose_storage_to_copy_move_zim_file))
+    )
+  }
+
+  fun dismissStorageSelectDialog() {
+    storageSelectDialogState.value = null
+  }
 
   suspend fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
     kiwixDataStore.apply {
