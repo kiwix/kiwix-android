@@ -56,7 +56,11 @@ import org.robolectric.annotation.Config
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU], manifest = Config.NONE, application = TestApplication::class)
+@Config(
+  sdk = [Build.VERSION_CODES.TIRAMISU, Build.VERSION_CODES.N_MR1],
+  manifest = Config.NONE,
+  application = TestApplication::class
+)
 class ExternalLinkOpenerTest {
   private lateinit var kiwixDataStore: KiwixDataStore
   private val alertDialogShower = AlertDialogShower()
@@ -81,7 +85,6 @@ class ExternalLinkOpenerTest {
 
   @Test
   fun alertDialogShowerOpensLinkIfConfirmButtonIsClicked() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -111,7 +114,6 @@ class ExternalLinkOpenerTest {
 
   @Test
   fun alertDialogShowerOpensLinkIfGeoProtocolAdded() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
     val uri = Uri.parse("geo:28.61388888888889,77.20833333333334")
     val intent = Intent(Intent.ACTION_VIEW, uri)
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
@@ -140,7 +142,6 @@ class ExternalLinkOpenerTest {
 
   @Test
   fun alertDialogShowerDoesNoOpenLinkIfNegativeButtonIsClicked() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -168,7 +169,6 @@ class ExternalLinkOpenerTest {
   @Test
   fun alertDialogShowerOpensLinkAndSavesPreferencesIfNeutralButtonIsClicked() =
     runBlocking {
-      if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
       val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
       Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
         intent,
@@ -200,7 +200,6 @@ class ExternalLinkOpenerTest {
 
   @Test
   fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -222,8 +221,7 @@ class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun toastIfPackageManagerIsNull() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
+  internal fun toastIfPackageManagerIsNotResolvable() = runBlocking {
     // In Robolectric, PackageManager is not null, but we can make it return null for resolveActivity
     // or just not add any resolves.
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
@@ -235,11 +233,14 @@ class ExternalLinkOpenerTest {
     externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
     val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
     assertNull(startedIntent)
+    assert(
+      org.robolectric.shadows.ShadowToast.getTextOfLatestToast() ==
+        activity.getString(org.kiwix.kiwixmobile.core.R.string.no_reader_application_installed)
+    )
   }
 
   @Test
   fun openExternalLinkWithDialog_showsDialogIfIntentIsResolvable() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -265,7 +266,6 @@ class ExternalLinkOpenerTest {
 
   @Test
   fun openExternalLinkWithDialog_showsToastIfIntentIsNotResolvable() = runBlocking {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runBlocking
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     // No resolve info.
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
@@ -279,11 +279,14 @@ class ExternalLinkOpenerTest {
     assertNull(startedIntent)
     val dialogData = alertDialogShower.dialogState.value
     assertNull(dialogData)
+    assert(
+      org.robolectric.shadows.ShadowToast.getTextOfLatestToast() ==
+        activity.getString(org.kiwix.kiwixmobile.core.R.string.no_reader_application_installed)
+    )
   }
 
   @Test
   fun testDialogButtonTextDoesNotWrap() {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return
     val longText = "This is a very long button text"
     val dialog = KiwixDialog.ExternalRedirectDialog(longText)
     alertDialogShower.show(dialog, uri = Uri.parse("https://example.com"))
