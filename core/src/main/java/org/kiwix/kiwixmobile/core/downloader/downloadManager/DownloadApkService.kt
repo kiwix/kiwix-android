@@ -107,7 +107,7 @@ class DownloadApkService : Service() {
     if (intent?.hasExtra(APP_NAME_KEY) == true) {
       appName = intent.getStringExtra(APP_NAME_KEY)
     }
-    if (intent?.action == STOP_DOWNLOAD_SERVICE) {
+    if (intent?.action == STOP_DOWNLOAD_APK_SERVICE) {
       stopForegroundServiceForDownloads()
     }
     return START_STICKY
@@ -320,9 +320,6 @@ class DownloadApkService : Service() {
     }
   }
 
-  private fun getDownloadNotificationTitle(download: Download): String =
-    fetchDownloadNotificationManager.getDownloadNotificationTitle(download)
-
   /**
    * Stops the foreground service, disposes of resources, and removes the Fetch listener.
    */
@@ -336,7 +333,7 @@ class DownloadApkService : Service() {
   }
 
   companion object {
-    const val STOP_DOWNLOAD_SERVICE = "stop_download_service"
+    const val STOP_DOWNLOAD_APK_SERVICE = "stop_download_apk_service"
 
     @JvmField var isDownloadApkServiceRunning = false
   }

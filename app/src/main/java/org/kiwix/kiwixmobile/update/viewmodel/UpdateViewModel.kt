@@ -38,12 +38,19 @@ class UpdateViewModel @Inject constructor(
     fetchDownloadInfo()
   }
 
-  // implement loading and error states
   private fun fetchDownloadInfo() = viewModelScope.launch {
-    downloadApkDao.downloads().collect { download ->
-      _state.value = state.value.copy(
-        downloadApkItem = DownloadApkItem(download)
-      )
+    _state.value = state.value.copy(
+      loading = true
+    )
+    runCatching {
+      downloadApkDao.downloads().collect { download ->
+        _state.value = state.value.copy(
+          downloadApkItem = DownloadApkItem(download),
+          loading = false
+        )
+      }
+    }.onFailure {
+      it.printStackTrace()
     }
   }
 
