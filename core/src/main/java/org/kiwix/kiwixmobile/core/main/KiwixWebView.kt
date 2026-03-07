@@ -190,7 +190,7 @@ open class KiwixWebView constructor(
               appContext.toast(
                 appContext.getString(
                   R.string.save_media_saved,
-                  result.displayName
+                  result.uri
                 )
               )
             }
@@ -199,7 +199,7 @@ open class KiwixWebView constructor(
               appContext.toast(
                 appContext.getString(
                   R.string.save_media_saved,
-                  result.file.name
+                  result.file.absolutePath
                 )
               )
             }
@@ -207,7 +207,7 @@ open class KiwixWebView constructor(
             is SaveResult.InvalidSource -> {
               appContext.toast(
                 appContext.getString(
-                  R.string.error_file_invalid,
+                  R.string.invalid_media_source,
                 )
               )
             }

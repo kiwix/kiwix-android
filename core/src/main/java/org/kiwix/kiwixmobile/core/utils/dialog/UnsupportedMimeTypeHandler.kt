@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import java.io.File
@@ -35,8 +34,6 @@ import javax.inject.Inject
 
 class UnsupportedMimeTypeHandler @Inject constructor(
   private val activity: Activity,
-  @Suppress("UnusedPrivateProperty")
-  private val kiwixDataStore: KiwixDataStore,
   private val zimReaderContainer: ZimReaderContainer
 ) {
   private var alertDialogShower: AlertDialogShower? = null
@@ -88,12 +85,25 @@ class UnsupportedMimeTypeHandler @Inject constructor(
         }
 
         is SaveResult.MediaSaved -> {
-          activity.toast(
-            activity.getString(
-              R.string.save_media_saved,
-              result.displayName
+          if (openFile) {
+            intent.apply {
+              setDataAndType(result.uri, documentType)
+              flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+              addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            if (intent.resolveActivity(activity.packageManager) != null) {
+              activity.startActivity(intent)
+            } else {
+              activity.toast(R.string.no_reader_application_installed)
+            }
+          } else {
+            activity.toast(
+              activity.getString(
+                R.string.save_media_saved,
+                result.displayName
+              )
             )
-          )
+          }
         }
 
         is SaveResult.InvalidSource -> {

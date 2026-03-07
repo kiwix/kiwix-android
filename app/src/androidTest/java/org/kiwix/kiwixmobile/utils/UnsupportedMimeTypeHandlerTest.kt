@@ -57,7 +57,6 @@ class UnsupportedMimeTypeHandlerTest {
   private val unsupportedMimeTypeHandler =
     UnsupportedMimeTypeHandler(
       activity,
-      kiwixDataStore,
       zimReaderContainer
     ).apply {
       setAlertDialogShower(alertDialogShower)
@@ -199,7 +198,6 @@ class UnsupportedMimeTypeHandlerTest {
     val downloadOrOpenEpubAndPdfHandler =
       UnsupportedMimeTypeHandler(
         activity,
-        kiwixDataStore,
         zimReaderContainer
       ).apply {
         setAlertDialogShower(alertDialogShower)
