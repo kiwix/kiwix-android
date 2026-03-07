@@ -59,6 +59,7 @@ import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -163,6 +164,7 @@ class FetchDownloadNotificationManager @Inject constructor(
       enableVibration(false)
     }
 
+  @Suppress("LongMethod")
   override fun updateNotification(
     notificationBuilder: NotificationCompat.Builder,
     downloadNotification: DownloadNotification,
@@ -195,16 +197,26 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
     when {
       downloadNotification.isDownloading ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
-          .addAction(
-            drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
-          ).addAction(
-            drawable.fetch_notification_pause,
-            context.getString(R.string.notification_pause_button_text),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
-          )
+        // check if we are downloading apk file or a zim file and managing button state accordingly
+        if (runBlocking { downloadRoomDao.getAllDownloads().firstOrNull().isNullOrEmpty() }) {
+          notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+            .addAction(
+              drawable.fetch_notification_cancel,
+              context.getString(R.string.cancel),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+            )
+        } else {
+          notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+            .addAction(
+              drawable.fetch_notification_cancel,
+              context.getString(R.string.cancel),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+            ).addAction(
+              drawable.fetch_notification_pause,
+              context.getString(R.string.notification_pause_button_text),
+              getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
+            )
+        }
 
       downloadNotification.isPaused ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
