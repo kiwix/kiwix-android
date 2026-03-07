@@ -94,7 +94,7 @@
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
 
-    <service android:name=".read_aloud.ReadAloudService"
+    <service android:name=".readAloud.ReadAloudService"
       android:foregroundServiceType="mediaPlayback" />
     <service
       android:name=".downloader.downloadManager.DownloadMonitorService"

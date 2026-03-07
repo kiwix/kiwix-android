@@ -24,7 +24,7 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
 import org.kiwix.kiwixmobile.core.di.modules.CoreServiceModule
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudService
 
 @Subcomponent(modules = [CoreServiceModule::class])
 @CoreServiceScope
