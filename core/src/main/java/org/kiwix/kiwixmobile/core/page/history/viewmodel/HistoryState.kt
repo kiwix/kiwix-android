@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class HistoryState(
