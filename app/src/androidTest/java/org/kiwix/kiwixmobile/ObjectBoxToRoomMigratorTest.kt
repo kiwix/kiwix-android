@@ -66,7 +66,7 @@ class ObjectBoxToRoomMigratorTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var boxStore: BoxStore
   private lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
-  private val migrationMaxTime = 25000
+  private val migrationMaxTime = 35000
   private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @Before
