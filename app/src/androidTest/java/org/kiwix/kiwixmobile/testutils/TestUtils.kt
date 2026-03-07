@@ -221,6 +221,7 @@ object TestUtils {
       action()
     } catch (ignore: Throwable) {
       if (retryCount > 0) {
+        Thread.sleep(500)
         testFlakyView(action, retryCount - 1)
       } else {
         throw ignore // No more retries, rethrow the exception

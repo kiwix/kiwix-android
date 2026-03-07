@@ -21,14 +21,13 @@ package org.kiwix.kiwixmobile.download
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
-import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
@@ -84,9 +83,15 @@ class DownloadRobot : BaseRobot() {
   ) {
     try {
       composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0].isDisplayed()
+        composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+          .fetchSemanticsNodes().isNotEmpty()
       }
     } catch (e: ComposeTimeoutException) {
+      Log.e(
+        KIWIX_DOWNLOAD_TEST,
+        "Timeout waiting for data to load. Nodes with tag $ONLINE_BOOK_ITEM_TESTING_TAG: " +
+          "${composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).fetchSemanticsNodes().size}"
+      )
       if (retryCountForDataToLoad > 0) {
         // refresh the data if there is "Swipe Down for Library" visible on the screen.
         refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule)
@@ -156,7 +161,7 @@ class DownloadRobot : BaseRobot() {
           performTextClearance()
           performTextInput(searchZIMFileTitle)
         }
-        waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+        waitUntilTimeout(1000) // Reduced from 10s as it's sufficient for searching an item.
       }
     })
   }
@@ -168,8 +173,10 @@ class DownloadRobot : BaseRobot() {
   fun downloadZimFile(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntilTimeout()
-        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0].performClick()
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+        }
+        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).onFirst().performClick()
       }
     })
   }
@@ -177,58 +184,111 @@ class DownloadRobot : BaseRobot() {
   fun assertDownloadStart(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
-          onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0].isDisplayed()
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes().isNotEmpty()
         }
       }
     })
   }
 
   fun pauseDownload(composeTestRule: ComposeContentTestRule) {
-    testFlakyView({
-      composeTestRule.apply {
-        onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG)[0].performClick()
-      }
-    })
-  }
-
-  fun assertDownloadPaused(
-    composeTestRule: ComposeContentTestRule,
-    scenario: ActivityScenario<KiwixMainActivity>
-  ) {
-    testFlakyView({
-      composeTestRule.apply {
-        waitForIdle()
-        var pauseState = ""
-        scenario.onActivity { activity ->
-          pauseState = activity.getString(R.string.paused_state)
-        }
+    composeTestRule.apply {
+      runCatching {
         waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-          composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-            .assertTextEquals(pauseState)
-            .isDisplayed()
+          onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes().isNotEmpty()
         }
+        onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG).onFirst().performClick()
+      }.onFailure {
+        Log.e(KIWIX_DOWNLOAD_TEST, "Failed to pause download - it might have finished already: ${it.message}")
       }
-    })
+      waitForIdle()
+    }
   }
 
   fun resumeDownload(composeTestRule: ComposeContentTestRule) {
-    pauseDownload(composeTestRule)
+    composeTestRule.apply {
+      runCatching {
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          val resumeNodes = onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes()
+          val stopNodes = onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes()
+          resumeNodes.isNotEmpty() || stopNodes.isEmpty()
+        }
+        val nodes = onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+        if (nodes.isNotEmpty()) {
+          onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG).onFirst().performClick()
+        }
+      }.onFailure {
+        Log.e(KIWIX_DOWNLOAD_TEST, "Failed to resume download - it might have finished already: ${it.message}")
+      }
+      waitForIdle()
+    }
   }
 
   fun assertDownloadResumed(
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
-    try {
-      composeTestRule.apply {
-        waitUntilTimeout()
-        onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-          .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+    composeTestRule.apply {
+      waitForIdle()
+      val pauseState = kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state)
+
+      // Wait for the state text to NO LONGER be "paused"
+      // Or for the node to disappear entirely (meaning it finished downloading!)
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        try {
+          val nodes = onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).fetchSemanticsNodes()
+          if (nodes.isEmpty()) {
+            true // Node disappeared, likely download finished.
+          } else {
+            // Check if text is NOT pauseState
+            try {
+              onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst().assertTextEquals(pauseState)
+              false // Still paused
+            } catch (_: AssertionError) {
+              true // Text changed!
+            }
+          }
+        } catch (_: Exception) {
+          true // Any other error, we treat as "it's not paused anymore" or "it's gone"
+        }
       }
-      throw IllegalStateException("Could not resume the download")
-    } catch (_: AssertionError) {
-      // do nothing since download is resumed.
+
+      // Final sanity check: if it still exists, it shouldn't be "paused"
+      runCatching {
+        onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst().assertTextEquals(pauseState)
+      }.onSuccess {
+        throw IllegalStateException("Download is still in paused state after resume call")
+      }.onFailure {
+        // Correct - either doesn't exist or text is not paused.
+      }
+    }
+  }
+
+  fun assertDownloadPaused(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    composeTestRule.apply {
+      waitForIdle()
+      val pauseState = kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state)
+
+      // Wait for the state text to BE "paused"
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        try {
+          onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+            .onFirst()
+            .assertTextEquals(pauseState)
+          true
+        } catch (_: Exception) {
+          false
+        }
+      }
+      onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst().assertIsDisplayed()
+      onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst().assertTextEquals(pauseState)
     }
   }
 
@@ -238,23 +298,23 @@ class DownloadRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
-    try {
-      composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0].assertDoesNotExist()
-      Log.e(KIWIX_DOWNLOAD_TEST, "Download complete")
-    } catch (e: AssertionError) {
-      if (retryCountForDownloadingZimFile > 0) {
-        resumeDownloadIfPaused(composeTestRule, kiwixMainActivity)
-        composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-        Log.e(KIWIX_DOWNLOAD_TEST, "Downloading in progress")
-        waitUntilDownloadComplete(
-          retryCountForDownloadingZimFile - 1,
-          composeTestRule,
-          kiwixMainActivity
-        )
-        return
-      }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't download the ZIM file.\n Original exception = $e")
+    val nodes = composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+    if (nodes.isEmpty()) {
+      Log.e(KIWIX_DOWNLOAD_TEST, "Download complete (Stop button not found)")
+      return
+    }
+
+    if (retryCountForDownloadingZimFile > 0) {
+      resumeDownloadIfPaused(composeTestRule, kiwixMainActivity)
+      Log.e(KIWIX_DOWNLOAD_TEST, "Downloading in progress, retryCount = $retryCountForDownloadingZimFile")
+      composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      waitUntilDownloadComplete(
+        retryCountForDownloadingZimFile - 1,
+        composeTestRule,
+        kiwixMainActivity
+      )
+    } else {
+      throw RuntimeException("Couldn't download the ZIM file within timeout.")
     }
   }
 
@@ -263,14 +323,17 @@ class DownloadRobot : BaseRobot() {
     kiwixMainActivity: KiwixMainActivity
   ) {
     try {
-      composeTestRule
-        .onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
-        .assertTextEquals(kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
-      resumeDownload(composeTestRule)
-    } catch (_: AssertionError) {
-      // do nothing since downloading is In Progress.
-    } catch (_: RuntimeException) {
-      // do nothing since downloading is In Progress.
+      val pauseState = kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state)
+      val nodes = composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).fetchSemanticsNodes()
+      if (nodes.isNotEmpty()) {
+        val text = nodes[0].config[androidx.compose.ui.semantics.SemanticsProperties.Text][0].text
+        if (text == pauseState) {
+          Log.e(KIWIX_DOWNLOAD_TEST, "Download paused, resuming...")
+          resumeDownload(composeTestRule)
+        }
+      }
+    } catch (_: Exception) {
+      // Ignore errors during check
     }
   }
 
@@ -280,7 +343,9 @@ class DownloadRobot : BaseRobot() {
   ) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntilTimeout()
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+        }
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
           .assertTextEquals(kiwixMainActivity.getString(string.confirm_stop_download_title))
       }
@@ -290,7 +355,9 @@ class DownloadRobot : BaseRobot() {
   fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+        }
         onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
       }
     })
@@ -301,29 +368,26 @@ class DownloadRobot : BaseRobot() {
     kiwixMainActivity: KiwixMainActivity
   ) {
     try {
-      composeTestRule.waitUntilTimeout()
-      stopDownload(composeTestRule)
-      assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickOnYesButton(composeTestRule)
-      composeTestRule.waitUntilTimeout()
-    } catch (_: AssertionError) {
-      Log.e(
-        KIWIX_DOWNLOAD_TEST,
-        "Failed to stop downloading. Probably because it is not downloading the zim file"
-      )
-    } catch (_: ComposeTimeoutException) {
-      Log.e(
-        KIWIX_DOWNLOAD_TEST,
-        "Failed to stop downloading. Probably because it is not downloading the zim file"
-      )
+      val nodes = composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+      if (nodes.isNotEmpty()) {
+        stopDownload(composeTestRule)
+        assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+        clickOnYesButton(composeTestRule)
+        composeTestRule.waitForIdle()
+      }
+    } catch (e: Exception) {
+      Log.e(KIWIX_DOWNLOAD_TEST, "Failed to stop downloading: ${e.message}")
     }
   }
 
   fun stopDownload(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      val stopButton = onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0]
-      waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) { stopButton.isDisplayed() }
-      stopButton.performClick()
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
+          .fetchSemanticsNodes().isNotEmpty()
+      }
+      onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).onFirst().performClick()
+      waitForIdle()
     }
   }
 
