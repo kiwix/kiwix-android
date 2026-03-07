@@ -92,6 +92,8 @@ const val SEARCH_ITEM_TESTING_TAG = "searchItemTestingTag"
 const val OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG = "openItemInNewTagIconTestingTag"
 const val LOADING_ITEMS_BEFORE = 3
 
+const val VOICE_SEARCH_TESTING_TAG = "voiceSearchTestingTag"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
