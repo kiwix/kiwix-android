@@ -775,7 +775,7 @@ object FileUtils {
 
           if (bytes.isEmpty()) {
             Log.w("MEDIA_SAVE", "Loaded image bytes are empty for source=$source")
-            return SaveResult.Error("Empty image data")
+            return SaveResult.InvalidSource
           }
 
           val mime = MimeTypeMap.getSingleton()
@@ -803,7 +803,7 @@ object FileUtils {
             source,
             fileName,
             zimReaderContainer
-          ) ?: return SaveResult.Error("File save failed")
+          ) ?: return SaveResult.InvalidSource
 
           Log.d("MEDIA_SAVE", "File saved: ${file.absolutePath}")
 
