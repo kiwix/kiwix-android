@@ -32,7 +32,7 @@ fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
   OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class OnlineLibraryRobot : BaseRobot() {
-  fun assertOnlineLibraryFragmentDisplayed(composeContentTestRule: ComposeContentTestRule) {
+  fun assertOnlineLibraryScreenDisplayed(composeContentTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeContentTestRule.apply {
         waitForIdle()

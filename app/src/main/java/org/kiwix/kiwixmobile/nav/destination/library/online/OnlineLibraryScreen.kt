@@ -229,6 +229,20 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
     }
     showLoadMoreProgressBar(state.isLoadingMoreItem)
   }
+  LaunchedEffect(state.onlineLibraryList) {
+    if (!state.isLoadingMoreItem) {
+      try {
+        lazyListState.scrollToItem(ZERO)
+      } catch (_: IllegalArgumentException) {
+        // Ignore layout reentrance — scrollToItem can rarely be called
+        // while Compose is already in a measure/layout pass (e.g. during
+        // language change recreation). Swallowing this is safe because
+        // the list will render correctly on the next frame.
+      } catch (_: IllegalStateException) {
+        // Same as above — ignore state exceptions during layout transitions.
+      }
+    }
+  }
   LaunchedEffect(lazyListState, state.onlineLibraryList) {
     snapshotFlow {
       val layoutInfo = lazyListState.layoutInfo

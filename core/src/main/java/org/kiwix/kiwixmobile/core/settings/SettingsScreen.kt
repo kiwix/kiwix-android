@@ -120,7 +120,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -286,7 +285,7 @@ private fun showImportBookmarkDialog(
 
 private fun showExportBookmarkDialog(coreSettingsViewModel: CoreSettingsViewModel) {
   coreSettingsViewModel.alertDialogShower.show(
-    KiwixDialog.YesNoDialog.ExportBookmarks(EXPORT_BOOK_MARK_PATH),
+    KiwixDialog.YesNoDialog.ExportBookmarks,
     { coreSettingsViewModel.exportBookmark() }
   )
 }
