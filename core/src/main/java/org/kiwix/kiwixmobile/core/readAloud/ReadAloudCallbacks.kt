@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.read_aloud
+package org.kiwix.kiwixmobile.core.readAloud
 
 interface ReadAloudCallbacks {
   fun onReadAloudPauseOrResume(isPauseTTS: Boolean)

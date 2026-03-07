@@ -23,7 +23,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudNotificationManager
 
 @Module
 class CoreServiceModule {
@@ -32,5 +32,5 @@ class CoreServiceModule {
   fun providesReadAloudNotificationManager(
     notificationManager: NotificationManager,
     context: Context
-  ): ReadAloudNotificationManger = ReadAloudNotificationManger(notificationManager, context)
+  ): ReadAloudNotificationManager = ReadAloudNotificationManager(notificationManager, context)
 }
