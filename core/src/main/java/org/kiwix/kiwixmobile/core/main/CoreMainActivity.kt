@@ -55,11 +55,14 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService.Companion.STOP_DOWNLOAD_APK_SERVICE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService.Companion.isDownloadApkServiceRunning
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.isDownloadMonitorServiceRunning
@@ -128,6 +131,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
+
+  @Inject
+  lateinit var downloadApkDao: DownloadApkDao
 
   /**
    * We have migrated the UI in compose, so providing the compose based navigation to activity
@@ -270,6 +276,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onResume() {
     super.onResume()
     startDownloadMonitorServiceIfOngoingDownloads(true)
+    startDownloadApkServiceIfOngoingApkDownload(true)
     cancelBackgroundTimeoutNotification()
   }
 
@@ -284,6 +291,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           this,
           DownloadMonitorService::class.java
         ).setAction(STOP_DOWNLOAD_SERVICE)
+      )
+    }
+  }
+
+  private fun stopDownloadApkServiceIfRunning() {
+    if (isDownloadApkServiceRunning) {
+      startService(
+        Intent(
+          this,
+          DownloadApkService::class.java
+        ).setAction(STOP_DOWNLOAD_APK_SERVICE)
       )
     }
   }
@@ -320,18 +338,25 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   @Suppress("InjectDispatcher")
-  fun startDownloadApkService() {
+  fun startDownloadApkServiceIfOngoingApkDownload(isAppStart: Boolean = false) {
     // need to implement checks if the app is in foreground. stop the service for that
     CoroutineScope(Dispatchers.IO).launch {
       runCatching {
-        startService(
-          Intent(
-            this@CoreMainActivity,
-            DownloadApkService::class.java
-          ).apply {
-            putExtra(APP_NAME_KEY, appName)
-          }
-        )
+        if (downloadApkDao.getOngoingDownloads() != null || !isAppStart) {
+          startService(
+            Intent(
+              this@CoreMainActivity,
+              DownloadApkService::class.java
+            ).apply {
+              putExtra(APP_NAME_KEY, appName)
+            }
+          )
+        } else {
+          /* Stopping service at when app is in foreground can be a bit un-necessary
+           because apk download size is usually small and the user probably would wait
+           * for the app download to complete. This can be removed later if not needed. */
+          stopDownloadApkServiceIfRunning()
+        }
       }
     }
   }

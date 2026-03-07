@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.update.composables.UpdateInfoCard
 import org.kiwix.kiwixmobile.update.viewmodel.DownloadApkState
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
+// implement loading states
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateScreen(

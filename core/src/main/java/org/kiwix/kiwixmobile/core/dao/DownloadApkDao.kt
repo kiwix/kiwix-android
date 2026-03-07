@@ -23,8 +23,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tonyodev.fetch2.Download
+import com.tonyodev.fetch2.Status
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
@@ -67,6 +69,12 @@ interface DownloadApkDao {
     addDownloadId(
       downloadId = downloadRequester.enqueue(DownloadRequest(url))
     )
+  }
+
+  suspend fun getOngoingDownloads(): DownloadApkModel? = downloads().first().takeIf {
+    it.state == Status.QUEUED ||
+      it.state == Status.DOWNLOADING ||
+      it.state == Status.ADDED
   }
 
   @Query("UPDATE downloadapkentity SET lastDialogShownInMilliSeconds = :lastDialogShownInMilliSeconds WHERE id = 1")

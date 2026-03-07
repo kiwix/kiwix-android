@@ -18,8 +18,10 @@
 
 package org.kiwix.kiwixmobile.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.compose.setContent
@@ -91,6 +93,7 @@ import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
 import org.kiwix.kiwixmobile.core.utils.workManager.WorkType
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import java.io.File
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
@@ -141,7 +144,7 @@ class KiwixMainActivity : CoreMainActivity() {
     /* If the app is running for the first time, we run the WorkManager immediately.
     For consecutive runs after that, we initialize a periodic WorkManager,
     which only queues unique requests with a tag name. */
-    initializeWorkManager()
+    initializeUpdateWorkManager()
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       navController = rememberNavController()
@@ -257,12 +260,28 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  private fun initializeWorkManager() {
+  private fun initializeUpdateWorkManager() {
+    // cleanUpPreviousDownloadedApkFile(context)
     if (runBlocking { kiwixDataStore.showIntro.first() }) {
       UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
     } else {
       UpdateWorkManager.startWork(this, WorkType.PERIODIC)
     }
+  }
+
+  /* Ideally should be run at first startup after the app has been updated but the room db
+  and datastore values don't reset after update. so to access to the first app run won't be possible after update.
+  It will persist the old data. This function triggering everytime is bad for example
+  when the user downloads the update but doesn't install it. it will wipe it from the storage*/
+  private fun cleanUpPreviousDownloadedApkFile(context: Context) {
+    // hard coded dir path need more research to get access to media
+    // path but previous context.externalMediaDirs is deprecated
+    val apkDir = File(
+      Environment.getExternalStorageDirectory(),
+      "Android/media/${context.packageName}/Kiwix"
+    )
+    val previousApkFile = apkDir.listFiles { file -> file.extension == "apk" }?.firstOrNull()
+    previousApkFile?.delete()
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {

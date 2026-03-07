@@ -71,7 +71,7 @@ class DownloadManagerRequester @Inject constructor(
   }
 
   override fun startApkDownloadService() {
-    (context as CoreApp).getMainActivity().startDownloadApkService()
+    (context as CoreApp).getMainActivity().startDownloadApkServiceIfOngoingApkDownload()
   }
 }
 

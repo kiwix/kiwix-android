@@ -211,7 +211,7 @@ class UpdateFragment : BaseFragment() {
   }
 
   @SuppressLint("RequestInstallPackagesPolicy")
-  fun installApk(
+  private fun installApk(
     context: Context,
     state: UpdateStates
   ) {
@@ -227,7 +227,7 @@ class UpdateFragment : BaseFragment() {
     )
     /*This flag prevents user to install the apk,
     if they removed the apk file from storage but the download status is set to COMPLETED*/
-    if (canOpenApk(apkFile)) {
+    if (apkFile.exists()) {
       @Suppress("DEPRECATION")
       val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)
       installerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -246,13 +246,6 @@ class UpdateFragment : BaseFragment() {
         {
         }
       )
-    }
-  }
-
-  private fun canOpenApk(apkFile: File): Boolean {
-    return when {
-      apkFile.exists() -> true
-      else -> false
     }
   }
 
