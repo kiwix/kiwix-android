@@ -139,6 +139,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -633,9 +634,8 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
-  @Suppress("MagicNumber")
   private fun initHideBackToTopTimer() {
-    hideBackToTopTimer = object : CountDownTimer(1200, 1200) {
+    hideBackToTopTimer = object : CountDownTimer(BACK_TO_TOP_HIDE_DELAY_MS, BACK_TO_TOP_HIDE_DELAY_MS) {
       override fun onTick(millisUntilFinished: Long) {
         // do nothing it's default override method
       }

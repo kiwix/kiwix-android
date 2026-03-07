@@ -24,7 +24,12 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -95,6 +100,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -136,7 +143,8 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_PULSE_DURATION_MS
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_PULSE_MAX_SCALE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -602,17 +610,37 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
+    val haptic = LocalHapticFeedback.current
+    val infiniteTransition = rememberInfiniteTransition(label = "backToTopPulse")
+    val scale by infiniteTransition.animateFloat(
+      initialValue = 1f,
+      targetValue = BACK_TO_TOP_PULSE_MAX_SCALE,
+      animationSpec = infiniteRepeatable(
+        animation = tween(
+          durationMillis = BACK_TO_TOP_PULSE_DURATION_MS,
+          easing = FastOutSlowInEasing
+        ),
+        repeatMode = RepeatMode.Reverse
+      ),
+      label = "pulseScale"
+    )
     SmallFloatingActionButton(
-      onClick = state.backToTopButtonClick,
-      modifier = Modifier.padding(bottom = BACK_TO_TOP_BUTTON_BOTTOM_MARGIN),
-      containerColor = MaterialTheme.colorScheme.primary,
-      contentColor = MaterialTheme.colorScheme.onPrimary,
+      onClick = {
+        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        state.backToTopButtonClick()
+      },
+      modifier = Modifier.graphicsLayer {
+        scaleX = scale
+        scaleY = scale
+      },
+      containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+      contentColor = MaterialTheme.colorScheme.onSurface,
       shape = CircleShape
     ) {
       Icon(
-        painter = Drawable(R.drawable.action_find_previous).toPainter(),
+        painter = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
         contentDescription = stringResource(R.string.pref_back_to_top),
-        tint = White
+        tint = MaterialTheme.colorScheme.onSurface
       )
     }
   }
