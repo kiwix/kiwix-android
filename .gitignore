@@ -25,6 +25,7 @@ gen/
 # Gradle files
 .gradle/
 build/
+gradle/gradle-daemon-jvm.properties
 
 # Local configuration file (sdk path, etc)
 local.properties

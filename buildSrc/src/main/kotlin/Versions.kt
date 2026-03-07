@@ -80,7 +80,7 @@ object Versions {
 
   const val androidx_activity: String = "1.9.3"
 
-  const val libkiwix: String = "2.4.2"
+  const val libkiwix: String = "2.5.0"
 
   const val material: String = "1.12.0"
 
@@ -117,6 +117,8 @@ object Versions {
   const val DATASTORE = "1.2.0"
 
   const val LIFECYCLE_VERSION = "2.8.6"
+
+  const val ROBOLECTRIC = "4.14.1"
 }
 
 /**

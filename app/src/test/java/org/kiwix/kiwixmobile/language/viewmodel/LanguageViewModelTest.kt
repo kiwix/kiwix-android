@@ -85,8 +85,10 @@ class LanguageViewModelTest {
     }
     every { application.unregisterReceiver(any()) } just Runs
     LanguageSessionCache.hasFetched = false
-    coEvery { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
+    every { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
+    coEvery { kiwixService.getLanguages() } returns LanguageFeed()
+    every { application.getString(any<Int>()) } returns "Error"
   }
 
   private fun createViewModel() {
@@ -170,10 +172,14 @@ class LanguageViewModelTest {
     runTest {
       coEvery { kiwixService.getLanguages() } throws RuntimeException()
       createViewModel()
+
+      advanceUntilIdle() // Wait for coroutines to settle
+
       languageViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
+        cancelAndConsumeRemainingEvents()
       }
     }
   }

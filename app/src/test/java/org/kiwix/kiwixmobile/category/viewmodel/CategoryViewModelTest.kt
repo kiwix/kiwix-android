@@ -87,6 +87,7 @@ class CategoryViewModelTest {
     CategorySessionCache.hasFetched = false
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
+    coEvery { kiwixService.getCategories() } returns CategoryFeed()
   }
 
   private fun createViewModel() {
@@ -189,10 +190,14 @@ class CategoryViewModelTest {
       coEvery { kiwixService.getCategories() } throws RuntimeException()
 
       createViewModel()
+
+      advanceUntilIdle() // Wait for coroutines to settle
+
       categoryViewModel.state.test {
         assertThat(awaitItem()).isEqualTo(Loading)
         val error = awaitItem() as State.Error
         assertThat(error.errorMessage).isEqualTo("Error")
+        cancelAndConsumeRemainingEvents()
       }
     }
   }
