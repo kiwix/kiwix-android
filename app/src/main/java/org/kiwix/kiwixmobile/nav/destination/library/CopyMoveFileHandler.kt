@@ -233,12 +233,13 @@ class CopyMoveFileHandler @Inject constructor(
   fun observeFileSystemState() {
     if (storageObservingJob?.isActive == true) return
     storageObservingJob = lifecycleScope?.launch {
-      fat32Checker.fileSystemStates.collect {
-        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
-        if (validateZimFileCanCopyOrMove()) {
-          performCopyMoveOperation()
-        }
+      // Wait until filesystem detection completes
+      fat32Checker.fileSystemStates.first { it != DetectingFileSystem }
+      copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+      if (validateZimFileCanCopyOrMove()) {
+        performCopyMoveOperation()
       }
+      storageObservingJob?.cancel()
     }
   }
 
