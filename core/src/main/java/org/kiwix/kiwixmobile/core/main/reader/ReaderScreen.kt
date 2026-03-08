@@ -43,6 +43,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -81,7 +83,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -100,8 +101,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -610,7 +610,7 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
-    val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
     val infiniteTransition = rememberInfiniteTransition(label = "backToTopPulse")
     val scale by infiniteTransition.animateFloat(
       initialValue = 1f,
@@ -624,15 +624,24 @@ private fun BackToTopFab(state: ReaderScreenState) {
       ),
       label = "pulseScale"
     )
-    SmallFloatingActionButton(
+    val interactionSource = remember { MutableInteractionSource() }
+    LaunchedEffect(interactionSource) {
+      interactionSource.interactions.collect { interaction ->
+        if (interaction is PressInteraction.Press) {
+          view.performHapticFeedback(android.view.HapticFeedbackConstants.CONTEXT_CLICK)
+        }
+      }
+    }
+    FloatingActionButton(
       onClick = {
-        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        view.performHapticFeedback(android.view.HapticFeedbackConstants.CONTEXT_CLICK)
         state.backToTopButtonClick()
       },
       modifier = Modifier.graphicsLayer {
         scaleX = scale
         scaleY = scale
       },
+      interactionSource = interactionSource,
       containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
       contentColor = MaterialTheme.colorScheme.onSurface,
       shape = CircleShape
