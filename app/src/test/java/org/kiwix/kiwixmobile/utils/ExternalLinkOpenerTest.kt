@@ -17,8 +17,8 @@
  */
 
 package org.kiwix.kiwixmobile.utils
-import android.app.Application
 
+import android.app.Application
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
