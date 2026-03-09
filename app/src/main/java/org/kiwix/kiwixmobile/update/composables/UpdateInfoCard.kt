@@ -30,7 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
@@ -48,29 +50,36 @@ fun UpdateInfoCard(
       .fillMaxSize(),
     verticalArrangement = Arrangement.Center
   ) {
-    AppInfoRow()
+    if (!state.loading) {
+      AppInfoRow()
 
-    Spacer(modifier = Modifier.height(SIXTEEN_DP))
-    val downloadApkState = state.downloadApkItem
-    when (downloadApkState.currentDownloadState) {
-      Status.QUEUED, Status.DOWNLOADING, Status.ADDED -> {
-        DownloadInfoRow(
-          state = state,
-          onCancel = onUpdateCancel,
-        )
-      }
+      Spacer(modifier = Modifier.height(SIXTEEN_DP))
+      val downloadApkState = state.downloadApkItem
+      when (downloadApkState.currentDownloadState) {
+        Status.QUEUED, Status.DOWNLOADING, Status.ADDED -> {
+          DownloadInfoRow(
+            state = state,
+            onCancel = onUpdateCancel,
+          )
+        }
 
-      Status.NONE, Status.CANCELLED, Status.FAILED, Status.REMOVED, Status.DELETED -> {
-        UpdateButton(onUpdateClick)
-      }
+        Status.NONE, Status.CANCELLED, Status.FAILED, Status.REMOVED, Status.DELETED -> {
+          UpdateButton(onUpdateClick)
+        }
 
-      Status.COMPLETED -> {
-        InstallButton(onInstallApk)
-      }
+        Status.COMPLETED -> {
+          InstallButton(onInstallApk)
+        }
 
-      Status.PAUSED -> {
-        // pause implementation is not present in apk download
+        Status.PAUSED -> {
+          // pause implementation is not present in apk download
+        }
       }
+    } else {
+      ContentLoadingProgressBar(
+        modifier = Modifier.align(androidx.compose.ui.Alignment.CenterHorizontally),
+        progressBarStyle = ProgressBarStyle.CIRCLE
+      )
     }
   }
 }
