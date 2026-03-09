@@ -66,7 +66,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.ui.theme.LightGrey
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray850
