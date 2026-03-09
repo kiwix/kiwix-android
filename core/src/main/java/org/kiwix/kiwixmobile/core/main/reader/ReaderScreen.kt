@@ -43,8 +43,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -101,7 +99,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -131,6 +128,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixWebViewWithAppBarScrolling
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
@@ -610,7 +608,6 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
-    val view = LocalView.current
     val infiniteTransition = rememberInfiniteTransition(label = "backToTopPulse")
     val scale by infiniteTransition.animateFloat(
       initialValue = 1f,
@@ -624,34 +621,15 @@ private fun BackToTopFab(state: ReaderScreenState) {
       ),
       label = "pulseScale"
     )
-    val interactionSource = remember { MutableInteractionSource() }
-    LaunchedEffect(interactionSource) {
-      interactionSource.interactions.collect { interaction ->
-        if (interaction is PressInteraction.Press) {
-          view.performHapticFeedback(android.view.HapticFeedbackConstants.CONTEXT_CLICK)
-        }
-      }
-    }
-    FloatingActionButton(
-      onClick = {
-        view.performHapticFeedback(android.view.HapticFeedbackConstants.CONTEXT_CLICK)
-        state.backToTopButtonClick()
-      },
+    KiwixFloatingActionButton(
+      icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
+      onClick = state.backToTopButtonClick,
+      contentDescription = stringResource(R.string.pref_back_to_top),
       modifier = Modifier.graphicsLayer {
         scaleX = scale
         scaleY = scale
-      },
-      interactionSource = interactionSource,
-      containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-      contentColor = MaterialTheme.colorScheme.onSurface,
-      shape = CircleShape
-    ) {
-      Icon(
-        painter = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
-        contentDescription = stringResource(R.string.pref_back_to_top),
-        tint = MaterialTheme.colorScheme.onSurface
-      )
-    }
+      }
+    )
   }
 }
 

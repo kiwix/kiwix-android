@@ -635,15 +635,16 @@ abstract class CoreReaderFragment :
   }
 
   private fun initHideBackToTopTimer() {
-    hideBackToTopTimer = object : CountDownTimer(BACK_TO_TOP_HIDE_DELAY_MS, BACK_TO_TOP_HIDE_DELAY_MS) {
-      override fun onTick(millisUntilFinished: Long) {
-        // do nothing it's default override method
-      }
+    hideBackToTopTimer =
+      object : CountDownTimer(BACK_TO_TOP_HIDE_DELAY_MS, BACK_TO_TOP_HIDE_DELAY_MS) {
+        override fun onTick(millisUntilFinished: Long) {
+          // Not needed; we only use onFinish to hide the button.
+        }
 
-      override fun onFinish() {
-        hideBackToTopButton()
+        override fun onFinish() {
+          hideBackToTopButton()
+        }
       }
-    }
   }
 
   override fun onCreateView(
