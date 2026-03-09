@@ -127,10 +127,10 @@ import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudCallbacks
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudService
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer

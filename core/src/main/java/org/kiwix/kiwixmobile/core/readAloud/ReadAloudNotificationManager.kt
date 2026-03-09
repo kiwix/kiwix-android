@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.read_aloud
+package org.kiwix.kiwixmobile.core.readAloud
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -27,11 +27,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.IS_TTS_PAUSE_OR_RESUME
+import org.kiwix.kiwixmobile.core.readAloud.ReadAloudService.Companion.IS_TTS_PAUSE_OR_RESUME
 import org.kiwix.kiwixmobile.core.utils.READ_ALOUD_SERVICE_CHANNEL_ID
 import javax.inject.Inject
 
-class ReadAloudNotificationManger @Inject constructor(
+class ReadAloudNotificationManager @Inject constructor(
   private val notificationManager: NotificationManager,
   private val context: Context
 ) {
