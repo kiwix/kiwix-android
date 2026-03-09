@@ -85,7 +85,7 @@ class CategoryViewModelTest {
     }
     every { application.unregisterReceiver(any()) } just Runs
     CategorySessionCache.hasFetched = false
-    every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
+    every { kiwixDataStore.cachedOnlineCategoryList } returns categories
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
     coEvery { kiwixService.getCategories() } returns CategoryFeed()
   }
