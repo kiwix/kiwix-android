@@ -29,7 +29,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -180,8 +182,9 @@ class DownloadManagerRequesterTest {
     verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `pauseResumeDownload should re-enqueue when resuming a stale download`() {
+  fun `pauseResumeDownload should re-enqueue when resuming a stale download`() = runTest {
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -199,6 +202,8 @@ class DownloadManagerRequesterTest {
     every { downloadRoomDao.getEntityForDownloadId(downloadId) } returns staleEntity
 
     requester.pauseResumeDownload(downloadId, isPause = true)
+
+    advanceUntilIdle()
 
     verify { downloadRoomDao.getEntityForDownloadId(downloadId) }
     verify { downloadRoomDao.deleteDownloadByDownloadId(downloadId) }
