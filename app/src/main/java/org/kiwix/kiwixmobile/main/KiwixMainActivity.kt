@@ -51,6 +51,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineScope
@@ -69,6 +70,7 @@ import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_APK_COMPLETE_INTENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
@@ -110,6 +112,9 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
 
+  @Inject
+  lateinit var apkDao: DownloadApkDao
+
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
@@ -143,8 +148,8 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     /* If the app is running for the first time, we run the WorkManager immediately.
     For consecutive runs after that, we initialize a periodic WorkManager,
-    which only queues unique requests with a tag name. */
-    initializeUpdateWorkManager()
+    which only queues unique requests wit the same tag name. */
+    initializeUpdateWorkManager(this, apkDao)
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       navController = rememberNavController()
@@ -260,28 +265,33 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  private fun initializeUpdateWorkManager() {
-    // cleanUpPreviousDownloadedApkFile(context)
+  private fun initializeUpdateWorkManager(
+    context: Context,
+    apkDao: DownloadApkDao
+  ) {
     if (runBlocking { kiwixDataStore.showIntro.first() }) {
+      cleanUpPreviousDownloadedApkFile(context, apkDao)
       UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
     } else {
       UpdateWorkManager.startWork(this, WorkType.PERIODIC)
     }
   }
 
-  /* Ideally should be run at first startup after the app has been updated but the room db
-  and datastore values don't reset after update. so to access to the first app run won't be possible after update.
-  It will persist the old data. This function triggering everytime is bad for example
-  when the user downloads the update but doesn't install it. it will wipe it from the storage*/
-  private fun cleanUpPreviousDownloadedApkFile(context: Context) {
-    // hard coded dir path need more research to get access to media
-    // path but previous context.externalMediaDirs is deprecated
-    val apkDir = File(
-      Environment.getExternalStorageDirectory(),
-      "Android/media/${context.packageName}/Kiwix"
-    )
-    val previousApkFile = apkDir.listFiles { file -> file.extension == "apk" }?.firstOrNull()
-    previousApkFile?.delete()
+  /*This functions check if the updated apk is in completed state after the update and run once
+   at first app startup to perform a clean of redundant apk file in the storage.*/
+  private fun cleanUpPreviousDownloadedApkFile(context: Context, apkDao: DownloadApkDao) {
+    val previousApkInfoStatus = runBlocking { apkDao.getDownload() }?.status ?: return
+    if (previousApkInfoStatus == Status.COMPLETED) {
+      /* Hard coded dir path need more research to get access to media
+       path but previous context.externalMediaDirs is deprecated */
+      val apkDir = File(
+        Environment.getExternalStorageDirectory(),
+        "Android/media/${context.packageName}/Kiwix"
+      )
+      val previousApkFile = apkDir.listFiles { file -> file.extension == "apk" }?.firstOrNull()
+      previousApkFile?.delete()
+      runBlocking { apkDao.resetDownloadInfoState() }
+    }
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {

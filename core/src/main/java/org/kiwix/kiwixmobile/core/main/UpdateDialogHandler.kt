@@ -42,8 +42,7 @@ class UpdateDialogHandler @Inject constructor(
     val apkInfo = apkDao.getDownload() ?: return
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = apkInfo.lastDialogShownInMilliSeconds
-    // hardcode the bigger version here to automatically trigger the update dialog
-    val availableVersion = VersionId("3.15.0")
+    val availableVersion = VersionId(apkInfo.version)
     val shouldShowPopup =
       lastPopupMillis == 0L || isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
     if (

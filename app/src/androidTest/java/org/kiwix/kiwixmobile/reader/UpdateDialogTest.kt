@@ -24,7 +24,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
@@ -36,6 +35,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
-import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 class UpdateDialogTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -56,6 +55,10 @@ class UpdateDialogTest : BaseActivityTest() {
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var kiwixDataStore: KiwixDataStore
 
+  private lateinit var apkDao: DownloadApkDao
+
+  /*Need to inject test's own kiwix database instance in the app so we can manipulate the values
+   * to assert dialog*/
   @Before
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
@@ -94,20 +97,13 @@ class UpdateDialogTest : BaseActivityTest() {
 
   @Test
   fun showUpdatePopupWhenApplicationIsThreeDaysOld() {
-    openLocalLibraryScreen()
     openReaderFragment()
     update { assertUpdateDialogDisplayed(composeTestRule) }
   }
 
-  private fun openLocalLibraryScreen() {
+  private fun openReaderFragment() {
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
-    }
-  }
-
-  private fun openReaderFragment() {
-    UiThreadStatement.runOnUiThread {
       kiwixMainActivity.navigate(kiwixMainActivity.readerFragmentRoute)
     }
   }

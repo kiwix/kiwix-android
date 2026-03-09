@@ -18,11 +18,13 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -33,7 +35,8 @@ class UpdateRobot : BaseRobot() {
     composeTestRule.apply {
       waitUntilTimeout()
       onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-        .assertTextEquals("Update Kiwix")
+        .assertIsDisplayed()
+        .assertTextEquals(context.getString(string.new_update_available_title))
     }
   }
 

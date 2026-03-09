@@ -71,7 +71,7 @@ fun DownloadInfoRow(
         }
 
         else -> {
-          // Do nothing for remaining errors, since re-download is not possible due to the absence of the ZIM file.
+          // Do nothing for remaining errors
         }
       }
     }
