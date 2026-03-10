@@ -10,4 +10,5 @@
   <item type="id" name="settingsFragmentContainer" />
   <item type="id" name="searchFragmentContainer" />
   <item type="id" name="localFileTransferFragmentContainer" />
+  <item type="id" name="updateFragmentContainer" />
 </resources>
