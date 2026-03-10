@@ -33,7 +33,7 @@ fun update(func: UpdateRobot.() -> Unit) = UpdateRobot().applyWithViewHierarchyP
 class UpdateRobot : BaseRobot() {
   fun assertUpdateDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitForIdle()
       onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
         .assertIsDisplayed()
         .assertTextEquals(context.getString(string.new_update_available_title))

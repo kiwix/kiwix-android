@@ -265,6 +265,9 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  /*need to make these function suspend and maybe put it in launched effect
+   * instead of having multiple run blocking blocks that might make the ui a
+   * bit laggy*/
   private fun initializeUpdateWorkManager(
     context: Context,
     apkDao: DownloadApkDao
