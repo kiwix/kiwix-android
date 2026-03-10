@@ -47,7 +47,7 @@ fun StorageSelectDialogScreen(
   storageDeviceList: List<StorageDevice>,
   storageCalculator: StorageCalculator,
   kiwixDataStore: KiwixDataStore,
-  shouldShowCheckboxSelected: Boolean,
+  isStorageSelected: Boolean,
   onSelectAction: (StorageDevice) -> Unit
 ) {
   KiwixDialogTheme {
@@ -58,7 +58,7 @@ fun StorageSelectDialogScreen(
     ) {
       StorageSelectDialogTitle(title, titleSize)
       StorageDeviceList(
-        shouldShowCheckboxSelected,
+        isStorageSelected,
         storageDeviceList,
         onSelectAction,
         storageCalculator,
@@ -70,7 +70,7 @@ fun StorageSelectDialogScreen(
 
 @Composable
 fun StorageDeviceList(
-  shouldShowCheckboxSelected: Boolean,
+  isStorageSelected: Boolean,
   storageDeviceList: List<StorageDevice>,
   onSelectAction: (StorageDevice) -> Unit,
   storageCalculator: StorageCalculator,
@@ -81,7 +81,7 @@ fun StorageDeviceList(
       StorageDeviceItem(
         index,
         item,
-        shouldShowCheckboxSelected,
+        isStorageSelected,
         onSelectAction,
         storageCalculator,
         kiwixDataStore
