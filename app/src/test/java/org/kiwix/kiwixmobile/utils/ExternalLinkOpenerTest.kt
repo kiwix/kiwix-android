@@ -44,6 +44,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -53,6 +54,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
 import org.robolectric.android.controller.ActivityController
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowToast
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
@@ -234,8 +236,8 @@ class ExternalLinkOpenerTest {
     val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
     assertNull(startedIntent)
     assert(
-      org.robolectric.shadows.ShadowToast.getTextOfLatestToast() ==
-        activity.getString(org.kiwix.kiwixmobile.core.R.string.no_reader_application_installed)
+      ShadowToast.getTextOfLatestToast() ==
+        activity.getString(R.string.no_reader_application_installed)
     )
   }
 
@@ -280,8 +282,8 @@ class ExternalLinkOpenerTest {
     val dialogData = alertDialogShower.dialogState.value
     assertNull(dialogData)
     assert(
-      org.robolectric.shadows.ShadowToast.getTextOfLatestToast() ==
-        activity.getString(org.kiwix.kiwixmobile.core.R.string.no_reader_application_installed)
+      ShadowToast.getTextOfLatestToast() ==
+        activity.getString(R.string.no_reader_application_installed)
     )
   }
 
