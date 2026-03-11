@@ -403,6 +403,11 @@ class DownloadMonitorService : Service() {
     val notificationTitle =
       downloadRoomDao.getEntityForFileName(getDownloadNotificationTitle(download))?.title
         ?: download.file
+    val openActionPendingIntent = fetchDownloadNotificationManager.getOpenActionPendingIntent(
+      this,
+      getDownloadNotificationTitle(download),
+      download.id + THIRTY_TREE
+    )
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
@@ -412,8 +417,13 @@ class DownloadMonitorService : Service() {
       .setGroupSummary(false)
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-      .setContentIntent(getPendingIntentForDownloadedNotification(download))
       .setAutoCancel(true)
+      .setContentIntent(openActionPendingIntent)
+      .addAction(
+        android.R.drawable.ic_menu_send,
+        getString(R.string.open),
+        openActionPendingIntent
+      )
     // Assigning a new ID to the notification because the same ID is used for the foreground
     // notification. If we use the same ID, changing the foreground notification for another
     // ongoing download cancels the previous notification for that id, preventing the download
@@ -425,20 +435,6 @@ class DownloadMonitorService : Service() {
     // Cancel the fetch related any notification if present.
     cancelNotificationForId(download.id)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
-  }
-
-  private fun getPendingIntentForDownloadedNotification(download: Download): PendingIntent {
-    val internal =
-      Intents.internal(CoreMainActivity::class.java).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putExtra(DOWNLOAD_NOTIFICATION_TITLE, getDownloadNotificationTitle(download))
-      }
-    return PendingIntent.getActivity(
-      this,
-      download.id,
-      internal,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
   }
 
   private fun downloadNotificationChannel() {

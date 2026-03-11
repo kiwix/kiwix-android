@@ -85,7 +85,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   @Suppress("MagicNumber")
-  private fun openPageInBookFromNavigationArguments() {
+  internal fun openPageInBookFromNavigationArguments() {
     showProgressBarWithProgress(30)
     val kiwixMainActivity = activity as? KiwixMainActivity
     val zimFileUri = getNavigationResult(ZIM_FILE_URI_KEY, kiwixMainActivity)
