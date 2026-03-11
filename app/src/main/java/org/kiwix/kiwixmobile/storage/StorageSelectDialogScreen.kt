@@ -47,7 +47,7 @@ fun StorageSelectDialogScreen(
   storageDeviceList: List<StorageDevice>,
   storageCalculator: StorageCalculator,
   kiwixDataStore: KiwixDataStore,
-  isStorageSelected: Boolean,
+  shouldShowStorageSelected: Boolean,
   onSelectAction: (StorageDevice) -> Unit
 ) {
   KiwixDialogTheme {
@@ -58,7 +58,7 @@ fun StorageSelectDialogScreen(
     ) {
       StorageSelectDialogTitle(title, titleSize)
       StorageDeviceList(
-        isStorageSelected,
+        shouldShowStorageSelected,
         storageDeviceList,
         onSelectAction,
         storageCalculator,
@@ -70,7 +70,7 @@ fun StorageSelectDialogScreen(
 
 @Composable
 fun StorageDeviceList(
-  isStorageSelected: Boolean,
+  shouldShowStorageSelected: Boolean,
   storageDeviceList: List<StorageDevice>,
   onSelectAction: (StorageDevice) -> Unit,
   storageCalculator: StorageCalculator,
@@ -81,7 +81,7 @@ fun StorageDeviceList(
       StorageDeviceItem(
         index,
         item,
-        isStorageSelected,
+        shouldShowStorageSelected,
         onSelectAction,
         storageCalculator,
         kiwixDataStore

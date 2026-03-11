@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,7 +69,7 @@ const val STORAGE_DEVICE_ITEM_TESTING_TAG = "storageDeviceItemTestingTag"
 fun StorageDeviceItem(
   index: Int,
   storageDevice: StorageDevice,
-  isStorageSelected: Boolean,
+  shouldShowStorageSelected: Boolean,
   onClick: (StorageDevice) -> Unit,
   storageCalculator: StorageCalculator,
   kiwixDataStore: KiwixDataStore,
@@ -90,14 +91,14 @@ fun StorageDeviceItem(
       storageCalculator
     )
   }
-  val isSelected = isStorageSelected && currentStorageIndex == index
+  val isSelected = shouldShowStorageSelected && currentStorageIndex == index
   Row(
     modifier = Modifier
       .fillMaxWidth()
       .border(
         width = if (isSelected) ONE_DP else ZERO_DP,
         color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(FOUR_DP)
+        shape = RoundedCornerShape(FOUR_DP)
       )
       .padding(TWELVE_DP)
       .selectable(
