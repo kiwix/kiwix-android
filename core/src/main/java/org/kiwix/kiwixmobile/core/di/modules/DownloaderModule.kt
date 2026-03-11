@@ -24,11 +24,13 @@ import com.tonyodev.fetch2.FetchNotificationManager
 import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
@@ -57,9 +59,10 @@ object DownloaderModule {
     fetch: Fetch,
     kiwixDataStore: KiwixDataStore,
     context: Context,
-    downloadRoomDao: DownloadRoomDao
+    downloadRoomDao: DownloadRoomDao,
+    @IoDispatcher ioDispatcher: CoroutineDispatcher
   ): DownloadRequester =
-    DownloadManagerRequester(fetch, kiwixDataStore, context, downloadRoomDao)
+    DownloadManagerRequester(fetch, kiwixDataStore, context, downloadRoomDao, ioDispatcher)
 
   @Provides
   @Singleton

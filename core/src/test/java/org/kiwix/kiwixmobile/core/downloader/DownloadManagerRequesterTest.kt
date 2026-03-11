@@ -24,6 +24,7 @@ import com.tonyodev.fetch2.NetworkType
 import com.tonyodev.fetch2.Request
 import com.tonyodev.fetch2core.Func
 import io.mockk.Runs
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -31,6 +32,9 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
@@ -52,6 +56,7 @@ class DownloadManagerRequesterTest {
   private lateinit var downloadRoomDao: DownloadRoomDao
   private lateinit var requester: DownloadManagerRequester
   private lateinit var mainActivity: CoreMainActivity
+  private lateinit var dispatcher: TestDispatcher
 
   @BeforeEach
   fun setup() {
@@ -66,11 +71,22 @@ class DownloadManagerRequesterTest {
     } just Runs
     every { kiwixDataStore.selectedStorage } returns flowOf("/storage/emulated/0")
     every { kiwixDataStore.wifiOnly } returns flowOf(false)
-    requester = DownloadManagerRequester(fetch, kiwixDataStore, context, downloadRoomDao)
+  }
+
+  private fun createRequester(testScheduler: TestCoroutineScheduler) {
+    dispatcher = StandardTestDispatcher(testScheduler)
+    requester = DownloadManagerRequester(
+      fetch,
+      kiwixDataStore,
+      context,
+      downloadRoomDao,
+      dispatcher
+    )
   }
 
   @Test
-  fun `cancel should call fetch delete`() {
+  fun `cancel should call fetch delete`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
 
     requester.cancel(downloadId)
@@ -85,8 +101,10 @@ class DownloadManagerRequesterTest {
     verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `cancel should remove from Room DB when Fetch returns error`() {
+  fun `cancel should remove from Room DB when Fetch returns error`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -101,12 +119,14 @@ class DownloadManagerRequesterTest {
     }
 
     requester.cancel(downloadId)
-
+    advanceUntilIdle()
     verify { downloadRoomDao.deleteDownloadByDownloadId(downloadId) }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `retryDownload should call fetch retry`() {
+  fun `retryDownload should call fetch retry`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
 
     requester.retryDownload(downloadId)
@@ -118,11 +138,14 @@ class DownloadManagerRequesterTest {
         func2 = any<Func<Error>>()
       )
     }
+    advanceUntilIdle()
     verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `retryDownload should re-enqueue when Fetch returns error`() {
+  fun `retryDownload should re-enqueue when Fetch returns error`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -140,13 +163,15 @@ class DownloadManagerRequesterTest {
     every { downloadRoomDao.getEntityForDownloadId(downloadId) } returns staleEntity
 
     requester.retryDownload(downloadId)
-
+    advanceUntilIdle()
     verify { downloadRoomDao.getEntityForDownloadId(downloadId) }
     verify { downloadRoomDao.deleteDownloadByDownloadId(downloadId) }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `retryDownload should not re-enqueue when stale entity is null`() {
+  fun `retryDownload should not re-enqueue when stale entity is null`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -162,12 +187,13 @@ class DownloadManagerRequesterTest {
     every { downloadRoomDao.getEntityForDownloadId(downloadId) } returns null
 
     requester.retryDownload(downloadId)
-
+    advanceUntilIdle()
     verify(exactly = 0) { downloadRoomDao.deleteDownloadByDownloadId(any<Long>()) }
   }
 
   @Test
-  fun `pauseResumeDownload should call fetch resume when isPause is true`() {
+  fun `pauseResumeDownload should call fetch resume when isPause is true`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
 
     requester.pauseResumeDownload(downloadId, isPause = true)
@@ -185,7 +211,9 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `pauseResumeDownload should re-enqueue when resuming a stale download`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
+    val url = "https://example.com/test.zim"
     val errorCallbackSlot = slot<Func<Error>>()
     every {
       fetch.resume(
@@ -198,7 +226,7 @@ class DownloadManagerRequesterTest {
       fetch
     }
     val staleEntity = mockk<DownloadRoomEntity>(relaxed = true)
-    every { staleEntity.url } returns "https://example.com/test.zim"
+    every { staleEntity.url } returns url
     every { downloadRoomDao.getEntityForDownloadId(downloadId) } returns staleEntity
 
     requester.pauseResumeDownload(downloadId, isPause = true)
@@ -207,20 +235,25 @@ class DownloadManagerRequesterTest {
 
     verify { downloadRoomDao.getEntityForDownloadId(downloadId) }
     verify { downloadRoomDao.deleteDownloadByDownloadId(downloadId) }
+    coVerify { downloadRoomDao.addIfDoesNotExist(eq(url), any(), requester) }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `pauseResumeDownload should call fetch pause when isPause is false`() {
+  fun `pauseResumeDownload should call fetch pause when isPause is false`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
 
     requester.pauseResumeDownload(downloadId, isPause = false)
-
+    advanceUntilIdle()
     verify { fetch.pause(id = downloadId.toInt()) }
     verify { mainActivity.startDownloadMonitorServiceIfOngoingDownloads() }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `pauseResumeDownload should not re-enqueue when stale entity has null url`() {
+  fun `pauseResumeDownload should not re-enqueue when stale entity has null url`() = runTest {
+    createRequester(testScheduler)
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -238,12 +271,13 @@ class DownloadManagerRequesterTest {
     every { downloadRoomDao.getEntityForDownloadId(downloadId) } returns staleEntity
 
     requester.pauseResumeDownload(downloadId, isPause = true)
-
+    advanceUntilIdle()
     verify(exactly = 0) { downloadRoomDao.deleteDownloadByDownloadId(any<Long>()) }
   }
 
   @Test
   fun `enqueue should create fetch request with WiFi only config`() = runTest {
+    createRequester(testScheduler)
     val downloadRequest = mockk<DownloadRequest>(relaxed = true)
 
     every { kiwixDataStore.wifiOnly } returns flowOf(true)
@@ -260,6 +294,7 @@ class DownloadManagerRequesterTest {
 
   @Test
   fun `enqueue should create fetch request with all network config`() = runTest {
+    createRequester(testScheduler)
     val downloadRequest = mockk<DownloadRequest>(relaxed = true)
 
     every { kiwixDataStore.wifiOnly } returns flowOf(false)
