@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
+import android.view.HapticFeedbackConstants.CONTEXT_CLICK
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.shape.CircleShape
@@ -31,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalView
+import org.kiwix.kiwixmobile.core.extensions.pulsing
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 
 /**
  * A reusable Floating Action Button (FAB) composable used across multiple screens
@@ -43,6 +46,7 @@ import androidx.compose.ui.platform.LocalView
  *        Defaults to [Modifier] (no modifications).
  * @param tint The color used to tint the icon. Defaults to
  *        [MaterialTheme.colorScheme.onSurface].
+ * @param shouldPulse enables the pulsing effect on fab button. By-default it is disabled.
  */
 @Composable
 fun KiwixFloatingActionButton(
@@ -51,35 +55,39 @@ fun KiwixFloatingActionButton(
   contentDescription: String,
   modifier: Modifier = Modifier,
   tint: Color = MaterialTheme.colorScheme.onSurface,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  shouldPulse: Boolean = false
 ) {
-  val view = LocalView.current
-  val interactionSource = remember { MutableInteractionSource() }
-  LaunchedEffect(interactionSource) {
-    interactionSource.interactions.collect { interaction ->
-      if (interaction is PressInteraction.Press) {
-        view.performHapticFeedback(
-          android.view.HapticFeedbackConstants.CONTEXT_CLICK
-        )
+  KiwixTheme {
+    val view = LocalView.current
+    LaunchedEffect(interactionSource) {
+      interactionSource.interactions.collect { interaction ->
+        if (interaction is PressInteraction.Press) {
+          view.performHapticFeedback(CONTEXT_CLICK)
+        }
       }
     }
-  }
-  FloatingActionButton(
-    onClick = {
-      view.performHapticFeedback(
-        android.view.HapticFeedbackConstants.CONTEXT_CLICK
+    val pulseModifier = if (shouldPulse) {
+      Modifier.pulsing()
+    } else {
+      Modifier
+    }
+    FloatingActionButton(
+      onClick = {
+        view.performHapticFeedback(CONTEXT_CLICK)
+        onClick()
+      },
+      modifier = modifier.then(pulseModifier),
+      interactionSource = interactionSource,
+      containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+      contentColor = MaterialTheme.colorScheme.onSurface,
+      shape = CircleShape
+    ) {
+      Icon(
+        painter = icon,
+        contentDescription = contentDescription,
+        tint = tint
       )
-      onClick()
-    },
-    modifier = modifier,
-    interactionSource = interactionSource,
-    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-    contentColor = MaterialTheme.colorScheme.onSurface,
-    shape = CircleShape
-  ) {
-    Icon(
-      painter = icon,
-      contentDescription = contentDescription,
-      tint = tint
-    )
+    }
   }
 }

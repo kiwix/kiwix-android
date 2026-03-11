@@ -24,12 +24,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -127,8 +122,8 @@ import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
-import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.KiwixWebViewWithAppBarScrolling
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
@@ -141,8 +136,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_PULSE_DURATION_MS
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_PULSE_MAX_SCALE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -608,27 +601,11 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
-    val infiniteTransition = rememberInfiniteTransition(label = "backToTopPulse")
-    val scale by infiniteTransition.animateFloat(
-      initialValue = 1f,
-      targetValue = BACK_TO_TOP_PULSE_MAX_SCALE,
-      animationSpec = infiniteRepeatable(
-        animation = tween(
-          durationMillis = BACK_TO_TOP_PULSE_DURATION_MS,
-          easing = FastOutSlowInEasing
-        ),
-        repeatMode = RepeatMode.Reverse
-      ),
-      label = "pulseScale"
-    )
     KiwixFloatingActionButton(
       icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
       onClick = state.backToTopButtonClick,
       contentDescription = stringResource(R.string.pref_back_to_top),
-      modifier = Modifier.graphicsLayer {
-        scaleX = scale
-        scaleY = scale
-      }
+      shouldPulse = true
     )
   }
 }
