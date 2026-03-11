@@ -44,7 +44,9 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
  * @param contentDescription Accessibility description for the FAB icon.
  * @param modifier Optional [Modifier] for customizing the FAB's layout and appearance.
  *        Defaults to [Modifier] (no modifications).
- * @param tint The color used to tint the icon. Defaults to
+ * @param containerColor The background color of the fab button.Defaults to
+ *        [MaterialTheme.colorScheme.surfaceContainerHighest].
+ * @param contentColor The color used for the content of fab button(Icon). Defaults to
  *        [MaterialTheme.colorScheme.onSurface].
  * @param shouldPulse enables the pulsing effect on fab button. By-default it is disabled.
  */
@@ -54,7 +56,8 @@ fun KiwixFloatingActionButton(
   onClick: () -> Unit,
   contentDescription: String,
   modifier: Modifier = Modifier,
-  tint: Color = MaterialTheme.colorScheme.onSurface,
+  containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
+  contentColor: Color = MaterialTheme.colorScheme.onSurface,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   shouldPulse: Boolean = false
 ) {
@@ -79,14 +82,13 @@ fun KiwixFloatingActionButton(
       },
       modifier = modifier.then(pulseModifier),
       interactionSource = interactionSource,
-      containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-      contentColor = MaterialTheme.colorScheme.onSurface,
+      containerColor = containerColor,
+      contentColor = contentColor,
       shape = CircleShape
     ) {
       Icon(
         painter = icon,
-        contentDescription = contentDescription,
-        tint = tint
+        contentDescription = contentDescription
       )
     }
   }
