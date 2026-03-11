@@ -155,3 +155,38 @@ jobs:
             name: kiwix-android
             path: |
               **/*.apk
+
+  unit_test_job:
+    name: Unit Tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Restore Cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
+
+      - name: Upload Unit Test Reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: unit-test-report
+          path: '**/build/reports/tests/'
