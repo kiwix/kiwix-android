@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White

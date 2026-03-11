@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class BookmarkState(
