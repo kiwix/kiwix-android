@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* GuoPC
 * Kly
 * LowensteinYang
 -->
@@ -14,4 +15,10 @@
   <string name="swipe_down_to_scan_storage">請向下滑動來掃描您的裝置以便尋找新書…</string>
   <string name="auto_detect_books">自動偵測您的書籍</string>
   <string name="auto_detect_books_description">首次啟動時，系統將詢問您是否允許應用程式掃描您的儲存空間。若您同意，我們將會自動偵測您的 ZIM 檔案而無需您手動添加。</string>
+  <string name="select_category">選擇分類</string>
+  <string name="no_category_available">沒有可用的分類</string>
+  <string name="your_selected_category">所選分類：</string>
+  <string name="other_categories">其他分類：</string>
+  <string name="all_categories">所有分類</string>
+  <string name="select_category_content_description">選擇此分類會在頂部優先顯示該語言的可下載書籍。</string>
 </resources>
