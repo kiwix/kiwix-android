@@ -61,7 +61,6 @@ class UpdateWorkManager @AssistedInject constructor(
   private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    // catch specific exceptions here
     return try {
       kiwixService =
         KiwixService.ServiceCreator.newHackListService(
