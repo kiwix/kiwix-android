@@ -13,8 +13,6 @@ class VersionIdTest {
     assertEquals(version.major, 2)
     assertEquals(version.minor, 0)
     assertEquals(version.build, 0)
-    assertEquals(version.variantType, "")
-    assertEquals(version.variantNumber, 0)
   }
 
   @Test

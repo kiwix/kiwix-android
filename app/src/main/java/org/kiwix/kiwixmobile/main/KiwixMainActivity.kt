@@ -41,6 +41,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.os.LocaleListCompat
@@ -155,10 +156,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
-    /* If the app is running for the first time, we run the WorkManager immediately.
-    For consecutive runs after that, we initialize a periodic WorkManager,
-    which only queues unique requests wit the same tag name. */
-    initializeUpdateWorkManager(this, apkDao)
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       snackBarHostState = remember { SnackbarHostState() }
@@ -189,7 +186,12 @@ class KiwixMainActivity : CoreMainActivity() {
         alertDialogShower = alertDialogShower,
         snackBarHostState = snackBarHostState
       )
+      val context = LocalContext.current
       LaunchedEffect(Unit) {
+        /* If the app is running for the first time, we run the WorkManager immediately.
+         * For consecutive runs after that, we initialize a periodic WorkManager,
+         * which only queues unique requests wit the same tag name. */
+        initializeUpdateWorkManager(context, apkDao)
         // Load the menu when UI is attached to screen.
         leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
       }
@@ -276,14 +278,11 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  /*need to make these function suspend and maybe put it in launched effect
-   * instead of having multiple run blocking blocks that might make the ui a
-   * bit laggy*/
-  private fun initializeUpdateWorkManager(
+  private suspend fun initializeUpdateWorkManager(
     context: Context,
     apkDao: DownloadApkDao
   ) {
-    if (runBlocking { kiwixDataStore.showIntro.first() }) {
+    if (kiwixDataStore.showIntro.first()) {
       cleanUpPreviousDownloadedApkFile(context, apkDao)
       UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
     } else {
@@ -293,8 +292,8 @@ class KiwixMainActivity : CoreMainActivity() {
 
   /*This functions check if the updated apk is in completed state after the update and run once
    at first app startup to perform a clean of redundant apk file in the storage.*/
-  private fun cleanUpPreviousDownloadedApkFile(context: Context, apkDao: DownloadApkDao) {
-    val previousApkInfoStatus = runBlocking { apkDao.getDownload() }?.status ?: return
+  private suspend fun cleanUpPreviousDownloadedApkFile(context: Context, apkDao: DownloadApkDao) {
+    val previousApkInfoStatus = apkDao.getDownload()?.status ?: return
     if (previousApkInfoStatus == Status.COMPLETED) {
       /* Hard coded dir path need more research to get access to media
        path but previous context.externalMediaDirs is deprecated */
@@ -304,7 +303,7 @@ class KiwixMainActivity : CoreMainActivity() {
       )
       val previousApkFile = apkDir.listFiles { file -> file.extension == "apk" }?.firstOrNull()
       previousApkFile?.delete()
-      runBlocking { apkDao.resetDownloadInfoState() }
+      apkDao.resetDownloadInfoState()
     }
   }
 

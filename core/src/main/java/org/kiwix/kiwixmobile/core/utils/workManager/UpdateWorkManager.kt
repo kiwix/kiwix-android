@@ -54,7 +54,6 @@ const val REPEAT_INTERVAL = 7L // in days
 const val PERIODIC_WORKER_TAG = "PeriodicAppConfigWorker"
 const val APP_VERSION_REGEX = """.*?(\d+(?:[.-]\d+)+).*"""
 
-@Suppress("all")
 class UpdateWorkManager @AssistedInject constructor(
   @Assisted private val appContext: Context,
   @Assisted private val params: WorkerParameters,
@@ -62,7 +61,6 @@ class UpdateWorkManager @AssistedInject constructor(
   private val apkDao: DownloadApkDao
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    // clear the downloaded apk file here on work manager if it exists.
     // catch specific exceptions here
     return try {
       kiwixService =
@@ -88,8 +86,8 @@ class UpdateWorkManager @AssistedInject constructor(
         )
       }
       Result.success()
-    } catch (e: Exception) {
-      e.printStackTrace()
+    } catch (ignore: Exception) {
+      ignore.printStackTrace()
       Result.failure()
     }
   }
