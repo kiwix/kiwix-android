@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
@@ -117,16 +119,17 @@ class SearchViewModel @Inject constructor(
     viewModelScope.launch { debouncedSearchQuery() }
 
     viewModelScope.launch {
-      combine(searchOrigin, _searchText) { origin, text ->
-        origin == FromWebView && text.isNotBlank()
-      }.collect {
-        _showFindInPage.value = it
+      searchOrigin.collect {
+        _showFindInPage.value = it == FromWebView
       }
     }
   }
 
-  private fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
-    zimReaderContainer.zimFileReader?.getSuggestedSpelledWords(word, maxCount).orEmpty()
+  @Suppress("InjectDispatcher")
+  private suspend fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
+    withContext(Dispatchers.IO) {
+      zimReaderContainer.zimFileReader?.getSuggestedSpelledWords(word, maxCount).orEmpty()
+    }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
@@ -165,7 +168,7 @@ class SearchViewModel @Inject constructor(
         val firstPage = it.getVisibleResults(0).orEmpty()
         _visibleResults.value = firstPage
 
-        if (it.searchTerm.isNotBlank()) {
+        if (it.searchTerm.isNotBlank() && it.getVisibleResults(0).isNullOrEmpty()) {
           _spellingSuggestions.value =
             getSuggestedSpelledWords(it.searchTerm, MAX_SUGGEST_WORD_COUNT)
         } else {

@@ -58,7 +58,7 @@ fun SearchScreenRoute(
   val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
 
   // Voice Intent
-  DisposableEffect(coreMainActivity) {
+  DisposableEffect(Unit) {
     coreMainActivity.activityResultForwarder =
       { requestCode, resultCode, data ->
         viewModel.actions.trySend(
@@ -88,7 +88,7 @@ fun SearchScreenRoute(
   }
 
   // Search Results
-  LaunchedEffect(viewModel) {
+  LaunchedEffect(Unit) {
     viewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
 
     arguments?.getString(NAV_ARG_SEARCH_STRING)?.let {
@@ -128,6 +128,7 @@ fun SearchScreenRoute(
     navigationIcon = {
       NavigationIcon(
         onClick = {
+          coreMainActivity.currentFocus?.closeKeyboard()
           coreMainActivity.onBackPressedDispatcher.onBackPressed()
         }
       )
@@ -155,7 +156,7 @@ private fun buildActionMenuItems(
   context: Context,
   showFindInPage: Boolean
 ): List<ActionMenuItem> {
-  return listOfNotNull(
+  return listOf(
     ActionMenuItem(
       contentDescription = R.string.search_label,
       icon = IconItem.Drawable(R.drawable.ic_mic_black_24dp),
@@ -165,18 +166,14 @@ private fun buildActionMenuItems(
         viewModel.actions.trySend(Action.ReceivedPromptForSpeechInput)
       }
     ),
-    if (showFindInPage) {
-      ActionMenuItem(
-        contentDescription = R.string.menu_search_in_text,
-        iconButtonText = context.getString(R.string.menu_search_in_text),
-        testingTag = FIND_IN_PAGE_TESTING_TAG,
-        isEnabled = true,
-        onClick = {
-          viewModel.actions.trySend(Action.ClickedSearchInText)
-        }
-      )
-    } else {
-      null
-    }
+    ActionMenuItem(
+      contentDescription = R.string.menu_search_in_text,
+      iconButtonText = context.getString(R.string.menu_search_in_text),
+      testingTag = FIND_IN_PAGE_TESTING_TAG,
+      isEnabled = showFindInPage,
+      onClick = {
+        viewModel.actions.trySend(Action.ClickedSearchInText)
+      }
+    )
   )
 }
