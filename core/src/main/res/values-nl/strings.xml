@@ -27,6 +27,7 @@
   <string name="menu_about_app">Over de app %s</string>
   <string name="external_redirect_message">U wordt nu naar ons %s doorverwezen.</string>
   <string name="support_donation_platform">donatieplatform</string>
+  <string name="about_app_page">pagina over de app</string>
   <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Media opslaan</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>

@@ -15,6 +15,9 @@
   <string name="menu_support_kiwix">Поддржете го Кивикс</string>
   <string name="menu_support_kiwix_for_custom_apps">Поддржете го %s</string>
   <string name="menu_about_app">За %s</string>
+  <string name="external_redirect_message">Ќе бидете пренасочени кон нашата %s.</string>
+  <string name="support_donation_platform">платформа за дарување</string>
+  <string name="about_app_page">страница за прилогот</string>
   <string name="menu_wifi_hotspot">Безжично жариште</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
@@ -308,7 +311,7 @@
   <string name="delete_selected_bookmarks">Да ги избришам избраните обележувачи?</string>
   <string name="import_bookmarks_dialog_title">Да увезам обележувачи?</string>
   <string name="export_all_bookmarks_dialog_title">Да ги извезам сите обележувачи?</string>
-  <string name="export_all_bookmarks_dialog_message">Извозот ќе создаде податотека bookmark.xml во папката \n%s.</string>
+  <string name="export_all_bookmarks_dialog_message" fuzzy="true">Извозот ќе создаде податотека bookmark.xml во папката \n%s.</string>
   <string name="bookmark_imported_message">Сите обележувачи се увезени.</string>
   <string name="error_invalid_bookmark_file">Грешка: Избраната податотека не е важечка податотека со обележувачи.</string>
   <string name="send_report">Испрати дијагностички извештај</string>
