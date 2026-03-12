@@ -81,7 +81,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment
+import org.kiwix.kiwixmobile.webserver.ZimHostRoute
 
 @Suppress("LongMethod")
 @Composable
@@ -171,9 +171,7 @@ fun KiwixNavGraph(
       KiwixDestination.ZimHost.route,
       deepLinks = listOf(navDeepLink { uriPattern = ZIM_HOST_NAV_DEEP_LINK })
     ) {
-      FragmentContainer(R.id.zimHostFragmentContainer) {
-        ZimHostFragment()
-      }
+      ZimHostRoute(viewModelFactory, alertDialogShower)
     }
     composable(KiwixDestination.Help.route) {
       val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)

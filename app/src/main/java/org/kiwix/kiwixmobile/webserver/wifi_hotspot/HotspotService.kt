@@ -32,10 +32,10 @@ import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.serverAddress
+import org.kiwix.kiwixmobile.webserver.RESTART_SERVER
+import org.kiwix.kiwixmobile.webserver.SELECTED_ZIM_PATHS_KEY
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment.Companion.RESTART_SERVER
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -100,7 +100,7 @@ class HotspotService :
     when (intent.action) {
       ACTION_START_SERVER -> {
         val restartServer = intent.getBooleanExtra(RESTART_SERVER, false)
-        intent.getStringArrayListExtra(ZimHostFragment.SELECTED_ZIM_PATHS_KEY)?.let {
+        intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY)?.let {
           serviceScope.launch {
             val serverStatus =
               withContext(Dispatchers.IO) {
