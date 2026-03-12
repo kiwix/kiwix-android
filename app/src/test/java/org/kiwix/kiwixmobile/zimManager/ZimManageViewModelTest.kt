@@ -24,6 +24,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
 import androidx.lifecycle.asFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.jraska.livedata.test
@@ -705,6 +706,13 @@ suspend fun <T> TestScope.testFlow(
     }
   }
   job.join()
+}
+
+suspend inline fun <reified T> ReceiveTurbine<*>.awaitItemOfType(): T {
+  while (true) {
+    val item = awaitItem()
+    if (item is T) return item
+  }
 }
 
 class BookTestWrapper(private val id: String) : Book(0L) {

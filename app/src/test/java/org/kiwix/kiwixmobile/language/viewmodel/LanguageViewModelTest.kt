@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
+import org.kiwix.kiwixmobile.zimManager.awaitItemOfType
 import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.language
@@ -98,9 +99,7 @@ class LanguageViewModelTest {
         kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
-      ).apply {
-        setIsUnitTestCase()
-      }
+      )
   }
 
   @Nested
@@ -160,13 +159,13 @@ class LanguageViewModelTest {
 
       createViewModel()
       languageViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val error = awaitItem() as State.Error
+        val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("No language available")
       }
     }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `online api throws exception falls back to error`() = flakyTest {
     runTest {
@@ -176,8 +175,7 @@ class LanguageViewModelTest {
       advanceUntilIdle() // Wait for coroutines to settle
 
       languageViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val error = awaitItem() as State.Error
+        val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("Error")
         cancelAndConsumeRemainingEvents()
       }
@@ -197,7 +195,7 @@ class LanguageViewModelTest {
         languageViewModel.actions.emit(Save)
         advanceUntilIdle()
         advanceTimeBy(100)
-        val effect = awaitItem() as SaveLanguagesAndFinish
+        val effect = awaitItemOfType<SaveLanguagesAndFinish>()
         assertThat(effect.languages).isEqualTo(activeLanguage)
       }
     }
@@ -217,8 +215,7 @@ class LanguageViewModelTest {
 
       createViewModel()
       languageViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val content = awaitItem() as State.Content
+        val content = awaitItemOfType<State.Content>()
         assertThat(content.items.first().languageCode)
           .isEqualTo("eng")
       }
@@ -231,8 +228,7 @@ class LanguageViewModelTest {
       networkStates.value = NetworkState.NOT_CONNECTED
       createViewModel()
       languageViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val error = awaitItem() as State.Error
+        val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("Error")
       }
     }
@@ -273,8 +269,7 @@ class LanguageViewModelTest {
 
         languageViewModel.actions.emit(Filter("eng"))
         advanceUntilIdle()
-        val content = awaitItem() as Content
-        print("content $content")
+        val content = awaitItemOfType<Content>()
         val filteredItem: List<LanguageListItem.LanguageItem> =
           content.viewItems.filter {
             it is LanguageListItem.LanguageItem && it.language.language == "eng"

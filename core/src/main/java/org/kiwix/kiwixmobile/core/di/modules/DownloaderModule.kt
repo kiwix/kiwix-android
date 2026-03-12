@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
@@ -49,7 +50,7 @@ object DownloaderModule {
   fun providesDownloader(
     downloadRequester: DownloadRequester,
     downloadRoomDao: DownloadRoomDao,
-    kiwixService: KiwixService
+    @OPDSKiwixService kiwixService: KiwixService
   ): Downloader =
     DownloaderImpl(downloadRequester, downloadRoomDao, kiwixService)
 

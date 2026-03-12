@@ -27,6 +27,8 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
@@ -59,6 +61,15 @@ class NetworkModule {
       .build()
   }
 
-  @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
+  @Provides
+  @Singleton
+  @OPDSKiwixService
+  fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
     ServiceCreator.newHackListService(okHttpClient, KIWIX_OPDS_LIBRARY_URL)
+
+  @Provides
+  @Singleton
+  @CategoryKiwixService
+  fun provideCategoryKiwixService(okHttpClient: OkHttpClient): KiwixService =
+    ServiceCreator.newHackListService(okHttpClient, KIWIX_LANGUAGE_URL)
 }
