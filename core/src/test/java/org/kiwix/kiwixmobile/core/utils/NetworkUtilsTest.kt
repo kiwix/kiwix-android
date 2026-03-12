@@ -87,7 +87,7 @@ class NetworkUtilsTest {
 
     val emptyUrlResult = NetworkUtils.getFileNameFromUrl("")
 
-// URL is an Empty String
+    // URL is an Empty String
     assertTrue(
       "When URL is empty, a UUID should be returned: $emptyUrlResult",
       emptyUrlResult.matches(defaultUUIDRegex)
@@ -100,7 +100,7 @@ class NetworkUtilsTest {
       NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android")
     )
 
-// When the URL ends with '/' , there is no filename, so a UUID should be generated
+    // When the URL ends with '/', there is no filename, so a UUID should be generated
     val fileNameFromTrailingSlashUrl =
       NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/")
 
@@ -109,7 +109,7 @@ class NetworkUtilsTest {
       fileNameFromTrailingSlashUrl.matches(defaultUUIDRegex)
     )
 
-    // When URL contains '/?' there is no filename before the query, so generate UUID
+    // When URL contains '/?', there is no filename before the query, so generate UUID
     val fileNameFromSlashQuestionUrl =
       NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android")
 
@@ -215,11 +215,7 @@ class NetworkUtilsTest {
 
   @Test
   fun `parseURL returns empty string for url without underscore`() {
-    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
-    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
-    every { context.getString(R.string.zim_simple) } returns "Simple"
     val result = NetworkUtils.parseURL(context, "http://example.com/file.zim")
-
     assertEquals("", result)
   }
 
