@@ -22,24 +22,18 @@ data class VersionId(
   val major: Int,
   val minor: Int,
   val build: Int,
-  val variantType: String,
-  val variantNumber: Int,
 ) : Comparable<VersionId> {
   override fun compareTo(other: VersionId): Int =
     major.compareTo(other.major).takeIf { it != 0 }
       ?: minor.compareTo(other.minor).takeIf { it != 0 }
-      ?: build.compareTo(other.build).takeIf { it != 0 }
-      ?: variantNumber.compareTo(other.variantNumber)
+      ?: build.compareTo(other.build)
 }
 
 fun VersionId(versionName: String): VersionId {
-  val parts = versionName.substringBeforeLast('-').split('.')
-  val variant = versionName.substringAfterLast('-', "")
+  val parts = versionName.split('.')
   return VersionId(
     major = parts.getOrNull(0)?.toIntOrNull() ?: 0,
     minor = parts.getOrNull(1)?.toIntOrNull() ?: 0,
     build = parts.getOrNull(2)?.toIntOrNull() ?: 0,
-    variantType = variant.filter(Char::isLetter),
-    variantNumber = variant.filter(Char::isDigit).toIntOrNull() ?: 0,
   )
 }
