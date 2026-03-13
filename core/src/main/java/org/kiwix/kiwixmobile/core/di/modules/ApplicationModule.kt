@@ -31,7 +31,8 @@ import javax.inject.Singleton
 @Module(
   includes = [
     DownloaderModule::class,
-    DatabaseModule::class
+    DatabaseModule::class,
+    CoroutineModule::class
   ]
 )
 class ApplicationModule {

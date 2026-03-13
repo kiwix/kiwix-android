@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.SaveCatego
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
+import org.kiwix.kiwixmobile.zimManager.awaitItemOfType
 import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.category
@@ -85,7 +86,7 @@ class CategoryViewModelTest {
     }
     every { application.unregisterReceiver(any()) } just Runs
     CategorySessionCache.hasFetched = false
-    every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(categories.value)
+    every { kiwixDataStore.cachedOnlineCategoryList } returns categories
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
     coEvery { kiwixService.getCategories() } returns CategoryFeed()
   }
@@ -97,9 +98,7 @@ class CategoryViewModelTest {
         kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver
-      ).apply {
-        setIsUnitTestCase()
-      }
+      )
   }
 
   @Nested
@@ -163,7 +162,7 @@ class CategoryViewModelTest {
         categoryViewModel.actions.emit(Action.Select(categoryItem))
         advanceUntilIdle()
         advanceTimeBy(100)
-        val effect = awaitItem() as SaveCategoryAndFinish
+        val effect = awaitItemOfType<SaveCategoryAndFinish>()
         assertThat(effect.category).isEqualTo(activeCategory)
       }
     }
@@ -177,13 +176,13 @@ class CategoryViewModelTest {
 
       createViewModel()
       categoryViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val error = awaitItem() as State.Error
+        val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("No category available")
       }
     }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `online api throws exception falls back to error`() = flakyTest {
     runTest {
@@ -194,8 +193,7 @@ class CategoryViewModelTest {
       advanceUntilIdle() // Wait for coroutines to settle
 
       categoryViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val error = awaitItem() as State.Error
+        val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("Error")
         cancelAndConsumeRemainingEvents()
       }
@@ -217,8 +215,7 @@ class CategoryViewModelTest {
 
       createViewModel()
       categoryViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val content = awaitItem() as Content
+        val content = awaitItemOfType<Content>()
         assertThat(content.items.first().category)
           .isEqualTo("Offline")
       }
@@ -232,8 +229,7 @@ class CategoryViewModelTest {
 
       createViewModel()
       categoryViewModel.state.test {
-        assertThat(awaitItem()).isEqualTo(Loading)
-        val error = awaitItem() as State.Error
+        val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("Error")
       }
     }
@@ -278,7 +274,7 @@ class CategoryViewModelTest {
         categoryViewModel.actions.emit(UpdateCategory(categories))
         advanceUntilIdle()
 
-        assertThat(awaitItem()).isEqualTo(Content(categories))
+        assertThat(awaitItemOfType<Content>()).isEqualTo(Content(categories))
         cancelAndConsumeRemainingEvents()
       }
     }
@@ -304,7 +300,7 @@ class CategoryViewModelTest {
 
         categoryViewModel.actions.emit(Action.Filter("wiki"))
         advanceUntilIdle()
-        val content = awaitItem() as Content
+        val content = awaitItemOfType<Content>()
         val filteredItem: CategoryListItem.CategoryItem =
           content.viewItems.first { it is CategoryListItem.CategoryItem } as CategoryListItem.CategoryItem
         assertThat(filteredItem.category.category).isEqualTo("wikipedia")

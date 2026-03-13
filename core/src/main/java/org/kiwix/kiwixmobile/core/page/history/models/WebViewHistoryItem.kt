@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.adapter
+package org.kiwix.kiwixmobile.core.page.history.models
 
 import android.os.Bundle
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity

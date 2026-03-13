@@ -44,7 +44,6 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_ICON_CORNER_RADIUS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
@@ -55,6 +54,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 const val READ_ALOUD_MENU_ITEM_TESTING_TAG = "readAloudMenuItemTestingTag"
 const val TAKE_NOTE_MENU_ITEM_TESTING_TAG = "takeNoteMenuItemTestingTag"
 const val RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG = "randomArticleMenuItemTestingTag"
+const val SHARE_ARTICLE_MENU_ITEM_TESTING_TAG = "shareArticleMenuItemTestingTag"
 const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 const val TABS_SIZE_TEXT_TESTING_TAG = "tabsSizeTextTestingTag"
 
@@ -70,6 +70,7 @@ class ReaderMenuState(
     fun onTabMenuClicked()
     fun onHomeMenuClicked()
     fun onAddNoteMenuClicked()
+    fun onShareMenuClicked()
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
     fun onSearchMenuClickedMenuClicked()
@@ -80,6 +81,7 @@ class ReaderMenuState(
   private val menuItemVisibility = mutableMapOf<MenuItemType, Boolean>().apply {
     put(MenuItemType.Search, true)
     put(MenuItemType.TabSwitcher, true)
+    put(MenuItemType.Share, true)
     put(MenuItemType.AddNote, true)
     put(MenuItemType.RandomArticle, true)
     put(MenuItemType.ReadAloud, true)
@@ -110,6 +112,7 @@ class ReaderMenuState(
       MenuItemType.RandomArticle,
       MenuItemType.Search,
       MenuItemType.ReadAloud,
+      MenuItemType.Share,
       MenuItemType.AddNote,
       MenuItemType.TabSwitcher
     )
@@ -134,6 +137,7 @@ class ReaderMenuState(
       false,
       MenuItemType.Search,
       MenuItemType.TabSwitcher,
+      MenuItemType.Share,
       MenuItemType.RandomArticle,
       MenuItemType.AddNote,
       MenuItemType.ReadAloud
@@ -145,6 +149,7 @@ class ReaderMenuState(
       true,
       MenuItemType.Search,
       MenuItemType.TabSwitcher,
+      MenuItemType.Share,
       MenuItemType.RandomArticle,
       MenuItemType.AddNote,
       MenuItemType.ReadAloud
@@ -157,6 +162,7 @@ class ReaderMenuState(
       false,
       MenuItemType.RandomArticle,
       MenuItemType.ReadAloud,
+      MenuItemType.Share,
       MenuItemType.AddNote
     )
   }
@@ -213,7 +219,7 @@ class ReaderMenuState(
           .clip(RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
           .background(MaterialTheme.colorScheme.onPrimary)
           .border(
-            ONE_DP,
+            TWO_DP,
             MaterialTheme.colorScheme.onBackground,
             RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS)
           )
@@ -235,6 +241,15 @@ class ReaderMenuState(
   }
 
   private fun addReaderMenuItems() {
+    if (menuItemVisibility[MenuItemType.Share] == true) {
+      menuItems += ActionMenuItem(
+        contentDescription = R.string.share_article,
+        onClick = { menuClickListener.onShareMenuClicked() },
+        testingTag = SHARE_ARTICLE_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+
     if (menuItemVisibility[MenuItemType.AddNote] == true) {
       menuItems += ActionMenuItem(
         contentDescription = R.string.take_notes,
@@ -281,6 +296,7 @@ class ReaderMenuState(
 enum class MenuItemType {
   Search,
   TabSwitcher,
+  Share,
   AddNote,
   RandomArticle,
   ReadAloud

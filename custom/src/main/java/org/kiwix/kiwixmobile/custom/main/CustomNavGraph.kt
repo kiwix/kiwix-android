@@ -48,9 +48,12 @@ import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
-import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
-import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
+import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
+import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
+import org.kiwix.kiwixmobile.core.page.notes.NotesScreenRoute
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
@@ -80,19 +83,28 @@ fun CustomNavGraph(
       }
     }
     composable(CustomDestination.History.route) {
-      FragmentContainer(R.id.historyFragmentContainer) {
-        HistoryFragment()
-      }
+      val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
+      HistoryScreenRoute(
+        navigateBack = navController::popBackStack,
+        viewModel = historyViewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
     composable(CustomDestination.Notes.route) {
-      FragmentContainer(R.id.notesFragmentContainer) {
-        NotesFragment()
-      }
+      val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
+      NotesScreenRoute(
+        navigateBack = navController::popBackStack,
+        notesViewModel = notesViewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
     composable(CustomDestination.Bookmarks.route) {
-      FragmentContainer(R.id.bookmarksFragmentContainer) {
-        BookmarksFragment()
-      }
+      val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
+      BookmarkScreenRoute(
+        navigateBack = navController::popBackStack,
+        viewModel = bookmarkViewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
     composable(CustomDestination.Help.route) {
       val customHelpViewModel: CustomHelpViewModel = viewModel(factory = viewModelFactory)

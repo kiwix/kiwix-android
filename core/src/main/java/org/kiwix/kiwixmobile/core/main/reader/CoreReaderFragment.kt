@@ -31,6 +31,11 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.print.PdfPrint
+import android.print.PrintAttributes
+import android.print.PrintAttributes.Margins
+import android.print.PrintAttributes.MediaSize
+import android.print.PrintAttributes.Resolution
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
@@ -99,8 +104,11 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservabl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
@@ -121,12 +129,12 @@ import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
@@ -139,6 +147,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -158,12 +167,14 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -173,6 +184,8 @@ import kotlin.math.max
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 const val HIDE_TAB_SWITCHER_DELAY: Long = 300
+const val OPEN_HOME_SCREEN_DELAY: Long = 300
+private const val PDF_RESOLUTION_DPI = 300
 
 @Suppress("LargeClass")
 abstract class CoreReaderFragment :
@@ -254,6 +267,15 @@ abstract class CoreReaderFragment :
   private var readAloudService: ReadAloudService? = null
   private val navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
+  private val pdfPrinter by lazy {
+    PdfPrint(
+      PrintAttributes.Builder()
+        .setMediaSize(MediaSize.ISO_A4)
+        .setResolution(Resolution("pdf", "pdf", PDF_RESOLUTION_DPI, PDF_RESOLUTION_DPI))
+        .setMinMargins(Margins.NO_MARGINS)
+        .build()
+    )
+  }
   private var isReadAloudServiceRunning = false
   private var libkiwixBook: Book? = null
   private var shouldTableOfContentDrawer = mutableStateOf(false)
@@ -633,17 +655,17 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
-  @Suppress("MagicNumber")
   private fun initHideBackToTopTimer() {
-    hideBackToTopTimer = object : CountDownTimer(1200, 1200) {
-      override fun onTick(millisUntilFinished: Long) {
-        // do nothing it's default override method
-      }
+    hideBackToTopTimer =
+      object : CountDownTimer(BACK_TO_TOP_HIDE_DELAY_MS, BACK_TO_TOP_HIDE_DELAY_MS) {
+        override fun onTick(millisUntilFinished: Long) {
+          // Not needed; we only use onFinish to hide the button.
+        }
 
-      override fun onFinish() {
-        hideBackToTopButton()
+        override fun onFinish() {
+          hideBackToTopButton()
+        }
       }
-    }
   }
 
   override fun onCreateView(
@@ -1439,6 +1461,52 @@ abstract class CoreReaderFragment :
     }
   }
 
+  override fun onShareMenuClicked() {
+    runSafelyInCoreReaderLifecycleScope {
+      val webView = getCurrentWebView() ?: return@runSafelyInCoreReaderLifecycleScope
+      if (webView.progress < HUNDERED) {
+        context?.toast(string.please_wait_for_page_to_load, Toast.LENGTH_SHORT)
+        return@runSafelyInCoreReaderLifecycleScope
+      }
+      val title = webView.title ?: "Article"
+      val slugifiedTitle = title.toSlug().ifEmpty { "article" }
+      val cacheDir = FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
+      val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
+      if (pdfFile.isFileExist()) {
+        pdfFile.deleteFile()
+      }
+      pdfFile.createNewFile()
+      val printAdapter = webView.createPrintDocumentAdapter(title)
+      pdfPrinter.print(
+        adapter = printAdapter,
+        outputFile = pdfFile,
+        onComplete = { if (isAdded) sharePdfFile(it) },
+        onError = {
+          Log.e(TAG_KIWIX, "Failed to generate PDF for sharing: $it")
+          if (isAdded) context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
+        },
+      )
+    }
+  }
+
+  private fun sharePdfFile(pdfFile: java.io.File) {
+    try {
+      val uri = androidx.core.content.FileProvider.getUriForFile(
+        requireContext(),
+        requireContext().packageName + ".fileprovider",
+        pdfFile
+      )
+      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "application/pdf"
+        putExtra(Intent.EXTRA_STREAM, uri)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+      }
+      startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+    } catch (e: IOException) {
+      context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
+    }
+  }
+
   override fun onHomeMenuClicked() {
     if (readerScreenState.value.showTabSwitcher) {
       hideTabSwitcher()
@@ -1785,7 +1853,6 @@ abstract class CoreReaderFragment :
     readerScreenState.update { copy(isNoBookOpenInReader = false) }
   }
 
-  @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
     runSafelyInCoreReaderLifecycleScope {
       // Run safely because it is runs after 300 MS.
@@ -1794,7 +1861,7 @@ abstract class CoreReaderFragment :
           createNewTab()
           hideTabSwitcher()
         }
-      }, 300)
+      }, OPEN_HOME_SCREEN_DELAY)
     }
   }
 

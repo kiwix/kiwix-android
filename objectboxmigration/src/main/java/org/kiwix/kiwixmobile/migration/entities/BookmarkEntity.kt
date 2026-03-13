@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.migration.entities
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity

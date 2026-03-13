@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.bookmark.adapter
+package org.kiwix.kiwixmobile.core.page.bookmark.models
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
