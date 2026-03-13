@@ -34,22 +34,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
-import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.R.string
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
-import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.KIWIX_LANGUAGE_URL
-import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -65,13 +54,12 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryLi
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  private var kiwixService: KiwixService,
+  @CategoryKiwixService private val kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
@@ -104,7 +92,6 @@ class CategoryViewModel @Inject constructor(
   fun setIsUnitTestCase() {
     isUnitTestCase = true
   }
-
   private fun observeActions() =
     actions
       .map { action -> reduce(action, state.value) }
@@ -153,10 +140,6 @@ class CategoryViewModel @Inject constructor(
 
   @Suppress("MagicNumber")
   private fun fetchCategoriesFlow() = flow {
-    if (!isUnitTestCase) {
-      kiwixService =
-        ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
-    }
     val feed = kiwixService.getCategories()
 
     val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
@@ -242,20 +225,6 @@ class CategoryViewModel @Inject constructor(
     )
     return Saving
   }
-
-  private fun getOkHttpClient() = OkHttpClient().newBuilder()
-    .followRedirects(true)
-    .followSslRedirects(true)
-    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-    .readTimeout(READ_TIMEOUT, SECONDS)
-    .callTimeout(CALL_TIMEOUT, SECONDS)
-    .addNetworkInterceptor(
-      HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) BASIC else NONE
-      }
-    )
-    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-    .build()
 
   @VisibleForTesting
   fun onClearedExposed() {

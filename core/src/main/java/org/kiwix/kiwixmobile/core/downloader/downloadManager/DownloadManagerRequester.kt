@@ -23,12 +23,13 @@ import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.NetworkType.ALL
 import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
 import com.tonyodev.fetch2.Request
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
@@ -39,7 +40,8 @@ class DownloadManagerRequester @Inject constructor(
   private val fetch: Fetch,
   private val kiwixDataStore: KiwixDataStore,
   private val context: Context,
-  private val downloadRoomDao: DownloadRoomDao
+  private val downloadRoomDao: DownloadRoomDao,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DownloadRequester {
   override suspend fun enqueue(downloadRequest: DownloadRequest): Long {
     val request = downloadRequest.toFetchRequest(kiwixDataStore)
@@ -47,13 +49,12 @@ class DownloadManagerRequester @Inject constructor(
     return request.id.toLong()
   }
 
-  @Suppress("InjectDispatcher")
   override fun cancel(downloadId: Long) {
     fetch.delete(
       id = downloadId.toInt(),
       func = null,
       func2 = {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
           downloadRoomDao.deleteDownloadByDownloadId(downloadId)
         }
       }
@@ -71,6 +72,7 @@ class DownloadManagerRequester @Inject constructor(
     )
     startDownloadMonitorService()
   }
+
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
     if (isPause) {
       fetch.resume(downloadId.toInt(), null) {
@@ -82,9 +84,8 @@ class DownloadManagerRequester @Inject constructor(
     startDownloadMonitorService()
   }
 
-  @Suppress("InjectDispatcher")
   private fun reEnqueueStaleDownload(downloadId: Long) {
-    CoroutineScope(Dispatchers.IO).launch {
+    CoroutineScope(ioDispatcher).launch {
       downloadRoomDao.getEntityForDownloadId(downloadId)?.let { staleEntity ->
         staleEntity.url?.let { url ->
           downloadRoomDao.deleteDownloadByDownloadId(downloadId)

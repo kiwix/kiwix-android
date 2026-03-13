@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.core.page.notes.adapter
+package org.kiwix.kiwixmobile.core.page.notes.models
 
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page

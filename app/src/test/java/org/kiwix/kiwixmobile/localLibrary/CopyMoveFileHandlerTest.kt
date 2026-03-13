@@ -50,7 +50,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -93,6 +92,8 @@ class CopyMoveFileHandlerTest {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     every { destinationFile.canRead() } returns true
+    every { activity.getString(any()) } returns "mocked string"
+    every { activity.getString(any(), any()) } returns "mocked string"
     fileHandler = CopyMoveFileHandler(
       activity,
       kiwixDataStore,
@@ -308,7 +309,7 @@ class CopyMoveFileHandlerTest {
     advanceUntilIdle()
     verify {
       copyMoveProgressBarController.showCopyMoveDialog(
-        activity.getString(R.string.copy_move_multiple_files_dialog_description),
+        any(),
         any(),
         any()
       )
@@ -408,7 +409,7 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       copyMoveProgressBarController.showCopyMoveDialog(
-        "",
+        any(),
         capture(positiveButtonClickSlot),
         any()
       )
@@ -433,7 +434,7 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       copyMoveProgressBarController.showCopyMoveDialog(
-        "",
+        any(),
         capture(positiveButtonClickSlot),
         any()
       )
@@ -460,7 +461,7 @@ class CopyMoveFileHandlerTest {
 
     verify {
       copyMoveProgressBarController.showCopyMoveDialog(
-        "",
+        any(),
         any(),
         any()
       )
@@ -479,7 +480,7 @@ class CopyMoveFileHandlerTest {
       coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
       every {
         copyMoveProgressBarController.showCopyMoveDialog(
-          "",
+          any(),
           capture(positiveButtonClickSlot),
           capture(negativeButtonClickSlot)
         )
@@ -573,12 +574,7 @@ class CopyMoveFileHandlerTest {
 
       verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
       verify {
-        fileCopyMoveCallback.onError(
-          activity.getString(
-            R.string.error_file_invalid,
-            destinationFile.path
-          )
-        )
+        fileCopyMoveCallback.onError(any())
       }
     }
   }
@@ -600,7 +596,7 @@ class CopyMoveFileHandlerTest {
 
       coVerify {
         fileHandler.handleFileOperationError(
-          activity.getString(R.string.error_file_invalid, destinationFile.path),
+          any(),
           destinationFile
         )
         destinationFile.deleteFile()

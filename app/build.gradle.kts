@@ -32,7 +32,8 @@ val trackedFileBackupDir = File("$rootDir/build/tracked-file-backups")
 fun backupTrackedFile(file: File) {
   if (!trackedFileBackupDir.exists()) trackedFileBackupDir.mkdirs()
 
-  val fileKey = file.relativeTo(rootDir).path.replace("/", "_")
+  val fileKey =
+    file.relativeTo(rootDir).path.replace(File.separator, "_")
   val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
   val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
   if (existsMarkerFile.exists()) return
@@ -46,7 +47,8 @@ fun backupTrackedFile(file: File) {
 }
 
 fun restoreTrackedFile(file: File) {
-  val fileKey = file.relativeTo(rootDir).path.replace("/", "_")
+  val fileKey =
+    file.relativeTo(rootDir).path.replace(File.separator, "_")
   val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
   val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
   if (!existsMarkerFile.exists()) return

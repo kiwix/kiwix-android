@@ -307,7 +307,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         },
         bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
         navHostController = (requireActivity() as CoreMainActivity).navController,
-        onUserBackPressed = { onUserBackPressed() }
+        onUserBackPressed = { onUserBackPressed() },
+        zimManageViewModel = zimManageViewModel
       )
       DialogHost(alertDialogShower)
       showStorageDialogState.value?.let { params ->
