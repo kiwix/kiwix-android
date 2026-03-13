@@ -65,8 +65,12 @@ class ZimHostRobot : BaseRobot() {
 
   fun assertZimFilesLoaded(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    val zimFileNodes = composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)
-    zimFileNodes.assertCountEquals(2)
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onAllNodesWithTag(BOOK_ITEM_TESTING_TAG).assertCountEquals(2)
+      }
+    })
   }
 
   fun openZimHostFragment(
