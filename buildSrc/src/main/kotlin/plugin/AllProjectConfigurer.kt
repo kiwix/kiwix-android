@@ -246,6 +246,7 @@ class AllProjectConfigurer {
       implementation(Libs.COMPOSE_NAVIGATION)
       implementation(Libs.LIFECYCLE_VIEWMODEL_COMPOSE)
       implementation(Libs.LIFECYCLE_VIEWMODEL_KTX)
+      implementation(Libs.ACCOMPANIST)
 
       // Jetpack Datastore
       implementation(Libs.DATASTORE)
