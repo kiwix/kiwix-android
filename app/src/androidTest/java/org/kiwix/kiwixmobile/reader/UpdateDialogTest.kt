@@ -33,11 +33,11 @@ import com.google.android.apps.common.testing.accessibility.framework.integratio
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
@@ -51,6 +51,8 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
+const val MAX_APP_VERSION = "100.100.100"
+
 class UpdateDialogTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
@@ -61,7 +63,7 @@ class UpdateDialogTest : BaseActivityTest() {
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var kiwixDataStore: KiwixDataStore
-
+  private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var apkDao: DownloadApkDao
 
   @Before
@@ -79,16 +81,15 @@ class UpdateDialogTest : BaseActivityTest() {
         setPrefLanguage("en")
         setIsScanFileSystemDialogShown(true)
         setIsFirstRun(false)
-        setIsPlayStoreBuild(false)
         setPrefIsTest(true)
       }
     }
-    val db = Room.databaseBuilder(
+    kiwixRoomDatabase = Room.databaseBuilder(
       context,
       KiwixRoomDatabase::class.java,
       "KiwixRoom.db"
     ).build()
-    apkDao = db.downloadApkDao()
+    apkDao = kiwixRoomDatabase.downloadApkDao()
     activityScenario =
       ActivityScenario.launch(KiwixMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
@@ -106,108 +107,187 @@ class UpdateDialogTest : BaseActivityTest() {
     composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
+  private val olderThanThreeDays = System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS + 1000)
+  private val lessThanThreeDays = System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS / 2)
+
+  @Test
+  fun showUpdatePopupWhenUpdateIsAvailableAndShowingDialogForTheFirstTime() {
+    openReaderFragment()
+    resetStates()
+    insertMaxApkVersion()
+    runBlocking {
+      setDialogState(
+        lastDialog = 0L,
+        laterClick = 0L
+      )
+    }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
+  }
+
   @Test
   fun showUpdatePopupWhenUpdateIsAvailableAndApplicationIsOlderThanThreeDays() {
     openReaderFragment()
-
-    insertApkVersion("10.10.10")
-
-    val olderThanThreeDays = System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS + 1000)
-
+    resetStates()
+    insertMaxApkVersion()
     runBlocking {
       setDialogState(
         lastDialog = olderThanThreeDays,
         laterClick = 0L
       )
     }
-
     update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
   }
 
   @Test
   fun showUpdatePopupWhenUpdateIsAvailableAndLaterWasClickedMoreThanThreeDaysAgo() {
     openReaderFragment()
-
-    insertApkVersion("10.10.10")
-
-    val olderThanThreeDays = System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS + 1000)
-
+    resetStates()
+    insertMaxApkVersion()
     runBlocking {
       setDialogState(
         lastDialog = 0L,
         laterClick = olderThanThreeDays
       )
     }
-
     update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
   }
 
+  // Do not show tests should fail
   @Test
-  fun doNotShowUpdatePopupWhenLaterClickedLessThanThreeDaysAgo() {
+  fun doNotShowUpdatePopupWhenUpdateIsAvailableAndLaterClickedLessThanThreeDaysAgo() {
     openReaderFragment()
-
-    insertApkVersion("10.10.10")
-
-    val lessThanThreeDays = System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS + 1000)
-
+    resetStates()
+    insertMaxApkVersion()
     runBlocking {
       setDialogState(
         lastDialog = 0L,
         laterClick = lessThanThreeDays
       )
     }
-
-    update { assertUpdateDialogIsNotDisplayed(composeTestRule) }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
   }
 
   @Test
-  fun doNotShowUpdatePopupWhenUpdateIsNotAvailable() {
+  fun doNotShowUpdatePopupWhenUpdateIsAvailableAndUpdateClickedLessThanThreeDaysAgo() {
     openReaderFragment()
+    resetStates()
+    insertMaxApkVersion()
+    runBlocking {
+      kiwixDataStore.setIsPlayStoreBuild(false)
+      setDialogState(
+        lastDialog = lessThanThreeDays,
+        laterClick = 0L
+      )
+    }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
+  }
 
+  @Test
+  fun doNotShowUpdatePopupWhenUpdateIsNotAvailableAndLaterClickedOlderThanThreeDaysAgo() {
+    openReaderFragment()
+    resetStates()
+    runBlocking {
+      kiwixDataStore.setIsPlayStoreBuild(false)
+      setDialogState(
+        lastDialog = 0L,
+        laterClick = System.currentTimeMillis() - (THREE_DAYS_IN_MILLISECONDS + 1000)
+      )
+    }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
+  }
+
+  @Test
+  fun doNotShowUpdatePopupWhenUpdateIsNotAvailableAndUpdateClickedOlderThanThreeDaysAgo() {
+    openReaderFragment()
+    resetStates()
+    runBlocking {
+      setDialogState(
+        lastDialog = olderThanThreeDays,
+        laterClick = 0L
+      )
+    }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
+  }
+
+  @Test
+  fun doNotShowUpdatePopupWhenUpdateIsAvailableAndLaterClickedOlderThanThreeDaysAgoAndIsPlayStoreBuild() {
+    openReaderFragment()
+    resetStates()
+    insertMaxApkVersion()
+    runBlocking {
+      kiwixDataStore.setIsPlayStoreBuild(true)
+      setDialogState(
+        lastDialog = 0L,
+        laterClick = olderThanThreeDays
+      )
+    }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
+  }
+
+  @Test
+  fun doNotShowUpdatePopupWhenUpdateIsAvailableAndUpdateClickedOlderThanThreeDaysAgoIsPlayStoreBuild() {
+    openReaderFragment()
+    resetStates()
+    insertMaxApkVersion()
+    runBlocking {
+      kiwixDataStore.setIsPlayStoreBuild(true)
+      setDialogState(
+        lastDialog = olderThanThreeDays,
+        laterClick = 0L
+      )
+    }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
+  }
+
+  @Test
+  fun doNotShowUpdatePopupWhenUpdateIsNotAvailableAndShowingDialogForTheFirstTime() {
+    openReaderFragment()
+    resetStates()
     runBlocking {
       setDialogState(
         lastDialog = 0L,
         laterClick = 0L
       )
     }
-
-    update { assertUpdateDialogIsNotDisplayed(composeTestRule) }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
   }
 
   @Test
-  fun doNotShowUpdatePopupWhenApkVersionIsLessThanApplicationVersion() {
+  fun doNotShowUpdatePopupWhenUpdateIsAvailableAndShowingDialogForTheFirstTimeAndIsPlayStoreBuild() {
     openReaderFragment()
-
-    insertApkVersion("1.0.0")
-
+    resetStates()
+    insertMaxApkVersion()
     runBlocking {
+      kiwixDataStore.setIsPlayStoreBuild(true)
       setDialogState(
         lastDialog = 0L,
         laterClick = 0L
       )
     }
-
-    update { assertUpdateDialogIsNotDisplayed(composeTestRule) }
+    update { assertUpdateDialogDisplayed(composeTestRule) }
+    resetStates()
   }
 
-  @Test
-  fun doNotShowUpdatePopupWhenApkVersionIsEqualToApplicationVersion() {
-    openReaderFragment()
+  private fun insertMaxApkVersion() {
+    apkDao.addApkInfoItem(DownloadApkEntity(ApkInfo("", MAX_APP_VERSION, "")))
+  }
 
-    insertApkVersion(BuildConfig.VERSION_NAME)
-
+  private fun resetStates() {
     runBlocking {
-      setDialogState(
-        lastDialog = 0L,
-        laterClick = 0L
-      )
+      apkDao.addApkInfoItem(DownloadApkEntity(ApkInfo("", "", "")))
+      setDialogState(0L, 0L)
+      kiwixDataStore.setIsPlayStoreBuild(false)
     }
-
-    update { assertUpdateDialogIsNotDisplayed(composeTestRule) }
-  }
-
-  private fun insertApkVersion(version: String) {
-    apkDao.addApkInfoItem(DownloadApkEntity(ApkInfo("", version, "")))
   }
 
   private suspend fun setDialogState(lastDialog: Long, laterClick: Long) {
@@ -220,5 +300,10 @@ class UpdateDialogTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(kiwixMainActivity.readerFragmentRoute)
     }
+  }
+
+  @After
+  fun tearDown() {
+    kiwixRoomDatabase.close()
   }
 }

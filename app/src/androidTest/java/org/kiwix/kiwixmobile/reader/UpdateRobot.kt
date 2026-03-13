@@ -25,9 +25,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun update(func: UpdateRobot.() -> Unit) = UpdateRobot().applyWithViewHierarchyPrinting(func)
 class UpdateRobot : BaseRobot() {
@@ -37,16 +35,6 @@ class UpdateRobot : BaseRobot() {
       onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
         .assertIsDisplayed()
         .assertTextEquals(context.getString(string.new_update_available_title))
-    }
-  }
-
-  // need research on how to test this.
-  fun assertUpdateDialogIsNotDisplayed(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      composeTestRule.apply {
-        waitUntilTimeout()
-        onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG).assertDoesNotExist()
-      }
     }
   }
 }

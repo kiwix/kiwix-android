@@ -42,7 +42,7 @@ class UpdateDialogHandler @Inject constructor(
     val apkInfo = apkDao.getDownload() ?: return
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = apkInfo.lastDialogShownInMilliSeconds
-    val availableVersion = VersionId(apkInfo.version)
+    val availableVersion = apkInfo.version
     val shouldShowPopup =
       lastPopupMillis == 0L || isThreeDaysElapsed(currentMilliSeconds, lastPopupMillis)
     if (
@@ -56,10 +56,14 @@ class UpdateDialogHandler @Inject constructor(
   }
 
   fun isUpdateAvailable(
-    availableVersion: VersionId
+    availableVersion: String
   ): Boolean {
-    val currentVersion = VersionId(BuildConfig.VERSION_NAME)
-    return availableVersion > currentVersion && runBlocking { !kiwixDataStore.isPlayStoreBuild.first() }
+    if (availableVersion.isNotEmpty()) {
+      val currentVersionId = VersionId(BuildConfig.VERSION_NAME)
+      val availableVersionId = VersionId(availableVersion)
+      return availableVersionId > currentVersionId && runBlocking { !kiwixDataStore.isPlayStoreBuild.first() }
+    }
+    return false
   }
 
   suspend fun isTimeToShowUpdate(currentMillis: Long): Boolean {
