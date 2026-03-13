@@ -135,7 +135,13 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
       advanceUntilIdle()
       coVerify(exactly = 0) {
-        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any())
+        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+          any(),
+          any(),
+          any(),
+          any(),
+          any()
+        )
       }
     }
 
@@ -187,7 +193,13 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       val uri2 = createValidUri("test2.zim", availableSpace = 10000L)
 
       coEvery {
-        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any())
+        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+          any(),
+          any(),
+          any(),
+          any(),
+          any()
+        )
       } coAnswers {
         processSelectedZimFiles.onFileCopied(mockk<File>(relaxed = true))
       }
