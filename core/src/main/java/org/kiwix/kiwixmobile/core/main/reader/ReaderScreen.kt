@@ -125,9 +125,7 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.KiwixWebViewWithAppBarScrolling
-import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
-import org.kiwix.kiwixmobile.core.ui.components.TWELVE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
@@ -136,6 +134,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import androidx.compose.material3.HorizontalDivider
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -143,7 +142,17 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_SP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THIRTEEN_SP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_HEADING_LEVEL_2
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_HEADING_LEVEL_3
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_HEADING_LEVEL_4
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_HEADER_VERTICAL_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_INDENT_PER_LEVEL
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_ITEM_CORNER_RADIUS
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TOC_ITEM_VERTICAL_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
@@ -154,7 +163,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
@@ -261,7 +269,7 @@ fun ReaderScreen(
           title = state.tableOfContentTitle,
           sections = documentSections.orEmpty(),
           state.selectedWebView,
-          showTableOfContentDrawer
+          showTableOfContentDrawer,
         )
       }
     }
@@ -345,53 +353,63 @@ private fun ReaderContentLayout(
   }
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun TableDrawerSheet(
   title: String,
   sections: List<DocumentSection>,
   selectedWebView: KiwixWebView?,
-  showTableOfContentDrawer: MutableState<Boolean>
+  showTableOfContentDrawer: MutableState<Boolean>,
 ) {
   val drawerBackgroundColor = if (isSystemInDarkTheme()) {
     MineShaftGray700
   } else {
     White
   }
+  val lazyListState = rememberLazyListState()
   ModalDrawerSheet(
     modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
     drawerShape = RectangleShape,
     drawerContainerColor = drawerBackgroundColor
   ) {
-    LazyColumn(modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(
+      state = lazyListState,
+      modifier = Modifier.fillMaxHeight()
+    ) {
       item {
-        Text(
-          text = title.ifEmpty { stringResource(id = R.string.no_section_info) },
-          style = MaterialTheme.typography.titleMedium,
-          modifier = Modifier
-            .fillMaxWidth()
-            .minimumInteractiveComponentSize()
-            .clickable {
-              onTableOfContentHeaderClick(
-                selectedWebView,
-                showTableOfContentDrawer
-              )
-            }
-            .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
-            .semantics { contentDescription = "${title}${title.hashCode()}" }
-        )
+        Column {
+          Text(
+            text = title.ifEmpty { stringResource(id = R.string.no_section_info) },
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier
+              .fillMaxWidth()
+              .minimumInteractiveComponentSize()
+              .clickable {
+                onTableOfContentHeaderClick(
+                  selectedWebView,
+                  showTableOfContentDrawer
+                )
+              }
+              .padding(horizontal = SIXTEEN_DP, vertical = TOC_HEADER_VERTICAL_PADDING)
+              .semantics { contentDescription = "${title}${title.hashCode()}" }
+          )
+          HorizontalDivider(
+            thickness = ONE_DP,
+            color = MaterialTheme.colorScheme.outlineVariant
+          )
+        }
       }
       itemsIndexed(sections) { index, section ->
-        val paddingStart = (section.level - ONE) * TWELVE
-        Text(
-          text = section.title,
-          style = MaterialTheme.typography.bodyMedium.copy(
-            fontWeight = FontWeight.Light,
-            fontSize = LARGE_BODY_TEXT_SIZE
-          ),
+        val sectionStyle = tocSectionStyle(section.level)
+
+        Box(
           modifier = Modifier
             .fillMaxWidth()
-            .minimumInteractiveComponentSize()
+            .padding(horizontal = FOUR_DP)
+            .clip(RoundedCornerShape(TOC_ITEM_CORNER_RADIUS))
+            .then(
+              Modifier
+            )
             .clickable {
               onTableOfContentSectionClick(
                 selectedWebView,
@@ -400,11 +418,67 @@ fun TableDrawerSheet(
                 showTableOfContentDrawer
               )
             }
-            .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
+            .padding(
+              start = sectionStyle.startPadding,
+              top = TOC_ITEM_VERTICAL_PADDING,
+              bottom = TOC_ITEM_VERTICAL_PADDING,
+              end = SIXTEEN_DP
+            )
             .semantics { contentDescription = "${section.title}$index" }
-        )
+        ) {
+          Text(
+            text = section.title,
+            fontSize = sectionStyle.fontSize,
+            fontWeight = sectionStyle.fontWeight,
+            color = sectionStyle.color,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+          )
+        }
       }
     }
+  }
+}
+
+private data class TocSectionStyle(
+  val fontSize: androidx.compose.ui.unit.TextUnit,
+  val fontWeight: FontWeight,
+  val color: Color,
+  val startPadding: Dp
+)
+
+@Composable
+private fun tocSectionStyle(level: Int): TocSectionStyle {
+  val onSurface = MaterialTheme.colorScheme.onSurface
+  val onTertiary = MaterialTheme.colorScheme.onTertiary
+  return when (level) {
+    TOC_HEADING_LEVEL_2 -> TocSectionStyle(
+      fontSize = LARGE_BODY_TEXT_SIZE,
+      fontWeight = FontWeight.SemiBold,
+      color = onSurface,
+      startPadding = SIXTEEN_DP
+    )
+
+    TOC_HEADING_LEVEL_3 -> TocSectionStyle(
+      fontSize = FIFTEEN_SP,
+      fontWeight = FontWeight.Medium,
+      color = onSurface,
+      startPadding = SIXTEEN_DP + TOC_INDENT_PER_LEVEL
+    )
+
+    TOC_HEADING_LEVEL_4 -> TocSectionStyle(
+      fontSize = MEDIUM_BODY_TEXT_SIZE,
+      fontWeight = FontWeight.Normal,
+      color = onTertiary,
+      startPadding = SIXTEEN_DP + TOC_INDENT_PER_LEVEL * 2
+    )
+
+    else -> TocSectionStyle(
+      fontSize = THIRTEEN_SP,
+      fontWeight = FontWeight.Normal,
+      color = onTertiary,
+      startPadding = SIXTEEN_DP + TOC_INDENT_PER_LEVEL * 3
+    )
   }
 }
 

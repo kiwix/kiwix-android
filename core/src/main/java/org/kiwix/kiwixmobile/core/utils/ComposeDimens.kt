@@ -36,7 +36,6 @@ object ComposeDimens {
   val CRASH_IMAGE_SIZE = 70.dp
 
   // KiwixAppBar(Toolbar) dimens
-  val ACTION_MENU_TEXTVIEW_BUTTON_PADDING = 13.dp
   val KIWIX_TOOLBAR_HEIGHT = 56.dp
   val KIWIX_TOOLBAR_SHADOW_ELEVATION = 4.dp
 
@@ -57,14 +56,12 @@ object ComposeDimens {
   val THREE_DP = 3.dp
   val TWO_DP = 2.dp
   val ONE_DP = 1.dp
-  val SEVENTY_DP = 70.dp
   val FIFTY_DP = 50.dp
   val SIXTY_FOUR_DP = 64.dp
   val ONE_HUNDRED_FIFTY = 150.dp
   val TWENTY_TWO_DP = 22.dp
 
   // Font Sizes
-  val TWENTY_FOUR_SP = 24.sp
   val FOURTEEN_SP = 14.sp
   val EIGHTEEN_SP = 18.sp
 
@@ -195,6 +192,15 @@ object ComposeDimens {
   const val READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA = 0.38f
   val SEARCH_PLACEHOLDER_TEXT_SIZE = 12.sp
   val DONATION_LAYOUT_MAXIMUM_WIDTH = 400.dp
+  val TOC_HEADER_VERTICAL_PADDING = 16.dp
+  val TOC_ITEM_VERTICAL_PADDING = 6.dp
+  val TOC_INDENT_PER_LEVEL = 12.dp
+  val TOC_ITEM_CORNER_RADIUS = 8.dp
+  val FIFTEEN_SP = 15.sp
+  val THIRTEEN_SP = 13.sp
+  const val TOC_HEADING_LEVEL_2 = 2
+  const val TOC_HEADING_LEVEL_3 = 3
+  const val TOC_HEADING_LEVEL_4 = 4
 
   // MainActivity dimens
   val NAVIGATION_DRAWER_WIDTH = 280.dp
