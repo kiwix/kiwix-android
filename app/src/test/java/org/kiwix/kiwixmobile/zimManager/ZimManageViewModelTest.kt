@@ -24,6 +24,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
 import androidx.lifecycle.asFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.jraska.livedata.test
@@ -116,8 +117,8 @@ class ZimManageViewModelTest {
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk()
   private val storageObserver: StorageObserver = mockk()
   private val kiwixService: KiwixService = mockk()
-  private val application: Application = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val application: Application = mockk(relaxed = true)
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk(relaxed = true)
   private val fat32Checker: Fat32Checker = mockk()
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
@@ -139,7 +140,7 @@ class ZimManageViewModelTest {
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
   private val testDispatcher = StandardTestDispatcher()
-  private val onlineLibraryManager = mockk<OnlineLibraryManager>()
+  private val onlineLibraryManager = mockk<OnlineLibraryManager>(relaxed = true)
 
   @AfterAll
   fun teardown() {
@@ -147,7 +148,6 @@ class ZimManageViewModelTest {
     Dispatchers.resetMain()
   }
 
-  @Suppress("LongMethod")
   @BeforeEach
   @Suppress("LongMethod")
   fun init() {
@@ -169,16 +169,16 @@ class ZimManageViewModelTest {
       @Suppress("UnspecifiedRegisterReceiverFlag")
       every { application.registerReceiver(any(), any()) } returns mockk()
     }
-    every { application.getString(any<Int>()) } returns ""
-    every { application.getString(any<Int>(), *anyVararg()) } returns ""
+    every { application.getString(any()) } returns ""
+    every { application.getString(any(), any()) } returns ""
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
-    every { kiwixDataStore.wifiOnly } returns flowOf(true)
-    every { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
-    every { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
+    coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
+    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
+    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
     every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
     every {
       onlineLibraryManager.buildLibraryUrl(
@@ -409,12 +409,10 @@ class ZimManageViewModelTest {
             )
           )
         }
-        cancelAndConsumeRemainingEvents()
       }
     }
   }
 
-  @Suppress("LongMethod")
   @Test
   @Suppress("LongMethod", "MaxLineLength")
   fun `library marks files over 4GB as can't download if file system state says to`() = flakyTest {
@@ -425,10 +423,9 @@ class ZimManageViewModelTest {
           url = "",
           size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
         )
-      every { application.getString(any()) } answers { "" }
-      every { application.getString(any(), any()) } answers { "" }
-      every { application.getString(any(), *anyVararg()) } answers { "" }
-
+      every { application.getString(any()) } returns "All languages"
+      every { application.getString(any(), any()) } returns "All languages"
+      every { application.getString(any(), *anyVararg()) } returns "All languages"
       // test libraryItems fetches for all language.
       viewModel.libraryItems.test {
         coEvery {
@@ -442,6 +439,7 @@ class ZimManageViewModelTest {
         fileSystemStates.emit(CannotWrite4GbFile)
         advanceUntilIdle()
 
+        awaitItem()
         val item = awaitItem()
         val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
         if (bookItem?.fileSystemState == CannotWrite4GbFile) {
@@ -460,7 +458,8 @@ class ZimManageViewModelTest {
         coEvery {
           onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
         } returns arrayListOf(bookOver4Gb)
-        every { application.getString(any(), any()) } answers { "Selected language: English" }
+        every { application.getString(any(), any()) } returns "Selected language: English"
+        every { application.getString(any(), *anyVararg()) } returns "Selected language: English"
         networkStates.value = CONNECTED
         downloads.value = listOf()
         books.value = listOf()
@@ -518,7 +517,6 @@ class ZimManageViewModelTest {
             )
           )
         }
-        cancelAndConsumeRemainingEvents()
       }
     }
   }
@@ -708,6 +706,13 @@ suspend fun <T> TestScope.testFlow(
     }
   }
   job.join()
+}
+
+suspend inline fun <reified T> ReceiveTurbine<*>.awaitItemOfType(): T {
+  while (true) {
+    val item = awaitItem()
+    if (item is T) return item
+  }
 }
 
 class BookTestWrapper(private val id: String) : Book(0L) {

@@ -74,6 +74,7 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_OPDS_LIBRARY_URL
@@ -135,7 +136,7 @@ class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
-  private var kiwixService: KiwixService,
+  @OPDSKiwixService private var kiwixService: KiwixService,
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val fat32Checker: Fat32Checker,
