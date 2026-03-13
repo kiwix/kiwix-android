@@ -7,3 +7,4 @@ include(
   ":defaultmigration"
 )
 rootProject.name = "kiwix-android"
+include(":benchmark")
