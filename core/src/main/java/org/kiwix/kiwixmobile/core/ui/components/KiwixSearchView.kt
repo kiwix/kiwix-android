@@ -19,21 +19,28 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -43,9 +50,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
+@Suppress("LongMethod")
 @Composable
 fun KiwixSearchView(
   modifier: Modifier = Modifier,
@@ -63,53 +72,93 @@ fun KiwixSearchView(
     Color.DarkGray
   }
   val keyboardController = LocalSoftwareKeyboardController.current
-  val colors = TextFieldDefaults.colors(
-    focusedIndicatorColor = Color.Transparent,
-    unfocusedIndicatorColor = Color.Transparent,
-    focusedContainerColor = Color.Transparent,
-    disabledContainerColor = Color.Transparent,
-    unfocusedContainerColor = Color.Transparent,
-    focusedTextColor = MaterialTheme.colorScheme.onBackground
-  )
-  val focusRequester = FocusRequester()
-  SideEffect(focusRequester::requestFocus)
-  TextField(
+  val focusRequester = remember { FocusRequester() }
+
+  LaunchedEffect(focusRequester) {
+    focusRequester.requestFocus()
+  }
+
+  val textFieldValue = rememberTextFieldState()
+
+  // For OnSearchKiwix and Voice Search Set Cursor at the end
+  LaunchedEffect(value) {
+    val current = textFieldValue.text.toString()
+
+    if (current != value) {
+      textFieldValue.edit {
+        replace(0, length, value)
+      }
+    }
+  }
+
+  LaunchedEffect(Unit) {
+    snapshotFlow { textFieldValue.text.toString() }
+      .distinctUntilChanged()
+      .collect { newText ->
+        if (newText != value) {
+          onValueChange(newText)
+        }
+      }
+  }
+
+  BasicTextField(
+    state = textFieldValue,
     modifier = modifier
       .testTag(searchViewTextFiledTestTag)
-      .minimumInteractiveComponentSize()
       .focusRequester(focusRequester)
       .semantics { contentDescription = placeholder },
-    singleLine = true,
-    value = value,
-    placeholder = {
-      Text(
-        text = placeholder,
-        color = hintColor,
-        fontSize = ComposeDimens.EIGHTEEN_SP,
-        maxLines = ONE,
-        overflow = Ellipsis
-      )
-    },
-    colors = colors,
-    textStyle = TextStyle.Default.copy(fontSize = ComposeDimens.EIGHTEEN_SP),
-    onValueChange = { onValueChange(it.replace("\n", "")) },
-    trailingIcon = {
-      if (value.isNotEmpty()) {
-        IconButton(onClick = onClearClick, modifier = Modifier.testTag(clearButtonTestTag)) {
-          Icon(
-            painter = painterResource(R.drawable.ic_clear_white_24dp),
-            tint = MaterialTheme.colorScheme.onBackground,
-            contentDescription = stringResource(R.string.searchview_description_clear)
-          )
+    lineLimits = TextFieldLineLimits.SingleLine,
+    decorator = { innerTextField ->
+
+      Row(
+        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Box(
+          modifier = Modifier.weight(1f),
+          contentAlignment = Alignment.CenterStart
+        ) {
+          innerTextField()
+
+          if (textFieldValue.text.isEmpty()) {
+            Text(
+              text = placeholder,
+              color = hintColor,
+              fontSize = ComposeDimens.EIGHTEEN_SP,
+              maxLines = ONE,
+              overflow = Ellipsis
+            )
+          }
+        }
+
+        if (textFieldValue.text.isNotEmpty()) {
+          IconButton(
+            onClick = {
+              textFieldValue.edit {
+                replace(0, length, "")
+              }
+              onClearClick()
+            },
+            modifier = Modifier.testTag(clearButtonTestTag)
+          ) {
+            Icon(
+              painter = painterResource(R.drawable.ic_clear_white_24dp),
+              tint = MaterialTheme.colorScheme.onBackground,
+              contentDescription = stringResource(R.string.searchview_description_clear)
+            )
+          }
         }
       }
     },
+    cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+    textStyle = TextStyle.Default.copy(
+      fontSize = ComposeDimens.EIGHTEEN_SP,
+      color = MaterialTheme.colorScheme.onBackground
+    ),
     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-    keyboardActions = KeyboardActions(
-      onDone = {
-        keyboardController?.hide()
-        onKeyboardSubmitButtonClick.invoke(value)
-      }
-    )
+    onKeyboardAction = {
+      keyboardController?.hide()
+      onKeyboardSubmitButtonClick(textFieldValue.text.toString())
+    }
   )
 }
