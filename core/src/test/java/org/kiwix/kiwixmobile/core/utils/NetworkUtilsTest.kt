@@ -146,6 +146,38 @@ class NetworkUtilsTest {
   }
 
   @Test
+  fun `getFileNameFromUrl handles query at beginning`() {
+    val result = NetworkUtils.getFileNameFromUrl("?query=test")
+
+    // Since there is no filename, UUID should be generated
+    assertTrue(result.isNotEmpty())
+  }
+
+  @Test
+  fun `parseURL returns empty when beginIndex greater than endIndex`() {
+    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
+    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
+    every { context.getString(R.string.zim_simple) } returns "Simple"
+
+    val url = "http://example.com/file_a_2020.zim"
+
+    val result = NetworkUtils.parseURL(context, url)
+
+    assertEquals("", result)
+  }
+
+  @Test
+  fun `parseURL handles malformed url and catches exception`() {
+    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
+    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
+    every { context.getString(R.string.zim_simple) } returns "Simple"
+
+    val result = NetworkUtils.parseURL(context, "http://example.com/_")
+
+    assertEquals("", result)
+  }
+
+  @Test
   fun testParsedURL() {
     every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
     every { context.getString(R.string.zim_no_vid) } returns "No Videos"
