@@ -52,7 +52,7 @@ import org.kiwix.kiwixmobile.core.R
 import android.view.inputmethod.InputMethodManager
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
@@ -142,9 +142,9 @@ fun computeNoteMetadata(
     (if (name.isNotEmpty()) name else zimFileTitle).orEmpty()
   }
 
-  val articleNoteFileName = noteListItem?.noteFilePath?.let {
-    getTextAfterLastSlashWithoutExtension(it)
-  } ?: run {
+  val articleNoteFileName = if (noteListItem?.noteFilePath != null) {
+    getTextAfterLastSlashWithoutExtension(noteListItem.noteFilePath)
+  } else {
     val url = config.currentWebViewUrl
     val name = if (url != null) getTextAfterLastSlashWithoutExtension(url) else ""
     name.ifEmpty { articleTitle }.orEmpty()
