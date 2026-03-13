@@ -24,7 +24,7 @@ import android.app.Activity
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.FragmentManager
+
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -64,7 +64,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
   private val storageCalculator: StorageCalculator = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
-  private val fragmentManager: FragmentManager = mockk(relaxed = true)
+
   private val selectedZimFileCallback: SelectedZimFileCallback = mockk(relaxed = true)
 
   private lateinit var testScope: TestScope
@@ -89,7 +89,6 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       testScope,
       alertDialogShower,
       snackBarHostState,
-      fragmentManager,
       selectedZimFileCallback
     )
 
@@ -135,9 +134,9 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
       advanceUntilIdle()
+
       coVerify(exactly = 0) {
         copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
-          any(),
           any(),
           any(),
           any(),
@@ -155,12 +154,12 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
       advanceUntilIdle()
+
       coVerify {
         copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
           uri,
           documentFile,
           false,
-          fragmentManager,
           null,
           true
         )
@@ -186,6 +185,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
       advanceUntilIdle()
+
       verify { activity.toast("Invalid file", any()) }
     }
 
@@ -197,7 +197,6 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       coEvery {
         copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
-          any(),
           any(),
           any(),
           any(),
@@ -226,12 +225,12 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
     advanceUntilIdle()
+
     coVerify {
       copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
         uri,
         documentFile,
         false,
-        fragmentManager,
         null,
         true
       )
@@ -248,12 +247,12 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
     advanceUntilIdle()
+
     coVerify {
       copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
         uri,
         documentFile,
         false,
-        fragmentManager,
         null,
         true
       )
@@ -267,6 +266,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     every { file.path } returns "/storage/test.zim"
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
+    advanceUntilIdle()
 
     processSelectedZimFiles.onFileCopied(file)
 
@@ -280,6 +280,8 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     every { file.path } returns "/storage/test.zim"
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
+    advanceUntilIdle()
+
     processSelectedZimFiles.onFileMoved(file)
 
     verify { selectedZimFileCallback.navigateToReaderFragment(file) }
@@ -292,6 +294,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     every { activity.toast(any<String>(), any()) } just Runs
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
+    advanceUntilIdle()
 
     processSelectedZimFiles.onError(errorMessage)
 
@@ -309,6 +312,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     } just Runs
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri1, uri2), isAfterRetry = true)
+    advanceUntilIdle()
 
     processSelectedZimFiles.onError(errorMessage)
 

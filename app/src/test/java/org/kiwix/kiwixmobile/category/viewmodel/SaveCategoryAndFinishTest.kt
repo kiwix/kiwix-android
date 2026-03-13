@@ -18,10 +18,8 @@
 
 package org.kiwix.kiwixmobile.category.viewmodel
 
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.TestScope
@@ -37,14 +35,12 @@ class SaveCategoryAndFinishTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
-    every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
-    every { onBackPressedDispatcher.onBackPressed() } answers { }
+    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(category, kiwixDataStore, lifeCycleScope).invokeWith(activity)
+    SaveCategoryAndFinish(category, kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
     testScheduler.advanceUntilIdle()
-    verify { onBackPressedDispatcher.onBackPressed() }
+    verify { onDismiss() }
   }
 }

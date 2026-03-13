@@ -138,8 +138,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
         clickOnCopy(composeTestRule)
-        assertStorageSelectionDialogDisplayed(composeTestRule)
-        clickOnInternalStorage(composeTestRule)
+        selectInternalStorageIfDialogShown(composeTestRule)
         assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
@@ -204,8 +203,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
         clickOnMove(composeTestRule)
-        assertStorageSelectionDialogDisplayed(composeTestRule)
-        clickOnInternalStorage(composeTestRule)
+        selectInternalStorageIfDialogShown(composeTestRule)
         assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
