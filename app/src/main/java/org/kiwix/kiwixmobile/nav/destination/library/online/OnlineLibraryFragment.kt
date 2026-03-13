@@ -794,7 +794,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onSelectAction = ::storeDeviceInPreferences
         titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
         setStorageDeviceList(storageDeviceList)
-        setShouldShowCheckboxSelected(false)
+        setShouldShowStorageSelected(false)
       }
       .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 
