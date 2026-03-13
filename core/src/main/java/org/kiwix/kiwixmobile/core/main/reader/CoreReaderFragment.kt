@@ -1540,7 +1540,8 @@ abstract class CoreReaderFragment :
       }
       val title = webView.title ?: "Article"
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
-      val cacheDir = FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
+      val cacheDir =
+        FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
       val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
       if (pdfFile.isFileExist()) {
         pdfFile.deleteFile()
