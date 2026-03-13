@@ -473,7 +473,7 @@ private fun LazyListScope.storageCategory(
 ) {
   if (!settingsUiState.shouldShowStorageCategory) return
   item {
-    SettingsCategory(stringResource(R.string.pref_storage)) {
+    SettingsCategory(stringResource(R.string.pref_storage), showBottomDivider = false) {
       if (settingsUiState.isLoadingStorageDetails) {
         StorageLoadingPreference()
       } else {
@@ -578,7 +578,11 @@ fun AppThemePreference(
 }
 
 @Composable
-private fun SettingsCategory(title: String, content: @Composable ColumnScope.() -> Unit) {
+private fun SettingsCategory(
+  title: String,
+  showBottomDivider: Boolean = true,
+  content: @Composable ColumnScope.() -> Unit
+) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
@@ -593,10 +597,12 @@ private fun SettingsCategory(title: String, content: @Composable ColumnScope.() 
       Spacer(modifier = Modifier.padding(vertical = FIVE_DP))
       content()
     }
-    HorizontalDivider(
-      thickness = ONE_DP,
-      modifier = Modifier.padding(vertical = FIVE_DP)
-    )
+    if (showBottomDivider) {
+      HorizontalDivider(
+        thickness = ONE_DP,
+        modifier = Modifier.padding(vertical = FIVE_DP)
+      )
+    }
   }
 }
 
