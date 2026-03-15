@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,11 +37,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
@@ -52,6 +62,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
@@ -60,6 +71,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 @HiltViewModel
@@ -76,7 +88,7 @@ open class LanguageViewModel @Inject constructor(
   private val coroutineJobs = mutableListOf<Job>()
 
   @VisibleForTesting
-  var isUnitTestCase: Boolean = isTest
+  var isUnitTestCase: Boolean = false
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -203,7 +215,18 @@ open class LanguageViewModel @Inject constructor(
       is Filter -> filter(action, currentState)
       is Select -> select(action, currentState)
       Save -> saveAction(currentState)
+      Cancel -> cancel(currentState)
     }
+  }
+
+  private fun cancel(currentState: State): State {
+    if (currentState !is Content) return currentState
+    effects.tryEmit(object : SideEffect<Unit> {
+      override fun invokeWith(activity: AppCompatActivity) {
+        activity.onBackPressedDispatcher.onBackPressed()
+      }
+    })
+    return currentState
   }
 
   private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
