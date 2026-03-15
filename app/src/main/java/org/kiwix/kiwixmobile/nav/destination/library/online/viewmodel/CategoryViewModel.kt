@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -34,11 +35,21 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -46,6 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Cancel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Select
@@ -54,6 +66,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryLi
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class CategoryViewModel @Inject constructor(
@@ -67,7 +80,7 @@ class CategoryViewModel @Inject constructor(
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
 
   @VisibleForTesting
-  var isUnitTestCase: Boolean = isTest
+  var isUnitTestCase: Boolean = false
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
@@ -170,6 +183,7 @@ class CategoryViewModel @Inject constructor(
       is Filter -> filter(action, currentState)
       is Select -> select(action, currentState)
       Action.Save -> saveAction(currentState)
+      Action.Cancel -> cancel(currentState)
     }
   }
 

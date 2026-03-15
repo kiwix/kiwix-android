@@ -217,7 +217,6 @@ class CategoryViewModelTest {
 
       advanceUntilIdle() // Wait for coroutines to settle
 
-
       categoryViewModel.state.test {
         val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("Error")
@@ -298,7 +297,7 @@ class CategoryViewModelTest {
       createViewModel()
       val categories = listOf(Category(1, false, "Test"))
       categoryViewModel.state.test {
-        val item = awaitItem()
+        awaitItem()
         categoryViewModel.state.value = Loading
         categoryViewModel.actions.emit(UpdateCategory(categories))
         advanceUntilIdle()
@@ -325,7 +324,7 @@ class CategoryViewModelTest {
 
       categoryViewModel.state.value = Content(categories)
       categoryViewModel.state.test {
-        val item = awaitItem()
+        awaitItem()
         categoryViewModel.actions.emit(Action.Filter("wiki"))
         advanceUntilIdle()
         val content = awaitItemOfType<Content>()
