@@ -68,10 +68,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
-import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
-import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_OPDS_LIBRARY_URL
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -92,15 +89,15 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zimManager.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -127,7 +124,7 @@ open class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
-  @OPDSKiwixService private var kiwixService: KiwixService,
+  @OPDSKiwixService private val initialKiwixService: KiwixService,
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val fat32Checker: Fat32Checker,
@@ -141,6 +138,7 @@ open class ZimManageViewModel @Inject constructor(
     object ScrollToTop : OnlineLibraryUiEvent()
   }
 
+  private var kiwixService: KiwixService = initialKiwixService
   private lateinit var validateZimViewModel: ValidateZimViewModel
 
   @Suppress("InjectDispatcher")
@@ -208,6 +206,10 @@ open class ZimManageViewModel @Inject constructor(
   init {
     observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
+  }
+
+  private suspend fun sendUiEvent(event: OnlineLibraryUiEvent) {
+    _onlineLibraryEvent.emit(event)
   }
 
   fun setValidateZimViewModel(validateZimViewModel: ValidateZimViewModel) {
