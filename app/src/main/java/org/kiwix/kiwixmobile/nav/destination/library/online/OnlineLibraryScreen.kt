@@ -18,6 +18,11 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,11 +50,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -57,14 +68,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
@@ -72,6 +87,7 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_MESSAGE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESSBAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN
@@ -96,12 +112,14 @@ const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
 const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 const val LOAD_MORE_DELAY = 150L
+private const val BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD = 200
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
+  isBackToTopEnabled: Boolean,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
@@ -132,6 +150,11 @@ fun OnlineLibraryScreen(
           searchBar = searchBarIfActive(state)
         )
       },
+      floatingActionButton = {
+        if (isBackToTopEnabled) {
+          OnlineLibraryBackToTopButton(listState)
+        }
+      },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
         .let { baseModifier ->
@@ -156,6 +179,53 @@ fun OnlineLibraryScreen(
         OnlineLibraryScreenContent(state, listState)
       }
     }
+  }
+}
+
+@Composable
+private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
+  val coroutineScope = rememberCoroutineScope()
+  var shouldShowBackToTopButton by remember { mutableStateOf(false) }
+
+  LaunchedEffect(listState) {
+    var hideBackToTopJob: Job? = null
+    snapshotFlow {
+      listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
+    }
+      .distinctUntilChanged()
+      .collect { (firstVisibleItemIndex, firstVisibleItemScrollOffset) ->
+        val shouldShowButton =
+          firstVisibleItemIndex > ZERO ||
+            firstVisibleItemScrollOffset > BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD
+
+        hideBackToTopJob?.cancel()
+        if (shouldShowButton) {
+          shouldShowBackToTopButton = true
+          hideBackToTopJob = launch {
+            delay(BACK_TO_TOP_HIDE_DELAY_MS)
+            shouldShowBackToTopButton = false
+          }
+        } else {
+          shouldShowBackToTopButton = false
+        }
+      }
+  }
+
+  AnimatedVisibility(
+    visible = shouldShowBackToTopButton,
+    enter = fadeIn() + scaleIn(),
+    exit = fadeOut() + scaleOut()
+  ) {
+    KiwixFloatingActionButton(
+      icon = painterResource(id = org.kiwix.kiwixmobile.core.R.drawable.ic_arrow_upward_24dp),
+      onClick = {
+        coroutineScope.launch {
+          listState.animateScrollToItem(ZERO)
+        }
+      },
+      contentDescription = stringResource(string.pref_back_to_top),
+      shouldPulse = true
+    )
   }
 }
 
