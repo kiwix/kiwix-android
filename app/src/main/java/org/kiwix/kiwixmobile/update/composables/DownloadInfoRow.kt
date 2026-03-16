@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
@@ -49,7 +50,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.getDownloadedSizeTex
 import org.kiwix.kiwixmobile.update.getDownloadApkStateText
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
-@Suppress("all")
+const val APK_CANCEL_BUTTON_TESTING_TAG = "APKCancelButtonTestingTag"
+
 @Composable
 fun DownloadInfoRow(
   state: UpdateStates,
@@ -61,8 +63,8 @@ fun DownloadInfoRow(
   LaunchedEffect(downloadState) {
     if (downloadState == Status.FAILED) {
       when (errorState) {
-        com.tonyodev.fetch2.Error.UNKNOWN_IO_ERROR,
-        com.tonyodev.fetch2.Error.CONNECTION_TIMED_OUT,
+        Error.UNKNOWN_IO_ERROR,
+        Error.CONNECTION_TIMED_OUT,
         Error.UNKNOWN -> {
           // Only retrigger the download for CONNECTION_TIMED_OUT or UNKNOWN_IO_ERROR.
           // For other errors (e.g., REQUEST_DOES_NOT_EXIST, EMPTY_RESPONSE_FROM_SERVER, REQUEST_NOT_SUCCESSFUL),
@@ -76,7 +78,14 @@ fun DownloadInfoRow(
       }
     }
   }
+  DownloadBar(state, onCancel)
+}
 
+@Composable
+fun DownloadBar(
+  state: UpdateStates,
+  onCancel: () -> Unit
+) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -116,6 +125,7 @@ fun DownloadInfoRow(
     IconButton(
       onClick = onCancel,
       modifier = Modifier
+        .testTag(APK_CANCEL_BUTTON_TESTING_TAG)
         .minimumInteractiveComponentSize()
         .padding(horizontal = TWO_DP)
     ) {
