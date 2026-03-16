@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.reader
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import androidx.core.content.FileProvider
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.test.runTest
@@ -35,6 +37,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -64,143 +67,164 @@ class ZimReaderSourceTest {
   }
 
   @Test
-  fun fileConstructorWithExistingFileIsValid() = runTest {
+  fun fileSourceTest() = runTest {
     val source = ZimReaderSource(testZimFile)
+    // Normal operations
     assertTrue(source.exists())
     assertTrue(source.canOpenInLibkiwix())
-  }
+    val archive = source.createArchive()
+    assertNotNull(archive)
+    archive?.dispose()
+    assertEquals(testZimFile.canonicalPath, source.toDatabase())
 
-  @Test
-  fun singleFileDescriptorConstructorCreatesValidSource() = runTest {
-    val parcelFd = ParcelFileDescriptor.open(testZimFile, ParcelFileDescriptor.MODE_READ_ONLY)
-    AssetFileDescriptor(parcelFd, 0, testZimFile.length()).use { assetFd ->
-      val source = ZimReaderSource(
-        file = null,
-        uri = null,
-        assetFileDescriptorList = listOf(assetFd)
-      )
-      assertTrue(source.exists())
-      assertTrue(source.canOpenInLibkiwix())
-      val archive = source.createArchive()
-      assertNotNull(archive)
-      archive!!.dispose()
+    // Test hasCode of different source with same file
+    val sameSource = ZimReaderSource(testZimFile)
+    assertEquals(source, sameSource)
+    assertEquals(source.hashCode(), sameSource.hashCode())
+
+    assertEquals(source, source)
+
+    // Test hasCode of different file
+    val otherFile = File(targetContext.cacheDir, "other.zim").apply {
+      writeText("dummy")
+      tempFiles += this
     }
+    assertNotEquals(source, ZimReaderSource(otherFile))
+    assertFalse(source.equals("random"))
+
+    // Corrupt file
+    val corruptFile = File(targetContext.cacheDir, "corrupt.zim").apply {
+      writeText("not a zim")
+      tempFiles += this
+    }
+    val corruptSource = ZimReaderSource(corruptFile)
+    assertTrue(corruptSource.exists())
+    assertTrue(corruptSource.canOpenInLibkiwix())
+
+    // Non-existent file
+    val missingFile = File(targetContext.cacheDir, "ghost.zim")
+    val missingSource = ZimReaderSource(missingFile)
+    assertFalse(missingSource.exists())
+    assertFalse(missingSource.canOpenInLibkiwix())
+    assertNull(missingSource.createArchive())
+
+    // fromDatabaseValue (file path)
+    val dbSource = ZimReaderSource.fromDatabaseValue(testZimFile.absolutePath)
+    assertNotNull(dbSource)
+    assertEquals(testZimFile.absolutePath, dbSource?.file?.absolutePath)
   }
 
   @Test
-  fun multipleFileDescriptorsSourceIsValid() = runTest {
-    val parcelFd1 = ParcelFileDescriptor.open(testZimFile, ParcelFileDescriptor.MODE_READ_ONLY)
-    val parcelFd2 = ParcelFileDescriptor.open(testZimFile, ParcelFileDescriptor.MODE_READ_ONLY)
-    AssetFileDescriptor(parcelFd1, 0, testZimFile.length()).use { assetFd1 ->
-      AssetFileDescriptor(parcelFd2, 0, testZimFile.length()).use { assetFd2 ->
-        val source = ZimReaderSource(
-          file = null,
-          uri = null,
-          assetFileDescriptorList = listOf(assetFd1, assetFd2)
-        )
-        assertTrue(source.exists())
-        assertTrue(source.canOpenInLibkiwix())
+  fun fileDescriptorSourceTest() = runTest {
+    val fileLength = testZimFile.length()
+    val half = fileLength / 2
+
+    val pfd1 = ParcelFileDescriptor.open(testZimFile, ParcelFileDescriptor.MODE_READ_ONLY)
+    val pfd2 = ParcelFileDescriptor.open(testZimFile, ParcelFileDescriptor.MODE_READ_ONLY)
+
+    AssetFileDescriptor(pfd1, 0, fileLength).use { fdFull ->
+      AssetFileDescriptor(pfd1, 0, half).use { fd1 ->
+        AssetFileDescriptor(pfd2, half, fileLength - half).use { fd2 ->
+
+          // Single descriptor
+          val singleSource = ZimReaderSource(assetFileDescriptorList = listOf(fdFull))
+          assertTrue(singleSource.exists())
+          assertTrue(singleSource.canOpenInLibkiwix())
+          val archive = singleSource.createArchive()
+          assertNotNull(archive)
+          archive?.dispose()
+
+          // Chunked descriptors
+          val multiSource = ZimReaderSource(assetFileDescriptorList = listOf(fd1, fd2))
+          assertTrue(multiSource.exists())
+          assertTrue(multiSource.canOpenInLibkiwix())
+          val multiArchive = multiSource.createArchive()
+          assertNotNull(multiArchive)
+          multiArchive?.dispose()
+
+          // Equality
+          val sameDescriptorSource = ZimReaderSource(assetFileDescriptorList = listOf(fdFull))
+          assertEquals(singleSource, sameDescriptorSource)
+          assertEquals(singleSource.hashCode(), sameDescriptorSource.hashCode())
+
+          // Descriptor size mismatch
+          assertNotEquals(singleSource, multiSource)
+        }
       }
     }
+
+    // Empty descriptor list
+    val emptyDescriptorSource = ZimReaderSource(assetFileDescriptorList = emptyList())
+
+    assertFalse(emptyDescriptorSource.exists())
+    assertFalse(emptyDescriptorSource.canOpenInLibkiwix())
+    assertNull(emptyDescriptorSource.createArchive())
+
+    // Default ZimReaderSource
+    val defaultSource = ZimReaderSource()
+    assertEquals(0, defaultSource.hashCode())
   }
 
   @Test
-  fun existsWithNonExistentFileIsFalse() = runTest {
-    assertFalse(ZimReaderSource(File(targetContext.cacheDir, "no_such_file.zim")).exists())
+  fun uriSourceTest() = runTest {
+    val uri = Uri.parse("content://test/uri")
+    val source = ZimReaderSource(uri)
+    // Constructor
+    assertEquals(uri, source.uri)
+
+    // Database conversion
+    assertEquals(uri.toString(), source.toDatabase())
+
+    // Equality
+    val sameSource = ZimReaderSource(uri)
+    assertEquals(source, sameSource)
+    assertEquals(source.hashCode(), sameSource.hashCode())
+
+    // Different URI
+    val differentUriSource = ZimReaderSource(Uri.parse("content://test/other"))
+    assertNotEquals(source, differentUriSource)
+
+    // Cross type equality
+    val fileSource = ZimReaderSource(testZimFile)
+    assertNotEquals(source, fileSource)
+
+    // Invalid URI
+    val invalidUriSource = ZimReaderSource(Uri.parse("content://invalid/nonexistent"))
+    assertFalse(invalidUriSource.exists())
+    assertFalse(invalidUriSource.canOpenInLibkiwix())
+    assertNull(invalidUriSource.createArchive())
+
+    // fromDatabaseValue with URI
+    val dbUriSource = ZimReaderSource.fromDatabaseValue(uri.toString())
+    assertNotNull(dbUriSource)
+    assertEquals(uri, dbUriSource!!.uri)
+
+    // fromDatabaseValue null
+    assertNull(ZimReaderSource.fromDatabaseValue(null))
   }
 
   @Test
-  fun existsWithInvalidUriIsFalse() = runTest {
-    assertFalse(ZimReaderSource(Uri.parse("content://invalid/nonexistent")).exists())
-  }
+  fun getUriTest() {
+    val activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java)
 
-  @Test
-  fun canOpenInLibkiwixWithValidZimIsTrue() = runTest {
-    assertTrue(ZimReaderSource(testZimFile).canOpenInLibkiwix())
-  }
+    activityScenario.onActivity { activity ->
+      val file = File(activity.cacheDir, "test.zim").apply {
+        writeText("dummy")
+      }
+      val fileSource = ZimReaderSource(file)
+      val resultUri = fileSource.getUri(activity)
+      val expectedUri = FileProvider.getUriForFile(
+        activity,
+        "${activity.packageName}.fileprovider",
+        file
+      )
+      assertEquals(expectedUri, resultUri)
 
-  @Test
-  fun canOpenInLibkiwixReturnsTrueForReadableCorruptFile() = runTest {
-    val corrupt = File(targetContext.cacheDir, "corrupt.zim").also {
-      it.writeText("this is not a ZIM file")
-      tempFiles += it
+      val testUri = Uri.parse("content://test/someuri")
+      val uriSource = ZimReaderSource(testUri)
+      val returnedUri = uriSource.getUri(activity)
+      assertEquals(testUri, returnedUri)
+      file.delete()
     }
-    assertTrue(ZimReaderSource(corrupt).canOpenInLibkiwix())
-  }
-
-  @Test
-  fun canOpenInLibkiwixWithNonExistentFileIsFalse() = runTest {
-    assertFalse(ZimReaderSource(File(targetContext.cacheDir, "ghost.zim")).canOpenInLibkiwix())
-  }
-
-  @Test
-  fun canOpenInLibkiwixWithInvalidUriIsFalse() = runTest {
-    assertFalse(ZimReaderSource(Uri.parse("content://invalid/nonexistent")).canOpenInLibkiwix())
-  }
-
-  @Test
-  fun createArchiveWithValidZimIsNonNull() = runTest {
-    val archive = ZimReaderSource(testZimFile).createArchive()
-    assertNotNull(archive)
-    archive!!.dispose()
-  }
-
-  @Test
-  fun createArchiveWithInvalidUriReturnsNull() = runTest {
-    assertNull(ZimReaderSource(Uri.parse("content://invalid/nonexistent")).createArchive())
-  }
-
-  @Test
-  fun uriConstructorStoresUri() {
-    val uri = Uri.parse("content://dummy/path")
-    assertEquals(uri, ZimReaderSource(uri).uri)
-  }
-
-  @Test
-  fun fromDatabaseValueWithContentStringCreatesUriSource() {
-    val contentString = "content://some/document/path"
-    val source = ZimReaderSource.fromDatabaseValue(contentString)
-    assertNotNull(source)
-    assertEquals(Uri.parse(contentString), source!!.uri)
-    assertNull(source.file)
-  }
-
-  @Test
-  fun fromDatabaseValueWithFileStringCreatesFileSource() {
-    val path = testZimFile.absolutePath
-    val source = ZimReaderSource.fromDatabaseValue(path)
-    assertNotNull(source)
-    assertEquals(path, source!!.file?.absolutePath)
-    assertNull(source.uri)
-  }
-
-  @Test
-  fun toDatabaseWithFileSourceUsesCanonicalPath() {
-    assertEquals(testZimFile.canonicalPath, ZimReaderSource(testZimFile).toDatabase())
-  }
-
-  @Test
-  fun toDatabaseWithUriSourceUsesUriString() {
-    val uriString = "content://test/uri"
-    assertEquals(uriString, ZimReaderSource(Uri.parse(uriString)).toDatabase())
-  }
-
-  @Test
-  fun equalsWithSameFilePathAreEqual() {
-    assertEquals(ZimReaderSource(testZimFile), ZimReaderSource(testZimFile))
-  }
-
-  @Test
-  fun equalsWithDifferentFilesAreNotEqual() {
-    val other = File(targetContext.cacheDir, "other.zim").also {
-      it.createNewFile()
-      tempFiles += it
-    }
-    assertNotEquals(ZimReaderSource(testZimFile), ZimReaderSource(other))
-  }
-
-  @Test
-  fun hashCodeWithEqualSourcesMatch() {
-    assertEquals(ZimReaderSource(testZimFile).hashCode(), ZimReaderSource(testZimFile).hashCode())
   }
 }

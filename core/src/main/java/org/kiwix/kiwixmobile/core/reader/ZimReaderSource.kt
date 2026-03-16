@@ -70,8 +70,9 @@ class ZimReaderSource(
   suspend fun canOpenInLibkiwix(): Boolean {
     return when {
       file?.canReadFile() == true -> true
-      assetFileDescriptorList?.first()?.parcelFileDescriptor?.fd
-        ?.let(::isFileDescriptorCanOpenWithLibkiwix) == true -> true
+      assetFileDescriptorList?.isNotEmpty() == true &&
+        assetFileDescriptorList.first().parcelFileDescriptor?.fd
+          ?.let(::isFileDescriptorCanOpenWithLibkiwix) == true -> true
 
       else -> false
     }

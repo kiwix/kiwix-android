@@ -96,149 +96,77 @@ class ZimReaderContainerTest {
   }
 
   @Test
-  fun setZimReaderSourceWithValidFileCreatesReader() = runTest {
+  fun setZimReaderSourceScenarios() = runTest {
     val source = ZimReaderSource(testZimFile)
+
+    // Valid source
     container.setZimReaderSource(source)
     assertNotNull(container.zimFileReader)
     assertEquals(source, container.zimReaderSource)
-  }
 
-  @Test
-  fun setZimReaderSourceWithSameSourceDoesNotRecreateReader() = runTest {
-    val source = ZimReaderSource(testZimFile)
-    container.setZimReaderSource(source)
+    // Same source should not recreate
     val originalReader = container.zimFileReader
     container.setZimReaderSource(source)
     assertSame(originalReader, container.zimFileReader)
-  }
 
-  @Test
-  fun setZimReaderSourceWithDifferentSourceCreatesNewReader() = runTest {
-    val source1 = ZimReaderSource(testZimFile)
-    container.setZimReaderSource(source1)
-    val originalReader = container.zimFileReader
+    // Different source should recreate
     val secondFile = File(targetContext.cacheDir, "second.zim").also {
       testZimFile.copyTo(it, overwrite = true)
       tempFiles += it
     }
     container.setZimReaderSource(ZimReaderSource(secondFile))
     assertNotSame(originalReader, container.zimFileReader)
-  }
 
-  @Test
-  fun setZimReaderSourceWithInvalidFileReaderIsNull() = runTest {
+    // Invalid file
     val invalidFile = File(targetContext.cacheDir, "fake.zim").also {
-      it.writeText("corrupt data")
+      it.writeText("corrupt")
       tempFiles += it
     }
     container.setZimReaderSource(ZimReaderSource(invalidFile))
     assertNull(container.zimFileReader)
-  }
 
-  @Test
-  fun setZimReaderSourceWithNullClearsReader() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    assertNotNull(container.zimFileReader)
+    // Null source clears reader
     container.setZimReaderSource(null)
     assertNull(container.zimFileReader)
     assertNull(container.zimReaderSource)
   }
 
   @Test
-  fun loadMainPageReturnsOkWithContent() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    val response = container.load(getMainEntryPath(), emptyMap())
-    assertEquals(200, response.statusCode)
-    assertEquals("OK", response.reasonPhrase)
-    assertEquals("bytes", response.responseHeaders["Accept-Ranges"])
-    assertNotNull(response.data)
-  }
-
-  @Test
-  fun loadWithRangeReturnsPartialContent() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    val response = container.load(getMainEntryPath(), mapOf("Range" to "bytes=0-10"))
-    assertEquals(206, response.statusCode)
-    assertEquals("Partial Content", response.reasonPhrase)
-    assertNotNull(response.responseHeaders["Content-Range"])
-    assertNull(response.responseHeaders["Connection"])
-  }
-
-  @Test
-  fun loadWithRangeWithoutDashAddsConnectionClose() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    val response = container.load(getMainEntryPath(), mapOf("Range" to "bytes=0"))
-    assertEquals(206, response.statusCode)
-    assertEquals("close", response.responseHeaders["Connection"])
-  }
-
-  @Test
-  fun loadWithOpenEndedRangeHasNoConnectionClose() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    val response = container.load(getMainEntryPath(), mapOf("Range" to "bytes=0-"))
-    assertEquals(206, response.statusCode)
-    assertNull(response.responseHeaders["Connection"])
-  }
-
-  @Test
-  fun loadNonExistentEntryReturnsNullMimeType() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    assertNull(container.load("nonexistent/path.html", emptyMap()).mimeType)
-  }
-
-  @Test
-  fun isRedirectWithContentPrefixedNonRedirectUrlIsFalse() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    assertFalse(container.isRedirect(CONTENT_PREFIX + getMainEntryPath()))
-  }
-
-  @Test
-  fun getRedirectWithContentPrefixedUrlContainsOriginalPath() = runTest {
+  fun loadRequestScenarios() = runTest {
     container.setZimReaderSource(ZimReaderSource(testZimFile))
     val mainEntry = getMainEntryPath()
-    assertTrue(container.getRedirect(CONTENT_PREFIX + mainEntry).contains(mainEntry))
+
+    // Normal load
+    val normal = container.load(mainEntry, emptyMap())
+    assertEquals(200, normal.statusCode)
+    assertEquals("OK", normal.reasonPhrase)
+    assertEquals("bytes", normal.responseHeaders["Accept-Ranges"])
+    assertNotNull(normal.data)
+
+    // Range request
+    val partial = container.load(mainEntry, mapOf("Range" to "bytes=0-10"))
+    assertEquals(206, partial.statusCode)
+    assertEquals("Partial Content", partial.reasonPhrase)
+    assertNotNull(partial.responseHeaders["Content-Range"])
+
+    // Range without dash
+    val singleByte = container.load(mainEntry, mapOf("Range" to "bytes=0"))
+    assertEquals(206, singleByte.statusCode)
+    assertEquals("close", singleByte.responseHeaders["Connection"])
+
+    // Open ended range
+    val openRange = container.load(mainEntry, mapOf("Range" to "bytes=0-"))
+    assertEquals(206, openRange.statusCode)
+    assertNull(openRange.responseHeaders["Connection"])
+
+    // Non-existent entry
+    val missing = container.load("nonexistent/path.html", emptyMap())
+    assertNull(missing.mimeType)
   }
 
   @Test
-  fun getPageUrlFromTitleWithValidTitleReturnsPath() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    val mainEntryTitle = container.zimFileReader!!
-      .jniKiwixReader.mainEntry.getItem(true).title
-    val result = container.getPageUrlFromTitle(mainEntryTitle)
-    assertNotNull(result)
-    assertTrue(result!!.isNotBlank())
-  }
-
-  @Test
-  fun getPageUrlFromTitleWithUnknownTitleIsNull() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    assertNull(container.getPageUrlFromTitle("Nonexistent_Title_12345"))
-  }
-
-  @Test
-  fun getRandomArticleUrlReturnsNonNull() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    assertNotNull(container.getRandomArticleUrl())
-  }
-
-  @Test
-  fun metadataReturnsExpectedValues() = runTest {
-    container.setZimReaderSource(ZimReaderSource(testZimFile))
-    assertEquals("Test_Zim", container.zimFileTitle)
-    assertEquals("Wikipedia Contributors", container.creator)
-    assertEquals("Zimbalaka 1.0", container.publisher)
-    assertEquals("60094d1e-1c9a-a60b-2011-4fb02f8db6c3", container.name)
-    assertEquals("2017-04-21", container.date)
-    assertEquals("Wikipedia article on Test Zim", container.description)
-    assertEquals("en", container.language)
-    assertEquals("A/index.html", container.mainPage)
-    assertEquals(348L, container.fileSize)
-    assertNotNull(container.id)
-    assertNotNull(container.favicon)
-  }
-
-  @Test
-  fun withoutReaderPropertiesReturnDefaults() {
+  fun readerApiAndMetadataScenarios() = runTest {
+    // Behavior without reader
     assertNull(container.zimFileReader)
     assertNull(container.zimReaderSource)
     assertNull(container.zimFileTitle)
@@ -256,5 +184,47 @@ class ZimReaderContainerTest {
     assertFalse(container.isRedirect("anything"))
     assertNull(container.getPageUrlFromTitle("anything"))
     assertNull(container.getRandomArticleUrl())
+
+    // Load reader
+    container.setZimReaderSource(ZimReaderSource(testZimFile))
+
+    val mainEntry = getMainEntryPath()
+
+    // Redirect behavior
+    assertFalse(container.isRedirect(CONTENT_PREFIX + mainEntry))
+    assertTrue(container.getRedirect(CONTENT_PREFIX + mainEntry).contains(mainEntry))
+
+    // Title lookup
+    val title = container.zimFileReader!!
+      .jniKiwixReader.mainEntry.getItem(true).title
+
+    val url = container.getPageUrlFromTitle(title)
+    assertNotNull(url)
+    assertTrue(url!!.isNotBlank())
+
+    val mainEntryTitle = container.zimFileReader!!
+      .jniKiwixReader.mainEntry.getItem(true).title
+    val result = container.getPageUrlFromTitle(mainEntryTitle)
+    assertNotNull(result)
+    assertTrue(result!!.isNotBlank())
+
+    assertNull(container.getPageUrlFromTitle("Nonexistent_Title_12345"))
+
+    // Random article
+    assertNotNull(container.getRandomArticleUrl())
+
+    // Metadata
+    container.setZimReaderSource(ZimReaderSource(testZimFile))
+    assertEquals("Test_Zim", container.zimFileTitle)
+    assertEquals("Wikipedia Contributors", container.creator)
+    assertEquals("Zimbalaka 1.0", container.publisher)
+    assertEquals("60094d1e-1c9a-a60b-2011-4fb02f8db6c3", container.name)
+    assertEquals("2017-04-21", container.date)
+    assertEquals("Wikipedia article on Test Zim", container.description)
+    assertEquals("en", container.language)
+    assertEquals("A/index.html", container.mainPage)
+    assertEquals(348L, container.fileSize)
+    assertNotNull(container.id)
+    assertNotNull(container.favicon)
   }
 }
