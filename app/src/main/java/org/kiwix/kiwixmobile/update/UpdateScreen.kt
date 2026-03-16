@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
@@ -31,6 +32,8 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.update.composables.UpdateInfoCard
 import org.kiwix.kiwixmobile.update.viewmodel.DownloadApkState
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
+
+const val UPDATE_SCREEN_TESTING_TAG = "updateScreenTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +54,8 @@ fun UpdateScreen(
     }
   ) {
     UpdateInfoCard(
-      modifier = Modifier.padding(it),
+      modifier = Modifier.padding(it)
+        .testTag(UPDATE_SCREEN_TESTING_TAG),
       state = state,
       onUpdateClick = onUpdateClick,
       onUpdateCancel = onUpdateCancel,

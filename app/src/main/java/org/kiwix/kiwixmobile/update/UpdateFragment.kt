@@ -201,7 +201,8 @@ class UpdateFragment : BaseFragment() {
   private fun onNavigationBack(state: UpdateStates) {
     val downloadState = state.downloadApkItem.currentDownloadState
     if (downloadState == Status.QUEUED ||
-      downloadState == Status.DOWNLOADING
+      downloadState == Status.DOWNLOADING ||
+      downloadState == Status.ADDED
     ) {
       showStopDownloadDialog()
     } else {
@@ -242,8 +243,6 @@ class UpdateFragment : BaseFragment() {
         KiwixDialog.ShowReDownloadDialog,
         {
           onUpdateClick()
-        },
-        {
         }
       )
     }

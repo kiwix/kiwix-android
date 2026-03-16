@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.R
@@ -35,6 +36,9 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
+
+const val UPDATE_BUTTON_TESTING_TAG = "updateButtonTestingTag"
+const val INSTALL_BUTTON_TESTING_TAG = "installButtonTestingTag"
 
 @Composable
 fun UpdateInfoCard(
@@ -87,7 +91,8 @@ fun UpdateInfoCard(
 @Composable
 fun InstallButton(onInstallApk: () -> Unit) {
   KiwixButton(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier.fillMaxWidth()
+      .testTag(INSTALL_BUTTON_TESTING_TAG),
     clickListener = {
       onInstallApk()
     },
@@ -98,7 +103,8 @@ fun InstallButton(onInstallApk: () -> Unit) {
 @Composable
 fun UpdateButton(onUpdateClick: () -> Unit) {
   KiwixButton(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier.fillMaxWidth()
+      .testTag(UPDATE_BUTTON_TESTING_TAG),
     clickListener = onUpdateClick,
     buttonText = stringResource(R.string.update)
   )
