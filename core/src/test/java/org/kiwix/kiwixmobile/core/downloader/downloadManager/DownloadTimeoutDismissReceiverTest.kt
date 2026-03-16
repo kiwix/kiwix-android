@@ -26,6 +26,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 class DownloadTimeoutDismissReceiverTest {
   private lateinit var receiver: DownloadTimeoutDismissReceiver
@@ -40,39 +41,62 @@ class DownloadTimeoutDismissReceiverTest {
   }
 
   @Test
-  fun `onReceive with matching action cancels notification`() {
-    val intent: Intent = mockk()
+  fun onReceiveWithMatchingActionCancelsNotification() {
+    val intent = mockk<Intent>()
     every { intent.action } returns BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION
-    every {
-      context.getSystemService(Context.NOTIFICATION_SERVICE)
-    } returns notificationManager
-
+    every { context.getSystemService(Context.NOTIFICATION_SERVICE) } returns notificationManager
     receiver.onReceive(context, intent)
-
     verify { notificationManager.cancel(DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID) }
   }
 
   @Test
-  fun `onReceive with wrong action does nothing`() {
-    val intent: Intent = mockk()
-    every { intent.action } returns "some_other_action"
-
+  fun onReceiveWithWrongActionDoesNothing() {
+    val intent = mockk<Intent>()
+    every { intent.action } returns "wrong_action"
+    every {
+      context.getSystemService(Context.NOTIFICATION_SERVICE)
+    } returns notificationManager
     receiver.onReceive(context, intent)
-
-    verify(exactly = 0) { context.getSystemService(any<String>()) }
+    verify(exactly = 0) {
+      notificationManager.cancel(DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID)
+    }
   }
 
   @Test
-  fun `onReceive with null intent does nothing`() {
+  fun onReceiveWithNullIntentDoesNothing() {
+    every {
+      context.getSystemService(Context.NOTIFICATION_SERVICE)
+    } returns notificationManager
     receiver.onReceive(context, null)
-
-    verify(exactly = 0) { context.getSystemService(any<String>()) }
+    verify(exactly = 0) {
+      notificationManager.cancel(DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID)
+    }
   }
 
   @Test
-  fun `onIntentWithActionReceived handles service unavailable`() {
-    val intent: Intent = mockk()
+  fun onIntentWithActionReceivedHandlesNullNotificationManager() {
+    val intent = mockk<Intent>()
+    every { intent.action } returns BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION
     every { context.getSystemService(Context.NOTIFICATION_SERVICE) } returns null
-    receiver.onIntentWithActionReceived(context, intent)
+    assertDoesNotThrow {
+      receiver.onIntentWithActionReceived(context, intent)
+    }
+    verify { context.getSystemService(Context.NOTIFICATION_SERVICE) }
+    verify(exactly = 0) {
+      notificationManager.cancel(DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID)
+    }
+  }
+
+  @Test
+  fun onIntentWithActionReceivedHandlesWrongServiceType() {
+    val intent = mockk<Intent>()
+    every { context.getSystemService(Context.NOTIFICATION_SERVICE) } returns mockk<Any>()
+    assertDoesNotThrow {
+      receiver.onIntentWithActionReceived(context, intent)
+    }
+    verify { context.getSystemService(Context.NOTIFICATION_SERVICE) }
+    verify(exactly = 0) {
+      notificationManager.cancel(DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID)
+    }
   }
 }
