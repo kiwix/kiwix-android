@@ -129,7 +129,7 @@ class DownloadServiceTest : BaseActivityTest() {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        searchZappingSauvageFile(composeTestRule)
+        searchD3JsDocsFile(composeTestRule)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
       }
