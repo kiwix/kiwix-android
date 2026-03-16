@@ -106,7 +106,6 @@ const val THREE = 3
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  private val storageObserver: StorageObserver,
   @OPDSKiwixService private var kiwixService: KiwixService,
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,

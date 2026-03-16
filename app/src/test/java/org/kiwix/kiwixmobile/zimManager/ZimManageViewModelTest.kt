@@ -26,7 +26,6 @@ import android.os.Build
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.ReceiveTurbine
-import org.kiwix.kiwixmobile.core.StorageObserver
 
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
@@ -94,7 +93,6 @@ class ZimManageViewModelTest {
   private val kiwixService: KiwixService = mockk()
   private val application: Application = mockk(relaxed = true)
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk(relaxed = true)
-  private val storageObserver: StorageObserver = mockk(relaxed = true)
   private val fat32Checker: Fat32Checker = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
 
@@ -174,7 +172,6 @@ class ZimManageViewModelTest {
       ZimManageViewModel(
         downloadRoomDao,
         libkiwixBookOnDisk,
-        storageObserver,
         kiwixService,
         application,
         connectivityBroadcastReceiver,
