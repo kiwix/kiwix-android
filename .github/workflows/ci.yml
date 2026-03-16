@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
-      fail-fast: true
+      fail-fast: false
     runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -127,7 +127,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
-      fail-fast: true
+      fail-fast: false
     runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -216,7 +216,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
-      fail-fast: true
+      fail-fast: false
     runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -305,7 +305,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
-      fail-fast: true
+      fail-fast: false
     runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
