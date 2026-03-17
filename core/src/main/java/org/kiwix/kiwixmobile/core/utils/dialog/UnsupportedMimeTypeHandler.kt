@@ -20,11 +20,13 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -46,7 +48,7 @@ class UnsupportedMimeTypeHandler @Inject constructor(
   fun showSaveOrOpenUnsupportedFilesDialog(
     url: String?,
     documentType: String?,
-    lifecycleScope: CoroutineScope?
+    lifecycleScope: CoroutineScope
   ) {
     alertDialogShower?.show(
       KiwixDialog.SaveOrOpenUnsupportedFiles,
@@ -60,9 +62,9 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     url: String?,
     documentType: String?,
     openFile: Boolean,
-    lifecycleScope: CoroutineScope?
+    lifecycleScope: CoroutineScope
   ) {
-    lifecycleScope?.launch {
+    lifecycleScope.launch {
       val result = FileUtils.downloadFileFromUrl(
         context = activity,
         url = url,
@@ -71,40 +73,9 @@ class UnsupportedMimeTypeHandler @Inject constructor(
       )
 
       when (result) {
-        is SaveResult.FileSaved -> {
-          if (openFile) {
-            openFile(result.file, documentType)
-          } else {
-            activity.toast(
-              activity.getString(
-                R.string.save_media_saved,
-                result.file.name
-              )
-            )
-          }
-        }
+        is SaveResult.FileSaved -> handleFileSaved(result, documentType, openFile)
 
-        is SaveResult.MediaSaved -> {
-          if (openFile) {
-            intent.apply {
-              setDataAndType(result.uri, documentType)
-              flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-              addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            if (intent.resolveActivity(activity.packageManager) != null) {
-              activity.startActivity(intent)
-            } else {
-              activity.toast(R.string.no_reader_application_installed)
-            }
-          } else {
-            activity.toast(
-              activity.getString(
-                R.string.save_media_saved,
-                result.displayName
-              )
-            )
-          }
-        }
+        is SaveResult.MediaSaved -> handleMediaSaved(result, documentType, openFile)
 
         is SaveResult.InvalidSource -> {
           Log.e("MEDIA_SAVE", R.string.invalid_media_source.toString())
@@ -119,24 +90,62 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     }
   }
 
-  private fun openFile(savedFile: File, documentType: String?) {
-    if (savedFile.exists()) {
-      val uri =
-        FileProvider.getUriForFile(
-          activity,
-          "${activity.packageName}.fileprovider",
-          savedFile
+  private suspend fun handleFileSaved(
+    result: SaveResult.FileSaved,
+    documentType: String?,
+    openFile: Boolean
+  ) {
+    if (openFile) {
+      openFile(result.file, documentType)
+    } else {
+      activity.toast(
+        activity.getString(
+          R.string.save_media_saved,
+          result.file.absolutePath
         )
-      intent.apply {
-        setDataAndType(uri, documentType)
-        flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      }
-      if (intent.resolveActivity(activity.packageManager) != null) {
-        activity.startActivity(intent)
-      } else {
-        activity.toast(R.string.no_reader_application_installed)
-      }
+      )
+    }
+  }
+
+  private fun handleMediaSaved(
+    result: SaveResult.MediaSaved,
+    documentType: String?,
+    openFile: Boolean
+  ) {
+    if (openFile) {
+      openUri(result.uri, documentType)
+    } else {
+      activity.toast(
+        activity.getString(
+          R.string.save_media_saved,
+          result.displayName
+        )
+      )
+    }
+  }
+
+  private suspend fun openFile(savedFile: File, documentType: String?) {
+    if (!savedFile.isFileExist()) return
+    val uri =
+      FileProvider.getUriForFile(
+        activity,
+        "${activity.packageName}.fileprovider",
+        savedFile
+      )
+    openUri(uri, documentType)
+  }
+
+  private fun openUri(uri: Uri, documentType: String?) {
+    intent.apply {
+      setDataAndType(uri, documentType)
+      flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    if (intent.resolveActivity(activity.packageManager) != null) {
+      activity.startActivity(intent)
+    } else {
+      activity.toast(R.string.no_reader_application_installed)
     }
   }
 }

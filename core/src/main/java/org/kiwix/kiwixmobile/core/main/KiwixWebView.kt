@@ -27,6 +27,7 @@ import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -185,7 +186,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
       if (url == null && src == null) return
 
-      val appContext = instance.applicationContext
+      val appContext = ContextCompat.getContextForLanguage(instance)
 
       @Suppress("InjectDispatcher")
       CoroutineScope(Dispatchers.IO).launch {
@@ -202,7 +203,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
               appContext.toast(
                 appContext.getString(
                   R.string.save_media_saved,
-                  result.uri
+                  result.displayName
                 )
               )
             }
