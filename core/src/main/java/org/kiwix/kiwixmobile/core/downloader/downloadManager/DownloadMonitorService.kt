@@ -97,7 +97,7 @@ class DownloadMonitorService : Service() {
 
   private val networkCallback = object : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network) {
-      retryDownloadsOnNetworkGain()
+      resumeQueuedDownloadsOnNetworkAvailable()
     }
 
     override fun onLost(network: Network) {
@@ -105,12 +105,17 @@ class DownloadMonitorService : Service() {
     }
   }
 
-  private fun retryDownloadsOnNetworkGain() {
-    fetch.getDownloadsWithStatus(
-      listOf(Status.QUEUED)
-    ) { queuedDownloads ->
-      queuedDownloads.forEach { download ->
-        fetch.resume(download.id)
+  /**
+   * Resumes all downloads that are currently in the QUEUED state
+   * when network connectivity becomes available.
+   *
+   * It ensures that any downloads paused due to lack of connectivity
+   * are resumed automatically once the network is restored.
+   */
+  private fun resumeQueuedDownloadsOnNetworkAvailable() {
+    fetch.getDownloadsWithStatus(listOf(Status.QUEUED)) { queuedDownloads ->
+      queuedDownloads.forEach { queuedDownload ->
+        fetch.resume(queuedDownload.id)
       }
     }
   }
