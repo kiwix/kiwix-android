@@ -8,6 +8,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -68,11 +69,18 @@ class LocalLibraryViewModelTest {
   fun `file system check scans books`() = runTest {
     every { libkiwixBookOnDisk.books() } returns flowOf(emptyList())
     coEvery { storageObserver.getBooksOnFileSystem(any()) } returns flowOf(emptyList())
+    backgroundScope.launch {
+      viewModel.requestFileSystemCheck.collect {}
+    }
 
+    advanceUntilIdle()
     viewModel.requestFileSystemCheck.emit(Unit)
+
     advanceUntilIdle()
 
-    coVerify { storageObserver.getBooksOnFileSystem(any()) }
+    coVerify {
+      storageObserver.getBooksOnFileSystem(any())
+    }
   }
 
   @Test
