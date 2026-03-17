@@ -1470,7 +1470,8 @@ abstract class CoreReaderFragment :
       }
       val title = webView.title ?: "Article"
       val slugifiedTitle = title.toSlug().ifEmpty { "article" }
-      val cacheDir = FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
+      val cacheDir =
+        FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
       val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
       if (pdfFile.isFileExist()) {
         pdfFile.deleteFile()
@@ -1503,6 +1504,7 @@ abstract class CoreReaderFragment :
       }
       startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
     } catch (e: IOException) {
+      e.printStackTrace()
       context?.toast(string.unable_to_share_article, Toast.LENGTH_SHORT)
     }
   }
@@ -1601,11 +1603,13 @@ abstract class CoreReaderFragment :
   }
 
   override fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?) {
-    unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(
-      url,
-      documentType,
-      coreReaderLifeCycleScope
-    )
+    runSafelyInCoreReaderLifecycleScope {
+      unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(
+        url,
+        documentType,
+        this
+      )
+    }
   }
 
   suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {

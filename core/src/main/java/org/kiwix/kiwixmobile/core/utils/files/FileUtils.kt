@@ -733,7 +733,7 @@ object FileUtils {
     return kiwixDir
   }
 
-  @Suppress("ReturnCount", "TooGenericExceptionCaught", "LongMethod")
+  @Suppress("ReturnCount")
   suspend fun downloadFileFromUrl(
     context: Context,
     url: String?,
@@ -747,81 +747,97 @@ object FileUtils {
       return saveBase64Source(src, context)
     }
 
-    val fileNameAndSource =
-      getSafeFileNameAndSourceFromUrlOrSrc(url, src)
-
-    if (fileNameAndSource == null) {
+    val (fileName, source) = getSafeFileNameAndSourceFromUrlOrSrc(url, src) ?: run {
       Log.w("MEDIA_SAVE", "Invalid media source: url=$url, src=$src")
       return SaveResult.InvalidSource
     }
 
-    val fileName = fileNameAndSource.first
-    val source = fileNameAndSource.second
-
     if (fileName.isNullOrEmpty() || source.isNullOrEmpty()) {
-      Log.w("MEDIA_SAVE", "Invalid media source after parsing")
+      Log.w("MEDIA_SAVE", "Invalid media source: url=$url, src=$src")
       return SaveResult.InvalidSource
     }
-
-    return try {
-      when {
-        isImage(source) -> {
-          Log.d("MEDIA_SAVE", "Detected image: $fileName")
-
-          val bytes = zimReaderContainer
-            .load(source, emptyMap())
-            .data
-            .readBytes()
-
-          if (bytes.isEmpty()) {
-            Log.w("MEDIA_SAVE", "Loaded image bytes are empty for source=$source")
-            return SaveResult.InvalidSource
-          }
-
-          val mime = MimeTypeMap.getSingleton()
-            .getMimeTypeFromExtension(
-              MimeTypeMap.getFileExtensionFromUrl(source)
-            ) ?: "image/*"
-
-          val uri = saveImageToMediaStore(
-            context,
-            fileName,
-            mime,
-            bytes
-          ) ?: return SaveResult.Error("Image save failed")
-
-          Log.d("MEDIA_SAVE", "Image saved: $uri")
-
-          SaveResult.MediaSaved(uri, fileName)
-        }
-
-        else -> {
-          Log.d("MEDIA_SAVE", "Saving non-image file: $fileName")
-
-          val file = saveFileFromUrl(
-            context,
-            source,
-            fileName,
-            zimReaderContainer
-          ) ?: return SaveResult.InvalidSource
-
-          Log.d("MEDIA_SAVE", "File saved: ${file.absolutePath}")
-
-          SaveResult.FileSaved(file)
-        }
-      }
-    } catch (e: Exception) {
-      Log.e("MEDIA_SAVE", "Unexpected error while saving media", e)
-      SaveResult.Error("Unexpected error", e)
+    return if (isImage(source)) {
+      handleImage(context, fileName, source, zimReaderContainer)
+    } else {
+      handleFile(context, fileName, source, zimReaderContainer)
     }
   }
 
-  private fun isImage(source: String): Boolean {
-    val extension = MimeTypeMap.getFileExtensionFromUrl(source)
-    val mime = MimeTypeMap.getSingleton()
-      .getMimeTypeFromExtension(extension)
+  private suspend fun handleImage(
+    context: Context,
+    fileName: String,
+    source: String,
+    zimReaderContainer: ZimReaderContainer
+  ): SaveResult = runCatching {
+    Log.d("MEDIA_SAVE", "Detected image: $fileName")
 
+    val bytes = loadBytes(source, zimReaderContainer) ?: return SaveResult.InvalidSource
+
+    val mime = resolveMimeType(source) ?: "image/*"
+
+    val uri = saveImageToMediaStore(
+      context,
+      fileName,
+      mime,
+      bytes
+    ) ?: return SaveResult.Error("Image save failed")
+
+    Log.d("MEDIA_SAVE", "Image saved: $uri")
+
+    SaveResult.MediaSaved(uri, fileName)
+  }.getOrElse {
+    Log.e("MEDIA_SAVE", "Unexpected error while saving media", it)
+    SaveResult.Error("Image save error", it)
+  }
+
+  private suspend fun handleFile(
+    context: Context,
+    fileName: String,
+    source: String,
+    zimReaderContainer: ZimReaderContainer
+  ): SaveResult = runCatching {
+    Log.d("MEDIA_SAVE", "Saving non-image file: $fileName")
+
+    val file = saveFileFromUrl(
+      context,
+      source,
+      fileName,
+      zimReaderContainer
+    ) ?: return SaveResult.InvalidSource
+
+    Log.d("MEDIA_SAVE", "File saved: ${file.absolutePath}")
+
+    SaveResult.FileSaved(file)
+  }.getOrElse {
+    Log.d("MEDIA_SAVE", "Error saving file", it)
+    SaveResult.Error("File save error", it)
+  }
+
+  private fun isImage(source: String): Boolean {
+    val mime = resolveMimeType(source)
     return mime?.startsWith("image/") == true
+  }
+
+  private fun resolveMimeType(source: String): String? {
+    val extension = MimeTypeMap.getFileExtensionFromUrl(source)
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+  }
+
+  private suspend fun loadBytes(
+    source: String,
+    zimReaderContainer: ZimReaderContainer
+  ): ByteArray? {
+    val bytes = zimReaderContainer
+      .load(source, emptyMap())
+      .data
+      .readBytes()
+
+    return if (bytes.isEmpty()) {
+      Log.w("MEDIA_SAVE", "Loaded image bytes are empty for source=$source")
+      return null
+    } else {
+      bytes
+    }
   }
 
   @Suppress("ReturnCount")
