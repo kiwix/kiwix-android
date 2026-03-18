@@ -38,7 +38,7 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper.getMainLooper
 import android.widget.Toast
-import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
@@ -85,8 +85,8 @@ class WifiDirectManager @Inject constructor(
   // Whether the device is the file sender or not
   private var isFileSender = false
 
-  private var hasSenderStartedConnection = false
-  lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
+  var hasSenderStartedConnection = false
+  lateinit var lifecycleCoroutineScope: CoroutineScope
   private lateinit var alertDialogShower: AlertDialogShower
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
@@ -266,7 +266,7 @@ class WifiDirectManager @Inject constructor(
   private suspend fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
     if (groupInfo.groupFormed) {
       if (isFileSender) {
-        Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
+        Log.d(LocalFileTransferViewModel.TAG, "Starting file transfer")
         val fileReceiverDeviceAddress =
           if (groupInfo.isGroupOwner) inetAddress else groupInfo.groupOwnerAddress
         context.toast(R.string.preparing_files, Toast.LENGTH_LONG)
@@ -366,7 +366,7 @@ class WifiDirectManager @Inject constructor(
       outputStream: OutputStream
     ) {
       inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
-      Log.d(LocalFileTransferFragment.TAG, "Both streams closed")
+      Log.d(LocalFileTransferViewModel.TAG, "Both streams closed")
     }
 
     @JvmStatic fun getDeviceStatus(status: Int): String {
