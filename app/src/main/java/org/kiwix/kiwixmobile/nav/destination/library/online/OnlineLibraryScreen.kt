@@ -19,10 +19,8 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -68,8 +66,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -87,7 +83,6 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_MESSAGE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESSBAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN
@@ -119,7 +114,6 @@ private const val BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD = 200
 @Composable
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
-  isBackToTopEnabled: Boolean,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
@@ -151,9 +145,7 @@ fun OnlineLibraryScreen(
         )
       },
       floatingActionButton = {
-        if (isBackToTopEnabled) {
-          OnlineLibraryBackToTopButton(listState)
-        }
+        OnlineLibraryBackToTopButton(listState)
       },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -188,33 +180,21 @@ private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
   var shouldShowBackToTopButton by remember { mutableStateOf(false) }
 
   LaunchedEffect(listState) {
-    var hideBackToTopJob: Job? = null
     snapshotFlow {
       listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
     }
       .distinctUntilChanged()
       .collect { (firstVisibleItemIndex, firstVisibleItemScrollOffset) ->
-        val shouldShowButton =
+        shouldShowBackToTopButton =
           firstVisibleItemIndex > ZERO ||
-            firstVisibleItemScrollOffset > BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD
-
-        hideBackToTopJob?.cancel()
-        if (shouldShowButton) {
-          shouldShowBackToTopButton = true
-          hideBackToTopJob = launch {
-            delay(BACK_TO_TOP_HIDE_DELAY_MS)
-            shouldShowBackToTopButton = false
-          }
-        } else {
-          shouldShowBackToTopButton = false
-        }
+          firstVisibleItemScrollOffset > BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD
       }
   }
 
   AnimatedVisibility(
     visible = shouldShowBackToTopButton,
-    enter = fadeIn() + scaleIn(),
-    exit = fadeOut() + scaleOut()
+    enter = slideInVertically { it },
+    exit = slideOutVertically { it }
   ) {
     KiwixFloatingActionButton(
       icon = painterResource(id = org.kiwix.kiwixmobile.core.R.drawable.ic_arrow_upward_24dp),
