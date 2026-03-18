@@ -27,6 +27,8 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -87,7 +89,36 @@ class DownloadMonitorService : Service() {
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
+
+  @Inject
+  lateinit var connectivityManager: ConnectivityManager
+
   private var appName: String? = "kiwix"
+
+  private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+    override fun onAvailable(network: Network) {
+      resumeQueuedDownloadsOnNetworkAvailable()
+    }
+
+    override fun onLost(network: Network) {
+      // do nothing
+    }
+  }
+
+  /**
+   * Resumes all downloads that are currently in the QUEUED state
+   * when network connectivity becomes available.
+   *
+   * It ensures that any downloads paused due to lack of connectivity
+   * are resumed automatically once the network is restored.
+   */
+  private fun resumeQueuedDownloadsOnNetworkAvailable() {
+    fetch.getDownloadsWithStatus(listOf(Status.QUEUED)) { queuedDownloads ->
+      queuedDownloads.forEach { queuedDownload ->
+        fetch.resume(queuedDownload.id)
+      }
+    }
+  }
 
   override fun onCreate() {
     CoreApp.coreComponent
@@ -99,7 +130,20 @@ class DownloadMonitorService : Service() {
     fetch.addListener(fetchListener, true)
     setupUpdater()
     startForegroundService()
+    registerNetworkCallback()
     isDownloadMonitorServiceRunning = true
+  }
+
+  private fun registerNetworkCallback() {
+    runCatching {
+      connectivityManager.registerDefaultNetworkCallback(networkCallback)
+    }.onFailure { it.printStackTrace() }
+  }
+
+  private fun unregisterNetworkCallback() {
+    runCatching {
+      connectivityManager.unregisterNetworkCallback(networkCallback)
+    }.onFailure { it.printStackTrace() }
   }
 
   private fun setupUpdater() {
@@ -490,6 +534,7 @@ class DownloadMonitorService : Service() {
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
     updaterJob?.cancel()
+    unregisterNetworkCallback()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()

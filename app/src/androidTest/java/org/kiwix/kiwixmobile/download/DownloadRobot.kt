@@ -61,7 +61,7 @@ fun downloadRobot(func: DownloadRobot.() -> Unit) =
   DownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class DownloadRobot : BaseRobot() {
-  private val searchZIMFileTitle = "Zapping Sauvage"
+  private val searchZIMFileTitle = "D3 js docs"
   fun clickLibraryOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitUntilTimeout()
@@ -140,7 +140,7 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  fun searchZappingSauvageFile(composeTestRule: ComposeContentTestRule) {
+  fun searchD3JsDocsFile(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle() // let the compose settle.

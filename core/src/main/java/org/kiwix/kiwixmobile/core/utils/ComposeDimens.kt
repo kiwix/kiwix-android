@@ -57,6 +57,7 @@ object ComposeDimens {
   val THREE_DP = 3.dp
   val TWO_DP = 2.dp
   val ONE_DP = 1.dp
+  val ZERO_DP = 0.dp
   val SEVENTY_DP = 70.dp
   val FIFTY_DP = 50.dp
   val SIXTY_FOUR_DP = 64.dp

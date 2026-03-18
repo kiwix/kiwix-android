@@ -32,7 +32,6 @@ import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatV25
-import java.util.regex.Pattern
 
 class NetworkUtilsTest {
   private val context: Context = mockk()
@@ -83,16 +82,16 @@ class NetworkUtilsTest {
 
   @Test
   fun testFilenameFromUrl() {
-    // TODO find a way to assert regex matching via JUnit and rewrite the test
+    val defaultUUIDRegex =
+      Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
-    val defaultUUIDRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-    val pattern = Pattern.compile(defaultUUIDRegex)
+    val emptyUrlResult = NetworkUtils.getFileNameFromUrl("")
 
     // URL is an Empty String
-    var matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl(""))
-    if (!matcher.matches()) {
-      assertEquals("filename doesn't match UUID regex (for empty string URL)", 0, 1)
-    }
+    assertTrue(
+      "When URL is empty, a UUID should be returned: $emptyUrlResult",
+      emptyUrlResult.matches(defaultUUIDRegex)
+    )
 
     // URL contains no '?' character but has '/' characters
     assertEquals(
@@ -100,23 +99,24 @@ class NetworkUtilsTest {
       "q=kiwix+android",
       NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android")
     )
-    // and ends with a '/' character
-    matcher =
-      pattern.matcher(
-        NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/")
-      )
-    if (!matcher.matches()) {
-      assertEquals("filename doesn't match UUID regex (for no '?' and '/' in end)", 0, 1)
-    }
 
-    // Empty string between last '?' and preceding '/'
-    matcher =
-      pattern.matcher(
-        NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android")
-      )
-    if (!matcher.matches()) {
-      assertEquals("filename doesn't match UUID regex (for consecutive '/?')", 0, 1)
-    }
+    // When the URL ends with '/', there is no filename, so a UUID should be generated
+    val fileNameFromTrailingSlashUrl =
+      NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/")
+
+    assertTrue(
+      "Expected a UUID when URL ends with '/': $fileNameFromTrailingSlashUrl",
+      fileNameFromTrailingSlashUrl.matches(defaultUUIDRegex)
+    )
+
+    // When URL contains '/?', there is no filename before the query, so generate UUID
+    val fileNameFromSlashQuestionUrl =
+      NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android")
+
+    assertTrue(
+      "Expected a UUID when URL contains '/?': $fileNameFromSlashQuestionUrl",
+      fileNameFromSlashQuestionUrl.matches(defaultUUIDRegex)
+    )
 
     // Standard case
     // Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it
@@ -143,6 +143,38 @@ class NetworkUtilsTest {
       "search",
       NetworkUtils.getFileNameFromUrl("https://github.com/search?q=kiwix+android")
     )
+  }
+
+  @Test
+  fun `getFileNameFromUrl handles query at beginning`() {
+    val result = NetworkUtils.getFileNameFromUrl("?query=test")
+
+    // Since there is no filename, UUID should be generated
+    assertTrue(result.isNotEmpty())
+  }
+
+  @Test
+  fun `parseURL returns empty when beginIndex greater than endIndex`() {
+    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
+    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
+    every { context.getString(R.string.zim_simple) } returns "Simple"
+
+    val url = "http://example.com/file_a_2020.zim"
+
+    val result = NetworkUtils.parseURL(context, url)
+
+    assertEquals("", result)
+  }
+
+  @Test
+  fun `parseURL handles malformed url and catches exception`() {
+    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
+    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
+    every { context.getString(R.string.zim_simple) } returns "Simple"
+
+    val result = NetworkUtils.parseURL(context, "http://example.com/_")
+
+    assertEquals("", result)
   }
 
   @Test
@@ -199,5 +231,43 @@ class NetworkUtilsTest {
         "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"
       )
     )
+  }
+
+  @Test
+  fun `getFileNameFromUrl returns empty string when url is null`() {
+    val result = NetworkUtils.getFileNameFromUrl(null)
+    assertEquals("", result)
+  }
+
+  @Test
+  fun `parseURL returns empty string when url is null`() {
+    val result = NetworkUtils.parseURL(context, null)
+    assertEquals("", result)
+  }
+
+  @Test
+  fun `parseURL returns empty string for url without underscore`() {
+    val result = NetworkUtils.parseURL(context, "http://example.com/file.zim")
+    assertEquals("", result)
+  }
+
+  @Test
+  fun `isNetworkAvailable returns false when network capabilities are null`() {
+    val compatV25 = CompatV25()
+    val network: Network = mockk()
+    every { connectivity.activeNetwork } returns network
+    every { connectivity.getNetworkCapabilities(network) } returns null
+
+    assertFalse(compatV25.isNetworkAvailable(connectivity))
+  }
+
+  @Test
+  fun `isWifi returns false when network capabilities are null`() {
+    val compatV25 = CompatV25()
+    val network: Network = mockk()
+    every { connectivity.activeNetwork } returns network
+    every { connectivity.getNetworkCapabilities(network) } returns null
+
+    assertFalse(compatV25.isWifi(connectivity))
   }
 }
