@@ -21,6 +21,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.util.Base64.encodeToString
+import android.webkit.WebResourceResponse
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.coEvery
 import io.mockk.every
@@ -54,6 +56,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.util.Base64
 import java.util.Random
 
 class FileUtilsInstrumentationTest {
@@ -655,6 +658,85 @@ class FileUtilsInstrumentationTest {
         documentProviderContentQuery(context, uri, documentsContractWrapper)
       )
     }
+  }
+
+  @Test
+  fun testBase64ImageWithEmptyDataReturnsError() = runTest {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runTest
+
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
+      url = null,
+      src = "data:image/png;base64,",
+      zimReaderContainer = mockk(relaxed = true)
+    )
+
+    Assertions.assertTrue(result is SaveResult.Error)
+    Assertions.assertEquals(
+      "Empty base64 data",
+      (result as SaveResult.Error).message
+    )
+  }
+
+  @Test
+  fun testBase64SvgReturnsMediaSaved() = runTest {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@runTest
+
+    val svgBytes = FileUtilsInstrumentationTest::class.java.classLoader
+      .getResourceAsStream("test.svg")
+      ?.readBytes()
+      ?: error("test.svg not found in androidTest assets")
+
+    val svgBase64 = android.util.Base64.encodeToString(
+      svgBytes,
+      android.util.Base64.NO_WRAP
+    )
+
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
+      url = null,
+      src = "data:image/svg+xml;base64,$svgBase64",
+      zimReaderContainer = mockk(relaxed = true)
+    )
+
+    Assertions.assertTrue(
+      result is SaveResult.MediaSaved,
+      "Expected MediaSaved for base64 SVG but got $result"
+    )
+    Assertions.assertTrue(
+      (result as SaveResult.MediaSaved).displayName.endsWith(".svg")
+    )
+  }
+
+  @Test
+  fun testEpubRoutesToFileSavedNotImagePath() = runTest {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) return@runTest
+
+    val epubBytes = FileUtilsInstrumentationTest::class.java.classLoader
+      .getResourceAsStream("test.epub")
+      ?.readBytes()
+      ?: error("test.epub not found in androidTest assets")
+
+    val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
+    every {
+      zimReaderContainer.load(any(), any())
+    } returns WebResourceResponse(
+      "application/epub+zip",
+      "utf-8",
+      epubBytes.inputStream()
+    )
+
+    val result = FileUtils.downloadFileFromUrl(
+      context = context!!,
+      url = "test.epub",
+      src = null,
+      zimReaderContainer = zimReaderContainer
+    )
+
+    Assertions.assertFalse(
+      result is SaveResult.MediaSaved,
+      "epub must not store in image/MediaStore path but got $result"
+    )
   }
 
   data class DummyUrlData(
