@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.IS_TTS_P
 import org.kiwix.kiwixmobile.core.utils.READ_ALOUD_SERVICE_CHANNEL_ID
 import javax.inject.Inject
 
-class ReadAloudNotificationManger @Inject constructor(
+class ReadAloudNotificationManager @Inject constructor(
   private val notificationManager: NotificationManager,
   private val context: Context
 ) {
