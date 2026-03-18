@@ -37,8 +37,12 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
+import android.util.Base64
 import android.util.Log
+import android.webkit.MimeTypeMap
+import android.webkit.URLUtil
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.io.File
 
 class FileUtilsTest {
@@ -212,12 +216,36 @@ class FileUtilsTest {
   @Test
   fun deleteZimFile_deletesZimFileAndChecksPartFiles() = runBlocking {
     val path = "/storage/emulated/0/wiki.zim"
-    coEvery { any<File>().deleteFile(any()) } returns true
+    val deletedPaths = mutableListOf<String>()
+    coEvery { any<File>().deleteFile(any()) } coAnswers {
+      deletedPaths.add(firstArg<File>().path)
+      true
+    }
     coEvery { any<File>().isFileExist(any()) } coAnswers {
       val p = firstArg<File>().path
       p == "$path.part"
     }
     FileUtils.deleteZimFile(path)
+    assertTrue(deletedPaths.contains(path))
+    assertTrue(deletedPaths.any { it.contains(".part") })
+  }
+
+  @Test
+  fun deleteZimFile_deletesMultipleChunks_sequentially() = runBlocking {
+    val basePath = "/storage/emulated/0/wiki.zim"
+    val inputPath = "${basePath}aa"
+    val deleted = mutableListOf<String>()
+    coEvery { any<File>().deleteFile(any()) } coAnswers {
+      deleted.add(firstArg<File>().path)
+      true
+    }
+    coEvery { any<File>().isFileExist(any()) } coAnswers {
+      val p = firstArg<File>().path
+      p == "${basePath}aa" || p == "${basePath}ab"
+    }
+    FileUtils.deleteZimFile(inputPath)
+    assertTrue(deleted.any { it.contains("aa") })
+    assertTrue(deleted.any { it.contains("ab") })
   }
 
   @Test
@@ -379,64 +407,116 @@ class FileUtilsTest {
     val input = "data:image/png;base64,$base64Data"
     val expectedBytes = byteArrayOf(1, 2, 3)
 
-    mockkStatic(android.webkit.MimeTypeMap::class)
-    val mockMimeTypeMap = mockk<android.webkit.MimeTypeMap>()
-    every { android.webkit.MimeTypeMap.getSingleton() } returns mockMimeTypeMap
+    mockkStatic(MimeTypeMap::class)
+    val mockMimeTypeMap = mockk<MimeTypeMap>()
+    every { MimeTypeMap.getSingleton() } returns mockMimeTypeMap
     every { mockMimeTypeMap.getExtensionFromMimeType("image/png") } returns "png"
 
-    mockkStatic(android.util.Base64::class)
-    every { android.util.Base64.decode(base64Data, android.util.Base64.DEFAULT) } returns expectedBytes
+    mockkStatic(Base64::class)
+    every {
+      Base64.decode(
+        base64Data,
+        Base64.DEFAULT
+      )
+    } returns expectedBytes
 
     val result = FileUtils.decodeBase64DataUri(input)
     assertEquals("png", result?.first)
     assertTrue(result?.second?.contentEquals(expectedBytes) == true)
 
-    unmockkStatic(android.webkit.MimeTypeMap::class)
-    unmockkStatic(android.util.Base64::class)
+    unmockkStatic(MimeTypeMap::class)
+    unmockkStatic(Base64::class)
+  }
+
+  @Test
+  fun decodeBase64DataUri_returnsBin_whenMimeUnknown() {
+    val base64 = "data:unknown/type;base64,SGVsbG8="
+
+    mockkStatic(MimeTypeMap::class)
+    val mockMime = mockk<MimeTypeMap>()
+    every { MimeTypeMap.getSingleton() } returns mockMime
+    every { mockMime.getExtensionFromMimeType(any()) } returns null
+
+    val result = FileUtils.decodeBase64DataUri(base64)
+    assertEquals("bin", result?.first)
+
+    unmockkStatic(MimeTypeMap::class)
   }
 
   @Test
   fun getSafeFileNameAndSourceFromUrlOrSrc_returnsDecodedFileName_fromUrl() {
-    mockkStatic(android.webkit.URLUtil::class)
-    every { android.webkit.URLUtil.guessFileName("https://example.com/test.png", null, null) } returns "test.png"
+    mockkStatic(URLUtil::class)
+    every {
+      URLUtil.guessFileName(
+        "https://example.com/test.png",
+        null,
+        null
+      )
+    } returns "test.png"
 
-    val result = FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://example.com/test.png", null)
+    val result =
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://example.com/test.png", null)
     assertEquals("test.png", result?.first)
     assertEquals("https://example.com/test.png", result?.second)
 
-    unmockkStatic(android.webkit.URLUtil::class)
+    unmockkStatic(URLUtil::class)
   }
 
   @Test
   fun getSafeFileNameAndSourceFromUrlOrSrc_returnsDecodedFileName_fromSrc() {
-    mockkStatic(android.webkit.URLUtil::class)
-    every { android.webkit.URLUtil.guessFileName(null, null, null) } returns "downloadfile.bin"
-    every { android.webkit.URLUtil.guessFileName("https://example.com/src.png", null, null) } returns "src.png"
+    mockkStatic(URLUtil::class)
+    every { URLUtil.guessFileName(null, null, null) } returns "downloadfile.bin"
+    every {
+      URLUtil.guessFileName(
+        "https://example.com/src.png",
+        null,
+        null
+      )
+    } returns "src.png"
 
     val result = FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(null, "https://example.com/src.png")
     assertEquals("src.png", result?.first)
     assertEquals("https://example.com/src.png", result?.second)
 
-    unmockkStatic(android.webkit.URLUtil::class)
+    unmockkStatic(URLUtil::class)
   }
 
   @Test
-  fun getDownloadRootDir_returnsExternalMediaDirs_forPlayStoreBuildWithAndroid11OrAbove() = runBlocking {
-    val kiwixDataStore = mockk<org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore>()
-    coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
-
-    val mockCoreApp = mockk<CoreApp>()
-    CoreApp.instance = mockCoreApp
-    val mockFile = mockk<File>()
-    every { mockCoreApp.externalMediaDirs } returns arrayOf(mockFile)
-
-    val result = FileUtils.getDownloadRootDir(kiwixDataStore)
-    assertEquals(mockFile, result)
+  fun getSafeFileNameAndSourceFromUrlOrSrc_returnsNull_whenBothInputsNull() {
+    val result = FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(null, null)
+    assertEquals(null, result)
   }
+
+  @Test
+  fun getSafeFileNameAndSourceFromUrlOrSrc_returnsNull_forBinFile() {
+    mockkStatic(URLUtil::class)
+    every { URLUtil.guessFileName(any(), any(), any()) } returns "file.bin"
+
+    val result =
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://example.com/file.bin", null)
+    assertEquals(null to "https://example.com/file.bin", result)
+
+    unmockkStatic(URLUtil::class)
+  }
+
+  @Test
+  fun getDownloadRootDir_returnsExternalMediaDirs_forPlayStoreBuildWithAndroid11OrAbove() =
+    runBlocking {
+      val kiwixDataStore = mockk<KiwixDataStore>()
+      coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
+
+      val mockCoreApp = mockk<CoreApp>()
+      CoreApp.instance = mockCoreApp
+      val mockFile = mockk<File>()
+      every { mockCoreApp.externalMediaDirs } returns arrayOf(mockFile)
+
+      val result = FileUtils.getDownloadRootDir(kiwixDataStore)
+      assertEquals(mockFile, result)
+    }
 
   @Test
   fun downloadFileFromUrl_returnsNull_ifDownloadRootDirIsNull() = runBlocking {
-    val kiwixDataStore = mockk<org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore>()
+    val kiwixDataStore = mockk<KiwixDataStore>()
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
 
     val mockCoreApp = mockk<CoreApp>()
