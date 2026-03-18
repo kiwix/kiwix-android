@@ -26,9 +26,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -48,29 +50,41 @@ class UpdateScreenRobot : BaseRobot() {
     }
   }
 
-  fun clickUpdateButton(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      onNodeWithTag(UPDATE_BUTTON_TESTING_TAG)
-        .performClick()
-    }
-  }
-
-  fun clickNavigationButton(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
-        .performClick()
-    }
+  fun downloadApkFile(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onAllNodesWithTag(UPDATE_BUTTON_TESTING_TAG)[0].performClick()
+      }
+    })
   }
 
   fun assertDownloadApkStart(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntilTimeout()
         waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
           onAllNodesWithTag(APK_CANCEL_BUTTON_TESTING_TAG)[0].isDisplayed()
         }
       }
     })
+  }
+
+  fun assertDownloadApkFinished(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(INSTALL_BUTTON_TESTING_TAG)[0].isDisplayed()
+        }
+      }
+    })
+  }
+
+  fun stopApkDownload(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      val stopButton = onAllNodesWithTag(APK_CANCEL_BUTTON_TESTING_TAG)[0]
+      waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) { stopButton.isDisplayed() }
+      stopButton.performClick()
+    }
   }
 
   fun waitForApkInfoToLoad(
@@ -81,22 +95,47 @@ class UpdateScreenRobot : BaseRobot() {
     }
   }
 
-  fun waitForInstallToLoad(
-    composeTestRule: ComposeContentTestRule
+  fun clickOnNoButton(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG).performClick()
+      }
+    })
+  }
+
+  // wait for 5 minutes for downloading the APK file
+  fun waitUntilApkDownloadComplete(
+    retryCountForDownloadingApkFile: Int = 30,
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
   ) {
-    composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-      composeTestRule.onAllNodesWithTag(INSTALL_BUTTON_TESTING_TAG)[0].isDisplayed()
+    try {
+      composeTestRule.onAllNodesWithTag(APK_CANCEL_BUTTON_TESTING_TAG)[0].assertDoesNotExist()
+    } catch (e: AssertionError) {
+      if (retryCountForDownloadingApkFile > 0) {
+        composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+        waitUntilApkDownloadComplete(
+          retryCountForDownloadingApkFile - 1,
+          composeTestRule,
+          kiwixMainActivity
+        )
+        return
+      }
+      // throw the exception when there is no more retry left.
+      throw RuntimeException("Couldn't download the APK file.\n Original exception = $e")
     }
   }
 
-  fun assertStopDownloadDialogDisplayed(
-    composeTestRule: ComposeContentTestRule
+  fun assertStopApkDownloadDialogDisplayed(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
   ) {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-          .assertTextEquals("Stop download?")
+          .assertTextEquals(kiwixMainActivity.getString(string.confirm_stop_download_title))
       }
     })
   }

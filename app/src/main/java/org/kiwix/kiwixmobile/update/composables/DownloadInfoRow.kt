@@ -36,6 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -50,7 +52,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.getDownloadedSizeTex
 import org.kiwix.kiwixmobile.update.getDownloadApkStateText
 import org.kiwix.kiwixmobile.update.viewmodel.UpdateStates
 
-const val APK_CANCEL_BUTTON_TESTING_TAG = "APKCancelButtonTestingTag"
+const val APK_CANCEL_BUTTON_TESTING_TAG = "ApkCancelButtonTestingTag"
 
 @Composable
 fun DownloadInfoRow(
@@ -125,7 +127,7 @@ fun DownloadBar(
     IconButton(
       onClick = onCancel,
       modifier = Modifier
-        .testTag(APK_CANCEL_BUTTON_TESTING_TAG)
+        .semantics { testTag = APK_CANCEL_BUTTON_TESTING_TAG }
         .minimumInteractiveComponentSize()
         .padding(horizontal = TWO_DP)
     ) {
