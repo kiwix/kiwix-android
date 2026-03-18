@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
@@ -266,10 +265,20 @@ abstract class CoreSettingsViewModel(
         )
         return@launch
       }
-      if (File(AddNoteDialog.NOTES_DIRECTORY).deleteRecursively()) {
+      runCatching {
+        dataSource.clearNotes()
+      }.onSuccess {
         sendAction(
           ShowSnackbar(
             context.getString(R.string.notes_deletion_successful),
+            viewModelScope
+          )
+        )
+      }.onFailure {
+        Log.e("SettingsPresenter", it.message, it)
+        sendAction(
+          ShowSnackbar(
+            context.getString(R.string.notes_deletion_unsuccessful),
             viewModelScope
           )
         )

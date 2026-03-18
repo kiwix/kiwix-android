@@ -27,6 +27,7 @@ import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -35,6 +36,7 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.reader.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
@@ -128,10 +130,15 @@ class LibraryRobot : BaseRobot() {
       } catch (_: AssertionError) {
         Log.e("DELETE_ZIM_FILE", "Zim files found in local library so we are deleting them")
       }
+      val bookItemList = composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG)
       val zimFileNodes = composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)
       val itemCount = zimFileNodes.fetchSemanticsNodes().size
-      repeat(itemCount) { index ->
-        zimFileNodes[index].performTouchInput { longClick() }
+      if (itemCount != ZERO) {
+        zimFileNodes[ZERO].performTouchInput { longClick() }
+      }
+      (1 until itemCount).forEach { index ->
+        bookItemList.performScrollToIndex(index)
+        zimFileNodes[index].performClick()
       }
       clickOnFileDeleteIcon()
       clickOnDeleteZimFile(composeTestRule)

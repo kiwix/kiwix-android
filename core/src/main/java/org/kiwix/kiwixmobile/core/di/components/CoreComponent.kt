@@ -37,6 +37,8 @@ import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
@@ -82,7 +84,12 @@ interface CoreComponent {
   fun zimFileReaderFactory(): ZimFileReader.Factory
   fun libkiwixBookFactory(): LibkiwixBookFactory
   fun storageObserver(): StorageObserver
-  fun kiwixService(): KiwixService
+
+  @OPDSKiwixService
+  fun provideOPDSKiwixService(): KiwixService
+
+  @CategoryKiwixService
+  fun provideCategoryKiwixService(): KiwixService
   fun application(): Application
   fun bookUtils(): BookUtils
   fun dataSource(): DataSource

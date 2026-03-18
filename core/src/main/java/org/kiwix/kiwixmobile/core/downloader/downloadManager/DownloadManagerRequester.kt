@@ -23,8 +23,13 @@ import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.NetworkType.ALL
 import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
 import com.tonyodev.fetch2.Request
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
@@ -34,7 +39,9 @@ import javax.inject.Inject
 class DownloadManagerRequester @Inject constructor(
   private val fetch: Fetch,
   private val kiwixDataStore: KiwixDataStore,
-  private val context: Context
+  private val context: Context,
+  private val downloadRoomDao: DownloadRoomDao,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DownloadRequester {
   override suspend fun enqueue(downloadRequest: DownloadRequest): Long {
     val request = downloadRequest.toFetchRequest(kiwixDataStore)
@@ -43,22 +50,53 @@ class DownloadManagerRequester @Inject constructor(
   }
 
   override fun cancel(downloadId: Long) {
-    fetch.delete(downloadId.toInt())
+    fetch.delete(
+      id = downloadId.toInt(),
+      func = null,
+      func2 = {
+        CoroutineScope(ioDispatcher).launch {
+          downloadRoomDao.deleteDownloadByDownloadId(downloadId)
+        }
+      }
+    )
     startDownloadMonitorService()
   }
 
   override fun retryDownload(downloadId: Long) {
-    fetch.retry(downloadId.toInt())
+    fetch.retry(
+      id = downloadId.toInt(),
+      func = null,
+      func2 = {
+        reEnqueueStaleDownload(downloadId)
+      }
+    )
     startDownloadMonitorService()
   }
 
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
     if (isPause) {
-      fetch.resume(downloadId.toInt())
+      fetch.resume(downloadId.toInt(), null) {
+        reEnqueueStaleDownload(downloadId)
+      }
     } else {
       fetch.pause(downloadId.toInt())
     }
     startDownloadMonitorService()
+  }
+
+  private fun reEnqueueStaleDownload(downloadId: Long) {
+    CoroutineScope(ioDispatcher).launch {
+      downloadRoomDao.getEntityForDownloadId(downloadId)?.let { staleEntity ->
+        staleEntity.url?.let { url ->
+          downloadRoomDao.deleteDownloadByDownloadId(downloadId)
+          downloadRoomDao.addIfDoesNotExist(
+            url,
+            staleEntity.toBook(),
+            this@DownloadManagerRequester
+          )
+        }
+      }
+    }
   }
 
   override fun startDownloadMonitorService() {

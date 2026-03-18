@@ -76,17 +76,14 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -120,14 +117,14 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.utils.HUNDERED
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.KiwixWebViewWithAppBarScrolling
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.TWELVE
@@ -139,7 +136,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -160,7 +156,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTestingTag"
 const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
@@ -211,15 +209,17 @@ fun ReaderScreen(
           )
         },
         bottomBar = {
-          BottomAppBarOfReaderScreen(
-            state.bookmarkButtonItem,
-            state.previousPageButtonItem,
-            state.onHomeButtonClick,
-            state.nextPageButtonItem,
-            state.tocButtonItem,
-            state.shouldShowBottomAppBar,
-            bottomAppBarScrollBehavior
-          )
+          if (!state.isNoBookOpenInReader) {
+            BottomAppBarOfReaderScreen(
+              state.bookmarkButtonItem,
+              state.previousPageButtonItem,
+              state.onHomeButtonClick,
+              state.nextPageButtonItem,
+              state.tocButtonItem,
+              state.shouldShowBottomAppBar,
+              bottomAppBarScrollBehavior
+            )
+          }
         },
         floatingActionButton = { BackToTopFab(state) },
         modifier = Modifier
@@ -328,12 +328,14 @@ private fun ReaderContentLayout(
         state.fullScreenItem.first -> ShowFullScreenView(state)
 
         else -> {
-          ShowZIMFileContent(
-            state,
-            bottomAppBarScrollBehavior,
-            topAppBarScrollBehavior,
-            shouldUpdateTopAppBarAndBottomAppBarOnScrolling
-          )
+          state.selectedWebView?.let { selectedWebView ->
+            KiwixWebViewWithAppBarScrolling(
+              selectedWebView,
+              topAppBarScrollBehavior,
+              bottomAppBarScrollBehavior,
+              shouldUpdateTopAppBarAndBottomAppBarOnScrolling
+            )
+          }
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state)
@@ -521,55 +523,6 @@ fun SearchPlaceholder(hint: String, searchPlaceHolderClick: () -> Unit) {
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ShowZIMFileContent(
-  state: ReaderScreenState,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
-  topAppBarScrollBehavior: TopAppBarScrollBehavior,
-  shouldUpdateTopAppBarAndBottomAppBarOnScrolling: MutableState<Boolean>
-) {
-  state.selectedWebView?.let { selectedWebView ->
-    key(selectedWebView) {
-      DisposableEffect(Unit) {
-        val listener = View.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-          val deltaY = (scrollY - oldScrollY).toFloat()
-          if (deltaY == 0f || !shouldUpdateTopAppBarAndBottomAppBarOnScrolling.value) return@OnScrollChangeListener
-          val topLimit = topAppBarScrollBehavior.state.heightOffsetLimit
-          val bottomLimit = bottomAppBarScrollBehavior.state.heightOffsetLimit
-
-          topAppBarScrollBehavior.state.heightOffset =
-            (topAppBarScrollBehavior.state.heightOffset - deltaY)
-              .coerceIn(topLimit, 0f)
-
-          bottomAppBarScrollBehavior.state.heightOffset =
-            (bottomAppBarScrollBehavior.state.heightOffset - deltaY)
-              .coerceIn(bottomLimit, 0f)
-        }
-
-        selectedWebView.setOnScrollChangeListener(listener)
-
-        onDispose {
-          selectedWebView.setOnScrollChangeListener(null)
-        }
-      }
-      AndroidView(
-        factory = { context ->
-          FrameLayout(context).apply {
-            (selectedWebView.parent as? ViewGroup)?.removeView(selectedWebView)
-            selectedWebView.layoutParams = FrameLayout.LayoutParams(
-              FrameLayout.LayoutParams.MATCH_PARENT,
-              FrameLayout.LayoutParams.MATCH_PARENT
-            )
-            addView(selectedWebView)
-          }
-        },
-        modifier = Modifier.fillMaxSize(),
-      )
-    }
-  }
-}
-
 @Composable
 private fun ShowFullScreenView(state: ReaderScreenState) {
   state.fullScreenItem.second?.let { videoView ->
@@ -650,19 +603,12 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
-    SmallFloatingActionButton(
+    KiwixFloatingActionButton(
+      icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
       onClick = state.backToTopButtonClick,
-      modifier = Modifier.padding(bottom = BACK_TO_TOP_BUTTON_BOTTOM_MARGIN),
-      containerColor = MaterialTheme.colorScheme.primary,
-      contentColor = MaterialTheme.colorScheme.onPrimary,
-      shape = CircleShape
-    ) {
-      Icon(
-        painter = Drawable(R.drawable.action_find_previous).toPainter(),
-        contentDescription = stringResource(R.string.pref_back_to_top),
-        tint = White
-      )
-    }
+      contentDescription = stringResource(R.string.pref_back_to_top),
+      shouldPulse = true
+    )
   }
 }
 

@@ -30,7 +30,7 @@ import androidx.fragment.app.DialogFragment
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem

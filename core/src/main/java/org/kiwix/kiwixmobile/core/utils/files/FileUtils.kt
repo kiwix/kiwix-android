@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.hasContent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -62,6 +63,10 @@ object FileUtils {
   private val fileOperationMutex = Mutex()
   private const val SPELLING_DB_CACHED_DIRECTORY = "SpellingsDBCachedDir"
   private const val ASSET_LOADING_CACHED_DIRECTORY = "AssetLoadingCachedDir"
+
+  val EXPORT_BOOK_MARK_PATH =
+    "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+      "/org.kiwix"
 
   @JvmStatic
   fun getSpellingDBDir(context: Context): File? {
@@ -745,7 +750,7 @@ object FileUtils {
             zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
               fileToSave.outputStream().use(inputStream::copyTo)
             }
-            fileToSave
+            if (fileToSave.hasContent()) fileToSave else null
           }
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save file", e)

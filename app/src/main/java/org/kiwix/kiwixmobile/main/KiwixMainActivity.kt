@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.main
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -40,7 +41,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -69,6 +69,7 @@ import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
@@ -88,6 +89,7 @@ import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
@@ -358,21 +360,35 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun handleNotificationIntent(intent: Intent?) {
-    if (intent?.hasExtra(DOWNLOAD_NOTIFICATION_TITLE) == true) {
-      lifecycleScope.launch {
-        delay(OPENING_ZIM_FILE_DELAY)
-        intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
-          libkiwixBookOnDisk.bookMatching(it)?.let { bookOnDiskEntity ->
-            openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
-          }
-        }
+    val openFileTitle = intent?.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE) ?: return
+    // Cancel the notification when user taps the "Open" action button
+    val notificationId = intent.getIntExtra(DOWNLOAD_NOTIFICATION_ID, -1)
+    if (notificationId != -1) {
+      val notificationManager =
+        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+      notificationManager.cancel(notificationId)
+    }
+    lifecycleScope.launch {
+      delay(OPENING_ZIM_FILE_DELAY)
+      libkiwixBookOnDisk.bookMatching(openFileTitle)?.let { bookOnDiskEntity ->
+        openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
       }
     }
   }
 
   private fun openZimFromFilePath(path: String) {
-    navigate(KiwixDestination.Reader.route)
-    setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+    val isAlreadyOnReader =
+      navController.currentDestination?.route == KiwixDestination.Reader.route
+    if (isAlreadyOnReader) {
+      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+      supportFragmentManager.fragments
+        .filterIsInstance<KiwixReaderFragment>()
+        .firstOrNull()
+        ?.openPageInBookFromNavigationArguments()
+    } else {
+      navigate(KiwixDestination.Reader.route)
+      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+    }
   }
 
   override val zimHostDrawerMenuItem: DrawerMenuItem? by lazy {
@@ -460,7 +476,7 @@ class KiwixMainActivity : CoreMainActivity() {
       ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
         .setShortLabel(getString(string.new_tab_shortcut_label))
         .setLongLabel(getString(string.new_tab_shortcut_label))
-        .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
+        .setIcon(createShortcutIcon(drawable.ic_add_blue_24dp))
         .setDisabledMessage(getString(string.shortcut_disabled_message))
         .setIntent(
           Intent(this, KiwixMainActivity::class.java).apply {
@@ -474,7 +490,7 @@ class KiwixMainActivity : CoreMainActivity() {
       ShortcutInfoCompat.Builder(this, GET_CONTENT_SHORTCUT_ID)
         .setShortLabel(getString(string.get_content_shortcut_label))
         .setLongLabel(getString(string.get_content_shortcut_label))
-        .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_get_content))
+        .setIcon(createShortcutIcon(drawable.ic_file_download_blue_24dp))
         .setDisabledMessage(getString(string.shortcut_disabled_message))
         .setIntent(
           Intent(this, KiwixMainActivity::class.java).apply {

@@ -95,6 +95,9 @@
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
+  <string name="share_article">Share article</string>
+  <string name="unable_to_share_article">Unable to share article</string>
+  <string name="please_wait_for_page_to_load">Please wait for the page to fully load</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
   <string name="cancel">Cancel</string>
@@ -319,7 +322,7 @@
   <string name="delete_selected_bookmarks">Delete Selected Bookmarks?</string>
   <string name="import_bookmarks_dialog_title">Import Bookmarks?</string>
   <string name="export_all_bookmarks_dialog_title">Export All Bookmarks?</string>
-  <string name="export_all_bookmarks_dialog_message">Exporting will generate bookmark.xml file in the Download/org.kiwix…/ folder.</string>
+  <string name="export_all_bookmarks_dialog_message">Exporting will generate bookmark.xml file in the \n%s folder.</string>
   <string name="bookmark_imported_message">All the bookmarks has been imported.</string>
   <string name="error_invalid_bookmark_file">Error: The selected file is not a valid bookmark file.</string>
   <string name="send_report">Send diagnostic report</string>

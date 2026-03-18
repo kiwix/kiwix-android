@@ -420,10 +420,12 @@ class FileUtilsInstrumentationTest {
         }
       }
     }
-    // get the SD card path
-    val sdCardPath =
-      context?.getExternalFilesDirs("")
-        ?.get(1)?.path?.substringBefore("/Android")
+    // Get all external storage directories (internal storage and possible SD card)
+    val externalDirs = context?.getExternalFilesDirs("")
+    require(externalDirs != null && externalDirs.size > 1) {
+      "SD card must be enabled in the emulator/device to run this test"
+    }
+    val sdCardPath = externalDirs[1].path.substringBefore("/Android")
     val dummyUriData =
       arrayListOf(
         // test the download uri on older devices

@@ -128,6 +128,7 @@ class InitialDownloadTest : BaseActivityTest() {
       clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+      searchD3JsDocsFile(composeTestRule)
       downloadZimFile(composeTestRule)
     }
     initialDownload {

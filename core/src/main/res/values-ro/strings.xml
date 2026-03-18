@@ -307,7 +307,7 @@
   <string name="delete_selected_bookmarks">Ștergeți Semnele de Carte Selectate?</string>
   <string name="import_bookmarks_dialog_title">Importă Semnele de carte?</string>
   <string name="export_all_bookmarks_dialog_title">Exportă Toate Semnele de Carte?</string>
-  <string name="export_all_bookmarks_dialog_message">Exportarea va genera fișierul bookmark.xml în folderul Download/org.kiwix…/.</string>
+  <string name="export_all_bookmarks_dialog_message">Exportarea va genera fișierul bookmark.xml în folderul \n%s.</string>
   <string name="bookmark_imported_message">Toate semnele de carte au fost importate.</string>
   <string name="error_invalid_bookmark_file">Eroare: Fișierul selectat nu este un fișier de semn de carte valid.</string>
   <string name="send_report">Trimite raport de diagnostic</string>

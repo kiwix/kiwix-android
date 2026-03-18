@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,8 +43,14 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -50,17 +59,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.Flow
+import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.bottomShadow
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
+
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_SP
@@ -68,6 +87,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_SHADOW_ELEVA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_LEFT_RIGHT_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_ROW_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
@@ -75,13 +95,129 @@ import org.threeten.bp.format.DateTimeParseException
 const val SWITCH_TEXT_TESTING_TAG = "switchTextTestingTag"
 const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"
 const val PAGE_LIST_TEST_TAG = "pageListTestingTag"
+const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
+const val DELETE_MENU_ICON_TESTING_TAG = "deleteMenuIconTestingTag"
 
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("LongMethod", "LongParameterList")
+@Composable
+fun <T : Page, S : PageState<T>> PageScreenRoute(
+  switchString: String,
+  screenTitle: String,
+  searchQueryHint: String,
+  deleteIconTitle: Int,
+  noItemsString: String,
+  switchIsCheckedFlow: Flow<Boolean>,
+  alertDialogShower: AlertDialogShower,
+  navigateBack: () -> Unit,
+  viewModel: PageViewModel<T, S>
+) {
+  val state by viewModel.state.collectAsStateWithLifecycle()
+  val activity = LocalActivity.current as CoreMainActivity
+
+  var isSearchActive by rememberSaveable { mutableStateOf(false) }
+  var searchText by rememberSaveable { mutableStateOf("") }
+  val isInSelectionMode = state.isInSelectionState
+  val selectedCount by remember(state.pageItems) {
+    derivedStateOf {
+      state.pageItems.count { it.isSelected }
+    }
+  }
+
+  LaunchedEffect(Unit) {
+    viewModel.setAlertDialogShower(alertDialogShower)
+    viewModel.setLifeCycleScope(activity.lifecycleScope)
+  }
+
+  viewModel.effects.CollectSideEffectWithActivity { effect, coreActivity ->
+    effect.invokeWith(coreActivity)
+  }
+
+  val handleNavigationClick = remember(
+    isSearchActive,
+    isInSelectionMode,
+    searchText
+  ) {
+    {
+      when {
+        isSearchActive -> {
+          isSearchActive = false
+          searchText = ""
+          viewModel.actions.tryEmit(Action.Filter(""))
+        }
+
+        isInSelectionMode -> viewModel.actions.tryEmit(Action.ExitActionModeMenu)
+        else -> navigateBack()
+      }
+    }
+  }
+
+  BackHandler(enabled = isSearchActive || isInSelectionMode) { handleNavigationClick() }
+
+  PageScreen(
+    state = state,
+    searchText = searchText,
+    screenTitle = screenTitle,
+    switchString = switchString,
+    noItemsString = noItemsString,
+    searchQueryHint = searchQueryHint,
+    isSearchBarActive = isSearchActive,
+    isInSelectionMode = isInSelectionMode,
+    selectedCount = selectedCount,
+    switchIsCheckedFlow = switchIsCheckedFlow,
+    navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
+    actionMenuItems = actionMenuList(
+      deleteIconTitle = deleteIconTitle,
+      isSearchActive = isSearchActive,
+      isInSelectionMode = isInSelectionMode,
+      onSearchClick = {
+        isSearchActive = true
+      },
+      onDeleteClick = {
+        viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
+      },
+      onSelectionDeleteClick = {
+        viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
+      }
+    ),
+    onClearSearch = {
+      searchText = ""
+      viewModel.actions.tryEmit(Action.Filter(""))
+    },
+    onSearchTextChange = { newText ->
+      searchText = newText
+      viewModel.actions.tryEmit(Action.Filter(newText.trim()))
+    },
+    onSwitchCheckedChange = { isChecked ->
+      viewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
+    },
+    onItemLongClick = { page ->
+      viewModel.actions.tryEmit(Action.OnItemLongClick(page))
+    },
+    onItemClick = { page ->
+      viewModel.actions.tryEmit(Action.OnItemClick(page))
+    },
+  )
+}
+
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList", "LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PageScreen(
-  state: PageFragmentScreenState,
-  itemClickListener: OnItemClickListener,
+fun <T : Page, S : PageState<T>> PageScreen(
+  state: S,
+  searchText: String,
+  switchString: String,
+  screenTitle: String,
+  searchQueryHint: String,
+  noItemsString: String,
+  isSearchBarActive: Boolean,
+  isInSelectionMode: Boolean,
+  selectedCount: Int,
+  switchIsCheckedFlow: Flow<Boolean>,
+  onItemClick: (Page) -> Unit,
+  onItemLongClick: (Page) -> Unit,
+  onSearchTextChange: (String) -> Unit,
+  onSwitchCheckedChange: (Boolean) -> Unit,
+  onClearSearch: () -> Unit,
   actionMenuItems: List<ActionMenuItem>,
   navigationIcon: @Composable () -> Unit
 ) {
@@ -90,16 +226,32 @@ fun PageScreen(
       topBar = {
         Column {
           KiwixAppBar(
-            title = stringResource(state.screenTitle),
+            title = if (isInSelectionMode) {
+              stringResource(R.string.selected_items, selectedCount)
+            } else {
+              screenTitle
+            },
             navigationIcon = navigationIcon,
             actionMenuItems = actionMenuItems,
-            searchBar = searchBarIfActive(state)
+            searchBar = searchBarIfActive(
+              isSearchBarActive = isSearchBarActive,
+              isInSelectionMode = isInSelectionMode,
+              searchQueryHint = searchQueryHint,
+              searchText = searchText,
+              onSearchTextChange = onSearchTextChange,
+              onClearSearch = onClearSearch
+            )
           )
-          PageSwitchRow(state)
+          PageSwitchRow(
+            switchString = switchString,
+            switchIsEnabled = !state.isInSelectionState,
+            switchIsCheckedFlow = switchIsCheckedFlow,
+            onSwitchCheckedChange = onSwitchCheckedChange
+          )
         }
       }
     ) { padding ->
-      val items = state.pageState.pageItems
+      val items = state.pageItems
       Box(
         modifier = Modifier
           .padding(
@@ -111,7 +263,7 @@ fun PageScreen(
       ) {
         if (items.isEmpty()) {
           Text(
-            text = state.noItemsString,
+            text = noItemsString,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
               .align(Alignment.Center)
@@ -119,8 +271,9 @@ fun PageScreen(
           )
         } else {
           PageList(
-            state = state,
-            itemClickListener = itemClickListener
+            visiblePageItems = state.visiblePageItems,
+            onItemClick = onItemClick,
+            onItemLongClick = onItemLongClick
           )
         }
       }
@@ -130,8 +283,9 @@ fun PageScreen(
 
 @Composable
 private fun PageList(
-  state: PageFragmentScreenState,
-  itemClickListener: OnItemClickListener
+  visiblePageItems: List<PageRelated>,
+  onItemClick: (Page) -> Unit,
+  onItemLongClick: (Page) -> Unit,
 ) {
   val listState = rememberLazyListState()
   LazyColumn(
@@ -141,9 +295,15 @@ private fun PageList(
       // hides keyboard when scrolled
       .hideKeyboardOnLazyColumnScroll(listState)
   ) {
-    itemsIndexed(state.pageState.visiblePageItems) { index, item ->
+    itemsIndexed(visiblePageItems) { index, item ->
       when (item) {
-        is Page -> PageListItem(index = index, page = item, itemClickListener = itemClickListener)
+        is Page -> PageListItem(
+          index = index,
+          page = item,
+          onItemClick = onItemClick,
+          onItemLongClick = onItemLongClick
+        )
+
         is DateItem -> DateItemText(item)
       }
     }
@@ -151,30 +311,16 @@ private fun PageList(
 }
 
 @Composable
-private fun searchBarIfActive(
-  state: PageFragmentScreenState
-): (@Composable () -> Unit)? = if (state.isSearchActive) {
-  {
-    KiwixSearchView(
-      placeholder = state.searchQueryHint,
-      value = state.searchText,
-      searchViewTextFiledTestTag = "",
-      onValueChange = { state.searchValueChangedListener(it) },
-      onClearClick = { state.clearSearchButtonClickListener.invoke() }
-    )
-  }
-} else {
-  null
-}
-
-@Composable
-fun PageSwitchRow(
-  state: PageFragmentScreenState
+private fun PageSwitchRow(
+  switchString: String,
+  switchIsEnabled: Boolean,
+  switchIsCheckedFlow: Flow<Boolean>,
+  onSwitchCheckedChange: (Boolean) -> Unit,
 ) {
   val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
   if (!context.isCustomApp()) {
-    val isChecked by state.switchIsCheckedFlow.collectAsState(true)
+    val isChecked by switchIsCheckedFlow.collectAsState(true)
     Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
       Row(
         modifier = Modifier
@@ -185,15 +331,15 @@ fun PageSwitchRow(
         verticalAlignment = Alignment.CenterVertically
       ) {
         Text(
-          state.switchString,
+          text = switchString,
           color = MaterialTheme.colorScheme.onBackground,
           style = TextStyle(fontSize = FOURTEEN_SP),
           modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
         )
         Switch(
           checked = isChecked,
-          onCheckedChange = { state.onSwitchCheckedChanged(it) },
-          enabled = state.switchIsEnabled,
+          onCheckedChange = onSwitchCheckedChange,
+          enabled = switchIsEnabled,
           modifier = Modifier
             .padding(horizontal = PAGE_SWITCH_LEFT_RIGHT_MARGIN),
           colors = SwitchDefaults.colors(
@@ -231,6 +377,84 @@ private fun parseDateSafely(dateString: String): LocalDate? {
   return try {
     LocalDate.parse(dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
   } catch (_: DateTimeParseException) {
+    null
+  }
+}
+
+/**
+ * Builds the list of action menu items for the app bar.
+ *
+ * @param isSearchActive Whether the search mode is currently active.
+ * @param isInSelectionMode Whether the screen is in selection mode.
+ * @param deleteIconTitle The string resource ID for the delete icon content description.
+ * @param onSearchClick Callback to invoke when the search icon is clicked.
+ * @param onDeleteClick Callback to invoke when the delete icon is clicked.
+ * @param onSelectionDeleteClick Callback to invoke when the delete selected items icon is clicked.
+ * @return A list of [ActionMenuItem]s to be displayed in the app bar.
+ *
+ * - If in selection mode, shows only the delete selected items icon.
+ * - Otherwise, shows the search icon only when search is not active, and always includes the delete icon.
+ */
+private fun actionMenuList(
+  isSearchActive: Boolean,
+  isInSelectionMode: Boolean,
+  deleteIconTitle: Int,
+  onSearchClick: () -> Unit,
+  onDeleteClick: () -> Unit,
+  onSelectionDeleteClick: () -> Unit,
+): List<ActionMenuItem> = when {
+  isInSelectionMode -> listOf(
+    ActionMenuItem(
+      icon = IconItem.Vector(Icons.Default.Delete),
+      contentDescription = R.string.delete,
+      onClick = onSelectionDeleteClick,
+      testingTag = DELETE_MENU_ICON_TESTING_TAG
+    )
+  )
+  else -> listOfNotNull(
+    when {
+      !isSearchActive -> ActionMenuItem(
+        icon = IconItem.Drawable(R.drawable.action_search),
+        contentDescription = R.string.search_label,
+        onClick = onSearchClick,
+        testingTag = SEARCH_ICON_TESTING_TAG
+      )
+
+      else -> null
+    },
+    ActionMenuItem(
+      icon = IconItem.Vector(Icons.Default.Delete),
+      contentDescription = deleteIconTitle,
+      onClick = onDeleteClick,
+      testingTag = DELETE_MENU_ICON_TESTING_TAG
+    )
+  )
+}
+
+/**
+ * Returns the search bar composable if the search is active and not in selection mode,
+ * otherwise returns null.
+ */
+@Composable
+private fun searchBarIfActive(
+  isSearchBarActive: Boolean,
+  isInSelectionMode: Boolean,
+  searchQueryHint: String,
+  searchText: String,
+  onSearchTextChange: (String) -> Unit,
+  onClearSearch: () -> Unit,
+): (@Composable () -> Unit)? {
+  return if (isSearchBarActive && !isInSelectionMode) {
+    {
+      KiwixSearchView(
+        placeholder = searchQueryHint,
+        value = searchText,
+        searchViewTextFiledTestTag = "",
+        onValueChange = onSearchTextChange,
+        onClearClick = onClearSearch
+      )
+    }
+  } else {
     null
   }
 }

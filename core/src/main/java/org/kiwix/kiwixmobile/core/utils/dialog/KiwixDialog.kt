@@ -372,10 +372,14 @@ sealed class KiwixDialog(
       R.string.open_in_new_tab
     )
 
-    object ExportBookmarks : YesNoDialog(
-      R.string.export_all_bookmarks_dialog_title,
-      message = R.string.export_all_bookmarks_dialog_message,
-    )
+    data class ExportBookmarks(override val args: List<Any>) :
+      YesNoDialog(
+        R.string.export_all_bookmarks_dialog_title,
+        message = R.string.export_all_bookmarks_dialog_message,
+      ),
+      HasBodyFormatArgs {
+      constructor(path: String) : this(listOf(path))
+    }
 
     object FileSystemScan : YesNoDialog(
       R.string.file_system_scan_dialog_title,

@@ -19,10 +19,10 @@ package org.kiwix.kiwixmobile.core.data
 
 import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.libkiwix.Book
 
@@ -44,7 +44,7 @@ interface DataSource {
   fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>>
   suspend fun saveNote(noteListItem: NoteListItem)
   suspend fun deleteNote(noteTitle: String)
-  suspend fun deleteNotes(noteList: List<NoteListItem>)
+  suspend fun clearNotes()
   suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
   fun getAllWebViewPagesHistory(): Flow<List<WebViewHistoryEntity>>
   suspend fun clearWebViewPagesHistory()

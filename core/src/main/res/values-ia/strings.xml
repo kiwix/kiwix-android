@@ -310,7 +310,7 @@
   <string name="delete_selected_bookmarks">Deler marcapaginas seligite?</string>
   <string name="import_bookmarks_dialog_title">Importar marcapaginas?</string>
   <string name="export_all_bookmarks_dialog_title">Exportar tote le marcapaginas?</string>
-  <string name="export_all_bookmarks_dialog_message">Le exportation generara un file bookmark.xml in le dossier Download/org.kiwix…/.</string>
+  <string name="export_all_bookmarks_dialog_message">Le exportation generara un file bookmark.xml in le dossier \n%s.</string>
   <string name="bookmark_imported_message">Tote le marcapaginas ha essite importate.</string>
   <string name="error_invalid_bookmark_file">Error: Le file seligite non es un file de marcapaginas valide.</string>
   <string name="send_report">Inviar reporto diagnostic</string>

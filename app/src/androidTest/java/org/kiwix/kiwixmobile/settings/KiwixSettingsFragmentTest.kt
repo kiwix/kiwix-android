@@ -142,13 +142,9 @@ class KiwixSettingsFragmentTest {
       toggleExternalLinkWarningPref(composeTestRule)
       toggleWifiDownloadsOnlyPref(composeTestRule)
       clickExternalStoragePreference(composeTestRule)
-      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-        assertExternalStorageSelected(composeTestRule)
-      }
+      assertExternalStorageSelected(composeTestRule)
       clickInternalStoragePreference(composeTestRule)
-      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-        assertInternalStorageSelected(composeTestRule)
-      }
+      assertInternalStorageSelected(composeTestRule)
       clickClearHistoryPreference(composeTestRule)
       assertHistoryDialogDisplayed(composeTestRule)
       dismissDialog()

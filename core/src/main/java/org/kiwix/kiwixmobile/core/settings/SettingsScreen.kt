@@ -76,10 +76,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -123,6 +120,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -172,7 +170,7 @@ private fun SetUpViewModelAndPermissionLauncher(
   LaunchedEffect(Unit) {
     coreSettingsViewModel.initialize(activity = coreMainActivity)
     coreSettingsViewModel.actions
-      .onEach { action ->
+      .collect { action ->
         handleSettingsAction(
           action = action,
           viewModel = coreSettingsViewModel,
@@ -180,7 +178,6 @@ private fun SetUpViewModelAndPermissionLauncher(
           launchers = launchers
         )
       }
-      .launchIn(coreSettingsViewModel.viewModelScope)
   }
 }
 
@@ -289,7 +286,7 @@ private fun showImportBookmarkDialog(
 
 private fun showExportBookmarkDialog(coreSettingsViewModel: CoreSettingsViewModel) {
   coreSettingsViewModel.alertDialogShower.show(
-    KiwixDialog.YesNoDialog.ExportBookmarks,
+    KiwixDialog.YesNoDialog.ExportBookmarks(EXPORT_BOOK_MARK_PATH),
     { coreSettingsViewModel.exportBookmark() }
   )
 }

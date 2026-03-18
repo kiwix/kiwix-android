@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
-import android.os.Environment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,12 +40,13 @@ import org.kiwix.kiwixmobile.core.extensions.getFavicon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
@@ -437,11 +437,7 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private suspend fun exportedFile(fileName: String): File {
-    val rootFolder =
-      File(
-        "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
-          "/org.kiwix"
-      )
+    val rootFolder = File(EXPORT_BOOK_MARK_PATH)
     if (!rootFolder.isFileExist()) rootFolder.mkdir()
     return sequence {
       yield(File(rootFolder, fileName))

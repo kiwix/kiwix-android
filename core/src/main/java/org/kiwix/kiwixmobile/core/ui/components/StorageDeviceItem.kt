@@ -18,14 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -44,7 +46,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
 import eu.mhutti1.utils.storage.StorageDevice
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
 import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
 import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
@@ -54,9 +55,12 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FREE_SPACE_TEXTVIEW_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PROGRESS_BAR_HEIGHT
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.STORAGE_TITLE_TEXTVIEW_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ZERO_DP
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val STORAGE_DEVICE_ITEM_TESTING_TAG = "storageDeviceItemTestingTag"
@@ -65,7 +69,7 @@ const val STORAGE_DEVICE_ITEM_TESTING_TAG = "storageDeviceItemTestingTag"
 fun StorageDeviceItem(
   index: Int,
   storageDevice: StorageDevice,
-  shouldShowCheckboxSelected: Boolean,
+  shouldShowStorageSelected: Boolean,
   onClick: (StorageDevice) -> Unit,
   storageCalculator: StorageCalculator,
   kiwixDataStore: KiwixDataStore,
@@ -87,25 +91,25 @@ fun StorageDeviceItem(
       storageCalculator
     )
   }
+  val isSelected = shouldShowStorageSelected && currentStorageIndex == index
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = SIXTEEN_DP)
+      .border(
+        width = if (isSelected) ONE_DP else ZERO_DP,
+        color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
+        shape = RoundedCornerShape(FOUR_DP)
+      )
+      .padding(TWELVE_DP)
       .selectable(
-        selected = shouldShowCheckboxSelected && currentStorageIndex == index,
+        selected = isSelected,
         onClick = { onClick(storageDevice) }
       )
       .semantics { testTag = STORAGE_DEVICE_ITEM_TESTING_TAG }
-      .padding(vertical = EIGHT_DP)
   ) {
-    RadioButton(
-      selected = shouldShowCheckboxSelected && currentStorageIndex == index,
-      onClick = null
-    )
     Column(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(start = EIGHT_DP)
     ) {
       Text(
         text = resizeStoragePathAndTitle(storagePathAndTitle),

@@ -54,6 +54,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.library
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerImpl
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -317,7 +319,9 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       kiwixMainActivity,
       kiwixDataStore,
       StorageCalculator(kiwixDataStore),
-      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()))
+      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker())),
+      FileOperationHandlerImpl(kiwixMainActivity),
+      CopyMoveProgressBarControllerImpl(kiwixMainActivity)
     ).apply {
       setAlertDialogShower(AlertDialogShower())
     }

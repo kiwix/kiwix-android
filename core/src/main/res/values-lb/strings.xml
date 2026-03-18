@@ -212,7 +212,7 @@
   <string name="delete_selected_bookmarks">Déi ausgewielte Lieszeeche läschen?</string>
   <string name="import_bookmarks_dialog_title">Lieszeechen importéieren?</string>
   <string name="export_all_bookmarks_dialog_title">All Lieszeechen exportéieren?</string>
-  <string name="export_all_bookmarks_dialog_message">Beim Exportéiere gëtt ee Fichier „bookmark.xml“ am Dossier „Download/org.kiwix…/“ ugeluecht.</string>
+  <string name="export_all_bookmarks_dialog_message">Beim Exportéiere gëtt ee Fichier „bookmark.xml" am Dossier \n„%s" ugeluecht.</string>
   <string name="bookmark_imported_message">All d’Lieszeeche goufen importéiert.</string>
   <string name="error_invalid_bookmark_file">Feeler: Den ausgewielte Fichier ass kee valabele Lieszeechefichier.</string>
   <string name="diagnostic_report_message" fuzzy="true">Schéckt ons wgl. all déi follgend Detailer fir datt mir de Problem feststelle kënnen</string>

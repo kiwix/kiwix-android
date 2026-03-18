@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
@@ -202,7 +201,7 @@ class CustomMainActivity : CoreMainActivity() {
     val newTabShortcut = ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
       .setShortLabel(getString(string.new_tab_shortcut_label))
       .setLongLabel(getString(string.new_tab_shortcut_label))
-      .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
+      .setIcon(createShortcutIcon(drawable.ic_add_blue_24dp))
       .setDisabledMessage(getString(string.shortcut_disabled_message))
       .setIntent(
         Intent(this, CustomMainActivity::class.java).apply {

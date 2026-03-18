@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -31,10 +32,10 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
@@ -135,9 +136,10 @@ class Repository @Inject internal constructor(
     }
 
   @Suppress("InjectDispatcher")
-  override suspend fun deleteNotes(noteList: List<NoteListItem>) =
+  override suspend fun clearNotes() =
     withContext(Dispatchers.IO) {
-      notesRoomDao.deleteNotes(noteList)
+      val notesList = notesRoomDao.notes().first().map { it as NoteListItem }
+      notesRoomDao.deleteNotes(notesList)
     }
 
   override suspend fun insertWebViewPageHistoryItems(

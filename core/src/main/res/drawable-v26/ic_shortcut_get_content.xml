@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:keep="@drawable/ic_shortcut_get_content">
+  <background android:drawable="@drawable/ic_shortcut_background" />
+  <foreground android:drawable="@drawable/ic_shortcut_get_content_foreground" />
+</adaptive-icon>

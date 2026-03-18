@@ -27,6 +27,10 @@ import dagger.Provides
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.di.KiwixScope
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerImpl
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
@@ -48,6 +52,17 @@ object KiwixModule {
       kiwixDataStore,
       listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker())
     )
+
+  @Provides
+  @KiwixScope
+  internal fun provideFileOperationHandler(fileOperationHandlerImpl: FileOperationHandlerImpl): FileOperationHandler =
+    fileOperationHandlerImpl
+
+  @Provides
+  @KiwixScope
+  internal fun provideCopyMoveProgressBarController(
+    copyMoveProgressBarControllerImpl: CopyMoveProgressBarControllerImpl
+  ): CopyMoveProgressBarController = copyMoveProgressBarControllerImpl
 
   // We are forced to use the nullable type because of a
   // crash on our nightly builds running on an emulator API 27

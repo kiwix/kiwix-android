@@ -34,21 +34,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
-import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
-import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.KIWIX_LANGUAGE_URL
-import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
@@ -68,20 +57,18 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  private var kiwixService: KiwixService,
+  @CategoryKiwixService private val kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private val coroutineJobs = mutableListOf<Job>()
-  private var isUnitTestCase: Boolean = false
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -89,11 +76,6 @@ class LanguageViewModel @Inject constructor(
       add(observeActions())
       add(observeLanguages())
     }
-  }
-
-  @VisibleForTesting
-  fun setIsUnitTestCase() {
-    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -104,10 +86,6 @@ class LanguageViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun fetchLanguagesFlow() = flow {
-    if (!isUnitTestCase) {
-      kiwixService =
-        ServiceCreator.newHackListService(getOkHttpClient(), KIWIX_LANGUAGE_URL)
-    }
     val feed = kiwixService.getLanguages()
     var allBooksCount = ZERO
 
@@ -256,20 +234,6 @@ class LanguageViewModel @Inject constructor(
     filter: String,
     currentState: Content
   ) = currentState.updateFilter(filter)
-
-  private fun getOkHttpClient() = OkHttpClient().newBuilder()
-    .followRedirects(true)
-    .followSslRedirects(true)
-    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-    .readTimeout(READ_TIMEOUT, SECONDS)
-    .callTimeout(CALL_TIMEOUT, SECONDS)
-    .addNetworkInterceptor(
-      HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) BASIC else NONE
-      }
-    )
-    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-    .build()
 }
 
 object LanguageSessionCache {

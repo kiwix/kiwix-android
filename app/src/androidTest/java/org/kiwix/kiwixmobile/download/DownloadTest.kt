@@ -101,6 +101,7 @@ class DownloadTest : BaseActivityTest() {
         setIsPlayStoreBuild(true)
         setPrefIsTest(true)
         setSelectedOnlineContentCategory("")
+        setSelectedOnlineContentLanguage("")
       }
     }
     activityScenario =
@@ -147,6 +148,7 @@ class DownloadTest : BaseActivityTest() {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+        searchD3JsDocsFile(composeTestRule)
         downloadZimFile(composeTestRule)
         try {
           assertDownloadStart(composeTestRule)
@@ -231,6 +233,7 @@ class DownloadTest : BaseActivityTest() {
       clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+      searchD3JsDocsFile(composeTestRule)
       downloadZimFile(composeTestRule)
       assertDownloadStart(composeTestRule)
       pauseDownload(composeTestRule)
@@ -279,6 +282,7 @@ class DownloadTest : BaseActivityTest() {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
+        searchD3JsDocsFile(composeTestRule)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
         pauseDownload(composeTestRule)
@@ -328,7 +332,7 @@ class DownloadTest : BaseActivityTest() {
         clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        searchZappingSauvageFile(composeTestRule)
+        searchD3JsDocsFile(composeTestRule)
         downloadZimFile(composeTestRule)
         assertDownloadStart(composeTestRule)
       }

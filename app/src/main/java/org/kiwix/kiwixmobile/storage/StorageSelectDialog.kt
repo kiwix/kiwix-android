@@ -54,14 +54,14 @@ class StorageSelectDialog : DialogFragment() {
   lateinit var kiwixDataStore: KiwixDataStore
   private var aTitle: String? = null
   private val storageDeviceList = arrayListOf<StorageDevice>()
-  private var shouldShowCheckboxSelected: Boolean = true
+  private var shouldShowStorageSelected: Boolean = true
 
   fun setStorageDeviceList(storageDeviceList: List<StorageDevice>) {
     this.storageDeviceList.addAll(storageDeviceList)
   }
 
-  fun setShouldShowCheckboxSelected(shouldShowCheckboxSelected: Boolean) {
-    this.shouldShowCheckboxSelected = shouldShowCheckboxSelected
+  fun setShouldShowStorageSelected(shouldShowStorageSelected: Boolean) {
+    this.shouldShowStorageSelected = shouldShowStorageSelected
   }
 
   override fun onCreateView(
@@ -77,7 +77,7 @@ class StorageSelectDialog : DialogFragment() {
           storageDeviceList,
           storageCalculator,
           kiwixDataStore,
-          shouldShowCheckboxSelected
+          shouldShowStorageSelected
         ) {
           lifecycleScope.runSafelyInLifecycleScope {
             onSelectAction?.invoke(it)

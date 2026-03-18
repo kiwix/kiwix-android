@@ -52,7 +52,7 @@ class CustomSettingsViewModel @Inject constructor(
   override suspend fun setStorage(coreMainActivity: CoreMainActivity) {
     settingsUiState.update {
       it.copy(
-        shouldShowStorageCategory = true,
+        shouldShowStorageCategory = false,
         isLoadingStorageDetails = false
       )
     }

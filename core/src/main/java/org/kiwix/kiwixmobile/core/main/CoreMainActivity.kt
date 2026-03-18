@@ -21,13 +21,19 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.IconCompat
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -72,6 +78,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
+import androidx.core.graphics.createBitmap
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
@@ -81,6 +88,8 @@ const val ZIM_FILE_URI_KEY = "zimFileUri"
 const val KIWIX_INTERNAL_ERROR = 10
 const val ACTION_NEW_TAB = "NEW_TAB"
 const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
+private const val ADAPTIVE_ICON_SIZE_DP = 108
+private const val ADAPTIVE_ICON_INSET_DP = 36
 
 // Fragments names for compose based navigation.
 const val READER_FRAGMENT = "readerFragment"
@@ -585,6 +594,40 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       settingDrawerGroup,
       helpAndSupportDrawerGroup
     )
+  }
+
+  protected fun createShortcutIcon(
+    @DrawableRes foregroundRes: Int
+  ): IconCompat {
+    val density = resources.displayMetrics.density
+    val sizePx = (ADAPTIVE_ICON_SIZE_DP * density).toInt()
+    val insetPx = ADAPTIVE_ICON_INSET_DP * density
+    val bitmap = createBitmap(sizePx, sizePx)
+    val canvas = Canvas(bitmap)
+
+    val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFF5F5F5.toInt() }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      canvas.drawRect(0f, 0f, sizePx.toFloat(), sizePx.toFloat(), bgPaint)
+    } else {
+      val radius = sizePx / 2f
+      canvas.drawCircle(radius, radius, radius, bgPaint)
+    }
+
+    AppCompatResources.getDrawable(this, foregroundRes)?.let { fg ->
+      fg.setBounds(
+        insetPx.toInt(),
+        insetPx.toInt(),
+        sizePx - insetPx.toInt(),
+        sizePx - insetPx.toInt()
+      )
+      fg.draw(canvas)
+    }
+
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      IconCompat.createWithAdaptiveBitmap(bitmap)
+    } else {
+      IconCompat.createWithBitmap(bitmap)
+    }
   }
 
   protected abstract fun getIconResId(): Int

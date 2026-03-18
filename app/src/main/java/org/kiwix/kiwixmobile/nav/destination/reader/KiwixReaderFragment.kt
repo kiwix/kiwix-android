@@ -46,12 +46,12 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.reader.HIDE_TAB_SWITCHER_DELAY
+import org.kiwix.kiwixmobile.core.main.reader.OPEN_HOME_SCREEN_DELAY
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -85,7 +85,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   @Suppress("MagicNumber")
-  private fun openPageInBookFromNavigationArguments() {
+  internal fun openPageInBookFromNavigationArguments() {
     showProgressBarWithProgress(30)
     val kiwixMainActivity = activity as? KiwixMainActivity
     val zimFileUri = getNavigationResult(ZIM_FILE_URI_KEY, kiwixMainActivity)
@@ -167,7 +167,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         if (webViewList.isEmpty()) {
           hideTabSwitcher(false)
         }
-      }, HIDE_TAB_SWITCHER_DELAY)
+      }, OPEN_HOME_SCREEN_DELAY)
     }
   }
 
