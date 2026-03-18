@@ -63,8 +63,4 @@ class ServiceModule {
   @ServiceScope
   fun providesHotspotStateReceiverCallback(service: Service): HotspotStateReceiver.Callback =
     service as HotspotStateReceiver.Callback
-
-  @Provides
-  @ServiceScope
-  fun providesGenerateQr(): GenerateQR = GenerateQR()
 }

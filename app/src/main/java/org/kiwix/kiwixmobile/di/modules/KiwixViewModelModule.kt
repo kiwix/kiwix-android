@@ -29,10 +29,16 @@ import org.kiwix.kiwixmobile.intro.KiwixIntroViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 
 @Module(includes = [CoreViewModelModule::class])
 abstract class KiwixViewModelModule {
+  @Binds
+  @IntoMap
+  @ViewModelKey(ZimHostViewModel::class)
+  abstract fun bindZimHostViewModel(viewModel: ZimHostViewModel): ViewModel
+
   @Binds
   @IntoMap
   @ViewModelKey(ZimManageViewModel::class)
