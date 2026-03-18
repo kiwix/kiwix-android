@@ -307,7 +307,6 @@ class OnlineLibraryViewModel @Inject constructor(
           }
         }
         titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-        setShouldShowCheckboxSelected(false)
       }
       dialog.setStorageDeviceList(activity.getStorageDeviceList())
       dialog.show(
