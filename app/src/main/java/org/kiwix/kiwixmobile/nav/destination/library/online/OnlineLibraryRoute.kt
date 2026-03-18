@@ -40,7 +40,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -58,7 +57,6 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -267,6 +265,7 @@ fun OnlineLibraryRoute(
       }
     },
     navHostController = navController,
+    zimManageViewModel = zimManageViewModel,
     navigationIcon = {
       NavigationIcon(
         iconItem = if (isSearchActive) {
@@ -318,6 +317,7 @@ private fun HandleUiEvents(
             }
           )
         }
+
         is OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar -> {
           snackbarHostState.snack(
             message = event.message,
@@ -326,6 +326,7 @@ private fun HandleUiEvents(
             actionClick = { event.onAction() }
           )
         }
+
         is OnlineLibraryViewModel.UiEvent.ShowDialog -> {
           alertDialogShower.show(
             event.dialog,
@@ -333,17 +334,21 @@ private fun HandleUiEvents(
             event.negativeAction
           )
         }
+
         is OnlineLibraryViewModel.UiEvent.ShowToast -> {
           context.toast(event.message, Toast.LENGTH_SHORT)
         }
+
         is OnlineLibraryViewModel.UiEvent.RequestPermission -> {
           // Handled via launchers
         }
+
         is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
           if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             (activity as androidx.fragment.app.FragmentActivity).navigateToSettings()
           }
         }
+
         is OnlineLibraryViewModel.UiEvent.NavigateToAppSettings -> {
           activity.navigateToAppSettings()
         }
@@ -414,6 +419,7 @@ private fun HandleEffects(
           onRefreshingChanged
         )
       }
+
       NetworkState.NOT_CONNECTED -> {
         if (!isListEmpty) {
           onlineLibraryViewModel.emitNoInternetSnackbar(context)
@@ -422,6 +428,7 @@ private fun HandleEffects(
         }
         onRefreshingChanged(false)
       }
+
       else -> {}
     }
   }
@@ -533,6 +540,7 @@ private fun onStopButtonClick(
           onlineLibraryViewModel.downloader.retryDownload(item.downloadId)
         }
       }
+
       else -> {
         onlineLibraryViewModel.emitDialog(KiwixDialog.YesNoDialog.StopDownload) {
           onlineLibraryViewModel.downloader.cancelDownload(item.downloadId)

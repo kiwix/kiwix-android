@@ -203,6 +203,7 @@ class OnlineLibraryViewModel @Inject constructor(
             emitNoInternetSnackbar(context)
             return@launch
           }
+
           kiwixDataStore.wifiOnly.first() &&
             !NetworkUtils.isWiFi(context) -> {
             emitDialog(
@@ -219,6 +220,7 @@ class OnlineLibraryViewModel @Inject constructor(
             )
             return@launch
           }
+
           else -> {
             if (kiwixDataStore.showStorageOption.first()) {
               if (activity.getStorageDeviceList().size > 1) {
@@ -262,7 +264,10 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  fun handleStoragePermissionRationale(activity: KiwixMainActivity, onRequestPermission: () -> Unit) {
+  fun handleStoragePermissionRationale(
+    activity: KiwixMainActivity,
+    onRequestPermission: () -> Unit
+  ) {
     viewModelScope.launch {
       val showRationale = permissionChecker.shouldShowRationale(
         activity,
@@ -394,10 +399,12 @@ class OnlineLibraryViewModel @Inject constructor(
             onRefreshingChanged
           )
         }
+
         kiwixDataStore.wifiOnly.first() && !NetworkUtils.isWiFi(context) -> {
           _noContentState.value =
             context.getString(R.string.swipe_down_for_library) to true
         }
+
         isListEmpty -> {
           zimManageViewModel.updateOnlineLibraryFilters(getOnlineLibraryRequest())
           _noContentState.value = "" to false
