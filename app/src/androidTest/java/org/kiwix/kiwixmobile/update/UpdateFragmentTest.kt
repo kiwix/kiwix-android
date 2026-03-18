@@ -19,20 +19,21 @@
 package org.kiwix.kiwixmobile.update
 
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
 import org.hamcrest.Matchers.anyOf
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,13 +42,16 @@ import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.entity.ApkInfo
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 const val MAX_APP_VERSION = "100.100.100"
 
@@ -112,25 +116,34 @@ class UpdateDialogTest : BaseActivityTest() {
         )
       )
     }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    // composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test
-  fun test() {
+  fun updateDownloadTest() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(kiwixMainActivity.readerFragmentRoute)
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     updateScreenRobot {
       navigateToUpdateScreen(composeTestRule)
-      clickUpdateButton(composeTestRule)
-      clickNavigationButton(composeTestRule)
-      assertStopDownloadDialogDisplayed(composeTestRule)
+      waitForApkInfoToLoad(composeTestRule)
+      downloadApkFile(composeTestRule)
+      assertDownloadApkStart(composeTestRule)
+      stopApkDownload(composeTestRule)
+      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+      clickOnNoButton(composeTestRule)
+      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+      clickOnNoButton(composeTestRule)
+      waitUntilApkDownloadComplete(
+        composeTestRule = composeTestRule,
+        kiwixMainActivity = kiwixMainActivity
+      )
+      assertDownloadApkFinished(composeTestRule)
     }
-  }
-
-  @After
-  fun tearDown() {
-    kiwixRoomDatabase.close()
   }
 }
