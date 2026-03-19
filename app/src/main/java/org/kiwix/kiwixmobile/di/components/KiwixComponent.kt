@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.di.components
 import dagger.Component
 import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.di.modules.CoroutineModule
 import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
 import org.kiwix.kiwixmobile.di.modules.KiwixModule
@@ -39,7 +40,8 @@ import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
     KiwixViewModelModule::class,
     KiwixModule::class,
     MigrationModule::class,
-    DatabaseModule::class
+    DatabaseModule::class,
+    CoroutineModule::class
   ]
 )
 interface KiwixComponent {
