@@ -23,6 +23,7 @@ import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
@@ -139,6 +140,7 @@ class DownloadStateTest {
     val context = mockk<Context>()
     every { context.getString(R.string.pending_state) } returns "Pending"
     assertThat(DownloadState.Pending.toReadableState(context)).isEqualTo("Pending")
+    verify { context.getString(R.string.pending_state) }
   }
 
   @Test
@@ -146,6 +148,7 @@ class DownloadStateTest {
     val context = mockk<Context>()
     every { context.getString(R.string.running_state) } returns "Downloading"
     assertThat(DownloadState.Running.toReadableState(context)).isEqualTo("Downloading")
+    verify { context.getString(R.string.running_state) }
   }
 
   @Test
@@ -153,6 +156,7 @@ class DownloadStateTest {
     val context = mockk<Context>()
     every { context.getString(R.string.paused_state) } returns "Paused"
     assertThat(DownloadState.Paused.toReadableState(context)).isEqualTo("Paused")
+    verify { context.getString(R.string.paused_state) }
   }
 
   @Test
@@ -160,6 +164,7 @@ class DownloadStateTest {
     val context = mockk<Context>()
     every { context.getString(R.string.complete) } returns "Complete"
     assertThat(DownloadState.Successful.toReadableState(context)).isEqualTo("Complete")
+    verify { context.getString(R.string.complete) }
   }
 
   @Test
@@ -169,5 +174,16 @@ class DownloadStateTest {
     every { context.getString(R.string.failed_state, "CONNECTION_TIMED_OUT") } returns
       "Failed: CONNECTION_TIMED_OUT"
     assertThat(failed.toReadableState(context)).isEqualTo("Failed: CONNECTION_TIMED_OUT")
+    verify { context.getString(R.string.failed_state, "CONNECTION_TIMED_OUT") }
+  }
+
+  @Test
+  fun `toReadableState works when Failed has zimUrl`() {
+    val context = mockk<Context>()
+    val failed = DownloadState.Failed(Error.UNKNOWN, "http://example.com")
+
+    every { context.getString(R.string.failed_state, "UNKNOWN") } returns "Failed"
+
+    assertThat(failed.toReadableState(context)).isEqualTo("Failed")
   }
 }
