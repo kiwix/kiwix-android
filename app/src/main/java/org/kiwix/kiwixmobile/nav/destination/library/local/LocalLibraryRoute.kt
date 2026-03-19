@@ -19,6 +19,9 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.view.ActionMode
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -35,10 +38,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -51,7 +60,10 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestMultiSelection
@@ -61,6 +73,8 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.util.Locale
+
+private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 
 /**
  * Entry point for Local Library feature.
@@ -99,6 +113,7 @@ fun LocalLibraryRoute(
   val coroutineScope = rememberCoroutineScope()
   var actionMode by remember { mutableStateOf<ActionMode?>(null) }
   var permissionDeniedLayoutShowing by remember { mutableStateOf(false) }
+  var shouldScanFileSystem by remember { mutableStateOf(false) }
 
   val selectedZimFileCallback = rememberSelectedZimFileCallback(
     activity,
@@ -140,6 +155,7 @@ fun LocalLibraryRoute(
     coroutineScope.launch {
       localLibraryViewModel.requestFileSystemCheck.emit(Unit)
     }
+    Unit
   }
 
   LaunchedEffect(Unit) {
@@ -180,6 +196,84 @@ fun LocalLibraryRoute(
 
     if (activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
       requestFileSystemCheck()
+    }
+  }
+
+  // Port of LocalLibraryFragment.onResume() lifecycle logic.
+  // Shows the scan storage dialog on first visit, handles permission checks,
+  // and triggers file system scans when returning from settings.
+  val lifecycleOwner = LocalLifecycleOwner.current
+  DisposableEffect(lifecycleOwner) {
+    val observer = LifecycleEventObserver { _, event ->
+      if (event == Lifecycle.Event.ON_RESUME) {
+        coroutineScope.launch {
+          when {
+            shouldShowFileSystemDialog(
+              kiwixDataStore,
+              fileSelectListState
+            ) -> {
+              Handler(Looper.getMainLooper()).postDelayed({
+                coroutineScope.launch {
+                  showFileSystemScanDialog(
+                    dialogShower,
+                    kiwixDataStore,
+                    onScanRequested = {
+                      shouldScanFileSystem = true
+                      coroutineScope.launch {
+                        scanFileSystem(
+                          activity,
+                          kiwixDataStore,
+                          dialogShower,
+                          shouldScanFileSystem = true,
+                          onShouldScanChanged = { shouldScanFileSystem = it },
+                          requestFileSystemCheck = requestFileSystemCheck
+                        )
+                      }
+                    }
+                  )
+                }
+              }, SHOW_SCAN_DIALOG_DELAY)
+            }
+
+            shouldScanFileSystem -> {
+              // When user goes to settings for granting the MANAGE_EXTERNAL_STORAGE
+              // permission, and comes back to the application then initiate
+              // the scanning of file system.
+              scanFileSystem(
+                activity,
+                kiwixDataStore,
+                dialogShower,
+                shouldScanFileSystem = shouldScanFileSystem,
+                onShouldScanChanged = { shouldScanFileSystem = it },
+                requestFileSystemCheck = requestFileSystemCheck
+              )
+            }
+
+            !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
+              !kiwixDataStore.prefIsTest.first() &&
+              !permissionDeniedLayoutShowing -> {
+              // Check manage external storage permission for non-PlayStore builds.
+              if (!activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                  val shouldShowDialog =
+                    kiwixDataStore.showManageExternalFilesPermissionDialog.first()
+                  if (shouldShowDialog) {
+                    kiwixDataStore.setShowManageExternalFilesPermissionDialog(false)
+                    dialogShower.show(
+                      KiwixDialog.ManageExternalFilesPermissionDialog,
+                      { activity.navigateToSettings() }
+                    )
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    lifecycleOwner.lifecycle.addObserver(observer)
+    onDispose {
+      lifecycleOwner.lifecycle.removeObserver(observer)
     }
   }
 
@@ -243,6 +337,78 @@ fun LocalLibraryRoute(
     onDispose {
       processSelectedZimFilesForPlayStore.dispose()
       selectedZimFileCallback.hashCode() // keep reference
+    }
+  }
+}
+
+/**
+ * Determines whether the file system scan dialog should be shown.
+ * Conditions:
+ *  1. The scan dialog has not already been shown.
+ *  2. This is not the Play Store build.
+ *  3. There are no ZIM files showing on the library screen.
+ */
+private suspend fun shouldShowFileSystemDialog(
+  kiwixDataStore: KiwixDataStore,
+  fileSelectListState: FileSelectListState
+): Boolean =
+  !kiwixDataStore.isScanFileSystemDialogShown.first() &&
+    !BuildConfig.IS_PLAYSTORE &&
+    fileSelectListState.bookOnDiskListItems.isEmpty()
+
+/**
+ * Shows the FileSystemScan dialog.
+ */
+private fun showFileSystemScanDialog(
+  dialogShower: AlertDialogShower,
+  kiwixDataStore: KiwixDataStore,
+  onScanRequested: () -> Unit
+) {
+  dialogShower.show(
+    KiwixDialog.YesNoDialog.FileSystemScan,
+    {
+      CoroutineScope(Dispatchers.Main).launch {
+        // Sets true so that it cannot show again.
+        kiwixDataStore.setIsScanFileSystemDialogShown(true)
+        onScanRequested()
+      }
+    },
+    {
+      CoroutineScope(Dispatchers.Main).launch {
+        // User clicks on the "No" button so do not show again.
+        kiwixDataStore.setIsScanFileSystemDialogShown(true)
+      }
+    }
+  )
+}
+
+/**
+ * Scans the file system for ZIM files.
+ * Checks:
+ * 1. If the app has manage external storage permission (on Android R+).
+ * 2. Then finally it scans the storage for ZIM files.
+ */
+private suspend fun scanFileSystem(
+  activity: KiwixMainActivity,
+  kiwixDataStore: KiwixDataStore,
+  dialogShower: AlertDialogShower,
+  shouldScanFileSystem: Boolean,
+  onShouldScanChanged: (Boolean) -> Unit,
+  requestFileSystemCheck: () -> Unit
+) {
+  when {
+    !activity.isManageExternalStoragePermissionGranted(kiwixDataStore) -> {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        dialogShower.show(
+          KiwixDialog.ManageExternalFilesPermissionDialog,
+          { activity.navigateToSettings() }
+        )
+      }
+    }
+
+    else -> {
+      onShouldScanChanged(false)
+      requestFileSystemCheck()
     }
   }
 }
@@ -320,13 +486,13 @@ private fun handleNavigationIconClick(activity: KiwixMainActivity) {
 
 private fun kotlinx.coroutines.CoroutineScope.launchWithPermissionCheck(
   activity: KiwixMainActivity,
-  kiwixDataStore: org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore,
-  dialogShower: org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower,
+  kiwixDataStore: KiwixDataStore,
+  dialogShower: AlertDialogShower,
   block: suspend () -> Unit
 ) {
   launch {
     if (!activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         dialogShower.show(
           KiwixDialog.ManageExternalFilesPermissionDialog,
           {
