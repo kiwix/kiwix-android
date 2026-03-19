@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 class ReadAloudService : Service() {
   @set:Inject
-  var readAloudNotificationManager: ReadAloudNotificationManger? = null
+  var readAloudNotificationManager: ReadAloudNotificationManager? = null
   private val serviceBinder: IBinder = ReadAloudBinder(this)
   private var readAloudCallbacks: ReadAloudCallbacks? = null
 
@@ -66,7 +66,7 @@ class ReadAloudService : Service() {
   private fun startForegroundNotificationHelper(isPauseTTS: Boolean) {
     runCatching {
       readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)?.let {
-        startForeground(ReadAloudNotificationManger.READ_ALOUD_NOTIFICATION_ID, it)
+        startForeground(ReadAloudNotificationManager.READ_ALOUD_NOTIFICATION_ID, it)
       }
     }.onFailure { it.printStackTrace() }
   }
