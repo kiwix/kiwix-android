@@ -24,8 +24,8 @@ class Chunk(
   val url: String?,
   val contentLength: Long,
   val notificationID: Int,
-  private val startByte: Long,
-  private val endByte: Long
+  val startByte: Long,
+  val endByte: Long
 ) {
   var isDownloaded = false
   val size: Long

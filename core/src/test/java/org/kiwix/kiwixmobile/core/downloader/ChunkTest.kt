@@ -22,123 +22,134 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ChunkTest {
-  @Test
-  fun `size returns 1 plus endByte minus startByte`() {
-    val chunk = Chunk(
-      rangeHeader = "0-99",
-      fileName = "test.zim.part.part",
-      url = "http://example.com/test.zim",
-      contentLength = 100L,
-      notificationID = 1,
-      startByte = 0L,
-      endByte = 99L
-    )
-    assertThat(chunk.size).isEqualTo(100L)
-  }
-
-  @Test
-  fun `size is correct for non-zero startByte`() {
-    val chunk = Chunk(
-      rangeHeader = "50-149",
-      fileName = "test.zim.part.part",
-      url = "http://example.com/test.zim",
-      contentLength = 200L,
-      notificationID = 2,
-      startByte = 50L,
-      endByte = 149L
-    )
-    assertThat(chunk.size).isEqualTo(100L)
-  }
-
-  @Test
-  fun `size is 1 when startByte equals endByte`() {
-    val chunk = Chunk(
-      rangeHeader = "0-0",
-      fileName = "test.zim.part.part",
-      url = "http://example.com/test.zim",
-      contentLength = 1L,
-      notificationID = 3,
-      startByte = 0L,
-      endByte = 0L
-    )
-    assertThat(chunk.size).isEqualTo(1L)
-  }
-
-  @Test
-  fun `isDownloaded defaults to false`() {
-    val chunk = Chunk(
-      rangeHeader = "0-99",
-      fileName = "test.zim.part.part",
-      url = "http://example.com/test.zim",
-      contentLength = 100L,
-      notificationID = 1,
-      startByte = 0L,
-      endByte = 99L
-    )
-    assertThat(chunk.isDownloaded).isFalse()
-  }
-
-  @Test
-  fun `isDownloaded can be set to true`() {
-    val chunk = Chunk(
-      rangeHeader = "0-99",
-      fileName = "test.zim.part.part",
-      url = "http://example.com/test.zim",
-      contentLength = 100L,
-      notificationID = 1,
-      startByte = 0L,
-      endByte = 99L
-    )
-    chunk.isDownloaded = true
-    assertThat(chunk.isDownloaded).isTrue()
-  }
+  private fun createChunk(
+    start: Long = 0L,
+    end: Long = 99L,
+    range: String = "$start-$end",
+    fileName: String? = "test.zim.part.part",
+    url: String? = "http://example.com/test.zim",
+    contentLength: Long = end + 1,
+    notificationID: Int = 1
+  ) = Chunk(
+    rangeHeader = range,
+    fileName = fileName,
+    url = url,
+    contentLength = contentLength,
+    notificationID = notificationID,
+    startByte = start,
+    endByte = end
+  )
 
   @Test
   fun `constructor stores all properties correctly`() {
-    val chunk = Chunk(
-      rangeHeader = "100-200",
+    val chunk = createChunk(
+      start = 100,
+      end = 200,
+      range = "100-200",
       fileName = "wiki.zimaa.part.part",
       url = "http://mirror.example.com/wiki.zim",
-      contentLength = 5000L,
-      notificationID = 42,
-      startByte = 100L,
-      endByte = 200L
+      contentLength = 5000,
+      notificationID = 42
     )
+
     assertThat(chunk.rangeHeader).isEqualTo("100-200")
     assertThat(chunk.fileName).isEqualTo("wiki.zimaa.part.part")
     assertThat(chunk.url).isEqualTo("http://mirror.example.com/wiki.zim")
     assertThat(chunk.contentLength).isEqualTo(5000L)
     assertThat(chunk.notificationID).isEqualTo(42)
+    assertThat(chunk.startByte).isEqualTo(100L)
+    assertThat(chunk.endByte).isEqualTo(200L)
   }
 
   @Test
   fun `constructor accepts null fileName and url`() {
-    val chunk = Chunk(
-      rangeHeader = "0-",
-      fileName = null,
-      url = null,
-      contentLength = 100L,
-      notificationID = 1,
-      startByte = 0L,
-      endByte = 99L
-    )
+    val chunk = createChunk(fileName = null, url = null)
     assertThat(chunk.fileName).isNull()
     assertThat(chunk.url).isNull()
+  }
+
+  @Test
+  fun `size returns 1 plus endByte minus startByte`() {
+    val chunk = createChunk(0, 99)
+    assertThat(chunk.size).isEqualTo(100)
+  }
+
+  @Test
+  fun `size is correct when startByte is non-zero`() {
+    val chunk = createChunk(50, 149)
+    assertThat(chunk.size).isEqualTo(100)
+  }
+
+  @Test
+  fun `size is 1 when startByte equals endByte`() {
+    val chunk = createChunk(0, 0)
+    assertThat(chunk.size).isEqualTo(1)
+  }
+
+  @Test
+  fun `size works for large ranges`() {
+    val start = 0L
+    val end = ChunkUtils.CHUNK_SIZE
+    val chunk = createChunk(start, end)
+    assertThat(chunk.size).isEqualTo(ChunkUtils.CHUNK_SIZE + 1)
+  }
+
+  @Test
+  fun `size works near long boundaries`() {
+    val start = Long.MAX_VALUE - 10
+    val end = Long.MAX_VALUE - 1
+
+    val chunk = createChunk(
+      start = start,
+      end = end,
+      range = "$start-$end",
+      contentLength = Long.MAX_VALUE
+    )
+    assertThat(chunk.size).isEqualTo(10)
+  }
+
+  @Test
+  fun `size calculation still follows formula when startByte greater than endByte`() {
+    val chunk = createChunk(100, 50)
+    assertThat(chunk.size).isEqualTo(-49)
+  }
+
+  @Test
+  fun `size returns consistent value across multiple accesses`() {
+    val chunk = createChunk(0, 9)
+    assertThat(chunk.size).isEqualTo(10)
+    assertThat(chunk.size).isEqualTo(10)
+    assertThat(chunk.size).isEqualTo(10)
+  }
+
+  @Test
+  fun `isDownloaded defaults to false`() {
+    val chunk = createChunk()
+    assertThat(chunk.isDownloaded).isFalse()
+  }
+
+  @Test
+  fun `isDownloaded can be set to true`() {
+    val chunk = createChunk()
+    chunk.isDownloaded = true
+    assertThat(chunk.isDownloaded).isTrue()
+  }
+
+  @Test
+  fun `isDownloaded can toggle between states`() {
+    val chunk = createChunk()
+    chunk.isDownloaded = true
+    assertThat(chunk.isDownloaded).isTrue()
+
+    chunk.isDownloaded = false
+    assertThat(chunk.isDownloaded).isFalse()
   }
 
   @Test
   fun `size is correct for large byte ranges`() {
     val startByte = 0L
     val endByte = ChunkUtils.CHUNK_SIZE
-    val chunk = Chunk(
-      rangeHeader = "$startByte-$endByte",
-      fileName = "large.zim.part.part",
-      url = "http://example.com/large.zim",
-      contentLength = endByte + 1,
-      notificationID = 10,
-      startByte = startByte,
-      endByte = endByte
-    )
+    val chunk = createChunk(start = startByte, end = endByte)
     assertThat(chunk.size).isEqualTo(ChunkUtils.CHUNK_SIZE + 1)
   }
 }

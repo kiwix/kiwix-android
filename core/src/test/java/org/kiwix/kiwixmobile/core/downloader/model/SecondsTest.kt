@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.core.downloader.model
 import android.content.Context
 import androidx.core.content.ContextCompat
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -36,10 +38,10 @@ class SecondsTest {
 
   @BeforeEach
   fun setUp() {
-    mockContext = io.mockk.mockk(relaxed = true)
+    mockContext = mockk(relaxed = true)
     mockkObject(CoreApp.Companion)
     mockkStatic(ContextCompat::class)
-    every { CoreApp.instance } returns io.mockk.mockk(relaxed = true)
+    every { CoreApp.instance } returns mockk(relaxed = true)
     every { ContextCompat.getContextForLanguage(any()) } returns mockContext
     every { mockContext.getString(R.string.time_day) } returns "day"
     every { mockContext.getString(R.string.time_hour) } returns "hour"
@@ -117,5 +119,38 @@ class SecondsTest {
   fun `seconds property stores the value correctly`() {
     val seconds = Seconds(42L)
     assertThat(seconds.seconds).isEqualTo(42L)
+  }
+
+  @Test
+  fun `toHumanReadableTime rounds near one day to one day`() {
+    val seconds = Seconds(86399L)
+    assertThat(seconds.toHumanReadableTime()).isEqualTo("1 day left")
+  }
+
+  @Test
+  fun `toHumanReadableTime rounds near one hour to one hour`() {
+    val seconds = Seconds(3599L)
+    assertThat(seconds.toHumanReadableTime()).isEqualTo("1 hour left")
+  }
+
+  @Test
+  fun `toHumanReadableTime rounds near one minute to one minute`() {
+    val seconds = Seconds(59L)
+    assertThat(seconds.toHumanReadableTime()).isEqualTo("1 minute left")
+  }
+
+  @Test
+  fun `handles very large durations`() {
+    val seconds = Seconds(86400 * 10L)
+    assertThat(seconds.toHumanReadableTime()).isEqualTo("10 day left")
+  }
+
+  @Test
+  fun `context strings are retrieved for formatting`() {
+    val seconds = Seconds(3600)
+    seconds.toHumanReadableTime()
+
+    verify { mockContext.getString(R.string.time_hour) }
+    verify { mockContext.getString(R.string.time_left) }
   }
 }
