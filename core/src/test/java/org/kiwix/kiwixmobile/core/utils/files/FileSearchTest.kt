@@ -33,7 +33,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -179,13 +178,10 @@ suspend fun <T> TestScope.testFlow(
   triggerAction: suspend () -> Unit,
   assert: suspend TurbineTestContext<T>.() -> Unit
 ) {
-  val job = launch {
-    flow.test {
-      triggerAction()
-      assert()
-      cancelAndIgnoreRemainingEvents()
-      ensureAllEventsConsumed()
-    }
+  flow.test {
+    triggerAction()
+    assert()
+    cancelAndIgnoreRemainingEvents()
+    ensureAllEventsConsumed()
   }
-  job.join()
 }
