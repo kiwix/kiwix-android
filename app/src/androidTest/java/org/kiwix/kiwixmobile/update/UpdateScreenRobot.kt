@@ -18,15 +18,18 @@
 
 package org.kiwix.kiwixmobile.update
 
+import android.accessibilityservice.AccessibilityService
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.test.platform.app.InstrumentationRegistry
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
@@ -50,7 +53,11 @@ class UpdateScreenRobot : BaseRobot() {
     }
   }
 
-  fun downloadApkFile(composeTestRule: ComposeContentTestRule) {
+  fun clickNavigationIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+  }
+
+  fun downloadApk(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
@@ -68,6 +75,16 @@ class UpdateScreenRobot : BaseRobot() {
       }
     })
   }
+
+  /*fun assertDownloadApkStopped(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(UPDATE_BUTTON_TESTING_TAG)[0].isDisplayed()
+        }
+      }
+    })
+  }*/
 
   fun assertDownloadApkFinished(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
@@ -104,6 +121,15 @@ class UpdateScreenRobot : BaseRobot() {
     })
   }
 
+  fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
+      }
+    })
+  }
+
   // wait for 5 minutes for downloading the APK file
   fun waitUntilApkDownloadComplete(
     retryCountForDownloadingApkFile: Int = 30,
@@ -125,6 +151,13 @@ class UpdateScreenRobot : BaseRobot() {
       // throw the exception when there is no more retry left.
       throw RuntimeException("Couldn't download the APK file.\n Original exception = $e")
     }
+  }
+
+  fun navigateBackWhenDownloading(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.waitUntilTimeout(3000)
+    InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
+      AccessibilityService.GLOBAL_ACTION_BACK
+    )
   }
 
   fun assertStopApkDownloadDialogDisplayed(

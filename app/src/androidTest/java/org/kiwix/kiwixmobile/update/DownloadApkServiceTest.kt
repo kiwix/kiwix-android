@@ -18,41 +18,56 @@
 
 package org.kiwix.kiwixmobile.update
 
+import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.IdlingPolicies
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Assertions
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadApkEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadApkService
 import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.update.composables.APK_CANCEL_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
+import java.util.concurrent.TimeUnit
 
-const val MAX_APP_VERSION = "100.100.100"
-
-class UpdateFragmentTest : BaseActivityTest() {
+@LargeTest
+class DownloadApkServiceTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -117,33 +132,67 @@ class UpdateFragmentTest : BaseActivityTest() {
   }
 
   @Test
-  fun updateDownloadTest() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+  fun downloadApkServiceTest() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(KiwixDestination.Library.route)
+      }
+      updateScreenRobot {
+        navigateToUpdateScreen(composeTestRule)
+        waitForApkInfoToLoad(composeTestRule)
+        downloadApk(composeTestRule)
+        assertDownloadApkStart(composeTestRule)
+      }
+      assetApkDownloadService(true)
+      // relaunch the application.
+      val context = ApplicationProvider.getApplicationContext<Context>()
+      val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+      intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+      context.startActivity(intent)
+      InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+      activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          kiwixMainActivity = it
+          kiwixMainActivity.navigate(KiwixDestination.Library.route)
+        }
+      }
+      updateScreenRobot {
+        navigateToUpdateScreen(composeTestRule)
+        waitForApkInfoToLoad(composeTestRule)
+        assertDownloadApkStart(composeTestRule)
+        composeTestRule.onNodeWithTag(APK_CANCEL_BUTTON_TESTING_TAG).performClick()
+        clickOnYesButton(composeTestRule)
+      }
+      assetApkDownloadService(false)
     }
-    updateScreenRobot {
-      navigateToUpdateScreen(composeTestRule)
-      waitForApkInfoToLoad(composeTestRule)
-      downloadApk(composeTestRule)
-      assertDownloadApkStart(composeTestRule)
-      stopApkDownload(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickOnNoButton(composeTestRule)
-      clickNavigationIcon(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickNavigationIcon(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickOnNoButton(composeTestRule)
-      navigateBackWhenDownloading(composeTestRule)
-      clickOnNoButton(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      waitUntilApkDownloadComplete(
-        composeTestRule = composeTestRule,
-        kiwixMainActivity = kiwixMainActivity
-      )
-      assertDownloadApkFinished(composeTestRule)
+    if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+    ) {
+      LeakAssertions.assertNoLeaks()
+    }
+  }
+
+  private fun assetApkDownloadService(isRunning: Boolean) {
+    composeTestRule.waitUntilTimeout(3000)
+    // press the home button so that application goes into background
+    InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
+      AccessibilityService.GLOBAL_ACTION_HOME
+    )
+    Assertions.assertEquals(
+      isRunning,
+      DownloadApkService.isDownloadApkServiceRunning
+    )
+    composeTestRule.waitUntilTimeout(3000)
+  }
+
+  companion object {
+    @BeforeClass
+    fun beforeClass() {
+      IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS)
+      IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS)
+      IdlingRegistry.getInstance().register(getInstance())
     }
   }
 }
