@@ -74,7 +74,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialo
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.libzim.SuggestionSearch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -390,4 +389,24 @@ internal class SearchViewModelTest {
     recentsFromDb.trySend(databaseResults).isSuccess
     viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
   }
+}
+
+/**
+ * Local testFlow that uses launch/job.join() because SearchViewModel
+ * uses debounce which requires concurrent coroutine execution.
+ */
+private suspend fun <T> TestScope.testFlow(
+  flow: kotlinx.coroutines.flow.Flow<T>,
+  triggerAction: suspend () -> Unit,
+  assert: suspend app.cash.turbine.TurbineTestContext<T>.() -> Unit
+) {
+  val job = launch {
+    flow.test {
+      triggerAction()
+      assert()
+      cancelAndIgnoreRemainingEvents()
+      ensureAllEventsConsumed()
+    }
+  }
+  job.join()
 }

@@ -26,7 +26,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -253,15 +252,12 @@ suspend fun <T> TestScope.testFlow(
   triggerAction: suspend () -> Unit,
   assert: suspend TurbineTestContext<T>.() -> Unit
 ) {
-  val job = launch {
-    flow.test(timeout = TURBINE_TIMEOUT) {
-      triggerAction()
-      assert()
-      cancelAndIgnoreRemainingEvents()
-      ensureAllEventsConsumed()
-    }
+  flow.test(timeout = TURBINE_TIMEOUT) {
+    triggerAction()
+    assert()
+    cancelAndIgnoreRemainingEvents()
+    ensureAllEventsConsumed()
   }
-  job.join()
 }
 
 val TURBINE_TIMEOUT = 5000.toDuration(DurationUnit.MILLISECONDS)

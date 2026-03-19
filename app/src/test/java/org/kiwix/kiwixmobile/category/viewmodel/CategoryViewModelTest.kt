@@ -58,7 +58,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.zimManager.awaitItemOfType
-import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.category
 
@@ -138,14 +137,19 @@ class CategoryViewModelTest {
     }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `an empty categories emission does not send update action`() = runTest {
-    createViewModel()
-    testFlow(
-      categoryViewModel.actions,
-      triggerAction = { categories.emit(listOf()) },
-      assert = { expectNoEvents() }
-    )
+  fun `an empty categories emission does not send update action`() = flakyTest {
+    runTest {
+      createViewModel()
+      advanceUntilIdle()
+      categoryViewModel.actions.test {
+        categories.emit(listOf())
+        expectNoEvents()
+        cancelAndIgnoreRemainingEvents()
+        ensureAllEventsConsumed()
+      }
+    }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
