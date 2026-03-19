@@ -26,7 +26,6 @@ import android.os.Build
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.ReceiveTurbine
-
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import kotlinx.coroutines.flow.Flow
@@ -57,6 +56,7 @@ import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -127,42 +127,10 @@ class ZimManageViewModelTest {
     every { libkiwixBookOnDisk.books() } returns books
     every { fat32Checker.fileSystemStates } returns fileSystemStates
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      every { application.registerReceiver(any(), any(), any()) } returns mockk()
-    } else {
-      @Suppress("UnspecifiedRegisterReceiverFlag")
-      every { application.registerReceiver(any(), any()) } returns mockk()
-    }
-    every { application.getString(any<Int>()) } returns ""
-    every { application.getString(any<Int>(), *anyVararg()) } returns ""
-
-    every {
-      connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-    } returns networkCapabilities
-    every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
-    coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
-    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
-    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
-    every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
-    every {
-      onlineLibraryManager.buildLibraryUrl(
-        any(),
-        any(),
-        any(),
-        any(),
-        any(),
-        any()
-      )
-    } returns MOCK_BASE_URL
-    val response = mockk<retrofit2.Response<String>>()
-    val rawResponse = mockk<Response>()
-    every { response.raw() } returns rawResponse
-    val httpsUrl = mockk<HttpUrl>()
-    every { httpsUrl.host } returns ""
-    every { httpsUrl.scheme } returns ""
-    every { rawResponse.networkResponse?.request?.url } returns httpsUrl
-    coEvery { kiwixService.getLibraryPage(any()) } returns response
-    every { response.body() } returns ""
+    mockApplication()
+    mockKiwixDataStore()
+    mockOnlineLibraryManager()
+    mockKiwixService()
     downloads.value = emptyList()
     books.value = emptyList()
     fileSystemStates.value = FileSystemState.DetectingFileSystem
@@ -198,6 +166,54 @@ class ZimManageViewModelTest {
         )
       )
     }
+  }
+
+  private fun mockApplication() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      every { application.registerReceiver(any(), any(), any()) } returns mockk()
+    } else {
+      @Suppress("UnspecifiedRegisterReceiverFlag")
+      every { application.registerReceiver(any(), any()) } returns mockk()
+    }
+    every { application.getString(any<Int>()) } returns ""
+    every { application.getString(any<Int>(), *anyVararg()) } returns ""
+
+    every {
+      connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+    } returns networkCapabilities
+    every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
+  }
+
+  private fun mockKiwixDataStore() {
+    coEvery { kiwixDataStore.wifiOnly } returns flowOf(true)
+    coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns onlineContentLanguage
+    coEvery { kiwixDataStore.selectedOnlineContentCategory } returns onlineCategoryContent
+  }
+
+  private fun mockOnlineLibraryManager() {
+    every { onlineLibraryManager.getStartOffset(any(), any()) } returns ONE
+    every {
+      onlineLibraryManager.buildLibraryUrl(
+        any(),
+        any(),
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } returns MOCK_BASE_URL
+  }
+
+  private fun mockKiwixService() {
+    val response = mockk<retrofit2.Response<String>>()
+    val rawResponse = mockk<Response>()
+    every { response.raw() } returns rawResponse
+    val httpsUrl = mockk<HttpUrl>()
+    every { httpsUrl.host } returns ""
+    every { httpsUrl.scheme } returns ""
+    every { rawResponse.networkResponse?.request?.url } returns httpsUrl
+    coEvery { kiwixService.getLibraryPage(any()) } returns response
+    every { response.body() } returns ""
   }
 
   @Nested
@@ -346,61 +362,48 @@ class ZimManageViewModelTest {
       every { application.getString(any()) } returns "All languages"
       every { application.getString(any(), any()) } returns "All languages"
       every { application.getString(any(), *anyVararg()) } returns "All languages"
-      coEvery { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
-      // test libraryItems fetches for all language.
-      viewModel.libraryItems.test {
-        coEvery {
-          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
-        } returns arrayListOf(bookOver4Gb)
-        networkStates.value = CONNECTED
-        downloads.value = listOf()
-        books.value = listOf()
-        onlineContentLanguage.value = ""
-        fileSystemStates.emit(FileSystemState.DetectingFileSystem)
-        fileSystemStates.emit(CannotWrite4GbFile)
-        advanceUntilIdle()
 
-        awaitItem()
-        val item = awaitItem()
-        val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
-        if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-          assertThat(item.items).isEqualTo(
-            listOf(
-              LibraryListItem.DividerItem(Long.MIN_VALUE, "All languages"),
-              LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
-            )
-          )
-        }
-        cancelAndConsumeRemainingEvents()
-      }
+
+      // test libraryItems fetches for all language.
+      assertLibraryItemFileSystemState(bookOver4Gb, "", "All languages")
 
       // test library items fetches for a particular language
-      viewModel.libraryItems.test {
-        coEvery {
-          onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
-        } returns arrayListOf(bookOver4Gb)
-        every { application.getString(any(), any()) } returns "Selected language: English"
-        every { application.getString(any(), *anyVararg()) } returns "Selected language: English"
-        networkStates.value = CONNECTED
-        downloads.value = listOf()
-        books.value = listOf()
-        onlineContentLanguage.value = "eng"
-        fileSystemStates.emit(FileSystemState.DetectingFileSystem)
-        fileSystemStates.emit(CannotWrite4GbFile)
-        advanceUntilIdle()
+      assertLibraryItemFileSystemState(bookOver4Gb, "eng", "Selected language: English")
+    }
+  }
 
-        val item = awaitItem()
-        val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
-        if (bookItem?.fileSystemState == CannotWrite4GbFile) {
-          assertThat(item.items).isEqualTo(
-            listOf(
-              LibraryListItem.DividerItem(Long.MIN_VALUE, "Selected language: English"),
-              LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
-            )
-          )
-        }
-        cancelAndConsumeRemainingEvents()
+  private suspend fun TestScope.assertLibraryItemFileSystemState(
+    book: LibkiwixBook,
+    language: String,
+    expectedDivider: String
+  ) {
+    viewModel.libraryItems.test {
+      coEvery {
+        onlineLibraryManager.parseOPDSStreamAndGetBooks(any(), any())
+      } returns arrayListOf(book)
+      if (language.isNotEmpty()) {
+        every { application.getString(any(), any()) } returns expectedDivider
+        every { application.getString(any(), *anyVararg()) } returns expectedDivider
       }
+      networkStates.value = CONNECTED
+      downloads.value = listOf()
+      books.value = listOf()
+      onlineContentLanguage.value = language
+      fileSystemStates.emit(FileSystemState.DetectingFileSystem)
+      fileSystemStates.emit(CannotWrite4GbFile)
+      advanceUntilIdle()
+
+      val item = awaitItemOfType<ZimManageViewModel.LibraryListItemWrapper>()
+      val bookItem = item.items.filterIsInstance<LibraryListItem.BookItem>().firstOrNull()
+      if (bookItem?.fileSystemState == CannotWrite4GbFile) {
+        assertThat(item.items).isEqualTo(
+          listOf(
+            LibraryListItem.DividerItem(Long.MIN_VALUE, expectedDivider),
+            LibraryListItem.BookItem(book, CannotWrite4GbFile)
+          )
+        )
+      }
+      cancelAndConsumeRemainingEvents()
     }
   }
 

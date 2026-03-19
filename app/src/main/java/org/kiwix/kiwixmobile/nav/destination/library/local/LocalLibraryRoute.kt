@@ -83,7 +83,13 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
  * Complexity suppressed as this is a Route-level composable managing
  * multiple app-level concerns that shouldn't be split.
  */
-@Suppress("LongMethod", "ComplexMethod", "ComplexCondition", "TooGenericExceptionCaught", "InjectDispatcher")
+@Suppress(
+  "LongMethod",
+  "ComplexMethod",
+  "ComplexCondition",
+  "TooGenericExceptionCaught",
+  "InjectDispatcher"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocalLibraryRoute(
@@ -107,8 +113,10 @@ fun LocalLibraryRoute(
   val deviceListScanningProgress by localLibraryViewModel.deviceListScanningProgress.observeAsState()
   val snackBarHostState = remember { SnackbarHostState() }
 
-  val processSelectedZimFilesForPlayStore = remember { component.processSelectedZimFilesForPlayStore() }
-  val processSelectedZimFilesForStandalone = remember { component.processSelectedZimFilesForStandalone() }
+  val processSelectedZimFilesForPlayStore =
+    remember { component.processSelectedZimFilesForPlayStore() }
+  val processSelectedZimFilesForStandalone =
+    remember { component.processSelectedZimFilesForStandalone() }
 
   val coroutineScope = rememberCoroutineScope()
   var actionMode by remember { mutableStateOf<ActionMode?>(null) }
@@ -163,7 +171,8 @@ fun LocalLibraryRoute(
       val effectResult = it.invokeWith(activity)
       if (effectResult is ActionMode) {
         actionMode = effectResult
-        actionMode?.title = String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
+        actionMode?.title =
+          String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
       }
     }
   }
@@ -174,7 +183,8 @@ fun LocalLibraryRoute(
         actionMode?.finish()
         actionMode = null
       } else {
-        actionMode?.title = String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
+        actionMode?.title =
+          String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
       }
     }
   }
@@ -224,7 +234,6 @@ fun LocalLibraryRoute(
                           activity,
                           kiwixDataStore,
                           dialogShower,
-                          shouldScanFileSystem = true,
                           onShouldScanChanged = { shouldScanFileSystem = it },
                           requestFileSystemCheck = requestFileSystemCheck
                         )
@@ -243,7 +252,6 @@ fun LocalLibraryRoute(
                 activity,
                 kiwixDataStore,
                 dialogShower,
-                shouldScanFileSystem = shouldScanFileSystem,
                 onShouldScanChanged = { shouldScanFileSystem = it },
                 requestFileSystemCheck = requestFileSystemCheck
               )
@@ -392,7 +400,6 @@ private suspend fun scanFileSystem(
   activity: KiwixMainActivity,
   kiwixDataStore: KiwixDataStore,
   dialogShower: AlertDialogShower,
-  shouldScanFileSystem: Boolean,
   onShouldScanChanged: (Boolean) -> Unit,
   requestFileSystemCheck: () -> Unit
 ) {
