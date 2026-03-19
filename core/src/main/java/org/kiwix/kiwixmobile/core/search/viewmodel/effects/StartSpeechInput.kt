@@ -22,7 +22,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
-data class StartSpeechInput(private val actions: Channel<Action>) : SideEffect<Unit> {
+data class StartSpeechInput(private val actions: MutableSharedFlow<Action>) : SideEffect<Unit> {
   @Suppress("DEPRECATION")
   override fun invokeWith(activity: AppCompatActivity) {
     try {
@@ -47,7 +47,7 @@ data class StartSpeechInput(private val actions: Channel<Action>) : SideEffect<U
         REQ_CODE_SPEECH_INPUT
       )
     } catch (_: ActivityNotFoundException) {
-      actions.trySend(StartSpeechInputFailed).isSuccess
+      actions.tryEmit(StartSpeechInputFailed)
     }
   }
 

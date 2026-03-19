@@ -22,7 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSearch
 internal class ShowDeleteSearchDialogTest {
   @Test
   fun `invoke with shows dialog that offers ConfirmedDelete action`() {
-    val actions = mockk<Channel<Action>>(relaxed = true)
+    val actions = mockk<MutableSharedFlow<Action>>(relaxed = true)
     val searchListItem = RecentSearchListItem("", "")
     val activity = mockk<CoreMainActivity>()
     val dialogShower = mockk<DialogShower>()
@@ -49,6 +49,6 @@ internal class ShowDeleteSearchDialogTest {
       dialogShower.show(DeleteSearch, capture(lambdaSlot))
     }
     lambdaSlot.captured.invoke()
-    verify { actions.trySend(ConfirmedDelete(searchListItem)).isSuccess }
+    verify { actions.tryEmit(ConfirmedDelete(searchListItem)) }
   }
 }

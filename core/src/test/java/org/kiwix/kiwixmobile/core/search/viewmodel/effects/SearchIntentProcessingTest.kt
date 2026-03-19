@@ -26,7 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifySequence
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 internal class SearchIntentProcessingTest {
-  private val actions: Channel<Action> = mockk(relaxed = true)
+  private val actions: MutableSharedFlow<Action> = mockk(relaxed = true)
 
   private val activity: AppCompatActivity = mockk()
 
@@ -63,8 +63,8 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getString(NAV_ARG_SEARCH_STRING) } returns extra
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verifySequence {
-      actions.trySend(any<ScreenWasStartedFrom>()).isSuccess
-      actions.trySend(Filter(extra)).isSuccess
+      actions.tryEmit(any<ScreenWasStartedFrom>())
+      actions.tryEmit(Filter(extra))
     }
   }
 
@@ -74,8 +74,8 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getString(NAV_ARG_SEARCH_STRING) } returns extra
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verifySequence {
-      actions.trySend(any<ScreenWasStartedFrom>()).isSuccess
-      actions.trySend(Filter(extra)).isSuccess
+      actions.tryEmit(any<ScreenWasStartedFrom>())
+      actions.tryEmit(Filter(extra))
     }
   }
 
@@ -84,8 +84,8 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getBoolean(EXTRA_IS_WIDGET_VOICE, false) } returns true
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verify {
-      actions.trySend(any<ScreenWasStartedFrom>()).isSuccess
-      actions.trySend(ReceivedPromptForSpeechInput).isSuccess
+      actions.tryEmit(any<ScreenWasStartedFrom>())
+      actions.tryEmit(ReceivedPromptForSpeechInput)
     }
   }
 
@@ -94,7 +94,7 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getBoolean(TAG_FROM_TAB_SWITCHER, false) } returns true
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verify {
-      actions.trySend(ScreenWasStartedFrom(FromTabView)).isSuccess
+      actions.tryEmit(ScreenWasStartedFrom(FromTabView))
     }
   }
 
@@ -103,7 +103,7 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getBoolean(TAG_FROM_TAB_SWITCHER, false) } returns false
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verify {
-      actions.trySend(ScreenWasStartedFrom(FromWebView)).isSuccess
+      actions.tryEmit(ScreenWasStartedFrom(FromWebView))
     }
   }
 }

@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
@@ -34,11 +34,11 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 data class SearchArgumentProcessing(
   private val bundle: Bundle?,
-  private val actions: Channel<Action>
+  private val actions: MutableSharedFlow<Action>
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     bundle?.let {
-      actions.trySend(
+      actions.tryEmit(
         ScreenWasStartedFrom(
           if (it.getBoolean(TAG_FROM_TAB_SWITCHER, false)) {
             FromTabView
@@ -46,10 +46,10 @@ data class SearchArgumentProcessing(
             FromWebView
           }
         )
-      ).isSuccess
-      actions.trySend(Filter(it.getString(NAV_ARG_SEARCH_STRING, ""))).isSuccess
+      )
+      actions.tryEmit(Filter(it.getString(NAV_ARG_SEARCH_STRING, "")))
       if (it.getBoolean(EXTRA_IS_WIDGET_VOICE, false)) {
-        actions.trySend(ReceivedPromptForSpeechInput).isSuccess
+        actions.tryEmit(ReceivedPromptForSpeechInput)
       }
     }
   }

@@ -61,7 +61,7 @@ fun SearchScreenRoute(
   DisposableEffect(Unit) {
     coreMainActivity.activityResultForwarder =
       { requestCode, resultCode, data ->
-        viewModel.actions.trySend(
+        viewModel.actions.tryEmit(
           Action.ActivityResultReceived(
             requestCode,
             resultCode,
@@ -75,12 +75,7 @@ fun SearchScreenRoute(
     }
   }
 
-  val state by viewModel.state.collectAsStateWithLifecycle()
-  val searchList by viewModel.visibleResults.collectAsStateWithLifecycle()
-  val searchText by viewModel.searchText.collectAsStateWithLifecycle()
-  val isLoadingMore by viewModel.isLoadingMore.collectAsStateWithLifecycle()
-  val spellingSuggestions by viewModel.spellingSuggestions.collectAsStateWithLifecycle()
-  val showFindInPage by viewModel.showFindInPage.collectAsStateWithLifecycle(initialValue = false)
+  val state by viewModel.uiState.collectAsStateWithLifecycle()
 
   // Handles SideEffects
   viewModel.effects.CollectSideEffectWithActivity { effect, activity ->
@@ -95,15 +90,15 @@ fun SearchScreenRoute(
       viewModel.updateSearchQuery(it)
     }
 
-    viewModel.actions.trySend(
+    viewModel.actions.tryEmit(
       Action.CreatedWithArguments(Bundle(arguments))
     )
   }
   val screenState = SearchScreenState(
-    searchList = searchList,
+    searchList = state.searchList,
     isLoading = state.isLoading,
-    shouldShowLoadingMoreProgressBar = isLoadingMore,
-    searchText = searchText,
+    shouldShowLoadingMoreProgressBar = state.isLoadingMore,
+    searchText = state.searchText,
     onSearchViewClearClick = {
       viewModel.updateSearchQuery("")
     },
@@ -112,18 +107,18 @@ fun SearchScreenRoute(
     },
     onItemClick = {
       coreMainActivity.currentFocus?.closeKeyboard()
-      viewModel.actions.trySend(Action.OnItemClick(it))
+      viewModel.actions.tryEmit(Action.OnItemClick(it))
     },
     onItemLongClick = {
-      viewModel.actions.trySend(Action.OnItemLongClick(it))
+      viewModel.actions.tryEmit(Action.OnItemLongClick(it))
     },
     onNewTabIconClick = {
       coreMainActivity.currentFocus?.closeKeyboard()
-      viewModel.actions.trySend(Action.OnOpenInNewTabClick(it))
+      viewModel.actions.tryEmit(Action.OnOpenInNewTabClick(it))
     },
     onKeyboardSubmitButtonClick = { query ->
-      searchList.firstOrNull { it.value.equals(query, true) }
-        ?.let { viewModel.actions.trySend(Action.OnItemClick(it)) }
+      state.searchList.firstOrNull { it.value.equals(query, true) }
+        ?.let { viewModel.actions.tryEmit(Action.OnItemClick(it)) }
     },
     navigationIcon = {
       NavigationIcon(
@@ -133,21 +128,21 @@ fun SearchScreenRoute(
         }
       )
     },
-    spellingCorrectionSuggestions = spellingSuggestions,
+    spellingCorrectionSuggestions = state.spellingSuggestions,
     onSuggestionClick = {
       viewModel.updateSearchQuery(it)
     },
     onLoadMore = {
       coroutineScope.launch {
-        viewModel.loadMoreSearchResults(searchList.size)
+        viewModel.loadMoreSearchResults(state.searchList.size)
       }
     }
   )
 
   SearchScreen(
     screenState,
-    buildActionMenuItems(viewModel, context, showFindInPage),
-    isLoadingMore
+    buildActionMenuItems(viewModel, context, state.showFindInPage),
+    state.isLoadingMore
   )
 }
 
@@ -163,7 +158,7 @@ private fun buildActionMenuItems(
       testingTag = VOICE_SEARCH_TESTING_TAG,
       isEnabled = true,
       onClick = {
-        viewModel.actions.trySend(Action.ReceivedPromptForSpeechInput)
+        viewModel.actions.tryEmit(Action.ReceivedPromptForSpeechInput)
       }
     ),
     ActionMenuItem(
@@ -172,7 +167,7 @@ private fun buildActionMenuItems(
       testingTag = FIND_IN_PAGE_TESTING_TAG,
       isEnabled = showFindInPage,
       onClick = {
-        viewModel.actions.trySend(Action.ClickedSearchInText)
+        viewModel.actions.tryEmit(Action.ClickedSearchInText)
       }
     )
   )
