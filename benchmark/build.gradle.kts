@@ -5,28 +5,25 @@ plugins {
 
 android {
   namespace = "org.kiwix.kiwixmobile.benchmark"
-  compileSdk = 36
+  compileSdk = Config.compileSdk
 
   defaultConfig {
-    minSdk = 27
-    targetSdk = 36
+    minSdk = Config.minSdk
+    targetSdk = Config.targetSdk
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = Config.javaVersion
+    targetCompatibility = Config.javaVersion
   }
 
   kotlinOptions {
-    jvmTarget = "17"
+    jvmTarget = Config.javaVersion.toString()
   }
 
   buildTypes {
-    // This benchmark buildType is used for benchmarking, and should function like your
-    // release build (for example, with minification on). It"s signed with a debug key
-    // for easy local/CI testing.
     create("benchmark") {
       isDebuggable = true
       signingConfig = getByName("debug").signingConfig
@@ -46,8 +43,7 @@ dependencies {
   implementation(Libs.espresso_core)
 
   implementation(Libs.uiautomator)
-
-  implementation("androidx.benchmark:benchmark-macro-junit4:1.4.1")
+  implementation(Libs.BENCHMARK_MACRO_JUNIT4)
 }
 
 androidComponents {
