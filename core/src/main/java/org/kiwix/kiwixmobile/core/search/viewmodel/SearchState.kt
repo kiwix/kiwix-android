@@ -40,7 +40,7 @@ data class SearchState(
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   ): List<SearchListItem>? {
     if (searchTerm.isEmpty()) return recentResults
-    return searchResultsWithTerm.searchMutex.withLock {
+    return searchResultsWithTerm.searchMutex?.withLock {
       searchResultsWithTerm.suggestionSearch?.let {
         yield()
         withContext(ioDispatcher) {
