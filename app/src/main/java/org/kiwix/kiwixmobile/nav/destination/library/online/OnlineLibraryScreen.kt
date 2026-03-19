@@ -50,9 +50,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,6 +68,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
@@ -107,7 +107,7 @@ const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
 const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 const val LOAD_MORE_DELAY = 150L
-private const val BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD = 200
+private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -177,18 +177,8 @@ fun OnlineLibraryScreen(
 @Composable
 private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
   val coroutineScope = rememberCoroutineScope()
-  var shouldShowBackToTopButton by remember { mutableStateOf(false) }
-
-  LaunchedEffect(listState) {
-    snapshotFlow {
-      listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
-    }
-      .distinctUntilChanged()
-      .collect { (firstVisibleItemIndex, firstVisibleItemScrollOffset) ->
-        shouldShowBackToTopButton =
-          firstVisibleItemIndex > ZERO ||
-          firstVisibleItemScrollOffset > BACK_TO_TOP_SCROLL_OFFSET_THRESHOLD
-      }
+  val shouldShowBackToTopButton by remember {
+    derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
   }
 
   AnimatedVisibility(
@@ -197,7 +187,7 @@ private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
     exit = slideOutVertically { it }
   ) {
     KiwixFloatingActionButton(
-      icon = painterResource(id = org.kiwix.kiwixmobile.core.R.drawable.ic_arrow_upward_24dp),
+      icon = painterResource(id = drawable.ic_arrow_upward_24dp),
       onClick = {
         coroutineScope.launch {
           listState.animateScrollToItem(ZERO)
