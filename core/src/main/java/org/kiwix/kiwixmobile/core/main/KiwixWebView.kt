@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import org.kiwix.videowebview.VideoEnabledWebChromeClient.ToggledFullscreenCallback
 import org.kiwix.videowebview.VideoEnabledWebView
 import javax.inject.Inject
@@ -146,7 +147,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer, kiwixDataStore).obtainMessage()
+        val msg = SaveHandler(zimReaderContainer).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -177,28 +178,57 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   }
 
   class SaveHandler(
-    private val zimReaderContainer: ZimReaderContainer,
-    private val kiwixDataStore: KiwixDataStore
-  ) :
-    Handler(Looper.getMainLooper()) {
-    @SuppressWarnings("InjectDispatcher")
+    private val zimReaderContainer: ZimReaderContainer
+  ) : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
       val url = msg.data.getString("url", null)
       val src = msg.data.getString("src", null)
+
       if (url == null && src == null) return
+
+      val appContext = ContextCompat.getContextForLanguage(instance)
+
+      @Suppress("InjectDispatcher")
       CoroutineScope(Dispatchers.IO).launch {
-        val savedFile =
-          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, kiwixDataStore)
-        val applicationContextForLanguage = ContextCompat.getContextForLanguage(instance)
+        val result = FileUtils.downloadFileFromUrl(
+          context = appContext,
+          url = url,
+          src = src,
+          zimReaderContainer = zimReaderContainer
+        )
+
         withContext(Dispatchers.Main) {
-          savedFile?.let {
-            applicationContextForLanguage.toast(
-              applicationContextForLanguage.getString(R.string.save_media_saved, it.name)
-            ).also {
-              Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
+          when (result) {
+            is SaveResult.MediaSaved -> {
+              appContext.toast(
+                appContext.getString(
+                  R.string.save_media_saved,
+                  result.displayName
+                )
+              )
             }
-          } ?: run {
-            applicationContextForLanguage.toast(R.string.save_media_error)
+
+            is SaveResult.FileSaved -> {
+              appContext.toast(
+                appContext.getString(
+                  R.string.save_media_saved,
+                  result.file.absolutePath
+                )
+              )
+            }
+
+            is SaveResult.InvalidSource -> {
+              appContext.toast(
+                appContext.getString(
+                  R.string.invalid_media_source,
+                )
+              )
+            }
+
+            is SaveResult.Error -> {
+              Log.e("MEDIA_SAVE", result.message, result.throwable)
+              appContext.toast(R.string.save_media_error)
+            }
           }
         }
       }
