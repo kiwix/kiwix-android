@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,11 +48,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -59,12 +67,15 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
@@ -96,6 +107,7 @@ const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
 const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 const val LOAD_MORE_DELAY = 150L
+private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -132,6 +144,9 @@ fun OnlineLibraryScreen(
           searchBar = searchBarIfActive(state)
         )
       },
+      floatingActionButton = {
+        OnlineLibraryBackToTopButton(listState)
+      },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
         .let { baseModifier ->
@@ -156,6 +171,31 @@ fun OnlineLibraryScreen(
         OnlineLibraryScreenContent(state, listState)
       }
     }
+  }
+}
+
+@Composable
+private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
+  val coroutineScope = rememberCoroutineScope()
+  val shouldShowBackToTopButton by remember {
+    derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
+  }
+
+  AnimatedVisibility(
+    visible = shouldShowBackToTopButton,
+    enter = slideInVertically { it },
+    exit = slideOutVertically { it }
+  ) {
+    KiwixFloatingActionButton(
+      icon = painterResource(id = drawable.ic_arrow_upward_24dp),
+      onClick = {
+        coroutineScope.launch {
+          listState.animateScrollToItem(ZERO)
+        }
+      },
+      contentDescription = stringResource(string.pref_back_to_top),
+      shouldPulse = true
+    )
   }
 }
 
