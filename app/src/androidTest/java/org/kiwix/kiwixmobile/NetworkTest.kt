@@ -17,136 +17,163 @@
  */
 package org.kiwix.kiwixmobile
 
-import android.Manifest
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.IdlingPolicies
-import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.GrantPermissionRule
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import androidx.test.filters.SmallTest
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.SocketPolicy
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
-import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
-import java.util.concurrent.TimeUnit
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.sharedFunctions.TEST_PORT
+import java.net.InetAddress
+import java.util.concurrent.TimeUnit.SECONDS
 
 /**
  * Created by mhutti1 on 14/04/17.
  */
+@SmallTest
 @RunWith(AndroidJUnit4::class)
 class NetworkTest {
-  // @Inject
-  // MockWebServer mockWebServer
-
-  private val permissions =
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
-
   @Rule
   @JvmField
-  var permissionRules: GrantPermissionRule =
-    GrantPermissionRule.grant(*permissions)
+  val retryRule = RetryRule()
 
-  @Before fun setUp() {
-    val component =
-      DaggerTestComponent.builder().context(
-        InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-      ).build()
-    coreComponent = component
-    component.inject(this)
-    val library = NetworkTest::class.java.classLoader.getResourceAsStream("library.xml")
-    val metalinks = NetworkTest::class.java.classLoader.getResourceAsStream("test.zim.meta4")
-    val testzim = NetworkTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    // try {
-    //  byte[] libraryBytes = IOUtils.toByteArray(library);
-    //  mockWebServer.enqueue(new MockResponse().setBody(new String(libraryBytes)));
-    //  byte[] metalinkBytes = IOUtils.toByteArray(metalinks);
-    //  mockWebServer.enqueue(new MockResponse().setBody(new String(metalinkBytes)));
-    //  mockWebServer.enqueue(new MockResponse().setHeader("Content-Length", 357269));
-    //  Buffer buffer = new Buffer();
-    //  buffer.write(IOUtils.toByteArray(testzim));
-    //  buffer.close();
-    //  mockWebServer.enqueue(new MockResponse().setBody(buffer));
-    // } catch (IOException e) {
-    //  e.printStackTrace();
-    // }
+  private lateinit var mockWebServer: MockWebServer
+  private lateinit var kiwixService: KiwixService
+
+  @Before
+  fun setUp() {
+    mockWebServer = MockWebServer()
+    mockWebServer.start(InetAddress.getByName("127.0.0.1"), TEST_PORT)
+    kiwixService = KiwixService.ServiceCreator.newHackListService(
+      OkHttpClient().newBuilder()
+        .connectTimeout(TEST_TIMEOUT, SECONDS)
+        .readTimeout(TEST_TIMEOUT, SECONDS)
+        .callTimeout(TEST_TIMEOUT, SECONDS)
+        .addNetworkInterceptor(HttpLoggingInterceptor().apply { level = BASIC })
+        .build(),
+      mockWebServer.url("/").toString()
+    )
+    Log.d(TAG, "MockWebServer started on port $TEST_PORT")
+  }
+
+  @After
+  fun tearDown() {
+    mockWebServer.shutdown()
+    Log.d(TAG, "MockWebServer shut down")
+  }
+
+  private fun getResourceAsString(name: String): String =
+    javaClass.classLoader!!.getResourceAsStream(name)!!.bufferedReader().readText()
+
+  @Test
+  fun testNetworkSuccess() = runBlocking {
+    val libraryXml = getResourceAsString("library.xml")
+    mockWebServer.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody(libraryXml)
+    )
+
+    val response = kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
+    val recordedRequest = mockWebServer.takeRequest()
+    Log.d(TAG, "testNetworkSuccess: code=${response.code()} bodyLength=${response.body()?.length}")
+    Log.d(TAG, "testNetworkSuccess: method=${recordedRequest.method} path=${recordedRequest.path}")
+    Log.d(
+      TAG,
+      "testNetworkSuccess: code=${response.code()} bodyLength=${response.body()?.length} bodyPreview=${
+        response.body()?.take(100)
+      }"
+    )
+
+    assertEquals("GET", recordedRequest.method)
+    assertTrue(recordedRequest.path!!.startsWith("/v2/entries"))
+    assertTrue(response.isSuccessful)
+    assertEquals(200, response.code())
+    assertEquals(libraryXml, response.body())
   }
 
   @Test
-  @Ignore("Broken in 2.5") // TODO Fix in 3.0
-  fun networkTest() {
-    ActivityScenario.launch(KiwixMainActivity::class.java)
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickMenu(TestUtils.getResourceString(string.library))
-    TestUtils.allowStoragePermissionsIfNeeded()
-    // Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-    //   .inAdapterView(ViewMatchers.withId(R.id.libraryList))
-    //   .perform(ViewActions.click())
-    try {
-      Espresso.onView(ViewMatchers.withId(android.R.id.button1)).perform(ViewActions.click())
-    } catch (e: RuntimeException) {
-      Log.w(NETWORK_TEST_TAG, "failed to perform click action on the view : ${e.localizedMessage} ")
-    }
-    clickOn(string.local_zims)
-    try {
-      // Espresso.onData(CoreMatchers.allOf(ViewMatchers.withId(R.id.zim_swiperefresh)))
-      // refresh(R.id.zim_swiperefresh)
-      Thread.sleep(500)
-    } catch (e: InterruptedException) {
-      e.printStackTrace()
-    }
+  fun testNetworkError() = runBlocking {
+    mockWebServer.enqueue(MockResponse().setResponseCode(500))
 
-    // Commented out the following which assumes only 1 match - not always safe to assume as there may
-    // already be a similar file on the device.
-    // onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+    val response = kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
+    Log.d(TAG, "testNetworkError: code=${response.code()} body=${response.body()}")
 
-    // Find matching zim files on the device
-    // try {
-    //   val dataInteraction =
-    //     Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-    //       .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
-    //   // TODO how can we get a count of the items matching the dataInteraction?
-    //   dataInteraction.atPosition(0).perform(ViewActions.click())
-    //   clickMenu(string.library)
-    //   val dataInteraction1 =
-    //     Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-    //       .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
-    //   dataInteraction1.atPosition(0).perform(ViewActions.longClick()) // to delete the zim file
-    //   BaristaDialogInteractions.clickDialogPositiveButton()
-    // } catch (e: Exception) {
-    //   Log.w(NETWORK_TEST_TAG, "failed to interact with local ZIM file: " + e.localizedMessage)
-    // }
+    assertFalse(response.isSuccessful)
+    assertEquals(500, response.code())
+    assertNull(response.body())
+    assertNotNull(response.errorBody())
   }
 
-  @After fun finish() {
-    IdlingRegistry.getInstance().unregister(getInstance())
+  @Test
+  fun testNetworkNotFound() = runBlocking {
+    mockWebServer.enqueue(MockResponse().setResponseCode(404))
+
+    val response = kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
+    Log.d(TAG, "testNetworkNotFound: code=${response.code()} body=${response.body()}")
+
+    assertFalse(response.isSuccessful)
+    assertEquals(404, response.code())
+    assertNull(response.body())
+    assertNotNull(response.errorBody())
+  }
+
+  @Test
+  fun testNetworkEmptyResponse() = runBlocking {
+    mockWebServer.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody("")
+    )
+
+    val response = kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
+    Log.d(TAG, "testNetworkEmptyResponse: code=${response.code()} body='${response.body()}'")
+
+    assertTrue(response.isSuccessful)
+    assertEquals(200, response.code())
+    assertEquals("", response.body())
+  }
+
+  @Test
+  fun testNetworkTimeout() {
+    mockWebServer.enqueue(
+      MockResponse().apply { socketPolicy = SocketPolicy.NO_RESPONSE }
+    )
+
+    var exceptionThrown = false
+    try {
+      runBlocking {
+        withTimeout((TEST_TIMEOUT + 2L) * 1000L) {
+          kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
+        }
+      }
+    } catch (e: Exception) {
+      Log.e(TAG, "testNetworkTimeout: caught expected ${e::class.java.simpleName}: ${e.message}")
+      exceptionThrown = true
+    }
+
+    assertTrue("Expected a timeout exception to be thrown", exceptionThrown)
   }
 
   companion object {
-    private const val NETWORK_TEST_TAG = "KiwixNetworkTest"
-
-    @BeforeClass fun beforeClass() {
-      IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS)
-      IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS)
-      IdlingRegistry.getInstance().register(getInstance())
-    }
+    private const val TAG = "NetworkTest"
+    private const val TEST_TIMEOUT = 5L
   }
 }
