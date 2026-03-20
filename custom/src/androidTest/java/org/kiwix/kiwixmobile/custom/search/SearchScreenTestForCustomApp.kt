@@ -27,6 +27,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -55,8 +56,8 @@ import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
@@ -75,7 +76,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @RunWith(AndroidJUnit4::class)
-class SearchFragmentTestForCustomApp {
+class SearchScreenTestForCustomApp {
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -241,31 +242,32 @@ class SearchFragmentTestForCustomApp {
       openSearchWithQuery(searchTerms[0])
       // wait for searchFragment become visible on screen.
       delay(2000)
-      val searchFragment = customMainActivity.supportFragmentManager.fragments
-        .filterIsInstance<SearchFragment>()
-        .firstOrNull()
+      val searchViewModel = ViewModelProvider(
+        customMainActivity,
+        customMainActivity.viewModelFactory
+      )[SearchViewModel::class.java]
       for (i in 1..100) {
         // This will execute the render method 100 times frequently.
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 100MS delay.
         delay(100)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(200)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(300)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchFragment?.searchViewModel?.actions?.trySend(Action.Filter(searchTerm))?.isSuccess
+        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
     }
 

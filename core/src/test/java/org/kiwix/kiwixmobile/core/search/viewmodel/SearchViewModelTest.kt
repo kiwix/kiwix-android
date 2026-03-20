@@ -103,6 +103,9 @@ internal class SearchViewModelTest {
     clearAllMocks()
     recentsFromDb = Channel(Channel.UNLIMITED)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
+    every {
+      zimFileReader.getSuggestedSpelledWords(any(), any())
+    } returns emptyList()
     coEvery {
       searchResultGenerator.generateSearchResults("", zimFileReader)
     } returns null
@@ -191,9 +194,9 @@ internal class SearchViewModelTest {
       coEvery {
         searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
       } returns suggestionSearch
-      viewModel.searchResults(searchTerm)
+      viewModel.updateSearchQuery(searchTerm)
       recentsFromDb.trySend(emptyList()).isSuccess
-      viewModel.actions.trySend(ScreenWasStartedFrom(FromWebView)).isSuccess
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
       testScheduler.apply {
         advanceTimeBy(timeout)
         runCurrent()
@@ -370,7 +373,7 @@ internal class SearchViewModelTest {
           }
         }
 
-      viewModel.actions.trySend(action).isSuccess
+      viewModel.actions.tryEmit(action)
       advanceUntilIdle()
       assertThat(collectedEffects).containsExactlyElementsOf(effects.toList())
       job.cancel()
@@ -386,8 +389,8 @@ internal class SearchViewModelTest {
     coEvery {
       searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
     } returns suggestionSearch
-    viewModel.actions.trySend(Filter(searchTerm)).isSuccess
+    viewModel.actions.tryEmit(Filter(searchTerm))
     recentsFromDb.trySend(databaseResults).isSuccess
-    viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
+    viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
   }
 }
