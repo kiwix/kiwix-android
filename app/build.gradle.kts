@@ -116,6 +116,12 @@ android {
       signingConfig = signingConfigs.getByName("releaseSigningConfig")
       applicationIdSuffix = ".standalone" // Bug Fix #3933
     }
+    create("benchmark") {
+      initWith(buildTypes.getByName("release"))
+      signingConfig = signingConfigs.getByName("debug")
+      matchingFallbacks += listOf("release")
+      isDebuggable = false
+    }
   }
   bundle {
     language {
@@ -181,6 +187,7 @@ dependencies {
   releaseImplementation(project(":defaultmigration"))
   add("nightlyImplementation", project(":defaultmigration"))
   add("standaloneImplementation", project(":defaultmigration"))
+  add("benchmarkImplementation", project(":defaultmigration"))
   // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
 }
