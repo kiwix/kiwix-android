@@ -18,8 +18,14 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.wifi.p2p.WifiP2pDevice
+import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +39,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,10 +49,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,18 +71,21 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixShowCaseView
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ShowcaseProperty
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_TEXT_ALPHA
@@ -88,20 +103,129 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.TO_BE_SENT
+import org.kiwix.kiwixmobile.localFileTransfer.helper.FileTransferDialogComponent
+import org.kiwix.kiwixmobile.localFileTransfer.helper.HandlePermissionStateComponent
 
 const val YOUR_DEVICE_SHOW_CASE_TAG = "yourDeviceShowCaseTag"
 const val PEER_DEVICE_LIST_SHOW_CASE_TAG = "peerDeviceListShowCaseTag"
 const val FILE_FOR_TRANSFER_SHOW_CASE_TAG = "fileForTransferShowCaseTag"
+const val URIS_KEY = "localFileTransferUriKey"
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Suppress("LongMethod")
+@Composable
+internal fun LocalFileTransferScreenRoute(
+  isReceiver: Boolean,
+  filesForTransfer: List<FileItem>,
+  navigateBack: () -> Unit,
+  viewModel: LocalFileTransferViewModel
+) {
+  val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+  val isWritePermissionRequired by produceState(initialValue = false) {
+    value = viewModel.isWritePermissionRequired()
+  }
+
+  val context = LocalContext.current
+
+  LaunchedEffect(Unit) {
+    viewModel.initializeWifiDirectManager(filesForTransfer)
+  }
+
+  val enableLocationServicesLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.StartActivityForResult()
+  ) { result ->
+    if (result.resultCode != Activity.RESULT_OK) {
+      if (!viewModel.isLocationServiceEnabled) {
+        Toast.makeText(context, string.permission_refused_location, Toast.LENGTH_SHORT).show()
+      }
+    }
+  }
+
+  LaunchedEffect(Unit) {
+    viewModel.navigationEvent.collect { event ->
+      when (event) {
+        NavigationEvent.NavigateBack -> navigateBack()
+      }
+    }
+  }
+
+  // Collect permission events
+  val permissionState = remember { mutableStateOf<PermissionAction?>(null) }
+  LaunchedEffect(Unit) {
+    viewModel.permissionEvent.collect { action ->
+      permissionState.value = action
+    }
+  }
+
+  HandlePermissionStateComponent(
+    permissionState = permissionState.value,
+    onPermissionGranted = {
+      permissionState.value = null
+      viewModel.onPermissionGranted()
+    },
+    showDialog = { dialogEvent ->
+      viewModel.showDialog(dialogEvent)
+    },
+    clearPermissionAction = { permissionState.value = null },
+    isAndroid13orAbove = viewModel.android13OrAbove,
+    isWriteExternalStoragePermissionRequired = isWritePermissionRequired
+  )
+
+  FileTransferDialogComponent(
+    context = context,
+    viewModel = viewModel,
+    enableLocationServicesLauncher = {
+      enableLocationServicesLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+    }
+  )
+
+  val actionMenuItems = remember {
+    listOf(
+      ActionMenuItem(
+        IconItem.Vector(Icons.Default.Search),
+        string.search_label,
+        { viewModel.onSearchMenuClicked() },
+        testingTag = SEARCH_ICON_TESTING_TAG
+      )
+    )
+  }
+
+  KiwixTheme {
+    LocalFileTransferScreen(
+      deviceName = uiState.deviceName,
+      toolbarTitle = if (isReceiver) {
+        org.kiwix.kiwixmobile.R.string.receive_files_title
+      } else {
+        org.kiwix.kiwixmobile.R.string.send_files_title
+      },
+      isPeerSearching = uiState.isPeerSearching,
+      peerDeviceList = uiState.peers,
+      transferFileList = uiState.transferFiles,
+      actionMenuItems = actionMenuItems,
+      onDeviceItemClick = viewModel::onDeviceSelected,
+      kiwixDataStore = viewModel.kiwixDataStore,
+      lifeCycleScope = rememberCoroutineScope(),
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+          onClick = navigateBack
+        )
+      }
+    )
+  }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
-fun LocalFileTransferScreen(
+private fun LocalFileTransferScreen(
   deviceName: String,
   @StringRes toolbarTitle: Int,
   isPeerSearching: Boolean,
