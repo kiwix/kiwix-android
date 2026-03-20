@@ -114,6 +114,9 @@
   <string name="pref_clear_all_bookmarks_title">Cancella i segnalibri</string>
   <string name="clear_all_history_dialog_title">Vuoi cancellare tutta la cronologia?</string>
   <string name="share">Condividi</string>
+  <string name="share_article">Condividi voce</string>
+  <string name="unable_to_share_article">Impossibile condividere la voce</string>
+  <string name="please_wait_for_page_to_load">Attendi che la pagina si carichi completamente</string>
   <string name="selected_file_cab_app_chooser_title">Condividi file ZIM con:</string>
   <string name="delete">Cancella</string>
   <string name="cancel">Annulla</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* YeBoy371
 * Ykhwong
 -->
 <resources>
@@ -10,4 +11,6 @@
   <string name="receive_files_title">파일 받기</string>
   <string name="no_app_found_to_open">ZIM 파일을 선택하기 위한 앱이 없습니다!</string>
   <string name="select_zim_file">읽을 ZIM 파일 선택</string>
+  <string name="other_categories">다른 분류:</string>
+  <string name="all_categories">모든 분류</string>
 </resources>
