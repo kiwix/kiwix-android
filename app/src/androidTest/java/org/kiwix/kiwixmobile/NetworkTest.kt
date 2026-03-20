@@ -50,7 +50,6 @@ import java.util.concurrent.TimeUnit.SECONDS
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class NetworkTest {
-
   @Rule
   @JvmField
   val retryRule = RetryRule()
