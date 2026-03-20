@@ -34,6 +34,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -51,6 +52,7 @@ class FileSearchTest {
   private val contentResolver: ContentResolver = mockk()
   private val storageDevice: StorageDevice = mockk()
   private val scanningProgressListener: ScanningProgressListener = mockk()
+  private val testDispatcher = StandardTestDispatcher()
 
   @BeforeEach
   fun init() {
@@ -66,7 +68,7 @@ class FileSearchTest {
         storageDevice
       )
     every { storageDevice.name } returns "/deviceDir"
-    fileSearch = FileSearch(context)
+    fileSearch = FileSearch(context, testDispatcher)
   }
 
   @AfterAll

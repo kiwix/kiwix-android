@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -38,6 +39,7 @@ import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
@@ -76,7 +78,8 @@ class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator,
-  private val searchMutex: Mutex = Mutex()
+  private val searchMutex: Mutex = Mutex(),
+  @param:IoDispatcher val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   private val initialState: SearchState =
     SearchState(
@@ -238,7 +241,7 @@ class SearchViewModel @Inject constructor(
     startIndex: Int,
     existingSearchList: List<SearchListItem>?
   ): List<SearchListItem>? {
-    val searchResults = state.value.getVisibleResults(startIndex)
+    val searchResults = state.value.getVisibleResults(startIndex, ioDispatcher = ioDispatcher)
 
     return searchResults?.filter { newItem ->
       existingSearchList?.none { it == newItem } ?: true

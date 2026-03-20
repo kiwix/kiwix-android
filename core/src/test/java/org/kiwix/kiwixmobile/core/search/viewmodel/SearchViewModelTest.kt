@@ -113,7 +113,8 @@ internal class SearchViewModelTest {
         recentSearchRoomDao,
         zimReaderContainer,
         searchResultGenerator,
-        searchMutex
+        searchMutex,
+        testDispatcher
       ).apply {
         setAlertDialogShower(dialogShower)
       }

@@ -217,7 +217,8 @@ class ZimManageViewModelTest {
         dataSource,
         connectivityManager,
         onlineLibraryManager,
-        kiwixDataStore
+        kiwixDataStore,
+        testDispatcher
       ).apply {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)

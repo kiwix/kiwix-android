@@ -25,7 +25,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -74,6 +73,7 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
@@ -131,7 +131,7 @@ const val MAX_PROGRESS = 100
 
 const val THREE = 3
 
-@Suppress("LargeClass")
+@Suppress("LargeClass", "LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -143,7 +143,8 @@ class ZimManageViewModel @Inject constructor(
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   val onlineLibraryManager: OnlineLibraryManager,
-  private val kiwixDataStore: KiwixDataStore
+  private val kiwixDataStore: KiwixDataStore,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -183,8 +184,6 @@ class ZimManageViewModel @Inject constructor(
 
   private lateinit var validateZimViewModel: ValidateZimViewModel
 
-  @Suppress("InjectDispatcher")
-  private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   private val _libraryItems =
