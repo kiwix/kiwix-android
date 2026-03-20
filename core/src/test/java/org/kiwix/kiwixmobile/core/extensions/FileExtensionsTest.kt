@@ -57,10 +57,10 @@ class FileExtensionsTest {
 
   @Test
   fun `deleteFile should delete the file and return true`() = runTest(testDispatcher) {
-    assertTrue(tempFile.exists(), "File should exist before deletion")
+    assertTrue(tempFile.isFileExist(testDispatcher), "File should exist before deletion")
     val result = tempFile.deleteFile(testDispatcher)
     assertTrue(result, "deleteFile should return true")
-    assertFalse(tempFile.exists(), "File should not exist after deletion")
+    assertFalse(tempFile.isFileExist(testDispatcher), "File should not exist after deletion")
   }
 
   @Test
@@ -69,22 +69,34 @@ class FileExtensionsTest {
   }
 
   @Test
-  fun `freeSpace should return a value greater than zero`() = runTest(testDispatcher) {
-    val free = tempFile.freeSpace(testDispatcher)
-    assertTrue(free > 0, "Free space should be greater than zero")
+  fun `canReadFile should return false for non-readable file`() = runTest(testDispatcher) {
+    tempFile.setReadable(false)
+    assertFalse(tempFile.canReadFile(testDispatcher))
   }
 
   @Test
-  fun `totalSpace should return a value greater than zero`() = runTest(testDispatcher) {
-    val total = tempFile.totalSpace(testDispatcher)
-    assertTrue(total > 0, "Total space should be greater than zero")
+  fun `freeSpace should return the actual free space`() = runTest(testDispatcher) {
+    val expectedFreeSpace = tempFile.freeSpace
+    val actualFreeSpace = tempFile.freeSpace(testDispatcher)
+    assertEquals(expectedFreeSpace, actualFreeSpace, "Free space should match actual file system value")
+  }
+
+  @Test
+  fun `totalSpace should return the actual total space`() = runTest(testDispatcher) {
+    val expectedTotalSpace = tempFile.totalSpace
+    val actualTotalSpace = tempFile.totalSpace(testDispatcher)
+    assertEquals(expectedTotalSpace, actualTotalSpace, "Total space should match actual file system value")
   }
 
   @Test
   fun `totalSpace should be greater than or equal to freeSpace`() = runTest(testDispatcher) {
-    val total = tempFile.totalSpace(testDispatcher)
-    val free = tempFile.freeSpace(testDispatcher)
-    assertTrue(total >= free, "Total space should be >= free space")
+    val expectedTotalSpace = tempFile.totalSpace
+    val expectedFreeSpace = tempFile.freeSpace
+    val actualTotalSpace = tempFile.totalSpace(testDispatcher)
+    val actualFreeSpace = tempFile.freeSpace(testDispatcher)
+    assertEquals(expectedTotalSpace, actualTotalSpace)
+    assertEquals(expectedFreeSpace, actualFreeSpace)
+    assertTrue(actualTotalSpace >= actualFreeSpace, "Total space should be >= free space")
   }
 
   @Test
