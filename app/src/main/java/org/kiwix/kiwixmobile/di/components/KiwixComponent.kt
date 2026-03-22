@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
 import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
-import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
 
 @KiwixScope
@@ -45,7 +44,6 @@ import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
 interface KiwixComponent {
   fun activityComponentBuilder(): KiwixActivityComponent.Builder
   fun serviceComponent(): Builder
-  fun inject(storageSelectDialog: StorageSelectDialog)
   fun providesOnlineLibraryManager(): OnlineLibraryManager
   fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
   fun provideFileOperationHandler(): FileOperationHandler
