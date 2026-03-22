@@ -9,6 +9,7 @@ buildscript {
 }
 plugins {
   `android-library`
+  kotlin("kapt")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
@@ -20,6 +21,11 @@ android {
   buildTypes {
     getByName("release") {
       isMinifyEnabled = false
+    }
+  }
+  sourceSets {
+    getByName("androidTest") {
+      assets.srcDirs(File(projectDir, "schemas"))
     }
   }
 }
@@ -62,4 +68,11 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   testImplementation(Libs.TURBINE_FLOW_TEST)
+  androidTestImplementation(Libs.roomTesting)
+}
+
+kapt {
+  arguments {
+    arg("room.schemaLocation", "$projectDir/schemas")
+  }
 }
