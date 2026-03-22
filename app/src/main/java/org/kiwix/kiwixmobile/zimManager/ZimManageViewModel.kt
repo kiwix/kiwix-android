@@ -106,6 +106,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelectAll
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
@@ -152,6 +153,7 @@ class ZimManageViewModel @Inject constructor(
     object RequestValidateZimFiles : FileSelectActions()
     object RequestDeleteMultiSelection : FileSelectActions()
     object RequestShareMultiSelection : FileSelectActions()
+    object RequestSelectAll : FileSelectActions()
     object MultiModeFinished : FileSelectActions()
     object RestartActionMode : FileSelectActions()
     object UserClickedDownloadBooksButton : FileSelectActions()
@@ -466,6 +468,7 @@ class ZimManageViewModel @Inject constructor(
             when (action) {
               is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
               is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
+              RequestSelectAll -> selectAll()
               RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
               RequestShareMultiSelection -> ShareFiles(selectionsFromState())
               RequestValidateZimFiles ->
@@ -489,6 +492,23 @@ class ZimManageViewModel @Inject constructor(
       fileSelectListStates.postValue(
         it.copy(
           bookOnDiskListItems = selectBook(it, bookOnDisk),
+          selectionMode = MULTI
+        )
+      )
+    }
+    return StartMultiSelection(fileSelectActions)
+  }
+
+  private fun selectAll(): StartMultiSelection {
+    fileSelectListStates.value?.let { state ->
+
+      val updatedList = state.bookOnDiskListItems.map { listItem ->
+        listItem.apply { isSelected = true }
+      }
+
+      fileSelectListStates.postValue(
+        state.copy(
+          bookOnDiskListItems = updatedList,
           selectionMode = MULTI
         )
       )
