@@ -29,12 +29,17 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -42,6 +47,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.data.remote.CategoryFeed
+import org.kiwix.kiwixmobile.core.data.remote.CategoryEntry
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
@@ -71,9 +77,17 @@ class CategoryViewModelTest {
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
   private lateinit var categoryViewModel: CategoryViewModel
   private var categories: MutableStateFlow<List<Category>?> = MutableStateFlow(null)
+  private val testDispatcher = UnconfinedTestDispatcher()
+
+  @AfterEach
+  fun tearDown() {
+    Dispatchers.resetMain()
+    CategorySessionCache.hasFetched = false
+  }
 
   @BeforeEach
   fun init() {
+    Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     every { application.getString(any()) } returns "Error"
     every { connectivityBroadcastReceiver.action } returns "test"
@@ -89,9 +103,12 @@ class CategoryViewModelTest {
     every { kiwixDataStore.cachedOnlineCategoryList } returns categories
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
     coEvery { kiwixService.getCategories() } returns CategoryFeed()
+    coEvery { kiwixDataStore.saveOnlineCategoryList(any()) } just Runs
+    coEvery { kiwixService.getCategories() } returns CategoryFeed()
   }
 
   private fun createViewModel() {
+    CategoryViewModel.isTest = true
     categoryViewModel =
       CategoryViewModel(
         application,
@@ -131,15 +148,15 @@ class CategoryViewModelTest {
 
   @Test
   fun `initial state is Loading`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+    runTest(testDispatcher) {
+      coEvery { kiwixService.getCategories() } coAnswers { awaitCancellation() }
       createViewModel()
       assertThat(categoryViewModel.state.value).isEqualTo(Loading)
     }
   }
 
   @Test
-  fun `an empty categories emission does not send update action`() = runTest {
+  fun `an empty categories emission does not send update action`() = runTest(testDispatcher) {
     createViewModel()
     testFlow(
       categoryViewModel.actions,
@@ -151,30 +168,37 @@ class CategoryViewModelTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `Save uses active category`() = flakyTest {
-    runTest {
-      every { application.getString(any()) } returns ""
-      createViewModel()
+    runTest(testDispatcher) {
       val activeCategory = category(category = "wikipedia").copy(active = true)
-      val inactiveCategory = category(category = "gutenburg").copy(active = false)
-      val categoryItem = CategoryListItem.CategoryItem(activeCategory)
+      val inactiveCategory = category(category = "Gutenberg").copy(active = false)
+      val entries = listOf(activeCategory, inactiveCategory).map { cat ->
+        CategoryEntry().apply { title = cat.category }
+      }
+      coEvery { kiwixService.getCategories() } returns CategoryFeed().apply { this.entries = entries }
+      every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("wikipedia")
+
+      createViewModel()
+      advanceUntilIdle()
+
       categoryViewModel.effects.test {
         categoryViewModel.state.value = Content(listOf(activeCategory, inactiveCategory))
-        categoryViewModel.actions.emit(Action.Select(categoryItem))
+        categoryViewModel.actions.emit(Action.Save)
         advanceUntilIdle()
         advanceTimeBy(100)
         val effect = awaitItemOfType<SaveCategoryAndFinish>()
-        assertThat(effect.category).isEqualTo(activeCategory)
+        assertThat(effect.categories.map { it.category }).containsExactly("wikipedia")
       }
     }
   }
 
   @Test
   fun `online and api returns empty emits Error when no cache`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       coEvery { kiwixService.getCategories() } returns CategoryFeed()
       coEvery { application.getString(string.no_category_available) } returns "No category available"
 
       createViewModel()
+      advanceUntilIdle()
       categoryViewModel.state.test {
         val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("No category available")
@@ -185,7 +209,7 @@ class CategoryViewModelTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `online api throws exception falls back to error`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       coEvery { kiwixService.getCategories() } throws RuntimeException()
 
       createViewModel()
@@ -202,7 +226,7 @@ class CategoryViewModelTest {
 
   @Test
   fun `offline uses cached categories`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       networkStates.value = NetworkState.NOT_CONNECTED
 
       val cached =
@@ -214,6 +238,7 @@ class CategoryViewModelTest {
         flowOf(cached)
 
       createViewModel()
+      advanceUntilIdle()
       categoryViewModel.state.test {
         val content = awaitItemOfType<Content>()
         assertThat(content.items.first().category)
@@ -224,10 +249,11 @@ class CategoryViewModelTest {
 
   @Test
   fun `offline and no cache emits no network error`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       networkStates.value = NetworkState.NOT_CONNECTED
 
       createViewModel()
+      advanceUntilIdle()
       categoryViewModel.state.test {
         val error = awaitItemOfType<State.Error>()
         assertThat(error.errorMessage).isEqualTo("Error")
@@ -237,7 +263,7 @@ class CategoryViewModelTest {
 
   @Test
   fun `session cache skips api call`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       CategorySessionCache.hasFetched = true
 
       val cached =
@@ -249,6 +275,7 @@ class CategoryViewModelTest {
         flowOf(cached)
 
       createViewModel()
+      advanceUntilIdle()
       verify(exactly = 0) {
         runBlocking { kiwixService.getCategories() }
       }
@@ -261,16 +288,16 @@ class CategoryViewModelTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `UpdateCategory changes Loading to Content`() = flakyTest {
-    runTest {
-      CategorySessionCache.hasFetched = true
+    runTest(testDispatcher) {
+      CategorySessionCache.hasFetched = false
       coEvery { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(emptyList())
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+      coEvery { kiwixService.getCategories() } coAnswers { awaitCancellation() }
 
       createViewModel()
       val categories = listOf(Category(1, false, "Test"))
       categoryViewModel.state.test {
-        skipItems(1)
-
+        awaitItem()
+        categoryViewModel.state.value = Loading
         categoryViewModel.actions.emit(UpdateCategory(categories))
         advanceUntilIdle()
 
@@ -283,26 +310,25 @@ class CategoryViewModelTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `Filter updates content`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+    runTest(testDispatcher) {
+      CategorySessionCache.hasFetched = false
+      coEvery { kiwixService.getCategories() } coAnswers { awaitCancellation() }
 
+      createViewModel()
       val categories =
         listOf(
           Category(1, false, "wikipedia"),
-          Category(2, false, "Gutenburg")
+          Category(2, false, "Gutenberg")
         )
 
-      createViewModel()
+      categoryViewModel.state.value = Content(categories)
       categoryViewModel.state.test {
-        skipItems(1)
-        categoryViewModel.actions.emit(UpdateCategory(categories))
-        advanceUntilIdle()
-
+        awaitItem()
         categoryViewModel.actions.emit(Action.Filter("wiki"))
         advanceUntilIdle()
         val content = awaitItemOfType<Content>()
         val filteredItem: CategoryListItem.CategoryItem =
-          content.viewItems.first { it is CategoryListItem.CategoryItem } as CategoryListItem.CategoryItem
+          content.viewItems.filterIsInstance<CategoryListItem.CategoryItem>().first()
         assertThat(filteredItem.category.category).isEqualTo("wikipedia")
         cancelAndConsumeRemainingEvents()
       }
@@ -312,33 +338,20 @@ class CategoryViewModelTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `Select emits side effect and moves to Saving`() = flakyTest {
-    runTest {
+    runTest(testDispatcher) {
       coEvery { kiwixService.getCategories() } returns CategoryFeed()
 
-      val items =
-        listOf(
-          Category(0, true, ""),
-          Category(1, false, "Wikipedia")
-        )
+      val entry = CategoryEntry().apply { title = "Wikipedia" }
+      coEvery { kiwixService.getCategories() } returns CategoryFeed().apply { entries = listOf(entry) }
+      every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("Wikipedia")
 
       createViewModel()
       advanceUntilIdle()
+
       categoryViewModel.effects.test {
-        categoryViewModel.actions.emit(UpdateCategory(items))
-        advanceUntilIdle()
-        categoryViewModel.actions.emit(
-          Action.Select(
-            CategoryListItem.CategoryItem(
-              Category(1, false, "Wikipedia")
-            )
-          )
-        )
-
-        advanceUntilIdle()
-        assertThat(awaitItem())
-          .isInstanceOf(SaveCategoryAndFinish::class.java)
-
-        cancelAndConsumeRemainingEvents()
+        categoryViewModel.actions.emit(Action.Save)
+        val effect = awaitItem() as SaveCategoryAndFinish
+        assertThat(effect.categories.map { it.category }).containsExactly("Wikipedia")
       }
     }
   }

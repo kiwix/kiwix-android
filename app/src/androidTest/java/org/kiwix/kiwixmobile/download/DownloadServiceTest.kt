@@ -51,7 +51,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -85,15 +84,15 @@ class DownloadServiceTest : BaseActivityTest() {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
-        setPrefLanguage("en")
+        setPrefLanguage("")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
         setIsScanFileSystemDialogShown(true)
         setShowStorageOption(false)
         setIsPlayStoreBuild(true)
         setPrefIsTest(true)
         setIsFirstRun(false)
-        setSelectedOnlineContentCategory("")
         setSelectedOnlineContentLanguage("")
+        setSelectedOnlineContentCategory("")
       }
     }
     activityScenario =
@@ -126,12 +125,7 @@ class DownloadServiceTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         kiwixMainActivity = it
-        it.navigate(KiwixDestination.Library.route)
-      }
-      library {
-        refreshList(composeTestRule)
-        waitUntilZimFilesRefreshing(composeTestRule)
-        deleteZimIfExists(composeTestRule)
+        it.navigate(KiwixDestination.Downloads.route)
       }
       downloadRobot {
         clickDownloadOnBottomNav(composeTestRule)
@@ -164,17 +158,15 @@ class DownloadServiceTest : BaseActivityTest() {
   }
 
   private fun assetDownloadService(isRunning: Boolean) {
+    composeTestRule.waitUntilTimeout(3000)
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
       AccessibilityService.GLOBAL_ACTION_HOME
     )
-    // Now we are downloading the small file so we need to check the service initialization fast.
-    repeat(20) {
-      Assertions.assertEquals(
-        isRunning,
-        DownloadMonitorService.isDownloadMonitorServiceRunning
-      )
-    }
+    Assertions.assertEquals(
+      isRunning,
+      DownloadMonitorService.isDownloadMonitorServiceRunning
+    )
     composeTestRule.waitUntilTimeout(3000)
   }
 

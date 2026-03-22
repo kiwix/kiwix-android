@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.download
 
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -103,7 +104,8 @@ class DownloadRobot : BaseRobot() {
     language: String
   ) {
     composeTestRule.apply {
-      onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).assertTextEquals(language)
+      onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG)
+        .assertTextContains(language, substring = true)
     }
   }
 

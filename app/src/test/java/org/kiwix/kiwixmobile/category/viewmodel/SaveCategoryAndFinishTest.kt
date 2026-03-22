@@ -41,7 +41,7 @@ class SaveCategoryAndFinishTest {
     every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
     every { onBackPressedDispatcher.onBackPressed() } answers { }
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(category, kiwixDataStore, lifeCycleScope).invokeWith(activity)
+    SaveCategoryAndFinish(listOf(category), kiwixDataStore, lifeCycleScope).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
     testScheduler.advanceUntilIdle()
