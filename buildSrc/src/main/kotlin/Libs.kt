@@ -307,6 +307,8 @@ object Libs {
 
   const val roomRuntime = "androidx.room:room-runtime:" + Versions.roomVersion
 
+  const val roomTesting = "androidx.room:room-testing:" + Versions.roomVersion
+
   /**
    * https://github.com/zxing/zxing
    */
