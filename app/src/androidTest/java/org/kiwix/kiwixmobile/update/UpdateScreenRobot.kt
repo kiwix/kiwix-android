@@ -57,7 +57,7 @@ class UpdateScreenRobot : BaseRobot() {
     composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
   }
 
-  fun downloadApk(composeTestRule: ComposeContentTestRule) {
+  fun clickUpdateApk(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()
@@ -96,7 +96,7 @@ class UpdateScreenRobot : BaseRobot() {
     })
   }
 
-  fun stopApkDownload(composeTestRule: ComposeContentTestRule) {
+  fun clickApkCancelButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       val stopButton = onAllNodesWithTag(APK_CANCEL_BUTTON_TESTING_TAG)[0]
       waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) { stopButton.isDisplayed() }
@@ -126,6 +126,16 @@ class UpdateScreenRobot : BaseRobot() {
       composeTestRule.apply {
         waitForIdle()
         onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
+      }
+    })
+  }
+
+  fun assertDownloadStopped(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(UPDATE_BUTTON_TESTING_TAG)[0].isDisplayed()
+        }
       }
     })
   }
