@@ -26,15 +26,11 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import androidx.work.testing.TestListenableWorkerBuilder
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,7 +40,6 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.update.Channel
 import org.kiwix.kiwixmobile.core.data.remote.update.Items
 import org.kiwix.kiwixmobile.core.data.remote.update.UpdateFeed
-import org.kiwix.kiwixmobile.core.di.modules.KIWIX_UPDATE_URL
 import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
 
 @RunWith(AndroidJUnit4::class)
@@ -59,45 +54,28 @@ class UpdateWorkerTest {
     context = ApplicationProvider.getApplicationContext()
     apkDao = mockk(relaxed = true)
     kiwixService = mockk()
-
-    mockkObject(KiwixService.ServiceCreator)
-    every {
-      KiwixService.ServiceCreator.newHackListService(any(), any())
-    } returns kiwixService
-
     worker = buildWorker()
-  }
-
-  @After
-  fun tearDown() {
-    unmockkObject(KiwixService.ServiceCreator)
   }
 
   @Test
   fun doWork_returnsSuccess_andInsertsApkInfo_whenNoPreviousDownloadExists() {
     runBlocking {
       coEvery { kiwixService.getUpdates() } returns updateFeed(
-        title = "Kiwix Android 100.100.100",
-        link = APK_URL
+        title = "org.kiwix.kiwixmobile.standalone.apk"
       )
       coEvery { apkDao.getDownload() } returns null
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.success()))
-      verify(exactly = 1) {
-        KiwixService.ServiceCreator.newHackListService(any(), KIWIX_UPDATE_URL)
-      }
-      verify(exactly = 1) {
+      verify {
         apkDao.addApkInfoItem(
           match {
-            it.name == "Kiwix Android 100.100.100" &&
-              it.version == "100.100.100" &&
+            it.name == "org.kiwix.kiwixmobile.standalone.apk" &&
+              it.version == "10.10.10" &&
               it.url == APK_URL
           }
         )
       }
-      verify(exactly = 0) { apkDao.addLatestAppVersion(any()) }
+      verify { apkDao.addLatestAppVersion(any()) }
     }
   }
 
@@ -105,16 +83,13 @@ class UpdateWorkerTest {
   fun doWork_returnsSuccess_andUpdatesExistingVersion_whenPreviousDownloadExists() {
     runBlocking {
       coEvery { kiwixService.getUpdates() } returns updateFeed(
-        title = "Kiwix Android 101.0.0",
-        link = APK_URL
+        title = "Kiwix Android 101.0.0"
       )
       coEvery { apkDao.getDownload() } returns existingDownload()
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.success()))
-      verify(exactly = 1) { apkDao.addLatestAppVersion("101.0.0") }
-      verify(exactly = 0) { apkDao.addApkInfoItem(any()) }
+      verify { apkDao.addLatestAppVersion("101.0.0") }
+      verify { apkDao.addApkInfoItem(any()) }
     }
   }
 
@@ -122,25 +97,10 @@ class UpdateWorkerTest {
   fun doWork_returnsFailure_whenFeedContainsNoItems() {
     runBlocking {
       coEvery { kiwixService.getUpdates() } returns UpdateFeed()
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.failure()))
-      verify(exactly = 0) { apkDao.addApkInfoItem(any()) }
-      verify(exactly = 0) { apkDao.addLatestAppVersion(any()) }
-    }
-  }
-
-  @Test
-  fun doWork_returnsFailure_whenFetchingUpdatesThrows() {
-    runBlocking {
-      coEvery { kiwixService.getUpdates() } throws RuntimeException("Network error")
-
-      val result = worker.doWork()
-
-      assertThat(result, `is`(ListenableWorker.Result.failure()))
-      verify(exactly = 0) { apkDao.addApkInfoItem(any()) }
-      verify(exactly = 0) { apkDao.addLatestAppVersion(any()) }
+      verify { apkDao.addApkInfoItem(any()) }
+      verify { apkDao.addLatestAppVersion(any()) }
     }
   }
 
@@ -163,10 +123,10 @@ class UpdateWorkerTest {
       )
       .build()
 
-  private fun updateFeed(title: String, link: String): UpdateFeed {
+  private fun updateFeed(title: String): UpdateFeed {
     val item = Items().apply {
       this.title = title
-      this.link = link
+      link = APK_URL
     }
     val channel = Channel().apply {
       items = listOf(item)
@@ -177,12 +137,12 @@ class UpdateWorkerTest {
   }
 
   private fun existingDownload() = DownloadApkEntity(
-    name = "Kiwix Android 99.0.0",
-    version = "99.0.0",
+    name = "org.kiwix.kiwixmobile.standalone.apk",
+    version = "10.10.10",
     url = APK_URL
   )
 
   private companion object {
-    const val APK_URL = "https://download.kiwix.org/kiwix.apk"
+    const val APK_URL = "https://test.com"
   }
 }

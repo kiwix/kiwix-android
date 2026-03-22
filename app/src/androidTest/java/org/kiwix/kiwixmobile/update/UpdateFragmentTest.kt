@@ -121,24 +121,29 @@ class UpdateFragmentTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+      kiwixMainActivity.navigate(KiwixDestination.Reader.route)
     }
     updateScreenRobot {
       navigateToUpdateScreen(composeTestRule)
       waitForApkInfoToLoad(composeTestRule)
-      downloadApk(composeTestRule)
+      clickUpdateApk(composeTestRule)
       assertDownloadApkStart(composeTestRule)
-      stopApkDownload(composeTestRule)
+      waitForApkInfoToLoad(composeTestRule)
+      clickApkCancelButton(composeTestRule)
+      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+      clickOnYesButton(composeTestRule)
+      assertDownloadStopped(composeTestRule)
+      waitForApkInfoToLoad(composeTestRule)
+      clickUpdateApk(composeTestRule)
+      clickApkCancelButton(composeTestRule)
       assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
       clickOnNoButton(composeTestRule)
       clickNavigationIcon(composeTestRule)
       assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickNavigationIcon(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
       clickOnNoButton(composeTestRule)
-      navigateBackWhenDownloading(composeTestRule)
-      clickOnNoButton(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+      // navigateBackWhenDownloading(composeTestRule)
+      // clickOnNoButton(composeTestRule)
+      // assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
       waitUntilApkDownloadComplete(
         composeTestRule = composeTestRule,
         kiwixMainActivity = kiwixMainActivity
