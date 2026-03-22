@@ -106,6 +106,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelectAll
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.libkiwix.Book
 import java.io.File
@@ -271,6 +272,13 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       { navigateToLocalFileTransferFragment() },
       isEnabled = true,
       testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+    ),
+    ActionMenuItem(
+      IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_toc_24dp),
+      string.select_all_files,
+      { offerAction(RequestSelectAll) },
+      isEnabled = true,
+      testingTag = "None"
     )
   )
 
