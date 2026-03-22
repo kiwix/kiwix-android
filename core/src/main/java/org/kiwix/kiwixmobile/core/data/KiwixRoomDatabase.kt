@@ -52,7 +52,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     WebViewHistoryEntity::class
   ],
   version = 10,
-  exportSchema = false
+  exportSchema = true
 )
 @TypeConverters(
   HistoryRoomDaoCoverts::class,
