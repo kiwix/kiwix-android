@@ -251,7 +251,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     )
   }
 
-
   /**
    * Stores the newly selected storage path in preferences
    * and retries copying/moving the ZIM file.
