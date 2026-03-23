@@ -39,7 +39,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
+
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -695,15 +695,12 @@ suspend fun <T> TestScope.testFlow(
   assert: suspend TurbineTestContext<T>.() -> Unit,
   timeout: Duration? = null
 ) {
-  val job = launch {
-    flow.test(timeout = timeout) {
-      triggerAction()
-      assert()
-      cancelAndIgnoreRemainingEvents()
-      ensureAllEventsConsumed()
-    }
+  flow.test(timeout = timeout) {
+    triggerAction()
+    assert()
+    cancelAndIgnoreRemainingEvents()
+    ensureAllEventsConsumed()
   }
-  job.join()
 }
 
 suspend inline fun <reified T> ReceiveTurbine<*>.awaitItemOfType(): T {
