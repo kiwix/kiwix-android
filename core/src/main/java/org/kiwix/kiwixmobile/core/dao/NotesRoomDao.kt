@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import java.io.File
 
@@ -60,7 +60,7 @@ abstract class NotesRoomDao : PageDao {
 
   fun saveNote(noteItem: NoteListItem) {
     val notesEntity = NotesRoomEntity(noteItem)
-    if (count(notesEntity.id.toInt()) > 0) {
+    if (count(notesEntity.id) > 0) {
       // set the default id so that room will automatically generates the database id.
       notesEntity.id = 0
     }
@@ -68,7 +68,7 @@ abstract class NotesRoomDao : PageDao {
   }
 
   @Query("SELECT COUNT() FROM NotesRoomEntity WHERE id = :id")
-  abstract fun count(id: Int): Int
+  abstract fun count(id: Long): Int
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   abstract fun saveNote(notesRoomEntity: NotesRoomEntity)

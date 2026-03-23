@@ -9,4 +9,7 @@
   <files-path
     name="debug"
     path="logs/" />
+  <cache-path
+    name="shared_files"
+    path="." />
 </paths>

@@ -71,6 +71,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
+const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 
 class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
@@ -256,21 +257,44 @@ class FetchDownloadNotificationManager @Inject constructor(
     context: Context
   ) {
     if (downloadNotification.isCompleted) {
-      val internal =
-        Intents.internal(CoreMainActivity::class.java).apply {
-          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-          putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
-        }
-      val pendingIntent =
-        getActivity(
-          context,
-          downloadNotification.notificationId,
-          internal,
-          FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
-        )
-      notificationBuilder.setContentIntent(pendingIntent)
-      notificationBuilder.setAutoCancel(true)
+      notificationBuilder.setContentIntent(
+        getOpenActionPendingIntent(context, downloadNotification)
+      )
+      notificationBuilder.addAction(
+        android.R.drawable.ic_menu_send,
+        context.getString(R.string.open),
+        getOpenActionPendingIntent(context, downloadNotification)
+      )
     }
+  }
+
+  fun getOpenActionPendingIntent(
+    context: Context,
+    downloadNotification: DownloadNotification
+  ): PendingIntent =
+    getOpenActionPendingIntent(
+      context,
+      downloadNotification.title,
+      downloadNotification.notificationId
+    )
+
+  fun getOpenActionPendingIntent(
+    context: Context,
+    title: String,
+    notificationId: Int
+  ): PendingIntent {
+    val internal =
+      Intents.internal(CoreMainActivity::class.java).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        putExtra(DOWNLOAD_NOTIFICATION_TITLE, title)
+        putExtra(DOWNLOAD_NOTIFICATION_ID, notificationId)
+      }
+    return getActivity(
+      context,
+      notificationId + 1,
+      internal,
+      FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+    )
   }
 
   fun showDownloadPauseNotification(

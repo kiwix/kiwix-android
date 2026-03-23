@@ -117,6 +117,8 @@ object Versions {
   const val DATASTORE = "1.2.0"
 
   const val LIFECYCLE_VERSION = "2.8.6"
+
+  const val ROBOLECTRIC = "4.14.1"
 }
 
 /**

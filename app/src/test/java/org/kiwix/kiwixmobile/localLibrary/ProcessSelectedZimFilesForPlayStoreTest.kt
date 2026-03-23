@@ -134,9 +134,16 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       every { activity.getString(R.string.change_storage) } returns "Change Storage"
 
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
-
+      advanceUntilIdle()
       coVerify(exactly = 0) {
-        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any(), any())
+        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any()
+        )
       }
     }
 
@@ -147,7 +154,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       val documentFile = DocumentFile.fromSingleUri(activity, uri)!!
 
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
-
+      advanceUntilIdle()
       coVerify {
         copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
           uri,
@@ -178,31 +185,39 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       every { activity.toast(any<String>(), any()) } just Runs
 
       processSelectedZimFiles.processSelectedFiles(listOf(uri))
-
+      advanceUntilIdle()
       verify { activity.toast("Invalid file", any()) }
     }
 
   @Test
-  fun `processMultipleFiles should show success toast when all files processed`() = testScope.runTest {
-    val uri1 = createValidUri("test1.zim", availableSpace = 10000L)
-    val uri2 = createValidUri("test2.zim", availableSpace = 10000L)
+  fun `processMultipleFiles should show success toast when all files processed`() =
+    testScope.runTest {
+      val uri1 = createValidUri("test1.zim", availableSpace = 10000L)
+      val uri2 = createValidUri("test2.zim", availableSpace = 10000L)
 
-    coEvery {
-      copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(any(), any(), any(), any(), any(), any())
-    } coAnswers {
-      processSelectedZimFiles.onFileCopied(mockk<File>(relaxed = true))
+      coEvery {
+        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any()
+        )
+      } coAnswers {
+        processSelectedZimFiles.onFileCopied(mockk<File>(relaxed = true))
+      }
+
+      every {
+        activity.getString(R.string.your_selected_files_added_to_library)
+      } returns "Files added to library"
+      every { activity.toast(any<String>(), any()) } just Runs
+
+      processSelectedZimFiles.processSelectedFiles(listOf(uri1, uri2))
+      advanceUntilIdle()
+
+      verify { activity.toast("Files added to library", any()) }
     }
-
-    every {
-      activity.getString(R.string.your_selected_files_added_to_library)
-    } returns "Files added to library"
-    every { activity.toast(any<String>(), any()) } just Runs
-
-    processSelectedZimFiles.processSelectedFiles(listOf(uri1, uri2))
-    advanceUntilIdle()
-
-    verify { activity.toast("Files added to library", any()) }
-  }
 
   @Test
   fun `isValidZimFile should return true for valid zim extension`() = testScope.runTest {
@@ -210,7 +225,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     val documentFile = DocumentFile.fromSingleUri(activity, uri)!!
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
-
+    advanceUntilIdle()
     coVerify {
       copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
         uri,
@@ -232,7 +247,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     every { FileUtils.isSplittedZimFile("test.zimaa") } returns true
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
-
+    advanceUntilIdle()
     coVerify {
       copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
         uri,

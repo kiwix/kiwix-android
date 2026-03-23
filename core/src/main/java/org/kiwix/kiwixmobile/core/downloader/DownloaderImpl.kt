@@ -23,13 +23,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
   private val downloadRoomDao: DownloadRoomDao,
-  private val kiwixService: KiwixService
+  @OPDSKiwixService private val kiwixService: KiwixService
 ) : Downloader {
   @Suppress("InjectDispatcher")
   override fun download(book: LibkiwixBook) {

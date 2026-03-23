@@ -76,7 +76,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -123,6 +122,7 @@ import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.KiwixWebViewWithAppBarScrolling
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -136,7 +136,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_BUTTON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -210,15 +209,17 @@ fun ReaderScreen(
           )
         },
         bottomBar = {
-          BottomAppBarOfReaderScreen(
-            state.bookmarkButtonItem,
-            state.previousPageButtonItem,
-            state.onHomeButtonClick,
-            state.nextPageButtonItem,
-            state.tocButtonItem,
-            state.shouldShowBottomAppBar,
-            bottomAppBarScrollBehavior
-          )
+          if (!state.isNoBookOpenInReader) {
+            BottomAppBarOfReaderScreen(
+              state.bookmarkButtonItem,
+              state.previousPageButtonItem,
+              state.onHomeButtonClick,
+              state.nextPageButtonItem,
+              state.tocButtonItem,
+              state.shouldShowBottomAppBar,
+              bottomAppBarScrollBehavior
+            )
+          }
         },
         floatingActionButton = { BackToTopFab(state) },
         modifier = Modifier
@@ -602,19 +603,12 @@ private fun TtsControls(state: ReaderScreenState) {
 @Composable
 private fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
-    SmallFloatingActionButton(
+    KiwixFloatingActionButton(
+      icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
       onClick = state.backToTopButtonClick,
-      modifier = Modifier.padding(bottom = BACK_TO_TOP_BUTTON_BOTTOM_MARGIN),
-      containerColor = MaterialTheme.colorScheme.primary,
-      contentColor = MaterialTheme.colorScheme.onPrimary,
-      shape = CircleShape
-    ) {
-      Icon(
-        painter = Drawable(R.drawable.action_find_previous).toPainter(),
-        contentDescription = stringResource(R.string.pref_back_to_top),
-        tint = White
-      )
-    }
+      contentDescription = stringResource(R.string.pref_back_to_top),
+      shouldPulse = true
+    )
   }
 }
 

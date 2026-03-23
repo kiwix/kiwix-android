@@ -153,7 +153,7 @@ class CopyMoveFileHandler @Inject constructor(
         onSelectAction = ::copyMoveZIMFileInSelectedStorage
         titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
         setStorageDeviceList(storageDeviceList)
-        setShouldShowCheckboxSelected(false)
+        setShouldShowStorageSelected(false)
       }
       .show(fragmentManager, activity.getString(R.string.choose_storage_to_copy_move_zim_file))
 
@@ -233,12 +233,13 @@ class CopyMoveFileHandler @Inject constructor(
   fun observeFileSystemState() {
     if (storageObservingJob?.isActive == true) return
     storageObservingJob = lifecycleScope?.launch {
-      fat32Checker.fileSystemStates.collect {
-        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
-        if (validateZimFileCanCopyOrMove()) {
-          performCopyMoveOperation()
-        }
+      // Wait until filesystem detection completes
+      fat32Checker.fileSystemStates.first { it != DetectingFileSystem }
+      copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+      if (validateZimFileCanCopyOrMove()) {
+        performCopyMoveOperation()
       }
+      storageObservingJob?.cancel()
     }
   }
 

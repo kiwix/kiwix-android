@@ -30,7 +30,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Dao
@@ -74,7 +74,7 @@ abstract class HistoryRoomDao : PageDao {
   abstract fun insertHistoryItem(historyRoomEntity: HistoryRoomEntity)
 
   @Query("SELECT COUNT() FROM HistoryRoomEntity WHERE id = :id")
-  abstract fun count(id: Int): Int
+  abstract fun count(id: Long): Int
 
   suspend fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
     saveMutex.withLock {
@@ -93,7 +93,7 @@ abstract class HistoryRoomDao : PageDao {
         updateHistoryItem(it)
       } ?: run {
         val historyEntity = HistoryRoomEntity(historyItem)
-        if (count(historyEntity.id.toInt()) > 0) {
+        if (count(historyEntity.id) > 0) {
           // set the default id so that room will automatically generates the database id.
           historyEntity.id = 0
         }

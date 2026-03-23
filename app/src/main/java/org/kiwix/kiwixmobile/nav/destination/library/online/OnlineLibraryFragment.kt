@@ -289,7 +289,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         },
         bottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
         navHostController = (requireActivity() as CoreMainActivity).navController,
-        onUserBackPressed = { onUserBackPressed() }
+        onUserBackPressed = { onUserBackPressed() },
+        zimManageViewModel = zimManageViewModel
       )
       DialogHost(alertDialogShower)
     }
@@ -793,7 +794,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onSelectAction = ::storeDeviceInPreferences
         titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
         setStorageDeviceList(storageDeviceList)
-        setShouldShowCheckboxSelected(false)
+        setShouldShowStorageSelected(false)
       }
       .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 

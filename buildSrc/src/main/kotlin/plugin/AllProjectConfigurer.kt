@@ -101,6 +101,7 @@ class AllProjectConfigurer {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
           isReturnDefaultValues = true
+          isIncludeAndroidResources = true
           all {
             it.also { testTask ->
               testTask.useJUnitPlatform()
@@ -254,6 +255,11 @@ class AllProjectConfigurer {
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT_ACCESSIBILITY)
       debugImplementation(Libs.COMPOSE_UI_MANIFEST)
       debugImplementation(Libs.COMPOSE_TOOLING)
+
+      // Robolectric unit testing
+      testImplementation(Libs.robolectric)
+      testImplementation(Libs.androidx_test_core)
+      testImplementation(Libs.junit_vintage_engine)
     }
   }
 }

@@ -252,7 +252,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       .apply {
         onSelectAction = ::storeDeviceInPreferences
         setStorageDeviceList(storageDeviceList)
-        setShouldShowCheckboxSelected(true)
+        setShouldShowStorageSelected(true)
       }
       .show(fragmentManager, activity.getString(string.pref_storage))
 
