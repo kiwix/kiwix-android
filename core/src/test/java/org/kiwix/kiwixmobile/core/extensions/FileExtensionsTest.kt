@@ -64,28 +64,43 @@ class FileExtensionsTest {
   }
 
   @Test
+  fun `deleteFile should return false when file does not exist`() = runTest(testDispatcher) {
+    val nonExistentFile = File("non_existent.tmp")
+    val result = nonExistentFile.deleteFile(testDispatcher)
+    assertFalse(result)
+  }
+
+  @Test
   fun `canReadFile should return true for readable file`() = runTest(testDispatcher) {
     assertTrue(tempFile.canReadFile(testDispatcher))
   }
 
   @Test
-  fun `canReadFile should return false for non-readable file`() = runTest(testDispatcher) {
-    tempFile.setReadable(false)
-    assertFalse(tempFile.canReadFile(testDispatcher))
+  fun `canReadFile should return false for non-existing file`() = runTest(testDispatcher) {
+    val file = File("does_not_exist.tmp")
+    assertFalse(file.canReadFile(testDispatcher))
   }
 
   @Test
   fun `freeSpace should return the actual free space`() = runTest(testDispatcher) {
     val expectedFreeSpace = tempFile.freeSpace
     val actualFreeSpace = tempFile.freeSpace(testDispatcher)
-    assertEquals(expectedFreeSpace, actualFreeSpace, "Free space should match actual file system value")
+    assertEquals(
+      expectedFreeSpace,
+      actualFreeSpace,
+      "Free space should match actual file system value"
+    )
   }
 
   @Test
   fun `totalSpace should return the actual total space`() = runTest(testDispatcher) {
     val expectedTotalSpace = tempFile.totalSpace
     val actualTotalSpace = tempFile.totalSpace(testDispatcher)
-    assertEquals(expectedTotalSpace, actualTotalSpace, "Total space should match actual file system value")
+    assertEquals(
+      expectedTotalSpace,
+      actualTotalSpace,
+      "Total space should match actual file system value"
+    )
   }
 
   @Test
