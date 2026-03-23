@@ -18,14 +18,12 @@
 
 package org.kiwix.kiwixmobile.update
 
-import android.accessibilityservice.AccessibilityService
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.platform.app.InstrumentationRegistry
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
@@ -67,6 +65,8 @@ class UpdateScreenRobot : BaseRobot() {
   }
 
   fun assertDownloadApkStart(composeTestRule: ComposeContentTestRule) {
+    waitForApkInfoToLoad(composeTestRule)
+    clickUpdateApk(composeTestRule)
     testFlakyView({
       composeTestRule.apply {
         waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
@@ -75,16 +75,6 @@ class UpdateScreenRobot : BaseRobot() {
       }
     })
   }
-
-  /*fun assertDownloadApkStopped(composeTestRule: ComposeContentTestRule) {
-    testFlakyView({
-      composeTestRule.apply {
-        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
-          onAllNodesWithTag(UPDATE_BUTTON_TESTING_TAG)[0].isDisplayed()
-        }
-      }
-    })
-  }*/
 
   fun assertDownloadApkFinished(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
@@ -96,7 +86,7 @@ class UpdateScreenRobot : BaseRobot() {
     })
   }
 
-  fun clickApkCancelButton(composeTestRule: ComposeContentTestRule) {
+  private fun clickApkCancelButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       val stopButton = onAllNodesWithTag(APK_CANCEL_BUTTON_TESTING_TAG)[0]
       waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) { stopButton.isDisplayed() }
@@ -112,7 +102,7 @@ class UpdateScreenRobot : BaseRobot() {
     }
   }
 
-  fun clickOnNoButton(composeTestRule: ComposeContentTestRule) {
+  private fun clickOnNoButton(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
@@ -130,7 +120,7 @@ class UpdateScreenRobot : BaseRobot() {
     })
   }
 
-  fun assertDownloadStopped(composeTestRule: ComposeContentTestRule) {
+  private fun assertDownloadStopped(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
@@ -140,37 +130,15 @@ class UpdateScreenRobot : BaseRobot() {
     })
   }
 
-  // wait for 5 minutes for downloading the APK file
+  // Using longer time for apk download since it is not possible to resume apk download
+  // for re-testing
   fun waitUntilApkDownloadComplete(
-    retryCountForDownloadingApkFile: Int = 30,
-    composeTestRule: ComposeContentTestRule,
-    kiwixMainActivity: KiwixMainActivity
+    composeTestRule: ComposeContentTestRule
   ) {
-    try {
-      composeTestRule.onAllNodesWithTag(APK_CANCEL_BUTTON_TESTING_TAG)[0].assertDoesNotExist()
-    } catch (e: AssertionError) {
-      if (retryCountForDownloadingApkFile > 0) {
-        composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-        waitUntilApkDownloadComplete(
-          retryCountForDownloadingApkFile - 1,
-          composeTestRule,
-          kiwixMainActivity
-        )
-        return
-      }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't download the APK file.\n Original exception = $e")
-    }
+    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_APK_DOWNLOAD_TEST.toLong())
   }
 
-  fun navigateBackWhenDownloading(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitUntilTimeout(3000)
-    InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
-      AccessibilityService.GLOBAL_ACTION_BACK
-    )
-  }
-
-  fun assertStopApkDownloadDialogDisplayed(
+  private fun assertStopApkDownloadDialogDisplayed(
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
@@ -181,5 +149,27 @@ class UpdateScreenRobot : BaseRobot() {
           .assertTextEquals(kiwixMainActivity.getString(string.confirm_stop_download_title))
       }
     })
+  }
+
+  fun assertDownloadStoppedAfterCancel(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    clickApkCancelButton(composeTestRule)
+    assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+    clickOnYesButton(composeTestRule)
+    assertDownloadStopped(composeTestRule)
+  }
+
+  fun assertAllDownloadStopDialogsShown(
+    composeTestRule: ComposeContentTestRule,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    clickApkCancelButton(composeTestRule)
+    assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+    clickOnNoButton(composeTestRule)
+    clickNavigationIcon(composeTestRule)
+    assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+    clickOnNoButton(composeTestRule)
   }
 }
