@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.extensions
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -37,37 +36,23 @@ import java.io.FileOutputStream
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class BookExtensionsTest {
-  private val zimFiles = mutableListOf<File>()
-
-  @After
-  fun tearDown() {
-    zimFiles.forEach { it.delete() }
-  }
-
   @Test
-  fun getFaviconShouldReturnNullForNullBook() {
-    val result = null.getFavicon()
+  fun testBookFavicon() {
+    // Test null Book
     assertNull(
       "getFavicon on a null Book should return null",
-      result
+      null.getFavicon()
     )
-  }
 
-  @Test
-  fun getFaviconShouldReturnEmptyStringWhenIllustrationThrowsException() {
-    // Book() with no backing archive will throw when getIllustration is called,
-    // exercising the runCatching error-handling path.
-    val book = Book()
-    val result = book.getFavicon()
+    // Test favicon is empty when getFavicon throw exception.
+    val emptyBook = Book()
+    val exceptionResult = emptyBook.getFavicon()
     assertEquals(
       "getFavicon should return empty string when illustration extraction fails",
       "",
-      result
+      exceptionResult
     )
-  }
 
-  @Test
-  fun getFaviconShouldReturnFaviconForRealZimFile() {
     // Load a real ZIM file and create a Book backed by an Archive
     val zimFile = getZimFile("testzim.zim")
     val archive = Archive(zimFile.path)
@@ -79,19 +64,7 @@ class BookExtensionsTest {
       "getFavicon should return a non-empty string for a real ZIM file",
       result!!.isNotEmpty()
     )
-  }
-
-  @Test
-  fun getFaviconShouldReturnEmptyStringWhenFaviconUrlIsNull() {
-    // A Book() without a backing archive has no favicon URL,
-    // so getFavicon should return the default empty string.
-    val book = Book()
-    val result = book.getFavicon()
-    assertEquals(
-      "getFavicon should return empty string when favicon url is null",
-      "",
-      result
-    )
+    zimFile.delete()
   }
 
   private fun getZimFile(zimFileName: String): File {
@@ -110,7 +83,6 @@ class BookExtensionsTest {
         }
       }
     }
-    zimFiles.add(zimFile)
     return zimFile
   }
 }
