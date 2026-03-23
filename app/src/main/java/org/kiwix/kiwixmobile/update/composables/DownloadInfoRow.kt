@@ -34,12 +34,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -88,6 +88,7 @@ fun DownloadBar(
   state: UpdateStates,
   onCancel: () -> Unit
 ) {
+  val context = LocalContext.current
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -133,7 +134,7 @@ fun DownloadBar(
     ) {
       Icon(
         painter = painterResource(id = org.kiwix.kiwixmobile.R.drawable.ic_stop_24dp),
-        contentDescription = null
+        contentDescription = context.getString(string.stop_download)
       )
     }
   }

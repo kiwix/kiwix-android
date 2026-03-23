@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
@@ -34,7 +35,6 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
@@ -57,7 +57,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -127,15 +126,14 @@ class DownloadApkServiceTest : BaseActivityTest() {
         )
       )
     }
-    // composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test
   fun downloadApkServiceTest() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+      kiwixMainActivity.navigate(KiwixDestination.Reader.route)
     }
     updateScreenRobot {
       navigateToUpdateScreen(composeTestRule)

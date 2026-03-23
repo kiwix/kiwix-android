@@ -432,4 +432,5 @@
   <string name="error_during_installing_apk">An error was encountered while installing the apk. File no longer exists in storage</string>
   <string name="download_again">re-download</string>
   <string name="downloading_new_update">Downloading New update</string>
+  <string name="stop_download">Stop download</string>
 </resources>

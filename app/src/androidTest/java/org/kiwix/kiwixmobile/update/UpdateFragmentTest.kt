@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.update
 
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
@@ -113,7 +114,7 @@ class UpdateFragmentTest : BaseActivityTest() {
         )
       )
     }
-    // composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
   @Test
@@ -125,28 +126,12 @@ class UpdateFragmentTest : BaseActivityTest() {
     }
     updateScreenRobot {
       navigateToUpdateScreen(composeTestRule)
-      waitForApkInfoToLoad(composeTestRule)
-      clickUpdateApk(composeTestRule)
       assertDownloadApkStart(composeTestRule)
-      waitForApkInfoToLoad(composeTestRule)
-      clickApkCancelButton(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickOnYesButton(composeTestRule)
-      assertDownloadStopped(composeTestRule)
-      waitForApkInfoToLoad(composeTestRule)
+      assertDownloadStoppedAfterCancel(composeTestRule, kiwixMainActivity)
       clickUpdateApk(composeTestRule)
-      clickApkCancelButton(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickOnNoButton(composeTestRule)
-      clickNavigationIcon(composeTestRule)
-      assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-      clickOnNoButton(composeTestRule)
-      // navigateBackWhenDownloading(composeTestRule)
-      // clickOnNoButton(composeTestRule)
-      // assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
+      assertAllDownloadStopDialogsShown(composeTestRule, kiwixMainActivity)
       waitUntilApkDownloadComplete(
-        composeTestRule = composeTestRule,
-        kiwixMainActivity = kiwixMainActivity
+        composeTestRule = composeTestRule
       )
       assertDownloadApkFinished(composeTestRule)
     }
