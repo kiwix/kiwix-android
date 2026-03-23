@@ -177,4 +177,112 @@ class ChunkUtilsTest {
       listReturned[1].fileName
     )
   }
+
+  @Test
+  fun `getChunks returns correct count for exact multiple of CHUNK_SIZE`() {
+    val size = ChunkUtils.CHUNK_SIZE * 3
+    val listReturned = ChunkUtils.getChunks(url, size, 1)
+    assertEquals(
+      "exact multiple should not produce an extra chunk",
+      3,
+      listReturned.size
+    )
+  }
+
+  @Test
+  fun `getChunks returns single chunk for content length of 1`() {
+    val listReturned = ChunkUtils.getChunks(url, 1L, 5)
+    assertEquals(1, listReturned.size)
+    assertEquals("0-", listReturned[0].rangeHeader)
+    assertEquals(5, listReturned[0].notificationID)
+  }
+
+  @Test
+  fun `getChunks chunk sizes cover contentLength contiguously without overlaps`() {
+    val contentLength = ChunkUtils.CHUNK_SIZE * 2 + 500L
+    val listReturned = ChunkUtils.getChunks(url, contentLength, 1)
+    val totalSize = listReturned.sumOf { it.size }
+
+    // Total bytes covered by chunks should match content length exactly
+    assertThat(totalSize).isGreaterThanOrEqualTo(contentLength)
+
+    // Verify chunks are contiguous and non-overlapping by checking range headers
+    for (i in 0 until listReturned.size - 1) {
+      val currentRange = listReturned[i].rangeHeader
+      val nextRange = listReturned[i + 1].rangeHeader
+
+      val currentEnd = currentRange.substringAfter("-")
+      val nextStart = nextRange.substringBefore("-").toLong()
+
+      // Current chunk's end + 1 should equal next chunk's start
+      if (currentEnd.isNotEmpty()) {
+        assertThat(nextStart).isEqualTo(currentEnd.toLong() + 1)
+      }
+    }
+  }
+
+  @Test
+  fun `getChunks generates filenames correctly when file has no extension`() {
+    every { StorageUtils.getFileNameFromUrl("noExtURL") } returns "TestFile"
+
+    val size = ChunkUtils.CHUNK_SIZE * 2
+    val chunks = ChunkUtils.getChunks("noExtURL", size, 10)
+
+    assertEquals("TestFile.zimaa.part.part", chunks[0].fileName)
+    assertEquals("TestFile.zimab.part.part", chunks[1].fileName)
+  }
+
+  @Test
+  fun `chunk file extension rolls over after 26 chunks`() {
+    val size = ChunkUtils.CHUNK_SIZE * 30
+    val chunks = ChunkUtils.getChunks(url, size, 1)
+
+    assertEquals("TestFileName.zimaa.part.part", chunks[0].fileName)
+    assertEquals("TestFileName.zimaz.part.part", chunks[25].fileName)
+    assertEquals("TestFileName.zimba.part.part", chunks[26].fileName)
+  }
+
+  @Test
+  fun `chunks should have correct start and end byte`() {
+    val size = ChunkUtils.CHUNK_SIZE * 2
+    val chunks = ChunkUtils.getChunks(url, size, 1)
+
+    assertEquals("0-${ChunkUtils.CHUNK_SIZE}", chunks[0].rangeHeader)
+    assertEquals("${ChunkUtils.CHUNK_SIZE + 1}-", chunks[1].rangeHeader)
+  }
+
+  @Test
+  fun `last chunk endByte should match contentLength`() {
+    val contentLength = ChunkUtils.CHUNK_SIZE + 500
+    val chunks = ChunkUtils.getChunks(url, contentLength, 1)
+
+    val lastChunk = chunks.last()
+
+    // Last chunk range header should have an empty end (indicating end of file)
+    assertThat(lastChunk.rangeHeader.endsWith("-")).isTrue()
+  }
+
+  @Test
+  fun `getChunks works when url is null`() {
+    every { StorageUtils.getFileNameFromUrl(null) } returns "Fallback"
+
+    val chunks = ChunkUtils.getChunks(null, ChunkUtils.CHUNK_SIZE, 1)
+
+    assertEquals("Fallback.part.part", chunks[0].fileName)
+  }
+
+  @Test
+  fun `content length zero should produce no chunks`() {
+    val chunks = ChunkUtils.getChunks(url, 0, 1)
+
+    assertThat(chunks).isEmpty()
+  }
+
+  @Test
+  fun `range header should include end when chunk not last`() {
+    val size = ChunkUtils.CHUNK_SIZE * 3
+    val chunks = ChunkUtils.getChunks(url, size, 1)
+
+    assertEquals("0-${ChunkUtils.CHUNK_SIZE}", chunks[0].rangeHeader)
+  }
 }
