@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.LoadMoreResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
@@ -66,6 +68,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
 import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
@@ -96,12 +99,6 @@ class SearchViewModel @Inject constructor(
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
     viewModelScope.launch { debouncedSearchQuery() }
-
-    viewModelScope.launch {
-      searchOrigin.collect {
-        updateSearchScreenUiState(uiState.value.copy(showFindInPage = it == FromWebView))
-      }
-    }
   }
 
   private suspend fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
@@ -149,47 +146,43 @@ class SearchViewModel @Inject constructor(
         recentResults,
         searchOrigin
       )
-    }
-      .distinctUntilChanged()
-      .collect {
-        // When getting the search results show the loading progressBar.
-        updateSearchScreenUiState(
-          uiState.value.copy(isLoading = true, isLoadingMore = false, searchState = it)
-        )
+    }.mapLatest { searchState ->
+      // When getting the search results show the loading progressBar.
+      updateUiState { it.copy(isLoading = true, isLoadingMore = false) }
 
-        val firstPage = it.getVisibleResults(ZERO).orEmpty()
-        updateSearchScreenUiState(
-          uiState.value.copy(searchList = firstPage)
-        )
-
-        updateSuggestedWords()
+      val firstPage = withContext(ioDispatcher) {
+        searchState.getVisibleResults(ZERO).orEmpty()
       }
+      updateUiState {
+        it.copy(
+          searchState = searchState,
+          searchList = firstPage,
+          spellingCorrectionSuggestions = getSuggestedWordsList(),
+          isLoading = false,
+          findInPageMenuItem =
+            it.findInPageMenuItem.first to (searchOrigin.value == FromWebView)
+        )
+      }
+    }.collect {
+      // Do nothing as state is already updated.
+    }
   }
 
   /**
-   * Updates the suggested word list using the libkiwix spellings database.
+   * Return the suggested word list using the libkiwix spellings database.
    */
-  private suspend fun updateSuggestedWords() {
+  private suspend fun getSuggestedWordsList(): List<String> {
+    val suggestedWordsList = arrayListOf<String>()
     val uiState = uiState.value
     val onlyRecentSearches =
       uiState.searchList.all { it is SearchListItem.RecentSearchListItem }
 
     if (onlyRecentSearches && uiState.searchText.isNotEmpty()) {
-      val suggestedWords = withContext(ioDispatcher) {
-        getSuggestedSpelledWords(
-          uiState.searchText,
-          MAX_SUGGEST_WORD_COUNT
-        )
-      }
-
-      updateSearchScreenUiState(
-        uiState.copy(spellingSuggestions = suggestedWords, isLoading = false)
-      )
-    } else {
-      updateSearchScreenUiState(
-        uiState.copy(spellingSuggestions = emptyList(), isLoading = false)
+      suggestedWordsList.addAll(
+        getSuggestedSpelledWords(uiState.searchText, MAX_SUGGEST_WORD_COUNT)
       )
     }
+    return suggestedWordsList
   }
 
   private fun searchResults() =
@@ -202,6 +195,7 @@ class SearchViewModel @Inject constructor(
         )
       }
 
+  @Suppress("CyclomaticComplexMethod")
   private suspend fun actionMapper() {
     actions.collect {
       when (it) {
@@ -212,12 +206,12 @@ class SearchViewModel @Inject constructor(
         is Filter -> filter.tryEmit(it.term)
         ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
         is ConfirmedDelete -> deleteItemAndShowToast(it)
-        is CreatedWithArguments ->
-          _effects.tryEmit(SearchArgumentProcessing(it.arguments, actions))
-
-        ReceivedPromptForSpeechInput ->
-          _effects.tryEmit(StartSpeechInput(actions))
-
+        is CreatedWithArguments -> _effects.tryEmit(SearchArgumentProcessing(it.arguments, actions))
+        ReceivedPromptForSpeechInput -> _effects.tryEmit(StartSpeechInput(actions))
+        is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
+        is VoiceSearchResult -> onSearchValueChanged(it.term)
+        is LoadMoreResults -> loadMoreSearchResults(it.startIndex)
+        is Action.CloseKeyboard -> _effects.tryEmit(CloseKeyboard)
         StartSpeechInputFailed ->
           _effects.tryEmit(ShowToast(R.string.speech_not_supported))
 
@@ -230,14 +224,6 @@ class SearchViewModel @Inject constructor(
               actions
             )
           )
-
-        is ScreenWasStartedFrom -> {
-          searchOrigin.tryEmit(it.searchOrigin)
-        }
-
-        is VoiceSearchResult -> {
-          updateSearchQuery(it.term)
-        }
       }
     }
   }
@@ -274,42 +260,92 @@ class SearchViewModel @Inject constructor(
     _effects.tryEmit(OpenSearchItem(searchListItem, openInNewTab))
   }
 
-  fun updateSearchQuery(query: String) {
-    updateSearchScreenUiState(uiState.value.copy(searchText = query))
+  private fun updateSearchQuery(query: String) {
+    updateUiState { it.copy(searchText = query) }
     debouncedSearchQuery.value = query.trim()
   }
 
-  suspend fun loadMoreSearchResults(startIndex: Int) {
+  private suspend fun loadMoreSearchResults(startIndex: Int) {
     val uiState = uiState.value
     if (uiState.isLoadingMore) return
 
-    updateSearchScreenUiState(uiState.copy(isLoading = false, isLoadingMore = true))
+    // Show load more progressBar.
+    updateUiState {
+      it.copy(isLoading = false, isLoadingMore = true)
+    }
 
-    val more = withContext(ioDispatcher) {
+    val moreResults = withContext(ioDispatcher) {
       uiState.searchState.getVisibleResults(startIndex)
     }
 
     val current = uiState.searchList
-    val newItems = more?.filter { newItem ->
+    val newItems = moreResults?.filter { newItem ->
       current.none { it == newItem }
     }
-    val isLoadingMore = when {
+    val updatedState = when {
       // When there are no more items available in libkiwix to show.
       // We should keep the isLoadingMore = true so that it can not ask again for more results.
-      newItems == null -> true
+      moreResults == null -> uiState.copy(isLoadingMore = true)
       // Set the load more false because some duplicate items comes
       // from libkiwix that are already showing.
-      newItems.isEmpty() -> false
-      else -> {
-        updateSearchScreenUiState(uiState.copy(searchList = current + newItems))
-        false
-      }
+      newItems.isNullOrEmpty() -> uiState.copy(isLoadingMore = false)
+      else -> uiState.copy(searchList = current + newItems, isLoadingMore = false)
     }
-    updateSearchScreenUiState(uiState.copy(isLoadingMore = isLoadingMore))
+    updateUiState { updatedState }
   }
 
-  private fun updateSearchScreenUiState(searchScreenUiState: SearchScreenUiState) {
-    _uiState.value = searchScreenUiState
+  private fun setIsPageSearchEnabled(searchText: String) {
+    updateUiState {
+      it.copy(findInPageMenuItem = searchText.isNotBlank() to it.findInPageMenuItem.second)
+    }
+  }
+
+  fun onItemClick(it: SearchListItem) {
+    closeKeyboard()
+    actions.tryEmit(OnItemClick(it))
+  }
+
+  fun onItemLongClick(it: SearchListItem) {
+    closeKeyboard()
+    actions.tryEmit(Action.OnItemLongClick(it))
+  }
+
+  fun onNewTabIconClick(it: SearchListItem) {
+    closeKeyboard()
+    actions.tryEmit(Action.OnOpenInNewTabClick(it))
+  }
+
+  fun onSearchClear() {
+    updateSearchQuery("")
+    setIsPageSearchEnabled("")
+  }
+
+  fun onSearchValueChanged(searchText: String) {
+    updateSearchQuery(searchText)
+    setIsPageSearchEnabled(searchText)
+  }
+
+  fun onSuggestionItemClick(suggestionText: String) {
+    updateUiState { it.copy(spellingCorrectionSuggestions = emptyList()) }
+    onSearchValueChanged(suggestionText)
+  }
+
+  fun onKeyboardSubmitButtonClick(query: String) {
+    uiState.value.searchList.firstOrNull {
+      it.value.equals(query, ignoreCase = true)
+    }?.let { onItemClick(it) }
+  }
+
+  fun closeKeyboard() {
+    actions.tryEmit(Action.CloseKeyboard)
+  }
+
+  fun loadMoreSearchResults() {
+    actions.tryEmit(Action.LoadMoreResults(uiState.value.searchList.size))
+  }
+
+  private inline fun updateUiState(updatedState: (SearchScreenUiState) -> SearchScreenUiState) {
+    _uiState.update(updatedState)
   }
 }
 
@@ -324,8 +360,15 @@ data class SearchScreenUiState(
   val searchText: String = "",
   val isLoading: Boolean = false,
   val isLoadingMore: Boolean = false,
-  val spellingSuggestions: List<String> = emptyList(),
-  val showFindInPage: Boolean = false,
+  val spellingCorrectionSuggestions: List<String> = emptyList(),
+  /**
+   * Represents the state of the FIND_IN_PAGE menu item.
+   *
+   * A [Pair] containing:
+   *  - [Boolean]: Whether the menu item is enabled (clickable).
+   *  - [Boolean]: Whether the menu item is visible.
+   */
+  val findInPageMenuItem: Pair<Boolean, Boolean> = false to true,
   val searchOrigin: SearchOrigin = FromWebView,
   val searchState: SearchState = SearchState(
     "",

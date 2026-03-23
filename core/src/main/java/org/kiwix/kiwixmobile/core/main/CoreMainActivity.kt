@@ -167,7 +167,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   val enableLeftDrawer = mutableStateOf(true)
 
   /**
-   * For managing the back press of fragments.
+   * For managing the back press of compose screens.
    */
   val customBackHandler = mutableStateOf<(() -> FragmentActivityExtensions.Super)?>(null)
 

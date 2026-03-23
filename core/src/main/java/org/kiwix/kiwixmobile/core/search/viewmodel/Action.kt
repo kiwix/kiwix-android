@@ -27,6 +27,7 @@ sealed class Action {
   object ClickedSearchInText : Action()
   object ReceivedPromptForSpeechInput : Action()
   object StartSpeechInputFailed : Action()
+  object CloseKeyboard : Action()
 
   data class OnItemClick(val searchListItem: SearchListItem) : Action()
   data class OnOpenInNewTabClick(val searchListItem: SearchListItem) : Action()
@@ -40,4 +41,5 @@ sealed class Action {
     Action()
 
   data class VoiceSearchResult(val term: String) : Action()
+  data class LoadMoreResults(val startIndex: Int) : Action()
 }

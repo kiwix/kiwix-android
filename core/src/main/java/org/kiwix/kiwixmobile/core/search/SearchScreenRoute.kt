@@ -20,21 +20,20 @@ package org.kiwix.kiwixmobile.core.search
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
-import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchScreenUiState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
@@ -44,7 +43,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
 
-@Suppress("LongMethod")
 @Composable
 fun SearchScreenRoute(
   viewModelFactory: ViewModelProvider.Factory,
@@ -53,11 +51,10 @@ fun SearchScreenRoute(
   coreMainActivity: CoreMainActivity
 ) {
   val context = LocalContext.current
-  val coroutineScope = rememberCoroutineScope()
-
   val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
+  val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-  // Voice Intent
+  // Voice Intent.
   DisposableEffect(Unit) {
     coreMainActivity.activityResultForwarder =
       { requestCode, resultCode, data ->
@@ -69,13 +66,10 @@ fun SearchScreenRoute(
           )
         )
       }
-
     onDispose {
       coreMainActivity.activityResultForwarder = null
     }
   }
-
-  val state by viewModel.uiState.collectAsStateWithLifecycle()
 
   // Handles SideEffects
   viewModel.effects.CollectSideEffectWithActivity { effect, activity ->
@@ -87,71 +81,35 @@ fun SearchScreenRoute(
     viewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
 
     arguments?.getString(NAV_ARG_SEARCH_STRING)?.let {
-      viewModel.updateSearchQuery(it)
+      viewModel.onSearchValueChanged(it)
     }
 
     viewModel.actions.tryEmit(
       Action.CreatedWithArguments(Bundle(arguments))
     )
   }
-  val screenState = SearchScreenState(
-    searchList = state.searchList,
-    isLoading = state.isLoading,
-    shouldShowLoadingMoreProgressBar = state.isLoadingMore,
-    searchText = state.searchText,
-    onSearchViewClearClick = {
-      viewModel.updateSearchQuery("")
-    },
-    onSearchViewValueChange = {
-      viewModel.updateSearchQuery(it)
-    },
-    onItemClick = {
-      coreMainActivity.currentFocus?.closeKeyboard()
-      viewModel.actions.tryEmit(Action.OnItemClick(it))
-    },
-    onItemLongClick = {
-      viewModel.actions.tryEmit(Action.OnItemLongClick(it))
-    },
-    onNewTabIconClick = {
-      coreMainActivity.currentFocus?.closeKeyboard()
-      viewModel.actions.tryEmit(Action.OnOpenInNewTabClick(it))
-    },
-    onKeyboardSubmitButtonClick = { query ->
-      state.searchList.firstOrNull { it.value.equals(query, true) }
-        ?.let { viewModel.actions.tryEmit(Action.OnItemClick(it)) }
-    },
-    navigationIcon = {
+
+  SearchScreen(
+    uiState,
+    viewModel,
+    buildActionMenuItems(viewModel, uiState, context),
+    {
       NavigationIcon(
         onClick = {
-          coreMainActivity.currentFocus?.closeKeyboard()
+          viewModel.closeKeyboard()
           coreMainActivity.onBackPressedDispatcher.onBackPressed()
         }
       )
-    },
-    spellingCorrectionSuggestions = state.spellingSuggestions,
-    onSuggestionClick = {
-      viewModel.updateSearchQuery(it)
-    },
-    onLoadMore = {
-      coroutineScope.launch {
-        viewModel.loadMoreSearchResults(state.searchList.size)
-      }
     }
-  )
-
-  SearchScreen(
-    screenState,
-    buildActionMenuItems(viewModel, context, state.showFindInPage),
-    state.isLoadingMore
   )
 }
 
 private fun buildActionMenuItems(
   viewModel: SearchViewModel,
-  context: Context,
-  showFindInPage: Boolean
+  uiState: SearchScreenUiState,
+  context: Context
 ): List<ActionMenuItem> {
-  return listOf(
+  return listOfNotNull(
     ActionMenuItem(
       contentDescription = R.string.search_label,
       icon = IconItem.Drawable(R.drawable.ic_mic_black_24dp),
@@ -161,14 +119,22 @@ private fun buildActionMenuItems(
         viewModel.actions.tryEmit(Action.ReceivedPromptForSpeechInput)
       }
     ),
-    ActionMenuItem(
-      contentDescription = R.string.menu_search_in_text,
-      iconButtonText = context.getString(R.string.menu_search_in_text),
-      testingTag = FIND_IN_PAGE_TESTING_TAG,
-      isEnabled = showFindInPage,
-      onClick = {
-        viewModel.actions.tryEmit(Action.ClickedSearchInText)
-      }
-    )
+    if (uiState.findInPageMenuItem.second) {
+      Log.e("FIND_IN_PAGE", "buildActionMenuItems: ${uiState.findInPageMenuItem.first}")
+      // Check if the `FIND_IN_PAGE` is visible or not.
+      // If visible then show it in menu.
+      ActionMenuItem(
+        contentDescription = R.string.menu_search_in_text,
+        iconButtonText = context.getString(R.string.menu_search_in_text),
+        testingTag = FIND_IN_PAGE_TESTING_TAG,
+        isEnabled = uiState.findInPageMenuItem.first,
+        onClick = {
+          viewModel.actions.tryEmit(Action.ClickedSearchInText)
+        }
+      )
+    } else {
+      // If `FIND_IN_PAGE` is not visible return null so that it will not show on the menu item.
+      null
+    }
   )
 }

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,6 +69,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchScreenUiState
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
@@ -95,11 +99,13 @@ const val LOADING_ITEMS_BEFORE = 3
 const val VOICE_SEARCH_TESTING_TAG = "voiceSearchTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("ComposableLambdaParameterNaming")
 @Composable
 fun SearchScreen(
-  searchScreenState: SearchScreenState,
+  state: SearchScreenUiState,
+  searchViewModel: SearchViewModel,
   actionMenuItemList: List<ActionMenuItem>,
-  isLoadingMoreResult: Boolean
+  navigationIcon: @Composable() () -> Unit
 ) {
   val lazyListState = rememberLazyListState()
   KiwixTheme {
@@ -107,34 +113,35 @@ fun SearchScreen(
       topBar = {
         KiwixAppBar(
           title = stringResource(R.string.empty_string),
-          navigationIcon = searchScreenState.navigationIcon,
+          navigationIcon = navigationIcon,
           actionMenuItems = actionMenuItemList,
           searchBar = {
             KiwixSearchView(
-              value = searchScreenState.searchText,
+              value = state.searchText,
               searchViewTextFiledTestTag = SEARCH_FIELD_TESTING_TAG,
-              onValueChange = searchScreenState.onSearchViewValueChange,
-              onClearClick = searchScreenState.onSearchViewClearClick,
+              onValueChange = { searchViewModel.onSearchValueChanged(it) },
+              onClearClick = { searchViewModel.onSearchClear() },
               modifier = Modifier,
-              onKeyboardSubmitButtonClick = searchScreenState.onKeyboardSubmitButtonClick
+              onKeyboardSubmitButtonClick = { searchViewModel.onKeyboardSubmitButtonClick(it) }
             )
           }
         )
       }
     ) { innerPadding ->
-      SearchScreenContent(searchScreenState, innerPadding, lazyListState)
+      SearchScreenContent(state, searchViewModel, innerPadding, lazyListState)
     }
   }
   InfiniteListHandler(
     listState = lazyListState,
-    isLoadingMoreResult = isLoadingMoreResult,
-    onLoadMore = searchScreenState.onLoadMore
+    isLoadingMoreResult = state.isLoadingMore,
+    onLoadMore = { searchViewModel.loadMoreSearchResults() }
   )
 }
 
 @Composable
 private fun SearchScreenContent(
-  searchScreenState: SearchScreenState,
+  state: SearchScreenUiState,
+  searchViewModel: SearchViewModel,
   innerPadding: PaddingValues,
   lazyListState: LazyListState
 ) {
@@ -150,41 +157,42 @@ private fun SearchScreenContent(
     contentAlignment = Alignment.Center
   ) {
     when {
-      searchScreenState.spellingCorrectionSuggestions.isNotEmpty() -> {
+      state.spellingCorrectionSuggestions.isNotEmpty() -> {
         SpellingCorrectionSuggestions(
-          searchScreenState.spellingCorrectionSuggestions,
-          searchScreenState.onSuggestionClick
-        )
+          state.spellingCorrectionSuggestions
+        ) { searchViewModel.onSuggestionItemClick(it) }
       }
 
-      searchScreenState.searchList.isEmpty() -> NoSearchResultView()
+      state.searchList.isEmpty() -> NoSearchResultView()
 
       else -> {
         LazyColumn(
           modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            // hides keyboard when scrolled
+            .hideKeyboardOnLazyColumnScroll(lazyListState),
           state = lazyListState
         ) {
           item {
             Spacer(modifier = Modifier.height(FOUR_DP))
           }
-          items(searchScreenState.searchList) { item ->
+          items(state.searchList) { item ->
             SearchListItem(
               searchListItem = item,
-              onItemClick = { searchScreenState.onItemClick(item) },
-              onNewTabIconClick = { searchScreenState.onNewTabIconClick(item) },
+              onItemClick = { searchViewModel.onItemClick(item) },
+              onNewTabIconClick = { searchViewModel.onNewTabIconClick(item) },
               onItemLongClick = if (item is SearchListItem.RecentSearchListItem) {
-                { searchScreenState.onItemLongClick(item) }
+                { searchViewModel.onItemLongClick(item) }
               } else {
                 null
               }
             )
           }
-          showLoadMoreProgressBar(searchScreenState, progressBarTrackColor)
+          showLoadMoreProgressBar(state, progressBarTrackColor)
         }
       }
     }
-    ShowLoadingProgressBar(searchScreenState.isLoading, progressBarTrackColor)
+    ShowLoadingProgressBar(state.isLoading, progressBarTrackColor)
   }
 }
 
@@ -264,10 +272,10 @@ private fun SpellingSuggestionItem(
 }
 
 private fun LazyListScope.showLoadMoreProgressBar(
-  searchScreenState: SearchScreenState,
+  state: SearchScreenUiState,
   progressBarTrackColor: Color
 ) {
-  if (searchScreenState.shouldShowLoadingMoreProgressBar) {
+  if (state.isLoadingMore) {
     item {
       Box(
         modifier = Modifier

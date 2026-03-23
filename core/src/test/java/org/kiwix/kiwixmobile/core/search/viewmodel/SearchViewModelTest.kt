@@ -193,7 +193,7 @@ internal class SearchViewModelTest {
       coEvery {
         searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
       } returns suggestionSearch
-      viewModel.updateSearchQuery(searchTerm)
+      viewModel.onSearchValueChanged(searchTerm)
       recentsFromDb.trySend(emptyList()).isSuccess
       viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
       testScheduler.apply {
