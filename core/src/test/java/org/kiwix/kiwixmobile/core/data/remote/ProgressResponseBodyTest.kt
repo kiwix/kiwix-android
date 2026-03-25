@@ -226,6 +226,7 @@ class ProgressResponseBodyTest {
 
       val buffer = Buffer()
       while (source.read(buffer, 1) != -1L) {
+        // to nothing
       }
 
       repeat(3) {
