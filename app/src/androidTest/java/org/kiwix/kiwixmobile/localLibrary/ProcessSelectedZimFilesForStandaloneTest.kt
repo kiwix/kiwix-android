@@ -76,7 +76,11 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
+        setShowManageExternalFilesPermissionDialog(false)
+        setManageExternalFilesPermissionDialogOnRefresh(false)
         setIsPlayStoreBuild(false)
+        setIsFirstRun(false)
         setPrefIsTest(true)
       }
     }
