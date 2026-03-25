@@ -115,6 +115,8 @@ class ZimHostFragmentTest {
           setPrefLanguage("en")
           setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
           setIsScanFileSystemDialogShown(true)
+          setShowManageExternalFilesPermissionDialog(false)
+          setManageExternalFilesPermissionDialogOnRefresh(false)
           setIsFirstRun(false)
           setIsPlayStoreBuild(true)
           setPrefIsTest(true)
