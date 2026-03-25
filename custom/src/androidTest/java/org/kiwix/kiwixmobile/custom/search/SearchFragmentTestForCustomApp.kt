@@ -40,7 +40,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.junit.After
@@ -48,11 +47,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.SearchFragment
@@ -66,13 +60,13 @@ import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.testutils.RetryRule
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
-import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @RunWith(AndroidJUnit4::class)
 class SearchFragmentTestForCustomApp {
@@ -140,20 +134,22 @@ class SearchFragmentTestForCustomApp {
     activityScenario.onActivity {
       customMainActivity = it
     }
-    // test with a large ZIM file to properly test the scenario
-    downloadingZimFile = getDownloadingZimFileFromDataFolder()
-    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-      if (response.isSuccessful) {
-        response.body?.let { responseBody ->
-          writeZimFileData(responseBody, downloadingZimFile)
+    testFlakyView({
+      // test with a large ZIM file to properly test the scenario
+      downloadingZimFile = getDownloadingZimFileFromDataFolder()
+      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, downloadingZimFile)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
         }
-      } else {
-        throw RuntimeException(
-          "Download Failed. Error: ${response.message}\n" +
-            " Status Code: ${response.code}"
-        )
       }
-    }
+    })
     UiThreadStatement.runOnUiThread {
       customMainActivity.navigate(customMainActivity.readerFragmentRoute)
     }
@@ -220,20 +216,22 @@ class SearchFragmentTestForCustomApp {
       activityScenario.onActivity {
         customMainActivity = it
       }
-      // test with a large ZIM file to properly test the scenario
-      downloadingZimFile = getDownloadingZimFileFromDataFolder()
-      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-        if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
+      testFlakyView({
+        // test with a large ZIM file to properly test the scenario
+        downloadingZimFile = getDownloadingZimFileFromDataFolder()
+        getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, downloadingZimFile)
+            }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
           }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
         }
-      }
+      })
       UiThreadStatement.runOnUiThread {
         customMainActivity.navigate(customMainActivity.readerFragmentRoute)
       }
@@ -274,21 +272,23 @@ class SearchFragmentTestForCustomApp {
     activityScenario.onActivity {
       customMainActivity = it
     }
-    // test with a large ZIM file to properly test the scenario
-    downloadingZimFile = getDownloadingZimFileFromDataFolder()
-    getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZIMFileUrl)).execute()
-      .use { response ->
-        if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
+    testFlakyView({
+      // test with a large ZIM file to properly test the scenario
+      downloadingZimFile = getDownloadingZimFileFromDataFolder()
+      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZIMFileUrl)).execute()
+        .use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, downloadingZimFile)
+            }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
           }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
         }
-      }
+    })
     UiThreadStatement.runOnUiThread {
       customMainActivity.navigate(customMainActivity.readerFragmentRoute)
     }
@@ -365,17 +365,6 @@ class SearchFragmentTestForCustomApp {
     zimFile.createNewFile()
     return zimFile
   }
-
-  @Singleton
-  private fun getOkkHttpClientForTesting(): OkHttpClient =
-    OkHttpClient().newBuilder()
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-      .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-      .callTimeout(CALL_TIMEOUT, TimeUnit.SECONDS)
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-      .build()
 
   @After
   fun finish() {

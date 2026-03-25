@@ -44,9 +44,6 @@ import okhttp3.OkHttpClient
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.ui.components.SWIPE_REFRESH_TESTING_TAG
@@ -73,6 +70,8 @@ object TestUtils {
   const val TEST_PAUSE_MS_FOR_DOWNLOAD_TEST = 10000
   const val TEST_PAUSE_MS_FOR_SNACKBAR = 6000L
   const val RETRY_COUNT_FOR_FLAKY_TEST = 3
+  private const val READ_AND_CALL_TIMEOUT = 5L
+  private const val CONNECTION_TIMEOUT = 1L
 
   /*
     TEST_PAUSE_MS is used as such:
@@ -255,9 +254,9 @@ object TestUtils {
     OkHttpClient().newBuilder()
       .followRedirects(true)
       .followSslRedirects(true)
-      .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-      .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-      .callTimeout(CALL_TIMEOUT, TimeUnit.SECONDS)
+      .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+      .readTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
+      .callTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
       .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()
 
