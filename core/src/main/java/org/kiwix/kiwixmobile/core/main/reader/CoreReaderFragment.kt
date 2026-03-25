@@ -2075,6 +2075,9 @@ abstract class CoreReaderFragment :
     activity: AppCompatActivity
   ): FragmentActivityExtensions.Super {
     pendingIntent = intent
+    if (!isWebViewHistoryRestoring) {
+      startIntentBasedOnAction(pendingIntent)
+    }
     return FragmentActivityExtensions.Super.ShouldCall
   }
 
