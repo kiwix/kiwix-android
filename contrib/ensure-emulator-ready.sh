@@ -24,4 +24,3 @@ done
 
 adb shell input keyevent 82 || true
 adb devices
-bash "$1"
