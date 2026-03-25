@@ -38,7 +38,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.junit.After
@@ -47,11 +46,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -60,13 +54,13 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.custom.testutils.RetryRule
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
-import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 const val FIVE_SECONDS = 5 * 1000
 
@@ -132,21 +126,24 @@ class DownloadServiceTestForCustomApps {
       activityScenario.onActivity {
         customMainActivity = it
       }
-      // test with a large ZIM file to properly test the scenario
-      val downloadingZimFile = getDownloadingZimFileFromDataFolder()
-      getOkkHttpClientForTesting().newCall(downloadRequest()).execute()
-        .use { response ->
-          if (response.isSuccessful) {
-            response.body?.let { responseBody ->
-              writeZimFileData(responseBody, downloadingZimFile)
+      var downloadingZimFile: File? = null
+      testFlakyView({
+        // test with a large ZIM file to properly test the scenario
+        downloadingZimFile = getDownloadingZimFileFromDataFolder()
+        getOkkHttpClientForTesting().newCall(downloadRequest()).execute()
+          .use { response ->
+            if (response.isSuccessful) {
+              response.body?.let { responseBody ->
+                writeZimFileData(responseBody, downloadingZimFile)
+              }
+            } else {
+              throw RuntimeException(
+                "Download Failed. Error: ${response.message}\n" +
+                  " Status Code: ${response.code}"
+              )
             }
-          } else {
-            throw RuntimeException(
-              "Download Failed. Error: ${response.message}\n" +
-                " Status Code: ${response.code}"
-            )
           }
-        }
+      })
       UiThreadStatement.runOnUiThread {
         customMainActivity.navigate(customMainActivity.readerFragmentRoute)
       }
@@ -203,17 +200,6 @@ class DownloadServiceTestForCustomApps {
   private fun downloadRequest() =
     Request.Builder()
       .url(URI.create(rayCharlesZIMFileUrl).toURL())
-      .build()
-
-  @Singleton
-  private fun getOkkHttpClientForTesting(): OkHttpClient =
-    OkHttpClient().newBuilder()
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-      .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-      .callTimeout(CALL_TIMEOUT, TimeUnit.SECONDS)
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()
 
   private fun getDownloadingZimFileFromDataFolder(): File {

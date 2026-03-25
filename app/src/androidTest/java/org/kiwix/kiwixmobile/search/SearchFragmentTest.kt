@@ -58,6 +58,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
@@ -169,20 +170,22 @@ class SearchFragmentTest : BaseActivityTest() {
     }
 
     UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(KiwixDestination.Library.route) }
-    // test with a large ZIM file to properly test the scenario
-    downloadingZimFile = getDownloadingZimFile()
-    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-      if (response.isSuccessful) {
-        response.body?.let { responseBody ->
-          writeZimFileData(responseBody, downloadingZimFile)
+    testFlakyView({
+      // test with a large ZIM file to properly test the scenario
+      downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, downloadingZimFile)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
         }
-      } else {
-        throw RuntimeException(
-          "Download Failed. Error: ${response.message}\n" +
-            " Status Code: ${response.code}"
-        )
       }
-    }
+    })
     openKiwixReaderFragmentWithFile(downloadingZimFile)
     search { checkZimFileSearchSuccessful(composeTestRule) }
     openSearchWithQuery(zimFile = downloadingZimFile)
@@ -257,19 +260,21 @@ class SearchFragmentTest : BaseActivityTest() {
         kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
       composeTestRule.waitForIdle()
-      downloadingZimFile = getDownloadingZimFile()
-      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-        if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
+      testFlakyView({
+        downloadingZimFile = getDownloadingZimFile()
+        getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, downloadingZimFile)
+            }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
           }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
         }
-      }
+      })
       openKiwixReaderFragmentWithFile(downloadingZimFile)
       composeTestRule.waitForIdle()
       search { checkZimFileSearchSuccessful(composeTestRule) }

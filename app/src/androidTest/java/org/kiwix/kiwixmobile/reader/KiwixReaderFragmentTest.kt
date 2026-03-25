@@ -67,6 +67,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
@@ -209,20 +210,23 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     composeTestRule.waitForIdle()
-    val downloadingZimFile = getDownloadingZimFile()
-    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-      if (response.isSuccessful) {
-        response.body?.let { responseBody ->
-          writeZimFileData(responseBody, downloadingZimFile)
+    var downloadingZimFile: File? = null
+    testFlakyView({
+      downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, downloadingZimFile)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
         }
-      } else {
-        throw RuntimeException(
-          "Download Failed. Error: ${response.message}\n" +
-            " Status Code: ${response.code}"
-        )
       }
-    }
-    openKiwixReaderFragmentWithFile(downloadingZimFile)
+    })
+    openKiwixReaderFragmentWithFile(downloadingZimFile!!)
     composeTestRule.waitForIdle()
     reader {
       checkZimFileLoadedSuccessful(composeTestRule)
@@ -287,21 +291,24 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
         kiwixMainActivity.navigate(KiwixDestination.Library.route)
       }
       composeTestRule.waitForIdle()
-      val downloadingZimFile = getDownloadingZimFile()
-      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
-        .use { response ->
-          if (response.isSuccessful) {
-            response.body?.let { responseBody ->
-              writeZimFileData(responseBody, downloadingZimFile)
+      var downloadingZimFile: File? = null
+      testFlakyView({
+        downloadingZimFile = getDownloadingZimFile()
+        getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
+          .use { response ->
+            if (response.isSuccessful) {
+              response.body?.let { responseBody ->
+                writeZimFileData(responseBody, downloadingZimFile)
+              }
+            } else {
+              throw RuntimeException(
+                "Download Failed. Error: ${response.message}\n" +
+                  " Status Code: ${response.code}"
+              )
             }
-          } else {
-            throw RuntimeException(
-              "Download Failed. Error: ${response.message}\n" +
-                " Status Code: ${response.code}"
-            )
           }
-        }
-      openKiwixReaderFragmentWithFile(downloadingZimFile)
+      })
+      openKiwixReaderFragmentWithFile(downloadingZimFile!!)
       composeTestRule.waitForIdle()
       reader {
         startReadAloudFeature(composeTestRule)

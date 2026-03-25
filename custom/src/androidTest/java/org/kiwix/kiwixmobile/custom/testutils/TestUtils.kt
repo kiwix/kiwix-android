@@ -26,15 +26,22 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
+import okhttp3.OkHttpClient
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.util.Timer
 import java.util.TimerTask
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 object TestUtils {
   private const val TAG = "TESTUTILS"
   const val TEST_PAUSE_MS_FOR_SEARCH_TEST = 10000
   const val TEST_PAUSE_MS = 3000
+  private const val READ_AND_CALL_TIMEOUT = 5L
+  private const val CONNECTION_TIMEOUT = 1L
 
   @JvmStatic
   fun isSystemUINotRespondingDialogVisible(uiDevice: UiDevice) =
@@ -137,4 +144,16 @@ object TestUtils {
       }
     }
   }
+
+  @JvmStatic
+  @Singleton
+  fun getOkkHttpClientForTesting(): OkHttpClient =
+    OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+      .readTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
+      .callTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .build()
 }
