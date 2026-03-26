@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import android.annotation.SuppressLint
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -75,7 +73,7 @@ fun KiwixWebViewWithAppBarScrolling(
 
   key(kiwixWebView) {
     DisposableEffect(Unit) {
-      val listener = createTouchListener(
+      val listener = createScrollListener(
         topAppBarScrollBehavior,
         bottomAppBarScrollBehavior,
         shouldUpdateAppBars,
@@ -84,9 +82,8 @@ fun KiwixWebViewWithAppBarScrolling(
         scope,
         settleJob
       )
-
-      kiwixWebView.setOnTouchListener(listener)
-      onDispose { kiwixWebView.setOnTouchListener(null) }
+      kiwixWebView.setOnScrollChangeListener(listener)
+      onDispose { kiwixWebView.setOnScrollChangeListener(null) }
     }
 
     AndroidView(
@@ -105,9 +102,8 @@ fun KiwixWebViewWithAppBarScrolling(
   }
 }
 
-@SuppressLint("ClickableViewAccessibility")
 @OptIn(ExperimentalMaterial3Api::class)
-private fun createTouchListener(
+private fun createScrollListener(
   topAppBarScrollBehavior: TopAppBarScrollBehavior,
   bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
   shouldUpdateScroll: MutableState<Boolean>,
@@ -115,50 +111,35 @@ private fun createTouchListener(
   updateAccumulatedScroll: (Float) -> Unit,
   scope: CoroutineScope,
   settleJob: MutableState<Job?>
-): View.OnTouchListener {
-  var lastY = 0f
+): View.OnScrollChangeListener {
+  return View.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+    val deltaY = (scrollY - oldScrollY).toFloat()
+    if (deltaY == 0f || !shouldUpdateScroll.value) return@OnScrollChangeListener
 
-  return View.OnTouchListener { _, event ->
-    if (!shouldUpdateScroll.value) return@OnTouchListener false
-
-    when (event.actionMasked) {
-      MotionEvent.ACTION_DOWN -> {
-        lastY = event.y
-        settleJob.value?.cancel()
-      }
-
-      MotionEvent.ACTION_MOVE -> {
-        val deltaY = event.y - lastY
-        lastY = event.y
-        val accumulated = accumulatedScroll() + deltaY
-
-        if (abs(accumulated) < MIN_SCROLL_DELTA) {
-          updateAccumulatedScroll(accumulated)
-          return@OnTouchListener false
-        }
-
-        val scroll = accumulated * SCROLL_CONSUME_FACTOR
-        updateAccumulatedScroll(0f)
-
-        consumeScroll(
-          scroll,
-          topAppBarScrollBehavior,
-          bottomAppBarScrollBehavior
-        )
-      }
-
-      MotionEvent.ACTION_UP,
-      MotionEvent.ACTION_CANCEL -> {
-        settleJob.value?.cancel()
-        settleJob.value = scope.launch {
-          delay(DEFAULT_SETTLE_DELAY)
-          settleTopAppBarWithoutVelocity(topAppBarScrollBehavior)
-          settleBottomAppBarWithoutVelocity(bottomAppBarScrollBehavior)
-        }
-      }
+    val accumulated = accumulatedScroll() - deltaY
+    if (abs(accumulated) < MIN_SCROLL_DELTA) {
+      updateAccumulatedScroll(accumulated)
+      return@OnScrollChangeListener
     }
+    val scroll = accumulated * SCROLL_CONSUME_FACTOR
+    updateAccumulatedScroll(0f)
+    consumeScroll(scroll, topAppBarScrollBehavior, bottomAppBarScrollBehavior)
+    triggerSettle(scope, settleJob, topAppBarScrollBehavior, bottomAppBarScrollBehavior)
+  }
+}
 
-    false
+@OptIn(ExperimentalMaterial3Api::class)
+private fun triggerSettle(
+  scope: CoroutineScope,
+  settleJob: MutableState<Job?>,
+  topAppBarScrollBehavior: TopAppBarScrollBehavior,
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
+) {
+  settleJob.value?.cancel()
+  settleJob.value = scope.launch {
+    delay(DEFAULT_SETTLE_DELAY)
+    settleTopAppBarWithoutVelocity(topAppBarScrollBehavior)
+    settleBottomAppBarWithoutVelocity(bottomAppBarScrollBehavior)
   }
 }
 
