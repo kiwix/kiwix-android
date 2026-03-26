@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -83,7 +84,7 @@ class NetworkTest {
     javaClass.classLoader!!.getResourceAsStream(name)!!.bufferedReader().readText()
 
   @Test
-  fun testNetworkSuccess() = runBlocking {
+  fun testNetworkSuccess() = runTest {
     val libraryXml = getResourceAsString("library.xml")
     mockWebServer.enqueue(
       MockResponse()
@@ -110,7 +111,7 @@ class NetworkTest {
   }
 
   @Test
-  fun testNetworkError() = runBlocking {
+  fun testNetworkError() = runTest {
     mockWebServer.enqueue(MockResponse().setResponseCode(500))
 
     val response = kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
@@ -123,7 +124,7 @@ class NetworkTest {
   }
 
   @Test
-  fun testNetworkNotFound() = runBlocking {
+  fun testNetworkNotFound() = runTest {
     mockWebServer.enqueue(MockResponse().setResponseCode(404))
 
     val response = kiwixService.getLibraryPage(mockWebServer.url("/v2/entries").toString())
@@ -136,7 +137,7 @@ class NetworkTest {
   }
 
   @Test
-  fun testNetworkEmptyResponse() = runBlocking {
+  fun testNetworkEmptyResponse() = runTest {
     mockWebServer.enqueue(
       MockResponse()
         .setResponseCode(200)
