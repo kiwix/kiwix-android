@@ -27,6 +27,7 @@
   <string name="menu_about_app">Over de app %s</string>
   <string name="external_redirect_message">U wordt nu naar ons %s doorverwezen.</string>
   <string name="support_donation_platform">donatieplatform</string>
+  <string name="about_app_page">pagina over de app</string>
   <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Media opslaan</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
@@ -108,6 +109,9 @@
   <string name="pref_clear_all_bookmarks_title">Bladwijzers wissen</string>
   <string name="clear_all_history_dialog_title">Alle geschiedenis wissen?</string>
   <string name="share">Delen</string>
+  <string name="share_article">Pagina delen</string>
+  <string name="unable_to_share_article">Pagina kan niet worden gedeeld</string>
+  <string name="please_wait_for_page_to_load">Wacht even tot de pagina volledig is geladen</string>
   <string name="selected_file_cab_app_chooser_title">ZIM-bestanden delen met:</string>
   <string name="delete">Verwijderen</string>
   <string name="cancel">Annuleren</string>

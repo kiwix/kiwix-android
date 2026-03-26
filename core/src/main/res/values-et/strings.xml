@@ -16,6 +16,7 @@
   <string name="pref_info_version">Versioon</string>
   <string name="pref_language_title">Keel</string>
   <string name="pref_language_chooser">Vali keel</string>
+  <string name="share_article">Jaga artiklit</string>
   <string name="library">Raamatukogu</string>
   <string name="resuming_state">Jätkamine</string>
   <string name="downloading_state">Allalaadimine</string>
