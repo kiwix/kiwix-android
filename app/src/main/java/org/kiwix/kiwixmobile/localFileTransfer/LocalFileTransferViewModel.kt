@@ -5,68 +5,99 @@ import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.location.LocationManager
+import android.net.Uri
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.NavigateBack
+import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.RequestPermission
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import javax.inject.Inject
 
 data class LocalFileTransferUiState(
   val deviceName: String = "",
+  val isReceiver: Boolean = false,
   val isPeerSearching: Boolean = false,
   val peers: List<WifiP2pDevice> = emptyList(),
-  val transferFiles: List<FileItem> = emptyList()
+  val transferFiles: List<FileItem> = emptyList(),
+  val shouldShowShowCase: Boolean = false,
+  val isWritePermissionRequired: Boolean = false
 )
 
 class LocalFileTransferViewModel @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
-  val wifiDirectManager: WifiDirectManager,
-  val alertDialogShower: AlertDialogShower,
+  private val wifiDirectManager: WifiDirectManager,
   private val locationManager: LocationManager,
   private val permissionChecker: KiwixPermissionChecker
 ) : ViewModel(), WifiDirectManager.Callbacks {
   private val _uiState = MutableStateFlow(LocalFileTransferUiState())
   val uiState: StateFlow<LocalFileTransferUiState> = _uiState.asStateFlow()
 
-  private val _permissionEvent = Channel<PermissionAction>(Channel.BUFFERED)
-  val permissionEvent = _permissionEvent.receiveAsFlow()
+  private val _events = MutableSharedFlow<UiEvent>()
+  val events = _events.asSharedFlow()
 
-  private val _dialogEvent = Channel<DialogEvent>(Channel.BUFFERED)
-  val dialogEvent = _dialogEvent.receiveAsFlow()
+  private val _dialogEvent = MutableSharedFlow<DialogEvent>(extraBufferCapacity = Int.MAX_VALUE)
+  val dialogEvent = _dialogEvent.asSharedFlow()
 
-  fun showDialog(dialog: DialogEvent) {
+  val isWritePermissionRequired = MutableStateFlow(false)
+
+  init {
     viewModelScope.launch {
-      _dialogEvent.send(dialog)
+      kiwixDataStore.showShowCaseToUser.collect { shouldShow ->
+        _uiState.update { it.copy(shouldShowShowCase = shouldShow) }
+      }
+    }
+    viewModelScope.launch {
+      val isRequired = permissionChecker.isWriteExternalStoragePermissionRequired()
+      _uiState.update {
+        it.copy(isWritePermissionRequired = isRequired)
+      }
     }
   }
 
-  private val _navigationEvent = Channel<NavigationEvent>(Channel.BUFFERED)
-  val navigationEvent = _navigationEvent.receiveAsFlow()
+  fun showDialog(dialog: DialogEvent) {
+    viewModelScope.launch {
+      _dialogEvent.emit(dialog)
+    }
+  }
 
   val android13OrAbove = permissionChecker.isAndroid13orAbove()
 
-  suspend fun isWritePermissionRequired(): Boolean =
-    permissionChecker.isWriteExternalStoragePermissionRequired()
+  fun initialize(uris: List<Uri>, alertDialogShower: AlertDialogShower) {
+    val files = uris.map { FileItem(it) }
+    val isReceiver = files.isEmpty()
 
-  fun initializeWifiDirectManager(filesForTransfer: List<FileItem>) {
+    _uiState.update {
+      it.copy(
+        transferFiles = files,
+        isReceiver = isReceiver
+      )
+    }
+
+    initializeWifiDirectManager(files, alertDialogShower)
+  }
+
+  private fun initializeWifiDirectManager(
+    filesForTransfer: List<FileItem>,
+    alertDialogShower: AlertDialogShower
+  ) {
     _uiState.update { it.copy(transferFiles = filesForTransfer) }
-    wifiDirectManager.hasSenderStartedConnection = false
 
     wifiDirectManager.apply {
       callbacks = this@LocalFileTransferViewModel
-      lifecycleCoroutineScope = viewModelScope
+      setLifeCycleScope(viewModelScope)
       startWifiDirectManager(filesForTransfer)
       setAlertDialogShower(alertDialogShower)
     }
@@ -137,13 +168,13 @@ class LocalFileTransferViewModel @Inject constructor(
 
   private fun requestEnableWifiP2pServices() {
     viewModelScope.launch {
-      _dialogEvent.send(DialogEvent.ShowEnableWifiP2p)
+      _dialogEvent.emit(DialogEvent.ShowEnableWifiP2p)
     }
   }
 
   private fun requestEnableLocationServices() {
     viewModelScope.launch {
-      _dialogEvent.send(DialogEvent.ShowEnableLocationServices)
+      _dialogEvent.emit(DialogEvent.ShowEnableLocationServices)
     }
   }
 
@@ -158,7 +189,7 @@ class LocalFileTransferViewModel @Inject constructor(
       val hasWifiPerm = permissionChecker.hasNearbyWifiPermission()
 
       if (!hasWifiPerm) {
-        _permissionEvent.send(PermissionAction.RequestPermission(NEARBY_WIFI_DEVICES))
+        _events.emit(RequestPermission(NEARBY_WIFI_DEVICES))
       }
 
       return hasWifiPerm
@@ -167,7 +198,7 @@ class LocalFileTransferViewModel @Inject constructor(
     val hasLocationPermission = permissionChecker.hasFineLocationPermission()
 
     if (!hasLocationPermission) {
-      _permissionEvent.send(PermissionAction.RequestPermission(ACCESS_FINE_LOCATION))
+      _events.emit(RequestPermission(ACCESS_FINE_LOCATION))
     }
 
     return hasLocationPermission
@@ -179,7 +210,7 @@ class LocalFileTransferViewModel @Inject constructor(
     return when (hasPermission) {
       true -> true
       false -> {
-        _permissionEvent.send(PermissionAction.RequestPermission(WRITE_EXTERNAL_STORAGE))
+        _events.emit(RequestPermission(WRITE_EXTERNAL_STORAGE))
         false
       }
     }
@@ -223,7 +254,13 @@ class LocalFileTransferViewModel @Inject constructor(
 
   override fun onFileTransferComplete() {
     viewModelScope.launch {
-      _navigationEvent.send(NavigationEvent.NavigateBack)
+      _events.emit(NavigateBack)
+    }
+  }
+
+  fun onShowCaseDisplayed() {
+    viewModelScope.launch {
+      kiwixDataStore.setShowCaseViewForFileTransferShown()
     }
   }
 
@@ -239,18 +276,16 @@ class LocalFileTransferViewModel @Inject constructor(
   }
 }
 
-sealed class NavigationEvent {
-  object NavigateBack : NavigationEvent()
-}
-
-sealed class PermissionAction {
-  data class RequestPermission(val permission: String) : PermissionAction()
-}
-
 sealed class DialogEvent {
   object ShowNearbyWifiRationale : DialogEvent()
   object ShowLocationRationale : DialogEvent()
   object ShowStorageRationale : DialogEvent()
   object ShowEnableWifiP2p : DialogEvent()
   object ShowEnableLocationServices : DialogEvent()
+}
+
+sealed class UiEvent {
+  data class RequestPermission(val permission: String) : UiEvent()
+  object NavigateBack : UiEvent()
+  data class ShowDialog(val dialog: DialogEvent) : UiEvent()
 }

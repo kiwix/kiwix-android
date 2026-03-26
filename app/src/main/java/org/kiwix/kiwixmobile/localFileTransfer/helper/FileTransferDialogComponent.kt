@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.localFileTransfer.DialogEvent
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
@@ -35,6 +36,7 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 @Suppress("LongMethod")
 internal fun FileTransferDialogComponent(
   context: Context,
+  alertDialogShower: AlertDialogShower,
   viewModel: LocalFileTransferViewModel,
   enableLocationServicesLauncher: () -> Unit
 ) {
@@ -43,7 +45,7 @@ internal fun FileTransferDialogComponent(
       when (dialogEvent) {
         DialogEvent.ShowNearbyWifiRationale -> {
           (context as? Activity)?.let { activity ->
-            viewModel.alertDialogShower.show(
+            alertDialogShower.show(
               KiwixDialog.NearbyWifiPermissionRationale,
               {
                 activity.navigateToAppSettings()
@@ -57,7 +59,7 @@ internal fun FileTransferDialogComponent(
 
         DialogEvent.ShowLocationRationale -> {
           (context as? Activity)?.let { activity ->
-            viewModel.alertDialogShower.show(
+            alertDialogShower.show(
               KiwixDialog.LocationPermissionRationale,
               {
                 activity.navigateToAppSettings()
@@ -71,7 +73,7 @@ internal fun FileTransferDialogComponent(
 
         DialogEvent.ShowStorageRationale -> {
           (context as? Activity)?.let { activity ->
-            viewModel.alertDialogShower.show(
+            alertDialogShower.show(
               KiwixDialog.StoragePermissionRationale,
               {
                 activity.navigateToAppSettings()
@@ -84,7 +86,7 @@ internal fun FileTransferDialogComponent(
         }
 
         DialogEvent.ShowEnableWifiP2p -> {
-          viewModel.alertDialogShower.show(
+          alertDialogShower.show(
             KiwixDialog.EnableWifiP2pServices,
             {
               context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
@@ -96,7 +98,7 @@ internal fun FileTransferDialogComponent(
         }
 
         DialogEvent.ShowEnableLocationServices -> {
-          viewModel.alertDialogShower.show(
+          alertDialogShower.show(
             KiwixDialog.EnableLocationServices,
             {
               enableLocationServicesLauncher()

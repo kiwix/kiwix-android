@@ -85,12 +85,16 @@ class WifiDirectManager @Inject constructor(
   // Whether the device is the file sender or not
   private var isFileSender = false
 
-  var hasSenderStartedConnection = false
-  lateinit var lifecycleCoroutineScope: CoroutineScope
+  private var hasSenderStartedConnection = false
+  private lateinit var lifecycleCoroutineScope: CoroutineScope
   private lateinit var alertDialogShower: AlertDialogShower
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
+  }
+
+  fun setLifeCycleScope(coroutineScope: CoroutineScope) {
+    lifecycleCoroutineScope = coroutineScope
   }
 
   // Initialisations for using the WiFi P2P API
