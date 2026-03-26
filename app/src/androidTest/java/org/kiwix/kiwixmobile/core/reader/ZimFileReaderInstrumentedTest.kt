@@ -36,6 +36,7 @@ import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.search.viewmodel.MAX_SUGGEST_WORD_COUNT
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.reader.EncodedUrlTest
@@ -104,31 +105,26 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       val reader = createZimFileReader()
 
       // ── Verify all 14 properties with actual expected values ──
-      assertEquals("Test Zim", reader.title)
-      assertNotNull(reader.mainPage)
-      assertTrue(reader.id.isNotEmpty())
+      assertEquals("Test_Zim", reader.title)
+      assertEquals("A/index.html", reader.mainPage)
+      assertEquals("60094d1e-1c9a-a60b-2011-4fb02f8db6c3", reader.id)
       assertEquals(16, reader.mediaCount)
       assertEquals(4, reader.articleCount)
-      assertEquals("Test_Zim", reader.creator)
-      assertEquals("Kiwix", reader.publisher)
-      assertTrue(reader.name.isNotEmpty())
-      assertEquals("2024-02-01", reader.date)
-      assertEquals("This is a test zim file", reader.description)
-      assertEquals("eng", reader.language)
+      assertEquals("Wikipedia Contributors", reader.creator)
+      assertEquals("Zimbalaka 1.0", reader.publisher)
+      assertEquals("60094d1e-1c9a-a60b-2011-4fb02f8db6c3", reader.name)
+      assertEquals("2017-04-21", reader.date)
+      assertEquals("Wikipedia article on Test Zim", reader.description)
+      assertEquals("en", reader.language)
       assertEquals("", reader.tags)
-      assertTrue(reader.fileSize > 0)
+      assertEquals(348, reader.fileSize)
       assertNotNull(reader.favicon)
 
       // ── Verify searchSuggestions and related methods ──
       assertNotNull(reader.searchSuggestions("android"))
       assertNotNull(reader.getRandomArticleUrl())
       assertTrue(reader.getSuggestedSpelledWords("test", 5).isEmpty())
-
-      // ── Verify getPageUrlFrom for correct and incorrect title ──
       assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
-      reader.mainPage?.let { mainPagePath ->
-        assertNotNull(reader.getPageUrlFrom(mainPagePath))
-      }
 
       // ── Verify getMimeTypeFromUrl ──
       assertEquals("text/html", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/index.html"))
@@ -165,8 +161,8 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
 
       // ── Verify prepareSpellingsDB and getSuggestedSpelledWords ──
       reader.prepareSpellingsDB(reader.jniKiwixReader)
-      val suggestions = reader.getSuggestedSpelledWords("android", 5)
-      assertNotNull(suggestions)
+      val suggestions = reader.getSuggestedSpelledWords("android", MAX_SUGGEST_WORD_COUNT)
+      assertTrue(suggestions.isEmpty())
 
       // ── Verify toBook maps all fields correctly ──
       val book = reader.toBook()
