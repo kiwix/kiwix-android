@@ -22,6 +22,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.serverAddress
 import org.kiwix.kiwixmobile.webserver.RESTART_SERVER
@@ -55,6 +57,10 @@ class HotspotService :
 
   @set:Inject
   var hotspotStateReceiver: HotspotStateReceiver? = null
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
   private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
   private var zimHostCallbacks: ZimHostCallbacks? = null
@@ -95,7 +101,7 @@ class HotspotService :
     serviceScope.cancel()
   }
 
-  @Suppress("NestedBlockDepth", "InjectDispatcher")
+  @Suppress("NestedBlockDepth")
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     when (intent.action) {
       ACTION_START_SERVER -> {
@@ -103,7 +109,7 @@ class HotspotService :
         intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY)?.let {
           serviceScope.launch {
             val serverStatus =
-              withContext(Dispatchers.IO) {
+              withContext(ioDispatcher) {
                 webServerHelper?.startServerHelper(it, restartServer)
               }
             if (serverStatus?.isServerStarted == true) {

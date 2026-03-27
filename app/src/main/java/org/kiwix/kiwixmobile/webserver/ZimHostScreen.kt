@@ -77,12 +77,12 @@ const val QR_IMAGE_TESTING_TAG = "qrImageTestingTag"
 @Composable
 fun ZimHostScreen(
   serverIpText: String,
-  shareIconItem: Pair<Boolean, () -> Unit>,
+  showShareIcon: Boolean,
+  shareIconClick: () -> Unit,
   qrImageItem: Pair<Boolean, IconItem>,
   booksList: List<BooksOnDiskListItem>,
   startServerButtonItem: Triple<String, Color, () -> Unit>,
   selectionMode: SelectionMode,
-  selectedBookIds: Set<String>,
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
@@ -107,13 +107,12 @@ fun ZimHostScreen(
           verticalAlignment = Alignment.CenterVertically
         ) {
           ServerIpText(serverIpText, Modifier.weight(1f), LocalContext.current)
-          ShareIcon(shareIconItem)
+          ShareIcon(showShareIcon, shareIconClick)
         }
         Box(modifier = Modifier.weight(1f)) {
           BookItemList(
             booksList,
             selectionMode,
-            selectedBookIds,
             qrImageItem,
             onClick,
             onLongClick,
@@ -155,13 +154,13 @@ private fun ServerIpText(
 }
 
 @Composable
-private fun ShareIcon(shareIconItem: Pair<Boolean, () -> Unit>) {
-  if (shareIconItem.first) {
+private fun ShareIcon(showShareIcon: Boolean, shareIconItem: () -> Unit) {
+  if (showShareIcon) {
     Image(
       painter = painterResource(id = R.drawable.ic_share_35dp),
       contentDescription = stringResource(id = R.string.share_host_address),
       modifier = Modifier
-        .clickable { shareIconItem.second.invoke() }
+        .clickable { shareIconItem.invoke() }
         .padding(FOUR_DP)
         .heightIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
         .widthIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH),
@@ -191,7 +190,6 @@ private fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
 private fun BookItemList(
   booksList: List<BooksOnDiskListItem>,
   selectionMode: SelectionMode,
-  selectedBookIds: Set<String>,
   qrImageItem: Pair<Boolean, IconItem>,
   onClick: ((BookOnDisk) -> Unit)?,
   onLongClick: ((BookOnDisk) -> Unit)?,
@@ -217,7 +215,6 @@ private fun BookItemList(
               index = index,
               bookOnDisk = bookItem,
               selectionMode = selectionMode,
-              isSelected = selectedBookIds.contains(bookItem.book.id),
               onClick = onClick,
               onLongClick = onLongClick,
               onMultiSelect = onMultiSelect
