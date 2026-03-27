@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 
 internal class SearchStateTest {
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   internal fun `visibleResults use searchResults when searchTerm is not empty`() =
     runTest {
@@ -62,10 +63,11 @@ internal class SearchStateTest {
           SearchResultsWithTerm("", suggestionSearchWrapper, mockk()),
           emptyList(),
           FromWebView
-        ).getVisibleResults(0)
+        ).getVisibleResults(0, ioDispatcher = UnconfinedTestDispatcher(testScheduler))
       ).isEqualTo(listOf(SearchListItem.ZimSearchResultListItem(searchTerm, "")))
     }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   internal fun `visibleResults use recentResults when searchTerm is empty`() =
     runTest {
@@ -76,7 +78,7 @@ internal class SearchStateTest {
           SearchResultsWithTerm("", null, mockk()),
           results,
           FromWebView
-        ).getVisibleResults(0)
+        ).getVisibleResults(0, ioDispatcher = UnconfinedTestDispatcher(testScheduler))
       ).isEqualTo(results)
     }
 
@@ -105,6 +107,7 @@ internal class SearchStateTest {
     ).isFalse
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `test search cancellation`() =
     runTest {
@@ -126,9 +129,9 @@ internal class SearchStateTest {
       var list: List<SearchListItem>? = emptyList()
       var list1: List<SearchListItem>? = emptyList()
       val job =
-        launch(Dispatchers.IO) {
-          delay(1000)
-          list = searchState.getVisibleResults(0)
+        launch(testScheduler) {
+          list =
+            searchState.getVisibleResults(0, ioDispatcher = UnconfinedTestDispatcher(testScheduler))
         }
 
       job.cancelAndJoin()
@@ -137,8 +140,9 @@ internal class SearchStateTest {
       assertThat(list?.size).isEqualTo(0)
 
       val job1 =
-        launch(Dispatchers.IO) {
-          list1 = searchState.getVisibleResults(0)
+        launch(UnconfinedTestDispatcher(testScheduler)) {
+          list1 =
+            searchState.getVisibleResults(0, ioDispatcher = UnconfinedTestDispatcher(testScheduler))
         }
       job1.invokeOnCompletion {
         // test the second job is successfully return the data

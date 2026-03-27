@@ -81,7 +81,7 @@ class SearchViewModel @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator,
   private val searchMutex: Mutex = Mutex(),
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(SearchScreenUiState())
   val uiState = _uiState.asStateFlow()
@@ -151,7 +151,7 @@ class SearchViewModel @Inject constructor(
       updateUiState { it.copy(isLoading = true, isLoadingMore = false) }
 
       val firstPage = withContext(ioDispatcher) {
-        searchState.getVisibleResults(ZERO).orEmpty()
+        searchState.getVisibleResults(ZERO, ioDispatcher = ioDispatcher).orEmpty()
       }
       updateUiState {
         it.copy(
@@ -160,7 +160,7 @@ class SearchViewModel @Inject constructor(
           spellingCorrectionSuggestions = getSuggestedWordsList(),
           isLoading = false,
           findInPageMenuItem =
-            it.findInPageMenuItem.first to (searchOrigin.value == FromWebView)
+            it.searchText.isNotBlank() to (searchOrigin.value == FromWebView)
         )
       }
     }.collect {
@@ -275,7 +275,7 @@ class SearchViewModel @Inject constructor(
     }
 
     val moreResults = withContext(ioDispatcher) {
-      uiState.searchState.getVisibleResults(startIndex)
+      uiState.searchState.getVisibleResults(startIndex, ioDispatcher = ioDispatcher)
     }
 
     val current = uiState.searchList

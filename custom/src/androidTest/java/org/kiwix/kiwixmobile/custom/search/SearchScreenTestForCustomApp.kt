@@ -247,25 +247,25 @@ class SearchScreenTestForCustomApp {
       for (i in 1..100) {
         // This will execute the render method 100 times frequently.
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+        searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 100MS delay.
         delay(100)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+        searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(200)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+        searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
         delay(300)
         val searchTerm = searchTerms[i % searchTerms.size]
-        searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+        searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
     }
 

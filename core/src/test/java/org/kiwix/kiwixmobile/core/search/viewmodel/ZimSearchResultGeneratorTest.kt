@@ -22,15 +22,17 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 internal class ZimSearchResultGeneratorTest {
+  private val testDispatcher = StandardTestDispatcher()
   private val zimFileReader: ZimFileReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =
-    ZimSearchResultGenerator()
+    ZimSearchResultGenerator(testDispatcher)
 
   @Test
   internal fun `empty search term returns empty list`() {
@@ -42,7 +44,7 @@ internal class ZimSearchResultGeneratorTest {
 
   @Test
   internal fun `suggestion results are distinct`() {
-    val searchTerm = " "
+    val searchTerm = "a"
     val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
     every { zimFileReader.searchSuggestions(searchTerm) } returns suggestionSearchWrapper
     runBlocking {
