@@ -449,23 +449,3 @@ internal class SearchViewModelTest {
     viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
   }
 }
-
-/**
- * Local testFlow that uses launch/job.join() because SearchViewModel
- * uses debounce which requires concurrent coroutine execution.
- */
-private suspend fun <T> TestScope.testFlow(
-  flow: kotlinx.coroutines.flow.Flow<T>,
-  triggerAction: suspend () -> Unit,
-  assert: suspend app.cash.turbine.TurbineTestContext<T>.() -> Unit
-) {
-  val job = launch {
-    flow.test {
-      triggerAction()
-      assert()
-      cancelAndIgnoreRemainingEvents()
-      ensureAllEventsConsumed()
-    }
-  }
-  job.join()
-}
