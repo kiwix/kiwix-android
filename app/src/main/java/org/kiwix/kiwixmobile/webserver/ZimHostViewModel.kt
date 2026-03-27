@@ -18,51 +18,60 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import android.app.Application
+import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
+import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.DismissDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowErrorToast
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowManualHotspotDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowNoBooksToast
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowWifiDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StartIpCheck
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StartServer
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StopServer
 import javax.inject.Inject
 
 class ZimHostViewModel @Inject constructor(
+  private val context: Application,
   private val dataSource: DataSource,
   private val kiwixDataStore: KiwixDataStore,
   private val generateQr: GenerateQR,
-  private val zimReaderContainer: ZimReaderContainer,
   private val connectivityReporter: ConnectivityReporter
 ) : ViewModel(), ZimHostCallbacks {
   data class UiState(
-    val ipAddress: String = "",
-    val isServerRunning: Boolean = false,
-    val shareVisible: Boolean = false,
+    @StringRes val startServerButtonTextRes: Int = string.start_server_label,
+    val startServerButtonColor: Color = StartServerGreen,
+    val serverIpDisplayText: String = "",
+    val serverIpAddress: String = "",
+    val showShareIcon: Boolean = false,
     val qrVisible: Boolean = false,
     val qrIcon: IconItem = IconItem.Drawable(R.drawable.ic_storage),
     val books: List<BooksOnDiskListItem> = emptyList(),
-    val isPlayStoreBuild: Boolean = false,
-    // Tracks Checkboxes
-    val selectedBookIds: Set<String> = emptySet()
+    val isPlayStoreBuildWithAndroid11OrAbove: Boolean = false,
   )
-
-  private val _uiState = MutableStateFlow(UiState())
-  val uiState: StateFlow<UiState> = _uiState
-
-  private val _events = Channel<Event>(Channel.BUFFERED)
-  val events = _events.receiveAsFlow()
 
   sealed class Event {
     object StartIpCheck : Event()
@@ -75,164 +84,161 @@ class ZimHostViewModel @Inject constructor(
     object DismissDialog : Event()
   }
 
-  fun onResumeLoad(isCustomApp: Boolean) {
-    viewModelScope.launch {
-      val hosted = kiwixDataStore.hostedBookIds.first()
-      val isPlayStore = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-      val rawBooks = dataSource.getLanguageCategorizedBooks().first()
+  private val _uiState = MutableStateFlow(UiState())
+  val uiState: StateFlow<UiState> = _uiState
 
-      // Resolve Books
-      val processedBooks = if (isCustomApp) {
-        rawBooks.mapNotNull { item ->
-          if (item is BooksOnDiskListItem.BookOnDisk) {
-            zimReaderContainer.zimFileReader?.let { BooksOnDiskListItem.BookOnDisk(it) }
-          } else {
-            item
+  private val _events = MutableSharedFlow<Event>(extraBufferCapacity = Int.MAX_VALUE)
+  val events = _events.asSharedFlow()
+
+  fun loadBooks() {
+    viewModelScope.launch {
+      val previouslyHostedBookIds = kiwixDataStore.hostedBookIds.first()
+      val isPlayStore = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
+      val books = dataSource.getLanguageCategorizedBooks().first()
+      books.forEach { item ->
+        if (item is BookOnDisk) {
+          item.isSelected = when {
+            // Hosted books are now saved using the unique book ID.
+            previouslyHostedBookIds.contains(item.book.id) -> true
+            // Backward compatibility: for users who have not been migrated to the new logic yet,
+            // fall back to checking only the title.
+            previouslyHostedBookIds.contains(item.book.title) -> true
+            // If no previously hosted books are saved, select all books by default.
+            previouslyHostedBookIds.isEmpty() -> true
+            else -> false
           }
         }
-      } else {
-        rawBooks
-      }
-
-      // Initially Select All
-      val allBookIds = processedBooks
-        .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
-        .map { it.book.id }
-        .toSet()
-
-      val initialSelection = when {
-        isCustomApp || hosted.isEmpty() -> allBookIds
-        else -> hosted
       }
 
       _uiState.update {
-        it.copy(
-          books = processedBooks,
-          selectedBookIds = initialSelection,
-          isPlayStoreBuild = isPlayStore
-        )
+        it.copy(books = books, isPlayStoreBuildWithAndroid11OrAbove = isPlayStore)
       }
 
-      if (!isCustomApp && hosted.isEmpty() && initialSelection.isNotEmpty()) {
-        kiwixDataStore.setHostedBookIds(initialSelection)
+      if (ServerUtils.isServerStarted) {
+        onServerStarted(ServerUtils.serverAddress)
+      } else {
+        layoutStopped()
       }
-
-      if (ServerUtils.isServerStarted) onServerStarted(ServerUtils.serverAddress) else layoutStopped()
     }
   }
 
   fun onButtonClicked() {
     viewModelScope.launch {
       if (ServerUtils.isServerStarted) {
-        _events.send(Event.StopServer)
+        sendEvent(StopServer)
         return@launch
       }
 
-      val paths = selectedPaths(_uiState.value.books, _uiState.value.selectedBookIds)
+      val paths = selectedBooksPath(uiState.value.books)
       if (paths.isEmpty()) {
-        _events.send(Event.ShowNoBooksToast)
+        sendEvent(ShowNoBooksToast)
         return@launch
       }
 
       when {
-        connectivityReporter.checkWifi() -> _events.send(Event.ShowWifiDialog)
-        connectivityReporter.checkTethering() -> _events.send(Event.StartIpCheck)
-        else -> _events.send(Event.ShowManualHotspotDialog)
+        connectivityReporter.checkWifi() -> sendEvent(ShowWifiDialog)
+        connectivityReporter.checkTethering() -> sendEvent(StartIpCheck)
+        else -> sendEvent(ShowManualHotspotDialog)
       }
     }
   }
 
-  fun toggleSelection(book: BooksOnDiskListItem.BookOnDisk) {
-    val newSelection = _uiState.value.selectedBookIds.toMutableSet().apply {
-      if (!remove(book.id)) add(book.id)
+  fun onBookSelected(book: BookOnDisk) {
+    val tempBooksList: List<BooksOnDiskListItem> = uiState.value.books.onEach {
+      if (it == book) {
+        it.isSelected = !it.isSelected
+      }
+      it
     }
-
-    _uiState.update { it.copy(selectedBookIds = newSelection) }
+    // Force recomposition by first setting an empty list before assigning the updated list.
+    // This is necessary because modifying an object's property doesn't trigger recomposition,
+    // as Compose still considers the list unchanged.
+    _uiState.update { it.copy(books = emptyList()) }
+    _uiState.update { it.copy(books = tempBooksList) }
 
     viewModelScope.launch {
-      kiwixDataStore.setHostedBookIds(newSelection)
-
+      saveHostedBooks(tempBooksList)
       if (ServerUtils.isServerStarted) {
-        _events.send(Event.StartServer(selectedPaths(_uiState.value.books, newSelection), true))
+        sendEvent(StartServer(selectedBooksPath(uiState.value.books), true))
       }
     }
   }
 
-  private fun selectedPaths(
-    books: List<BooksOnDiskListItem>,
-    selectedIds: Set<String>
-  ): ArrayList<String> =
+  private fun selectedBooksPath(books: List<BooksOnDiskListItem>): ArrayList<String> =
     books
       .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
-      .filter { selectedIds.contains(it.book.id) }
+      .filter { it.isSelected }
       .map { it.zimReaderSource.toDatabase() }
+      .onEach { Log.v("Hosted Book", "ZIM PATH : $it") }
       .toCollection(ArrayList())
 
+  private suspend fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
+    val hostedBooks = booksList.asSequence()
+      .filter(BooksOnDiskListItem::isSelected)
+      .filterIsInstance<BookOnDisk>()
+      .map { it.book.id }
+      .toSet()
+    kiwixDataStore.setHostedBookIds(hostedBooks)
+  }
+
   fun onWifiConfirmed() {
-    viewModelScope.launch { _events.send(Event.StartIpCheck) }
+    sendEvent(StartIpCheck)
   }
 
   override fun onIpAddressValid() {
-    viewModelScope.launch {
-      _events.send(
-        Event.StartServer(
-          selectedPaths(
-            _uiState.value.books,
-            _uiState.value.selectedBookIds
-          ),
-          false
-        )
-      )
-    }
+    sendEvent(StartServer(selectedBooksPath(uiState.value.books), false))
   }
 
   override fun onServerStarted(ip: String) {
     ServerUtils.serverAddress = ip
-
-    val generatedQrIcon = if (ip.isNotBlank()) {
-      val qr = generateQr.createQR(ip)
-      IconItem.ImageBitmap(qr.asImageBitmap())
-    } else {
-      IconItem.Drawable(R.drawable.ic_storage)
-    }
-
     _uiState.update {
       it.copy(
-        ipAddress = ip,
-        isServerRunning = true,
-        shareVisible = ip.isNotBlank(),
+        serverIpAddress = ip,
+        showShareIcon = ip.isNotBlank(),
         qrVisible = true,
-        qrIcon = generatedQrIcon
+        qrIcon = getQrIcon(ip),
+        serverIpDisplayText = context.getString(string.server_started_message, ip),
+        startServerButtonColor = StopServerRed
       )
     }
-
-    viewModelScope.launch { _events.send(Event.DismissDialog) }
+    sendEvent(DismissDialog)
   }
 
   private fun layoutStopped() {
     _uiState.update {
       it.copy(
-        ipAddress = "",
-        isServerRunning = false,
-        shareVisible = false,
+        serverIpAddress = "",
+        showShareIcon = false,
         qrVisible = false,
-        qrIcon = IconItem.Drawable(R.drawable.ic_storage)
+        qrIcon = getQrIcon(null),
+        serverIpDisplayText = context.getString(string.server_textview_default_message),
+        startServerButtonColor = StartServerGreen
       )
     }
   }
+
+  private fun getQrIcon(ip: String?) =
+    if (ip.isNullOrBlank()) {
+      IconItem.Drawable(R.drawable.ic_storage)
+    } else {
+      val qr = generateQr.createQR(ip)
+      IconItem.ImageBitmap(qr.asImageBitmap())
+    }
 
   override fun onServerStopped() {
     layoutStopped()
   }
 
   override fun onServerFailedToStart(errorMessage: Int?) {
-    viewModelScope.launch {
-      _events.send(Event.DismissDialog)
-      errorMessage?.let { _events.send(Event.ShowErrorToast(it)) }
-    }
+    sendEvent(DismissDialog)
+    errorMessage?.let { sendEvent(ShowErrorToast(it)) }
   }
 
   override fun onIpAddressInvalid() {
-    viewModelScope.launch { _events.send(Event.DismissDialog) }
+    sendEvent(DismissDialog)
+  }
+
+  private fun sendEvent(event: Event) {
+    viewModelScope.launch { _events.emit(event) }
   }
 }

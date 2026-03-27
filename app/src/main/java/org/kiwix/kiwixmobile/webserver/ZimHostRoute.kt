@@ -49,15 +49,22 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
-import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.DismissDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowErrorToast
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowManualHotspotDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowNoBooksToast
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowWifiDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StartIpCheck
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StartServer
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StopServer
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
@@ -68,7 +75,6 @@ const val RESTART_SERVER = "restart_server"
 
 const val REQUEST_STORAGE_PERMISSION = 1001
 
-@Suppress("LongMethod")
 @Composable
 fun ZimHostRoute(
   viewModelFactory: ViewModelProvider.Factory,
@@ -83,49 +89,26 @@ fun ZimHostRoute(
 
   LaunchedEffect(lifecycleOwner) {
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-      viewModel.onResumeLoad(activity.isCustomApp())
+      viewModel.loadBooks()
     }
   }
-
-  CollectZimHostEvents(
-    lifecycleOwner,
-    viewModel,
-    activity,
-    alertDialogShower
-  )
-
-  val serverIpDisplayText =
-    if (uiState.isServerRunning && uiState.ipAddress.isNotBlank()) {
-      stringResource(id = R.string.server_started_message, uiState.ipAddress)
-    } else {
-      stringResource(id = R.string.server_textview_default_message)
-    }
-
-  val buttonText =
-    if (uiState.isServerRunning) {
-      stringResource(id = R.string.stop_server_label)
-    } else {
-      stringResource(id = R.string.start_server_label)
-    }
-
-  val buttonColor =
-    if (uiState.isServerRunning) StopServerRed else StartServerGreen
-
+  CollectZimHostEvents(lifecycleOwner, viewModel, activity, alertDialogShower)
   ZimHostScreen(
-    serverIpText = serverIpDisplayText,
-    shareIconItem = uiState.shareVisible to {
+    serverIpText = uiState.serverIpDisplayText,
+    showShareIcon = uiState.showShareIcon,
+    shareIconClick = {
       activity.startActivity(
         Intent(Intent.ACTION_SEND).apply {
           type = "text/plain"
-          putExtra(Intent.EXTRA_TEXT, uiState.ipAddress)
+          putExtra(Intent.EXTRA_TEXT, uiState.serverIpAddress)
         }
       )
     },
     qrImageItem = uiState.qrVisible to uiState.qrIcon,
     booksList = uiState.books,
     startServerButtonItem = Triple(
-      buttonText,
-      buttonColor
+      stringResource(uiState.startServerButtonTextRes),
+      uiState.startServerButtonColor
     ) {
       handlePermissionsAndStart(
         activity,
@@ -134,9 +117,8 @@ fun ZimHostRoute(
         viewModel
       )
     },
-    selectedBookIds = uiState.selectedBookIds,
     selectionMode = SelectionMode.MULTI,
-    onMultiSelect = { viewModel.toggleSelection(it) },
+    onMultiSelect = { viewModel.onBookSelected(it) },
     navigationIcon = {
       NavigationIcon(onClick = {
         activity.onBackPressedDispatcher.onBackPressed()
@@ -145,7 +127,6 @@ fun ZimHostRoute(
   )
 }
 
-// ===== Hotspot Services =====
 @Composable
 private fun BindHotspotService(
   activity: KiwixMainActivity,
@@ -180,7 +161,6 @@ private fun BindHotspotService(
   }
 }
 
-// ===== Zim Host Events =====
 @Composable
 private fun CollectZimHostEvents(
   lifecycleOwner: LifecycleOwner,
@@ -193,7 +173,7 @@ private fun CollectZimHostEvents(
       viewModel.events.collect { event ->
         handleZimHostEvent(
           event = event,
-          activity = activity,
+          context = activity,
           alertDialogShower = alertDialogShower,
           viewModel = viewModel
         )
@@ -204,97 +184,79 @@ private fun CollectZimHostEvents(
 
 private fun handleZimHostEvent(
   event: ZimHostViewModel.Event,
-  activity: KiwixMainActivity,
+  context: Context,
   alertDialogShower: AlertDialogShower,
   viewModel: ZimHostViewModel
 ) {
   when (event) {
-    is ZimHostViewModel.Event.StartIpCheck ->
-      handleStartIpCheck(activity, alertDialogShower)
+    is StartIpCheck ->
+      handleStartIpCheck(context, alertDialogShower)
 
-    is ZimHostViewModel.Event.StartServer ->
-      handleStartServer(activity, event)
+    is StartServer ->
+      handleStartServer(context, event)
 
-    is ZimHostViewModel.Event.StopServer ->
-      handleStopServer(activity)
+    is StopServer ->
+      handleStopServer(context)
 
-    is ZimHostViewModel.Event.ShowWifiDialog ->
-      handleWifiDialog(activity, alertDialogShower, viewModel)
+    is ShowWifiDialog ->
+      handleWifiDialog(context, alertDialogShower, viewModel)
 
-    is ZimHostViewModel.Event.ShowManualHotspotDialog ->
-      handleManualHotspotDialog(activity, alertDialogShower)
+    is ShowManualHotspotDialog ->
+      handleManualHotspotDialog(context, alertDialogShower)
 
-    is ZimHostViewModel.Event.ShowNoBooksToast ->
-      showNoBooksToast(activity)
+    is ShowNoBooksToast ->
+      showNoBooksToast(context)
 
-    is ZimHostViewModel.Event.ShowErrorToast ->
-      showErrorToast(activity, event.messageRes)
+    is ShowErrorToast ->
+      showErrorToast(context, event.messageRes)
 
-    is ZimHostViewModel.Event.DismissDialog ->
+    is DismissDialog ->
       alertDialogShower.dismiss()
   }
 }
 
-private fun handleStartIpCheck(
-  activity: KiwixMainActivity,
-  alertDialogShower: AlertDialogShower
-) {
-  alertDialogShower.show(
-    KiwixDialog.StartServer { ContentLoadingProgressBar() }
-  )
-
-  activity.startService(
-    Intent(activity, HotspotService::class.java)
-      .setAction(ACTION_CHECK_IP_ADDRESS)
-  )
+private fun handleStartIpCheck(context: Context, alertDialogShower: AlertDialogShower) {
+  alertDialogShower.show(KiwixDialog.StartServer { ContentLoadingProgressBar() })
+  context.startService(createHotspotIntent(context, ACTION_CHECK_IP_ADDRESS))
 }
 
-private fun handleStartServer(
-  activity: KiwixMainActivity,
-  event: ZimHostViewModel.Event.StartServer
-) {
-  activity.startService(
-    Intent(activity, HotspotService::class.java)
-      .setAction(ACTION_START_SERVER)
-      .putStringArrayListExtra(
-        SELECTED_ZIM_PATHS_KEY,
-        event.paths
-      )
+private fun handleStartServer(context: Context, event: StartServer) {
+  context.startService(
+    createHotspotIntent(context, ACTION_START_SERVER)
+      .putStringArrayListExtra(SELECTED_ZIM_PATHS_KEY, event.paths)
       .putExtra(RESTART_SERVER, event.restart)
   )
 }
 
-private fun handleStopServer(
-  activity: KiwixMainActivity
-) {
-  activity.startService(
-    Intent(activity, HotspotService::class.java)
-      .setAction(ACTION_STOP_SERVER)
-  )
+private fun handleStopServer(context: Context) {
+  context.startService(createHotspotIntent(context, ACTION_STOP_SERVER))
 }
 
+private fun createHotspotIntent(context: Context, action: String): Intent =
+  Intent(context, HotspotService::class.java).setAction(action)
+
 private fun handleWifiDialog(
-  activity: KiwixMainActivity,
+  context: Context,
   alertDialogShower: AlertDialogShower,
   viewModel: ZimHostViewModel
 ) {
   alertDialogShower.show(
     KiwixDialog.WiFiOnWhenHostingBooks,
-    { activity.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) },
+    { context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) },
     {},
     { viewModel.onWifiConfirmed() }
   )
 }
 
 private fun handleManualHotspotDialog(
-  activity: KiwixMainActivity,
+  context: Context,
   alertDialogShower: AlertDialogShower
 ) {
   alertDialogShower.show(
     KiwixDialog.StartHotspotManually,
     {
       runCatching {
-        activity.startActivity(
+        context.startActivity(
           Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(
               "com.android.settings",
@@ -303,7 +265,7 @@ private fun handleManualHotspotDialog(
           }
         )
       }.onFailure {
-        activity.startActivity(
+        context.startActivity(
           Intent(Settings.ACTION_WIRELESS_SETTINGS)
         )
       }
@@ -311,23 +273,12 @@ private fun handleManualHotspotDialog(
   )
 }
 
-private fun showNoBooksToast(activity: KiwixMainActivity) {
-  Toast.makeText(
-    activity,
-    R.string.no_books_selected_toast_message,
-    Toast.LENGTH_SHORT
-  ).show()
+private fun showNoBooksToast(context: Context) {
+  context.toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
 }
 
-private fun showErrorToast(
-  activity: KiwixMainActivity,
-  messageRes: Int
-) {
-  Toast.makeText(
-    activity,
-    messageRes,
-    Toast.LENGTH_SHORT
-  ).show()
+private fun showErrorToast(context: Context, messageRes: Int) {
+  context.toast(messageRes, Toast.LENGTH_SHORT)
 }
 
 // ===== Permission Handling =====
@@ -355,7 +306,7 @@ private fun handlePermissionsAndStart(
   }
 
   // Handles Play Store
-  if (uiState.isPlayStoreBuild) {
+  if (uiState.isPlayStoreBuildWithAndroid11OrAbove) {
     viewModel.onButtonClicked()
     return
   }
