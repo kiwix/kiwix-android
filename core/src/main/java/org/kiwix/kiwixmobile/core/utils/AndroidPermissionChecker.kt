@@ -66,7 +66,7 @@ class AndroidPermissionChecker @Inject constructor(
    * For Android 13 and above, use hasNearbyWifiPermission().
    */
   override suspend fun hasFineLocationPermission(): Boolean {
-    require(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+    require(!isAndroid13orAbove()) {
       "hasFineLocationPermission should not be called on API 33+. Use hasNearbyWifiPermission() instead."
     }
     return ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED

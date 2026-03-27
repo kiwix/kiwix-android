@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.location.LocationManager
+import android.net.Uri
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import app.cash.turbine.test
@@ -47,10 +48,11 @@ class LocalFileTransferViewModelTest {
     viewModel = LocalFileTransferViewModel(
       kiwixDataStore,
       wifiDirectManager,
-      alertDialogShower,
       locationManager,
       permissionChecker
-    )
+    ).apply {
+      initialize(listOf(), alertDialogShower)
+    }
   }
 
   @AfterEach
@@ -61,8 +63,8 @@ class LocalFileTransferViewModelTest {
 
   @Test
   fun `initializeWifiDirectManager updates UI state with transfer files`() = runTest {
-    val files = listOf(FileItem("test.zim"))
-    viewModel.initializeWifiDirectManager(files)
+    val files = listOf(Uri.parse("test.zim"))
+    viewModel.initialize(files, alertDialogShower)
 
     viewModel.uiState.test {
       assertThat(awaitItem().transferFiles).isEqualTo(files)
@@ -85,7 +87,6 @@ class LocalFileTransferViewModelTest {
       viewModel = LocalFileTransferViewModel(
         kiwixDataStore,
         wifiDirectManager,
-        alertDialogShower,
         locationManager,
         permissionChecker
       )

@@ -19,15 +19,21 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
+import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.annotation.RequiresApi
 
 interface KiwixPermissionChecker {
   suspend fun hasWriteExternalStoragePermission(): Boolean
   suspend fun hasReadExternalStoragePermission(): Boolean
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   suspend fun hasNearbyWifiPermission(): Boolean
   suspend fun hasFineLocationPermission(): Boolean
   suspend fun isWriteExternalStoragePermissionRequired(): Boolean
 
   fun shouldShowRationale(activity: Activity, permission: String): Boolean
 
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
   fun isAndroid13orAbove(): Boolean
 }

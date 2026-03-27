@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.annotation.SuppressLint
 import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.p2p.WifiP2pDevice
@@ -23,6 +22,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.NavigateBack
 import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.RequestPermission
+import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.ShowDialog
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import javax.inject.Inject
 
@@ -48,10 +48,7 @@ class LocalFileTransferViewModel @Inject constructor(
   private val _events = MutableSharedFlow<UiEvent>()
   val events = _events.asSharedFlow()
 
-  private val _dialogEvent = MutableSharedFlow<DialogEvent>(extraBufferCapacity = Int.MAX_VALUE)
-  val dialogEvent = _dialogEvent.asSharedFlow()
-
-  val isWritePermissionRequired = MutableStateFlow(false)
+  private val isAndroid13OrAbove = permissionChecker.isAndroid13orAbove()
 
   init {
     viewModelScope.launch {
@@ -69,21 +66,16 @@ class LocalFileTransferViewModel @Inject constructor(
 
   fun showDialog(dialog: DialogEvent) {
     viewModelScope.launch {
-      _dialogEvent.emit(dialog)
+      _events.emit(ShowDialog(dialog))
     }
   }
-
-  val android13OrAbove = permissionChecker.isAndroid13orAbove()
 
   fun initialize(uris: List<Uri>, alertDialogShower: AlertDialogShower) {
     val files = uris.map { FileItem(it) }
     val isReceiver = files.isEmpty()
 
     _uiState.update {
-      it.copy(
-        transferFiles = files,
-        isReceiver = isReceiver
-      )
+      it.copy(transferFiles = files, isReceiver = isReceiver)
     }
 
     initializeWifiDirectManager(files, alertDialogShower)
@@ -93,8 +85,6 @@ class LocalFileTransferViewModel @Inject constructor(
     filesForTransfer: List<FileItem>,
     alertDialogShower: AlertDialogShower
   ) {
-    _uiState.update { it.copy(transferFiles = filesForTransfer) }
-
     wifiDirectManager.apply {
       callbacks = this@LocalFileTransferViewModel
       setLifeCycleScope(viewModelScope)
@@ -103,41 +93,41 @@ class LocalFileTransferViewModel @Inject constructor(
     }
   }
 
-  fun onDeviceSelected(device: WifiP2pDevice) {
-    wifiDirectManager.sendToDevice(device)
-  }
-
-  @SuppressLint("InlinedApi")
   fun onSearchMenuClicked() {
     viewModelScope.launch {
-      if (!checkFineLocationAccessPermission()) {
-        Log.d(TAG, "Location or wifi permission not granted")
-        return@launch
+      if (checkDiscoveryPreconditions()) {
+        showPeerDiscoveryProgressBar()
+        wifiDirectManager.discoverPeerDevices()
       }
-
-      if (!checkExternalStorageWritePermission()) {
-        Log.d(TAG, "Storage permission not granted")
-        return@launch
-      }
-
-      if (!wifiDirectManager.isWifiP2pEnabled) {
-        Log.d(TAG, "wifi p2p is not enabled")
-        requestEnableWifiP2pServices()
-        return@launch
-      }
-
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
-        !isLocationServiceEnabled
-      ) {
-        Log.d(TAG, "location service is not enabled")
-        requestEnableLocationServices()
-        return@launch
-      }
-
-      Log.d(TAG, "All true in onSearchMenuClicked - checks passed")
-      showPeerDiscoveryProgressBar()
-      wifiDirectManager.discoverPeerDevices()
     }
+  }
+
+  @Suppress("ReturnCount")
+  private suspend fun checkDiscoveryPreconditions(): Boolean {
+    if (!checkFineLocationOrWifiPermission()) {
+      Log.d(TAG, "Location or wifi permission not granted")
+      return false
+    }
+
+    if (!checkExternalStorageWritePermission()) {
+      Log.d(TAG, "Storage permission not granted")
+      return false
+    }
+
+    if (!wifiDirectManager.isWifiP2pEnabled) {
+      Log.d(TAG, "wifi p2p is not enabled")
+      requestEnableWifiP2pServices()
+      return false
+    }
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
+      !isLocationServiceEnabled
+    ) {
+      Log.d(TAG, "location service is not enabled")
+      requestEnableLocationServices()
+      return false
+    }
+    return true
   }
 
   // Setup UI for searching peers
@@ -147,7 +137,7 @@ class LocalFileTransferViewModel @Inject constructor(
 
   val isLocationServiceEnabled: Boolean
     get() =
-      if (android13OrAbove) {
+      if (isAndroid13OrAbove) {
         true
       } else {
         isProviderEnabled(LocationManager.GPS_PROVIDER) ||
@@ -167,53 +157,53 @@ class LocalFileTransferViewModel @Inject constructor(
   }
 
   private fun requestEnableWifiP2pServices() {
-    viewModelScope.launch {
-      _dialogEvent.emit(DialogEvent.ShowEnableWifiP2p)
-    }
+    showDialog(DialogEvent.ShowEnableWifiP2p)
   }
 
   private fun requestEnableLocationServices() {
-    viewModelScope.launch {
-      _dialogEvent.emit(DialogEvent.ShowEnableLocationServices)
-    }
+    showDialog(DialogEvent.ShowEnableLocationServices)
   }
 
-  @SuppressLint("InlinedApi")
   fun onPermissionGranted() {
     onSearchMenuClicked()
   }
 
-  @SuppressLint("InlinedApi")
-  private suspend fun checkFineLocationAccessPermission(): Boolean {
-    if (android13OrAbove) {
-      val hasWifiPerm = permissionChecker.hasNearbyWifiPermission()
-
-      if (!hasWifiPerm) {
-        _events.emit(RequestPermission(NEARBY_WIFI_DEVICES))
-      }
-
-      return hasWifiPerm
+  private suspend fun checkFineLocationOrWifiPermission(): Boolean {
+    val hasLocalPermission = if (isAndroid13OrAbove) {
+      permissionChecker.hasNearbyWifiPermission()
+    } else {
+      permissionChecker.hasFineLocationPermission()
     }
-
-    val hasLocationPermission = permissionChecker.hasFineLocationPermission()
-
-    if (!hasLocationPermission) {
-      _events.emit(RequestPermission(ACCESS_FINE_LOCATION))
+    if (!hasLocalPermission) {
+      requestPermission(locationPermission)
     }
-
-    return hasLocationPermission
+    return hasLocalPermission
   }
 
   private suspend fun checkExternalStorageWritePermission(): Boolean {
-    val hasPermission = permissionChecker.hasWriteExternalStoragePermission()
-
-    return when (hasPermission) {
-      true -> true
-      false -> {
-        _events.emit(RequestPermission(WRITE_EXTERNAL_STORAGE))
-        false
-      }
+    val isGranted = permissionChecker.hasWriteExternalStoragePermission()
+    if (!isGranted) {
+      requestPermission(WRITE_EXTERNAL_STORAGE)
     }
+    return isGranted
+  }
+
+  private suspend fun requestPermission(permission: String) {
+    _events.emit(RequestPermission(permission))
+  }
+
+  fun onPermissionRationaleRequired(permission: String) {
+    val dialog = when (permission) {
+      NEARBY_WIFI_DEVICES -> DialogEvent.ShowNearbyWifiRationale
+      ACCESS_FINE_LOCATION -> DialogEvent.ShowLocationRationale
+      WRITE_EXTERNAL_STORAGE -> DialogEvent.ShowStorageRationale
+      else -> null
+    }
+    dialog?.let { showDialog(it) }
+  }
+
+  fun onDeviceSelected(device: WifiP2pDevice) {
+    wifiDirectManager.sendToDevice(device)
   }
 
   override fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?) {
@@ -239,10 +229,7 @@ class LocalFileTransferViewModel @Inject constructor(
     _uiState.update { it.copy(transferFiles = filesForTransfer) }
   }
 
-  override fun onFileStatusChanged(
-    itemIndex: Int,
-    fileStatus: FileItem.FileStatus
-  ) {
+  override fun onFileStatusChanged(itemIndex: Int, fileStatus: FileItem.FileStatus) {
     _uiState.update { state ->
       val tempTransferList = state.transferFiles.toMutableList()
       if (itemIndex in tempTransferList.indices) {
@@ -264,6 +251,12 @@ class LocalFileTransferViewModel @Inject constructor(
     }
   }
 
+  val locationPermission = if (isAndroid13OrAbove) {
+    NEARBY_WIFI_DEVICES
+  } else {
+    ACCESS_FINE_LOCATION
+  }
+
   override fun onCleared() {
     super.onCleared()
     wifiDirectManager.stopWifiDirectManager()
@@ -271,8 +264,7 @@ class LocalFileTransferViewModel @Inject constructor(
   }
 
   companion object {
-    // Not a typo, 'Log' tags have a length upper limit of 25 characters
-    const val TAG = "LocalFileTransferActvty"
+    const val TAG = "LocalFileTransfer"
   }
 }
 

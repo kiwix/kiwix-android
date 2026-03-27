@@ -39,7 +39,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -217,7 +216,8 @@ class ZimManageViewModelTest {
         dataSource,
         connectivityManager,
         onlineLibraryManager,
-        kiwixDataStore
+        kiwixDataStore,
+        testDispatcher
       ).apply {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)
@@ -593,7 +593,15 @@ class ZimManageViewModelTest {
         testFlow(
           flow = viewModel.sideEffects,
           triggerAction = { viewModel.fileSelectActions.emit(RequestShareMultiSelection) },
-          assert = { assertThat(awaitItem()).isEqualTo(ShareFiles(listOf(selectedBook))) }
+          assert = {
+            assertThat(awaitItem()).isEqualTo(
+              ShareFiles(
+                listOf(selectedBook),
+                this@runTest,
+                testDispatcher
+              )
+            )
+          }
         )
       }
     }

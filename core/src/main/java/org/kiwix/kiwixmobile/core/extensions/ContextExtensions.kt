@@ -22,8 +22,11 @@ import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
 
@@ -63,3 +66,21 @@ fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Inte
 
 val Context.locale: Locale
   get() = resources.configuration.locales.get(0)
+
+@RequiresApi(Build.VERSION_CODES.R)
+fun Context.navigateToSettings() {
+  val intent =
+    Intent().apply {
+      action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+      data = Uri.fromParts("package", packageName, null)
+    }
+  startActivity(intent)
+}
+
+fun Context.navigateToAppSettings() {
+  startActivity(
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+      data = Uri.fromParts("package", packageName, null)
+    }
+  )
+}
