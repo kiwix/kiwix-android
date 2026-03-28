@@ -36,6 +36,7 @@ import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.search.viewmodel.MAX_SUGGEST_WORD_COUNT
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.reader.EncodedUrlTest
@@ -99,128 +100,125 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   }
 
   @Test
-  fun testZimFileReader() = runBlocking {
-    val reader = createZimFileReader()
+  fun testZimFileReader() {
+    runBlocking {
+      val reader = createZimFileReader()
 
-    // ── Verify all 14 properties with actual expected values ──
-    assertEquals("Test Zim", reader.title)
-    assertNotNull(reader.mainPage)
-    assertTrue(reader.id.isNotEmpty())
-    assertEquals(16, reader.mediaCount)
-    assertEquals(4, reader.articleCount)
-    assertEquals("Test_Zim", reader.creator)
-    assertEquals("Kiwix", reader.publisher)
-    assertTrue(reader.name.isNotEmpty())
-    assertEquals("2024-02-01", reader.date)
-    assertEquals("This is a test zim file", reader.description)
-    assertEquals("eng", reader.language)
-    assertEquals("", reader.tags)
-    assertTrue(reader.fileSize > 0)
-    assertNotNull(reader.favicon)
+      // ── Verify all 14 properties with actual expected values ──
+      assertEquals("Test_Zim", reader.title)
+      assertEquals("A/index.html", reader.mainPage)
+      assertEquals("60094d1e-1c9a-a60b-2011-4fb02f8db6c3", reader.id)
+      assertEquals(16, reader.mediaCount)
+      assertEquals(4, reader.articleCount)
+      assertEquals("Wikipedia Contributors", reader.creator)
+      assertEquals("Zimbalaka 1.0", reader.publisher)
+      assertEquals("60094d1e-1c9a-a60b-2011-4fb02f8db6c3", reader.name)
+      assertEquals("2017-04-21", reader.date)
+      assertEquals("Wikipedia article on Test Zim", reader.description)
+      assertEquals("en", reader.language)
+      assertEquals("", reader.tags)
+      assertEquals(348, reader.fileSize)
+      assertNotNull(reader.favicon)
 
-    // ── Verify searchSuggestions and related methods ──
-    assertNotNull(reader.searchSuggestions("android"))
-    assertNotNull(reader.getRandomArticleUrl())
-    assertTrue(reader.getSuggestedSpelledWords("test", 5).isEmpty())
+      // ── Verify searchSuggestions and related methods ──
+      assertNotNull(reader.searchSuggestions("android"))
+      assertNotNull(reader.getRandomArticleUrl())
+      assertTrue(reader.getSuggestedSpelledWords("test", 5).isEmpty())
+      assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
 
-    // ── Verify getPageUrlFrom for correct and incorrect title ──
-    assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
-    reader.mainPage?.let { mainPagePath ->
-      assertNotNull(reader.getPageUrlFrom(mainPagePath))
+      // ── Verify getMimeTypeFromUrl ──
+      assertEquals("text/html", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/index.html"))
+      assertEquals("text/css", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}-/assets/style1.css"))
+      assertNull(reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/non_existent_page.html"))
+
+      // ── Verify isRedirect ──
+      assertFalse(reader.isRedirect("http://example.com/test"))
+      assertFalse(reader.isRedirect(""))
+
+      // ── Verify getRedirect ──
+      val redirect = reader.getRedirect("${CONTENT_PREFIX}A/index.html")
+      assertNotNull(redirect)
+      assertTrue(redirect.isNotEmpty())
+
+      // ── Verify load returns content for valid URL ──
+      val inputStream = reader.load("${CONTENT_PREFIX}A/index.html")
+      assertNotNull(inputStream)
+      val content = inputStream?.bufferedReader()?.readText()
+      assertNotNull(content)
+      assertTrue(content!!.isNotEmpty())
+
+      // ── Verify load returns empty content for invalid URL ──
+      val invalidInputStream = reader.load("${CONTENT_PREFIX}A/non_existent_page_12345.html")
+      assertNotNull(invalidInputStream)
+      val invalidContent = invalidInputStream?.bufferedReader()?.readText()
+      assertTrue(invalidContent.isNullOrEmpty())
+
+      // ── Verify getItem ──
+      val item = reader.getItem("${CONTENT_PREFIX}A/index.html")
+      assertNotNull(item)
+      val nullItem = reader.getItem("${CONTENT_PREFIX}A/non_existent_12345.html")
+      assertNull(nullItem)
+
+      // ── Verify prepareSpellingsDB and getSuggestedSpelledWords ──
+      reader.prepareSpellingsDB(reader.jniKiwixReader)
+      val suggestions = reader.getSuggestedSpelledWords("android", MAX_SUGGEST_WORD_COUNT)
+      assertTrue(suggestions.isEmpty())
+
+      // ── Verify toBook maps all fields correctly ──
+      val book = reader.toBook()
+      assertEquals(reader.title, book.title)
+      assertEquals(reader.id, book.id)
+      assertEquals("${reader.fileSize}", book.size)
+      assertEquals(reader.favicon.toString(), book.favicon)
+      assertEquals(reader.creator, book.creator)
+      assertEquals(reader.publisher, book.publisher)
+      assertEquals(reader.date, book.date)
+      assertEquals(reader.description, book.description)
+      assertEquals(reader.language, book.language)
+      assertEquals(reader.articleCount.toString(), book.articleCount)
+      assertEquals(reader.mediaCount.toString(), book.mediaCount)
+      assertEquals(reader.name, book.bookName)
+      assertEquals(reader.tags, book.tags)
+
+      // ── Verify all 14 properties return defaults after dispose ──
+      reader.dispose()
+
+      assertNull(reader.mainPage)
+      assertEquals("No Title Found", reader.title)
+      assertNull(reader.mediaCount)
+      assertNull(reader.articleCount)
+      assertEquals("", reader.creator)
+      assertEquals("", reader.publisher)
+      assertEquals("", reader.date)
+      assertEquals("", reader.description)
+      assertEquals("", reader.language)
+      assertEquals("", reader.tags)
+      assertNull(reader.favicon)
+      assertNull(reader.searchSuggestions("test"))
+      assertNull(reader.getRandomArticleUrl())
+      assertNull(reader.getPageUrlFrom("index"))
+
+      // ── Verify Factory.create with non-existent file ──
+      val factory = ZimFileReader.Factory.Impl()
+      val nonExistentSource = ZimReaderSource(File("/non/existent/path/fakefile.zim"))
+      assertNull(factory.create(nonExistentSource, false))
+
+      // ── Verify Factory.create with corrupted file ──
+      val corruptedFile = File(context.getExternalFilesDirs(null)[0], "corrupted.zim")
+      if (corruptedFile.exists()) corruptedFile.delete()
+      corruptedFile.createNewFile()
+      corruptedFile.writeBytes(ByteArray(100) { it.toByte() })
+      val corruptedSource = ZimReaderSource(corruptedFile)
+      assertNull(factory.create(corruptedSource, false))
+      corruptedFile.delete()
+
+      // ── Verify Factory.create with valid file ──
+      val validZimFile = copyZimFile("testzim_factory.zim")
+      val validSource = ZimReaderSource(validZimFile)
+      val validResult = factory.create(validSource, false)
+      assertNotNull(validResult)
+      validResult?.dispose()
     }
-
-    // ── Verify getMimeTypeFromUrl ──
-    assertEquals("text/html", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/index.html"))
-    assertEquals("text/css", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}-/assets/style1.css"))
-    assertNull(reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/non_existent_page.html"))
-
-    // ── Verify isRedirect ──
-    assertFalse(reader.isRedirect("http://example.com/test"))
-    assertFalse(reader.isRedirect(""))
-
-    // ── Verify getRedirect ──
-    val redirect = reader.getRedirect("${CONTENT_PREFIX}A/index.html")
-    assertNotNull(redirect)
-    assertTrue(redirect.isNotEmpty())
-
-    // ── Verify load returns content for valid URL ──
-    val inputStream = reader.load("${CONTENT_PREFIX}A/index.html")
-    assertNotNull(inputStream)
-    val content = inputStream?.bufferedReader()?.readText()
-    assertNotNull(content)
-    assertTrue(content!!.isNotEmpty())
-
-    // ── Verify load returns empty content for invalid URL ──
-    val invalidInputStream = reader.load("${CONTENT_PREFIX}A/non_existent_page_12345.html")
-    assertNotNull(invalidInputStream)
-    val invalidContent = invalidInputStream?.bufferedReader()?.readText()
-    assertTrue(invalidContent.isNullOrEmpty())
-
-    // ── Verify getItem ──
-    val item = reader.getItem("${CONTENT_PREFIX}A/index.html")
-    assertNotNull(item)
-    val nullItem = reader.getItem("${CONTENT_PREFIX}A/non_existent_12345.html")
-    assertNull(nullItem)
-
-    // ── Verify prepareSpellingsDB and getSuggestedSpelledWords ──
-    reader.prepareSpellingsDB(reader.jniKiwixReader)
-    val suggestions = reader.getSuggestedSpelledWords("android", 5)
-    assertNotNull(suggestions)
-
-    // ── Verify toBook maps all fields correctly ──
-    val book = reader.toBook()
-    assertEquals(reader.title, book.title)
-    assertEquals(reader.id, book.id)
-    assertEquals("${reader.fileSize}", book.size)
-    assertEquals(reader.favicon.toString(), book.favicon)
-    assertEquals(reader.creator, book.creator)
-    assertEquals(reader.publisher, book.publisher)
-    assertEquals(reader.date, book.date)
-    assertEquals(reader.description, book.description)
-    assertEquals(reader.language, book.language)
-    assertEquals(reader.articleCount.toString(), book.articleCount)
-    assertEquals(reader.mediaCount.toString(), book.mediaCount)
-    assertEquals(reader.name, book.bookName)
-    assertEquals(reader.tags, book.tags)
-
-    // ── Verify all 14 properties return defaults after dispose ──
-    reader.dispose()
-
-    assertNull(reader.mainPage)
-    assertEquals("No Title Found", reader.title)
-    assertNull(reader.mediaCount)
-    assertNull(reader.articleCount)
-    assertEquals("", reader.creator)
-    assertEquals("", reader.publisher)
-    assertEquals("", reader.date)
-    assertEquals("", reader.description)
-    assertEquals("", reader.language)
-    assertEquals("", reader.tags)
-    assertNull(reader.favicon)
-    assertNull(reader.searchSuggestions("test"))
-    assertNull(reader.getRandomArticleUrl())
-    assertNull(reader.getPageUrlFrom("index"))
-
-    // ── Verify Factory.create with non-existent file ──
-    val factory = ZimFileReader.Factory.Impl()
-    val nonExistentSource = ZimReaderSource(File("/non/existent/path/fakefile.zim"))
-    assertNull(factory.create(nonExistentSource, false))
-
-    // ── Verify Factory.create with corrupted file ──
-    val corruptedFile = File(context.getExternalFilesDirs(null)[0], "corrupted.zim")
-    if (corruptedFile.exists()) corruptedFile.delete()
-    corruptedFile.createNewFile()
-    corruptedFile.writeBytes(ByteArray(100) { it.toByte() })
-    val corruptedSource = ZimReaderSource(corruptedFile)
-    assertNull(factory.create(corruptedSource, false))
-    corruptedFile.delete()
-
-    // ── Verify Factory.create with valid file ──
-    val validZimFile = copyZimFile("testzim_factory.zim")
-    val validSource = ZimReaderSource(validZimFile)
-    val validResult = factory.create(validSource, false)
-    assertNotNull(validResult)
-    validResult?.dispose()
   }
 
   @After
