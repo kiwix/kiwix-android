@@ -52,6 +52,8 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 const val MAX_APP_VERSION = "100.100.100"
+const val DOWNLOAD_APK_LINK =
+  "https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk"
 
 class UpdateFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -96,7 +98,7 @@ class UpdateFragmentTest : BaseActivityTest() {
         ApkInfo(
           "Kiwix Apk",
           MAX_APP_VERSION,
-          "https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk"
+          DOWNLOAD_APK_LINK
         )
       )
     )
@@ -125,7 +127,7 @@ class UpdateFragmentTest : BaseActivityTest() {
       kiwixMainActivity.navigate(KiwixDestination.Reader.route)
     }
     updateScreenRobot {
-      navigateToUpdateScreen(composeTestRule)
+      clickOnYes(composeTestRule)
       assertDownloadApkStart(composeTestRule)
       assertDownloadStoppedAfterCancel(composeTestRule, kiwixMainActivity)
       clickUpdateApk(composeTestRule)

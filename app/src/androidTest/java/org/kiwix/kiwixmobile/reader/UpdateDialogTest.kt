@@ -50,8 +50,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
-
-const val MAX_APP_VERSION = "100.100.100"
+import org.kiwix.kiwixmobile.update.MAX_APP_VERSION
 
 class UpdateDialogTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)

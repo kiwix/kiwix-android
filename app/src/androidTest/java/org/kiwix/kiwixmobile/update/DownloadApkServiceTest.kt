@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.update
 
-import android.accessibilityservice.AccessibilityService
-import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
@@ -29,7 +26,6 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.filters.LargeTest
@@ -103,12 +99,13 @@ class DownloadApkServiceTest : BaseActivityTest() {
       "KiwixRoom.db"
     ).build()
     apkDao = kiwixRoomDatabase.downloadApkDao()
+    // assuming this link will always work, perhaps we can use a different link.
     apkDao.addApkInfoItem(
       DownloadApkEntity(
         ApkInfo(
           "Kiwix Apk",
           MAX_APP_VERSION,
-          "https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk"
+          DOWNLOAD_APK_LINK
         )
       )
     )
@@ -136,30 +133,14 @@ class DownloadApkServiceTest : BaseActivityTest() {
       kiwixMainActivity.navigate(KiwixDestination.Reader.route)
     }
     updateScreenRobot {
-      navigateToUpdateScreen(composeTestRule)
+      clickOnYes(composeTestRule)
       waitForApkInfoToLoad(composeTestRule)
       clickUpdateApk(composeTestRule)
       assertDownloadApkStart(composeTestRule)
     }
     assertApkDownloadService(true)
-    // relaunch the application.
-    val context = ApplicationProvider.getApplicationContext<Context>()
-    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-    context.startActivity(intent)
-    InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(KiwixDestination.Reader.route)
-      }
-    }
     updateScreenRobot {
-      navigateToUpdateScreen(composeTestRule)
-      assertDownloadApkStart(composeTestRule)
-      clickNavigationIcon(composeTestRule)
-      clickOnYesButton(composeTestRule)
+      assertDownloadStoppedAfterCancel(composeTestRule, kiwixMainActivity)
     }
     assertApkDownloadService(false)
     if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU &&
@@ -171,10 +152,6 @@ class DownloadApkServiceTest : BaseActivityTest() {
 
   private fun assertApkDownloadService(isRunning: Boolean) {
     composeTestRule.waitUntilTimeout(3000)
-    // press the home button so that application goes into background
-    InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
-      AccessibilityService.GLOBAL_ACTION_HOME
-    )
     Assertions.assertEquals(
       isRunning,
       DownloadApkService.isDownloadApkServiceRunning
