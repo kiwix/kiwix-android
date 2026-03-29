@@ -95,10 +95,8 @@ class UpdateViewModelTest {
     )
     createViewModel()
     runCurrent()
-
     downloads.emit(download)
     advanceUntilIdle()
-
     assertThat(viewModel.state.value.loading).isFalse()
     assertThat(viewModel.state.value.downloadApkItem).isEqualTo(DownloadApkItem(download))
   }

@@ -72,9 +72,7 @@ class UpdateWorkerTest {
         title = "Kiwix Android 100.100.100"
       )
       coEvery { apkDao.getDownload() } returns null
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.success()))
       verify(exactly = 1) {
         KiwixService.ServiceCreator.newHackListService(any(), KIWIX_UPDATE_URL)
@@ -99,9 +97,7 @@ class UpdateWorkerTest {
         title = "Kiwix Android 101.0.0"
       )
       coEvery { apkDao.getDownload() } returns existingDownload()
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.success()))
       verify { apkDao.addLatestAppVersion("101.0.0") }
       verify { apkDao.addApkInfoItem(any()) }
@@ -112,9 +108,7 @@ class UpdateWorkerTest {
   fun doWork_returnsFailure_whenFeedContainsNoItems() {
     runBlocking {
       coEvery { kiwixService.getUpdates() } returns UpdateFeed()
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.failure()))
       verify { apkDao.addApkInfoItem(any()) }
       verify { apkDao.addLatestAppVersion(any()) }
@@ -125,9 +119,7 @@ class UpdateWorkerTest {
   fun doWork_returnsFailure_whenFetchingUpdatesThrows() {
     runBlocking {
       coEvery { kiwixService.getUpdates() } throws RuntimeException("network error")
-
       val result = worker.doWork()
-
       assertThat(result, `is`(ListenableWorker.Result.failure()))
       verify { apkDao.addApkInfoItem(any()) }
       verify { apkDao.addLatestAppVersion(any()) }

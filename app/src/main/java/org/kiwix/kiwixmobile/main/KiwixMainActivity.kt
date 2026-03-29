@@ -177,9 +177,11 @@ class KiwixMainActivity : CoreMainActivity() {
       )
       val context = LocalContext.current
       LaunchedEffect(Unit) {
-        /* If the app is running for the first time, we run the WorkManager immediately.
+        /**
+         * If the app is running for the first time, we run the WorkManager immediately.
          * For consecutive runs after that, we initialize a periodic WorkManager,
-         * which only queues unique requests wit the same tag name. */
+         * which only queues unique requests wit the same tag name.
+         */
         initializeUpdateWorkManager(context, apkDao)
         // Load the menu when UI is attached to screen.
         leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
@@ -279,8 +281,10 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  /*This functions check if the updated apk is in completed state after the update and run once
-   at first app startup to perform a clean of redundant apk file in the storage.*/
+  /**
+   * This function check if the updated apk is in completed state after the update and run once
+   * at first app startup to perform a cleanup of redundant apk file in the storage.
+   */
   private suspend fun cleanUpPreviousDownloadedApkFile(context: Context, apkDao: DownloadApkDao) {
     val previousApkInfoStatus = apkDao.getDownload()?.status ?: return
     if (previousApkInfoStatus == Status.COMPLETED) {

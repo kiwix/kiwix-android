@@ -43,7 +43,7 @@ fun updateScreenRobot(func: UpdateScreenRobot.() -> Unit) =
   UpdateScreenRobot().applyWithViewHierarchyPrinting(func)
 
 class UpdateScreenRobot : BaseRobot() {
-  fun navigateToUpdateScreen(composeTestRule: ComposeContentTestRule) {
+  fun clickOnYes(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
@@ -51,7 +51,7 @@ class UpdateScreenRobot : BaseRobot() {
     }
   }
 
-  fun clickNavigationIcon(composeTestRule: ComposeContentTestRule) {
+  private fun clickNavigationIcon(composeTestRule: ComposeContentTestRule) {
     composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
   }
 
@@ -111,15 +111,6 @@ class UpdateScreenRobot : BaseRobot() {
     })
   }
 
-  fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
-    testFlakyView({
-      composeTestRule.apply {
-        waitForIdle()
-        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
-      }
-    })
-  }
-
   private fun assertDownloadStopped(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
@@ -157,7 +148,7 @@ class UpdateScreenRobot : BaseRobot() {
   ) {
     clickApkCancelButton(composeTestRule)
     assertStopApkDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)
-    clickOnYesButton(composeTestRule)
+    clickOnYes(composeTestRule)
     assertDownloadStopped(composeTestRule)
   }
 

@@ -226,8 +226,10 @@ class UpdateFragment : BaseFragment() {
       authority,
       apkFile
     )
-    /*This flag prevents user to install the apk,
-    if they removed the apk file from storage but the download status is set to COMPLETED*/
+    /**
+     * This flag prevents user to install the apk,
+     * if they removed the apk file from storage but the download status is set to COMPLETED
+     */
     if (apkFile.exists()) {
       @Suppress("DEPRECATION")
       val installerIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)
