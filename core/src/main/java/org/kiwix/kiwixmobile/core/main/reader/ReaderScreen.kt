@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import androidx.annotation.VisibleForTesting
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -543,8 +544,9 @@ private fun BoxScope.ShowProgressBarIfZIMFilePageIsLoading(state: ReaderScreenSt
   }
 }
 
+@VisibleForTesting
 @Composable
-private fun NoBookOpenView(
+internal fun NoBookOpenView(
   onOpenLibraryButtonClicked: () -> Unit
 ) {
   Column(
@@ -568,8 +570,9 @@ private fun NoBookOpenView(
   }
 }
 
+@VisibleForTesting
 @Composable
-private fun TtsControls(state: ReaderScreenState) {
+internal fun TtsControls(state: ReaderScreenState) {
   if (state.showTtsControls) {
     Row {
       Button(
@@ -600,8 +603,9 @@ private fun TtsControls(state: ReaderScreenState) {
   }
 }
 
+@VisibleForTesting
 @Composable
-private fun BackToTopFab(state: ReaderScreenState) {
+internal fun BackToTopFab(state: ReaderScreenState) {
   if (state.showBackToTopButton) {
     KiwixFloatingActionButton(
       icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
@@ -612,9 +616,10 @@ private fun BackToTopFab(state: ReaderScreenState) {
   }
 }
 
+@VisibleForTesting
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomAppBarOfReaderScreen(
+internal fun BottomAppBarOfReaderScreen(
   bookmarkButtonItem: Triple<() -> Unit, () -> Unit, Drawable>,
   previousPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
   onHomeButtonClick: () -> Unit,
@@ -681,8 +686,9 @@ private fun BottomAppBarOfReaderScreen(
   }
 }
 
+@VisibleForTesting
 @Composable
-private fun BottomAppBarButtonIcon(
+internal fun BottomAppBarButtonIcon(
   onClick: () -> Unit,
   onLongClick: (() -> Unit)? = null,
   buttonIcon: IconItem,
@@ -715,8 +721,9 @@ private fun BottomAppBarButtonIcon(
   }
 }
 
+@VisibleForTesting
 @Composable
-private fun ShowDonationLayout(state: ReaderScreenState) {
+internal fun ShowDonationLayout(state: ReaderScreenState) {
   if (state.shouldShowDonationPopup) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
       DonationLayout(
@@ -769,8 +776,9 @@ fun TabSwitcherView(
   }
 }
 
+@VisibleForTesting
 @Composable
-private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
+internal fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
   var isAnimating by remember { mutableStateOf(false) }
   var isDone by remember { mutableStateOf(false) }
 

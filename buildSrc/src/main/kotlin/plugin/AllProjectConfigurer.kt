@@ -255,6 +255,7 @@ class AllProjectConfigurer {
       // Compose UI test implementation
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT_ACCESSIBILITY)
+      testImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
       debugImplementation(Libs.COMPOSE_UI_MANIFEST)
       debugImplementation(Libs.COMPOSE_TOOLING)
 
