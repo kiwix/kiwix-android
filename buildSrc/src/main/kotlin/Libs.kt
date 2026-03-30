@@ -367,6 +367,7 @@ object Libs {
    */
   const val LIFECYCLE_VIEWMODEL_KTX =
     "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE_VERSION}"
+  const val ACCOMPANIST = "com.google.accompanist:accompanist-permissions:${Versions.ACCOMPANIST}"
 
   const val BENCHMARK_MACRO_JUNIT4: String =
     "androidx.benchmark:benchmark-macro-junit4:${Versions.BENCHMARK_MACRO}"

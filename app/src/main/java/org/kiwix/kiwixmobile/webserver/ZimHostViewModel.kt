@@ -43,12 +43,18 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
 import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.AllFilesPermissionDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.AskNotificationPermission
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.AskReadWritePermission
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.DismissDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.NotificationPermissionRationaleDialog
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ReadPermissionRationaleDialog
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowErrorToast
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowManualHotspotDialog
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.ShowNoBooksToast
@@ -66,7 +72,8 @@ class ZimHostViewModel @Inject constructor(
   private val generateQr: GenerateQR,
   private val connectivityReporter: ConnectivityReporter,
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  private val kiwixPermissionChecker: KiwixPermissionChecker
 ) : ViewModel(), ZimHostCallbacks {
   data class UiState(
     @StringRes val startServerButtonTextRes: Int = string.start_server_label,
@@ -76,8 +83,7 @@ class ZimHostViewModel @Inject constructor(
     val showShareIcon: Boolean = false,
     val qrVisible: Boolean = false,
     val qrIcon: IconItem = IconItem.Drawable(R.drawable.ic_storage),
-    val books: List<BooksOnDiskListItem> = emptyList(),
-    val isPlayStoreBuildWithAndroid11OrAbove: Boolean = false,
+    val books: List<BooksOnDiskListItem> = emptyList()
   )
 
   sealed class Event {
@@ -89,7 +95,14 @@ class ZimHostViewModel @Inject constructor(
     object ShowNoBooksToast : Event()
     data class ShowErrorToast(val messageRes: Int) : Event()
     object DismissDialog : Event()
+    object AskNotificationPermission : Event()
+    object AskReadWritePermission : Event()
+    object NotificationPermissionRationaleDialog : Event()
+    object ReadPermissionRationaleDialog : Event()
+    object AllFilesPermissionDialog : Event()
   }
+
+  val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
   private val _uiState = MutableStateFlow(UiState())
   val uiState: StateFlow<UiState> = _uiState
@@ -100,13 +113,10 @@ class ZimHostViewModel @Inject constructor(
   fun loadBooks(isCustomApp: Boolean) {
     viewModelScope.launch(ioDispatcher) {
       val previouslyHostedBookIds = kiwixDataStore.hostedBookIds.first()
-      val isPlayStore = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
       val books = dataSource.getLanguageCategorizedBooks().first()
       val zimFileReader = zimReaderContainer.zimFileReader
       val processedBooks = processBooks(books, previouslyHostedBookIds, isCustomApp, zimFileReader)
-      _uiState.update {
-        it.copy(books = processedBooks, isPlayStoreBuildWithAndroid11OrAbove = isPlayStore)
-      }
+      _uiState.update { it.copy(books = processedBooks) }
 
       if (ServerUtils.isServerStarted) {
         onServerStarted(ServerUtils.serverAddress)
@@ -159,23 +169,42 @@ class ZimHostViewModel @Inject constructor(
 
   fun startServerButtonClick() {
     viewModelScope.launch {
-      if (ServerUtils.isServerStarted) {
-        sendEvent(StopServer)
-        return@launch
-      }
+      if (checkStartServerPreconditions()) {
+        if (ServerUtils.isServerStarted) {
+          sendEvent(StopServer)
+          return@launch
+        }
 
-      val paths = selectedBooksPath(uiState.value.books)
-      if (paths.isEmpty()) {
-        sendEvent(ShowNoBooksToast)
-        return@launch
-      }
+        val paths = selectedBooksPath(uiState.value.books)
+        if (paths.isEmpty()) {
+          sendEvent(ShowNoBooksToast)
+          return@launch
+        }
 
-      when {
-        connectivityReporter.checkWifi() -> sendEvent(ShowWifiDialog)
-        connectivityReporter.checkTethering() -> sendEvent(StartIpCheck)
-        else -> sendEvent(ShowManualHotspotDialog)
+        when {
+          connectivityReporter.checkWifi() -> sendEvent(ShowWifiDialog)
+          connectivityReporter.checkTethering() -> sendEvent(StartIpCheck)
+          else -> sendEvent(ShowManualHotspotDialog)
+        }
       }
     }
+  }
+
+  @Suppress("ReturnCount")
+  private suspend fun checkStartServerPreconditions(): Boolean {
+    if (!kiwixPermissionChecker.hasNotificationPermission()) {
+      sendEvent(AskNotificationPermission)
+      return false
+    }
+    if (!kiwixPermissionChecker.hasReadExternalStoragePermission()) {
+      sendEvent(AskReadWritePermission)
+      return false
+    }
+    if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+      sendEvent(AllFilesPermissionDialog)
+      return false
+    }
+    return true
   }
 
   fun onBookSelected(book: BookOnDisk) {
@@ -215,6 +244,14 @@ class ZimHostViewModel @Inject constructor(
 
   fun onWifiConfirmed() {
     sendEvent(StartIpCheck)
+  }
+
+  fun showNotificationPermissionRationaleDialog() {
+    sendEvent(NotificationPermissionRationaleDialog)
+  }
+
+  fun showReadPermissionRationalDialog() {
+    sendEvent(ReadPermissionRationaleDialog)
   }
 
   override fun onIpAddressValid() {

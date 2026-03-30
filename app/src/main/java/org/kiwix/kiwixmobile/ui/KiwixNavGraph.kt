@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,11 +79,13 @@ import org.kiwix.kiwixmobile.language.LanguageScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
 @Suppress("LongMethod")
 @Composable
@@ -172,7 +175,9 @@ fun KiwixNavGraph(
       KiwixDestination.ZimHost.route,
       deepLinks = listOf(navDeepLink { uriPattern = ZIM_HOST_NAV_DEEP_LINK })
     ) {
-      ZimHostRoute(viewModelFactory, alertDialogShower)
+      val activity = LocalActivity.current as KiwixMainActivity
+      val viewModel: ZimHostViewModel = viewModel(factory = viewModelFactory)
+      ZimHostRoute(viewModel, alertDialogShower, activity)
     }
     composable(KiwixDestination.Help.route) {
       val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)
