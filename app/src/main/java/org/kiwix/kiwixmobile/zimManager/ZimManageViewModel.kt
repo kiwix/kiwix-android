@@ -502,8 +502,8 @@ class ZimManageViewModel @Inject constructor(
     bookOnDisk: BookOnDisk
   ): List<BooksOnDiskListItem> {
     return it.bookOnDiskListItems.map { listItem ->
-      if (listItem.id == bookOnDisk.id) {
-        listItem.apply { isSelected = !isSelected }
+      if (listItem is BookOnDisk && listItem.id == bookOnDisk.id) {
+        listItem.copy(isSelected = !listItem.isSelected)
       } else {
         listItem
       }
@@ -527,7 +527,11 @@ class ZimManageViewModel @Inject constructor(
         it.copy(
           bookOnDiskListItems =
             it.bookOnDiskListItems.map { booksOnDiskListItem ->
-              booksOnDiskListItem.apply { isSelected = false }
+              if (booksOnDiskListItem is BookOnDisk) {
+                booksOnDiskListItem.copy(isSelected = false)
+              } else {
+                booksOnDiskListItem
+              }
             },
           selectionMode = NORMAL
         )
@@ -843,10 +847,15 @@ class ZimManageViewModel @Inject constructor(
       bookOnDiskListItems =
         newList.map { newBookOnDisk ->
           val firstOrNull =
-            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
-              oldBookOnDisk.id == newBookOnDisk.id
-            }
-          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected == true }
+            oldState.bookOnDiskListItems.filterIsInstance<BookOnDisk>()
+              .firstOrNull { oldBookOnDisk ->
+                oldBookOnDisk.id == newBookOnDisk.id
+              }
+          if (newBookOnDisk is BookOnDisk) {
+            newBookOnDisk.copy(isSelected = firstOrNull?.isSelected == true)
+          } else {
+            newBookOnDisk
+          }
         }
     )
   }

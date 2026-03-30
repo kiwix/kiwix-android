@@ -96,7 +96,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
@@ -726,7 +725,7 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
         state.bookOnDiskListItems.isEmpty()
       )
     )
-    if (state.bookOnDiskListItems.none(BooksOnDiskListItem::isSelected)) {
+    if (state.selectedBooks.isEmpty()) {
       actionMode?.finish()
       actionMode = null
     }
