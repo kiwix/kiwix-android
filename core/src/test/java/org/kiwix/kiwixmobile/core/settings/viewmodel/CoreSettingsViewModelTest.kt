@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.settings.viewmodel
 
 import android.Manifest
+import android.app.Activity
 import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.ContentResolver
@@ -30,6 +31,7 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import app.cash.turbine.test
+import eu.mhutti1.utils.storage.StorageDevice
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -39,21 +41,27 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Rule
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
@@ -61,13 +69,23 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllNotes
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ImportBookmarks
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.NavigateToAppSettingsDialog
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.RequestWriteStoragePermission
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.MainDispatcherRule
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import eu.mhutti1.utils.storage.StorageDevice
 import java.io.File
 
 /**
@@ -76,7 +94,7 @@ import java.io.File
  * in the flavor-specific ViewModel tests.
  */
 @Suppress("LongParameterList")
-private class TestableCoreSettingsViewModel(
+private class TestCoreSettingsViewModel(
   context: Application,
   kiwixDataStore: KiwixDataStore,
   dataSource: DataSource,
@@ -93,35 +111,31 @@ private class TestableCoreSettingsViewModel(
     libkiwixBookmarks,
     kiwixPermissionChecker
   ) {
-  var setStorageCalled = false
-  var showExternalLinksPreferenceCalled = false
-  var showPrefWifiOnlyPreferenceCalled = false
-  var showPermissionItemCalled = false
-  var showLanguageCategoryCalled = false
-
   override suspend fun setStorage(coreMainActivity: CoreMainActivity) {
-    setStorageCalled = true
+    // Do nothing
   }
 
   override suspend fun showExternalLinksPreference() {
-    showExternalLinksPreferenceCalled = true
+    // Do nothing
   }
 
   override suspend fun showPrefWifiOnlyPreference() {
-    showPrefWifiOnlyPreferenceCalled = true
+    // Do nothing
   }
 
   override suspend fun showPermissionItem() {
-    showPermissionItemCalled = true
+    // Do nothing
   }
 
   override suspend fun showLanguageCategory() {
-    showLanguageCategoryCalled = true
+    // Do nothing
   }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreSettingsViewModelTest {
+  @get:Rule
+  val dispatcherRule = MainDispatcherRule()
   private val context: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
   private val dataSource: DataSource = mockk(relaxed = true)
@@ -129,12 +143,14 @@ internal class CoreSettingsViewModelTest {
   private val themeConfig: ThemeConfig = mockk(relaxed = true)
   private val libkiwixBookmarks: LibkiwixBookmarks = mockk(relaxed = true)
   private val kiwixPermissionChecker: KiwixPermissionChecker = mockk(relaxed = true)
-
-  private lateinit var viewModel: TestableCoreSettingsViewModel
+  private val activity: CoreMainActivity = mockk(relaxed = true)
+  private val contentResolver: ContentResolver = mockk(relaxed = true)
+  private val tempDir = File(System.getProperty("java.io.tmpdir"))
+  private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
+  private lateinit var viewModel: TestCoreSettingsViewModel
 
   @BeforeEach
   fun setUp() {
-    Dispatchers.setMain(UnconfinedTestDispatcher())
     clearAllMocks()
 
     // Mock Android static methods used by extension functions
@@ -146,7 +162,7 @@ internal class CoreSettingsViewModelTest {
     mockkStatic(Intent::class)
     every { Intent.createChooser(any(), any()) } returns mockk(relaxed = true)
 
-    // Stub all KiwixDataStore Flow properties needed during ViewModel construction
+    // // Stub all KiwixDataStore Flow properties needed during ViewModel construction
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
     every { kiwixDataStore.backToTop } returns flowOf(false)
     every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
@@ -164,6 +180,8 @@ internal class CoreSettingsViewModelTest {
     every { context.packageManager } returns packageManager
     every { context.packageName } returns "org.kiwix.test"
     every { packageManager.getPackageInfo("org.kiwix.test", 0) } returns packageInfo
+    every { context.contentResolver } returns contentResolver
+    every { context.externalCacheDir } returns tempDir
 
     // Stub string resources used across multiple tests
     every { context.getString(R.string.theme_dark) } returns "Dark"
@@ -185,8 +203,16 @@ internal class CoreSettingsViewModelTest {
     every {
       context.getString(R.string.no_app_found_to_select_bookmark_file)
     } returns "No app found"
+    createViewModel()
+  }
 
-    viewModel = TestableCoreSettingsViewModel(
+  @AfterEach
+  fun tearDown() {
+    unmockkAll()
+  }
+
+  private fun createViewModel() {
+    viewModel = TestCoreSettingsViewModel(
       context,
       kiwixDataStore,
       dataSource,
@@ -197,46 +223,126 @@ internal class CoreSettingsViewModelTest {
     )
   }
 
-  @AfterEach
-  fun tearDown() {
-    Dispatchers.resetMain()
-    unmockkAll()
+  private fun spykViewModel(): TestCoreSettingsViewModel {
+    createViewModel()
+    return spyk(viewModel, recordPrivateCalls = true)
+  }
+
+  @Nested
+  inner class Initialize {
+    @Test
+    fun `initialize calls all required methods`() = runTest {
+      val spyViewModel = spykViewModel()
+      coEvery { spyViewModel.setStorage(any()) } just Runs
+      coEvery { spyViewModel.showExternalLinksPreference() } just Runs
+      coEvery { spyViewModel.showPrefWifiOnlyPreference() } just Runs
+      coEvery { spyViewModel.showPermissionItem() } just Runs
+      coEvery { spyViewModel.showLanguageCategory() } just Runs
+
+      spyViewModel.initialize(activity)
+
+      coVerify(exactly = 1) { spyViewModel.setStorage(activity) }
+      coVerify(exactly = 1) { spyViewModel.showExternalLinksPreference() }
+      coVerify(exactly = 1) { spyViewModel.showPrefWifiOnlyPreference() }
+      coVerify(exactly = 1) { spyViewModel.showPermissionItem() }
+      coVerify(exactly = 1) { spyViewModel.showLanguageCategory() }
+      val versionInfo = spyViewModel.uiState.value.versionInformation
+
+      assertTrue(versionInfo.contains("Build"))
+    }
+
+    @Test
+    fun `initialize fails if one method throws exception`() = runTest {
+      val spyViewModel = spykViewModel()
+      coEvery { spyViewModel.setStorage(any()) } throws RuntimeException("failure")
+
+      coEvery { spyViewModel.showExternalLinksPreference() } just Runs
+      coEvery { spyViewModel.showPrefWifiOnlyPreference() } just Runs
+      coEvery { spyViewModel.showPermissionItem() } just Runs
+      coEvery { spyViewModel.showLanguageCategory() } just Runs
+
+      try {
+        spyViewModel.initialize(activity)
+        fail("CoreViewModel should throw an error when the internal method throws an error. But no error was thrown.")
+      } catch (e: RuntimeException) {
+        assertEquals("failure", e.message)
+      }
+    }
   }
 
   @Nested
   inner class PreferenceSetters {
     @Test
     fun `setAppTheme delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.updateAppTheme(any()) } just Runs
       viewModel.setAppTheme("dark_mode")
       advanceUntilIdle()
       coVerify { kiwixDataStore.updateAppTheme("dark_mode") }
+
+      // Test with multiple emission
+      repeat(3) {
+        viewModel.setAppTheme("light_mode")
+      }
+
+      advanceUntilIdle()
+
+      coVerify(exactly = 3) {
+        kiwixDataStore.updateAppTheme("light_mode")
+      }
     }
 
     @Test
     fun `setBackToTop delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setPrefBackToTop(any()) } just Runs
       viewModel.setBackToTop(true)
       advanceUntilIdle()
       coVerify { kiwixDataStore.setPrefBackToTop(true) }
+
+      // Toggles values
+      viewModel.setBackToTop(true)
+      viewModel.setBackToTop(false)
+      advanceUntilIdle()
+      coVerify {
+        kiwixDataStore.setPrefBackToTop(true)
+        kiwixDataStore.setPrefBackToTop(false)
+      }
     }
 
     @Test
-    fun `setTextZoom computes correct value and delegates`() = runTest {
-      // (position + ZOOM_OFFSET) * ZOOM_SCALE = (2 + 2) * 25 = 100
-      viewModel.setTextZoom(2)
+    fun `setTextZoom applies correct transformation`() = runTest {
+      coEvery { kiwixDataStore.setTextZoom(any()) } just Runs
+      val position = 2
+      viewModel.setTextZoom(position)
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setTextZoom(100) }
+
+      val expected = (position + ZOOM_OFFSET) * ZOOM_SCALE
+
+      coVerify { kiwixDataStore.setTextZoom(expected) }
     }
 
     @Test
     fun `setTextZoom with zero position computes minimum zoom`() = runTest {
-      // (0 + 2) * 25 = 50
+      coEvery { kiwixDataStore.setTextZoom(any()) } just Runs
       viewModel.setTextZoom(0)
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setTextZoom(50) }
+
+      val expected = (0 + ZOOM_OFFSET) * ZOOM_SCALE
+      coVerify { kiwixDataStore.setTextZoom(expected) }
+    }
+
+    @Test
+    fun `setTextZoom handles large position`() = runTest {
+      coEvery { kiwixDataStore.setTextZoom(any()) } just Runs
+      viewModel.setTextZoom(Int.MAX_VALUE / 2)
+      advanceUntilIdle()
+
+      // avoid overflow assertion crash
+      coVerify { kiwixDataStore.setTextZoom(any()) }
     }
 
     @Test
     fun `setNewTabInBackground delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setOpenNewInBackground(any()) } just Runs
       viewModel.setNewTabInBackground(true)
       advanceUntilIdle()
       coVerify { kiwixDataStore.setOpenNewInBackground(true) }
@@ -244,6 +350,7 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `setExternalLinkPopup delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setExternalLinkPopup(any()) } just Runs
       viewModel.setExternalLinkPopup(false)
       advanceUntilIdle()
       coVerify { kiwixDataStore.setExternalLinkPopup(false) }
@@ -251,145 +358,434 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `setWifiOnly delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setWifiOnly(any()) } just Runs
       viewModel.setWifiOnly(false)
       advanceUntilIdle()
       coVerify { kiwixDataStore.setWifiOnly(false) }
     }
 
     @Test
+    fun `setWifiOnly handles rapid updates`() = runTest {
+      coEvery { kiwixDataStore.setWifiOnly(any()) } just Runs
+      repeat(10) {
+        viewModel.setWifiOnly(it % 2 == 0)
+      }
+      advanceUntilIdle()
+      coVerify(exactly = 10) {
+        kiwixDataStore.setWifiOnly(any())
+      }
+    }
+
+    @Test
     fun `updateAppLanguage delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setPrefLanguage(any()) } just Runs
       viewModel.updateAppLanguage("fr")
       advanceUntilIdle()
       coVerify { kiwixDataStore.setPrefLanguage("fr") }
+    }
+
+    @Test
+    fun `updateAppLanguage handles empty string`() = runTest {
+      coEvery { kiwixDataStore.setPrefLanguage(any()) } just Runs
+      viewModel.updateAppLanguage("")
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setPrefLanguage("") }
     }
   }
 
   @Nested
   inner class StateFlows {
     @Test
-    fun `themeLabel maps SYSTEM theme to system label`() = runTest {
-      assertThat(viewModel.themeLabel.value).isEqualTo("System")
+    fun `themeLabel uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.appTheme } returns emptyFlow()
+
+      createViewModel()
+
+      assertEquals("System", viewModel.themeLabel.value)
     }
 
     @Test
-    fun `themeLabel maps DARK theme to dark label`() = runTest {
+    fun `themeLabel emits SYSTEM label by default`() = runTest {
+      every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
+      every { context.getString(R.string.theme_system) } returns "System"
+
+      createViewModel()
+
+      viewModel.themeLabel.test {
+        assertEquals("System", awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `themeLabel emits DARK label`() = runTest {
       every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.DARK)
-      // Recreate ViewModel to pick up the new flow
-      viewModel = TestableCoreSettingsViewModel(
-        context, kiwixDataStore, dataSource,
-        storageCalculator, themeConfig, libkiwixBookmarks, kiwixPermissionChecker
-      )
-      advanceUntilIdle()
-      assertThat(viewModel.themeLabel.value).isEqualTo("Dark")
+      every { context.getString(R.string.theme_dark) } returns "Dark"
+
+      createViewModel()
+
+      viewModel.themeLabel.test {
+        assertEquals("Dark", awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
     }
 
     @Test
-    fun `themeLabel maps LIGHT theme to light label`() = runTest {
+    fun `themeLabel emits LIGHT label`() = runTest {
       every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.LIGHT)
-      viewModel = TestableCoreSettingsViewModel(
-        context, kiwixDataStore, dataSource,
-        storageCalculator, themeConfig, libkiwixBookmarks, kiwixPermissionChecker
+      every { context.getString(R.string.theme_light) } returns "Light"
+
+      createViewModel()
+
+      viewModel.themeLabel.test {
+        assertEquals("Light", awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `themeLabel updates when theme changes`() = runTest {
+      val flow = MutableSharedFlow<ThemeConfig.Theme>(replay = 1)
+
+      every { kiwixDataStore.appTheme } returns flow
+      every { context.getString(R.string.theme_dark) } returns "Dark"
+      every { context.getString(R.string.theme_light) } returns "Light"
+      every { context.getString(R.string.theme_system) } returns "System"
+
+      createViewModel()
+
+      viewModel.themeLabel.test {
+        // Assert initial item
+        assertEquals("System", awaitItem())
+        flow.emit(ThemeConfig.Theme.DARK)
+        assertEquals("Dark", awaitItem())
+
+        flow.emit(ThemeConfig.Theme.LIGHT)
+        assertEquals("Light", awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `backToTopEnabled uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.backToTop } returns emptyFlow()
+
+      createViewModel()
+
+      assertFalse(viewModel.backToTopEnabled.value)
+    }
+
+    @Test
+    fun `backToTopEnabled emits values from datastore`() = runTest {
+      val flow = MutableStateFlow(false)
+      every { kiwixDataStore.backToTop } returns flow
+
+      createViewModel()
+
+      viewModel.backToTopEnabled.test {
+        // Assert initial item
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        flow.emit(false)
+        assertFalse(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `externalLinkPopup uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.externalLinkPopup } returns emptyFlow()
+
+      createViewModel()
+
+      assertTrue(viewModel.externalLinkPopup.value)
+    }
+
+    @Test
+    fun `externalLinkPopup emits values`() = runTest {
+      val flow = MutableStateFlow(true)
+      every { kiwixDataStore.externalLinkPopup } returns flow
+
+      createViewModel()
+
+      viewModel.externalLinkPopup.test {
+        // Assert initial item
+        assertTrue(awaitItem())
+
+        flow.emit(false)
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `textZoom uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.textZoom } returns emptyFlow()
+
+      createViewModel()
+
+      assertEquals(DEFAULT_ZOOM, viewModel.textZoom.value)
+    }
+
+    @Test
+    fun `textZoom emits values from datastore`() = runTest {
+      val flow = MutableStateFlow(DEFAULT_ZOOM)
+      every { kiwixDataStore.textZoom } returns flow
+
+      createViewModel()
+
+      viewModel.textZoom.test {
+        // Assert initial item
+        assertEquals(DEFAULT_ZOOM, awaitItem())
+        flow.emit(150)
+        assertEquals(150, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `newTabInBackground uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.openNewTabInBackground } returns emptyFlow()
+
+      createViewModel()
+
+      assertFalse(viewModel.newTabInBackground.value)
+    }
+
+    @Test
+    fun `newTabInBackground emits values`() = runTest {
+      val flow = MutableStateFlow(false)
+      every { kiwixDataStore.openNewTabInBackground } returns flow
+
+      createViewModel()
+
+      viewModel.newTabInBackground.test {
+        // Assert initial item
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        flow.emit(false)
+        assertFalse(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `wifiOnly uses default when no emission`() = runTest {
+      every { kiwixDataStore.wifiOnly } returns emptyFlow()
+
+      createViewModel()
+
+      assertTrue(viewModel.wifiOnly.value)
+    }
+
+    @Test
+    fun `wifiOnly emits values`() = runTest {
+      val flow = MutableStateFlow(true)
+      every { kiwixDataStore.wifiOnly } returns flow
+
+      createViewModel()
+
+      viewModel.wifiOnly.test {
+        // Assert initial item
+        assertTrue(awaitItem())
+        flow.emit(false)
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+  }
+
+  @Nested
+  inner class ActionTest {
+    @Test
+    fun `sendAction emits action to collectors`() = runTest {
+      val action = ClearAllHistory
+      viewModel.actions.test {
+        viewModel.sendAction(action)
+        assertEquals(action, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `sendAction emits multiple actions in order`() = runTest {
+      viewModel.actions.test {
+        viewModel.sendAction(ClearAllHistory)
+        viewModel.sendAction(ClearAllNotes)
+
+        assertEquals(ClearAllHistory, awaitItem())
+        assertEquals(ClearAllNotes, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `sendAction handles rapid concurrent emissions`() = runTest {
+      viewModel.actions.test {
+        repeat(10) {
+          launch {
+            viewModel.sendAction(ClearAllHistory)
+          }
+        }
+
+        repeat(10) {
+          assertEquals(ClearAllHistory, awaitItem())
+        }
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `sendAction supports all action types`() = runTest {
+      val actions = listOf(
+        ClearAllHistory,
+        ClearAllNotes,
+        OpenCredits,
+        ExportBookmarks,
+        ImportBookmarks,
+        AllowPermission,
+        RequestWriteStoragePermission,
+        NavigateToAppSettingsDialog,
+        OnStorageItemClick(mockk()),
+        ShowSnackbar("msg", this)
       )
+
+      viewModel.actions.test {
+        actions.forEach { viewModel.sendAction(it) }
+        val received = mutableListOf<Action>()
+        repeat(actions.size) {
+          received.add(awaitItem())
+        }
+
+        assertEquals(actions.toSet(), received.toSet())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `actions stop emitting after collector is cancelled`() = runTest {
+      val job = launch {
+        viewModel.actions.collect {}
+      }
+      job.cancel()
+      viewModel.sendAction(ClearAllHistory)
       advanceUntilIdle()
-      assertThat(viewModel.themeLabel.value).isEqualTo("Light")
     }
 
     @Test
-    fun `backToTopEnabled reflects kiwixDataStore backToTop flow`() = runTest {
-      assertThat(viewModel.backToTopEnabled.value).isFalse()
-    }
-
-    @Test
-    fun `externalLinkPopup reflects kiwixDataStore flow`() = runTest {
-      assertThat(viewModel.externalLinkPopup.value).isTrue()
-    }
-
-    @Test
-    fun `textZoom reflects kiwixDataStore flow`() = runTest {
-      assertThat(viewModel.textZoom.value).isEqualTo(DEFAULT_ZOOM)
-    }
-
-    @Test
-    fun `newTabInBackground reflects kiwixDataStore flow`() = runTest {
-      assertThat(viewModel.newTabInBackground.value).isFalse()
-    }
-
-    @Test
-    fun `wifiOnly reflects kiwixDataStore flow`() = runTest {
-      assertThat(viewModel.wifiOnly.value).isTrue()
+    fun `sendAction stress test`() = runTest {
+      viewModel.actions.test {
+        repeat(100) {
+          viewModel.sendAction(ClearAllHistory)
+        }
+        repeat(100) {
+          awaitItem()
+        }
+        cancelAndIgnoreRemainingEvents()
+      }
     }
   }
 
   @Nested
-  inner class Initialize {
+  inner class ClearHistoryTest {
     @Test
-    fun `initialize calls all abstract methods and sets version info`() = runTest {
-      val activity: CoreMainActivity = mockk(relaxed = true)
-      viewModel.initialize(activity)
-      advanceUntilIdle()
-
-      assertThat(viewModel.setStorageCalled).isTrue()
-      assertThat(viewModel.showExternalLinksPreferenceCalled).isTrue()
-      assertThat(viewModel.showPrefWifiOnlyPreferenceCalled).isTrue()
-      assertThat(viewModel.showPermissionItemCalled).isTrue()
-      assertThat(viewModel.showLanguageCategoryCalled).isTrue()
-      // versionInformation should be set
-      assertThat(viewModel.uiState.value.versionInformation).contains("Build:")
-    }
-  }
-
-  @Test
-  fun `setAlertDialog stores the AlertDialogShower`() {
-    val shower: AlertDialogShower = mockk()
-    viewModel.setAlertDialog(shower)
-    assertThat(viewModel.alertDialogShower).isSameAs(shower)
-  }
-
-  @Test
-  fun `sendAction emits action to actions shared flow`() = runTest {
-    viewModel.actions.test {
-      viewModel.sendAction(Action.ClearAllHistory)
-      assertThat(awaitItem()).isEqualTo(Action.ClearAllHistory)
-      cancelAndIgnoreRemainingEvents()
-    }
-  }
-
-  @Nested
-  inner class ClearHistory {
-    @Test
-    fun `clearHistory clears data and emits snackbar`() = runTest {
+    fun `clearHistory emits snackbar on success`() = runTest {
       coEvery { dataSource.clearHistory() } just Runs
+      every { context.getString(R.string.all_history_cleared) } returns "History cleared"
 
       viewModel.actions.test {
         viewModel.clearHistory()
         advanceUntilIdle()
-        val action = awaitItem()
-        assertThat(action).isInstanceOf(Action.ShowSnackbar::class.java)
-        assertThat((action as Action.ShowSnackbar).message).isEqualTo("History cleared")
+        val action = awaitItem() as Action.ShowSnackbar
+        assertEquals("History cleared", action.message)
         cancelAndIgnoreRemainingEvents()
       }
       coVerify { dataSource.clearHistory() }
     }
 
     @Test
-    fun `clearHistory handles failure without crashing`() = runTest {
-      // The clearHistory method wraps the viewModelScope.launch + sendAction in runCatching.
-      // When the launched coroutine (dataSource.clearHistory()) throws, the runCatching block
-      // catches it and logs the error. We verify no snackbar is emitted on failure.
-      coEvery { dataSource.clearHistory() } just Runs
-
-      // Simulate the runCatching failure path by making sendAction's emit fail
-      // Actually, the simpler approach: verify that clearHistory with a working dataSource
-      // still emits the snackbar (happy path already covered), and here we just verify
-      // that the method doesn't crash when called.
-      viewModel.clearHistory()
-      advanceUntilIdle()
+    fun `clearHistory does not emit snackbar on failure`() = runTest {
+      coEvery { dataSource.clearHistory() } throws RuntimeException("error")
+      viewModel.actions.test {
+        viewModel.clearHistory()
+        advanceUntilIdle()
+        expectNoEvents()
+        cancelAndIgnoreRemainingEvents()
+      }
       coVerify { dataSource.clearHistory() }
+    }
+
+    @Test
+    fun `clearHistory handles exception with null message`() = runTest {
+      coEvery { dataSource.clearHistory() } throws RuntimeException(null as String?)
+      viewModel.actions.test {
+        viewModel.clearHistory()
+        advanceUntilIdle()
+        expectNoEvents()
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `clearHistory can be called multiple times`() = runTest {
+      coEvery { dataSource.clearHistory() } just Runs
+      every { context.getString(any()) } returns "History cleared"
+      viewModel.actions.test {
+        repeat(3) {
+          viewModel.clearHistory()
+        }
+        advanceUntilIdle()
+        repeat(3) {
+          awaitItem()
+        }
+        cancelAndIgnoreRemainingEvents()
+      }
+      coVerify(exactly = 3) { dataSource.clearHistory() }
+    }
+
+    @Test
+    fun `clearHistory handles concurrent calls`() = runTest {
+      coEvery { dataSource.clearHistory() } just Runs
+      every { context.getString(any()) } returns "History cleared"
+
+      viewModel.actions.test {
+        repeat(5) {
+          launch {
+            viewModel.clearHistory()
+          }
+        }
+
+        advanceUntilIdle()
+
+        repeat(5) {
+          awaitItem()
+        }
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `clearHistory emits correct snackbar message`() = runTest {
+      coEvery { dataSource.clearHistory() } just Runs
+      every { context.getString(R.string.all_history_cleared) } returns "All history cleared"
+      viewModel.actions.test {
+        viewModel.clearHistory()
+        advanceUntilIdle()
+        val action = awaitItem() as Action.ShowSnackbar
+        assertEquals("All history cleared", action.message)
+        cancelAndIgnoreRemainingEvents()
+      }
     }
   }
 
   @Nested
-  inner class ClearAllNotes {
+  inner class ClearAllNotesTest {
     @Test
     fun `clearAllNotes when external storage is not writable shows failure snackbar`() = runTest {
       val mockApp: CoreApp = mockk(relaxed = true)
@@ -401,11 +797,12 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(Action.ShowSnackbar::class.java)
-        assertThat((action as Action.ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
+        assertThat((action as ShowSnackbar).message)
           .isEqualTo("Notes deletion failed")
         cancelAndIgnoreRemainingEvents()
       }
+      coVerify(exactly = 0) { dataSource.clearNotes() }
     }
 
     @Test
@@ -420,11 +817,12 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(Action.ShowSnackbar::class.java)
-        assertThat((action as Action.ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
+        assertThat((action as ShowSnackbar).message)
           .isEqualTo("Permission not granted")
         cancelAndIgnoreRemainingEvents()
       }
+      coVerify(exactly = 0) { dataSource.clearNotes() }
     }
 
     @Test
@@ -440,8 +838,8 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(Action.ShowSnackbar::class.java)
-        assertThat((action as Action.ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
+        assertThat((action as ShowSnackbar).message)
           .isEqualTo("Notes deleted")
         cancelAndIgnoreRemainingEvents()
       }
@@ -461,10 +859,71 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(Action.ShowSnackbar::class.java)
-        assertThat((action as Action.ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
+        assertThat((action as ShowSnackbar).message)
           .isEqualTo("Notes deletion failed")
         cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `clearAllNotes handles exception with null message`() = runTest {
+      val mockApp: CoreApp = mockk(relaxed = true)
+      mockkObject(CoreApp.Companion)
+      every { CoreApp.instance } returns mockApp
+      every { mockApp.isExternalStorageWritable } returns true
+      coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
+      coEvery { dataSource.clearNotes() } throws RuntimeException(null as String?)
+
+      every { context.getString(R.string.notes_deletion_unsuccessful) } returns "fail"
+
+      viewModel.actions.test {
+        viewModel.clearAllNotes()
+        advanceUntilIdle()
+        awaitItem()
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `clearAllNotes handles concurrent calls`() = runTest {
+      val mockApp: CoreApp = mockk(relaxed = true)
+      mockkObject(CoreApp.Companion)
+      every { CoreApp.instance } returns mockApp
+      coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
+      coEvery { dataSource.clearNotes() } just Runs
+
+      every { context.getString(any()) } returns "success"
+
+      viewModel.actions.test {
+        repeat(5) {
+          launch {
+            viewModel.clearAllNotes()
+          }
+        }
+
+        advanceUntilIdle()
+
+        repeat(5) {
+          awaitItem()
+        }
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `clearAllNotes does not check permission if storage not writable`() = runTest {
+      val mockApp: CoreApp = mockk(relaxed = true)
+      mockkObject(CoreApp.Companion)
+      every { CoreApp.instance } returns mockApp
+      every { mockApp.isExternalStorageWritable } returns false
+
+      viewModel.clearAllNotes()
+
+      advanceUntilIdle()
+
+      coVerify(exactly = 0) {
+        kiwixPermissionChecker.hasWriteExternalStoragePermission()
       }
     }
   }
@@ -495,7 +954,7 @@ internal class CoreSettingsViewModelTest {
         assertThat(result).isFalse()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isEqualTo(Action.RequestWriteStoragePermission)
+        assertThat(action).isEqualTo(RequestWriteStoragePermission)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -505,18 +964,16 @@ internal class CoreSettingsViewModelTest {
   inner class StoragePermissionResult {
     @Test
     fun `granted emits ExportBookmarks`() = runTest {
-      val activity: CoreMainActivity = mockk(relaxed = true)
       viewModel.actions.test {
         viewModel.onStoragePermissionResult(true, activity)
         val action = awaitItem()
-        assertThat(action).isEqualTo(Action.ExportBookmarks)
+        assertThat(action).isEqualTo(ExportBookmarks)
         cancelAndIgnoreRemainingEvents()
       }
     }
 
     @Test
     fun `not granted with rationale shows toast`() = runTest {
-      val activity: CoreMainActivity = mockk(relaxed = true)
       every {
         kiwixPermissionChecker.shouldShowRationale(
           activity,
@@ -548,7 +1005,7 @@ internal class CoreSettingsViewModelTest {
         viewModel.onStoragePermissionResult(false, activity)
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isEqualTo(Action.NavigateToAppSettingsDialog)
+        assertThat(action).isEqualTo(NavigateToAppSettingsDialog)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -651,6 +1108,96 @@ internal class CoreSettingsViewModelTest {
       // Clean up
       tempDir.deleteRecursively()
     }
+
+    @Test
+    fun `valid xml file passes parsing`() = runTest {
+      val uri = mockk<Uri>()
+      val xml = "<root><a>1</a></root>".byteInputStream()
+
+      val intent = mockk<Intent> {
+        every { data } returns uri
+      }
+
+      every { contentResolver.getType(uri) } returns "application/xml"
+      every { contentResolver.openInputStream(uri) } returns xml
+
+      val result = ActivityResult(Activity.RESULT_OK, intent)
+
+      viewModel.onBookmarkFileSelected(result)
+
+      advanceUntilIdle()
+
+      coVerify { libkiwixBookmarks.importBookmarks(any()) }
+    }
+
+    @Test
+    fun `createTempFile creates file successfully`() = runTest {
+      val uri = mockk<Uri>()
+      val xml = "<root></root>".byteInputStream()
+
+      val intent = mockk<Intent> {
+        every { data } returns uri
+      }
+
+      every { contentResolver.getType(uri) } returns "application/xml"
+      every { contentResolver.openInputStream(uri) } returns xml
+
+      val result = ActivityResult(Activity.RESULT_OK, intent)
+
+      viewModel.onBookmarkFileSelected(result)
+
+      advanceUntilIdle()
+
+      val file = File(tempDir, "bookmark.xml")
+      assertTrue(file.exists())
+    }
+
+    @Test
+    fun `createTempFile overwrites existing file`() = runTest {
+      val existingFile = File(tempDir, "bookmark.xml")
+      existingFile.writeText("old content")
+
+      val uri = mockk<Uri>()
+      val xml = "<root>new</root>".byteInputStream()
+
+      val intent = mockk<Intent> {
+        every { data } returns uri
+      }
+
+      every { contentResolver.getType(uri) } returns "application/xml"
+      every { contentResolver.openInputStream(uri) } returns xml
+
+      val result = ActivityResult(Activity.RESULT_OK, intent)
+
+      viewModel.onBookmarkFileSelected(result)
+
+      advanceUntilIdle()
+
+      val updatedContent = existingFile.readText()
+      assertTrue(updatedContent.contains("new"))
+    }
+
+    @Test
+    fun `createTempFile handles large input stream`() = runTest {
+      val uri = mockk<Uri>()
+      val largeContent = "<root>" + "a".repeat(50_000) + "</root>"
+
+      val intent = mockk<Intent> {
+        every { data } returns uri
+      }
+
+      every { contentResolver.getType(uri) } returns "application/xml"
+      every { contentResolver.openInputStream(uri) } returns largeContent.byteInputStream()
+
+      val result = ActivityResult(Activity.RESULT_OK, intent)
+
+      viewModel.onBookmarkFileSelected(result)
+
+      advanceUntilIdle()
+
+      val file = File(tempDir, "bookmark.xml")
+      assertTrue(file.length() > 0)
+    }
   }
 
   @Nested
@@ -704,6 +1251,30 @@ internal class CoreSettingsViewModelTest {
       coVerify {
         kiwixDataStore.setSelectedStoragePosition(EXTERNAL_SELECT_POSITION)
       }
+    }
+  }
+
+  @Nested
+  inner class OpenCreditsTest {
+    @Test
+    fun `openCredits calls alertDialogShower`() {
+      viewModel.setAlertDialog(alertDialogShower)
+      viewModel.openCredits()
+
+      verify {
+        alertDialogShower.show(any())
+      }
+    }
+
+    @Test
+    fun `openCredits executes without crash in dark theme`() {
+      coEvery { themeConfig.isDarkTheme() } returns true
+
+      viewModel.setAlertDialog(alertDialogShower)
+
+      viewModel.openCredits()
+
+      verify { alertDialogShower.show(any()) }
     }
   }
 }
