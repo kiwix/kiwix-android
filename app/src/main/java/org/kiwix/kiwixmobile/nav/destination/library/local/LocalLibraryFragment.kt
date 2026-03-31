@@ -114,6 +114,7 @@ import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
+const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
 private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 
 @Suppress("LargeClass")
@@ -208,7 +209,6 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
         LocalLibraryScreen(
           listState = lazyListState,
           state = libraryScreenState.value,
-          fabButtonClick = { filePickerButtonClick() },
           onClick = { onBookItemClick(it) },
           onLongClick = { onBookItemLongClick(it) },
           onMultiSelect = { offerAction(RequestSelect(it)) },
@@ -265,6 +265,13 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   }
 
   private fun actionMenuItems() = listOf(
+    ActionMenuItem(
+      IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_add_blue_24dp),
+      R.string.select_zim_file,
+      { filePickerButtonClick() },
+      isEnabled = true,
+      testingTag = SELECT_FILE_BUTTON_TESTING_TAG
+    ),
     ActionMenuItem(
       IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
       string.get_content_from_nearby_device,
