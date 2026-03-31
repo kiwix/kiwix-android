@@ -24,7 +24,6 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.edit
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +44,6 @@ import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.get
 
 private const val KIWIX_DATASTORE_NAME = "kiwix_datastore_preferences"
 

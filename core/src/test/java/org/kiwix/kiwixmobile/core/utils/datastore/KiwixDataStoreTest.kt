@@ -79,6 +79,7 @@ class KiwixDataStoreTest {
   fun `textZoom returns 100 by default`() = runTest {
     kiwixDataStore.textZoom.test {
       assertThat(awaitItem()).isEqualTo(KiwixDataStore.DEFAULT_ZOOM)
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -87,6 +88,7 @@ class KiwixDataStoreTest {
     kiwixDataStore.setTextZoom(150)
     kiwixDataStore.textZoom.test {
       assertThat(awaitItem()).isEqualTo(150)
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -96,6 +98,7 @@ class KiwixDataStoreTest {
       assertThat(awaitItem()).isEqualTo(KiwixDataStore.DEFAULT_ZOOM)
       kiwixDataStore.setTextZoom(180)
       assertThat(awaitItem()).isEqualTo(180)
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -103,6 +106,7 @@ class KiwixDataStoreTest {
   fun `currentZimFile returns null by default`() = runTest {
     kiwixDataStore.currentZimFile.test {
       assertThat(awaitItem()).isNull()
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -113,6 +117,7 @@ class KiwixDataStoreTest {
     kiwixDataStore.setCurrentZimFile(path)
     kiwixDataStore.currentZimFile.test {
       assertThat(awaitItem()).isEqualTo(path)
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -125,6 +130,7 @@ class KiwixDataStoreTest {
     kiwixDataStore.setCurrentZimFile(path2)
     kiwixDataStore.currentZimFile.test {
       assertThat(awaitItem()).isEqualTo(path2)
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -132,6 +138,7 @@ class KiwixDataStoreTest {
   fun `currentTab returns null by default`() = runTest {
     kiwixDataStore.currentTab.test {
       assertThat(awaitItem()).isNull()
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -140,6 +147,7 @@ class KiwixDataStoreTest {
     kiwixDataStore.setCurrentTab(3)
     kiwixDataStore.currentTab.test {
       assertThat(awaitItem()).isEqualTo(3)
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
@@ -152,6 +160,16 @@ class KiwixDataStoreTest {
   fun `setPrefBackToTop toggles backToTop`() = runTest {
     kiwixDataStore.setPrefBackToTop(true)
     assertThat(kiwixDataStore.backToTop.first()).isTrue()
+  }
+
+  @Test
+  fun `backToTop emits updates`() = runTest {
+    kiwixDataStore.backToTop.test {
+      assertThat(awaitItem()).isFalse()
+      kiwixDataStore.setPrefBackToTop(true)
+      assertThat(awaitItem()).isTrue()
+      cancelAndIgnoreRemainingEvents()
+    }
   }
 
   @Test
