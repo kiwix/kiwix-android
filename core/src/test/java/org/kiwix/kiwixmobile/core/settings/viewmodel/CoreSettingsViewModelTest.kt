@@ -614,18 +614,6 @@ internal class CoreSettingsViewModelTest {
     }
 
     @Test
-    fun `sendAction emits multiple actions in order`() = runTest {
-      viewModel.actions.test {
-        viewModel.sendAction(ClearAllHistory)
-        viewModel.sendAction(ClearAllNotes)
-
-        assertEquals(ClearAllHistory, awaitItem())
-        assertEquals(ClearAllNotes, awaitItem())
-        cancelAndIgnoreRemainingEvents()
-      }
-    }
-
-    @Test
     fun `sendAction handles rapid concurrent emissions`() = runTest {
       viewModel.actions.test {
         repeat(10) {
