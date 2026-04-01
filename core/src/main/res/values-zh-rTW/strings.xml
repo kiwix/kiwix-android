@@ -82,7 +82,6 @@
   <string name="theme_system">系統</string>
   <string name="theme_light">明亮</string>
   <string name="theme_dark">暗黑</string>
-  <string name="pref_theme_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
   <string name="pref_language_title">語言</string>

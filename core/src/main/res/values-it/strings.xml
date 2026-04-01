@@ -85,7 +85,6 @@
   <string name="theme_system">Sistema</string>
   <string name="theme_light">Chiaro</string>
   <string name="theme_dark">Scuro</string>
-  <string name="pref_theme_summary">Visualizza le voci con colori invertiti</string>
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
   <string name="pref_language_title">Lingua</string>

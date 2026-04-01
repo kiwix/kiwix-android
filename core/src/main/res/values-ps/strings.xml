@@ -63,7 +63,6 @@
   <string name="theme_system">غونډال</string>
   <string name="theme_light">روښانه</string>
   <string name="theme_dark">تياره</string>
-  <string name="pref_theme_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
   <string name="pref_back_to_top">بېرته سر ته</string>
   <string name="pref_back_to_top_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
   <string name="pref_language_title">ژبه</string>

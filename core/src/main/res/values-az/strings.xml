@@ -22,7 +22,6 @@
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Məlumat</string>
   <string name="pref_info_version">Versiya</string>
-  <string name="pref_theme_summary">Məqalələri “gecə rejimində” göstər</string>
   <string name="pref_back_to_top">Əvvələ qayıt</string>
   <string name="pref_back_to_top_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
   <string name="pref_language_title">Dil</string>

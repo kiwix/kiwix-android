@@ -72,7 +72,6 @@
   <string name="theme_system">Системна</string>
   <string name="theme_light">Світла</string>
   <string name="theme_dark">Темна</string>
-  <string name="pref_theme_summary">Показати статті з інвертованими кольорами</string>
   <string name="pref_back_to_top">Повернутись угору</string>
   <string name="pref_back_to_top_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
   <string name="pref_language_title">Мова</string>
