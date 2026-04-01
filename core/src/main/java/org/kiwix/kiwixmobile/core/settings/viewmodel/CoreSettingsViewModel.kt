@@ -232,16 +232,19 @@ abstract class CoreSettingsViewModel(
       .getPackageInformation(context.packageName, ZERO).versionName.toString()
 
   fun clearHistory() {
-    runCatching {
-      viewModelScope.launch { dataSource.clearHistory() }
-      sendAction(
-        ShowSnackbar(
-          context.getString(R.string.all_history_cleared),
-          viewModelScope
+    viewModelScope.launch {
+      runCatching {
+        dataSource.clearHistory()
+      }.onSuccess {
+        sendAction(
+          ShowSnackbar(
+            context.getString(R.string.all_history_cleared),
+            viewModelScope
+          )
         )
-      )
-    }.onFailure {
-      Log.e("SettingsPresenter", it.message, it)
+      }.onFailure {
+        Log.e("SettingsPresenter", it.message, it)
+      }
     }
   }
 
@@ -365,7 +368,7 @@ abstract class CoreSettingsViewModel(
       DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
       true
     } catch (ignore: Exception) {
-      android.util.Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
+      Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
       false
     }
   }
