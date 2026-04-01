@@ -77,7 +77,6 @@
   <string name="theme_system">Sistemsko</string>
   <string name="theme_light">Svetlo</string>
   <string name="theme_dark">Temno</string>
-  <string name="pref_theme_summary">Prikaz člankov z obrnjenimi barvami</string>
   <string name="pref_back_to_top">Nazaj na vrh</string>
   <string name="pref_back_to_top_summary">Na dnu strani prikaži gumb za pomik na vrh strani</string>
   <string name="pref_language_title">Jezik</string>

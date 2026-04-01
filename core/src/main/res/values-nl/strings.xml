@@ -80,7 +80,6 @@
   <string name="theme_system">Systeem</string>
   <string name="theme_light">Licht</string>
   <string name="theme_dark">Donker</string>
-  <string name="pref_theme_summary">Artikelen weergeven met omgekeerde kleuren</string>
   <string name="pref_back_to_top">Terug naar boven</string>
   <string name="pref_back_to_top_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar het begin</string>
   <string name="pref_language_title">Taal</string>

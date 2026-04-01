@@ -70,7 +70,6 @@
   <string name="theme_system">Σύστημα</string>
   <string name="theme_light">Φωτεινό</string>
   <string name="theme_dark">Σκοτεινό</string>
-  <string name="pref_theme_summary">Προβολή λημμάτων με ανεστραμμένα χρώματα</string>
   <string name="pref_back_to_top">Επιστροφή στην κορυφή</string>
   <string name="pref_back_to_top_summary">Εμφάνιση κουμπιού στο τέλος της σελίδας για να μετακινηθείτε στην κορυφή</string>
   <string name="pref_language_title">Γλώσσα</string>

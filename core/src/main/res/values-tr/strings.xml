@@ -91,7 +91,6 @@
   <string name="theme_system">Sistem</string>
   <string name="theme_light">Açık</string>
   <string name="theme_dark">Koyu</string>
-  <string name="pref_theme_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
   <string name="pref_language_title">Dil</string>

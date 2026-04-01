@@ -92,7 +92,6 @@
   <string name="theme_system">Sistema</string>
   <string name="theme_light">Claro</string>
   <string name="theme_dark">Escuro</string>
-  <string name="pref_theme_summary">Mostrar artigos com cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Mostra um botão no fim da página para voltar ao topo</string>
   <string name="pref_language_title">Idioma</string>

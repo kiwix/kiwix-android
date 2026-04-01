@@ -72,7 +72,6 @@
   <string name="theme_system">Systema</string>
   <string name="theme_light">Clar</string>
   <string name="theme_dark">Obscur</string>
-  <string name="pref_theme_summary">Monstrar articulos in colores invertite</string>
   <string name="pref_back_to_top">Initio del pagina</string>
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
   <string name="pref_language_title">Lingua</string>

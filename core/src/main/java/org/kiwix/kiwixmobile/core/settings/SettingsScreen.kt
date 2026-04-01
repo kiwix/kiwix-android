@@ -567,7 +567,7 @@ fun AppThemePreference(
 
   ListPreference(
     titleId = R.string.pref_theme,
-    summary = stringResource(id = R.string.pref_theme_summary),
+    summary = themeLabel,
     options = entries,
     selectedOption = themeLabel,
     onOptionSelected = { selectedEntry ->

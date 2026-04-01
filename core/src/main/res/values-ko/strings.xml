@@ -83,7 +83,6 @@
   <string name="theme_system">시스템</string>
   <string name="theme_light">라이트</string>
   <string name="theme_dark">다크</string>
-  <string name="pref_theme_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>
   <string name="pref_language_title">언어</string>
