@@ -4,17 +4,18 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllHistory
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedHistory
@@ -24,7 +25,10 @@ internal class ShowDeleteHistoryDialogTest {
   private val historyRoomDao = mockk<HistoryRoomDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
-  private val viewModelScope = CoroutineScope(Dispatchers.IO)
+
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
+  private val testViewModelScope = TestScope(mainDispatcherRule.dispatcher)
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() =
@@ -34,7 +38,7 @@ internal class ShowDeleteHistoryDialogTest {
           effects,
           historyState(),
           historyRoomDao,
-          viewModelScope,
+          testViewModelScope,
           dialogShower
         )
       mockkActivityInjection(showDeleteHistoryDialog)
@@ -42,7 +46,15 @@ internal class ShowDeleteHistoryDialogTest {
       showDeleteHistoryDialog.invokeWith(activity)
       verify { dialogShower.show(any(), capture(lambdaSlot)) }
       lambdaSlot.captured.invoke()
-      verify { effects.tryEmit(DeletePageItems(historyState(), historyRoomDao, viewModelScope)) }
+      verify {
+        effects.tryEmit(
+          DeletePageItems(
+            historyState(),
+            historyRoomDao,
+            testViewModelScope
+          )
+        )
+      }
     }
 
   @Test
@@ -53,7 +65,7 @@ internal class ShowDeleteHistoryDialogTest {
           effects,
           historyState(listOf(historyItem(isSelected = true, zimReaderSource = mockk()))),
           historyRoomDao,
-          viewModelScope,
+          testViewModelScope,
           dialogShower
         )
       mockkActivityInjection(showDeleteHistoryDialog)
@@ -69,7 +81,7 @@ internal class ShowDeleteHistoryDialogTest {
           effects,
           historyState(),
           historyRoomDao,
-          viewModelScope,
+          testViewModelScope,
           dialogShower
         )
       mockkActivityInjection(showDeleteHistoryDialog)

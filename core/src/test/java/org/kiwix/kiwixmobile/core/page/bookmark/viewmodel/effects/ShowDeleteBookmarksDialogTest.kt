@@ -22,10 +22,11 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -44,7 +45,9 @@ internal class ShowDeleteBookmarksDialogTest {
   private val libkiwixBookmark = mockk<LibkiwixBookmarks>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
-  private val viewModelScope = CoroutineScope(Dispatchers.IO)
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private val viewModelScope = TestScope(UnconfinedTestDispatcher())
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {

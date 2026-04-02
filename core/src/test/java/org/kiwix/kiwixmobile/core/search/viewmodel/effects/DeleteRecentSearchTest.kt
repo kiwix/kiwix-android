@@ -21,27 +21,32 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class DeleteRecentSearchTest {
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
+  private val testViewModelScope = TestScope(mainDispatcherRule.dispatcher)
+
   @Test
   fun `invoke with deletes a search`() =
     runBlocking {
       val searchListItem: SearchListItem = RecentSearchListItem("", "")
       val recentSearchDao: RecentSearchRoomDao = mockk()
       val activity: AppCompatActivity = mockk()
-      val viewModelScope = CoroutineScope(Dispatchers.IO)
+
       DeleteRecentSearch(
         searchListItem = searchListItem,
         recentSearchRoomDao = recentSearchDao,
-        viewModelScope = viewModelScope
+        viewModelScope = testViewModelScope
       ).invokeWith(activity)
       delay(50)
       verify { recentSearchDao.deleteSearchString(searchListItem.value) }

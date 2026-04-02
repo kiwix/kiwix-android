@@ -82,7 +82,7 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
-import org.kiwix.kiwixmobile.core.utils.MainDispatcherRule
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower

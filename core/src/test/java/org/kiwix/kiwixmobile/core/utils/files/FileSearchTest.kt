@@ -33,6 +33,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -40,6 +41,8 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class FileSearchTest {
@@ -50,6 +53,9 @@ class FileSearchTest {
   private val contentResolver: ContentResolver = mockk()
   private val storageDevice: StorageDevice = mockk()
   private val scanningProgressListener: ScanningProgressListener = mockk()
+
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
 
   @BeforeEach
   fun init() {
@@ -65,7 +71,7 @@ class FileSearchTest {
         storageDevice
       )
     every { storageDevice.name } returns "/deviceDir"
-    fileSearch = FileSearch(context)
+    fileSearch = FileSearch(context, mainDispatcherRule.dispatcher)
   }
 
   @AfterAll
@@ -178,10 +184,13 @@ suspend fun <T> TestScope.testFlow(
   triggerAction: suspend () -> Unit,
   assert: suspend TurbineTestContext<T>.() -> Unit
 ) {
-  flow.test {
-    triggerAction()
-    assert()
-    cancelAndIgnoreRemainingEvents()
-    ensureAllEventsConsumed()
+  val job = launch {
+    flow.test {
+      triggerAction()
+      assert()
+      cancelAndIgnoreRemainingEvents()
+      ensureAllEventsConsumed()
+    }
   }
+  job.join()
 }

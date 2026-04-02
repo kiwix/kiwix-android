@@ -25,24 +25,20 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -73,32 +69,26 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.libzim.SuggestionSearch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
   private val recentSearchRoomDao: RecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
   private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
-  private val testDispatcher = StandardTestDispatcher()
   private val searchMutex: Mutex = mockk()
 
   lateinit var viewModel: SearchViewModel
-
-  @AfterAll
-  fun teardown() {
-    Dispatchers.resetMain()
-  }
-
   private lateinit var recentsFromDb: Channel<List<RecentSearchListItem>>
 
   @BeforeEach
   fun init() {
-    Dispatchers.resetMain()
-    Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     recentsFromDb = Channel(Channel.UNLIMITED)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
@@ -112,7 +102,8 @@ internal class SearchViewModelTest {
         recentSearchRoomDao,
         zimReaderContainer,
         searchResultGenerator,
-        searchMutex
+        searchMutex,
+        mainDispatcherRule.dispatcher
       ).apply {
         setAlertDialogShower(dialogShower)
       }
