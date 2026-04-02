@@ -46,6 +46,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -135,7 +136,13 @@ fun LocalLibraryScreen(
           topAppBarScrollBehavior = scrollBehavior
         )
       },
-      floatingActionButton = { LocalLibraryBackToTopButton(listState) },
+      floatingActionButton = {
+        LocalLibraryBackToTopButton(
+          listState = listState,
+          scrollBehavior = scrollBehavior,
+          bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+        )
+      },
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -145,34 +152,61 @@ fun LocalLibraryScreen(
           } ?: baseModifier
         }
     ) { contentPadding ->
-      SwipeRefreshLayout(
-        isRefreshing = state.swipeRefreshItem.first,
-        isEnabled = state.swipeRefreshItem.second,
-        onRefresh = onRefresh,
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(contentPadding)
-      ) {
-        OnBackPressed(onUserBackPressed, navHostController)
-        if (state.scanningProgressItem.first) {
-          ContentLoadingProgressBar(
-            modifier = Modifier.testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG),
-            progressBarStyle = ProgressBarStyle.HORIZONTAL,
-            progress = state.scanningProgressItem.second
-          )
-        }
-        if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
-          NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
-        } else {
-          BookItemList(
-            state.fileSelectListState,
-            onClick,
-            onLongClick,
-            onMultiSelect,
-            listState
-          )
-        }
-      }
+      LocalLibraryMainContent(
+        state,
+        onRefresh,
+        contentPadding,
+        onUserBackPressed,
+        navHostController,
+        onDownloadButtonClick,
+        onClick,
+        onLongClick,
+        onMultiSelect,
+        listState
+      )
+    }
+  }
+}
+
+@Composable
+private fun LocalLibraryMainContent(
+  state: LocalLibraryScreenState,
+  onRefresh: () -> Unit,
+  contentPadding: PaddingValues,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
+  onDownloadButtonClick: () -> Unit,
+  onClick: ((BookOnDisk) -> Unit)? = null,
+  onLongClick: ((BookOnDisk) -> Unit)? = null,
+  onMultiSelect: ((BookOnDisk) -> Unit)? = null,
+  listState: LazyListState
+) {
+  SwipeRefreshLayout(
+    isRefreshing = state.swipeRefreshItem.first,
+    isEnabled = state.swipeRefreshItem.second,
+    onRefresh = onRefresh,
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(contentPadding)
+  ) {
+    OnBackPressed(onUserBackPressed, navHostController)
+    if (state.scanningProgressItem.first) {
+      ContentLoadingProgressBar(
+        modifier = Modifier.testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG),
+        progressBarStyle = ProgressBarStyle.HORIZONTAL,
+        progress = state.scanningProgressItem.second
+      )
+    }
+    if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
+      NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
+    } else {
+      BookItemList(
+        state.fileSelectListState,
+        onClick,
+        onLongClick,
+        onMultiSelect,
+        listState
+      )
     }
   }
 }
@@ -222,8 +256,13 @@ private fun BookItemList(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LocalLibraryBackToTopButton(listState: LazyListState) {
+private fun LocalLibraryBackToTopButton(
+  listState: LazyListState,
+  scrollBehavior: TopAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?
+) {
   val coroutineScope = rememberCoroutineScope()
   val shouldShowBackToTopButton by remember {
     derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
@@ -238,6 +277,13 @@ private fun LocalLibraryBackToTopButton(listState: LazyListState) {
       icon = painterResource(id = R.drawable.ic_arrow_upward_24dp),
       onClick = {
         coroutineScope.launch {
+          // Manually reset the topAppBar and bottomAppBar scroll offsets
+          // so they become visible when scrolling to top programmatically.
+          // animateScrollToItem alone does not update the nestedScrollConnection.
+          scrollBehavior.state.heightOffset = 0f
+          scrollBehavior.state.contentOffset = 0f
+          bottomAppBarScrollBehaviour?.state?.heightOffset = 0f
+          bottomAppBarScrollBehaviour?.state?.contentOffset = 0f
           listState.animateScrollToItem(ZERO)
         }
       },

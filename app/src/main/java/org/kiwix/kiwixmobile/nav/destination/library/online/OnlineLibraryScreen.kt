@@ -39,6 +39,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -145,7 +146,11 @@ fun OnlineLibraryScreen(
         )
       },
       floatingActionButton = {
-        OnlineLibraryBackToTopButton(listState)
+        OnlineLibraryBackToTopButton(
+          listState = listState,
+          scrollBehavior = scrollBehavior,
+          bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+        )
       },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -155,27 +160,49 @@ fun OnlineLibraryScreen(
           } ?: baseModifier
         }
     ) { paddingValues ->
-      SwipeRefreshLayout(
-        isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,
-        isEnabled = !state.scanningProgressItem.first,
-        onRefresh = state.onRefresh,
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(
-            top = paddingValues.calculateTopPadding(),
-            start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-            end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-          )
-      ) {
-        OnBackPressed(onUserBackPressed, navHostController)
-        OnlineLibraryScreenContent(state, listState)
-      }
+      OnlineLibraryMainContent(
+        state,
+        paddingValues,
+        onUserBackPressed,
+        navHostController,
+        listState
+      )
     }
   }
 }
 
 @Composable
-private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
+private fun OnlineLibraryMainContent(
+  state: OnlineLibraryScreenState,
+  paddingValues: PaddingValues,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
+  listState: LazyListState
+) {
+  SwipeRefreshLayout(
+    isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,
+    isEnabled = !state.scanningProgressItem.first,
+    onRefresh = state.onRefresh,
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(
+        top = paddingValues.calculateTopPadding(),
+        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+      )
+  ) {
+    OnBackPressed(onUserBackPressed, navHostController)
+    OnlineLibraryScreenContent(state, listState)
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OnlineLibraryBackToTopButton(
+  listState: LazyListState,
+  scrollBehavior: TopAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?
+) {
   val coroutineScope = rememberCoroutineScope()
   val shouldShowBackToTopButton by remember {
     derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
@@ -190,6 +217,13 @@ private fun OnlineLibraryBackToTopButton(listState: LazyListState) {
       icon = painterResource(id = drawable.ic_arrow_upward_24dp),
       onClick = {
         coroutineScope.launch {
+          // Manually reset the topAppBar and bottomAppBar scroll offsets
+          // so they become visible when scrolling to top programmatically.
+          // animateScrollToItem alone does not update the nestedScrollConnection.
+          scrollBehavior.state.heightOffset = 0f
+          scrollBehavior.state.contentOffset = 0f
+          bottomAppBarScrollBehaviour?.state?.heightOffset = 0f
+          bottomAppBarScrollBehaviour?.state?.contentOffset = 0f
           listState.animateScrollToItem(ZERO)
         }
       },
