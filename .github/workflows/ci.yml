@@ -122,11 +122,13 @@ jobs:
           profile: pixel_2
           ram-size: 3072M
           cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           force-avd-creation: false
           heap-size: 512M
-          script: ./gradlew :benchmark:connectedBenchmarkDebugAndroidTest
+          script: |
+            bash contrib/ensure-emulator-ready.sh
+            ./gradlew :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload coverage to Codecov
         if: ${{ matrix.api-level==30 }}
