@@ -466,7 +466,9 @@ class ZimManageViewModel @Inject constructor(
               is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
               is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
               RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-              RequestShareMultiSelection -> ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
+              RequestShareMultiSelection ->
+                ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
+
               RequestValidateZimFiles ->
                 ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
 
