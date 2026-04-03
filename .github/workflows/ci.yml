@@ -110,6 +110,24 @@ jobs:
         if: ${{ matrix.api-level==30 }}
         run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
+      - name: Run benchmarks
+        if: ${{ matrix.api-level==30 }}
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        with:
+          api-level: 30
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072M
+          cores: 4
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          force-avd-creation: false
+          heap-size: 512M
+          script: ./gradlew :benchmark:connectedBenchmarkDebugAndroidTest
+
       - name: Upload coverage to Codecov
         if: ${{ matrix.api-level==30 }}
         uses: codecov/codecov-action@v5

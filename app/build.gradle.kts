@@ -186,6 +186,7 @@ dependencies {
   add("nightlyImplementation", project(":defaultmigration"))
   add("standaloneImplementation", project(":defaultmigration"))
   add("benchmarkImplementation", project(":defaultmigration"))
+  add("benchmarkImplementation", project(":objectboxmigration"))
   // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
 }
