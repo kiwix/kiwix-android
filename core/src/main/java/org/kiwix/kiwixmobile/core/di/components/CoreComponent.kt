@@ -23,6 +23,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
 import dagger.Component
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
@@ -38,6 +39,7 @@ import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
@@ -90,6 +92,10 @@ interface CoreComponent {
 
   @CategoryKiwixService
   fun provideCategoryKiwixService(): KiwixService
+
+  @IoDispatcher
+  fun provideIoDispatcher(): CoroutineDispatcher
+
   fun application(): Application
   fun bookUtils(): BookUtils
   fun dataSource(): DataSource

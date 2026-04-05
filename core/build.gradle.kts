@@ -58,7 +58,6 @@ dependencies {
 
   implementation(Libs.android_arch_lifecycle_extensions)
   implementation(Libs.webkit)
-  testImplementation(Libs.kotlinx_coroutines_test)
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   testImplementation(Libs.TURBINE_FLOW_TEST)

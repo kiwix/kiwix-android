@@ -22,21 +22,25 @@ import androidx.appcompat.app.AppCompatActivity
 import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class SaveSearchToRecentsTest {
   private val newRecentSearchDao: RecentSearchRoomDao = mockk()
   private val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
 
   private val activity: AppCompatActivity = mockk()
-  private val testDispatcher = CoroutineScope(Dispatchers.IO)
+
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
+  private val testViewModelScope = TestScope(mainDispatcherRule.dispatcher)
 
   @Test
   fun `invoke with null Id does nothing`() =
@@ -45,7 +49,7 @@ internal class SaveSearchToRecentsTest {
         newRecentSearchDao,
         searchListItem,
         null,
-        testDispatcher
+        testViewModelScope
       ).invokeWith(
         activity
       )
@@ -60,7 +64,7 @@ internal class SaveSearchToRecentsTest {
         newRecentSearchDao,
         searchListItem,
         id,
-        testDispatcher
+        testViewModelScope
       ).invokeWith(activity)
       delay(50)
       verify {

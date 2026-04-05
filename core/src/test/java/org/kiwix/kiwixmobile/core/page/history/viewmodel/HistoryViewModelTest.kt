@@ -4,10 +4,11 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +36,9 @@ internal class HistoryViewModelTest {
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
-  private val viewModelScope = CoroutineScope(Dispatchers.IO)
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private val viewModelScope = TestScope(UnconfinedTestDispatcher())
 
   private lateinit var viewModel: HistoryViewModel
   private val zimReaderSource: ZimReaderSource = mockk()

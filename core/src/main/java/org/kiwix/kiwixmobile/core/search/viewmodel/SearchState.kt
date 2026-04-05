@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -37,7 +36,7 @@ data class SearchState(
   suspend fun getVisibleResults(
     startIndex: Int,
     job: Job? = null,
-    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    ioDispatcher: CoroutineDispatcher
   ): List<SearchListItem>? {
     if (searchTerm.isEmpty()) return recentResults
     return searchResultsWithTerm.searchMutex.withLock {

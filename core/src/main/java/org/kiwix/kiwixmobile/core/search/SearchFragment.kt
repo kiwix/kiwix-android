@@ -310,7 +310,8 @@ class SearchFragment : BaseFragment() {
     renderingJob =
       lifecycleScope.launch {
         try {
-          val searchResult = state.getVisibleResults(ZERO, coroutineContext[Job])
+          val searchResult =
+            state.getVisibleResults(ZERO, coroutineContext[Job], searchViewModel.ioDispatcher)
           searchResult?.let {
             searchScreenState.update {
               copy(searchList = it)
