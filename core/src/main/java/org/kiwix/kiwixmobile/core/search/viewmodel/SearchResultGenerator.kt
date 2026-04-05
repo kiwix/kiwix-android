@@ -33,7 +33,7 @@ interface SearchResultGenerator {
 }
 
 class ZimSearchResultGenerator @Inject constructor(
-  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchResultGenerator {
   override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
     if (searchTerm.isBlank() || zimFileReader == null) {

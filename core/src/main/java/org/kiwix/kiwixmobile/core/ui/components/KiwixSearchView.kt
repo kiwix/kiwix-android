@@ -95,9 +95,7 @@ fun KiwixSearchView(
     snapshotFlow { textFieldValue.text.toString() }
       .distinctUntilChanged()
       .collect { newText ->
-        if (newText != value) {
-          onValueChange(newText)
-        }
+        onValueChange(newText)
       }
   }
 
