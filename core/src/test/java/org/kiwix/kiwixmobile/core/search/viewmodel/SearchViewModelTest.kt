@@ -26,8 +26,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
@@ -86,12 +85,12 @@ internal class SearchViewModelTest {
 
   lateinit var viewModel: SearchViewModel
 
-  private lateinit var recentsFromDb: Channel<List<RecentSearchListItem>>
+  private lateinit var recentsFromDb: MutableSharedFlow<List<RecentSearchListItem>>
 
   @BeforeEach
   fun init() {
     clearAllMocks()
-    recentsFromDb = Channel(Channel.UNLIMITED)
+    recentsFromDb = MutableSharedFlow(replay = 1)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
     every {
       zimFileReader.getSuggestedSpelledWords(any(), any())
@@ -100,7 +99,7 @@ internal class SearchViewModelTest {
       searchResultGenerator.generateSearchResults(any(), zimFileReader)
     } returns null
     every { zimReaderContainer.id } returns "id"
-    every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
+    every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb
     viewModel =
       SearchViewModel(
         recentSearchRoomDao,
@@ -167,7 +166,7 @@ internal class SearchViewModelTest {
         searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
       } returns suggestionSearch
       viewModel.onSearchValueChanged(searchTerm)
-      recentsFromDb.trySend(emptyList()).isSuccess
+      recentsFromDb.tryEmit(emptyList())
       viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
       testScheduler.apply {
         advanceTimeBy(timeout)
@@ -378,7 +377,7 @@ internal class SearchViewModelTest {
 
     @Test
     fun onKeyboardSubmitButtonClick_whenNoMatchFound_returnsNothing() = runTest {
-      recentsFromDb.trySend(emptyList())
+      recentsFromDb.tryEmit(emptyList())
       advanceUntilIdle()
 
       viewModel.effects.test {
@@ -437,7 +436,7 @@ internal class SearchViewModelTest {
       searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
     } returns suggestionSearch
     viewModel.actions.tryEmit(Filter(searchTerm))
-    recentsFromDb.trySend(databaseResults).isSuccess
+    recentsFromDb.tryEmit(databaseResults)
     viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
   }
 }
