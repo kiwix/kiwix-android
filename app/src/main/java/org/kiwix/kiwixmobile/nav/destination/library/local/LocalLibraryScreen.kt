@@ -18,12 +18,16 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,15 +47,18 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -65,6 +72,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
@@ -75,14 +83,13 @@ import org.kiwix.kiwixmobile.core.main.reader.OnBackPressed
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
@@ -98,9 +105,9 @@ import kotlin.math.roundToInt
 const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
 const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
 const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
-const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
 const val SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG =
   "showSwipeDownToScanFileSystemTextTestingTag"
+private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -110,7 +117,6 @@ fun LocalLibraryScreen(
   listState: LazyListState,
   onRefresh: () -> Unit,
   onDownloadButtonClick: () -> Unit,
-  fabButtonClick: () -> Unit,
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
@@ -131,7 +137,13 @@ fun LocalLibraryScreen(
           topAppBarScrollBehavior = scrollBehavior
         )
       },
-      floatingActionButton = { SelectFileButton(fabButtonClick) },
+      floatingActionButton = {
+        LocalLibraryBackToTopButton(
+          listState = listState,
+          scrollBehavior = scrollBehavior,
+          bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+        )
+      },
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -141,34 +153,62 @@ fun LocalLibraryScreen(
           } ?: baseModifier
         }
     ) { contentPadding ->
-      SwipeRefreshLayout(
-        isRefreshing = state.swipeRefreshItem.first,
-        isEnabled = state.swipeRefreshItem.second,
-        onRefresh = onRefresh,
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(contentPadding)
-      ) {
-        OnBackPressed(onUserBackPressed, navHostController)
-        if (state.scanningProgressItem.first) {
-          ContentLoadingProgressBar(
-            modifier = Modifier.testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG),
-            progressBarStyle = ProgressBarStyle.HORIZONTAL,
-            progress = state.scanningProgressItem.second
-          )
-        }
-        if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
-          NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
-        } else {
-          BookItemList(
-            state.fileSelectListState,
-            onClick,
-            onLongClick,
-            onMultiSelect,
-            listState
-          )
-        }
-      }
+      LocalLibraryMainContent(
+        state,
+        onRefresh,
+        contentPadding,
+        onUserBackPressed,
+        navHostController,
+        onDownloadButtonClick,
+        onClick,
+        onLongClick,
+        onMultiSelect,
+        listState
+      )
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LocalLibraryMainContent(
+  state: LocalLibraryScreenState,
+  onRefresh: () -> Unit,
+  contentPadding: PaddingValues,
+  onUserBackPressed: () -> FragmentActivityExtensions.Super,
+  navHostController: NavHostController,
+  onDownloadButtonClick: () -> Unit,
+  onClick: ((BookOnDisk) -> Unit)? = null,
+  onLongClick: ((BookOnDisk) -> Unit)? = null,
+  onMultiSelect: ((BookOnDisk) -> Unit)? = null,
+  listState: LazyListState
+) {
+  SwipeRefreshLayout(
+    isRefreshing = state.swipeRefreshItem.first,
+    isEnabled = state.swipeRefreshItem.second,
+    onRefresh = onRefresh,
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(contentPadding)
+  ) {
+    OnBackPressed(onUserBackPressed, navHostController)
+    if (state.scanningProgressItem.first) {
+      ContentLoadingProgressBar(
+        modifier = Modifier.testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG),
+        progressBarStyle = ProgressBarStyle.HORIZONTAL,
+        progress = state.scanningProgressItem.second
+      )
+    }
+    if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
+      NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
+    } else {
+      BookItemList(
+        state.fileSelectListState,
+        onClick,
+        onLongClick,
+        onMultiSelect,
+        listState
+      )
     }
   }
 }
@@ -218,19 +258,39 @@ private fun BookItemList(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SelectFileButton(fabButtonClick: () -> Unit) {
-  FloatingActionButton(
-    onClick = fabButtonClick,
-    modifier = Modifier
-      .testTag(SELECT_FILE_BUTTON_TESTING_TAG),
-    containerColor = Black,
-    shape = MaterialTheme.shapes.extraLarge
+private fun LocalLibraryBackToTopButton(
+  listState: LazyListState,
+  scrollBehavior: TopAppBarScrollBehavior,
+  bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?
+) {
+  val coroutineScope = rememberCoroutineScope()
+  val shouldShowBackToTopButton by remember {
+    derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
+  }
+
+  AnimatedVisibility(
+    visible = shouldShowBackToTopButton,
+    enter = slideInVertically { it },
+    exit = slideOutVertically { it }
   ) {
-    Icon(
-      painter = painterResource(id = R.drawable.ic_add_blue_24dp),
-      contentDescription = stringResource(id = string.select_zim_file),
-      tint = White
+    KiwixFloatingActionButton(
+      icon = painterResource(id = R.drawable.ic_arrow_upward_24dp),
+      onClick = {
+        coroutineScope.launch {
+          // Manually reset the topAppBar and bottomAppBar scroll offsets
+          // so they become visible when scrolling to top programmatically.
+          // animateScrollToItem alone does not update the nestedScrollConnection.
+          scrollBehavior.state.heightOffset = 0f
+          scrollBehavior.state.contentOffset = 0f
+          bottomAppBarScrollBehaviour?.state?.heightOffset = 0f
+          bottomAppBarScrollBehaviour?.state?.contentOffset = 0f
+          listState.animateScrollToItem(ZERO)
+        }
+      },
+      contentDescription = stringResource(R.string.pref_back_to_top),
+      shouldPulse = true
     )
   }
 }
