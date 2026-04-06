@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.core.main.reader
 
 import android.os.Build
 import android.widget.FrameLayout
+import io.mockk.every
+import io.mockk.mockk
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.MutableState
@@ -39,6 +41,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -608,5 +611,72 @@ class ReaderScreenComposablesTest {
     composeTestRule
       .onNodeWithText("Test Reader")
       .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_fullScreenItem_isDisplayed() {
+    val videoView = FrameLayout(context).apply {
+      contentDescription = "video_view"
+    }
+    renderReaderScreen(
+      createTestState(fullScreenItem = Pair(true, videoView))
+    )
+    composeTestRule
+      .onNodeWithContentDescription("video_view")
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_onSelectTab_triggersCallback() {
+    var selectedIndex = -1
+    val webView = mockk<KiwixWebView>(relaxed = true)
+    every { webView.contentDescription } returns "tab_webview"
+
+    val state = createTestState(
+      showTabSwitcher = true
+    ).copy(
+      kiwixWebViewList = listOf(webView),
+      onTabClickListener = object : TabClickListener {
+        override fun onSelectTab(position: Int) {
+          selectedIndex = position
+        }
+        override fun onCloseTab(position: Int) { /* no-op */ }
+      }
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    // The contentDescription is composed as "${webView.contentDescription}${webView.hashCode()}"
+    composeTestRule
+      .onNodeWithContentDescription("tab_webview${webView.hashCode()}", substring = true)
+      .performClick()
+
+    assertTrue("onSelectTab callback should be triggered with index 0", selectedIndex == 0)
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_onCloseTab_triggersCallback() {
+    var closedIndex = -1
+    val webView = mockk<KiwixWebView>(relaxed = true)
+
+    val state = createTestState(
+      showTabSwitcher = true
+    ).copy(
+      kiwixWebViewList = listOf(webView),
+      onTabClickListener = object : TabClickListener {
+        override fun onSelectTab(position: Int) { /* no-op */ }
+        override fun onCloseTab(position: Int) {
+          closedIndex = position
+        }
+      }
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithContentDescription(context.getString(R.string.close_tab) + "0")
+      .performClick()
+
+    assertTrue("onCloseTab callback should be triggered with index 0", closedIndex == 0)
   }
 }
