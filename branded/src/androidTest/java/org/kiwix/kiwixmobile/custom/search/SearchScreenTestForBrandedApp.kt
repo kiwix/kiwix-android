@@ -22,9 +22,7 @@ import android.Manifest
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -91,12 +89,12 @@ class SearchScreenTestForBrandedApp {
   var retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<BrandedMainActivity>()
 
   private lateinit var brandedMainActivity: BrandedMainActivity
   private lateinit var uiDevice: UiDevice
   private lateinit var downloadingZimFile: File
-  private lateinit var activityScenario: ActivityScenario<BrandedMainActivity>
+  private var activityScenario: ActivityScenario<BrandedMainActivity>? = null
 
   private val scientificAllianceZIMUrl =
     "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2025-06.zim"
@@ -121,20 +119,15 @@ class SearchScreenTestForBrandedApp {
         setPrefIsTest(true)
       }
     }
-    activityScenario =
-      ActivityScenario.launch(BrandedMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
+    activityScenario = composeTestRule.activityRule.scenario
+    activityScenario?.onActivity {
+      brandedMainActivity = it
+      AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+    }
   }
 
   @Test
   fun searchScreen() {
-    activityScenario.onActivity {
-      brandedMainActivity = it
-    }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -214,9 +207,7 @@ class SearchScreenTestForBrandedApp {
           "fad",
           "forum"
         )
-      activityScenario.onActivity {
-        brandedMainActivity = it
-      }
+
       testFlakyView({
         // test with a large ZIM file to properly test the scenario
         downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -271,9 +262,7 @@ class SearchScreenTestForBrandedApp {
 
   @Test
   fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {
-    activityScenario.onActivity {
-      brandedMainActivity = it
-    }
+
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -306,7 +295,7 @@ class SearchScreenTestForBrandedApp {
       // open note screen.
       openNoteFragment(brandedMainActivity as CoreMainActivity, composeTestRule)
       composeTestRule.waitUntilTimeout()
-      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      clickOnNavigationIcon(composeTestRule)
       // after came back check the previously loaded article is still showing or not.
       assertAFoolForYouArticleLoaded(composeTestRule)
     }

@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_HOME_BUTTON_TEST
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
@@ -189,5 +190,9 @@ class SearchRobot {
         onNodeWithTag(LEFT_DRAWER_NOTES_ITEM_TESTING_TAG).performClick()
       }
     })
+  }
+
+  fun clickOnNavigationIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
   }
 }
