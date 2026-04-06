@@ -302,7 +302,7 @@ class SearchFragment : BaseFragment() {
     // To avoid unnecessary data loading and prevent crashes, we check if the search screen is
     // visible to the user before proceeding. If the screen is not visible,
     // we skip the data loading process.
-    if (!isVisible) return
+    if (!isAdded) return
     isDataLoading.value = false
     findInPageMenuItem.value = findInPageMenuItem.value.first to (state.searchOrigin == FromWebView)
     setIsPageSearchEnabled(state.searchTerm)

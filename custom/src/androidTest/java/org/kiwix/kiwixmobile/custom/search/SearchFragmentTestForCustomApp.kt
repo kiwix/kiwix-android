@@ -22,11 +22,8 @@ import android.Manifest
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -51,7 +48,6 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -90,12 +86,12 @@ class SearchFragmentTestForCustomApp {
   var retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<CustomMainActivity>()
 
   private lateinit var customMainActivity: CustomMainActivity
   private lateinit var uiDevice: UiDevice
   private lateinit var downloadingZimFile: File
-  private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
+  private var activityScenario: ActivityScenario<CustomMainActivity>? = null
 
   private val scientificAllianceZIMUrl =
     "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2025-06.zim"
@@ -120,20 +116,15 @@ class SearchFragmentTestForCustomApp {
         setPrefIsTest(true)
       }
     }
-    activityScenario =
-      ActivityScenario.launch(CustomMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
+    activityScenario = composeTestRule.activityRule.scenario
+    activityScenario?.onActivity {
+      customMainActivity = it
+      AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+    }
   }
 
   @Test
   fun searchFragment() {
-    activityScenario.onActivity {
-      customMainActivity = it
-    }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -213,9 +204,6 @@ class SearchFragmentTestForCustomApp {
           "fad",
           "forum"
         )
-      activityScenario.onActivity {
-        customMainActivity = it
-      }
       testFlakyView({
         // test with a large ZIM file to properly test the scenario
         downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -269,9 +257,6 @@ class SearchFragmentTestForCustomApp {
 
   @Test
   fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {
-    activityScenario.onActivity {
-      customMainActivity = it
-    }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -304,7 +289,7 @@ class SearchFragmentTestForCustomApp {
       // open note screen.
       openNoteFragment(customMainActivity as CoreMainActivity, composeTestRule)
       composeTestRule.waitUntilTimeout()
-      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      clickOnNavigationIcon(composeTestRule)
       // after came back check the previously loaded article is still showing or not.
       assertAFoolForYouArticleLoaded(composeTestRule)
     }
