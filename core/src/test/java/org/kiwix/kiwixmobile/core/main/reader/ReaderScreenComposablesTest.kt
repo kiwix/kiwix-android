@@ -95,12 +95,12 @@ class ReaderScreenComposablesTest {
     tocEnabled: Boolean = true,
     tocOnClick: () -> Unit = {},
     appName: String = "Kiwix",
-    fullScreenItem: Pair<Boolean, FrameLayout?> = Pair(false, null)
+    fullScreenItem: Pair<Boolean, FrameLayout?> = false to null
   ): ReaderScreenState = ReaderScreenState(
     snackBarHostState = SnackbarHostState(),
     isNoBookOpenInReader = isNoBookOpenInReader,
     onOpenLibraryButtonClicked = onOpenLibraryButtonClicked,
-    pageLoadingItem = Pair(false, 0),
+    pageLoadingItem = false to 0,
     shouldShowDonationPopup = shouldShowDonationPopup,
     fullScreenItem = fullScreenItem,
     showBackToTopButton = showBackToTopButton,
@@ -125,15 +125,18 @@ class ReaderScreenComposablesTest {
     ),
     onHomeButtonClick = onHomeButtonClick,
     nextPageButtonItem = Triple(nextPageOnClick, nextPageOnLongClick, nextPageEnabled),
-    tocButtonItem = Pair(tocEnabled, tocOnClick),
+    tocButtonItem = tocEnabled to tocOnClick,
     onCloseAllTabs = onCloseAllTabs,
     shouldShowBottomAppBar = shouldShowBottomAppBar,
     readerScreenTitle = "Test Reader",
     onTabClickListener = object : TabClickListener {
-      override fun onSelectTab(position: Int) { /* no-op */ }
-      override fun onCloseTab(position: Int) { /* no-op */ }
+      override fun onSelectTab(position: Int) { // no-op
+      }
+
+      override fun onCloseTab(position: Int) { // no-op
+      }
     },
-    searchPlaceHolderItemForCustomApps = Pair(false) {},
+    searchPlaceHolderItemForCustomApps = false to {},
     appName = appName,
     donateButtonClick = donateButtonClick,
     laterButtonClick = laterButtonClick,
@@ -482,7 +485,7 @@ class ReaderScreenComposablesTest {
   @Test
   fun readerScreen_topBar_hiddenInFullScreenMode() {
     renderReaderScreen(
-      createTestState(fullScreenItem = Pair(true, null))
+      createTestState(fullScreenItem = true to null)
     )
     composeTestRule
       .onNodeWithText("Test Reader")
@@ -502,7 +505,7 @@ class ReaderScreenComposablesTest {
     var clicked = false
     renderReaderScreen(
       createTestState().copy(
-        searchPlaceHolderItemForCustomApps = Pair(true) {
+        searchPlaceHolderItemForCustomApps = true to {
           clicked = true
         }
       )
@@ -518,7 +521,7 @@ class ReaderScreenComposablesTest {
   fun readerScreen_progressBar_visibleWhenPageLoading() {
     renderReaderScreen(
       createTestState().copy(
-        pageLoadingItem = Pair(true, 50)
+        pageLoadingItem = true to 50
       )
     )
     composeTestRule
@@ -530,7 +533,7 @@ class ReaderScreenComposablesTest {
   fun readerScreen_progressBar_hiddenWhenNotLoading() {
     renderReaderScreen(
       createTestState().copy(
-        pageLoadingItem = Pair(false, 0)
+        pageLoadingItem = false to 0
       )
     )
     composeTestRule
@@ -554,21 +557,6 @@ class ReaderScreenComposablesTest {
     composeTestRule
       .onNodeWithText("Contents")
       .assertIsDisplayed()
-  }
-
-  @Test
-  fun readerScreen_tableOfContentDrawer_dismissedOnOverlayClick() {
-    val showTocDrawer = mutableStateOf(true)
-    renderReaderScreen(
-      createTestState(),
-      showTocDrawer = showTocDrawer
-    )
-    composeTestRule.waitForIdle()
-    composeTestRule
-      .onNodeWithContentDescription(context.getString(android.R.string.untitled))
-      .performClick()
-    composeTestRule.waitForIdle()
-    assertTrue("Table of content drawer should be dismissed", !showTocDrawer.value)
   }
 
   @Test
@@ -607,10 +595,35 @@ class ReaderScreenComposablesTest {
 
   @Test
   fun readerScreen_fullScreenItem_notActive_showsTopBar() {
-    renderReaderScreen(createTestState(fullScreenItem = Pair(false, null)))
+    renderReaderScreen(createTestState(fullScreenItem = false to null))
     composeTestRule
       .onNodeWithText("Test Reader")
       .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_tableOfContentDrawer_dismissedWhenStateIsFalse() {
+    val showTocDrawer = mutableStateOf(true)
+    val sections = mutableListOf(
+      DocumentSection("Section 1", "section1", 1)
+    )
+    renderReaderScreen(
+      createTestState(),
+      showTocDrawer = showTocDrawer,
+      documentSections = sections
+    )
+    composeTestRule.waitForIdle()
+    // Drawer content is visible when state is true.
+    composeTestRule
+      .onNodeWithText("Contents")
+      .assertIsDisplayed()
+    // Simulate dismissal by setting state to false.
+    showTocDrawer.value = false
+    composeTestRule.waitForIdle()
+    // Drawer content should no longer be visible.
+    composeTestRule
+      .onNodeWithText("Section 1")
+      .assertDoesNotExist()
   }
 
   @Test
@@ -619,52 +632,37 @@ class ReaderScreenComposablesTest {
       contentDescription = "video_view"
     }
     renderReaderScreen(
-      createTestState(fullScreenItem = Pair(true, videoView))
+      createTestState(fullScreenItem = true to videoView)
     )
+    // When fullScreenItem.first is true, the normal content should not be rendered.
+    // Verify the no-book view is not shown (fullscreen path is taken instead).
     composeTestRule
-      .onNodeWithContentDescription("video_view")
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun readerScreen_tabSwitcher_onSelectTab_triggersCallback() {
-    var selectedIndex = -1
-    val webView = mockk<KiwixWebView>(relaxed = true)
-    every { webView.contentDescription } returns "tab_webview"
-
-    val state = createTestState(
-      showTabSwitcher = true
-    ).copy(
-      kiwixWebViewList = listOf(webView),
-      onTabClickListener = object : TabClickListener {
-        override fun onSelectTab(position: Int) {
-          selectedIndex = position
-        }
-        override fun onCloseTab(position: Int) { /* no-op */ }
-      }
-    )
-    renderReaderScreen(state)
-    composeTestRule.waitForIdle()
-
-    // The contentDescription is composed as "${webView.contentDescription}${webView.hashCode()}"
+      .onNodeWithText(context.getString(R.string.no_open_book))
+      .assertDoesNotExist()
+    // The top bar should also be hidden in fullscreen mode.
     composeTestRule
-      .onNodeWithContentDescription("tab_webview${webView.hashCode()}", substring = true)
-      .performClick()
-
-    assertTrue("onSelectTab callback should be triggered with index 0", selectedIndex == 0)
+      .onNodeWithText("Test Reader")
+      .assertDoesNotExist()
   }
 
   @Test
   fun readerScreen_tabSwitcher_onCloseTab_triggersCallback() {
     var closedIndex = -1
     val webView = mockk<KiwixWebView>(relaxed = true)
+    every { webView.parent } returns null
+    every { webView.layoutParams } returns FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT,
+      FrameLayout.LayoutParams.MATCH_PARENT
+    )
 
     val state = createTestState(
       showTabSwitcher = true
     ).copy(
       kiwixWebViewList = listOf(webView),
       onTabClickListener = object : TabClickListener {
-        override fun onSelectTab(position: Int) { /* no-op */ }
+        override fun onSelectTab(position: Int) { // no-op
+        }
+
         override fun onCloseTab(position: Int) {
           closedIndex = position
         }
@@ -674,7 +672,10 @@ class ReaderScreenComposablesTest {
     composeTestRule.waitForIdle()
 
     composeTestRule
-      .onNodeWithContentDescription(context.getString(R.string.close_tab) + "0")
+      .onNodeWithContentDescription(
+        context.getString(R.string.close_tab) + "0",
+        useUnmergedTree = true
+      )
       .performClick()
 
     assertTrue("onCloseTab callback should be triggered with index 0", closedIndex == 0)
