@@ -124,7 +124,7 @@ class NavigationHistoryRobot : BaseRobot() {
     try {
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
           .assertTextEquals(context.getString(R.string.backward_history))
       }
     } catch (_: AssertionError) {
@@ -148,7 +148,7 @@ class NavigationHistoryRobot : BaseRobot() {
     try {
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
           .assertTextEquals(context.getString(R.string.forward_history))
       }
     } catch (_: AssertionError) {
@@ -174,7 +174,7 @@ class NavigationHistoryRobot : BaseRobot() {
     try {
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG, useUnmergedTree = true)
           .assertTextEquals(context.getString(R.string.clear_all_history_dialog_title))
       }
     } catch (ignore: AssertionFailedError) {

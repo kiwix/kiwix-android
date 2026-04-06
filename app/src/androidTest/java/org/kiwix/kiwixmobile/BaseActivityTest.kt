@@ -27,6 +27,7 @@ import androidx.test.rule.GrantPermissionRule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.junit.After
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
@@ -57,4 +58,11 @@ abstract class BaseActivityTest {
     .build()
 
   abstract fun waitForIdle()
+
+  @After
+  fun tearDown() {
+    if (::activityScenario.isInitialized) {
+      activityScenario.close()
+    }
+  }
 }
