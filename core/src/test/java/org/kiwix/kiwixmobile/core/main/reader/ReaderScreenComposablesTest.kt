@@ -19,10 +19,11 @@
 package org.kiwix.kiwixmobile.core.main.reader
 
 import android.os.Build
+import android.widget.FrameLayout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
@@ -53,7 +54,7 @@ import org.robolectric.annotation.Config
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.VANILLA_ICE_CREAM])
+@Config(sdk = [Build.VERSION_CODES.R])
 class ReaderScreenComposablesTest {
   @get:Rule
   val composeTestRule = createComposeRule()
@@ -90,14 +91,15 @@ class ReaderScreenComposablesTest {
     nextPageEnabled: Boolean = true,
     tocEnabled: Boolean = true,
     tocOnClick: () -> Unit = {},
-    appName: String = "Kiwix"
+    appName: String = "Kiwix",
+    fullScreenItem: Pair<Boolean, FrameLayout?> = Pair(false, null)
   ): ReaderScreenState = ReaderScreenState(
     snackBarHostState = SnackbarHostState(),
     isNoBookOpenInReader = isNoBookOpenInReader,
     onOpenLibraryButtonClicked = onOpenLibraryButtonClicked,
     pageLoadingItem = Pair(false, 0),
     shouldShowDonationPopup = shouldShowDonationPopup,
-    fullScreenItem = Pair(false, null),
+    fullScreenItem = fullScreenItem,
     showBackToTopButton = showBackToTopButton,
     backToTopButtonClick = backToTopButtonClick,
     showTtsControls = showTtsControls,
@@ -139,14 +141,18 @@ class ReaderScreenComposablesTest {
    * Renders the full [ReaderScreen] with the given state,
    * providing minimal test doubles for required dependencies.
    */
-  private fun renderReaderScreen(state: ReaderScreenState) {
+  private fun renderReaderScreen(
+    state: ReaderScreenState,
+    showTocDrawer: MutableState<Boolean> = mutableStateOf(false),
+    documentSections: MutableList<DocumentSection>? = null
+  ) {
     composeTestRule.setContent {
       val navController = rememberNavController()
       ReaderScreen(
         state = state,
         actionMenuItems = emptyList(),
-        showTableOfContentDrawer = remember { mutableStateOf(false) },
-        documentSections = null,
+        showTableOfContentDrawer = showTocDrawer,
+        documentSections = documentSections,
         onUserBackPressed = { FragmentActivityExtensions.Super.ShouldCall },
         navHostController = navController,
         mainActivityBottomAppBarScrollBehaviour = null,
@@ -468,5 +474,139 @@ class ReaderScreenComposablesTest {
       .onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG)
       .performClick()
     assertTrue("onCloseAllTabs callback should be triggered", clicked)
+  }
+
+  @Test
+  fun readerScreen_topBar_hiddenInFullScreenMode() {
+    renderReaderScreen(
+      createTestState(fullScreenItem = Pair(true, null))
+    )
+    composeTestRule
+      .onNodeWithText("Test Reader")
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun readerScreen_topBar_hiddenWhenTabSwitcherVisible() {
+    renderReaderScreen(createTestState(showTabSwitcher = true))
+    composeTestRule
+      .onNodeWithText("Test Reader")
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun readerScreen_searchPlaceholder_visibleAndClickable() {
+    var clicked = false
+    renderReaderScreen(
+      createTestState().copy(
+        searchPlaceHolderItemForCustomApps = Pair(true) {
+          clicked = true
+        }
+      )
+    )
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.search_label))
+      .assertIsDisplayed()
+      .performClick()
+    assertTrue(clicked)
+  }
+
+  @Test
+  fun readerScreen_progressBar_visibleWhenPageLoading() {
+    renderReaderScreen(
+      createTestState().copy(
+        pageLoadingItem = Pair(true, 50)
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_progressBar_hiddenWhenNotLoading() {
+    renderReaderScreen(
+      createTestState().copy(
+        pageLoadingItem = Pair(false, 0)
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun readerScreen_tableOfContentDrawer_visibleWhenOpen() {
+    val showTocDrawer = mutableStateOf(true)
+    val sections = mutableListOf(
+      DocumentSection("Section 1", "section1", 1),
+      DocumentSection("Section 2", "section2", 2)
+    )
+    renderReaderScreen(
+      createTestState(),
+      showTocDrawer = showTocDrawer,
+      documentSections = sections
+    )
+    composeTestRule.waitForIdle()
+    composeTestRule
+      .onNodeWithText("Contents")
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_tableOfContentDrawer_dismissedOnOverlayClick() {
+    val showTocDrawer = mutableStateOf(true)
+    renderReaderScreen(
+      createTestState(),
+      showTocDrawer = showTocDrawer
+    )
+    composeTestRule.waitForIdle()
+    composeTestRule
+      .onNodeWithContentDescription(context.getString(android.R.string.untitled))
+      .performClick()
+    composeTestRule.waitForIdle()
+    assertTrue("Table of content drawer should be dismissed", !showTocDrawer.value)
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_visibleWhenEnabled() {
+    renderReaderScreen(createTestState(showTabSwitcher = true))
+    composeTestRule.waitForIdle()
+    composeTestRule
+      .onNodeWithTag(TAB_SWITCHER_VIEW_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_hiddenWhenDisabled() {
+    renderReaderScreen(createTestState(showTabSwitcher = false))
+    composeTestRule.waitForIdle()
+    composeTestRule
+      .onNodeWithTag(TAB_SWITCHER_VIEW_TESTING_TAG)
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun readerScreen_bottomAppBar_tocDisabled_doesNotTriggerCallback() {
+    var clicked = false
+    renderReaderScreen(
+      createTestState(
+        shouldShowBottomAppBar = true,
+        tocEnabled = false,
+        tocOnClick = { clicked = true }
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG)
+      .performClick()
+    assertTrue(!clicked)
+  }
+
+  @Test
+  fun readerScreen_fullScreenItem_notActive_showsTopBar() {
+    renderReaderScreen(createTestState(fullScreenItem = Pair(false, null)))
+    composeTestRule
+      .onNodeWithText("Test Reader")
+      .assertIsDisplayed()
   }
 }
