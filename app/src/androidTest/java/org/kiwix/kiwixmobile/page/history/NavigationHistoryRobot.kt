@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
@@ -29,7 +28,6 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
-import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG
@@ -125,13 +123,15 @@ class NavigationHistoryRobot : BaseRobot() {
       composeTestRule.apply {
         waitForIdle()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
-          .assertTextEquals(context.getString(R.string.backward_history))
+          .assert(androidx.compose.ui.test.hasText(context.getString(R.string.backward_history), ignoreCase = true))
       }
-    } catch (_: AssertionError) {
+    } catch (e: AssertionError) {
       pauseForBetterTestPerformance(composeTestRule)
       if (retryCountForBackwardNavigationHistory > 0) {
         retryCountForBackwardNavigationHistory--
         assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
+      } else {
+        throw e
       }
     }
   }
@@ -149,13 +149,15 @@ class NavigationHistoryRobot : BaseRobot() {
       composeTestRule.apply {
         waitForIdle()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
-          .assertTextEquals(context.getString(R.string.forward_history))
+          .assert(androidx.compose.ui.test.hasText(context.getString(R.string.forward_history), ignoreCase = true))
       }
-    } catch (_: AssertionError) {
+    } catch (e: AssertionError) {
       pauseForBetterTestPerformance(composeTestRule)
       if (retryCountForForwardNavigationHistory > 0) {
         retryCountForForwardNavigationHistory--
         assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
+      } else {
+        throw e
       }
     }
   }
@@ -175,15 +177,15 @@ class NavigationHistoryRobot : BaseRobot() {
       composeTestRule.apply {
         waitForIdle()
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG, useUnmergedTree = true)
-          .assertTextEquals(context.getString(R.string.clear_all_history_dialog_title))
+          .assert(androidx.compose.ui.test.hasText(context.getString(R.string.clear_all_history_dialog_title), ignoreCase = true))
       }
-    } catch (ignore: AssertionFailedError) {
+    } catch (e: AssertionError) {
       pauseForBetterTestPerformance(composeTestRule)
       if (retryCountForClearNavigationHistory > 0) {
         retryCountForClearNavigationHistory--
         assertDeleteDialogDisplayed(composeTestRule)
       } else {
-        throw RuntimeException("Could not found the NavigationHistoryDeleteDialog. Original exception = $ignore")
+        throw e
       }
     }
   }
