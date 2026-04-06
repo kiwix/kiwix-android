@@ -171,8 +171,6 @@ androidComponents {
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   androidTestImplementation(Libs.shark_android)
-  testImplementation(Libs.kotlinx_coroutines_test)
-  testImplementation(Libs.TURBINE_FLOW_TEST)
   // inject migration module in test cases.
   androidTestImplementation(project(":objectboxmigration"))
   // Inject the migration module for the debug variant, as it is used by the test module.

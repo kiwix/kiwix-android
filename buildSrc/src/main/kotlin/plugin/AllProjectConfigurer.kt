@@ -212,6 +212,7 @@ class AllProjectConfigurer {
       implementation(Libs.multidex)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
+      testImplementation(Libs.TURBINE_FLOW_TEST)
       testImplementation(Libs.kotlinx_coroutines_test)
       testImplementation(Libs.junit_jupiter)
       testImplementation(Libs.mockk)
