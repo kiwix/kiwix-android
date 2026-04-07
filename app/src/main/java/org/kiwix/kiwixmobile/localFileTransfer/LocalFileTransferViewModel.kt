@@ -7,6 +7,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -120,9 +121,7 @@ class LocalFileTransferViewModel @Inject constructor(
       return false
     }
 
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
-      !isLocationServiceEnabled
-    ) {
+    if (permissionChecker.isAndroid8OrAbove() && !isLocationServiceEnabled) {
       Log.d(TAG, "location service is not enabled")
       requestEnableLocationServices()
       return false
@@ -261,6 +260,11 @@ class LocalFileTransferViewModel @Inject constructor(
     super.onCleared()
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
+  }
+
+  @VisibleForTesting
+  fun onClearedExposed() {
+    onCleared()
   }
 
   companion object {

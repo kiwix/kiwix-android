@@ -81,4 +81,7 @@ class AndroidPermissionChecker @Inject constructor(
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
   override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
+  override fun isAndroid8OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 }
