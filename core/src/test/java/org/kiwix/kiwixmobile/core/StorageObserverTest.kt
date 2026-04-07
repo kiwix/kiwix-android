@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.libkiwix.Book
+import org.kiwix.libkiwix.Illustration
 import org.kiwix.libzim.Archive
 import org.kiwix.sharedFunctions.libkiwixBook
 import java.io.File
@@ -141,8 +142,39 @@ class StorageObserverTest {
   }
 }
 
-class BookTestWrapper(private val id: String) : Book(0L) {
+class BookTestWrapper(
+  private val id: String,
+  private val bookTitle: String = "",
+  private val bookDescription: String = "",
+  private val bookLanguage: String = "",
+  private val bookCreator: String = "",
+  private val bookPublisher: String = "",
+  private val bookDate: String = "",
+  private val bookUrl: String = "",
+  private val bookArticleCount: String = "",
+  private val bookMediaCount: String = "",
+  private val bookSize: String = "",
+  private val bookPath: String = "",
+  private val bookName: String = "",
+  private val bookTags: String = ""
+) : Book(0L) {
   override fun getId(): String = id
+  override fun getTitle(): String = bookTitle
+  override fun getDescription(): String = bookDescription
+  override fun getLanguage(): String = bookLanguage
+  override fun getCreator(): String = bookCreator
+  override fun getPublisher(): String = bookPublisher
+  override fun getDate(): String = bookDate
+  override fun getUrl(): String = bookUrl
+  override fun getArticleCount(): Long = bookArticleCount.toLong()
+  override fun getMediaCount(): Long = bookMediaCount.toLong()
+  override fun getSize(): Long = bookSize.toLong()
+  override fun getPath(): String = bookPath
+  override fun getName(): String = bookName
+  override fun getTags(): String = bookTags
+
+  // Returning null due to not construing the `Illustration` since it is libkiwix internal class.
+  override fun getIllustration(size: Int): Illustration? = null
   override fun equals(other: Any?): Boolean = other is BookTestWrapper && getId() == other.getId()
   override fun hashCode(): Int = getId().hashCode()
   override fun update(archive: Archive?) {
