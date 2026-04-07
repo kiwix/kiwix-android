@@ -23,6 +23,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
 import dagger.Component
+
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp

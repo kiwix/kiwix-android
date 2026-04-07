@@ -86,6 +86,7 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
@@ -96,9 +97,6 @@ import org.kiwix.libkiwix.Book
 import retrofit2.Response
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
-
-const val DEFAULT_PROGRESS = 0
-const val MAX_PROGRESS = 100
 
 const val THREE = 3
 

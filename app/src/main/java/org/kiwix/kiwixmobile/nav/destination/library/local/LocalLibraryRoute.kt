@@ -32,45 +32,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
+import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
-import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.ui.KiwixDestination
-import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.util.Locale
 
@@ -93,9 +90,10 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocalLibraryRoute(
-  viewModelFactory: ViewModelProvider.Factory,
+  localLibraryViewModel: LocalLibraryViewModel,
   navController: NavHostController,
-  zimFileUriArg: String
+  zimFileUriArg: String,
+  snackBarHostState: SnackbarHostState
 ) {
   val context = LocalContext.current
   val activity = context as KiwixMainActivity
@@ -104,19 +102,7 @@ fun LocalLibraryRoute(
   val kiwixDataStore = activity.kiwixDataStore
   val dialogShower = remember { activity.alertDialogShower }
   val mainRepositoryActions = remember { component.mainRepositoryActions() }
-
-  val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
-  val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
-
-  val fileSelectListState by localLibraryViewModel.fileSelectListStates
-    .observeAsState(FileSelectListState(emptyList()))
-  val deviceListScanningProgress by localLibraryViewModel.deviceListScanningProgress.observeAsState()
-  val snackBarHostState = remember { SnackbarHostState() }
-
-  val processSelectedZimFilesForPlayStore =
-    remember { component.processSelectedZimFilesForPlayStore() }
-  val processSelectedZimFilesForStandalone =
-    remember { component.processSelectedZimFilesForStandalone() }
+  val uiState = localLibraryViewModel.uiState.collectAsStateWithLifecycle()
 
   val coroutineScope = rememberCoroutineScope()
   var actionMode by remember { mutableStateOf<ActionMode?>(null) }
@@ -130,19 +116,6 @@ fun LocalLibraryRoute(
     coroutineScope,
     mainRepositoryActions = mainRepositoryActions
   )
-
-  LaunchedEffect(Unit) {
-    processSelectedZimFilesForStandalone.setSelectedZimFileCallback(selectedZimFileCallback)
-    processSelectedZimFilesForPlayStore.init(
-      lifecycleScope = coroutineScope,
-      alertDialogShower = dialogShower,
-      snackBarHostState = snackBarHostState,
-      fragmentManager = activity.supportFragmentManager,
-      selectedZimFileCallback = selectedZimFileCallback
-    )
-    localLibraryViewModel.setAlertDialogShower(dialogShower)
-    localLibraryViewModel.setValidateZimViewModel(validateZimViewModel)
-  }
 
   val fileSelectLauncher = rememberFileSelectLauncher(
     activity,
@@ -166,47 +139,41 @@ fun LocalLibraryRoute(
     Unit
   }
 
-  LaunchedEffect(Unit) {
-    localLibraryViewModel.sideEffects.collect {
-      val effectResult = it.invokeWith(activity)
-      if (effectResult is ActionMode) {
-        actionMode = effectResult
-        actionMode?.title =
-          String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
-      }
+  localLibraryViewModel.sideEffects.CollectSideEffectWithActivity { effect, activity ->
+    effect.invokeWith(activity)
+    if (effect is ActionMode) {
+      actionMode = effect
+      actionMode?.title = String.format(
+        Locale.getDefault(),
+        "%d",
+        uiState.value.fileSelectListState.selectedBooks.size
+      )
     }
   }
 
-  LaunchedEffect(fileSelectListState) {
-    if (fileSelectListState.bookOnDiskListItems.isNotEmpty()) {
-      if (fileSelectListState.bookOnDiskListItems.none { it.isSelected }) {
+  LaunchedEffect(uiState.value.fileSelectListState) {
+    if (uiState.value.fileSelectListState.bookOnDiskListItems.isNotEmpty()) {
+      if (uiState.value.fileSelectListState.bookOnDiskListItems.none { it.isSelected }) {
         actionMode?.finish()
         actionMode = null
       } else {
-        actionMode?.title =
-          String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
+        actionMode?.title = String.format(
+          Locale.getDefault(),
+          "%d",
+          uiState.value.fileSelectListState.selectedBooks.size
+        )
       }
     }
   }
 
   LaunchedEffect(Unit) {
-    if (zimFileUriArg.isNotEmpty()) {
-      val uri = zimFileUriArg.toUri()
-      // Manual handling for start-up argument, similar to logic inside launcher
-      coroutineScope.launch {
-        when {
-          processSelectedZimFilesForStandalone.canHandleUris() ->
-            processSelectedZimFilesForStandalone.processSelectedFiles(listOf(uri))
+    localLibraryViewModel.processZimFileUri(zimFileUriArg)
 
-          activity.kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() ->
-            processSelectedZimFilesForPlayStore.processSelectedFiles(listOf(uri))
-        }
-      }
-    }
-
-    if (activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
-      requestFileSystemCheck()
-    }
+    // it should not everytime scan the storage.
+    // It should only when user want to scan the storage.
+    // if (activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
+    //   requestFileSystemCheck()
+    // }
   }
 
   // Port of LocalLibraryFragment.onResume() lifecycle logic.
@@ -285,17 +252,10 @@ fun LocalLibraryRoute(
     }
   }
 
-  val screenState = rememberLocalLibraryScreenState(
-    fileSelectListState = fileSelectListState,
-    deviceListScanningProgress = deviceListScanningProgress,
-    snackBarHostState = snackBarHostState,
-    permissionDeniedLayoutShowing = permissionDeniedLayoutShowing,
-    navController = navController
-  )
-
   LocalLibraryScreen(
-    state = screenState,
+    state = uiState.value,
     listState = rememberLazyListState(),
+    snackbarHostState = snackBarHostState,
     onRefresh = {
       coroutineScope.launchWithPermissionCheck(activity, kiwixDataStore, dialogShower) {
         requestFileSystemCheck()
@@ -307,11 +267,10 @@ fun LocalLibraryRoute(
           permissionDeniedLayoutShowing = false
           activity.navigateToAppSettings()
         } else {
-          localLibraryViewModel.fileSelectActions.tryEmit(FileSelectActions.UserClickedDownloadBooksButton)
+          localLibraryViewModel.fileSelectActions.tryEmit(UserClickedDownloadBooksButton)
         }
       }
     },
-    fabButtonClick = filePickerButtonClick,
     onClick = { bookOnDisk ->
       coroutineScope.launchWithPermissionCheck(activity, kiwixDataStore, dialogShower) {
         localLibraryViewModel.fileSelectActions.tryEmit(RequestNavigateTo(bookOnDisk))
@@ -326,9 +285,7 @@ fun LocalLibraryRoute(
       localLibraryViewModel.fileSelectActions.tryEmit(RequestSelect(bookOnDisk))
     },
     bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
-    onUserBackPressed = {
-      handleUserBackPressed(activity)
-    },
+    onUserBackPressed = { handleUserBackPressed(activity) },
     navHostController = navController,
     navigationIcon = {
       NavigationIcon(
@@ -420,58 +377,17 @@ private suspend fun scanFileSystem(
   }
 }
 
-@Composable
-private fun rememberLocalLibraryScreenState(
-  fileSelectListState: FileSelectListState,
-  deviceListScanningProgress: Int?,
-  snackBarHostState: SnackbarHostState,
-  permissionDeniedLayoutShowing: Boolean,
-  navController: NavHostController
-): LocalLibraryScreenState {
-  val context = LocalContext.current
-  return remember(
-    fileSelectListState,
-    deviceListScanningProgress,
-    snackBarHostState,
-    permissionDeniedLayoutShowing,
-    navController,
-    context
-  ) {
-    val noFilesViewItem = Triple(
-      if (permissionDeniedLayoutShowing) {
-        context.getString(string.grant_read_storage_permission)
-      } else {
-        context.getString(string.no_files_here)
-      },
-      if (permissionDeniedLayoutShowing) {
-        context.getString(string.go_to_settings_label)
-      } else {
-        context.getString(string.download_books)
-      },
-      permissionDeniedLayoutShowing || fileSelectListState.bookOnDiskListItems.isEmpty()
-    )
-
-    val actionMenuItems = listOf(
-      ActionMenuItem(
-        IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
-        string.get_content_from_nearby_device,
-        { navController.navigate(KiwixDestination.LocalFileTransfer.route) },
-        isEnabled = true,
-        testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
-      )
-    )
-
-    LocalLibraryScreenState(
-      fileSelectListState = fileSelectListState,
-      snackBarHostState = snackBarHostState,
-      swipeRefreshItem = false to (deviceListScanningProgress != MAX_PROGRESS && deviceListScanningProgress != null),
-      scanningProgressItem = (deviceListScanningProgress != null && deviceListScanningProgress != MAX_PROGRESS) to
-        (deviceListScanningProgress ?: 0),
-      noFilesViewItem = noFilesViewItem,
-      actionMenuItems = actionMenuItems
-    )
-  }
-}
+val actionMenuItems = listOf(
+  ActionMenuItem(
+    IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
+    string.get_content_from_nearby_device,
+    {
+      // navController.navigate(KiwixDestination.LocalFileTransfer.route)
+    },
+    isEnabled = true,
+    testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+  )
+)
 
 private fun handleUserBackPressed(activity: KiwixMainActivity): FragmentActivityExtensions.Super {
   val coreMainActivity = activity as? CoreMainActivity

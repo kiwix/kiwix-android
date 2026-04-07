@@ -26,10 +26,12 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
+import android.os.Environment
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
@@ -80,4 +82,14 @@ class AndroidPermissionChecker @Inject constructor(
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
   override fun isAndroid8OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+  override suspend fun isManageExternalStoragePermissionGranted(): Boolean =
+    if (kiwixDataStore.isNotPlayStoreBuildWithAndroid11OrAbove() &&
+      !kiwixDataStore.prefIsTest.first() &&
+      kiwixDataStore.showManageExternalFilesPermissionDialogOnRefresh.first()
+    ) {
+      Environment.isExternalStorageManager()
+    } else {
+      true
+    }
 }

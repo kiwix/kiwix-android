@@ -33,7 +33,14 @@ fun rememberSelectedZimFileCallback(
   zimReaderFactory: ZimFileReader.Factory = remember { CoreApp.coreComponent.zimFileReaderFactory() },
   mainRepositoryActions: MainRepositoryActions
 ): SelectedZimFileCallback {
-  return remember(activity, navController, dialogShower, coroutineScope, zimReaderFactory, mainRepositoryActions) {
+  return remember(
+    activity,
+    navController,
+    dialogShower,
+    coroutineScope,
+    zimReaderFactory,
+    mainRepositoryActions
+  ) {
     object : SelectedZimFileCallback {
       override fun showFileCopyMoveErrorDialog(errorMessage: String, callBack: suspend () -> Unit) {
         dialogShower.show(
