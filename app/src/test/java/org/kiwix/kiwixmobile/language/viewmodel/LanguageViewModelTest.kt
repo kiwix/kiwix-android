@@ -106,7 +106,7 @@ class LanguageViewModelTest {
     every { application.unregisterReceiver(any()) } just Runs
     LanguageSessionCache.hasFetched = false
     every { kiwixDataStore.cachedLanguageList } returns flowOf(languages.value)
-    every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("eng")
+    every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
     coEvery { kiwixService.getLanguages() } returns LanguageFeed()
     every { application.getString(any<Int>()) } returns "Error"
     coEvery { kiwixDataStore.saveLanguageList(any()) } just Runs
