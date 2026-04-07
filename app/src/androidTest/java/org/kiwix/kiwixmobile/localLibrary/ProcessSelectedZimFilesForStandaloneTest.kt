@@ -43,11 +43,11 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -145,11 +145,9 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
 
   private fun triggerProcessSelectedZimFiles(urisList: List<Uri>) {
     kiwixMainActivity.lifecycleScope.launch {
-      val localLibraryFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<LocalLibraryFragment>()
-          .firstOrNull()
-      localLibraryFragment?.handleSelectedFileUri(urisList)
+      val processSelectedZimFilesForStandalone =
+        kiwixMainActivity.kiwixActivityComponent.processSelectedZimFilesForStandalone()
+      processSelectedZimFilesForStandalone.processSelectedFiles(urisList)
     }
   }
 

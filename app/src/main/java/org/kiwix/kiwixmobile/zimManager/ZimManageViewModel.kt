@@ -86,7 +86,6 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
@@ -109,7 +108,6 @@ class ZimManageViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
   @OPDSKiwixService private var kiwixService: KiwixService,
-
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val fat32Checker: Fat32Checker,

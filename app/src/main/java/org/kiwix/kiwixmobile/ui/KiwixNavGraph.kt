@@ -78,7 +78,7 @@ import org.kiwix.kiwixmobile.language.LanguageScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
@@ -114,13 +114,11 @@ fun KiwixNavGraph(
     ) { backStackEntry ->
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
 
-      FragmentContainer(R.id.localLibraryFragmentContainer) {
-        LocalLibraryFragment().apply {
-          arguments = Bundle().apply {
-            putString(ZIM_FILE_URI_KEY, zimFileUri)
-          }
-        }
-      }
+      LocalLibraryRoute(
+        viewModelFactory = viewModelFactory,
+        navController = navController,
+        zimFileUriArg = zimFileUri
+      )
     }
     composable(KiwixDestination.Downloads.route) {
       FragmentContainer(R.id.downloadFragmentContainer) {

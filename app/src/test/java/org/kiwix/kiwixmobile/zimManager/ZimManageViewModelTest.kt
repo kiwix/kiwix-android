@@ -98,7 +98,6 @@ class ZimManageViewModelTest {
   private val fat32Checker: Fat32Checker = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
 
-
   @Suppress("DEPRECATION")
   private val networkCapabilities: NetworkCapabilities = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
