@@ -12,6 +12,7 @@ android {
     targetSdk = Config.targetSdk
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
   }
 
   compileOptions {
@@ -27,7 +28,7 @@ android {
     create("benchmark") {
       isDebuggable = true
       signingConfig = getByName("debug").signingConfig
-      matchingFallbacks += listOf("release")
+      matchingFallbacks += "release"
       proguardFile("benchmark-rules.pro")
     }
   }
@@ -37,13 +38,11 @@ android {
 }
 
 dependencies {
-
   implementation(Libs.junit)
-
   implementation(Libs.espresso_core)
-
   implementation(Libs.uiautomator)
   implementation(Libs.BENCHMARK_MACRO_JUNIT4)
+  add("benchmarkImplementation", project(":objectboxmigration"))
 }
 
 androidComponents {
