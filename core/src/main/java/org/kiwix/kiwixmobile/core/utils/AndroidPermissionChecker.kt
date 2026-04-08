@@ -36,8 +36,8 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class AndroidPermissionChecker @Inject constructor(
-  val context: Application,
-  val kiwixDataStore: KiwixDataStore
+  private val context: Application,
+  private val kiwixDataStore: KiwixDataStore
 ) : KiwixPermissionChecker {
   override suspend fun hasWriteExternalStoragePermission(): Boolean =
     if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {

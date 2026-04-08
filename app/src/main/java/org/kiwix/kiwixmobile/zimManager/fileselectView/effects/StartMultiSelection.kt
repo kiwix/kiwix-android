@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
@@ -33,7 +34,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestValidateZimFiles
 
 data class StartMultiSelection(
-  private val fileSelectActions: MutableSharedFlow<FileSelectActions>
+  private val fileSelectActions: MutableSharedFlow<FileSelectActions>,
+  private val coroutineScope: CoroutineScope
 ) : SideEffect<ActionMode?> {
   override fun invokeWith(activity: AppCompatActivity): ActionMode? {
     return activity.startActionMode(
@@ -56,7 +58,7 @@ data class StartMultiSelection(
         }
       )
     ) {
-      activity.lifecycleScope.launch {
+      coroutineScope.launch {
         fileSelectActions.emit(MultiModeFinished)
       }
     }

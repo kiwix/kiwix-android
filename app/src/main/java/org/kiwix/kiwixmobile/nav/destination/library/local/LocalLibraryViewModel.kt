@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import android.app.Application
 import android.net.Uri
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
@@ -42,18 +43,26 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.extensions.canReadFile
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.effects.ShowManageExternalFilesPermissionDialog
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
@@ -67,7 +76,9 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.ShowManageFilesPermissionDialog
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.ShowCopyMoveErrorDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -100,13 +111,15 @@ class LocalLibraryViewModel @Inject constructor(
   private val processSelectedZimFilesForPlayStore: ProcessSelectedZimFilesForPlayStore,
   private val repositoryActions: MainRepositoryActions,
   private val kiwixPermissionChecker: KiwixPermissionChecker,
+  private val kiwixDataStore: KiwixDataStore,
+  private val zimReaderFactory: ZimFileReader.Factory,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(), SelectedZimFileCallback {
   /**
    * Sealed class representing all file selection actions.
    */
   sealed class FileSelectActions {
-    data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    data class RequestNavigateTo(val zimReaderSource: ZimReaderSource) : FileSelectActions()
     data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data object RequestValidateZimFiles : FileSelectActions()
@@ -115,6 +128,9 @@ class LocalLibraryViewModel @Inject constructor(
     data object MultiModeFinished : FileSelectActions()
     data object RestartActionMode : FileSelectActions()
     data object UserClickedDownloadBooksButton : FileSelectActions()
+    data object ShowManageFilesPermissionDialog : FileSelectActions()
+    data class ShowCopyMoveErrorDialog(val errorMessage: String, val callBack: suspend () -> Unit) :
+      FileSelectActions()
   }
 
   data class LocalLibraryScreenState(
@@ -136,7 +152,7 @@ class LocalLibraryViewModel @Inject constructor(
 
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
-  val fileSelectActions = MutableSharedFlow<FileSelectActions>(extraBufferCapacity = 1)
+  private val fileSelectActions = MutableSharedFlow<FileSelectActions>(extraBufferCapacity = 1)
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   private val selectedZimFileUriList: MutableList<Uri> = mutableListOf()
@@ -190,31 +206,35 @@ class LocalLibraryViewModel @Inject constructor(
           sideEffects.emit(
             when (action) {
               is RequestNavigateTo ->
-                OpenFileWithNavigation(action.bookOnDisk)
+                OpenFileWithNavigation(
+                  zimReaderSource = action.zimReaderSource,
+                  coroutineScope = viewModelScope,
+                  ioDispatcher = ioDispatcher
+                )
 
-              is RequestMultiSelection ->
-                startMultiSelectionAndSelectBook(action.bookOnDisk)
-
-              RequestDeleteMultiSelection ->
-                DeleteFiles(selectionsFromState(), alertDialogShower)
-
-              RequestShareMultiSelection ->
-                ShareFiles(selectionsFromState())
-
+              is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
+              RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
+              RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+              MultiModeFinished -> noSideEffectAndClearSelectionState()
+              is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
+              RestartActionMode -> StartMultiSelection(fileSelectActions, viewModelScope)
+              UserClickedDownloadBooksButton -> NavigateToDownloads
               RequestValidateZimFiles ->
                 ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
 
-              MultiModeFinished ->
-                noSideEffectAndClearSelectionState()
+              ShowManageFilesPermissionDialog ->
+                if (kiwixPermissionChecker.isAndroid13orAbove()) {
+                  ShowManageExternalFilesPermissionDialog(alertDialogShower)
+                } else {
+                  None
+                }
 
-              is RequestSelect ->
-                noSideEffectSelectBook(action.bookOnDisk)
-
-              RestartActionMode ->
-                StartMultiSelection(fileSelectActions)
-
-              UserClickedDownloadBooksButton ->
-                NavigateToDownloads
+              is ShowCopyMoveErrorDialog -> ShowFileCopyMoveErrorDialog(
+                alertDialogShower,
+                action.errorMessage,
+                viewModelScope,
+                action.callBack
+              )
             }
           )
         }.onFailure {
@@ -234,7 +254,7 @@ class LocalLibraryViewModel @Inject constructor(
         )
       )
     }
-    return StartMultiSelection(fileSelectActions)
+    return StartMultiSelection(fileSelectActions, viewModelScope)
   }
 
   private fun selectBook(
@@ -388,15 +408,89 @@ class LocalLibraryViewModel @Inject constructor(
     _uiState.value = transform(_uiState.value)
   }
 
+  fun onSwipeRefresh() {
+    viewModelScope.launch {
+      if (uiState.value.permissionDeniedLayoutShowing) {
+        // When permission denied layout is showing hide the "Swipe refresh".
+        updateState { it.copy(isSwipeRefreshing = false) }
+      } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+        sendAction(ShowManageFilesPermissionDialog)
+        // Set loading to false since the dialog is currently being displayed.
+        // If the user clicks on "No" in the permission dialog,
+        // the loading icon remains visible infinitely.
+        updateState { it.copy(isSwipeRefreshing = false) }
+      } else {
+        // hide the swipe refreshing because now we are showing the ContentLoadingProgressBar
+        // to show the progress of how many files are scanned.
+        // disable the swipe refresh layout until the ongoing scanning will not complete
+        // to avoid multiple scanning.
+        updateState { it.copy(isSwipeRefreshing = false) }
+        // Scan the storage for ZIM files.
+        requestFileSystemCheck.emit(Unit)
+      }
+    }
+  }
+
+  fun onDownloadButtonClick() {
+    if (uiState.value.permissionDeniedLayoutShowing) {
+      updateState { it.copy(permissionDeniedLayoutShowing = false) }
+      context.navigateToAppSettings()
+    } else {
+      sendAction(UserClickedDownloadBooksButton)
+    }
+  }
+
+  fun onBookItemClick(bookOnDisk: BookOnDisk) {
+    viewModelScope.launch {
+      if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+        sendAction(ShowManageFilesPermissionDialog)
+      } else {
+        sendAction(RequestNavigateTo(bookOnDisk.zimReaderSource))
+      }
+    }
+  }
+
+  fun onBookItemLongClick(bookOnDisk: BookOnDisk) {
+    viewModelScope.launch {
+      if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+        sendAction(ShowManageFilesPermissionDialog)
+      } else {
+        sendAction(RequestMultiSelection(bookOnDisk))
+      }
+    }
+  }
+
+  fun onMultiSelect(bookOnDisk: BookOnDisk) {
+    sendAction(RequestSelect(bookOnDisk))
+  }
+
+  fun filePickerMenuButtonClick() {
+    viewModelScope.launch {
+      if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
+        // TODO request write external permission
+      } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+        sendAction(ShowManageFilesPermissionDialog)
+      } else {
+        // TODO launch file picking action.
+      }
+    }
+  }
+
+  private fun sendAction(action: FileSelectActions) {
+    viewModelScope.launch {
+      fileSelectActions.emit(action)
+    }
+  }
+
   fun processZimFileUri(zimFileUri: String) {
     viewModelScope.launch {
       if (zimFileUri.isNotEmpty()) {
         selectedZimFileUriList.clear()
         selectedZimFileUriList.add(zimFileUri.toUri())
-        if (kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
-          // show dialog of manageExternalStoragePermission
-        } else if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
-          // ask for write permission.
+        if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
+          // TODO request write external permission
+        } else if (kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+          sendAction(ShowManageFilesPermissionDialog)
         } else {
           handleSelectedFileUri(selectedZimFileUriList)
         }
@@ -419,14 +513,54 @@ class LocalLibraryViewModel @Inject constructor(
   }
 
   override fun navigateToReaderFragment(file: File) {
+    viewModelScope.launch {
+      if (!file.canReadFile()) {
+        context.toast(string.unable_to_read_zim_file)
+      } else {
+        // Save the ZIM file to the libkiwix to display it on the local library screen.
+        // This is particularly useful when storage is slow or contains a large number of files.
+        // In such cases, scanning may take some time to show all the files on the
+        // local library screen. Since our application is already aware of this opened ZIM file,
+        // we can directly add it to the libkiwix.
+        // See https://github.com/kiwix/kiwix-android/issues/3650
+        addBookToLibkiwixBookOnDisk(file)
+        // Open the ZIM file in reader screen.
+        sendAction(RequestNavigateTo(ZimReaderSource(file)))
+      }
+    }
   }
 
   override fun addBookToLibkiwixBookOnDisk(file: File) {
+    viewModelScope.launch(ioDispatcher) {
+      runCatching {
+        zimReaderFactory.create(ZimReaderSource(file), false)
+          ?.let { zimFileReader ->
+            val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+            repositoryActions.saveBook(book)
+            zimFileReader.dispose()
+          }
+      }.onFailure {
+        Log.e("LocalLibraryViewModel", "Failed to save book. Original Exception = ", it)
+      }
+    }
   }
 
   override fun showFileCopyMoveErrorDialog(
     errorMessage: String,
     callBack: suspend () -> Unit
   ) {
+    sendAction(ShowCopyMoveErrorDialog(errorMessage, callBack))
   }
+
+  /**
+   * Determines whether the file system scan dialog should be shown.
+   * Conditions:
+   *  1. The scan dialog has not already been shown.
+   *  2. This is not the Play Store build.
+   *  3. There are no ZIM files showing on the library screen.
+   */
+  private suspend fun shouldShowFileSystemDialog(): Boolean =
+    !kiwixDataStore.isScanFileSystemDialogShown.first() &&
+    !BuildConfig.IS_PLAYSTORE &&
+    uiState.value.fileSelectListState.bookOnDiskListItems.isEmpty()
 }
