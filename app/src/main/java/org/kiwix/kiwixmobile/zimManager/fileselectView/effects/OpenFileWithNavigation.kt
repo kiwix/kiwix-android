@@ -37,8 +37,7 @@ data class OpenFileWithNavigation(
   private val zimReaderSource: ZimReaderSource,
   private val coroutineScope: CoroutineScope,
   private val ioDispatcher: CoroutineDispatcher
-) :
-  SideEffect<Unit> {
+) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     coroutineScope.launch {
       val canOpenInLibkiwix = withContext(ioDispatcher) {

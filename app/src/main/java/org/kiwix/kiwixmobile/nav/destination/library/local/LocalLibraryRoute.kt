@@ -19,9 +19,12 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Activity.RESULT_OK
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.view.ActionMode
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -29,42 +32,35 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.flow.filterIsInstance
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
+import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.util.Locale
-
-private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 
 /**
  * Entry point for Local Library feature.
@@ -73,14 +69,7 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
  * Complexity suppressed as this is a Route-level composable managing
  * multiple app-level concerns that shouldn't be split.
  */
-@Suppress(
-  "LongMethod",
-  "ComplexMethod",
-  "ComplexCondition",
-  "TooGenericExceptionCaught",
-  "InjectDispatcher"
-)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun LocalLibraryRoute(
   localLibraryViewModel: LocalLibraryViewModel,
@@ -88,24 +77,17 @@ fun LocalLibraryRoute(
   zimFileUriArg: String,
   snackBarHostState: SnackbarHostState
 ) {
-  val context = LocalContext.current
-  val activity = context as KiwixMainActivity
-
-  val kiwixDataStore = activity.kiwixDataStore
-  val dialogShower = remember { activity.alertDialogShower }
+  val activity = LocalActivity.current as KiwixMainActivity
   val uiState = localLibraryViewModel.uiState.collectAsStateWithLifecycle()
-
-  val coroutineScope = rememberCoroutineScope()
   var actionMode by remember { mutableStateOf<ActionMode?>(null) }
-  var permissionDeniedLayoutShowing by remember { mutableStateOf(false) }
-  var shouldScanFileSystem by remember { mutableStateOf(false) }
-
-  val requestFileSystemCheck = {
-    coroutineScope.launch {
-      localLibraryViewModel.requestFileSystemCheck.emit(Unit)
+  val readWritePermission =
+    rememberMultiplePermissionsState(listOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE))
+  val filePickerLauncher =
+    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      if (it.resultCode == RESULT_OK) {
+        localLibraryViewModel.processSelectedZimFiles(it.data)
+      }
     }
-    Unit
-  }
 
   localLibraryViewModel.sideEffects.CollectSideEffectWithActivity { effect, activity ->
     val effectResult = effect.invokeWith(activity)
@@ -116,7 +98,6 @@ fun LocalLibraryRoute(
       }
     }
   }
-
   LaunchedEffect(uiState.value.fileSelectListState) {
     if (uiState.value.fileSelectListState.bookOnDiskListItems.none { it.isSelected }) {
       actionMode?.finish()
@@ -125,97 +106,15 @@ fun LocalLibraryRoute(
       setActionModeTitle(actionMode, uiState.value.fileSelectListState.selectedBooks.size)
     }
   }
-
-  LaunchedEffect(Unit) {
-    localLibraryViewModel.processZimFileUri(zimFileUriArg)
-
-    // it should not everytime scan the storage.
-    // It should only when user want to scan the storage.
-    // if (activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
-    //   requestFileSystemCheck()
-    // }
-  }
-
-  // Port of LocalLibraryFragment.onResume() lifecycle logic.
-  // Shows the scan storage dialog on first visit, handles permission checks,
-  // and triggers file system scans when returning from settings.
-  val lifecycleOwner = LocalLifecycleOwner.current
-  DisposableEffect(lifecycleOwner) {
-    val observer = LifecycleEventObserver { _, event ->
-      if (event == Lifecycle.Event.ON_RESUME) {
-        coroutineScope.launch {
-          when {
-            shouldShowFileSystemDialog(
-              kiwixDataStore,
-              fileSelectListState
-            ) -> {
-              Handler(Looper.getMainLooper()).postDelayed({
-                coroutineScope.launch {
-                  showFileSystemScanDialog(
-                    dialogShower,
-                    kiwixDataStore,
-                    onScanRequested = {
-                      shouldScanFileSystem = true
-                      coroutineScope.launch {
-                        scanFileSystem(
-                          activity,
-                          kiwixDataStore,
-                          dialogShower,
-                          onShouldScanChanged = { shouldScanFileSystem = it },
-                          requestFileSystemCheck = requestFileSystemCheck
-                        )
-                      }
-                    }
-                  )
-                }
-              }, SHOW_SCAN_DIALOG_DELAY)
-            }
-
-            shouldScanFileSystem -> {
-              // When user goes to settings for granting the MANAGE_EXTERNAL_STORAGE
-              // permission, and comes back to the application then initiate
-              // the scanning of file system.
-              scanFileSystem(
-                activity,
-                kiwixDataStore,
-                dialogShower,
-                onShouldScanChanged = { shouldScanFileSystem = it },
-                requestFileSystemCheck = requestFileSystemCheck
-              )
-            }
-
-            !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
-              !kiwixDataStore.prefIsTest.first() &&
-              !permissionDeniedLayoutShowing -> {
-              // Check manage external storage permission for non-PlayStore builds.
-              if (!activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                  val shouldShowDialog =
-                    kiwixDataStore.showManageExternalFilesPermissionDialog.first()
-                  if (shouldShowDialog) {
-                    kiwixDataStore.setShowManageExternalFilesPermissionDialog(false)
-                    dialogShower.show(
-                      KiwixDialog.ManageExternalFilesPermissionDialog,
-                      { activity.navigateToSettings() }
-                    )
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    lifecycleOwner.lifecycle.addObserver(observer)
-    onDispose {
-      lifecycleOwner.lifecycle.removeObserver(observer)
-    }
-  }
+  ObserveLocalLibraryUiActions(localLibraryViewModel, readWritePermission, activity)
+  LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { localLibraryViewModel.onResume() }
 
   LocalLibraryScreen(
     state = uiState.value,
     actionMenuItems =
-      actionMenuItems(navController, localLibraryViewModel::filePickerMenuButtonClick),
+      actionMenuItems(navController) {
+        localLibraryViewModel.filePickerMenuButtonClick(filePickerLauncher)
+      },
     listState = rememberLazyListState(),
     snackbarHostState = snackBarHostState,
     onRefresh = localLibraryViewModel::onSwipeRefresh,
@@ -236,66 +135,36 @@ fun LocalLibraryRoute(
       )
     }
   )
+  LaunchedEffect(Unit) {
+    LanguageUtils(activity).changeFont(activity, localLibraryViewModel.kiwixDataStore)
+    localLibraryViewModel.processZimFileArguments(zimFileUriArg)
+  }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun ObserveLocalLibraryUiActions(
+  viewModel: LocalLibraryViewModel,
+  readWritePermission: MultiplePermissionsState,
+  activity: KiwixMainActivity
+) {
+  LaunchedEffect(Unit) {
+    // All other actions are handled in viewModel with sideEffect.
+    // Asking permission is a UI responsibility so we are asking it on UI.
+    viewModel.localLibraryUiActions
+      .filterIsInstance<RequestReadWritePermission>()
+      .collect {
+        activity.toast(string.request_storage)
+        readWritePermission.handlePermissionRequest(
+          onGranted = { viewModel.onReadWritePermissionGranted(it.resultAction) },
+          onRationale = viewModel::onReadWriteRationalPermission,
+        )
+      }
+  }
 }
 
 private fun setActionModeTitle(actionMode: ActionMode?, selectedBookCount: Int) {
   actionMode?.title = String.format(Locale.getDefault(), "%d", selectedBookCount)
-}
-
-/**
- * Shows the FileSystemScan dialog.
- */
-private fun showFileSystemScanDialog(
-  dialogShower: AlertDialogShower,
-  kiwixDataStore: KiwixDataStore,
-  onScanRequested: () -> Unit
-) {
-  dialogShower.show(
-    KiwixDialog.YesNoDialog.FileSystemScan,
-    {
-      CoroutineScope(Dispatchers.Main).launch {
-        // Sets true so that it cannot show again.
-        kiwixDataStore.setIsScanFileSystemDialogShown(true)
-        onScanRequested()
-      }
-    },
-    {
-      CoroutineScope(Dispatchers.Main).launch {
-        // User clicks on the "No" button so do not show again.
-        kiwixDataStore.setIsScanFileSystemDialogShown(true)
-      }
-    }
-  )
-}
-
-/**
- * Scans the file system for ZIM files.
- * Checks:
- * 1. If the app has manage external storage permission (on Android R+).
- * 2. Then finally it scans the storage for ZIM files.
- */
-private suspend fun scanFileSystem(
-  activity: KiwixMainActivity,
-  kiwixDataStore: KiwixDataStore,
-  dialogShower: AlertDialogShower,
-  onShouldScanChanged: (Boolean) -> Unit,
-  requestFileSystemCheck: () -> Unit
-) {
-  when {
-    !activity.isManageExternalStoragePermissionGranted(kiwixDataStore) -> {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        dialogShower.show(
-          KiwixDialog.ManageExternalFilesPermissionDialog,
-          { activity.navigateToSettings() }
-        )
-      }
-    }
-
-    else -> {
-      onShouldScanChanged(false)
-      requestFileSystemCheck()
-    }
-  }
 }
 
 fun actionMenuItems(navController: NavHostController, filePickerButtonClick: () -> Unit) = listOf(
