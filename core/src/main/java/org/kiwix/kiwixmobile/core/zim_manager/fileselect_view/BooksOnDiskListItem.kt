@@ -28,7 +28,6 @@ import java.io.File
 import java.util.Locale
 
 sealed class BooksOnDiskListItem {
-  var isSelected: Boolean = false
   abstract val id: String
 
   data class LanguageItem constructor(
@@ -46,6 +45,7 @@ sealed class BooksOnDiskListItem {
     val book: LibkiwixBook,
     val file: File = File(""),
     val zimReaderSource: ZimReaderSource,
+    val isSelected: Boolean = false,
     val tags: List<KiwixTag> = KiwixTag.Companion.from(book.tags),
     override val id: String = book.id
   ) : BooksOnDiskListItem() {
@@ -58,9 +58,10 @@ sealed class BooksOnDiskListItem {
       zimReaderSource = ZimReaderSource(File(downloadRoomEntity.file))
     )
 
-    constructor(zimFileReader: ZimFileReader) : this(
+    constructor(zimFileReader: ZimFileReader, isSelected: Boolean) : this(
       book = zimFileReader.toBook(),
-      zimReaderSource = zimFileReader.zimReaderSource
+      zimReaderSource = zimFileReader.zimReaderSource,
+      isSelected = isSelected
     )
 
     constructor(libkiwixBook: LibkiwixBook) : this(

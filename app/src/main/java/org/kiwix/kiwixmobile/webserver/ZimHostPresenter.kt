@@ -33,19 +33,22 @@ class ZimHostPresenter @Inject internal constructor(
 ) : BasePresenter<View>(), Presenter {
   override suspend fun loadBooks(previouslyHostedBookIds: Set<String>) {
     runCatching {
-      val books = dataSource.getLanguageCategorizedBooks().first()
-      books.forEach { item ->
-        if (item is BooksOnDiskListItem.BookOnDisk) {
-          item.isSelected = when {
-            // Hosted books are now saved using the unique book ID.
-            previouslyHostedBookIds.contains(item.book.id) -> true
-            // Backward compatibility: for users who have not been migrated to the new logic yet,
-            // fall back to checking only the title.
-            previouslyHostedBookIds.contains(item.book.title) -> true
-            // If no previously hosted books are saved, select all books by default.
-            previouslyHostedBookIds.isEmpty() -> true
-            else -> false
-          }
+      val books = dataSource.getLanguageCategorizedBooks().first().map {
+        if (it is BooksOnDiskListItem.BookOnDisk) {
+          it.copy(
+            isSelected = when {
+              // Hosted books are now saved using the unique book ID.
+              previouslyHostedBookIds.contains(it.book.id) -> true
+              // Backward compatibility: for users who have not been migrated to the new logic yet,
+              // fall back to checking only the title.
+              previouslyHostedBookIds.contains(it.book.title) -> true
+              // If no previously hosted books are saved, select all books by default.
+              previouslyHostedBookIds.isEmpty() -> true
+              else -> false
+            }
+          )
+        } else {
+          it
         }
       }
       view?.addBooks(books)

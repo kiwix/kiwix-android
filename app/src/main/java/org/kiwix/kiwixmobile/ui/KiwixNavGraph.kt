@@ -121,13 +121,15 @@ fun KiwixNavGraph(
       val activity = context as KiwixMainActivity
       val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
       val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
-      localLibraryViewModel.apply {
-        initialize(
-          validateZimViewModel,
-          alertDialogShower,
-          snackBarHostState,
-          activity.supportFragmentManager
-        )
+      LaunchedEffect(Unit) {
+        localLibraryViewModel.apply {
+          initialize(
+            validateZimViewModel,
+            alertDialogShower,
+            snackBarHostState,
+            activity.supportFragmentManager
+          )
+        }
       }
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
 
