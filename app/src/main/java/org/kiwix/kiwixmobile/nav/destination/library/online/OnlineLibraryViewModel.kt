@@ -22,6 +22,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -46,6 +47,8 @@ import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import javax.inject.Inject
 
 /**
@@ -79,8 +82,8 @@ class OnlineLibraryViewModel @Inject constructor(
 
     data class ShowDialog(
       val dialog: KiwixDialog,
-      val positiveAction: () -> Unit = {},
-      val negativeAction: () -> Unit = {}
+      val negativeAction: () -> Unit = {},
+      val positiveAction: () -> Unit = {}
     ) : UiEvent()
 
     data class ShowToast(val message: String) : UiEvent()
@@ -92,7 +95,10 @@ class OnlineLibraryViewModel @Inject constructor(
     object NavigateToAppSettings : UiEvent()
   }
 
-  private val _uiEvents = MutableSharedFlow<UiEvent>(extraBufferCapacity = 10)
+  private val _uiEvents = MutableSharedFlow<UiEvent>(
+    replay = 1,
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+  )
   val uiEvents = _uiEvents.asSharedFlow()
 
   private val _scanningProgress = MutableStateFlow<Pair<Boolean, String>>(false to "")
@@ -147,11 +153,11 @@ class OnlineLibraryViewModel @Inject constructor(
 
   fun emitDialog(
     dialog: KiwixDialog,
-    positiveAction: () -> Unit = {},
-    negativeAction: () -> Unit = {}
+    negativeAction: () -> Unit = {},
+    positiveAction: () -> Unit = {}
   ) {
     viewModelScope.launch {
-      _uiEvents.emit(UiEvent.ShowDialog(dialog, positiveAction, negativeAction))
+      _uiEvents.emit(UiEvent.ShowDialog(dialog, negativeAction, positiveAction))
     }
   }
 
@@ -171,7 +177,7 @@ class OnlineLibraryViewModel @Inject constructor(
       if (!activity.isManageExternalStoragePermissionGranted(kiwixDataStore)) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
           emitDialog(KiwixDialog.ManageExternalFilesPermissionDialog) {
-            _uiEvents.tryEmit(UiEvent.NavigateToSettings)
+            onNavigateToSettingsClicked()
           }
         }
       } else {
@@ -281,9 +287,21 @@ class OnlineLibraryViewModel @Inject constructor(
       } else {
         emitDialog(
           KiwixDialog.WriteStoragePermissionRationale,
-          positiveAction = { _uiEvents.tryEmit(UiEvent.NavigateToAppSettings) }
+          positiveAction = ::onNavigateToAppSettingsClicked
         )
       }
+    }
+  }
+
+  fun onNavigateToSettingsClicked() {
+    viewModelScope.launch {
+      _uiEvents.emit(UiEvent.NavigateToSettings)
+    }
+  }
+
+  fun onNavigateToAppSettingsClicked() {
+    viewModelScope.launch {
+      _uiEvents.emit(UiEvent.NavigateToAppSettings)
     }
   }
 
@@ -366,7 +384,7 @@ class OnlineLibraryViewModel @Inject constructor(
         totalResults,
         ITEMS_PER_PAGE
       )
-      val currentPage = count / ITEMS_PER_PAGE
+      val currentPage = if (count > 0) (count - 1) / ITEMS_PER_PAGE else 0
       val nextPage = currentPage + 1
       if (nextPage < totalPages) {
         zimManageViewModel.updateOnlineLibraryFilters(
@@ -413,5 +431,14 @@ class OnlineLibraryViewModel @Inject constructor(
         }
       }
     }
+  }
+
+  fun pauseResumeDownload(item: LibraryDownloadItem) {
+    val isResumeAction = item.downloadState == DownloadState.Paused
+    downloader.pauseResumeDownload(item.downloadId, isResumeAction)
+  }
+
+  fun deleteDownload(item: LibraryDownloadItem) {
+    downloader.cancelDownload(item.downloadId)
   }
 }

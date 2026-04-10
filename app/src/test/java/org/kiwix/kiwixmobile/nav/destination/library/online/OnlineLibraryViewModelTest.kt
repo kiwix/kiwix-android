@@ -182,9 +182,26 @@ class OnlineLibraryViewModelTest {
     verify {
       zimManageViewModel.updateOnlineLibraryFilters(
         match {
-          it.page == 2 && it.isLoadMoreItem
+          it.page == 1 && it.isLoadMoreItem
         }
       )
     }
   }
+
+  @Test
+  fun `onNavigateToSettingsClicked emits NavigateToSettings event`() = runTest {
+    viewModel.uiEvents.test {
+      viewModel.onNavigateToSettingsClicked()
+      assertThat(awaitItem()).isInstanceOf(OnlineLibraryViewModel.UiEvent.NavigateToSettings::class.java)
+    }
+  }
+
+  @Test
+  fun `onNavigateToAppSettingsClicked emits NavigateToAppSettings event`() = runTest {
+    viewModel.uiEvents.test {
+      viewModel.onNavigateToAppSettingsClicked()
+      assertThat(awaitItem()).isInstanceOf(OnlineLibraryViewModel.UiEvent.NavigateToAppSettings::class.java)
+    }
+  }
+
 }
