@@ -25,3 +25,4 @@ object Intents {
   @JvmStatic fun <T : Activity> internal(clazz: Class<T>): Intent =
     Intent(clazz.canonicalName).setPackage(CoreApp.instance.packageName)
 }
+

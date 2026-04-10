@@ -298,7 +298,8 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
             index = index,
             item = item,
             onPauseResumeClick = state.onPauseResumeButtonClick,
-            onStopClick = state.onStopButtonClick
+            onStopClick = state.onStopButtonClick,
+            onAutomaticRetry = state.onAutomaticRetry
           )
         }
       }

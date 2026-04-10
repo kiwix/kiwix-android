@@ -81,6 +81,10 @@ data class OnlineLibraryScreenState(
    */
   val onStopButtonClick: (LibraryDownloadItem) -> Unit,
   /**
+   * Handles automatic background retries for failed downloads.
+   */
+  val onAutomaticRetry: (LibraryDownloadItem) -> Unit,
+  /**
    * Handles the showing of searchBar in toolbar.
    */
   val isSearchActive: Boolean,

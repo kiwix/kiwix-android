@@ -226,13 +226,13 @@ fun OnlineLibraryRoute(
           onlineLibraryViewModel.emitNoInternetSnackbar(context)
           return@OnlineLibraryScreenState
         }
-        onlineLibraryViewModel.downloader.pauseResumeDownload(
-          item.downloadId,
-          item.downloadState == DownloadState.Paused
-        )
+        onlineLibraryViewModel.pauseResumeDownload(item)
       },
       onStopButtonClick = { item ->
         onStopButtonClick(onlineLibraryViewModel, item, activity, context)
+      },
+      onAutomaticRetry = { item ->
+        onlineLibraryViewModel.downloader.retryDownload(item.downloadId)
       },
       isSearchActive = isSearchActive,
       searchText = searchText,
@@ -312,7 +312,9 @@ private fun HandleUiEvents(
             actionLabel = event.actionLabel,
             lifecycleScope = scope,
             actionClick = {
-              event.actionIntent?.let { context.startActivity(it) }
+              event.actionIntent?.let { intent: android.content.Intent ->
+                context.startActivity(intent)
+              }
               event.onAction?.invoke()
             }
           )
@@ -345,6 +347,7 @@ private fun HandleUiEvents(
 
         is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
           if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            context.toast(context.getString(string.all_files_permission_needed), Toast.LENGTH_SHORT)
             (activity as androidx.fragment.app.FragmentActivity).navigateToSettings()
           }
         }
@@ -543,13 +546,13 @@ private fun onStopButtonClick(
 
       else -> {
         onlineLibraryViewModel.emitDialog(KiwixDialog.YesNoDialog.StopDownload) {
-          onlineLibraryViewModel.downloader.cancelDownload(item.downloadId)
+          onlineLibraryViewModel.deleteDownload(item)
         }
       }
     }
   } else {
     onlineLibraryViewModel.emitDialog(KiwixDialog.YesNoDialog.StopDownload) {
-      onlineLibraryViewModel.downloader.cancelDownload(item.downloadId)
+      onlineLibraryViewModel.deleteDownload(item)
     }
   }
 }
