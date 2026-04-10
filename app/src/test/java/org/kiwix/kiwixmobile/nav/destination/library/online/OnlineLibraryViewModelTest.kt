@@ -28,6 +28,7 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -41,6 +42,9 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -201,6 +205,38 @@ class OnlineLibraryViewModelTest {
     viewModel.uiEvents.test {
       viewModel.onNavigateToAppSettingsClicked()
       assertThat(awaitItem()).isInstanceOf(OnlineLibraryViewModel.UiEvent.NavigateToAppSettings::class.java)
+    }
+  }
+
+  @Test
+  fun `pauseResumeDownload triggers downloader with correct isResumeAction`() = runTest {
+    val downloadId = 123L
+    val item = mockk<LibraryDownloadItem>()
+    every { item.downloadId } returns downloadId
+
+    // When state is Paused -> isResumeAction should be true
+    every { item.downloadState } returns DownloadState.Paused
+    viewModel.pauseResumeDownload(item)
+    verify { downloader.pauseResumeDownload(downloadId, true) }
+
+    // When state is Downloading (or anything else) -> isResumeAction should be false
+    every { item.downloadState } returns mockk<DownloadState>()
+    viewModel.pauseResumeDownload(item)
+    verify { downloader.pauseResumeDownload(downloadId, false) }
+  }
+
+  @Test
+  fun `emitDialog emits ShowDialog event`() = runTest {
+    val dialog = KiwixDialog.ManageExternalFilesPermissionDialog
+    val neutralAction = {}
+    val positiveAction = {}
+
+    viewModel.uiEvents.test {
+      viewModel.emitDialog(dialog, neutralAction, positiveAction)
+      val event = awaitItem() as OnlineLibraryViewModel.UiEvent.ShowDialog
+      assertThat(event.dialog).isEqualTo(dialog)
+      assertEquals(neutralAction, event.negativeAction)
+      assertEquals(positiveAction, event.positiveAction)
     }
   }
 }
