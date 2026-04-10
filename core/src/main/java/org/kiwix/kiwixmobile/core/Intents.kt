@@ -26,3 +26,4 @@ object Intents {
     Intent(clazz.canonicalName).setPackage(CoreApp.instance.packageName)
 }
 
+
