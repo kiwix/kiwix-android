@@ -203,5 +203,4 @@ class OnlineLibraryViewModelTest {
       assertThat(awaitItem()).isInstanceOf(OnlineLibraryViewModel.UiEvent.NavigateToAppSettings::class.java)
     }
   }
-
 }
