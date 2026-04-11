@@ -17,10 +17,13 @@
     android:name=".KiwixApp"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
+    android:localeConfig="@xml/locales_config"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
-    android:localeConfig="@xml/locales_config"
     tools:targetApi="tiramisu">
+    <profileable
+      android:shell="true"
+      tools:targetApi="29" />
 
     <activity
       android:name=".main.KiwixMainActivity"
@@ -30,7 +33,6 @@
       android:launchMode="singleInstance"
       android:theme="@style/KiwixTheme.Launcher"
       android:windowSoftInputMode="adjustPan">
-
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -46,13 +48,16 @@
 
         <data android:scheme="content" />
         <data android:mimeType="application/octet-stream" />
-
       </intent-filter>
       <intent-filter>
-        <!-- Intent filter for Samsung's "My Files" file manager.
+
+        <!--
+         Intent filter for Samsung's "My Files" file manager.
          This is necessary because it returns an empty mimeType for ZIM files,
-         preventing our application from appearing in the suggestion list. -->
+         preventing our application from appearing in the suggestion list.
+                -->
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <!-- This will match any URI that starts with "content://0@media/external/file/" -->
         <data android:scheme="content" />
@@ -135,13 +140,18 @@
       </intent-filter>
       <intent-filter>
         <action android:name="org.kiwix.kiwixmobile.core.main.CoreMainActivity" />
+
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="kiwix" android:host="zimhost" />
+
+        <data
+          android:host="zimhost"
+          android:scheme="kiwix" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -168,8 +178,10 @@
         <action android:name="KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </receiver>
+
     <service
       android:name=".webserver.wifi_hotspot.HotspotService"
       android:foregroundServiceType="dataSync" />
   </application>
+
 </manifest>
