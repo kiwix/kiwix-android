@@ -488,7 +488,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         if (it is BookOnDisk) {
           zimReaderContainer.zimFileReader?.let { zimFileReader ->
             val booksOnDiskListItem =
-              (BookOnDisk(zimFileReader, true) as BooksOnDiskListItem)
+              BookOnDisk(zimFileReader, true) as BooksOnDiskListItem
             updatedBooksList.add(booksOnDiskListItem)
           }
         } else {
