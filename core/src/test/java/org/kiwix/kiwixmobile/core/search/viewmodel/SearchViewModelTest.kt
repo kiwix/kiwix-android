@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialo
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
@@ -269,6 +270,58 @@ internal class SearchViewModelTest {
       advanceUntilIdle()
       assertThat(viewModel.uiState.value.searchText).isEqualTo(suggestion)
     }
+
+    private fun emissionOf(
+      searchTerm: String,
+      suggestionSearch: SuggestionSearch,
+      databaseResults: List<RecentSearchListItem>,
+      searchOrigin: SearchOrigin
+    ) {
+      coEvery {
+        searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
+      } returns suggestionSearch
+      viewModel.actions.tryEmit(Filter(searchTerm))
+      recentsFromDb.tryEmit(databaseResults)
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
+    }
+  }
+
+  @Nested
+  inner class LoadSearch {
+    @Test
+    fun loadMoreSearchResults_whenSameDataReturned_doesNotUpdateSearchList() = runTest {
+      val existingItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      recentsFromDb.tryEmit(listOf(existingItem))
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
+      advanceUntilIdle()
+
+      val listBefore = viewModel.uiState.value.searchList
+
+      viewModel.loadMoreSearchResults()
+      advanceUntilIdle()
+      val listAfter = viewModel.uiState.value.searchList
+
+      assertThat(listAfter).isEqualTo(listBefore)
+      assertThat(viewModel.uiState.value.isLoadingMore).isFalse()
+    }
+
+    @Test
+    fun loadMoreSearchResults_whenNewDataArrives_updatesSearchList() = runTest {
+      val existingItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      val newItem = RecentSearchListItem("new data", ZimFileReader.CONTENT_PREFIX)
+
+      recentsFromDb.tryEmit(listOf(existingItem))
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
+      advanceUntilIdle()
+
+      recentsFromDb.tryEmit(listOf(existingItem, newItem))
+      viewModel.loadMoreSearchResults()
+      advanceUntilIdle()
+
+      val newData = viewModel.uiState.value.searchList
+      assertThat(newData).containsExactly(existingItem, newItem)
+      assertThat(viewModel.uiState.value.isLoadingMore).isFalse()
+    }
   }
 
   @Nested
@@ -390,6 +443,36 @@ internal class SearchViewModelTest {
     }
 
     @Test
+    fun closeKeyboard_whenCalled_emitsCloseKeyboardEffect() = runTest {
+      actionResultsInEffects(
+        Action.CloseKeyboard,
+        CloseKeyboard
+      )
+    }
+
+    @Test
+    fun onKeyboardSubmitButtonClick_whenMatchFound_emitsCloseKeyboardAndOnItemClick() = runTest {
+      val matchingItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      recentsFromDb.tryEmit(listOf(matchingItem))
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
+      advanceUntilIdle()
+
+      viewModel.effects.test {
+        viewModel.onKeyboardSubmitButtonClick("kiwix")
+        advanceUntilIdle()
+
+        val closeKeyboardEffect = awaitItem()
+        assertThat(closeKeyboardEffect).isEqualTo(CloseKeyboard)
+        val saveSearchToRecentsEffect = awaitItem()
+        assertThat(saveSearchToRecentsEffect).isInstanceOf(SaveSearchToRecents::class.java)
+        val openSearchItemEffect = awaitItem()
+        assertThat(openSearchItemEffect).isEqualTo(OpenSearchItem(matchingItem, false))
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
     fun loadMoreSearchResults_whenCalled_returnsLoadMoreResults() = runTest {
       viewModel.actions.test {
         viewModel.loadMoreSearchResults()
@@ -410,33 +493,19 @@ internal class SearchViewModelTest {
           ProcessActivityResult(0, 1, null, viewModel.actions)
         )
       }
-  }
 
-  private suspend fun TestScope.actionResultsInEffects(
-    action: Action,
-    vararg effects: SideEffect<*>
-  ) {
-    viewModel.effects.test {
-      viewModel.actions.tryEmit(action)
-      advanceUntilIdle()
-      effects.forEach { expected ->
-        assertThat(awaitItem()).isEqualTo(expected)
+    private suspend fun TestScope.actionResultsInEffects(
+      action: Action,
+      vararg effects: SideEffect<*>
+    ) {
+      viewModel.effects.test {
+        viewModel.actions.tryEmit(action)
+        advanceUntilIdle()
+        effects.forEach { expected ->
+          assertThat(awaitItem()).isEqualTo(expected)
+        }
+        expectNoEvents()
       }
-      expectNoEvents()
     }
-  }
-
-  private fun emissionOf(
-    searchTerm: String,
-    suggestionSearch: SuggestionSearch,
-    databaseResults: List<RecentSearchListItem>,
-    searchOrigin: SearchOrigin
-  ) {
-    coEvery {
-      searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
-    } returns suggestionSearch
-    viewModel.actions.tryEmit(Filter(searchTerm))
-    recentsFromDb.tryEmit(databaseResults)
-    viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
   }
 }

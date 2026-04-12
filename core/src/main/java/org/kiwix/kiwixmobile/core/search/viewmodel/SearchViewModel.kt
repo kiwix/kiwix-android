@@ -81,7 +81,7 @@ class SearchViewModel @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator,
   private val searchMutex: Mutex = Mutex(),
-  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(SearchScreenUiState())
   val uiState = _uiState.asStateFlow()
@@ -153,14 +153,18 @@ class SearchViewModel @Inject constructor(
       val firstPage = withContext(ioDispatcher) {
         searchState.getVisibleResults(ZERO, ioDispatcher = ioDispatcher).orEmpty()
       }
+
+      val suggestions =
+        getSuggestedWordsList(searchList = firstPage, searchText = searchState.searchTerm)
+
       updateUiState {
         it.copy(
           searchState = searchState,
           searchList = firstPage,
-          spellingCorrectionSuggestions = getSuggestedWordsList(),
+          spellingCorrectionSuggestions = suggestions,
           isLoading = false,
           findInPageMenuItem =
-            it.searchText.isNotBlank() to (searchOrigin.value == FromWebView)
+            searchState.searchTerm.isNotBlank() to (searchOrigin.value == FromWebView)
         )
       }
     }.collect {
@@ -171,15 +175,18 @@ class SearchViewModel @Inject constructor(
   /**
    * Return the suggested word list using the libkiwix spellings database.
    */
-  private suspend fun getSuggestedWordsList(): List<String> {
+  private suspend fun getSuggestedWordsList(
+    searchList: List<SearchListItem>,
+    searchText: String
+  ): List<String> {
     val suggestedWordsList = arrayListOf<String>()
-    val uiState = uiState.value
-    val onlyRecentSearches =
-      uiState.searchList.all { it is SearchListItem.RecentSearchListItem }
 
-    if (onlyRecentSearches && uiState.searchText.isNotEmpty()) {
+    val onlyRecentSearches =
+      searchList.all { it is SearchListItem.RecentSearchListItem }
+
+    if (onlyRecentSearches && searchText.isNotEmpty()) {
       suggestedWordsList.addAll(
-        getSuggestedSpelledWords(uiState.searchText, MAX_SUGGEST_WORD_COUNT)
+        getSuggestedSpelledWords(searchText, MAX_SUGGEST_WORD_COUNT)
       )
     }
     return suggestedWordsList

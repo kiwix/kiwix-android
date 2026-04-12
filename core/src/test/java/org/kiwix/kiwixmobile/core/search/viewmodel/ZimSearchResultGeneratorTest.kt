@@ -21,38 +21,36 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class ZimSearchResultGeneratorTest {
-  private val testDispatcher = StandardTestDispatcher()
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
   private val zimFileReader: ZimFileReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =
-    ZimSearchResultGenerator(testDispatcher)
+    ZimSearchResultGenerator(mainDispatcherRule.dispatcher)
 
   @Test
-  internal fun `empty search term returns empty list`() {
-    runBlocking {
-      assertThat(zimSearchResultGenerator.generateSearchResults("", zimFileReader))
-        .isEqualTo(null)
-    }
+  internal fun `empty search term returns empty list`() = runTest {
+    assertThat(zimSearchResultGenerator.generateSearchResults("", zimFileReader))
+      .isEqualTo(null)
   }
 
   @Test
-  internal fun `suggestion results are distinct`() {
+  internal fun `suggestion results are distinct`() = runTest {
     val searchTerm = "a"
     val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
     every { zimFileReader.searchSuggestions(searchTerm) } returns suggestionSearchWrapper
-    runBlocking {
-      assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
-        .isEqualTo(suggestionSearchWrapper)
-      verify {
-        zimFileReader.searchSuggestions(searchTerm)
-      }
+    assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
+      .isEqualTo(suggestionSearchWrapper)
+    verify {
+      zimFileReader.searchSuggestions(searchTerm)
     }
   }
 }
