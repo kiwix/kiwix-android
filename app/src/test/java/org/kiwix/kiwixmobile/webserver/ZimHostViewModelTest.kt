@@ -76,7 +76,6 @@ class ZimHostViewModelTest {
 
   @Before
   fun setUp() {
-
     coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
       listOf(book1, book2)
     )
@@ -117,7 +116,6 @@ class ZimHostViewModelTest {
 
   @Test
   fun loadBooks_whenHostedIdsEmpty_SelectsAllBooks() = runTest {
-
     viewModel.loadBooks(isCustomApp = false)
     advanceUntilIdle()
 
@@ -125,7 +123,8 @@ class ZimHostViewModelTest {
     assertTrue("Expected books list to be non-empty", books.isNotEmpty())
     assertTrue(
       "Initially all books should be selected when no host IDs",
-      books.all { it.isSelected })
+      books.all { it.isSelected }
+    )
   }
 
   @Test
