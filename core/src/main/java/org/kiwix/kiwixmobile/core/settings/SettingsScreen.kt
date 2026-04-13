@@ -214,7 +214,7 @@ private suspend fun handleSettingsAction(
       launchers.writeStoragePermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     Action.NavigateToAppSettingsDialog ->
-      showNavigateToAppSettingsDialog(viewModel)
+      showNavigateToAppSettingsDialog(viewModel, activity)
   }
 }
 
@@ -254,10 +254,13 @@ private fun showSnackbar(
   )
 }
 
-private fun showNavigateToAppSettingsDialog(coreSettingsViewModel: CoreSettingsViewModel) {
+private fun showNavigateToAppSettingsDialog(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  activity: CoreMainActivity
+) {
   coreSettingsViewModel.alertDialogShower.show(
     KiwixDialog.ReadPermissionRequired,
-    coreSettingsViewModel.context::navigateToAppSettings
+    activity::navigateToAppSettings
   )
 }
 

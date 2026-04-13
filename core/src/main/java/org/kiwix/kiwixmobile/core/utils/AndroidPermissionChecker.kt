@@ -38,18 +38,14 @@ class AndroidPermissionChecker @Inject constructor(
   val kiwixDataStore: KiwixDataStore
 ) : KiwixPermissionChecker {
   override suspend fun hasWriteExternalStoragePermission(): Boolean =
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-    ) {
+    if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       true
     } else {
       ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED
     }
 
   override suspend fun hasReadExternalStoragePermission(): Boolean =
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-    ) {
+    if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       true
     } else {
       ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED
