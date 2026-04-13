@@ -18,11 +18,16 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.NEARBY_WIFI_DEVICES
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.app.Application
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -33,29 +38,46 @@ class AndroidPermissionChecker @Inject constructor(
   val kiwixDataStore: KiwixDataStore
 ) : KiwixPermissionChecker {
   override suspend fun hasWriteExternalStoragePermission(): Boolean =
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-    ) {
+    if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       true
     } else {
-      ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-      ) == PackageManager.PERMISSION_GRANTED
+      ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED
     }
 
   override suspend fun hasReadExternalStoragePermission(): Boolean =
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
-      kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
-    ) {
+    if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       true
     } else {
-      ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-      ) == PackageManager.PERMISSION_GRANTED
+      ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED
     }
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  override suspend fun hasNearbyWifiPermission(): Boolean =
+    ContextCompat.checkSelfPermission(context, NEARBY_WIFI_DEVICES) == PERMISSION_GRANTED
+
+  /**
+   * Checks ACCESS_FINE_LOCATION permission.
+   *
+   * Note: This should only be called on devices below Android 13 (API 33).
+   * For Android 13 and above, use hasNearbyWifiPermission().
+   */
+  override suspend fun hasFineLocationPermission(): Boolean {
+    require(!isAndroid13orAbove()) {
+      "hasFineLocationPermission should not be called on API 33+. Use hasNearbyWifiPermission() instead."
+    }
+    return ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+  }
 
   override fun shouldShowRationale(activity: Activity, permission: String): Boolean =
     ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+
+  override suspend fun isWriteExternalStoragePermissionRequired(): Boolean =
+    !isAndroid13orAbove() &&
+      !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
+  override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
+  override fun isAndroid8OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 }

@@ -370,4 +370,6 @@ object Libs {
 
   const val BENCHMARK_MACRO_JUNIT4: String =
     "androidx.benchmark:benchmark-macro-junit4:${Versions.BENCHMARK_MACRO}"
+
+  const val ACCOMPANIST = "com.google.accompanist:accompanist-permissions:${Versions.ACCOMPANIST}"
 }

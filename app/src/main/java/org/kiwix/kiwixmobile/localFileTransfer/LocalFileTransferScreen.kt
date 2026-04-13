@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.content.Context
 import android.net.wifi.p2p.WifiP2pDevice
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -41,8 +40,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -59,12 +56,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
@@ -88,7 +82,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -97,20 +91,16 @@ import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.TO_BE_SENT
 const val YOUR_DEVICE_SHOW_CASE_TAG = "yourDeviceShowCaseTag"
 const val PEER_DEVICE_LIST_SHOW_CASE_TAG = "peerDeviceListShowCaseTag"
 const val FILE_FOR_TRANSFER_SHOW_CASE_TAG = "fileForTransferShowCaseTag"
+const val URIS_KEY = "localFileTransferUriKey"
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
+@Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun LocalFileTransferScreen(
-  deviceName: String,
-  @StringRes toolbarTitle: Int,
-  isPeerSearching: Boolean,
-  peerDeviceList: List<WifiP2pDevice>,
-  transferFileList: List<FileItem>,
+  state: LocalFileTransferUiState,
   actionMenuItems: List<ActionMenuItem>,
   onDeviceItemClick: (WifiP2pDevice) -> Unit,
-  kiwixDataStore: KiwixDataStore,
-  lifeCycleScope: CoroutineScope,
+  onShowCaseDisplayed: () -> Unit,
   navigationIcon: @Composable () -> Unit
 ) {
   val targets = remember { mutableStateMapOf<String, ShowcaseProperty>() }
@@ -119,7 +109,7 @@ fun LocalFileTransferScreen(
     Scaffold(
       topBar = {
         KiwixAppBar(
-          title = stringResource(toolbarTitle),
+          title = stringResource(getAppBarTitle(state.isReceiver)),
           actionMenuItems = actionMenuItems.map {
             it.copy(
               modifier =
@@ -142,38 +132,48 @@ fun LocalFileTransferScreen(
           .padding(padding)
           .background(Color.Transparent)
       ) {
-        YourDeviceHeader(deviceName, context, targets)
+        YourDeviceHeader(state.deviceName, context, targets)
         HorizontalDivider(
           color = DodgerBlue,
           thickness = ONE_DP,
           modifier = Modifier.padding(horizontal = FIVE_DP)
         )
-        NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick, context, targets)
+        NearbyDevicesSection(
+          state.peers,
+          state.isPeerSearching,
+          onDeviceItemClick,
+          context,
+          targets
+        )
         HorizontalDivider(
           color = DodgerBlue,
           thickness = ONE_DP,
           modifier = Modifier
             .padding(horizontal = FIVE_DP)
         )
-        TransferFilesSection(transferFileList, context, targets)
+        TransferFilesSection(state.transferFiles, context, targets)
       }
     }
-    ShowShowCaseToUserIfNotShown(targets, kiwixDataStore, lifeCycleScope)
+    ShowShowCaseToUserIfNotShown(targets, state.shouldShowShowCase, onShowCaseDisplayed)
   }
 }
+
+private fun getAppBarTitle(isReceiver: Boolean) =
+  if (isReceiver) {
+    org.kiwix.kiwixmobile.R.string.receive_files_title
+  } else {
+    org.kiwix.kiwixmobile.R.string.send_files_title
+  }
 
 @Composable
 fun ShowShowCaseToUserIfNotShown(
   targets: SnapshotStateMap<String, ShowcaseProperty>,
-  kiwixDataStore: KiwixDataStore,
-  lifeCycleScope: CoroutineScope
+  shouldShowShowCase: Boolean,
+  onShowCaseDisplayed: () -> Unit
 ) {
-  val shouldShowShowCase by kiwixDataStore.showShowCaseToUser.collectAsState(false)
   if (shouldShowShowCase) {
     KiwixShowCaseView(targets = targets) {
-      lifeCycleScope.launch {
-        kiwixDataStore.setShowCaseViewForFileTransferShown()
-      }
+      onShowCaseDisplayed.invoke()
     }
   }
 }

@@ -81,8 +81,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.navigateToSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
@@ -214,7 +214,7 @@ private suspend fun handleSettingsAction(
       launchers.writeStoragePermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     Action.NavigateToAppSettingsDialog ->
-      showNavigateToAppSettingsDialog(viewModel)
+      showNavigateToAppSettingsDialog(viewModel, activity)
   }
 }
 
@@ -254,10 +254,13 @@ private fun showSnackbar(
   )
 }
 
-private fun showNavigateToAppSettingsDialog(coreSettingsViewModel: CoreSettingsViewModel) {
+private fun showNavigateToAppSettingsDialog(
+  coreSettingsViewModel: CoreSettingsViewModel,
+  activity: CoreMainActivity
+) {
   coreSettingsViewModel.alertDialogShower.show(
     KiwixDialog.ReadPermissionRequired,
-    coreSettingsViewModel.context::navigateToAppSettings
+    activity::navigateToAppSettings
   )
 }
 

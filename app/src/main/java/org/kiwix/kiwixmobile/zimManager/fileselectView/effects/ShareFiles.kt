@@ -19,21 +19,31 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.ui.toUriParam
 
-data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
+data class ShareFiles(
+  private val selectedBooks: List<BookOnDisk>,
+  private val viewModelScope: CoroutineScope,
+  private val ioDispatcher: CoroutineDispatcher
+) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val selectedFileContentURIs =
-      selectedBooks.mapNotNull {
-        it.zimReaderSource.getUri(activity)
-      }
-    activity.navigate(
-      KiwixDestination.LocalFileTransfer.createRoute(uris = selectedFileContentURIs.toUriParam())
-    )
+    viewModelScope.launch {
+      val selectedFileContentURIs =
+        selectedBooks.mapNotNull {
+          withContext(ioDispatcher) { it.zimReaderSource.getUri(activity) }
+        }
+      activity.navigate(
+        KiwixDestination.LocalFileTransfer.createRoute(uris = selectedFileContentURIs.toUriParam())
+      )
+    }
   }
 }

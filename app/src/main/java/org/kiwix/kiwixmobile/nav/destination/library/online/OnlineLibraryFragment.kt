@@ -74,8 +74,8 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.navigateToSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ONE

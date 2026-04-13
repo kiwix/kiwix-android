@@ -51,7 +51,7 @@ import org.kiwix.kiwixmobile.core.main.HELP_SCREEN
 import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.INTRO_SCREEN
 import org.kiwix.kiwixmobile.core.main.LANGUAGE_SCREEN
-import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_SCREEN
 import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
@@ -75,7 +75,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
 import org.kiwix.kiwixmobile.intro.IntroScreenRoute
 import org.kiwix.kiwixmobile.language.LanguageScreenRoute
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
@@ -221,6 +222,7 @@ fun KiwixNavGraph(
         }
       }
     }
+
     composable(
       route = KiwixDestination.LocalFileTransfer.route,
       arguments = listOf(
@@ -231,22 +233,21 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-      val urisParam = backStackEntry.arguments?.getString(URIS_KEY)
-      val uris: List<Uri>? =
-        urisParam?.takeIf { it != "null" }?.split(",")?.map {
-          Uri.decode(it).toUri()
-        }
+      val uris: List<Uri> = backStackEntry.arguments
+        ?.getString(URIS_KEY)
+        ?.takeIf { it != "null" }
+        ?.split(",")
+        ?.map { Uri.decode(it).toUri() }
+        .orEmpty()
 
-      FragmentContainer(R.id.localFileTransferFragmentContainer) {
-        LocalFileTransferFragment().apply {
-          arguments = Bundle().apply {
-            putParcelableArray(
-              URIS_KEY,
-              uris?.toTypedArray()
-            )
-          }
-        }
-      }
+      val viewModel: LocalFileTransferViewModel = viewModel(factory = viewModelFactory)
+      viewModel.initialize(uris, alertDialogShower)
+
+      LocalFileTransferScreenRoute(
+        navigateBack = navController::popBackStack,
+        viewModel = viewModel,
+        alertDialogShower = alertDialogShower
+      )
     }
   }
 }
@@ -319,12 +320,12 @@ sealed class KiwixDestination(val route: String) {
     }
   }
 
-  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY={uris}") {
+  object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_SCREEN?$URIS_KEY={$URIS_KEY}") {
     fun createRoute(uris: String? = null): String {
       return if (uris != null) {
-        "$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY=${Uri.encode(uris)}"
+        "$LOCAL_FILE_TRANSFER_SCREEN?$URIS_KEY=${Uri.encode(uris)}"
       } else {
-        "$LOCAL_FILE_TRANSFER_FRAGMENT?$URIS_KEY=null"
+        "$LOCAL_FILE_TRANSFER_SCREEN?$URIS_KEY=null"
       }
     }
   }
