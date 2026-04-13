@@ -72,6 +72,9 @@ import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 const val START_SERVER_BUTTON_TESTING_TAG = "startServerButtonTestingTag"
 const val QR_IMAGE_TESTING_TAG = "qrImageTestingTag"
 
+const val SHARE_ICON_TESTING_TAG = "share_icon_zim_host"
+const val ZIM_HOST_SCREEN_TESTING_TAG = "zim_host_screen"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
@@ -89,12 +92,15 @@ fun ZimHostScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   KiwixTheme {
-    Scaffold(topBar = {
-      KiwixAppBar(
-        title = stringResource(R.string.menu_wifi_hotspot),
-        navigationIcon = navigationIcon
-      )
-    }) { contentPadding ->
+    Scaffold(
+      topBar = {
+        KiwixAppBar(
+          title = stringResource(R.string.menu_wifi_hotspot),
+          navigationIcon = navigationIcon
+        )
+      },
+      modifier = Modifier.testTag(ZIM_HOST_SCREEN_TESTING_TAG)
+    ) { contentPadding ->
       Column(
         modifier = Modifier
           .fillMaxSize()
@@ -163,7 +169,8 @@ private fun ShareIcon(showShareIcon: Boolean, shareIconItem: () -> Unit) {
         .clickable { shareIconItem.invoke() }
         .padding(FOUR_DP)
         .heightIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
-        .widthIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH),
+        .widthIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
+        .testTag(SHARE_ICON_TESTING_TAG),
       colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
       contentScale = ContentScale.Inside
     )
