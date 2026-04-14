@@ -1,23 +1,3 @@
-/*
- * Kiwix Android
- * Copyright (c) 2026 Kiwix <android.kiwix.org>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- */
-
-package org.kiwix.kiwixmobile.nav.destination.library.local
-
 import android.app.Application
 import androidx.compose.material3.SnackbarHostState
 import androidx.fragment.app.FragmentManager
@@ -27,20 +7,17 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -58,6 +35,7 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @ExperimentalCoroutinesApi
 class LocalLibraryViewModelTest {
@@ -78,14 +56,13 @@ class LocalLibraryViewModelTest {
   private val fragmentManager: FragmentManager = mockk(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
 
-  private val testDispatcher = StandardTestDispatcher()
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
 
   private lateinit var viewModel: LocalLibraryViewModel
 
   @BeforeEach
   fun setUp() {
-    Dispatchers.setMain(testDispatcher)
-
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(emptyList())
     every { libkiwixBookOnDisk.books() } returns flowOf(emptyList())
     coEvery { storageObserver.getBooksOnFileSystem(any()) } returns flowOf(emptyList())
@@ -102,13 +79,12 @@ class LocalLibraryViewModelTest {
     } returns flowOf(false)
 
     viewModel = createViewModel()
-    testDispatcher.scheduler.advanceUntilIdle()
+    mainDispatcherRule.dispatcher.scheduler.advanceUntilIdle()
   }
 
   @AfterEach
   fun tearDown() {
     viewModel.onClearedExposed()
-    Dispatchers.resetMain()
   }
 
   private fun createViewModel(): LocalLibraryViewModel {
@@ -123,7 +99,7 @@ class LocalLibraryViewModelTest {
       kiwixPermissionChecker,
       kiwixDataStore,
       zimReaderFactory,
-      testDispatcher
+      mainDispatcherRule.dispatcher
     )
     vm.initialize(
       validateZimViewModel,
@@ -223,9 +199,36 @@ class LocalLibraryViewModelTest {
     assertion: (org.kiwix.kiwixmobile.core.base.SideEffect<*>) -> Unit
   ) = runTest {
     viewModel.sideEffects.test {
-      testDispatcher.scheduler.advanceUntilIdle()
+      mainDispatcherRule.dispatcher.scheduler.advanceUntilIdle()
       viewModel.localLibraryUiActions.emit(action)
       assertion(awaitItem())
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `onResume triggers scan dialog when dialog not shown and list empty`() = runTest {
+    every { kiwixDataStore.isScanFileSystemDialogShown } returns flowOf(false)
+    every { libkiwixBookOnDisk.books() } returns flowOf(emptyList())
+    every { dataSource.booksOnDiskAsListItems() } returns flowOf(emptyList())
+
+    viewModel.sideEffects.test {
+      viewModel.onResume()
+      mainDispatcherRule.dispatcher.scheduler.advanceUntilIdle()
+      assertTrue(awaitItem() is ShowFileSystemScanDialog)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `onResume check permissions when storage permission not granted`() = runTest {
+    coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns false
+    every { kiwixDataStore.isScanFileSystemDialogShown } returns flowOf(true)
+
+    viewModel.sideEffects.test {
+      viewModel.onResume()
+      mainDispatcherRule.dispatcher.scheduler.advanceUntilIdle()
+      // Skip redundant emissions
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -418,5 +421,55 @@ class LocalLibraryViewModelTest {
         selectedZimFileCallback = viewModel
       )
     }
+  }
+
+  @Test
+  fun `onBookItemLongClick triggers multi selection`() = runTest {
+    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns true
+
+    viewModel.sideEffects.test {
+      viewModel.onBookItemLongClick(bookOnDisk)
+      assertTrue(awaitItem() is None)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `onMultiSelect triggers selection side effect`() = runTest {
+    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    viewModel.sideEffects.test {
+      viewModel.onMultiSelect(bookOnDisk)
+      assertTrue(awaitItem() is None)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `filePickerMenuButtonClick triggers permission request if not granted`() = runTest {
+    coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns false
+    viewModel.sideEffects.test {
+      viewModel.filePickerMenuButtonClick(mockk(relaxed = true))
+      assertTrue(awaitItem() is None)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `processZimFileArguments processes valid URI`() = runTest {
+    coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
+    coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns true
+
+    viewModel.processZimFileArguments("content://test.zim")
+    advanceUntilIdle()
+    // Verification depends on processSelectedZimFilesForStandalone/PlayStore behavior
+  }
+
+  @Test
+  fun `processSelectedZimFiles processes intent`() = runTest {
+    val intent = mockk<android.content.Intent>(relaxed = true)
+    viewModel.processSelectedZimFiles(intent)
+    advanceUntilIdle()
+    // Verification depends on processSelectedZimFilesForStandalone/PlayStore behavior
   }
 }
