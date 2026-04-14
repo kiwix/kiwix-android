@@ -325,6 +325,49 @@ internal class SearchViewModelTest {
   }
 
   @Nested
+  inner class UiClickTests {
+    @Test
+    fun onItemClick_whenCalled_emitsCloseKeyboardSaveAndOpen() = runTest {
+      val searchListItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      viewModel.effects.test {
+        viewModel.onItemClick(searchListItem)
+        advanceUntilIdle()
+        assertThat(awaitItem()).isEqualTo(CloseKeyboard)
+        assertThat(awaitItem()).isInstanceOf(SaveSearchToRecents::class.java)
+        assertThat(awaitItem()).isEqualTo(OpenSearchItem(searchListItem, false))
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onItemLongClick_whenCalled_emitsCloseKeyboardAndShowDeleteDialog() = runTest {
+      val searchListItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      viewModel.effects.test {
+        viewModel.onItemLongClick(searchListItem)
+        advanceUntilIdle()
+        assertThat(awaitItem()).isEqualTo(CloseKeyboard)
+        assertThat(awaitItem()).isEqualTo(
+          ShowDeleteSearchDialog(searchListItem, viewModel.actions, dialogShower)
+        )
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onNewTabIconClick_whenCalled_emitsCloseKeyboardSaveAndOpenInNewTab() = runTest {
+      val searchListItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      viewModel.effects.test {
+        viewModel.onNewTabIconClick(searchListItem)
+        advanceUntilIdle()
+        assertThat(awaitItem()).isEqualTo(CloseKeyboard)
+        assertThat(awaitItem()).isInstanceOf(SaveSearchToRecents::class.java)
+        assertThat(awaitItem()).isEqualTo(OpenSearchItem(searchListItem, true))
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+  }
+
+  @Nested
   inner class ActionMapping {
     @Test
     fun `ExitedSearch offers PopFragmentBackstack`() =

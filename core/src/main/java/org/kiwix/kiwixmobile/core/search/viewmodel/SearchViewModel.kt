@@ -314,12 +314,12 @@ class SearchViewModel @Inject constructor(
 
   fun onItemLongClick(it: SearchListItem) {
     closeKeyboard()
-    actions.tryEmit(Action.OnItemLongClick(it))
+    actions.tryEmit(OnItemLongClick(it))
   }
 
   fun onNewTabIconClick(it: SearchListItem) {
     closeKeyboard()
-    actions.tryEmit(Action.OnOpenInNewTabClick(it))
+    actions.tryEmit(OnOpenInNewTabClick(it))
   }
 
   fun onSearchClear() {
