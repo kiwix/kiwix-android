@@ -182,11 +182,8 @@ class LocalLibraryViewModel @Inject constructor(
   private val _uiState = MutableStateFlow(LocalLibraryUiState())
   val uiState = _uiState.asStateFlow()
 
-  val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
-  val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
-  val localLibraryUiActions = MutableSharedFlow<LocalLibraryUiActions>()
-
   private val coroutineJobs: MutableList<Job> = mutableListOf()
+  private var onResumeJob: Job? = null
 
   fun initialize(
     validateZimViewModel: ValidateZimViewModel,
@@ -208,10 +205,13 @@ class LocalLibraryViewModel @Inject constructor(
   }
 
   fun onResume() {
-    viewModelScope.launch {
+    onResumeJob?.cancel()
+    onResumeJob = viewModelScope.launch {
       when {
         shouldShowFileSystemDialog() -> {
-          delay(SHOW_SCAN_DIALOG_DELAY)
+          if (!kiwixDataStore.prefIsTest.first()) {
+            delay(SHOW_SCAN_DIALOG_DELAY)
+          }
           if (!isActive) return@launch
           sendAction(FileSystemScanDialog)
         }
