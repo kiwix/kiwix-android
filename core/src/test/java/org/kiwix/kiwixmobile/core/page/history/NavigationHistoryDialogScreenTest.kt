@@ -16,8 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.page.history
+package org.kiwix.kiwixmobile.core.page.history
 
+import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -27,37 +28,36 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialogScreen
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 /**
  * UI tests for [NavigationHistoryDialogScreen] Compose components.
  * Covers: empty state, populated list rendering, item details,
  * click interactions, app bar integration, and action menu state.
  */
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.R])
 class NavigationHistoryDialogScreenTest {
 
   @get:Rule
   val composeTestRule = createComposeRule()
 
-  private val context =
-    InstrumentationRegistry.getInstrumentation().targetContext
+  private val context get() = RuntimeEnvironment.getApplication()
 
   @Test
   fun emptyState_displaysNoHistoryText() {
@@ -189,7 +189,7 @@ class NavigationHistoryDialogScreenTest {
       )
     }
     composeTestRule.onNodeWithText("Clicked Page").performClick()
-    assertEquals(items[0], clickedItem)
+    assertThat(clickedItem).isEqualTo(items[0])
   }
 
   @Test
@@ -209,9 +209,9 @@ class NavigationHistoryDialogScreenTest {
       )
     }
     composeTestRule.onNodeWithText("Second").performClick()
-    assertEquals(items[1], clickedItem)
-    assertEquals("Second", clickedItem?.title)
-    assertEquals("https://example.com/2", clickedItem?.pageUrl)
+    assertThat(clickedItem).isEqualTo(items[1])
+    assertThat(clickedItem?.title).isEqualTo("Second")
+    assertThat(clickedItem?.pageUrl).isEqualTo("https://example.com/2")
   }
 
   @Test
@@ -261,7 +261,7 @@ class NavigationHistoryDialogScreenTest {
       )
     }
     composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
-    assertTrue(navigationIconClicked)
+    assertThat(navigationIconClicked).isTrue
   }
 
   @Test
@@ -323,7 +323,7 @@ class NavigationHistoryDialogScreenTest {
       )
     }
     composeTestRule.onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG).performClick()
-    assertTrue(clearAllClicked)
+    assertThat(clearAllClicked).isTrue
   }
 
   private fun createTestHistoryItems(
