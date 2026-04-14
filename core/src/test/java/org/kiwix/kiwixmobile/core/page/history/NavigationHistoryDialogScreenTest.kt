@@ -53,7 +53,6 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class NavigationHistoryDialogScreenTest {
-
   @get:Rule
   val composeTestRule = createComposeRule()
 
