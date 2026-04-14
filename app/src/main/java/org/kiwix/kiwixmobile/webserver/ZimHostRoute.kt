@@ -48,10 +48,10 @@ import com.google.accompanist.permissions.rememberPermissionState
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
