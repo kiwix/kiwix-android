@@ -109,6 +109,7 @@ This variable should only be set when building an APK. If you set this variable 
 - 📥 [Fetch](https://github.com/tonyofrancis/Fetch) - File download manager library for Android.
 - 🧪 [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code.
 - 📷 [ZXing](https://github.com/zxing/zxing) - Barcode scanning library for Java, Android.
+- 📫 [Accompanist Permissions](https://github.com/google/accompanist) - Runtime permission library for Jetpack Compose.
 
 ## Contributing
 
