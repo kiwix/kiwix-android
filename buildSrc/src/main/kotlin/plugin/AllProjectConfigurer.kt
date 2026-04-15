@@ -264,7 +264,6 @@ class AllProjectConfigurer {
       testImplementation(Libs.robolectric)
       testImplementation(Libs.androidx_test_core)
       testImplementation(Libs.junit_vintage_engine)
-      testImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
     }
   }
 }
