@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -191,7 +192,7 @@ open class ErrorActivity : BaseActivity() {
     dismissVerificationDialog()
     // Generate and send send report when all ZIM files are validated.
     val emailIntent = emailIntent()
-    val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
+    val activities = getSupportedEmailApps(installedEmailAppsIntent())
     val targetedIntents = createEmailIntents(emailIntent, activities)
     if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
       val chooserIntent =
@@ -214,15 +215,8 @@ open class ErrorActivity : BaseActivity() {
   /**
    * Get a list of supported email apps.
    */
-  private fun getSupportedEmailApps(
-    emailIntent: Intent,
-    supportedPackages: List<String>
-  ): List<ResolveInfo> {
-    return packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
-      .filter {
-        supportedPackages.any(it.activityInfo.packageName::contains)
-      }
-  }
+  private fun getSupportedEmailApps(emailIntent: Intent): List<ResolveInfo> =
+    packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
 
   /**
    * Create a list of intents for supported email apps.
@@ -238,30 +232,14 @@ open class ErrorActivity : BaseActivity() {
     }.toMutableList()
   }
 
-  // List of supported email apps
-  private val supportedEmailPackages =
-    listOf(
-      "com.google.android.gm",
-      "com.zoho.mail",
-      "com.microsoft.office.outlook",
-      "com.yahoo.mobile.client.android.mail",
-      "me.bluemail.mail",
-      "ch.protonmail.android",
-      "com.fsck.k9",
-      "com.maildroid",
-      "org.kman.AquaMail",
-      "com.edison.android.mail",
-      "com.readdle.spark",
-      "com.gmx.mobile.android.mail",
-      "com.fastmail",
-      "ru.mail.mailapp",
-      "ru.yandex.mail",
-      "de.tutao.tutanota"
-    )
-
   private val sendEmailLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
       restartApp()
+    }
+
+  private fun installedEmailAppsIntent(): Intent =
+    Intent(Intent.ACTION_SENDTO).apply {
+      data = "mailto:".toUri()
     }
 
   private suspend fun emailIntent(): Intent {
