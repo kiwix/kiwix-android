@@ -44,7 +44,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -133,7 +133,7 @@ private fun AppBarTitle(
 
 @Composable
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
-  var overflowExpanded by remember { mutableStateOf(false) }
+  var overflowExpanded by rememberSaveable { mutableStateOf(false) }
 
   Row {
     val (mainActions, overflowActions) = actionMenuItems.partition { !it.isInOverflow }

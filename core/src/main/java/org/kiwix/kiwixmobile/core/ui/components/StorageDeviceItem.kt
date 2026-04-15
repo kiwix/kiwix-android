@@ -34,7 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,10 +74,10 @@ fun StorageDeviceItem(
   storageCalculator: StorageCalculator,
   kiwixDataStore: KiwixDataStore,
 ) {
-  var storagePathAndTitle by remember { mutableStateOf("") }
-  var usedSpace by remember { mutableStateOf("") }
-  var freeSpace by remember { mutableStateOf("") }
-  var progress by remember { mutableIntStateOf(0) }
+  var storagePathAndTitle by rememberSaveable { mutableStateOf("") }
+  var usedSpace by rememberSaveable { mutableStateOf("") }
+  var freeSpace by rememberSaveable { mutableStateOf("") }
+  var progress by rememberSaveable { mutableIntStateOf(0) }
   val context = LocalContext.current
   val currentStorageIndex by kiwixDataStore.selectedStoragePosition.collectAsState(ZERO)
   LaunchedEffect(storageDevice) {

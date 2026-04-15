@@ -86,6 +86,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -189,7 +190,7 @@ fun ReaderScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   // For managing the scroll event handling of webView.
-  val shouldUpdateTopAppBarAndBottomAppBarOnScrolling = remember { mutableStateOf(true) }
+  val shouldUpdateTopAppBarAndBottomAppBarOnScrolling = rememberSaveable { mutableStateOf(true) }
   val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
   LaunchedEffect(bottomAppBarScrollBehavior.state.heightOffset) {
@@ -276,7 +277,7 @@ fun OnBackPressed(
   navHostController: NavHostController
 ) {
   // Tracks whether the fragment's BackHandler should be enabled.
-  var shouldEnableBackPress by remember { mutableStateOf(true) }
+  var shouldEnableBackPress by rememberSaveable { mutableStateOf(true) }
   BackHandler(enabled = shouldEnableBackPress) {
     val result = onUserBackPressed()
     if (result == FragmentActivityExtensions.Super.ShouldCall) {
