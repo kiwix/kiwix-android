@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -70,6 +71,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ARROW_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ITEM_TITLE_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ITEM_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 private const val HELP_ITEM_ANIMATION_DURATION = 300
@@ -100,7 +102,7 @@ fun HelpScreenItem(
 }
 
 @Composable
-fun HelpItemHeader(
+private fun HelpItemHeader(
   title: String,
   isOpen: Boolean,
   onToggle: () -> Unit
@@ -145,13 +147,15 @@ fun HelpItemHeader(
 }
 
 @Composable
-fun HelpItemDescription(context: Context, description: String) {
+private fun HelpItemDescription(context: Context, description: String) {
   val textColor = if (isSystemInDarkTheme()) {
     Color.LightGray
   } else {
     MineShaftGray900
   }
   val helpItemDescription = remember { TextView(context) }
+  val density = LocalDensity.current
+  val minHeightPx = with(density) { MATERIAL_MINIMUM_HEIGHT_AND_WIDTH.toPx().toInt() }
   Box(
     contentAlignment = Alignment.CenterStart,
     modifier = Modifier
@@ -160,8 +164,8 @@ fun HelpItemDescription(context: Context, description: String) {
   ) {
     AndroidView(
       factory = { helpItemDescription },
-      modifier = Modifier.padding(bottom = SIXTEEN_DP)
-        .minimumInteractiveComponentSize()
+      modifier = Modifier
+        .padding(bottom = SIXTEEN_DP)
         .testTag(HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG)
         .semantics { contentDescription = description }
     ) { textView ->
@@ -169,6 +173,7 @@ fun HelpItemDescription(context: Context, description: String) {
         text = description
         setTextAppearance(R.style.TextAppearance_KiwixTheme_Subtitle2)
         setTextColor(textColor.toArgb())
+        minHeight = minHeightPx
         gravity = Gravity.CENTER or Gravity.START
         LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
         movementMethod = LinkMovementMethod.getInstance()

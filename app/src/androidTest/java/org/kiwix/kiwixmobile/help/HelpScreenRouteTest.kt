@@ -33,6 +33,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -50,7 +51,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 
-class HelpFragmentTest : BaseActivityTest() {
+class HelpScreenRouteTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -152,7 +153,7 @@ class HelpFragmentTest : BaseActivityTest() {
   private fun setShowCopyMoveToPublicDirectory(showRestriction: Boolean) {
     context.let {
       KiwixDataStore(it).apply {
-        lifeCycleScope.launch {
+        runBlocking {
           setWifiOnly(false)
           setIntroShown()
           setPrefLanguage("en")
