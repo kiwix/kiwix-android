@@ -153,7 +153,7 @@ fun HelpItemDescription(context: Context, description: String) {
   }
   val helpItemDescription = remember { TextView(context) }
   Box(
-    contentAlignment = Alignment.Center,
+    contentAlignment = Alignment.CenterStart,
     modifier = Modifier
       .fillMaxWidth()
       .padding(top = SIXTEEN_DP)
@@ -161,6 +161,7 @@ fun HelpItemDescription(context: Context, description: String) {
     AndroidView(
       factory = { helpItemDescription },
       modifier = Modifier.padding(bottom = SIXTEEN_DP)
+        .minimumInteractiveComponentSize()
         .testTag(HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG)
         .semantics { contentDescription = description }
     ) { textView ->
@@ -168,8 +169,6 @@ fun HelpItemDescription(context: Context, description: String) {
         text = description
         setTextAppearance(R.style.TextAppearance_KiwixTheme_Subtitle2)
         setTextColor(textColor.toArgb())
-        minHeight =
-          context.resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
         gravity = Gravity.CENTER or Gravity.START
         LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
         movementMethod = LinkMovementMethod.getInstance()
