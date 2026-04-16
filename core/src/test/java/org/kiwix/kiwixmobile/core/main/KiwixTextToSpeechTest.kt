@@ -24,12 +24,15 @@ import android.media.AudioManager
 import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.SUCCESS
+import android.speech.tts.UtteranceProgressListener
 import android.speech.tts.Voice
 import android.webkit.WebView
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -37,8 +40,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowTextToSpeech
+import org.robolectric.shadows.ShadowToast
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
@@ -56,6 +63,7 @@ class KiwixTextToSpeechTest {
   @Before
   fun setUp() {
     clearAllMocks()
+    ShadowToast.reset()
     context = spyk(ApplicationProvider.getApplicationContext())
     audioManager = mockk(relaxed = true)
     every { context.getSystemService(Context.AUDIO_SERVICE) } returns audioManager
@@ -122,17 +130,22 @@ class KiwixTextToSpeechTest {
     every { tts.isSpeaking } returns false
     every { zimReaderContainer.language } returns "mul"
     kiwixTts.readAloud(webView)
-    verify(exactly = 0) { webView.loadUrl(match { it.contains("body") }) }
+    verify(exactly = 0) { webView.loadUrl(any()) }
+    assertThat(ShadowToast.getTextOfLatestToast())
+      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.tts_not_enabled))
   }
 
   @Test
   fun `readAloud does not speak when language is not supported`() {
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "xyz"
+    every { zimReaderContainer.language } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_NOT_SUPPORTED
     kiwixTts.readAloud(webView)
-    verify(exactly = 0) { webView.loadUrl(match { it.contains("body") }) }
+    verify { tts.isLanguageAvailable(any()) }
+    verify(exactly = 0) { webView.loadUrl(any()) }
+    assertThat(ShadowToast.getTextOfLatestToast())
+      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.tts_lang_not_supported))
   }
 
   @Test
@@ -267,5 +280,198 @@ class KiwixTextToSpeechTest {
     every { voice.features } returns emptySet()
     every { tts.voice } returns voice
     return webView
+  }
+
+  @Test
+  fun `readAloud loads processed content when everything is valid`() {
+    injectMockTts()
+    grantAudioFocus()
+    kiwixTts.readAloud(setupReadAloudForSuccess())
+    verify {
+      webView.loadUrl(match { it.contains("body = document.getElementsByTagName") })
+    }
+  }
+
+  @Test
+  fun `readAloud does not proceed when audio focus is denied`() {
+    injectMockTts()
+    every {
+      audioManager.requestAudioFocus(any<AudioFocusRequest>())
+    } returns AudioManager.AUDIOFOCUS_REQUEST_FAILED
+
+    kiwixTts.readAloud(setupReadAloudForSuccess())
+
+    verify(exactly = 0) { webView.loadUrl(any()) }
+  }
+
+  @Test
+  fun `readAloud does not proceed when locale is null`() {
+    injectMockTts()
+
+    every { tts.isSpeaking } returns false
+    every { zimReaderContainer.language } returns "eng"
+
+    mockkObject(LanguageUtils.Companion)
+    every { LanguageUtils.iSO3ToLocale(any()) } returns null
+
+    kiwixTts.readAloud(webView)
+
+    verify(exactly = 0) { webView.loadUrl(any()) }
+  }
+
+  @Test
+  fun `readAloud shows download dialog when feature not installed`() {
+    val activity = mockk<CoreMainActivity>(relaxed = true)
+    every { activity.getSystemService(Context.AUDIO_SERVICE) } returns audioManager
+    kiwixTts = KiwixTextToSpeech(
+      activity,
+      initListener,
+      speakingListener,
+      focusListener,
+      zimReaderContainer
+    )
+    injectMockTts()
+    every { tts.isSpeaking } returns false
+    every { zimReaderContainer.language } returns "eng"
+    every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_AVAILABLE
+
+    val voice: Voice = mockk(relaxed = true)
+    every { voice.features } returns setOf(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)
+    every { tts.voice } returns voice
+
+    kiwixTts.readAloud(webView)
+
+    verify { activity.externalLinkOpener.showTTSLanguageDownloadDialog() }
+  }
+
+  @Test
+  fun `task continues speaking next piece on done`() {
+    injectMockTts()
+
+    val pieces = listOf("Hello", "World")
+    val task = kiwixTts.TTSTask(pieces)
+
+    task.start()
+
+    val listenerSlot = slot<UtteranceProgressListener>()
+    verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
+
+    listenerSlot.captured.onDone("id")
+
+    verify { tts.speak(eq("World"), any(), any(), any()) }
+  }
+
+  @Test
+  fun `task handles error and shows toast`() {
+    injectMockTts()
+
+    val pieces = listOf("Hello")
+    val task = kiwixTts.TTSTask(pieces)
+
+    task.start()
+
+    val listenerSlot = io.mockk.slot<UtteranceProgressListener>()
+    verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
+    listenerSlot.captured.onError("error")
+
+    assertThat(ShadowToast.getTextOfLatestToast())
+      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.texttospeech_error))
+  }
+
+  @Test
+  fun `task stops after last piece`() {
+    injectMockTts()
+    val pieces = listOf("OnlyOne")
+    val task = kiwixTts.TTSTask(pieces)
+    kiwixTts.currentTTSTask = task
+    task.start()
+    val listenerSlot = slot<UtteranceProgressListener>()
+    verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
+    listenerSlot.captured.onDone("id")
+    assertThat(kiwixTts.currentTTSTask).isNull()
+    verify { speakingListener.onSpeakingEnded() }
+  }
+
+  @Test
+  fun `pause decrements current piece and resumes correctly`() {
+    injectMockTts()
+    val pieces = listOf("Hello", "World")
+    val task = kiwixTts.TTSTask(pieces)
+    task.start()
+    task.pause()
+    task.start()
+    verify(atLeast = 2) {
+      tts.speak(eq("Hello"), any(), any(), any())
+    }
+  }
+
+  @Test
+  fun `javascript interface splits content and starts speaking`() {
+    injectMockTts()
+
+    val jsInterface = kiwixTts.javaClass
+      .declaredClasses
+      .first { it.simpleName == "TTSJavaScriptInterface" }
+      .getDeclaredConstructor(kiwixTts.javaClass)
+      .apply { isAccessible = true }
+      .newInstance(kiwixTts)
+
+    val method = jsInterface.javaClass.getDeclaredMethod("speakAloud", String::class.java)
+    method.invoke(jsInterface, "Hello. World\nTest")
+
+    verify { speakingListener.onSpeakingStarted() }
+    assertThat(kiwixTts.currentTTSTask).isNotNull()
+  }
+
+  private fun invokeSpeakAloud(content: String) {
+    val jsInterface = kiwixTts.javaClass
+      .declaredClasses
+      .first { it.simpleName == "TTSJavaScriptInterface" }
+      .getDeclaredConstructor(kiwixTts.javaClass)
+      .apply { isAccessible = true }
+      .newInstance(kiwixTts)
+    val method = jsInterface.javaClass.getDeclaredMethod("speakAloud", String::class.java)
+    method.invoke(jsInterface, content)
+  }
+
+  private fun initializeTtsAndGetListener(): TextToSpeech.OnInitListener {
+    kiwixTts.initializeTTS()
+    val ttsField = KiwixTextToSpeech::class.java.getDeclaredField("tts")
+    ttsField.isAccessible = true
+    val realTts = ttsField.get(kiwixTts) as TextToSpeech
+    val shadow: ShadowTextToSpeech = shadowOf(realTts)
+    return shadow.onInitListener
+  }
+
+  @Test
+  fun `initializeTTS success sets isInitialized and calls onInitSucceed callback`() {
+    val listener = initializeTtsAndGetListener()
+
+    listener.onInit(TextToSpeech.SUCCESS)
+
+    assertThat(kiwixTts.isInitialized).isTrue()
+    verify { initListener.onInitSucceed() }
+  }
+
+  @Test
+  fun `initializeTTS failure shows toast and does not call success callback`() {
+    val listener = initializeTtsAndGetListener()
+
+    listener.onInit(TextToSpeech.ERROR)
+
+    assertThat(kiwixTts.isInitialized).isFalse()
+    verify(exactly = 0) { initListener.onInitSucceed() }
+    assertThat(ShadowToast.getTextOfLatestToast())
+      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.texttospeech_initialization_failed))
+  }
+
+  @Test
+  fun `javascript interface does nothing for empty content`() {
+    injectMockTts()
+
+    invokeSpeakAloud("   \n   ")
+
+    verify(exactly = 0) { speakingListener.onSpeakingStarted() }
+    assertThat(kiwixTts.currentTTSTask).isNull()
   }
 }
