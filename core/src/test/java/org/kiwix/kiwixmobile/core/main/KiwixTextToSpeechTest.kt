@@ -35,6 +35,7 @@ import io.mockk.mockkObject
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import org.kiwix.kiwixmobile.core.R
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -132,7 +133,7 @@ class KiwixTextToSpeechTest {
     kiwixTts.readAloud(webView)
     verify(exactly = 0) { webView.loadUrl(any()) }
     assertThat(ShadowToast.getTextOfLatestToast())
-      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.tts_not_enabled))
+      .isEqualTo(context.getString(R.string.tts_not_enabled))
   }
 
   @Test
@@ -145,7 +146,7 @@ class KiwixTextToSpeechTest {
     verify { tts.isLanguageAvailable(any()) }
     verify(exactly = 0) { webView.loadUrl(any()) }
     assertThat(ShadowToast.getTextOfLatestToast())
-      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.tts_lang_not_supported))
+      .isEqualTo(context.getString(R.string.tts_lang_not_supported))
   }
 
   @Test
@@ -370,12 +371,12 @@ class KiwixTextToSpeechTest {
 
     task.start()
 
-    val listenerSlot = io.mockk.slot<UtteranceProgressListener>()
+    val listenerSlot = slot<UtteranceProgressListener>()
     verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
     listenerSlot.captured.onError("error")
 
     assertThat(ShadowToast.getTextOfLatestToast())
-      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.texttospeech_error))
+      .isEqualTo(context.getString(R.string.texttospeech_error))
   }
 
   @Test
@@ -462,7 +463,7 @@ class KiwixTextToSpeechTest {
     assertThat(kiwixTts.isInitialized).isFalse()
     verify(exactly = 0) { initListener.onInitSucceed() }
     assertThat(ShadowToast.getTextOfLatestToast())
-      .isEqualTo(context.getString(org.kiwix.kiwixmobile.core.R.string.texttospeech_initialization_failed))
+      .isEqualTo(context.getString(R.string.texttospeech_initialization_failed))
   }
 
   @Test
