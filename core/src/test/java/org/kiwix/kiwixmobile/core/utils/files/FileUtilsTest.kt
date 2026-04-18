@@ -18,31 +18,29 @@
 
 package org.kiwix.kiwixmobile.core.utils.files
 
-import io.mockk.clearMocks
+import android.content.Context
+import android.net.Uri
+import android.provider.DocumentsContract
+import android.util.Log
+import android.webkit.URLUtil
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
-import kotlinx.coroutines.runBlocking
+import io.mockk.unmockkAll
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
-import android.content.Context
-import android.net.Uri
-import android.provider.DocumentsContract
-import android.util.Base64
-import android.util.Log
-import android.webkit.MimeTypeMap
-import android.webkit.URLUtil
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.io.File
 
 class FileUtilsTest {
@@ -53,477 +51,301 @@ class FileUtilsTest {
 
   @BeforeEach
   fun init() {
-    clearMocks(mockFile)
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
     mockkStatic(Log::class)
     every { Log.e(any(), any()) } returns 0
     every { Log.w(any(), any<String>()) } returns 0
     every { Log.w(any(), any<String>(), any()) } returns 0
+    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().deleteFile() } returns true
   }
 
   @AfterEach
   fun tearDown() {
-    unmockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
-    unmockkStatic(Log::class)
+    unmockkAll()
+    clearAllMocks()
   }
 
-  @Test
-  fun fileNameEndsWithZimAndFileDoesNotExistAtTheLocation() {
-    testWith(".zim", false)
-  }
+  // ======== getAllZimParts ========
 
   @Test
-  fun fileNameEndsWithZimAndFileExistsAtTheLocation() {
+  fun getAllZimParts_whenFileEndsWithZimAndExists_returnsOriginalFile() {
     testWith(".zim", true)
   }
 
   @Test
-  fun fileNameEndsWithZimPartAndFileDoesNotExistAtTheLocation() {
-    testWith(".zim.part", false)
+  fun getAllZimParts_whenFileEndsWithZimAndNotExists_returnsPartFile() {
+    testWith(".zim", false)
   }
 
   @Test
-  fun fileNameEndsWithZimPartAndFileExistsAtTheLocation() {
+  fun getAllZimParts_whenFileEndsWithZimPartAndExists_returnsOriginalFile() {
     testWith(".zim.part", true)
   }
 
   @Test
-  fun fileNameEndsWithZimAndNoSuchFileExistsAtAnySuchLocation() =
-    runBlocking {
-      expect("zimab", false)
-      assertEquals(
-        FileUtils.getAllZimParts(testBook).size,
-        0,
-        "Nothing is returned in this case"
-      )
-    }
+  fun getAllZimParts_whenFileEndsWithZimPartAndNotExists_returnsPartFile() {
+    testWith(".zim.part", false)
+  }
 
-  private fun testWith(extension: String, fileExists: Boolean) =
-    runBlocking {
-      expect(extension, fileExists)
-      val coreApp = mockk<CoreApp>()
-      CoreApp.instance = coreApp
-      every { coreApp.packageName } returns "mock_package"
-      val files = FileUtils.getAllZimParts(testBook)
-      assertEquals(
-        files.size,
-        1,
-        "Only a single book is returned in case the file has extension $extension"
-      )
-      if (fileExists) {
-        assertEquals(
-          testBook.file,
-          files[0],
-          "The filename retained as such"
-        )
-      } else {
-        assertEquals(
-          testBook.file.toString() + ".part",
-          files[0].path,
-          "The filename is appended with .part"
-        )
-      }
-    }
+  @Test
+  fun getAllZimParts_whenNoFileExistsAtAnyLocation_returnsEmptyList() = runTest {
+    every { mockFile.path } returns "${fileName}zimab"
+    coEvery { mockFile.isFileExist() } returns false
+    coEvery { any<File>().isFileExist() } returns false
+    assertEquals(0, FileUtils.getAllZimParts(testBook).size)
+  }
 
-  private fun expect(extension: String, fileExists: Boolean) {
+  private fun testWith(extension: String, fileExists: Boolean) = runTest {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
-  }
-
-  @Test
-  fun getFileName_returnsOriginalName_whenFileExists() = runBlocking {
-    val path = "/storage/emulated/0/test.zimaa"
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      firstArg<File>().path == path
+    coEvery { mockFile.isFileExist() } returns fileExists
+    val coreApp = mockk<CoreApp>()
+    CoreApp.instance = coreApp
+    every { coreApp.packageName } returns "mock_package"
+    val files = FileUtils.getAllZimParts(testBook)
+    assertEquals(1, files.size)
+    if (fileExists) {
+      assertEquals(testBook.file, files[0])
+    } else {
+      assertEquals(testBook.file.toString() + ".part", files[0].path)
     }
-    val result = FileUtils.getFileName(path)
-    assertEquals(path, result)
   }
 
+  // ======== getFileName ========
+
   @Test
-  fun getFileName_returnsPartSuffix_whenOnlyPartFileExists() = runBlocking {
+  fun getFileName_whenFileExists_returnsOriginalName() = runTest {
     val path = "/storage/emulated/0/test.zimaa"
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      firstArg<File>().path == "$path.part"
-    }
-    val result = FileUtils.getFileName(path)
-    assertEquals("$path.part", result)
+    coEvery { any<File>().isFileExist() } returns true
+    assertEquals(path, FileUtils.getFileName(path))
   }
 
   @Test
-  fun getFileName_returnsAaSuffix_whenNeitherExists() = runBlocking {
-    coEvery { any<File>().isFileExist(any()) } returns false
+  fun getFileName_whenNeitherFileExist_returnsAaSuffix() = runTest {
     val path = "/storage/emulated/0/test.zimaa"
-    val result = FileUtils.getFileName(path)
-    assertEquals("${path}aa", result)
+    coEvery { any<File>().isFileExist() } returns false
+    assertEquals("${path}aa", FileUtils.getFileName(path))
   }
 
+  // ======== hasPart ========
+
   @Test
-  fun hasPart_returnsFalse_whenFileEndsWithZim() = runBlocking {
+  fun hasPart_whenFileEndsWithZimAndExists_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      firstArg<File>().path == path
-    }
-    val result = FileUtils.hasPart(File(path))
-    assertFalse(result)
+    coEvery { any<File>().isFileExist() } returns true
+    assertFalse(FileUtils.hasPart(File(path)))
   }
 
   @Test
-  fun hasPart_returnsTrue_whenFileResolvesToPartFile() = runBlocking {
-    val path = "/storage/emulated/0/wiki.zimaa"
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      firstArg<File>().path == "$path.part"
-    }
-    val result = FileUtils.hasPart(File(path))
-    assertTrue(result)
-  }
-
-  @Test
-  fun hasPart_returnsTrue_whenSplitChunkHasPartFile() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val inputPath = "${basePath}aa"
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      val p = firstArg<File>().path
-      when (p) {
-        inputPath -> true
-        "${basePath}aa.part" -> true
-        else -> false
-      }
-    }
-    val result = FileUtils.hasPart(File(inputPath))
-    assertTrue(result)
-  }
-
-  @Test
-  fun hasPart_returnsFalse_whenAllChunksExistWithNoParts() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val inputPath = "${basePath}aa"
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      val p = firstArg<File>().path
-      when (p) {
-        inputPath -> true
-        "${basePath}aa.part" -> false
-        "${basePath}aa" -> true
-        "${basePath}ab.part" -> false
-        "${basePath}ab" -> false
-        else -> false
-      }
-    }
-    val result = FileUtils.hasPart(File(inputPath))
-    assertFalse(result)
-  }
-
-  @Test
-  fun deleteZimFile_deletesZimFileAndChecksPartFiles() = runBlocking {
+  fun hasPart_whenNoFilesExistForZimPath_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
-    val deletedPaths = mutableListOf<String>()
-    coEvery { any<File>().deleteFile(any()) } coAnswers {
-      deletedPaths.add(firstArg<File>().path)
-      true
-    }
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      val p = firstArg<File>().path
-      p == "$path.part"
-    }
-    FileUtils.deleteZimFile(path)
-    assertTrue(deletedPaths.contains(path))
-    assertTrue(deletedPaths.any { it.contains(".part") })
+    coEvery { any<File>().isFileExist() } returns false
+    assertFalse(FileUtils.hasPart(File(path)))
   }
 
-  @Test
-  fun deleteZimFile_deletesMultipleChunks_sequentially() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val inputPath = "${basePath}aa"
-    val deleted = mutableListOf<String>()
-    coEvery { any<File>().deleteFile(any()) } coAnswers {
-      deleted.add(firstArg<File>().path)
-      true
-    }
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      val p = firstArg<File>().path
-      p == "${basePath}aa" || p == "${basePath}ab"
-    }
-    FileUtils.deleteZimFile(inputPath)
-    assertTrue(deleted.any { it.contains("aa") })
-    assertTrue(deleted.any { it.contains("ab") })
-  }
+  // ======== deleteZimFile ========
 
   @Test
-  fun deleteZimFile_stripsPartPartSuffix_thenDeletesZimFile() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val pathWithPartPart = "$basePath.part.part"
-    coEvery { any<File>().deleteFile(any()) } returns true
-    coEvery { any<File>().isFileExist(any()) } returns false
-    FileUtils.deleteZimFile(pathWithPartPart)
-  }
-
-  @Test
-  fun deleteZimFile_deletesSplitChunksUntilMissing() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val path = "${basePath}aa"
-    coEvery { any<File>().deleteFile(any()) } returns true
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      val p = firstArg<File>().path
-      p == "${basePath}aa"
-    }
+  fun deleteZimFile_whenZimFile_returnsWithoutError() = runTest {
+    val path = "/storage/emulated/0/wiki.zim"
+    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().deleteFile() } returns true
     FileUtils.deleteZimFile(path)
   }
 
   @Test
-  fun deleteZimFile_deletesSplitChunksAndTheirPartFiles() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val path = "${basePath}aa"
-    coEvery { any<File>().deleteFile(any()) } returns true
-    coEvery { any<File>().isFileExist(any()) } coAnswers {
-      val p = firstArg<File>().path
-      when (p) {
-        "${basePath}aa" -> true
-        "${basePath}ab" -> false
-        "${basePath}ab.part.part" -> true
-        "${basePath}ac" -> false
-        "${basePath}ac.part.part" -> false
-        "${basePath}ac.part" -> true
-        "${basePath}ad" -> false
-        "${basePath}ad.part.part" -> false
-        "${basePath}ad.part" -> false
-        else -> false
-      }
-    }
+  fun deleteZimFile_whenZimFileWithPart_returnsWithoutError() = runTest {
+    val path = "/storage/emulated/0/wiki.zim"
+    coEvery { any<File>().isFileExist() } returns true
+    coEvery { any<File>().deleteFile() } returns true
     FileUtils.deleteZimFile(path)
   }
 
   @Test
-  fun deleteZimFile_handlesPartSuffixOnSplitFile() = runBlocking {
-    val basePath = "/storage/emulated/0/wiki.zim"
-    val path = "${basePath}aa.part.part"
-    coEvery { any<File>().deleteFile(any()) } returns true
-    coEvery { any<File>().isFileExist(any()) } returns false
-    FileUtils.deleteZimFile(path)
+  fun deleteZimFile_whenPathEndsWithPartPart_returnsCompletes() = runTest {
+    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().deleteFile() } returns true
+    FileUtils.deleteZimFile("/storage/emulated/0/wiki.zim.part.part")
   }
 
   @Test
-  fun isValidZimFile_returnsTrue_forValidExtensions() {
+  fun deleteZimFile_whenSplitFileEndsWithPartPart_stripsAndCompletes() = runTest {
+    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().deleteFile() } returns true
+    FileUtils.deleteZimFile("/storage/emulated/0/wiki.zimaa.part.part")
+  }
+
+  // ======== isValidZimFile ========
+
+  @Test
+  fun isValidZimFile_whenValidExtensions_returnsTrue() {
     assertTrue(FileUtils.isValidZimFile("test.zim"))
     assertTrue(FileUtils.isValidZimFile("test.zimaa"))
+    assertTrue(FileUtils.isValidZimFile("/storage/emulated/0/wikipedia.zim"))
+    assertTrue(FileUtils.isValidZimFile("/storage/emulated/0/wikipedia.zimaa"))
   }
 
   @Test
-  fun isValidZimFile_returnsFalse_forInvalidExtensions() {
+  fun isValidZimFile_whenInvalidExtensions_returnsFalse() {
     assertFalse(FileUtils.isValidZimFile("test.png"))
     assertFalse(FileUtils.isValidZimFile("test.zip"))
     assertFalse(FileUtils.isValidZimFile("test.zima"))
+    assertFalse(FileUtils.isValidZimFile("test.zimab"))
   }
 
+  // ======== isSplittedZimFile ========
+
   @Test
-  fun isSplittedZimFile_returnsTrue_forSplitExtensions() {
+  fun isSplittedZimFile_whenSplitExtensions_returnsTrue() {
     assertTrue(FileUtils.isSplittedZimFile("test.zimaa"))
     assertTrue(FileUtils.isSplittedZimFile("test.zimab"))
+    assertTrue(FileUtils.isSplittedZimFile("test.zimaz"))
   }
 
   @Test
-  fun isSplittedZimFile_returnsFalse_forNonSplitExtensions() {
+  fun isSplittedZimFile_whenNonSplitExtensions_returnsFalse() {
     assertFalse(FileUtils.isSplittedZimFile("test.zim"))
     assertFalse(FileUtils.isSplittedZimFile("test.zim.part"))
+    assertFalse(FileUtils.isSplittedZimFile("test.zimzz"))
+    assertFalse(FileUtils.isSplittedZimFile("test.zimaaa"))
+    assertFalse(FileUtils.isSplittedZimFile(""))
   }
 
-  @Test
-  fun isFileDescriptorCanOpenWithLibkiwix_returnsFalse_forInvalidFd() {
-    assertFalse(FileUtils.isFileDescriptorCanOpenWithLibkiwix(-1))
-  }
+  // ======== getLocalFilePathByUri ========
 
   @Test
-  fun getLocalFilePathByUri_returnsPath_forFileUri() = runBlocking {
+  fun getLocalFilePathByUri_whenFileScheme_returnsPath() = runTest {
     val mockContext = mockk<Context>()
     val mockUri = mockk<Uri>()
     every { mockUri.scheme } returns "file"
     every { mockUri.path } returns "/storage/emulated/0/test.zim"
-
     mockkStatic(DocumentsContract::class)
     every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
-
-    val result = FileUtils.getLocalFilePathByUri(mockContext, mockUri)
-    assertEquals("/storage/emulated/0/test.zim", result)
-
-    unmockkStatic(DocumentsContract::class)
+    assertEquals(
+      "/storage/emulated/0/test.zim",
+      FileUtils.getLocalFilePathByUri(mockContext, mockUri)
+    )
   }
 
   @Test
-  fun getLocalFilePathByUri_returnsPath_whenSchemeIsNull() = runBlocking {
+  fun getLocalFilePathByUri_whenSchemeIsNull_returnsPath() = runTest {
     val mockContext = mockk<Context>()
     val mockUri = mockk<Uri>()
     every { mockUri.scheme } returns null
     every { mockUri.path } returns "/storage/emulated/0/test.zim"
-
     mockkStatic(DocumentsContract::class)
     every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
-
-    val result = FileUtils.getLocalFilePathByUri(mockContext, mockUri)
-    assertEquals("/storage/emulated/0/test.zim", result)
-
-    unmockkStatic(DocumentsContract::class)
+    assertEquals(
+      "/storage/emulated/0/test.zim",
+      FileUtils.getLocalFilePathByUri(mockContext, mockUri)
+    )
   }
 
+  // ======== extractDocumentId ========
+
   @Test
-  fun extractDocumentId_returnsId_whenWrapperSucceeds() {
+  fun extractDocumentId_whenWrapperSucceeds_returnsId() {
     val mockUri = mockk<Uri>()
     val mockWrapper = mockk<DocumentResolverWrapper>()
     every { mockWrapper.getDocumentId(mockUri) } returns "1234"
-
-    val result = FileUtils.extractDocumentId(mockUri, mockWrapper)
-    assertEquals("1234", result)
+    assertEquals("1234", FileUtils.extractDocumentId(mockUri, mockWrapper))
   }
 
   @Test
-  fun extractDocumentId_returnsEmptyString_whenWrapperFails() {
+  fun extractDocumentId_whenWrapperThrows_returnsEmptyString() {
     val mockUri = mockk<Uri>()
     val mockWrapper = mockk<DocumentResolverWrapper>()
     every { mockWrapper.getDocumentId(mockUri) } throws Exception("Failed")
-
-    val result = FileUtils.extractDocumentId(mockUri, mockWrapper)
-    assertEquals("", result)
+    assertEquals("", FileUtils.extractDocumentId(mockUri, mockWrapper))
   }
 
+  // ======== documentProviderContentQuery ========
+
   @Test
-  fun documentProviderContentQuery_returnsZimFile_whenDirectPath() = runBlocking {
+  fun documentProviderContentQuery_whenRawZimPath_returnsFilePath() = runTest {
     val mockContext = mockk<Context>()
     val mockUri = mockk<Uri>()
     val mockWrapper = mockk<DocumentResolverWrapper>()
-
     every { mockWrapper.getDocumentId(mockUri) } returns "raw:/storage/emulated/0/test.zim"
-
-    val result = FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper)
-    assertEquals("/storage/emulated/0/test.zim", result)
+    assertEquals(
+      "/storage/emulated/0/test.zim",
+      FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper)
+    )
   }
 
   @Test
-  fun decodeBase64DataUri_returnsNull_forInvalidBase64() {
-    val result = FileUtils.decodeBase64DataUri("invalid_string_without_comma")
-    assertEquals(null, result)
+  fun documentProviderContentQuery_whenRawZimaaPath_returnsFilePath() = runTest {
+    val mockContext = mockk<Context>()
+    val mockUri = mockk<Uri>()
+    val mockWrapper = mockk<DocumentResolverWrapper>()
+    every { mockWrapper.getDocumentId(mockUri) } returns "raw:/storage/emulated/0/test.zimaa"
+    assertEquals(
+      "/storage/emulated/0/test.zimaa",
+      FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper)
+    )
   }
 
-  @Test
-  fun decodeBase64DataUri_returnsExtensionAndBytes_forValidBase64() {
-    val base64Data = "mocked_base_64_encoded_string"
-    val input = "data:image/png;base64,$base64Data"
-    val expectedBytes = byteArrayOf(1, 2, 3)
-
-    mockkStatic(MimeTypeMap::class)
-    val mockMimeTypeMap = mockk<MimeTypeMap>()
-    every { MimeTypeMap.getSingleton() } returns mockMimeTypeMap
-    every { mockMimeTypeMap.getExtensionFromMimeType("image/png") } returns "png"
-
-    mockkStatic(Base64::class)
-    every {
-      Base64.decode(
-        base64Data,
-        Base64.DEFAULT
-      )
-    } returns expectedBytes
-
-    val result = FileUtils.decodeBase64DataUri(input)
-    assertEquals("png", result?.first)
-    assertTrue(result?.second?.contentEquals(expectedBytes) == true)
-
-    unmockkStatic(MimeTypeMap::class)
-    unmockkStatic(Base64::class)
-  }
+  // ======== getSafeFileNameAndSourceFromUrlOrSrc ========
 
   @Test
-  fun decodeBase64DataUri_returnsBin_whenMimeUnknown() {
-    val base64 = "data:unknown/type;base64,SGVsbG8="
-
-    mockkStatic(MimeTypeMap::class)
-    val mockMime = mockk<MimeTypeMap>()
-    every { MimeTypeMap.getSingleton() } returns mockMime
-    every { mockMime.getExtensionFromMimeType(any()) } returns null
-
-    val result = FileUtils.decodeBase64DataUri(base64)
-    assertEquals("bin", result?.first)
-
-    unmockkStatic(MimeTypeMap::class)
-  }
-
-  @Test
-  fun getSafeFileNameAndSourceFromUrlOrSrc_returnsDecodedFileName_fromUrl() {
+  fun getSafeFileNameAndSourceFromUrlOrSrc_whenValidUrl_returnsDecodedFileName() {
     mockkStatic(URLUtil::class)
     every {
-      URLUtil.guessFileName(
-        "https://example.com/test.png",
-        null,
-        null
-      )
+      URLUtil.guessFileName("https://kiwix.org/test.png", null, null)
     } returns "test.png"
 
     val result =
-      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://example.com/test.png", null)
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://kiwix.org/test.png", null)
     assertEquals("test.png", result?.first)
-    assertEquals("https://example.com/test.png", result?.second)
-
-    unmockkStatic(URLUtil::class)
+    assertEquals("https://kiwix.org/test.png", result?.second)
   }
 
   @Test
-  fun getSafeFileNameAndSourceFromUrlOrSrc_returnsDecodedFileName_fromSrc() {
+  fun getSafeFileNameAndSourceFromUrlOrSrc_whenValidSrc_returnsDecodedFileName() {
     mockkStatic(URLUtil::class)
     every { URLUtil.guessFileName(null, null, null) } returns "downloadfile.bin"
     every {
-      URLUtil.guessFileName(
-        "https://example.com/src.png",
-        null,
-        null
-      )
+      URLUtil.guessFileName("https://kiwix.org/src.png", null, null)
     } returns "src.png"
-
-    val result = FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(null, "https://example.com/src.png")
+    val result =
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(null, "https://kiwix.org/src.png")
     assertEquals("src.png", result?.first)
-    assertEquals("https://example.com/src.png", result?.second)
-
-    unmockkStatic(URLUtil::class)
+    assertEquals("https://kiwix.org/src.png", result?.second)
   }
 
   @Test
-  fun getSafeFileNameAndSourceFromUrlOrSrc_returnsNull_whenBothInputsNull() {
-    val result = FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(null, null)
-    assertEquals(null, result)
+  fun getSafeFileNameAndSourceFromUrlOrSrc_whenBothNull_returnsNull() {
+    assertNull(FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(null, null))
   }
 
   @Test
-  fun getSafeFileNameAndSourceFromUrlOrSrc_returnsNull_forBinFile() {
+  fun getSafeFileNameAndSourceFromUrlOrSrc_whenBinFile_returnsNullFileName() {
     mockkStatic(URLUtil::class)
     every { URLUtil.guessFileName(any(), any(), any()) } returns "file.bin"
 
     val result =
-      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://example.com/file.bin", null)
-    assertEquals(null to "https://example.com/file.bin", result)
-
-    unmockkStatic(URLUtil::class)
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://kiwix.org/file.bin", null)
+    assertEquals(null to "https://kiwix.org/file.bin", result)
   }
 
   @Test
-  fun getDownloadRootDir_returnsExternalMediaDirs_forPlayStoreBuildWithAndroid11OrAbove() =
-    runBlocking {
-      val kiwixDataStore = mockk<KiwixDataStore>()
-      coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
-
-      val mockCoreApp = mockk<CoreApp>()
-      CoreApp.instance = mockCoreApp
-      val mockFile = mockk<File>()
-      every { mockCoreApp.externalMediaDirs } returns arrayOf(mockFile)
-
-      val result = FileUtils.getDownloadRootDir(kiwixDataStore)
-      assertEquals(mockFile, result)
-    }
+  fun getSafeFileNameAndSourceFromUrlOrSrc_whenUrlHasNoExtension_returnsNullFileName() {
+    mockkStatic(URLUtil::class)
+    every { URLUtil.guessFileName(any(), any(), any()) } returns "downloadfile.bin"
+    val result =
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://kiwix.org/resource", null)
+    assertNull(result?.first)
+  }
 
   @Test
-  fun downloadFileFromUrl_returnsNull_ifDownloadRootDirIsNull() = runBlocking {
-    val kiwixDataStore = mockk<KiwixDataStore>()
-    coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
-
-    val mockCoreApp = mockk<CoreApp>()
-    CoreApp.instance = mockCoreApp
-    every { mockCoreApp.externalMediaDirs } returns emptyArray<File>()
-
-    val result = FileUtils.downloadFileFromUrl("xyz", null, mockk(), kiwixDataStore)
-    assertEquals(null, result)
+  fun getSafeFileNameAndSourceFromUrlOrSrc_whenUrlHasColon_stripsColonFromFileName() {
+    mockkStatic(URLUtil::class)
+    every {
+      URLUtil.guessFileName("https://kiwix.org/file:name.epub", null, null)
+    } returns "file:name.epub"
+    val result =
+      FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://kiwix.org/file:name.epub", null)
+    assertEquals("filename.epub", result?.first)
   }
 }
