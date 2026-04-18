@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.search
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -120,7 +119,6 @@ private fun buildActionMenuItems(
       }
     ),
     if (uiState.findInPageMenuItem.second) {
-      Log.e("FIND_IN_PAGE", "buildActionMenuItems: ${uiState.findInPageMenuItem.first}")
       // Check if the `FIND_IN_PAGE` is visible or not.
       // If visible then show it in menu.
       ActionMenuItem(
