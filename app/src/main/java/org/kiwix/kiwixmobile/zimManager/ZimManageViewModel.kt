@@ -137,7 +137,6 @@ class ZimManageViewModel @Inject constructor(
     val version: Long = System.nanoTime()
   )
 
-
   private var isUnitTestCase: Boolean = false
   private val _libraryItems =
     MutableStateFlow<LibraryListItemWrapper>(LibraryListItemWrapper(emptyList()))
@@ -384,7 +383,6 @@ class ZimManageViewModel @Inject constructor(
       requestDownloadLibrary.tryEmit(request)
     }
     .launchIn(viewModelScope)
-
 
   private fun updateDownloadState(isInitial: Boolean) {
     onlineLibraryDownloading.tryEmit(isInitial to !isInitial)

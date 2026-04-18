@@ -23,8 +23,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
@@ -52,7 +50,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -108,7 +105,6 @@ class ZimManageViewModelTest {
   private val fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
-  private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
 
   @RegisterExtension
   private val mainDispatcherRule = MainDispatcherRule()
@@ -363,7 +359,6 @@ class ZimManageViewModelTest {
       every { application.getString(any(), any()) } returns "All languages"
       every { application.getString(any(), *anyVararg()) } returns "All languages"
 
-
       // test libraryItems fetches for all language.
       assertLibraryItemFileSystemState(bookOver4Gb, "", "All languages")
 
@@ -444,7 +439,6 @@ class ZimManageViewModelTest {
       }
     }
   }
-
 }
 
 suspend fun <T> TestScope.testFlow(

@@ -45,11 +45,9 @@ import kotlinx.coroutines.flow.filterIsInstance
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.SHARE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
@@ -114,19 +112,13 @@ fun LocalLibraryRoute(
     onLongClick = localLibraryViewModel::onBookItemLongClick,
     onMultiSelect = localLibraryViewModel::onMultiSelect,
     bottomAppBarScrollBehaviour = mainActivity.bottomAppBarScrollBehaviour,
-    onUserBackPressed = { handleUserBackPressed(mainActivity) },
+    onUserBackPressed = localLibraryViewModel::handleUserBackPressed,
     navHostController = navController,
     navigationIcon = {
       NavigationIcon(
         iconItem = navigationIconItem(uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI),
         contentDescription = string.open_drawer,
-        onClick = {
-          handleNavigationIconClick(
-            mainActivity,
-            uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI,
-            localLibraryViewModel
-          )
-        }
+        onClick = localLibraryViewModel::onNavigationIconClick
       )
     }
   )
@@ -218,27 +210,3 @@ private fun normalModeMenuItems(
       testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
     )
   )
-
-private fun handleUserBackPressed(activity: KiwixMainActivity): FragmentActivityExtensions.Super {
-  val coreMainActivity = activity as? CoreMainActivity
-  return if (coreMainActivity?.navigationDrawerIsOpen() == true) {
-    coreMainActivity.closeNavigationDrawer()
-    FragmentActivityExtensions.Super.ShouldNotCall
-  } else {
-    FragmentActivityExtensions.Super.ShouldCall
-  }
-}
-
-private fun handleNavigationIconClick(
-  activity: KiwixMainActivity,
-  isMultiMode: Boolean,
-  viewModel: LocalLibraryViewModel
-) {
-  if (isMultiMode) {
-    viewModel.finishMultiModeFinished()
-  } else if (activity.navigationDrawerIsOpen()) {
-    activity.closeNavigationDrawer()
-  } else {
-    activity.openNavigationDrawer()
-  }
-}

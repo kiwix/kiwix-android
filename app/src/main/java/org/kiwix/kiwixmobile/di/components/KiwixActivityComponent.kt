@@ -23,7 +23,6 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
@@ -49,6 +48,9 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
+
+  fun processSelectedZimFilesForStandalone(): ProcessSelectedZimFilesForStandalone
+  fun processSelectedZimFilesForPlayStore(): ProcessSelectedZimFilesForPlayStore
 
   @Subcomponent.Builder
   interface Builder {
