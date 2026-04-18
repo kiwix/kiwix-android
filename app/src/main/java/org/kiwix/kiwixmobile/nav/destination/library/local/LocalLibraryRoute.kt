@@ -176,14 +176,14 @@ private fun multiModeMenuItem(localLibraryViewModel: LocalLibraryViewModel) = li
   ),
   ActionMenuItem(
     IconItem.Drawable(drawable.baseline_share_24),
-    string.delete,
+    string.share,
     { localLibraryViewModel.shareMenuIconClick() },
     isEnabled = true,
     testingTag = SHARE_MENU_BUTTON_TESTING_TAG
   ),
   ActionMenuItem(
     IconItem.Drawable(R.drawable.file_validate),
-    string.delete,
+    string.validate_zim_files,
     { localLibraryViewModel.validateMenuIconClick() },
     isEnabled = true,
     testingTag = VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG
