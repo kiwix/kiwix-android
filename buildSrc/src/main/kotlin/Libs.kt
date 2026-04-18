@@ -372,4 +372,7 @@ object Libs {
     "androidx.benchmark:benchmark-macro-junit4:${Versions.BENCHMARK_MACRO}"
 
   const val ACCOMPANIST = "com.google.accompanist:accompanist-permissions:${Versions.ACCOMPANIST}"
+
+  const val CORE_SPLASH_SCREEN: String =
+    "androidx.core:core-splashscreen:" + Versions.CORE_SPLASHSCREEN
 }

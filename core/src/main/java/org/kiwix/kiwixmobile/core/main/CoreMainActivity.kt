@@ -79,6 +79,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
 import androidx.core.graphics.createBitmap
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import org.kiwix.kiwixmobile.core.ThemeConfig
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
@@ -135,6 +137,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
+
+  @Inject
+  lateinit var themeConfig: ThemeConfig
 
   /**
    * We have migrated the UI in compose, so providing the compose based navigation to activity
@@ -198,6 +203,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
+    val splashScreen = installSplashScreen()
+    splashScreen.setKeepOnScreenCondition {
+      !themeConfig.isThemeLoaded.value
+    }
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {

@@ -22,19 +22,25 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ThemeConfig @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   val context: Context
 ) {
+  val isThemeLoaded: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
   fun init() {
     CoroutineScope(Dispatchers.Main).launch {
       kiwixDataStore.appTheme.collect {
         setMode(it)
+        isThemeLoaded.value = true
       }
     }
   }

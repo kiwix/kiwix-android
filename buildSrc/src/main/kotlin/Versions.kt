@@ -123,6 +123,7 @@ object Versions {
   const val BENCHMARK_MACRO: String = "1.4.1"
 
   const val ACCOMPANIST = "0.34.0"
+  const val CORE_SPLASHSCREEN: String = "1.2.0"
 }
 
 /**

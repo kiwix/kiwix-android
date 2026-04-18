@@ -18,7 +18,9 @@
   -->
 
 <resources>
-  <style name="KiwixTheme.Launcher">
-    <item name="android:windowBackground">@drawable/launch_screen</item>
+  <style name="KiwixTheme.Splash" parent="Theme.SplashScreen">
+    <item name="windowSplashScreenBackground">@color/alabaster_white</item>
+    <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+    <item name="postSplashScreenTheme">@style/KiwixTheme</item>
   </style>
 </resources>
