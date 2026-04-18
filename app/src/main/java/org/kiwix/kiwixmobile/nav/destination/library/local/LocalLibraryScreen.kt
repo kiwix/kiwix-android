@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +39,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -62,13 +60,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -88,12 +83,9 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
@@ -342,46 +334,36 @@ fun NoFilesView(
 @Composable
 private fun SwipeDownToScanFileSystemText() {
   val infiniteTransition = rememberInfiniteTransition(label = "swipeAnim")
-
   val offsetY by infiniteTransition.animateFloat(
     initialValue = ZERO.toFloat(),
-    targetValue = 24f,
+    targetValue = TEN_DP.value,
     animationSpec = infiniteRepeatable(
-      animation =
-        tween(SWIPE_DOWN_IMAGE_ANIMATION_TIME, easing = FastOutSlowInEasing),
+      animation = tween(SWIPE_DOWN_IMAGE_ANIMATION_TIME, easing = FastOutSlowInEasing),
       repeatMode = RepeatMode.Restart
     ),
     label = "swipeOffset"
   )
 
-  val alpha = 1f - (offsetY / 24f).coerceIn(ZERO.toFloat(), 1f)
-
-  Row(
+  Column(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(EIGHT_DP),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Center
+      .offset { IntOffset(0, offsetY.roundToInt()) }
+      .testTag(SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG),
+    horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Icon(
-      painter = IconItem.Drawable(drawable.ic_swipe_down).toPainter(),
+      painter = painterResource(id = drawable.ic_swipe_down),
       contentDescription = null,
       modifier = Modifier
-        .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }
         .size(TWENTY_DP)
-        .alpha(alpha),
-      tint = MaterialTheme.colorScheme.onSurfaceVariant
+        .testTag(SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG),
+      tint = MaterialTheme.colorScheme.primary
     )
-    Spacer(Modifier.width(SIX_DP))
     Text(
-      text = stringResource(string.swipe_down_to_scan_storage),
-      textAlign = TextAlign.Center,
-      style = MaterialTheme.typography.bodySmall.copy(
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-      ),
-      modifier = Modifier.semantics {
-        testTag = SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG
-      }
+      text = stringResource(id = string.swipe_down_to_scan_storage),
+      style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+      color = MaterialTheme.colorScheme.primary,
+      textAlign = TextAlign.Center
     )
   }
 }
