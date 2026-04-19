@@ -182,6 +182,10 @@
     <service
       android:name=".webserver.wifi_hotspot.HotspotService"
       android:foregroundServiceType="dataSync" />
+
+    <receiver
+      android:name="org.kiwix.kiwixmobile.core.utils.ShortcutUtils$ShortcutResultReceiver"
+      android:exported="true" />
   </application>
 
 </manifest>

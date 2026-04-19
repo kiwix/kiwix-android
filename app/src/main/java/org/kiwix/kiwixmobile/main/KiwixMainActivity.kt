@@ -81,6 +81,7 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -214,6 +215,7 @@ class KiwixMainActivity : CoreMainActivity() {
       handleGetContentIntent(intent)
       safelyHandleDeepLink(intent)
       handleBackgroundTimeoutLimitIntent(intent)
+      handleShortcutIntent(intent)
     }
   }
 
@@ -318,7 +320,7 @@ class KiwixMainActivity : CoreMainActivity() {
         "file",
         "content" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            openLocalLibraryWithZimFilePath("$it")
+            openZimFromFilePath("$it")
             clearIntentDataAndAction()
           }, OPENING_ZIM_FILE_DELAY)
         }
@@ -344,6 +346,15 @@ class KiwixMainActivity : CoreMainActivity() {
           }
         }
       }
+    }
+  }
+
+  private fun handleShortcutIntent(intent: Intent?) {
+    val zimFileUri = intent?.getStringExtra(ZIM_FILE_URI_KEY) ?: return
+    val pageUrl = intent.getStringExtra(PAGE_URL_KEY)
+    lifecycleScope.launch {
+      delay(OPENING_ZIM_FILE_DELAY)
+      openZimFromFilePath(zimFileUri, pageUrl)
     }
   }
 
@@ -375,11 +386,14 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  private fun openZimFromFilePath(path: String) {
+  private fun openZimFromFilePath(path: String, pageUrl: String? = null) {
     val isAlreadyOnReader =
       navController.currentDestination?.route == KiwixDestination.Reader.route
     if (isAlreadyOnReader) {
       setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+      if (pageUrl != null) {
+        setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
+      }
       supportFragmentManager.fragments
         .filterIsInstance<KiwixReaderFragment>()
         .firstOrNull()
@@ -387,6 +401,9 @@ class KiwixMainActivity : CoreMainActivity() {
     } else {
       navigate(KiwixDestination.Reader.route)
       setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+      if (pageUrl != null) {
+        setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
+      }
     }
   }
 

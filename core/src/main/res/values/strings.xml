@@ -427,4 +427,10 @@
   <string name="confirmation_validate_zim_files">Are you sure you want to validate the following ZIM files?\n\n%s</string>
   <string name="validating_zim_file">Validating ZIM file…</string>
   <string name="validating_zim_files">Validating ZIM files…</string>
+  <string name="menu_add_to_homescreen">Add to Home Screen</string>
+  <string name="added_to_homescreen">Shortcut added to Home Screen</string>
+  <string name="add_shortcut_title">Add shortcut</string>
+  <string name="shortcut_name_label">Shortcut name</string>
+  <string name="xiaomi_shortcut_instruction">Xiaomi devices (MIUI) require manual permission to add shortcuts.</string>
+  <string name="open_xiaomi_settings">Open Settings</string>
 </resources>
