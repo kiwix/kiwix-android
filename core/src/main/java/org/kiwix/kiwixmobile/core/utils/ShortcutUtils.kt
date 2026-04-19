@@ -190,9 +190,11 @@ object ShortcutUtils {
   /**
    * Checks if the current device is a Xiaomi/MIUI device.
    */
-  fun isXiaomiDevice(): Boolean {
-    return Build.MANUFACTURER.contains("Xiaomi", ignoreCase = true) ||
-      Build.BRAND.contains("Xiaomi", ignoreCase = true)
+  fun isXiaomiDevice(manufacturer: String = Build.MANUFACTURER): Boolean {
+    return manufacturer.contains("Xiaomi", ignoreCase = true) ||
+      manufacturer.contains("Redmi", ignoreCase = true) ||
+      manufacturer.contains("POCO", ignoreCase = true) ||
+      manufacturer.contains("Blackshark", ignoreCase = true)
   }
 
   /**
