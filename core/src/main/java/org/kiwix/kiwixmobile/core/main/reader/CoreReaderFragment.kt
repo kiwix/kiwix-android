@@ -1687,6 +1687,7 @@ abstract class CoreReaderFragment :
    * WARNING: If modifying this method, ensure thorough testing with custom apps
    * to verify proper functionality.
    */
+  @Suppress("NestedBlockDepth")
   open suspend fun openAndSetInContainer(
     zimReaderSource: ZimReaderSource,
     showSearchSuggestionsSpellChecked: Boolean = false,

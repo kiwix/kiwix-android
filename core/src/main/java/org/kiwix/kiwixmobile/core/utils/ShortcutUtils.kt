@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -46,6 +46,7 @@ object ShortcutUtils {
   private const val TAG = "ShortcutUtils"
   private const val ADAPTIVE_ICON_SIZE_DP = 108
   private const val ADAPTIVE_SAFE_ZONE_SIZE_DP = 72
+  private const val MIUI_INSTALL_SHORTCUT_OP_CODE = 10017
 
   /**
    * Attempts to add a pinned shortcut for a ZIM book to the home screen.
@@ -85,28 +86,16 @@ object ShortcutUtils {
         val decodedString: ByteArray = Base64.decode(faviconBase64, Base64.DEFAULT)
         BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
       }
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
       Log.e(TAG, "Error decoding favicon for $displayTitle", e)
       null
     }
 
     val icon = createProfessionalIcon(context, faviconBitmap)
 
-    val shortcutInfo = try {
-      val mainActivityClass = context.getMainActivityClass()
-      ShortcutInfoCompat.Builder(context, id)
-        .setActivity(ComponentName(context, mainActivityClass))
-        .setShortLabel(displayTitle)
-        .setLongLabel(displayTitle)
-        .setIcon(icon)
-        .setIntent(shortcutIntent)
-        .build()
-    } catch (e: Exception) {
-      Log.e(TAG, "Failed to build ShortcutInfo for $displayTitle", e)
-      return false
-    }
+    val shortcutInfo = buildShortcutInfo(context, id, displayTitle, icon, shortcutIntent)
 
-    return if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+    return if (shortcutInfo != null && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
       val successCallback = PendingIntent.getBroadcast(
         context,
         id.hashCode(),
@@ -115,9 +104,36 @@ object ShortcutUtils {
       )
       ShortcutManagerCompat.requestPinShortcut(context, shortcutInfo, successCallback.intentSender)
     } else {
-      Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
-      context.toast(R.string.shortcut_disabled_message)
+      if (shortcutInfo != null) {
+        Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
+        context.toast(R.string.shortcut_disabled_message)
+      }
       false
+    }
+  }
+
+  private fun buildShortcutInfo(
+    context: Context,
+    id: String,
+    displayTitle: String,
+    icon: IconCompat,
+    shortcutIntent: Intent
+  ): ShortcutInfoCompat? {
+    return try {
+      val mainActivityClass = context.getMainActivityClass()
+      ShortcutInfoCompat.Builder(context, id)
+        .setActivity(ComponentName(context, mainActivityClass))
+        .setShortLabel(displayTitle)
+        .setLongLabel(displayTitle)
+        .setIcon(icon)
+        .setIntent(shortcutIntent)
+        .build()
+    } catch (
+      @Suppress("TooGenericExceptionCaught")
+      e: Exception
+    ) {
+      Log.e(TAG, "Failed to build ShortcutInfo for $displayTitle", e)
+      null
     }
   }
 
@@ -182,7 +198,7 @@ object ShortcutUtils {
       try {
         Class.forName("org.kiwix.kiwixmobile.custom.main.CustomMainActivity")
       } catch (e2: ClassNotFoundException) {
-        throw RuntimeException("Could not find KiwixMainActivity or CustomMainActivity")
+        throw IllegalStateException("Could not find KiwixMainActivity or CustomMainActivity")
       }
     }
   }
@@ -213,7 +229,10 @@ object ShortcutUtils {
 
     try {
       context.startActivity(intent)
-    } catch (e: Exception) {
+    } catch (
+      @Suppress("TooGenericExceptionCaught")
+      e: Exception
+    ) {
       Log.e(TAG, "Failed to open MIUI permission editor, falling back to app settings", e)
       try {
         val fallbackIntent =
@@ -222,7 +241,10 @@ object ShortcutUtils {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
           }
         context.startActivity(fallbackIntent)
-      } catch (e2: Exception) {
+      } catch (
+        @Suppress("TooGenericExceptionCaught")
+        e2: Exception
+      ) {
         Log.e(TAG, "Failed to open fallback app settings", e2)
       }
     }
@@ -245,12 +267,15 @@ object ShortcutUtils {
       )
       val result = method.invoke(
         appOpsManager,
-        10017, // MIUI's internal code for "Install Shortcut"
+        MIUI_INSTALL_SHORTCUT_OP_CODE,
         android.os.Process.myUid(),
         context.packageName
       ) as Int
       result == AppOpsManager.MODE_ALLOWED
-    } catch (e: Exception) {
+    } catch (
+      @Suppress("TooGenericExceptionCaught")
+      e: Exception
+    ) {
       Log.e(TAG, "Failed to check MIUI shortcut permission", e)
       false // Fallback to show helper if we can't be sure
     }

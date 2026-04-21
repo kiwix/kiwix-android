@@ -59,7 +59,7 @@ class ShortcutUtilsTest {
 
   @Test
   fun `isXiaomiDevice returns false for other brands`() {
-    listOf("Samsung", "Google", "OnePlus", "Motorola").forEach { brand ->
+    listOf("Samsung", "Google", "OnePlus", "Motorola", "Sony").forEach { brand ->
       assertThat(ShortcutUtils.isXiaomiDevice(brand))
         .withFailMessage("Should not detect $brand as Xiaomi-family")
         .isFalse
@@ -68,9 +68,7 @@ class ShortcutUtilsTest {
 
   @Test
   fun `isShortcutPermissionGranted returns true for non-Xiaomi devices`() {
-    // Note: We use the default parameter (Build.MANUFACTURER) here which is "Samsung"
-    // due to ShadowBuild.setManufacturer in this test setup.
-    ShadowBuild.setManufacturer("Samsung")
+    ShadowBuild.setManufacturer("Google")
     val context = mockk<Context>()
     assertThat(ShortcutUtils.isShortcutPermissionGranted(context)).isTrue
   }
@@ -95,5 +93,14 @@ class ShortcutUtilsTest {
   fun `addBookShortcut returns false if zimFileReader is null`() {
     val context = mockk<Context>()
     assertThat(ShortcutUtils.addBookShortcut(context, null, "test_url")).isFalse
+  }
+
+  @Test
+  fun `openMiuiPermissionEditor does not crash when intent fails`() {
+    val context = mockk<Context>(relaxed = true)
+    every { context.startActivity(any()) } throws RuntimeException("Activity not found")
+
+    // Should not crash, just log errors and try fallback
+    ShortcutUtils.openMiuiPermissionEditor(context)
   }
 }

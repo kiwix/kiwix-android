@@ -185,7 +185,7 @@
 
     <receiver
       android:name="org.kiwix.kiwixmobile.core.utils.ShortcutUtils$ShortcutResultReceiver"
-      android:exported="true" />
+      android:exported="false" />
   </application>
 
 </manifest>

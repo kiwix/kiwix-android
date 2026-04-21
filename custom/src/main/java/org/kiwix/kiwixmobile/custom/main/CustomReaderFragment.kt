@@ -427,9 +427,14 @@ class CustomReaderFragment : CoreReaderFragment() {
    */
   override suspend fun openAndSetInContainer(
     zimReaderSource: ZimReaderSource,
-    showSearchSuggestionsSpellChecked: Boolean
+    showSearchSuggestionsSpellChecked: Boolean,
+    initialUrl: String?
   ) {
-    super.openAndSetInContainer(zimReaderSource, BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED)
+    super.openAndSetInContainer(
+      zimReaderSource,
+      BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED,
+      initialUrl
+    )
   }
 
   override suspend fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {

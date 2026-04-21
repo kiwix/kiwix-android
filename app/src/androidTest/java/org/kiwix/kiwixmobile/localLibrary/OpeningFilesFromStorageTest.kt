@@ -101,13 +101,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         setPrefIsTest(true)
       }
     }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
+
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
       setSuppressingResultMatcher(
         anyOf(
@@ -121,37 +115,41 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Test
   fun testOpeningFileWithFilePicker() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        it.navigate(KiwixDestination.Library.route)
-      }
-      composeTestRule.waitForIdle()
-      val uri = copyFileToDownloadsFolder(context, fileName)
-      try {
-        runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
-        intending(hasAction(Intent.ACTION_CHOOSER))
-          .respondWith(
-            Instrumentation.ActivityResult(
-              Activity.RESULT_OK,
-              Intent().setData(uri)
-            )
-          )
-        // open file picker to select a file to test the real scenario.
-        composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
-        copyMoveFileHandler {
-          assertCopyMoveDialogDisplayed(composeTestRule)
-          clickOnMove(composeTestRule)
-          assertStorageSelectionDialogDisplayed(composeTestRule)
-          clickOnInternalStorage(composeTestRule)
-          assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+      ActivityScenario.launch(KiwixMainActivity::class.java).use { scenario ->
+        scenario.moveToState(Lifecycle.State.RESUMED)
+        scenario.onActivity {
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+          kiwixMainActivity = it
+          it.navigate(KiwixDestination.Library.route)
         }
-      } catch (ignore: Exception) {
-        fail("Could not open file from file manager. Original exception = $ignore")
-      } finally {
-        deleteAllFilesInDirectory(
-          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
-        )
-        deleteZimFileFromDownloadsFolder(uri)
+        composeTestRule.waitForIdle()
+        val uri = copyFileToDownloadsFolder(context, fileName)
+        try {
+          runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+          intending(hasAction(Intent.ACTION_CHOOSER))
+            .respondWith(
+              Instrumentation.ActivityResult(
+                Activity.RESULT_OK,
+                Intent().setData(uri)
+              )
+            )
+          // open file picker to select a file to test the real scenario.
+          composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
+          copyMoveFileHandler {
+            assertCopyMoveDialogDisplayed(composeTestRule)
+            clickOnMove(composeTestRule)
+            assertStorageSelectionDialogDisplayed(composeTestRule)
+            clickOnInternalStorage(composeTestRule)
+            assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+          }
+        } catch (ignore: Exception) {
+          fail("Could not open file from file manager. Original exception = $ignore")
+        } finally {
+          deleteAllFilesInDirectory(
+            runBlocking { File(kiwixDataStore.selectedStorage.first()) }
+          )
+          deleteZimFileFromDownloadsFolder(uri)
+        }
       }
     }
   }
@@ -159,35 +157,36 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Test
   fun testOpeningFileFromFileManager() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        it.navigate(KiwixDestination.Library.route)
-      }
-      composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
-      try {
-        runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
-        val viewIntent = Intent(Intent.ACTION_VIEW).apply {
-          setDataAndType(uri, "application/octet-stream")
-          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-          setPackage(context.packageName)
+      val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/octet-stream")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        setPackage(context.packageName)
+      }
+      ActivityScenario.launch<KiwixMainActivity>(viewIntent).use { scenario ->
+        scenario.moveToState(Lifecycle.State.RESUMED)
+        scenario.onActivity {
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+          kiwixMainActivity = it
         }
-        ActivityScenario.launch<KiwixMainActivity>(viewIntent).onActivity {}
         composeTestRule.waitForIdle()
-        copyMoveFileHandler {
-          assertCopyMoveDialogDisplayed(composeTestRule)
-          clickOnMove(composeTestRule)
-          assertStorageSelectionDialogDisplayed(composeTestRule)
-          clickOnInternalStorage(composeTestRule)
-          assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+        try {
+          runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+          copyMoveFileHandler {
+            assertCopyMoveDialogDisplayed(composeTestRule)
+            clickOnMove(composeTestRule)
+            assertStorageSelectionDialogDisplayed(composeTestRule)
+            clickOnInternalStorage(composeTestRule)
+            assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+          }
+        } catch (ignore: Exception) {
+          fail("Could not open file from file manager. Original exception = $ignore")
+        } finally {
+          deleteAllFilesInDirectory(
+            runBlocking { File(kiwixDataStore.selectedStorage.first()) }
+          )
+          deleteZimFileFromDownloadsFolder(uri)
         }
-      } catch (ignore: Exception) {
-        fail("Could not open file from file manager. Original exception = $ignore")
-      } finally {
-        deleteAllFilesInDirectory(
-          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
-        )
-        deleteZimFileFromDownloadsFolder(uri)
       }
     }
   }
@@ -215,9 +214,15 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
-    ).onActivity {}
-    copyMoveFileHandler {
-      assertCopyMoveDialogNotDisplayed(composeTestRule)
+    ).use { scenario ->
+      scenario.moveToState(Lifecycle.State.RESUMED)
+      scenario.onActivity {
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+      }
+      composeTestRule.waitForIdle()
+      copyMoveFileHandler {
+        assertCopyMoveDialogNotDisplayed(composeTestRule)
+      }
     }
   }
 
