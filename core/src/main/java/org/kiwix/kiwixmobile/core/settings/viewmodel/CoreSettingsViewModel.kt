@@ -51,7 +51,6 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInform
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.data.DataSource
-import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
@@ -428,7 +427,7 @@ abstract class CoreSettingsViewModel(
 
   @Suppress("NestedBlockDepth")
   fun onStorageDeviceSelected(storageDevice: StorageDevice, coreMainActivity: CoreMainActivity) {
-    viewModelScope.runSafelyInLifecycleScope {
+    viewModelScope.launch {
       kiwixDataStore.apply {
         setSelectedStorage(getPublicDirectoryPath(storageDevice.name))
         setSelectedStoragePosition(

@@ -1211,33 +1211,39 @@ internal class CoreSettingsViewModelTest {
   inner class StorageDeviceSelected {
     @Test
     fun `internal storage device sets INTERNAL_SELECT_POSITION`() = runTest {
+      val internalStoragePath = "/public/path"
       val storageDevice: StorageDevice = mockk()
       val activity: CoreMainActivity = mockk(relaxed = true)
       every { storageDevice.isInternal } returns true
-      every { storageDevice.name } returns "/internal/storage"
-      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns "/public/path"
+      every { storageDevice.name } returns internalStoragePath
+      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns internalStoragePath
 
       viewModel.onStorageDeviceSelected(storageDevice, activity)
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setSelectedStorage("/public/path") }
       coVerify {
+        kiwixDataStore.setSelectedStorage(internalStoragePath)
         kiwixDataStore.setSelectedStoragePosition(INTERNAL_SELECT_POSITION)
+        kiwixDataStore.setShowStorageOption(false)
+        viewModel.setStorage(activity)
       }
     }
 
     @Test
     fun `external storage device sets EXTERNAL_SELECT_POSITION`() = runTest {
+      val externalStoragePath = "/public/ext/path"
       val storageDevice: StorageDevice = mockk()
       val activity: CoreMainActivity = mockk(relaxed = true)
       every { storageDevice.isInternal } returns false
-      every { storageDevice.name } returns "/external/storage"
-      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns "/public/ext/path"
+      every { storageDevice.name } returns externalStoragePath
+      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns externalStoragePath
 
       viewModel.onStorageDeviceSelected(storageDevice, activity)
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setSelectedStorage("/public/ext/path") }
       coVerify {
+        kiwixDataStore.setSelectedStorage(externalStoragePath)
         kiwixDataStore.setSelectedStoragePosition(EXTERNAL_SELECT_POSITION)
+        kiwixDataStore.setShowStorageOption(false)
+        viewModel.setStorage(activity)
       }
     }
   }
