@@ -85,11 +85,6 @@ abstract class CoreSettingsViewModel(
   val libkiwixBookmarks: LibkiwixBookmarks,
   val kiwixPermissionChecker: KiwixPermissionChecker
 ) : ViewModel() {
-  data class PermissionLaunchersForSettingScreen(
-    val writeStoragePermission: ManagedActivityResultLauncher<String, Boolean>,
-    val filePicker: ManagedActivityResultLauncher<Intent, ActivityResult>
-  )
-
   data class SettingsUiState(
     val storageDeviceList: List<StorageDevice> = emptyList(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
@@ -99,7 +94,7 @@ abstract class CoreSettingsViewModel(
     val shouldShowExternalLinkPreference: Boolean = false,
     val shouldShowPrefWifiOnlyPreference: Boolean = false,
     val versionInformation: String = "",
-    val permissionItem: Pair<Boolean, String> = false to "",
+    val permissionItem: Pair<Boolean, String> = false to ""
   )
 
   abstract suspend fun setStorage(coreMainActivity: CoreMainActivity)

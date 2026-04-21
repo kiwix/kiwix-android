@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.settings
 
-import android.Manifest
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
@@ -76,13 +76,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
-import org.kiwix.kiwixmobile.core.extensions.snack
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
+import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
@@ -93,7 +96,6 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
-import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.PermissionLaunchersForSettingScreen
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.SettingsUiState
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_OFFSET
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_SCALE
@@ -132,14 +134,20 @@ const val SETTINGS_LIST_TESTING_TAG = "settingsListTestingTag"
 
 const val DIALOG_LIST_MAX_HEIGHT_RATIO = 0.8f
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SettingsScreenRoute(
   coreSettingsViewModel: CoreSettingsViewModel,
   navigateBack: () -> Unit
 ) {
   val activity = LocalActivity.current as CoreMainActivity
+  // Not placing condition here. Because viewModel already verify whether
+  // we should ask this permission or not. Compose suggested to avoid using remember inside conditionals.
+  val writePermissionState = rememberPermissionState(WRITE_EXTERNAL_STORAGE) {
+    coreSettingsViewModel.onStoragePermissionResult(it, activity)
+  }
   // Setup viewModel data version name, observing the click events, etc.
-  SetUpViewModelAndPermissionLauncher(coreSettingsViewModel, activity)
+  SetUpViewModelAndPermissionLauncher(coreSettingsViewModel, activity, writePermissionState)
   SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
   // Change font according to app language.
   ChangeFontAccordingToLanguage(activity, coreSettingsViewModel.kiwixDataStore)
@@ -158,15 +166,19 @@ private fun ChangeFontAccordingToLanguage(
   }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun SetUpViewModelAndPermissionLauncher(
   coreSettingsViewModel: CoreSettingsViewModel,
-  coreMainActivity: CoreMainActivity
+  coreMainActivity: CoreMainActivity,
+  writePermissionState: PermissionState
 ) {
-  val launchers = rememberPermissionLaunchers(
-    viewModel = coreSettingsViewModel,
-    activity = coreMainActivity
-  )
+  val launcher =
+    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      if (it.resultCode == RESULT_OK) {
+        coreSettingsViewModel.onBookmarkFileSelected(it)
+      }
+    }
   LaunchedEffect(Unit) {
     coreSettingsViewModel.initialize(activity = coreMainActivity)
     coreSettingsViewModel.actions
@@ -175,17 +187,20 @@ private fun SetUpViewModelAndPermissionLauncher(
           action = action,
           viewModel = coreSettingsViewModel,
           activity = coreMainActivity,
-          launchers = launchers
+          filePickerLauncher = launcher,
+          writePermissionState = writePermissionState
         )
       }
   }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 private suspend fun handleSettingsAction(
   action: Action,
   viewModel: CoreSettingsViewModel,
   activity: CoreMainActivity,
-  launchers: PermissionLaunchersForSettingScreen
+  filePickerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+  writePermissionState: PermissionState,
 ) {
   when (action) {
     AllowPermission -> {
@@ -202,7 +217,7 @@ private suspend fun handleSettingsAction(
     }
 
     ImportBookmarks ->
-      showImportBookmarkDialog(viewModel, launchers.filePicker)
+      showImportBookmarkDialog(viewModel, filePickerLauncher)
 
     is OnStorageItemClick ->
       viewModel.onStorageDeviceSelected(action.storageDevice, activity)
@@ -211,35 +226,10 @@ private suspend fun handleSettingsAction(
       showSnackbar(action.message, action.lifecycleScope, viewModel)
 
     Action.RequestWriteStoragePermission ->
-      launchers.writeStoragePermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      writePermissionState.launchPermissionRequest()
 
     Action.NavigateToAppSettingsDialog ->
       showNavigateToAppSettingsDialog(viewModel, activity)
-  }
-}
-
-@Composable
-private fun rememberPermissionLaunchers(
-  viewModel: CoreSettingsViewModel,
-  activity: CoreMainActivity
-): PermissionLaunchersForSettingScreen {
-  val permissionLauncher =
-    rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-      viewModel.onStoragePermissionResult(it, activity)
-    }
-
-  val filePickerLauncher =
-    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-      if (it.resultCode == RESULT_OK) {
-        viewModel.onBookmarkFileSelected(it)
-      }
-    }
-
-  return remember(permissionLauncher, filePickerLauncher) {
-    PermissionLaunchersForSettingScreen(
-      permissionLauncher,
-      filePickerLauncher
-    )
   }
 }
 
@@ -301,10 +291,10 @@ private fun SettingsScreen(
   coreSettingsViewModel: CoreSettingsViewModel,
   navigationIcon: @Composable() () -> Unit
 ) {
-  val uiState = coreSettingsViewModel.uiState.collectAsStateWithLifecycle()
+  val uiState by coreSettingsViewModel.uiState.collectAsStateWithLifecycle()
   KiwixTheme {
     Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.value.snackbarHostState) },
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.snackbarHostState) },
       topBar = {
         KiwixAppBar(
           title = stringResource(R.string.menu_settings),
@@ -321,16 +311,16 @@ private fun SettingsScreen(
           }
       ) {
         item { DisplayCategory(coreSettingsViewModel) }
-        item { ExtrasCategory(coreSettingsViewModel, uiState.value) }
-        storageCategory(uiState.value, coreSettingsViewModel)
+        item { ExtrasCategory(coreSettingsViewModel, uiState) }
+        storageCategory(uiState, coreSettingsViewModel)
         item { HistoryCategory(coreSettingsViewModel) }
         item { NotesCategory(coreSettingsViewModel) }
         item { BookmarksCategory(coreSettingsViewModel) }
-        item { PermissionCategory(coreSettingsViewModel, uiState.value) }
-        if (uiState.value.shouldShowLanguageCategory) {
-          item { LanguageCategory(uiState.value, coreSettingsViewModel) }
+        item { PermissionCategory(coreSettingsViewModel, uiState) }
+        if (uiState.shouldShowLanguageCategory) {
+          item { LanguageCategory(uiState, coreSettingsViewModel) }
         }
-        informationCategory(coreSettingsViewModel, uiState.value)
+        informationCategory(coreSettingsViewModel, uiState)
       }
     }
   }
