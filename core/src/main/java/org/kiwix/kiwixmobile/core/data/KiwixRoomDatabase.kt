@@ -314,7 +314,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
       }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_8_9 =
+    internal val MIGRATION_8_9 =
       object : Migration(8, 9) {
         override fun migrate(db: SupportSQLiteDatabase) {
           db.execSQL(
@@ -368,7 +368,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
       }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_9_10 =
+    internal val MIGRATION_9_10 =
       object : Migration(9, 10) {
         override fun migrate(db: SupportSQLiteDatabase) {
           db.execSQL(
