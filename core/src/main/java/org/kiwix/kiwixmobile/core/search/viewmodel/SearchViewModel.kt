@@ -148,17 +148,7 @@ class SearchViewModel @Inject constructor(
       )
     }.mapLatest { searchState ->
       // When getting the search results show the loading progressBar.
-      updateUiState {
-        it.copy(
-          isLoading = true,
-          isLoadingMore = false,
-          searchList = if (searchState.searchTerm.isEmpty()) {
-            searchState.recentResults
-          } else {
-            it.searchList
-          }
-        )
-      }
+      updateUiState { it.copy(isLoading = true, isLoadingMore = false) }
 
       val firstPage = withContext(ioDispatcher) {
         searchState.getVisibleResults(ZERO, ioDispatcher = ioDispatcher).orEmpty()
@@ -284,7 +274,7 @@ class SearchViewModel @Inject constructor(
 
   private suspend fun loadMoreSearchResults(startIndex: Int) {
     val uiState = uiState.value
-    if (uiState.isLoadingMore) return
+    if (uiState.isLoadingMore || uiState.searchList.isEmpty()) return
 
     // Show load more progressBar.
     updateUiState {

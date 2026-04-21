@@ -88,6 +88,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
 const val NO_SEARCH_RESULT_TESTING_TAG = "noSearchResultTestingTag"
@@ -381,8 +382,9 @@ fun InfiniteListHandler(
 ) {
   val shouldLoadMore = remember {
     derivedStateOf {
-      val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
       val totalItemCount = listState.layoutInfo.totalItemsCount
+      if (totalItemCount == ZERO) return@derivedStateOf false
+      val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: ZERO
       !isLoadingMoreResult && lastVisibleItemIndex >= totalItemCount - buffer
     }
   }
