@@ -106,9 +106,7 @@ fun KiwixMainActivityScreen(
             BottomNavigationBar(
               navController = navController,
               bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-              navBackStackEntry = navBackStackEntry,
-              leftDrawerState = leftDrawerState,
-              uiCoroutineScope = uiCoroutineScope
+              navBackStackEntry = navBackStackEntry
             )
           }
         },
@@ -162,9 +160,7 @@ private fun OnUserBackPressed(
 fun BottomNavigationBar(
   navController: NavHostController,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  navBackStackEntry: NavBackStackEntry?,
-  leftDrawerState: DrawerState,
-  uiCoroutineScope: CoroutineScope
+  navBackStackEntry: NavBackStackEntry?
 ) {
   val bottomNavItems = listOf(
     BottomNavItem(
@@ -196,21 +192,18 @@ fun BottomNavigationBar(
       NavigationBarItem(
         selected = currentDestinationRoute == item.route,
         onClick = {
-          uiCoroutineScope.launch {
-            leftDrawerState.close()
-            navController.navigate(item.route) {
-              // Avoid multiple copies of the same destination
-              launchSingleTop = true
+          navController.navigate(item.route) {
+            // Avoid multiple copies of the same destination
+            launchSingleTop = true
 
-              // Pop up to the start destination of the graph to avoid building up a large stack
-              popUpTo(navController.graph.findStartDestination().id) {
-                // Bug fix #4392
-                saveState = item.route != KiwixDestination.Reader.route
-              }
-
-              // Restore state when reselecting a previously selected tab
-              restoreState = item.route != KiwixDestination.Reader.route
+            // Pop up to the start destination of the graph to avoid building up a large stack
+            popUpTo(navController.graph.findStartDestination().id) {
+              // Bug fix #4392
+              saveState = item.route != KiwixDestination.Reader.route
             }
+
+            // Restore state when reselecting a previously selected tab
+            restoreState = item.route != KiwixDestination.Reader.route
           }
         },
         icon = {
