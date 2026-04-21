@@ -43,6 +43,7 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
+import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -85,6 +86,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
@@ -699,25 +701,30 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearHistory does not emit snackbar on failure`() = runTest {
-      coEvery { dataSource.clearHistory() } throws RuntimeException("error")
-      viewModel.actions.test {
-        viewModel.clearHistory()
-        advanceUntilIdle()
-        expectNoEvents()
-        cancelAndIgnoreRemainingEvents()
+      val exception = RuntimeException("error")
+      coEvery { dataSource.clearHistory() } throws exception
+      mockkObject(Log)
+      every { Log.e(any(), any(), any()) } just Runs
+      viewModel.clearHistory()
+      advanceUntilIdle()
+      verify {
+        Log.e("SettingsPresenter", exception.message, exception)
       }
-      coVerify { dataSource.clearHistory() }
+      unmockkObject(Log)
     }
 
     @Test
     fun `clearHistory handles exception with null message`() = runTest {
-      coEvery { dataSource.clearHistory() } throws RuntimeException(null as String?)
-      viewModel.actions.test {
-        viewModel.clearHistory()
-        advanceUntilIdle()
-        expectNoEvents()
-        cancelAndIgnoreRemainingEvents()
+      val exception = RuntimeException(null as String?)
+      coEvery { dataSource.clearHistory() } throws exception
+      mockkObject(Log)
+      every { Log.e(any(), any(), any()) } just Runs
+      viewModel.clearHistory()
+      advanceUntilIdle()
+      verify {
+        Log.e("SettingsPresenter", exception.message, exception)
       }
+      unmockkObject(Log)
     }
 
     @Test
@@ -1211,33 +1218,39 @@ internal class CoreSettingsViewModelTest {
   inner class StorageDeviceSelected {
     @Test
     fun `internal storage device sets INTERNAL_SELECT_POSITION`() = runTest {
+      val internalStoragePath = "/public/path"
       val storageDevice: StorageDevice = mockk()
       val activity: CoreMainActivity = mockk(relaxed = true)
       every { storageDevice.isInternal } returns true
-      every { storageDevice.name } returns "/internal/storage"
-      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns "/public/path"
+      every { storageDevice.name } returns internalStoragePath
+      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns internalStoragePath
 
       viewModel.onStorageDeviceSelected(storageDevice, activity)
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setSelectedStorage("/public/path") }
       coVerify {
+        kiwixDataStore.setSelectedStorage(internalStoragePath)
         kiwixDataStore.setSelectedStoragePosition(INTERNAL_SELECT_POSITION)
+        kiwixDataStore.setShowStorageOption(false)
+        viewModel.setStorage(activity)
       }
     }
 
     @Test
     fun `external storage device sets EXTERNAL_SELECT_POSITION`() = runTest {
+      val externalStoragePath = "/public/ext/path"
       val storageDevice: StorageDevice = mockk()
       val activity: CoreMainActivity = mockk(relaxed = true)
       every { storageDevice.isInternal } returns false
-      every { storageDevice.name } returns "/external/storage"
-      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns "/public/ext/path"
+      every { storageDevice.name } returns externalStoragePath
+      coEvery { kiwixDataStore.getPublicDirectoryPath(any()) } returns externalStoragePath
 
       viewModel.onStorageDeviceSelected(storageDevice, activity)
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setSelectedStorage("/public/ext/path") }
       coVerify {
+        kiwixDataStore.setSelectedStorage(externalStoragePath)
         kiwixDataStore.setSelectedStoragePosition(EXTERNAL_SELECT_POSITION)
+        kiwixDataStore.setShowStorageOption(false)
+        viewModel.setStorage(activity)
       }
     }
   }
