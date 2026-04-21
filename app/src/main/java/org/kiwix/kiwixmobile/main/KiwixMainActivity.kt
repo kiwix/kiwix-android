@@ -365,10 +365,6 @@ class KiwixMainActivity : CoreMainActivity() {
     intent.data = null
   }
 
-  private fun openLocalLibraryWithZimFilePath(path: String) {
-    navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
-  }
-
   private fun handleNotificationIntent(intent: Intent?) {
     val openFileTitle = intent?.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE) ?: return
     // Cancel the notification when user taps the "Open" action button
