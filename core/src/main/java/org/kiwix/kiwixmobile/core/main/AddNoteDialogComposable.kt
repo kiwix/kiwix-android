@@ -64,6 +64,9 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import java.io.File
 import java.io.IOException
 
@@ -182,7 +185,8 @@ class NoteOperations(
   private val noteText: androidx.compose.runtime.MutableState<TextFieldValue>,
   private val noteEdited: androidx.compose.runtime.MutableState<Boolean>,
   private val snackBarHostState: SnackbarHostState,
-  private val menuController: NoteMenuController
+  private val menuController: NoteMenuController,
+  private val requestPermission: () -> Unit
 ) {
   fun saveNote() {
     if (!instance.isExternalStorageWritable) {
@@ -191,7 +195,7 @@ class NoteOperations(
     }
     if (!hasWritePermission()) {
       Log.d("AddNoteDialog", "WRITE_EXTERNAL_STORAGE permission not granted")
-      context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+      requestPermission()
       return
     }
     writeNoteToFile()
@@ -365,6 +369,7 @@ class NoteMenuController(
  * Pure composable replacement for the old AddNoteDialog DialogFragment.
  * Contains all the business logic for note CRUD operations.
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @Suppress("LongMethod")
 @Composable
 fun AddNoteDialogComposable(
@@ -382,6 +387,14 @@ fun AddNoteDialogComposable(
 
   val noteText = remember { mutableStateOf(TextFieldValue("")) }
   val noteEdited = remember { mutableStateOf(false) }
+
+  val writePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE) { isGranted ->
+    if (isGranted) {
+      // If the user was trying to save, we could auto-save here,
+      // but for now, we just let them click Save again.
+      context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
+    }
+  }
 
   val menuItems = remember {
     mutableStateOf(
@@ -419,7 +432,13 @@ fun AddNoteDialogComposable(
     NoteOperations(
       context, scope, metadata, kiwixDataStore, mainRepositoryActions,
       noteText, noteEdited, snackBarHostState, menuController
-    )
+    ) {
+      if (writePermissionState.status.shouldShowRationale) {
+        context.toast(R.string.ext_storage_permission_rationale_add_note, Toast.LENGTH_LONG)
+      } else {
+        writePermissionState.launchPermissionRequest()
+      }
+    }
   }
 
   fun hideKeyboard() {
