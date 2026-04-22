@@ -51,8 +51,6 @@ import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
@@ -368,36 +366,6 @@ abstract class CoreReaderFragment :
   private var pendingIntent: Intent? = null
 
   @Volatile var isWebViewHistoryRestoring = false
-
-  private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
-    registerForActivityResult(
-      ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-      if (isGranted) {
-        // Successfully granted permission, so opening the note keeper
-        showAddNoteDialog()
-      } else {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          /* shouldShowRequestPermissionRationale() returns false when:
-           *  1) User has previously checked on "Don't ask me again", and/or
-           *  2) Permission has been disabled on device
-           */
-          context?.toast(
-            string.ext_storage_permission_rationale_add_note,
-            Toast.LENGTH_LONG
-          )
-        } else {
-          context?.toast(
-            string.ext_storage_write_permission_denied_add_note,
-            Toast.LENGTH_LONG
-          )
-          alertDialogShower?.show(
-            KiwixDialog.ReadPermissionRequired,
-            requireActivity()::navigateToAppSettings
-          )
-        }
-      }
-    }
 
   fun runSafelyInCoreReaderLifecycleScope(func: suspend CoroutineScope.() -> Unit) {
     runCatching {
@@ -1220,8 +1188,6 @@ abstract class CoreReaderFragment :
       // to handle if service is already unbounded
     }
     unRegisterReadAloudService()
-    storagePermissionForNotesLauncher?.unregister()
-    storagePermissionForNotesLauncher = null
     donationDialogHandler?.setDonationDialogCallBack(null)
     donationDialogHandler = null
     composeView?.disposeComposition()
@@ -1524,11 +1490,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun onAddNoteMenuClicked() {
-    runSafelyInCoreReaderLifecycleScope {
-      if (requestExternalStorageWritePermissionForNotes()) {
-        showAddNoteDialog()
-      }
-    }
+    showAddNoteDialog()
   }
 
   override fun onShareMenuClicked() {
@@ -1619,25 +1581,6 @@ abstract class CoreReaderFragment :
     addNoteDialogConfig.value = AddNoteDialogConfig(
       noteListItem = noteListItem
     )
-  }
-
-  @Suppress("NestedBlockDepth")
-  private suspend fun requestExternalStorageWritePermissionForNotes(): Boolean {
-    var isPermissionGranted = false
-    if (kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-    ) {
-      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_GRANTED
-      ) {
-        isPermissionGranted = true
-      } else {
-        storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-      }
-    } else {
-      isPermissionGranted = true
-    }
-    return isPermissionGranted
   }
 
   private fun goToBookmarks(): Boolean {
