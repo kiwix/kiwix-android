@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -224,20 +224,18 @@ class MainRepositoryActionsTest {
 
     @Test
     fun `loadWebViewPagesHistory returns mapped WebViewHistoryItems`() = runTest {
-      val entity1: WebViewHistoryEntity = mockk {
-        coEvery { id } returns 1L
-        coEvery { zimId } returns "zim1"
-        coEvery { webViewIndex } returns 0
-        coEvery { webViewCurrentPosition } returns 0
-        coEvery { webViewBackForwardListBundle } returns null
-      }
-      val entity2: WebViewHistoryEntity = mockk {
-        coEvery { id } returns 2L
-        coEvery { zimId } returns "zim2"
-        coEvery { webViewIndex } returns 1
-        coEvery { webViewCurrentPosition } returns 1
-        coEvery { webViewBackForwardListBundle } returns null
-      }
+      val entity1 = WebViewHistoryEntity(
+        zimFilePath = "/zim1",
+        title = "Page 1",
+        url = "/url1",
+        position = 0
+      )
+      val entity2 = WebViewHistoryEntity(
+        zimFilePath = "/zim2",
+        title = "Page 2",
+        url = "/url2",
+        position = 1
+      )
       coEvery {
         dataSource.getAllWebViewPagesHistory()
       } returns flowOf(listOf(entity1, entity2))
@@ -245,8 +243,10 @@ class MainRepositoryActionsTest {
       val result = mainRepositoryActions.loadWebViewPagesHistory()
 
       assertThat(result).hasSize(2)
-      assertThat(result[0].zimId).isEqualTo("zim1")
-      assertThat(result[1].zimId).isEqualTo("zim2")
+      assertThat(result[0].zimFilePath).isEqualTo("/zim1")
+      assertThat(result[0].title).isEqualTo("Page 1")
+      assertThat(result[1].zimFilePath).isEqualTo("/zim2")
+      assertThat(result[1].title).isEqualTo("Page 2")
     }
 
     @Test
