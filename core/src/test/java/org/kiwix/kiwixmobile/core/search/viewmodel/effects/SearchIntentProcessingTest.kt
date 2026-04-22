@@ -31,7 +31,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
@@ -45,6 +44,7 @@ internal class SearchIntentProcessingTest {
   private val activity: AppCompatActivity = mockk()
 
   private val bundle: Bundle? = mockk(relaxed = true)
+  private val processSearchArgument: (String) -> Unit = mockk(relaxed = true)
 
   @BeforeEach
   fun init() {
@@ -53,18 +53,19 @@ internal class SearchIntentProcessingTest {
 
   @Test
   fun `invoke with does nothing with null data`() {
-    SearchArgumentProcessing(null, actions).invokeWith(activity)
+    SearchArgumentProcessing(null, actions, processSearchArgument).invokeWith(activity)
     verify { actions wasNot Called }
+    verify { processSearchArgument wasNot Called }
   }
 
   @Test
   fun `invoke with offers action when EXTRA_PROCESS_TEXT present`() {
     val extra = ""
     every { bundle?.getString(NAV_ARG_SEARCH_STRING) } returns extra
-    SearchArgumentProcessing(bundle, actions).invokeWith(activity)
+    SearchArgumentProcessing(bundle, actions, processSearchArgument).invokeWith(activity)
     verifySequence {
       actions.tryEmit(any<ScreenWasStartedFrom>())
-      actions.tryEmit(Filter(extra))
+      processSearchArgument.invoke(extra)
     }
   }
 
@@ -72,19 +73,20 @@ internal class SearchIntentProcessingTest {
   fun `invoke with offers action when EXTRA_SEARCH present`() {
     val extra = ""
     every { bundle?.getString(NAV_ARG_SEARCH_STRING) } returns extra
-    SearchArgumentProcessing(bundle, actions).invokeWith(activity)
+    SearchArgumentProcessing(bundle, actions, processSearchArgument).invokeWith(activity)
     verifySequence {
       actions.tryEmit(any<ScreenWasStartedFrom>())
-      actions.tryEmit(Filter(extra))
+      processSearchArgument.invoke(extra)
     }
   }
 
   @Test
   fun `invoke with offers action when EXTRA_IS_WIDGET_VOICE present`() {
     every { bundle?.getBoolean(EXTRA_IS_WIDGET_VOICE, false) } returns true
-    SearchArgumentProcessing(bundle, actions).invokeWith(activity)
+    SearchArgumentProcessing(bundle, actions, processSearchArgument).invokeWith(activity)
     verify {
       actions.tryEmit(any<ScreenWasStartedFrom>())
+      processSearchArgument.invoke("")
       actions.tryEmit(ReceivedPromptForSpeechInput)
     }
   }
@@ -92,7 +94,7 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when TAG_FROM_TAB_SWITCHER present`() {
     every { bundle?.getBoolean(TAG_FROM_TAB_SWITCHER, false) } returns true
-    SearchArgumentProcessing(bundle, actions).invokeWith(activity)
+    SearchArgumentProcessing(bundle, actions, processSearchArgument).invokeWith(activity)
     verify {
       actions.tryEmit(ScreenWasStartedFrom(FromTabView))
     }
@@ -101,7 +103,7 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when TAG_FROM_TAB_SWITCHER not present`() {
     every { bundle?.getBoolean(TAG_FROM_TAB_SWITCHER, false) } returns false
-    SearchArgumentProcessing(bundle, actions).invokeWith(activity)
+    SearchArgumentProcessing(bundle, actions, processSearchArgument).invokeWith(activity)
     verify {
       actions.tryEmit(ScreenWasStartedFrom(FromWebView))
     }

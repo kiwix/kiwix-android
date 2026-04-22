@@ -440,7 +440,7 @@ internal class SearchViewModelTest {
         val bundle = mockk<Bundle>()
         actionResultsInEffects(
           CreatedWithArguments(bundle),
-          SearchArgumentProcessing(bundle, viewModel.actions)
+          SearchArgumentProcessing(bundle, viewModel.actions, viewModel.processSearchArgument)
         )
       }
 

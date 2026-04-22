@@ -213,7 +213,11 @@ class SearchViewModel @Inject constructor(
         is Filter -> filter.tryEmit(it.term)
         ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
         is ConfirmedDelete -> deleteItemAndShowToast(it)
-        is CreatedWithArguments -> _effects.tryEmit(SearchArgumentProcessing(it.arguments, actions))
+        is CreatedWithArguments ->
+          _effects.tryEmit(
+            SearchArgumentProcessing(it.arguments, actions, processSearchArgument)
+          )
+
         ReceivedPromptForSpeechInput -> _effects.tryEmit(StartSpeechInput(actions))
         is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
         is VoiceSearchResult -> onSearchValueChanged(it.term)
@@ -233,6 +237,10 @@ class SearchViewModel @Inject constructor(
           )
       }
     }
+  }
+
+  val processSearchArgument: (String) -> Unit = {
+    onSearchValueChanged(it)
   }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {

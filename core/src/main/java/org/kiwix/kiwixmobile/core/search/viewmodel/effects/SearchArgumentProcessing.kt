@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
@@ -34,7 +33,8 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 data class SearchArgumentProcessing(
   private val bundle: Bundle?,
-  private val actions: MutableSharedFlow<Action>
+  private val actions: MutableSharedFlow<Action>,
+  private val processSearchArgument: (String) -> Unit
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     bundle?.let {
@@ -47,7 +47,7 @@ data class SearchArgumentProcessing(
           }
         )
       )
-      actions.tryEmit(Filter(it.getString(NAV_ARG_SEARCH_STRING, "")))
+      processSearchArgument.invoke(it.getString(NAV_ARG_SEARCH_STRING, ""))
       if (it.getBoolean(EXTRA_IS_WIDGET_VOICE, false)) {
         actions.tryEmit(ReceivedPromptForSpeechInput)
       }

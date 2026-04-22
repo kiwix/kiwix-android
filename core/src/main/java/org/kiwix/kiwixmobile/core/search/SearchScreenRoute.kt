@@ -78,11 +78,6 @@ fun SearchScreenRoute(
   // Search Results
   LaunchedEffect(Unit) {
     viewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
-
-    arguments?.getString(NAV_ARG_SEARCH_STRING)?.let {
-      viewModel.onSearchValueChanged(it)
-    }
-
     viewModel.actions.tryEmit(
       Action.CreatedWithArguments(Bundle(arguments))
     )
