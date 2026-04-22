@@ -50,6 +50,7 @@ import javax.inject.Singleton
  */
 
 @Singleton
+@Suppress("LongParameterList")
 class Repository @Inject internal constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val libkiwixBookmarks: LibkiwixBookmarks,
