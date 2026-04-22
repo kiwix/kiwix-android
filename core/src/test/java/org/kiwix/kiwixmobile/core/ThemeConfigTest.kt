@@ -20,61 +20,55 @@ package org.kiwix.kiwixmobile.core
 
 import android.content.Context
 import android.content.res.Configuration
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 class ThemeConfigTest {
   private lateinit var themeConfig: ThemeConfig
   private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var context: Context
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  private val testDispatcher = UnconfinedTestDispatcher()
+  @RegisterExtension
+  val dispatcherRule = MainDispatcherRule()
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @BeforeEach
   fun setUp() {
-    Dispatchers.setMain(testDispatcher)
     kiwixDataStore = mockk()
     context = mockk()
     themeConfig = ThemeConfig(kiwixDataStore, context)
   }
 
   @Test
-  fun `should return true when dark mode is ON`() = runTest {
+  fun isDarkTheme_whenDarkMode_returnsTrue() = runTest {
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.DARK)
     val result = themeConfig.isDarkTheme()
     assertTrue(result)
   }
 
   @Test
-  fun `should return false when dark mode is OFF`() = runTest {
+  fun isDarkTheme_whenLightMode_returnsFalse() = runTest {
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.LIGHT)
     val result = themeConfig.isDarkTheme()
     assertFalse(result)
   }
 
   @Test
-  fun `should return true when dark mode is SYSTEM and uiMode is ON`() = runTest {
-    val configuration =
-      Configuration().apply {
-        uiMode = Configuration.UI_MODE_NIGHT_YES
-      }
+  fun isDarkTheme_whenSystemModeAndUiModeNight_returnsTrue() = runTest {
+    val configuration = Configuration().apply {
+      uiMode = Configuration.UI_MODE_NIGHT_YES
+    }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
@@ -83,11 +77,10 @@ class ThemeConfigTest {
   }
 
   @Test
-  fun `should return false when dark mode is SYSTEM and uiMode is OFF`() = runTest {
-    val configuration =
-      Configuration().apply {
-        uiMode = Configuration.UI_MODE_NIGHT_NO
-      }
+  fun isDarkTheme_whenSystemModeAndUiModeDay_returnsFalse() = runTest {
+    val configuration = Configuration().apply {
+      uiMode = Configuration.UI_MODE_NIGHT_NO
+    }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
@@ -96,11 +89,10 @@ class ThemeConfigTest {
   }
 
   @Test
-  fun `should return false when dark mode is SYSTEM and uiMode is NOT_SET`() = runTest {
-    val configuration =
-      Configuration().apply {
-        uiMode = Configuration.UI_MODE_NIGHT_UNDEFINED
-      }
+  fun isDarkTheme_whenSystemModeAndUiModeNotSet_returnsFalse() = runTest {
+    val configuration = Configuration().apply {
+      uiMode = Configuration.UI_MODE_NIGHT_UNDEFINED
+    }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
@@ -109,16 +101,26 @@ class ThemeConfigTest {
   }
 
   @Test
-  fun `should call setMode during init`() = runTest {
-    every { kiwixDataStore.appTheme } returns mockk(relaxed = true)
+  fun init_whenCalled_setsIsThemeLoadedTrueAfterSyncRead() {
+    every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.DARK)
+    assertFalse(themeConfig.isThemeLoaded.value)
+    themeConfig.init()
+    assertTrue(themeConfig.isThemeLoaded.value)
+  }
+
+  @Test
+  fun init_whenCalled_accessesAppThemeFromDataStore() {
+    every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.DARK)
     val spy = spyk(themeConfig)
+    assertFalse(spy.isThemeLoaded.value)
     spy.init()
-    coVerify { kiwixDataStore.appTheme }
+    assertTrue(spy.isThemeLoaded.value)
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @AfterEach
-  fun tearDown() {
-    Dispatchers.resetMain()
+  @Test
+  fun init_whenCalledWithLightTheme_setsIsThemeLoadedTrue() {
+    every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.LIGHT)
+    themeConfig.init()
+    assertTrue(themeConfig.isThemeLoaded.value)
   }
 }
