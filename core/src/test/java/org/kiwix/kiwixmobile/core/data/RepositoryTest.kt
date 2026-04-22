@@ -34,6 +34,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -52,9 +53,14 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.libkiwix.Book
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RepositoryTest {
+  @JvmField
+  @RegisterExtension
+  val mainDispatcherRule = MainDispatcherRule()
+
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk(relaxed = true)
   private val libkiwixBookmarks: LibkiwixBookmarks = mockk(relaxed = true)
   private val historyRoomDao: HistoryRoomDao = mockk(relaxed = true)
@@ -83,7 +89,8 @@ class RepositoryTest {
       webViewHistoryRoomDao,
       notesRoomDao,
       recentSearchRoomDao,
-      zimReaderContainer
+      zimReaderContainer,
+      mainDispatcherRule.dispatcher
     )
   }
 
@@ -198,7 +205,7 @@ class RepositoryTest {
         val items = awaitItem()
         assertThat(items).hasSize(2)
         assertThat(items).containsExactly(bookmarkItem1, bookmarkItem2)
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -210,7 +217,7 @@ class RepositoryTest {
       repository.getBookmarks().test {
         val items = awaitItem()
         assertThat(items).isEmpty()
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -393,7 +400,7 @@ class RepositoryTest {
         val items = awaitItem()
         assertThat(items).hasSize(2)
         assertThat(items).containsExactly(entity1, entity2)
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -406,7 +413,7 @@ class RepositoryTest {
       repository.getAllWebViewPagesHistory().test {
         val items = awaitItem()
         assertThat(items).isEmpty()
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -429,7 +436,20 @@ class RepositoryTest {
       repository.getLanguageCategorizedBooks().test {
         val items = awaitItem()
         assertThat(items).isEmpty()
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `getLanguageCategorizedBooks returns list of book`() = runTest {
+      val bookOnDisk = BookOnDisk(LibkiwixBook())
+      every { libkiwixBookOnDisk.books() } returns flowOf(listOf(bookOnDisk))
+
+      repository.getLanguageCategorizedBooks().test {
+        val items = awaitItem()
+        assertThat(items[0]).isInstanceOf(BooksOnDiskListItem.LanguageItem::class.java)
+        assertThat(items[1]).isEqualTo(bookOnDisk)
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -454,7 +474,7 @@ class RepositoryTest {
           assertThat(items[0]).isInstanceOf(BooksOnDiskListItem.LanguageItem::class.java)
           assertThat((items[0] as BooksOnDiskListItem.LanguageItem).id).isEqualTo("en")
           assertThat((items[1] as BookOnDisk).book.language).isEqualTo("en")
-          awaitComplete()
+          cancelAndIgnoreRemainingEvents()
         }
       }
 
@@ -487,7 +507,7 @@ class RepositoryTest {
         assertThat((items[2] as BookOnDisk).book.title).isEqualTo("B")
         assertThat((items[3] as BooksOnDiskListItem.LanguageItem).id).isEqualTo("fr")
         assertThat((items[4] as BookOnDisk).book.title).isEqualTo("C")
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -508,7 +528,7 @@ class RepositoryTest {
         val items = awaitItem()
         // Only one book with ID "1" should remain
         assertThat(items.filterIsInstance<BookOnDisk>()).hasSize(1)
-        awaitComplete()
+        cancelAndIgnoreRemainingEvents()
       }
     }
   }

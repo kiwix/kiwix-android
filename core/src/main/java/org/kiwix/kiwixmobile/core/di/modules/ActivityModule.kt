@@ -20,8 +20,10 @@ package org.kiwix.kiwixmobile.core.di.modules
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -35,7 +37,10 @@ abstract class ActivityModule {
   companion object {
     @Provides
     @ActivityScope
-    fun providesMainPresenter(dataSource: DataSource): MainRepositoryActions =
-      MainRepositoryActions(dataSource)
+    fun providesMainPresenter(
+      dataSource: DataSource,
+      @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): MainRepositoryActions =
+      MainRepositoryActions(dataSource, ioDispatcher)
   }
 }
