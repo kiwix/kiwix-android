@@ -81,7 +81,7 @@ fun HelpScreenRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
-private fun HelpScreen(
+internal fun HelpScreen(
   data: MutableList<HelpScreenItemDataClass>,
   onSendReportButtonClick: () -> Unit,
   navigationIcon: @Composable () -> Unit
