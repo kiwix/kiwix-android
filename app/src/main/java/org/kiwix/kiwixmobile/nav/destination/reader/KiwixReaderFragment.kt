@@ -94,16 +94,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
     runSafelyInCoreReaderLifecycleScope {
       if (pageUrl.isNotEmpty()) {
         if (zimFileUri.isNotEmpty()) {
-          tryOpeningZimFile(zimFileUri, pageUrl)
+          tryOpeningZimFile(zimFileUri)
         } else {
           // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
           // This is necessary because we are not opening the ZIM file again; the bookmark is
           // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
           // See https://github.com/kiwix/kiwix-android/issues/3541
           zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
-          hideProgressBar()
-          loadUrlWithCurrentWebview(pageUrl)
         }
+        hideProgressBar()
+        loadUrlWithCurrentWebview(pageUrl)
       } else {
         if (zimFileUri.isNotEmpty()) {
           tryOpeningZimFile(zimFileUri)
@@ -126,7 +126,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun getNavigationResult(key: String, kiwixMainActivity: KiwixMainActivity?) =
     kiwixMainActivity?.getObservableNavigationResult<String>(key)?.value.orEmpty()
 
-  private suspend fun tryOpeningZimFile(zimFileUri: String, initialUrl: String? = null) {
+  private suspend fun tryOpeningZimFile(zimFileUri: String) {
     // Stop any ongoing WebView loading and clear the WebView list
     // before setting a new ZIM file to the reader. This helps prevent native crashes.
     // The WebView's `shouldInterceptRequest` method continues to be invoked until the WebView is
@@ -157,7 +157,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       return
     }
     val zimReaderSource = ZimReaderSource(File(filePath))
-    openZimFile(zimReaderSource, initialUrl = initialUrl)
+    openZimFile(zimReaderSource)
   }
 
   override fun openHomeScreen() {

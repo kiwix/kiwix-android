@@ -276,8 +276,19 @@ object ShortcutUtils {
       @Suppress("TooGenericExceptionCaught")
       e: Exception
     ) {
-      Log.e(TAG, "Failed to check MIUI shortcut permission", e)
-      false // Fallback to show helper if we can't be sure
+      // On non-MIUI ROMs (e.g. Poco with HyperOS/stock Android), op code 10017
+      // doesn't exist, causing IllegalArgumentException("Bad operation #10017").
+      // In that case, the device has no shortcut restriction, so return true.
+      val rootCause = if (e is java.lang.reflect.InvocationTargetException) e.cause else e
+      val isBadOperation = rootCause is IllegalArgumentException &&
+        rootCause.message?.contains("Bad operation") == true
+
+      if (isBadOperation) {
+        Log.d(TAG, "MIUI shortcut op code not supported on this device, assuming granted")
+      } else {
+        Log.e(TAG, "Failed to check MIUI shortcut permission", e)
+      }
+      isBadOperation
     }
   }
 }

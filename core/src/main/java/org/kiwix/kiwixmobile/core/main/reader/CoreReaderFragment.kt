@@ -69,7 +69,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -79,18 +78,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
+
 import androidx.core.app.ActivityCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -164,7 +158,7 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
@@ -1633,15 +1627,14 @@ abstract class CoreReaderFragment :
 
   suspend fun openZimFile(
     zimReaderSource: ZimReaderSource,
-    isCustomApp: Boolean = false,
-    initialUrl: String? = null
+    isCustomApp: Boolean = false
   ) {
     if (isCustomApp || hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
         hideNoBookOpenViews()
-        openAndSetInContainer(zimReaderSource, initialUrl = initialUrl)
+        openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
         exitBook()
@@ -1687,26 +1680,16 @@ abstract class CoreReaderFragment :
    * WARNING: If modifying this method, ensure thorough testing with custom apps
    * to verify proper functionality.
    */
-  @Suppress("NestedBlockDepth")
   open suspend fun openAndSetInContainer(
     zimReaderSource: ZimReaderSource,
-    showSearchSuggestionsSpellChecked: Boolean = false,
-    initialUrl: String? = null
+    showSearchSuggestionsSpellChecked: Boolean = false
   ) {
     clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
     zimReaderContainer?.let { zimReaderContainer ->
       zimReaderContainer.setZimReaderSource(zimReaderSource, showSearchSuggestionsSpellChecked)
 
       zimReaderContainer.zimFileReader?.let { zimFileReader ->
-        if (initialUrl != null) {
-          if (webViewList.isEmpty()) {
-            newTab(initialUrl, selectTab = true)
-          } else {
-            loadUrlWithCurrentWebview(initialUrl)
-          }
-        } else {
-          openMainPage()
-        }
+        openMainPage()
         readerMenuState?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: run {
@@ -2251,7 +2234,8 @@ abstract class CoreReaderFragment :
       isUrlValidInitially = urlIsValid(),
       disableReadAloud = false,
       disableTabs = false,
-      disableSearch = false
+      disableSearch = false,
+      isPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())
     )
 
   protected fun urlIsValid(): Boolean = getCurrentWebView()?.url != null
@@ -2465,12 +2449,31 @@ abstract class CoreReaderFragment :
       return
     }
 
+    // On Xiaomi/MIUI devices, check shortcut permission first
+    if (ShortcutUtils.isXiaomiDevice() &&
+      !ShortcutUtils.isShortcutPermissionGranted(requireContext())
+    ) {
+      // Show permission dialog first, then proceed to naming dialog after user grants permission
+      (alertDialogShower as? AlertDialogShower)?.show(
+        KiwixDialog.XiaomiShortcutPermission,
+        {
+          // "Open Settings" button — open MIUI permission editor
+          ShortcutUtils.openMiuiPermissionEditor(requireContext())
+        }
+      )
+      return
+    }
+
+    // Permission is granted (or not Xiaomi) — show the shortcut naming dialog
+    showAddShortcutDialog(reader)
+  }
+
+  private fun showAddShortcutDialog(reader: ZimFileReader) {
     val initialName = reader.title
     val nameState = mutableStateOf(initialName)
 
     val dialog = KiwixDialog.AddShortcut(
       customGetView = {
-        val localContext = LocalContext.current
         val name by remember { nameState }
         Column {
           OutlinedTextField(
@@ -2481,33 +2484,6 @@ abstract class CoreReaderFragment :
               .fillMaxWidth()
               .padding(bottom = EIGHT_DP)
           )
-          val isXiaomi = ShortcutUtils.isXiaomiDevice()
-          val isPermissionGranted: MutableState<Boolean> = remember {
-            mutableStateOf(ShortcutUtils.isShortcutPermissionGranted(localContext))
-          }
-
-          // Re-check permission whenever the user returns to the app from settings
-          val lifecycleOwner = LocalLifecycleOwner.current
-          LaunchedEffect(lifecycleOwner) {
-            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-              isPermissionGranted.value = ShortcutUtils.isShortcutPermissionGranted(localContext)
-            }
-          }
-
-          if (isXiaomi && !isPermissionGranted.value) {
-            Text(
-              text = stringResource(R.string.xiaomi_shortcut_instruction),
-              style = MaterialTheme.typography.bodySmall,
-              color = MaterialTheme.colorScheme.secondary,
-              modifier = Modifier.padding(bottom = FOUR_DP)
-            )
-            TextButton(
-              onClick = { ShortcutUtils.openMiuiPermissionEditor(localContext) },
-              modifier = Modifier.align(Alignment.End)
-            ) {
-              Text(stringResource(R.string.open_xiaomi_settings))
-            }
-          }
         }
       }
     )

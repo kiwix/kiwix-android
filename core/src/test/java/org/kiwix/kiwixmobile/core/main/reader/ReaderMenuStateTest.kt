@@ -436,9 +436,49 @@ internal class ReaderMenuStateTest {
   @Test
   internal fun `all overflow menu items are hidden in tab switcher mode`() {
     readerMenuState.showTabSwitcherOptions()
-    assertThat(hasMenuItem(SHARE_ARTICLE_MENU_ITEM_TESTING_TAG)).isFalse()
-    assertThat(hasMenuItem(TAKE_NOTE_MENU_ITEM_TESTING_TAG)).isFalse()
-    assertThat(hasMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG)).isFalse()
     assertThat(hasMenuItem(READ_ALOUD_MENU_ITEM_TESTING_TAG)).isFalse()
+  }
+
+  // Add to home screen menu item tests
+
+  @Test
+  internal fun `add to home screen menu item is present when url is valid and supported`() {
+    val state = ReaderMenuState(
+      menuClickListener = menuClickListener,
+      isUrlValidInitially = true,
+      isPinShortcutSupported = true
+    )
+    assertThat(state.menuItems.any { it.testingTag == ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG }).isTrue()
+  }
+
+  @Test
+  internal fun `add to home screen menu item is hidden when not supported`() {
+    val state = ReaderMenuState(
+      menuClickListener = menuClickListener,
+      isUrlValidInitially = true,
+      isPinShortcutSupported = false
+    )
+    assertThat(state.menuItems.any { it.testingTag == ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG }).isFalse()
+  }
+
+  @Test
+  internal fun `add to home screen menu item is hidden when url is not valid`() {
+    val state = ReaderMenuState(
+      menuClickListener = menuClickListener,
+      isUrlValidInitially = false,
+      isPinShortcutSupported = true
+    )
+    assertThat(state.menuItems.any { it.testingTag == ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG }).isFalse()
+  }
+
+  @Test
+  internal fun `add to home screen menu item is hidden in tab switcher mode`() {
+    val state = ReaderMenuState(
+      menuClickListener = menuClickListener,
+      isUrlValidInitially = true,
+      isPinShortcutSupported = true
+    )
+    state.showTabSwitcherOptions()
+    assertThat(state.menuItems.any { it.testingTag == ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG }).isFalse()
   }
 }

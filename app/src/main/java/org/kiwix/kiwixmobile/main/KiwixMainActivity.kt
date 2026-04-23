@@ -320,7 +320,7 @@ class KiwixMainActivity : CoreMainActivity() {
         "file",
         "content" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            openZimFromFilePath("$it")
+            openLocalLibraryWithZimFilePath("$it")
             clearIntentDataAndAction()
           }, OPENING_ZIM_FILE_DELAY)
         }
@@ -363,6 +363,10 @@ class KiwixMainActivity : CoreMainActivity() {
     // of the application.
     intent.action = null
     intent.data = null
+  }
+
+  private fun openLocalLibraryWithZimFilePath(path: String) {
+    navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
   }
 
   private fun handleNotificationIntent(intent: Intent?) {

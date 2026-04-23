@@ -352,7 +352,9 @@ class CustomReaderFragment : CoreReaderFragment() {
       isUrlValidInitially = urlIsValid(),
       disableReadAloud = BuildConfig.DISABLE_READ_ALOUD,
       disableTabs = BuildConfig.DISABLE_TABS,
-      disableSearch = BuildConfig.DISABLE_TITLE
+      disableSearch = BuildConfig.DISABLE_TITLE,
+      // Custom apps usually don't need homescreen shortcuts
+      isPinShortcutSupported = false
     )
 
   /**
@@ -427,13 +429,11 @@ class CustomReaderFragment : CoreReaderFragment() {
    */
   override suspend fun openAndSetInContainer(
     zimReaderSource: ZimReaderSource,
-    showSearchSuggestionsSpellChecked: Boolean,
-    initialUrl: String?
+    showSearchSuggestionsSpellChecked: Boolean
   ) {
     super.openAndSetInContainer(
       zimReaderSource,
-      BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED,
-      initialUrl
+      BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED
     )
   }
 

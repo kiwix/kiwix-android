@@ -65,7 +65,8 @@ class ReaderMenuState(
   isUrlValidInitially: Boolean,
   private val disableReadAloud: Boolean = false,
   private val disableTabs: Boolean = false,
-  private val disableSearch: Boolean = false
+  private val disableSearch: Boolean = false,
+  private val isPinShortcutSupported: Boolean = false
 ) {
   interface MenuClickListener {
     fun onTabMenuClicked()
@@ -249,7 +250,10 @@ class ReaderMenuState(
   }
 
   private fun addAddToHomeScreenMenuItem() {
-    if (menuItemVisibility[MenuItemType.AddToHomeScreen] == true && urlIsValid) {
+    if (menuItemVisibility[MenuItemType.AddToHomeScreen] == true &&
+      urlIsValid &&
+      isPinShortcutSupported
+    ) {
       menuItems += ActionMenuItem(
         contentDescription = R.string.menu_add_to_homescreen,
         onClick = { menuClickListener.onAddToHomeScreenMenuClicked() },
