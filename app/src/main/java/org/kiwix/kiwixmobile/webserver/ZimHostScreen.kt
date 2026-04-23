@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -146,12 +147,14 @@ private fun ServerIpText(
   modifier: Modifier,
   context: Context
 ) {
+  val density = LocalDensity.current
+  val minHeightPx = with(density) { MATERIAL_MINIMUM_HEIGHT_AND_WIDTH.toPx().toInt() }
   val serverIpTextView = remember { TextView(context) }
   AndroidView(factory = { serverIpTextView }, modifier = modifier) { textView ->
     textView.apply {
       text = serverIpText
       textSize = 14F
-      minHeight = context.resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
+      minHeight = minHeightPx
       gravity = Gravity.CENTER or Gravity.START
       LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
       movementMethod = LinkMovementMethod.getInstance()

@@ -262,6 +262,7 @@ class ZimHostViewModel @Inject constructor(
     ServerUtils.serverAddress = ip
     _uiState.update {
       it.copy(
+        startServerButtonTextRes = string.stop_server_label,
         serverIpAddress = ip,
         showShareIcon = ip.isNotBlank(),
         qrVisible = true,
@@ -276,6 +277,7 @@ class ZimHostViewModel @Inject constructor(
   private fun layoutStopped() {
     _uiState.update {
       it.copy(
+        startServerButtonTextRes = string.start_server_label,
         serverIpAddress = "",
         showShareIcon = false,
         qrVisible = false,
