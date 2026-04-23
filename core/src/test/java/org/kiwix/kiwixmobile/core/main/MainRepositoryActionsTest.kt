@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main
 
+import android.os.Bundle
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.libkiwix.Book
 import org.kiwix.sharedFunctions.MainDispatcherRule
@@ -122,12 +124,9 @@ class MainRepositoryActionsTest {
     fun `deleteBookmark handles failure gracefully`() = runTest {
       val bookId = "test-book-id"
       val bookmarkUrl = "/article/test"
-      coEvery {
-        dataSource.deleteBookmark(bookId, bookmarkUrl)
-      } throws RuntimeException("DB error")
+      coEvery { dataSource.deleteBookmark(bookId, bookmarkUrl) } throws RuntimeException("DB error")
 
       mainRepositoryActions.deleteBookmark(bookId, bookmarkUrl)
-
       coVerify(exactly = 1) { dataSource.deleteBookmark(bookId, bookmarkUrl) }
     }
   }
@@ -224,37 +223,43 @@ class MainRepositoryActionsTest {
 
     @Test
     fun `loadWebViewPagesHistory returns mapped WebViewHistoryItems`() = runTest {
+      val bundle = mockk<Bundle>()
       val entity1 = WebViewHistoryEntity(
-        zimFilePath = "/zim1",
-        title = "Page 1",
-        url = "/url1",
-        position = 0
+        id = 0,
+        zimId = "demoZimId",
+        webViewIndex = 0,
+        webViewCurrentPosition = 1,
+        webViewBackForwardListBundle = bundle
       )
       val entity2 = WebViewHistoryEntity(
-        zimFilePath = "/zim2",
-        title = "Page 2",
-        url = "/url2",
-        position = 1
+        WebViewHistoryItem(
+          databaseId = 1,
+          zimId = "demoZimId1",
+          webViewIndex = 1,
+          webViewCurrentPosition = 2,
+          webViewBackForwardListBundle = null
+        )
       )
-      coEvery {
-        dataSource.getAllWebViewPagesHistory()
-      } returns flowOf(listOf(entity1, entity2))
+      coEvery { dataSource.getAllWebViewPagesHistory() } returns flowOf(listOf(entity1, entity2))
 
       val result = mainRepositoryActions.loadWebViewPagesHistory()
 
       assertThat(result).hasSize(2)
-      assertThat(result[0].zimFilePath).isEqualTo("/zim1")
-      assertThat(result[0].title).isEqualTo("Page 1")
-      assertThat(result[1].zimFilePath).isEqualTo("/zim2")
-      assertThat(result[1].title).isEqualTo("Page 2")
+      assertThat(result[0].databaseId).isEqualTo(0)
+      assertThat(result[0].zimId).isEqualTo("demoZimId")
+      assertThat(result[0].webViewIndex).isEqualTo(0)
+      assertThat(result[0].webViewCurrentPosition).isEqualTo(1)
+      assertThat(result[0].webViewBackForwardListBundle).isEqualTo(bundle)
+      assertThat(result[1].databaseId).isEqualTo(1)
+      assertThat(result[1].zimId).isEqualTo("demoZimId1")
+      assertThat(result[1].webViewIndex).isEqualTo(1)
+      assertThat(result[1].webViewCurrentPosition).isEqualTo(2)
+      assertThat(result[1].webViewBackForwardListBundle).isEqualTo(null)
     }
 
     @Test
     fun `loadWebViewPagesHistory returns empty list when no history`() = runTest {
-      coEvery {
-        dataSource.getAllWebViewPagesHistory()
-      } returns flowOf(emptyList())
-
+      coEvery { dataSource.getAllWebViewPagesHistory() } returns flowOf(emptyList())
       val result = mainRepositoryActions.loadWebViewPagesHistory()
 
       assertThat(result).isEmpty()

@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
@@ -40,7 +41,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.LanguageItem
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -50,7 +50,6 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Suppress("LongParameterList")
 class Repository @Inject internal constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val libkiwixBookmarks: LibkiwixBookmarks,
