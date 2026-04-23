@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.data
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
@@ -56,13 +57,13 @@ class Repository @Inject internal constructor(
   private val webViewHistoryRoomDao: WebViewHistoryRoomDao,
   private val notesRoomDao: NotesRoomDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DataSource {
   override fun getLanguageCategorizedBooks() =
     booksOnDiskAsListItems()
       .map { it.ifEmpty { emptyList() } }
 
-  @Suppress("InjectDispatcher")
   override fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>> =
     libkiwixBookOnDisk.books()
       .map { books ->
@@ -85,31 +86,26 @@ class Repository @Inject internal constructor(
         )
       }
       .map(MutableList<BooksOnDiskListItem>::toList)
-      .flowOn(Dispatchers.IO)
+      .flowOn(ioDispatcher)
 
-  @Suppress("InjectDispatcher")
-  override suspend fun saveBooks(books: List<Book>) = withContext(Dispatchers.IO) {
+  override suspend fun saveBooks(books: List<Book>) = withContext(ioDispatcher) {
     libkiwixBookOnDisk.insert(books)
   }
 
-  @Suppress("InjectDispatcher")
-  override suspend fun saveBook(book: Book) = withContext(Dispatchers.IO) {
-    libkiwixBookOnDisk.insert(listOf(book))
+  override suspend fun saveBook(book: Book) {
+    saveBooks(listOf(book))
   }
 
-  @Suppress("InjectDispatcher")
-  override suspend fun saveHistory(history: HistoryItem) = withContext(Dispatchers.IO) {
+  override suspend fun saveHistory(history: HistoryItem) = withContext(ioDispatcher) {
     historyRoomDao.saveHistory(history)
   }
 
-  @Suppress("InjectDispatcher")
   override suspend fun deleteHistory(historyList: List<HistoryListItem>) =
-    withContext(Dispatchers.IO) {
+    withContext(ioDispatcher) {
       historyRoomDao.deleteHistory(historyList.filterIsInstance<HistoryItem>())
     }
 
-  @Suppress("InjectDispatcher")
-  override suspend fun clearHistory() = withContext(Dispatchers.IO) {
+  override suspend fun clearHistory() = withContext(ioDispatcher) {
     historyRoomDao.deleteAllHistory()
     recentSearchRoomDao.deleteSearchHistory()
   }
@@ -129,15 +125,13 @@ class Repository @Inject internal constructor(
   override suspend fun deleteBookmark(bookId: String, bookmarkUrl: String) =
     libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl)
 
-  @Suppress("InjectDispatcher")
   override suspend fun saveNote(noteListItem: NoteListItem) =
-    withContext(Dispatchers.IO) {
+    withContext(ioDispatcher) {
       notesRoomDao.saveNote(noteListItem)
     }
 
-  @Suppress("InjectDispatcher")
   override suspend fun clearNotes() =
-    withContext(Dispatchers.IO) {
+    withContext(ioDispatcher) {
       val notesList = notesRoomDao.notes().first().map { it as NoteListItem }
       notesRoomDao.deleteNotes(notesList)
     }
@@ -155,8 +149,7 @@ class Repository @Inject internal constructor(
     webViewHistoryRoomDao.clearWebViewPagesHistory()
   }
 
-  @Suppress("InjectDispatcher")
-  override suspend fun deleteNote(noteTitle: String) = withContext(Dispatchers.IO) {
+  override suspend fun deleteNote(noteTitle: String) = withContext(ioDispatcher) {
     notesRoomDao.deleteNote(noteTitle)
   }
 }

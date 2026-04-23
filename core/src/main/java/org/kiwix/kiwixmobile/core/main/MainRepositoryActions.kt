@@ -17,12 +17,13 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
@@ -34,11 +35,13 @@ import javax.inject.Inject
 private const val TAG = "MainPresenter"
 
 @ActivityScope
-class MainRepositoryActions @Inject constructor(private val dataSource: DataSource) {
-  @Suppress("InjectDispatcher")
+class MainRepositoryActions @Inject constructor(
+  private val dataSource: DataSource,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
   suspend fun saveHistory(history: HistoryItem) {
     runCatching {
-      withContext(Dispatchers.IO) {
+      withContext(ioDispatcher) {
         dataSource.saveHistory(history)
       }
     }.onFailure {
@@ -46,10 +49,9 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
     }
   }
 
-  @Suppress("InjectDispatcher")
   suspend fun saveBookmark(bookmark: LibkiwixBookmarkItem) {
     runCatching {
-      withContext(Dispatchers.IO) {
+      withContext(ioDispatcher) {
         dataSource.saveBookmark(bookmark)
       }
     }.onFailure {
@@ -57,10 +59,9 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
     }
   }
 
-  @Suppress("InjectDispatcher")
   suspend fun deleteBookmark(bookId: String, bookmarkUrl: String) {
     runCatching {
-      withContext(Dispatchers.IO) {
+      withContext(ioDispatcher) {
         dataSource.deleteBookmark(bookId, bookmarkUrl)
       }
     }.onFailure {
