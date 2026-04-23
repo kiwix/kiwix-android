@@ -145,10 +145,7 @@ class ZimHostScreenInstrumentTest {
 
   @Test
   fun testZimHostScreen() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
-      isWifiEnabled()
-    ) {
+    if (isWifiEnabled()) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)
@@ -254,7 +251,8 @@ class ZimHostScreenInstrumentTest {
 
   private fun loadZimFileInApplication(zimFileName: String) {
     val loadFileStream =
-      ZimHostScreenInstrumentTest::class.java.classLoader!!.getResourceAsStream(zimFileName)
+      ZimHostScreenInstrumentTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+        ?: error("Error loading resource for $zimFileName")
     val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), zimFileName) }
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
