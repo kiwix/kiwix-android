@@ -69,11 +69,13 @@ object ShortcutUtils {
     pageUrl: String?,
     customName: String? = null
   ): ShortcutResult {
+    if (zimFileReader == null) {
+      Log.e(TAG, "Cannot create shortcut: zimFileReader is null")
+      return ShortcutResult.ReaderNull
+    }
+
     val componentName = getLauncherComponentName(context)
     return when {
-      zimFileReader == null -> ShortcutResult.ReaderNull.also {
-        Log.e(TAG, "Cannot create shortcut: zimFileReader is null")
-      }
       !ShortcutManagerCompat.isRequestPinShortcutSupported(context) -> ShortcutResult.NotSupported.also {
         Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
         context.toast(R.string.shortcut_disabled_message)
