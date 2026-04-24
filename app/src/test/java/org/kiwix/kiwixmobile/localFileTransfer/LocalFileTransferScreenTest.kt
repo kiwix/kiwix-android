@@ -23,6 +23,7 @@ import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import org.junit.Assert.assertTrue
@@ -30,7 +31,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_MESSAGE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -164,6 +170,14 @@ class LocalFileTransferScreenTest {
     composeTestRule
       .onNodeWithText(context.getString(R.string.no_devices_found))
       .assertDoesNotExist()
+  }
+
+  @Test
+  fun localFileTransferScreen_nearbyDevices_showsProgressBarWhenSearching() {
+    renderScreen(createTestState(isPeerSearching = true))
+    composeTestRule
+      .onNodeWithTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
+      .assertIsDisplayed()
   }
 
   @Test
@@ -330,6 +344,52 @@ class LocalFileTransferScreenTest {
     composeTestRule
       .onNodeWithText(context.getString(R.string.your_device))
       .assertIsDisplayed()
+  }
+
+  // Showcase Tests
+
+  @Test
+  fun localFileTransferScreen_showcase_isDisplayedWhenRequested() {
+    renderScreen(createTestState(shouldShowShowCase = true))
+    // The showcase is displayed, so the message should be visible.
+    composeTestRule
+      .onNodeWithTag(SHOWCASE_VIEW_MESSAGE_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun localFileTransferScreen_showcase_triggersCallbackOnCompletion() {
+    var showcaseDisplayed = false
+    val actionMenuItem = ActionMenuItem(
+      icon = IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.action_search),
+      contentDescription = org.kiwix.kiwixmobile.core.R.string.search_label,
+      onClick = {},
+      testingTag = SEARCH_ICON_TESTING_TAG
+    )
+
+    renderScreen(
+      createTestState(shouldShowShowCase = true),
+      actionMenuItems = listOf(actionMenuItem),
+      onShowCaseDisplayed = { showcaseDisplayed = true }
+    )
+
+    // Wait for all targets to be positioned and added to the map.
+    composeTestRule.waitForIdle()
+
+    // In LocalFileTransferScreen, there are 4 showcase targets:
+    // 0: Search icon (index 0) - now added via actionMenuItems
+    // 1: Your device header (index 1)
+    // 2: Nearby devices list (index 2) - added because peers is empty
+    // 3: Files for transfer (index 3)
+
+    repeat(4) {
+      composeTestRule
+        .onNodeWithTag(SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG)
+        .assertIsDisplayed()
+        .performClick()
+    }
+
+    assertTrue("Showcase displayed callback should be triggered", showcaseDisplayed)
   }
 
   // Helper Methods

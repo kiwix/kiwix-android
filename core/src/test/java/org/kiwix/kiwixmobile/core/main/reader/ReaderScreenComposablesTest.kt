@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import org.kiwix.kiwixmobile.core.utils.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
 
 /**
  * Behavior-driven UI tests for ReaderScreen.
