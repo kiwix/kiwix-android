@@ -27,7 +27,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
-import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
@@ -110,8 +109,6 @@ interface CoreComponent {
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
   fun kiwixPermissionChecker(): KiwixPermissionChecker
-  fun themeConfig(): ThemeConfig
-
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)
 

@@ -25,12 +25,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class ThemeConfig @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   val context: Context
@@ -38,16 +35,10 @@ class ThemeConfig @Inject constructor(
   val isThemeLoaded: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
   fun init() {
-    // Startup Flickering
-    runBlocking {
-      val theme = kiwixDataStore.appTheme.first()
-      setMode(theme)
-      isThemeLoaded.value = true
-    }
-    // Runtime theme changes
     CoroutineScope(Dispatchers.Main).launch {
       kiwixDataStore.appTheme.collect { theme ->
         setMode(theme)
+        isThemeLoaded.emit(true)
       }
     }
   }

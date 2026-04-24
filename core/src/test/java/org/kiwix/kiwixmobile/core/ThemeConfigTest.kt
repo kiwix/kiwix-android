@@ -25,6 +25,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ThemeConfigTest {
   private lateinit var themeConfig: ThemeConfig
   private lateinit var kiwixDataStore: KiwixDataStore
@@ -101,26 +103,29 @@ class ThemeConfigTest {
   }
 
   @Test
-  fun init_whenCalled_setsIsThemeLoadedTrueAfterSyncRead() {
+  fun init_whenCalled_setsIsThemeLoadedTrueAfterSyncRead() = runTest {
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.DARK)
     assertFalse(themeConfig.isThemeLoaded.value)
     themeConfig.init()
+    advanceUntilIdle()
     assertTrue(themeConfig.isThemeLoaded.value)
   }
 
   @Test
-  fun init_whenCalled_accessesAppThemeFromDataStore() {
+  fun init_whenCalled_accessesAppThemeFromDataStore() = runTest {
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.DARK)
     val spy = spyk(themeConfig)
     assertFalse(spy.isThemeLoaded.value)
     spy.init()
+    advanceUntilIdle()
     assertTrue(spy.isThemeLoaded.value)
   }
 
   @Test
-  fun init_whenCalledWithLightTheme_setsIsThemeLoadedTrue() {
+  fun init_whenCalledWithLightTheme_setsIsThemeLoadedTrue() = runTest {
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.LIGHT)
     themeConfig.init()
+    advanceUntilIdle()
     assertTrue(themeConfig.isThemeLoaded.value)
   }
 }
