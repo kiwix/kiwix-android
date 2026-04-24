@@ -12,30 +12,39 @@ jobs:
     steps:
 
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: temurin
 
+      - name: Set up Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r27d
+          link-to-sdk: true
+
       - name: Decrypt files
         env:
           KEYSTORE: ${{ secrets.keystore }}
-          SSH_KEY: ${{ secrets.ssh_key }}
+          KIWIX_FILE_UPLOAD_SSH_KEY: ${{ secrets.KIWIXANDROID_FILE_UPLOAD_KEY }}
         run: |
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
-          echo "$SSH_KEY" | base64 -d > ssh_key
-          chmod 600 ssh_key
-          
+          KEY_PATH=kiwix_file_upload_ssh_key
+          echo "$KIWIX_FILE_UPLOAD_SSH_KEY" > $KEY_PATH
+          chmod 600 $KEY_PATH
+          echo "KIWIX_FILE_UPLOAD_SSH_KEY_PATH=$KEY_PATH" >> $GITHUB_ENV
+
       - name: build debug
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          APK_BUILD: "true"
         run: ./gradlew assembleNightly
 
       - name: Set date variable
@@ -47,4 +56,4 @@ jobs:
         run: |
           mkdir $DATE
           cp $UNIVERSAL_DEBUG_APK $DATE
-          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no $DATE ci@master.download.kiwix.org:/data/download/nightly/
+          scp -P 30322 -vrp -i "$KIWIX_FILE_UPLOAD_SSH_KEY_PATH" -o StrictHostKeyChecking=no $DATE kiwix-android@master.download.kiwix.org:/data/kiwix/nightly/
