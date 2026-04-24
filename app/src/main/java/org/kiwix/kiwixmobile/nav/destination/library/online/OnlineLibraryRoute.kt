@@ -19,14 +19,18 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -40,19 +44,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
@@ -62,6 +70,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ScrollToTop
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
@@ -112,8 +121,8 @@ fun OnlineLibraryRoute(
     context
   )
 
-  val libraryItems by zimManageViewModel.libraryItems.collectAsState()
-  val onlineLibraryDownloading by zimManageViewModel.onlineLibraryDownloading.collectAsState()
+  val libraryItems by onlineLibraryViewModel.libraryItems.collectAsState()
+  val onlineLibraryDownloading by onlineLibraryViewModel.onlineLibraryDownloading.collectAsState()
   val scanningProgress by onlineLibraryViewModel.scanningProgress.collectAsState()
   val noContentState by onlineLibraryViewModel.noContentState.collectAsState()
 
@@ -124,12 +133,12 @@ fun OnlineLibraryRoute(
     alertDialogShower = alertDialogShower,
     activity = activity,
     scope = scope,
-    context = context
+    context = context,
+    lazyListState = lazyListState
   )
 
   // Handle side-effects (Network, Wifi, Progress, etc)
   HandleEffects(
-    zimManageViewModel = zimManageViewModel,
     onlineLibraryViewModel = onlineLibraryViewModel,
     isListEmpty = onlineLibraryList.isNullOrEmpty(),
     onNoContentChanged = { noContentViewItem = it },
@@ -160,19 +169,19 @@ fun OnlineLibraryRoute(
   )
 
   LaunchedEffect(Unit) {
-    zimManageViewModel.updateOnlineLibraryFilters(
+    onlineLibraryViewModel.updateOnlineLibraryFilters(
       onlineLibraryViewModel.getOnlineLibraryRequest()
     )
     scanningProgressItem = false to context.getString(string.reaching_remote_library)
-    zimManageViewModel.onlineBooksSearchedQuery.value
+    onlineLibraryViewModel.onlineBooksSearchedQuery.value
       ?.takeIf { it.isNotEmpty() }
       ?.let { query ->
         isSearchActive = true
         searchText = query
-        zimManageViewModel.requestFiltering.tryEmit(query)
+        onlineLibraryViewModel.requestFiltering.tryEmit(query)
       } ?: run {
-      zimManageViewModel.onlineBooksSearchedQuery.value = ""
-      zimManageViewModel.requestFiltering.tryEmit("")
+      onlineLibraryViewModel.onlineBooksSearchedQuery.value = ""
+      onlineLibraryViewModel.requestFiltering.tryEmit("")
     }
   }
 
@@ -192,7 +201,6 @@ fun OnlineLibraryRoute(
         scope.launch {
           onlineLibraryViewModel.refreshFragment(
             activity,
-            zimManageViewModel,
             true,
             context,
             onlineLibraryList.isNullOrEmpty(),
@@ -238,15 +246,15 @@ fun OnlineLibraryRoute(
       searchText = searchText,
       searchValueChangedListener = {
         if (it.isNotEmpty()) {
-          zimManageViewModel.onlineBooksSearchedQuery.value = it
+          onlineLibraryViewModel.onlineBooksSearchedQuery.value = it
         }
         searchText = it
-        zimManageViewModel.requestFiltering.tryEmit(it.trim())
+        onlineLibraryViewModel.requestFiltering.tryEmit(it.trim())
       },
       clearSearchButtonClickListener = {
         searchText = ""
-        zimManageViewModel.onlineBooksSearchedQuery.value = null
-        zimManageViewModel.requestFiltering.tryEmit("")
+        onlineLibraryViewModel.onlineBooksSearchedQuery.value = null
+        onlineLibraryViewModel.requestFiltering.tryEmit("")
       },
       onLoadMore = { count ->
         onlineLibraryViewModel.handleLoadMore(zimManageViewModel, count)
@@ -260,12 +268,11 @@ fun OnlineLibraryRoute(
       handleBackPress(activity, isSearchActive) {
         isSearchActive = false
         searchText = ""
-        zimManageViewModel.onlineBooksSearchedQuery.value = null
-        zimManageViewModel.requestFiltering.tryEmit("")
+        onlineLibraryViewModel.onlineBooksSearchedQuery.value = null
+        onlineLibraryViewModel.requestFiltering.tryEmit("")
       }
     },
     navHostController = navController,
-    zimManageViewModel = zimManageViewModel,
     navigationIcon = {
       NavigationIcon(
         iconItem = if (isSearchActive) {
@@ -278,8 +285,8 @@ fun OnlineLibraryRoute(
           if (isSearchActive) {
             isSearchActive = false
             searchText = ""
-            zimManageViewModel.onlineBooksSearchedQuery.value = null
-            zimManageViewModel.requestFiltering.tryEmit("")
+            onlineLibraryViewModel.onlineBooksSearchedQuery.value = null
+            onlineLibraryViewModel.requestFiltering.tryEmit("")
             activity.onBackPressedDispatcher.onBackPressed()
           } else {
             if (activity.navigationDrawerIsOpen()) {
@@ -300,8 +307,9 @@ private fun HandleUiEvents(
   snackbarHostState: SnackbarHostState,
   alertDialogShower: AlertDialogShower,
   activity: KiwixMainActivity,
-  scope: kotlinx.coroutines.CoroutineScope,
-  context: android.content.Context
+  scope: CoroutineScope,
+  context: Context,
+  lazyListState: LazyListState
 ) {
   LaunchedEffect(Unit) {
     viewModel.uiEvents.collect { event ->
@@ -312,7 +320,7 @@ private fun HandleUiEvents(
             actionLabel = event.actionLabel,
             lifecycleScope = scope,
             actionClick = {
-              event.actionIntent?.let { intent: android.content.Intent ->
+              event.actionIntent?.let { intent: Intent ->
                 context.startActivity(intent)
               }
               event.onAction?.invoke()
@@ -346,15 +354,17 @@ private fun HandleUiEvents(
         }
 
         is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
-          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             context.toast(context.getString(string.all_files_permission_needed), Toast.LENGTH_SHORT)
-            (activity as androidx.fragment.app.FragmentActivity).navigateToSettings()
+            (activity as FragmentActivity).navigateToSettings()
           }
         }
 
         is OnlineLibraryViewModel.UiEvent.NavigateToAppSettings -> {
           activity.navigateToAppSettings()
         }
+
+        ScrollToTop -> lazyListState.scrollToItem(ZERO)
       }
     }
   }
@@ -363,7 +373,6 @@ private fun HandleUiEvents(
 @Composable
 @Suppress("LongMethod", "ComplexMethod")
 private fun HandleEffects(
-  zimManageViewModel: ZimManageViewModel,
   onlineLibraryViewModel: OnlineLibraryViewModel,
   isListEmpty: Boolean,
   onNoContentChanged: (Pair<String, Boolean>) -> Unit,
@@ -374,9 +383,9 @@ private fun HandleEffects(
   val scope = rememberCoroutineScope()
 
   // Observe LiveData from ZimManageViewModel using observeAsState (Compose-LiveData bridge)
-  val shouldShowWifiOnly by zimManageViewModel.shouldShowWifiOnlyDialog.observeAsState(false)
-  val libraryListIsRefreshing by zimManageViewModel.libraryListIsRefreshing.observeAsState(false)
-  val networkState by zimManageViewModel.networkStates.observeAsState()
+  val shouldShowWifiOnly by onlineLibraryViewModel.shouldShowWifiOnlyDialog.observeAsState(false)
+  val libraryListIsRefreshing by onlineLibraryViewModel.libraryListIsRefreshing.observeAsState(false)
+  val networkState by onlineLibraryViewModel.networkStates.observeAsState()
 
   // Handle wifi-only dialog
   LaunchedEffect(shouldShowWifiOnly) {
@@ -387,8 +396,8 @@ private fun HandleEffects(
           onNoContentChanged("" to false)
           scope.launch {
             onlineLibraryViewModel.kiwixDataStore.setWifiOnly(false)
-            zimManageViewModel.shouldShowWifiOnlyDialog.value = false
-            zimManageViewModel.updateOnlineLibraryFilters(
+            onlineLibraryViewModel.shouldShowWifiOnlyDialog.value = false
+            onlineLibraryViewModel.updateOnlineLibraryFilters(
               onlineLibraryViewModel.getOnlineLibraryRequest()
             )
           }
@@ -417,7 +426,6 @@ private fun HandleEffects(
         onlineLibraryViewModel.handleNetworkConnected(
           context,
           activity,
-          zimManageViewModel,
           isListEmpty,
           onRefreshingChanged
         )
@@ -565,7 +573,7 @@ private fun buildActionMenuItems(
 ): List<ActionMenuItem> = listOfNotNull(
   if (!isSearchActive) {
     ActionMenuItem(
-      icon = IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.action_search),
+      icon = IconItem.Drawable(R.drawable.action_search),
       contentDescription = string.search_label,
       onClick = onSearchClick,
       testingTag = SEARCH_ICON_TESTING_TAG
@@ -610,9 +618,9 @@ private fun handleBackPress(
     FragmentActivityExtensions.Super.ShouldNotCall
   } else {
     val decorView = activity.window.decorView
-    val insets = androidx.core.view.ViewCompat.getRootWindowInsets(decorView)
+    val insets = ViewCompat.getRootWindowInsets(decorView)
     val isKeyboardVisible =
-      insets?.isVisible(androidx.core.view.WindowInsetsCompat.Type.ime()) == true
+      insets?.isVisible(WindowInsetsCompat.Type.ime()) == true
     if (isKeyboardVisible || isSearchActive) {
       activity.currentFocus?.closeKeyboard()
       closeSearch()

@@ -48,8 +48,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.UpdateCategory
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategorySessionCache
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
