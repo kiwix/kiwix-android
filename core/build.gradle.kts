@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import plugin.KiwixConfigurationPlugin
 
 buildscript {
@@ -9,7 +10,6 @@ buildscript {
 }
 plugins {
   `android-library`
-  kotlin("kapt")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
@@ -64,14 +64,12 @@ dependencies {
 
   implementation(Libs.android_arch_lifecycle_extensions)
   implementation(Libs.webkit)
-  testImplementation(Libs.kotlinx_coroutines_test)
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
-  testImplementation(Libs.TURBINE_FLOW_TEST)
   androidTestImplementation(Libs.roomTesting)
 }
 
-kapt {
+configure<KaptExtension> {
   arguments {
     arg("room.schemaLocation", "$projectDir/schemas")
   }

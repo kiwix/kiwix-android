@@ -98,6 +98,7 @@ class AllProjectConfigurer {
       }
 
       testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
           isReturnDefaultValues = true
           isIncludeAndroidResources = true
