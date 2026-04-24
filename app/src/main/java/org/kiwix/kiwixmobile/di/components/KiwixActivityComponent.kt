@@ -49,7 +49,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(zimHostFragment: ZimHostFragment)
   fun inject(kiwixMainActivity: KiwixMainActivity)
 
-
   @Subcomponent.Builder
   interface Builder {
     @BindsInstance fun activity(activity: Activity): Builder

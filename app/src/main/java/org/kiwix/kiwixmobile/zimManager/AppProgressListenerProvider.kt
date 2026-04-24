@@ -24,9 +24,10 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.NINE
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel
 
 class AppProgressListenerProvider(
-  private val zimManageViewModel: ZimManageViewModel
+  private val onlineLibraryViewModel: OnlineLibraryViewModel
 ) : OnlineLibraryProgressListener {
   override fun onProgress(bytesRead: Long, contentLength: Long) {
     val progress =
@@ -35,10 +36,10 @@ class AppProgressListenerProvider(
       } else {
         (bytesRead * NINE * HUNDERED / contentLength).coerceAtMost(HUNDERED.toLong())
       }
-    zimManageViewModel.downloadProgress.postValue(
-      zimManageViewModel.context.getString(
+    onlineLibraryViewModel.downloadProgress.postValue(
+      onlineLibraryViewModel.context.getString(
         R.string.downloading_library,
-        zimManageViewModel.context.getString(R.string.percentage, progress.toInt())
+        onlineLibraryViewModel.context.getString(R.string.percentage, progress.toInt())
       )
     )
   }
