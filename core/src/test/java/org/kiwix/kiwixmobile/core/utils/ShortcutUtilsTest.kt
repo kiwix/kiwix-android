@@ -90,9 +90,10 @@ class ShortcutUtilsTest {
   }
 
   @Test
-  fun `addBookShortcut returns false if zimFileReader is null`() {
+  fun `addBookShortcut returns ReaderNull if zimFileReader is null`() {
     val context = mockk<Context>()
-    assertThat(ShortcutUtils.addBookShortcut(context, null, "test_url")).isFalse
+    assertThat(ShortcutUtils.addBookShortcut(context, null, "test_url"))
+      .isEqualTo(ShortcutResult.ReaderNull)
   }
 
   @Test

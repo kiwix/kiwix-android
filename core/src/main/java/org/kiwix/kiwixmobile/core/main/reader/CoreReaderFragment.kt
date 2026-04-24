@@ -2489,12 +2489,11 @@ abstract class CoreReaderFragment :
     )
 
     (alertDialogShower as? AlertDialogShower)?.show(dialog, {
-      val nameToAdd = nameState.value
       ShortcutUtils.addBookShortcut(
         context = requireContext(),
         zimFileReader = reader,
         pageUrl = getCurrentWebView()?.url,
-        customName = nameToAdd
+        customName = nameState.value
       )
     })
   }

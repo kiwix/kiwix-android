@@ -389,21 +389,16 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun openZimFromFilePath(path: String, pageUrl: String? = null) {
     val isAlreadyOnReader =
       navController.currentDestination?.route == KiwixDestination.Reader.route
+    if (!isAlreadyOnReader) {
+      navigate(KiwixDestination.Reader.route)
+    }
+    setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+    pageUrl?.let { setNavigationResultOnCurrent(it, PAGE_URL_KEY) }
     if (isAlreadyOnReader) {
-      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
-      if (pageUrl != null) {
-        setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
-      }
       supportFragmentManager.fragments
         .filterIsInstance<KiwixReaderFragment>()
         .firstOrNull()
         ?.openPageInBookFromNavigationArguments()
-    } else {
-      navigate(KiwixDestination.Reader.route)
-      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
-      if (pageUrl != null) {
-        setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
-      }
     }
   }
 

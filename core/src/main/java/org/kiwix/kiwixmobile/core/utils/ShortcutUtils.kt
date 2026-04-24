@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.AppOpsManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -42,6 +41,18 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.Log
 
+/**
+ * Represents the result of a shortcut creation attempt.
+ * Allows callers to handle each failure case appropriately.
+ */
+sealed class ShortcutResult {
+  object Success : ShortcutResult()
+  object NotSupported : ShortcutResult()
+  object ReaderNull : ShortcutResult()
+  object LaunchIntentNotFound : ShortcutResult()
+  object ShortcutInfoCreationFailed : ShortcutResult()
+}
+
 object ShortcutUtils {
   private const val TAG = "ShortcutUtils"
   private const val ADAPTIVE_ICON_SIZE_DP = 108
@@ -50,34 +61,54 @@ object ShortcutUtils {
 
   /**
    * Attempts to add a pinned shortcut for a ZIM book to the home screen.
-   * Returns true if the request was successfully sent to the OS.
+   * Returns a [ShortcutResult] indicating success or the specific failure reason.
    */
   fun addBookShortcut(
     context: Context,
     zimFileReader: ZimFileReader?,
     pageUrl: String?,
     customName: String? = null
-  ): Boolean {
-    if (zimFileReader == null) {
-      Log.e(TAG, "Cannot create shortcut: zimFileReader is null")
-      return false
+  ): ShortcutResult {
+    val componentName = getLauncherComponentName(context)
+    return when {
+      zimFileReader == null -> ShortcutResult.ReaderNull.also {
+        Log.e(TAG, "Cannot create shortcut: zimFileReader is null")
+      }
+      !ShortcutManagerCompat.isRequestPinShortcutSupported(context) -> ShortcutResult.NotSupported.also {
+        Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
+        context.toast(R.string.shortcut_disabled_message)
+      }
+      componentName == null -> ShortcutResult.LaunchIntentNotFound.also {
+        Log.e(TAG, "Launcher activity not found for package: ${context.packageName}")
+      }
+      else -> {
+        performPinning(context, zimFileReader, pageUrl, customName, componentName)
+      }
     }
+  }
 
+  private fun getLauncherComponentName(context: Context): android.content.ComponentName? {
+    return context.packageManager.getLaunchIntentForPackage(context.packageName)?.component
+  }
+
+  @Suppress("LongMethod")
+  private fun performPinning(
+    context: Context,
+    zimFileReader: ZimFileReader,
+    pageUrl: String?,
+    customName: String?,
+    componentName: android.content.ComponentName
+  ): ShortcutResult {
     val displayTitle = customName?.takeIf { it.isNotBlank() }
       ?: zimFileReader.title.takeIf { it.isNotBlank() }
       ?: "Kiwix Book"
     val id = "kiwix_" + System.currentTimeMillis().toString()
     val zimFileUri = zimFileReader.zimReaderSource.toDatabase()
 
-    Log.d(TAG, "Creating professional shortcut for book: $displayTitle with ID: $id")
-
-    // Intent to open the book in KiwixMainActivity
-    val shortcutIntent = Intent(context, context.getMainActivityClass()).apply {
-      action = Intent.ACTION_VIEW
+    val shortcutIntent = Intent(Intent.ACTION_VIEW).apply {
+      setClassName(context, componentName.className)
       putExtra(ZIM_FILE_URI_KEY, zimFileUri)
-      if (!pageUrl.isNullOrEmpty()) {
-        putExtra(PAGE_URL_KEY, pageUrl)
-      }
+      pageUrl?.let { putExtra(PAGE_URL_KEY, it) }
       flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     }
 
@@ -92,10 +123,9 @@ object ShortcutUtils {
     }
 
     val icon = createProfessionalIcon(context, faviconBitmap)
+    val shortcutInfo = buildShortcutInfo(context, id, displayTitle, icon, shortcutIntent, componentName)
 
-    val shortcutInfo = buildShortcutInfo(context, id, displayTitle, icon, shortcutIntent)
-
-    return if (shortcutInfo != null && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+    return if (shortcutInfo != null) {
       val successCallback = PendingIntent.getBroadcast(
         context,
         id.hashCode(),
@@ -103,12 +133,9 @@ object ShortcutUtils {
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
       )
       ShortcutManagerCompat.requestPinShortcut(context, shortcutInfo, successCallback.intentSender)
+      ShortcutResult.Success
     } else {
-      if (shortcutInfo != null) {
-        Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
-        context.toast(R.string.shortcut_disabled_message)
-      }
-      false
+      ShortcutResult.ShortcutInfoCreationFailed
     }
   }
 
@@ -117,12 +144,12 @@ object ShortcutUtils {
     id: String,
     displayTitle: String,
     icon: IconCompat,
-    shortcutIntent: Intent
+    shortcutIntent: Intent,
+    componentName: android.content.ComponentName
   ): ShortcutInfoCompat? {
     return try {
-      val mainActivityClass = context.getMainActivityClass()
       ShortcutInfoCompat.Builder(context, id)
-        .setActivity(ComponentName(context, mainActivityClass))
+        .setActivity(componentName)
         .setShortLabel(displayTitle)
         .setLongLabel(displayTitle)
         .setIcon(icon)
@@ -185,21 +212,6 @@ object ShortcutUtils {
       IconCompat.createWithAdaptiveBitmap(bitmap)
     } else {
       IconCompat.createWithBitmap(bitmap)
-    }
-  }
-
-  /**
-   * Helper to get the main activity class name.
-   */
-  private fun Context.getMainActivityClass(): Class<*> {
-    return try {
-      Class.forName("org.kiwix.kiwixmobile.main.KiwixMainActivity")
-    } catch (e: ClassNotFoundException) {
-      try {
-        Class.forName("org.kiwix.kiwixmobile.custom.main.CustomMainActivity")
-      } catch (e2: ClassNotFoundException) {
-        throw IllegalStateException("Could not find KiwixMainActivity or CustomMainActivity")
-      }
     }
   }
 
