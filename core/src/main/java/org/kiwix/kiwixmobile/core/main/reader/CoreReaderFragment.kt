@@ -183,6 +183,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.ShortcutResult
 import org.kiwix.kiwixmobile.core.utils.ShortcutUtils
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
@@ -2489,12 +2490,15 @@ abstract class CoreReaderFragment :
     )
 
     (alertDialogShower as? AlertDialogShower)?.show(dialog, {
-      ShortcutUtils.addBookShortcut(
+      val result = ShortcutUtils.addBookShortcut(
         context = requireContext(),
         zimFileReader = reader,
         pageUrl = getCurrentWebView()?.url,
         customName = nameState.value
       )
+      if (result == ShortcutResult.NotSupported) {
+        toast(string.shortcut_disabled_message)
+      }
     })
   }
 

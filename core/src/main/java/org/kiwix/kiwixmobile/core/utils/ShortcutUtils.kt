@@ -78,7 +78,6 @@ object ShortcutUtils {
     return when {
       !ShortcutManagerCompat.isRequestPinShortcutSupported(context) -> ShortcutResult.NotSupported.also {
         Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
-        context.toast(R.string.shortcut_disabled_message)
       }
       componentName == null -> ShortcutResult.LaunchIntentNotFound.also {
         Log.e(TAG, "Launcher activity not found for package: ${context.packageName}")
