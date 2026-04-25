@@ -99,7 +99,7 @@ import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryRequest
+import org.kiwix.kiwixmobile.zimManager.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import javax.inject.Inject

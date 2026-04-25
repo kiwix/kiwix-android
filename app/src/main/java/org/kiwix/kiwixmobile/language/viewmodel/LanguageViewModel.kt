@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -34,10 +35,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
@@ -49,6 +60,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
@@ -57,6 +69,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
@@ -69,6 +82,9 @@ class LanguageViewModel @Inject constructor(
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private val coroutineJobs = mutableListOf<Job>()
+
+  @VisibleForTesting
+  var isUnitTestCase: Boolean = false
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -94,7 +110,10 @@ class LanguageViewModel @Inject constructor(
       runCatching {
         Language(
           languageCode = entry.languageCode,
-          active = kiwixDataStore.selectedOnlineContentLanguage.first() == entry.languageCode,
+          active = kiwixDataStore.selectedOnlineContentLanguage.first()
+            .split(",")
+            .filter { it.isNotEmpty() }
+            .contains(entry.languageCode),
           occurrencesOfLanguage = entry.count,
           id = (index + ONE).toLong()
         )
@@ -109,10 +128,13 @@ class LanguageViewModel @Inject constructor(
         else -> buildList {
           add(
             Language(
-              languageCode = "",
+              id = ZERO.toLong(),
               active = kiwixDataStore.selectedOnlineContentLanguage.first().isEmpty(),
-              occurrencesOfLanguage = allBooksCount,
-              id = ZERO.toLong()
+              occurencesOfLanguage = allBooksCount,
+              language = "",
+              languageLocalized = "",
+              languageCode = "",
+              languageCodeISO2 = ""
             )
           )
           addAll(languages)
@@ -185,39 +207,41 @@ class LanguageViewModel @Inject constructor(
   ): State {
     return when (action) {
       is Error -> State.Error(action.errorMessage)
-
-      is UpdateLanguages ->
-        when (currentState) {
-          Loading -> Content(action.languages)
-          else -> currentState
-        }
-
-      is Filter -> {
-        when (currentState) {
-          is Content -> filterContent(action.filter, currentState)
-          else -> currentState
-        }
-      }
-
-      is Select ->
-        when (currentState) {
-          is Content -> updateSelection(action.language, currentState)
-          else -> currentState
-        }
-
-      Save ->
-        when (currentState) {
-          is Content -> save(currentState)
-          else -> currentState
-        }
+      is UpdateLanguages -> updateLanguages(action, currentState)
+      is Filter -> filter(action, currentState)
+      is Select -> select(action, currentState)
+      Save -> saveAction(currentState)
+      Cancel -> cancel(currentState)
     }
   }
 
+  private fun cancel(currentState: State): State {
+    if (currentState !is Content) return currentState
+    effects.tryEmit(object : SideEffect<Unit> {
+      override fun invokeWith(activity: AppCompatActivity) {
+        activity.onBackPressedDispatcher.onBackPressed()
+      }
+    })
+    return currentState
+  }
+
+  private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
+    if (currentState is Loading) Content(action.languages) else currentState
+
+  private fun filter(action: Filter, currentState: State): State =
+    if (currentState is Content) filterContent(action.filter, currentState) else currentState
+
+  private fun select(action: Select, currentState: State): State =
+    if (currentState is Content) updateSelection(action.language, currentState) else currentState
+
+  private fun saveAction(currentState: State): State =
+    if (currentState is Content) save(currentState) else currentState
+
   private fun save(currentState: Content): State {
-    val selectedLanguage = currentState.items.first { it.active }
+    val selectedLanguages = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveLanguagesAndFinish(
-        selectedLanguage,
+        selectedLanguages,
         kiwixDataStore,
         viewModelScope
       )
@@ -234,6 +258,25 @@ class LanguageViewModel @Inject constructor(
     filter: String,
     currentState: Content
   ) = currentState.updateFilter(filter)
+
+  private fun getOkHttpClient() = OkHttpClient().newBuilder()
+    .followRedirects(true)
+    .followSslRedirects(true)
+    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+    .readTimeout(READ_TIMEOUT, SECONDS)
+    .callTimeout(CALL_TIMEOUT, SECONDS)
+    .addNetworkInterceptor(
+      HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) BASIC else NONE
+      }
+    )
+    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+    .build()
+
+  companion object {
+    @VisibleForTesting
+    var isTest: Boolean = false
+  }
 }
 
 object LanguageSessionCache {

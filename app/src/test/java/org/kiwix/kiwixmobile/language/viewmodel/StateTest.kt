@@ -34,9 +34,9 @@ class StateTest {
       val content = Content(listOf(language(), language(isActive = true)))
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MAX_VALUE),
+          HeaderItem(HeaderItem.SELECTED),
           LanguageItem(language(isActive = true)),
-          HeaderItem(Long.MIN_VALUE),
+          HeaderItem(HeaderItem.OTHER),
           LanguageItem(language())
         )
       )
@@ -50,7 +50,7 @@ class StateTest {
         ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MIN_VALUE),
+          HeaderItem(HeaderItem.OTHER),
           LanguageItem(language(language = "matchesFilter"))
         )
       )

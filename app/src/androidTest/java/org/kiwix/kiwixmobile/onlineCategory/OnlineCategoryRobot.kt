@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.onlineCategory
 
 import androidx.compose.ui.test.ComposeTimeoutException
-import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -99,7 +99,14 @@ class OnlineCategoryRobot : BaseRobot() {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
-        .assertIsSelected()
+        .assertIsOn()
+    }
+  }
+
+  fun clickOnSaveCategoryIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG).performClick()
     }
   }
 }
