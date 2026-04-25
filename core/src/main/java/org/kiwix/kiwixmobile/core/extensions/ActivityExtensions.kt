@@ -26,10 +26,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Environment
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -47,32 +43,6 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 object ActivityExtensions {
   private val Activity.coreMainActivity: CoreMainActivity get() = this as CoreMainActivity
-
-  fun AppCompatActivity.startActionMode(
-    menuId: Int,
-    idsToClickActions: Map<Int, () -> Any>,
-    onDestroyAction: () -> Unit
-  ): ActionMode? {
-    return startSupportActionMode(object : ActionMode.Callback {
-      override fun onActionItemClicked(mode: ActionMode, item: MenuItem) =
-        idsToClickActions[item.itemId]?.let {
-          it()
-          mode.finish()
-          true
-        } ?: false
-
-      override fun onCreateActionMode(mode: ActionMode, menu: Menu?): Boolean {
-        mode.menuInflater.inflate(menuId, menu)
-        return true
-      }
-
-      override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = false
-
-      override fun onDestroyActionMode(mode: ActionMode?) {
-        onDestroyAction()
-      }
-    })
-  }
 
   inline fun <reified T : Activity> Activity.start(
     noinline intentFunc: (Intent.() -> Unit)? = null

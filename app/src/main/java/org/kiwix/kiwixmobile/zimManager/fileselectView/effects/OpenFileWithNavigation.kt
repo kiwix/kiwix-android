@@ -19,30 +19,30 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
-@Suppress("InjectDispatcher")
-data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
-  SideEffect<Unit> {
+data class OpenFileWithNavigation(
+  private val zimReaderSource: ZimReaderSource,
+  private val coroutineScope: CoroutineScope,
+  private val ioDispatcher: CoroutineDispatcher
+) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val zimReaderSource = bookOnDisk.zimReaderSource
-    (activity as KiwixMainActivity).lifecycleScope.launch {
-      val canOpenInLibkiwix =
-        withContext(Dispatchers.IO) {
-          zimReaderSource.canOpenInLibkiwix()
-        }
+    coroutineScope.launch {
+      val canOpenInLibkiwix = withContext(ioDispatcher) {
+        zimReaderSource.canOpenInLibkiwix()
+      }
       if (!canOpenInLibkiwix) {
         activity.toast(
           activity.getString(R.string.error_file_not_found, zimReaderSource.toDatabase())
@@ -51,7 +51,7 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
         val navOptions = NavOptions.Builder()
           .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
           .build()
-        activity.apply {
+        (activity as CoreMainActivity).apply {
           navigate(KiwixDestination.Reader.route, navOptions)
           setNavigationResultOnCurrent(zimReaderSource.toDatabase(), ZIM_FILE_URI_KEY)
         }

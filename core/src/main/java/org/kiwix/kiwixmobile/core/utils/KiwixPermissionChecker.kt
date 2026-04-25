@@ -39,4 +39,6 @@ interface KiwixPermissionChecker {
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
   fun isAndroid8OrAbove(): Boolean
+
+  suspend fun isManageExternalStoragePermissionGranted(): Boolean
 }

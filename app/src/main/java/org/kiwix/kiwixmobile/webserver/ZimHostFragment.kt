@@ -124,11 +124,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private val selectedBooksPath: ArrayList<String>
     get() {
       return booksList.value
-        .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
-        .map {
-          it.zimReaderSource.toDatabase()
-        }
+        .filter(BookOnDisk::isSelected)
+        .map { it.zimReaderSource.toDatabase() }
         .onEach { path ->
           Log.v(tag, "ZIM PATH : $path")
         }
@@ -304,16 +302,13 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun select(bookOnDisk: BookOnDisk) {
-    val tempBooksList: List<BooksOnDiskListItem> = booksList.value.onEach {
-      if (it == bookOnDisk) {
-        it.isSelected = !it.isSelected
+    val tempBooksList: List<BooksOnDiskListItem> = booksList.value.map {
+      if (it is BookOnDisk && it == bookOnDisk) {
+        it.copy(isSelected = !it.isSelected)
+      } else {
+        it
       }
-      it
     }
-    // Force recomposition by first setting an empty list before assigning the updated list.
-    // This is necessary because modifying an object's property doesn't trigger recomposition,
-    // as Compose still considers the list unchanged.
-    booksList.value = emptyList()
     booksList.value = tempBooksList
     saveHostedBooks(tempBooksList)
     if (ServerUtils.isServerStarted) {
@@ -363,8 +358,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
     val hostedBooks = booksList.asSequence()
-      .filter(BooksOnDiskListItem::isSelected)
       .filterIsInstance<BookOnDisk>()
+      .filter(BookOnDisk::isSelected)
       .map { it.book.id }
       .toSet()
     lifecycleScope.launch {
@@ -493,10 +488,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         if (it is BookOnDisk) {
           zimReaderContainer.zimFileReader?.let { zimFileReader ->
             val booksOnDiskListItem =
-              (BookOnDisk(zimFileReader) as BooksOnDiskListItem)
-                .apply {
-                  isSelected = true
-                }
+              BookOnDisk(zimFileReader, true) as BooksOnDiskListItem
             updatedBooksList.add(booksOnDiskListItem)
           }
         } else {
