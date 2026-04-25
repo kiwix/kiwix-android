@@ -170,8 +170,11 @@ class NoteRobot : BaseRobot() {
     // UIDevice does not found the view immediately due to rendering process.
     testFlakyView({
       composeTestRule.waitForIdle()
+      // Use assertTextContains instead of assertTextEquals because Material3
+      // TextField includes placeholder text in the semantic Text property,
+      // causing assertTextEquals to fail with combined [placeholder, editableText].
       composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
-        .assertTextEquals(noteText)
+        .assertTextContains(noteText)
     })
   }
 
@@ -179,7 +182,7 @@ class NoteRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
-        .assertTextContains("", ignoreCase = true)
+        .assertTextContains("", substring = true)
     })
   }
 

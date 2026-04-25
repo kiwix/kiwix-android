@@ -24,9 +24,8 @@ import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -86,10 +85,10 @@ class DownloadServiceTestForCustomApps {
   var retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<CustomMainActivity>()
   private lateinit var customMainActivity: CustomMainActivity
   private lateinit var uiDevice: UiDevice
-  private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
+  private var activityScenario: ActivityScenario<CustomMainActivity>? = null
   private val rayCharlesZIMFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
@@ -111,21 +110,16 @@ class DownloadServiceTestForCustomApps {
         setPrefIsTest(true)
       }
     }
-    activityScenario =
-      ActivityScenario.launch(CustomMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
+    activityScenario = composeTestRule.activityRule.scenario
+    activityScenario?.onActivity {
+      customMainActivity = it
+      AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+    }
   }
 
   @Test
   fun testDownloadMonitorServiceShouldNotStartForCustomApp() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-      activityScenario.onActivity {
-        customMainActivity = it
-      }
       var downloadingZimFile: File? = null
       testFlakyView({
         // test with a large ZIM file to properly test the scenario

@@ -98,6 +98,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
@@ -225,6 +227,20 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
           )
         }
         DialogHost(dialogShower as AlertDialogShower)
+        processSelectedZimFilesForPlayStore?.copyMoveFileHandler?.storageSelectDialogState?.value?.let { config ->
+          StorageSelectDialog(
+            title = config.title,
+            titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE,
+            storageDeviceList = config.storageDeviceList,
+            storageCalculator = storageCalculator,
+            kiwixDataStore = kiwixDataStore,
+            shouldShowCheckboxSelected = config.shouldShowCheckboxSelected,
+            onDismiss = {
+              processSelectedZimFilesForPlayStore?.copyMoveFileHandler?.dismissStorageSelectDialog()
+            },
+            onSelectAction = config.onSelectAction
+          )
+        }
         DisposableEffect(Unit) {
           onDispose {
             // Dispose UI resources when this Compose view is removed. Compose disposes
@@ -327,7 +343,6 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       lifecycleScope = lifecycleScope,
       alertDialogShower = dialogShower as AlertDialogShower,
       snackBarHostState = libraryScreenState.value.snackBarHostState,
-      fragmentManager = parentFragmentManager,
       selectedZimFileCallback = this@LocalLibraryFragment
     )
     zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)

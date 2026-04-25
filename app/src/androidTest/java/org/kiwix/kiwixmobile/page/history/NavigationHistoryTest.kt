@@ -21,12 +21,11 @@ package org.kiwix.kiwixmobile.page.history
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavOptions
-import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
@@ -63,7 +62,7 @@ class NavigationHistoryTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -86,14 +85,13 @@ class NavigationHistoryTest : BaseActivityTest() {
         setPrefIsTest(true)
       }
     }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          kiwixMainActivity = it
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
+    activityScenario = composeTestRule.scenario.apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        kiwixMainActivity = it
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
       }
+    }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
       setSuppressingResultMatcher(
         anyOf(

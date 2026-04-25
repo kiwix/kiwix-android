@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
