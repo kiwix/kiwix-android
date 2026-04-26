@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.help
 
 import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -29,6 +30,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -58,8 +60,8 @@ class HelpScreenTest {
   fun helpScreen_displaysCorrectTitle() {
     renderHelpScreen()
     composeTestRule
-      .onNodeWithText(context.getString(R.string.menu_help))
-      .assertIsDisplayed()
+      .onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
+      .assertTextEquals(context.getString(R.string.menu_help))
   }
 
   @Test
