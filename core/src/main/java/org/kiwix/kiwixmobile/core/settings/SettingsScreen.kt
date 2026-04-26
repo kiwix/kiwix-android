@@ -29,6 +29,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -287,7 +288,8 @@ private fun showExportBookmarkDialog(coreSettingsViewModel: CoreSettingsViewMode
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")
 @Composable
-private fun SettingsScreen(
+@VisibleForTesting
+internal fun SettingsScreen(
   coreSettingsViewModel: CoreSettingsViewModel,
   navigationIcon: @Composable() () -> Unit
 ) {
