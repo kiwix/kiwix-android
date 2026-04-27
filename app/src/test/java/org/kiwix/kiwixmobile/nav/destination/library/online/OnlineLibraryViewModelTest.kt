@@ -153,7 +153,7 @@ class OnlineLibraryViewModelTest {
 
     var isRefreshing = true
 
-    viewModel.refreshFragment(
+    viewModel.refreshScreen(
       activity,
       zimManageViewModel,
       isExplicitRefresh = true,

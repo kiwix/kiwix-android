@@ -74,8 +74,7 @@ fun DownloadBookItem(
   index: Int,
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
-  onStopClick: (LibraryDownloadItem) -> Unit,
-  onAutomaticRetry: (LibraryDownloadItem) -> Unit
+  onStopClick: (LibraryDownloadItem) -> Unit
 ) {
   // Automatically invoke onStopClick if the download failed
   LaunchedEffect(item.id, item.currentDownloadState) {
@@ -87,7 +86,7 @@ fun DownloadBookItem(
           // Only retrigger the download for CONNECTION_TIMED_OUT or UNKNOWN_IO_ERROR.
           // For other errors (e.g., REQUEST_DOES_NOT_EXIST, EMPTY_RESPONSE_FROM_SERVER, REQUEST_NOT_SUCCESSFUL),
           // we inform the user because the download cannot be restarted in these cases.
-          onAutomaticRetry.invoke(item)
+          onStopClick.invoke(item)
         }
 
         else -> {
