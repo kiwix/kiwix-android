@@ -21,7 +21,7 @@
   <string name="menu_wifi_hotspot">வைபை பகிரலை</string>
   <string name="save_media">ஊடகத்தைச் சேமி</string>
   <string name="save_media_error">ஊடகத்தைச் சேமிக்க முயலும் போது ஒரு பிழை நேர்ந்தது!</string>
-  <string name="save_media_saved">ஊடகம் %s என Downloads/org.kiwix…/ இற் சேமிக்கப்பட்டது</string>
+  <string name="save_media_saved">ஊடகம் %s என சேமிக்கப்பட்டது</string>
   <string name="search_label">தேடு</string>
   <string name="choose_file">ஓர் உள்ளடக்கக் கோப்பைத் தெரிவு செய் (*.zim)</string>
   <string name="open_in_new_tab">தொடுப்பைப் புதிய தாவலில் திறக்கவா?</string>

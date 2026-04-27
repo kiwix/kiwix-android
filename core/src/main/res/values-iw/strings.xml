@@ -26,7 +26,7 @@
   <string name="menu_wifi_hotspot">לארח ספרים</string>
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
-  <string name="save_media_saved">המדיה נשמרה בתור %s לתיקייה Android/media/org.kiwix…/‎</string>
+  <string name="save_media_saved">המדיה נשמרה ב־%s</string>
   <string name="search_label">חיפוש</string>
   <string name="searched_list">באיזו רשימה נעשה החיפוש</string>
   <string name="more_options">אפשרויות נוספות</string>

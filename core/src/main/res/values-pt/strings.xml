@@ -31,7 +31,7 @@
   <string name="menu_wifi_hotspot">Ponto de acesso de Wi-Fi</string>
   <string name="save_media">Guardar conteúdo</string>
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
-  <string name="save_media_saved">Conteúdo guardado como %s em Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Conteúdo guardado em %s</string>
   <string name="search_label">Pesquisar</string>
   <string name="searched_list">Lista pesquisada</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>

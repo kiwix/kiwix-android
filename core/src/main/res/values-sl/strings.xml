@@ -28,7 +28,7 @@
   <string name="menu_wifi_hotspot">Dostopna točka Wi-Fi</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja predstavnosti je prišlo do napake!</string>
-  <string name="save_media_saved">Shrani medij kot %s na Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Medij shranjen v %s</string>
   <string name="search_label">Iskanje</string>
   <string name="searched_list">Preiskani seznam</string>
   <string name="more_options">Več možnosti</string>
@@ -105,6 +105,9 @@
   <string name="pref_clear_all_bookmarks_title">Počisti zaznamke</string>
   <string name="clear_all_history_dialog_title">Počistim vso zgodovino?</string>
   <string name="share">Deli</string>
+  <string name="share_article">Deli članek</string>
+  <string name="unable_to_share_article">Članka ni mogoče deliti</string>
+  <string name="please_wait_for_page_to_load">Počakajte, da se stran v celoti naloži</string>
   <string name="selected_file_cab_app_chooser_title">Deli ZIM datoteke z:</string>
   <string name="delete">izbriši</string>
   <string name="cancel">Prekliči</string>

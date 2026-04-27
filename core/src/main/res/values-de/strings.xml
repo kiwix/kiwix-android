@@ -49,7 +49,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
-  <string name="save_media_saved">Medium als %s nach Downloads/org.kiwix…/ gespeichert</string>
+  <string name="save_media_saved">Medium wurde in %s gespeichert</string>
   <string name="search_label">Suchen</string>
   <string name="searched_list">Durchsuchte Liste</string>
   <string name="choose_file">Wähle eine Inhaltsdatei (*.zim)</string>

@@ -31,7 +31,8 @@
   <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Media opslaan</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
-  <string name="save_media_saved">Het bestand is opgeslagen als %s in Downloads/org.kiwix…/</string>
+  <string name="invalid_media_source">Het geselecteerde mediabestand is niet gevonden.</string>
+  <string name="save_media_saved">Media opgeslagen in %s</string>
   <string name="search_label">Zoeken</string>
   <string name="searched_list">Gezochte lijst</string>
   <string name="more_options">Meer opties</string>

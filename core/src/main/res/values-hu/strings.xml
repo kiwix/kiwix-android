@@ -31,7 +31,7 @@
   <string name="menu_wifi_hotspot">Wi-Fi hozzáférési pont</string>
   <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentési kísérletekor!</string>
-  <string name="save_media_saved">Média elmentve %s néven ide: Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Média elmentve ide: %s</string>
   <string name="search_label">Keresés</string>
   <string name="searched_list">Keresett lista</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>

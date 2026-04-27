@@ -5,6 +5,7 @@
 * Larsa
 * Marcusjehrlander
 * McDutchie
+* Michael FOSS
 * MohitMali
 * Rofiatmustapha12
 * Sabelöga
@@ -34,7 +35,8 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
-  <string name="save_media_saved">Sparade media som %s i Downloads/org.kiwix…/</string>
+  <string name="invalid_media_source">Det valda mediet hittades inte.</string>
+  <string name="save_media_saved">Sparade media i %s</string>
   <string name="search_label">Sök</string>
   <string name="searched_list">Sökt lista</string>
   <string name="more_options">Fler alternativ</string>
@@ -111,6 +113,9 @@
   <string name="pref_clear_all_bookmarks_title">Rensa bokmärken</string>
   <string name="clear_all_history_dialog_title">Rensa all historik?</string>
   <string name="share">Dela</string>
+  <string name="share_article">Dela artikel</string>
+  <string name="unable_to_share_article">Kunde inte dela artikeln</string>
+  <string name="please_wait_for_page_to_load">Vänta vänligen tills sidan har laddat klart</string>
   <string name="selected_file_cab_app_chooser_title">Dela ZIM-filer med:</string>
   <string name="delete">Radera</string>
   <string name="cancel">\nAvbryt</string>
@@ -323,7 +328,7 @@
   <string name="delete_selected_bookmarks">Radera valda bokmärken?</string>
   <string name="import_bookmarks_dialog_title">Importera bokmärken?</string>
   <string name="export_all_bookmarks_dialog_title">Exportera alla bokmärken?</string>
-  <string name="export_all_bookmarks_dialog_message" fuzzy="true">Exportering kommer generera en bookmark.xml-fil i mappen \n%s</string>
+  <string name="export_all_bookmarks_dialog_message">Exportering kommer generera en bookmark.xml-fil i mappen \n%s.</string>
   <string name="bookmark_imported_message">Alla bokmärken har importerats.</string>
   <string name="error_invalid_bookmark_file">Fel: Den valda filen är inte en giltig bokmärkesfil.</string>
   <string name="send_report">Skicka diagnostisk rapport</string>

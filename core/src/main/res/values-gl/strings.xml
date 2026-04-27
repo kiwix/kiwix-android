@@ -24,7 +24,7 @@
   <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
-  <string name="save_media_saved">Multimedia gardado como %s en Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Multimedia gardado en %s</string>
   <string name="search_label">Procurar</string>
   <string name="searched_list">Lista buscada</string>
   <string name="more_options">Máis opcións</string>

@@ -23,7 +23,7 @@
   <string name="menu_wifi_hotspot">Puncto de accesso a WiFi</string>
   <string name="save_media">Salveguardar multimedia</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
-  <string name="save_media_saved">File multimedial salveguardate como %s in Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Multimedia salveguardate in %s</string>
   <string name="search_label">Cercar</string>
   <string name="searched_list">Lista cercate</string>
   <string name="more_options">Plus optiones</string>
@@ -80,7 +80,7 @@
   <string name="pref_credits_title">Creditos</string>
   <string name="tts_lang_not_supported">Le lingua de iste pagina non es supportate. Pote esser que le pagina non appare correctemente.</string>
   <string name="no_reader_application_installed">Non poteva trovar un application installate pro iste typo de file</string>
-  <string name="no_email_application_installed">Per favor, instala un cliente de correo electronic</string>
+  <string name="no_email_application_installed">Per favor, installa un programma de posta electronic</string>
   <string name="no_app_found_to_select_bookmark_file">Necun app trovate pro seliger un file de marcapaginas</string>
   <string name="no_section_info">Nulle capites de contento trovate</string>
   <string name="request_storage">Pro acceder al contento foras de linea, nos require accesso a tu immagazinage.</string>

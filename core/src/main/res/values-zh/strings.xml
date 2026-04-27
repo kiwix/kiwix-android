@@ -53,7 +53,7 @@
   <string name="menu_wifi_hotspot">无线热点</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
-  <string name="save_media_saved">已将媒体作为%s保存至Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">已将媒体保存至 %s</string>
   <string name="search_label">搜索</string>
   <string name="searched_list">已搜索项目列表</string>
   <string name="more_options">更多选项</string>

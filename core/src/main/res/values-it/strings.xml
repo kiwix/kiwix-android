@@ -36,7 +36,7 @@
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Salva file multimediale</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
-  <string name="save_media_saved">File multimediale salvato come %s in Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">File multimediali salvati in %s</string>
   <string name="search_label">Cerca</string>
   <string name="searched_list">Lista cercata</string>
   <string name="more_options">Altre opzioni</string>

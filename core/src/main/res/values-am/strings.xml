@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* RhAnish
+-->
 <resources>
   <string name="menu_help">እርዳታ</string>
   <string name="menu_home">መኖርያ ገጽ</string>
@@ -6,4 +9,8 @@
   <string name="menu_random_article">መጣጥፍ በነሲብ</string>
   <string name="search_label">ፍለጋ</string>
   <string name="pref_language_title">ቋንቋ</string>
+  <string name="yes">አዎ</string>
+  <string name="no">አይ</string>
+  <string name="time_today">ዛሬ</string>
+  <string name="time_yesterday">ትላንትና</string>
 </resources>

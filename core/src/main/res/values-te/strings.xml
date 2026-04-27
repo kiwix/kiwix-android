@@ -24,7 +24,7 @@
   <string name="menu_wifi_hotspot">WiFi హాట్‌స్పాట్</string>
   <string name="save_media">మీడియాని ఇలా భద్రపరచండి…</string>
   <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
-  <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %s వద్ద భద్రపరచాము</string>
+  <string name="save_media_saved" fuzzy="true">మీడియాని మీ బొమ్మల సంచయంలోని %s వద్ద భద్రపరచాము</string>
   <string name="search_label">వెతుకు</string>
   <string name="choose_file">కంటెంట్ ఫైల్‌ను ఎంచుకోండి (*.zim)</string>
   <string name="open_in_new_tab">లంకెను కొత్త ట్యాబులో తెరువాలా?</string>

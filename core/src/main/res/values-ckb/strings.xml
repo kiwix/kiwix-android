@@ -6,6 +6,7 @@
 * Hzr115
 * Kurd
 * McDutchie
+* MohitMali
 * Sarchia
 * Épine
 * ئارام بکر
@@ -25,7 +26,7 @@
   <string name="menu_wifi_hotspot">خانەخوێی کتێبەکان</string>
   <string name="save_media">میدیا پاشەکەوت بکە</string>
   <string name="save_media_error">ھەڵەیەک ڕوویدا لەکاتی ھەوڵدان لە خەزێنەکردنی میدیاکە!</string>
-  <string name="save_media_saved">میدیاکە بە %s بۆ Downloads/org.kiwix…/ پاشەکەوت کرا</string>
+  <string name="save_media_saved"> پاشەکەوت کرا میدیاکە بۆ %s</string>
   <string name="search_label">گەڕان</string>
   <string name="choose_file">ناوەڕۆکێکی پەڕگە ھەڵبژێرە (*.zim)</string>
   <string name="open_in_new_tab">بەستەرەکە لە تابێکی نوێدا بکرێتەوە؟</string>

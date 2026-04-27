@@ -26,7 +26,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Media gorde</string>
   <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
-  <string name="save_media_saved">Multimedia %s gisa gorde da Downloads/org.kiwix…/ kokalekuan</string>
+  <string name="save_media_saved">Multimedia %s kokalekuan gorde da</string>
   <string name="search_label">Bilatu</string>
   <string name="searched_list">Zerrendan bilatu da</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>

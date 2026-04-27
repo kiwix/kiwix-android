@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Danil Kostenkov
 * Fenixs-ru
 * Kareyac
 * Pavel200071
@@ -14,4 +15,13 @@
   <string name="receive_files_title">Получить файлы</string>
   <string name="no_app_found_to_open">Не найдено приложение для выбора ZIM-файла!</string>
   <string name="select_zim_file">Выберите ZIM-файл для чтения</string>
+  <string name="swipe_down_to_scan_storage">Проведите пальцем вниз, чтобы просканировать устройство и найти новые книги…</string>
+  <string name="auto_detect_books">Автоматическое определение ваших книг</string>
+  <string name="auto_detect_books_description">При первом запуске вам будет предложено разрешить приложению сканировать ваше хранилище. Если вы разрешите, мы автоматически обнаружим ваши ZIM-файлы без необходимости добавлять их вручную.</string>
+  <string name="select_category">Выбор категории</string>
+  <string name="no_category_available">Категории недоступны</string>
+  <string name="your_selected_category">Выбранная категория:</string>
+  <string name="other_categories">Другие категории</string>
+  <string name="all_categories">Все категории</string>
+  <string name="select_category_content_description">Выбор этой категории приведёт к тому, что вверху списка будут отображаться книги, доступные для скачивания на этом языке.</string>
 </resources>

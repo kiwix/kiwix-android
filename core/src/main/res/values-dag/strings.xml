@@ -25,7 +25,7 @@
   <string name="menu_wifi_hotspot">Wifi gbaabu shee</string>
   <string name="save_media">Zaŋ niŋ saɣisinli</string>
   <string name="save_media_error">Chirimbu nyɛla din niŋ saha shɛli a ni bori ni a zaŋ saɣisinli niŋ!</string>
-  <string name="save_media_saved">Imehifadhi maudhui kama %s kwenye Vipakuliwa/org.kiwix\n…/</string>
+  <string name="save_media_saved">Maudhui yamehifadhiwa kwenye %s</string>
   <string name="search_label">Vihima</string>
   <string name="searched_list">vihigu yuya</string>
   <string name="choose_file">Piimi Lahabali kɔligu yaɣili (*.zim)</string>

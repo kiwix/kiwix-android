@@ -25,7 +25,7 @@
   <string name="menu_wifi_hotspot">Găzduiește Cărți</string>
   <string name="save_media">Salvează Media</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
-  <string name="save_media_saved">Salvează media ca %s în Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Media salvată în %s</string>
   <string name="search_label">Caută</string>
   <string name="searched_list">Lista căutată</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>

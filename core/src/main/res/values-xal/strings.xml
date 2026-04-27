@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* MohitMali
 * Ukhant Erdemt
 * Алия
 -->
@@ -16,7 +17,7 @@
   <string name="menu_wifi_hotspot">WiFi цацх цег</string>
   <string name="save_media">медиаг оңгдан төрләр хадһлх</string>
   <string name="save_media_error">Медиа-файлыг хадһлхд эндү һарв!</string>
-  <string name="save_media_saved">Медиа-файлнь Downloads/org.kiwix…/-д %s кевәр хадһлгдв.</string>
+  <string name="save_media_saved">Медиа файл %s-д хадгалагдлаа</string>
   <string name="search_label">Хәәлт</string>
   <string name="open_in_new_tab">Холвасыг оңгдан хавчурһд неетн</string>
   <string name="hotspot_service_channel_name">Цацх цегин үүлчллһнә цувг</string>
