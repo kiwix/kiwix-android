@@ -11,6 +11,7 @@
 * MohitMali
 * Movses
 * Piramidion
+* Repakr
 * Vlad5250
 * Ypryima
 * Ата
@@ -30,7 +31,7 @@
   <string name="menu_wifi_hotspot">Розташувати книги</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved">Медіафайл збережено як %s до Downloads/media/org.kiwix…/</string>
+  <string name="save_media_saved">Медіафайл збережено до %s</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Cranki
+* MohitMali
 -->
 <resources>
   <string name="menu_help">Pomoć</string>
@@ -17,7 +18,7 @@
   <string name="menu_wifi_hotspot">WiFi pristupna tačka (hotspot)</string>
   <string name="save_media">Sačuvaj medij</string>
   <string name="save_media_error">Došlo je do greške prilikom pokušaja spremanja medija!</string>
-  <string name="save_media_saved">Mediji su sačuvani kao %s u Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Mediji su sačuvani u %s</string>
   <string name="search_label">Pretraga</string>
   <string name="searched_list">Pretražena lista</string>
   <string name="choose_file">Odaberite datoteku sadržaja (*.zim)</string>

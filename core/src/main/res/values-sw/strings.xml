@@ -28,7 +28,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Hifadhi midia kama…</string>
   <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
-  <string name="save_media_saved">Imehifadhi maudhui kama %s kwenye Vipakuliwa/org\n.kiwix…/</string>
+  <string name="save_media_saved">Maudhui yamehifadhiwa katika %s</string>
   <string name="search_label">Tafuta</string>
   <string name="searched_list">Orodha iliyotafutwa</string>
   <string name="choose_file">Chagua Faili ya Maudhui (*.zim)</string>

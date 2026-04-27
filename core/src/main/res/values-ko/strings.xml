@@ -14,6 +14,7 @@
 * Priviet
 * Rosalyn
 * Suleiman the Magnificent Television
+* Tensama0415
 * YeBoy371
 * Ykhwong
 * 그냥기여자
@@ -31,10 +32,12 @@
   <string name="menu_support_kiwix">Kiwix 지원하기</string>
   <string name="menu_support_kiwix_for_custom_apps">%s 지원하기</string>
   <string name="menu_about_app">%s 앱 정보</string>
+  <string name="about_app_page">앱 소개 페이지</string>
   <string name="menu_wifi_hotspot">와이파이 핫스팟</string>
   <string name="save_media">미디어 저장</string>
   <string name="save_media_error">미디어 저장 중, 오류가 발생하였습니다!</string>
-  <string name="save_media_saved">미디어를 %s(으)로 Downloads/org.kiwix…/에 저장했습니다</string>
+  <string name="invalid_media_source">선택한 미디어를 찾을 수 없습니다.</string>
+  <string name="save_media_saved">미디어를 %s(으)로 저장했습니다</string>
   <string name="search_label">검색</string>
   <string name="searched_list">검색 목록</string>
   <string name="more_options">더 많은 옵션</string>
@@ -324,7 +327,7 @@
   <string name="delete_selected_bookmarks">선택한 북마크를 지울까요?</string>
   <string name="import_bookmarks_dialog_title">북마크를 가져올까요?</string>
   <string name="export_all_bookmarks_dialog_title">모든 북마크를 내보낼까요?</string>
-  <string name="export_all_bookmarks_dialog_message" fuzzy="true">내보내기를 하면 \n%s 폴더에 bookmark.xml 파일이 생성됩니다.</string>
+  <string name="export_all_bookmarks_dialog_message">내보내기를 하면 %s 폴더에 bookmark.xml 파일이 생성됩니다.</string>
   <string name="bookmark_imported_message">모든 북마크를 가져왔습니다.</string>
   <string name="error_invalid_bookmark_file">오류: 선택한 파일은 유효한 북마크 파일이 아닙니다.</string>
   <string name="send_report">진단 보고서 보내기</string>
@@ -344,8 +347,8 @@
   <string name="preparing_file_for_copy">복사/이동 준비 중</string>
   <string name="action_copy">복사</string>
   <string name="move">이동</string>
-  <string name="copying_zim_file" fuzzy="true">ZIM 파일을 복사하는 중 %s…</string>
-  <string name="moving_zim_file" fuzzy="true">ZIM 파일을 이동하는 중 %s…</string>
+  <string name="copying_zim_file">ZIM 파일을 복사하는 중 %s…</string>
+  <string name="moving_zim_file">ZIM 파일을 이동하는 중 %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix는 ZIM 파일을 자체 데이터 디렉터리에 위치할 것을 요구합니다.\n복사하거나 이동하시겠습니까?</string>
   <string name="copy_file_error_message">ZIM 파일 복사 오류: %s.</string>
   <string name="verify_zim_chunk_dialog_title">주의하세요: 모든 ZIM 청크가 제대로 이동/복사되었는지 확인하세요!</string>

@@ -23,7 +23,7 @@
 * محمد أحمد عبد الفتاح
 -->
 <resources>
-  <string name="menu_help">المساعدة</string>
+  <string name="menu_help">مساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">الإعدادات</string>
   <string name="menu_search_in_text">البحث في الصفحة</string>
@@ -40,7 +40,8 @@
   <string name="menu_wifi_hotspot">كتب المضيف</string>
   <string name="save_media">حفظ الوسائط</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
-  <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
+  <string name="invalid_media_source">لم يتم العثور على الوسائط المحددة.</string>
+  <string name="save_media_saved">تم حفظ الوسائط في %s</string>
   <string name="search_label">البحث</string>
   <string name="searched_list">قائمة مشتركة</string>
   <string name="more_options">مزيد من الخيارات</string>
@@ -117,6 +118,9 @@
   <string name="pref_clear_all_bookmarks_title">حذف العلامات المرجعية</string>
   <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>
   <string name="share">مشاركة</string>
+  <string name="share_article">شارك المقال</string>
+  <string name="unable_to_share_article">تعذر مشاركة المقال</string>
+  <string name="please_wait_for_page_to_load">يرجى الانتظار حتى يتم تحميل الصفحة بالكامل</string>
   <string name="selected_file_cab_app_chooser_title">مشاركة ملفات ZIM مع:</string>
   <string name="delete">حذف</string>
   <string name="cancel">إلغاء</string>
@@ -329,7 +333,7 @@
   <string name="delete_selected_bookmarks">حذف علامات مرجعية محددة؟</string>
   <string name="import_bookmarks_dialog_title">استيراد الإشارات المرجعية؟</string>
   <string name="export_all_bookmarks_dialog_title">تصدير كافة الإشارات المرجعية؟</string>
-  <string name="export_all_bookmarks_dialog_message" fuzzy="true">سيؤدي التصدير إلى إنشاء ملف bookmark.xml في المجلد \n%s.</string>
+  <string name="export_all_bookmarks_dialog_message">سيؤدي التصدير إلى إنشاء ملف bookmark.xml في مجلد \n%s .</string>
   <string name="bookmark_imported_message">تم استيراد كافة الإشارات المرجعية.</string>
   <string name="error_invalid_bookmark_file">خطأ: الملف المحدد ليس ملف إشارة مرجعية صالحًا.</string>
   <string name="send_report">إرسال تقرير التشخيص</string>

@@ -46,7 +46,7 @@
   <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Guardar medios</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
-  <string name="save_media_saved">Medios guardados en %s en Descargas/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Medios guardados en %s en Descargas/org.kiwix…/</string>
   <string name="search_label">Buscar</string>
   <string name="searched_list">Lista buscada</string>
   <string name="more_options">Más opciones</string>

@@ -15,4 +15,10 @@
   <string name="swipe_down_to_scan_storage">مرر لأسفل لمسح جهازك للبحث عن كتب جديدة…</string>
   <string name="auto_detect_books">الكشف التلقائي عن كتبك</string>
   <string name="auto_detect_books_description">عند التشغيل الأول، سيُطلب منك تمكين التطبيق من فحص مساحة التخزين لديك. إذا سمحت بذلك، فسنكتشف ملفات ZIM تلقائيًا دون الحاجة إلى إضافتها يدويًا.</string>
+  <string name="select_category">اختر الفئة</string>
+  <string name="no_category_available">لا توجد فئات متاحة</string>
+  <string name="your_selected_category">الفئة المختارة:</string>
+  <string name="other_categories">فئات أخرى:</string>
+  <string name="all_categories">جميع الفئات</string>
+  <string name="select_category_content_description">سيؤدي اختيار هذه الفئة إلى إعطاء الأولوية لعرض الكتب القابلة للتنزيل بتلك اللغة في الأعلى.</string>
 </resources>

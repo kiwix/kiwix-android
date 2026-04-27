@@ -3,6 +3,7 @@
 * Af420
 * Ahmed-Najib-Biabani-Ibrahimkhel
 * Amjad Khan
+* MohitMali
 * شاه زمان پټان
 -->
 <resources>
@@ -23,7 +24,7 @@
   <string name="menu_wifi_hotspot">وای‌فای هاټسپاټ</string>
   <string name="save_media">رسنۍ خوندي‌کول</string>
   <string name="save_media_error">د رسنۍ خوندي‌کولو پرمهال يوه تېروتنه رامنځ ته شوه!</string>
-  <string name="save_media_saved">رسنۍ د %s په توگه Downloads/org.kiwix\nکې خوندي کړئ</string>
+  <string name="save_media_saved"> رسنۍ د %s په توگه خوندي شوي دي</string>
   <string name="search_label">پلټل</string>
   <string name="searched_list">پلټل‌شوی لړليک</string>
   <string name="more_options">نورې خوښنې</string>

@@ -2,6 +2,7 @@
 <!-- Authors:
 * Anzx
 * Macofe
+* MohitMali
 * Swathi
 * Vkashyap
 * ~aanzx
@@ -20,7 +21,7 @@
   <string name="menu_wifi_hotspot">ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್</string>
   <string name="save_media">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಿ</string>
   <string name="save_media_error">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಲು ಪ್ರಯತ್ನಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ!</string>
-  <string name="save_media_saved">ಮಾಧ್ಯಮವನ್ನು %s ನಂತೆ Downloads/org.kiwix…/ ಗೆ ಉಳಿಸಲಾಗಿದೆ</string>
+  <string name="save_media_saved">ಮಾಧ್ಯಮವನ್ನು %s ಗೆ ಉಳಿಸಲಾಗಿದೆ</string>
   <string name="search_label">ಹುಡುಕು</string>
   <string name="choose_file">ವಿಷಯದ ಕಡತವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ (′. zim′)</string>
   <string name="open_in_new_tab">ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ಕೊಂಡಿಯನ್ನು ತೆರೆಯಿರಿ?</string>

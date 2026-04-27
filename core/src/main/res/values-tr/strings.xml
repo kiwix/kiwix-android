@@ -42,7 +42,7 @@
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-  <string name="save_media_saved">Medya %s olarak Downloads/org.kiwix…/\'e kaydedildi</string>
+  <string name="save_media_saved">Medya %s olarak kaydedildi</string>
   <string name="search_label">Ara</string>
   <string name="searched_list">Aranan liste</string>
   <string name="more_options">Daha fazla seçenek</string>
@@ -331,7 +331,7 @@
   <string name="delete_selected_bookmarks">Seçilmiş Yer İşaretleri Silinsin mi?</string>
   <string name="import_bookmarks_dialog_title">Yer işaretlerini içeri aktar?</string>
   <string name="export_all_bookmarks_dialog_title">Tüm yer işaretlerini dışarı aktar?</string>
-  <string name="export_all_bookmarks_dialog_message" fuzzy="true">Dışa aktarmak, \n%s dosyasında bookmark.xml dosyası oluşturur.</string>
+  <string name="export_all_bookmarks_dialog_message">Dışa aktarmak, \n%s dosyasında bookmark.xml dosyası oluşturur.</string>
   <string name="bookmark_imported_message">Tüm yer işaretleri dışarı aktarıldı.</string>
   <string name="error_invalid_bookmark_file">Hata: Seçilen dosya geçerli bir yer işareti dosyası değildir.</string>
   <string name="send_report">Teşhis raporu gönder</string>

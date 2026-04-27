@@ -18,7 +18,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Go boloka Metswedi ya Tshedimosetso</string>
   <string name="save_media_error">Phoso e diragetse fa o ne o leka go boloka metswedi ya tshediosetso.</string>
-  <string name="save_media_saved">Metswedi ya tshedimosetso e bolokilwe gotwe %s ko Downloads/org.kiwix---/</string>
+  <string name="save_media_saved">Metswedi ya tshedimosetso e bolokilwe go %s</string>
   <string name="search_label">Senka</string>
   <string name="choose_file">Tlhopha Content File (*.zim)</string>
   <string name="open_in_new_tab">A o bula link mo tsebeng e ntšha?</string>

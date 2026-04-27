@@ -24,7 +24,7 @@
   <string name="menu_wifi_hotspot">Wifi hotspot</string>
   <string name="save_media">Sauke yanayin sadarwa</string>
   <string name="save_media_error">An samu kuskure lokacin da ake kokarin sauke yanayin sadarwan</string>
-  <string name="save_media_saved">An sauke sadarwa a yanayin  %s zuwa Downloads / org.kiwix…/</string>
+  <string name="save_media_saved">An adana kafofin watsa labarai a %s</string>
   <string name="search_label">Binciko</string>
   <string name="choose_file">Zaɓi Fayil ɗin Abun ciki (*.zim)</string>
   <string name="open_in_new_tab">Bude mahadar a sabon shafi?</string>

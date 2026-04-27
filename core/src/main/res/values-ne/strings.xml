@@ -3,6 +3,7 @@
 * Ganesh Paudel
 * Macofe
 * McDutchie
+* MohitMali
 * Nirajan pant
 * Surit
 * पर्वत सुबेदी
@@ -26,7 +27,7 @@
   <string name="menu_wifi_hotspot">वाइफाइ हटस्पट</string>
   <string name="save_media">मेडियालाई यसरूपमा सङ्ग्रह गर्नुहोस्…</string>
   <string name="save_media_error">मिडियालाई बचत गर्ने प्रयास गर्दा त्रुटि भयो!</string>
-  <string name="save_media_saved">Downloads/org.kiwix…/ मा %s को रूपमा मिडिया बचत गरियो।</string>
+  <string name="save_media_saved">%s मा मिडिया बचत गरियो</string>
   <string name="search_label">खोज्नुहोस्</string>
   <string name="searched_list">खोजिएको सूची</string>
   <string name="more_options">थप विकल्पहरू</string>

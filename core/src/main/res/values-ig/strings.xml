@@ -25,7 +25,7 @@
   <string name="menu_wifi_hotspot">Ebe Ọkụ Wi-Fi</string>
   <string name="save_media">chekwaa mgbasa ozi</string>
   <string name="save_media_error">Enwere mperi mgbe ị na-achọ ịchekwa mgbasa ozi!</string>
-  <string name="save_media_saved">Mgbasa ozi echekwara ka %s na nbudata/org.kiwix…/</string>
+  <string name="save_media_saved">Echekwara mgbasa ozi na %s</string>
   <string name="search_label">Chọọ</string>
   <string name="searched_list">\n Ndepụta achọtara</string>
   <string name="choose_file">Họrọ faịlụ ọdịnaya (*.zim)</string>

@@ -21,7 +21,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Fí media savù</string>
   <string name="save_media_error">É ko é téné savu madia iya ñyi wa</string>
-  <string name="save_media_saved">Savu media dabí %s ché ñwu ké téné Downloadu/org.Kiwix../</string>
+  <string name="save_media_saved">Media dabí ché %s</string>
   <string name="search_label">Tene</string>
   <string name="choose_file">Do wo chi enwn ki lugbo centent filu</string>
   <string name="open_in_new_tab">Bi linki etitó</string>

@@ -19,7 +19,7 @@
   <string name="menu_wifi_hotspot">ߥߝߌ ߛߐ߬ߘߐ߲߬ ߦߙߐ</string>
   <string name="save_media">ߡߍ߲ߞߊ߲ ߠߎ߬ ߟߊߡߙߊ߬</string>
   <string name="save_media_error">ߝߎ߬ߕߎ߲߬ߕߌ ߘߏ߫ ߓߘߊ߫ ߓߌ߬ߟߴߊ߬ ߘߐ߫ ߞߵߌ ߕߴߌ ߞߊߘߊ߲ ߞߊ߲߬ ߞߊ߬ ߞߟߋߞߟߋ ߟߊߞߎ߲߬ߘߎ߫߹</string>
-  <string name="save_media_saved">ߞߟߋߞߟߋ߫ ߟߊߞߎ߲߬ߘߎ߬ %s ߘߌ߫ Android\\media\\org.KIWIX…\\ ߞߊ߲߬</string>
+  <string name="save_media_saved">ߞߟߋߞߟߋ߫ ߟߊߞߎ߲߬ߘߎ߬ %s ߘߌ߫</string>
   <string name="search_label">ߢߌߣߌ߲ߠߌ߲</string>
   <string name="choose_file">ߞߣߐߘߐ߫ ߞߐߕߐ߮ ߓߊߕߐ߬ߡߐ߲߫  (* .zim)</string>
   <string name="open_in_new_tab">ߞߊ߬ ߛߘߌ߬ߜߋ߲ ߠߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ߫ ߟߊ߫؟</string>

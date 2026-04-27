@@ -22,7 +22,7 @@
   <string name="menu_wifi_hotspot">Wifi Hotspot</string>
   <string name="save_media">Fi Media pamọ</string>
   <string name="save_media_error">Aṣiṣe waye nigbati o n gbiyanju lati fipamọ media!</string>
-  <string name="save_media_saved">Media ti won fi pamo bi %s si Awọn igbasilẹ/org.kiwix…/</string>
+  <string name="save_media_saved">A ti fipamọ media si %s</string>
   <string name="search_label">Àwárí</string>
   <string name="choose_file">Yan Faili Akoonu kan (*.zim)</string>
   <string name="open_in_new_tab">Ṣii ọna asopọ ni ojuiwe titun?</string>

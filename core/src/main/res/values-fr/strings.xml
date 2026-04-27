@@ -5,6 +5,7 @@
 * Benoit74
 * BlueCamille
 * Boniface
+* Chpol
 * Constant
 * Derugon
 * Djiboun
@@ -48,10 +49,14 @@
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Soutenez %s</string>
   <string name="menu_about_app">À propos de l’application %s</string>
+  <string name="external_redirect_message">Vous allez maintenant être redirigé vers notre %s.</string>
+  <string name="support_donation_platform">plateforme de dons</string>
+  <string name="about_app_page">page à propos de l\'application</string>
   <string name="menu_wifi_hotspot">Point d’accès WiFi</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
-  <string name="save_media_saved">Média enregistré sous %s dans le dossier Downloads/org.kiwix…/</string>
+  <string name="invalid_media_source">Le média sélectionné est introuvable.</string>
+  <string name="save_media_saved">Média enregistré dans %s</string>
   <string name="search_label">Rechercher</string>
   <string name="searched_list">Liste de recherche</string>
   <string name="more_options">Plus d\'options</string>
@@ -128,6 +133,9 @@
   <string name="pref_clear_all_bookmarks_title">Supprimer les marque-pages</string>
   <string name="clear_all_history_dialog_title">Effacer tout l’historique ?</string>
   <string name="share">Partager</string>
+  <string name="share_article">Partager l’article</string>
+  <string name="unable_to_share_article">Impossible de partager l\'article</string>
+  <string name="please_wait_for_page_to_load">Veuillez attendre que la page soit entièrement chargée</string>
   <string name="selected_file_cab_app_chooser_title">Partager des fichiers ZIM avec :</string>
   <string name="delete">Supprimer</string>
   <string name="cancel">Annuler</string>
@@ -224,7 +232,7 @@
   <string name="downloading">Téléchargement</string>
   <string name="no_items_msg">Aucun élément disponible</string>
   <string name="crash_title">Eh bien… c’est embarrassant</string>
-  <string name="crash_description" fuzzy="true">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
+  <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant le rapport sur l\'incident ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
   <string name="crash_checkbox_exception">Détails du plantage</string>
@@ -346,7 +354,7 @@
   <string name="send_report">Envoyer un rapport de diagnostic</string>
   <string name="crash_checkbox_file_system">Détails du système de fichiers</string>
   <string name="diagnostic_report">Rapport de diagnostic</string>
-  <string name="diagnostic_report_message" fuzzy="true">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
+  <string name="diagnostic_report_message">Pour nous aider à identifier le problème, reproduisez d\'abord le dysfonctionnement, puis envoyez le rapport de diagnostic.</string>
   <string name="percentage">%d %%</string>
   <string name="pref_text_zoom_title">Zoom du texte</string>
   <string name="search_open_in_new_tab">Ouvrir dans un nouvel onglet</string>
@@ -363,6 +371,7 @@
   <string name="copying_zim_file">Copie du fichier ZIM %s…</string>
   <string name="moving_zim_file">Déplacement du fichier ZIM %s…</string>
   <string name="copy_move_files_dialog_description">Kiwix a besoin que le fichier ZIM soit dans son propre répertoire de données. Voulez-vous le copier ou le déplacer à cet endroit ?</string>
+  <string name="copy_move_multiple_files_dialog_description">Kiwix a besoin que les fichiers ZIM soient dans son répertoire de données.\nVoulez-vous les copier ou les déplacer à cet endroit ?</string>
   <string name="copy_file_error_message">Erreur lors de la copie du fichier ZIM : %s.</string>
   <string name="verify_zim_chunk_dialog_title">Soyez prudent : assurez-vous que tous les blocs ZIM ont été correctement déplacés/copiés !</string>
   <string name="verify_zim_chunks_dialog_message">Vous pouvez les vérifier dans le dossier « Android/media/org.kiwix…/ ».\nUne fois terminé, actualisez l\'écran de la bibliothèque en faisant glisser votre doigt vers le bas. Le fichier ZIM divisé apparaîtra alors dans votre bibliothèque.</string>
@@ -370,6 +379,8 @@
   <string name="copy_move_files_to_app_directory_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, notre application ne peut plus accéder directement aux fichiers stockés n’importe où sur votre appareil. Pour vous permettre de visualiser les fichiers sélectionnés, nous devons les déplacer ou les copier dans un dossier spécial dans le répertoire de notre application. Cela permettra d’accéder aux fichiers et de les ouvrir.</string>
   <string name="choose_storage_to_copy_move_zim_file">Choisissez l’espace de stockage pour copier/déplacer le fichier ZIM</string>
   <string name="move_file_error_message">Erreur lors du déplacement du fichier ZIM : %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nVoulez-vous continuer avec d\'autres fichiers ZIM ?</string>
+  <string name="your_selected_files_added_to_library">Votre sélection de fichiers ZIM a été ajoutée à la bibliothèque.</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier ZIM), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
   <string name="all_files_permission_needed">Tous les droits sur les fichiers sont nécessaires</string>
@@ -421,6 +432,11 @@
   <string name="downloading_state">Téléchargement en cours</string>
   <string name="download_failed_state">Échec</string>
   <string name="searchview_description_clear">Effacer la requête</string>
+  <string name="do_you_mean">Voulez-vous dire :</string>
+  <string name="suggested_search_icon_description">Sélectionnez cette suggestion pour l\'utiliser et corriger automatiquement votre recherche</string>
+  <string name="file_system_scan_dialog_title">Parcourir le stockage à la recherche de livres ?</string>
+  <string name="file_system_scan_dialog_message">Kiwix analysera votre périphérique de stockage et affichera les livres disponibles.</string>
+  <string name="download_timeout_resume_message">Le délai d\'attente du téléchargement en arrière-plan Android a expiré. Voulez-vous le relancer ?</string>
   <string name="validate_zim_files">Valider les fichiers ZIM</string>
   <string name="confirmation_validate_zim_files">Êtes-vous sûr de vouloir valider les fichiers ZIM suivants?\n\n%s</string>
   <string name="validating_zim_file">Validation des fichiers ZIM…</string>

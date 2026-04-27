@@ -17,7 +17,7 @@
   <string name="menu_wifi_hotspot">Istràngia libros</string>
   <string name="save_media">Sarba su mèdia</string>
   <string name="save_media_error">B\'est istadu un\'errore durante su tentativu de sarvamentu de su mèdia!</string>
-  <string name="save_media_saved">Mèdia sarvadu comente %s in Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Mèdia sarvada in %s</string>
   <string name="search_label">Chirca</string>
   <string name="choose_file">Ischerta unu documentu de cuntenutu ZIM (*.zim)</string>
   <string name="open_in_new_tab">Abèrrere su ligàmene in un’ischeda noa?</string>

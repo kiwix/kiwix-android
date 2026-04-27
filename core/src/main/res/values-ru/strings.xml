@@ -4,6 +4,7 @@
 * Avd2ev
 * Cabadeck
 * DDPAT
+* Danil Kostenkov
 * DevilishSkull
 * Diman Russkov
 * Dirruw'o
@@ -27,6 +28,7 @@
 * Razno0
 * Rivka Silinsky
 * Rofiatmustapha12
+* Shabe
 * Smavrina
 * Stjn
 * Teretalexev
@@ -45,12 +47,16 @@
   <string name="menu_support_kiwix">Поддержать Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Поддержка %s</string>
   <string name="menu_about_app">О приложении %s</string>
+  <string name="external_redirect_message">Сейчас вы будете перенаправлены на наш %s.</string>
+  <string name="support_donation_platform">платформа для пожертвований</string>
+  <string name="about_app_page">страница о приложении</string>
   <string name="menu_wifi_hotspot">Точка доступа WIFI</string>
   <string name="save_media">Сохранить Медиа-файлы</string>
   <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
-  <string name="save_media_saved">Медиафайл сохранён как %s в Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">Медиафайл сохранён в %s</string>
   <string name="search_label">Поиск</string>
   <string name="searched_list">Список поиска</string>
+  <string name="more_options">Дополнительные действия</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
   <string name="hotspot_service_channel_name">Сервисный канал Точки доступа</string>
@@ -78,8 +84,8 @@
   <string name="start_server_label">Запустить сервер</string>
   <string name="stop_server_label">Остановить сервер</string>
   <string name="error_server_already_running">Сервер уже работает. Пожалуйста, выключите его и повторите попытку.</string>
-  <string name="error_ip_address_not_found" fuzzy="true">Не удалось найти IP-адрес.</string>
-  <string name="server_started_message" fuzzy="true">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
+  <string name="error_ip_address_not_found">Не удалось найти IP-адрес.</string>
+  <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден. %s</string>
@@ -87,9 +93,15 @@
   <string name="zim_not_opened">Не удается открыть ZIM-файл</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом. %s</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Не удалось загрузить статью. Файл ZIM загружен некорректно.</string>
+  <string name="could_not_find_random_article">Не удалось найти случайную статью. Пожалуйста, попробуйте позже.</string>
   <string name="pref_display_title">Экран</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
+  <string name="pref_theme">Тема</string>
+  <string name="theme_system">Системная</string>
+  <string name="theme_light">Светлая</string>
+  <string name="theme_dark">Тёмная</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
   <string name="pref_back_to_top_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
   <string name="pref_language_title">Язык</string>
@@ -110,14 +122,17 @@
   <string name="pref_notes">Заметки</string>
   <string name="pref_permission">Разрешения</string>
   <string name="pref_import_bookmark_title">Импортировать закладки</string>
-  <string name="pref_import_bookmark_summary">Импортировать сохраненные закладки</string>
+  <string name="pref_import_bookmark_summary">Импортировать сохранённые закладки</string>
   <string name="pref_export_bookmark_title">Экспортировать закладки</string>
-  <string name="pref_export_bookmark_summary">Экспортировать все сохраненные закладки</string>
+  <string name="pref_export_bookmark_summary">Экспортировать все сохранённые закладки</string>
   <string name="export_bookmark_saved">Закладки экспортированы в файл %s</string>
   <string name="all_history_cleared">Вся история очищена</string>
   <string name="pref_clear_all_bookmarks_title">Очистить закладки</string>
   <string name="clear_all_history_dialog_title">Очистить всю историю?</string>
   <string name="share">Поделиться</string>
+  <string name="share_article">Поделиться статьёй</string>
+  <string name="unable_to_share_article">Не удаётся поделиться статьёй</string>
+  <string name="please_wait_for_page_to_load">Пожалуйста, подождите, пока страница полностью загрузится.</string>
   <string name="selected_file_cab_app_chooser_title">Поделиться файлами ZIM с:</string>
   <string name="delete">Удалить</string>
   <string name="cancel">Отменить</string>
@@ -152,6 +167,7 @@
   <string name="download_no_space">Недостаточно места для загрузки.</string>
   <string name="download">Скачать</string>
   <string name="download_notification_channel_name">Имя канала уведомлений о загрузке</string>
+  <string name="download_notification_channel_description">Загрузка файлов ZIM…</string>
   <string name="space_available">Доступно Места:</string>
   <string name="move_no_space">Недостаточно места для перемещения/копирования.</string>
   <string name="zim_simple">Простой</string>
@@ -186,6 +202,7 @@
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
+  <string name="change_storage">Изменить</string>
   <string name="tts_not_enabled">Функция чтения вслух для этого ZIM-файла не включена</string>
   <string name="texttospeech_initialization_failed">Не удалось выполнить инициализацию чтения вслух. Пожалуйста, попробуйте снова</string>
   <string name="texttospeech_error">Неожиданная ошибка при чтении вслух. Пожалуйста, попробуйте снова</string>
@@ -207,11 +224,12 @@
   <string name="external_link_popup_dialog_message">Вы открываете внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн.\nХотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивать</string>
   <string name="your_languages">Выбранные языки:</string>
+  <string name="your_language">Выбранный язык: %s</string>
   <string name="other_languages">Другие языки:</string>
   <string name="downloading">Скачивание</string>
   <string name="no_items_msg">Нет доступных элементов</string>
   <string name="crash_title">Хммм… Как неловко</string>
-  <string name="crash_description" fuzzy="true">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
+  <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
   <string name="crash_checkbox_language">Ваши Языковые Настройки</string>
   <string name="crash_checkbox_zimfiles">Список ваших ZIM-файлов</string>
   <string name="crash_checkbox_exception">Детали ошибки</string>
@@ -229,11 +247,16 @@
   <string name="welcome_to_the_family">Добро пожаловать в семью</string>
   <string name="save_books_offline">Сохранить книги в автономный режим</string>
   <string name="download_books_message">Скачивайте книги и читайте, где бы вы ни были.</string>
+  <string name="save_books_in_desired_storage">Сохраняйте книги в нужном месте хранения.</string>
+  <string name="storage_location_hint">В настройках вы можете выбрать предпочтительное место для хранения файлов ZIM: SD-карту или внутреннюю память устройства.</string>
   <string name="unable_to_add_to_bookmarks">Не удалось добавить в закладки</string>
   <string name="go_to_previous_page">Перейти к предыдущей странице</string>
   <string name="go_to_next_page">Перейти к следующей странице</string>
   <string name="table_of_contents">Содержание</string>
+  <string name="select_language">Выберите язык</string>
   <string name="save_languages">Сохранить языки</string>
+  <string name="all_languages">Все языки</string>
+  <string name="no_language_available">Нет доступных языков</string>
   <string name="expand">Развернуть</string>
   <string name="history">История</string>
   <string name="history_from_current_book">Посмотреть историю из всех книг</string>
@@ -322,13 +345,13 @@
   <string name="delete_selected_bookmarks">Удалить выбранные закладки?</string>
   <string name="import_bookmarks_dialog_title">Импортировать закладки?</string>
   <string name="export_all_bookmarks_dialog_title">Экспортировать все закладки?</string>
-  <string name="export_all_bookmarks_dialog_message" fuzzy="true">Экспорт создаст файл bookmark.xml в папке \n%s</string>
+  <string name="export_all_bookmarks_dialog_message">Экспорт создаст файл bookmark.xml в папке \n%s</string>
   <string name="bookmark_imported_message">Все закладки импортированы.</string>
   <string name="error_invalid_bookmark_file">Ошибка: Выбранный файл не является допустимым файлом закладок.</string>
   <string name="send_report">Отправить отчёт диагностики</string>
   <string name="crash_checkbox_file_system">Информация о файловой системе</string>
   <string name="diagnostic_report">Отчёт диагностики</string>
-  <string name="diagnostic_report_message" fuzzy="true">Пожалуйста, пришлите нам всю информацию ниже, чтобы мы смогли обнаружить проблему</string>
+  <string name="diagnostic_report_message">Чтобы помочь нам обнаружить проблему, сначала воспроизведите её, а затем отправьте диагностический отчёт.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Масштаб текста</string>
   <string name="search_open_in_new_tab">Открыть в новой вкладке</string>
@@ -345,11 +368,16 @@
   <string name="copying_zim_file">Копирование ZIM-файла %s…</string>
   <string name="moving_zim_file">Перемещение ZIM-файла %s…</string>
   <string name="copy_move_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных.\nВы хотите скопировать или переместить его туда?</string>
+  <string name="copy_move_multiple_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных.\nВы хотите скопировать или переместить его туда?</string>
   <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Будьте осторожны: убедитесь, что все фрагменты ZIM были корректно перемещены/скопированы!</string>
+  <string name="verify_zim_chunks_dialog_message">Вы можете проверить их в папке «Android/media/org.kiwix…/». После этого обновите экран библиотеки, проведя пальцем вниз. Разделённый ZIM-файл появится в вашей библиотеке.</string>
   <string name="why_copy_move_files_to_app_directory">Зачем копировать / перемещать файлы в общий каталог приложения?</string>
   <string name="copy_move_files_to_app_directory_description">Из-за политики Google Play на Android 11 и выше наше приложение больше не может напрямую обращаться к файлам, хранящимся в другом месте на вашем устройстве. Чтобы вы могли просматривать выбранные файлы, нам необходимо переместить или скопировать их в специальную папку в каталоге нашего приложения. Это позволяет нам получать доступ к файлам и открывать их.</string>
   <string name="choose_storage_to_copy_move_zim_file">Выберите хранилище для копирования/перемещения ZIM-файла</string>
   <string name="move_file_error_message">Ошибка при перемещении ZIM-файла: %s.</string>
+  <string name="file_copy_move_error_dialog_message">%s \nХотите продолжить с другими ZIM-файлами?</string>
+  <string name="your_selected_files_added_to_library">Выбранные ZIM-файлы добавлены в библиотеку.</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
   <string name="update_content_description">Чтобы обновить содержимое (ZIM-файл), вам необходимо загрузить полную версию этого самого содержимого. Вы можете сделать это через раздел загрузки.</string>
   <string name="all_files_permission_needed">Требуются разрешения для всех файлов</string>
@@ -360,6 +388,9 @@
   <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
   <string name="allow">Разрешить</string>
   <string name="swipe_down_for_library">Проведите пальцем вниз, чтобы открыть библиотеку</string>
+  <string name="reaching_remote_library">Как получить доступ к удалённой библиотеки</string>
+  <string name="parsing_remote_library">Анализ удалённой библиотеки</string>
+  <string name="starting_downloading_remote_library">Начало загрузки онлайн-библиотеки</string>
   <string name="downloading_library">Загрузка библиотеки \n %s</string>
   <string name="no_notes">Нет заметок</string>
   <string name="notes_from_all_books">Просмотр заметок из всех книг</string>
@@ -394,4 +425,17 @@
   <string name="donation_dialog_title">Пожертвуйте сегодня</string>
   <string name="donation_dialog_description">%s нуждается в вашей помощи.</string>
   <string name="make_donation">Сделать пожертвование</string>
+  <string name="resuming_state">Возобновление</string>
+  <string name="downloading_state">Скачивание</string>
+  <string name="download_failed_state">Не удалось</string>
+  <string name="searchview_description_clear">Очистить запрос</string>
+  <string name="do_you_mean">Вы имели в виду:</string>
+  <string name="suggested_search_icon_description">Нажмите, чтобы воспользоваться этим предложением и автоматически исправить поисковый запрос.</string>
+  <string name="file_system_scan_dialog_title">Сканировать хранилище на наличие книг?</string>
+  <string name="file_system_scan_dialog_message">Kiwix просканирует память вашего устройства и покажет здесь список доступных книг.</string>
+  <string name="download_timeout_resume_message">Фоновая загрузка Android завершилась по истечении времени ожидания. Хотите возобновить загрузку?</string>
+  <string name="validate_zim_files">Проверить файлы ZIM</string>
+  <string name="confirmation_validate_zim_files">Вы уверены, что хотите проверить следующие ZIM-файлы?\n\n %s</string>
+  <string name="validating_zim_file">Проверка ZIM-файла…</string>
+  <string name="validating_zim_files">Проверка ZIM-файлов…</string>
 </resources>

@@ -5,6 +5,7 @@
 * Bodhisattwa
 * Borhan
 * Greatder
+* MohitMali
 * San1joy23
 * Sohom Datta
 * Synopses4252
@@ -29,7 +30,7 @@
   <string name="menu_wifi_hotspot">ওয়াইফাই হটস্পট</string>
   <string name="save_media">মিডিয়া সংরক্ষণ করুন</string>
   <string name="save_media_error">মিডিয়া সংরক্ষণের চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
-  <string name="save_media_saved">%s হিসাবে Downloads/org.kiwix…/ এ মিডিয়া সংরক্ষিত হয়েছে</string>
+  <string name="save_media_saved">%s-এ মিডিয়া সংরক্ষণ করা হয়েছে</string>
   <string name="search_label">অনুসন্ধান</string>
   <string name="searched_list">অনুসন্ধান করা তালিকা</string>
   <string name="more_options">আরো বিকল্প</string>

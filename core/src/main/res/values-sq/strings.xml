@@ -2,6 +2,7 @@
 <!-- Authors:
 * Besnik b
 * Fitoschido
+* MohitMali
 * Xhulianoo
 -->
 <resources>
@@ -19,7 +20,7 @@
   <string name="menu_wifi_hotspot">Hotspot WiFi</string>
   <string name="save_media">Ruajë Median</string>
   <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
-  <string name="save_media_saved">Media u ruajt te Android/media/org.kiwix…/ si %s</string>
+  <string name="save_media_saved">Media u ruajt si %s</string>
   <string name="search_label">Kērko</string>
   <string name="searched_list">Lista e kërkuar</string>
   <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>

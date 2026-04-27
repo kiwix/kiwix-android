@@ -31,7 +31,7 @@
   <string name="menu_wifi_hotspot">वाईफाई हॉटस्पॉट</string>
   <string name="save_media">मीडिया सहेजें</string>
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
-  <string name="save_media_saved">मीडिया को %s के रूप में  Downloads/org.kiwix/ में सहेजा गया</string>
+  <string name="save_media_saved">%s में मीडिया सहेजा गया</string>
   <string name="search_label">खोजें</string>
   <string name="searched_list">खोजी गई सूची</string>
   <string name="more_options">अधिक विकल्प</string>

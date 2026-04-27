@@ -19,7 +19,7 @@
   <string name="menu_wifi_hotspot">Пункт доступу WiFi</string>
   <string name="save_media">Захаваць мэдыя</string>
   <string name="save_media_error">Узьнікла памылка пры захаваньні мэдыяфайлу!</string>
-  <string name="save_media_saved">Мэдыя-файл захаваны як %s у Downloads/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Мэдыя-файл захаваны як %s у Downloads/org.kiwix…/</string>
   <string name="search_label">Пошук</string>
   <string name="searched_list">Пошукавы сьпіс</string>
   <string name="choose_file">Абярыце файл зьместу (*.zim)</string>
@@ -42,7 +42,6 @@
   <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Вэрсія</string>
-  <string name="pref_theme_summary">Паказваць артыкулы ў інвэртаваных колерах</string>
   <string name="pref_back_to_top">Вярнуцца ўгару</string>
   <string name="pref_back_to_top_summary">Паказваць кнопку ў канцы старонкі для пракручваньня ўверх</string>
   <string name="pref_language_title">Мова</string>
@@ -85,8 +84,8 @@
   <string name="help_4">Хоць Kiwix пачаткова быў распрацаваны для афляйнавай падтрымкі Вікіпэдыі, але можа чытаць іншыя віды зьместу.</string>
   <string name="help_5">Дзе зьмест?</string>
   <string name="delete_zim_failed">Выбачайце, мы не змаглі выдаліць некаторыя файлы. Паспрабуйце скарыстацца файлавым кіраўніком.</string>
-  <string name="confirm_stop_download_title">Спыніць загрузку?</string>
-  <string name="confirm_stop_download_msg">Вы ўпэўненыя, што хочаце спыніць гэтую загрузку?</string>
+  <string name="confirm_stop_download_title">Спыніць сьцягваньне?</string>
+  <string name="confirm_stop_download_msg">Вы ўпэўненыя, што хочаце спыніць гэтае сьцягваньне?</string>
   <string name="texttospeech_initialization_failed">Няўдалая спроба ініцыялізацыі Чытаньня ўслых. Калі ласка, паспрабуйце яшчэ раз</string>
   <string name="time_left">засталося</string>
   <string name="time_today">Сёньня</string>
