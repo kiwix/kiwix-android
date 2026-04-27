@@ -353,7 +353,7 @@ class PageScreenTest {
       onItemClick = { clickedPage = it }
     )
     composeTestRule
-      .onNodeWithContentDescription("${pages[0].title}0")
+      .onNodeWithTag(PAGE_ITEM_TESTING_TAG)
       .performClick()
     assertEquals("Clicked page should match the expected page", pages[0], clickedPage)
   }
@@ -402,7 +402,7 @@ class PageScreenTest {
 
   @Test
   fun dateItem_displaysFormattedDateLabel() {
-    val dateItem = HistoryListItem.DateItem("15 Jan 2026")
+    val dateItem = HistoryListItem.DateItem("01 Jan 2000")
     val page = TestPage(title = "History Page", id = 1L)
     val state = TestPageStateWithDateItems(
       pageItems = listOf(page),
@@ -410,7 +410,7 @@ class PageScreenTest {
     )
     renderPageScreen(state = state)
     composeTestRule
-      .onNodeWithText("15 Jan 2026")
+      .onNodeWithText("01 Jan 2000")
       .assertIsDisplayed()
   }
 
