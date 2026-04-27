@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import plugin.KiwixConfigurationPlugin
 
 buildscript {
@@ -20,6 +21,11 @@ android {
   buildTypes {
     getByName("release") {
       isMinifyEnabled = false
+    }
+  }
+  sourceSets {
+    getByName("androidTest") {
+      assets.srcDirs(File(projectDir, "schemas"))
     }
   }
 }
@@ -60,4 +66,11 @@ dependencies {
   implementation(Libs.webkit)
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
+  androidTestImplementation(Libs.roomTesting)
+}
+
+configure<KaptExtension> {
+  arguments {
+    arg("room.schemaLocation", "$projectDir/schemas")
+  }
 }

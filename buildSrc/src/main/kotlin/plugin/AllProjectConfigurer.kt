@@ -237,6 +237,7 @@ class AllProjectConfigurer {
       implementation(Libs.fetchOkhttp)
       implementation(Libs.androidx_activity)
       androidTestImplementation(Libs.leakcanary_android_instrumentation)
+      androidTestUtil(Libs.orchestrator)
 
       // compose
       implementation(Libs.COMPOSE_MATERIAL3)
