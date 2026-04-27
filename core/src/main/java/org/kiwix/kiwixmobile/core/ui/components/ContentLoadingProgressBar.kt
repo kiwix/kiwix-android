@@ -27,12 +27,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
+
+const val CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG = "contentLoadingProgressBar"
 
 @Composable
 fun ContentLoadingProgressBar(
@@ -46,7 +50,7 @@ fun ContentLoadingProgressBar(
   when (progressBarStyle) {
     ProgressBarStyle.CIRCLE -> {
       CircularProgressIndicator(
-        modifier = modifier,
+        modifier = modifier.semantics { testTag = CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG },
         color = progressBarColor,
         trackColor = progressBarTrackColor,
         strokeWidth = circularProgressBarStockWidth
@@ -55,7 +59,9 @@ fun ContentLoadingProgressBar(
 
     ProgressBarStyle.HORIZONTAL -> {
       LinearProgressIndicator(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+          .fillMaxWidth()
+          .semantics { testTag = CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG },
         progress = { progress.toFloat() / HUNDERED },
         color = progressBarColor,
         trackColor = progressBarTrackColor,

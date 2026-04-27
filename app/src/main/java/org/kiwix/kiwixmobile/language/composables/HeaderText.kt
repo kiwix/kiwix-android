@@ -25,8 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
+
+const val LANGUAGE_HEADER_TESTING_TAG = "languageHeaderTestingTag"
 
 @Composable
 fun HeaderText(
@@ -45,7 +49,8 @@ fun HeaderText(
       else -> ""
     },
     modifier = modifier
-      .padding(horizontal = ComposeDimens.SIXTEEN_DP, vertical = ComposeDimens.EIGHT_DP),
+      .padding(horizontal = ComposeDimens.SIXTEEN_DP, vertical = ComposeDimens.EIGHT_DP)
+      .semantics { testTag = "$LANGUAGE_HEADER_TESTING_TAG${item.id}" },
     fontSize = ComposeDimens.FOURTEEN_SP,
     style = MaterialTheme.typography.headlineMedium,
     color = MaterialTheme.colorScheme.onSurfaceVariant
