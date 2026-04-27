@@ -17,15 +17,12 @@
  */
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
-import android.Manifest
-import android.annotation.SuppressLint
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -43,13 +40,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
@@ -81,7 +80,7 @@ const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 @Suppress("UnusedPrivateProperty")
 private const val ZERO = 0
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Suppress("MagicNumber", "LongMethod")
 @Composable
 fun OnlineLibraryRoute(
@@ -91,40 +90,27 @@ fun OnlineLibraryRoute(
 ) {
   val context = LocalContext.current
   val activity = context as KiwixMainActivity
-
-  val zimManageViewModel: ZimManageViewModel =
-    viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
   val onlineLibraryViewModel: OnlineLibraryViewModel =
     viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
-
+  val uiState by onlineLibraryViewModel.uiState.collectAsState()
+  val notificationPermission = if (onlineLibraryViewModel.isAndroid13OrAbove) {
+    rememberPermissionState(POST_NOTIFICATIONS) {
+      onlineLibraryViewModel.onNotificationPermissionResult(it, activity)
+    }
+  } else {
+    null
+  }
+  val writePermissionState = rememberPermissionState(WRITE_EXTERNAL_STORAGE) {
+    onlineLibraryViewModel.onStoragePermissionResult(it, activity)
+  }
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
   val lazyListState = rememberLazyListState()
 
   var isSearchActive by remember { mutableStateOf(false) }
-  var searchText by remember { mutableStateOf("") }
-  var isLoadingMoreItem by remember { mutableStateOf(false) }
-  var scanningProgressItem by remember { mutableStateOf(Pair(false, "")) }
-  var noContentViewItem by remember { mutableStateOf(Pair("", false)) }
-  var isRefreshing by remember { mutableStateOf(false) }
   var onlineLibraryList by remember { mutableStateOf<List<LibraryListItem>?>(null) }
 
-  val storagePermissionLauncher = rememberStoragePermissionLauncher(
-    onlineLibraryViewModel,
-    activity,
-    context
-  )
-
-  val notificationPermissionLauncher = rememberNotificationPermissionLauncher(
-    onlineLibraryViewModel,
-    activity,
-    context
-  )
-
   val libraryItems by onlineLibraryViewModel.libraryItems.collectAsState()
-  val onlineLibraryDownloading by onlineLibraryViewModel.onlineLibraryDownloading.collectAsState()
-  val scanningProgress by onlineLibraryViewModel.scanningProgress.collectAsState()
-  val noContentState by onlineLibraryViewModel.noContentState.collectAsState()
 
   // Collect UI events
   HandleUiEvents(
@@ -134,7 +120,9 @@ fun OnlineLibraryRoute(
     activity = activity,
     scope = scope,
     context = context,
-    lazyListState = lazyListState
+    lazyListState = lazyListState,
+    notificationPermission = notificationPermission,
+    writePermissionState = writePermissionState
   )
 
   // Handle side-effects (Network, Wifi, Progress, etc)
@@ -145,44 +133,25 @@ fun OnlineLibraryRoute(
     onRefreshingChanged = { isRefreshing = it }
   )
 
-  LaunchedEffect(noContentState) {
-    if (noContentState.first.isNotEmpty() || noContentState.second) {
-      noContentViewItem = noContentState
-    }
-  }
-
   ObserveLibraryItems(
     libraryItems = libraryItems,
-    context = context,
-    activity = activity,
     onListChanged = { onlineLibraryList = it },
-    onNoContentChanged = { noContentViewItem = it },
     onLoadingMoreChanged = { isLoadingMoreItem = it }
   )
 
-  ObserveDownloadingState(
-    onlineLibraryDownloading = onlineLibraryDownloading,
-    onRefreshingChanged = { isRefreshing = it },
-    onScanningProgressChanged = { scanningProgressItem = it },
-    onLoadingMoreChanged = { isLoadingMoreItem = it },
-    context = context
-  )
+  // ObserveDownloadingState(
+  //   onlineLibraryDownloading = onlineLibraryDownloading,
+  //   onRefreshingChanged = { isRefreshing = it },
+  //   onScanningProgressChanged = { scanningProgressItem = it },
+  //   onLoadingMoreChanged = { isLoadingMoreItem = it },
+  //   context = context
+  // )
 
   LaunchedEffect(Unit) {
     onlineLibraryViewModel.updateOnlineLibraryFilters(
       onlineLibraryViewModel.getOnlineLibraryRequest()
     )
     scanningProgressItem = false to context.getString(string.reaching_remote_library)
-    onlineLibraryViewModel.onlineBooksSearchedQuery.value
-      ?.takeIf { it.isNotEmpty() }
-      ?.let { query ->
-        isSearchActive = true
-        searchText = query
-        onlineLibraryViewModel.requestFiltering.tryEmit(query)
-      } ?: run {
-      onlineLibraryViewModel.onlineBooksSearchedQuery.value = ""
-      onlineLibraryViewModel.requestFiltering.tryEmit("")
-    }
   }
 
   val actionMenuItems = buildActionMenuItems(
@@ -193,83 +162,14 @@ fun OnlineLibraryRoute(
   )
 
   OnlineLibraryScreen(
-    state = OnlineLibraryScreenState(
-      onlineLibraryList = onlineLibraryList,
-      isRefreshing = isRefreshing,
-      snackBarHostState = snackbarHostState,
-      onRefresh = {
-        scope.launch {
-          onlineLibraryViewModel.refreshFragment(
-            activity,
-            true,
-            context,
-            onlineLibraryList.isNullOrEmpty(),
-            { isRefreshing = it }
-          )
-        }
-      },
-      scanningProgressItem = scanningProgressItem,
-      noContentViewItem = noContentViewItem,
-      bookUtils = onlineLibraryViewModel.bookUtils,
-      availableSpaceCalculator = onlineLibraryViewModel.availableSpaceCalculator,
-      onBookItemClick = {
-        onlineLibraryViewModel.onBookItemClick(
-          activity,
-          it,
-          context,
-          onRequestStoragePermission = {
-            storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          },
-          onRequestNotificationPermission = {
-            @SuppressLint("InlinedApi")
-            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-          },
-          onShowStorageSelectDialog = {
-            onlineLibraryViewModel.showStorageSelectDialog(activity)
-          }
-        )
-      },
-      onPauseResumeButtonClick = { item ->
-        if (!NetworkUtils.isNetworkAvailable(activity)) {
-          onlineLibraryViewModel.emitNoInternetSnackbar(context)
-          return@OnlineLibraryScreenState
-        }
-        onlineLibraryViewModel.pauseResumeDownload(item)
-      },
-      onStopButtonClick = { item ->
-        onStopButtonClick(onlineLibraryViewModel, item, activity, context)
-      },
-      onAutomaticRetry = { item ->
-        onlineLibraryViewModel.downloader.retryDownload(item.downloadId)
-      },
-      isSearchActive = isSearchActive,
-      searchText = searchText,
-      searchValueChangedListener = {
-        if (it.isNotEmpty()) {
-          onlineLibraryViewModel.onlineBooksSearchedQuery.value = it
-        }
-        searchText = it
-        onlineLibraryViewModel.requestFiltering.tryEmit(it.trim())
-      },
-      clearSearchButtonClickListener = {
-        searchText = ""
-        onlineLibraryViewModel.onlineBooksSearchedQuery.value = null
-        onlineLibraryViewModel.requestFiltering.tryEmit("")
-      },
-      onLoadMore = { count ->
-        onlineLibraryViewModel.handleLoadMore(zimManageViewModel, count)
-      },
-      isLoadingMoreItem = isLoadingMoreItem
-    ),
+    uiState = uiState,
+    onlineLibraryViewModel = onlineLibraryViewModel,
     actionMenuItems = actionMenuItems,
     listState = lazyListState,
     bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
     onUserBackPressed = {
-      handleBackPress(activity, isSearchActive) {
-        isSearchActive = false
-        searchText = ""
-        onlineLibraryViewModel.onlineBooksSearchedQuery.value = null
-        onlineLibraryViewModel.requestFiltering.tryEmit("")
+      handleBackPress(activity, uiState.isSearchActive) {
+        onlineLibraryViewModel.closeSearchView()
       }
     },
     navHostController = navController,
@@ -282,11 +182,8 @@ fun OnlineLibraryRoute(
         },
         contentDescription = string.open_drawer,
         onClick = {
-          if (isSearchActive) {
-            isSearchActive = false
-            searchText = ""
-            onlineLibraryViewModel.onlineBooksSearchedQuery.value = null
-            onlineLibraryViewModel.requestFiltering.tryEmit("")
+          if (uiState.isSearchActive) {
+            onlineLibraryViewModel.closeSearchView()
             activity.onBackPressedDispatcher.onBackPressed()
           } else {
             if (activity.navigationDrawerIsOpen()) {
@@ -301,6 +198,7 @@ fun OnlineLibraryRoute(
   )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun HandleUiEvents(
   viewModel: OnlineLibraryViewModel,
@@ -309,7 +207,9 @@ private fun HandleUiEvents(
   activity: KiwixMainActivity,
   scope: CoroutineScope,
   context: Context,
-  lazyListState: LazyListState
+  lazyListState: LazyListState,
+  notificationPermission: PermissionState?,
+  writePermissionState: PermissionState
 ) {
   LaunchedEffect(Unit) {
     viewModel.uiEvents.collect { event ->
@@ -350,7 +250,7 @@ private fun HandleUiEvents(
         }
 
         is OnlineLibraryViewModel.UiEvent.RequestPermission -> {
-          // Handled via launchers
+          handlePermissionEvents(notificationPermission, event.permission, writePermissionState)
         }
 
         is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
@@ -370,6 +270,18 @@ private fun HandleUiEvents(
   }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
+private fun handlePermissionEvents(
+  notificationPermission: PermissionState?,
+  permission: String,
+  writePermissionState: PermissionState
+) {
+  when (permission) {
+    POST_NOTIFICATIONS -> notificationPermission?.launchPermissionRequest()
+    WRITE_EXTERNAL_STORAGE -> writePermissionState.launchPermissionRequest()
+  }
+}
+
 @Composable
 @Suppress("LongMethod", "ComplexMethod")
 private fun HandleEffects(
@@ -379,12 +291,10 @@ private fun HandleEffects(
   onRefreshingChanged: (Boolean) -> Unit
 ) {
   val context = LocalContext.current
-  val activity = context as KiwixMainActivity
   val scope = rememberCoroutineScope()
 
   // Observe LiveData from ZimManageViewModel using observeAsState (Compose-LiveData bridge)
   val shouldShowWifiOnly by onlineLibraryViewModel.shouldShowWifiOnlyDialog.observeAsState(false)
-  val libraryListIsRefreshing by onlineLibraryViewModel.libraryListIsRefreshing.observeAsState(false)
   val networkState by onlineLibraryViewModel.networkStates.observeAsState()
 
   // Handle wifi-only dialog
@@ -414,21 +324,11 @@ private fun HandleEffects(
     }
   }
 
-  // Handle refreshing state
-  LaunchedEffect(libraryListIsRefreshing) {
-    onRefreshingChanged(libraryListIsRefreshing)
-  }
-
   // Handle network state changes
   LaunchedEffect(networkState) {
     when (networkState) {
       NetworkState.CONNECTED -> {
-        onlineLibraryViewModel.handleNetworkConnected(
-          context,
-          activity,
-          isListEmpty,
-          onRefreshingChanged
-        )
+        onlineLibraryViewModel.handleNetworkConnected()
       }
 
       NetworkState.NOT_CONNECTED -> {
@@ -446,69 +346,13 @@ private fun HandleEffects(
 }
 
 @Composable
-private fun rememberStoragePermissionLauncher(
-  onlineLibraryViewModel: OnlineLibraryViewModel,
-  activity: KiwixMainActivity,
-  context: android.content.Context
-): ActivityResultLauncher<String> =
-  rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-    if (isGranted) {
-      onlineLibraryViewModel.checkSpaceAndDownload(context, activity) {
-        onlineLibraryViewModel.showStorageSelectDialog(activity)
-      }
-    } else {
-      onlineLibraryViewModel.handleStoragePermissionRationale(activity) {
-        ActivityCompat.requestPermissions(
-          activity,
-          arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-          org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-        )
-      }
-    }
-  }
-
-@Composable
-private fun rememberNotificationPermissionLauncher(
-  onlineLibraryViewModel: OnlineLibraryViewModel,
-  activity: KiwixMainActivity,
-  context: android.content.Context
-): ActivityResultLauncher<String> =
-  rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-    if (isGranted) {
-      onlineLibraryViewModel.downloadBookItem?.let {
-        kotlinx.coroutines.MainScope().launch {
-          if (activity.getStorageDeviceList().isNotEmpty()) {
-            onlineLibraryViewModel.checkSpaceAndDownload(context, activity) {
-              onlineLibraryViewModel.showStorageSelectDialog(activity)
-            }
-          }
-        }
-      }
-    }
-  }
-
-@Composable
 private fun ObserveLibraryItems(
   libraryItems: ZimManageViewModel.LibraryListItemWrapper,
-  context: android.content.Context,
-  activity: KiwixMainActivity,
   onListChanged: (List<LibraryListItem>?) -> Unit,
-  onNoContentChanged: (Pair<String, Boolean>) -> Unit,
   onLoadingMoreChanged: (Boolean) -> Unit
 ) {
   LaunchedEffect(libraryItems) {
     onListChanged(libraryItems.items)
-    if (libraryItems.items.isEmpty()) {
-      onNoContentChanged(
-        if (!NetworkUtils.isNetworkAvailable(activity)) {
-          context.getString(string.no_network_connection)
-        } else {
-          context.getString(string.no_items_msg)
-        } to true
-      )
-    } else {
-      onNoContentChanged("" to false)
-    }
     onLoadingMoreChanged(false)
   }
 }
@@ -531,37 +375,6 @@ private fun ObserveDownloadingState(
       onScanningProgressChanged(false to context.getString(string.reaching_remote_library))
     }
     onLoadingMoreChanged(loadingMoreItem)
-  }
-}
-
-private fun onStopButtonClick(
-  onlineLibraryViewModel: OnlineLibraryViewModel,
-  item: LibraryListItem.LibraryDownloadItem,
-  activity: KiwixMainActivity,
-  context: android.content.Context
-) {
-  if (item.currentDownloadState == com.tonyodev.fetch2.Status.FAILED) {
-    when (item.downloadError) {
-      com.tonyodev.fetch2.Error.UNKNOWN_IO_ERROR,
-      com.tonyodev.fetch2.Error.CONNECTION_TIMED_OUT,
-      com.tonyodev.fetch2.Error.UNKNOWN -> {
-        if (!NetworkUtils.isNetworkAvailable(activity)) {
-          onlineLibraryViewModel.emitNoInternetSnackbar(context)
-        } else {
-          onlineLibraryViewModel.downloader.retryDownload(item.downloadId)
-        }
-      }
-
-      else -> {
-        onlineLibraryViewModel.emitDialog(KiwixDialog.YesNoDialog.StopDownload) {
-          onlineLibraryViewModel.deleteDownload(item)
-        }
-      }
-    }
-  } else {
-    onlineLibraryViewModel.emitDialog(KiwixDialog.YesNoDialog.StopDownload) {
-      onlineLibraryViewModel.deleteDownload(item)
-    }
   }
 }
 

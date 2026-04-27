@@ -18,16 +18,17 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
+import android.content.Context
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
-import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.core.utils.NINE
-import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.NINE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 class AppProgressListenerProvider(
-  private val onlineLibraryViewModel: OnlineLibraryViewModel
+  private val context: Context,
+  private val updateDownloadProgress: (String) -> Unit
 ) : OnlineLibraryProgressListener {
   override fun onProgress(bytesRead: Long, contentLength: Long) {
     val progress =
@@ -36,10 +37,10 @@ class AppProgressListenerProvider(
       } else {
         (bytesRead * NINE * HUNDERED / contentLength).coerceAtMost(HUNDERED.toLong())
       }
-    onlineLibraryViewModel.downloadProgress.postValue(
-      onlineLibraryViewModel.context.getString(
+    updateDownloadProgress(
+      context.getString(
         R.string.downloading_library,
-        onlineLibraryViewModel.context.getString(R.string.percentage, progress.toInt())
+        context.getString(R.string.percentage, progress.toInt())
       )
     )
   }

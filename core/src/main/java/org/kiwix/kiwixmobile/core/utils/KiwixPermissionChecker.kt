@@ -33,10 +33,13 @@ interface KiwixPermissionChecker {
   suspend fun isWriteExternalStoragePermissionRequired(): Boolean
 
   fun shouldShowRationale(activity: Activity, permission: String): Boolean
+  suspend fun hasNotificationPermission(): Boolean
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
   fun isAndroid13orAbove(): Boolean
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
   fun isAndroid8OrAbove(): Boolean
+
+  suspend fun isManageExternalStoragePermissionGranted(): Boolean
 }
