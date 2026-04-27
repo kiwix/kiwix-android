@@ -21,11 +21,13 @@ package org.kiwix.kiwixmobile.core.search
 import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.longClick
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertTrue
@@ -57,8 +59,6 @@ class SearchScreenUITest {
   fun setUp() {
     mockViewModel = mockk(relaxed = true)
   }
-
-  // ======== Helper Mock ========
 
   private fun mockSearchScreenContent(
     state: SearchScreenUiState = SearchScreenUiState(),
@@ -93,8 +93,6 @@ class SearchScreenUITest {
     onClick = onClick
   )
 
-  // ======== Search Field ========
-
   @Test
   fun searchScreen_whenScreenLaunched_searchFieldIsDisplayed() {
     mockSearchScreenContent()
@@ -102,8 +100,6 @@ class SearchScreenUITest {
       .onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
       .assertIsDisplayed()
   }
-
-  // ======== Search Results ========
 
   @Test
   fun searchScreen_whenSearchListIsEmpty_noResultViewIsDisplayed() {
@@ -177,8 +173,6 @@ class SearchScreenUITest {
     verify { mockViewModel.onItemLongClick(any()) }
   }
 
-  // ======== Open In New Tab ========
-
   @Test
   fun searchScreen_whenSearchItemDisplayed_openInNewTabIconIsVisible() {
     mockSearchScreenContent(
@@ -203,8 +197,6 @@ class SearchScreenUITest {
       .performClick()
     verify { mockViewModel.onNewTabIconClick(any()) }
   }
-
-  // ======== Spelling Corrections ========
 
   @Test
   fun searchScreen_whenSpellingCorrectionsAvailable_doYouMeanHeaderIsDisplayed() {
@@ -259,8 +251,6 @@ class SearchScreenUITest {
     verify { mockViewModel.onSuggestionItemClick("Wikipedia") }
   }
 
-  // ======== Loading ========
-
   @Test
   fun searchScreen_whenIsLoadingTrue_searchItemsAreHidden() {
     mockSearchScreenContent(
@@ -273,8 +263,6 @@ class SearchScreenUITest {
       .onNodeWithTag(SEARCH_ITEM_TESTING_TAG)
       .assertDoesNotExist()
   }
-
-  // ======== Voice Search ========
 
   @Test
   fun searchScreen_whenVoiceSearchIconDisplayed_isVisible() {
@@ -293,8 +281,6 @@ class SearchScreenUITest {
       .performClick()
     assertTrue("Voice search callback should be triggered", clicked)
   }
-
-  // ======== Find In Page ========
 
   @Test
   fun searchScreen_whenFindInPageMenuItemPresent_isDisplayed() {
@@ -320,5 +306,71 @@ class SearchScreenUITest {
       .onNodeWithTag(FIND_IN_PAGE_TESTING_TAG)
       .performClick()
     assertTrue("Find in page callback should be triggered", clicked)
+  }
+
+  @Test
+  fun searchScreen_whenScrolledNearEnd_loadMoreTriggered() {
+    val items = List(10) {
+      ZimSearchResultListItem("Item $it", "url")
+    }
+
+    mockSearchScreenContent(
+      state = SearchScreenUiState(
+        searchList = items,
+        isLoadingMore = false
+      )
+    )
+    composeTestRule.onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG, true)[8]
+      .performScrollTo()
+
+    composeTestRule.waitForIdle()
+
+    verify(atLeast = 1) {
+      mockViewModel.loadMoreSearchResults()
+    }
+  }
+
+  @Test
+  fun searchScreen_whenAlreadyLoadingMore_loadMoreNotTriggered() {
+    val items = List(10) {
+      ZimSearchResultListItem("Item $it", "url")
+    }
+
+    mockSearchScreenContent(
+      state = SearchScreenUiState(
+        searchList = items,
+        isLoadingMore = true
+      )
+    )
+    composeTestRule.onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG, true)[8]
+      .performScrollTo()
+
+    composeTestRule.waitForIdle()
+
+    verify(exactly = 0) {
+      mockViewModel.loadMoreSearchResults()
+    }
+  }
+
+  @Test
+  fun searchScreen_whenScrolledMultipleTimes_loadMoreCalledOnce() {
+    val items = List(10) {
+      ZimSearchResultListItem("Item $it", "url")
+    }
+
+    mockSearchScreenContent(
+      state = SearchScreenUiState(searchList = items)
+    )
+
+    repeat(3) {
+      composeTestRule.onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG, true)[8]
+        .performScrollTo()
+    }
+
+    composeTestRule.waitForIdle()
+
+    verify(atMost = 1) {
+      mockViewModel.loadMoreSearchResults()
+    }
   }
 }
