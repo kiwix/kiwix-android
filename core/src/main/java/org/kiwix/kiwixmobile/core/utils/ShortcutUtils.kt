@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.AppOpsManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -28,7 +29,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
+import android.os.Process
+import android.provider.Settings
 import android.util.Base64
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -40,6 +44,7 @@ import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Represents the result of a shortcut creation attempt.
@@ -79,18 +84,19 @@ object ShortcutUtils {
       !ShortcutManagerCompat.isRequestPinShortcutSupported(context) -> ShortcutResult.NotSupported.also {
         Log.e(TAG, "Pinned shortcuts are NOT supported by this launcher/device")
       }
+
       componentName == null -> ShortcutResult.LaunchIntentNotFound.also {
         Log.e(TAG, "Launcher activity not found for package: ${context.packageName}")
       }
+
       else -> {
         performPinning(context, zimFileReader, pageUrl, customName, componentName)
       }
     }
   }
 
-  private fun getLauncherComponentName(context: Context): android.content.ComponentName? {
-    return context.packageManager.getLaunchIntentForPackage(context.packageName)?.component
-  }
+  private fun getLauncherComponentName(context: Context): ComponentName? =
+    context.packageManager.getLaunchIntentForPackage(context.packageName)?.component
 
   @Suppress("LongMethod")
   private fun performPinning(
@@ -98,7 +104,7 @@ object ShortcutUtils {
     zimFileReader: ZimFileReader,
     pageUrl: String?,
     customName: String?,
-    componentName: android.content.ComponentName
+    componentName: ComponentName
   ): ShortcutResult {
     val displayTitle = customName?.takeIf { it.isNotBlank() }
       ?: zimFileReader.title.takeIf { it.isNotBlank() }
@@ -124,7 +130,8 @@ object ShortcutUtils {
     }
 
     val icon = createProfessionalIcon(context, faviconBitmap)
-    val shortcutInfo = buildShortcutInfo(context, id, displayTitle, icon, shortcutIntent, componentName)
+    val shortcutInfo =
+      buildShortcutInfo(context, id, displayTitle, icon, shortcutIntent, componentName)
 
     return if (shortcutInfo != null) {
       val successCallback = PendingIntent.getBroadcast(
@@ -146,7 +153,7 @@ object ShortcutUtils {
     displayTitle: String,
     icon: IconCompat,
     shortcutIntent: Intent,
-    componentName: android.content.ComponentName
+    componentName: ComponentName
   ): ShortcutInfoCompat? {
     return try {
       ShortcutInfoCompat.Builder(context, id)
@@ -249,8 +256,8 @@ object ShortcutUtils {
       Log.e(TAG, "Failed to open MIUI permission editor, falling back to app settings", e)
       try {
         val fallbackIntent =
-          Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = android.net.Uri.fromParts("package", context.packageName, null)
+          Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", context.packageName, null)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
           }
         context.startActivity(fallbackIntent)
@@ -281,7 +288,7 @@ object ShortcutUtils {
       val result = method.invoke(
         appOpsManager,
         MIUI_INSTALL_SHORTCUT_OP_CODE,
-        android.os.Process.myUid(),
+        Process.myUid(),
         context.packageName
       ) as Int
       result == AppOpsManager.MODE_ALLOWED
@@ -292,7 +299,7 @@ object ShortcutUtils {
       // On non-MIUI ROMs (e.g. Poco with HyperOS/stock Android), op code 10017
       // doesn't exist, causing IllegalArgumentException("Bad operation #10017").
       // In that case, the device has no shortcut restriction, so return true.
-      val rootCause = if (e is java.lang.reflect.InvocationTargetException) e.cause else e
+      val rootCause = if (e is InvocationTargetException) e.cause else e
       val isBadOperation = rootCause is IllegalArgumentException &&
         rootCause.message?.contains("Bad operation") == true
 
