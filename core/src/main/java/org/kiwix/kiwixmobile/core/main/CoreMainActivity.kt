@@ -79,6 +79,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
 import androidx.core.graphics.createBitmap
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
@@ -198,6 +199,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
+    val splashScreen = installSplashScreen()
+    splashScreen.setKeepOnScreenCondition {
+      !CoreApp.instance.themeConfig.isThemeLoaded.value
+    }
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {

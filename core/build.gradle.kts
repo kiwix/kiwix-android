@@ -60,4 +60,5 @@ dependencies {
   implementation(Libs.webkit)
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
+  implementation(Libs.CORE_SPLASH_SCREEN)
 }

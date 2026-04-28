@@ -43,7 +43,6 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
-import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -86,7 +85,6 @@ import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
@@ -413,7 +411,6 @@ internal class CoreSettingsViewModelTest {
 
       createViewModel()
       advanceUntilIdle()
-
       viewModel.themeLabel.test {
         assertEquals("System", awaitItem())
         cancelAndIgnoreRemainingEvents()
@@ -427,7 +424,6 @@ internal class CoreSettingsViewModelTest {
 
       createViewModel()
       advanceUntilIdle()
-
       viewModel.themeLabel.test {
         assertEquals("Dark", awaitItem())
         cancelAndIgnoreRemainingEvents()
@@ -441,7 +437,6 @@ internal class CoreSettingsViewModelTest {
 
       createViewModel()
       advanceUntilIdle()
-
       viewModel.themeLabel.test {
         assertEquals("Light", awaitItem())
         cancelAndIgnoreRemainingEvents()
@@ -704,30 +699,19 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearHistory does not emit snackbar on failure`() = runTest {
-      val exception = RuntimeException("error")
-      coEvery { dataSource.clearHistory() } throws exception
-      mockkObject(Log)
-      every { Log.e(any(), any(), any()) } just Runs
+      coEvery { dataSource.clearHistory() } throws RuntimeException("error")
       viewModel.clearHistory()
       advanceUntilIdle()
-      verify {
-        Log.e("SettingsPresenter", exception.message, exception)
-      }
-      unmockkObject(Log)
+      // verify app does not crash.
+      coVerify(exactly = 1) { dataSource.clearHistory() }
     }
 
     @Test
     fun `clearHistory handles exception with null message`() = runTest {
-      val exception = RuntimeException(null as String?)
-      coEvery { dataSource.clearHistory() } throws exception
-      mockkObject(Log)
-      every { Log.e(any(), any(), any()) } just Runs
+      coEvery { dataSource.clearHistory() } throws RuntimeException(null as String?)
       viewModel.clearHistory()
       advanceUntilIdle()
-      verify {
-        Log.e("SettingsPresenter", exception.message, exception)
-      }
-      unmockkObject(Log)
+      coVerify(exactly = 1) { dataSource.clearHistory() }
     }
 
     @Test

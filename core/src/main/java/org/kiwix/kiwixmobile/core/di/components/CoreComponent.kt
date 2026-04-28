@@ -109,7 +109,6 @@ interface CoreComponent {
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
   fun kiwixPermissionChecker(): KiwixPermissionChecker
-
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)
 
