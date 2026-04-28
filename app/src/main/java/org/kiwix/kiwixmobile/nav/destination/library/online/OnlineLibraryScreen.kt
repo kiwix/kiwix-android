@@ -18,14 +18,15 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,7 +41,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBarScrollBehavior
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,12 +48,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,8 +98,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.OnlineLibraryUiEvent.ScrollToTop
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryUiState
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 
@@ -115,25 +116,16 @@ private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun OnlineLibraryScreen(
-  state: OnlineLibraryScreenState,
+  uiState: OnlineLibraryUiState,
+  onlineLibraryViewModel: OnlineLibraryViewModel,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
-  zimManageViewModel: ZimManageViewModel,
-  navigationIcon: @Composable () -> Unit,
+  navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-  LaunchedEffect(Unit) {
-    zimManageViewModel.onlineLibraryEvent.collect {
-      when (it) {
-        ScrollToTop -> {
-          listState.scrollToItem(ZERO)
-        }
-      }
-    }
-  }
   KiwixTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
@@ -143,7 +135,7 @@ fun OnlineLibraryScreen(
           navigationIcon = navigationIcon,
           actionMenuItems = actionMenuItems,
           topAppBarScrollBehavior = scrollBehavior,
-          searchBar = searchBarIfActive(state)
+          searchBar = searchBarIfActive(uiState, onlineLibraryViewModel)
         )
       },
       floatingActionButton = {
@@ -162,7 +154,8 @@ fun OnlineLibraryScreen(
         }
     ) { paddingValues ->
       OnlineLibraryMainContent(
-        state,
+        uiState,
+        onlineLibraryViewModel,
         paddingValues,
         onUserBackPressed,
         navHostController,
@@ -175,16 +168,17 @@ fun OnlineLibraryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OnlineLibraryMainContent(
-  state: OnlineLibraryScreenState,
+  uiState: OnlineLibraryUiState,
+  onlineLibraryViewModel: OnlineLibraryViewModel,
   paddingValues: PaddingValues,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
   listState: LazyListState
 ) {
   SwipeRefreshLayout(
-    isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,
-    isEnabled = !state.scanningProgressItem.first,
-    onRefresh = state.onRefresh,
+    isRefreshing = uiState.isRefreshing && !uiState.showScanning,
+    isEnabled = !uiState.showScanning,
+    onRefresh = onlineLibraryViewModel.onScreenRefresh,
     modifier = Modifier
       .fillMaxSize()
       .padding(
@@ -194,7 +188,7 @@ private fun OnlineLibraryMainContent(
       )
   ) {
     OnBackPressed(onUserBackPressed, navHostController)
-    OnlineLibraryScreenContent(state, listState)
+    OnlineLibraryScreenContent(uiState, listState, onlineLibraryViewModel)
   }
 }
 
@@ -237,15 +231,16 @@ private fun OnlineLibraryBackToTopButton(
 
 @Composable
 private fun searchBarIfActive(
-  state: OnlineLibraryScreenState
+  state: OnlineLibraryUiState,
+  onlineLibraryViewModel: OnlineLibraryViewModel
 ): (@Composable () -> Unit)? = if (state.isSearchActive) {
   {
     KiwixSearchView(
-      value = state.searchText,
+      value = state.searchQuery,
       searchViewTextFiledTestTag = ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG,
       clearButtonTestTag = ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG,
-      onValueChange = { state.searchValueChangedListener(it) },
-      onClearClick = { state.clearSearchButtonClickListener.invoke() }
+      onValueChange = onlineLibraryViewModel::onSearchQueryChanged,
+      onClearClick = onlineLibraryViewModel::clearSearch
     )
   }
 } else {
@@ -254,27 +249,33 @@ private fun searchBarIfActive(
 
 @Composable
 private fun OnlineLibraryScreenContent(
-  state: OnlineLibraryScreenState,
-  lazyListState: LazyListState
+  uiState: OnlineLibraryUiState,
+  lazyListState: LazyListState,
+  onlineLibraryViewModel: OnlineLibraryViewModel
 ) {
   Box(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
-    if (state.noContentViewItem.second) {
-      NoContentView(state.noContentViewItem.first)
+    if (uiState.showNoContent) {
+      NoContentView(uiState.noContentMessage)
     } else {
-      OnlineLibraryList(state, lazyListState)
+      OnlineLibraryList(uiState, lazyListState, onlineLibraryViewModel)
     }
-    if (state.scanningProgressItem.first) {
-      ShowFetchingLibraryLayout(state.scanningProgressItem.second)
+    if (uiState.showScanning) {
+      ShowFetchingLibraryLayout(uiState.scanningMessage)
     }
   }
 }
 
 @OptIn(FlowPreview::class)
 @Composable
-private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: LazyListState) {
+private fun OnlineLibraryList(
+  state: OnlineLibraryUiState,
+  lazyListState: LazyListState,
+  onlineLibraryViewModel: OnlineLibraryViewModel
+) {
+  val activity = LocalActivity.current as KiwixMainActivity
   LazyColumn(
     modifier = Modifier
       .fillMaxSize()
@@ -282,34 +283,31 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
       .hideKeyboardOnLazyColumnScroll(lazyListState),
     state = lazyListState
   ) {
-    state.onlineLibraryList?.let { libraryList ->
-      itemsIndexed(libraryList) { index, item ->
-        when (item) {
-          is DividerItem -> ShowDividerItem(item)
-          is LibraryListItem.BookItem -> OnlineBookItem(
-            index = index,
-            item = item,
-            state.bookUtils,
-            state.availableSpaceCalculator,
-            state.onBookItemClick
-          )
+    itemsIndexed(state.items) { index, item ->
+      when (item) {
+        is DividerItem -> ShowDividerItem(item)
+        is LibraryListItem.BookItem -> OnlineBookItem(
+          index = index,
+          item = item,
+          onlineLibraryViewModel.bookUtils,
+          onlineLibraryViewModel.availableSpaceCalculator
+        ) { onlineLibraryViewModel.onBookItemClick(it, activity) }
 
-          is LibraryListItem.LibraryDownloadItem -> DownloadBookItem(
-            index = index,
-            item = item,
-            onPauseResumeClick = state.onPauseResumeButtonClick,
-            onStopClick = state.onStopButtonClick
-          )
-        }
+        is LibraryListItem.LibraryDownloadItem -> DownloadBookItem(
+          index = index,
+          item = item,
+          onPauseResumeClick = onlineLibraryViewModel::onPauseResumeButtonClick,
+          onStopClick = onlineLibraryViewModel::onStopButtonClick
+        )
       }
     }
-    showLoadMoreProgressBar(state.isLoadingMoreItem)
+    showLoadMoreProgressBar(state.isLoadingMore)
   }
-  LaunchedEffect(lazyListState, state.onlineLibraryList) {
+  LaunchedEffect(lazyListState, state.items) {
     snapshotFlow {
       val layoutInfo = lazyListState.layoutInfo
       val visibleIndexes = layoutInfo.visibleItemsInfo.map { it.index }
-      val list = state.onlineLibraryList.orEmpty()
+      val list = state.items
       val visibleBookIndexes = visibleIndexes.filter { index ->
         list.getOrNull(index) is LibraryListItem.BookItem
       }
@@ -321,8 +319,8 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
       .distinctUntilChanged()
       .debounce(LOAD_MORE_DELAY)
       .collect { (lastVisibleBookIndex, totalBookCount) ->
-        if (lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMoreItem) {
-          state.onLoadMore(totalBookCount)
+        if (lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMore) {
+          onlineLibraryViewModel.handleLoadMore(totalBookCount)
         }
       }
   }

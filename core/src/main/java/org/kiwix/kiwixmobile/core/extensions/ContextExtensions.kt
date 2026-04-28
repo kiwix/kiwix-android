@@ -74,7 +74,12 @@ fun Context.navigateToSettings() {
       action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
       data = Uri.fromParts("package", packageName, null)
     }
-  startActivity(intent)
+  try {
+    startActivity(intent)
+  } catch (e: Exception) {
+    // Fallback to the general All Files Access settings list
+    startActivity(Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION))
+  }
 }
 
 fun Context.navigateToAppSettings() {
