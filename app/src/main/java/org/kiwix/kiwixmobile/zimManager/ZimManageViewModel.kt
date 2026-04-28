@@ -76,6 +76,7 @@ const val DEFAULT_PROGRESS = 0
 const val MAX_PROGRESS = 100
 
 const val THREE = 3
+const val FOUR = 4
 
 @Suppress("LargeClass")
 class ZimManageViewModel @Inject constructor(

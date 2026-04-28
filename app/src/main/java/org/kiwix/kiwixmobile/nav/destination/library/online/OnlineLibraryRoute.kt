@@ -34,11 +34,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -50,7 +47,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -64,15 +60,10 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ScrollToTop
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
 const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
@@ -107,11 +98,6 @@ fun OnlineLibraryRoute(
   val snackbarHostState = remember { SnackbarHostState() }
   val lazyListState = rememberLazyListState()
 
-  var isSearchActive by remember { mutableStateOf(false) }
-  var onlineLibraryList by remember { mutableStateOf<List<LibraryListItem>?>(null) }
-
-  val libraryItems by onlineLibraryViewModel.libraryItems.collectAsState()
-
   // Collect UI events
   HandleUiEvents(
     viewModel = onlineLibraryViewModel,
@@ -123,20 +109,6 @@ fun OnlineLibraryRoute(
     lazyListState = lazyListState,
     notificationPermission = notificationPermission,
     writePermissionState = writePermissionState
-  )
-
-  // Handle side-effects (Network, Wifi, Progress, etc)
-  HandleEffects(
-    onlineLibraryViewModel = onlineLibraryViewModel,
-    isListEmpty = onlineLibraryList.isNullOrEmpty(),
-    onNoContentChanged = { noContentViewItem = it },
-    onRefreshingChanged = { isRefreshing = it }
-  )
-
-  ObserveLibraryItems(
-    libraryItems = libraryItems,
-    onListChanged = { onlineLibraryList = it },
-    onLoadingMoreChanged = { isLoadingMoreItem = it }
   )
 
   // ObserveDownloadingState(
@@ -151,12 +123,12 @@ fun OnlineLibraryRoute(
     onlineLibraryViewModel.updateOnlineLibraryFilters(
       onlineLibraryViewModel.getOnlineLibraryRequest()
     )
-    scanningProgressItem = false to context.getString(string.reaching_remote_library)
+    // scanningProgressItem = false to context.getString(string.reaching_remote_library)
   }
 
   val actionMenuItems = buildActionMenuItems(
-    isSearchActive = isSearchActive,
-    onSearchClick = { isSearchActive = true },
+    isSearchActive = uiState.isSearchActive,
+    onSearchClick = onlineLibraryViewModel::openSearchView,
     activity = activity,
     navController = navController
   )
@@ -166,6 +138,7 @@ fun OnlineLibraryRoute(
     onlineLibraryViewModel = onlineLibraryViewModel,
     actionMenuItems = actionMenuItems,
     listState = lazyListState,
+    snackBarHostState = snackbarHostState,
     bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
     onUserBackPressed = {
       handleBackPress(activity, uiState.isSearchActive) {
@@ -175,7 +148,7 @@ fun OnlineLibraryRoute(
     navHostController = navController,
     navigationIcon = {
       NavigationIcon(
-        iconItem = if (isSearchActive) {
+        iconItem = if (uiState.isSearchActive) {
           IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
         } else {
           IconItem.Vector(Icons.Filled.Menu)
@@ -279,81 +252,6 @@ private fun handlePermissionEvents(
   when (permission) {
     POST_NOTIFICATIONS -> notificationPermission?.launchPermissionRequest()
     WRITE_EXTERNAL_STORAGE -> writePermissionState.launchPermissionRequest()
-  }
-}
-
-@Composable
-@Suppress("LongMethod", "ComplexMethod")
-private fun HandleEffects(
-  onlineLibraryViewModel: OnlineLibraryViewModel,
-  isListEmpty: Boolean,
-  onNoContentChanged: (Pair<String, Boolean>) -> Unit,
-  onRefreshingChanged: (Boolean) -> Unit
-) {
-  val context = LocalContext.current
-  val scope = rememberCoroutineScope()
-
-  // Observe LiveData from ZimManageViewModel using observeAsState (Compose-LiveData bridge)
-  val shouldShowWifiOnly by onlineLibraryViewModel.shouldShowWifiOnlyDialog.observeAsState(false)
-  val networkState by onlineLibraryViewModel.networkStates.observeAsState()
-
-  // Handle wifi-only dialog
-  LaunchedEffect(shouldShowWifiOnly) {
-    if (shouldShowWifiOnly && !NetworkUtils.isWiFi(context)) {
-      onlineLibraryViewModel.emitDialog(
-        KiwixDialog.YesNoDialog.WifiOnly,
-        positiveAction = {
-          onNoContentChanged("" to false)
-          scope.launch {
-            onlineLibraryViewModel.kiwixDataStore.setWifiOnly(false)
-            onlineLibraryViewModel.shouldShowWifiOnlyDialog.value = false
-            onlineLibraryViewModel.updateOnlineLibraryFilters(
-              onlineLibraryViewModel.getOnlineLibraryRequest()
-            )
-          }
-        },
-        negativeAction = {
-          context.toast(
-            context.getString(string.denied_internet_permission_message),
-            Toast.LENGTH_SHORT
-          )
-          onNoContentChanged(context.getString(string.swipe_down_for_library) to true)
-        }
-      )
-      onRefreshingChanged(false)
-    }
-  }
-
-  // Handle network state changes
-  LaunchedEffect(networkState) {
-    when (networkState) {
-      NetworkState.CONNECTED -> {
-        onlineLibraryViewModel.handleNetworkConnected()
-      }
-
-      NetworkState.NOT_CONNECTED -> {
-        if (!isListEmpty) {
-          onlineLibraryViewModel.emitNoInternetSnackbar(context)
-        } else {
-          onNoContentChanged(context.getString(string.no_network_connection) to true)
-        }
-        onRefreshingChanged(false)
-      }
-
-      else -> {}
-    }
-  }
-}
-
-@Composable
-private fun ObserveLibraryItems(
-  libraryItems: ZimManageViewModel.LibraryListItemWrapper,
-  onListChanged: (List<LibraryListItem>?) -> Unit,
-  onLoadingMoreChanged: (Boolean) -> Unit
-) {
-  LaunchedEffect(libraryItems) {
-    onListChanged(libraryItems.items)
-    onLoadingMoreChanged(false)
   }
 }
 

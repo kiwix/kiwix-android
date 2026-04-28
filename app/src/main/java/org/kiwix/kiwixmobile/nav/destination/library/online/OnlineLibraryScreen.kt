@@ -46,6 +46,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -120,6 +121,7 @@ fun OnlineLibraryScreen(
   onlineLibraryViewModel: OnlineLibraryViewModel,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
+  snackBarHostState: SnackbarHostState,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
@@ -128,7 +130,7 @@ fun OnlineLibraryScreen(
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
       topBar = {
         KiwixAppBar(
           title = stringResource(string.download),
@@ -178,7 +180,7 @@ private fun OnlineLibraryMainContent(
   SwipeRefreshLayout(
     isRefreshing = uiState.isRefreshing && !uiState.showScanning,
     isEnabled = !uiState.showScanning,
-    onRefresh = onlineLibraryViewModel.onScreenRefresh,
+    onRefresh = { onlineLibraryViewModel.refreshScreen(true) },
     modifier = Modifier
       .fillMaxSize()
       .padding(
