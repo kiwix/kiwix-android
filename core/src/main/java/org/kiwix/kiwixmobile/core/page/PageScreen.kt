@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.page
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -164,6 +165,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     isInSelectionMode = isInSelectionMode,
     selectedCount = selectedCount,
     switchIsCheckedFlow = switchIsCheckedFlow,
+    isCustomApp = activity.isCustomApp(),
     navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
     actionMenuItems = actionMenuList(
       deleteIconTitle = deleteIconTitle,
@@ -201,6 +203,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
 
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList", "LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
+@VisibleForTesting
 @Composable
 fun <T : Page, S : PageState<T>> PageScreen(
   state: S,
@@ -213,6 +216,7 @@ fun <T : Page, S : PageState<T>> PageScreen(
   isInSelectionMode: Boolean,
   selectedCount: Int,
   switchIsCheckedFlow: Flow<Boolean>,
+  isCustomApp: Boolean = false,
   onItemClick: (Page) -> Unit,
   onItemLongClick: (Page) -> Unit,
   onSearchTextChange: (String) -> Unit,
@@ -246,7 +250,8 @@ fun <T : Page, S : PageState<T>> PageScreen(
             switchString = switchString,
             switchIsEnabled = !state.isInSelectionState,
             switchIsCheckedFlow = switchIsCheckedFlow,
-            onSwitchCheckedChange = onSwitchCheckedChange
+            onSwitchCheckedChange = onSwitchCheckedChange,
+            isCustomApp = isCustomApp
           )
         }
       }
@@ -316,10 +321,10 @@ private fun PageSwitchRow(
   switchIsEnabled: Boolean,
   switchIsCheckedFlow: Flow<Boolean>,
   onSwitchCheckedChange: (Boolean) -> Unit,
+  isCustomApp: Boolean = false
 ) {
-  val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
-  if (!context.isCustomApp()) {
+  if (!isCustomApp) {
     val isChecked by switchIsCheckedFlow.collectAsState(true)
     Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
       Row(
