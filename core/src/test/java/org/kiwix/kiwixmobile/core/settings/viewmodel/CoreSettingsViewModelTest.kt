@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -136,7 +136,7 @@ private class TestCoreSettingsViewModel(
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreSettingsViewModelTest {
-  @get:Rule
+  @RegisterExtension
   val dispatcherRule = MainDispatcherRule()
   private val context: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
@@ -412,6 +412,7 @@ internal class CoreSettingsViewModelTest {
       every { context.getString(R.string.theme_system) } returns "System"
 
       createViewModel()
+      advanceUntilIdle()
 
       viewModel.themeLabel.test {
         assertEquals("System", awaitItem())
@@ -425,6 +426,7 @@ internal class CoreSettingsViewModelTest {
       every { context.getString(R.string.theme_dark) } returns "Dark"
 
       createViewModel()
+      advanceUntilIdle()
 
       viewModel.themeLabel.test {
         assertEquals("Dark", awaitItem())
@@ -438,6 +440,7 @@ internal class CoreSettingsViewModelTest {
       every { context.getString(R.string.theme_light) } returns "Light"
 
       createViewModel()
+      advanceUntilIdle()
 
       viewModel.themeLabel.test {
         assertEquals("Light", awaitItem())

@@ -442,6 +442,21 @@ sealed class KiwixDialog(
     confirmButtonText = R.string.open_article,
     dismissButtonText = R.string.open_note
   )
+
+  object XiaomiShortcutPermission : KiwixDialog(
+    R.string.add_shortcut_title,
+    R.string.xiaomi_permission_required,
+    R.string.open_xiaomi_settings,
+    android.R.string.cancel
+  )
+
+  data class AddShortcut(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
+    R.string.add_shortcut_title,
+    null,
+    android.R.string.ok,
+    android.R.string.cancel,
+    customComposeView = customGetView
+  )
 }
 
 interface HasBodyFormatArgs {
