@@ -25,7 +25,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
 internal class StartSpeechInputTest {
-  private val actions = mockk<Channel<Action>>(relaxed = true)
+  private val actions = mockk<MutableSharedFlow<Action>>(relaxed = true)
 
   @Suppress("DEPRECATION")
   @Test
@@ -42,7 +42,7 @@ internal class StartSpeechInputTest {
     val activity = mockk<CoreMainActivity>(relaxed = true)
     every { activity.startActivityForResult(any(), any()) } throws ActivityNotFoundException()
     StartSpeechInput(actions).invokeWith(activity)
-    verify { actions.trySend(StartSpeechInputFailed).isSuccess }
+    verify { actions.tryEmit(StartSpeechInputFailed) }
   }
 
   @Suppress("DEPRECATION")

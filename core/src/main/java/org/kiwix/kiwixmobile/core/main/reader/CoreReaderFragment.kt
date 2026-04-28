@@ -31,15 +31,15 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
 import android.print.PdfPrint
 import android.print.PrintAttributes
 import android.print.PrintAttributes.Margins
 import android.print.PrintAttributes.MediaSize
 import android.print.PrintAttributes.Resolution
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.view.ActionMode
@@ -116,6 +116,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toSlug
@@ -138,7 +139,6 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
-import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
@@ -2075,7 +2075,14 @@ abstract class CoreReaderFragment :
     activity: AppCompatActivity
   ): FragmentActivityExtensions.Super {
     pendingIntent = intent
+    tryHandlePendingIntent()
     return FragmentActivityExtensions.Super.ShouldCall
+  }
+
+  private fun tryHandlePendingIntent() {
+    if (!isAdded || zimReaderContainer?.zimFileReader == null || isWebViewHistoryRestoring) return
+    handlePendingIntent()
+    pendingIntent = null
   }
 
   @Suppress("MagicNumber")

@@ -112,7 +112,7 @@ private fun OnUserBackPressed(
     when {
       leftDrawerState.isOpen -> uiCoroutineScope.launch { leftDrawerState.close() }
       customBackHandler.value?.invoke() == FragmentActivityExtensions.Super.ShouldNotCall -> {
-        // do nothing since fragment handles the back press.
+        // do nothing since compose screen handles the back press.
       }
 
       currentRoute == CustomDestination.Reader.route &&

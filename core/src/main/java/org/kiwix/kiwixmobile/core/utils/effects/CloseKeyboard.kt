@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,27 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+package org.kiwix.kiwixmobile.core.utils.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
-import org.kiwix.kiwixmobile.core.search.SearchListItem
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSearch
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 
-data class ShowDeleteSearchDialog(
-  private val searchListItem: SearchListItem,
-  private val actions: MutableSharedFlow<Action>,
-  var dialogShower: DialogShower
-) : SideEffect<Unit> {
+object CloseKeyboard : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.cachedComponent.inject(this)
-    dialogShower.show(
-      DeleteSearch,
-      { actions.tryEmit(Action.ConfirmedDelete(searchListItem)) }
-    )
+    activity.currentFocus?.closeKeyboard()
   }
 }

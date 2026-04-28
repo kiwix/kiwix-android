@@ -25,24 +25,18 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -74,45 +68,46 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialo
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
 import org.kiwix.libzim.SuggestionSearch
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
+  @RegisterExtension
+  private val mainDispatcherRule = MainDispatcherRule()
+
   private val recentSearchRoomDao: RecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
   private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
-  private val testDispatcher = StandardTestDispatcher()
   private val searchMutex: Mutex = mockk()
 
   lateinit var viewModel: SearchViewModel
 
-  @AfterAll
-  fun teardown() {
-    Dispatchers.resetMain()
-  }
-
-  private lateinit var recentsFromDb: Channel<List<RecentSearchListItem>>
+  private lateinit var recentsFromDb: MutableSharedFlow<List<RecentSearchListItem>>
 
   @BeforeEach
   fun init() {
-    Dispatchers.resetMain()
-    Dispatchers.setMain(testDispatcher)
     clearAllMocks()
-    recentsFromDb = Channel(Channel.UNLIMITED)
+    recentsFromDb = MutableSharedFlow(replay = 1)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
+    every {
+      zimFileReader.getSuggestedSpelledWords(any(), any())
+    } returns emptyList()
     coEvery {
-      searchResultGenerator.generateSearchResults("", zimFileReader)
+      searchResultGenerator.generateSearchResults(any(), zimFileReader)
     } returns null
     every { zimReaderContainer.id } returns "id"
-    every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
+    every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb
     viewModel =
       SearchViewModel(
         recentSearchRoomDao,
         zimReaderContainer,
         searchResultGenerator,
-        searchMutex
+        searchMutex,
+        mainDispatcherRule.dispatcher
       ).apply {
         setAlertDialogShower(dialogShower)
       }
@@ -121,63 +116,44 @@ internal class SearchViewModelTest {
   @Nested
   inner class DebouncedTest {
     @Test
-    fun `Search action is debounced`() = runTest {
+    fun searchState_whenDebounced_returnsLatestQuery() = runTest {
       val searchTerm1 = "query1"
       val searchTerm2 = "query2"
       val searchTerm3 = "query3"
-      val searchOrigin = FromWebView
       val suggestionSearch: SuggestionSearch = mockk()
-      testFlow(
-        viewModel.state,
-        triggerAction = {
-          searchResult(searchTerm1, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
-          searchResult(searchTerm2, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
-          searchResult(searchTerm3, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
-        },
-        assert = {
-          skipItems(1) // Skip the initial item.
-          assertThat(awaitItem()).isEqualTo(
-            SearchState(
-              searchTerm3,
-              SearchResultsWithTerm(searchTerm3, suggestionSearch, searchMutex),
-              emptyList(),
-              searchOrigin
-            )
-          )
-        }
-      )
+
+      viewModel.uiState.test {
+        skipItems(1)
+        searchResult(searchTerm1, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+        searchResult(searchTerm2, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
+        searchResult(searchTerm3, suggestionSearch, testScheduler, DEBOUNCE_DELAY)
+
+        advanceUntilIdle()
+
+        val result = expectMostRecentItem()
+        assertThat(result.searchState.searchTerm).isEqualTo(searchTerm3)
+        cancelAndIgnoreRemainingEvents()
+      }
     }
 
     @Test
-    fun `Search action is not debounced if time hasn't passed`() = runTest {
+    fun searchState_whenUserIsTypingAndDebouncedIsNotComplete_returnsInitialState() = runTest {
       val searchTerm1 = "query1"
       val searchTerm2 = "query2"
       val searchTerm3 = "query3"
-      val searchOrigin = FromWebView
       val suggestionSearch: SuggestionSearch = mockk()
-      viewModel.state.test {
+
+      viewModel.uiState.test {
+        skipItems(1)
         searchResult(searchTerm1, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
         searchResult(searchTerm2, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
         searchResult(searchTerm3, suggestionSearch, testScheduler, DEBOUNCE_DELAY / 3)
-        // test value is not passed to searchResult as time has not passed and user still typing
-        // Match if it is initial `SearchState`
-        assertThat(awaitItem()).isEqualTo(
-          SearchState(
-            "",
-            SearchResultsWithTerm("", null, searchMutex),
-            emptyList(),
-            searchOrigin
-          )
-        )
-        testScheduler.advanceTimeBy(DEBOUNCE_DELAY)
-        assertThat(awaitItem()).isEqualTo(
-          SearchState(
-            searchTerm3,
-            SearchResultsWithTerm(searchTerm3, suggestionSearch, searchMutex),
-            emptyList(),
-            searchOrigin
-          )
-        )
+
+        val latest = expectMostRecentItem()
+        assertThat(latest.searchText).isEqualTo(searchTerm3)
+        assertThat(latest.searchState.searchTerm).isEqualTo("")
+
+        cancelAndIgnoreRemainingEvents()
       }
     }
 
@@ -190,9 +166,9 @@ internal class SearchViewModelTest {
       coEvery {
         searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
       } returns suggestionSearch
-      viewModel.searchResults(searchTerm)
-      recentsFromDb.trySend(emptyList()).isSuccess
-      viewModel.actions.trySend(ScreenWasStartedFrom(FromWebView)).isSuccess
+      viewModel.onSearchValueChanged(searchTerm)
+      recentsFromDb.tryEmit(emptyList())
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
       testScheduler.apply {
         advanceTimeBy(timeout)
         runCurrent()
@@ -203,53 +179,192 @@ internal class SearchViewModelTest {
   @Nested
   inner class StateTests {
     @Test
-    fun `initial state is Initialising`() =
+    fun uiState_whenInitialized_returnsDefaultState() =
       runTest {
-        testFlow(
-          viewModel.state,
-          triggerAction = {},
-          assert = {
-            assertThat(awaitItem()).isEqualTo(
-              SearchState(
-                "",
-                SearchResultsWithTerm("", null, searchMutex),
-                emptyList(),
-                FromWebView
-              )
-            )
-          }
-        )
+        viewModel.uiState.test {
+          val initial = awaitItem()
+
+          assertThat(initial.searchState.searchTerm).isEqualTo("")
+          assertThat(initial.searchState.recentResults).isEmpty()
+          assertThat(initial.searchState.searchOrigin).isEqualTo(FromWebView)
+          assertThat(initial.searchText).isEqualTo("")
+          assertThat(initial.isLoading).isFalse()
+        }
       }
 
     @Test
-    fun `SearchState combines sources from inputs`() =
+    fun reducer_whenSearched_returnsCombinedResult() =
       runTest {
         val searchTerm = "searchTerm"
         val searchOrigin = FromWebView
         val suggestionSearch: SuggestionSearch = mockk()
-        testFlow(
-          viewModel.state,
-          triggerAction = {
-            emissionOf(
-              searchTerm = searchTerm,
-              suggestionSearch = suggestionSearch,
-              databaseResults = listOf(RecentSearchListItem("", "")),
-              searchOrigin = searchOrigin
-            )
-          },
-          assert = {
-            skipItems(2)
-            assertThat(awaitItem()).isEqualTo(
-              SearchState(
-                searchTerm,
-                SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
-                listOf(RecentSearchListItem("", "")),
-                searchOrigin
-              )
-            )
-          }
-        )
+        viewModel.uiState.test {
+          skipItems(1)
+
+          emissionOf(
+            searchTerm = searchTerm,
+            suggestionSearch = suggestionSearch,
+            databaseResults = listOf(RecentSearchListItem("", "")),
+            searchOrigin = searchOrigin
+          )
+          advanceUntilIdle()
+
+          skipItems(1)
+
+          val item = awaitItem()
+          assertThat(item.searchState.searchTerm).isEqualTo(searchTerm)
+          assertThat(item.searchState.recentResults).isEqualTo(listOf(RecentSearchListItem("", "")))
+          assertThat(item.searchState.searchOrigin).isEqualTo(searchOrigin)
+
+          cancelAndIgnoreRemainingEvents()
+        }
       }
+
+    @Test
+    fun onSearchValueChanged_whenNonBlank_returnsFindInPageMenuItemIsEnabled() = runTest {
+      viewModel.onSearchValueChanged("kiwix")
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.findInPageMenuItem.first).isTrue()
+    }
+
+    @Test
+    fun onSearchClear_whenCalled_returnsFindInPageMenuItemIsDisabled() = runTest {
+      viewModel.onSearchValueChanged("hello")
+      advanceUntilIdle()
+      viewModel.onSearchClear()
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.findInPageMenuItem.first).isFalse()
+    }
+
+    @Test
+    fun onSearchValueChanged_whenCalled_returnsUpdatedSearchText() = runTest {
+      val query = "kiwix"
+      viewModel.onSearchValueChanged(query)
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.searchText).isEqualTo(query)
+    }
+
+    @Test
+    fun onSearchClear_whenCalled_returnsEmptyText() = runTest {
+      viewModel.onSearchValueChanged("hello")
+      advanceUntilIdle()
+      viewModel.onSearchClear()
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.searchText).isEqualTo("")
+    }
+
+    @Test
+    fun onSuggestionItemClick_whenCalled_returnsEmptySpellingCorrectionSuggestions() = runTest {
+      every { zimFileReader.getSuggestedSpelledWords(any(), any()) } returns listOf("suggested")
+      viewModel.onSearchValueChanged("suggeste")
+      advanceUntilIdle()
+      viewModel.onSuggestionItemClick("suggested")
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.spellingCorrectionSuggestions).isEmpty()
+    }
+
+    @Test
+    fun onSuggestionItemClick_whenCalled_returnsSpellingCorrectionSuggestions() = runTest {
+      val suggestion = "corrected"
+      viewModel.onSuggestionItemClick(suggestion)
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.searchText).isEqualTo(suggestion)
+    }
+
+    private fun emissionOf(
+      searchTerm: String,
+      suggestionSearch: SuggestionSearch,
+      databaseResults: List<RecentSearchListItem>,
+      searchOrigin: SearchOrigin
+    ) {
+      coEvery {
+        searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
+      } returns suggestionSearch
+      viewModel.actions.tryEmit(Filter(searchTerm))
+      recentsFromDb.tryEmit(databaseResults)
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
+    }
+  }
+
+  @Nested
+  inner class LoadSearch {
+    @Test
+    fun loadMoreSearchResults_whenSameDataReturned_doesNotUpdateSearchList() = runTest {
+      val existingItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      recentsFromDb.tryEmit(listOf(existingItem))
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
+      advanceUntilIdle()
+
+      val listBefore = viewModel.uiState.value.searchList
+
+      viewModel.loadMoreSearchResults()
+      advanceUntilIdle()
+      val listAfter = viewModel.uiState.value.searchList
+
+      assertThat(listAfter).isEqualTo(listBefore)
+      assertThat(viewModel.uiState.value.isLoadingMore).isFalse()
+    }
+
+    @Test
+    fun loadMoreSearchResults_whenNewDataArrives_updatesSearchList() = runTest {
+      val existingItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      val newItem = RecentSearchListItem("new data", ZimFileReader.CONTENT_PREFIX)
+
+      recentsFromDb.tryEmit(listOf(existingItem))
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
+      advanceUntilIdle()
+
+      recentsFromDb.tryEmit(listOf(existingItem, newItem))
+      viewModel.loadMoreSearchResults()
+      advanceUntilIdle()
+
+      val newData = viewModel.uiState.value.searchList
+      assertThat(newData).containsExactly(existingItem, newItem)
+      assertThat(viewModel.uiState.value.isLoadingMore).isFalse()
+    }
+  }
+
+  @Nested
+  inner class UiClickTests {
+    @Test
+    fun onItemClick_whenCalled_emitsCloseKeyboardSaveAndOpen() = runTest {
+      val searchListItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      viewModel.effects.test {
+        viewModel.onItemClick(searchListItem)
+        advanceUntilIdle()
+        assertThat(awaitItem()).isEqualTo(CloseKeyboard)
+        assertThat(awaitItem()).isInstanceOf(SaveSearchToRecents::class.java)
+        assertThat(awaitItem()).isEqualTo(OpenSearchItem(searchListItem, false))
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onItemLongClick_whenCalled_emitsCloseKeyboardAndShowDeleteDialog() = runTest {
+      val searchListItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      viewModel.effects.test {
+        viewModel.onItemLongClick(searchListItem)
+        advanceUntilIdle()
+        assertThat(awaitItem()).isEqualTo(CloseKeyboard)
+        assertThat(awaitItem()).isEqualTo(
+          ShowDeleteSearchDialog(searchListItem, viewModel.actions, dialogShower)
+        )
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onNewTabIconClick_whenCalled_emitsCloseKeyboardSaveAndOpenInNewTab() = runTest {
+      val searchListItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      viewModel.effects.test {
+        viewModel.onNewTabIconClick(searchListItem)
+        advanceUntilIdle()
+        assertThat(awaitItem()).isEqualTo(CloseKeyboard)
+        assertThat(awaitItem()).isInstanceOf(SaveSearchToRecents::class.java)
+        assertThat(awaitItem()).isEqualTo(OpenSearchItem(searchListItem, true))
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
   }
 
   @Nested
@@ -325,7 +440,7 @@ internal class SearchViewModelTest {
         val bundle = mockk<Bundle>()
         actionResultsInEffects(
           CreatedWithArguments(bundle),
-          SearchArgumentProcessing(bundle, viewModel.actions)
+          SearchArgumentProcessing(bundle, viewModel.actions, viewModel.processSearchArgument)
         )
       }
 
@@ -348,6 +463,72 @@ internal class SearchViewModelTest {
       }
 
     @Test
+    fun voiceSearchResult_whenEmitted_returnsUpdatedSearchText() = runTest {
+      val voiceTerm = "kiwix"
+      viewModel.actions.tryEmit(Action.VoiceSearchResult(voiceTerm))
+      advanceUntilIdle()
+
+      assertThat(viewModel.uiState.value.searchText).isEqualTo(voiceTerm)
+    }
+
+    @Test
+    fun onKeyboardSubmitButtonClick_whenNoMatchFound_returnsNothing() = runTest {
+      recentsFromDb.tryEmit(emptyList())
+      advanceUntilIdle()
+
+      viewModel.effects.test {
+        viewModel.onKeyboardSubmitButtonClick("no match here")
+
+        expectNoEvents()
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun closeKeyboard_whenCalled_emitsCloseKeyboardEffect() = runTest {
+      actionResultsInEffects(
+        Action.CloseKeyboard,
+        CloseKeyboard
+      )
+    }
+
+    @Test
+    fun onKeyboardSubmitButtonClick_whenMatchFound_emitsCloseKeyboardAndOnItemClick() = runTest {
+      val matchingItem = RecentSearchListItem("kiwix", ZimFileReader.CONTENT_PREFIX)
+      recentsFromDb.tryEmit(listOf(matchingItem))
+      viewModel.actions.tryEmit(ScreenWasStartedFrom(FromWebView))
+      advanceUntilIdle()
+
+      viewModel.effects.test {
+        viewModel.onKeyboardSubmitButtonClick("kiwix")
+        advanceUntilIdle()
+
+        val closeKeyboardEffect = awaitItem()
+        assertThat(closeKeyboardEffect).isEqualTo(CloseKeyboard)
+        val saveSearchToRecentsEffect = awaitItem()
+        assertThat(saveSearchToRecentsEffect).isInstanceOf(SaveSearchToRecents::class.java)
+        val openSearchItemEffect = awaitItem()
+        assertThat(openSearchItemEffect).isEqualTo(OpenSearchItem(matchingItem, false))
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun loadMoreSearchResults_whenCalled_returnsLoadMoreResults() = runTest {
+      viewModel.actions.test {
+        viewModel.loadMoreSearchResults()
+
+        val action = awaitItem()
+
+        assertThat(action).isInstanceOf(Action.LoadMoreResults::class.java)
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
     fun `ActivityResultReceived offers ProcessActivityResult`() =
       runTest {
         actionResultsInEffects(
@@ -356,57 +537,18 @@ internal class SearchViewModelTest {
         )
       }
 
-    private fun TestScope.actionResultsInEffects(
+    private suspend fun TestScope.actionResultsInEffects(
       action: Action,
       vararg effects: SideEffect<*>
     ) {
-      if (effects.size > 1) return
-      val collectedEffects = mutableListOf<SideEffect<*>>()
-      val job =
-        launch {
-          viewModel.effects.collect {
-            collectedEffects.add(it)
-          }
+      viewModel.effects.test {
+        viewModel.actions.tryEmit(action)
+        advanceUntilIdle()
+        effects.forEach { expected ->
+          assertThat(awaitItem()).isEqualTo(expected)
         }
-
-      viewModel.actions.trySend(action).isSuccess
-      advanceUntilIdle()
-      assertThat(collectedEffects).containsExactlyElementsOf(effects.toList())
-      job.cancel()
+        expectNoEvents()
+      }
     }
   }
-
-  private fun emissionOf(
-    searchTerm: String,
-    suggestionSearch: SuggestionSearch,
-    databaseResults: List<RecentSearchListItem>,
-    searchOrigin: SearchOrigin
-  ) {
-    coEvery {
-      searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
-    } returns suggestionSearch
-    viewModel.actions.trySend(Filter(searchTerm)).isSuccess
-    recentsFromDb.trySend(databaseResults).isSuccess
-    viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
-  }
-}
-
-/**
- * Local testFlow that uses launch/job.join() because SearchViewModel
- * uses debounce which requires concurrent coroutine execution.
- */
-private suspend fun <T> TestScope.testFlow(
-  flow: kotlinx.coroutines.flow.Flow<T>,
-  triggerAction: suspend () -> Unit,
-  assert: suspend app.cash.turbine.TurbineTestContext<T>.() -> Unit
-) {
-  val job = launch {
-    flow.test {
-      triggerAction()
-      assert()
-      cancelAndIgnoreRemainingEvents()
-      ensureAllEventsConsumed()
-    }
-  }
-  job.join()
 }

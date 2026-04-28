@@ -27,7 +27,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.VoiceSearchResult
 internal class ProcessActivityResultTest {
   private val activity: AppCompatActivity = mockk()
   private val data = mockk<Intent>()
-  private val actions = mockk<Channel<Action>>(relaxed = true)
+  private val actions = mockk<MutableSharedFlow<Action>>(relaxed = true)
   private val successfulResult =
     ProcessActivityResult(
       StartSpeechInput.REQ_CODE_SPEECH_INPUT,
@@ -72,6 +72,6 @@ internal class ProcessActivityResultTest {
   fun `invoke with sends filter action with data`() {
     every { data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) } returns arrayListOf("")
     successfulResult.invokeWith(activity)
-    verify { actions.trySend(VoiceSearchResult("")).isSuccess }
+    verify { actions.tryEmit(VoiceSearchResult("")) }
   }
 }
