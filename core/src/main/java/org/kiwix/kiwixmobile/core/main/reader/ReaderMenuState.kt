@@ -57,6 +57,7 @@ const val RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG = "randomArticleMenuItemTestingTa
 const val SHARE_ARTICLE_MENU_ITEM_TESTING_TAG = "shareArticleMenuItemTestingTag"
 const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 const val TABS_SIZE_TEXT_TESTING_TAG = "tabsSizeTextTestingTag"
+const val ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG = "addToHomeScreenMenuItemTestingTag"
 
 @Stable
 class ReaderMenuState(
@@ -64,7 +65,8 @@ class ReaderMenuState(
   isUrlValidInitially: Boolean,
   private val disableReadAloud: Boolean = false,
   private val disableTabs: Boolean = false,
-  private val disableSearch: Boolean = false
+  private val disableSearch: Boolean = false,
+  private val isPinShortcutSupported: Boolean = false
 ) {
   interface MenuClickListener {
     fun onTabMenuClicked()
@@ -74,6 +76,7 @@ class ReaderMenuState(
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
     fun onSearchMenuClickedMenuClicked()
+    fun onAddToHomeScreenMenuClicked()
   }
 
   val menuItems = mutableStateListOf<ActionMenuItem>()
@@ -85,6 +88,7 @@ class ReaderMenuState(
     put(MenuItemType.AddNote, true)
     put(MenuItemType.RandomArticle, true)
     put(MenuItemType.ReadAloud, true)
+    put(MenuItemType.AddToHomeScreen, true)
   }
 
   var isInTabSwitcher by mutableStateOf(false)
@@ -114,7 +118,8 @@ class ReaderMenuState(
       MenuItemType.ReadAloud,
       MenuItemType.Share,
       MenuItemType.AddNote,
-      MenuItemType.TabSwitcher
+      MenuItemType.TabSwitcher,
+      MenuItemType.AddToHomeScreen
     )
   }
 
@@ -140,7 +145,8 @@ class ReaderMenuState(
       MenuItemType.Share,
       MenuItemType.RandomArticle,
       MenuItemType.AddNote,
-      MenuItemType.ReadAloud
+      MenuItemType.ReadAloud,
+      MenuItemType.AddToHomeScreen
     )
   }
 
@@ -152,7 +158,8 @@ class ReaderMenuState(
       MenuItemType.Share,
       MenuItemType.RandomArticle,
       MenuItemType.AddNote,
-      MenuItemType.ReadAloud
+      MenuItemType.ReadAloud,
+      MenuItemType.AddToHomeScreen
     )
   }
 
@@ -163,7 +170,8 @@ class ReaderMenuState(
       MenuItemType.RandomArticle,
       MenuItemType.ReadAloud,
       MenuItemType.Share,
-      MenuItemType.AddNote
+      MenuItemType.AddNote,
+      MenuItemType.AddToHomeScreen
     )
   }
 
@@ -176,6 +184,7 @@ class ReaderMenuState(
     menuItems.clear()
     addSearchMenuItem()
     addTabMenuItem()
+    addAddToHomeScreenMenuItem()
     addReaderMenuItems()
   }
 
@@ -240,6 +249,20 @@ class ReaderMenuState(
     }
   }
 
+  private fun addAddToHomeScreenMenuItem() {
+    if (menuItemVisibility[MenuItemType.AddToHomeScreen] == true &&
+      urlIsValid &&
+      isPinShortcutSupported
+    ) {
+      menuItems += ActionMenuItem(
+        contentDescription = R.string.menu_add_to_homescreen,
+        onClick = { menuClickListener.onAddToHomeScreenMenuClicked() },
+        testingTag = ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+  }
+
   private fun addReaderMenuItems() {
     if (menuItemVisibility[MenuItemType.Share] == true) {
       menuItems += ActionMenuItem(
@@ -299,5 +322,6 @@ enum class MenuItemType {
   Share,
   AddNote,
   RandomArticle,
-  ReadAloud
+  ReadAloud,
+  AddToHomeScreen
 }

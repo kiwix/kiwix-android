@@ -69,8 +69,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.remember
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+
 import androidx.core.app.ActivityCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -147,6 +157,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
@@ -171,6 +183,8 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.ShortcutResult
+import org.kiwix.kiwixmobile.core.utils.ShortcutUtils
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
@@ -1612,7 +1626,10 @@ abstract class CoreReaderFragment :
     }
   }
 
-  suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
+  suspend fun openZimFile(
+    zimReaderSource: ZimReaderSource,
+    isCustomApp: Boolean = false
+  ) {
     if (isCustomApp || hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
@@ -2218,7 +2235,8 @@ abstract class CoreReaderFragment :
       isUrlValidInitially = urlIsValid(),
       disableReadAloud = false,
       disableTabs = false,
-      disableSearch = false
+      disableSearch = false,
+      isPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())
     )
 
   protected fun urlIsValid(): Boolean = getCurrentWebView()?.url != null
@@ -2423,6 +2441,65 @@ abstract class CoreReaderFragment :
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()
     }
+  }
+
+  override fun onAddToHomeScreenMenuClicked() {
+    val reader = zimReaderContainer?.zimFileReader
+    if (reader == null) {
+      Log.e(TAG_KIWIX, "Reader or ZimFileReader is null, cannot add to home screen")
+      return
+    }
+
+    // On Xiaomi/MIUI devices, check shortcut permission first
+    if (ShortcutUtils.isXiaomiDevice() &&
+      !ShortcutUtils.isShortcutPermissionGranted(requireContext())
+    ) {
+      // Show permission dialog first, then proceed to naming dialog after user grants permission
+      (alertDialogShower as? AlertDialogShower)?.show(
+        KiwixDialog.XiaomiShortcutPermission,
+        {
+          // "Open Settings" button — open MIUI permission editor
+          ShortcutUtils.openMiuiPermissionEditor(requireContext())
+        }
+      )
+      return
+    }
+
+    // Permission is granted (or not Xiaomi) — show the shortcut naming dialog
+    showAddShortcutDialog(reader)
+  }
+
+  private fun showAddShortcutDialog(reader: ZimFileReader) {
+    val initialName = reader.title
+    val nameState = mutableStateOf(initialName)
+
+    val dialog = KiwixDialog.AddShortcut(
+      customGetView = {
+        val name by remember { nameState }
+        Column {
+          OutlinedTextField(
+            value = name,
+            onValueChange = { nameState.value = it },
+            label = { Text(stringResource(R.string.shortcut_name_label)) },
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(bottom = EIGHT_DP)
+          )
+        }
+      }
+    )
+
+    (alertDialogShower as? AlertDialogShower)?.show(dialog, {
+      val result = ShortcutUtils.addBookShortcut(
+        context = requireContext(),
+        zimFileReader = reader,
+        pageUrl = getCurrentWebView()?.url,
+        customName = nameState.value
+      )
+      if (result == ShortcutResult.NotSupported) {
+        toast(string.shortcut_disabled_message)
+      }
+    })
   }
 
   override fun webViewTitleUpdated(title: String) {
