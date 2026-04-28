@@ -40,8 +40,9 @@ import java.io.File
 fun bookOnDisk(
   databaseId: Long = 0L,
   book: LibkiwixBook = libkiwixBook(),
-  zimReaderSource: ZimReaderSource = ZimReaderSource(File(""))
-) = BookOnDisk(databaseId, book, File(""), zimReaderSource)
+  zimReaderSource: ZimReaderSource = ZimReaderSource(File("")),
+  isSelected: Boolean = false
+) = BookOnDisk(databaseId, book, File(""), zimReaderSource, isSelected = isSelected)
 
 fun downloadModel(
   databaseId: Long = 1L,

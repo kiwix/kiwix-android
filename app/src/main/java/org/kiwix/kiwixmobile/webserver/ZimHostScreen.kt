@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -72,12 +73,16 @@ import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 const val START_SERVER_BUTTON_TESTING_TAG = "startServerButtonTestingTag"
 const val QR_IMAGE_TESTING_TAG = "qrImageTestingTag"
 
+const val SHARE_ICON_TESTING_TAG = "share_icon_zim_host"
+const val ZIM_HOST_SCREEN_TESTING_TAG = "zim_host_screen"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun ZimHostScreen(
   serverIpText: String,
-  shareIconItem: Pair<Boolean, () -> Unit>,
+  showShareIcon: Boolean,
+  shareIconClick: () -> Unit,
   qrImageItem: Pair<Boolean, IconItem>,
   booksList: List<BooksOnDiskListItem>,
   startServerButtonItem: Triple<String, Color, () -> Unit>,
@@ -88,12 +93,15 @@ fun ZimHostScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   KiwixTheme {
-    Scaffold(topBar = {
-      KiwixAppBar(
-        title = stringResource(R.string.menu_wifi_hotspot),
-        navigationIcon = navigationIcon
-      )
-    }) { contentPadding ->
+    Scaffold(
+      topBar = {
+        KiwixAppBar(
+          title = stringResource(R.string.menu_wifi_hotspot),
+          navigationIcon = navigationIcon
+        )
+      },
+      modifier = Modifier.testTag(ZIM_HOST_SCREEN_TESTING_TAG)
+    ) { contentPadding ->
       Column(
         modifier = Modifier
           .fillMaxSize()
@@ -106,7 +114,7 @@ fun ZimHostScreen(
           verticalAlignment = Alignment.CenterVertically
         ) {
           ServerIpText(serverIpText, Modifier.weight(1f), LocalContext.current)
-          ShareIcon(shareIconItem)
+          ShareIcon(showShareIcon, shareIconClick)
         }
         Box(modifier = Modifier.weight(1f)) {
           BookItemList(
@@ -139,12 +147,14 @@ private fun ServerIpText(
   modifier: Modifier,
   context: Context
 ) {
+  val density = LocalDensity.current
+  val minHeightPx = with(density) { MATERIAL_MINIMUM_HEIGHT_AND_WIDTH.toPx().toInt() }
   val serverIpTextView = remember { TextView(context) }
   AndroidView(factory = { serverIpTextView }, modifier = modifier) { textView ->
     textView.apply {
       text = serverIpText
       textSize = 14F
-      minHeight = context.resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
+      minHeight = minHeightPx
       gravity = Gravity.CENTER or Gravity.START
       LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
       movementMethod = LinkMovementMethod.getInstance()
@@ -153,16 +163,17 @@ private fun ServerIpText(
 }
 
 @Composable
-private fun ShareIcon(shareIconItem: Pair<Boolean, () -> Unit>) {
-  if (shareIconItem.first) {
+private fun ShareIcon(showShareIcon: Boolean, shareIconItem: () -> Unit) {
+  if (showShareIcon) {
     Image(
       painter = painterResource(id = R.drawable.ic_share_35dp),
       contentDescription = stringResource(id = R.string.share_host_address),
       modifier = Modifier
-        .clickable { shareIconItem.second.invoke() }
+        .clickable { shareIconItem.invoke() }
         .padding(FOUR_DP)
         .heightIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
-        .widthIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH),
+        .widthIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
+        .testTag(SHARE_ICON_TESTING_TAG),
       colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
       contentScale = ContentScale.Inside
     )

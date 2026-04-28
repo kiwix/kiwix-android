@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.webserver
 
 import android.Manifest
 import android.content.Context
+import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
@@ -29,6 +30,7 @@ import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
@@ -46,6 +48,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -61,7 +64,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class ZimHostFragmentTest {
+@RunWith(AndroidJUnit4::class)
+class ZimHostScreenInstrumentTest {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -72,7 +76,7 @@ class ZimHostFragmentTest {
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  lateinit var kiwixMainActivity: KiwixMainActivity
+  private lateinit var kiwixMainActivity: KiwixMainActivity
   private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   private val permissions =
@@ -118,6 +122,7 @@ class ZimHostFragmentTest {
           setIsFirstRun(false)
           setIsPlayStoreBuild(true)
           setPrefIsTest(true)
+          setHostedBookIds(emptySet())
         }
       }
     }
@@ -139,10 +144,8 @@ class ZimHostFragmentTest {
   }
 
   @Test
-  fun testZimHostFragment() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-    ) {
+  fun testZimHostScreen() {
+    if (isWifiEnabled()) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)
@@ -213,6 +216,12 @@ class ZimHostFragmentTest {
     LeakAssertions.assertNoLeaks()
   }
 
+  private fun isWifiEnabled(): Boolean {
+    val wifiManager =
+      context?.applicationContext?.getSystemService(WifiManager::class.java)
+    return wifiManager?.isWifiEnabled == true
+  }
+
   @Test
   fun testZIMFilesShowingOnZimHostScreen() {
     activityScenario.onActivity {
@@ -242,11 +251,12 @@ class ZimHostFragmentTest {
 
   private fun loadZimFileInApplication(zimFileName: String) {
     val loadFileStream =
-      ZimHostFragmentTest::class.java.classLoader.getResourceAsStream(zimFileName)
+      ZimHostScreenInstrumentTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+        ?: error("Error loading resource for $zimFileName")
     val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), zimFileName) }
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
+    loadFileStream?.use { inputStream ->
       val outputStream: OutputStream = FileOutputStream(zimFile)
       outputStream.use { it ->
         val buffer = ByteArray(inputStream.available())
