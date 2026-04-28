@@ -141,7 +141,7 @@ internal fun LanguageScreenRoute(
 @SuppressLint("ComposableLambdaParameterNaming")
 @Suppress("LongParameterList")
 @Composable
-private fun LanguageScreen(
+internal fun LanguageScreen(
   searchText: String,
   isSearchActive: Boolean,
   state: State,
