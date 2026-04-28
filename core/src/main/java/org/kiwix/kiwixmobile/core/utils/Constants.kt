@@ -59,3 +59,4 @@ const val SIX = 6
 const val NINE = 9
 const val HUNDERED = 100
 const val DEFAULT_INT_VALUE = -1
+const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTestingTag"
