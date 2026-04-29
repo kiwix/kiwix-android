@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.roomDao
 
 import android.content.Context
+import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,14 +29,17 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.R])
 class NoteRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var notesRoomDao: NotesRoomDao
@@ -56,7 +59,6 @@ class NoteRoomDaoTest {
   @Test
   fun testNotesRoomDao() =
     runBlocking {
-      // delete all the notes from database to properly run the test cases.
       clearNotes()
       val noteItem =
         getNoteListItem(
@@ -82,7 +84,6 @@ class NoteRoomDaoTest {
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 1)
 
-      // Delete the saved note item with all delete methods available in NoteRoomDao.
       // delete via noteTitle
       notesRoomDao.deleteNote(noteItem.title)
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
@@ -113,39 +114,34 @@ class NoteRoomDaoTest {
       clearNotes()
 
       // Test to insert the items with same id.
-      val noteItem2 =
-        getNoteListItem(
-          databaseId = 1,
-          zimUrl = "http://kiwix.app/Installing",
-          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
-        )
-      val noteItem3 =
-        getNoteListItem(
-          databaseId = 1,
-          title = "Installing",
-          zimUrl = "http://kiwix.app/Installing",
-          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
-        )
+      val noteItem2 = getNoteListItem(
+        databaseId = 1,
+        zimUrl = "http://kiwix.app/Installing",
+        noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+      )
+      val noteItem3 = getNoteListItem(
+        databaseId = 1,
+        title = "Installing",
+        zimUrl = "http://kiwix.app/Installing",
+        noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+      )
       kiwixRoomDatabase.notesRoomDao().saveNote(noteItem2)
       kiwixRoomDatabase.notesRoomDao().saveNote(noteItem3)
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(2, notesList.size)
       clearNotes()
 
-      // Attempt to save undefined history item
+      // Attempt to save undefined note item
       lateinit var undefinedNoteListItem: NoteListItem
       try {
         notesRoomDao.saveNote(undefinedNoteListItem)
-        assertThat(
-          "Undefined value was saved into database",
-          false
-        )
+        assertThat("Undefined value was saved into database", false)
       } catch (_: Exception) {
         assertThat("Undefined value was not saved, as expected.", true)
       }
 
-      // Save history item with Unicode values
-      val unicodeTitle = "title \u03A3" // Unicode character for Greek capital letter Sigma
+      // Save note item with Unicode values
+      val unicodeTitle = "title \u03A3"
       val noteListItem2 =
         getNoteListItem(title = unicodeTitle, zimUrl = "http://kiwix.app/Installing")
       notesRoomDao.saveNote(noteListItem2)

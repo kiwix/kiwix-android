@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.roomDao
 
 import android.content.Context
+import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -35,8 +35,11 @@ import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.R])
 class HistoryRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var historyRoomDao: HistoryRoomDao

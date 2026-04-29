@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.roomDao
 
 import android.content.Context
+import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,8 +31,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.R])
 class RecentSearchRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
@@ -82,15 +85,11 @@ class RecentSearchRoomDaoTest {
       // verify that the result is not empty
       assertThat(getRecentSearchByZimId(zimId).size, equalTo(1))
 
-      // we are not saving undefined or null values into database.
       // test to save undefined value for recent search.
       lateinit var undefinedQuery: String
       try {
         recentSearchRoomDao.saveSearch(undefinedQuery, zimId, url)
-        assertThat(
-          "Undefined value was saved into database",
-          false
-        )
+        assertThat("Undefined value was saved into database", false)
       } catch (e: Exception) {
         assertThat("Undefined value was not saved, as expected.", true)
       }
@@ -99,7 +98,7 @@ class RecentSearchRoomDaoTest {
       recentSearchRoomDao.deleteSearchHistory()
 
       // save unicode values into database
-      val unicodeQuery = "title \u03A3" // Unicode character for Greek capital letter Sigma
+      val unicodeQuery = "title \u03A3"
       recentSearchRoomDao.saveSearch(unicodeQuery, zimId, url)
       assertThat(getRecentSearchByZimId(zimId)[0].searchTerm, equalTo("title Σ"))
     }
