@@ -181,6 +181,7 @@ dependencies {
   add("standaloneImplementation", project(":defaultmigration"))
   // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
+  testImplementation("com.getkeepsafe.relinker:relinker:1.4.5")
 }
 
 tasks.register("generateVersionCodeAndName") {
