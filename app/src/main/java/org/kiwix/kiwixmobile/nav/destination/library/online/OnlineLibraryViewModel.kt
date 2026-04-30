@@ -91,7 +91,18 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewMod
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowSnackbar
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowToast
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.RequestNotificationPermission
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.RequestStoragePermission
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.RequestManageExternalFilesPermission
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.ShowWifiOnlyDialog
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.ShowStorageSelection
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.NotEnoughSpace
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.StartDownload
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.NoInternet
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.HandleBookDownloadUseCase.DownloadAction.DisableStorageSelection
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveOnlineLibraryItems
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.AppProgressListenerProvider
@@ -120,7 +131,8 @@ class OnlineLibraryViewModel @Inject constructor(
   val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val repository: OnlineLibraryRepository,
-  private val libraryItemsMapper: LibraryItemsMapper,
+  private val observeOnlineLibraryItems: ObserveOnlineLibraryItems,
+  private val handleBookDownloadUseCase: HandleBookDownloadUseCase,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   data class OnlineLibraryRequest(
@@ -254,7 +266,7 @@ class OnlineLibraryViewModel @Inject constructor(
       .onEach {
         _uiState.update { current -> current.copy(isRefreshing = true) }
         updateOnlineLibraryFilters(
-          OnlineLibraryRequest(category = it, page = ONE, isLoadMoreItem = false)
+          OnlineLibraryRequest(category = it, page = ZERO, isLoadMoreItem = false)
         )
       }
       .flowOn(ioDispatcher)
@@ -278,7 +290,7 @@ class OnlineLibraryViewModel @Inject constructor(
     kiwixDataStore.selectedOnlineContentLanguage
       .onEach {
         updateOnlineLibraryFilters(
-          OnlineLibraryRequest(lang = it, page = ONE, isLoadMoreItem = false)
+          OnlineLibraryRequest(lang = it, page = ZERO, isLoadMoreItem = false)
         )
       }
       .flowOn(ioDispatcher)
@@ -292,6 +304,9 @@ class OnlineLibraryViewModel @Inject constructor(
       page = newRequest.page,
       isLoadMoreItem = newRequest.isLoadMoreItem
     )
+    viewModelScope.launch {
+      onlineLibraryRequest.emit(currentRequest)
+    }
   }
 
   private fun updateNetworkStates() = connectivityBroadcastReceiver.networkStates
@@ -544,76 +559,49 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  private fun checkSpaceAndDownload(onStorageSelect: () -> Unit) {
-    viewModelScope.launch {
-      if (!permissionChecker.isManageExternalStoragePermissionGranted()) {
-        emitDialog(KiwixDialog.ManageExternalFilesPermissionDialog) {
-          onNavigateToSettingsClicked()
-        }
-      } else {
-        downloadBookItem?.let { item ->
-          availableSpaceCalculator.hasAvailableSpaceFor(
-            item,
-            { downloadFile() },
-            { availableSpace -> emitNoSpaceSnackbar(context, availableSpace, onStorageSelect) }
-          )
-        }
-      }
-    }
-  }
-
-  @Suppress("NestedBlockDepth")
   fun onBookItemClick(item: BookItem, activity: KiwixMainActivity) {
     viewModelScope.launch {
       downloadBookItem = item
-      if (isAndroid13OrAbove && !permissionChecker.hasNotificationPermission()) {
-        sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
-        return@launch
-      }
-      when {
-        !NetworkUtils.isNetworkAvailable(context) -> {
-          emitNoInternetSnackbar(context)
+      val action = handleBookDownloadUseCase.invoke(
+        item,
+        activity.getStorageDeviceList().size
+      )
+      when (action) {
+        RequestNotificationPermission -> if (isAndroid13OrAbove) {
+          sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
         }
 
-        kiwixDataStore.wifiOnly.first() &&
-          !NetworkUtils.isWiFi(context) -> {
-          emitDialog(
-            KiwixDialog.YesNoDialog.WifiOnly,
-            positiveAction = {
-              viewModelScope.launch {
-                kiwixDataStore.setWifiOnly(false)
-                checkExternalStorageWritePermission(activity)
-              }
-            }
-          )
+        RequestStoragePermission -> sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
+        RequestManageExternalFilesPermission -> emitDialog(KiwixDialog.ManageExternalFilesPermissionDialog) {
+          sendUiEvent(NavigateToSettings)
         }
 
-        else -> {
-          if (kiwixDataStore.showStorageOption.first()) {
-            if (activity.getStorageDeviceList().size > 1) {
-              showStorageSelectDialog(activity)
-            } else {
-              kiwixDataStore.setShowStorageOption(false)
+        NoInternet -> emitNoInternetSnackbar(context)
+
+        ShowWifiOnlyDialog -> emitDialog(
+          KiwixDialog.YesNoDialog.WifiOnly,
+          positiveAction = {
+            viewModelScope.launch {
+              kiwixDataStore.setWifiOnly(false)
               onBookItemClick(item, activity)
             }
-          } else {
-            checkExternalStorageWritePermission(activity)
           }
+        )
+
+        ShowStorageSelection -> showStorageSelectDialog(activity)
+
+        DisableStorageSelection -> {
+          kiwixDataStore.setShowStorageOption(false)
+          onBookItemClick(item, activity)
         }
+
+        is NotEnoughSpace -> emitNoSpaceSnackbar(context, action.availableSpace) {
+          showStorageSelectDialog(activity)
+        }
+
+        is StartDownload -> downloadFile()
       }
     }
-  }
-
-  private suspend fun checkExternalStorageWritePermission(activity: KiwixMainActivity) {
-    if (permissionChecker.hasWriteExternalStoragePermission()) {
-      checkSpaceAndDownload { showStorageSelectDialog(activity) }
-    } else {
-      sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
-    }
-  }
-
-  fun onNavigateToSettingsClicked() {
-    sendUiEvent(NavigateToSettings)
   }
 
   fun onNavigateToAppSettingsClicked() {

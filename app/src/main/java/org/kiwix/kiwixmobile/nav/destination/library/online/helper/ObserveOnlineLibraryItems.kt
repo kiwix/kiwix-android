@@ -16,12 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library.online
+package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
@@ -31,8 +37,38 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownl
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 
-class LibraryItemsMapper @Inject constructor() {
-  suspend fun map(
+class ObserveOnlineLibraryItems @Inject constructor(
+  private val kiwixDataStore: KiwixDataStore,
+  private val fat32Checker: Fat32Checker,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
+  operator fun invoke(
+    localBooks: Flow<List<Book>>,
+    downloads: Flow<List<DownloadModel>>,
+    networkBooks: Flow<List<LibkiwixBook>>,
+    getString: (Int, Array<out Any>) -> String,
+    getSimpleString: (Int) -> String
+  ): Flow<List<LibraryListItem>> {
+    return combine(
+      localBooks,
+      downloads,
+      networkBooks,
+      fat32Checker.fileSystemStates,
+      kiwixDataStore.selectedOnlineContentLanguage
+    ) { books, activeDownloads, remoteBooks, fsState, lang ->
+      observeLibraryItems(
+        booksOnFileSystem = books,
+        activeDownloads = activeDownloads,
+        remoteBooks = remoteBooks,
+        fileSystemState = fsState,
+        selectedLanguage = lang,
+        getString = getString,
+        getSimpleString = getSimpleString
+      )
+    }.flowOn(ioDispatcher)
+  }
+
+  private fun observeLibraryItems(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
     remoteBooks: List<LibkiwixBook>,
