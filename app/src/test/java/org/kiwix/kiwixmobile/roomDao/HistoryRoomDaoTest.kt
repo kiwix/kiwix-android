@@ -35,11 +35,12 @@ import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.kiwix.kiwixmobile.core.utils.shadows.ShadowReLinker
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R])
+@Config(sdk = [Build.VERSION_CODES.R], shadows = [ShadowReLinker::class])
 class HistoryRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var historyRoomDao: HistoryRoomDao

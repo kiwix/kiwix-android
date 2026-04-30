@@ -39,12 +39,13 @@ import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.shadows.ShadowReLinker
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R])
+@Config(sdk = [Build.VERSION_CODES.R], shadows = [ShadowReLinker::class])
 class KiwixRoomDatabaseTest {
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase

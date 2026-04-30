@@ -31,11 +31,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.utils.shadows.ShadowReLinker
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R])
+@Config(sdk = [Build.VERSION_CODES.R], shadows = [ShadowReLinker::class])
 class RecentSearchRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
