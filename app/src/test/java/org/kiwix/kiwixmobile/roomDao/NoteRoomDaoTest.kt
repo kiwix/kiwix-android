@@ -47,7 +47,9 @@ class NoteRoomDaoTest {
   @Before
   fun setUp() {
     val context = ApplicationProvider.getApplicationContext<Context>()
-    kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
+    kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
+      .allowMainThreadQueries()
+      .build()
     notesRoomDao = kiwixRoomDatabase.notesRoomDao()
   }
 

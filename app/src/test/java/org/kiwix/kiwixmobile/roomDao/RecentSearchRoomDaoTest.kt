@@ -52,7 +52,9 @@ class RecentSearchRoomDaoTest {
       val url = "http://kiwix.app/mainPage"
       val context = ApplicationProvider.getApplicationContext<Context>()
       kiwixRoomDatabase =
-        Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
+        Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
+          .allowMainThreadQueries()
+          .build()
       recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
       // Save a recent search entity
       val query =
