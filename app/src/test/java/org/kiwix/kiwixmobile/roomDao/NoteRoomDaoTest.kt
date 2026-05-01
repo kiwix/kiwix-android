@@ -35,12 +35,11 @@ import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
-import org.kiwix.kiwixmobile.core.utils.shadows.ShadowReLinker
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R], shadows = [ShadowReLinker::class])
+@Config(sdk = [Build.VERSION_CODES.R], application = android.app.Application::class)
 class NoteRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var notesRoomDao: NotesRoomDao

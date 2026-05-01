@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.data
 
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -33,7 +34,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.utils.shadows.ShadowReLinker
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -47,7 +47,7 @@ import org.robolectric.annotation.Config
  * only the version-1 schema so that migrations can be applied incrementally.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R], shadows = [ShadowReLinker::class])
+@Config(sdk = [Build.VERSION_CODES.R], application = Application::class)
 class KiwixRoomDatabaseMigrationTest {
   private lateinit var db: SupportSQLiteDatabase
   private lateinit var roomDb: KiwixRoomDatabase

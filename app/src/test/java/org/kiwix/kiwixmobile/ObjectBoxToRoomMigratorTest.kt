@@ -43,13 +43,12 @@ import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 import org.kiwix.kiwixmobile.migration.entities.NotesEntity
 import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
-import org.kiwix.kiwixmobile.core.utils.shadows.ShadowReLinker
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R], shadows = [ShadowReLinker::class])
+@Config(sdk = [Build.VERSION_CODES.R], application = android.app.Application::class)
 class ObjectBoxToRoomMigratorTest {
   private lateinit var context: Context
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
