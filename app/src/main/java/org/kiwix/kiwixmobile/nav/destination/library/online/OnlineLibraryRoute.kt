@@ -111,21 +111,6 @@ fun OnlineLibraryRoute(
     writePermissionState = writePermissionState
   )
 
-  // ObserveDownloadingState(
-  //   onlineLibraryDownloading = onlineLibraryDownloading,
-  //   onRefreshingChanged = { isRefreshing = it },
-  //   onScanningProgressChanged = { scanningProgressItem = it },
-  //   onLoadingMoreChanged = { isLoadingMoreItem = it },
-  //   context = context
-  // )
-
-  LaunchedEffect(Unit) {
-    onlineLibraryViewModel.updateOnlineLibraryFilters(
-      onlineLibraryViewModel.getOnlineLibraryRequest()
-    )
-    // scanningProgressItem = false to context.getString(string.reaching_remote_library)
-  }
-
   val actionMenuItems = buildActionMenuItems(
     isSearchActive = uiState.isSearchActive,
     onSearchClick = onlineLibraryViewModel::openSearchView,
@@ -172,6 +157,7 @@ fun OnlineLibraryRoute(
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
+@Suppress("LongParameterList")
 @Composable
 private fun HandleUiEvents(
   viewModel: OnlineLibraryViewModel,
@@ -252,27 +238,6 @@ private fun handlePermissionEvents(
   when (permission) {
     POST_NOTIFICATIONS -> notificationPermission?.launchPermissionRequest()
     WRITE_EXTERNAL_STORAGE -> writePermissionState.launchPermissionRequest()
-  }
-}
-
-@Composable
-private fun ObserveDownloadingState(
-  onlineLibraryDownloading: Pair<Boolean, Boolean>,
-  onRefreshingChanged: (Boolean) -> Unit,
-  onScanningProgressChanged: (Pair<Boolean, String>) -> Unit,
-  onLoadingMoreChanged: (Boolean) -> Unit,
-  context: android.content.Context
-) {
-  LaunchedEffect(onlineLibraryDownloading) {
-    val (initialLibraryDownloading, loadingMoreItem) = onlineLibraryDownloading
-    if (initialLibraryDownloading) {
-      onRefreshingChanged(false)
-      onScanningProgressChanged(true to context.getString(string.reaching_remote_library))
-    } else {
-      onRefreshingChanged(false)
-      onScanningProgressChanged(false to context.getString(string.reaching_remote_library))
-    }
-    onLoadingMoreChanged(loadingMoreItem)
   }
 }
 

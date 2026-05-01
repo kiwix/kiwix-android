@@ -77,7 +77,6 @@ class ObserveOnlineLibraryItems @Inject constructor(
     getString: (Int, Array<Any>) -> String,
     getSimpleString: (Int) -> String
   ): List<LibraryListItem> {
-
     val allBooks =
       remoteBooks - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
 
@@ -120,13 +119,12 @@ class ObserveOnlineLibraryItems @Inject constructor(
     fileSystemState: FileSystemState,
     sectionTitle: String,
     sectionId: Long
-  ) =
-    if (books.isNotEmpty()) {
-      listOf(DividerItem(sectionId, sectionTitle)) +
-        books.asLibraryItems(activeDownloads, fileSystemState)
-    } else {
-      emptyList()
-    }
+  ) = if (books.isNotEmpty()) {
+    listOf(DividerItem(sectionId, sectionTitle)) +
+      books.asLibraryItems(activeDownloads, fileSystemState)
+  } else {
+    emptyList()
+  }
 
   private fun List<LibkiwixBook>.asLibraryItems(
     activeDownloads: List<DownloadModel>,

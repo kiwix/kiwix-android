@@ -78,7 +78,7 @@ const val MAX_PROGRESS = 100
 const val THREE = 3
 const val FOUR = 4
 
-@Suppress("LargeClass")
+@Suppress("LargeClass", "LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,

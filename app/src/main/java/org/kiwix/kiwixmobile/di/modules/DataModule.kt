@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLib
 @Module
 class DataModule {
   @Provides
-  fun provideOnlineLibraryRepository(onlineLibraryRepositoryImpl: OnlineLibraryRepositoryImpl): OnlineLibraryRepository =
-    onlineLibraryRepositoryImpl
+  fun provideOnlineLibraryRepository(
+    onlineLibraryRepositoryImpl: OnlineLibraryRepositoryImpl
+  ): OnlineLibraryRepository = onlineLibraryRepositoryImpl
 }

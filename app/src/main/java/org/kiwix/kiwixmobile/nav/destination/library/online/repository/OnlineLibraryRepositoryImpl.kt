@@ -39,7 +39,9 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_OPDS_LIBRARY_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState
@@ -63,7 +65,7 @@ class OnlineLibraryRepositoryImpl @Inject constructor(
     appProgressListener: AppProgressListenerProvider?
   ): Flow<OnlineLibraryState> = flow {
     emit(Loading(request.isLoadMoreItem))
-    val maxRetries = 5
+    val maxRetries = FIVE
     repeat(maxRetries) { attempt ->
       try {
         val baseUrl = KIWIX_OPDS_LIBRARY_URL
@@ -102,9 +104,9 @@ class OnlineLibraryRepositoryImpl @Inject constructor(
         )
         emit(Success(request, books, totalPages))
         return@flow
-      } catch (e: Exception) {
-        if (attempt == maxRetries - 1) {
-          emit(Error(request, e))
+      } catch (ignore: Exception) {
+        if (attempt == maxRetries - ONE) {
+          emit(Error(request, ignore))
         }
       }
     }
