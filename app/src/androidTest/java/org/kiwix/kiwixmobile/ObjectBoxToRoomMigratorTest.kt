@@ -500,7 +500,8 @@ class ObjectBoxToRoomMigratorTest {
         zimId = "test-zim-id",
         zimName = "test-zim-name",
         zimFilePath = expectedZimFilePath,
-        zimReaderSource = null, // zimReaderSource is null, but zimFilePath is provided
+        // zimReaderSource is null, but zimFilePath is provided
+        zimReaderSource = null,
         favicon = null,
         historyUrl = "https://kiwix.app/A/Test",
         historyTitle = "Test Title",
@@ -530,7 +531,8 @@ class ObjectBoxToRoomMigratorTest {
         id = 0,
         zimId = "test-zim-id",
         zimFilePath = expectedZimFilePath,
-        zimReaderSource = null, // zimReaderSource is null, but zimFilePath is provided
+        // zimReaderSource is null, but zimFilePath is provided
+        zimReaderSource = null,
         zimUrl = "https://kiwix.app/A/Test",
         noteTitle = "Test Title",
         noteFilePath = "/storage/emulated/0/Download/Notes/test.txt",

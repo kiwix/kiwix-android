@@ -303,7 +303,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       val legacyBookOnDiskEntity = BookOnDiskEntity(
         id = 0,
         file = zimFile,
-        zimReaderSource = ZimReaderSource(File("")), // null cannot be used for non-null type
+        // null cannot be used for non-null type
+        zimReaderSource = ZimReaderSource(File("")),
         bookId = expectedZimId,
         title = "",
         description = "",
@@ -493,7 +494,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         zimId = expectedZimId,
         zimName = expectedZimName,
         zimFilePath = expectedZimFilePath,
-        zimReaderSource = null, // legacy data
+        // legacy data
+        zimReaderSource = null,
         bookmarkUrl = expectedBookmarkUrl,
         bookmarkTitle = expectedTitle,
         favicon = expectedFavicon
