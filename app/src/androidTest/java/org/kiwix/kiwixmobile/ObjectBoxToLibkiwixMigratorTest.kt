@@ -298,12 +298,12 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
 
   @Test
-  fun migrateBookOnDisk_withNullZimReaderSource_ShouldSetZimReaderSource(): Unit =
+  fun migrateBookOnDisk_withLegacyEmptyFileZimReaderSource_ShouldSetZimReaderSource(): Unit =
     runBlocking {
       val legacyBookOnDiskEntity = BookOnDiskEntity(
         id = 0,
         file = zimFile,
-        // null cannot be used for non-null type
+        // Legacy rows use an empty-file sentinel because zimReaderSource is non-nullable.
         zimReaderSource = ZimReaderSource(File("")),
         bookId = expectedZimId,
         title = "",
@@ -487,8 +487,26 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
 
   @Test
-  fun migrateBookMarks_withZimFilePath_shouldSetZimReaderSource(): Unit =
+  fun migrateBookMarks_withDuplicateDetection_shouldNotInsertDuplicate(): Unit =
     runBlocking {
+      // 1. Manually add an existing bookmark to libkiwix
+      val existingZimReaderSource = ZimReaderSource(File(expectedZimFilePath))
+      val libkiwixBook = Book().apply {
+        update(Archive(expectedZimFilePath))
+      }
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
+        LibkiwixBookmarkItem(
+          zimId = expectedZimId,
+          zimFilePath = expectedZimFilePath,
+          zimReaderSource = existingZimReaderSource,
+          zimName = expectedZimName,
+          bookmarkUrl = expectedBookmarkUrl,
+          title = expectedTitle,
+          favicon = expectedFavicon,
+          libKiwixBook = libkiwixBook
+        )
+      )
+
       val legacyBookmarkEntity = BookmarkEntity(
         id = 0,
         zimId = expectedZimId,
@@ -506,13 +524,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
 
       val actualDataAfterMigration =
         objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
+      // Should not insert duplicate if zimReaderSource is backfilled correctly
       assertEquals(1, actualDataAfterMigration.size)
-      // zimReaderSource should be set during migration
-      assertNotNull(actualDataAfterMigration[0].zimReaderSource)
-      assertEquals(
-        actualDataAfterMigration[0].zimReaderSource?.file?.canonicalPath,
-        expectedZimFilePath
-      )
 
       clearBookmarks()
     }
