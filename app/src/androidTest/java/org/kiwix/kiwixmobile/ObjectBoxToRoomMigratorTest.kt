@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
@@ -485,5 +486,101 @@ class ObjectBoxToRoomMigratorTest {
         "Migration took too long: $migrationTime ms",
         migrationTime < migrationMaxTime
       )
+    }
+
+  @Test
+  fun migrateHistory_withZimFilePath_shouldSetZimReaderSource() =
+    runBlocking {
+      val box = boxStore.boxFor(HistoryEntity::class.java)
+      clearRoomAndBoxStoreDatabases(box)
+
+      val expectedZimFilePath = "/storage/emulated/0/Download/test.zim"
+      val historyEntity = HistoryEntity(
+        id = 0,
+        zimId = "test-zim-id",
+        zimName = "test-zim-name",
+        zimFilePath = expectedZimFilePath,
+        zimReaderSource = null, // zimReaderSource is null, but zimFilePath is provided
+        favicon = null,
+        historyUrl = "https://kiwix.app/A/Test",
+        historyTitle = "Test Title",
+        dateString = "30 May 2024",
+        timeStamp = System.currentTimeMillis()
+      )
+
+      box.put(historyEntity)
+      objectBoxToRoomMigrator.migrateHistory(box)
+
+      val actual = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+      assertEquals(1, actual.size)
+      assertEquals(
+        ZimReaderSource.fromDatabaseValue(expectedZimFilePath),
+        actual[0].zimReaderSource
+      )
+    }
+
+  @Test
+  fun migrateNotes_withZimFilePath_shouldSetZimReaderSource() =
+    runBlocking {
+      val box = boxStore.boxFor(NotesEntity::class.java)
+      clearRoomAndBoxStoreDatabases(box)
+
+      val expectedZimFilePath = "/storage/emulated/0/Download/test.zim"
+      val notesEntity = NotesEntity(
+        id = 0,
+        zimId = "test-zim-id",
+        zimFilePath = expectedZimFilePath,
+        zimReaderSource = null, // zimReaderSource is null, but zimFilePath is provided
+        zimUrl = "https://kiwix.app/A/Test",
+        noteTitle = "Test Title",
+        noteFilePath = "/storage/emulated/0/Download/Notes/test.txt",
+        favicon = null
+      )
+
+      box.put(notesEntity)
+      objectBoxToRoomMigrator.migrateNotes(box)
+
+      val notesList = kiwixRoomDatabase.notesRoomDao().notes().first() as List<NoteListItem>
+      assertEquals(1, notesList.size)
+      assertEquals(
+        ZimReaderSource.fromDatabaseValue(expectedZimFilePath),
+        notesList[0].zimReaderSource
+      )
+    }
+
+  @Test
+  fun migrateObjectBoxDataToRoom_shouldMigrateAllEntities() =
+    runBlocking {
+      val recentSearchBox = boxStore.boxFor(RecentSearchEntity::class.java)
+      val historyBox = boxStore.boxFor(HistoryEntity::class.java)
+      val notesBox = boxStore.boxFor(NotesEntity::class.java)
+
+      clearRoomAndBoxStoreDatabases(recentSearchBox)
+      clearRoomAndBoxStoreDatabases(historyBox)
+      clearRoomAndBoxStoreDatabases(notesBox)
+
+      // Ensure flags are false
+      val dataStore = objectBoxToRoomMigrator.kiwixDataStore
+      dataStore.setRecentSearchMigrated(false)
+      dataStore.setHistoryMigrated(false)
+      dataStore.setNotesMigrated(false)
+
+      // Put data in all boxes
+      recentSearchBox.put(RecentSearchEntity(searchTerm = "search", zimId = "id", url = "url"))
+      historyBox.put(HistoryEntity(getHistoryItem()))
+      notesBox.put(NotesEntity(getNoteListItem(zimUrl = "url")))
+
+      // Run main migration method
+      objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
+
+      // Verify all migrated
+      assertTrue(kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first().isNotEmpty())
+      assertTrue(kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first().isNotEmpty())
+      assertTrue(kiwixRoomDatabase.notesRoomDao().notes().first().isNotEmpty())
+
+      // Verify flags set to true
+      assertTrue(dataStore.isRecentSearchMigrated.first())
+      assertTrue(dataStore.isHistoryMigrated.first())
+      assertTrue(dataStore.isNotesMigrated.first())
     }
 }
