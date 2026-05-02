@@ -223,7 +223,7 @@ class KiwixRoomDatabaseMigrationTest {
       assertTrue("History data should be preserved after migration", cursor.moveToFirst())
       assertEquals(
         "Test Title",
-        cursor.getString(cursor.getColumnIndex("historyTitle"))
+        cursor.getString(cursor.getColumnIndexOrThrow("historyTitle"))
       )
     }
 
@@ -320,13 +320,22 @@ class KiwixRoomDatabaseMigrationTest {
     db.query("PRAGMA table_info(DownloadRoomEntity)").use { cursor ->
       val nameIdx = cursor.getColumnIndex("name")
       val typeIdx = cursor.getColumnIndex("type")
+      var statusFound = false
+      var errorFound = false
       while (cursor.moveToNext()) {
         val colName = cursor.getString(nameIdx)
         val colType = cursor.getString(typeIdx)
-        if (colName == "status" || colName == "error") {
-          assertEquals("status/error should be INTEGER", "INTEGER", colType)
+        if (colName == "status") {
+          statusFound = true
+          assertEquals("status should be INTEGER", "INTEGER", colType)
+        }
+        if (colName == "error") {
+          errorFound = true
+          assertEquals("error should be INTEGER", "INTEGER", colType)
         }
       }
+      assertTrue("status column should be found", statusFound)
+      assertTrue("error column should be found", errorFound)
     }
   }
 

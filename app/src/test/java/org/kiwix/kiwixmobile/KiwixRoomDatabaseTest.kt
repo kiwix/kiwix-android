@@ -87,7 +87,7 @@ class KiwixRoomDatabaseTest {
 
       // test deleting recent search
       recentSearchRoomDao.deleteSearchString(searchTerm)
-      recentSearches = recentSearchRoomDao.search(searchTerm).first()
+      recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 0)
 
       // test deleting all recent search history
@@ -96,7 +96,7 @@ class KiwixRoomDatabaseTest {
       recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 2)
       recentSearchRoomDao.deleteSearchHistory()
-      recentSearches = recentSearchRoomDao.search(searchTerm).first()
+      recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 0)
     }
 
