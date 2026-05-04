@@ -20,8 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
 import android.net.ConnectivityManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
@@ -32,39 +31,28 @@ class ObserveNetworkState @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) {
   sealed class Result {
-    object Refresh : Result()
+    object WifiAvailable : Result()
     object ShowWifiOnlyMessage : Result()
-    object InitialLoad : Result()
-    object ShowNoInternetSnackbarWithNoContent : Result()
-    object ShowNoInternetSnackbarWithContent : Result()
+    object ShowNoInternetSnackBar : Result()
 
-    object NoOp : Result()
+    object MobileInternet : Result()
   }
 
-  operator fun invoke(
-    networkState: Flow<NetworkState>,
-    hasItems: Boolean
-  ): Flow<Result> = networkState.map { state ->
-    when (state) {
-      NetworkState.CONNECTED -> {
-        val isWifi = connectivityManager.isWifi()
-        val wifiOnly = kiwixDataStore.wifiOnly.first()
-
-        when {
-          isWifi -> Result.Refresh
-          wifiOnly -> Result.ShowWifiOnlyMessage
-          !hasItems -> Result.InitialLoad
-          else -> Result.NoOp
+  operator fun invoke(networkState: Flow<NetworkState>): Flow<Result> =
+    networkState.combine(kiwixDataStore.wifiOnly) { state, wifiOnly ->
+      when (state) {
+        NetworkState.CONNECTED -> {
+          val isWifi = connectivityManager.isWifi()
+          when {
+            isWifi -> Result.WifiAvailable
+            wifiOnly -> Result.ShowWifiOnlyMessage
+            else -> Result.MobileInternet
+          }
         }
-      }
 
-      NetworkState.NOT_CONNECTED -> {
-        if (hasItems) {
-          Result.ShowNoInternetSnackbarWithContent
-        } else {
-          Result.ShowNoInternetSnackbarWithNoContent
+        NetworkState.NOT_CONNECTED -> {
+          Result.ShowNoInternetSnackBar
         }
       }
     }
-  }
 }

@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -67,6 +68,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Loading
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Parsing
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Success
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
@@ -155,7 +157,7 @@ class OnlineLibraryViewModel @Inject constructor(
     ) : OnlineLibraryState()
 
     object WifiOnlyException : OnlineLibraryState()
-
+    object NoInternetConnection : OnlineLibraryState()
     object Parsing : OnlineLibraryState()
   }
 
@@ -163,7 +165,6 @@ class OnlineLibraryViewModel @Inject constructor(
     val items: List<LibraryListItem> = emptyList(),
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,
-    val downloadingOnlineLibraryProgress: String = "",
     val searchQuery: String = "",
     val isSearchActive: Boolean = false,
     val scanningMessage: String = "",
@@ -240,13 +241,9 @@ class OnlineLibraryViewModel @Inject constructor(
 
   init {
     appProgressListener = AppProgressListenerProvider(context) {
-      _uiState.update { current -> current.copy(downloadingOnlineLibraryProgress = it) }
+      _uiState.update { current -> current.copy(scanningMessage = it) }
     }
     observeFlows()
-    viewModelScope.launch {
-      // Load the library initially, and avoid loading the library on every screen recomposition.
-      updateOnlineLibraryFilters(getOnlineLibraryRequest())
-    }
   }
 
   private fun observeFlows() {
@@ -255,6 +252,15 @@ class OnlineLibraryViewModel @Inject constructor(
       add(updateNetworkStates())
       add(observeLibrary())
       add(observeFilters())
+    }
+  }
+
+  fun loadInitialLibrary() {
+    viewModelScope.launch {
+      if (uiState.value.items.isEmpty()) {
+        // Load the library initially, and avoid loading the library on every screen recomposition.
+        updateOnlineLibraryFilters(getOnlineLibraryRequest())
+      }
     }
   }
 
@@ -269,12 +275,13 @@ class OnlineLibraryViewModel @Inject constructor(
       current.copy(
         items = it,
         isRefreshing = false,
+        showScanning = false,
         noContentMessage = noContentMessageWhenItemsComesFromOnlineSource(it),
         showNoContent = it.isEmpty()
       )
     }
   }.catch { throwable ->
-    _uiState.update { it.copy(isRefreshing = false) }
+    _uiState.update { it.copy(showScanning = false) }
     throwable.printStackTrace()
     Log.e("ZimManageViewModel", "Error----$throwable")
   }.launchIn(viewModelScope)
@@ -296,7 +303,7 @@ class OnlineLibraryViewModel @Inject constructor(
     combine(
       kiwixDataStore.selectedOnlineContentCategory,
       kiwixDataStore.selectedOnlineContentLanguage,
-      uiState.map { it.searchQuery }.debounce(500)
+      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500)
     ) { category, language, searchQuery ->
       OnlineLibraryRequest(searchQuery, category, language, false, ZERO)
     }
@@ -305,69 +312,73 @@ class OnlineLibraryViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
-    currentRequest = currentRequest.copy(
+    val updatedRequest = currentRequest.copy(
       query = newRequest.query ?: currentRequest.query,
       category = newRequest.category ?: currentRequest.category,
       lang = newRequest.lang ?: currentRequest.lang,
       page = newRequest.page,
       isLoadMoreItem = newRequest.isLoadMoreItem
     )
+    if (updatedRequest == currentRequest) return
+    currentRequest = updatedRequest
     viewModelScope.launch {
       onlineLibraryRequest.emit(currentRequest)
     }
   }
 
   private fun updateNetworkStates() =
-    observeNetworkState(
-      connectivityBroadcastReceiver.networkStates,
-      uiState.value.items.isNotEmpty()
-    ).onEach { state ->
-      when (state) {
-        ObserveNetworkState.Result.Refresh -> refreshScreen(false)
-        ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
-          _uiState.update {
-            it.copy(
-              noContentMessage = context.getString(R.string.swipe_down_for_library),
-              showNoContent = true
-            )
+    observeNetworkState(connectivityBroadcastReceiver.networkStates)
+      .onEach { state ->
+        when (state) {
+          ObserveNetworkState.Result.WifiAvailable -> refreshScreen(false)
+          ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
+            _uiState.update {
+              it.copy(
+                noContentMessage = context.getString(R.string.swipe_down_for_library),
+                showNoContent = true,
+                showScanning = false
+              )
+            }
+          }
+
+          ObserveNetworkState.Result.ShowNoInternetSnackBar -> {
+            if (uiState.value.items.isEmpty()) {
+              _uiState.update {
+                it.copy(
+                  noContentMessage = context.getString(string.no_network_connection),
+                  showNoContent = true,
+                  isRefreshing = false,
+                  showScanning = false
+                )
+              }
+            } else {
+              emitNoInternetSnackbar()
+              _uiState.update {
+                it.copy(isRefreshing = false, showScanning = false)
+              }
+            }
+          }
+
+          ObserveNetworkState.Result.MobileInternet -> {
+            if (uiState.value.items.isEmpty()) {
+              updateOnlineLibraryFilters(getOnlineLibraryRequest())
+              _uiState.update {
+                it.copy(
+                  showScanning = true,
+                  scanningMessage = context.getString(R.string.reaching_remote_library),
+                  noContentMessage = "",
+                  showNoContent = false,
+                  isRefreshing = false
+                )
+              }
+            }
           }
         }
-
-        ObserveNetworkState.Result.InitialLoad -> {
-          updateOnlineLibraryFilters(getOnlineLibraryRequest())
-          _uiState.update {
-            it.copy(
-              showScanning = true,
-              scanningMessage = context.getString(R.string.reaching_remote_library),
-              noContentMessage = "",
-              showNoContent = false,
-              isRefreshing = false
-            )
-          }
-        }
-
-        ObserveNetworkState.Result.ShowNoInternetSnackbarWithNoContent -> _uiState.update {
-          it.copy(
-            noContentMessage = context.getString(string.no_network_connection),
-            showNoContent = true,
-            isRefreshing = false
-          )
-        }
-
-        ObserveNetworkState.Result.ShowNoInternetSnackbarWithContent -> {
-          emitNoInternetSnackbar()
-          _uiState.update {
-            it.copy(isRefreshing = false)
-          }
-        }
-
-        ObserveNetworkState.Result.NoOp -> Unit
-      }
-    }.flowOn(ioDispatcher)
+      }.flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
   private fun observeLibrary() =
-    observeOnlineLibrary(onlineLibraryRequest, appProgressListener, connectivityBroadcastReceiver)
+    observeOnlineLibrary(onlineLibraryRequest, appProgressListener)
       .onEach { state -> handleLibraryState(state) }
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
@@ -375,15 +386,24 @@ class OnlineLibraryViewModel @Inject constructor(
   private suspend fun handleLibraryState(state: OnlineLibraryState) {
     val currentBooks = networkBooks.value
     when (state) {
-      Idle -> updateDownloadProgressIfNeeded(R.string.empty_string)
+      Idle -> updateDownloadProgressIfNeeded(R.string.reaching_remote_library)
       WifiOnlyException -> {
         _uiState.update {
           it.copy(
-            isRefreshing = false,
+            showScanning = false,
             isLoadingMore = false
           )
         }
         showWifiOnlyDialog()
+      }
+
+      NoInternetConnection -> {
+        _uiState.update {
+          it.copy(
+            showScanning = false,
+            isLoadingMore = false
+          )
+        }
       }
 
       is Loading -> {
@@ -445,7 +465,7 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private fun updateDownloadProgressIfNeeded(messageResId: Int) {
-    _uiState.update { it.copy(downloadingOnlineLibraryProgress = context.getString(messageResId)) }
+    _uiState.update { it.copy(scanningMessage = context.getString(messageResId)) }
   }
 
   private fun updateDownloadState(isInitial: Boolean) {
@@ -462,7 +482,8 @@ class OnlineLibraryViewModel @Inject constructor(
     _uiState.update {
       it.copy(
         isRefreshing = false,
-        isLoadingMore = false
+        isLoadingMore = false,
+        showScanning = false
       )
     }
   }
@@ -473,10 +494,6 @@ class OnlineLibraryViewModel @Inject constructor(
         .sortedBy { it.book.title }
         .mapNotNull { it.book.nativeBook }
     }
-
-  fun setDownloadBookItem(item: LibraryListItem.BookItem?) {
-    downloadBookItem = item
-  }
 
   fun emitNoInternetSnackbar() {
     sendUiEvent(
@@ -517,7 +534,7 @@ class OnlineLibraryViewModel @Inject constructor(
     sendUiEvent(ShowDialog(dialog, negativeAction, positiveAction))
   }
 
-  fun downloadFile() {
+  private fun downloadFile() {
     downloadBookItem?.book?.let {
       downloader.download(it)
       downloadBookItem = null
@@ -632,7 +649,9 @@ class OnlineLibraryViewModel @Inject constructor(
             _uiState.update {
               it.copy(
                 noContentMessage = "",
-                showNoContent = false
+                showNoContent = false,
+                showScanning = true,
+                scanningMessage = context.getString(R.string.reaching_remote_library)
               )
             }
           }
@@ -643,19 +662,15 @@ class OnlineLibraryViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               noContentMessage = context.getString(R.string.no_network_connection),
-              showNoContent = true
+              showNoContent = true,
+              isRefreshing = false,
+              showScanning = false,
+              scanningMessage = context.getString(R.string.reaching_remote_library)
             )
           }
         }
 
         WifiOnlyBlocked -> showWifiOnlyDialog()
-      }
-      _uiState.update {
-        it.copy(
-          isRefreshing = false,
-          showScanning = false,
-          scanningMessage = context.getString(R.string.reaching_remote_library)
-        )
       }
     }
   }

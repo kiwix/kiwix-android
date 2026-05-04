@@ -118,6 +118,10 @@ fun OnlineLibraryRoute(
     navController = navController
   )
 
+  LaunchedEffect(Unit) {
+    onlineLibraryViewModel.loadInitialLibrary()
+  }
+
   OnlineLibraryScreen(
     uiState = uiState,
     onlineLibraryViewModel = onlineLibraryViewModel,

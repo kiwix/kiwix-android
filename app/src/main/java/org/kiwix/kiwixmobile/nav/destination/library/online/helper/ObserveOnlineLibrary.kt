@@ -22,16 +22,16 @@ import android.net.ConnectivityManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Idle
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.zimManager.AppProgressListenerProvider
@@ -45,21 +45,20 @@ class ObserveOnlineLibrary @Inject constructor(
   @OptIn(ExperimentalCoroutinesApi::class)
   operator fun invoke(
     requests: Flow<OnlineLibraryRequest>,
-    appProgressListener: AppProgressListenerProvider?,
-    connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+    appProgressListener: AppProgressListenerProvider?
   ): Flow<OnlineLibraryState> {
     return requests
       .flatMapLatest { request ->
         flow {
-          connectivityBroadcastReceiver.networkStates
-            .filter { it == NetworkState.CONNECTED }
-            .first()
-
+          if (!connectivityManager.isNetworkAvailable()) {
+            emit(NoInternetConnection)
+            return@flow
+          }
           if (!shouldProceedWithDownload()) {
             emit(WifiOnlyException)
             return@flow
           }
-
+          emit(Idle)
           emitAll(repository.fetchOnlineLibrary(request, appProgressListener))
         }
       }
