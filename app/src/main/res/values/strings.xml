@@ -17,4 +17,9 @@
   <string name="other_categories" tools:keep="@string/other_categories">Other categories:</string>
   <string name="all_categories" tools:keep="@string/all_categories">All categories</string>
   <string name="select_category_content_description">Selecting this category will prioritize displaying downloadable books in that language at the top.</string>
+  <string name="update_all_books">Update all books</string>
+  <plurals name="update_all_books_queued">
+    <item quantity="one">%d book update queued for download</item>
+    <item quantity="other">%d book updates queued for download</item>
+  </plurals>
 </resources>
