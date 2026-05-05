@@ -457,6 +457,17 @@ sealed class KiwixDialog(
     android.R.string.cancel,
     customComposeView = customGetView
   )
+
+  data class ConfirmUpdateAll(override val args: List<Any>) :
+    KiwixDialog(
+      R.string.update_all_books_dialog_title,
+      R.string.update_all_books_dialog_message,
+      R.string.update,
+      R.string.no
+    ),
+    HasBodyFormatArgs {
+    constructor(count: Int) : this(listOf(count))
+  }
 }
 
 interface HasBodyFormatArgs {

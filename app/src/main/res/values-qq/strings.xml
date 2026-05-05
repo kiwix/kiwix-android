@@ -10,4 +10,6 @@
   <string name="receive_files_title">The titles of an activity used for receiving files.</string>
   <string name="no_app_found_to_open">It is a toast message shown on the library screen when the user is selecting a file from the file chooser but there is no app available to handle the selected file/intent.</string>
   <string name="select_zim_file">* It is a content description of a floating action button on the library screen.\n* This button opens a file chooser for the user to select a zim file to read.</string>
+  <string name="update_all_books">Label for a toolbar action button on the Local Library screen. Tapping it opens a confirmation dialog to download newer versions of all locally-installed books that have an update available online.</string>
+  <string name="update_all_books_queued">Toast message shown after the user confirms "Update All". %d is replaced by the number of book updates that have been queued for download.</string>
 </resources>

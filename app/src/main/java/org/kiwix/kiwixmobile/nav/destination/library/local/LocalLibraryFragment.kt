@@ -61,6 +61,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
@@ -90,6 +92,8 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -115,6 +119,7 @@ import javax.inject.Inject
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
+const val UPDATE_ALL_BUTTON_TESTING_TAG = "updateAllButtonTestingTag"
 private const val SHOW_SCAN_DIALOG_DELAY = 2000L
 
 @Suppress("LargeClass")
@@ -122,6 +127,8 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   @Inject lateinit var kiwixDataStore: KiwixDataStore
+
+  @Inject lateinit var downloader: Downloader
 
   @Inject lateinit var dialogShower: DialogShower
 
@@ -264,22 +271,46 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
     }
   }
 
-  private fun actionMenuItems() = listOf(
-    ActionMenuItem(
-      IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_add_blue_24dp),
-      R.string.select_zim_file,
-      { filePickerButtonClick() },
-      isEnabled = true,
-      testingTag = SELECT_FILE_BUTTON_TESTING_TAG
-    ),
-    ActionMenuItem(
-      IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
-      string.get_content_from_nearby_device,
-      { navigateToLocalFileTransferFragment() },
-      isEnabled = true,
-      testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+  private fun actionMenuItems(updatableBooks: List<LibkiwixBook> = emptyList()) =
+    listOfNotNull(
+      if (updatableBooks.isNotEmpty()) {
+        ActionMenuItem(
+          IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_file_download_blue_24dp),
+          R.string.update_all_books,
+          { onUpdateAllClick(updatableBooks) },
+          isEnabled = true,
+          testingTag = UPDATE_ALL_BUTTON_TESTING_TAG
+        )
+      } else {
+        null
+      },
+      ActionMenuItem(
+        IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_add_blue_24dp),
+        R.string.select_zim_file,
+        { filePickerButtonClick() },
+        isEnabled = true,
+        testingTag = SELECT_FILE_BUTTON_TESTING_TAG
+      ),
+      ActionMenuItem(
+        IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
+        string.get_content_from_nearby_device,
+        { navigateToLocalFileTransferFragment() },
+        isEnabled = true,
+        testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+      )
     )
-  )
+
+  private fun onUpdateAllClick(updatableBooks: List<LibkiwixBook>) {
+    dialogShower.show(
+      KiwixDialog.ConfirmUpdateAll(updatableBooks.size),
+      {
+        updatableBooks.forEach { book -> downloader.download(book) }
+        context.toast(
+          resources.getString(R.string.update_all_books_queued, updatableBooks.size)
+        )
+      }
+    )
+  }
 
   private fun onBookItemClick(bookOnDisk: BookOnDisk) {
     lifecycleScope.runSafelyInLifecycleScope {
@@ -337,6 +368,11 @@ class LocalLibraryFragment : BaseFragment(), SelectedZimFileCallback {
       add(sideEffects())
       add(fileSelectActions())
     }
+    zimManageViewModel.updateAvailableBooks
+      .onEach { updatableBooks ->
+        updateLibraryScreenState(actionMenuItems = actionMenuItems(updatableBooks))
+      }
+      .launchIn(viewLifecycleOwner.lifecycleScope)
     zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
       updateLibraryScreenState(
         // hide this progress bar when scanning is complete.

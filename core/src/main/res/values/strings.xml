@@ -433,4 +433,7 @@
   <string name="shortcut_name_label">Shortcut name</string>
   <string name="open_xiaomi_settings">Open Settings</string>
   <string name="xiaomi_permission_required">This device requires shortcut permission to be granted before adding a shortcut to the home screen. Please grant the permission in settings.</string>
+  <string name="update_all_books_dialog_title">Update books</string>
+  <string name="update_all_books_dialog_message">%d book(s) have a newer version available. Download updates now?</string>
+  <string name="update">Update</string>
 </resources>
