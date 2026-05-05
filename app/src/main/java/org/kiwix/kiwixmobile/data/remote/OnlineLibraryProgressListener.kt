@@ -16,16 +16,8 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library.online.repository
+package org.kiwix.kiwixmobile.data.remote
 
-import kotlinx.coroutines.flow.Flow
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState
-import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
-
-interface OnlineLibraryRepository {
-  fun fetchOnlineLibrary(
-    request: OnlineLibraryRequest,
-    appProgressListener: AppProgressListenerProvider?
-  ): Flow<OnlineLibraryState>
+interface OnlineLibraryProgressListener {
+  fun onProgress(bytesRead: Long, contentLength: Long)
 }

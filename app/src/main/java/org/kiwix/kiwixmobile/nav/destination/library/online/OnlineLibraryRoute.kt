@@ -62,7 +62,8 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ScrollToTop
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ScrollToTop
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
@@ -146,7 +147,6 @@ fun OnlineLibraryRoute(
         onClick = {
           if (uiState.isSearchActive) {
             onlineLibraryViewModel.closeSearchView()
-            activity.onBackPressedDispatcher.onBackPressed()
           } else {
             if (activity.navigationDrawerIsOpen()) {
               activity.closeNavigationDrawer()

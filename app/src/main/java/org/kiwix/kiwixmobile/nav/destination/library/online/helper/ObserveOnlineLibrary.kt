@@ -28,13 +28,13 @@ import kotlinx.coroutines.flow.flow
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryRequest
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Idle
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
-import org.kiwix.kiwixmobile.zimManager.AppProgressListenerProvider
+import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
 import javax.inject.Inject
 
 class ObserveOnlineLibrary @Inject constructor(

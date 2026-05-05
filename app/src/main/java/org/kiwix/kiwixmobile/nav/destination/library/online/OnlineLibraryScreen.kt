@@ -100,7 +100,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryUiState
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryUiState
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 

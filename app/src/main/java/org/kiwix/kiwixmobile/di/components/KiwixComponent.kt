@@ -32,7 +32,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarCo
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
-import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
+import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
+import org.kiwix.kiwixmobile.data.remote.opds.KiwixOpdsServiceFactory
 
 @KiwixScope
 @Component(
@@ -54,4 +55,5 @@ interface KiwixComponent {
   fun provideFileOperationHandler(): FileOperationHandler
   fun provideCopyMoveProgressBarController(): CopyMoveProgressBarController
   fun provideOnlineLibraryRepository(): OnlineLibraryRepository
+  fun provideKiwixOpdsServiceFactory(): KiwixOpdsServiceFactory
 }

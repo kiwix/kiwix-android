@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,15 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.nav.destination.library.online
 
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
+
+import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.provider.Settings
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -47,7 +49,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -55,7 +56,6 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_P
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
@@ -65,20 +65,8 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Idle
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Loading
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Parsing
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.Success
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.NavigateToAppSettings
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.NavigateToSettings
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.RequestPermission
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowDialog
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowSnackbar
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel.UiEvent.ShowToast
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveOnlineLibrary
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveOnlineLibraryItems
@@ -100,12 +88,24 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefres
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Parsing
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Success
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.NavigateToAppSettings
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.NavigateToSettings
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.RequestPermission
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowDialog
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowToast
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
-import org.kiwix.kiwixmobile.zimManager.AppProgressListenerProvider
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 
@@ -208,7 +208,7 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private val _uiEvents = MutableSharedFlow<UiEvent>(
-    replay = 1,
+    extraBufferCapacity = 1,
     onBufferOverflow = BufferOverflow.DROP_OLDEST
   )
   val uiEvents = _uiEvents.asSharedFlow()
@@ -226,18 +226,17 @@ class OnlineLibraryViewModel @Inject constructor(
     category = null,
     lang = null,
     isLoadMoreItem = false,
-    page = 0
+    page = ZERO
   )
 
-  private val networkBooks = MutableStateFlow<List<LibkiwixBook>>(emptyList())
+  internal val networkBooks = MutableStateFlow<List<LibkiwixBook>>(emptyList())
 
   private var onlineLibraryFetchingJob: Job? = null
   private var totalPages: Int = 0
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   val isAndroid13OrAbove = permissionChecker.isAndroid13orAbove()
 
-  var downloadBookItem: LibraryListItem.BookItem? = null
-    private set
+  private var downloadBookItem: BookItem? = null
 
   init {
     appProgressListener = AppProgressListenerProvider(context) {
@@ -289,9 +288,9 @@ class OnlineLibraryViewModel @Inject constructor(
   private fun noContentMessageWhenItemsComesFromOnlineSource(items: List<LibraryListItem>): String =
     when {
       items.isEmpty() -> if (connectivityManager.isNetworkAvailable()) {
-        context.getString(string.no_items_msg)
+        context.getString(R.string.no_items_msg)
       } else {
-        context.getString(string.no_network_connection)
+        context.getString(R.string.no_network_connection)
       }
 
       else -> ""
@@ -345,7 +344,7 @@ class OnlineLibraryViewModel @Inject constructor(
             if (uiState.value.items.isEmpty()) {
               _uiState.update {
                 it.copy(
-                  noContentMessage = context.getString(string.no_network_connection),
+                  noContentMessage = context.getString(R.string.no_network_connection),
                   showNoContent = true,
                   isRefreshing = false,
                   showScanning = false
@@ -383,7 +382,7 @@ class OnlineLibraryViewModel @Inject constructor(
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
-  private suspend fun handleLibraryState(state: OnlineLibraryState) {
+  internal suspend fun handleLibraryState(state: OnlineLibraryState) {
     val currentBooks = networkBooks.value
     when (state) {
       Idle -> updateDownloadProgressIfNeeded(R.string.reaching_remote_library)
@@ -450,13 +449,10 @@ class OnlineLibraryViewModel @Inject constructor(
         }
       },
       negativeAction = {
-        context.toast(
-          context.getString(string.denied_internet_permission_message),
-          Toast.LENGTH_SHORT
-        )
+        emitToast(context.getString(R.string.denied_internet_permission_message))
         _uiState.update {
           it.copy(
-            noContentMessage = context.getString(string.swipe_down_for_library),
+            noContentMessage = context.getString(R.string.swipe_down_for_library),
             showNoContent = true
           )
         }
@@ -495,9 +491,9 @@ class OnlineLibraryViewModel @Inject constructor(
         .mapNotNull { it.book.nativeBook }
     }
 
-  fun emitNoInternetSnackbar() {
+  private fun emitNoInternetSnackbar() {
     sendUiEvent(
-      ShowSnackbar(
+      UiEvent.ShowSnackbar(
         message = context.getString(R.string.no_network_connection),
         actionLabel = context.getString(R.string.menu_settings),
         actionIntent = Intent(Settings.ACTION_WIFI_SETTINGS)
@@ -505,8 +501,8 @@ class OnlineLibraryViewModel @Inject constructor(
     )
   }
 
-  fun emitNoSpaceSnackbar(
-    context: android.content.Context,
+  private fun emitNoSpaceSnackbar(
+    context: Context,
     availableSpace: String,
     onStorageSelect: () -> Unit
   ) {
@@ -522,11 +518,11 @@ class OnlineLibraryViewModel @Inject constructor(
     )
   }
 
-  fun emitToast(message: String) {
+  private fun emitToast(message: String) {
     sendUiEvent(ShowToast(message))
   }
 
-  fun emitDialog(
+  private fun emitDialog(
     dialog: KiwixDialog,
     negativeAction: () -> Unit = {},
     positiveAction: () -> Unit = {}
@@ -552,14 +548,17 @@ class OnlineLibraryViewModel @Inject constructor(
         ShowStorageSelection -> showStorageSelectDialog(activity)
         is StartDownload -> downloadFile()
         NoInternet -> emitNoInternetSnackbar()
-        RequestStoragePermission -> sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
+        RequestStoragePermission -> sendUiEvent(UiEvent.RequestPermission(WRITE_EXTERNAL_STORAGE))
         RequestNotificationPermission -> if (isAndroid13OrAbove) {
-          sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
+          sendUiEvent(UiEvent.RequestPermission(POST_NOTIFICATIONS))
         }
 
-        RequestManageExternalFilesPermission -> emitDialog(KiwixDialog.ManageExternalFilesPermissionDialog) {
-          sendUiEvent(NavigateToSettings)
-        }
+        RequestManageExternalFilesPermission -> emitDialog(
+          KiwixDialog.ManageExternalFilesPermissionDialog,
+          positiveAction = {
+            sendUiEvent(NavigateToSettings)
+          }
+        )
 
         ShowWifiOnlyDialog -> emitDialog(
           KiwixDialog.YesNoDialog.WifiOnly,
@@ -585,7 +584,7 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  fun onPauseResumeButtonClick(item: LibraryListItem.LibraryDownloadItem) {
+  fun onPauseResumeButtonClick(item: LibraryDownloadItem) {
     when (val result = resolveBookClickAction.onPauseResumeButtonClick(item)) {
       NoInternet -> emitNoInternetSnackbar()
       is PauseResume -> downloader.pauseResumeDownload(result.downloadId, result.isPaused)
@@ -593,13 +592,16 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  fun onStopButtonClick(item: LibraryListItem.LibraryDownloadItem) {
+  fun onStopButtonClick(item: LibraryDownloadItem) {
     when (val result = resolveBookClickAction.onStopButtonClick(item)) {
       NoInternet -> emitNoInternetSnackbar()
       is RetryDownload -> downloader.retryDownload(result.downloadId)
-      is CancelDownload -> emitDialog(KiwixDialog.YesNoDialog.StopDownload) {
-        downloader.cancelDownload(result.downloadId)
-      }
+      is CancelDownload -> emitDialog(
+        KiwixDialog.YesNoDialog.StopDownload,
+        positiveAction = {
+          downloader.cancelDownload(result.downloadId)
+        }
+      )
 
       else -> Unit
     }

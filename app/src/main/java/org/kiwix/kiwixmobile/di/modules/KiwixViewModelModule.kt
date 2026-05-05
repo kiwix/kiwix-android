@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.intro.KiwixIntroViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 

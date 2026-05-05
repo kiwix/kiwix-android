@@ -43,7 +43,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookCl
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.HasAvailableSpaceForBook
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.NotEnoughSpaceForBook
-import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import javax.inject.Inject
 
 class ResolveBookClickAction @Inject constructor(
@@ -59,7 +60,7 @@ class ResolveBookClickAction @Inject constructor(
     object ShowWifiOnlyDialog : LibraryActionResult()
     object ShowStorageSelection : LibraryActionResult()
     data class NotEnoughSpace(val availableSpace: String) : LibraryActionResult()
-    data class StartDownload(val item: LibraryListItem.BookItem) : LibraryActionResult()
+    data class StartDownload(val item: BookItem) : LibraryActionResult()
     object NoInternet : LibraryActionResult()
     object DisableStorageSelection : LibraryActionResult()
     data class PauseResume(val downloadId: Long, val isPaused: Boolean) : LibraryActionResult()
@@ -68,7 +69,7 @@ class ResolveBookClickAction @Inject constructor(
   }
 
   suspend fun onBookItemClick(
-    item: LibraryListItem.BookItem,
+    item: BookItem,
     storageDeviceCount: Int
   ): LibraryActionResult {
     return if (!permissionChecker.hasNotificationPermission()) {
@@ -95,7 +96,7 @@ class ResolveBookClickAction @Inject constructor(
     }
   }
 
-  fun onPauseResumeButtonClick(item: LibraryListItem.LibraryDownloadItem): LibraryActionResult {
+  fun onPauseResumeButtonClick(item: LibraryDownloadItem): LibraryActionResult {
     return if (!connectivityManager.isNetworkAvailable()) {
       NoInternet
     } else {
@@ -104,11 +105,11 @@ class ResolveBookClickAction @Inject constructor(
     }
   }
 
-  fun onStopButtonClick(item: LibraryListItem.LibraryDownloadItem): LibraryActionResult {
+  fun onStopButtonClick(item: LibraryDownloadItem): LibraryActionResult {
     return if (item.currentDownloadState == Status.FAILED) {
       when (item.downloadError) {
-        com.tonyodev.fetch2.Error.UNKNOWN_IO_ERROR,
-        com.tonyodev.fetch2.Error.CONNECTION_TIMED_OUT,
+        Error.UNKNOWN_IO_ERROR,
+        Error.CONNECTION_TIMED_OUT,
         Error.UNKNOWN -> {
           if (!connectivityManager.isNetworkAvailable()) {
             NoInternet

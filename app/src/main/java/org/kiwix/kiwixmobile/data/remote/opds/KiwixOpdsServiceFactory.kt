@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,8 +16,20 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.data.remote
+package org.kiwix.kiwixmobile.data.remote.opds
 
-interface OnlineLibraryProgressListener {
-  fun onProgress(bytesRead: Long, contentLength: Long)
+import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+
+interface KiwixOpdsServiceFactory {
+  fun create(
+    baseUrl: String,
+    start: Int,
+    count: Int,
+    query: String?,
+    lang: String?,
+    category: String?,
+    shouldTrackProgress: Boolean,
+    appProgressListener: AppProgressListenerProvider?
+  ): KiwixService
 }
