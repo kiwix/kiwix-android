@@ -258,7 +258,8 @@ class LocalLibraryViewModel @Inject constructor(
     if (!kiwixPermissionChecker.hasReadExternalStoragePermission()) {
       sendAction(RequestReadWritePermission(ReadeWritePermissionResultAction.None))
     } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
-      kiwixDataStore.showManageExternalFilesPermissionDialog.first()
+      kiwixDataStore.showManageExternalFilesPermissionDialog.first() &&
+      !kiwixDataStore.prefIsTest.first()
     ) {
       // We should only ask for first time, If the users wants to revoke settings
       // then they can directly toggle this feature from settings screen
@@ -550,7 +551,8 @@ class LocalLibraryViewModel @Inject constructor(
       !kiwixPermissionChecker.hasWriteExternalStoragePermission() && !kiwixDataStore.isScanFileSystemTest.first() ->
         sendAction(RequestReadWritePermission(ScanStorage))
 
-      !kiwixPermissionChecker.isManageExternalStoragePermissionGranted() -> {
+      !kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
+        !kiwixDataStore.prefIsTest.first() -> {
         // When user come back after giving the setting it will scan the storage.
         shouldScanFileSystem = true
         sendAction(ManageFilesPermissionDialog)
@@ -598,7 +600,9 @@ class LocalLibraryViewModel @Inject constructor(
       if (uiState.value.permissionDeniedLayoutShowing) {
         // When permission denied layout is showing hide the "Swipe refresh".
         updateState { it.copy(isSwipeRefreshing = false) }
-      } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+      } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
+        !kiwixDataStore.prefIsTest.first()
+      ) {
         sendAction(ManageFilesPermissionDialog)
         // Set loading to false since the dialog is currently being displayed.
         // If the user clicks on "No" in the permission dialog,
@@ -627,7 +631,9 @@ class LocalLibraryViewModel @Inject constructor(
 
   fun onBookItemClick(bookOnDisk: BookOnDisk) {
     viewModelScope.launch {
-      if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+      if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
+        !kiwixDataStore.prefIsTest.first()
+      ) {
         sendAction(ManageFilesPermissionDialog)
       } else {
         sendAction(RequestNavigateTo(bookOnDisk.zimReaderSource))
@@ -637,7 +643,9 @@ class LocalLibraryViewModel @Inject constructor(
 
   fun onBookItemLongClick(bookOnDisk: BookOnDisk) {
     viewModelScope.launch {
-      if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+      if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
+        !kiwixDataStore.prefIsTest.first()
+      ) {
         sendAction(ManageFilesPermissionDialog)
       } else {
         sendAction(RequestMultiSelection(bookOnDisk))
@@ -689,7 +697,9 @@ class LocalLibraryViewModel @Inject constructor(
     viewModelScope.launch {
       if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
         sendAction(RequestReadWritePermission(OpenFilePicker(filePickerLauncher)))
-      } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+      } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
+        !kiwixDataStore.prefIsTest.first()
+      ) {
         sendAction(ManageFilesPermissionDialog)
       } else {
         showFileChooser(filePickerLauncher)
@@ -726,13 +736,18 @@ class LocalLibraryViewModel @Inject constructor(
     }
   }
 
+  private var lastProcessedZimUri: String? = null
+
   fun processZimFileArguments(zimFileUri: String) {
     viewModelScope.launch {
-      if (zimFileUri.isNotEmpty()) {
+      if (zimFileUri.isNotEmpty() && zimFileUri != lastProcessedZimUri) {
+        lastProcessedZimUri = zimFileUri
         val selectedUris = listOf(zimFileUri.toUri())
         if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
           sendAction(RequestReadWritePermission(ProcessZimFiles(selectedUris)))
-        } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
+        } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted() &&
+          !kiwixDataStore.prefIsTest.first()
+        ) {
           sendAction(ManageFilesPermissionDialog)
         } else {
           handleSelectedFileUri(selectedUris)
