@@ -22,6 +22,7 @@ import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 
 interface KiwixOpdsServiceFactory {
+  @Suppress("LongParameterList")
   fun create(
     baseUrl: String,
     start: Int,

@@ -42,16 +42,13 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
-import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -69,7 +66,6 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavig
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
-import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 
@@ -84,9 +80,7 @@ class ZimManageViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
   val context: Application,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val dataSource: DataSource,
-  val onlineLibraryManager: OnlineLibraryManager,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   sealed class FileSelectActions {
@@ -101,14 +95,7 @@ class ZimManageViewModel @Inject constructor(
     object UserClickedDownloadBooksButton : FileSelectActions()
   }
 
-  data class LibraryListItemWrapper(
-    val items: List<LibraryListItem>,
-    val version: Long = System.nanoTime()
-  )
-
   private lateinit var validateZimViewModel: ValidateZimViewModel
-
-  private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
@@ -121,15 +108,10 @@ class ZimManageViewModel @Inject constructor(
 
   init {
     observeCoroutineFlows()
-    context.registerReceiver(connectivityBroadcastReceiver)
   }
 
   fun setValidateZimViewModel(validateZimViewModel: ValidateZimViewModel) {
     this.validateZimViewModel = validateZimViewModel
-  }
-
-  fun setIsUnitTestCase() {
-    isUnitTestCase = true
   }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
@@ -154,7 +136,6 @@ class ZimManageViewModel @Inject constructor(
       it.cancel()
     }
     coroutineJobs.clear()
-    context.unregisterReceiver(connectivityBroadcastReceiver)
     super.onCleared()
   }
 

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.category.viewmodel
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
 import android.os.Build
@@ -50,11 +50,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategorySessionCache
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.SaveCategoryAndFinish
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.zimManager.awaitItemOfType

@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -126,6 +125,7 @@ fun OnlineLibraryScreen(
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
+  activity: KiwixMainActivity,
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -162,7 +162,8 @@ fun OnlineLibraryScreen(
         paddingValues,
         onUserBackPressed,
         navHostController,
-        listState
+        listState,
+        activity
       )
     }
   }
@@ -176,7 +177,8 @@ private fun OnlineLibraryMainContent(
   paddingValues: PaddingValues,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
-  listState: LazyListState
+  listState: LazyListState,
+  activity: KiwixMainActivity
 ) {
   SwipeRefreshLayout(
     isRefreshing = uiState.isRefreshing && !uiState.showScanning,
@@ -191,7 +193,7 @@ private fun OnlineLibraryMainContent(
       )
   ) {
     OnBackPressed(onUserBackPressed, navHostController)
-    OnlineLibraryScreenContent(uiState, listState, onlineLibraryViewModel)
+    OnlineLibraryScreenContent(uiState, listState, onlineLibraryViewModel, activity)
   }
 }
 
@@ -254,7 +256,8 @@ private fun searchBarIfActive(
 private fun OnlineLibraryScreenContent(
   uiState: OnlineLibraryUiState,
   lazyListState: LazyListState,
-  onlineLibraryViewModel: OnlineLibraryViewModel
+  onlineLibraryViewModel: OnlineLibraryViewModel,
+  activity: KiwixMainActivity
 ) {
   Box(
     modifier = Modifier.fillMaxSize(),
@@ -263,7 +266,7 @@ private fun OnlineLibraryScreenContent(
     if (uiState.showNoContent) {
       NoContentView(uiState.noContentMessage)
     } else {
-      OnlineLibraryList(uiState, lazyListState, onlineLibraryViewModel)
+      OnlineLibraryList(uiState, lazyListState, onlineLibraryViewModel, activity)
     }
     if (uiState.showScanning) {
       ShowFetchingLibraryLayout(uiState.scanningMessage)
@@ -276,9 +279,9 @@ private fun OnlineLibraryScreenContent(
 private fun OnlineLibraryList(
   state: OnlineLibraryUiState,
   lazyListState: LazyListState,
-  onlineLibraryViewModel: OnlineLibraryViewModel
+  onlineLibraryViewModel: OnlineLibraryViewModel,
+  activity: KiwixMainActivity
 ) {
-  val activity = LocalActivity.current as KiwixMainActivity
   LazyColumn(
     modifier = Modifier
       .fillMaxSize()

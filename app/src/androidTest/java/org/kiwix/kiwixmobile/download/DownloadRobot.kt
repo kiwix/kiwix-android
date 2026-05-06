@@ -30,7 +30,6 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
@@ -90,7 +89,10 @@ class DownloadRobot : BaseRobot() {
       Log.e(
         KIWIX_DOWNLOAD_TEST,
         "Timeout waiting for data to load. Nodes with tag $ONLINE_BOOK_ITEM_TESTING_TAG: " +
-          "${composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).fetchSemanticsNodes().size}"
+          "${
+            composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+              .fetchSemanticsNodes().size
+          }"
       )
       if (retryCountForDataToLoad > 0) {
         // refresh the data if there is "Swipe Down for Library" visible on the screen.
@@ -161,7 +163,7 @@ class DownloadRobot : BaseRobot() {
           performTextClearance()
           performTextInput(searchZIMFileTitle)
         }
-        waitUntilTimeout(1000) // Reduced from 10s as it's sufficient for searching an item.
+        waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       }
     })
   }
@@ -201,7 +203,10 @@ class DownloadRobot : BaseRobot() {
         }
         onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG).onFirst().performClick()
       }.onFailure {
-        Log.e(KIWIX_DOWNLOAD_TEST, "Failed to pause download - it might have finished already: ${it.message}")
+        Log.e(
+          KIWIX_DOWNLOAD_TEST,
+          "Failed to pause download - it might have finished already: ${it.message}"
+        )
       }
       waitForIdle()
     }
@@ -222,7 +227,10 @@ class DownloadRobot : BaseRobot() {
           onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG).onFirst().performClick()
         }
       }.onFailure {
-        Log.e(KIWIX_DOWNLOAD_TEST, "Failed to resume download - it might have finished already: ${it.message}")
+        Log.e(
+          KIWIX_DOWNLOAD_TEST,
+          "Failed to resume download - it might have finished already: ${it.message}"
+        )
       }
       waitForIdle()
     }
@@ -246,7 +254,8 @@ class DownloadRobot : BaseRobot() {
           } else {
             // Check if text is NOT pauseState
             try {
-              onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst().assertTextEquals(pauseState)
+              onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst()
+                .assertTextEquals(pauseState)
               false // Still paused
             } catch (_: AssertionError) {
               true // Text changed!
@@ -298,7 +307,8 @@ class DownloadRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
-    val nodes = composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+    val nodes =
+      composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
     if (nodes.isEmpty()) {
       Log.e(KIWIX_DOWNLOAD_TEST, "Download complete (Stop button not found)")
       return
@@ -306,7 +316,10 @@ class DownloadRobot : BaseRobot() {
 
     if (retryCountForDownloadingZimFile > 0) {
       resumeDownloadIfPaused(composeTestRule, kiwixMainActivity)
-      Log.e(KIWIX_DOWNLOAD_TEST, "Downloading in progress, retryCount = $retryCountForDownloadingZimFile")
+      Log.e(
+        KIWIX_DOWNLOAD_TEST,
+        "Downloading in progress, retryCount = $retryCountForDownloadingZimFile"
+      )
       composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       waitUntilDownloadComplete(
         retryCountForDownloadingZimFile - 1,
@@ -324,7 +337,8 @@ class DownloadRobot : BaseRobot() {
   ) {
     try {
       val pauseState = kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state)
-      val nodes = composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).fetchSemanticsNodes()
+      val nodes =
+        composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).fetchSemanticsNodes()
       if (nodes.isNotEmpty()) {
         val text = nodes[0].config[androidx.compose.ui.semantics.SemanticsProperties.Text][0].text
         if (text == pauseState) {
@@ -356,7 +370,8 @@ class DownloadRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
-          onAllNodesWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+          onAllNodesWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+            .isNotEmpty()
         }
         onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
       }
@@ -368,7 +383,8 @@ class DownloadRobot : BaseRobot() {
     kiwixMainActivity: KiwixMainActivity
   ) {
     try {
-      val nodes = composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+      val nodes =
+        composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
       if (nodes.isNotEmpty()) {
         stopDownload(composeTestRule)
         assertStopDownloadDialogDisplayed(composeTestRule, kiwixMainActivity)

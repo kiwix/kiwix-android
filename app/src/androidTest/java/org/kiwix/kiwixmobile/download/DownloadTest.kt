@@ -244,7 +244,10 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
       } catch (ignore: Exception) {
         // do nothing as ZIM file already downloaded
-        Log.e(KIWIX_DOWNLOAD_TEST, "Could not complete pause/resume cycle. It might have finished: $ignore")
+        Log.e(
+          KIWIX_DOWNLOAD_TEST,
+          "Could not complete pause/resume cycle. It might have finished: $ignore"
+        )
       }
       // select the default device language to perform other test cases.
       topLevel {
@@ -321,7 +324,10 @@ class DownloadTest : BaseActivityTest() {
           assertDownloadResumed(composeTestRule, kiwixMainActivity)
           stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         } catch (ignore: Exception) {
-          Log.e(KIWIX_DOWNLOAD_TEST, "Could not complete resume after restart. It might have finished: $ignore")
+          Log.e(
+            KIWIX_DOWNLOAD_TEST,
+            "Could not complete resume after restart. It might have finished: $ignore"
+          )
         }
       }
     }

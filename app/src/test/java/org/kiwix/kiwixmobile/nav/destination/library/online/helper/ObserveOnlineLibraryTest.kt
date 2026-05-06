@@ -169,7 +169,8 @@ class ObserveOnlineLibraryTest {
       listOf(
         Idle,
         Success(request, emptyList(), 1)
-      ), results
+      ),
+      results
     )
   }
 

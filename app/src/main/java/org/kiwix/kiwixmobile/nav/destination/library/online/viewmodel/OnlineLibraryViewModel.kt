@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
-import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Application
@@ -26,6 +25,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.provider.Settings
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -56,6 +56,8 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_P
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
@@ -216,12 +218,12 @@ class OnlineLibraryViewModel @Inject constructor(
   private val _uiState = MutableStateFlow(OnlineLibraryUiState())
   val uiState = _uiState.asStateFlow()
   private var appProgressListener: AppProgressListenerProvider? = null
-  private val onlineLibraryRequest = MutableSharedFlow<OnlineLibraryRequest>(
+  internal val onlineLibraryRequest = MutableSharedFlow<OnlineLibraryRequest>(
     replay = 1,
     onBufferOverflow = BufferOverflow.DROP_OLDEST
   )
 
-  private var currentRequest = OnlineLibraryRequest(
+  internal var currentRequest = OnlineLibraryRequest(
     query = null,
     category = null,
     lang = null,
@@ -230,15 +232,19 @@ class OnlineLibraryViewModel @Inject constructor(
   )
 
   internal val networkBooks = MutableStateFlow<List<LibkiwixBook>>(emptyList())
-
-  private var onlineLibraryFetchingJob: Job? = null
-  private var totalPages: Int = 0
+  internal var totalPages: Int = 0
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   val isAndroid13OrAbove = permissionChecker.isAndroid13orAbove()
 
   private var downloadBookItem: BookItem? = null
 
+  @VisibleForTesting
+  internal fun setUiStateForTest(state: OnlineLibraryUiState) {
+    _uiState.value = state
+  }
+
   init {
+    context.registerReceiver(connectivityBroadcastReceiver)
     appProgressListener = AppProgressListenerProvider(context) {
       _uiState.update { current -> current.copy(scanningMessage = it) }
     }
@@ -310,7 +316,7 @@ class OnlineLibraryViewModel @Inject constructor(
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
-  private fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
+  internal fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
     val updatedRequest = currentRequest.copy(
       query = newRequest.query ?: currentRequest.query,
       category = newRequest.category ?: currentRequest.category,
@@ -327,54 +333,57 @@ class OnlineLibraryViewModel @Inject constructor(
 
   private fun updateNetworkStates() =
     observeNetworkState(connectivityBroadcastReceiver.networkStates)
-      .onEach { state ->
-        when (state) {
-          ObserveNetworkState.Result.WifiAvailable -> refreshScreen(false)
-          ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
-            _uiState.update {
-              it.copy(
-                noContentMessage = context.getString(R.string.swipe_down_for_library),
-                showNoContent = true,
-                showScanning = false
-              )
-            }
-          }
+      .onEach { handleNetworkState(it) }
+      .flowOn(ioDispatcher)
+      .launchIn(viewModelScope)
 
-          ObserveNetworkState.Result.ShowNoInternetSnackBar -> {
-            if (uiState.value.items.isEmpty()) {
-              _uiState.update {
-                it.copy(
-                  noContentMessage = context.getString(R.string.no_network_connection),
-                  showNoContent = true,
-                  isRefreshing = false,
-                  showScanning = false
-                )
-              }
-            } else {
-              emitNoInternetSnackbar()
-              _uiState.update {
-                it.copy(isRefreshing = false, showScanning = false)
-              }
-            }
-          }
+  internal suspend fun handleNetworkState(state: ObserveNetworkState.Result) {
+    when (state) {
+      ObserveNetworkState.Result.WifiAvailable -> refreshScreen(false)
+      ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
+        _uiState.update {
+          it.copy(
+            noContentMessage = context.getString(R.string.swipe_down_for_library),
+            showNoContent = true,
+            showScanning = false
+          )
+        }
+      }
 
-          ObserveNetworkState.Result.MobileInternet -> {
-            if (uiState.value.items.isEmpty()) {
-              updateOnlineLibraryFilters(getOnlineLibraryRequest())
-              _uiState.update {
-                it.copy(
-                  showScanning = true,
-                  scanningMessage = context.getString(R.string.reaching_remote_library),
-                  noContentMessage = "",
-                  showNoContent = false,
-                  isRefreshing = false
-                )
-              }
-            }
+      ObserveNetworkState.Result.ShowNoInternetSnackBar -> {
+        if (uiState.value.items.isEmpty()) {
+          _uiState.update {
+            it.copy(
+              noContentMessage = context.getString(R.string.no_network_connection),
+              showNoContent = true,
+              isRefreshing = false,
+              showScanning = false
+            )
+          }
+        } else {
+          emitNoInternetSnackbar()
+          _uiState.update {
+            it.copy(isRefreshing = false, showScanning = false)
           }
         }
-      }.flowOn(ioDispatcher)
-      .launchIn(viewModelScope)
+      }
+
+      ObserveNetworkState.Result.MobileInternet -> {
+        if (uiState.value.items.isEmpty()) {
+          updateOnlineLibraryFilters(getOnlineLibraryRequest())
+          _uiState.update {
+            it.copy(
+              showScanning = true,
+              scanningMessage = context.getString(R.string.reaching_remote_library),
+              noContentMessage = "",
+              showNoContent = false,
+              isRefreshing = false
+            )
+          }
+        }
+      }
+    }
+  }
 
   private fun observeLibrary() =
     observeOnlineLibrary(onlineLibraryRequest, appProgressListener)
@@ -382,6 +391,7 @@ class OnlineLibraryViewModel @Inject constructor(
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
+  @Suppress("CyclomaticComplexMethod")
   internal suspend fun handleLibraryState(state: OnlineLibraryState) {
     val currentBooks = networkBooks.value
     when (state) {
@@ -537,9 +547,13 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
+  fun setDownloadBookItem(item: BookItem) {
+    downloadBookItem = item
+  }
+
   fun onBookItemClick(item: BookItem, activity: KiwixMainActivity) {
     viewModelScope.launch {
-      downloadBookItem = item
+      setDownloadBookItem(item)
       val action = resolveBookClickAction.onBookItemClick(
         item,
         activity.getStorageDeviceList().size
@@ -692,8 +706,8 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   fun handleLoadMore(count: Int) {
-    val currentPage = if (count > 0) (count - 1) / ITEMS_PER_PAGE else 0
-    val nextPage = currentPage + 1
+    val currentPage = if (count > ZERO) (count - ONE) / ITEMS_PER_PAGE else ZERO
+    val nextPage = currentPage + ONE
     if (uiState.value.isLoadingMore) return
     if (nextPage < totalPages) {
       updateOnlineLibraryFilters(
@@ -734,6 +748,11 @@ class OnlineLibraryViewModel @Inject constructor(
       _uiEvents.emit(uiEvent)
     }
 
+  @VisibleForTesting
+  fun onClearedExposed() {
+    onCleared()
+  }
+
   override fun onCleared() {
     coroutineJobs.forEach {
       it.cancel()
@@ -741,7 +760,6 @@ class OnlineLibraryViewModel @Inject constructor(
     coroutineJobs.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
     appProgressListener = null
-    onlineLibraryFetchingJob = null
     super.onCleared()
   }
 

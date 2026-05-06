@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
@@ -36,12 +35,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -60,6 +55,7 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
@@ -69,21 +65,15 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
 const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 
-@Suppress("UnusedPrivateProperty")
-private const val ZERO = 0
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
-@Suppress("MagicNumber", "LongMethod")
+@Suppress("LongMethod")
 @Composable
 fun OnlineLibraryRoute(
-  viewModelFactory: ViewModelProvider.Factory,
+  onlineLibraryViewModel: OnlineLibraryViewModel,
   alertDialogShower: AlertDialogShower,
-  navController: NavHostController
+  navController: NavHostController,
+  activity: KiwixMainActivity
 ) {
-  val context = LocalContext.current
-  val activity = context as KiwixMainActivity
-  val onlineLibraryViewModel: OnlineLibraryViewModel =
-    viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
   val uiState by onlineLibraryViewModel.uiState.collectAsState()
   val notificationPermission = if (onlineLibraryViewModel.isAndroid13OrAbove) {
     rememberPermissionState(POST_NOTIFICATIONS) {
@@ -106,7 +96,6 @@ fun OnlineLibraryRoute(
     alertDialogShower = alertDialogShower,
     activity = activity,
     scope = scope,
-    context = context,
     lazyListState = lazyListState,
     notificationPermission = notificationPermission,
     writePermissionState = writePermissionState
@@ -136,6 +125,7 @@ fun OnlineLibraryRoute(
       }
     },
     navHostController = navController,
+    activity = activity,
     navigationIcon = {
       NavigationIcon(
         iconItem = if (uiState.isSearchActive) {
@@ -169,7 +159,6 @@ private fun HandleUiEvents(
   alertDialogShower: AlertDialogShower,
   activity: KiwixMainActivity,
   scope: CoroutineScope,
-  context: Context,
   lazyListState: LazyListState,
   notificationPermission: PermissionState?,
   writePermissionState: PermissionState
@@ -184,7 +173,7 @@ private fun HandleUiEvents(
             lifecycleScope = scope,
             actionClick = {
               event.actionIntent?.let { intent: Intent ->
-                context.startActivity(intent)
+                activity.startActivity(intent)
               }
               event.onAction?.invoke()
             }
@@ -209,7 +198,7 @@ private fun HandleUiEvents(
         }
 
         is OnlineLibraryViewModel.UiEvent.ShowToast -> {
-          context.toast(event.message, Toast.LENGTH_SHORT)
+          activity.toast(event.message, Toast.LENGTH_SHORT)
         }
 
         is OnlineLibraryViewModel.UiEvent.RequestPermission -> {
@@ -218,8 +207,11 @@ private fun HandleUiEvents(
 
         is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context.toast(context.getString(string.all_files_permission_needed), Toast.LENGTH_SHORT)
-            (activity as FragmentActivity).navigateToSettings()
+            activity.toast(
+              activity.getString(string.all_files_permission_needed),
+              Toast.LENGTH_SHORT
+            )
+            activity.navigateToSettings()
           }
         }
 

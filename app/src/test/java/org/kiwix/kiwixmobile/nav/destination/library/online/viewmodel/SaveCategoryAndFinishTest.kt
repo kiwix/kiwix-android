@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.category.viewmodel
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.SaveCategoryAndFinish
 
 class SaveCategoryAndFinishTest {
   @Test

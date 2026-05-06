@@ -80,12 +80,14 @@ import org.kiwix.kiwixmobile.language.LanguageScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 
 @Suppress("LongMethod")
 @Composable
@@ -127,10 +129,14 @@ fun KiwixNavGraph(
     }
 
     composable(KiwixDestination.Downloads.route) {
+      val activity = LocalActivity.current as KiwixMainActivity
+      val onlineLibraryViewModel: OnlineLibraryViewModel =
+        viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
       OnlineLibraryRoute(
-        viewModelFactory = viewModelFactory,
+        onlineLibraryViewModel = onlineLibraryViewModel,
         alertDialogShower = alertDialogShower,
-        navController = navController
+        navController = navController,
+        activity = activity
       )
     }
     composable(KiwixDestination.Bookmarks.route) {
