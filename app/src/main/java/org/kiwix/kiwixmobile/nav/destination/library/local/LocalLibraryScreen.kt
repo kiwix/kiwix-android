@@ -358,8 +358,7 @@ private fun SwipeDownToScanFileSystemText() {
       painter = painterResource(id = drawable.ic_swipe_down),
       contentDescription = null,
       modifier = Modifier
-        .size(TWENTY_DP)
-        .testTag(SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG),
+        .size(TWENTY_DP),
       tint = MaterialTheme.colorScheme.primary
     )
     Text(
