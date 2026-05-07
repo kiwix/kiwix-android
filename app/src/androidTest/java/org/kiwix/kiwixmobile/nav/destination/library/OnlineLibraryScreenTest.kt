@@ -138,6 +138,7 @@ class OnlineLibraryScreenTest : BaseActivityTest() {
       searchWikipediaZIMFiles(composeTestRule)
       clickOnClearSearchIcon(composeTestRule)
       pressBack()
+      clickOnNavigationIcon(composeTestRule)
       clickLibraryOnBottomNav(composeTestRule)
       clickDownloadOnBottomNav(composeTestRule)
       assertSearchViewIsNotActive(composeTestRule, kiwixMainActivity)

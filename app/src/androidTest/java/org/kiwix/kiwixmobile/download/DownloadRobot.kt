@@ -32,6 +32,7 @@ import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
@@ -450,10 +451,15 @@ class DownloadRobot : BaseRobot() {
   ) {
     testFlakyView({
       composeTestRule.apply {
+        waitForIdle()
         waitUntilTimeout()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
           .assertTextEquals(kiwixMainActivity.getString(string.download))
       }
     })
+  }
+
+  fun clickOnNavigationIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
   }
 }
