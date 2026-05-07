@@ -169,8 +169,8 @@ class OnlineLibraryViewModel @Inject constructor(
     val isLoadingMore: Boolean = false,
     val searchQuery: String = "",
     val isSearchActive: Boolean = false,
-    val scanningMessage: String = "",
-    val showScanning: Boolean = false,
+    val scanningProgressBarMessage: String = "",
+    val showScanningProgressBar: Boolean = false,
     val noContentMessage: String = "",
     val showNoContent: Boolean = false
   )
@@ -246,7 +246,7 @@ class OnlineLibraryViewModel @Inject constructor(
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
     appProgressListener = AppProgressListenerProvider(context) {
-      _uiState.update { current -> current.copy(scanningMessage = it) }
+      _uiState.update { current -> current.copy(scanningProgressBarMessage = it) }
     }
     observeFlows()
   }
@@ -280,13 +280,13 @@ class OnlineLibraryViewModel @Inject constructor(
       current.copy(
         items = it,
         isRefreshing = false,
-        showScanning = false,
+        showScanningProgressBar = false,
         noContentMessage = noContentMessageWhenItemsComesFromOnlineSource(it),
         showNoContent = it.isEmpty()
       )
     }
   }.catch { throwable ->
-    _uiState.update { it.copy(showScanning = false) }
+    _uiState.update { it.copy(showScanningProgressBar = false) }
     throwable.printStackTrace()
     Log.e("ZimManageViewModel", "Error----$throwable")
   }.launchIn(viewModelScope)
@@ -345,7 +345,7 @@ class OnlineLibraryViewModel @Inject constructor(
           it.copy(
             noContentMessage = context.getString(R.string.swipe_down_for_library),
             showNoContent = true,
-            showScanning = false
+            showScanningProgressBar = false
           )
         }
       }
@@ -357,13 +357,13 @@ class OnlineLibraryViewModel @Inject constructor(
               noContentMessage = context.getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
-              showScanning = false
+              showScanningProgressBar = false
             )
           }
         } else {
           emitNoInternetSnackbar()
           _uiState.update {
-            it.copy(isRefreshing = false, showScanning = false)
+            it.copy(isRefreshing = false, showScanningProgressBar = false)
           }
         }
       }
@@ -373,8 +373,8 @@ class OnlineLibraryViewModel @Inject constructor(
           updateOnlineLibraryFilters(getOnlineLibraryRequest())
           _uiState.update {
             it.copy(
-              showScanning = true,
-              scanningMessage = context.getString(R.string.reaching_remote_library),
+              showScanningProgressBar = true,
+              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library),
               noContentMessage = "",
               showNoContent = false,
               isRefreshing = false
@@ -399,7 +399,7 @@ class OnlineLibraryViewModel @Inject constructor(
       WifiOnlyException -> {
         _uiState.update {
           it.copy(
-            showScanning = false,
+            showScanningProgressBar = false,
             isLoadingMore = false
           )
         }
@@ -409,7 +409,7 @@ class OnlineLibraryViewModel @Inject constructor(
       NoInternetConnection -> {
         _uiState.update {
           it.copy(
-            showScanning = false,
+            showScanningProgressBar = false,
             isLoadingMore = false
           )
         }
@@ -471,7 +471,7 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private fun updateDownloadProgressIfNeeded(messageResId: Int) {
-    _uiState.update { it.copy(scanningMessage = context.getString(messageResId)) }
+    _uiState.update { it.copy(scanningProgressBarMessage = context.getString(messageResId)) }
   }
 
   private fun updateDownloadState(isInitial: Boolean) {
@@ -479,7 +479,7 @@ class OnlineLibraryViewModel @Inject constructor(
       it.copy(
         isRefreshing = isInitial,
         isLoadingMore = !isInitial,
-        showScanning = isInitial
+        showScanningProgressBar = isInitial
       )
     }
   }
@@ -489,7 +489,7 @@ class OnlineLibraryViewModel @Inject constructor(
       it.copy(
         isRefreshing = false,
         isLoadingMore = false,
-        showScanning = false
+        showScanningProgressBar = false
       )
     }
   }
@@ -666,8 +666,8 @@ class OnlineLibraryViewModel @Inject constructor(
               it.copy(
                 noContentMessage = "",
                 showNoContent = false,
-                showScanning = true,
-                scanningMessage = context.getString(R.string.reaching_remote_library)
+                showScanningProgressBar = true,
+                scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
               )
             }
           }
@@ -680,8 +680,8 @@ class OnlineLibraryViewModel @Inject constructor(
               noContentMessage = context.getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
-              showScanning = false,
-              scanningMessage = context.getString(R.string.reaching_remote_library)
+              showScanningProgressBar = false,
+              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
             )
           }
         }

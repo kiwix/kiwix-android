@@ -196,7 +196,7 @@ class OnlineLibraryViewModelTest {
 
       advanceUntilIdle()
 
-      assertTrue(viewModel.uiState.value.showScanning)
+      assertTrue(viewModel.uiState.value.showScanningProgressBar)
     }
 
     @Test
@@ -480,7 +480,7 @@ class OnlineLibraryViewModelTest {
       viewModel.handleLibraryState(Idle)
       assertEquals(
         context.getString(R.string.reaching_remote_library),
-        viewModel.uiState.value.scanningMessage
+        viewModel.uiState.value.scanningProgressBarMessage
       )
     }
 
@@ -490,7 +490,7 @@ class OnlineLibraryViewModelTest {
         viewModel.handleLibraryState(WifiOnlyException)
 
         val state = viewModel.uiState.value
-        assertFalse(state.showScanning)
+        assertFalse(state.showScanningProgressBar)
         assertFalse(state.isLoadingMore)
 
         val dialog = awaitItem() as ShowDialog
@@ -504,7 +504,7 @@ class OnlineLibraryViewModelTest {
       viewModel.handleLibraryState(NoInternetConnection)
 
       val state = viewModel.uiState.value
-      assertFalse(state.showScanning)
+      assertFalse(state.showScanningProgressBar)
       assertFalse(state.isLoadingMore)
     }
 
@@ -513,10 +513,10 @@ class OnlineLibraryViewModelTest {
       viewModel.handleLibraryState(Loading(isLoadMore = false))
 
       val state = viewModel.uiState.value
-      assertTrue(state.showScanning)
+      assertTrue(state.showScanningProgressBar)
       assertEquals(
         context.getString(R.string.reaching_remote_library),
-        state.scanningMessage
+        state.scanningProgressBarMessage
       )
     }
 
@@ -525,7 +525,7 @@ class OnlineLibraryViewModelTest {
       viewModel.handleLibraryState(Parsing)
       assertEquals(
         context.getString(R.string.parsing_remote_library),
-        viewModel.uiState.value.scanningMessage
+        viewModel.uiState.value.scanningProgressBarMessage
       )
     }
 
@@ -797,7 +797,7 @@ class OnlineLibraryViewModelTest {
 
       val state = viewModel.uiState.value
       assertTrue(state.showNoContent)
-      assertFalse(state.showScanning)
+      assertFalse(state.showScanningProgressBar)
     }
 
     @Test
@@ -808,7 +808,7 @@ class OnlineLibraryViewModelTest {
 
       val state = viewModel.uiState.value
       assertTrue(state.showNoContent)
-      assertFalse(state.showScanning)
+      assertFalse(state.showScanningProgressBar)
     }
 
     @Test
@@ -821,7 +821,7 @@ class OnlineLibraryViewModelTest {
         assertTrue(awaitItem() is OnlineLibraryViewModel.UiEvent.ShowSnackbar)
 
         val state = viewModel.uiState.value
-        assertFalse(state.showScanning)
+        assertFalse(state.showScanningProgressBar)
         assertFalse(state.isRefreshing)
       }
     }
@@ -838,7 +838,7 @@ class OnlineLibraryViewModelTest {
       verify { spyVm.updateOnlineLibraryFilters(any()) }
 
       val state = spyVm.uiState.value
-      assertTrue(state.showScanning)
+      assertTrue(state.showScanningProgressBar)
       assertFalse(state.showNoContent)
     }
 

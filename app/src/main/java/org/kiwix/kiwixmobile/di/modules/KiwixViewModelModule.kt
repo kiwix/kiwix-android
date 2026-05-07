@@ -43,9 +43,7 @@ abstract class KiwixViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(OnlineLibraryViewModel::class)
-  abstract fun bindOnlineLibraryViewModel(
-    onlineLibraryViewModel: OnlineLibraryViewModel
-  ): ViewModel
+  abstract fun bindOnlineLibraryViewModel(onlineLibraryViewModel: OnlineLibraryViewModel): ViewModel
 
   @Binds
   @IntoMap

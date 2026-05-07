@@ -181,8 +181,8 @@ private fun OnlineLibraryMainContent(
   activity: KiwixMainActivity
 ) {
   SwipeRefreshLayout(
-    isRefreshing = uiState.isRefreshing && !uiState.showScanning,
-    isEnabled = !uiState.showScanning,
+    isRefreshing = uiState.isRefreshing && !uiState.showScanningProgressBar,
+    isEnabled = !uiState.showScanningProgressBar,
     onRefresh = { onlineLibraryViewModel.refreshScreen(true) },
     modifier = Modifier
       .fillMaxSize()
@@ -268,8 +268,8 @@ private fun OnlineLibraryScreenContent(
     } else {
       OnlineLibraryList(uiState, lazyListState, onlineLibraryViewModel, activity)
     }
-    if (uiState.showScanning) {
-      ShowFetchingLibraryLayout(uiState.scanningMessage)
+    if (uiState.showScanningProgressBar) {
+      ShowFetchingLibraryLayout(uiState.scanningProgressBarMessage)
     }
   }
 }

@@ -76,8 +76,8 @@ class OnlineLibraryScreenTest {
     isLoadingMore: Boolean = false,
     searchQuery: String = "",
     isSearchActive: Boolean = false,
-    scanningMessage: String = "",
-    showScanning: Boolean = false,
+    scanningProgressBarMessage: String = "",
+    showScanningProgressBar: Boolean = false,
     noContentMessage: String = "",
     showNoContent: Boolean = false
   ): OnlineLibraryUiState = OnlineLibraryUiState(
@@ -86,8 +86,8 @@ class OnlineLibraryScreenTest {
     isLoadingMore = isLoadingMore,
     searchQuery = searchQuery,
     isSearchActive = isSearchActive,
-    scanningMessage = scanningMessage,
-    showScanning = showScanning,
+    scanningProgressBarMessage = scanningProgressBarMessage,
+    showScanningProgressBar = showScanningProgressBar,
     noContentMessage = noContentMessage,
     showNoContent = showNoContent,
   )
@@ -128,7 +128,9 @@ class OnlineLibraryScreenTest {
 
   @Test
   fun `shows loading when scanning`() {
-    renderScreen(createUiState(showScanning = true, scanningMessage = "Loading..."))
+    renderScreen(
+      createUiState(showScanningProgressBar = true, scanningProgressBarMessage = "Loading...")
+    )
 
     composeTestRule
       .onNodeWithTag(SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG)
@@ -252,7 +254,7 @@ class OnlineLibraryScreenTest {
   @Test
   fun `swipe refresh does NOT trigger when scanning`() {
     val viewModel = createMockViewModel()
-    renderScreen(createUiState(showScanning = true), viewModel = viewModel)
+    renderScreen(createUiState(showScanningProgressBar = true), viewModel = viewModel)
     composeTestRule.apply {
       onNodeWithTag(SWIPE_REFRESH_TESTING_TAG).performTouchInput { swipeDown() }
       waitForIdle()

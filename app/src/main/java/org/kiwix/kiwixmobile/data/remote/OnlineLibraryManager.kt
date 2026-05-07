@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.data.remote
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.libkiwix.Library
@@ -32,7 +32,7 @@ import java.io.StringReader
 import javax.inject.Inject
 
 class OnlineLibraryManager @Inject constructor() {
-  var totalResult = 0
+  var totalResult = ZERO
   suspend fun parseOPDSStreamAndGetBooks(
     content: String?,
     urlHost: String
@@ -81,7 +81,7 @@ class OnlineLibraryManager @Inject constructor() {
     lang?.takeIf { it.isNotBlank() }?.let { params += "lang=$it" }
     category?.takeIf { it.isNotBlank() }?.let { params += "category=$it" }
 
-    return "$baseUrl/${KiwixService.Companion.OPDS_LIBRARY_ENDPOINT}?${params.joinToString("&")}"
+    return "$baseUrl/${OPDS_LIBRARY_ENDPOINT}?${params.joinToString("&")}"
   }
 
   /**
