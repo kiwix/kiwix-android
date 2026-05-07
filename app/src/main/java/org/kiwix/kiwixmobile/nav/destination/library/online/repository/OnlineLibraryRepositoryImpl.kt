@@ -76,7 +76,7 @@ class OnlineLibraryRepositoryImpl @Inject constructor(
 
         val response = service.getLibraryPage(url)
         val base = response.getResolvedBaseUrl()
-        emit(Parsing)
+        emit(Parsing(request.isLoadMoreItem))
         val books = onlineLibraryManager
           .parseOPDSStreamAndGetBooks(response.body(), base)
           .orEmpty()

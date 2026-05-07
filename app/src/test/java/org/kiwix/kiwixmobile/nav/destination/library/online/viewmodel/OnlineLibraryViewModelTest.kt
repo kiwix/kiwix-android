@@ -477,11 +477,23 @@ class OnlineLibraryViewModelTest {
   inner class HandleLibraryState {
     @Test
     fun `when state is Idle then updates progress`() = runTest {
-      viewModel.handleLibraryState(Idle)
+      // When loading initial data should show the progressBar.
+      viewModel.handleLibraryState(Idle(false))
       assertEquals(
         context.getString(R.string.reaching_remote_library),
         viewModel.uiState.value.scanningProgressBarMessage
       )
+      assertTrue(viewModel.uiState.value.showScanningProgressBar)
+      assertFalse(viewModel.uiState.value.isLoadingMore)
+
+      // When loading load more items progressBar should not show.
+      viewModel.handleLibraryState(Idle(true))
+      assertEquals(
+        context.getString(R.string.reaching_remote_library),
+        viewModel.uiState.value.scanningProgressBarMessage
+      )
+      assertFalse(viewModel.uiState.value.showScanningProgressBar)
+      assertTrue(viewModel.uiState.value.isLoadingMore)
     }
 
     @Test
@@ -512,21 +524,42 @@ class OnlineLibraryViewModelTest {
     fun `when state is Loading then updates loading flags`() = runTest {
       viewModel.handleLibraryState(Loading(isLoadMore = false))
 
-      val state = viewModel.uiState.value
-      assertTrue(state.showScanningProgressBar)
+      assertTrue(viewModel.uiState.value.showScanningProgressBar)
+      assertFalse(viewModel.uiState.value.isLoadingMore)
       assertEquals(
         context.getString(R.string.reaching_remote_library),
-        state.scanningProgressBarMessage
+        viewModel.uiState.value.scanningProgressBarMessage
       )
+
+      viewModel.handleLibraryState(Loading(isLoadMore = true))
+
+      assertEquals(
+        context.getString(R.string.reaching_remote_library),
+        viewModel.uiState.value.scanningProgressBarMessage
+      )
+      assertFalse(viewModel.uiState.value.showScanningProgressBar)
+      assertTrue(viewModel.uiState.value.isLoadingMore)
     }
 
     @Test
     fun `when state is Parsing then updates progress`() = runTest {
-      viewModel.handleLibraryState(Parsing)
+      // When loading initial data should show the progressBar.
+      viewModel.handleLibraryState(Parsing(false))
       assertEquals(
         context.getString(R.string.parsing_remote_library),
         viewModel.uiState.value.scanningProgressBarMessage
       )
+      assertTrue(viewModel.uiState.value.showScanningProgressBar)
+      assertFalse(viewModel.uiState.value.isLoadingMore)
+
+      // When loading load more items progressBar should not show.
+      viewModel.handleLibraryState(Parsing(true))
+      assertEquals(
+        context.getString(R.string.parsing_remote_library),
+        viewModel.uiState.value.scanningProgressBarMessage
+      )
+      assertFalse(viewModel.uiState.value.showScanningProgressBar)
+      assertTrue(viewModel.uiState.value.isLoadingMore)
     }
 
     @Test
@@ -575,27 +608,6 @@ class OnlineLibraryViewModelTest {
 
       val result = viewModel.networkBooks.first()
       assertEquals(existing + newBooks, result)
-    }
-
-    @Test
-    fun `when success with empty books but existing data then keeps old list`() = runTest {
-      val existing = listOf(mockk<LibkiwixBook>())
-      viewModel.networkBooks.emit(existing)
-
-      val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
-        every { isLoadMoreItem } returns false
-      }
-
-      val state = Success(
-        books = emptyList(),
-        totalPages = 10,
-        request = request
-      )
-
-      viewModel.handleLibraryState(state)
-
-      val result = viewModel.networkBooks.first()
-      assertEquals(existing, result)
     }
 
     @Test

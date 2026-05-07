@@ -138,7 +138,7 @@ class ObserveOnlineLibraryTest {
 
     assertEquals(
       listOf(
-        Idle,
+        Idle(false),
         Loading(false),
         Success(request, emptyList(), 1)
       ),
@@ -167,7 +167,7 @@ class ObserveOnlineLibraryTest {
 
     assertEquals(
       listOf(
-        Idle,
+        Idle(false),
         Success(request, emptyList(), 1)
       ),
       results

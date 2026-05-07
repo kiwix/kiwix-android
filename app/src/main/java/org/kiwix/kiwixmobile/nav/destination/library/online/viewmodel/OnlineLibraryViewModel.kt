@@ -143,7 +143,7 @@ class OnlineLibraryViewModel @Inject constructor(
   )
 
   sealed class OnlineLibraryState {
-    object Idle : OnlineLibraryState()
+    data class Idle(val isLoadMore: Boolean) : OnlineLibraryState()
 
     data class Loading(val isLoadMore: Boolean) : OnlineLibraryState()
 
@@ -160,7 +160,7 @@ class OnlineLibraryViewModel @Inject constructor(
 
     object WifiOnlyException : OnlineLibraryState()
     object NoInternetConnection : OnlineLibraryState()
-    object Parsing : OnlineLibraryState()
+    data class Parsing(val isLoadMore: Boolean) : OnlineLibraryState()
   }
 
   data class OnlineLibraryUiState(
@@ -279,16 +279,14 @@ class OnlineLibraryViewModel @Inject constructor(
     _uiState.update { current ->
       current.copy(
         items = it,
-        isRefreshing = false,
-        showScanningProgressBar = false,
         noContentMessage = noContentMessageWhenItemsComesFromOnlineSource(it),
         showNoContent = it.isEmpty()
       )
     }
   }.catch { throwable ->
-    _uiState.update { it.copy(showScanningProgressBar = false) }
+    resetDownloadState()
     throwable.printStackTrace()
-    Log.e("ZimManageViewModel", "Error----$throwable")
+    Log.e("OnlineLibraryViewModel", "Error----$throwable")
   }.launchIn(viewModelScope)
 
   private fun noContentMessageWhenItemsComesFromOnlineSource(items: List<LibraryListItem>): String =
@@ -393,9 +391,12 @@ class OnlineLibraryViewModel @Inject constructor(
 
   @Suppress("CyclomaticComplexMethod")
   internal suspend fun handleLibraryState(state: OnlineLibraryState) {
-    val currentBooks = networkBooks.value
     when (state) {
-      Idle -> updateDownloadProgressIfNeeded(R.string.reaching_remote_library)
+      is Idle -> updateDownloadProgressIfNeeded(
+        state.isLoadMore,
+        R.string.reaching_remote_library
+      )
+
       WifiOnlyException -> {
         _uiState.update {
           it.copy(
@@ -416,20 +417,23 @@ class OnlineLibraryViewModel @Inject constructor(
       }
 
       is Loading -> {
-        updateDownloadState(!state.isLoadMore)
-        updateDownloadProgressIfNeeded(R.string.starting_downloading_remote_library)
+        updateDownloadProgressIfNeeded(
+          state.isLoadMore,
+          R.string.starting_downloading_remote_library
+        )
       }
 
-      Parsing -> updateDownloadProgressIfNeeded(R.string.parsing_remote_library)
+      is Parsing -> updateDownloadProgressIfNeeded(
+        state.isLoadMore,
+        R.string.parsing_remote_library
+      )
 
       is Success -> {
+        val currentBooks = networkBooks.value
         totalPages = state.totalPages
         val request = state.request
         val newBooks = when {
           request.isLoadMoreItem -> currentBooks + state.books
-
-          state.books.isEmpty() && currentBooks.isNotEmpty() -> currentBooks
-
           else -> state.books
         }
         networkBooks.emit(newBooks)
@@ -440,7 +444,7 @@ class OnlineLibraryViewModel @Inject constructor(
       }
 
       is OnlineLibraryState.Error -> {
-        if (currentBooks.isEmpty()) {
+        if (networkBooks.value.isEmpty()) {
           networkBooks.emit(emptyList())
         }
         resetDownloadState()
@@ -470,16 +474,12 @@ class OnlineLibraryViewModel @Inject constructor(
     )
   }
 
-  private fun updateDownloadProgressIfNeeded(messageResId: Int) {
-    _uiState.update { it.copy(scanningProgressBarMessage = context.getString(messageResId)) }
-  }
-
-  private fun updateDownloadState(isInitial: Boolean) {
+  private fun updateDownloadProgressIfNeeded(isLoadMore: Boolean, messageResId: Int) {
     _uiState.update {
       it.copy(
-        isRefreshing = isInitial,
-        isLoadingMore = !isInitial,
-        showScanningProgressBar = isInitial
+        showScanningProgressBar = !isLoadMore,
+        isLoadingMore = isLoadMore,
+        scanningProgressBarMessage = context.getString(messageResId)
       )
     }
   }

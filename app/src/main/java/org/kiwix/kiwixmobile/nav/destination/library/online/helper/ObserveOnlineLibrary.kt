@@ -58,7 +58,7 @@ class ObserveOnlineLibrary @Inject constructor(
             emit(WifiOnlyException)
             return@flow
           }
-          emit(Idle)
+          emit(Idle(request.isLoadMoreItem))
           emitAll(repository.fetchOnlineLibrary(request, appProgressListener))
         }
       }
