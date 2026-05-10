@@ -348,4 +348,7 @@
   <string name="resuming_state">This text is shown to inform the user that the current state of download is resuming.</string>
   <string name="downloading_state">This text is shown to inform the user that the current state of download is actively in progress.</string>
   <string name="download_failed_state">This text is shown to inform the user when a download has failed.</string>
+  <string name="update_all_books_dialog_title">Title of a confirmation dialog shown when the user taps "Update All books" on the Local Library screen.</string>
+  <string name="update_all_books_dialog_message">Body of the "Update All books" confirmation dialog. Shown when the user taps the Update All button in the Local Library screen.</string>
+  <string name="update">Label for the confirm/positive button in the "Update All books" dialog. Tapping it queues all outdated books for download.</string>
 </resources>

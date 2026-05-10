@@ -457,6 +457,13 @@ sealed class KiwixDialog(
     android.R.string.cancel,
     customComposeView = customGetView
   )
+
+  object ConfirmUpdateAll : KiwixDialog(
+    R.string.update_all_books_dialog_title,
+    R.string.update_all_books_dialog_message,
+    R.string.update,
+    R.string.no
+  )
 }
 
 interface HasBodyFormatArgs {

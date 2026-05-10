@@ -107,6 +107,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestUpdateAll
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
@@ -156,6 +157,7 @@ class ZimManageViewModel @Inject constructor(
     object MultiModeFinished : FileSelectActions()
     object RestartActionMode : FileSelectActions()
     object UserClickedDownloadBooksButton : FileSelectActions()
+    object RequestUpdateAll : FileSelectActions()
   }
 
   sealed class OnlineLibraryUiEvent {
@@ -192,6 +194,13 @@ class ZimManageViewModel @Inject constructor(
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
+
+  /**
+   * Holds the list of online [LibkiwixBook] entries that are newer than their locally-installed
+   * counterpart (matched by [LibkiwixBook.bookName]). Non-empty when updates are available.
+   */
+  private val _updateAvailableBooks = MutableStateFlow<List<LibkiwixBook>>(emptyList())
+  val updateAvailableBooks: StateFlow<List<LibkiwixBook>> = _updateAvailableBooks.asStateFlow()
 
   private var onlineLibraryFetchingJob: Job? = null
 
@@ -372,8 +381,42 @@ class ZimManageViewModel @Inject constructor(
       add(observeLanguageChanges())
       add(observeSearch())
       add(observeCategory())
+      add(observeUpdatesAvailable())
     }
   }
+
+  /**
+   * Watches the online library catalog and the local book list for changes, then computes
+   * which locally-installed books have a newer version available online.
+   *
+   * Matching is done by [LibkiwixBook.bookName] (e.g. "wikipedia_en_all_maxi"). A book is
+   * considered outdated when the online entry's [LibkiwixBook.date] (ISO "YYYY-MM" or
+   * "YYYY-MM-DD" string) is lexicographically greater than the local book's date.
+   */
+  private fun observeUpdatesAvailable() =
+    networkLibrary
+      .combine(dataSource.booksOnDiskAsListItems()) { onlineResult, localItems ->
+        val localBooks = localItems.filterIsInstance<BookOnDisk>().map { it.book }
+        val onlineByName = onlineResult.books
+          .filter { !it.bookName.isNullOrBlank() && !it.url.isNullOrBlank() }
+          .associateBy { it.bookName.orEmpty() }
+
+        localBooks.mapNotNull { local ->
+          val name = local.bookName ?: return@mapNotNull null
+          val online = onlineByName[name] ?: return@mapNotNull null
+          val localDate = local.date
+          val onlineDate = online.date
+          if (onlineDate.isNotBlank() && localDate.isNotBlank() && onlineDate > localDate) {
+            online
+          } else {
+            null
+          }
+        }
+      }
+      .catch { it.printStackTrace() }
+      .onEach { updatable -> _updateAvailableBooks.value = updatable }
+      .flowOn(ioDispatcher)
+      .launchIn(viewModelScope)
 
   override fun onCleared() {
     coroutineJobs.forEach {
@@ -476,6 +519,7 @@ class ZimManageViewModel @Inject constructor(
               is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
               RestartActionMode -> StartMultiSelection(fileSelectActions)
               UserClickedDownloadBooksButton -> NavigateToDownloads
+              RequestUpdateAll -> None
             }
           )
         }.onFailure {
