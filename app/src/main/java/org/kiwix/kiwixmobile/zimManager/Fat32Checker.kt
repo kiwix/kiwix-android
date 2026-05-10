@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.zimManager
 
 import android.os.Build
 import android.os.FileObserver
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -41,7 +42,8 @@ import java.io.File
 
 class Fat32Checker constructor(
   kiwixDataStore: KiwixDataStore,
-  private val fileSystemCheckers: List<FileSystemChecker>
+  private val fileSystemCheckers: List<FileSystemChecker>,
+  private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
   private val _fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
@@ -51,8 +53,7 @@ class Fat32Checker constructor(
     tryEmit(Unit)
   }
 
-  @Suppress("InjectDispatcher")
-  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+  private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
 
   init {
     scope.launch {
