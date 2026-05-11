@@ -30,7 +30,8 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 
 class AvailableSpaceCalculatorTest {
   private val downloadRoomDao: DownloadRoomDao = mockk()
@@ -52,7 +53,7 @@ class AvailableSpaceCalculatorTest {
       size = bookSize.toString()
       id = "test_id"
     }
-    val bookItem = LibraryListItem.BookItem(book, Fat32Checker.FileSystemState.CanWrite4GbFile)
+    val bookItem = BookItem(book, CanWrite4GbFile)
 
     val downloadModel: DownloadModel = mockk {
       every { bytesRemaining } returns bytesToBeDownloaded
@@ -86,7 +87,7 @@ class AvailableSpaceCalculatorTest {
       size = bookSize.toString()
       id = "test_id"
     }
-    val bookItem = LibraryListItem.BookItem(book, Fat32Checker.FileSystemState.CanWrite4GbFile)
+    val bookItem = BookItem(book, CanWrite4GbFile)
 
     val downloadModel: DownloadModel = mockk {
       every { bytesRemaining } returns bytesToBeDownloaded
@@ -141,6 +142,40 @@ class AvailableSpaceCalculatorTest {
   }
 
   @Test
+  fun `hasAvailableSpaceForBook returns false when size equals available`() = runTest {
+    val bookSize = 2000L
+
+    val book = LibkiwixBook().apply {
+      size = bookSize.toString()
+    }
+
+    coEvery { storageCalculator.availableBytes() } returns bookSize
+
+    val result = availableSpaceCalculator.hasAvailableSpaceForBook(book)
+
+    assertThat(result).isFalse
+  }
+
+  @Test
+  fun `hasAvailableSpaceFor succeeds when book size is zero`() = runTest {
+    val book = LibkiwixBook().apply {
+      size = "0"
+    }
+    val bookItem = BookItem(book, CanWrite4GbFile)
+
+    every { downloadRoomDao.allDownloads() } returns flowOf(emptyList())
+    coEvery { storageCalculator.availableBytes() } returns 1L
+
+    var successCalled = false
+
+    availableSpaceCalculator.hasAvailableSpaceFor(bookItem, {
+      successCalled = true
+    }, {})
+
+    assertThat(successCalled).isTrue
+  }
+
+  @Test
   fun `hasAvailableSpaceFor handles multiple ongoing downloads correctly`() = runTest {
     val bookSize = 1000L
     val availableBytes = 5000L
@@ -152,7 +187,7 @@ class AvailableSpaceCalculatorTest {
       size = bookSize.toString()
       id = "test_id"
     }
-    val bookItem = LibraryListItem.BookItem(book, Fat32Checker.FileSystemState.CanWrite4GbFile)
+    val bookItem = BookItem(book, CanWrite4GbFile)
 
     val download1: DownloadModel = mockk { every { bytesRemaining } returns 1500L }
     val download2: DownloadModel = mockk { every { bytesRemaining } returns 2000L }
@@ -174,7 +209,7 @@ class AvailableSpaceCalculatorTest {
         size = expectedSize.toString()
         id = "test_id"
       }
-      val bookItem = LibraryListItem.BookItem(book, Fat32Checker.FileSystemState.CanWrite4GbFile)
+      val bookItem = BookItem(book, CanWrite4GbFile)
 
       every { downloadRoomDao.allDownloads() } returns flowOf(emptyList())
       coEvery { storageCalculator.availableBytes() } returns expectedSize // Exactly equal
@@ -184,4 +219,29 @@ class AvailableSpaceCalculatorTest {
 
       assertThat(failureCalled).isTrue
     }
+
+  @Test
+  fun `hasAvailableSpaceFor handles negative available space`() = runTest {
+    val bookSize = 1000L
+    val availableBytes = 1000L
+    val bytesToBeDownloaded = 2000L
+
+    val book = LibkiwixBook().apply {
+      size = bookSize.toString()
+    }
+    val bookItem = BookItem(book, CanWrite4GbFile)
+
+    val download: DownloadModel = mockk {
+      every { bytesRemaining } returns bytesToBeDownloaded
+    }
+
+    every { downloadRoomDao.allDownloads() } returns flowOf(listOf(download))
+    coEvery { storageCalculator.availableBytes() } returns availableBytes
+
+    var failureMessage: String? = null
+
+    availableSpaceCalculator.hasAvailableSpaceFor(bookItem, {}, { failureMessage = it })
+
+    assertThat(failureMessage).isEqualTo("-1000 Bytes")
+  }
 }
