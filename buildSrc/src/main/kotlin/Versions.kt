@@ -123,6 +123,7 @@ object Versions {
 
   const val ACCOMPANIST = "0.34.0"
   const val CORE_SPLASHSCREEN: String = "1.2.0"
+  const val PLAY_REVIEW: String = "2.0.2"
 }
 
 /**

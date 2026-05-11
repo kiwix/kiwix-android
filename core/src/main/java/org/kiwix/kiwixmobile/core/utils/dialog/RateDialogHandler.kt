@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,11 +18,11 @@
 package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Intent
+import android.util.Log
 import androidx.annotation.IdRes
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
@@ -39,7 +40,8 @@ const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 @ActivityScope
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
-  private val libkiwixBookOnDisk: LibkiwixBookOnDisk
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
+  private val kiwixDataStore: KiwixDataStore
 ) {
   private var alertDialogShower: AlertDialogShower? = null
   private var visitCounterPref: RateAppCounter? = null
@@ -53,17 +55,45 @@ class RateDialogHandler @Inject constructor(
     alertDialogShower?.show(
       KiwixDialog.ShowRate(IconItem.MipmapImage(iconResId), activity),
       {
+        // User clicked "Rate!" — mark as handled and launch In-App Review flow
+        // for the playStore variant.
         visitCounterPref?.noThanksState = true
-        goToRateApp(activity)
+        launchInAppReviewFlow()
       },
       {
+        // User clicked "No Thanks" — mark as handled, do not trigger review flow.
         visitCounterPref?.noThanksState = true
       },
       {
+        // User clicked "Later" — reset the visit counter without calling
+        // launchReviewFlow(), so this does not consume the Play Store review quota.
         tempVisitCount = 0
         visitCounterPref?.count = tempVisitCount
       }
     )
+  }
+
+  /**
+   * Launches the Google Play In-App Review flow. The Play Store manages quotas
+   * internally and may not always show the review dialog, but calling this
+   * ensures the best chance of a seamless in-app rating experience.
+   */
+  @Suppress("TooGenericExceptionCaught")
+  internal fun launchInAppReviewFlow() {
+    try {
+      val reviewManager = ReviewManagerFactory.create(activity)
+      val requestFlow = reviewManager.requestReviewFlow()
+      requestFlow.addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+          val reviewInfo = task.result
+          reviewManager.launchReviewFlow(activity, reviewInfo)
+        } else {
+          Log.e(TAG, "Failed to request review flow", task.exception)
+        }
+      }
+    } catch (e: Exception) {
+      Log.e(TAG, "Error launching in-app review", e)
+    }
   }
 
   fun checkForRateDialog(
@@ -80,13 +110,22 @@ class RateDialogHandler @Inject constructor(
     }
   }
 
-  private suspend fun shouldShowRateDialog(): Boolean {
-    return tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
+  internal suspend fun shouldShowRateDialog(): Boolean {
+    return isPlayStoreVariant() &&
+      tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
       visitCounterPref?.noThanksState == false && isTwoWeekPassed() &&
       isZimFilesAvailableInLibrary() && !BuildConfig.DEBUG
   }
 
-  private suspend fun isZimFilesAvailableInLibrary(): Boolean {
+  /**
+   * Checks if this is the playStore variant. The rating dialog should only be
+   * shown for playStore builds since the standalone variant does not have a
+   * corresponding Play Store listing (different package name with `.standalone` suffix).
+   */
+  internal suspend fun isPlayStoreVariant(): Boolean =
+    kiwixDataStore.isPlayStoreBuild.first()
+
+  internal suspend fun isZimFilesAvailableInLibrary(): Boolean {
     // If it is a custom app, return true since custom apps always have the ZIM file.
     if (activity.isBrandedApp()) return true
     // For Kiwix app, check if there are ZIM files available in the library.
@@ -94,7 +133,7 @@ class RateDialogHandler @Inject constructor(
   }
 
   @Suppress("MagicNumber")
-  private fun isTwoWeekPassed(): Boolean {
+  internal fun isTwoWeekPassed(): Boolean {
     val firstTimeInstallTime =
       activity.packageManager
         .getPackageInformation(activity.packageName, 0).firstInstallTime
@@ -104,21 +143,7 @@ class RateDialogHandler @Inject constructor(
     return timeDifference >= twoWeeksInMillis
   }
 
-  private fun goToRateApp(activity: Activity) {
-    val kiwixLocalMarketUri =
-      "market://details?id=${activity.packageName}".toUri()
-    val kiwixBrowserMarketUri =
-      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
-    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
-    goToMarket.addFlags(
-      Intent.FLAG_ACTIVITY_NO_HISTORY or
-        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-    )
-    try {
-      activity.startActivity(goToMarket)
-    } catch (_: ActivityNotFoundException) {
-      activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
-    }
+  companion object {
+    private const val TAG = "RateDialogHandler"
   }
 }

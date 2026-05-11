@@ -374,4 +374,10 @@ object Libs {
 
   const val CORE_SPLASH_SCREEN: String =
     "androidx.core:core-splashscreen:" + Versions.CORE_SPLASHSCREEN
+
+  /**
+   * https://developer.android.com/guide/playcore/in-app-review
+   */
+  const val PLAY_REVIEW_KTX: String =
+    "com.google.android.play:review-ktx:" + Versions.PLAY_REVIEW
 }
