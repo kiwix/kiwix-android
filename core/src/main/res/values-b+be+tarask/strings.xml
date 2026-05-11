@@ -83,6 +83,7 @@
   <string name="help_2">Што робіць Kiwix?</string>
   <string name="help_4">Хоць Kiwix пачаткова быў распрацаваны для афляйнавай падтрымкі Вікіпэдыі, але можа чытаць іншыя віды зьместу.</string>
   <string name="help_5">Дзе зьмест?</string>
+  <string name="pref_current_folder">Бягучая тэчка</string>
   <string name="delete_zim_failed">Выбачайце, мы не змаглі выдаліць некаторыя файлы. Паспрабуйце скарыстацца файлавым кіраўніком.</string>
   <string name="confirm_stop_download_title">Спыніць сьцягваньне?</string>
   <string name="confirm_stop_download_msg">Вы ўпэўненыя, што хочаце спыніць гэтае сьцягваньне?</string>
@@ -112,6 +113,7 @@
   <string name="welcome_to_the_family">Вітаем у сям’і</string>
   <string name="ext_storage_write_permission_denied_add_note">Нататкамі нельга карыстацца бяз доступу да сховішча</string>
   <string name="permission_rationale_location">Android вымагае лякальнага дазволу на доступ праграмы да вызначэньня прыладаў</string>
+  <string name="status">Статус</string>
   <string name="no_bookmarks">Няма закладак</string>
   <string name="action_copy">Капіяваць</string>
 </resources>

@@ -412,4 +412,9 @@
   <string name="validate_zim_files">ZIM 파일 유효성 검사</string>
   <string name="validating_zim_file">ZIM 파일 유효성 검사 중…</string>
   <string name="validating_zim_files">ZIM 파일 유효성 검사 중…</string>
+  <string name="menu_add_to_homescreen">홈 화면에 추가하기</string>
+  <string name="added_to_homescreen">홈 화면에 바로가기 추가됨</string>
+  <string name="add_shortcut_title">바로가기 추가</string>
+  <string name="shortcut_name_label">바로가기 이름</string>
+  <string name="open_xiaomi_settings">설정 열기</string>
 </resources>
