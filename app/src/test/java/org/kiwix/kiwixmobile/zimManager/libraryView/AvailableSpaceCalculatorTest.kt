@@ -24,90 +24,77 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.HasAvailableSpaceForBook
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.NotEnoughSpaceForBook
 
 class AvailableSpaceCalculatorTest {
   private val downloadRoomDao: DownloadRoomDao = mockk()
   private val storageCalculator: StorageCalculator = mockk()
   private lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
-  @Before
+  @BeforeEach
   fun setUp() {
     availableSpaceCalculator = AvailableSpaceCalculator(downloadRoomDao, storageCalculator)
   }
 
   @Test
-  fun `hasAvailableSpaceFor calls successAction when enough space is available`() = runTest {
-    val bookSize = 1000L
-    val availableBytes = 2000L
-    val bytesToBeDownloaded = 500L
+  fun `hasAvailableSpaceFor returns HasAvailableSpaceForBook when enough space is available`() =
+    runTest {
+      val bookSize = 1000L
+      val availableBytes = 2000L
+      val bytesToBeDownloaded = 500L
 
-    val book = LibkiwixBook().apply {
-      size = bookSize.toString()
-      id = "test_id"
+      val book = LibkiwixBook().apply {
+        size = bookSize.toString()
+        id = "test_id"
+      }
+      val bookItem = BookItem(book, CanWrite4GbFile)
+
+      val downloadModel: DownloadModel = mockk {
+        every { bytesRemaining } returns bytesToBeDownloaded
+      }
+
+      every { downloadRoomDao.allDownloads() } returns flowOf(listOf(downloadModel))
+      coEvery { storageCalculator.availableBytes() } returns availableBytes
+
+      val result = availableSpaceCalculator.hasAvailableSpaceFor(bookItem)
+
+      assertThat(result).isInstanceOf(HasAvailableSpaceForBook::class.java)
     }
-    val bookItem = BookItem(book, CanWrite4GbFile)
-
-    val downloadModel: DownloadModel = mockk {
-      every { bytesRemaining } returns bytesToBeDownloaded
-    }
-
-    every { downloadRoomDao.allDownloads() } returns flowOf(listOf(downloadModel))
-    coEvery { storageCalculator.availableBytes() } returns availableBytes
-
-    var successCalled = false
-    var failureCalled = false
-
-    availableSpaceCalculator.hasAvailableSpaceFor(
-      bookItem,
-      successAction = { successCalled = true },
-      failureAction = { failureCalled = true }
-    )
-
-    assertThat(successCalled).isTrue
-    assertThat(failureCalled).isFalse
-  }
 
   @Test
-  fun `hasAvailableSpaceFor calls failureAction when not enough space is available`() = runTest {
-    val bookSize = 2000L
-    val availableBytes = 2000L
-    val bytesToBeDownloaded = 500L
-    // trueAvailableBytes = 2000 - 500 = 1500
-    // bookSize (2000) > trueAvailableBytes (1500) -> failure
+  fun `hasAvailableSpaceFor returns NotEnoughSpaceForBook when not enough space is available`() =
+    runTest {
+      val bookSize = 2000L
+      val availableBytes = 2000L
+      val bytesToBeDownloaded = 500L
+      // trueAvailableBytes = 2000 - 500 = 1500
+      // bookSize (2000) > trueAvailableBytes (1500) -> failure
 
-    val book = LibkiwixBook().apply {
-      size = bookSize.toString()
-      id = "test_id"
+      val book = LibkiwixBook().apply {
+        size = bookSize.toString()
+        id = "test_id"
+      }
+      val bookItem = BookItem(book, CanWrite4GbFile)
+
+      val downloadModel: DownloadModel = mockk {
+        every { bytesRemaining } returns bytesToBeDownloaded
+      }
+
+      every { downloadRoomDao.allDownloads() } returns flowOf(listOf(downloadModel))
+      coEvery { storageCalculator.availableBytes() } returns availableBytes
+
+      val result = availableSpaceCalculator.hasAvailableSpaceFor(bookItem) as NotEnoughSpaceForBook
+      assertThat(result.availableSpace).isEqualTo("1.5 KB") // 1500 bytes is 1.5 KB in human readable
     }
-    val bookItem = BookItem(book, CanWrite4GbFile)
-
-    val downloadModel: DownloadModel = mockk {
-      every { bytesRemaining } returns bytesToBeDownloaded
-    }
-
-    every { downloadRoomDao.allDownloads() } returns flowOf(listOf(downloadModel))
-    coEvery { storageCalculator.availableBytes() } returns availableBytes
-
-    var successCalled = false
-    var failureMessage: String? = null
-
-    availableSpaceCalculator.hasAvailableSpaceFor(
-      bookItem,
-      successAction = { successCalled = true },
-      failureAction = { failureMessage = it }
-    )
-
-    assertThat(successCalled).isFalse
-    assertThat(failureMessage).isEqualTo("1.5 KB") // 1500 bytes is 1.5 KB in human readable
-  }
 
   @Test
   fun `hasAvailableSpaceForBook returns true when enough space`() = runTest {
@@ -166,13 +153,9 @@ class AvailableSpaceCalculatorTest {
     every { downloadRoomDao.allDownloads() } returns flowOf(emptyList())
     coEvery { storageCalculator.availableBytes() } returns 1L
 
-    var successCalled = false
+    val result = availableSpaceCalculator.hasAvailableSpaceFor(bookItem)
 
-    availableSpaceCalculator.hasAvailableSpaceFor(bookItem, {
-      successCalled = true
-    }, {})
-
-    assertThat(successCalled).isTrue
+    assertThat(result).isInstanceOf(HasAvailableSpaceForBook::class.java)
   }
 
   @Test
@@ -195,14 +178,12 @@ class AvailableSpaceCalculatorTest {
     every { downloadRoomDao.allDownloads() } returns flowOf(listOf(download1, download2))
     coEvery { storageCalculator.availableBytes() } returns availableBytes
 
-    var successCalled = false
-    availableSpaceCalculator.hasAvailableSpaceFor(bookItem, { successCalled = true }, {})
-
-    assertThat(successCalled).isTrue
+    val result = availableSpaceCalculator.hasAvailableSpaceFor(bookItem)
+    assertThat(result).isInstanceOf(HasAvailableSpaceForBook::class.java)
   }
 
   @Test
-  fun `hasAvailableSpaceFor calls failureAction when book size is exactly equal to available space`() =
+  fun `hasAvailableSpaceFor returns NotEnoughSpaceForBook when book size is exactly equal to available space`() =
     runTest {
       val expectedSize = 2000L
       val book = LibkiwixBook().apply {
@@ -213,11 +194,8 @@ class AvailableSpaceCalculatorTest {
 
       every { downloadRoomDao.allDownloads() } returns flowOf(emptyList())
       coEvery { storageCalculator.availableBytes() } returns expectedSize // Exactly equal
-
-      var failureCalled = false
-      availableSpaceCalculator.hasAvailableSpaceFor(bookItem, {}, { failureCalled = true })
-
-      assertThat(failureCalled).isTrue
+      val result = availableSpaceCalculator.hasAvailableSpaceFor(bookItem) as NotEnoughSpaceForBook
+      assertThat(result).isInstanceOf(NotEnoughSpaceForBook::class.java)
     }
 
   @Test
@@ -238,10 +216,7 @@ class AvailableSpaceCalculatorTest {
     every { downloadRoomDao.allDownloads() } returns flowOf(listOf(download))
     coEvery { storageCalculator.availableBytes() } returns availableBytes
 
-    var failureMessage: String? = null
-
-    availableSpaceCalculator.hasAvailableSpaceFor(bookItem, {}, { failureMessage = it })
-
-    assertThat(failureMessage).isEqualTo("-1000 Bytes")
+    val result = availableSpaceCalculator.hasAvailableSpaceFor(bookItem) as NotEnoughSpaceForBook
+    assertThat(result.availableSpace).isEqualTo("-1000 Bytes")
   }
 }
