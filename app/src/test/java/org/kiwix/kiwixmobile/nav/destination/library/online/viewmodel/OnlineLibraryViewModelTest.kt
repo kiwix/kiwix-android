@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -92,10 +93,12 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowSnackbar
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import javax.inject.Provider
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(InstantExecutorExtension::class)
@@ -103,6 +106,7 @@ class OnlineLibraryViewModelTest {
   @RegisterExtension
   val dispatcherRule = MainDispatcherRule()
   private val downloader: Downloader = mockk(relaxed = true)
+  private val downloaderProvider: Provider<Downloader> = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
   private val bookUtils: BookUtils = mockk(relaxed = true)
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk(relaxed = true)
@@ -134,8 +138,9 @@ class OnlineLibraryViewModelTest {
       @Suppress("UnspecifiedRegisterReceiverFlag")
       every { context.registerReceiver(any(), any()) } returns mockk()
     }
+    every { downloaderProvider.get() } returns downloader
     viewModel = OnlineLibraryViewModel(
-      downloader,
+      downloaderProvider,
       kiwixDataStore,
       bookUtils,
       libkiwixBookOnDisk,
@@ -376,13 +381,13 @@ class OnlineLibraryViewModelTest {
   @Nested
   inner class OnPauseResumeButtonClick {
     @Test
-    fun `when action is PauseResume then triggers downloader`() {
+    fun `when action is PauseResume then triggers downloader`() = runTest {
       val item = mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
 
       every { resolveClick.onPauseResumeButtonClick(item) } returns PauseResume(1, true)
 
       viewModel.onPauseResumeButtonClick(item)
-
+      advanceUntilIdle()
       verify { downloader.pauseResumeDownload(1, true) }
     }
 
@@ -402,13 +407,13 @@ class OnlineLibraryViewModelTest {
   @Nested
   inner class OnStopButtonClick {
     @Test
-    fun `when action is RetryDownload then retries`() {
+    fun `when action is RetryDownload then retries`() = runTest {
       val item = mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
 
       every { resolveClick.onStopButtonClick(item) } returns RetryDownload(1)
 
       viewModel.onStopButtonClick(item)
-
+      advanceUntilIdle()
       verify { downloader.retryDownload(1) }
     }
 
@@ -424,6 +429,7 @@ class OnlineLibraryViewModelTest {
         val event = awaitItem() as OnlineLibraryViewModel.UiEvent.ShowDialog
         assertTrue(event.dialog is KiwixDialog.YesNoDialog.StopDownload)
         event.positiveAction.invoke()
+        advanceUntilIdle()
         verify { downloader.cancelDownload(1) }
         cancelAndIgnoreRemainingEvents()
       }
@@ -471,6 +477,78 @@ class OnlineLibraryViewModelTest {
   fun `clearSearch resets state`() {
     viewModel.clearSearch()
     assertEquals("", viewModel.uiState.value.searchQuery)
+  }
+
+  @Nested
+  inner class InitialLibraryLoading {
+    @Test
+    fun `loadInitialLibrary when no items are available`() = runTest {
+      val spyVm = spyk(viewModel)
+      spyVm.setUiStateForTest(viewModel.uiState.value.copy(items = emptyList()))
+
+      every { spyVm.updateOnlineLibraryFilters(any()) } just Runs
+      spyVm.loadInitialLibrary()
+      advanceUntilIdle()
+      verify { spyVm.updateOnlineLibraryFilters(any()) }
+    }
+
+    @Test
+    fun `loadInitialLibrary when items are available`() = runTest {
+      val spyVm = spyk(viewModel)
+      spyVm.setUiStateForTest(viewModel.uiState.value.copy(items = listOf(mockk())))
+
+      every { spyVm.updateOnlineLibraryFilters(any()) } just Runs
+      spyVm.loadInitialLibrary()
+      advanceUntilIdle()
+      verify(exactly = 0) { spyVm.updateOnlineLibraryFilters(any()) }
+    }
+  }
+
+  @Nested
+  inner class DownloadProvider {
+    @Test
+    fun `downloaderProvider get is not called during init`() {
+      val downloaderProvider: Provider<Downloader> = mockk(relaxed = true)
+
+      OnlineLibraryViewModel(
+        downloaderProvider,
+        kiwixDataStore,
+        bookUtils,
+        libkiwixBookOnDisk,
+        downloadDao,
+        availableSpaceCalculator,
+        permissionChecker,
+        context,
+        connectivityReceiver,
+        connectivityManager,
+        observeItems,
+        resolveClick,
+        observeLibrary,
+        refreshAction,
+        observeNetwork,
+        dispatcherRule.dispatcher
+      )
+      verify(exactly = 0) { downloaderProvider.get() }
+    }
+
+    @Test
+    fun `downloaderProvider is called only when download is triggered`() = runTest {
+      val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+      val activity = mockk<KiwixMainActivity>(relaxed = true)
+
+      coEvery {
+        resolveClick.onBookItemClick(item, any())
+      } returns StartDownload(item)
+
+      verify(exactly = 0) { downloaderProvider.get() }
+
+      viewModel.onBookItemClick(item, activity)
+
+      advanceUntilIdle()
+
+      verify(exactly = 1) { downloaderProvider.get() }
+      verify { downloader.download(item.book) }
+    }
   }
 
   @Nested
@@ -862,6 +940,130 @@ class OnlineLibraryViewModelTest {
       spyVm.handleNetworkState(ObserveNetworkState.Result.MobileInternet)
 
       verify(exactly = 0) { spyVm.updateOnlineLibraryFilters(any()) }
+    }
+  }
+
+  @Nested
+  inner class UpdateOnlineLibraryFilter {
+    @Test
+    fun `updateOnlineLibraryFilters updates all fields when new values provided`() = runTest {
+      val initial = OnlineLibraryRequest("oldQ", "oldCat", "oldLang", false, 1)
+      viewModel.currentRequest = initial
+
+      val newRequest = OnlineLibraryRequest("newQ", "newCat", "newLang", true, 2)
+      viewModel.onlineLibraryRequest.test {
+        viewModel.updateOnlineLibraryFilters(newRequest)
+        val updatedRequest = awaitItem()
+        assertThat(updatedRequest.query).isEqualTo("newQ")
+        assertThat(updatedRequest.category).isEqualTo("newCat")
+        assertThat(updatedRequest.lang).isEqualTo("newLang")
+        assertThat(updatedRequest.page).isEqualTo(2)
+        assertThat(updatedRequest.isLoadMoreItem).isTrue()
+        assertThat(updatedRequest).isEqualTo(newRequest)
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `updateOnlineLibraryFilters keeps old values when new values are null`() = runTest {
+      val initial = OnlineLibraryRequest("oldQ", "oldCat", "oldLang", false, 1)
+      viewModel.currentRequest = initial
+
+      val newRequest = OnlineLibraryRequest(null, null, null, true, 5)
+      viewModel.onlineLibraryRequest.test {
+        viewModel.updateOnlineLibraryFilters(newRequest)
+        val updated = awaitItem()
+
+        assertThat(updated.query).isEqualTo("oldQ")
+        assertThat(updated.category).isEqualTo("oldCat")
+        assertThat(updated.lang).isEqualTo("oldLang")
+        assertThat(updated.page).isEqualTo(5)
+        assertThat(updated.isLoadMoreItem).isTrue()
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `updateOnlineLibraryFilters updates only provided fields`() = runTest {
+      val initial = OnlineLibraryRequest("oldQ", "oldCat", "oldLang", false, 1)
+      viewModel.currentRequest = initial
+
+      val newRequest = OnlineLibraryRequest("newQ", null, "newLang", false, 3)
+      viewModel.onlineLibraryRequest.test {
+        viewModel.updateOnlineLibraryFilters(newRequest)
+
+        val updated = awaitItem()
+
+        assertThat(updated.query).isEqualTo("newQ")
+        assertThat(updated.category).isEqualTo("oldCat")
+        assertThat(updated.lang).isEqualTo("newLang")
+        assertThat(updated.page).isEqualTo(3)
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `updateOnlineLibraryFilters emits updated request`() = runTest {
+      val initial = OnlineLibraryRequest("q", "c", "l", false, 1)
+      viewModel.currentRequest = initial
+
+      val newRequest = OnlineLibraryRequest("newQ", null, null, false, 2)
+      viewModel.onlineLibraryRequest.test {
+        viewModel.updateOnlineLibraryFilters(newRequest)
+        val updatedRequest = awaitItem()
+        assertThat(updatedRequest.query).isEqualTo("newQ")
+        assertThat(updatedRequest.page).isEqualTo(2)
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `updateOnlineLibraryFilters updates currentRequest state`() = runTest {
+      val initial = OnlineLibraryRequest("oldQ", "oldCat", "oldLang", false, 1)
+      viewModel.currentRequest = initial
+
+      val newRequest = OnlineLibraryRequest("newQ", "newCat", "newLang", true, 2)
+
+      viewModel.updateOnlineLibraryFilters(newRequest)
+
+      assertThat(viewModel.currentRequest).isEqualTo(newRequest)
+    }
+
+    @Test
+    fun `updateOnlineLibraryFilters keeps same values when identical request is passed`() =
+      runTest {
+        val initial = OnlineLibraryRequest("sameQ", "sameCat", "sameLang", false, 1)
+        viewModel.currentRequest = initial
+
+        val newRequest = OnlineLibraryRequest("sameQ", "sameCat", "sameLang", false, 1)
+
+        viewModel.onlineLibraryRequest.test {
+          viewModel.updateOnlineLibraryFilters(newRequest)
+          val updated = awaitItem()
+
+          assertThat(updated).isEqualTo(initial)
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+    @Test
+    fun `updateOnlineLibraryFilters applies updates cumulatively`() = runTest {
+      val initial = OnlineLibraryRequest("q1", "c1", "l1", false, 1)
+      viewModel.currentRequest = initial
+
+      val req1 = OnlineLibraryRequest("q2", null, null, false, 2)
+      val req2 = OnlineLibraryRequest(null, "c2", null, true, 3)
+
+      viewModel.updateOnlineLibraryFilters(req1)
+      viewModel.updateOnlineLibraryFilters(req2)
+
+      val final = viewModel.currentRequest
+
+      assertThat(final.query).isEqualTo("q2")
+      assertThat(final.category).isEqualTo("c2")
+      assertThat(final.lang).isEqualTo("l1")
+      assertThat(final.page).isEqualTo(3)
+      assertThat(final.isLoadMoreItem).isTrue()
     }
   }
 }

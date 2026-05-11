@@ -28,6 +28,7 @@ import android.provider.Settings
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Provider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -117,7 +118,7 @@ import javax.inject.Inject
  */
 @Suppress("LongParameterList")
 class OnlineLibraryViewModel @Inject constructor(
-  val downloader: Downloader,
+  private val downloaderProvider: Provider<Downloader>,
   val kiwixDataStore: KiwixDataStore,
   val bookUtils: BookUtils,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -315,15 +316,13 @@ class OnlineLibraryViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   internal fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
-    val updatedRequest = currentRequest.copy(
+    currentRequest = currentRequest.copy(
       query = newRequest.query ?: currentRequest.query,
       category = newRequest.category ?: currentRequest.category,
       lang = newRequest.lang ?: currentRequest.lang,
       page = newRequest.page,
       isLoadMoreItem = newRequest.isLoadMoreItem
     )
-    if (updatedRequest == currentRequest) return
-    currentRequest = updatedRequest
     viewModelScope.launch {
       onlineLibraryRequest.emit(currentRequest)
     }
@@ -542,9 +541,15 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private fun downloadFile() {
-    downloadBookItem?.book?.let {
-      downloader.download(it)
+    downloadBookItem?.book?.let { book ->
+      withDownloader { it.download(book) }
       downloadBookItem = null
+    }
+  }
+
+  private fun withDownloader(block: suspend (Downloader) -> Unit) {
+    viewModelScope.launch(ioDispatcher) {
+      block(downloaderProvider.get())
     }
   }
 
@@ -602,7 +607,10 @@ class OnlineLibraryViewModel @Inject constructor(
   fun onPauseResumeButtonClick(item: LibraryDownloadItem) {
     when (val result = resolveBookClickAction.onPauseResumeButtonClick(item)) {
       NoInternet -> emitNoInternetSnackbar()
-      is PauseResume -> downloader.pauseResumeDownload(result.downloadId, result.isPaused)
+      is PauseResume -> withDownloader {
+        it.pauseResumeDownload(result.downloadId, result.isPaused)
+      }
+
       else -> Unit
     }
   }
@@ -610,11 +618,16 @@ class OnlineLibraryViewModel @Inject constructor(
   fun onStopButtonClick(item: LibraryDownloadItem) {
     when (val result = resolveBookClickAction.onStopButtonClick(item)) {
       NoInternet -> emitNoInternetSnackbar()
-      is RetryDownload -> downloader.retryDownload(result.downloadId)
+      is RetryDownload -> withDownloader {
+        it.retryDownload(result.downloadId)
+      }
+
       is CancelDownload -> emitDialog(
         KiwixDialog.YesNoDialog.StopDownload,
         positiveAction = {
-          downloader.cancelDownload(result.downloadId)
+          withDownloader {
+            it.cancelDownload(result.downloadId)
+          }
         }
       )
 
