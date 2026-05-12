@@ -319,7 +319,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       kiwixMainActivity,
       kiwixDataStore,
       StorageCalculator(kiwixDataStore),
-      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker())),
+      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()), Dispatchers.IO),
       FileOperationHandlerImpl(kiwixMainActivity),
       CopyMoveProgressBarControllerImpl(kiwixMainActivity)
     ).apply {

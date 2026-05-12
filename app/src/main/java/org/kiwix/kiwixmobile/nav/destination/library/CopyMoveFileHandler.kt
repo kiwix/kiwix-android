@@ -445,6 +445,7 @@ class CopyMoveFileHandler @Inject constructor(
   fun dispose() {
     storageObservingJob?.cancel()
     storageObservingJob = null
+    fat32Checker.dispose()
     setFileCopyMoveCallback(null)
     setLifeCycleScope(null)
   }

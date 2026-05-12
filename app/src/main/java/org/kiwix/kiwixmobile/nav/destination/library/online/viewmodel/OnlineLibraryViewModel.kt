@@ -774,6 +774,7 @@ class OnlineLibraryViewModel @Inject constructor(
     coroutineJobs.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
     appProgressListener = null
+    observeOnlineLibraryItems.dispose()
     super.onCleared()
   }
 
