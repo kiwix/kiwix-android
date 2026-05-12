@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Error
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Filter
@@ -76,7 +77,7 @@ class CategoryViewModel @Inject constructor(
     object Cancel : Action()
   }
 
-  val state = MutableStateFlow<State>(Loading)
+  val state = MutableStateFlow<State>(State.Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private var onDismiss: (() -> Unit)? = null
@@ -110,7 +111,7 @@ class CategoryViewModel @Inject constructor(
     val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
     if (CategorySessionCache.hasFetched && !cachedCategoryList.isNullOrEmpty()) {
-      actions.emit(UpdateCategory(cachedCategoryList))
+      actions.emit(Action.UpdateCategory(cachedCategoryList))
       return@launch
     }
 
@@ -119,7 +120,7 @@ class CategoryViewModel @Inject constructor(
         if (categories.isNotEmpty()) {
           kiwixDataStore.saveOnlineCategoryList(categories)
           CategorySessionCache.hasFetched = true
-          actions.emit(UpdateCategory(categories))
+          actions.emit(Action.UpdateCategory(categories))
         } else {
           emitCachedCategories(cachedCategoryList, true)
         }
@@ -132,14 +133,14 @@ class CategoryViewModel @Inject constructor(
 
   private suspend fun emitCachedCategories(cachedCategoryList: List<Category>?, isOnline: Boolean) {
     if (!cachedCategoryList.isNullOrEmpty()) {
-      actions.emit(UpdateCategory(cachedCategoryList))
+      actions.emit(Action.UpdateCategory(cachedCategoryList))
     } else {
       val errorMessage = if (isOnline) {
         context.getString(string.no_category_available)
       } else {
         context.getString(R.string.no_network_connection)
       }
-      actions.emit(Error(errorMessage))
+      actions.emit(Action.Error(errorMessage))
     }
   }
 
@@ -181,37 +182,40 @@ class CategoryViewModel @Inject constructor(
 
   private fun reduce(action: Action, currentState: State): State {
     return when (action) {
-      is Error -> State.Error(action.errorMessage)
-      is UpdateCategory -> updateCategory(action, currentState)
-      is Filter -> filter(action, currentState)
-      is Select -> select(action, currentState)
+      is Action.Error -> State.Error(action.errorMessage)
+      is Action.UpdateCategory -> updateCategory(action, currentState)
+      is Action.Filter -> filter(action, currentState)
+      is Action.Select -> select(action, currentState)
       Action.Save -> saveAction(currentState)
+      Action.ClearAll -> clearAll(currentState)
+      Action.SelectAll -> selectAll(currentState)
+      Action.Cancel -> cancel(currentState)
     }
   }
 
-  private fun updateCategory(action: UpdateCategory, currentState: State): State =
-    if (currentState is Loading) Content(action.categories) else currentState
+  private fun updateCategory(action: Action.UpdateCategory, currentState: State): State =
+    if (currentState is State.Loading) State.Content(action.categories) else currentState
 
-  private fun filter(action: Filter, currentState: State): State =
-    if (currentState is Content) filterContent(action.filter, currentState) else currentState
+  private fun filter(action: Action.Filter, currentState: State): State =
+    if (currentState is State.Content) filterContent(action.filter, currentState) else currentState
 
-  private fun select(action: Select, currentState: State): State =
-    if (currentState is Content) updateSelection(action.category, currentState) else currentState
+  private fun select(action: Action.Select, currentState: State): State =
+    if (currentState is State.Content) updateSelection(action.category, currentState) else currentState
 
   private fun saveAction(currentState: State): State =
-    if (currentState is Content) save(currentState) else currentState
+    if (currentState is State.Content) save(currentState) else currentState
 
   private fun filterContent(
     filter: String,
-    currentState: Content
+    currentState: State.Content
   ) = currentState.updateFilter(filter)
 
   private fun updateSelection(
     categoryItem: CategoryItem,
-    currentState: Content
+    currentState: State.Content
   ) = currentState.select(categoryItem)
 
-  private fun save(currentState: Content): State {
+  private fun save(currentState: State.Content): State {
     val selectedCategories = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveCategoryAndFinish(
@@ -236,8 +240,22 @@ class CategoryViewModel @Inject constructor(
     }
   }
 
+  private fun clearAll(currentState: State): State =
+    if (currentState is State.Content) {
+      currentState.copy(items = currentState.items.map { it.copy(active = false) })
+    } else {
+      currentState
+    }
+
+  private fun selectAll(currentState: State): State =
+    if (currentState is State.Content) {
+      currentState.copy(items = currentState.items.map { it.copy(active = it.id != 0L) })
+    } else {
+      currentState
+    }
+
   private fun cancel(currentState: State): State {
-    if (currentState !is Content) return currentState
+    if (currentState !is State.Content) return currentState
     effects.tryEmit(object : SideEffect<Unit> {
       override fun invokeWith(activity: AppCompatActivity) {
         activity.onBackPressedDispatcher.onBackPressed()
@@ -245,20 +263,6 @@ class CategoryViewModel @Inject constructor(
     })
     return currentState
   }
-
-  private fun getOkHttpClient() = OkHttpClient().newBuilder()
-    .followRedirects(true)
-    .followSslRedirects(true)
-    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-    .readTimeout(READ_TIMEOUT, SECONDS)
-    .callTimeout(CALL_TIMEOUT, SECONDS)
-    .addNetworkInterceptor(
-      HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) BASIC else NONE
-      }
-    )
-    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-    .build()
 
   @VisibleForTesting
   fun onClearedExposed() {
