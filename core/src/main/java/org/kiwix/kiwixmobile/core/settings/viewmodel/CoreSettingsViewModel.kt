@@ -93,7 +93,8 @@ abstract class CoreSettingsViewModel(
     val shouldShowExternalLinkPreference: Boolean = false,
     val shouldShowPrefWifiOnlyPreference: Boolean = false,
     val versionInformation: String = "",
-    val permissionItem: Pair<Boolean, String> = false to ""
+    val permissionItem: Pair<Boolean, String> = false to "",
+    val shouldShowRatingCategory: Boolean = false
   )
 
   abstract suspend fun setStorage(coreMainActivity: CoreMainActivity)
@@ -101,6 +102,7 @@ abstract class CoreSettingsViewModel(
   abstract suspend fun showPrefWifiOnlyPreference()
   abstract suspend fun showPermissionItem()
   abstract suspend fun showLanguageCategory()
+  abstract suspend fun showRatingCategory()
 
   protected val settingsUiState = MutableStateFlow(SettingsUiState())
   val uiState: StateFlow<SettingsUiState> = settingsUiState.asStateFlow()
@@ -114,6 +116,7 @@ abstract class CoreSettingsViewModel(
     showPrefWifiOnlyPreference()
     showPermissionItem()
     showLanguageCategory()
+    showRatingCategory()
     setVersionCodeInformation()
   }
 

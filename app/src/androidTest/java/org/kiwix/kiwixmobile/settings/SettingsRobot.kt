@@ -278,6 +278,10 @@ class SettingsRobot : BaseRobot() {
     clickPreferenceItem(context.getString(R.string.pref_info_version), composeTestRule)
   }
 
+  fun clickRateAppPreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_rate_app_title), composeTestRule)
+  }
+
   fun selectAlbanianLanguage(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()

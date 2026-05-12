@@ -232,6 +232,8 @@ private suspend fun handleSettingsAction(
 
     Action.NavigateToAppSettingsDialog ->
       showNavigateToAppSettingsDialog(viewModel, activity)
+
+    Action.RateApp -> activity.rateDialogHandler.launchInAppReviewFlow()
   }
 }
 
@@ -323,9 +325,22 @@ internal fun SettingsScreen(
         if (uiState.shouldShowLanguageCategory) {
           item { LanguageCategory(uiState, coreSettingsViewModel) }
         }
+        if (uiState.shouldShowRatingCategory) {
+          item { RatingCategory(coreSettingsViewModel) }
+        }
         informationCategory(coreSettingsViewModel, uiState)
       }
     }
+  }
+}
+
+@Composable
+private fun RatingCategory(coreSettingsViewModel: CoreSettingsViewModel) {
+  SettingsCategory(stringResource(R.string.pref_rating_category_title)) {
+    PreferenceItem(
+      stringResource(R.string.pref_rate_app_title),
+      stringResource(R.string.pref_rate_app_summary)
+    ) { coreSettingsViewModel.sendAction(Action.RateApp) }
   }
 }
 

@@ -101,4 +101,12 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
     }
     LeakAssertions.assertNoLeaks()
   }
+
+  @Test
+  fun testRateAppPreference() {
+    settingsRobo {
+      clickRateAppPreference(composeTestRule)
+    }
+    LeakAssertions.assertNoLeaks()
+  }
 }

@@ -82,4 +82,12 @@ class BrandedSettingsViewModel @Inject constructor(
   override suspend fun showPermissionItem() {
     settingsUiState.update { it.copy(permissionItem = false to "") }
   }
+
+  override suspend fun showRatingCategory() {
+    if (org.kiwix.kiwixmobile.custom.BuildConfig.DEBUG) {
+      settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
+    } else {
+      settingsUiState.update { it.copy(shouldShowRatingCategory = false) }
+    }
+  }
 }
