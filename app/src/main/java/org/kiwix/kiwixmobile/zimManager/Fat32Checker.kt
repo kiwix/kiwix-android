@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -62,7 +61,6 @@ class Fat32Checker constructor(
       kiwixDataStore.selectedStorage
         .onEach { _fileSystemStates.emit(FileSystemState.DetectingFileSystem) }
         .combine(requestCheckSystemFileType) { storage, _ -> storage }
-        .distinctUntilChanged()
         .collectLatest { storage ->
           val storageFile = File(storage)
           if (!storageFile.exists()) {

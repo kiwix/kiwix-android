@@ -101,11 +101,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
     }
     composeTestRule.apply {
-      kiwixMainActivity = activity
       runOnUiThread {
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         parentFile = runBlocking { File(kiwixDataStore.selectedStorage.first()) }
       }
+      kiwixMainActivity = activity
       waitForIdle()
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
@@ -125,6 +125,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
+        waitForIdle()
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
         }
@@ -191,6 +192,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       selectedFile = getSelectedFile("testzim.zim")
       composeTestRule.apply {
+        waitForIdle()
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
         }
@@ -212,6 +214,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // Test with second launch, this time permission dialog should not show.
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
+      library { refreshList(composeTestRule) }
       selectedFile = getSelectedFile("testzim.zim")
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
