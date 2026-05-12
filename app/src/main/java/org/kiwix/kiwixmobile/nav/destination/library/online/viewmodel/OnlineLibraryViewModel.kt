@@ -60,8 +60,6 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -103,8 +101,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowToast
-import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
@@ -173,7 +169,9 @@ class OnlineLibraryViewModel @Inject constructor(
     val scanningProgressBarMessage: String = "",
     val showScanningProgressBar: Boolean = false,
     val noContentMessage: String = "",
-    val showNoContent: Boolean = false
+    val showNoContent: Boolean = false,
+    val showStorageSelectDialog: Boolean = false,
+    val showCategoryDialog: Boolean = false
   )
 
   /**
@@ -237,7 +235,8 @@ class OnlineLibraryViewModel @Inject constructor(
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   val isAndroid13OrAbove = permissionChecker.isAndroid13orAbove()
 
-  private var downloadBookItem: BookItem? = null
+  var downloadBookItem: BookItem? = null
+    internal set
 
   @VisibleForTesting
   internal fun setUiStateForTest(state: OnlineLibraryUiState) {
@@ -553,19 +552,15 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  fun setDownloadBookItem(item: BookItem) {
-    downloadBookItem = item
-  }
-
   fun onBookItemClick(item: BookItem, activity: KiwixMainActivity) {
     viewModelScope.launch {
-      setDownloadBookItem(item)
+      downloadBookItem = item
       val action = resolveBookClickAction.onBookItemClick(
         item,
         activity.getStorageDeviceList().size
       )
       when (action) {
-        ShowStorageSelection -> showStorageSelectDialog(activity)
+        ShowStorageSelection -> setShowStorageSelectDialog(true)
         is StartDownload -> downloadFile()
         NoInternet -> emitNoInternetSnackbar()
         RequestStoragePermission -> sendUiEvent(UiEvent.RequestPermission(WRITE_EXTERNAL_STORAGE))
@@ -596,7 +591,7 @@ class OnlineLibraryViewModel @Inject constructor(
         }
 
         is NotEnoughSpace -> emitNoSpaceSnackbar(context, action.availableSpace) {
-          showStorageSelectDialog(activity)
+          setShowStorageSelectDialog(true)
         }
 
         else -> Unit
@@ -639,35 +634,12 @@ class OnlineLibraryViewModel @Inject constructor(
     sendUiEvent(NavigateToAppSettings)
   }
 
-  private fun showStorageSelectDialog(activity: KiwixMainActivity) {
-    viewModelScope.launch {
-      val dialog = StorageSelectDialog().apply {
-        onSelectAction = { device ->
-          viewModelScope.launch {
-            kiwixDataStore.setShowStorageOption(false)
-            kiwixDataStore.setSelectedStorage(
-              kiwixDataStore.getPublicDirectoryPath(device.name)
-            )
-            kiwixDataStore.setSelectedStoragePosition(
-              if (device.isInternal) {
-                INTERNAL_SELECT_POSITION
-              } else {
-                EXTERNAL_SELECT_POSITION
-              }
-            )
-            downloadBookItem?.let {
-              onBookItemClick(it, activity)
-            }
-          }
-        }
-        titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-      }
-      dialog.setStorageDeviceList(activity.getStorageDeviceList())
-      dialog.show(
-        activity.supportFragmentManager,
-        activity.getString(R.string.choose_storage_to_download_book)
-      )
-    }
+  fun setShowStorageSelectDialog(show: Boolean) {
+    _uiState.update { it.copy(showStorageSelectDialog = show) }
+  }
+
+  fun setShowCategoryDialog(show: Boolean) {
+    _uiState.update { it.copy(showCategoryDialog = show) }
   }
 
   fun refreshScreen(isExplicitRefresh: Boolean) {

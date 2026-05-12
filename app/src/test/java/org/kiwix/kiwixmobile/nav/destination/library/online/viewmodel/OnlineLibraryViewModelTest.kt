@@ -760,7 +760,7 @@ class OnlineLibraryViewModelTest {
       val item = mockk<LibraryListItem.BookItem>(relaxed = true)
       val activity = mockk<KiwixMainActivity>(relaxed = true)
 
-      viewModel.setDownloadBookItem(item)
+      viewModel.downloadBookItem = item
 
       val spyVm = spyk(viewModel)
       every { spyVm.onBookItemClick(item, activity) } just Runs
@@ -815,7 +815,7 @@ class OnlineLibraryViewModelTest {
       val item = mockk<LibraryListItem.BookItem>(relaxed = true)
       val activity = mockk<KiwixMainActivity>(relaxed = true)
 
-      viewModel.setDownloadBookItem(item)
+      viewModel.downloadBookItem = item
 
       val spyVm = spyk(viewModel)
       every { spyVm.onBookItemClick(item, activity) } just Runs
