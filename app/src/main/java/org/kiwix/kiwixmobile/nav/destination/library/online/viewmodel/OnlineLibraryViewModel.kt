@@ -143,7 +143,7 @@ class OnlineLibraryViewModel @Inject constructor(
     val lang: String? = null,
     val isLoadMoreItem: Boolean,
     val page: Int,
-    val version: Long = System.nanoTime()
+    val version: Long = 0L
   )
 
   sealed class OnlineLibraryState {
