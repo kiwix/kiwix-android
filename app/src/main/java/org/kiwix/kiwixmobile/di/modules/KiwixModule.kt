@@ -24,6 +24,8 @@ import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.di.KiwixScope
@@ -46,11 +48,13 @@ object KiwixModule {
   @KiwixScope
   internal fun provideFat32Checker(
     kiwixDataStore: KiwixDataStore,
-    mountPointProducer: MountPointProducer
+    mountPointProducer: MountPointProducer,
+    @IoDispatcher ioDispatcher: CoroutineDispatcher
   ): Fat32Checker =
     Fat32Checker(
       kiwixDataStore,
-      listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker())
+      listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker()),
+      ioDispatcher
     )
 
   @Provides

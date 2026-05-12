@@ -22,6 +22,7 @@ import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -194,5 +195,12 @@ class ObserveOnlineLibraryItemsTest {
     ).first()
 
     assertTrue(result.isEmpty())
+  }
+
+  @Test
+  fun `dispose should clear the fat32Checker`() {
+    observeOnlineLibraryItems.dispose()
+
+    verify { fat32Checker.dispose() }
   }
 }

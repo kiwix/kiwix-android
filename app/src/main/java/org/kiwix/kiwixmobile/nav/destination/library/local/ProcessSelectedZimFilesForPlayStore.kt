@@ -337,6 +337,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         } else {
           selectedZimFileCallback?.navigateToReaderFragment(file = file)
         }
+        multipleFilesProcessAction = null
       }
 
       else -> lifecycleScope?.launch {

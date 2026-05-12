@@ -134,4 +134,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
       ?.let(::LibraryDownloadItem)
       ?: BookItem(book, fileSystemState)
   }
+
+  fun dispose() {
+    fat32Checker.dispose()
+  }
 }

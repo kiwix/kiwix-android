@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +19,10 @@ package org.kiwix.kiwixmobile.zimManager
 
 import android.os.Build
 import android.os.FileObserver
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -41,7 +43,8 @@ import java.io.File
 
 class Fat32Checker constructor(
   kiwixDataStore: KiwixDataStore,
-  private val fileSystemCheckers: List<FileSystemChecker>
+  private val fileSystemCheckers: List<FileSystemChecker>,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val _fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
@@ -51,8 +54,7 @@ class Fat32Checker constructor(
     tryEmit(Unit)
   }
 
-  @Suppress("InjectDispatcher")
-  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+  private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
 
   init {
     scope.launch {
@@ -60,34 +62,40 @@ class Fat32Checker constructor(
         .onEach { _fileSystemStates.emit(FileSystemState.DetectingFileSystem) }
         .combine(requestCheckSystemFileType) { storage, _ -> storage }
         .collectLatest { storage ->
-          val systemState = toFileSystemState(storage)
+          val storageFile = File(storage)
+          if (!storageFile.exists()) {
+            _fileSystemStates.emit(NotEnoughSpaceFor4GbFile)
+            return@collectLatest
+          }
+          val systemState = toFileSystemState(storageFile)
           _fileSystemStates.emit(systemState)
+          fileObserver?.stopWatching()
           fileObserver =
-            if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(storage) else null
+            if (systemState == NotEnoughSpaceFor4GbFile) createFileObserver(storageFile) else null
         }
     }
   }
 
-  private fun fileObserver(it: String): FileObserver =
+  private fun createFileObserver(storageFile: File): FileObserver =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      object : FileObserver(File(it), MOVED_FROM or DELETE) {
+      object : FileObserver(storageFile, MOVED_FROM or DELETE) {
         override fun onEvent(event: Int, path: String?) {
           requestCheckSystemFileType.tryEmit(Unit)
         }
       }.apply { startWatching() }
     } else {
       @Suppress("DEPRECATION")
-      object : FileObserver(it, MOVED_FROM or DELETE) {
+      object : FileObserver(storageFile.path, MOVED_FROM or DELETE) {
         override fun onEvent(event: Int, path: String?) {
           requestCheckSystemFileType.tryEmit(Unit)
         }
       }.apply { startWatching() }
     }
 
-  private fun toFileSystemState(it: String) =
+  private fun toFileSystemState(storageFile: File) =
     when {
-      File(it).freeSpace > FOUR_GIGABYTES_IN_BYTES ->
-        if (canCreate4GbFile(it)) {
+      storageFile.freeSpace > FOUR_GIGABYTES_IN_BYTES ->
+        if (canCreate4GbFile(storageFile.path)) {
           CanWrite4GbFile
         } else {
           CannotWrite4GbFile
@@ -96,17 +104,21 @@ class Fat32Checker constructor(
       else -> NotEnoughSpaceFor4GbFile
     }
 
-  private fun canCreate4GbFile(storage: String): Boolean {
-    fileSystemCheckers.iterator().forEach {
-      when (it.checkFilesystemSupports4GbFiles(storage)) {
-        CAN_WRITE_4GB -> return@canCreate4GbFile true
-        CANNOT_WRITE_4GB -> return@canCreate4GbFile false
-        INCONCLUSIVE -> {
-          // do nothing
-        }
+  private fun canCreate4GbFile(storagePath: String): Boolean {
+    for (checker in fileSystemCheckers) {
+      when (checker.checkFilesystemSupports4GbFiles(storagePath)) {
+        CAN_WRITE_4GB -> return true
+        CANNOT_WRITE_4GB -> return false
+        INCONCLUSIVE -> Unit
       }
     }
     return false
+  }
+
+  fun dispose() {
+    fileObserver?.stopWatching()
+    fileObserver = null
+    scope.cancel()
   }
 
   companion object {
