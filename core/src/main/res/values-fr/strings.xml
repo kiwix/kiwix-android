@@ -441,4 +441,10 @@
   <string name="confirmation_validate_zim_files">Êtes-vous sûr de vouloir valider les fichiers ZIM suivants?\n\n%s</string>
   <string name="validating_zim_file">Validation des fichiers ZIM…</string>
   <string name="validating_zim_files">Validation des fichiers ZIM…</string>
+  <string name="menu_add_to_homescreen">Ajouter à l\'écran d\'accueil</string>
+  <string name="added_to_homescreen">Raccourci ajouté à l\'écran d\'accueil</string>
+  <string name="add_shortcut_title">Ajouter un raccourci</string>
+  <string name="shortcut_name_label">Nom du raccourci</string>
+  <string name="open_xiaomi_settings">Ouvrir les paramètres</string>
+  <string name="xiaomi_permission_required">Cet appareil requiert une autorisation pour ajouter un raccourci à l\'écran d\'accueil. Veuillez accorder cette autorisation dans les paramètres.</string>
 </resources>

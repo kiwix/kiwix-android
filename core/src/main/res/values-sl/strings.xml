@@ -28,6 +28,7 @@
   <string name="menu_wifi_hotspot">Dostopna točka Wi-Fi</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja predstavnosti je prišlo do napake!</string>
+  <string name="invalid_media_source">Izbrana predstavnost ni najdena.</string>
   <string name="save_media_saved">Medij shranjen v %s</string>
   <string name="search_label">Iskanje</string>
   <string name="searched_list">Preiskani seznam</string>
@@ -413,4 +414,10 @@
   <string name="confirmation_validate_zim_files">Ali ste prepričani, da želite preveriti naslednje datoteke ZIM?\n\n%s</string>
   <string name="validating_zim_file">Preverjanje datoteke ZIM …</string>
   <string name="validating_zim_files">Preverjanje datotek ZIM …</string>
+  <string name="menu_add_to_homescreen">Dodaj na začetni zaslon</string>
+  <string name="added_to_homescreen">Bližnjica je bila dodana na začetni zaslon</string>
+  <string name="add_shortcut_title">Dodaj bližnjico</string>
+  <string name="shortcut_name_label">Ime bližnjice</string>
+  <string name="open_xiaomi_settings">Odpri nastavitve</string>
+  <string name="xiaomi_permission_required">Ta naprava zahteva dovoljenje za bližnjice, preden jih dodate na začetni zaslon. Dovoljenje odobrite v nastavitvah.</string>
 </resources>
