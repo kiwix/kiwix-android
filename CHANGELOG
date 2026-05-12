@@ -1,3 +1,12 @@
+3.14.1
+Bug Fixed:
+* "Donate" sidebar link does not point to the donation page. (@kelson42 , @MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4845)
+
+Compilation/CI/CD:
+* Publish app to PS is broken. (@kelson42 , @MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4605)
+* Unable to upload AAB(Android app bundle) file. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4274)
+* Update release/nightly uploads for new destination. (@rgaudin https://github.com/kiwix/kiwix-android/pull/4837)
+
 3.14.0
 New Features:
 * Support for Android 15. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4147)
