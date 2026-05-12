@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.data.remote
 
+import android.content.Context
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
-import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.core.utils.NINE
-import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.NINE
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 class AppProgressListenerProvider(
-  private val zimManageViewModel: ZimManageViewModel
+  private val context: Context,
+  private val updateDownloadProgress: (String) -> Unit
 ) : OnlineLibraryProgressListener {
   override fun onProgress(bytesRead: Long, contentLength: Long) {
     val progress =
@@ -35,10 +36,10 @@ class AppProgressListenerProvider(
       } else {
         (bytesRead * NINE * HUNDERED / contentLength).coerceAtMost(HUNDERED.toLong())
       }
-    zimManageViewModel.downloadProgress.postValue(
-      zimManageViewModel.context.getString(
+    updateDownloadProgress(
+      context.getString(
         R.string.downloading_library,
-        zimManageViewModel.context.getString(R.string.percentage, progress.toInt())
+        context.getString(R.string.percentage, progress.toInt())
       )
     )
   }

@@ -46,10 +46,10 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Error
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.Action.UpdateCategory
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Error
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Filter
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
@@ -62,6 +62,13 @@ class CategoryViewModel @Inject constructor(
   @CategoryKiwixService private val kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
+  sealed class Action {
+    data class UpdateCategory(val categories: List<Category>) : Action()
+    data class Filter(val filter: String) : Action()
+    data class Select(val category: CategoryItem) : Action()
+    data class Error(val errorMessage: String) : Action()
+  }
+
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)

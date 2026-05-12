@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.data.remote
+package org.kiwix.kiwixmobile.data.remote
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody

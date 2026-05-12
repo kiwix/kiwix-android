@@ -130,13 +130,13 @@ class GetContentShortcutTest {
       }
     ActivityScenario.launch<KiwixMainActivity>(shortcutIntent)
     composeTestRule.waitForIdle()
-    onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
+    onlineLibrary { assertOnlineLibraryScreenDisplayed(composeTestRule) }
     topLevel {
       clickReaderOnBottomNav(composeTestRule) {
         assertReaderScreenDisplayed(composeTestRule)
       }
       clickDownloadOnBottomNav(composeTestRule) {
-        onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
+        onlineLibrary { assertOnlineLibraryScreenDisplayed(composeTestRule) }
       }
       clickLibraryOnBottomNav(composeTestRule) {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)

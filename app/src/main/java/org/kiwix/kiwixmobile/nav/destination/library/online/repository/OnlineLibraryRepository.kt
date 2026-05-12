@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
+package org.kiwix.kiwixmobile.nav.destination.library.online.repository
 
-import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
+import kotlinx.coroutines.flow.Flow
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState
+import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
 
-sealed class Action {
-  data class UpdateCategory(val categories: List<Category>) : Action()
-  data class Filter(val filter: String) : Action()
-  data class Select(val category: CategoryItem) : Action()
-  data class Error(val errorMessage: String) : Action()
+interface OnlineLibraryRepository {
+  fun fetchOnlineLibrary(
+    request: OnlineLibraryRequest,
+    appProgressListener: AppProgressListenerProvider?
+  ): Flow<OnlineLibraryState>
 }

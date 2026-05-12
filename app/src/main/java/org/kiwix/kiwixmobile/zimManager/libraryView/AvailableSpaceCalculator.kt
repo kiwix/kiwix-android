@@ -25,28 +25,32 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.HasAvailableSpaceForBook
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.NotEnoughSpaceForBook
 import javax.inject.Inject
 
 class AvailableSpaceCalculator @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val storageCalculator: StorageCalculator
 ) {
-  suspend fun hasAvailableSpaceFor(
-    bookItem: LibraryListItem.BookItem,
-    successAction: (LibraryListItem.BookItem) -> Unit,
-    failureAction: (String) -> Unit
-  ) {
+  suspend fun hasAvailableSpaceFor(bookItem: BookItem): AvailableSpaceResult {
     val trueAvailableBytes = downloadRoomDao.allDownloads()
       .map { downloads -> downloads.sumOf(DownloadModel::bytesRemaining) }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
       .first()
-    if (bookItem.book.size.toLong() < trueAvailableBytes) {
-      successAction.invoke(bookItem)
+    return if (bookItem.book.size.toLong() < trueAvailableBytes) {
+      HasAvailableSpaceForBook(bookItem)
     } else {
-      failureAction.invoke(Bytes(trueAvailableBytes).humanReadable)
+      NotEnoughSpaceForBook(Bytes(trueAvailableBytes).humanReadable)
     }
   }
 
   suspend fun hasAvailableSpaceForBook(book: LibkiwixBook) =
     book.size.toLong() < storageCalculator.availableBytes()
+
+  sealed class AvailableSpaceResult {
+    class HasAvailableSpaceForBook(val bookItem: BookItem) : AvailableSpaceResult()
+    class NotEnoughSpaceForBook(val availableSpace: String) : AvailableSpaceResult()
+  }
 }

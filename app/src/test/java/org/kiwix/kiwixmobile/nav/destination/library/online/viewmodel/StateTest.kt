@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.category.viewmodel
+package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested

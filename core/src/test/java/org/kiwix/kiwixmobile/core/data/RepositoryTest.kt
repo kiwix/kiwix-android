@@ -344,7 +344,9 @@ class RepositoryTest {
       repository.clearNotes()
 
       verify(exactly = 1) { notesRoomDao.notes() }
-      verify(exactly = 1) { notesRoomDao.deleteNotes(match { it.size == 2 && it.containsAll(listOf(note1, note2)) }) }
+      verify(exactly = 1) {
+        notesRoomDao.deleteNotes(match { it.size == 2 && it.containsAll(listOf(note1, note2)) })
+      }
     }
 
     @Test

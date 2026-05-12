@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.data.remote
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import org.xmlpull.v1.XmlPullParser
@@ -32,7 +32,7 @@ import java.io.StringReader
 import javax.inject.Inject
 
 class OnlineLibraryManager @Inject constructor() {
-  var totalResult = 0
+  var totalResult = ZERO
   suspend fun parseOPDSStreamAndGetBooks(
     content: String?,
     urlHost: String
@@ -81,7 +81,7 @@ class OnlineLibraryManager @Inject constructor() {
     lang?.takeIf { it.isNotBlank() }?.let { params += "lang=$it" }
     category?.takeIf { it.isNotBlank() }?.let { params += "category=$it" }
 
-    return "$baseUrl/$OPDS_LIBRARY_ENDPOINT?${params.joinToString("&")}"
+    return "$baseUrl/${OPDS_LIBRARY_ENDPOINT}?${params.joinToString("&")}"
   }
 
   /**

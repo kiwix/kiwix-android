@@ -23,14 +23,17 @@ import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
+import org.kiwix.kiwixmobile.di.modules.DataModule
 import org.kiwix.kiwixmobile.di.modules.KiwixModule
 import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
 import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
+import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
-import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
+import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
+import org.kiwix.kiwixmobile.data.remote.opds.KiwixOpdsServiceFactory
 
 @KiwixScope
 @Component(
@@ -39,7 +42,8 @@ import org.kiwix.kiwixmobile.zimManager.OnlineLibraryManager
     KiwixViewModelModule::class,
     KiwixModule::class,
     MigrationModule::class,
-    DatabaseModule::class
+    DatabaseModule::class,
+    DataModule::class
   ]
 )
 interface KiwixComponent {
@@ -50,4 +54,6 @@ interface KiwixComponent {
   fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
   fun provideFileOperationHandler(): FileOperationHandler
   fun provideCopyMoveProgressBarController(): CopyMoveProgressBarController
+  fun provideOnlineLibraryRepository(): OnlineLibraryRepository
+  fun provideKiwixOpdsServiceFactory(): KiwixOpdsServiceFactory
 }

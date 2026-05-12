@@ -113,7 +113,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       }
       clickDownloadOnBottomNav(composeTestRule) {
         onlineLibrary {
-          assertOnlineLibraryFragmentDisplayed(composeTestRule)
+          assertOnlineLibraryScreenDisplayed(composeTestRule)
         }
       }
       clickLibraryOnBottomNav(composeTestRule) {

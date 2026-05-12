@@ -1046,6 +1046,7 @@ internal class CoreSettingsViewModelTest {
 
       // Create a valid XML temp file
       val tempDir = File(System.getProperty("java.io.tmpdir"), "kiwix_test_cache")
+      if (tempDir.exists()) tempDir.delete()
       tempDir.mkdirs()
       every { context.externalCacheDir } returns tempDir
 
@@ -1076,6 +1077,7 @@ internal class CoreSettingsViewModelTest {
 
       // Create temp dir for the temp file
       val tempDir = File(System.getProperty("java.io.tmpdir"), "kiwix_test_cache2")
+      if (tempDir.exists()) tempDir.delete()
       tempDir.mkdirs()
       every { context.externalCacheDir } returns tempDir
 

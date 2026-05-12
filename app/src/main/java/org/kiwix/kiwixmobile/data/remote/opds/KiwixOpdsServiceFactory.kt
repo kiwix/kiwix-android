@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,10 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.adapter
+package org.kiwix.kiwixmobile.data.remote.opds
 
-interface OnItemClickListener {
-  fun onItemClick(page: Page)
+import org.kiwix.kiwixmobile.data.remote.AppProgressListenerProvider
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 
-  fun onItemLongClick(page: Page): Boolean
+interface KiwixOpdsServiceFactory {
+  @Suppress("LongParameterList")
+  fun create(
+    baseUrl: String,
+    start: Int,
+    count: Int,
+    query: String?,
+    lang: String?,
+    category: String?,
+    shouldTrackProgress: Boolean,
+    appProgressListener: AppProgressListenerProvider?
+  ): KiwixService
 }
