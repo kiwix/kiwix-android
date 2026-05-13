@@ -41,9 +41,9 @@ sealed class State {
       return Content(
         items.map {
           when {
-            // Toggling the "All Languages" item
-            isAllLanguages && it.id == 0L -> it.copy(active = !it.active)
-            // Deselect all others when "All Languages" is toggled on
+            // Selecting the "All Languages" item
+            isAllLanguages && it.id == 0L -> it.copy(active = true)
+            // Deselect all others when "All Languages" is selected
             isAllLanguages -> it.copy(active = false)
             // Toggling a specific language
             it.id == languageItem.id -> it.copy(active = !it.active)

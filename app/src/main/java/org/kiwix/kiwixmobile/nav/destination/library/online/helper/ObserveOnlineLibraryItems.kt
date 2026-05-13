@@ -54,26 +54,37 @@ class ObserveOnlineLibraryItems @Inject constructor(
       downloads,
       networkBooks,
       fat32Checker.fileSystemStates,
-      kiwixDataStore.selectedOnlineContentLanguage
-    ) { books, activeDownloads, remoteBooks, fsState, lang ->
+      kiwixDataStore.selectedOnlineContentLanguage,
+      kiwixDataStore.selectedOnlineContentCategory
+    ) { args ->
       observeLibraryItems(
-        booksOnFileSystem = books,
-        activeDownloads = activeDownloads,
-        remoteBooks = remoteBooks,
-        fileSystemState = fsState,
-        selectedLanguage = lang,
+        booksOnFileSystem = args[0] as List<Book>,
+        activeDownloads = args[1] as List<DownloadModel>,
+        remoteBooks = args[2] as List<LibkiwixBook>,
+        fileSystemState = args[3] as FileSystemState,
+        selection = Selection(
+          args[LANGUAGE_INDEX] as String,
+          args[CATEGORY_INDEX] as String
+        ),
         getString = getString,
         getSimpleString = getSimpleString
       )
     }.flowOn(ioDispatcher)
   }
 
+  companion object {
+    private const val LANGUAGE_INDEX = 4
+    private const val CATEGORY_INDEX = 5
+  }
+
+  private data class Selection(val language: String, val category: String)
+
   private fun observeLibraryItems(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
     remoteBooks: List<LibkiwixBook>,
-    fileSystemState: Fat32Checker.FileSystemState,
-    selectedLanguage: String,
+    fileSystemState: FileSystemState,
+    selection: Selection,
     getString: (Int, Array<Any>) -> String,
     getSimpleString: (Int) -> String
   ): List<LibraryListItem> {
@@ -87,20 +98,38 @@ class ObserveOnlineLibraryItems @Inject constructor(
 
     val filteredBooks = allBooks - downloadingBooks.toSet()
 
-    val sectionTitle =
-      when {
-        selectedLanguage.isBlank() -> getSimpleString(R.string.all_languages)
-        selectedLanguage.contains(",") -> {
-          val joinedLanguages = selectedLanguage.split(",")
+    val sectionTitle = buildString {
+      val languagePart = when {
+        selection.language.isBlank() -> getSimpleString(R.string.all_languages)
+        selection.language.contains(",") -> {
+          val joinedLanguages = selection.language.split(",")
             .joinToString(", ") { it.trim().convertToLocal().displayLanguage }
           "${getSimpleString(R.string.your_languages)} $joinedLanguages"
         }
 
         else -> getString(
           R.string.your_language,
-          arrayOf(selectedLanguage.convertToLocal().displayLanguage)
+          arrayOf(selection.language.convertToLocal().displayLanguage)
         )
       }
+      append(languagePart)
+
+      val categoryPart = when {
+        selection.category.isBlank() -> getSimpleString(R.string.all_categories)
+        selection.category.contains(",") -> {
+          val joinedCategories = selection.category.split(",")
+            .joinToString(", ") { it.trim() }
+          "${getSimpleString(R.string.your_categories)} $joinedCategories"
+        }
+
+        else -> getString(
+          R.string.your_category,
+          arrayOf(selection.category.trim())
+        )
+      }
+      append(" • ")
+      append(categoryPart)
+    }
 
     return createLibrarySection(
       downloadingBooks,
