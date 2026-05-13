@@ -361,13 +361,20 @@ private fun LazyListScope.showLoadMoreProgressBar(isLoadingMoreItem: Boolean) {
 @Composable
 private fun ShowDividerItem(dividerItem: DividerItem) {
   var isExpanded by remember { mutableStateOf(false) }
+  var isTruncated by remember { mutableStateOf(false) }
   Column(
     modifier = Modifier
       .fillMaxWidth()
       .padding(horizontal = SIXTEEN_DP)
       .padding(top = SIXTEEN_DP, bottom = EIGHT_DP)
       .animateContentSize()
-      .clickable { isExpanded = !isExpanded }
+      .then(
+        if (isTruncated || isExpanded) {
+          Modifier.clickable { isExpanded = !isExpanded }
+        } else {
+          Modifier
+        }
+      )
   ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
       Text(
@@ -375,6 +382,9 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
         textAlign = TextAlign.Start,
         maxLines = if (isExpanded) Int.MAX_VALUE else 1,
         overflow = TextOverflow.Ellipsis,
+        onTextLayout = { textLayoutResult ->
+          isTruncated = textLayoutResult.hasVisualOverflow
+        },
         style = MaterialTheme.typography.titleMedium.copy(
           fontWeight = FontWeight.Normal,
           color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -383,12 +393,14 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
           .weight(1f)
           .semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }
       )
-      Icon(
-        imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-        contentDescription = null,
-        tint = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.size(TWENTY_FOUR_DP)
-      )
+      if (isTruncated || isExpanded) {
+        Icon(
+          imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+          contentDescription = null,
+          tint = MaterialTheme.colorScheme.primary,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
     }
   }
 }
