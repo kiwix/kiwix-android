@@ -66,6 +66,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -358,6 +359,8 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
     Text(
       text = dividerItem.sectionTitle,
       textAlign = TextAlign.Center,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
       style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
       modifier = Modifier.semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }
     )

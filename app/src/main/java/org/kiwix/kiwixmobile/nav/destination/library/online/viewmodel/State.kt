@@ -41,9 +41,9 @@ sealed class State {
       return Content(
         items.map {
           when {
-            // Toggling the "All Categories" item
-            isAllCategories && it.id == 0L -> it.copy(active = !it.active)
-            // Deselect all others when "All Categories" is toggled on
+            // Selecting the "All Categories" item
+            isAllCategories && it.id == 0L -> it.copy(active = true)
+            // Deselect all others when "All Categories" is selected
             isAllCategories -> it.copy(active = false)
             // Toggling a specific category
             it.id == category.id -> it.copy(active = !it.active)

@@ -111,7 +111,19 @@ class CategoryViewModel @Inject constructor(
     val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
     if (CategorySessionCache.hasFetched && !cachedCategoryList.isNullOrEmpty()) {
-      actions.emit(Action.UpdateCategory(cachedCategoryList))
+      val selectedCategories = kiwixDataStore.selectedOnlineContentCategory.first()
+        .split(",")
+        .filter { it.isNotEmpty() }
+      val updatedCategories = cachedCategoryList.map { category ->
+        category.copy(
+          active = if (category.id == 0L) {
+            selectedCategories.isEmpty()
+          } else {
+            selectedCategories.contains(category.category)
+          }
+        )
+      }
+      actions.emit(Action.UpdateCategory(updatedCategories))
       return@launch
     }
 
