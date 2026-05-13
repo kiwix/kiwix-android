@@ -19,13 +19,16 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,10 +42,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -53,8 +60,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,6 +106,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -350,20 +360,36 @@ private fun LazyListScope.showLoadMoreProgressBar(isLoadingMoreItem: Boolean) {
 
 @Composable
 private fun ShowDividerItem(dividerItem: DividerItem) {
+  var isExpanded by remember { mutableStateOf(false) }
   Column(
     modifier = Modifier
       .fillMaxWidth()
       .padding(horizontal = SIXTEEN_DP)
       .padding(top = SIXTEEN_DP, bottom = EIGHT_DP)
+      .animateContentSize()
+      .clickable { isExpanded = !isExpanded }
   ) {
-    Text(
-      text = dividerItem.sectionTitle,
-      textAlign = TextAlign.Center,
-      maxLines = 1,
-      overflow = TextOverflow.Ellipsis,
-      style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
-      modifier = Modifier.semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }
-    )
+    Row(verticalAlignment = Alignment.CenterVertically) {
+      Text(
+        text = dividerItem.sectionTitle,
+        textAlign = TextAlign.Start,
+        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+        overflow = TextOverflow.Ellipsis,
+        style = MaterialTheme.typography.titleMedium.copy(
+          fontWeight = FontWeight.Normal,
+          color = MaterialTheme.colorScheme.onSurfaceVariant
+        ),
+        modifier = Modifier
+          .weight(1f)
+          .semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }
+      )
+      Icon(
+        imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(TWENTY_FOUR_DP)
+      )
+    }
   }
 }
 
