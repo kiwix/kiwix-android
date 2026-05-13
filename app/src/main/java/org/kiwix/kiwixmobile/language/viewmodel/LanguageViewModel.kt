@@ -156,7 +156,19 @@ class LanguageViewModel @Inject constructor(
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
 
     if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
-      actions.emit(UpdateLanguages(cachedLanguageList))
+      val selectedLanguages = kiwixDataStore.selectedOnlineContentLanguage.first()
+        .split(",")
+        .filter { it.isNotEmpty() }
+      val updatedLanguages = cachedLanguageList.map { language ->
+        language.copy(
+          active = if (language.id == 0L) {
+            selectedLanguages.isEmpty()
+          } else {
+            selectedLanguages.contains(language.languageCode)
+          }
+        )
+      }
+      actions.emit(UpdateLanguages(updatedLanguages))
       return@launch
     }
 
