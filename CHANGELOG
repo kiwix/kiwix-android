@@ -3,6 +3,7 @@ Bug Fixed:
 * "Donate" sidebar link does not point to the donation page. (@kelson42 , @MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4845)
 
 Compilation/CI/CD:
+* Using libkiwix `2.4.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4487)
 * Publish app to PS is broken. (@kelson42 , @MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4605)
 * Unable to upload AAB(Android app bundle) file. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4274)
 * Update release/nightly uploads for new destination. (@rgaudin https://github.com/kiwix/kiwix-android/pull/4837)
