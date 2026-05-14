@@ -54,27 +54,21 @@ class ObserveOnlineLibraryItems @Inject constructor(
       downloads,
       networkBooks,
       fat32Checker.fileSystemStates,
-      kiwixDataStore.selectedOnlineContentLanguage,
-      kiwixDataStore.selectedOnlineContentCategory
-    ) { args ->
+      combine(
+        kiwixDataStore.selectedOnlineContentLanguage,
+        kiwixDataStore.selectedOnlineContentCategory
+      ) { lang, cat -> Selection(lang, cat) }
+    ) { booksOnFileSystem, activeDownloads, remoteBooks, fileSystemState, selection ->
       observeLibraryItems(
-        booksOnFileSystem = args[0] as List<Book>,
-        activeDownloads = args[1] as List<DownloadModel>,
-        remoteBooks = args[2] as List<LibkiwixBook>,
-        fileSystemState = args[3] as FileSystemState,
-        selection = Selection(
-          args[LANGUAGE_INDEX] as String,
-          args[CATEGORY_INDEX] as String
-        ),
+        booksOnFileSystem = booksOnFileSystem,
+        activeDownloads = activeDownloads,
+        remoteBooks = remoteBooks,
+        fileSystemState = fileSystemState,
+        selection = selection,
         getString = getString,
         getSimpleString = getSimpleString
       )
     }.flowOn(ioDispatcher)
-  }
-
-  companion object {
-    private const val LANGUAGE_INDEX = 4
-    private const val CATEGORY_INDEX = 5
   }
 
   private data class Selection(val language: String, val category: String)
