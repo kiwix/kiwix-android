@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
 
-      - name: checkout
+      - name: Code checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
@@ -39,7 +39,7 @@ jobs:
           chmod 600 $KEY_PATH
           echo "KIWIX_FILE_UPLOAD_SSH_KEY_PATH=$KEY_PATH" >> $GITHUB_ENV
 
-      - name: build debug
+      - name: Debug build
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -50,7 +50,7 @@ jobs:
       - name: Set date variable
         run: echo "DATE=$(echo $(date +%Y-%m-%d))" >> $GITHUB_ENV
 
-      - name: release debug to kiwix.download.org
+      - name: Publish to kiwix.download.org
         env:
           UNIVERSAL_DEBUG_APK: app/build/outputs/apk/nightly/*universal*.apk
         run: |
