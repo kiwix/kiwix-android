@@ -10,7 +10,7 @@
 Kiwix is an offline reader for Web content, primarily designed to make [Wikipedia](https://www.wikipedia.org/) available offline. It reads archives in the [ZIM](https://openzim.org) file format, a highly compressed open format with additional metadata.
 This is the Android version of Kiwix, with [support versions ranging from 7.1 to 15](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt). The app is written in [Kotlin](https://kotlinlang.org/).
 
-[![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Amain+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ACI+branch%3Amain)
+[![CI](https://github.com/kiwix/kiwix-android/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kiwix/kiwix-android/actions/workflows/ci.yml?query=branch%3Amain)
 [![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/main/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
