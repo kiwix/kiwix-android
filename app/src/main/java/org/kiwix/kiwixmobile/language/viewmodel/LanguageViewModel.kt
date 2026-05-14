@@ -71,6 +71,10 @@ open class LanguageViewModel @Inject constructor(
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
+  companion object {
+    var isTest = false
+  }
+
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
