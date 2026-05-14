@@ -2,6 +2,7 @@
 Bug Fixed:
 * "Donate" sidebar link does not point to the donation page. (@kelson42 , @MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4845)
 * Android's 16KB page size. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4481, https://github.com/kiwix/kiwix-android/pull/4487)
+* Updated the library.xml URL. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4870)
 
 Compilation/CI/CD:
 * Using libkiwix `2.4.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4487)
