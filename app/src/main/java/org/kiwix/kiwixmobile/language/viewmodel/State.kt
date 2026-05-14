@@ -42,6 +42,7 @@ sealed class State {
       return Content(
         items.map { item ->
           when {
+            // Selecting the "All Languages" item
             isAllLanguages -> {
               val shouldBeActive = item.id == 0L
               if (item.active == shouldBeActive) {
@@ -50,7 +51,9 @@ sealed class State {
                 item.copy(active = shouldBeActive)
               }
             }
+            // Toggling a specific language
             item.id == selectedId -> item.copy(active = !item.active)
+            // Deselect "All Languages" when a specific language is selected
             item.id == 0L -> if (item.active) item.copy(active = false) else item
             else -> item
           }
