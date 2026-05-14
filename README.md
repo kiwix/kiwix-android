@@ -11,7 +11,7 @@ Kiwix is an offline reader for Web content, primarily designed to make [Wikipedi
 This is the Android version of Kiwix, with [support versions ranging from 7.1 to 15](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt). The app is written in [Kotlin](https://kotlinlang.org/).
 
 [![CI](https://github.com/kiwix/kiwix-android/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kiwix/kiwix-android/actions/workflows/ci.yml?query=branch%3Amain)
-[![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
+[![CD](https://github.com/kiwix/kiwix-android/actions/workflows/cd.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/cd.yml)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/main/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
