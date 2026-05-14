@@ -60,6 +60,10 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
+      - name: create unit coverage
+        if: ${{ matrix.api-level==30 }}
+        run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
+
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -105,10 +109,6 @@ jobs:
         with:
           name: ${{ matrix.api-level }}
           path: screencap.png
-
-      - name: create unit coverage
-        if: ${{ matrix.api-level==30 }}
-        run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
       - name: Run benchmarks
         if: ${{ matrix.api-level==30 }}

@@ -179,7 +179,7 @@ class AllProjectConfigurer {
       resolutionStrategy {
         eachDependency {
           if ("org.jacoco" == this.requested.group) {
-            useVersion("0.8.12")
+            useVersion("0.8.14")
           }
         }
       }

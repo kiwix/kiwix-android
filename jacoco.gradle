@@ -19,7 +19,7 @@
 apply plugin: 'jacoco'
 
 jacoco {
-  toolVersion = "0.8.12"
+  toolVersion = "0.8.14"
 }
 
 tasks.withType(Test).configureEach {
@@ -51,7 +51,8 @@ tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
       javaSrc << "$proj.projectDir/src/main/java"
       kotlinSrc << "$proj.projectDir/src/main/kotlin"
       execution << fileTree(dir: proj.buildDir,
-        includes: ['jacoco/testDebugUnitTest.exec',
+        includes: ['outputs/unit_test_code_coverage/**/*.exec',
+          'jacoco/testDebugUnitTest.exec',
           'outputs/code-coverage/connected/*coverage.ec',
           'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
     }
