@@ -67,15 +67,17 @@ class OnlineCategoryTest : BaseActivityTest() {
       // Select the "All language" category to freshly run the test case.
       selectCategory(composeTestRule, "")
       clickOnSaveCategoryIcon(composeTestRule)
-      // Select "Gutenberg" category.
+      // Select "Gutenberg" and "Wikipedia" categories.
       clickOnCategoryMenuIcon(composeTestRule)
       assertCategoryDialogDisplayed(composeTestRule)
       selectCategory(composeTestRule, "gutenberg")
+      selectCategory(composeTestRule, "wikipedia")
       clickOnSaveCategoryIcon(composeTestRule)
-      // assert category is selected.
+      // assert categories are selected.
       clickOnCategoryMenuIcon(composeTestRule)
       assertCategoryDialogDisplayed(composeTestRule)
       assertCategorySelected(composeTestRule, "gutenberg")
+      assertCategorySelected(composeTestRule, "wikipedia")
     }
   }
 }
