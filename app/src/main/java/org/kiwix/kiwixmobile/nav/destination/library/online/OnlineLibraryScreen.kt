@@ -380,7 +380,7 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
       Text(
         text = dividerItem.sectionTitle,
         textAlign = TextAlign.Start,
-        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+        maxLines = if (isExpanded) Int.MAX_VALUE else 2,
         overflow = TextOverflow.Ellipsis,
         onTextLayout = { textLayoutResult ->
           isTruncated = textLayoutResult.hasVisualOverflow
