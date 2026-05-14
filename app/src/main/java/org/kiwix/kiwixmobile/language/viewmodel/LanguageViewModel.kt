@@ -91,25 +91,25 @@ class LanguageViewModel @Inject constructor(
 
   private fun fetchLanguagesFlow() = flow {
     val feed = kiwixService.getLanguages()
-    var allBooksCount = ZERO
+    val entries = feed.entries.orEmpty()
     val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage.first()
       .split(",")
       .asSequence()
       .filter { it.isNotEmpty() }
       .toSet()
-
-    val languages = feed.entries.orEmpty().mapIndexedNotNull { index, entry ->
-      allBooksCount += entry.count
-      runCatching {
+    val totalBooksCount = entries.sumOf { it.count }
+    val languages = entries.mapIndexedNotNull { index, entry ->
+      try {
         Language(
           languageCode = entry.languageCode,
-          active = selectedLanguagesSet.contains(entry.languageCode),
+          active = entry.languageCode in selectedLanguagesSet,
           occurrencesOfLanguage = entry.count,
           id = (index + ONE).toLong()
         )
-      }.onFailure {
-        Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", it)
-      }.getOrNull()
+      } catch (ignore: Exception) {
+        Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", ignore)
+        null
+      }
     }
 
     val languageList =
@@ -120,7 +120,7 @@ class LanguageViewModel @Inject constructor(
             Language(
               id = ZERO.toLong(),
               active = selectedLanguagesSet.isEmpty(),
-              occurencesOfLanguage = allBooksCount,
+              occurencesOfLanguage = totalBooksCount,
               language = "",
               languageLocalized = "",
               languageCode = "",
@@ -144,15 +144,17 @@ class LanguageViewModel @Inject constructor(
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
 
     if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
-      val selectedLanguages = kiwixDataStore.selectedOnlineContentLanguage.first()
+      val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage.first()
         .split(",")
+        .asSequence()
         .filter { it.isNotEmpty() }
+        .toSet()
       val updatedLanguages = cachedLanguageList.map { language ->
         language.copy(
           active = if (language.id == 0L) {
-            selectedLanguages.isEmpty()
+            selectedLanguagesSet.isEmpty()
           } else {
-            selectedLanguages.contains(language.languageCode)
+            language.languageCode in selectedLanguagesSet
           }
         )
       }
