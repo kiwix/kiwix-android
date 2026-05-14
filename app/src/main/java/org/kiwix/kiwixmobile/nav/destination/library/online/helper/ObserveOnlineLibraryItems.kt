@@ -127,9 +127,9 @@ class ObserveOnlineLibraryItems @Inject constructor(
           arrayOf(selection.category.trim())
         )
       }
-      append(" • ")
+      append("\n")
       append(categoryPart)
-    }
+    }.toString()
 
     return createLibrarySection(
       downloadingBooks,
