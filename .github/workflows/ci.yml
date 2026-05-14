@@ -24,7 +24,7 @@ jobs:
           large-packages: false
           swap-storage: false
 
-      - name: checkout
+      - name: Code checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
@@ -60,7 +60,7 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
-      - name: create unit coverage
+      - name: Create unit test coverage
         if: ${{ matrix.api-level==30 }}
         run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
@@ -82,7 +82,7 @@ jobs:
           channel: canary
           script: echo "Generated AVD snapshot for caching."
 
-      - name: create instrumentation coverage
+      - name: Create instrumentation coverage
         uses: reactivecircus/android-emulator-runner@v2
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
@@ -160,7 +160,7 @@ jobs:
           large-packages: false
           swap-storage: false
 
-      - name: checkout
+      - name: Code checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
@@ -214,7 +214,7 @@ jobs:
           channel: canary
           script: echo "Generated AVD snapshot for caching."
 
-      - name: create instrumentation coverage for playStore variant
+      - name: Create instrumentation coverage for PlayStore variant
         uses: reactivecircus/android-emulator-runner@v2
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
@@ -251,7 +251,7 @@ jobs:
           large-packages: false
           swap-storage: false
 
-      - name: checkout
+      - name: Code checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
@@ -342,7 +342,7 @@ jobs:
           large-packages: false
           swap-storage: false
 
-      - name: checkout
+      - name: Code checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
