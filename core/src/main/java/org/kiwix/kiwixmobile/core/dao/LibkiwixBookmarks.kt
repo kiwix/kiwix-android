@@ -45,8 +45,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
@@ -168,10 +168,16 @@ class LibkiwixBookmarks @Inject constructor(
     ensureInitialized()
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
       addBookToLibraryIfNotExist(libkiwixBookmarkItem.libKiwixBook)
+      val sectionTitle = libkiwixBookmarkItem.url.substringAfter("#", "")
+      val bookMarkTitle = if (sectionTitle.isNotEmpty()) {
+        "${libkiwixBookmarkItem.title}#$sectionTitle"
+      } else {
+        libkiwixBookmarkItem.title
+      }
       val bookmark =
         Bookmark().apply {
           bookId = libkiwixBookmarkItem.zimId
-          title = libkiwixBookmarkItem.title
+          title = bookMarkTitle
           url = libkiwixBookmarkItem.url
           bookTitle =
             when {
