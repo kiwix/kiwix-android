@@ -16,7 +16,7 @@
  *
  */
 
-package custom
+package branded
 
 import org.json.simple.JSONObject
 import java.text.ParseException
@@ -26,7 +26,7 @@ import java.util.Locale
 
 const val dateFormat = "YYYY-MM"
 
-data class CustomApp(
+data class BrandedApp(
   val name: String,
   val url: String,
   val enforcedLanguage: String,

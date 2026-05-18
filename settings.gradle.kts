@@ -1,7 +1,7 @@
 include(
   ":core",
   ":app",
-  ":custom",
+  ":branded",
   ":install_time_asset",
   ":objectboxmigration",
   ":defaultmigration",

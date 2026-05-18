@@ -1,9 +1,9 @@
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.dsl.ProductFlavor
-import custom.CustomApps
-import custom.createPublisher
-import custom.transactionWithCommit
+import branded.BrandedApps
+import branded.createPublisher
+import branded.transactionWithCommit
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -29,9 +29,9 @@ android {
 
   flavorDimensions += "default"
   productFlavors.apply {
-    CustomApps.createDynamically(project.file("src"), this)
+    BrandedApps.createDynamically(project.file("src"), this)
     all {
-      // Added namespace for every custom app to make it compatible with gradle 8.0 and above.
+      // Added namespace for every branded app to make it compatible with gradle 8.0 and above.
       // This is now specified in the Gradle configuration instead of declaring
       // it directly in the AndroidManifest file.
       namespace = "org.kiwix.kiwixmobile.custom"
@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-  // Keep the migration for custom apps, since they are released on playStore.
+  // Keep the migration for branded apps, since they are released on playStore.
   implementation(project(":objectboxmigration"))
 }
 
@@ -284,6 +284,6 @@ afterEvaluate {
       val downloadAndPutAssetTask = tasks.getByName("download${flavorName}ZimAndPutInAssetFolder")
       val bundleReleaseTask = tasks.getByName("bundle${flavorName}Release")
       releaseBundleWithPlayAssetDeliveryTask.dependsOn(bundleReleaseTask)
-      bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
+      // bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
     }
 }

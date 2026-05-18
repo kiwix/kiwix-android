@@ -109,7 +109,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run Debug Lint
-        run: ./gradlew app:lintDebug custom:lintCustomexampleDebug
+        run: ./gradlew app:lintDebug branded:lintCustomexampleDebug
 
       - name: Upload Lint Reports
         uses: actions/upload-artifact@v6
