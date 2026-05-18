@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -169,7 +169,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       }
     }
-    customMainActivity?.consumeObservable<String>(PAGE_URL_KEY)
+    customMainActivity?.safelyConsumeObservable<String>(PAGE_URL_KEY)
   }
 
   /**

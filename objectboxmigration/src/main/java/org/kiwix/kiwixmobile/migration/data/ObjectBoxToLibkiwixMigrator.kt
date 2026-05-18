@@ -104,6 +104,16 @@ class ObjectBoxToLibkiwixMigrator {
     // run migration with mutex to do the migration one by one.
     migrationMutex.withLock {
       bookMarksList.forEachIndexed { index, bookmarkEntity ->
+        bookmarkEntity.zimFilePath?.let { filePath ->
+          // set zimReaderSource for previously saved bookmarks
+          if (bookmarkEntity.zimReaderSource == null) {
+            val zimReaderSource = ZimReaderSource(File(filePath))
+            if (zimReaderSource.canOpenInLibkiwix()) {
+              bookmarkEntity.zimReaderSource = zimReaderSource
+            }
+          }
+        }
+
         // moving this to handle the exceptions thrown by the libkiwix if any occur,
         // like if path is not validate due to user move the ZIM file to another location etc.
         try {

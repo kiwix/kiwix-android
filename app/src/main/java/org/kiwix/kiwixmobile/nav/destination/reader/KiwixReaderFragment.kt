@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -116,9 +116,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
       // Consume the argument.
       kiwixMainActivity?.apply {
-        consumeObservable<String>(ZIM_FILE_URI_KEY)
-        consumeObservable<String>(PAGE_URL_KEY)
-        consumeObservable<String>(SEARCH_ITEM_TITLE_KEY)
+        safelyConsumeObservable<String>(ZIM_FILE_URI_KEY)
+        safelyConsumeObservable<String>(PAGE_URL_KEY)
+        safelyConsumeObservable<String>(SEARCH_ITEM_TITLE_KEY)
       }
     }
   }

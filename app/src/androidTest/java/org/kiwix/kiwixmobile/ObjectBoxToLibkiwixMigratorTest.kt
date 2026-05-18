@@ -41,9 +41,11 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.page.bookmark.models.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.migration.di.component.DaggerMigrationComponent
@@ -298,6 +300,48 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
 
   @Test
+  fun migrateBookOnDisk_withLegacyEmptyFileZimReaderSource_ShouldSetZimReaderSource(): Unit =
+    runBlocking {
+      val legacyBookOnDiskEntity = BookOnDiskEntity(
+        BooksOnDiskListItem.BookOnDisk(
+          databaseId = 0,
+          file = zimFile,
+          // Legacy rows use an empty-file sentinel because zimReaderSource is non-nullable.
+          zimReaderSource = ZimReaderSource(File("")),
+          book = LibkiwixBook().apply {
+            id = expectedZimId
+            title = ""
+            description = ""
+            language = ""
+            creator = ""
+            publisher = ""
+            date = ""
+            url = ""
+            articleCount = ""
+            mediaCount = ""
+            size = ""
+            bookName = expectedZimName
+            favicon = ""
+          }
+        )
+      )
+      bookOnDiskBox.put(legacyBookOnDiskEntity)
+      // migrate data into libkiwix
+      objectBoxToLibkiwixMigrator.migrateLocalBooks(bookOnDiskBox)
+
+      val actualDataAfterMigration = objectBoxToLibkiwixMigrator.libkiwixBookOnDisk.getBooks()
+      assertEquals(1, actualDataAfterMigration.size)
+      // zimReaderSource should be set during migration
+      assertNotNull(actualDataAfterMigration[0].zimReaderSource)
+      assertEquals(
+        actualDataAfterMigration[0].zimReaderSource.file?.canonicalPath,
+        zimFile.canonicalPath
+      )
+
+      clearBookOnDisk()
+    }
+
+  @Test
   fun testMigrationWithEmptyData(): Unit =
     runBlocking {
       // Migrate data from empty ObjectBox database
@@ -447,6 +491,100 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       // Clear the bookmarks list from device to not affect the other test cases.
       clearBookmarks()
     }
+
+  @Test
+  fun migrateBookmarks_withOldFilePath_andNoZimReaderSourceAvailable(): Unit = runBlocking {
+    val oldBookmark = BookmarkEntity(
+      0,
+      expectedZimId,
+      expectedZimName,
+      expectedZimFilePath,
+      null,
+      expectedBookmarkUrl,
+      expectedTitle,
+      expectedFavicon
+    )
+    bookmarkBox.put(oldBookmark)
+    // migrate data into libkiwix
+    objectBoxToLibkiwixMigrator.migrateBookMarks(bookmarkBox)
+    // check if data successfully migrated to libkiwix
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
+    assertEquals(1, actualDataAfterMigration.size)
+    // Assert it sets the zimReaderSource from the file path.
+    assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), expectedZimFilePath)
+    assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
+    assertEquals(actualDataAfterMigration[0].title, expectedTitle)
+    assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
+  }
+
+  @Test
+  fun migrateBookMarks_withDuplicateDetection_shouldNotInsertDuplicate(): Unit =
+    runBlocking {
+      // 1. Manually add an existing bookmark to libkiwix
+      val existingZimReaderSource = ZimReaderSource(File(expectedZimFilePath))
+      val libkiwixBook = Book().apply {
+        update(Archive(expectedZimFilePath))
+      }
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
+        LibkiwixBookmarkItem(
+          zimId = expectedZimId,
+          zimFilePath = expectedZimFilePath,
+          zimReaderSource = existingZimReaderSource,
+          zimName = expectedZimName,
+          bookmarkUrl = expectedBookmarkUrl,
+          title = expectedTitle,
+          favicon = expectedFavicon,
+          libKiwixBook = libkiwixBook
+        )
+      )
+
+      val legacyBookmarkEntity = BookmarkEntity(
+        id = 0,
+        zimId = expectedZimId,
+        zimName = expectedZimName,
+        zimFilePath = expectedZimFilePath,
+        // legacy data
+        zimReaderSource = null,
+        bookmarkUrl = expectedBookmarkUrl,
+        bookmarkTitle = expectedTitle,
+        favicon = expectedFavicon
+      )
+      bookmarkBox.put(legacyBookmarkEntity)
+      // migrate data into libkiwix
+      objectBoxToLibkiwixMigrator.migrateBookMarks(bookmarkBox)
+
+      val actualDataAfterMigration =
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
+      // Should not insert duplicate if zimReaderSource is backfilled correctly
+      assertEquals(1, actualDataAfterMigration.size)
+
+      clearBookmarks()
+    }
+
+  @Test
+  fun bookmarkEntity_secondaryConstructor_shouldSetFieldsCorrectly() {
+    val bookmarkItem = BookmarkItem(
+      databaseId = 1L,
+      zimId = "zim-id",
+      zimName = "zim-name",
+      zimReaderSource = ZimReaderSource(File("/path/to/zim")),
+      bookmarkUrl = "url",
+      title = "title",
+      favicon = "favicon"
+    )
+    val entity = BookmarkEntity(bookmarkItem)
+    assertEquals(1L, entity.id)
+    assertEquals("zim-id", entity.zimId)
+    assertEquals("zim-name", entity.zimName)
+    assertEquals(null, entity.zimFilePath)
+    assertNotNull(entity.zimReaderSource)
+    assertEquals("url", entity.bookmarkUrl)
+    assertEquals("title", entity.bookmarkTitle)
+    assertEquals("favicon", entity.favicon)
+  }
 
   private suspend fun clearBookOnDisk() {
     objectBoxToLibkiwixMigrator.libkiwixBookOnDisk.delete(
