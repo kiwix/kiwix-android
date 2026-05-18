@@ -54,7 +54,6 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class DownloadBookItemUITest {
-
   @get:Rule
   val composeTestRule = createComposeRule()
 
@@ -136,7 +135,7 @@ class DownloadBookItemUITest {
   fun downloadBookItem_bookTitleIsDisplayed() {
     setContent(item = mockLibraryDownloadItem(title = "Wikipedia"))
     composeTestRule
-      .onNode(hasContentDescription("Wikipedia${testIndex}"))
+      .onNode(hasContentDescription("Wikipedia$testIndex"))
       .assertIsDisplayed()
   }
 
@@ -144,7 +143,7 @@ class DownloadBookItemUITest {
   fun downloadBookItem_bookDescriptionIsDisplayed() {
     setContent(item = mockLibraryDownloadItem(description = "The free encyclopedia"))
     composeTestRule
-      .onNode(hasContentDescription("The free encyclopedia${testIndex}"))
+      .onNode(hasContentDescription("The free encyclopedia$testIndex"))
       .assertIsDisplayed()
   }
 

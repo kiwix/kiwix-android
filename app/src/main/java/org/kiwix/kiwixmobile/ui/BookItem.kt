@@ -211,12 +211,12 @@ fun BookSize(size: String, modifier: Modifier = Modifier, index: Int) {
 }
 
 @Composable
-fun BookDate(date: String, index: Int) {
+fun BookDate(date: String, index: Int, modifier: Modifier = Modifier) {
   Text(
     text = date,
     style = MaterialTheme.typography.bodyMedium,
     color = MaterialTheme.colorScheme.onTertiary,
-    modifier = Modifier.semantics { contentDescription = "$date$index" }
+    modifier = modifier.semantics { contentDescription = "$date$index" }
   )
 }
 
