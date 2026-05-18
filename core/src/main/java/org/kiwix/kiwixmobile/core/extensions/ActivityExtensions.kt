@@ -117,15 +117,21 @@ object ActivityExtensions {
   ) {
     getObservableNavigationResult<T>(key)?.observe(owner) {
       observer.onChanged(it)
-      coreMainActivity.consumeObservable<T>(key)
+      coreMainActivity.safelyConsumeObservable<T>(key)
     }
   }
 
-  fun <T> Activity.consumeObservable(key: String = "result") =
-    if (coreMainActivity.isNavControllerInitialized) {
-      coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
-    } else {
-      // do nothing.
+  fun <T> Activity.safelyConsumeObservable(key: String = "result") =
+    runCatching {
+      if (coreMainActivity.isNavControllerInitialized) {
+        coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+      } else {
+        // do nothing.
+      }
+    }.onFailure {
+      // TODO This will be resolved automatically after migrating to Compose
+      // (once the ViewModel replaces this logic). Re-test after the migration is complete.
+      it.printStackTrace()
     }
 
   fun <T> Activity.setNavigationResult(result: T, key: String = "result") {

@@ -110,7 +110,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
@@ -2011,7 +2011,7 @@ abstract class CoreReaderFragment :
         loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
       }
     }
-    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
+    requireActivity().safelyConsumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
   private fun handlePendingIntent() {
