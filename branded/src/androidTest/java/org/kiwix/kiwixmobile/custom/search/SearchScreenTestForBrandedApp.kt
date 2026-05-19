@@ -56,8 +56,8 @@ import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
-import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
+import org.kiwix.kiwixmobile.custom.main.BrandedMainActivity
+import org.kiwix.kiwixmobile.custom.main.BrandedReaderFragment
 import org.kiwix.kiwixmobile.custom.testutils.RetryRule
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
@@ -70,7 +70,7 @@ import java.io.FileOutputStream
 import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
-class SearchScreenTestForCustomApp {
+class SearchScreenTestForBrandedApp {
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -93,10 +93,10 @@ class SearchScreenTestForCustomApp {
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
 
-  private lateinit var customMainActivity: CustomMainActivity
+  private lateinit var brandedMainActivity: BrandedMainActivity
   private lateinit var uiDevice: UiDevice
   private lateinit var downloadingZimFile: File
-  private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
+  private lateinit var activityScenario: ActivityScenario<BrandedMainActivity>
 
   private val scientificAllianceZIMUrl =
     "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2025-06.zim"
@@ -122,7 +122,7 @@ class SearchScreenTestForCustomApp {
       }
     }
     activityScenario =
-      ActivityScenario.launch(CustomMainActivity::class.java).apply {
+      ActivityScenario.launch(BrandedMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
@@ -133,7 +133,7 @@ class SearchScreenTestForCustomApp {
   @Test
   fun searchScreen() {
     activityScenario.onActivity {
-      customMainActivity = it
+      brandedMainActivity = it
     }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
@@ -152,7 +152,7 @@ class SearchScreenTestForCustomApp {
       }
     })
     UiThreadStatement.runOnUiThread {
-      customMainActivity.navigate(customMainActivity.readerFragmentRoute)
+      brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
     }
     openZimFileInReader(zimFile = downloadingZimFile)
     openSearchWithQuery()
@@ -215,7 +215,7 @@ class SearchScreenTestForCustomApp {
           "forum"
         )
       activityScenario.onActivity {
-        customMainActivity = it
+        brandedMainActivity = it
       }
       testFlakyView({
         // test with a large ZIM file to properly test the scenario
@@ -234,15 +234,15 @@ class SearchScreenTestForCustomApp {
         }
       })
       UiThreadStatement.runOnUiThread {
-        customMainActivity.navigate(customMainActivity.readerFragmentRoute)
+        brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
       }
       openZimFileInReader(zimFile = downloadingZimFile)
       openSearchWithQuery(searchTerms[0])
       // wait for searchFragment become visible on screen.
       delay(2000)
       val searchViewModel = ViewModelProvider(
-        customMainActivity,
-        customMainActivity.viewModelFactory
+        brandedMainActivity,
+        brandedMainActivity.viewModelFactory
       )[SearchViewModel::class.java]
       for (i in 1..100) {
         // This will execute the render method 100 times frequently.
@@ -272,7 +272,7 @@ class SearchScreenTestForCustomApp {
   @Test
   fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {
     activityScenario.onActivity {
-      customMainActivity = it
+      brandedMainActivity = it
     }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
@@ -292,7 +292,7 @@ class SearchScreenTestForCustomApp {
         }
     })
     UiThreadStatement.runOnUiThread {
-      customMainActivity.navigate(customMainActivity.readerFragmentRoute)
+      brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
     }
     openZimFileInReader(zimFile = downloadingZimFile)
     search {
@@ -304,7 +304,7 @@ class SearchScreenTestForCustomApp {
       assertAFoolForYouArticleLoaded(composeTestRule)
       composeTestRule.waitUntilTimeout()
       // open note screen.
-      openNoteFragment(customMainActivity as CoreMainActivity, composeTestRule)
+      openNoteFragment(brandedMainActivity as CoreMainActivity, composeTestRule)
       composeTestRule.waitUntilTimeout()
       composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
       // after came back check the previously loaded article is still showing or not.
@@ -314,7 +314,7 @@ class SearchScreenTestForCustomApp {
 
   private fun openSearchWithQuery(query: String = "") {
     UiThreadStatement.runOnUiThread {
-      customMainActivity.openSearch(searchString = query)
+      brandedMainActivity.openSearch(searchString = query)
     }
   }
 
@@ -323,18 +323,18 @@ class SearchScreenTestForCustomApp {
     zimFile: File? = null
   ) {
     UiThreadStatement.runOnUiThread {
-      val customReaderFragment =
-        customMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<CustomReaderFragment>()
+      val brandedReaderFragment =
+        brandedMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<BrandedReaderFragment>()
           .firstOrNull()
       runBlocking {
         assetFileDescriptor?.let {
-          customReaderFragment?.openZimFile(
+          brandedReaderFragment?.openZimFile(
             ZimReaderSource(assetFileDescriptorList = listOf(assetFileDescriptor)),
             true
           )
         } ?: run {
-          customReaderFragment?.openZimFile(
+          brandedReaderFragment?.openZimFile(
             ZimReaderSource(zimFile),
             true
           )

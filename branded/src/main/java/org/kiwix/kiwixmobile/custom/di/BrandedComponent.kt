@@ -16,17 +16,20 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.download.effects
+package org.kiwix.kiwixmobile.custom.di
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
-import javax.inject.Inject
+import dagger.Component
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
+import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 
-class NavigateToCustomReader @Inject constructor() : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    activity.finish()
-    activity.start<CustomMainActivity>()
-  }
+@Component(
+  dependencies = [CoreComponent::class],
+  modules = [BrandedViewModelModule::class, MigrationModule::class, DatabaseModule::class]
+)
+@BrandedScope
+interface BrandedComponent {
+  fun activityComponentBuilder(): BrandedActivityComponent.Builder
+  fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
 }

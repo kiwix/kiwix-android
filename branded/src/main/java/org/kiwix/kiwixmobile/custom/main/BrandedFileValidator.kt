@@ -34,7 +34,7 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-class CustomFileValidator @Inject constructor(private val context: Context) {
+class BrandedFileValidator @Inject constructor(private val context: Context) {
   suspend fun validate(
     onFilesFound: suspend (ValidationState) -> Unit,
     onNoFilesFound: suspend () -> Unit,

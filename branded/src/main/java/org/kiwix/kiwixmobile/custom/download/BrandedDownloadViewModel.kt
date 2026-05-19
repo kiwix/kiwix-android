@@ -44,16 +44,16 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
 import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
-import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
-import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
+import org.kiwix.kiwixmobile.custom.download.effects.DownloadBranded
+import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import javax.inject.Inject
 
-class CustomDownloadViewModel @Inject constructor(
+class BrandedDownloadViewModel @Inject constructor(
   downloadRoomDao: DownloadRoomDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
-  private val downloadCustom: DownloadCustom,
-  private val navigateToCustomReader: NavigateToCustomReader
+  private val downloadBranded: DownloadBranded,
+  private val navigateToBrandedReader: NavigateToBrandedReader
 ) : ViewModel() {
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()
@@ -101,7 +101,7 @@ class CustomDownloadViewModel @Inject constructor(
     return when (action) {
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
-      ClickedDownload -> state.also { _effects.emit(downloadCustom) }
+      ClickedDownload -> state.also { _effects.emit(downloadBranded) }
     }
   }
 
@@ -123,7 +123,7 @@ class CustomDownloadViewModel @Inject constructor(
             DownloadInProgress(action.downloads)
           }
         } else {
-          DownloadComplete.also { _effects.emit(navigateToCustomReader) }
+          DownloadComplete.also { _effects.emit(navigateToBrandedReader) }
         }
 
       DownloadComplete -> state

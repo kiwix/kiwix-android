@@ -44,8 +44,8 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
 import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
-import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
-import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
+import org.kiwix.kiwixmobile.custom.download.effects.DownloadBranded
+import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.downloadItem
@@ -53,24 +53,24 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 @ExtendWith(InstantExecutorExtension::class)
-internal class CustomDownloadViewModelTest {
+internal class BrandedDownloadViewModelTest {
   private val downloadRoomDao: DownloadRoomDao = mockk()
   private val setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace = mockk()
-  private val downloadCustom: DownloadCustom = mockk()
-  private val navigateToCustomReader: NavigateToCustomReader = mockk()
+  private val downloadBranded: DownloadBranded = mockk()
+  private val navigateToBrandedReader: NavigateToBrandedReader = mockk()
 
   private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
-  private lateinit var customDownloadViewModel: CustomDownloadViewModel
+  private lateinit var brandedDownloadViewModel: BrandedDownloadViewModel
 
   @BeforeEach
   internal fun setUp() {
     clearAllMocks()
     every { downloadRoomDao.downloads() } returns downloads
-    customDownloadViewModel = CustomDownloadViewModel(
+    brandedDownloadViewModel = BrandedDownloadViewModel(
       downloadRoomDao,
       setPreferredStorageWithMostSpace,
-      downloadCustom,
-      navigateToCustomReader
+      downloadBranded,
+      navigateToBrandedReader
     ).also {
       it.getStateForTesting().value = DownloadRequired
     }
@@ -79,7 +79,7 @@ internal class CustomDownloadViewModelTest {
   @Test
   internal fun `effects emits SetPreferred on Subscribe`() = runTest {
     testFlow(
-      flow = customDownloadViewModel.effects,
+      flow = brandedDownloadViewModel.effects,
       triggerAction = {},
       assert = { assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace) }
     )
@@ -88,7 +88,7 @@ internal class CustomDownloadViewModelTest {
   @Test
   internal fun `initial State is DownloadRequired`() = runTest {
     testFlow(
-      flow = customDownloadViewModel.state,
+      flow = brandedDownloadViewModel.state,
       triggerAction = {},
       assert = { assertThat(awaitItem()).isEqualTo(State.DownloadRequired) }
     )
@@ -171,7 +171,7 @@ internal class CustomDownloadViewModelTest {
     internal fun `Emission without data moves state from InProgress to Complete`() = flakyTest {
       runTest {
         testFlow(
-          flow = customDownloadViewModel.effects,
+          flow = brandedDownloadViewModel.effects,
           triggerAction = {
             assertStateTransition(
               this,
@@ -183,7 +183,7 @@ internal class CustomDownloadViewModelTest {
           },
           assert = {
             assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
-            assertThat(awaitItem()).isEqualTo(navigateToCustomReader)
+            assertThat(awaitItem()).isEqualTo(navigateToBrandedReader)
           }
         )
       }
@@ -208,10 +208,10 @@ internal class CustomDownloadViewModelTest {
       endState: State,
       awaitItemCount: Int = 1,
     ) {
-      customDownloadViewModel.getStateForTesting().value = initialState
+      brandedDownloadViewModel.getStateForTesting().value = initialState
       testScope.testFlow(
-        flow = customDownloadViewModel.state,
-        triggerAction = { customDownloadViewModel.actions.tryEmit(action) },
+        flow = brandedDownloadViewModel.state,
+        triggerAction = { brandedDownloadViewModel.actions.tryEmit(action) },
         assert = {
           val items = (1..awaitItemCount).map { awaitItem() }
           assertThat(items).contains(endState)
@@ -223,11 +223,11 @@ internal class CustomDownloadViewModelTest {
   @Test
   internal fun `clicking Retry triggers DownloadCustom`() = runTest {
     testFlow(
-      flow = customDownloadViewModel.effects,
-      triggerAction = { customDownloadViewModel.actions.emit(ClickedRetry) },
+      flow = brandedDownloadViewModel.effects,
+      triggerAction = { brandedDownloadViewModel.actions.emit(ClickedRetry) },
       assert = {
         assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
-        assertThat(awaitItem()).isEqualTo(downloadCustom)
+        assertThat(awaitItem()).isEqualTo(downloadBranded)
       }
     )
   }
@@ -236,11 +236,11 @@ internal class CustomDownloadViewModelTest {
   internal fun `clicking Download triggers DownloadCustom`() = flakyTest {
     runTest {
       testFlow(
-        flow = customDownloadViewModel.effects,
-        triggerAction = { customDownloadViewModel.actions.emit(ClickedDownload) },
+        flow = brandedDownloadViewModel.effects,
+        triggerAction = { brandedDownloadViewModel.actions.emit(ClickedDownload) },
         assert = {
           assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
-          assertThat(awaitItem()).isEqualTo(downloadCustom)
+          assertThat(awaitItem()).isEqualTo(downloadBranded)
         }
       )
     }

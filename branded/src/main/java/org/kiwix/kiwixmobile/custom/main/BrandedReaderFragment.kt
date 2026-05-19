@@ -50,10 +50,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.brandedActivityComponent
 import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
@@ -61,13 +61,13 @@ import javax.inject.Inject
 
 const val OPENING_DOWNLOAD_SCREEN_DELAY = 300L
 
-class CustomReaderFragment : CoreReaderFragment() {
+class BrandedReaderFragment : CoreReaderFragment() {
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.customActivityComponent.inject(this)
+    baseActivity.brandedActivityComponent.inject(this)
   }
 
   @Inject
-  lateinit var customFileValidator: CustomFileValidator
+  lateinit var brandedFileValidator: BrandedFileValidator
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -151,9 +151,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun loadPageFromNavigationArguments() {
-    val customMainActivity = activity as? CustomMainActivity
+    val brandedMainActivity = activity as? BrandedMainActivity
     val pageUrl =
-      customMainActivity?.getObservableNavigationResult<String>(PAGE_URL_KEY)?.value.orEmpty()
+      brandedMainActivity?.getObservableNavigationResult<String>(PAGE_URL_KEY)?.value.orEmpty()
     if (pageUrl.isNotEmpty()) {
       loadUrlWithCurrentWebview(pageUrl)
       // Setup bookmark for current book
@@ -169,7 +169,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       }
     }
-    customMainActivity?.safelyConsumeObservable<String>(PAGE_URL_KEY)
+    brandedMainActivity?.safelyConsumeObservable<String>(PAGE_URL_KEY)
   }
 
   /**
@@ -235,7 +235,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    *                                   restore the view state after opening the file. Default is false.
    */
   private suspend fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
@@ -319,7 +319,7 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   private suspend fun createDemoFile() {
     runCatching {
-      File(getDemoFilePathForCustomApp(CoreApp.instance)).also {
+      File(getDemoFilePathForBrandedApp(CoreApp.instance)).also {
         if (!it.isFileExist()) it.createNewFile()
       }
     }

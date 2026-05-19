@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,16 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package org.kiwix.kiwixmobile.custom
 
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.custom.di.CustomComponent
-import org.kiwix.kiwixmobile.custom.di.DaggerCustomComponent
+import androidx.lifecycle.ViewModel
+import org.kiwix.kiwixmobile.core.ViewModelFactory
+import org.kiwix.kiwixmobile.custom.di.BrandedScope
+import javax.inject.Inject
+import javax.inject.Provider
 
-class CustomApp : CoreApp() {
-  @Suppress("ConvertLambdaToReference") // we want the entire call to be lazy
-  val customComponent: CustomComponent by lazy {
-    DaggerCustomComponent.builder().coreComponent(coreComponent).build()
-  }
-}
+@BrandedScope
+class BrandedViewModelFactory @Inject constructor(
+  creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
+) : ViewModelFactory(creators)

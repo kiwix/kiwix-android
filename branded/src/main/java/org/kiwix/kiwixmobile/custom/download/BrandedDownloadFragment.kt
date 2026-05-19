@@ -44,14 +44,14 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.brandedActivityComponent
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
 import javax.inject.Inject
 
-class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
+class BrandedDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   private val downloadViewModel by lazy {
-    viewModel<CustomDownloadViewModel>(viewModelFactory)
+    viewModel<BrandedDownloadViewModel>(viewModelFactory)
   }
 
   @JvmField
@@ -66,7 +66,7 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   private var composeView: ComposeView? = null
   private var downloadState = mutableStateOf<State>(State.DownloadRequired)
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.customActivityComponent.inject(this)
+    baseActivity.brandedActivityComponent.inject(this)
   }
 
   override fun onCreateView(
@@ -77,7 +77,7 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     super.onCreate(savedInstanceState)
     composeView = ComposeView(requireContext()).apply {
       setContent {
-        CustomDownloadScreen(
+        BrandedDownloadScreen(
           state = downloadState.value,
           onDownloadClick = { downloadButtonClick() },
           onRetryClick = { retryButtonClick() }

@@ -18,36 +18,22 @@
 
 package org.kiwix.kiwixmobile.custom.download.effects
 
-import io.mockk.coVerify
+import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.sharedFunctions.libkiwixBook
 
-internal class DownloadCustomTest {
+internal class NavigateToBrandedReaderTest {
   @Test
-  fun `invokeWith queues download with ZimUrl`() {
-    val downloader = mockk<Downloader>()
-    DownloadCustom(downloader).invokeWith(mockk())
-    coVerify {
-      downloader.download(expectedBook())
+  fun `invokeWith finishes activity and starts main`() {
+    val activity = mockk<AppCompatActivity>()
+    // Inline functions cannot be mocked
+    // mockkObject(ActivityExtensions)
+    // every { start<CustomMainActivity>(null) } just Runs issues with inline extension functions
+    NavigateToBrandedReader().invokeWith(activity)
+    verify {
+      activity.finish()
+      activity.startActivity(any())
     }
   }
-
-  private fun expectedBook() =
-    libkiwixBook(
-      "custom",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    )
 }

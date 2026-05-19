@@ -59,7 +59,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 
 @Composable
-fun CustomDownloadScreen(
+fun BrandedDownloadScreen(
   state: State,
   onDownloadClick: () -> Unit,
   onRetryClick: () -> Unit

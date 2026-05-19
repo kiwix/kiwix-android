@@ -22,7 +22,7 @@ import android.app.Activity
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
@@ -75,7 +75,7 @@ class DonationDialogHandler @Inject constructor(
   }
 
   suspend fun isZimFilesAvailableInLibrary(): Boolean =
-    if (activity.isCustomApp()) true else libkiwixBookOnDisk.getBooks().isNotEmpty()
+    if (activity.isBrandedApp()) true else libkiwixBookOnDisk.getBooks().isNotEmpty()
 
   suspend fun updateLastDonationPopupShownTime() {
     kiwixDataStore.setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())

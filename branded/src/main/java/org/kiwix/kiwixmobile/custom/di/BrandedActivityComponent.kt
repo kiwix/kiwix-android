@@ -23,21 +23,21 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
-import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
+import org.kiwix.kiwixmobile.custom.download.BrandedDownloadFragment
+import org.kiwix.kiwixmobile.custom.main.BrandedMainActivity
+import org.kiwix.kiwixmobile.custom.main.BrandedReaderFragment
 
 @ActivityScope
-@Subcomponent(modules = [CustomActivityModule::class])
-interface CustomActivityComponent : CoreActivityComponent {
-  fun inject(customMainActivity: CustomMainActivity)
-  fun inject(customDownloadFragment: CustomDownloadFragment)
-  fun inject(customReaderFragment: CustomReaderFragment)
+@Subcomponent(modules = [BrandedActivityModule::class])
+interface BrandedActivityComponent : CoreActivityComponent {
+  fun inject(brandedMainActivity: BrandedMainActivity)
+  fun inject(brandedDownloadFragment: BrandedDownloadFragment)
+  fun inject(brandedReaderFragment: BrandedReaderFragment)
 
   @Subcomponent.Builder
   interface Builder {
     @BindsInstance fun activity(activity: Activity): Builder
 
-    fun build(): CustomActivityComponent
+    fun build(): BrandedActivityComponent
   }
 }

@@ -18,18 +18,8 @@
 
 package org.kiwix.kiwixmobile.custom.di
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
-import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
+import javax.inject.Scope
 
-@Component(
-  dependencies = [CoreComponent::class],
-  modules = [CustomViewModelModule::class, MigrationModule::class, DatabaseModule::class]
-)
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
-  fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
-}
+@Scope
+@Retention
+annotation class BrandedScope

@@ -24,24 +24,24 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.custom.download.CustomDownloadViewModel
-import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
-import org.kiwix.kiwixmobile.custom.settings.CustomSettingsViewModel
+import org.kiwix.kiwixmobile.custom.download.BrandedDownloadViewModel
+import org.kiwix.kiwixmobile.custom.help.BrandedHelpViewModel
+import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 
 @Module(includes = [CoreViewModelModule::class])
-abstract class CustomViewModelModule {
+abstract class BrandedViewModelModule {
   @Binds
   @IntoMap
-  @ViewModelKey(CustomDownloadViewModel::class)
-  abstract fun bindCustomDownloadViewModel(zimManageViewModel: CustomDownloadViewModel): ViewModel
+  @ViewModelKey(BrandedDownloadViewModel::class)
+  abstract fun bindBrandedDownloadViewModel(brandedDownloadViewModel: BrandedDownloadViewModel): ViewModel
 
   @Binds
   @IntoMap
-  @ViewModelKey(CustomHelpViewModel::class)
-  abstract fun bindCustomHelpViewModel(customHelpViewModel: CustomHelpViewModel): ViewModel
+  @ViewModelKey(BrandedHelpViewModel::class)
+  abstract fun bindCustomHelpViewModel(brandedHelpViewModel: BrandedHelpViewModel): ViewModel
 
   @Binds
   @IntoMap
-  @ViewModelKey(CustomSettingsViewModel::class)
-  abstract fun bindCustomSettingsViewModel(customSettingsViewModel: CustomSettingsViewModel): ViewModel
+  @ViewModelKey(BrandedSettingsViewModel::class)
+  abstract fun bindCustomSettingsViewModel(brandedSettingsViewModel: BrandedSettingsViewModel): ViewModel
 }

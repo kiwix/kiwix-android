@@ -87,9 +87,9 @@ class DownloadServiceTestForCustomApps {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-  private lateinit var customMainActivity: CustomMainActivity
+  private lateinit var brandedMainActivity: BrandedMainActivity
   private lateinit var uiDevice: UiDevice
-  private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
+  private lateinit var activityScenario: ActivityScenario<BrandedMainActivity>
   private val rayCharlesZIMFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
@@ -112,7 +112,7 @@ class DownloadServiceTestForCustomApps {
       }
     }
     activityScenario =
-      ActivityScenario.launch(CustomMainActivity::class.java).apply {
+      ActivityScenario.launch(BrandedMainActivity::class.java).apply {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
@@ -124,7 +124,7 @@ class DownloadServiceTestForCustomApps {
   fun testDownloadMonitorServiceShouldNotStartForCustomApp() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
-        customMainActivity = it
+        brandedMainActivity = it
       }
       var downloadingZimFile: File? = null
       testFlakyView({
@@ -145,7 +145,7 @@ class DownloadServiceTestForCustomApps {
           }
       })
       UiThreadStatement.runOnUiThread {
-        customMainActivity.navigate(customMainActivity.readerFragmentRoute)
+        brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
       }
       openZimFileInReader(zimFile = downloadingZimFile)
       // press the home button so that application goes into background
@@ -164,18 +164,18 @@ class DownloadServiceTestForCustomApps {
     zimFile: File? = null
   ) {
     UiThreadStatement.runOnUiThread {
-      val customReaderFragment =
-        customMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<CustomReaderFragment>()
+      val brandedReaderFragment =
+        brandedMainActivity.supportFragmentManager.fragments
+          .filterIsInstance<BrandedReaderFragment>()
           .firstOrNull()
       runBlocking {
         assetFileDescriptor?.let {
-          customReaderFragment?.openZimFile(
+          brandedReaderFragment?.openZimFile(
             ZimReaderSource(assetFileDescriptorList = listOf(assetFileDescriptor)),
             true
           )
         } ?: run {
-          customReaderFragment?.openZimFile(
+          brandedReaderFragment?.openZimFile(
             ZimReaderSource(zimFile),
             true
           )

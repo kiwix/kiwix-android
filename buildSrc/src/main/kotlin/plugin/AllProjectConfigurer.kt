@@ -51,7 +51,7 @@ class AllProjectConfigurer {
       // the debug symbols are not included in the Android App Bundle (AAB).
       ndkVersion = Config.NDK_VERSION
       // The namespace cannot be directly set in `LibraryExtension`.
-      // The core module is configured as a library for both Kiwix and custom apps.
+      // The core module is configured as a library for both Kiwix and branded apps.
       // Therefore, we set the namespace in `BaseExtension` for the core module,
       // based on the boolean value of `isLibrary`. This value is passed from the
       // `KiwixConfigurationPlugin`. If the current plugin is `LibraryPlugin`,

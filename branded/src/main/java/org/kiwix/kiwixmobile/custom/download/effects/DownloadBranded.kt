@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import javax.inject.Inject
 
-data class DownloadCustom @Inject constructor(val downloader: Downloader) : SideEffect<Unit> {
+data class DownloadBranded @Inject constructor(val downloader: Downloader) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     downloader.download(emptyBook(id = "custom", url = BuildConfig.ZIM_URL))
   }

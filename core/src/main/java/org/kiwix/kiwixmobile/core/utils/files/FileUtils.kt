@@ -947,7 +947,7 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun getDemoFilePathForCustomApp(context: Context) =
+  fun getDemoFilePathForBrandedApp(context: Context) =
     "${context.getExternalFilesDirs(null)[0]}/demo.zim"
 
   @SuppressLint("Recycle")

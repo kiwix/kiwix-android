@@ -61,13 +61,13 @@ import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
-import org.kiwix.kiwixmobile.custom.help.CustomHelpViewModel
-import org.kiwix.kiwixmobile.custom.settings.CustomSettingsViewModel
+import org.kiwix.kiwixmobile.custom.download.BrandedDownloadFragment
+import org.kiwix.kiwixmobile.custom.help.BrandedHelpViewModel
+import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 
 @Suppress("LongMethod")
 @Composable
-fun CustomNavGraph(
+fun BrandedNavGraph(
   navController: NavHostController,
   modifier: Modifier = Modifier,
   viewModelFactory: ViewModelProvider.Factory,
@@ -80,7 +80,7 @@ fun CustomNavGraph(
   ) {
     composable(route = CustomDestination.Reader.route) { backStackEntry ->
       FragmentContainer(R.id.readerFragmentContainer) {
-        CustomReaderFragment()
+        BrandedReaderFragment()
       }
     }
     composable(CustomDestination.History.route) {
@@ -108,23 +108,23 @@ fun CustomNavGraph(
       )
     }
     composable(CustomDestination.Help.route) {
-      val customHelpViewModel: CustomHelpViewModel = viewModel(factory = viewModelFactory)
+      val brandedHelpViewModel: BrandedHelpViewModel = viewModel(factory = viewModelFactory)
       HelpScreenRoute(
         navigateBack = navController::popBackStack,
-        helpViewModel = customHelpViewModel
+        helpViewModel = brandedHelpViewModel
       )
     }
     composable(CustomDestination.Settings.route) {
-      val customSettingsViewModel: CustomSettingsViewModel = viewModel(factory = viewModelFactory)
-      customSettingsViewModel.setAlertDialog(alertDialogShower)
+      val brandedSettingsViewModel: BrandedSettingsViewModel = viewModel(factory = viewModelFactory)
+      brandedSettingsViewModel.setAlertDialog(alertDialogShower)
       SettingsScreenRoute(
-        customSettingsViewModel,
+        brandedSettingsViewModel,
         navController::popBackStack
       )
     }
     composable(CustomDestination.Downloads.route) {
       FragmentContainer(R.id.downloadFragmentContainer) {
-        CustomDownloadFragment()
+        BrandedDownloadFragment()
       }
     }
     composable(

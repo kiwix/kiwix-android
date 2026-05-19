@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 
 @Suppress("LongParameterList")
 @Composable
-fun CustomMainActivityScreen(
+fun BrandedMainActivityScreen(
   navController: NavHostController,
   leftDrawerContent: List<DrawerMenuGroup>,
   topLevelDestinationsRoute: Set<String>,
@@ -87,7 +87,7 @@ fun CustomMainActivityScreen(
           .systemBarsPadding()
       ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-          CustomNavGraph(
+          BrandedNavGraph(
             navController = navController,
             modifier = Modifier.fillMaxSize(),
             viewModelFactory = viewModelFactory,

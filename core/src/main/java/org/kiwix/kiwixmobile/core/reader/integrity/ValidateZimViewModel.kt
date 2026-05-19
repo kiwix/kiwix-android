@@ -51,7 +51,7 @@ class ValidateZimViewModel @Inject constructor(
     isCancelled = true
   }
 
-  suspend fun startValidation(list: List<BookOnDisk>, isCustomApp: Boolean) {
+  suspend fun startValidation(list: List<BookOnDisk>, isBrandedApp: Boolean) {
     isCancelled = false
     _items.value = list.map { ValidateZimItemState(it) }
 
@@ -60,7 +60,7 @@ class ValidateZimViewModel @Inject constructor(
       updateStatus(book, ValidationStatus.InProgress)
 
       val result =
-        zimIntegrityChecker.validateZIMFile(book.zimReaderSource, isCustomApp)
+        zimIntegrityChecker.validateZIMFile(book.zimReaderSource, isBrandedApp)
       if (isCancelled) return
       if (result.isValid) {
         updateStatus(book, ValidationStatus.Success)

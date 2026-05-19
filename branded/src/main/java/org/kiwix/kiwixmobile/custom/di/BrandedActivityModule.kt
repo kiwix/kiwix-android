@@ -22,4 +22,4 @@ import dagger.Module
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 
 @Module(includes = [ActivityModule::class])
-class CustomActivityModule
+class BrandedActivityModule

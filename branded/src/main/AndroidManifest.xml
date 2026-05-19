@@ -4,13 +4,13 @@
 
 
   <application
-    android:name=".CustomApp"
+    android:name=".BrandedApp"
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true">
 
     <activity
-      android:name=".main.CustomMainActivity"
+      android:name=".main.BrandedMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:theme="@style/KiwixTheme.Splash"
       android:label="@string/app_name"
@@ -48,7 +48,7 @@
       </intent-filter>
     </activity>
 
-    <receiver android:name=".main.CustomSearchWidget"
+    <receiver android:name=".main.BrandedSearchWidget"
       android:exported="true">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

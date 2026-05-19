@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
-class CustomSettingsViewModel @Inject constructor(
+class BrandedSettingsViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,
   dataSource: DataSource,

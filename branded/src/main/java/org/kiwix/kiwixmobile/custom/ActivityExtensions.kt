@@ -19,17 +19,18 @@
 package org.kiwix.kiwixmobile.custom
 
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.custom.di.CustomComponent
+import org.kiwix.kiwixmobile.custom.di.BrandedComponent
 
-private val BaseActivity.customComponent: CustomComponent
-  get() = customApp()?.customComponent ?: throw RuntimeException(
+private val BaseActivity.brandedComponent: BrandedComponent
+  get() = brandedApp()?.brandedComponent ?: throw RuntimeException(
     """
         applicationContext is ${applicationContext::class.java.simpleName}
         application is ${application::class.java.simpleName} 
     """.trimIndent()
   )
 
-private fun BaseActivity.customApp() = applicationContext as? CustomApp ?: application as? CustomApp
+private fun BaseActivity.brandedApp() =
+  applicationContext as? BrandedApp ?: application as? BrandedApp
 
-internal inline val BaseActivity.customActivityComponent
-  get() = customComponent.activityComponentBuilder().activity(this).build()
+internal inline val BaseActivity.brandedActivityComponent
+  get() = brandedComponent.activityComponentBuilder().activity(this).build()

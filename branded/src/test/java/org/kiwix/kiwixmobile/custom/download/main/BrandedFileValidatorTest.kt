@@ -32,20 +32,20 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.custom.main.CustomFileValidator
+import org.kiwix.kiwixmobile.custom.main.BrandedFileValidator
 import org.kiwix.kiwixmobile.custom.main.ValidationState
 import java.io.File
 
-class CustomFileValidatorTest {
+class BrandedFileValidatorTest {
   private lateinit var context: Context
-  private lateinit var customFileValidator: CustomFileValidator
+  private lateinit var brandedFileValidator: BrandedFileValidator
   private lateinit var assetManager: AssetManager
 
   @BeforeEach
   fun setUp() {
     context = mockk(relaxed = true)
     assetManager = mockk(relaxed = true)
-    customFileValidator = CustomFileValidator(context)
+    brandedFileValidator = BrandedFileValidator(context)
   }
 
   @Test
@@ -55,7 +55,7 @@ class CustomFileValidatorTest {
     mockZimFiles(arrayOf(obbFile), "obb")
     mockZimFiles(arrayOf(zimFile), "zim")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = {
         assertTrue(it is ValidationState.HasBothFiles)
         assertEquals(obbFile, (it as ValidationState.HasBothFiles).obbFile)
@@ -71,7 +71,7 @@ class CustomFileValidatorTest {
     mockZimFiles(arrayOf(obbFile), "obb")
     mockZimFiles(arrayOf(), "zim")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = {
         assertTrue(it is ValidationState.HasFile)
         assertEquals(obbFile, (it as ValidationState.HasFile).file)
@@ -86,7 +86,7 @@ class CustomFileValidatorTest {
     mockZimFiles(arrayOf(), "obb")
     mockZimFiles(arrayOf(zimFile), "zim")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = {
         assertTrue(it is ValidationState.HasFile)
         assertEquals(zimFile, (it as ValidationState.HasFile).file)
@@ -100,7 +100,7 @@ class CustomFileValidatorTest {
     mockZimFiles(arrayOf(), extension = "zim")
     mockZimFiles(arrayOf(), extension = "obb")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = { fail("Should not call onFilesFound") },
       onNoFilesFound = { }
     )
@@ -111,7 +111,7 @@ class CustomFileValidatorTest {
     mockZimFiles(null, "zim")
     mockZimFiles(null, "obb")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = { fail("Should not call onFilesFound") },
       onNoFilesFound = { }
     )
@@ -122,7 +122,7 @@ class CustomFileValidatorTest {
     val textFile = mockk<File>()
     mockZimFiles(arrayOf(textFile), "txt")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = { fail("Should not call onFilesFound") },
       onNoFilesFound = { }
     )
@@ -133,7 +133,7 @@ class CustomFileValidatorTest {
     val zimFile = mockk<File>()
     mockZimFiles(arrayOf(zimFile), "ZIM")
 
-    customFileValidator.validate(
+    brandedFileValidator.validate(
       onFilesFound = {
         fail("Should not call onFilesFound")
       },
@@ -150,7 +150,7 @@ class CustomFileValidatorTest {
       ).assets
     } throws PackageManager.NameNotFoundException()
 
-    val assetList = customFileValidator.getAssetFileDescriptorListFromPlayAssetDelivery()
+    val assetList = brandedFileValidator.getAssetFileDescriptorListFromPlayAssetDelivery()
 
     assertTrue(assetList.isEmpty())
   }
@@ -162,7 +162,7 @@ class CustomFileValidatorTest {
     every { assetManager.openFd(any()) } returns descriptor
     every { assetManager.list("") } returns arrayOf("chunk1.zim", "chunk2.zim")
 
-    val assetList = customFileValidator.getAssetFileDescriptorListFromPlayAssetDelivery()
+    val assetList = brandedFileValidator.getAssetFileDescriptorListFromPlayAssetDelivery()
 
     assertEquals(2, assetList.size)
     assertEquals(descriptor, assetList[0])

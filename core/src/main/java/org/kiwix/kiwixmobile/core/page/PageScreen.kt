@@ -64,7 +64,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.extensions.bottomShadow
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
@@ -165,7 +165,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
     isInSelectionMode = isInSelectionMode,
     selectedCount = selectedCount,
     switchIsCheckedFlow = switchIsCheckedFlow,
-    isCustomApp = activity.isCustomApp(),
+    isBrandedApp = activity.isBrandedApp(),
     navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
     actionMenuItems = actionMenuList(
       deleteIconTitle = deleteIconTitle,
@@ -216,7 +216,7 @@ fun <T : Page, S : PageState<T>> PageScreen(
   isInSelectionMode: Boolean,
   selectedCount: Int,
   switchIsCheckedFlow: Flow<Boolean>,
-  isCustomApp: Boolean = false,
+  isBrandedApp: Boolean = false,
   onItemClick: (Page) -> Unit,
   onItemLongClick: (Page) -> Unit,
   onSearchTextChange: (String) -> Unit,
@@ -251,7 +251,7 @@ fun <T : Page, S : PageState<T>> PageScreen(
             switchIsEnabled = !isInSelectionMode,
             switchIsCheckedFlow = switchIsCheckedFlow,
             onSwitchCheckedChange = onSwitchCheckedChange,
-            isCustomApp = isCustomApp
+            isBrandedApp = isBrandedApp
           )
         }
       }
@@ -321,10 +321,10 @@ private fun PageSwitchRow(
   switchIsEnabled: Boolean,
   switchIsCheckedFlow: Flow<Boolean>,
   onSwitchCheckedChange: (Boolean) -> Unit,
-  isCustomApp: Boolean = false
+  isBrandedApp: Boolean = false
 ) {
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
-  if (!isCustomApp) {
+  if (!isBrandedApp) {
     val isChecked by switchIsCheckedFlow.collectAsState(true)
     Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
       Row(

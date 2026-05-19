@@ -16,10 +16,38 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.main
+package org.kiwix.kiwixmobile.custom.download.effects
 
-import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
+import io.mockk.coVerify
+import io.mockk.mockk
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.sharedFunctions.libkiwixBook
 
-class CustomSearchWidget : CoreSearchWidget() {
-  override val activityKClass = CustomMainActivity::class
+internal class DownloadBrandedTest {
+  @Test
+  fun `invokeWith queues download with ZimUrl`() {
+    val downloader = mockk<Downloader>()
+    DownloadBranded(downloader).invokeWith(mockk())
+    coVerify {
+      downloader.download(expectedBook())
+    }
+  }
+
+  private fun expectedBook() =
+    libkiwixBook(
+      "custom",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    )
 }

@@ -47,11 +47,11 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
-import org.kiwix.kiwixmobile.custom.CustomApp
+import org.kiwix.kiwixmobile.custom.BrandedApp
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.brandedActivityComponent
 
-class CustomMainActivity : CoreMainActivity() {
+class BrandedMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
@@ -62,12 +62,12 @@ class CustomMainActivity : CoreMainActivity() {
   override val historyFragmentRoute: String = CustomDestination.History.route
   override val notesFragmentRoute: String = CustomDestination.Notes.route
   override val helpFragmentRoute: String = CustomDestination.Help.route
-  override val cachedComponent by lazy { customActivityComponent }
+  override val cachedComponent by lazy { brandedActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 
   @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
-    customActivityComponent.inject(this)
+    brandedActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContent {
       navController = rememberNavController()
@@ -75,7 +75,7 @@ class CustomMainActivity : CoreMainActivity() {
       uiCoroutineScope = rememberCoroutineScope()
       RestoreDrawerStateOnOrientationChange()
       PersistDrawerStateOnChange()
-      CustomMainActivityScreen(
+      BrandedMainActivityScreen(
         navController = navController,
         leftDrawerContent = leftDrawerMenu,
         topLevelDestinationsRoute = topLevelDestinationsRoute,
@@ -94,7 +94,7 @@ class CustomMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(Dispatchers.IO).launch {
-      (applicationContext as CustomApp).customComponent
+      (applicationContext as BrandedApp).brandedComponent
         .provideObjectBoxDataMigrationHandler()
         .migrate()
     }
@@ -204,7 +204,7 @@ class CustomMainActivity : CoreMainActivity() {
       .setIcon(createShortcutIcon(drawable.ic_add_blue_24dp))
       .setDisabledMessage(getString(string.shortcut_disabled_message))
       .setIntent(
-        Intent(this, CustomMainActivity::class.java).apply {
+        Intent(this, BrandedMainActivity::class.java).apply {
           action = ACTION_NEW_TAB
         }
       )
