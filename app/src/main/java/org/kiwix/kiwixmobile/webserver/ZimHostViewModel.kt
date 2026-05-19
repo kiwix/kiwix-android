@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +35,10 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
 import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
@@ -54,12 +58,15 @@ import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StartServer
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StopServer
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class ZimHostViewModel @Inject constructor(
   private val context: Application,
   private val dataSource: DataSource,
   private val kiwixDataStore: KiwixDataStore,
   private val generateQr: GenerateQR,
-  private val connectivityReporter: ConnectivityReporter
+  private val connectivityReporter: ConnectivityReporter,
+  private val zimReaderContainer: ZimReaderContainer,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(), ZimHostCallbacks {
   data class UiState(
     @StringRes val startServerButtonTextRes: Int = string.start_server_label,
@@ -90,28 +97,15 @@ class ZimHostViewModel @Inject constructor(
   private val _events = MutableSharedFlow<Event>(extraBufferCapacity = Int.MAX_VALUE)
   val events = _events.asSharedFlow()
 
-  fun loadBooks() {
-    viewModelScope.launch {
+  fun loadBooks(isCustomApp: Boolean) {
+    viewModelScope.launch(ioDispatcher) {
       val previouslyHostedBookIds = kiwixDataStore.hostedBookIds.first()
       val isPlayStore = kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
       val books = dataSource.getLanguageCategorizedBooks().first()
-      books.forEach { item ->
-        if (item is BookOnDisk) {
-          item.isSelected = when {
-            // Hosted books are now saved using the unique book ID.
-            previouslyHostedBookIds.contains(item.book.id) -> true
-            // Backward compatibility: for users who have not been migrated to the new logic yet,
-            // fall back to checking only the title.
-            previouslyHostedBookIds.contains(item.book.title) -> true
-            // If no previously hosted books are saved, select all books by default.
-            previouslyHostedBookIds.isEmpty() -> true
-            else -> false
-          }
-        }
-      }
-
+      val zimFileReader = zimReaderContainer.zimFileReader
+      val processedBooks = processBooks(books, previouslyHostedBookIds, isCustomApp, zimFileReader)
       _uiState.update {
-        it.copy(books = books, isPlayStoreBuildWithAndroid11OrAbove = isPlayStore)
+        it.copy(books = processedBooks, isPlayStoreBuildWithAndroid11OrAbove = isPlayStore)
       }
 
       if (ServerUtils.isServerStarted) {
@@ -122,7 +116,48 @@ class ZimHostViewModel @Inject constructor(
     }
   }
 
-  fun onButtonClicked() {
+  private fun processBooks(
+    bookItems: List<BooksOnDiskListItem>,
+    hostedIds: Set<String>,
+    isCustomApp: Boolean,
+    zimFileReader: ZimFileReader?
+  ): List<BooksOnDiskListItem> {
+    return if (isCustomApp && zimFileReader != null) {
+      bookItems.mapNotNull { item ->
+        if (item is BookOnDisk) {
+          BookOnDisk(zimFileReader, isSelected = true)
+        } else {
+          null
+        }
+      }
+    } else {
+      bookItems.map { item ->
+        if (item is BookOnDisk) {
+          item.copy(isSelected = shouldSelectBook(item, hostedIds))
+        } else {
+          item
+        }
+      }
+    }
+  }
+
+  private fun shouldSelectBook(
+    book: BookOnDisk,
+    previouslyHostedBookIds: Set<String>
+  ): Boolean {
+    return when {
+      // Hosted books are now saved using the unique book ID.
+      previouslyHostedBookIds.contains(book.book.id) -> true
+      // Backward compatibility: for users who have not been migrated to the new logic yet,
+      // fall back to checking only the title.
+      previouslyHostedBookIds.contains(book.book.title) -> true
+      // If no previously hosted books are saved, select all books by default.
+      previouslyHostedBookIds.isEmpty() -> true
+      else -> false
+    }
+  }
+
+  fun startServerButtonClick() {
     viewModelScope.launch {
       if (ServerUtils.isServerStarted) {
         sendEvent(StopServer)
@@ -144,20 +179,17 @@ class ZimHostViewModel @Inject constructor(
   }
 
   fun onBookSelected(book: BookOnDisk) {
-    val tempBooksList: List<BooksOnDiskListItem> = uiState.value.books.onEach {
-      if (it == book) {
-        it.isSelected = !it.isSelected
+    val updatedBooks = uiState.value.books.map { item ->
+      if (item is BookOnDisk && item == book) {
+        item.copy(isSelected = !item.isSelected)
+      } else {
+        item
       }
-      it
     }
-    // Force recomposition by first setting an empty list before assigning the updated list.
-    // This is necessary because modifying an object's property doesn't trigger recomposition,
-    // as Compose still considers the list unchanged.
-    _uiState.update { it.copy(books = emptyList()) }
-    _uiState.update { it.copy(books = tempBooksList) }
+    _uiState.update { it.copy(books = updatedBooks) }
 
     viewModelScope.launch {
-      saveHostedBooks(tempBooksList)
+      saveHostedBooks(updatedBooks)
       if (ServerUtils.isServerStarted) {
         sendEvent(StartServer(selectedBooksPath(uiState.value.books), true))
       }
@@ -174,8 +206,8 @@ class ZimHostViewModel @Inject constructor(
 
   private suspend fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
     val hostedBooks = booksList.asSequence()
-      .filter(BooksOnDiskListItem::isSelected)
       .filterIsInstance<BookOnDisk>()
+      .filter(BookOnDisk::isSelected)
       .map { it.book.id }
       .toSet()
     kiwixDataStore.setHostedBookIds(hostedBooks)

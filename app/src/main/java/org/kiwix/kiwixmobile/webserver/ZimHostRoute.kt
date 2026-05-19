@@ -89,7 +89,7 @@ fun ZimHostRoute(
 
   LaunchedEffect(lifecycleOwner) {
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-      viewModel.loadBooks()
+      viewModel.loadBooks(activity.isCustomApp())
     }
   }
   CollectZimHostEvents(lifecycleOwner, viewModel, activity, alertDialogShower)
@@ -256,6 +256,8 @@ private fun handleManualHotspotDialog(
     KiwixDialog.StartHotspotManually,
     {
       runCatching {
+        // Try to open the device's dedicated hotspot/tethering screen.
+        // Most AOSP-based devices support this explicit Settings component.
         context.startActivity(
           Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(
@@ -265,6 +267,8 @@ private fun handleManualHotspotDialog(
           }
         )
       }.onFailure {
+        // Some OEMs remove or rename the tethering activity, so the direct intent may fail.
+        // As a fallback, open the Wireless settings screen—this reliably contains the Hotspot option.
         context.startActivity(
           Intent(Settings.ACTION_WIRELESS_SETTINGS)
         )
@@ -307,7 +311,7 @@ private fun handlePermissionsAndStart(
 
   // Handles Play Store
   if (uiState.isPlayStoreBuildWithAndroid11OrAbove) {
-    viewModel.onButtonClicked()
+    viewModel.startServerButtonClick()
     return
   }
 
@@ -346,5 +350,5 @@ private fun handlePermissionsAndStart(
     }
   }
 
-  viewModel.onButtonClicked()
+  viewModel.startServerButtonClick()
 }
