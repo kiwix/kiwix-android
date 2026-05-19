@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import org.kiwix.kiwixmobile.R as AppR
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -82,83 +83,99 @@ class ObserveOnlineLibraryItems @Inject constructor(
     getString: (Int, Array<Any>) -> String,
     getSimpleString: (Int) -> String
   ): List<LibraryListItem> {
-    val allBooks =
-      remoteBooks - booksOnFileSystem.map { LibkiwixBook(it) }.toSet()
+    val localBookIds = booksOnFileSystem.map { it.id }.toSet()
+    val activeDownloadsById = activeDownloads.associateBy { it.book.id }
+    val activeDownloadingIds = activeDownloadsById.keys
 
-    val downloadingBooks =
-      activeDownloads.map { download ->
-        allBooks.firstOrNull { it.id == download.book.id } ?: download.book
-      }
-
-    val filteredBooks = allBooks - downloadingBooks.toSet()
-
-    val sectionTitle = buildString {
-      val languagePart = when {
-        selection.language.isBlank() -> getSimpleString(R.string.all_languages)
-        selection.language.contains(",") -> {
-          val joinedLanguages = selection.language.split(",")
-            .joinToString(", ") { it.trim().convertToLocal().displayLanguage }
-          "${getSimpleString(R.string.your_languages)} $joinedLanguages"
-        }
-
-        else -> getString(
-          R.string.your_language,
-          arrayOf(selection.language.convertToLocal().displayLanguage)
+    val allBooks = remoteBooks.filterNot { it.id in localBookIds }
+    val allBooksById = allBooks.associateBy { it.id }
+    val downloadingBooks = activeDownloads.map { download ->
+      allBooksById[download.book.id] ?: download.book
+    }
+    val availableBooks = allBooks.filterNot { it.id in activeDownloadingIds }
+    val sectionTitle = buildSectionTitle(selection, getString, getSimpleString)
+    return buildList {
+      addAll(
+        createLibrarySection(
+          downloadingBooks,
+          activeDownloadsById,
+          fileSystemState,
+          getSimpleString(R.string.downloading),
+          Long.MAX_VALUE
         )
-      }
-      append(languagePart)
-
-      val categoryPart = when {
-        selection.category.isBlank() -> getSimpleString(R.string.all_categories)
-        selection.category.contains(",") -> {
-          val joinedCategories = selection.category.split(",")
-            .joinToString(", ") { it.trim() }
-          "${getSimpleString(R.string.your_categories)} $joinedCategories"
-        }
-
-        else -> getString(
-          R.string.your_category,
-          arrayOf(selection.category.trim())
-        )
-      }
-      append("\n")
-      append(categoryPart)
-    }.toString()
-
-    return createLibrarySection(
-      downloadingBooks,
-      activeDownloads,
-      fileSystemState,
-      getSimpleString(R.string.downloading),
-      Long.MAX_VALUE
-    ) +
-      createLibrarySection(
-        filteredBooks,
-        emptyList(),
-        fileSystemState,
-        sectionTitle,
-        Long.MIN_VALUE
       )
+
+      addAll(
+        createLibrarySection(
+          availableBooks,
+          emptyMap(),
+          fileSystemState,
+          sectionTitle,
+          Long.MIN_VALUE
+        )
+      )
+    }
+  }
+
+  private fun buildSectionTitle(
+    selection: Selection,
+    getString: (Int, Array<Any>) -> String,
+    getSimpleString: (Int) -> String
+  ): String {
+    val languages = selection.language.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    val categories = selection.category.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+
+    val languagePart = when {
+      languages.isEmpty() -> getSimpleString(R.string.all_languages)
+      languages.size > 1 -> {
+        val joined = languages.joinToString(", ") {
+          it.convertToLocal().displayLanguage
+        }
+        "${getSimpleString(R.string.your_languages)} $joined"
+      }
+
+      else -> getString(
+        R.string.your_language,
+        arrayOf(languages.first().convertToLocal().displayLanguage)
+      )
+    }
+
+    val categoryPart = when {
+      categories.isEmpty() -> getSimpleString(AppR.string.all_categories)
+      categories.size > 1 -> {
+        val joined = categories.joinToString(", ")
+        "${getSimpleString(AppR.string.your_categories)} $joined"
+      }
+
+      else -> getString(
+        AppR.string.your_category,
+        arrayOf(categories.first())
+      )
+    }
+
+    return "$languagePart\n$categoryPart"
   }
 
   private fun createLibrarySection(
     books: List<LibkiwixBook>,
-    activeDownloads: List<DownloadModel>,
+    downloadsById: Map<String, DownloadModel>,
     fileSystemState: FileSystemState,
     sectionTitle: String,
     sectionId: Long
-  ) = if (books.isNotEmpty()) {
-    listOf(DividerItem(sectionId, sectionTitle)) +
-      books.asLibraryItems(activeDownloads, fileSystemState)
-  } else {
-    emptyList()
+  ): List<LibraryListItem> {
+    if (books.isEmpty()) return emptyList()
+
+    return buildList {
+      add(DividerItem(sectionId, sectionTitle))
+      addAll(books.asLibraryItems(downloadsById, fileSystemState))
+    }
   }
 
   private fun List<LibkiwixBook>.asLibraryItems(
-    activeDownloads: List<DownloadModel>,
+    downloadsById: Map<String, DownloadModel>,
     fileSystemState: FileSystemState
   ) = map { book ->
-    activeDownloads.firstOrNull { download -> download.book == book }
+    downloadsById[book.id]
       ?.let(::LibraryDownloadItem)
       ?: BookItem(book, fileSystemState)
   }
