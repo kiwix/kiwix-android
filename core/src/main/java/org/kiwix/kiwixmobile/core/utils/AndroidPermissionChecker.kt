@@ -78,9 +78,6 @@ class AndroidPermissionChecker @Inject constructor(
     !isAndroid13orAbove() &&
       !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
 
-  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
-  override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
   override fun isAndroid8OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
@@ -91,6 +88,8 @@ class AndroidPermissionChecker @Inject constructor(
       true
     }
 
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
+  override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
   override suspend fun isManageExternalStoragePermissionGranted(): Boolean =
     if (kiwixDataStore.isNotPlayStoreBuildWithAndroid11OrAbove() &&
       !kiwixDataStore.prefIsTest.first() &&

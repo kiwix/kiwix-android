@@ -87,6 +87,7 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
+import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
 @Suppress("LongMethod")
 @Composable
@@ -183,7 +184,9 @@ fun KiwixNavGraph(
       KiwixDestination.ZimHost.route,
       deepLinks = listOf(navDeepLink { uriPattern = ZIM_HOST_NAV_DEEP_LINK })
     ) {
-      ZimHostRoute(viewModelFactory, alertDialogShower)
+      val activity = LocalActivity.current as KiwixMainActivity
+      val viewModel: ZimHostViewModel = viewModel(factory = viewModelFactory)
+      ZimHostRoute(viewModel, alertDialogShower, activity)
     }
     composable(KiwixDestination.Help.route) {
       val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)
