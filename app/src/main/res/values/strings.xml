@@ -23,4 +23,6 @@
     <item quantity="one">and %d more</item>
     <item quantity="other">and %d more</item>
   </plurals>
+  <string name="your_categories" tools:keep="@string/your_categories">Selected categories:</string>
+  <string name="your_category" tools:keep="@string/your_category">Selected category: %s</string>
 </resources>

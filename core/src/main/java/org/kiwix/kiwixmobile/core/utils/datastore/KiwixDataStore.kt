@@ -261,14 +261,15 @@ class KiwixDataStore @Inject constructor(
   val cachedLanguageList: Flow<List<Language>?> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.CACHED_LANGUAGE_CODES]?.let { jsonString ->
+        val selectedLanguages =
+          selectedOnlineContentLanguage.first().split(",").filter { it.isNotEmpty() }.toSet()
         val jsonArray = JSONArray(jsonString)
         List(jsonArray.length()) { i ->
           val obj = jsonArray.getJSONObject(i)
-          val selectedLanguages = selectedOnlineContentLanguage.first().split(",").filter { it.isNotEmpty() }
           Language(
             languageCode = obj.getString(KEY_LANGUAGE_CODE),
             occurrencesOfLanguage = obj.getInt(KEY_OCCURRENCES_OF_LANGUAGE),
-            active = selectedLanguages.contains(obj.getString(KEY_LANGUAGE_CODE)),
+            active = obj.getString(KEY_LANGUAGE_CODE) in selectedLanguages,
             id = obj.getLong(KEY_LANGUAGE_ID)
           )
         }
@@ -559,13 +560,14 @@ class KiwixDataStore @Inject constructor(
   val cachedOnlineCategoryList: Flow<List<Category>?> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.CACHED_ONLINE_CATEGORIES]?.let { jsonString ->
+        val selectedCategories =
+          selectedOnlineContentCategory.first().split(",").filter { it.isNotEmpty() }.toSet()
         val jsonArray = JSONArray(jsonString)
         List(jsonArray.length()) { i ->
           val obj = jsonArray.getJSONObject(i)
-          val selectedCategories = selectedOnlineContentCategory.first().split(",").filter { it.isNotEmpty() }
           Category(
             category = obj.getString(KEY_ONLINE_CATEGORY_NAME),
-            active = selectedCategories.contains(obj.getString(KEY_ONLINE_CATEGORY_NAME)),
+            active = obj.getString(KEY_ONLINE_CATEGORY_NAME) in selectedCategories,
             id = obj.getLong(KEY_ONLINE_CATEGORY_ID)
           )
         }

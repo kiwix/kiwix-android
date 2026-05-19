@@ -82,8 +82,6 @@ class CategoryViewModel @Inject constructor(
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private var onDismiss: (() -> Unit)? = null
 
-  @VisibleForTesting
-  var isUnitTestCase: Boolean = isTest
   private val coroutineJobs = mutableListOf<Job>()
 
   fun setOnDismissCallback(onDismiss: () -> Unit) {
@@ -111,15 +109,17 @@ class CategoryViewModel @Inject constructor(
     val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
     if (CategorySessionCache.hasFetched && !cachedCategoryList.isNullOrEmpty()) {
-      val selectedCategories = kiwixDataStore.selectedOnlineContentCategory.first()
+      val selectedCategoriesSet = kiwixDataStore.selectedOnlineContentCategory.first()
         .split(",")
+        .asSequence()
         .filter { it.isNotEmpty() }
+        .toSet()
       val updatedCategories = cachedCategoryList.map { category ->
         category.copy(
           active = if (category.id == 0L) {
-            selectedCategories.isEmpty()
+            selectedCategoriesSet.isEmpty()
           } else {
-            selectedCategories.contains(category.category)
+            category.category in selectedCategoriesSet
           }
         )
       }
@@ -159,14 +159,16 @@ class CategoryViewModel @Inject constructor(
   @Suppress("MagicNumber")
   private fun fetchCategoriesFlow() = flow {
     val feed = kiwixService.getCategories()
-
+    val selectedCategoriesRaw = kiwixDataStore.selectedOnlineContentCategory.first()
+    val selectedCategories = selectedCategoriesRaw
+      .split(",")
+      .asSequence()
+      .filter { it.isNotEmpty() }
+      .toSet()
     val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
       Category(
         category = entry.title,
-        active = kiwixDataStore.selectedOnlineContentCategory.first()
-          .split(",")
-          .filter { it.isNotEmpty() }
-          .contains(entry.title),
+        active = entry.title in selectedCategories,
         id = (index + ONE).toLong()
       )
     }
@@ -178,7 +180,7 @@ class CategoryViewModel @Inject constructor(
           add(
             Category(
               category = "",
-              active = kiwixDataStore.selectedOnlineContentCategory.first().isEmpty(),
+              active = selectedCategoriesRaw.isEmpty(),
               id = ZERO.toLong()
             )
           )
@@ -289,11 +291,6 @@ class CategoryViewModel @Inject constructor(
     context.unregisterReceiver(connectivityBroadcastReceiver)
     onDismiss = null
     super.onCleared()
-  }
-
-  companion object {
-    @VisibleForTesting
-    var isTest: Boolean = false
   }
 }
 
