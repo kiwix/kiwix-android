@@ -92,6 +92,7 @@ class ObserveOnlineLibraryItemsTest {
   fun `emits books in main section when no downloads`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
@@ -112,6 +113,7 @@ class ObserveOnlineLibraryItemsTest {
 
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(listOf(local)),
@@ -131,6 +133,7 @@ class ObserveOnlineLibraryItemsTest {
 
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
@@ -150,6 +153,7 @@ class ObserveOnlineLibraryItemsTest {
 
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
@@ -168,6 +172,7 @@ class ObserveOnlineLibraryItemsTest {
   fun `uses language specific title when language selected`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("en")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
@@ -186,6 +191,7 @@ class ObserveOnlineLibraryItemsTest {
   fun `no section added when no books`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
