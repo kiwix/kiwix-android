@@ -35,7 +35,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.TestApplication
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
@@ -50,6 +49,7 @@ import org.kiwix.kiwixmobile.language.composables.LANGUAGE_HEADER_TESTING_TAG
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
