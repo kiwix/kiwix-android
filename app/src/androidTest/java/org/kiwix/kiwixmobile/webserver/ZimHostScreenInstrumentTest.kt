@@ -256,7 +256,7 @@ class ZimHostScreenInstrumentTest {
     val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), zimFileName) }
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
-    loadFileStream?.use { inputStream ->
+    loadFileStream.use { inputStream ->
       val outputStream: OutputStream = FileOutputStream(zimFile)
       outputStream.use { it ->
         val buffer = ByteArray(inputStream.available())

@@ -53,7 +53,7 @@ class ZimHostScreenTest {
 
   private val context get() = RuntimeEnvironment.getApplication()
 
-  private fun fakeBookOnDisk(
+  private fun bookOnDisk(
     title: String = "Test Book",
     id: String = "book-id-1",
     isSelected: Boolean = false
@@ -224,7 +224,7 @@ class ZimHostScreenTest {
 
   @Test
   fun zimHostScreen_whenBooksList_displaysBookTitle() {
-    val book = fakeBookOnDisk(title = "Wikipedia EN")
+    val book = bookOnDisk(title = "Wikipedia EN")
     renderZimHostScreen(booksList = listOf(book))
     composeTestRule
       .onNodeWithText("Wikipedia EN")
@@ -234,8 +234,8 @@ class ZimHostScreenTest {
   @Test
   fun zimHostScreen_whenBooksList_displaysMultipleBooks() {
     val books = listOf(
-      fakeBookOnDisk(title = "Wikipedia EN", id = "id-1"),
-      fakeBookOnDisk(title = "Wiktionary FR", id = "id-2")
+      bookOnDisk(title = "Wikipedia EN", id = "id-1"),
+      bookOnDisk(title = "Wiktionary FR", id = "id-2")
     )
     renderZimHostScreen(booksList = books)
     composeTestRule.onNodeWithText("Wikipedia EN").assertIsDisplayed()
@@ -253,7 +253,7 @@ class ZimHostScreenTest {
   @Test
   fun zimHostScreen_whenBookItem_triggersOnClickCallback() {
     var clickedBook: BookOnDisk? = null
-    val book = fakeBookOnDisk(title = "Wikipedia EN")
+    val book = bookOnDisk(title = "Wikipedia EN")
     renderZimHostScreen(
       booksList = listOf(book),
       onClick = { clickedBook = it }
