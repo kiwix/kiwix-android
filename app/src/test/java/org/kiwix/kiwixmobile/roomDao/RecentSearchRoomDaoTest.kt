@@ -29,13 +29,14 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.TestApplication
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.R], application = android.app.Application::class)
+@Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class RecentSearchRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao

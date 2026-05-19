@@ -45,9 +45,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
-import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -585,4 +584,52 @@ class ObjectBoxToRoomMigratorTest {
       assertTrue(dataStore.isHistoryMigrated.first())
       assertTrue(dataStore.isNotesMigrated.first())
     }
+
+  private fun getHistoryItem(
+    title: String = "Installation",
+    historyUrl: String = "https://kiwix.app/A/Installation",
+    dateString: String = "30 May 2024",
+    databaseId: Long = 0L,
+    zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
+    zimName: String = "alpinelinux_en_all",
+    zimReaderSource: ZimReaderSource =
+      ZimReaderSource(
+        File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
+      ),
+    timeStamp: Long = System.currentTimeMillis()
+  ): HistoryListItem.HistoryItem =
+    HistoryListItem.HistoryItem(
+      databaseId = databaseId,
+      zimId = zimId,
+      zimName = zimName,
+      historyUrl = historyUrl,
+      title = title,
+      zimReaderSource = zimReaderSource,
+      favicon = null,
+      dateString = dateString,
+      timeStamp = timeStamp
+    )
+
+  private fun getNoteListItem(
+    databaseId: Long = 0L,
+    zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
+    title: String = "Alpine Wiki",
+    zimReaderSource: ZimReaderSource =
+      ZimReaderSource(
+        File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
+      ),
+    zimUrl: String,
+    noteFilePath: String =
+      "/storage/emulated/0/Download/Notes/Alpine linux/AlpineNote.txt"
+  ): NoteListItem =
+    NoteListItem(
+      databaseId = databaseId,
+      zimId = zimId,
+      title = title,
+      zimReaderSource = zimReaderSource,
+      zimUrl = zimUrl,
+      noteFilePath = noteFilePath,
+      null,
+      false
+    )
 }
