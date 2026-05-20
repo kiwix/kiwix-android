@@ -80,6 +80,15 @@ class RateDialogHandler @Inject constructor(
    */
   @Suppress("TooGenericExceptionCaught")
   internal fun launchInAppReviewFlow() {
+    val isTesting = try {
+      kotlinx.coroutines.runBlocking { kiwixDataStore.prefIsTest.first() }
+    } catch (e: Exception) {
+      false
+    }
+    if (isTesting) {
+      Log.i(TAG, "Skipping In-App Review flow during testing.")
+      return
+    }
     try {
       val reviewManager = ReviewManagerFactory.create(activity)
       val requestFlow = reviewManager.requestReviewFlow()
