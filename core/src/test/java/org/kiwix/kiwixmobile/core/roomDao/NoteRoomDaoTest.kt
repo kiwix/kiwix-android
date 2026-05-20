@@ -60,6 +60,7 @@ class NoteRoomDaoTest {
   }
 
   @Test
+  @Suppress("LongMethod")
   fun testNotesRoomDao() =
     runBlocking {
       clearNotes()
