@@ -187,6 +187,7 @@ class LibKiwixBookTest {
     }
 
     @Test
+    @Suppress("EqualsNullCall")
     fun libkiwix_whenComparedWithNull_returnsFalse() = runTest {
       val book = LibkiwixBook().apply { id = "A" }
 

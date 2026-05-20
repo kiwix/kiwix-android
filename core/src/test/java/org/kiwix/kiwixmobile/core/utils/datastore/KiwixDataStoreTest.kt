@@ -44,6 +44,7 @@ import java.util.Locale
 @Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
+@Suppress("LargeClass")
 class KiwixDataStoreTest {
   private lateinit var context: Context
   private lateinit var kiwixDataStore: KiwixDataStore
