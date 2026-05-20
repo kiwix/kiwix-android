@@ -68,6 +68,7 @@ class NoteRoomDaoTest {
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
+  @Suppress("LongMethod")
   fun testNotesRoomDao() =
     runTest(mainDispatcherRule.dispatcher) {
       clearNotes()
