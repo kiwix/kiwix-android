@@ -55,5 +55,23 @@ class StateTest {
         )
       )
     }
+
+    @Test
+    fun `select updates category items in-place without resorting`() {
+      val cat1 = category(id = 1L, category = "wikipedia", isActive = false)
+      val cat2 = category(id = 2L, category = "gutenberg", isActive = false)
+      val content = Content(listOf(cat1, cat2))
+
+      val initialOrder = content.viewItems
+      assertThat(initialOrder).hasSize(3) // 1 header (OTHER) + 2 categories
+
+      val selectedWikiItem = CategoryItem(cat1)
+      val updatedContent = content.select(selectedWikiItem)
+
+      assertThat(updatedContent.viewItems).hasSize(3)
+      assertThat(updatedContent.viewItems[0]).isEqualTo(HeaderItem(HeaderItem.OTHER))
+      assertThat((updatedContent.viewItems[1] as CategoryItem).category.active).isTrue()
+      assertThat((updatedContent.viewItems[2] as CategoryItem).category.active).isFalse()
+    }
   }
 }
