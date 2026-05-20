@@ -124,7 +124,9 @@ private fun CategoryList(
 ) {
   val viewItem = (state as Content).viewItems
 
-  LazyColumn {
+  LazyColumn(
+    modifier = Modifier.semantics { testTag = "category_list" }
+  ) {
     items(
       items = viewItem,
       key = { item ->
