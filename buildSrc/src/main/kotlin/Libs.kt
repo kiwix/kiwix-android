@@ -378,6 +378,6 @@ object Libs {
   /**
    * https://developer.android.com/guide/playcore/in-app-review
    */
-  const val PLAY_REVIEW_KTX: String =
-    "com.google.android.play:review-ktx:" + Versions.PLAY_REVIEW
+  const val PLAYSTORE_REVIEW_KTX: String =
+    "com.google.android.play:review-ktx:" + Versions.PLAYSTORE_REVIEW
 }

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2026 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,7 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.BuildConfig
+
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
@@ -114,7 +114,7 @@ class RateDialogHandler @Inject constructor(
     return isPlayStoreVariant() &&
       tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
       visitCounterPref?.noThanksState == false && isTwoWeekPassed() &&
-      isZimFilesAvailableInLibrary() && !BuildConfig.DEBUG
+      isZimFilesAvailableInLibrary()
   }
 
   /**

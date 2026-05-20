@@ -336,10 +336,12 @@ internal fun SettingsScreen(
 
 @Composable
 private fun RatingCategory(coreSettingsViewModel: CoreSettingsViewModel) {
+  val activity = LocalActivity.current as? CoreMainActivity
+  val appName = activity?.appName ?: ""
   SettingsCategory(stringResource(R.string.pref_rating_category_title)) {
     PreferenceItem(
-      stringResource(R.string.pref_rate_app_title),
-      stringResource(R.string.pref_rate_app_summary)
+      stringResource(R.string.pref_rate_app_title, appName),
+      stringResource(R.string.pref_rate_app_summary, appName)
     ) { coreSettingsViewModel.sendAction(Action.RateApp) }
   }
 }

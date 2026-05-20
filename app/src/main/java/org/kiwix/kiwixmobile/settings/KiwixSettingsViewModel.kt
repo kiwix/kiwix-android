@@ -102,7 +102,7 @@ class KiwixSettingsViewModel @Inject constructor(
   }
 
   override suspend fun showRatingCategory() {
-    if (org.kiwix.kiwixmobile.BuildConfig.DEBUG || kiwixDataStore.isPlayStoreBuild.first()) {
+    if (kiwixDataStore.isPlayStoreBuild.first()) {
       settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
     }
   }

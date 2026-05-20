@@ -18,11 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.utils.dialog
 
-import android.app.Activity
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,12 +38,17 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInform
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import io.mockk.every
 import io.mockk.coEvery
+import io.mockk.mockkConstructor
+import io.mockk.verify
+import androidx.lifecycle.lifecycleScope
 
 @ExperimentalCoroutinesApi
 class RateDialogHandlerTest {
-  private lateinit var activity: Activity
+  private lateinit var activity: CoreMainActivity
   private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
   private lateinit var rateDialogHandler: RateDialogHandler
@@ -56,10 +61,19 @@ class RateDialogHandlerTest {
     every { activity.packageManager } returns packageManager
     every { activity.packageName } returns "org.kiwix.kiwixmobile"
     kiwixDataStore = mockk(relaxed = true)
+    coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(true)
     libkiwixBookOnDisk = mockk(relaxed = true)
     rateDialogHandler =
       RateDialogHandler(activity, libkiwixBookOnDisk, kiwixDataStore)
     mockkObject(CompatHelper.Companion)
+    mockkConstructor(RateAppCounter::class)
+    mockkObject(NetworkUtils)
+    every { NetworkUtils.isNetworkAvailable(any()) } returns true
+
+    mockkStatic("androidx.lifecycle.LifecycleOwnerKt")
+    val mockLifecycleScope = mockk<androidx.lifecycle.LifecycleCoroutineScope>(relaxed = true)
+    every { mockLifecycleScope.coroutineContext } returns kotlin.coroutines.EmptyCoroutineContext
+    every { activity.lifecycleScope } returns mockLifecycleScope
   }
 
   @AfterEach
@@ -80,9 +94,100 @@ class RateDialogHandlerTest {
     // Standalone variant should never show the rate dialog since there is
     // no Play Store listing for the .standalone package.
     coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+    every { activity.packageName } returns "org.kiwix.kiwixmobile.standalone"
     rateDialogHandler = spyk(rateDialogHandler)
     val result = rateDialogHandler.shouldShowRateDialog()
     assertFalse(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns true when all conditions are met`() = runTest {
+    every { anyConstructed<RateAppCounter>().count } returns 19
+    every { anyConstructed<RateAppCounter>().noThanksState } returns false
+
+    rateDialogHandler = spyk(rateDialogHandler)
+    coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
+    every { rateDialogHandler.isTwoWeekPassed() } returns true
+    coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
+
+    rateDialogHandler.checkForRateDialog(0)
+
+    val result = rateDialogHandler.shouldShowRateDialog()
+    assertTrue(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns false when visit count is less than 20`() = runTest {
+    every { anyConstructed<RateAppCounter>().count } returns 18 // Increments to 19 (less than 20)
+    every { anyConstructed<RateAppCounter>().noThanksState } returns false
+
+    rateDialogHandler = spyk(rateDialogHandler)
+    coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
+    every { rateDialogHandler.isTwoWeekPassed() } returns true
+    coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
+
+    rateDialogHandler.checkForRateDialog(0)
+
+    val result = rateDialogHandler.shouldShowRateDialog()
+    assertFalse(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns false when noThanksState is true`() = runTest {
+    every { anyConstructed<RateAppCounter>().count } returns 19
+    every { anyConstructed<RateAppCounter>().noThanksState } returns true
+
+    rateDialogHandler = spyk(rateDialogHandler)
+    coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
+    every { rateDialogHandler.isTwoWeekPassed() } returns true
+    coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
+
+    rateDialogHandler.checkForRateDialog(0)
+
+    val result = rateDialogHandler.shouldShowRateDialog()
+    assertFalse(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns false when two weeks have not passed`() = runTest {
+    every { anyConstructed<RateAppCounter>().count } returns 19
+    every { anyConstructed<RateAppCounter>().noThanksState } returns false
+
+    rateDialogHandler = spyk(rateDialogHandler)
+    coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
+    every { rateDialogHandler.isTwoWeekPassed() } returns false
+    coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
+
+    rateDialogHandler.checkForRateDialog(0)
+
+    val result = rateDialogHandler.shouldShowRateDialog()
+    assertFalse(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns false when no zim files are available`() = runTest {
+    every { anyConstructed<RateAppCounter>().count } returns 19
+    every { anyConstructed<RateAppCounter>().noThanksState } returns false
+
+    rateDialogHandler = spyk(rateDialogHandler)
+    coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
+    every { rateDialogHandler.isTwoWeekPassed() } returns true
+    coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns false
+
+    rateDialogHandler.checkForRateDialog(0)
+
+    val result = rateDialogHandler.shouldShowRateDialog()
+    assertFalse(result)
+  }
+
+  @Test
+  fun `checkForRateDialog increments visit count`() = runTest {
+    every { anyConstructed<RateAppCounter>().count } returns 5
+    every { anyConstructed<RateAppCounter>().noThanksState } returns false
+
+    rateDialogHandler.checkForRateDialog(0)
+
+    verify { anyConstructed<RateAppCounter>().count = 6 }
   }
 
   @Test

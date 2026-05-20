@@ -98,13 +98,6 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
       clickCredits(composeTestRule)
       assertContributorsDialogDisplayed(composeTestRule)
       dismissDialog()
-    }
-    LeakAssertions.assertNoLeaks()
-  }
-
-  @Test
-  fun testRateAppPreference() {
-    settingsRobo {
       clickRateAppPreference(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()

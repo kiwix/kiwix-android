@@ -114,8 +114,8 @@
   <string name="rate_dialog_positive">Rate!</string>
   <string name="no_thanks">No, thanks</string>
   <string name="rate_dialog_neutral">Later</string>
-  <string name="pref_rate_app_title">Rate App</string>
-  <string name="pref_rate_app_summary">Rate Kiwix on the Play Store</string>
+  <string name="pref_rate_app_title">Rate %s</string>
+  <string name="pref_rate_app_summary">Rate %s on the Play Store</string>
   <string name="pref_rating_category_title">App Rating</string>
   <string name="open">Open</string>
   <string name="bookmark_removed">Bookmark removed</string>

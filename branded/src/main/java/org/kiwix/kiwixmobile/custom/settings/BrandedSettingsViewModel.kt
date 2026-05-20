@@ -84,10 +84,6 @@ class BrandedSettingsViewModel @Inject constructor(
   }
 
   override suspend fun showRatingCategory() {
-    if (org.kiwix.kiwixmobile.custom.BuildConfig.DEBUG) {
-      settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
-    } else {
-      settingsUiState.update { it.copy(shouldShowRatingCategory = false) }
-    }
+    settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
   }
 }

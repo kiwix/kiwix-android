@@ -61,5 +61,5 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   implementation(Libs.CORE_SPLASH_SCREEN)
-  implementation(Libs.PLAY_REVIEW_KTX)
+  implementation(Libs.PLAYSTORE_REVIEW_KTX)
 }
