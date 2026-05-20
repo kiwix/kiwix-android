@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,14 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver
 
-import dagger.Binds
-import dagger.Module
-import org.kiwix.kiwixmobile.core.di.ActivityScope
+package org.kiwix.kiwixmobile.core.extensions
 
-@Module
-abstract class ZimHostModule {
-  @ActivityScope @Binds
-  abstract fun bindsZimHostPresenter(zimHostPresenter: ZimHostPresenter): ZimHostContract.Presenter
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
+
+@OptIn(ExperimentalPermissionsApi::class)
+fun MultiplePermissionsState.handlePermissionRequest(
+  onGranted: () -> Unit,
+  onRationale: () -> Unit
+) {
+  when {
+    allPermissionsGranted -> onGranted()
+    shouldShowRationale -> onRationale()
+    else -> launchMultiplePermissionRequest()
+  }
 }
