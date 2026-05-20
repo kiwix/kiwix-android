@@ -52,7 +52,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActiv
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -208,7 +208,7 @@ open class ErrorActivity : BaseActivity() {
     val zimBooks = withContext(dispatcher) { libkiwixBookOnDisk.getBooks() }
     showValidationDialog.value = true
     CoroutineScope(dispatcher).launch {
-      validateZimViewModel.startValidation(zimBooks, isCustomApp())
+      validateZimViewModel.startValidation(zimBooks, isBrandedApp())
     }
   }
 

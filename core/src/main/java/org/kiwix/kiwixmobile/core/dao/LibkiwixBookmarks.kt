@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_MANAGER
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -378,7 +378,7 @@ class LibkiwixBookmarks @Inject constructor(
               deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
             }
           }
-          if (!coreApp.getMainActivity().isCustomApp()) zimFileReader?.dispose()
+          if (!coreApp.getMainActivity().isBrandedApp()) zimFileReader?.dispose()
         }
       }
   }
@@ -387,7 +387,7 @@ class LibkiwixBookmarks @Inject constructor(
     bookmarkItem: LibkiwixBookmarkItem,
     coreApp: CoreApp
   ): ZimFileReader? {
-    return if (coreApp.getMainActivity().isCustomApp()) {
+    return if (coreApp.getMainActivity().isBrandedApp()) {
       // in custom apps we are using the assetFileDescriptor so we do not have the filePath
       // and in custom apps there is only a single zim file so we are directly
       // getting the zimFileReader object.

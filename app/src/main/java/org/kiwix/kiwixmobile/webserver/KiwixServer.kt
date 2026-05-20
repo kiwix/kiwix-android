@@ -23,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Server
@@ -55,8 +55,8 @@ class KiwixServer @Inject constructor(
               Book().apply {
                 // Determine whether to create an Archive from an asset or a file path
                 val archive =
-                  if (path == getDemoFilePathForCustomApp(context)) {
-                    // For custom apps using a demo file, create an Archive with FileDescriptor
+                  if (path == getDemoFilePathForBrandedApp(context)) {
+                    // For branded apps using a demo file, create an Archive with FileDescriptor
                     val assetFileDescriptor =
                       zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
                     val startOffset = assetFileDescriptor?.startOffset ?: 0L

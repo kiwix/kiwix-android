@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
@@ -88,7 +88,7 @@ class RateDialogHandler @Inject constructor(
 
   private suspend fun isZimFilesAvailableInLibrary(): Boolean {
     // If it is a custom app, return true since custom apps always have the ZIM file.
-    if (activity.isCustomApp()) return true
+    if (activity.isBrandedApp()) return true
     // For Kiwix app, check if there are ZIM files available in the library.
     return libkiwixBookOnDisk.getBooks().isNotEmpty()
   }

@@ -1,0 +1,200 @@
+/*
+ * Kiwix Android
+ * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package org.kiwix.kiwixmobile.custom.download.main
+
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
+import android.content.res.AssetManager
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkConstructor
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.custom.main.BrandedFileValidator
+import org.kiwix.kiwixmobile.custom.main.ValidationState
+import java.io.File
+
+class BrandedFileValidatorTest {
+  private lateinit var context: Context
+  private lateinit var brandedFileValidator: BrandedFileValidator
+  private lateinit var assetManager: AssetManager
+
+  @BeforeEach
+  fun setUp() {
+    context = mockk(relaxed = true)
+    assetManager = mockk(relaxed = true)
+    brandedFileValidator = BrandedFileValidator(context)
+  }
+
+  @Test
+  fun `validate should call onFilesFound when both OBB and ZIM files are found`() = runTest {
+    val obbFile = mockk<File>()
+    val zimFile = mockk<File>()
+    mockZimFiles(arrayOf(obbFile), "obb")
+    mockZimFiles(arrayOf(zimFile), "zim")
+
+    brandedFileValidator.validate(
+      onFilesFound = {
+        assertTrue(it is ValidationState.HasBothFiles)
+        assertEquals(obbFile, (it as ValidationState.HasBothFiles).obbFile)
+        assertEquals(zimFile, it.zimFile)
+      },
+      onNoFilesFound = { fail("Should not call onNoFilesFound") }
+    )
+  }
+
+  @Test
+  fun `validate should call onFilesFound when only OBB file is found`() = runTest {
+    val obbFile = mockk<File>()
+    mockZimFiles(arrayOf(obbFile), "obb")
+    mockZimFiles(arrayOf(), "zim")
+
+    brandedFileValidator.validate(
+      onFilesFound = {
+        assertTrue(it is ValidationState.HasFile)
+        assertEquals(obbFile, (it as ValidationState.HasFile).file)
+      },
+      onNoFilesFound = { fail("Should not call onNoFilesFound") }
+    )
+  }
+
+  @Test
+  fun `validate should call onFilesFound when only ZIM file is found`() = runTest {
+    val zimFile = mockk<File>()
+    mockZimFiles(arrayOf(), "obb")
+    mockZimFiles(arrayOf(zimFile), "zim")
+
+    brandedFileValidator.validate(
+      onFilesFound = {
+        assertTrue(it is ValidationState.HasFile)
+        assertEquals(zimFile, (it as ValidationState.HasFile).file)
+      },
+      onNoFilesFound = { fail("Should not call onNoFilesFound") }
+    )
+  }
+
+  @Test
+  fun `validate should call onNoFilesFound when no OBB or ZIM files are found`() = runTest {
+    mockZimFiles(arrayOf(), extension = "zim")
+    mockZimFiles(arrayOf(), extension = "obb")
+
+    brandedFileValidator.validate(
+      onFilesFound = { fail("Should not call onFilesFound") },
+      onNoFilesFound = { }
+    )
+  }
+
+  @Test
+  fun `validate should call onNoFilesFound when directories are null`() = runTest {
+    mockZimFiles(null, "zim")
+    mockZimFiles(null, "obb")
+
+    brandedFileValidator.validate(
+      onFilesFound = { fail("Should not call onFilesFound") },
+      onNoFilesFound = { }
+    )
+  }
+
+  @Test
+  fun `validate should call onNoFilesFound when no matching files are found`() = runTest {
+    val textFile = mockk<File>()
+    mockZimFiles(arrayOf(textFile), "txt")
+
+    brandedFileValidator.validate(
+      onFilesFound = { fail("Should not call onFilesFound") },
+      onNoFilesFound = { }
+    )
+  }
+
+  @Test
+  fun `validate should call onFilesFound for case insensitive file extensions`() = runTest {
+    val zimFile = mockk<File>()
+    mockZimFiles(arrayOf(zimFile), "ZIM")
+
+    brandedFileValidator.validate(
+      onFilesFound = {
+        fail("Should not call onFilesFound")
+      },
+      onNoFilesFound = {}
+    )
+  }
+
+  @Test
+  fun `getAssetFileDescriptorListFromPlayAssetDelivery returns empty list when exception occurs`() {
+    every {
+      context.createPackageContext(
+        any(),
+        any()
+      ).assets
+    } throws PackageManager.NameNotFoundException()
+
+    val assetList = brandedFileValidator.getAssetFileDescriptorListFromPlayAssetDelivery()
+
+    assertTrue(assetList.isEmpty())
+  }
+
+  @Test
+  fun `getAssetFileDescriptorListFromPlayAssetDelivery returns list of asset descriptors`() {
+    val descriptor = mockk<AssetFileDescriptor>()
+    every { context.createPackageContext(any(), any()).assets } returns assetManager
+    every { assetManager.openFd(any()) } returns descriptor
+    every { assetManager.list("") } returns arrayOf("chunk1.zim", "chunk2.zim")
+
+    val assetList = brandedFileValidator.getAssetFileDescriptorListFromPlayAssetDelivery()
+
+    assertEquals(2, assetList.size)
+    assertEquals(descriptor, assetList[0])
+  }
+
+  private fun mockZimFiles(
+    zimFilesArray: Array<File?>?,
+    extension: String
+  ) {
+    mockkConstructor(ContextWrapper::class)
+    zimFilesArray?.forEach {
+      it?.let {
+        every { it.exists() } returns true
+        every { it.isFile } returns true
+        every { it.extension } returns extension
+        every { it.isDirectory } returns false
+        every { it.name } returns "sample.$extension"
+      }
+    }
+    val storageDirectory = mockk<File>()
+    every { storageDirectory.exists() } returns true
+    every { storageDirectory.isDirectory } returns true
+    every { storageDirectory.extension } returns ""
+    every { storageDirectory.parent } returns null
+    every { storageDirectory.listFiles() } returns zimFilesArray
+    if (extension == "zim") {
+      every {
+        context.getExternalFilesDirs(null)
+      } returns arrayOf(storageDirectory)
+      every { anyConstructed<ContextWrapper>().externalMediaDirs } returns arrayOf()
+    } else {
+      every { context.obbDirs } returns arrayOf(storageDirectory)
+    }
+  }
+}

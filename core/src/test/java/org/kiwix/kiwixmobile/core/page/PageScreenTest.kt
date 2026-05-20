@@ -144,7 +144,7 @@ class PageScreenTest {
     isInSelectionMode: Boolean = false,
     selectedCount: Int = 0,
     switchIsCheckedFlow: MutableStateFlow<Boolean> = MutableStateFlow(true),
-    isCustomApp: Boolean = false,
+    isBrandedApp: Boolean = false,
     onItemClick: (Page) -> Unit = {},
     onItemLongClick: (Page) -> Unit = {},
     onSearchTextChange: (String) -> Unit = {},
@@ -166,7 +166,7 @@ class PageScreenTest {
         isInSelectionMode = isInSelectionMode,
         selectedCount = selectedCount,
         switchIsCheckedFlow = switchIsCheckedFlow,
-        isCustomApp = isCustomApp,
+        isBrandedApp = isBrandedApp,
         onItemClick = onItemClick,
         onItemLongClick = onItemLongClick,
         onSearchTextChange = onSearchTextChange,
@@ -298,7 +298,7 @@ class PageScreenTest {
 
   @Test
   fun switchRow_hiddenForCustomApp() {
-    renderPageScreen(isCustomApp = true, switchString = "Show all bookmarks")
+    renderPageScreen(isBrandedApp = true, switchString = "Show all bookmarks")
     composeTestRule.onNodeWithTag(SWITCH_TEXT_TESTING_TAG)
       .assertDoesNotExist()
   }

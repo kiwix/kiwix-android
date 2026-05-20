@@ -56,7 +56,7 @@ class AppConfigurer {
             // There’s no option to include debug symbols directly in APKs, as they
             // significantly increase the APK size. For APKs published on the Play Store,
             // the only option is to upload the debug symbols manually.
-            // Two of our custom apps are published on the Play Store via APKs.
+            // Two of our branded apps are published on the Play Store via APKs.
             // Apart from those, all other APKs are distributed outside the Play Store,
             // so the debug symbols are not included and do not affect their size.
             debugSymbolLevel = "FULL"
