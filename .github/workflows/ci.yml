@@ -324,7 +324,7 @@ jobs:
           heap-size: 512M
           script: |
             bash contrib/ensure-emulator-ready.sh
-            bash contrib/instrumentation-customapps.sh
+            bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
     name: Automated tests on Tablet

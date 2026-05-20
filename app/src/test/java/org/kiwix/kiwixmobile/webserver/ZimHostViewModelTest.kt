@@ -37,13 +37,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
-import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
+import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
@@ -116,7 +116,7 @@ class ZimHostViewModelTest {
 
   @Test
   fun loadBooks_whenHostedIdsEmpty_SelectsAllBooks() = runTest {
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
@@ -142,7 +142,7 @@ class ZimHostViewModelTest {
     )
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
@@ -160,7 +160,7 @@ class ZimHostViewModelTest {
     )
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("Kotlin"))
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
@@ -168,17 +168,17 @@ class ZimHostViewModelTest {
   }
 
   @Test
-  fun loadBooks_whenIsCustomAppTrue_returnsSingleSelectedBook() = runTest {
+  fun loadBooks_whenIsBrandedAppTrue_returnsSingleSelectedBook() = runTest {
     val fakeReader: ZimFileReader = mockk(relaxed = true)
     every { zimReaderContainer.zimFileReader } returns fakeReader
 
     coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(listOf(book1))
 
-    viewModel.loadBooks(isCustomApp = true)
+    viewModel.loadBooks(isBrandedApp = true)
     advanceUntilIdle()
 
     val books = viewModel.uiState.value.books
-    assertEquals("Custom app should have only one book", 1, books.size)
+    assertEquals("Branded app should have only one book", 1, books.size)
     assertTrue((books[0] as BookOnDisk).isSelected)
   }
 
@@ -187,7 +187,7 @@ class ZimHostViewModelTest {
     ServerUtils.isServerStarted = true
     ServerUtils.serverAddress = IP_ADDRESS
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val state = viewModel.uiState.value
@@ -200,7 +200,7 @@ class ZimHostViewModelTest {
 
   @Test
   fun loadBooks_whenServerStopped_returnsServerIsStopped() = runTest {
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val state = viewModel.uiState.value
@@ -238,7 +238,7 @@ class ZimHostViewModelTest {
     )
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id2"))
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     viewModel.events.test {
@@ -346,7 +346,7 @@ class ZimHostViewModelTest {
     coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(listOf(book))
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id2"))
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val initialBook = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>().first()
@@ -361,7 +361,7 @@ class ZimHostViewModelTest {
 
   @Test
   fun onBookSelected_savesSelectionToDataStore() = runTest {
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val book = viewModel.uiState.value.books
@@ -378,7 +378,7 @@ class ZimHostViewModelTest {
   fun onBookSelected_whenServerRunning_emitsRestartServer() = runTest {
     ServerUtils.isServerStarted = true
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
 
     val book = viewModel.uiState.value.books
@@ -537,7 +537,7 @@ class ZimHostViewModelTest {
     )
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
 
-    viewModel.loadBooks(isCustomApp = false)
+    viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
   }
 }

@@ -297,7 +297,7 @@ class PageScreenTest {
   }
 
   @Test
-  fun switchRow_hiddenForCustomApp() {
+  fun switchRow_hiddenForBrandedApp() {
     renderPageScreen(isBrandedApp = true, switchString = "Show all bookmarks")
     composeTestRule.onNodeWithTag(SWITCH_TEXT_TESTING_TAG)
       .assertDoesNotExist()

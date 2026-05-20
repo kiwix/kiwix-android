@@ -336,7 +336,7 @@ abstract class CoreReaderFragment :
           closeTab(position)
         }
       },
-      searchPlaceHolderItemForCustomApps = false to {
+      searchPlaceHolderItemForBrandedApps = false to {
         openSearch(searchString = "", isOpenedFromTabView = false, false)
       },
       appName = "",
@@ -747,16 +747,16 @@ abstract class CoreReaderFragment :
    * such as showing a search placeholder instead of the title when the app is configured to
    * hide the title. This is important because the same toolbar is shared with the tab display.
    *
-   * NOTE: This method sets `showSearchPlaceHolderForCustomApps` to `false` by default.
+   * NOTE: This method sets `searchPlaceHolderItemForBrandedApps` to `false` by default.
    * Subclasses must explicitly handle the `true` case if needed.
    *
-   * ⚠️ When modifying this method, thoroughly test with custom app configurations to
+   * ⚠️ When modifying this method, thoroughly test with branded app configurations to
    * ensure correct toolbar behavior.
    */
   open fun showSearchPlaceHolderInToolbar(isTabSwitcherShowing: Boolean) {
     readerScreenState.update {
       copy(
-        searchPlaceHolderItemForCustomApps = searchPlaceHolderItemForCustomApps.copy(first = false)
+        searchPlaceHolderItemForBrandedApps = searchPlaceHolderItemForBrandedApps.copy(first = false)
       )
     }
   }

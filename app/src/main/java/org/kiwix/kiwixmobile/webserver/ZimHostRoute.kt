@@ -46,7 +46,7 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
@@ -98,7 +98,7 @@ fun ZimHostRoute(
   BindHotspotService(activity, viewModel)
   LaunchedEffect(lifecycleOwner) {
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-      viewModel.loadBooks(activity.isCustomApp())
+      viewModel.loadBooks(activity.isBrandedApp())
     }
   }
   LaunchedEffect(lifecycleOwner) {

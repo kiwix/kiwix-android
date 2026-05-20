@@ -145,7 +145,7 @@ data class ReaderScreenState(
   /**
    * Manages the showing/hiding of search placeholder in toolbar for custom apps.
    */
-  val searchPlaceHolderItemForCustomApps: Pair<Boolean, () -> Unit>,
+  val searchPlaceHolderItemForBrandedApps: Pair<Boolean, () -> Unit>,
   /**
    * Manages the showing of application name in donation layout.
    */
