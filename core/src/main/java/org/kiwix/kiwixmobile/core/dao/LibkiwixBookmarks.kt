@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,8 +46,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
@@ -171,7 +172,7 @@ class LibkiwixBookmarks @Inject constructor(
       val bookmark =
         Bookmark().apply {
           bookId = libkiwixBookmarkItem.zimId
-          title = libkiwixBookmarkItem.title
+          title = getBookmarkTitle(libkiwixBookmarkItem)
           url = libkiwixBookmarkItem.url
           bookTitle =
             when {
@@ -192,6 +193,37 @@ class LibkiwixBookmarks @Inject constructor(
       }
     }
   }
+
+  /**
+   * Builds a display title for a bookmark.
+   *
+   * When the bookmark URL points to a sub-section (i.e., contains a fragment after '#'),
+   * the fragment is appended to the base title in parentheses.
+   * For example: "Gro polygon (angle)".
+   *
+   * If no fragment is present, the base title is returned as-is.
+   */
+  private fun getBookmarkTitle(libkiwixBookmarkItem: LibkiwixBookmarkItem): String {
+    val subSectionFragment = getSubSectionFragment(libkiwixBookmarkItem.url)
+    return if (!subSectionFragment.isNullOrEmpty()) {
+      "${libkiwixBookmarkItem.title} ($subSectionFragment)"
+    } else {
+      libkiwixBookmarkItem.title
+    }
+  }
+
+  /**
+   * Returns the fragment (the part after '#') from the given URL, if present.
+   *
+   * A non-null, non-empty fragment indicates that the URL points to a sub-section
+   * (anchor) within the page.
+   *
+   * @return the decoded fragment, or null if none exists
+   *
+   * @see android.net.Uri.fragment
+   */
+  private fun getSubSectionFragment(url: String): String? =
+    url.toUri().fragment
 
   suspend fun addBookToLibrary(file: File? = null, archive: Archive? = null) {
     ensureInitialized()
