@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2024 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile
 
 import android.content.Context
+import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -39,9 +39,12 @@ import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.io.File
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class KiwixRoomDatabaseTest {
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase
@@ -84,7 +87,7 @@ class KiwixRoomDatabaseTest {
 
       // test deleting recent search
       recentSearchRoomDao.deleteSearchString(searchTerm)
-      recentSearches = recentSearchRoomDao.search(searchTerm).first()
+      recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 0)
 
       // test deleting all recent search history
@@ -93,7 +96,7 @@ class KiwixRoomDatabaseTest {
       recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 2)
       recentSearchRoomDao.deleteSearchHistory()
-      recentSearches = recentSearchRoomDao.search(searchTerm).first()
+      recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 0)
     }
 

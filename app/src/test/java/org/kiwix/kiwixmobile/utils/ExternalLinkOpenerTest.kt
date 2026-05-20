@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.utils
 
-import android.app.Application
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -44,6 +43,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.TestApplication
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -298,5 +298,3 @@ class ExternalLinkOpenerTest {
     assert(dialogData!!.first == dialog)
   }
 }
-
-class TestApplication : Application()
