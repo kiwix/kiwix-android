@@ -65,6 +65,7 @@ import org.robolectric.annotation.Config
  * This ensures we test real user-visible behavior, not internal
  * composable implementation details.
  */
+@Suppress("LargeClass")
 @OptIn(ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
