@@ -55,5 +55,23 @@ class StateTest {
         )
       )
     }
+
+    @Test
+    fun `select updates language items in-place without resorting`() {
+      val lang1 = language(id = 1L, language = "German", isActive = false)
+      val lang2 = language(id = 2L, language = "Italian", isActive = false)
+      val content = Content(listOf(lang1, lang2))
+
+      val initialOrder = content.viewItems
+      assertThat(initialOrder).hasSize(3) // 1 header (OTHER) + 2 languages
+
+      val selectedLangItem = LanguageItem(lang1)
+      val updatedContent = content.select(selectedLangItem)
+
+      assertThat(updatedContent.viewItems).hasSize(3)
+      assertThat(updatedContent.viewItems[0]).isEqualTo(HeaderItem(HeaderItem.OTHER))
+      assertThat((updatedContent.viewItems[1] as LanguageItem).language.active).isTrue()
+      assertThat((updatedContent.viewItems[2] as LanguageItem).language.active).isFalse()
+    }
   }
 }
