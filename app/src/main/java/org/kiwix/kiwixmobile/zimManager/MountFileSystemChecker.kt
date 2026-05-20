@@ -34,8 +34,9 @@ class MountFileSystemChecker @Inject constructor(
   private fun recursivelyDetermineFilesystem(
     mountPoints: List<MountInfo>,
     path: String
-  ): FileSystemCapability =
-    mountPoints.maxBy { it.matchCount(path) }
+  ): FileSystemCapability {
+    if (mountPoints.isEmpty()) return INCONCLUSIVE
+    return mountPoints.maxBy { it.matchCount(path) }
       ?.takeIf { it.matchCount(path) > 0 }
       ?.let {
         when {
@@ -45,4 +46,5 @@ class MountFileSystemChecker @Inject constructor(
           else -> INCONCLUSIVE
         }
       } ?: INCONCLUSIVE
+  }
 }
