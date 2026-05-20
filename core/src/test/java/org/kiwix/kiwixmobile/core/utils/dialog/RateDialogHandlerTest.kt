@@ -200,7 +200,7 @@ class RateDialogHandlerTest {
     coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
     every { rateDialogHandler.isTwoWeekPassed() } returns true
     coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
-    
+
     val alertDialogShower = mockk<AlertDialogShower>(relaxed = true)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
 
@@ -218,9 +218,9 @@ class RateDialogHandlerTest {
     coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
     every { rateDialogHandler.isTwoWeekPassed() } returns true
     coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
-    
+
     every { NetworkUtils.isNetworkAvailable(any()) } returns false
-    
+
     val alertDialogShower = mockk<AlertDialogShower>(relaxed = true)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
 
@@ -238,7 +238,7 @@ class RateDialogHandlerTest {
     coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
     every { rateDialogHandler.isTwoWeekPassed() } returns true
     coEvery { rateDialogHandler.isZimFilesAvailableInLibrary() } returns true
-    
+
     val alertDialogShower = mockk<AlertDialogShower>(relaxed = true)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
 
