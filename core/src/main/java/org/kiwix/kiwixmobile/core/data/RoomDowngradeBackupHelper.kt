@@ -25,6 +25,10 @@ import android.util.Log
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 object RoomDowngradeBackupHelper {
+  private const val NOTES_TABLE = "NotesRoomEntity"
+  private const val HISTORY_TABLE = "HistoryRoomEntity"
+  private const val RECENT_SEARCH_TABLE = "RecentSearchRoomEntity"
+
   data class RowSnapshot(val values: Map<String, Any?>)
 
   data class DatabaseSnapshot(
@@ -55,9 +59,9 @@ object RoomDowngradeBackupHelper {
     )
 
     val snapshot = DatabaseSnapshot(
-      notes = backupTable(sqliteDb, "NotesRoomEntity"),
-      history = backupTable(sqliteDb, "HistoryRoomEntity"),
-      recentSearches = backupTable(sqliteDb, "RecentSearchRoomEntity")
+      notes = backupTable(sqliteDb, NOTES_TABLE),
+      history = backupTable(sqliteDb, HISTORY_TABLE),
+      recentSearches = backupTable(sqliteDb, RECENT_SEARCH_TABLE)
     )
 
     sqliteDb.close()
@@ -68,9 +72,9 @@ object RoomDowngradeBackupHelper {
     db: SupportSQLiteDatabase,
     snapshot: DatabaseSnapshot
   ) {
-    restoreTableRows(db, "NotesRoomEntity", snapshot.notes)
-    restoreTableRows(db, "HistoryRoomEntity", snapshot.history)
-    restoreTableRows(db, "RecentSearchRoomEntity", snapshot.recentSearches)
+    restoreTableRows(db, NOTES_TABLE, snapshot.notes)
+    restoreTableRows(db, HISTORY_TABLE, snapshot.history)
+    restoreTableRows(db, RECENT_SEARCH_TABLE, snapshot.recentSearches)
   }
 
   private fun getExistingDbVersion(context: Context): Int? {
