@@ -41,6 +41,9 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.StatusConverter
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
+import org.kiwix.kiwixmobile.core.data.RoomDowngradeBackupHelper.CURRENT_ROOM_DB_VERSION
+import org.kiwix.kiwixmobile.core.data.RoomDowngradeBackupHelper.DB_NAME
+import org.kiwix.kiwixmobile.core.utils.files.Log
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(
@@ -51,7 +54,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     DownloadRoomEntity::class,
     WebViewHistoryEntity::class
   ],
-  version = 10,
+  version = CURRENT_ROOM_DB_VERSION,
   exportSchema = false
 )
 @TypeConverters(
@@ -73,8 +76,15 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     private var db: KiwixRoomDatabase? = null
     fun getInstance(context: Context): KiwixRoomDatabase {
       return db ?: synchronized(KiwixRoomDatabase::class) {
+        val backup =
+          if (RoomDowngradeBackupHelper.isDowngrade(context, CURRENT_ROOM_DB_VERSION)) {
+            Log.w("RoomDowngrade", "Downgrade detected. Backing up user data.")
+            RoomDowngradeBackupHelper.createSnapshot(context)
+          } else {
+            null
+          }
         return@getInstance db
-          ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
+          ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, DB_NAME)
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
             .addMigrations(
@@ -88,7 +98,20 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               MIGRATION_8_9,
               MIGRATION_9_10
             )
+            .fallbackToDestructiveMigrationOnDowngrade()
+            .addCallback(createRestoreCallback(backup))
             .build().also { db = it }
+      }
+    }
+
+    private fun createRestoreCallback(
+      backup: RoomDowngradeBackupHelper.DatabaseSnapshot?
+    ): RoomDatabase.Callback = object : RoomDatabase.Callback() {
+      override fun onCreate(db: SupportSQLiteDatabase) {
+        super.onCreate(db)
+        backup?.let {
+          RoomDowngradeBackupHelper.restoreSnapshot(db, it)
+        }
       }
     }
 
@@ -298,8 +321,8 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     @Suppress("MagicNumber")
     val MIGRATION_7_8 =
       object : Migration(7, 8) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-          database.execSQL(
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
