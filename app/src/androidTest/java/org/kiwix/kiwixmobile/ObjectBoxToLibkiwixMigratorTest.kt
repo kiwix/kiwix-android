@@ -432,7 +432,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
 
   @Test
-  fun testMigrationForNewCustomApps(): Unit =
+  fun testMigrationForNewBrandedApps(): Unit =
     runBlocking {
       val expectedZimId = "60094d1e-1c9a-a60b-2011"
       val bookmarkEntity =

@@ -306,7 +306,7 @@ private fun ReaderTopBar(
       actionMenuItems = actionMenuItems,
       topAppBarScrollBehavior = topAppBarScrollBehavior,
       searchBar =
-        searchPlaceHolderIfActive(state.searchPlaceHolderItemForCustomApps)
+        searchPlaceHolderIfActive(state.searchPlaceHolderItemForBrandedApps)
     )
   }
 }
@@ -478,12 +478,12 @@ private fun TabSwitcherAnimated(state: ReaderScreenState) {
 
 @Composable
 private fun searchPlaceHolderIfActive(
-  searchPlaceHolderItemForCustomApps: Pair<Boolean, () -> Unit>
-): (@Composable () -> Unit)? = if (searchPlaceHolderItemForCustomApps.first) {
+  searchPlaceHolderItemForBrandedApps: Pair<Boolean, () -> Unit>
+): (@Composable () -> Unit)? = if (searchPlaceHolderItemForBrandedApps.first) {
   {
     SearchPlaceholder(
       stringResource(R.string.search_label),
-      searchPlaceHolderItemForCustomApps.second
+      searchPlaceHolderItemForBrandedApps.second
     )
   }
 } else {

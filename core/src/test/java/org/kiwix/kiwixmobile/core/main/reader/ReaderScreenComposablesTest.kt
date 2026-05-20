@@ -137,7 +137,7 @@ class ReaderScreenComposablesTest {
       override fun onCloseTab(position: Int) { // no-op
       }
     },
-    searchPlaceHolderItemForCustomApps = false to {},
+    searchPlaceHolderItemForBrandedApps = false to {},
     appName = appName,
     donateButtonClick = donateButtonClick,
     laterButtonClick = laterButtonClick,
@@ -506,7 +506,7 @@ class ReaderScreenComposablesTest {
     var clicked = false
     renderReaderScreen(
       createTestState().copy(
-        searchPlaceHolderItemForCustomApps = true to {
+        searchPlaceHolderItemForBrandedApps = true to {
           clicked = true
         }
       )

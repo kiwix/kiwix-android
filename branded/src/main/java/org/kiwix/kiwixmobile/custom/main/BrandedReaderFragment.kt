@@ -400,7 +400,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
   private fun updateToolbarSearchPlaceholderVisibility(show: Boolean) {
     readerScreenState.update {
       copy(
-        searchPlaceHolderItemForCustomApps = searchPlaceHolderItemForCustomApps.copy(first = show)
+        searchPlaceHolderItemForBrandedApps = searchPlaceHolderItemForBrandedApps.copy(first = show)
       )
     }
   }

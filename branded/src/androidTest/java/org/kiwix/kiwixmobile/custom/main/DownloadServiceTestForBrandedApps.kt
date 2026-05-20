@@ -65,7 +65,7 @@ import java.net.URI
 const val FIVE_SECONDS = 5 * 1000
 
 @RunWith(AndroidJUnit4::class)
-class DownloadServiceTestForCustomApps {
+class DownloadServiceTestForBrandedApps {
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -121,7 +121,7 @@ class DownloadServiceTestForCustomApps {
   }
 
   @Test
-  fun testDownloadMonitorServiceShouldNotStartForCustomApp() {
+  fun testDownloadMonitorServiceShouldNotStartForBrandedApp() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         brandedMainActivity = it
