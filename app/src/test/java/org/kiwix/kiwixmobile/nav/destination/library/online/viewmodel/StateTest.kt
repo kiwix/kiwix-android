@@ -57,7 +57,7 @@ class StateTest {
     }
 
     @Test
-    fun `select updates category items in-place without resorting`() {
+    fun `select updates category items and moves them to selected section`() {
       val cat1 = category(id = 1L, category = "wikipedia", isActive = false)
       val cat2 = category(id = 2L, category = "gutenberg", isActive = false)
       val content = Content(listOf(cat1, cat2))
@@ -68,10 +68,14 @@ class StateTest {
       val selectedWikiItem = CategoryItem(cat1)
       val updatedContent = content.select(selectedWikiItem)
 
-      assertThat(updatedContent.viewItems).hasSize(3)
-      assertThat(updatedContent.viewItems[0]).isEqualTo(HeaderItem(HeaderItem.OTHER))
-      assertThat((updatedContent.viewItems[1] as CategoryItem).category.active).isTrue()
-      assertThat((updatedContent.viewItems[2] as CategoryItem).category.active).isFalse()
+      assertThat(updatedContent.viewItems).isEqualTo(
+        listOf(
+          HeaderItem(HeaderItem.SELECTED),
+          CategoryItem(cat1.copy(active = true)),
+          HeaderItem(HeaderItem.OTHER),
+          CategoryItem(cat2)
+        )
+      )
     }
   }
 }

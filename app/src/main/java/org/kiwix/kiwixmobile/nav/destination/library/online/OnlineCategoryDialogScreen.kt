@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Load
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 
 const val CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG = "categoryItemRadioButtonTestingTag"
+const val ONLINE_CATEGORY_LIST_TEST_TAG = "category_list"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -125,7 +126,7 @@ private fun CategoryList(
   val viewItem = (state as Content).viewItems
 
   LazyColumn(
-    modifier = Modifier.semantics { testTag = "category_list" }
+    modifier = Modifier.semantics { testTag = ONLINE_CATEGORY_LIST_TEST_TAG }
   ) {
     items(
       items = viewItem,

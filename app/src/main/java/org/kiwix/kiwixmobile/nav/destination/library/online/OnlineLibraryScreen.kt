@@ -385,7 +385,7 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
         onTextLayout = { textLayoutResult ->
           isTruncated = textLayoutResult.hasVisualOverflow
         },
-        style = MaterialTheme.typography.titleMedium.copy(
+        style = MaterialTheme.typography.titleSmall.copy(
           fontWeight = FontWeight.Normal,
           color = MaterialTheme.colorScheme.onSurfaceVariant
         ),
