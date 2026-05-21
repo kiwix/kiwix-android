@@ -186,6 +186,7 @@ class LibKiwixBookTest {
       assertThat(result).isFalse()
     }
 
+    @Suppress("EqualsNullCall")
     @Test
     fun libkiwix_whenComparedWithNull_returnsFalse() = runTest {
       val book = LibkiwixBook().apply { id = "A" }

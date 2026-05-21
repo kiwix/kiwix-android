@@ -18,8 +18,11 @@
 package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.IdRes
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.flow.first
@@ -80,28 +83,43 @@ class RateDialogHandler @Inject constructor(
    */
   @Suppress("TooGenericExceptionCaught")
   internal fun launchInAppReviewFlow() {
-    val isTesting = try {
-      kotlinx.coroutines.runBlocking { kiwixDataStore.prefIsTest.first() }
-    } catch (e: Exception) {
-      false
-    }
-    if (isTesting) {
-      Log.i(TAG, "Skipping In-App Review flow during testing.")
-      return
-    }
     try {
       val reviewManager = ReviewManagerFactory.create(activity)
       val requestFlow = reviewManager.requestReviewFlow()
       requestFlow.addOnCompleteListener { task ->
         if (task.isSuccessful) {
           val reviewInfo = task.result
-          reviewManager.launchReviewFlow(activity, reviewInfo)
+          val launchTask = reviewManager.launchReviewFlow(activity, reviewInfo)
+          launchTask.addOnCompleteListener { launchTaskResult ->
+            if (!launchTaskResult.isSuccessful) {
+              goToRateApp()
+            }
+          }
         } else {
           Log.e(TAG, "Failed to request review flow", task.exception)
+          goToRateApp()
         }
       }
     } catch (e: Exception) {
       Log.e(TAG, "Error launching in-app review", e)
+      goToRateApp()
+    }
+  }
+
+  internal fun goToRateApp() {
+    val kiwixLocalMarketUri = "market://details?id=${activity.packageName}".toUri()
+    val kiwixBrowserMarketUri = "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri).apply {
+      addFlags(
+        Intent.FLAG_ACTIVITY_NO_HISTORY or
+          Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+          Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+      )
+    }
+    try {
+      activity.startActivity(goToMarket)
+    } catch (_: ActivityNotFoundException) {
+      activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
     }
   }
 

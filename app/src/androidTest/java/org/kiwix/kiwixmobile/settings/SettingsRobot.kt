@@ -279,7 +279,8 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickRateAppPreference(composeTestRule: ComposeContentTestRule) {
-    clickPreferenceItem(context.getString(R.string.pref_rate_app_title), composeTestRule)
+    val title = context.getString(R.string.pref_rate_app_title, context.getString(R.string.app_name))
+    clickPreferenceItem(title, composeTestRule)
   }
 
   fun selectAlbanianLanguage(composeTestRule: ComposeContentTestRule) {
@@ -298,5 +299,14 @@ class SettingsRobot : BaseRobot() {
 
   fun dismissDialog() {
     pressBack()
+  }
+
+  fun assertRateAppPreferenceNotDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      val title = context.getString(R.string.pref_rate_app_title, context.getString(R.string.app_name))
+      onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        .assertDoesNotExist()
+    }
   }
 }

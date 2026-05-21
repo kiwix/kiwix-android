@@ -233,7 +233,7 @@ private suspend fun handleSettingsAction(
     Action.NavigateToAppSettingsDialog ->
       showNavigateToAppSettingsDialog(viewModel, activity)
 
-    Action.RateApp -> activity.rateDialogHandler.launchInAppReviewFlow()
+    Action.RateApp -> activity.rateDialogHandler.goToRateApp()
   }
 }
 
