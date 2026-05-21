@@ -61,6 +61,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -334,9 +335,11 @@ fun NoFilesView(
 @Composable
 private fun SwipeDownToScanFileSystemText() {
   val infiniteTransition = rememberInfiniteTransition(label = "swipeAnim")
+  val density = LocalDensity.current
+  val targetOffsetPx = with(density) { TWENTY_DP.toPx() }
   val offsetY by infiniteTransition.animateFloat(
     initialValue = ZERO.toFloat(),
-    targetValue = TEN_DP.value,
+    targetValue = targetOffsetPx,
     animationSpec = infiniteRepeatable(
       animation = tween(SWIPE_DOWN_IMAGE_ANIMATION_TIME, easing = FastOutSlowInEasing),
       repeatMode = RepeatMode.Restart
