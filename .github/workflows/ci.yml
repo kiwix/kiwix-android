@@ -6,6 +6,12 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
+env:
+  JAVA_VERSION: 17
+
 jobs:
 
   automated-tests:
@@ -33,17 +39,8 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
-
-      - name: Restore Cache
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Enable KVM
         run: |
@@ -169,17 +166,8 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
-
-      - name: Restore Cache
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Enable KVM
         run: |
@@ -260,17 +248,8 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
-
-      - name: Restore Cache
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Enable KVM
         run: |
@@ -351,17 +330,8 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
-
-      - name: Restore Cache
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Enable KVM
         run: |
@@ -416,3 +386,119 @@ jobs:
           script: |
             bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-file-opening-on-tablet.sh
+
+  code-formatting-job:
+    name: Code Formatting
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: 'gradle'
+
+      - name: Static Analysis
+        run: ./gradlew ktlintCheck
+
+      - name: Upload ktlint Reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: ktlint-report
+          path: '**/build/reports/ktlint'
+
+  detekt:
+    name: Detekt
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: 'gradle'
+
+      - name: Static Analysis
+        run: ./gradlew detektDebug detektCustomExampleDebug
+      - name: Upload Lint Reports
+        uses: actions/upload-artifact@v6
+        if: ${{ always() }}
+        with:
+          name: detekt-report
+          path: '**/build/reports/detekt'
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: 'gradle'
+
+      - name: Run Debug Lint
+        run: ./gradlew app:lintDebug branded:lintCustomexampleDebug
+
+      - name: Upload Lint Reports
+        uses: actions/upload-artifact@v6
+        if: ${{ always() }}
+        with:
+          name: lint-report
+          path: '**/build/reports/lint-results-*'
+
+  assemble:
+    name: Assemble
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+
+      - name: Set up Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r27d
+          link-to-sdk: true
+
+      - name: Build all configurations
+        env:
+          APK_BUILD: "true"
+        run: ./gradlew assemble
+
+      - name: Upload APK as Artifacts
+        uses: actions/upload-artifact@v6
+        if: ${{ always() }}
+        with:
+          name: kiwix-android
+          path: |
+            **/*.apk
