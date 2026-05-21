@@ -54,8 +54,6 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
@@ -64,13 +62,14 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.util.Locale
 
@@ -83,7 +82,13 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
  * Complexity suppressed as this is a Route-level composable managing
  * multiple app-level concerns that shouldn't be split.
  */
-@Suppress("LongMethod", "ComplexMethod", "ComplexCondition", "TooGenericExceptionCaught", "InjectDispatcher")
+@Suppress(
+  "LongMethod",
+  "ComplexMethod",
+  "ComplexCondition",
+  "TooGenericExceptionCaught",
+  "InjectDispatcher"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocalLibraryRoute(
@@ -107,8 +112,10 @@ fun LocalLibraryRoute(
   val deviceListScanningProgress by localLibraryViewModel.deviceListScanningProgress.observeAsState()
   val snackBarHostState = remember { SnackbarHostState() }
 
-  val processSelectedZimFilesForPlayStore = remember { component.processSelectedZimFilesForPlayStore() }
-  val processSelectedZimFilesForStandalone = remember { component.processSelectedZimFilesForStandalone() }
+  val processSelectedZimFilesForPlayStore =
+    remember { component.processSelectedZimFilesForPlayStore() }
+  val processSelectedZimFilesForStandalone =
+    remember { component.processSelectedZimFilesForStandalone() }
 
   val coroutineScope = rememberCoroutineScope()
   var actionMode by remember { mutableStateOf<ActionMode?>(null) }
@@ -163,7 +170,8 @@ fun LocalLibraryRoute(
       val effectResult = it.invokeWith(activity)
       if (effectResult is ActionMode) {
         actionMode = effectResult
-        actionMode?.title = String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
+        actionMode?.title =
+          String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
       }
     }
   }
@@ -174,7 +182,8 @@ fun LocalLibraryRoute(
         actionMode?.finish()
         actionMode = null
       } else {
-        actionMode?.title = String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
+        actionMode?.title =
+          String.format(Locale.getDefault(), "%d", fileSelectListState.selectedBooks.size)
       }
     }
   }
@@ -224,7 +233,6 @@ fun LocalLibraryRoute(
                           activity,
                           kiwixDataStore,
                           dialogShower,
-                          shouldScanFileSystem = true,
                           onShouldScanChanged = { shouldScanFileSystem = it },
                           requestFileSystemCheck = requestFileSystemCheck
                         )
@@ -243,7 +251,6 @@ fun LocalLibraryRoute(
                 activity,
                 kiwixDataStore,
                 dialogShower,
-                shouldScanFileSystem = shouldScanFileSystem,
                 onShouldScanChanged = { shouldScanFileSystem = it },
                 requestFileSystemCheck = requestFileSystemCheck
               )
@@ -392,7 +399,6 @@ private suspend fun scanFileSystem(
   activity: KiwixMainActivity,
   kiwixDataStore: KiwixDataStore,
   dialogShower: AlertDialogShower,
-  shouldScanFileSystem: Boolean,
   onShouldScanChanged: (Boolean) -> Unit,
   requestFileSystemCheck: () -> Unit
 ) {
