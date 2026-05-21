@@ -35,6 +35,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -78,7 +79,8 @@ fun KiwixMainActivityScreen(
   shouldShowBottomAppBar: Boolean,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   viewModelFactory: ViewModelProvider.Factory,
-  alertDialogShower: AlertDialogShower
+  alertDialogShower: AlertDialogShower,
+  snackBarHostState: SnackbarHostState
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -120,7 +122,8 @@ fun KiwixMainActivityScreen(
             startDestination = startDestination,
             modifier = Modifier.fillMaxSize(),
             viewModelFactory = viewModelFactory,
-            alertDialogShower = alertDialogShower
+            alertDialogShower = alertDialogShower,
+            snackBarHostState = snackBarHostState
           )
         }
       }

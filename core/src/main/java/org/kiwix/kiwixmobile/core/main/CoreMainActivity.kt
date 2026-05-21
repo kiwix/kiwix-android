@@ -38,6 +38,7 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -154,6 +155,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * Such as opening/closing leftDrawer.
    */
   lateinit var uiCoroutineScope: CoroutineScope
+  lateinit var snackBarHostState: SnackbarHostState
 
   /**
    * Managing the leftDrawerMenu in compose way so that when app's language changed

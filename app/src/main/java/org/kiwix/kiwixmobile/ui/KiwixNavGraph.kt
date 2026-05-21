@@ -23,6 +23,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -67,6 +68,7 @@ import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.notes.NotesScreenRoute
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
@@ -83,6 +85,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
@@ -95,7 +98,8 @@ fun KiwixNavGraph(
   startDestination: String,
   modifier: Modifier = Modifier,
   viewModelFactory: ViewModelProvider.Factory,
-  alertDialogShower: AlertDialogShower
+  alertDialogShower: AlertDialogShower,
+  snackBarHostState: SnackbarHostState
 ) {
   NavHost(
     navController = navController,
@@ -116,12 +120,25 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
+      val context = LocalContext.current
+      val activity = context as KiwixMainActivity
+      val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
+      val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
+      localLibraryViewModel.apply {
+        initialize(
+          validateZimViewModel,
+          alertDialogShower,
+          snackBarHostState,
+          activity.supportFragmentManager
+        )
+      }
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
 
       LocalLibraryRoute(
-        viewModelFactory = viewModelFactory,
+        localLibraryViewModel = localLibraryViewModel,
         navController = navController,
-        zimFileUriArg = zimFileUri
+        zimFileUriArg = zimFileUri,
+        snackBarHostState = snackBarHostState
       )
     }
 

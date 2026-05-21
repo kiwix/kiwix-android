@@ -30,6 +30,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -140,6 +141,7 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
+      snackBarHostState = remember { SnackbarHostState() }
       navController = rememberNavController()
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
@@ -164,7 +166,8 @@ class KiwixMainActivity : CoreMainActivity() {
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
         viewModelFactory = viewModelFactory,
-        alertDialogShower = alertDialogShower
+        alertDialogShower = alertDialogShower,
+        snackBarHostState = snackBarHostState
       )
       LaunchedEffect(Unit) {
         // Load the menu when UI is attached to screen.

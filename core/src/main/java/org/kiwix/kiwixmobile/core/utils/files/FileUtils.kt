@@ -107,7 +107,6 @@ object FileUtils {
     }
   }
 
-  @Suppress("InjectDispatcher")
   @JvmStatic
   @Synchronized
   fun deleteCachedFiles(
@@ -766,7 +765,6 @@ object FileUtils {
     }
   }
 
-<<<<<<< HEAD
   private suspend fun handleImage(
     context: Context,
     fileName: String,
@@ -899,48 +897,6 @@ object FileUtils {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Kiwix")
         put(MediaStore.Images.Media.IS_PENDING, 1)
-=======
-  @Suppress("ReturnCount", "NestedBlockDepth", "InjectDispatcher")
-  @JvmStatic
-  suspend fun downloadFileFromUrl(
-    url: String?,
-    src: String?,
-    zimReaderContainer: ZimReaderContainer,
-    kiwixDataStore: KiwixDataStore
-  ): File? = withContext(Dispatchers.IO) {
-    val root = getDownloadRootDir(kiwixDataStore) ?: return@withContext null
-    when {
-      isBase64DataUri(src) -> {
-        val decoded = decodeBase64DataUri(src) ?: return@withContext null
-        val (extension, bytes) = decoded
-        val file = File(root, generateBase64FileName(extension))
-
-        return@withContext try {
-          file.outputStream().use { it.write(bytes) }
-          file
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save base64 file", e)
-          null
-        }
-      }
-
-      else -> {
-        val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src)
-        if (fileName?.first == null) return@withContext null
-        val fileToSave = File(root, fileName.first)
-        if (fileToSave.isFileExist()) return@withContext fileToSave
-        return@withContext try {
-          fileName.second?.let {
-            zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
-              fileToSave.outputStream().use(inputStream::copyTo)
-            }
-            if (fileToSave.hasContent()) fileToSave else null
-          }
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save file", e)
-          null
-        }
->>>>>>> 20917b5f1 (Refactor LocalLibrary from Fragment to pure Composable)
       }
     }
 

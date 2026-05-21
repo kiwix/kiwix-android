@@ -52,6 +52,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -99,6 +100,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryScreenState
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.NoFileView
 import kotlin.math.roundToInt
 
 const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
@@ -124,12 +127,13 @@ fun LocalLibraryScreen(
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
+  snackbarHostState: SnackbarHostState,
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackbarHostState) },
       topBar = {
         KiwixAppBar(
           title = stringResource(R.string.library),
@@ -185,22 +189,22 @@ private fun LocalLibraryMainContent(
   listState: LazyListState
 ) {
   SwipeRefreshLayout(
-    isRefreshing = state.swipeRefreshItem.first,
-    isEnabled = state.swipeRefreshItem.second,
+    isRefreshing = state.isSwipeRefreshing,
+    isEnabled = !state.scanning.isScanning,
     onRefresh = onRefresh,
     modifier = Modifier
       .fillMaxSize()
       .padding(contentPadding)
   ) {
     OnBackPressed(onUserBackPressed, navHostController)
-    if (state.scanningProgressItem.first) {
+    if (state.scanning.isScanning) {
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
-        progress = state.scanningProgressItem.second
+        progress = state.scanning.progress
       )
     }
-    if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
-      NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
+    if (state.noFileView.isVisible || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
+      NoFilesView(state.noFileView, onDownloadButtonClick)
     } else {
       BookItemList(
         state.fileSelectListState,
@@ -297,7 +301,7 @@ private fun LocalLibraryBackToTopButton(
 
 @Composable
 fun NoFilesView(
-  noFilesViewItem: Triple<String, String, Boolean>,
+  noFilesView: NoFileView,
   onDownloadButtonClick: () -> Unit
 ) {
   Column(
@@ -310,13 +314,13 @@ fun NoFilesView(
   ) {
     Text(
       modifier = Modifier.testTag(NO_FILE_TEXT_TESTING_TAG),
-      text = noFilesViewItem.first,
+      text = noFilesView.title,
       style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
       textAlign = TextAlign.Center
     )
     Spacer(modifier = Modifier.height(EIGHT_DP))
     KiwixButton(
-      buttonText = noFilesViewItem.second,
+      buttonText = noFilesView.buttonText,
       clickListener = onDownloadButtonClick,
       modifier = Modifier.testTag(DOWNLOAD_BUTTON_TESTING_TAG)
     )
