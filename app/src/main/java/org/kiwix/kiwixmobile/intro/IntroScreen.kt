@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.intro.composable.IndicatorColumn
 import org.kiwix.kiwixmobile.intro.composable.IntroPage
-import org.kiwix.kiwixmobile.zimManager.THREE
+import org.kiwix.kiwixmobile.nav.destination.library.local.THREE
 
 private const val ANIMATION_DURATION: Long = 2000
 private const val PAGE_COUNT_IN_BUNDLE_VERSION: Int = 3

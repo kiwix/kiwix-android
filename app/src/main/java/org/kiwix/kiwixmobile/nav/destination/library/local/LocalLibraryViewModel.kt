@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c)2019–2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import android.app.Application
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
@@ -49,15 +48,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestValidateZimFiles
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -71,31 +61,28 @@ import javax.inject.Inject
 
 const val DEFAULT_PROGRESS = 0
 const val MAX_PROGRESS = 100
-
 const val THREE = 3
-const val FOUR = 4
 
-@Suppress("LargeClass", "LongParameterList")
-class ZimManageViewModel @Inject constructor(
+/**
+ * ViewModel for the Local Library screen.
+ *
+ * This ViewModel manages local ZIM file operations including:
+ * - File system scanning for ZIM files
+ * - File selection and multi-selection
+ * - Side effects for file operations (delete, share, validate, navigate)
+ */
+class LocalLibraryViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
-  val context: Application,
   private val dataSource: DataSource,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  val context: Application
 ) : ViewModel() {
-  sealed class FileSelectActions {
-    data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    object RequestValidateZimFiles : FileSelectActions()
-    object RequestDeleteMultiSelection : FileSelectActions()
-    object RequestShareMultiSelection : FileSelectActions()
-    object MultiModeFinished : FileSelectActions()
-    object RestartActionMode : FileSelectActions()
-    object UserClickedDownloadBooksButton : FileSelectActions()
-  }
+  @Suppress("InjectDispatcher")
+  private var ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
   private lateinit var validateZimViewModel: ValidateZimViewModel
+  private lateinit var alertDialogShower: AlertDialogShower
+
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
@@ -103,8 +90,6 @@ class ZimManageViewModel @Inject constructor(
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
-
-  private lateinit var alertDialogShower: AlertDialogShower
 
   init {
     observeCoroutineFlows()
@@ -118,16 +103,11 @@ class ZimManageViewModel @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
-  @VisibleForTesting
-  fun onClearedExposed() {
-    onCleared()
-  }
-
   private fun observeCoroutineFlows() {
     coroutineJobs.apply {
       add(scanBooksFromStorage())
       add(updateBookItems())
-      add(fileSelectActions())
+      add(processFileSelectActions())
     }
   }
 
@@ -146,25 +126,38 @@ class ZimManageViewModel @Inject constructor(
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 
-  private fun fileSelectActions() =
+  private fun processFileSelectActions() =
     fileSelectActions
       .onEach { action ->
         runCatching {
           sideEffects.emit(
             when (action) {
-              is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
-              is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
-              RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-              RequestShareMultiSelection ->
-                ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
+              is FileSelectActions.RequestNavigateTo ->
+                OpenFileWithNavigation(action.bookOnDisk)
 
-              RequestValidateZimFiles ->
+              is FileSelectActions.RequestMultiSelection ->
+                startMultiSelectionAndSelectBook(action.bookOnDisk)
+
+              FileSelectActions.RequestDeleteMultiSelection ->
+                DeleteFiles(selectionsFromState(), alertDialogShower)
+
+              FileSelectActions.RequestShareMultiSelection ->
+                ShareFiles(selectionsFromState())
+
+              FileSelectActions.RequestValidateZimFiles ->
                 ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
 
-              MultiModeFinished -> noSideEffectAndClearSelectionState()
-              is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
-              RestartActionMode -> StartMultiSelection(fileSelectActions)
-              UserClickedDownloadBooksButton -> NavigateToDownloads
+              FileSelectActions.MultiModeFinished ->
+                noSideEffectAndClearSelectionState()
+
+              is FileSelectActions.RequestSelect ->
+                noSideEffectSelectBook(action.bookOnDisk)
+
+              FileSelectActions.RestartActionMode ->
+                StartMultiSelection(fileSelectActions)
+
+              FileSelectActions.UserClickedDownloadBooksButton ->
+                NavigateToDownloads
             }
           )
         }.onFailure {
@@ -191,8 +184,8 @@ class ZimManageViewModel @Inject constructor(
     bookOnDisk: BookOnDisk
   ): List<BooksOnDiskListItem> {
     return it.bookOnDiskListItems.map { listItem ->
-      if (listItem is BookOnDisk && listItem.id == bookOnDisk.id) {
-        listItem.copy(isSelected = !listItem.isSelected)
+      if (listItem.id == bookOnDisk.id) {
+        listItem.apply { isSelected = !isSelected }
       } else {
         listItem
       }
@@ -216,11 +209,7 @@ class ZimManageViewModel @Inject constructor(
         it.copy(
           bookOnDiskListItems =
             it.bookOnDiskListItems.map { booksOnDiskListItem ->
-              if (booksOnDiskListItem is BookOnDisk) {
-                booksOnDiskListItem.copy(isSelected = false)
-              } else {
-                booksOnDiskListItem
-              }
+              booksOnDiskListItem.apply { isSelected = false }
             },
           selectionMode = NORMAL
         )
@@ -296,15 +285,10 @@ class ZimManageViewModel @Inject constructor(
       bookOnDiskListItems =
         newList.map { newBookOnDisk ->
           val firstOrNull =
-            oldState.bookOnDiskListItems.filterIsInstance<BookOnDisk>()
-              .firstOrNull { oldBookOnDisk ->
-                oldBookOnDisk.id == newBookOnDisk.id
-              }
-          if (newBookOnDisk is BookOnDisk) {
-            newBookOnDisk.copy(isSelected = firstOrNull?.isSelected == true)
-          } else {
-            newBookOnDisk
-          }
+            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
+              oldBookOnDisk.id == newBookOnDisk.id
+            }
+          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected == true }
         }
     )
   }
