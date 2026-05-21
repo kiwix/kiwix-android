@@ -1,3 +1,5 @@
+package org.kiwix.kiwixmobile.nav.destination.library.local
+
 import android.app.Application
 import androidx.compose.material3.SnackbarHostState
 import androidx.fragment.app.FragmentManager
@@ -58,6 +60,8 @@ class LocalLibraryViewModelTest {
 
   @RegisterExtension
   private val mainDispatcherRule = MainDispatcherRule()
+
+  private val testDispatcher get() = mainDispatcherRule.dispatcher
 
   private lateinit var viewModel: LocalLibraryViewModel
 

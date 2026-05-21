@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -61,6 +62,7 @@ import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -93,6 +95,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.UserClickedDownloadBooksButton
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDrawerToggle
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.OpenFilePicker
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ProcessZimFiles
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ScanStorage
@@ -155,6 +158,7 @@ class LocalLibraryViewModel @Inject constructor(
       LocalLibraryUiActions()
 
     data object ReadPermissionDialog : LocalLibraryUiActions()
+    data object RequestDrawerToggle : LocalLibraryUiActions()
   }
 
   sealed class ReadeWritePermissionResultAction {
@@ -185,6 +189,12 @@ class LocalLibraryViewModel @Inject constructor(
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   private var onResumeJob: Job? = null
+
+  val sideEffects = MutableSharedFlow<SideEffect<*>>()
+  val localLibraryUiActions = MutableSharedFlow<LocalLibraryUiActions>()
+
+  @VisibleForTesting
+  internal val requestFileSystemCheck = MutableSharedFlow<Unit>()
 
   fun initialize(
     validateZimViewModel: ValidateZimViewModel,
@@ -309,7 +319,7 @@ class LocalLibraryViewModel @Inject constructor(
       is RequestMultiSelection -> noSideEffectSelectBook(action.bookOnDisk)
       is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
       RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-      RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+      RequestShareMultiSelection -> ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
       MultiModeFinished -> noSideEffectAndClearSelectionState()
       UserClickedDownloadBooksButton -> NavigateToDownloads
       is RequestReadWritePermission -> None // We handle this on UI.
@@ -346,7 +356,18 @@ class LocalLibraryViewModel @Inject constructor(
           coroutineScope = viewModelScope,
           ioDispatcher = ioDispatcher
         )
+
+      RequestDrawerToggle -> sideEffectDrawerToggle()
     }
+
+  private fun sideEffectDrawerToggle(): SideEffect<Unit> = SideEffect { activity ->
+    val coreMainActivity = activity as? CoreMainActivity
+    if (coreMainActivity?.navigationDrawerIsOpen() == true) {
+      coreMainActivity.closeNavigationDrawer()
+    } else {
+      coreMainActivity?.openNavigationDrawer()
+    }
+  }
 
   private fun selectBook(
     it: FileSelectListState,
@@ -645,6 +666,23 @@ class LocalLibraryViewModel @Inject constructor(
 
   fun finishMultiModeFinished() {
     sendAction(MultiModeFinished)
+  }
+
+  fun onNavigationIconClick() {
+    if (uiState.value.fileSelectListState.selectionMode == MULTI) {
+      finishMultiModeFinished()
+    } else {
+      sendAction(RequestDrawerToggle)
+    }
+  }
+
+  fun handleUserBackPressed(): FragmentActivityExtensions.Super {
+    return if (uiState.value.fileSelectListState.selectionMode == MULTI) {
+      finishMultiModeFinished()
+      FragmentActivityExtensions.Super.ShouldNotCall
+    } else {
+      FragmentActivityExtensions.Super.ShouldCall
+    }
   }
 
   fun filePickerMenuButtonClick(filePickerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>) {

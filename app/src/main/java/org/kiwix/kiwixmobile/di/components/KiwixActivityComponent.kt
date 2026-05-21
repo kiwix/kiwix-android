@@ -42,6 +42,9 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(onlineCategoryDialog: OnlineCategoryDialog)
   fun inject(kiwixMainActivity: KiwixMainActivity)
 
+  fun processSelectedZimFilesForStandalone(): ProcessSelectedZimFilesForStandalone
+  fun processSelectedZimFilesForPlayStore(): ProcessSelectedZimFilesForPlayStore
+
   @Subcomponent.Builder
   interface Builder {
     @BindsInstance fun activity(activity: Activity): Builder
