@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.data
 
 import dagger.Module
 import dagger.Provides
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import javax.inject.Singleton
 
 @Module
@@ -26,4 +27,9 @@ class DataModule {
   @Singleton
   @Provides
   fun provideDataSource(repository: Repository): DataSource = repository
+
+  @Singleton
+  @Provides
+  fun providesMainPresenter(dataSource: DataSource): MainRepositoryActions =
+    MainRepositoryActions(dataSource)
 }

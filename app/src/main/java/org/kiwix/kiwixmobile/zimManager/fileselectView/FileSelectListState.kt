@@ -26,8 +26,8 @@ data class FileSelectListState(
   val bookOnDiskListItems: List<BooksOnDiskListItem>,
   val selectionMode: SelectionMode = NORMAL
 ) {
-  val selectedBooks by lazy {
-    bookOnDiskListItems.filterIsInstance<BookOnDisk>()
-      .filter(BookOnDisk::isSelected)
-  }
+  val selectedBooks
+    get() = bookOnDiskListItems
+      .filterIsInstance<BookOnDisk>()
+      .filter { it.isSelected }
 }

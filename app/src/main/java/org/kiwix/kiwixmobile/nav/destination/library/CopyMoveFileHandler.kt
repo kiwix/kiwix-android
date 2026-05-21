@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
@@ -59,7 +59,7 @@ const val COPY_MOVE_DIALOG_TITLE_TESTING_TAG = "copyMoveDialogTitleTestingTag"
 
 @Suppress("LongParameterList")
 class CopyMoveFileHandler @Inject constructor(
-  private val activity: Activity,
+  private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker,
@@ -86,9 +86,9 @@ class CopyMoveFileHandler @Inject constructor(
 
   private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
-      activity.getString(R.string.moving_zim_file, requireSelectedFile().name)
+      context.getString(R.string.moving_zim_file, requireSelectedFile().name)
     } else {
-      activity.getString(R.string.copying_zim_file, requireSelectedFile().name)
+      context.getString(R.string.copying_zim_file, requireSelectedFile().name)
     }
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
@@ -155,7 +155,7 @@ class CopyMoveFileHandler @Inject constructor(
         setStorageDeviceList(storageDeviceList)
         setShouldShowStorageSelected(false)
       }
-      .show(fragmentManager, activity.getString(R.string.choose_storage_to_copy_move_zim_file))
+      .show(fragmentManager, context.getString(R.string.choose_storage_to_copy_move_zim_file))
 
   suspend fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
     kiwixDataStore.apply {
@@ -273,9 +273,9 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   private fun getCopyMoveFilesToPublicDirectoryDialogMessage() = if (isSingleFileSelected) {
-    activity.getString(R.string.copy_move_files_dialog_description)
+    context.getString(R.string.copy_move_files_dialog_description)
   } else {
-    activity.getString(R.string.copy_move_multiple_files_dialog_description)
+    context.getString(R.string.copy_move_multiple_files_dialog_description)
   }
 
   suspend fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
@@ -313,7 +313,7 @@ class CopyMoveFileHandler @Inject constructor(
     } catch (ignore: Exception) {
       ignore.printStackTrace()
       handleFileOperationError(
-        activity.getString(R.string.copy_file_error_message, ignore.message),
+        context.getString(R.string.copy_file_error_message, ignore.message),
         destinationFile
       )
     }
@@ -335,7 +335,7 @@ class CopyMoveFileHandler @Inject constructor(
           notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
         } else {
           handleFileOperationError(
-            activity.getString(R.string.move_file_error_message, "File move failed"),
+            context.getString(R.string.move_file_error_message, "File move failed"),
             destinationFile
           )
         }
@@ -343,7 +343,7 @@ class CopyMoveFileHandler @Inject constructor(
     } catch (ignore: Exception) {
       ignore.printStackTrace()
       handleFileOperationError(
-        activity.getString(R.string.move_file_error_message, ignore.message),
+        context.getString(R.string.move_file_error_message, ignore.message),
         destinationFile
       )
     }
@@ -378,7 +378,7 @@ class CopyMoveFileHandler @Inject constructor(
     FileUtils.isSplittedZimFile(destinationFile.name) || validateZimFileValid(destinationFile)
 
   suspend fun handleInvalidZimFile(destinationFile: File, sourceUri: Uri) {
-    val errorMessage = activity.getString(R.string.error_file_invalid, destinationFile.path)
+    val errorMessage = context.getString(R.string.error_file_invalid, destinationFile.path)
     if (isMoveOperation) {
       val moveSuccessful = fileOperationHandler.rollbackMove(destinationFile, sourceUri)
 
@@ -431,7 +431,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun getStorageDeviceList() =
-    (activity as? KiwixMainActivity)?.getStorageDeviceList().orEmpty()
+    (context as? KiwixMainActivity)?.getStorageDeviceList().orEmpty()
 
   private suspend fun getSelectedStorageRoot(): File =
     unitTestStorage ?: File(kiwixDataStore.selectedStorage.first())

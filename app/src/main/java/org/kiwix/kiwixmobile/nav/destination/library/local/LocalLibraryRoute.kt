@@ -22,21 +22,18 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity.RESULT_OK
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.view.ActionMode
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,14 +50,18 @@ import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.SHARE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import java.util.Locale
+
+const val VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG = "validateZimFilesMenuButtonTestingTag"
 
 /**
  * Entry point for Local Library feature.
@@ -77,9 +78,8 @@ fun LocalLibraryRoute(
   zimFileUriArg: String,
   snackBarHostState: SnackbarHostState
 ) {
-  val activity = LocalActivity.current as KiwixMainActivity
+  val mainActivity = LocalActivity.current as KiwixMainActivity
   val uiState = localLibraryViewModel.uiState.collectAsStateWithLifecycle()
-  var actionMode by remember { mutableStateOf<ActionMode?>(null) }
   val readWritePermission =
     rememberMultiplePermissionsState(listOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE))
   val filePickerLauncher =
@@ -90,55 +90,56 @@ fun LocalLibraryRoute(
     }
 
   localLibraryViewModel.sideEffects.CollectSideEffectWithActivity { effect, activity ->
-    val effectResult = effect.invokeWith(activity)
-    if (effectResult is ActionMode) {
-      actionMode = effectResult
-      uiState.value.fileSelectListState.selectedBooks.size.let {
-        setActionModeTitle(actionMode, it)
-      }
-    }
+    effect.invokeWith(activity)
   }
-  LaunchedEffect(uiState.value.fileSelectListState) {
-    if (uiState.value.fileSelectListState.bookOnDiskListItems.none { it.isSelected }) {
-      actionMode?.finish()
-      actionMode = null
-    } else {
-      setActionModeTitle(actionMode, uiState.value.fileSelectListState.selectedBooks.size)
-    }
-  }
-  ObserveLocalLibraryUiActions(localLibraryViewModel, readWritePermission, activity)
+  ObserveLocalLibraryUiActions(localLibraryViewModel, readWritePermission, mainActivity)
   LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { localLibraryViewModel.onResume() }
-
+  BackHandler(enabled = uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI) {
+    localLibraryViewModel.finishMultiModeFinished()
+  }
   LocalLibraryScreen(
     state = uiState.value,
-    actionMenuItems =
-      actionMenuItems(navController) {
-        localLibraryViewModel.filePickerMenuButtonClick(filePickerLauncher)
-      },
+    actionMenuItems = actionMenuItems(
+      navController = navController,
+      selectionMode = uiState.value.fileSelectListState.selectionMode,
+      localLibraryViewModel = localLibraryViewModel
+    ) {
+      localLibraryViewModel.filePickerMenuButtonClick(filePickerLauncher)
+    },
     listState = rememberLazyListState(),
     snackbarHostState = snackBarHostState,
     onRefresh = localLibraryViewModel::onSwipeRefresh,
     onDownloadButtonClick = localLibraryViewModel::onDownloadButtonClick,
-    onClick = { localLibraryViewModel.onBookItemClick(it) },
-    onLongClick = { localLibraryViewModel.onBookItemLongClick(it) },
-    onMultiSelect = { localLibraryViewModel.onMultiSelect(it) },
-    bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
-    onUserBackPressed = { handleUserBackPressed(activity) },
+    onClick = localLibraryViewModel::onBookItemClick,
+    onLongClick = localLibraryViewModel::onBookItemLongClick,
+    onMultiSelect = localLibraryViewModel::onMultiSelect,
+    bottomAppBarScrollBehaviour = mainActivity.bottomAppBarScrollBehaviour,
+    onUserBackPressed = { handleUserBackPressed(mainActivity) },
     navHostController = navController,
     navigationIcon = {
       NavigationIcon(
-        iconItem = IconItem.Vector(Icons.Filled.Menu),
+        iconItem = navigationIconItem(uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI),
         contentDescription = string.open_drawer,
         onClick = {
-          handleNavigationIconClick(activity)
+          handleNavigationIconClick(
+            mainActivity,
+            uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI,
+            localLibraryViewModel
+          )
         }
       )
     }
   )
   LaunchedEffect(Unit) {
-    LanguageUtils(activity).changeFont(activity, localLibraryViewModel.kiwixDataStore)
+    LanguageUtils(mainActivity).changeFont(mainActivity, localLibraryViewModel.kiwixDataStore)
     localLibraryViewModel.processZimFileArguments(zimFileUriArg)
   }
+}
+
+fun navigationIconItem(isMultiMode: Boolean): IconItem = if (isMultiMode) {
+  IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
+} else {
+  IconItem.Vector(Icons.Filled.Menu)
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -163,26 +164,60 @@ private fun ObserveLocalLibraryUiActions(
   }
 }
 
-private fun setActionModeTitle(actionMode: ActionMode?, selectedBookCount: Int) {
-  actionMode?.title = String.format(Locale.getDefault(), "%d", selectedBookCount)
+fun actionMenuItems(
+  navController: NavHostController,
+  selectionMode: SelectionMode,
+  localLibraryViewModel: LocalLibraryViewModel,
+  filePickerButtonClick: () -> Unit
+) = when (selectionMode) {
+  SelectionMode.MULTI -> multiModeMenuItem(localLibraryViewModel)
+  SelectionMode.NORMAL -> normalModeMenuItems(navController, filePickerButtonClick)
 }
 
-fun actionMenuItems(navController: NavHostController, filePickerButtonClick: () -> Unit) = listOf(
+private fun multiModeMenuItem(localLibraryViewModel: LocalLibraryViewModel) = listOf(
   ActionMenuItem(
-    IconItem.Drawable(drawable.ic_add_blue_24dp),
-    R.string.select_zim_file,
-    { filePickerButtonClick.invoke() },
+    IconItem.Drawable(drawable.ic_delete_white_24dp),
+    string.delete,
+    { localLibraryViewModel.deleteMenuIconClick() },
     isEnabled = true,
-    testingTag = SELECT_FILE_BUTTON_TESTING_TAG
+    testingTag = DELETE_MENU_ICON_TESTING_TAG
   ),
   ActionMenuItem(
-    IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
-    string.get_content_from_nearby_device,
-    { navController.navigate(KiwixDestination.LocalFileTransfer.route) },
+    IconItem.Drawable(drawable.baseline_share_24),
+    string.delete,
+    { localLibraryViewModel.shareMenuIconClick() },
     isEnabled = true,
-    testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+    testingTag = SHARE_MENU_BUTTON_TESTING_TAG
+  ),
+  ActionMenuItem(
+    IconItem.Drawable(R.drawable.file_validate),
+    string.delete,
+    { localLibraryViewModel.validateMenuIconClick() },
+    isEnabled = true,
+    testingTag = VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG
   )
 )
+
+private fun normalModeMenuItems(
+  navController: NavHostController,
+  filePickerButtonClick: () -> Unit
+) =
+  listOf(
+    ActionMenuItem(
+      IconItem.Drawable(drawable.ic_add_blue_24dp),
+      R.string.select_zim_file,
+      { filePickerButtonClick.invoke() },
+      isEnabled = true,
+      testingTag = SELECT_FILE_BUTTON_TESTING_TAG
+    ),
+    ActionMenuItem(
+      IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
+      string.get_content_from_nearby_device,
+      { navController.navigate(KiwixDestination.LocalFileTransfer.route) },
+      isEnabled = true,
+      testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+    )
+  )
 
 private fun handleUserBackPressed(activity: KiwixMainActivity): FragmentActivityExtensions.Super {
   val coreMainActivity = activity as? CoreMainActivity
@@ -194,8 +229,14 @@ private fun handleUserBackPressed(activity: KiwixMainActivity): FragmentActivity
   }
 }
 
-private fun handleNavigationIconClick(activity: KiwixMainActivity) {
-  if (activity.navigationDrawerIsOpen()) {
+private fun handleNavigationIconClick(
+  activity: KiwixMainActivity,
+  isMultiMode: Boolean,
+  viewModel: LocalLibraryViewModel
+) {
+  if (isMultiMode) {
+    viewModel.finishMultiModeFinished()
+  } else if (activity.navigationDrawerIsOpen()) {
     activity.closeNavigationDrawer()
   } else {
     activity.openNavigationDrawer()

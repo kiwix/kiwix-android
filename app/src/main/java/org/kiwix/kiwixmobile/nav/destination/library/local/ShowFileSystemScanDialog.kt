@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect

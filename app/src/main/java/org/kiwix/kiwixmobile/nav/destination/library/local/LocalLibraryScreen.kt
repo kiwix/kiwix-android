@@ -138,7 +138,7 @@ fun LocalLibraryScreen(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackbarHostState) },
       topBar = {
         KiwixAppBar(
-          title = stringResource(R.string.library),
+          title = screenTitle(state.fileSelectListState),
           navigationIcon = navigationIcon,
           actionMenuItems = actionMenuItems,
           topAppBarScrollBehavior = scrollBehavior
@@ -175,6 +175,14 @@ fun LocalLibraryScreen(
     }
   }
 }
+
+@Composable
+private fun screenTitle(fileSelectListState: FileSelectListState): String =
+  if (fileSelectListState.selectedBooks.isNotEmpty()) {
+    "${fileSelectListState.selectedBooks.size}"
+  } else {
+    stringResource(R.string.library)
+  }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
