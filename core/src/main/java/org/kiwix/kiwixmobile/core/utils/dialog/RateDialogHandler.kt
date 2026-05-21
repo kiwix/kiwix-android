@@ -76,6 +76,14 @@ class RateDialogHandler @Inject constructor(
     )
   }
 
+  @Suppress("TooGenericExceptionCaught")
+  private val isTesting: Boolean
+    get() = try {
+      kotlinx.coroutines.runBlocking { kiwixDataStore.prefIsTest.first() }
+    } catch (e: Exception) {
+      false
+    }
+
   /**
    * Launches the Google Play In-App Review flow. The Play Store manages quotas
    * internally and may not always show the review dialog, but calling this
@@ -83,6 +91,10 @@ class RateDialogHandler @Inject constructor(
    */
   @Suppress("TooGenericExceptionCaught")
   internal fun launchInAppReviewFlow() {
+    if (isTesting) {
+      Log.i(TAG, "Skipping In-App Review flow during testing.")
+      return
+    }
     try {
       val reviewManager = ReviewManagerFactory.create(activity)
       val requestFlow = reviewManager.requestReviewFlow()
@@ -107,8 +119,13 @@ class RateDialogHandler @Inject constructor(
   }
 
   internal fun goToRateApp() {
+    if (isTesting) {
+      Log.i(TAG, "Skipping goToRateApp during testing.")
+      return
+    }
     val kiwixLocalMarketUri = "market://details?id=${activity.packageName}".toUri()
-    val kiwixBrowserMarketUri = "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+    val kiwixBrowserMarketUri =
+      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
     val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri).apply {
       addFlags(
         Intent.FLAG_ACTIVITY_NO_HISTORY or

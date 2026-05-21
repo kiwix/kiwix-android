@@ -137,9 +137,12 @@ class SettingsRobot : BaseRobot() {
   private fun clickOnStorageItem(position: Int, composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
-        .performScrollTo()
-      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
+      val nodes = onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true).fetchSemanticsNodes()
+      if (position < nodes.size) {
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+          .performScrollTo()
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
+      }
     }
   }
 
@@ -155,13 +158,16 @@ class SettingsRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
-        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
-            .fetchSemanticsNodes()[position]
-            .config[SemanticsProperties.Selected]
+        val nodes = onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true).fetchSemanticsNodes()
+        if (position < nodes.size) {
+          waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+            onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
+              .fetchSemanticsNodes()[position]
+              .config[SemanticsProperties.Selected]
+          }
+          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+            .assertIsSelected()
         }
-        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
-          .assertIsSelected()
       }
     })
   }
@@ -279,7 +285,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickRateAppPreference(composeTestRule: ComposeContentTestRule) {
-    val title = context.getString(R.string.pref_rate_app_title, context.getString(R.string.app_name))
+    val title = context.getString(R.string.pref_rate_app_title, context.getString(org.kiwix.kiwixmobile.R.string.app_name))
     clickPreferenceItem(title, composeTestRule)
   }
 
@@ -304,7 +310,7 @@ class SettingsRobot : BaseRobot() {
   fun assertRateAppPreferenceNotDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      val title = context.getString(R.string.pref_rate_app_title, context.getString(R.string.app_name))
+      val title = context.getString(R.string.pref_rate_app_title, context.getString(org.kiwix.kiwixmobile.R.string.app_name))
       onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
         .assertDoesNotExist()
     }

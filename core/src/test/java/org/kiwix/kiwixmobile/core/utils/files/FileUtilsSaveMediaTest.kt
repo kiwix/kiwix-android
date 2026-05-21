@@ -54,8 +54,7 @@ class FileUtilsSaveMediaTest {
   private lateinit var mockZimReaderContainer: ZimReaderContainer
 
   private val validPngBase64 =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ" +
-      "AAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=="
   private val validPngBytes = Base64.decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg==",
     Base64.DEFAULT
@@ -409,8 +408,7 @@ class FileUtilsSaveMediaTest {
     }
   }
 
-  // ======== downloadFileFromUrl - Edge Case ========
-  // If accidentally zimReaderContainer.load() called inside Media Saving app crashes.
+  //  ======== downloadFileFromUrl - Edge Case - if accidentally zimReadeContainer.load() called inside Media Saving app crashes. ========
   @Test
   fun downloadFileFromUrl_whenSaveBase64SourceDirectlyCalled_returnsMediaSave() {
     runTest {
