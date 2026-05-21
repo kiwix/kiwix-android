@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
+import android.app.Activity
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,6 +38,8 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
 import org.kiwix.kiwixmobile.custom.download.Action.DatabaseEmission
@@ -53,7 +56,8 @@ class BrandedDownloadViewModel @Inject constructor(
   downloadRoomDao: DownloadRoomDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
   private val downloadBranded: DownloadBranded,
-  private val navigateToBrandedReader: NavigateToBrandedReader
+  private val navigateToBrandedReader: NavigateToBrandedReader,
+  private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()
@@ -66,6 +70,9 @@ class BrandedDownloadViewModel @Inject constructor(
     observeActions()
     observeDownloads(downloadRoomDao)
   }
+
+  suspend fun hasNotificationPermission(activity: Activity): Boolean =
+    activity.hasNotificationPermission(kiwixDataStore)
 
   @VisibleForTesting
   fun getStateForTesting() = _state

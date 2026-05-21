@@ -61,7 +61,8 @@ import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.custom.download.BrandedDownloadFragment
+import org.kiwix.kiwixmobile.custom.download.BrandedDownloadRoute
+import org.kiwix.kiwixmobile.custom.download.BrandedDownloadViewModel
 import org.kiwix.kiwixmobile.custom.help.BrandedHelpViewModel
 import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 
@@ -123,9 +124,11 @@ fun BrandedNavGraph(
       )
     }
     composable(CustomDestination.Downloads.route) {
-      FragmentContainer(R.id.downloadFragmentContainer) {
-        BrandedDownloadFragment()
-      }
+      val brandedDownloadViewModel: BrandedDownloadViewModel = viewModel(factory = viewModelFactory)
+      BrandedDownloadRoute(
+        brandedDownloadViewModel,
+        alertDialogShower
+      )
     }
     composable(
       route = CustomDestination.Search.route,
