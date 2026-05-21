@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,10 +15,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.base
+
+package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.Called
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
 
-interface SideEffect<out T : Any?> {
-  fun invokeWith(activity: AppCompatActivity): T
+class NoneTest {
+  @Test
+  fun `invokeWith should do nothing`() {
+    val activity = mockk<AppCompatActivity>(relaxed = true)
+
+    None.invokeWith(activity)
+
+    verify { activity wasNot Called }
+  }
 }

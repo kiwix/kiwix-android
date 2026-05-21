@@ -303,11 +303,11 @@ class CopyMoveFileHandlerTest {
     fileHandler = spyk(fileHandler)
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(CanWrite4GbFile)
     coEvery { storageCalculator.availableBytes(any()) } returns Long.MAX_VALUE
-    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk())
     every {
       kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
     } returns MutableStateFlow(true)
     fileHandler.showMoveFileToPublicDirectoryDialog(
+      storageDeviceList = listOf(mockk()),
       fragmentManager = fragmentManager,
       isSingleFileSelected = false
     )
@@ -415,7 +415,6 @@ class CopyMoveFileHandlerTest {
     val storageDeviceList = listOf<StorageDevice>(mockk(), mockk())
 
     coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
-    coEvery { fileHandler.getStorageDeviceList() } returns storageDeviceList
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       copyMoveProgressBarController.showCopyMoveDialog(
@@ -426,6 +425,7 @@ class CopyMoveFileHandlerTest {
     } just Runs
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(
+      storageDeviceList = storageDeviceList,
       fragmentManager = fragmentManager,
       isSingleFileSelected = true
     )
@@ -441,7 +441,6 @@ class CopyMoveFileHandlerTest {
   fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runBlocking {
     fileHandler = spyk(fileHandler)
     coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
-    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk())
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       copyMoveProgressBarController.showCopyMoveDialog(
@@ -452,6 +451,7 @@ class CopyMoveFileHandlerTest {
     } just Runs
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(
+      storageDeviceList = listOf(mockk()),
       fragmentManager = fragmentManager,
       isSingleFileSelected = true
     )
@@ -463,11 +463,11 @@ class CopyMoveFileHandlerTest {
   fun showDirectlyCopyMoveDialogAfterFirstLaunch() = runBlocking {
     fileHandler = spyk(fileHandler)
     coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
-    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     prepareFileSystemAndFileForMockk()
     every { alertDialogShower.show(any(), any(), any()) } just Runs
     fileHandler.showMoveFileToPublicDirectoryDialog(
+      storageDeviceList = listOf(mockk(), mockk()),
       fragmentManager = fragmentManager,
       isSingleFileSelected = true
     )
@@ -487,7 +487,6 @@ class CopyMoveFileHandlerTest {
       val positiveButtonClickSlot = slot<() -> Unit>()
       val negativeButtonClickSlot = slot<() -> Unit>()
       fileHandler = spyk(fileHandler)
-      coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
       coEvery { storageCalculator.availableBytes(any()) } returns Long.MAX_VALUE
       every { fat32Checker.fileSystemStates } returns MutableStateFlow(CanWrite4GbFile)
       coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
@@ -501,6 +500,7 @@ class CopyMoveFileHandlerTest {
 
       coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
       fileHandler.showMoveFileToPublicDirectoryDialog(
+        storageDeviceList = listOf(mockk(), mockk()),
         fragmentManager = fragmentManager,
         isSingleFileSelected = true
       )

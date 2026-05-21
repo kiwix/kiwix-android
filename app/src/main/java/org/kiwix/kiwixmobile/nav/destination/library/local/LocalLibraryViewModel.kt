@@ -31,6 +31,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -54,15 +55,15 @@ import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
@@ -87,13 +88,12 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.MultiModeFinished
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.ReadPermissionDialog
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDrawerToggle
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestSelect
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDrawerToggle
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestValidateZimFiles
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.OpenFilePicker
@@ -102,6 +102,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigationDrawerToggle
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
@@ -197,6 +198,7 @@ class LocalLibraryViewModel @Inject constructor(
   internal val requestFileSystemCheck = MutableSharedFlow<Unit>()
 
   fun initialize(
+    storageDeviceList: List<StorageDevice>,
     validateZimViewModel: ValidateZimViewModel,
     alertDialogShower: AlertDialogShower,
     snackBarHostState: SnackbarHostState,
@@ -206,6 +208,7 @@ class LocalLibraryViewModel @Inject constructor(
     this.alertDialogShower = alertDialogShower
     processSelectedZimFilesForStandalone.setSelectedZimFileCallback(this)
     processSelectedZimFilesForPlayStore.init(
+      storageDeviceList = storageDeviceList,
       lifecycleScope = viewModelScope,
       alertDialogShower = alertDialogShower,
       snackBarHostState = snackBarHostState,
@@ -287,6 +290,8 @@ class LocalLibraryViewModel @Inject constructor(
 
   override fun onCleared() {
     clearObservers()
+    onResumeJob?.cancel()
+    onResumeJob = null
     processSelectedZimFilesForPlayStore.dispose()
     processSelectedZimFilesForStandalone.dispose()
     super.onCleared()
@@ -358,17 +363,8 @@ class LocalLibraryViewModel @Inject constructor(
           ioDispatcher = ioDispatcher
         )
 
-      RequestDrawerToggle -> sideEffectDrawerToggle()
+      RequestDrawerToggle -> NavigationDrawerToggle
     }
-
-  private fun sideEffectDrawerToggle(): SideEffect<Unit> = SideEffect { activity ->
-    val coreMainActivity = activity as? CoreMainActivity
-    if (coreMainActivity?.navigationDrawerIsOpen() == true) {
-      coreMainActivity.closeNavigationDrawer()
-    } else {
-      coreMainActivity?.openNavigationDrawer()
-    }
-  }
 
   private fun selectBook(
     it: FileSelectListState,

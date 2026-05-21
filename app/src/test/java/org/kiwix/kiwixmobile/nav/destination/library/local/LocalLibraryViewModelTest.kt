@@ -106,6 +106,7 @@ class LocalLibraryViewModelTest {
       mainDispatcherRule.dispatcher
     )
     vm.initialize(
+      emptyList(),
       validateZimViewModel,
       alertDialogShower,
       snackBarHostState,
@@ -331,7 +332,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `CopyMoveErrorDialog emits ShowFileCopyMoveErrorDialog side effect`() = testActionSideEffect(
-    LocalLibraryViewModel.LocalLibraryUiActions.CopyMoveErrorDialog("error", {})
+    LocalLibraryViewModel.LocalLibraryUiActions.CopyMoveErrorDialog("error") {}
   ) {
     assertTrue(it is ShowFileCopyMoveErrorDialog)
   }
@@ -418,6 +419,7 @@ class LocalLibraryViewModelTest {
     }
     verify {
       processSelectedZimFilesForPlayStore.init(
+        storageDeviceList = any(),
         lifecycleScope = any(),
         alertDialogShower = alertDialogShower,
         snackBarHostState = snackBarHostState,

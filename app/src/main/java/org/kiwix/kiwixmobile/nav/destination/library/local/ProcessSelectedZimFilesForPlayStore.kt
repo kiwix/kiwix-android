@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import java.io.File
@@ -71,6 +70,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private var lifecycleScope: CoroutineScope? = null
   private var alertDialogShower: AlertDialogShower? = null
   private var isSingleFileSelected = false
+  private var storageDeviceList: List<StorageDevice> = emptyList()
 
   /**
    * Manages the selected action by user when processing the multiple files.
@@ -83,12 +83,14 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * Must be called before using this class.
    */
   fun init(
+    storageDeviceList: List<StorageDevice>,
     lifecycleScope: CoroutineScope,
     alertDialogShower: AlertDialogShower,
     snackBarHostState: SnackbarHostState,
     fragmentManager: FragmentManager,
     selectedZimFileCallback: SelectedZimFileCallback
   ) {
+    this.storageDeviceList = storageDeviceList
     this.lifecycleScope = lifecycleScope
     this.fragmentManager = fragmentManager
     this.selectedZimFileCallback = selectedZimFileCallback
@@ -161,6 +163,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     }
 
     copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+      storageDeviceList,
       uri,
       documentFile,
       // pass if fileName is null then we will validate it after copying/moving
@@ -240,7 +243,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       lifecycleScope = lifecycleScope!!,
       actionClick = {
         lifecycleScope?.launch {
-          showStorageSelectDialog((context as KiwixMainActivity).getStorageDeviceList())
+          showStorageSelectDialog(storageDeviceList)
         }
       }
     )

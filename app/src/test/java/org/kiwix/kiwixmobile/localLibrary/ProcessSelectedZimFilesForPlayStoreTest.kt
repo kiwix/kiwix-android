@@ -86,6 +86,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     )
 
     processSelectedZimFiles.init(
+      emptyList(),
       testScope,
       alertDialogShower,
       snackBarHostState,
@@ -142,6 +143,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
           any(),
           any(),
           any(),
+          any(),
           any()
         )
       }
@@ -157,6 +159,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       advanceUntilIdle()
       coVerify {
         copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+          any(),
           uri,
           documentFile,
           false,
@@ -202,6 +205,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
           any(),
           any(),
           any(),
+          any(),
           any()
         )
       } coAnswers {
@@ -228,6 +232,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     advanceUntilIdle()
     coVerify {
       copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+        any(),
         uri,
         documentFile,
         false,
@@ -250,6 +255,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     advanceUntilIdle()
     coVerify {
       copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+        any(),
         uri,
         documentFile,
         false,

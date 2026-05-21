@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
@@ -77,6 +76,7 @@ class CopyMoveFileHandler @Inject constructor(
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
   private var unitTestDestinationFile: File? = null
+  private var storageDeviceList: List<StorageDevice> = emptyList()
 
   @VisibleForTesting
   fun setStorageFileForUnitTest(unitTestStorage: File, unitTestDestinationFile: File) {
@@ -96,6 +96,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun showMoveFileToPublicDirectoryDialog(
+    storageDeviceList: List<StorageDevice>,
     uri: Uri? = null,
     documentFile: DocumentFile? = null,
     shouldValidateZimFile: Boolean = false,
@@ -103,20 +104,21 @@ class CopyMoveFileHandler @Inject constructor(
     multipleFilesProcessAction: MultipleFilesProcessAction? = null,
     isSingleFileSelected: Boolean
   ) {
+    this.storageDeviceList = storageDeviceList
     this.isSingleFileSelected = isSingleFileSelected
     this.shouldValidateZimFile = shouldValidateZimFile
     this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
-    if (getStorageDeviceList().isEmpty()) {
+    if (storageDeviceList.isEmpty()) {
       copyMoveProgressBarController.showPreparingCopyMoveDialog()
     }
-    if (kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove.first() && getStorageDeviceList().size > 1) {
+    if (kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove.first() && storageDeviceList.size > 1) {
       // Show dialog to select storage if more than one storage device is available, and user
       // have not configured the storage yet.
       copyMoveProgressBarController.hidePreparingCopyMoveDialog()
       showCopyMoveDialog(true)
     } else {
-      if (getStorageDeviceList().size == 1) {
+      if (storageDeviceList.size == 1) {
         // If only internal storage is currently available, set shouldShowStorageSelectionDialog
         // to true. This allows the storage configuration dialog to be shown again if the
         // user removes an external storage device (like an SD card) and then reinserts it.
@@ -282,7 +284,7 @@ class CopyMoveFileHandler @Inject constructor(
     isMoveOperation = false
     fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
     if (showStorageSelectionDialog) {
-      showStorageSelectDialog(getStorageDeviceList())
+      showStorageSelectDialog(storageDeviceList)
     } else {
       copyZimFileToPublicAppDirectory()
     }
@@ -292,7 +294,7 @@ class CopyMoveFileHandler @Inject constructor(
     isMoveOperation = true
     fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
     if (showStorageSelectionDialog) {
-      showStorageSelectDialog(getStorageDeviceList())
+      showStorageSelectDialog(storageDeviceList)
     } else {
       moveZimFileToPublicAppDirectory()
     }
@@ -429,9 +431,6 @@ class CopyMoveFileHandler @Inject constructor(
     destinationFile.createNewFile()
     return destinationFile
   }
-
-  suspend fun getStorageDeviceList() =
-    (context as? KiwixMainActivity)?.getStorageDeviceList().orEmpty()
 
   private suspend fun getSelectedStorageRoot(): File =
     unitTestStorage ?: File(kiwixDataStore.selectedStorage.first())

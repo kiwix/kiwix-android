@@ -127,6 +127,7 @@ fun KiwixNavGraph(
       LaunchedEffect(Unit) {
         localLibraryViewModel.apply {
           initialize(
+            activity.getStorageDeviceList(),
             validateZimViewModel,
             alertDialogShower,
             snackBarHostState,

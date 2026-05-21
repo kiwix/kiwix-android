@@ -169,7 +169,6 @@ androidComponents {
 }
 
 dependencies {
-  implementation("androidx.core:core-splashscreen:1.2.0")
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   androidTestImplementation(Libs.shark_android)
   // inject migration module in test cases.
