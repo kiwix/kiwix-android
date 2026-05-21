@@ -57,18 +57,9 @@ sealed class State {
           else -> item
         }
       }
-      val updatedViewItems = viewItems.map { viewItem ->
-        if (viewItem is LanguageItem) {
-          val updatedLanguage = updatedItems.firstOrNull { it.id == viewItem.language.id } ?: viewItem.language
-          LanguageItem(updatedLanguage)
-        } else {
-          viewItem
-        }
-      }
       return Content(
         items = updatedItems,
-        filter = filter,
-        viewItems = updatedViewItems
+        filter = filter
       )
     }
 

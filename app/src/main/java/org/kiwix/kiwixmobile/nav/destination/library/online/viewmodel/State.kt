@@ -57,18 +57,9 @@ sealed class State {
           else -> item
         }
       }
-      val updatedViewItems = viewItems.map { viewItem ->
-        if (viewItem is CategoryItem) {
-          val updatedCategory = updatedItems.firstOrNull { it.id == viewItem.category.id } ?: viewItem.category
-          CategoryItem(updatedCategory)
-        } else {
-          viewItem
-        }
-      }
       return Content(
         items = updatedItems,
-        filter = filter,
-        viewItems = updatedViewItems
+        filter = filter
       )
     }
 
