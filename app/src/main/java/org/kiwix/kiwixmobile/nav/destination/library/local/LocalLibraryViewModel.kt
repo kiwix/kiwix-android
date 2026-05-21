@@ -235,8 +235,8 @@ class LocalLibraryViewModel @Inject constructor(
         }
 
         !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
-            !kiwixDataStore.prefIsTest.first() &&
-            !uiState.value.permissionDeniedLayoutShowing -> {
+          !kiwixDataStore.prefIsTest.first() &&
+          !uiState.value.permissionDeniedLayoutShowing -> {
           checkPermissions()
         }
 
@@ -777,7 +777,7 @@ class LocalLibraryViewModel @Inject constructor(
       context.applicationContext?.contentResolver?.takePersistableUriPermission(
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION or
-            Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+          Intent.FLAG_GRANT_WRITE_URI_PERMISSION
       )
     }.onFailure {
       Log.e(TAG_KIWIX, "Could not take persistable permission for uri = $uri")
