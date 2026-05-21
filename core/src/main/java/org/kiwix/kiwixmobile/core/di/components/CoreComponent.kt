@@ -52,7 +52,6 @@ import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
@@ -97,7 +96,6 @@ interface CoreComponent {
   fun application(): Application
   fun bookUtils(): BookUtils
   fun dataSource(): DataSource
-  fun mainRepositoryActions(): MainRepositoryActions
   fun downloadRoomDao(): DownloadRoomDao
   fun connectivityManager(): ConnectivityManager
   fun libkiwixBookmarks(): LibkiwixBookmarks

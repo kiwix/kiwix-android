@@ -135,7 +135,6 @@ fun KiwixNavGraph(
         }
       }
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
-
       LocalLibraryRoute(
         localLibraryViewModel = localLibraryViewModel,
         navController = navController,
