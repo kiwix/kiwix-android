@@ -104,6 +104,8 @@ import kotlin.math.roundToInt
 const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
 const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
 const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
+const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
+const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 const val SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG =
   "showSwipeDownToScanFileSystemTextTestingTag"
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5

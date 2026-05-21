@@ -23,8 +23,12 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
+
+import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForPlayStore
+import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForStandalone
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
@@ -38,11 +42,15 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 )
 interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(readerFragment: KiwixReaderFragment)
-  fun inject(localLibraryFragment: LocalLibraryFragment)
   fun inject(deleteFiles: DeleteFiles)
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(onlineCategoryDialog: OnlineCategoryDialog)
   fun inject(kiwixMainActivity: KiwixMainActivity)
+
+  fun processSelectedZimFilesForPlayStore(): ProcessSelectedZimFilesForPlayStore
+  fun processSelectedZimFilesForStandalone(): ProcessSelectedZimFilesForStandalone
+
+  fun mainRepositoryActions(): MainRepositoryActions
 
   @Subcomponent.Builder
   interface Builder {

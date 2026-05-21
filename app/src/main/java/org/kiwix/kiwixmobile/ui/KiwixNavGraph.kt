@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
-import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
@@ -81,11 +80,11 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
+import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
@@ -119,13 +118,11 @@ fun KiwixNavGraph(
     ) { backStackEntry ->
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
 
-      FragmentContainer(R.id.localLibraryFragmentContainer) {
-        LocalLibraryFragment().apply {
-          arguments = Bundle().apply {
-            putString(ZIM_FILE_URI_KEY, zimFileUri)
-          }
-        }
-      }
+      LocalLibraryRoute(
+        viewModelFactory = viewModelFactory,
+        navController = navController,
+        zimFileUriArg = zimFileUri
+      )
     }
 
     composable(KiwixDestination.Downloads.route) {
