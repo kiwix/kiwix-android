@@ -87,6 +87,7 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -118,6 +119,7 @@ private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 @Composable
 fun LocalLibraryScreen(
   state: LocalLibraryScreenState,
+  actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   onRefresh: () -> Unit,
   onDownloadButtonClick: () -> Unit,
@@ -138,7 +140,7 @@ fun LocalLibraryScreen(
         KiwixAppBar(
           title = stringResource(R.string.library),
           navigationIcon = navigationIcon,
-          actionMenuItems = state.actionMenuItems,
+          actionMenuItems = actionMenuItems,
           topAppBarScrollBehavior = scrollBehavior
         )
       },
