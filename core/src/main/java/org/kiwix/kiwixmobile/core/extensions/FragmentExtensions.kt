@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -32,7 +33,6 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 inline fun <reified T : ViewModel> Fragment.viewModel(
@@ -70,9 +70,12 @@ val Fragment.coreMainActivity get() = activity as CoreMainActivity
  */
 fun Fragment.setStatusBarColor() {
   CoroutineScope(Dispatchers.Main).launch {
-    val isDarkTheme = CoreApp.instance.themeConfig.isDarkTheme()
-    val windowBackGroundColor = if (isDarkTheme) {
-      Color.BLACK
+    val typedValue = TypedValue()
+    val theme = activity?.theme
+    val hasBackground = theme != null &&
+      theme.resolveAttribute(android.R.attr.colorBackground, typedValue, true)
+    val windowBackGroundColor = if (hasBackground) {
+      typedValue.data
     } else {
       Color.WHITE
     }

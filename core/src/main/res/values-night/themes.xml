@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--Top level DayNight theme to be used in AndroidManifest.xml-->
   <style name="KiwixTheme" parent="Base.KiwixTheme">
     <!-- Dark theme customisations here-->
@@ -20,5 +20,8 @@
     <item name="textSecondary">@color/mine_shaft_gray350</item>
     <item name="textTertiary">@color/mine_shaft_gray500</item>
     <item name="cardViewBackground">@color/mine_shaft_gray850</item>
+
+    <item name="android:statusBarColor" tools:ignore="NewApi">@color/mine_shaft_gray900</item>
+    <item name="android:navigationBarColor" tools:ignore="NewApi">@color/mine_shaft_gray900</item>
   </style>
 </resources>

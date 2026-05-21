@@ -234,7 +234,7 @@ class ReaderMenuState(
       Box(
         modifier = modifier
           .clip(RoundedCornerShape(TAB_SWITCHER_ICON_CORNER_RADIUS))
-          .background(MaterialTheme.colorScheme.onPrimary)
+          .background(MaterialTheme.colorScheme.surface)
           .border(
             TWO_DP,
             MaterialTheme.colorScheme.onBackground,

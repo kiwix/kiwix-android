@@ -38,7 +38,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -135,7 +134,6 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
@@ -355,15 +353,10 @@ fun TableDrawerSheet(
   selectedWebView: KiwixWebView?,
   showTableOfContentDrawer: MutableState<Boolean>
 ) {
-  val drawerBackgroundColor = if (isSystemInDarkTheme()) {
-    MineShaftGray700
-  } else {
-    White
-  }
   ModalDrawerSheet(
     modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
     drawerShape = RectangleShape,
-    drawerContainerColor = drawerBackgroundColor
+    drawerContainerColor = MaterialTheme.colorScheme.surface
   ) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
       item {
@@ -623,7 +616,7 @@ private fun BottomAppBarOfReaderScreen(
 ) {
   if (!shouldShowBottomAppBar) return
   BottomAppBar(
-    containerColor = MaterialTheme.colorScheme.onPrimary,
+    containerColor = MaterialTheme.colorScheme.surface,
     contentColor = MaterialTheme.colorScheme.onBackground,
     scrollBehavior = bottomAppBarScrollBehavior,
   ) {

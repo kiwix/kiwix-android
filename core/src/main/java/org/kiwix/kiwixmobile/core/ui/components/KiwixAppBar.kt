@@ -83,8 +83,8 @@ fun KiwixAppBar(
       actions = { ActionMenu(actionMenuItems) },
       scrollBehavior = topAppBarScrollBehavior,
       colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.onPrimary,
-        scrolledContainerColor = MaterialTheme.colorScheme.onPrimary
+        containerColor = MaterialTheme.colorScheme.surface,
+        scrolledContainerColor = MaterialTheme.colorScheme.surface
       ),
       // Edge-to-Edge mode is already enabled in our application,
       // so we don't need to apply additional top insets.

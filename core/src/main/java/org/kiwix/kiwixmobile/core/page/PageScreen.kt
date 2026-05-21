@@ -330,7 +330,7 @@ private fun PageSwitchRow(
       Row(
         modifier = Modifier
           .fillMaxWidth()
-          .background(MaterialTheme.colorScheme.onPrimary)
+          .background(MaterialTheme.colorScheme.surface)
           .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
         horizontalArrangement = Arrangement.Absolute.Right,
         verticalAlignment = Alignment.CenterVertically
