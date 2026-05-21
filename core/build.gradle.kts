@@ -27,6 +27,7 @@ android {
 fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
 
 dependencies {
+  implementation("androidx.core:core-splashscreen:1.2.0")
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
   implementation(Libs.threetenabp)
 

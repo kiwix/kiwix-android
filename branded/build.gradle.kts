@@ -61,7 +61,8 @@ android {
 }
 
 dependencies {
-  // Keep the migration for branded apps, since they are released on playStore.
+  implementation("androidx.core:core-splashscreen:1.2.0")
+  // Keep the migration for custom apps, since they are released on playStore.
   implementation(project(":objectboxmigration"))
 }
 

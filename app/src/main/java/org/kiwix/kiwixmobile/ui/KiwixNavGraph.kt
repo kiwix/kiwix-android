@@ -236,7 +236,6 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-
       val context = LocalActivity.current
       val coreMainActivity = context as CoreMainActivity
 
