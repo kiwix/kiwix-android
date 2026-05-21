@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ManageExternalFilesPermissionDialog
 
 @RequiresApi(Build.VERSION_CODES.R)
-class ShowManageExternalFilesPermissionDialog(private val dialogShower: AlertDialogShower) :
+class ManageExternalFilesPermissionDialog(private val dialogShower: AlertDialogShower) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     dialogShower.show(

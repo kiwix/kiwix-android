@@ -27,14 +27,14 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startActionMode
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.FileSelectActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.MultiModeFinished
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestValidateZimFiles
 
 data class StartMultiSelection(
-  private val fileSelectActions: MutableSharedFlow<FileSelectActions>,
+  private val localLibraryUiActions: MutableSharedFlow<LocalLibraryUiActions>,
   private val coroutineScope: CoroutineScope
 ) : SideEffect<ActionMode?> {
   override fun invokeWith(activity: AppCompatActivity): ActionMode? {
@@ -43,23 +43,23 @@ data class StartMultiSelection(
       mapOf(
         R.id.zim_file_delete_item to {
           activity.lifecycleScope.launch {
-            fileSelectActions.emit(RequestDeleteMultiSelection)
+            localLibraryUiActions.emit(RequestDeleteMultiSelection)
           }
         },
         R.id.zim_file_share_item to {
           activity.lifecycleScope.launch {
-            fileSelectActions.emit(RequestShareMultiSelection)
+            localLibraryUiActions.emit(RequestShareMultiSelection)
           }
         },
         R.id.zim_file_validate_item to {
           activity.lifecycleScope.launch {
-            fileSelectActions.emit(RequestValidateZimFiles)
+            localLibraryUiActions.emit(RequestValidateZimFiles)
           }
         }
       )
     ) {
       coroutineScope.launch {
-        fileSelectActions.emit(MultiModeFinished)
+        localLibraryUiActions.emit(MultiModeFinished)
       }
     }
   }

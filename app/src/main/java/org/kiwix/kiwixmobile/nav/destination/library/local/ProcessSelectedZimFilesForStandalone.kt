@@ -135,6 +135,10 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
       file to ""
     }
   }
+
+  fun dispose() {
+    selectedZimFileCallback = null
+  }
 }
 
 interface SelectedZimFileCallback {

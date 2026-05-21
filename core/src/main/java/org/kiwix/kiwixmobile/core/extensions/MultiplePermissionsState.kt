@@ -27,8 +27,8 @@ fun MultiplePermissionsState.handlePermissionRequest(
   onRationale: () -> Unit
 ) {
   when {
-    allPermissionsGranted -> onGranted()
-    shouldShowRationale -> onRationale()
+    allPermissionsGranted -> onGranted.invoke()
+    shouldShowRationale -> onRationale.invoke()
     else -> launchMultiplePermissionRequest()
   }
 }

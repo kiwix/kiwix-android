@@ -101,7 +101,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryScreenState
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiState
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.NoFileView
 import kotlin.math.roundToInt
 
@@ -118,7 +118,7 @@ private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun LocalLibraryScreen(
-  state: LocalLibraryScreenState,
+  state: LocalLibraryUiState,
   actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   onRefresh: () -> Unit,
@@ -179,7 +179,7 @@ fun LocalLibraryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LocalLibraryMainContent(
-  state: LocalLibraryScreenState,
+  state: LocalLibraryUiState,
   onRefresh: () -> Unit,
   contentPadding: PaddingValues,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
