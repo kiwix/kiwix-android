@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.data
+package org.kiwix.kiwixmobile.core.data
 
 import android.content.ContentValues
 import android.content.Context
@@ -32,8 +32,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.TestApplication
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -48,7 +47,7 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
-class KiwixRoomDatabaseMigrationTest {
+class KiwixRoomDatabaseMigrationSchemaValidationTest {
   private lateinit var db: SupportSQLiteDatabase
   private lateinit var roomDb: KiwixRoomDatabase
 

@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.core.data
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -28,16 +28,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertArrayEquals
-import org.junit.Before
-import org.junit.Test
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.data.RoomDowngradeBackupHelper
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File

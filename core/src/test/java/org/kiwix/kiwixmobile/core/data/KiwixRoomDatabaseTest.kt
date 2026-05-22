@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.core.data
 
 import android.content.Context
 import android.os.Build
@@ -35,11 +35,10 @@ import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.data.RoomDowngradeBackupHelper
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File

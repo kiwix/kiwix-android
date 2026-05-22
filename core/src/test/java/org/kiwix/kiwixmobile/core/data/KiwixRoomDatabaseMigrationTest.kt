@@ -203,6 +203,7 @@ class KiwixRoomDatabaseMigrationTest {
     )
     recentSearchCursor.close()
 
+    // History
     val historyCursor = db.query("SELECT * FROM HistoryRoomEntity WHERE zimId = 'zim-1'")
     historyCursor.moveToFirst()
     assertEquals(
