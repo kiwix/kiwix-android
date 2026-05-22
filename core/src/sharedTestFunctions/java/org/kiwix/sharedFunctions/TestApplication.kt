@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.sharedFunctions
 
 import android.app.Application
 

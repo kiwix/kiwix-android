@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.dao
+package org.kiwix.kiwixmobile.core.roomDao
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

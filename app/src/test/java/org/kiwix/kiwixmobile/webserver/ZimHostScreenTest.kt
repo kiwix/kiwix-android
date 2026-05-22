@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
-import org.kiwix.kiwixmobile.TestApplication
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config

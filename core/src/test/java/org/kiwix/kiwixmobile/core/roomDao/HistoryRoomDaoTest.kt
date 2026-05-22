@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.roomDao
+package org.kiwix.kiwixmobile.core.roomDao
 
 import android.content.Context
 import android.os.Build
@@ -31,11 +31,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
+import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
-import org.kiwix.kiwixmobile.TestApplication
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 

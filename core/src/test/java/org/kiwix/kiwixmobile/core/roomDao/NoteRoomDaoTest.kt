@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.roomDao
+package org.kiwix.kiwixmobile.core.roomDao
 
 import android.content.Context
 import android.os.Build
@@ -31,8 +31,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
-import org.kiwix.kiwixmobile.TestApplication
+import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getNoteListItem
+import org.kiwix.sharedFunctions.TestApplication
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
