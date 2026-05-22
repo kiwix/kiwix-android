@@ -23,7 +23,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -36,6 +35,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
@@ -52,12 +52,14 @@ import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class BrandedDownloadViewModel @Inject constructor(
   downloadRoomDao: DownloadRoomDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
   private val downloadBranded: DownloadBranded,
   private val navigateToBrandedReader: NavigateToBrandedReader,
-  private val kiwixDataStore: KiwixDataStore
+  private val kiwixDataStore: KiwixDataStore,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()
@@ -78,7 +80,7 @@ class BrandedDownloadViewModel @Inject constructor(
   fun getStateForTesting() = _state
 
   private fun observeActions() {
-    viewModelScope.launch {
+    viewModelScope.launch(ioDispatcher) {
       actions
         .collect { action ->
           val currentState = _state.value
@@ -91,13 +93,12 @@ class BrandedDownloadViewModel @Inject constructor(
   }
 
   private fun observeDownloads(
-    downloadRoomDao: DownloadRoomDao,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    downloadRoomDao: DownloadRoomDao
   ) {
-    viewModelScope.launch {
+    viewModelScope.launch(ioDispatcher) {
       downloadRoomDao.downloads()
         .map { it.map(::DownloadItem) }
-        .flowOn(dispatcher)
+        .flowOn(ioDispatcher)
         .collect { downloads ->
           actions.emit(DatabaseEmission(downloads))
         }
