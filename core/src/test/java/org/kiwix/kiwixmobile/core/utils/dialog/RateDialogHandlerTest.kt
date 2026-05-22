@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import androidx.lifecycle.LifecycleCoroutineScope
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
@@ -45,6 +46,7 @@ import io.mockk.coEvery
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 
 @ExperimentalCoroutinesApi
 class RateDialogHandlerTest {
@@ -71,8 +73,8 @@ class RateDialogHandlerTest {
     every { NetworkUtils.isNetworkAvailable(any()) } returns true
 
     mockkStatic("androidx.lifecycle.LifecycleOwnerKt")
-    val mockLifecycleScope = mockk<androidx.lifecycle.LifecycleCoroutineScope>(relaxed = true)
-    every { mockLifecycleScope.coroutineContext } returns kotlinx.coroutines.test.UnconfinedTestDispatcher()
+    val mockLifecycleScope = mockk<LifecycleCoroutineScope>(relaxed = true)
+    every { mockLifecycleScope.coroutineContext } returns UnconfinedTestDispatcher()
     every { activity.lifecycleScope } returns mockLifecycleScope
   }
 

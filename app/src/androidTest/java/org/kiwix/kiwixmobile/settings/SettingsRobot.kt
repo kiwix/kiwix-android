@@ -34,6 +34,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.DIALOG_PREFERENCE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.settings.PREFERENCE_ITEM_TESTING_TAG
@@ -284,9 +285,14 @@ class SettingsRobot : BaseRobot() {
     clickPreferenceItem(context.getString(R.string.pref_info_version), composeTestRule)
   }
 
-  fun clickRateAppPreference(composeTestRule: ComposeContentTestRule) {
-    val title = context.getString(R.string.pref_rate_app_title, context.getString(org.kiwix.kiwixmobile.R.string.app_name))
-    clickPreferenceItem(title, composeTestRule)
+  fun assertRateAppPreferenceDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      val title =
+        context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
+      onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        .assertExists()
+    }
   }
 
   fun selectAlbanianLanguage(composeTestRule: ComposeContentTestRule) {
@@ -310,7 +316,8 @@ class SettingsRobot : BaseRobot() {
   fun assertRateAppPreferenceNotDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      val title = context.getString(R.string.pref_rate_app_title, context.getString(org.kiwix.kiwixmobile.R.string.app_name))
+      val title =
+        context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
       onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
         .assertDoesNotExist()
     }
