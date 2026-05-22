@@ -41,13 +41,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
-import org.kiwix.kiwixmobile.utils.TestApplication
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
-import org.kiwix.kiwixmobile.core.R
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
