@@ -29,6 +29,8 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDialog
+import org.kiwix.kiwixmobile.core.utils.effects.ReadPermissionRequiredDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
@@ -320,7 +322,7 @@ class LocalLibraryViewModelTest {
     testActionSideEffect(
       LocalLibraryViewModel.LocalLibraryUiActions.ReadPermissionDialog
     ) {
-      assertTrue(it is org.kiwix.kiwixmobile.core.utils.effects.ReadPermissionRequiredDialog)
+      assertTrue(it is ReadPermissionRequiredDialog)
     }
 
   @Test
@@ -342,7 +344,7 @@ class LocalLibraryViewModelTest {
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns true
     viewModel.sideEffects.test {
       viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog)
-      assertTrue(awaitItem() is org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDialog)
+      assertTrue(awaitItem() is ManageExternalFilesPermissionDialog)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -377,7 +379,7 @@ class LocalLibraryViewModelTest {
 
     viewModel.sideEffects.test {
       viewModel.onBookItemClick(bookOnDisk)
-      assertTrue(awaitItem() is org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDialog)
+      assertTrue(awaitItem() is ManageExternalFilesPermissionDialog)
       cancelAndIgnoreRemainingEvents()
     }
   }
