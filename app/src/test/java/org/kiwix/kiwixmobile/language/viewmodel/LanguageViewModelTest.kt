@@ -98,6 +98,7 @@ class LanguageViewModelTest {
     networkStates.value = NetworkState.NOT_CONNECTED
     every { kiwixDataStore.cachedLanguageList } returns languages
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("eng")
+    every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
   }
 
   @Test
