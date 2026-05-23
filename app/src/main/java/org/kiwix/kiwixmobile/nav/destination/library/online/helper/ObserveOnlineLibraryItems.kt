@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import org.kiwix.kiwixmobile.R as AppR
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
+
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -48,7 +48,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
     downloads: Flow<List<DownloadModel>>,
     networkBooks: Flow<List<LibkiwixBook>>,
     getString: (Int, Array<out Any>) -> String,
-    getSimpleString: (Int) -> String
+    getSimpleString: (Int) -> String,
+    getDisplayLanguage: (String) -> String
   ): Flow<List<LibraryListItem>> {
     return combine(
       localBooks,
@@ -66,11 +67,16 @@ class ObserveOnlineLibraryItems @Inject constructor(
         remoteBooks = remoteBooks,
         fileSystemState = fileSystemState,
         selection = selection,
-        getString = getString,
-        getSimpleString = getSimpleString
+        localizationHelper = LocalizationHelper(getString, getSimpleString, getDisplayLanguage)
       )
     }.flowOn(ioDispatcher)
   }
+
+  private class LocalizationHelper(
+    val getString: (Int, Array<out Any>) -> String,
+    val getSimpleString: (Int) -> String,
+    val getDisplayLanguage: (String) -> String
+  )
 
   private data class Selection(val language: String, val category: String)
 
@@ -80,8 +86,7 @@ class ObserveOnlineLibraryItems @Inject constructor(
     remoteBooks: List<LibkiwixBook>,
     fileSystemState: FileSystemState,
     selection: Selection,
-    getString: (Int, Array<Any>) -> String,
-    getSimpleString: (Int) -> String
+    localizationHelper: LocalizationHelper
   ): List<LibraryListItem> {
     val localBookIds = booksOnFileSystem.map { it.id }.toSet()
     val activeDownloadsById = activeDownloads.associateBy { it.book.id }
@@ -93,14 +98,14 @@ class ObserveOnlineLibraryItems @Inject constructor(
       allBooksById[download.book.id] ?: download.book
     }
     val availableBooks = allBooks.filterNot { it.id in activeDownloadingIds }
-    val sectionTitle = buildSectionTitle(selection, getString, getSimpleString)
+    val sectionTitle = buildSectionTitle(selection, localizationHelper)
     return buildList {
       addAll(
         createLibrarySection(
           downloadingBooks,
           activeDownloadsById,
           fileSystemState,
-          getSimpleString(R.string.downloading),
+          localizationHelper.getSimpleString(R.string.downloading),
           Long.MAX_VALUE
         )
       )
@@ -119,35 +124,34 @@ class ObserveOnlineLibraryItems @Inject constructor(
 
   private fun buildSectionTitle(
     selection: Selection,
-    getString: (Int, Array<Any>) -> String,
-    getSimpleString: (Int) -> String
+    localizationHelper: LocalizationHelper
   ): String {
     val languages = selection.language.split(",").map { it.trim() }.filter { it.isNotEmpty() }
     val categories = selection.category.split(",").map { it.trim() }.filter { it.isNotEmpty() }
 
     val languagePart = when {
-      languages.isEmpty() -> getSimpleString(R.string.all_languages)
+      languages.isEmpty() -> localizationHelper.getSimpleString(R.string.all_languages)
       languages.size > 1 -> {
         val joined = languages.joinToString(", ") {
-          it.convertToLocal().displayLanguage
+          localizationHelper.getDisplayLanguage(it)
         }
-        "${getSimpleString(R.string.your_languages)} $joined"
+        "${localizationHelper.getSimpleString(R.string.your_languages)} $joined"
       }
 
-      else -> getString(
+      else -> localizationHelper.getString(
         R.string.your_language,
-        arrayOf(languages.first().convertToLocal().displayLanguage)
+        arrayOf(localizationHelper.getDisplayLanguage(languages.first()))
       )
     }
 
     val categoryPart = when {
-      categories.isEmpty() -> getSimpleString(AppR.string.all_categories)
+      categories.isEmpty() -> localizationHelper.getSimpleString(AppR.string.all_categories)
       categories.size > 1 -> {
         val joined = categories.joinToString(", ")
-        "${getSimpleString(AppR.string.your_categories)} $joined"
+        "${localizationHelper.getSimpleString(AppR.string.your_categories)} $joined"
       }
 
-      else -> getString(
+      else -> localizationHelper.getString(
         AppR.string.your_category,
         arrayOf(categories.first())
       )
