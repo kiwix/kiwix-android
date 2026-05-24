@@ -25,6 +25,8 @@ class RateAppCounter internal constructor(context: Context) {
   companion object {
     private const val NO_THANKS_CLICKED = "clickedNoThanks"
     private const val COUNT = "count"
+    private const val DOWNLOAD_COMPLETED = "downloadCompleted"
+    private const val READING_COUNT = "readingCount"
   }
 
   private var ratingsPreferences: SharedPreferences =
@@ -45,4 +47,28 @@ class RateAppCounter internal constructor(context: Context) {
         putInt(COUNT, count)
       }
     }
+
+  var downloadCompletedState: Boolean
+    get() = ratingsPreferences.getBoolean(DOWNLOAD_COMPLETED, false)
+    set(value) {
+      ratingsPreferences.edit {
+        putBoolean(DOWNLOAD_COMPLETED, value)
+      }
+    }
+
+  var readingCount: Int
+    get() = ratingsPreferences.getInt(READING_COUNT, 0)
+    set(value) {
+      ratingsPreferences.edit {
+        putInt(READING_COUNT, value)
+      }
+    }
+
+  fun resetTriggers() {
+    ratingsPreferences.edit {
+      putInt(COUNT, 0)
+      putBoolean(DOWNLOAD_COMPLETED, false)
+      putInt(READING_COUNT, 0)
+    }
+  }
 }

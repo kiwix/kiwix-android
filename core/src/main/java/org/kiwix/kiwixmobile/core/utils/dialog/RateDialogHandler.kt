@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
+const val READING_MILESTONE_THRESHOLD = 10
 
 @ActivityScope
 class RateDialogHandler @Inject constructor(
@@ -47,7 +48,7 @@ class RateDialogHandler @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) {
   private var alertDialogShower: AlertDialogShower? = null
-  private var visitCounterPref: RateAppCounter? = null
+  private val visitCounterPref by lazy { RateAppCounter(activity) }
   private var tempVisitCount = 0
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
@@ -60,18 +61,18 @@ class RateDialogHandler @Inject constructor(
       {
         // User clicked "Rate!" — mark as handled and launch In-App Review flow
         // for the playStore variant.
-        visitCounterPref?.noThanksState = true
+        visitCounterPref.noThanksState = true
         launchInAppReviewFlow()
       },
       {
         // User clicked "No Thanks" — mark as handled, do not trigger review flow.
-        visitCounterPref?.noThanksState = true
+        visitCounterPref.noThanksState = true
       },
       {
-        // User clicked "Later" — reset the visit counter without calling
+        // User clicked "Later" — reset the triggers without calling
         // launchReviewFlow(), so this does not consume the Play Store review quota.
         tempVisitCount = 0
-        visitCounterPref?.count = tempVisitCount
+        visitCounterPref.resetTriggers()
       }
     )
   }
@@ -88,35 +89,19 @@ class RateDialogHandler @Inject constructor(
 
       reviewManager.requestReviewFlow()
         .addOnCompleteListener { requestTask ->
-          if (!requestTask.isSuccessful) {
+          if (requestTask.isSuccessful) {
+            val reviewInfo = requestTask.result
+            reviewManager.launchReviewFlow(activity, reviewInfo)
+              .addOnCompleteListener { launchTask ->
+                if (!launchTask.isSuccessful) {
+                  Log.e(TAG, "Failed to launch review flow", launchTask.exception)
+                  goToRateApp()
+                }
+              }
+          } else {
             Log.e(TAG, "Failed to request review flow", requestTask.exception)
             goToRateApp()
-            return@addOnCompleteListener
           }
-
-          val reviewInfo = requestTask.result
-
-          reviewManager.launchReviewFlow(activity, reviewInfo)
-            .addOnCompleteListener { launchTask ->
-              /*
-               * The Play Core API does not guarantee that the review dialog
-               * will actually be shown to the user.
-               *
-               * If launching fails, fallback to Play Store rating page.
-               */
-              if (!launchTask.isSuccessful) {
-                Log.e(TAG, "Failed to launch review flow", launchTask.exception)
-                goToRateApp()
-              }
-            }
-            .addOnFailureListener { exception ->
-              Log.e(TAG, "Error launching review flow", exception)
-              goToRateApp()
-            }
-        }
-        .addOnFailureListener { exception ->
-          Log.e(TAG, "Failed to request review flow", exception)
-          goToRateApp()
         }
     } catch (exception: Exception) {
       Log.e(TAG, "Unexpected error while launching in-app review", exception)
@@ -145,10 +130,9 @@ class RateDialogHandler @Inject constructor(
   fun checkForRateDialog(
     @IdRes iconResId: Int
   ) {
-    visitCounterPref = RateAppCounter(activity)
-    tempVisitCount = visitCounterPref?.count ?: 0
+    tempVisitCount = visitCounterPref.count
     ++tempVisitCount
-    visitCounterPref?.count = tempVisitCount
+    visitCounterPref.count = tempVisitCount
     (activity as CoreMainActivity).lifecycleScope.launch {
       if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {
         showRateDialog(iconResId)
@@ -157,9 +141,13 @@ class RateDialogHandler @Inject constructor(
   }
 
   internal suspend fun shouldShowRateDialog(): Boolean {
+    val meetVisitCount = tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
+    val meetDownload = visitCounterPref.downloadCompletedState
+    val meetReading = visitCounterPref.readingCount >= READING_MILESTONE_THRESHOLD
+
     return isPlayStoreVariant() &&
-      tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
-      visitCounterPref?.noThanksState == false && isTwoWeekPassed() &&
+      (meetVisitCount || meetDownload || meetReading) &&
+      !visitCounterPref.noThanksState && isTwoWeekPassed() &&
       isZimFilesAvailableInLibrary()
   }
 
