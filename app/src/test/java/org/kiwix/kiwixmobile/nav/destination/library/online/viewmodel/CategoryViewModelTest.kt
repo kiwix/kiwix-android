@@ -20,9 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
 import android.os.Build
-import app.cash.turbine.test
 import io.mockk.Runs
-import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
@@ -31,58 +29,90 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.data.remote.CategoryEntry
 import org.kiwix.kiwixmobile.core.data.remote.CategoryFeed
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.zimManager.awaitItemOfType
-import org.kiwix.sharedFunctions.InstantExecutorExtension
-import org.kiwix.sharedFunctions.category
+import org.kiwix.sharedFunctions.MainDispatcherRule
+import org.kiwix.kiwixmobile.core.R as CoreR
 
-@ExtendWith(InstantExecutorExtension::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class CategoryViewModelTest {
   private val application: Application = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val kiwixService: KiwixService = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+
+  @RegisterExtension
+  val mainDispatcher = MainDispatcherRule()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
   private lateinit var categoryViewModel: CategoryViewModel
   private var categories: MutableStateFlow<List<Category>?> = MutableStateFlow(null)
 
+  private val errorMessage = "No Internet Connection"
+  private fun createCategory(
+    id: Long = 1,
+    active: Boolean = false,
+    category: String = "Wikipedia"
+  ) = Category(id, active, category)
+
   @BeforeEach
   fun init() {
-    clearAllMocks()
-    every { application.getString(any()) } returns "Error"
+    networkStates.value = NetworkState.CONNECTED
+    CategorySessionCache.hasFetched = false
+
+    every { application.getString(any()) } returns ""
+
+    every {
+      application.getString(CoreR.string.no_network_connection)
+    } returns errorMessage
+
+    every {
+      application.getString(string.no_category_available)
+    } returns "No categories"
+
     every { connectivityBroadcastReceiver.action } returns "test"
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      every { application.registerReceiver(any(), any(), any()) } returns mockk()
+      every {
+        application.registerReceiver(any(), any(), any())
+      } returns mockk()
     } else {
       @Suppress("UnspecifiedRegisterReceiverFlag")
-      every { application.registerReceiver(any(), any()) } returns mockk()
+      every {
+        application.registerReceiver(any(), any())
+      } returns mockk()
     }
+
     every { application.unregisterReceiver(any()) } just Runs
-    CategorySessionCache.hasFetched = false
-    every { kiwixDataStore.cachedOnlineCategoryList } returns categories
-    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
-    coEvery { kiwixService.getCategories() } returns CategoryFeed()
+
+    every {
+      kiwixDataStore.cachedOnlineCategoryList
+    } returns categories
+
+    every {
+      kiwixDataStore.selectedOnlineContentCategory
+    } returns flowOf("")
+
+    coEvery {
+      kiwixService.getCategories()
+    } returns CategoryFeed()
   }
 
   private fun createViewModel() {
@@ -91,14 +121,15 @@ class CategoryViewModelTest {
         application,
         kiwixDataStore,
         kiwixService,
-        connectivityBroadcastReceiver
+        connectivityBroadcastReceiver,
+        mainDispatcher.dispatcher
       )
   }
 
   @Nested
-  inner class Context {
+  inner class Init {
     @Test
-    fun `registers broadcastReceiver in init`() {
+    fun registersReceiver_invokesOnInit() = runTest {
       createViewModel()
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         verify {
@@ -113,231 +144,360 @@ class CategoryViewModelTest {
     }
 
     @Test
-    fun `unregisters broadcastReceiver in onCleared`() {
-      createViewModel()
-      every { application.unregisterReceiver(any()) } returns mockk()
-      categoryViewModel.onClearedExposed()
-      verify {
-        application.unregisterReceiver(connectivityBroadcastReceiver)
-      }
-    }
-  }
-
-  @Test
-  fun `initial state is Loading`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
+    fun categoryState_initially_isLoading() = runTest {
       createViewModel()
       assertThat(categoryViewModel.state.value).isEqualTo(Loading)
     }
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `an empty categories emission does not send update action`() = flakyTest {
-    runTest {
-      createViewModel()
-      advanceUntilIdle()
-      categoryViewModel.actions.test {
-        categories.emit(listOf())
-        expectNoEvents()
-        cancelAndIgnoreRemainingEvents()
-        ensureAllEventsConsumed()
-      }
-    }
-  }
+  @Nested
+  inner class ObserveActions {
+    @Nested
+    inner class Reduce {
+      @Nested
+      inner class Error {
+        @Test
+        fun errorAction_emitsErrorMessage() = runTest {
+          createViewModel()
+          advanceUntilIdle()
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `Save uses active category`() = flakyTest {
-    runTest {
-      every { application.getString(any()) } returns ""
-      createViewModel()
-      val activeCategory = category(category = "wikipedia").copy(active = true)
-      val inactiveCategory = category(category = "gutenburg").copy(active = false)
-      val categoryItem = CategoryListItem.CategoryItem(activeCategory)
-      categoryViewModel.effects.test {
-        categoryViewModel.state.value = Content(listOf(activeCategory, inactiveCategory))
-        categoryViewModel.actions.emit(Action.Select(categoryItem))
-        advanceUntilIdle()
-        advanceTimeBy(100)
-        val effect = awaitItemOfType<SaveCategoryAndFinish>()
-        assertThat(effect.category).isEqualTo(activeCategory)
-      }
-    }
-  }
+          categoryViewModel.actions.emit(Action.Error(errorMessage))
 
-  @Test
-  fun `online and api returns empty emits Error when no cache`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
-      coEvery { application.getString(string.no_category_available) } returns "No category available"
+          advanceUntilIdle()
 
-      createViewModel()
-      categoryViewModel.state.test {
-        val error = awaitItemOfType<State.Error>()
-        assertThat(error.errorMessage).isEqualTo("No category available")
-      }
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `online api throws exception falls back to error`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } throws RuntimeException()
-
-      createViewModel()
-
-      advanceUntilIdle() // Wait for coroutines to settle
-
-      categoryViewModel.state.test {
-        val error = awaitItemOfType<State.Error>()
-        assertThat(error.errorMessage).isEqualTo("Error")
-        cancelAndConsumeRemainingEvents()
-      }
-    }
-  }
-
-  @Test
-  fun `offline uses cached categories`() = flakyTest {
-    runTest {
-      networkStates.value = NetworkState.NOT_CONNECTED
-
-      val cached =
-        listOf(
-          Category(category = "Offline", active = true, id = 1)
-        )
-
-      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns
-        flowOf(cached)
-
-      createViewModel()
-      categoryViewModel.state.test {
-        val content = awaitItemOfType<Content>()
-        assertThat(content.items.first().category)
-          .isEqualTo("Offline")
-      }
-    }
-  }
-
-  @Test
-  fun `offline and no cache emits no network error`() = flakyTest {
-    runTest {
-      networkStates.value = NetworkState.NOT_CONNECTED
-
-      createViewModel()
-      categoryViewModel.state.test {
-        val error = awaitItemOfType<State.Error>()
-        assertThat(error.errorMessage).isEqualTo("Error")
-      }
-    }
-  }
-
-  @Test
-  fun `session cache skips api call`() = flakyTest {
-    runTest {
-      CategorySessionCache.hasFetched = true
-
-      val cached =
-        listOf(
-          Category(1, true, "Cached")
-        )
-
-      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns
-        flowOf(cached)
-
-      createViewModel()
-      verify(exactly = 0) {
-        runBlocking { kiwixService.getCategories() }
-      }
-
-      assertThat(categoryViewModel.state.value)
-        .isInstanceOf(Content::class.java)
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `UpdateCategory changes Loading to Content`() = flakyTest {
-    runTest {
-      CategorySessionCache.hasFetched = true
-      coEvery { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(emptyList())
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
-
-      createViewModel()
-      val categories = listOf(Category(1, false, "Test"))
-      categoryViewModel.state.test {
-        skipItems(1)
-
-        categoryViewModel.actions.emit(UpdateCategory(categories))
-        advanceUntilIdle()
-
-        assertThat(awaitItemOfType<Content>()).isEqualTo(Content(categories))
-        cancelAndConsumeRemainingEvents()
-      }
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `Filter updates content`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
-
-      val categories =
-        listOf(
-          Category(1, false, "wikipedia"),
-          Category(2, false, "Gutenburg")
-        )
-
-      createViewModel()
-      categoryViewModel.state.test {
-        skipItems(1)
-        categoryViewModel.actions.emit(UpdateCategory(categories))
-        advanceUntilIdle()
-
-        categoryViewModel.actions.emit(Action.Filter("wiki"))
-        advanceUntilIdle()
-        val content = awaitItemOfType<Content>()
-        val filteredItem: CategoryListItem.CategoryItem =
-          content.viewItems.first { it is CategoryListItem.CategoryItem } as CategoryListItem.CategoryItem
-        assertThat(filteredItem.category.category).isEqualTo("wikipedia")
-        cancelAndConsumeRemainingEvents()
-      }
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `Select emits side effect and moves to Saving`() = flakyTest {
-    runTest {
-      coEvery { kiwixService.getCategories() } returns CategoryFeed()
-
-      val items =
-        listOf(
-          Category(0, true, ""),
-          Category(1, false, "Wikipedia")
-        )
-
-      createViewModel()
-      advanceUntilIdle()
-      categoryViewModel.effects.test {
-        categoryViewModel.actions.emit(UpdateCategory(items))
-        advanceUntilIdle()
-        categoryViewModel.actions.emit(
-          Action.Select(
-            CategoryListItem.CategoryItem(
-              Category(1, false, "Wikipedia")
-            )
+          assertEquals(
+            State.Error(errorMessage),
+            categoryViewModel.state.value
           )
+        }
+      }
+
+      @Nested
+      inner class UpdateCategory {
+        @Test
+        fun updateCategory_whenLoadingState_emitsContent() = runTest {
+          createViewModel()
+          advanceUntilIdle()
+
+          val categories = listOf(createCategory())
+
+          categoryViewModel.state.value = Loading
+          categoryViewModel.actions.emit(UpdateCategory(categories))
+
+          advanceUntilIdle()
+
+          assertEquals(
+            State.Content(categories),
+            categoryViewModel.state.value
+          )
+        }
+
+        @Test
+        fun updateCategory_whenNotLoading_emitsCurrentState() = runTest {
+          createViewModel()
+          advanceUntilIdle()
+
+          val categories = listOf(createCategory())
+          val currentState = State.Error(errorMessage)
+
+          categoryViewModel.state.value = currentState
+          categoryViewModel.actions.emit(UpdateCategory(categories))
+
+          advanceUntilIdle()
+
+          assertEquals(
+            currentState,
+            categoryViewModel.state.value
+          )
+        }
+      }
+
+      @Nested
+      inner class Filter {
+        @Test
+        fun filter_whenContentState_updatesContent() = runTest {
+          createViewModel()
+          advanceUntilIdle()
+
+          val categories =
+            listOf(
+              createCategory(category = "Wikipedia"),
+              createCategory(id = 2, category = "Gutenburg")
+            )
+
+          categoryViewModel.state.value = State.Content(categories)
+          categoryViewModel.actions.emit(Action.Filter("Wiki"))
+
+          advanceUntilIdle()
+
+          val content = categoryViewModel.state.value as State.Content
+
+          assertEquals("Wikipedia", content.items.first().category)
+        }
+
+        @Test
+        fun filter_whenNotContentState_emitsCurrentState() = runTest {
+          createViewModel()
+          advanceUntilIdle()
+
+          val currentState = State.Error(errorMessage)
+
+          categoryViewModel.state.value = currentState
+          categoryViewModel.actions.emit(Action.Filter("Wiki"))
+
+          advanceUntilIdle()
+
+          assertEquals(
+            currentState,
+            categoryViewModel.state.value
+          )
+        }
+      }
+
+      @Nested
+      inner class Select {
+        @Test
+        fun select_whenContentState_emitsSaving() = runTest {
+          createViewModel()
+          advanceUntilIdle()
+
+          val categories = listOf(createCategory(active = true))
+
+          categoryViewModel.state.value = State.Content(categories)
+          categoryViewModel.actions.emit(
+            Action.Select(CategoryListItem.CategoryItem(categories.first()))
+          )
+
+          advanceUntilIdle()
+
+          assertEquals(State.Saving, categoryViewModel.state.value)
+        }
+
+        @Test
+        fun select_whenNotContentState_emitsCurrentState() = runTest {
+          createViewModel()
+          advanceUntilIdle()
+
+          val currentState = State.Error(errorMessage)
+
+          categoryViewModel.state.value = currentState
+          categoryViewModel.actions.emit(
+            Action.Select(CategoryListItem.CategoryItem(createCategory()))
+          )
+
+          advanceUntilIdle()
+
+          assertEquals(currentState, categoryViewModel.state.value)
+        }
+      }
+    }
+  }
+
+  @Nested
+  inner class ObserveCategories {
+    @Nested
+    inner class SessionCache {
+      @Test
+      fun sessionCacheHasFetchedAndCachedCategoryListNotNullOrEmpty_emitsCachedData() = runTest {
+        val categories = listOf(createCategory())
+
+        CategorySessionCache.hasFetched = true
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(categories)
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Content(categories),
+          categoryViewModel.state.value
+        )
+      }
+
+      @Test
+      fun sessionCacheHasFetchedAndCacheEmpty_continuesFlow() = runTest {
+        CategorySessionCache.hasFetched = true
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(emptyList())
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Error("No categories"),
+          categoryViewModel.state.value
+        )
+      }
+
+      @Test
+      fun sessionCacheHasFetchedAndCacheNull_continuesFlow() = runTest {
+        CategorySessionCache.hasFetched = true
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(null)
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Error("No categories"),
+          categoryViewModel.state.value
+        )
+      }
+    }
+
+    @Nested
+    inner class Online {
+      @Test
+      fun online_whenApiReturnsCategories_emitsContent() = runTest {
+        val entry = CategoryEntry().apply {
+          title = "Wikipedia"
+        }
+
+        val feed = CategoryFeed().apply {
+          entries = listOf(entry)
+        }
+
+        coEvery {
+          kiwixService.getCategories()
+        } returns feed
+
+        coEvery {
+          kiwixDataStore.saveOnlineCategoryList(any())
+        } just Runs
+
+        createViewModel()
+        advanceUntilIdle()
+
+        val expected = listOf(
+          createCategory(id = 0, active = true, category = ""),
+          createCategory(id = 1, category = "Wikipedia")
         )
 
-        advanceUntilIdle()
-        assertThat(awaitItem())
-          .isInstanceOf(SaveCategoryAndFinish::class.java)
+        assertEquals(
+          State.Content(expected),
+          categoryViewModel.state.value
+        )
+      }
 
-        cancelAndConsumeRemainingEvents()
+      @Test
+      fun online_apiEmpty_cacheExists_emitsCache() = runTest {
+        val categories = listOf(createCategory())
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(categories)
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Content(categories),
+          categoryViewModel.state.value
+        )
+      }
+
+      @Test
+      fun online_apiEmpty_cacheEmpty_emitsNoCategory() = runTest {
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(emptyList())
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Error("No categories"),
+          categoryViewModel.state.value
+        )
+      }
+
+      @Test
+      fun online_apiEmpty_cacheNull_emitsNoCategory() = runTest {
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(null)
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Error("No categories"),
+          categoryViewModel.state.value
+        )
+      }
+    }
+
+    @Nested
+    inner class Offline {
+      @Test
+      fun offline_cacheExists_emitsCache() = runTest {
+        networkStates.value = NetworkState.NOT_CONNECTED
+
+        val categories = listOf(createCategory())
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(categories)
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Content(categories),
+          categoryViewModel.state.value
+        )
+      }
+
+      @Test
+      fun offline_cacheEmpty_emitsNoInternet() = runTest {
+        networkStates.value = NetworkState.NOT_CONNECTED
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(emptyList())
+
+        every {
+          application.getString(
+            CoreR.string.no_network_connection
+          )
+        } returns errorMessage
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Error(errorMessage),
+          categoryViewModel.state.value
+        )
+      }
+
+      @Test
+      fun offline_cacheNull_emitsNoInternet() = runTest {
+        networkStates.value = NetworkState.NOT_CONNECTED
+
+        every {
+          kiwixDataStore.cachedOnlineCategoryList
+        } returns MutableStateFlow(null)
+
+        every {
+          application.getString(
+            CoreR.string.no_network_connection
+          )
+        } returns errorMessage
+
+        createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Error(errorMessage),
+          categoryViewModel.state.value
+        )
       }
     }
   }

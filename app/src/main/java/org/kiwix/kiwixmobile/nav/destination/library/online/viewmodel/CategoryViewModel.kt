@@ -22,6 +22,7 @@ import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -46,11 +48,11 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Error
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Filter
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
@@ -60,7 +62,8 @@ class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   @CategoryKiwixService private val kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
+  @IoDispatcher val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
   sealed class Action {
     data class UpdateCategory(val categories: List<Category>) : Action()
@@ -89,7 +92,7 @@ class CategoryViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private fun observeCategories() = viewModelScope.launch {
+  private fun observeCategories() = viewModelScope.launch(dispatcher) {
     state.value = Loading
 
     val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
