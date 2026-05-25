@@ -337,7 +337,7 @@ private fun handlePermissionEvents(
     }
 
     AllFilesPermissionDialog -> {
-      if (viewModel.isAndroid13OrAbove) {
+      if (viewModel.isAndroid11OrAbove) {
         alertDialogShower.show(
           KiwixDialog.ManageExternalFilesPermissionDialog,
           { context.navigateToSettings() }

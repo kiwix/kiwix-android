@@ -19,13 +19,11 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
-import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -151,19 +149,6 @@ object ActivityExtensions {
    */
   fun Activity.isBrandedApp(): Boolean =
     packageName != "org.kiwix.kiwixmobile" && packageName != "org.kiwix.kiwixmobile.standalone"
-
-  @SuppressLint("NewApi")
-  suspend fun Activity.isManageExternalStoragePermissionGranted(
-    kiwixDataStore: KiwixDataStore?
-  ): Boolean =
-    if (kiwixDataStore?.isNotPlayStoreBuildWithAndroid11OrAbove() == true &&
-      !kiwixDataStore.prefIsTest.first() &&
-      kiwixDataStore.showManageExternalFilesPermissionDialogOnRefresh.first()
-    ) {
-      Environment.isExternalStorageManager()
-    } else {
-      true
-    }
 
   fun Activity.isLandScapeMode(): Boolean =
     resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

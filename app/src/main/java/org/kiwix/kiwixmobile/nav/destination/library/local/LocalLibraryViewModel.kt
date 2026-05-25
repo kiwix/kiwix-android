@@ -331,7 +331,7 @@ class LocalLibraryViewModel @Inject constructor(
         ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
 
       ManageFilesPermissionDialog ->
-        if (kiwixPermissionChecker.isAndroid13orAbove()) {
+        if (kiwixPermissionChecker.isAndroid11OrAbove()) {
           ManageExternalFilesPermissionDialog(alertDialogShower)
         } else {
           None
@@ -720,12 +720,9 @@ class LocalLibraryViewModel @Inject constructor(
     }
   }
 
-  private var lastProcessedZimUri: String? = null
-
   fun processZimFileArguments(zimFileUri: String) {
     viewModelScope.launch {
-      if (zimFileUri.isNotEmpty() && zimFileUri != lastProcessedZimUri) {
-        lastProcessedZimUri = zimFileUri
+      if (zimFileUri.isNotEmpty()) {
         val selectedUris = listOf(zimFileUri.toUri())
         if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
           sendAction(RequestReadWritePermission(ProcessZimFiles(selectedUris)))
@@ -784,7 +781,7 @@ class LocalLibraryViewModel @Inject constructor(
     }
   }
 
-  private suspend fun handleSelectedFileUri(uris: List<Uri>) {
+  suspend fun handleSelectedFileUri(uris: List<Uri>) {
     when {
       // Process the ZIM file for standalone app.
       processSelectedZimFilesForStandalone.canHandleUris() ->

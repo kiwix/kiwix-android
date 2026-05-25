@@ -24,8 +24,6 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForPlayStore
-import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForStandalone
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialog
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
@@ -43,9 +41,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(onlineCategoryDialog: OnlineCategoryDialog)
   fun inject(kiwixMainActivity: KiwixMainActivity)
-
-  fun processSelectedZimFilesForStandalone(): ProcessSelectedZimFilesForStandalone
-  fun processSelectedZimFilesForPlayStore(): ProcessSelectedZimFilesForPlayStore
 
   @Subcomponent.Builder
   interface Builder {

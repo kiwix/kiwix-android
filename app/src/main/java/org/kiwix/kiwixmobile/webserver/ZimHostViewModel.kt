@@ -103,6 +103,7 @@ class ZimHostViewModel @Inject constructor(
   }
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
+  val isAndroid11OrAbove = kiwixPermissionChecker.isAndroid11OrAbove()
 
   private val _uiState = MutableStateFlow(UiState())
   val uiState: StateFlow<UiState> = _uiState
