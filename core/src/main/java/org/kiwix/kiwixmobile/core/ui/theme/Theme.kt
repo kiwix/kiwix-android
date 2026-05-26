@@ -89,7 +89,7 @@ fun KiwixDialogTheme(
 ) {
   val colorScheme = when {
     darkTheme -> DarkColorScheme.copy(
-      background = MineShaftGray700,
+      background = MineShaftGray900,
       onSurfaceVariant = MineShaftGray350
     )
 
