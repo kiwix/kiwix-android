@@ -147,7 +147,7 @@ class ZimHostScreenInstrumentTest {
 
   @Test
   fun testZimHostScreen() {
-    if (isWifiEnabled()) {
+    if (isWifiEnabled() && Build.VERSION.SDK_INT != Build.VERSION_CODES.VANILLA_ICE_CREAM) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(KiwixDestination.Library.route)

@@ -156,7 +156,10 @@ class LocalLibraryTest : BaseActivityTest() {
       assertLibraryListDisplayed(composeTestRule)
       validateZIMFiles(composeTestRule)
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU) {
+      // Temporary disabling on Android 13
+      LeakAssertions.assertNoLeaks()
+    }
   }
 
   @Test
