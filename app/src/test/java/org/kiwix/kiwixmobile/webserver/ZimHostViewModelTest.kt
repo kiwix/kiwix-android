@@ -94,6 +94,7 @@ class ZimHostViewModelTest {
     coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns true
     coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns true
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
+    every { kiwixPermissionChecker.isAndroid11OrAbove() } returns false
 
     every { context.getString(any()) } returns ""
     every { context.getString(any(), any()) } returns ""

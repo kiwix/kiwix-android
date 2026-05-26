@@ -356,7 +356,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `ManageFilesPermissionDialog emits correct side effect on Android 13+`() = runTest {
-    every { kiwixPermissionChecker.isAndroid13orAbove() } returns true
+    every { kiwixPermissionChecker.isAndroid11OrAbove() } returns true
     viewModel.sideEffects.test {
       viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog)
       assertTrue(awaitItem() is ManageExternalFilesPermissionDialog)
@@ -390,7 +390,7 @@ class LocalLibraryViewModelTest {
   fun `onBookItemClick shows permission dialog when permission not granted`() = runTest {
     val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
     coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns false
-    every { kiwixPermissionChecker.isAndroid13orAbove() } returns true
+    every { kiwixPermissionChecker.isAndroid11OrAbove() } returns true
 
     viewModel.sideEffects.test {
       viewModel.onBookItemClick(bookOnDisk)
