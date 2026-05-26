@@ -21,8 +21,7 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import org.kiwix.kiwixmobile.core.extensions.locale
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -114,8 +113,7 @@ class LanguageViewModel @Inject constructor(
       }
     }
 
-    val prefLanguageCode = kiwixDataStore.prefLanguage.first()
-    val sortedLanguages = sortLanguages(languages, prefLanguageCode)
+    val sortedLanguages = sortLanguages(languages)
 
     val languageList =
       when {
@@ -142,27 +140,11 @@ class LanguageViewModel @Inject constructor(
       emit(emptyList())
     }
 
-  private fun sortLanguages(languages: List<Language>, prefLanguageCode: String): List<Language> {
+  private fun sortLanguages(languages: List<Language>): List<Language> {
     val allLanguagesItem = languages.firstOrNull { it.id == 0L || it.languageCode.isEmpty() }
     val otherLanguages = languages.filter { it.id != 0L && it.languageCode.isNotEmpty() }
 
-    val systemLanguageLocale = if (prefLanguageCode.isNotEmpty() &&
-      prefLanguageCode != java.util.Locale.ROOT.toString()
-    ) {
-      java.util.Locale.forLanguageTag(prefLanguageCode)
-    } else if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
-      AppCompatDelegate.getApplicationLocales()[0] ?: try {
-        context.locale
-      } catch (_: Exception) {
-        java.util.Locale.getDefault()
-      }
-    } else {
-      try {
-        context.locale
-      } catch (_: Exception) {
-        java.util.Locale.getDefault()
-      }
-    }
+    val systemLanguageLocale = LocaleHelper.getAppLocale(context, kiwixDataStore)
 
     val systemLanguageISO3 = try {
       systemLanguageLocale.isO3Language
@@ -197,7 +179,6 @@ class LanguageViewModel @Inject constructor(
 
     val cachedLanguageList = kiwixDataStore.cachedLanguageList.first()
     val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
-    val prefLanguageCode = kiwixDataStore.prefLanguage.first()
 
     if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
       val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage.first()
@@ -214,7 +195,7 @@ class LanguageViewModel @Inject constructor(
           }
         )
       }
-      val sortedLanguages = sortLanguages(updatedLanguages, prefLanguageCode)
+      val sortedLanguages = sortLanguages(updatedLanguages)
       actions.emit(UpdateLanguages(sortedLanguages))
       return@launch
     }
@@ -224,25 +205,24 @@ class LanguageViewModel @Inject constructor(
         if (languages.isNotEmpty()) {
           kiwixDataStore.saveLanguageList(languages)
           LanguageSessionCache.hasFetched = true
-          val sortedLanguages = sortLanguages(languages, prefLanguageCode)
+          val sortedLanguages = sortLanguages(languages)
           actions.emit(UpdateLanguages(sortedLanguages))
         } else {
-          emitCachedLanguage(cachedLanguageList, prefLanguageCode, true)
+          emitCachedLanguage(cachedLanguageList, true)
         }
       }
       return@launch
     }
 
-    emitCachedLanguage(cachedLanguageList, prefLanguageCode, false)
+    emitCachedLanguage(cachedLanguageList, false)
   }
 
   private suspend fun emitCachedLanguage(
     cachedLanguageList: List<Language>?,
-    prefLanguageCode: String,
     isOnline: Boolean
   ) {
     if (!cachedLanguageList.isNullOrEmpty()) {
-      val sortedLanguages = sortLanguages(cachedLanguageList, prefLanguageCode)
+      val sortedLanguages = sortLanguages(cachedLanguageList)
       actions.emit(UpdateLanguages(sortedLanguages))
     } else {
       val errorMessage = if (isOnline) {

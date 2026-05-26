@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.mhutti1.utils.storage.StorageDevice
 import androidx.appcompat.app.AppCompatDelegate
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import javax.inject.Provider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
@@ -50,7 +51,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
@@ -284,33 +284,12 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  private fun getAppLocale(): java.util.Locale = if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
-    AppCompatDelegate.getApplicationLocales()[0] ?: context.resources.configuration.locales.get(0)
-  } else {
-    val pref = try {
-      runBlocking { kiwixDataStore.prefLanguage.first() }
-    } catch (_: Exception) {
-      ""
-    }
-    if (pref.isNotEmpty() && pref != java.util.Locale.ROOT.toString()) {
-      java.util.Locale.forLanguageTag(pref)
-    } else {
-      context.resources.configuration.locales.get(0)
-    }
-  }
-
-  private fun getString(resId: Int, vararg args: Any): String = try {
-    val config = android.content.res.Configuration(context.resources.configuration)
-    config.setLocale(getAppLocale())
-    val localizedContext = context.createConfigurationContext(config)
-    if (args.isEmpty()) localizedContext.getString(resId) else localizedContext.getString(resId, *args)
-  } catch (_: Throwable) {
-    if (args.isEmpty()) context.getString(resId) else context.getString(resId, *args)
-  }
+  private fun getString(resId: Int, vararg args: Any): String =
+    LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
 
   private fun getDisplayLanguage(languageCode: String): String {
     val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
-    return mappedLocale.getDisplayLanguage(getAppLocale())
+    return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
   }
 
   private fun observeLibraryItems() = observeOnlineLibraryItems(

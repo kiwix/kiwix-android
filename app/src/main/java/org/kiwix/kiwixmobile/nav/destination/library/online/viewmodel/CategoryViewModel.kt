@@ -49,8 +49,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import kotlinx.coroutines.runBlocking
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Error
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Filter
@@ -98,29 +97,8 @@ class CategoryViewModel @Inject constructor(
     }
   }
 
-  private fun getAppLocale(): java.util.Locale = if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
-    AppCompatDelegate.getApplicationLocales()[0] ?: context.resources.configuration.locales.get(0)
-  } else {
-    val pref = try {
-      runBlocking { kiwixDataStore.prefLanguage.first() }
-    } catch (_: Exception) {
-      ""
-    }
-    if (pref.isNotEmpty() && pref != java.util.Locale.ROOT.toString()) {
-      java.util.Locale.forLanguageTag(pref)
-    } else {
-      context.resources.configuration.locales.get(0)
-    }
-  }
-
-  private fun getString(resId: Int, vararg args: Any): String = try {
-    val config = android.content.res.Configuration(context.resources.configuration)
-    config.setLocale(getAppLocale())
-    val localizedContext = context.createConfigurationContext(config)
-    if (args.isEmpty()) localizedContext.getString(resId) else localizedContext.getString(resId, *args)
-  } catch (_: Throwable) {
-    if (args.isEmpty()) context.getString(resId) else context.getString(resId, *args)
-  }
+  private fun getString(resId: Int, vararg args: Any): String =
+    LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
 
   private fun observeActions() =
     actions
