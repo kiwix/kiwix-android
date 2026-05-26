@@ -222,7 +222,7 @@ class LibraryRobot : BaseRobot() {
     })
   }
 
-  fun clickOnLocalLibraryFragment(composeTestRule: ComposeContentTestRule) {
+  fun clickOnLocalLibraryScreen(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitUntilTimeout()

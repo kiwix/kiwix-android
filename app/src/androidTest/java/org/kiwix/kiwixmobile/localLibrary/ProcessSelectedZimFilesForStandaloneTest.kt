@@ -145,7 +145,7 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
   private fun prepareLocalLibraryForTest() {
     deleteAllFilesInDirectory(parentFile)
     TestUtils.deleteTemporaryFilesOfTestCases(context)
-    navigateToLocalLibraryFragment()
+    navigateToLocalLibraryScreen()
     deleteZimFilesIfExistInLocalLibrary()
   }
 
@@ -179,7 +179,7 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
     }
   }
 
-  private fun navigateToLocalLibraryFragment() {
+  private fun navigateToLocalLibraryScreen() {
     composeTestRule.apply {
       runOnUiThread {
         kiwixMainActivity.navigate(KiwixDestination.Library.route)

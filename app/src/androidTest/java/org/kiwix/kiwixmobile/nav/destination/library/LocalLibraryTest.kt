@@ -87,7 +87,7 @@ class LocalLibraryTest : BaseActivityTest() {
         setShowManageExternalFilesPermissionDialog(false)
         // Set setManageExternalFilesPermissionDialogOnRefresh to false to hide
         // the manage external storage permission dialog on Android 11 and above
-        // while refreshing the content in LocalLibraryFragment.
+        // while refreshing the content in LocalLibraryScreen.
         setManageExternalFilesPermissionDialogOnRefresh(false)
         setIsFirstRun(false)
         setPrefIsTest(true)
@@ -179,7 +179,7 @@ class LocalLibraryTest : BaseActivityTest() {
         isPlayStoreBuild = false
       )
       clickOnReaderFragment(composeTestRule)
-      clickOnLocalLibraryFragment(composeTestRule)
+      clickOnLocalLibraryScreen(composeTestRule)
       observeLocalLibraryActions()
       composeTestRule.waitUntilTimeout()
       // Assert scan dialog visible.
@@ -191,7 +191,7 @@ class LocalLibraryTest : BaseActivityTest() {
       }
       // Assert scan dialog does not show again.
       clickOnReaderFragment(composeTestRule)
-      clickOnLocalLibraryFragment(composeTestRule)
+      clickOnLocalLibraryScreen(composeTestRule)
       observeLocalLibraryActions()
       assertScanDialogNotDisplayed(composeTestRule)
       // Assert When there are ZIM files in local library screen then this dialog does not display.
@@ -212,7 +212,7 @@ class LocalLibraryTest : BaseActivityTest() {
         showManagePermissionDialog = true,
         isPlayStoreBuild = false
       )
-      clickOnLocalLibraryFragment(composeTestRule)
+      clickOnLocalLibraryScreen(composeTestRule)
       observeLocalLibraryActions()
       assertScanDialogNotDisplayed(composeTestRule)
     }

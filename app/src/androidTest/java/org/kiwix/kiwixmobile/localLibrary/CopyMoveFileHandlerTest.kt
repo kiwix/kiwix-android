@@ -163,7 +163,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       TestUtils.deleteTemporaryFilesOfTestCases(context)
 
       // Test multiple files copying.
-      navigateToLocalLibraryFragment()
+      navigateToLocalLibraryScreen()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
       selectedFile = getSelectedFile("testzim.zim")
@@ -230,7 +230,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       TestUtils.deleteTemporaryFilesOfTestCases(context)
 
       // Test multiple files copying.
-      navigateToLocalLibraryFragment()
+      navigateToLocalLibraryScreen()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
       selectedFile = getSelectedFile("testzim.zim")
@@ -255,11 +255,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun assertZimFileAddedInTheLocalLibrary() {
-    navigateToLocalLibraryFragment()
+    navigateToLocalLibraryScreen()
     copyMoveFileHandler { assertZimFileAddedInTheLocalLibrary(composeTestRule) }
   }
 
-  private fun navigateToLocalLibraryFragment() {
+  private fun navigateToLocalLibraryScreen() {
     UiThreadStatement.runOnUiThread {
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
