@@ -22,6 +22,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.kiwix.kiwixmobile.language.repository.LanguageRepository
+import org.kiwix.kiwixmobile.language.repository.LanguageRepositoryImpl
+import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepository
+import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepositoryImpl
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepositoryImpl
 
@@ -32,4 +36,14 @@ class DataModule {
   fun provideOnlineLibraryRepository(
     onlineLibraryRepositoryImpl: OnlineLibraryRepositoryImpl
   ): OnlineLibraryRepository = onlineLibraryRepositoryImpl
+
+  @Provides
+  fun provideLanguageRepository(
+    languageRepositoryImpl: LanguageRepositoryImpl
+  ): LanguageRepository = languageRepositoryImpl
+
+  @Provides
+  fun provideCategoryRepository(
+    categoryRepositoryImpl: CategoryRepositoryImpl
+  ): CategoryRepository = categoryRepositoryImpl
 }
