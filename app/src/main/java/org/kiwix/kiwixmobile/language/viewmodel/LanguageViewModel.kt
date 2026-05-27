@@ -28,29 +28,19 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
+
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.utils.FIVE
-import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
@@ -66,9 +56,8 @@ import javax.inject.Inject
 class LanguageViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  @OPDSKiwixService private val kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  @IoDispatcher private val dispatcher: CoroutineDispatcher
+  private val observeLanguages: ObserveLanguages,
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
@@ -90,55 +79,22 @@ class LanguageViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private fun fetchLanguagesFlow() = flow {
-    val feed = kiwixService.getLanguages()
-    val entries = feed.entries.orEmpty()
-    val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage.first()
-      .split(",")
-      .asSequence()
-      .filter { it.isNotEmpty() }
-      .toSet()
-    val totalBooksCount = entries.sumOf { it.count }
-    val languages = entries.mapIndexedNotNull { index, entry ->
-      try {
-        Language(
-          languageCode = entry.languageCode,
-          active = entry.languageCode in selectedLanguagesSet,
-          occurrencesOfLanguage = entry.count,
-          id = (index + ONE).toLong()
-        )
-      } catch (ignore: Exception) {
-        Log.w(TAG_KIWIX, "Unsupported locale code: ${entry.languageCode}", ignore)
-        null
+  private fun observeLanguages() = viewModelScope.launch {
+    state.value = Loading
+    when (
+      val result = observeLanguages(
+        errorNoLanguage = context.getString(R.string.no_language_available),
+        errorNoNetwork = context.getString(R.string.no_network_connection)
+      )
+    ) {
+      is ObserveLanguages.Result.Success -> {
+        val sortedLanguages = sortLanguages(result.languages)
+        actions.emit(UpdateLanguages(sortedLanguages))
       }
+      is ObserveLanguages.Result.Error ->
+        actions.emit(Error(result.message))
     }
-
-    val sortedLanguages = sortLanguages(languages)
-
-    val languageList =
-      when {
-        sortedLanguages.isEmpty() -> emptyList()
-        else -> buildList {
-          add(
-            Language(
-              id = ZERO.toLong(),
-              active = selectedLanguagesSet.isEmpty(),
-              occurencesOfLanguage = totalBooksCount,
-              language = "",
-              languageLocalized = "",
-              languageCode = "",
-              languageCodeISO2 = ""
-            )
-          )
-          addAll(sortedLanguages)
-        }
-      }
-    emit(languageList)
-  }.retry(FIVE.toLong())
-    .catch { e ->
-      e.printStackTrace()
-      emit(emptyList())
-    }
+  }
 
   private fun sortLanguages(languages: List<Language>): List<Language> {
     val allLanguagesItem = languages.firstOrNull { it.id == 0L || it.languageCode.isEmpty() }
@@ -161,7 +117,7 @@ class LanguageViewModel @Inject constructor(
           it.languageCode.equals(systemLanguageISO3, ignoreCase = true)
       }.thenBy { it.languageLocalized }
     ).mapIndexed { index, language ->
-      language.copy(id = (index + ONE).toLong())
+      language.copy(id = (index + 1).toLong())
     }
 
     return if (allLanguagesItem != null) {
@@ -174,65 +130,6 @@ class LanguageViewModel @Inject constructor(
     }
   }
 
-  private fun observeLanguages() = viewModelScope.launch(dispatcher) {
-    state.value = Loading
-
-    val cachedLanguageList = kiwixDataStore.cachedLanguageList.first()
-    val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
-
-    if (LanguageSessionCache.hasFetched && !cachedLanguageList.isNullOrEmpty()) {
-      val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage.first()
-        .split(",")
-        .asSequence()
-        .filter { it.isNotEmpty() }
-        .toSet()
-      val updatedLanguages = cachedLanguageList.map { language ->
-        language.copy(
-          active = if (language.id == 0L) {
-            selectedLanguagesSet.isEmpty()
-          } else {
-            language.languageCode in selectedLanguagesSet
-          }
-        )
-      }
-      val sortedLanguages = sortLanguages(updatedLanguages)
-      actions.emit(UpdateLanguages(sortedLanguages))
-      return@launch
-    }
-
-    if (isOnline) {
-      fetchLanguagesFlow().collect { languages ->
-        if (languages.isNotEmpty()) {
-          kiwixDataStore.saveLanguageList(languages)
-          LanguageSessionCache.hasFetched = true
-          val sortedLanguages = sortLanguages(languages)
-          actions.emit(UpdateLanguages(sortedLanguages))
-        } else {
-          emitCachedLanguage(cachedLanguageList, true)
-        }
-      }
-      return@launch
-    }
-
-    emitCachedLanguage(cachedLanguageList, false)
-  }
-
-  private suspend fun emitCachedLanguage(
-    cachedLanguageList: List<Language>?,
-    isOnline: Boolean
-  ) {
-    if (!cachedLanguageList.isNullOrEmpty()) {
-      val sortedLanguages = sortLanguages(cachedLanguageList)
-      actions.emit(UpdateLanguages(sortedLanguages))
-    } else {
-      val errorMessage = if (isOnline) {
-        context.getString(R.string.no_language_available)
-      } else {
-        context.getString(R.string.no_network_connection)
-      }
-      actions.emit(Error(errorMessage))
-    }
-  }
 
   @VisibleForTesting
   fun onClearedExposed() {
@@ -305,8 +202,4 @@ class LanguageViewModel @Inject constructor(
     filter: String,
     currentState: Content
   ) = currentState.updateFilter(filter)
-}
-
-object LanguageSessionCache {
-  var hasFetched: Boolean = false
 }

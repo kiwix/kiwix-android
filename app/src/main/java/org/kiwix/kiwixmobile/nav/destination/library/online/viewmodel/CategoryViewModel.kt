@@ -26,28 +26,20 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
+
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
@@ -63,9 +55,8 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  @OPDSKiwixService private val kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  @IoDispatcher val dispatcher: CoroutineDispatcher
+  private val observeCategories: ObserveCategories,
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
   sealed class Action {
     data class UpdateCategory(val categories: List<Category>) : Action()
@@ -107,96 +98,20 @@ class CategoryViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private fun observeCategories() = viewModelScope.launch(dispatcher) {
-    state.value = Loading
-
-    val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
-    val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
-    if (CategorySessionCache.hasFetched && !cachedCategoryList.isNullOrEmpty()) {
-      val selectedCategoriesSet = kiwixDataStore.selectedOnlineContentCategory.first()
-        .split(",")
-        .asSequence()
-        .filter { it.isNotEmpty() }
-        .toSet()
-      val updatedCategories = cachedCategoryList.map { category ->
-        category.copy(
-          active = if (category.id == 0L) {
-            selectedCategoriesSet.isEmpty()
-          } else {
-            category.category in selectedCategoriesSet
-          }
-        )
-      }
-      actions.emit(Action.UpdateCategory(updatedCategories))
-      return@launch
-    }
-
-    if (isOnline) {
-      fetchCategoriesFlow().collect { categories ->
-        if (categories.isNotEmpty()) {
-          kiwixDataStore.saveOnlineCategoryList(categories)
-          CategorySessionCache.hasFetched = true
-          actions.emit(Action.UpdateCategory(categories))
-        } else {
-          emitCachedCategories(cachedCategoryList, true)
-        }
-      }
-      return@launch
-    }
-
-    emitCachedCategories(cachedCategoryList, false)
-  }
-
-  private suspend fun emitCachedCategories(cachedCategoryList: List<Category>?, isOnline: Boolean) {
-    if (!cachedCategoryList.isNullOrEmpty()) {
-      actions.emit(Action.UpdateCategory(cachedCategoryList))
-    } else {
-      val errorMessage = if (isOnline) {
-        getString(string.no_category_available)
-      } else {
-        getString(R.string.no_network_connection)
-      }
-      actions.emit(Action.Error(errorMessage))
-    }
-  }
-
-  @Suppress("MagicNumber")
-  private fun fetchCategoriesFlow() = flow {
-    val feed = kiwixService.getCategories()
-    val selectedCategoriesRaw = kiwixDataStore.selectedOnlineContentCategory.first()
-    val selectedCategories = selectedCategoriesRaw
-      .split(",")
-      .asSequence()
-      .filter { it.isNotEmpty() }
-      .toSet()
-    val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
-      Category(
-        category = entry.title,
-        active = entry.title in selectedCategories,
-        id = (index + ONE).toLong()
+  private fun observeCategories() = viewModelScope.launch {
+    state.value = State.Loading
+    when (
+      val result = observeCategories(
+        errorNoCategory = getString(string.no_category_available),
+        errorNoNetwork = getString(R.string.no_network_connection)
       )
+    ) {
+      is ObserveCategories.Result.Success ->
+        actions.emit(Action.UpdateCategory(result.categories))
+      is ObserveCategories.Result.Error ->
+        actions.emit(Action.Error(result.message))
     }
-
-    val categoryList =
-      when {
-        categories.isEmpty() -> emptyList()
-        else -> buildList {
-          add(
-            Category(
-              category = "",
-              active = selectedCategoriesRaw.isEmpty(),
-              id = ZERO.toLong()
-            )
-          )
-          addAll(categories)
-        }
-      }
-    emit(categoryList)
-  }.retry(5)
-    .catch { e ->
-      e.printStackTrace()
-      emit(emptyList())
-    }
+  }
 
   private fun reduce(action: Action, currentState: State): State {
     return when (action) {
@@ -296,8 +211,4 @@ class CategoryViewModel @Inject constructor(
     onDismiss = null
     super.onCleared()
   }
-}
-
-object CategorySessionCache {
-  var hasFetched: Boolean = false
 }
