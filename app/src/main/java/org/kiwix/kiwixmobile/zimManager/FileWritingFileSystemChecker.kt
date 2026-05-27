@@ -25,7 +25,13 @@ import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 import java.io.RandomAccessFile
 
-class FileWritingFileSystemChecker : FileSystemChecker {
+class FileWritingFileSystemChecker(
+  private val testFileWriter: (String, Long) -> Unit = { filePath, length ->
+    RandomAccessFile(filePath, "rw").use {
+      it.setLength(length)
+    }
+  }
+) : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String): FileSystemCapability {
     val resultFile = File("$path/.kiwix_4gb_writing_test_result")
     if (resultFile.exists()) {
@@ -39,10 +45,8 @@ class FileWritingFileSystemChecker : FileSystemChecker {
     return with(File("$path/large_file_test.txt")) {
       deleteIfExists()
       try {
-        RandomAccessFile(this.path, "rw").use {
-          it.setLength(Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
-          CAN_WRITE_4GB.alsoSaveTo(resultFile)
-        }
+        testFileWriter(this.path, Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
+        CAN_WRITE_4GB.alsoSaveTo(resultFile)
       } catch (e: Exception) {
         e.printStackTrace()
         e.message?.let { message ->

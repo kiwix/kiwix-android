@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.zimManager
 
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.mockkConstructor
+import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
@@ -35,17 +35,17 @@ import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 import java.io.IOException
-import java.io.RandomAccessFile
 
 class FileWritingFileSystemCheckerTest {
   @get:Rule
   val tempFolder = TemporaryFolder()
 
+  private val testFileWriter: (String, Long) -> Unit = mockk()
   private lateinit var checker: FileWritingFileSystemChecker
 
   @Before
   fun setup() {
-    checker = FileWritingFileSystemChecker()
+    checker = FileWritingFileSystemChecker(testFileWriter)
     mockkObject(Log)
     every { Log.d(any(), any(), any()) } returns Unit
     every { Log.d(any(), any()) } returns Unit
@@ -91,9 +91,7 @@ class FileWritingFileSystemCheckerTest {
     val cacheFile = File(root, ".kiwix_4gb_writing_test_result")
     cacheFile.writeText(INCONCLUSIVE.name)
 
-    mockkConstructor(RandomAccessFile::class)
-    every { anyConstructed<RandomAccessFile>().setLength(any()) } returns Unit
-    every { anyConstructed<RandomAccessFile>().close() } returns Unit
+    every { testFileWriter(any(), any()) } returns Unit
 
     val capability = checker.checkFilesystemSupports4GbFiles(root.absolutePath)
     assertThat(capability).isEqualTo(CAN_WRITE_4GB)
@@ -111,9 +109,7 @@ class FileWritingFileSystemCheckerTest {
     val root = tempFolder.root
     val cacheFile = File(root, ".kiwix_4gb_writing_test_result")
 
-    mockkConstructor(RandomAccessFile::class)
-    every { anyConstructed<RandomAccessFile>().setLength(any()) } returns Unit
-    every { anyConstructed<RandomAccessFile>().close() } returns Unit
+    every { testFileWriter(any(), any()) } returns Unit
 
     val capability = checker.checkFilesystemSupports4GbFiles(root.absolutePath)
     assertThat(capability).isEqualTo(CAN_WRITE_4GB)
@@ -132,9 +128,7 @@ class FileWritingFileSystemCheckerTest {
     val root = tempFolder.root
     val cacheFile = File(root, ".kiwix_4gb_writing_test_result")
 
-    mockkConstructor(RandomAccessFile::class)
-    every { anyConstructed<RandomAccessFile>().setLength(any()) } throws IOException("Disk full")
-    every { anyConstructed<RandomAccessFile>().close() } returns Unit
+    every { testFileWriter(any(), any()) } throws IOException("Disk full")
 
     val capability = checker.checkFilesystemSupports4GbFiles(root.absolutePath)
     assertThat(capability).isEqualTo(CANNOT_WRITE_4GB)
