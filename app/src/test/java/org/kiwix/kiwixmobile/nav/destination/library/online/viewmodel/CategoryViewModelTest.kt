@@ -129,6 +129,16 @@ class CategoryViewModelTest {
     }
 
     @Test
+    fun whenOnClearInvoked_UnregistersBroadcastReceiver() {
+      createViewModel()
+      every { application.unregisterReceiver(any()) } returns mockk()
+      categoryViewModel.onClearedExposed()
+      verify {
+        application.unregisterReceiver(connectivityBroadcastReceiver)
+      }
+    }
+
+    @Test
     fun categoryState_initially_isLoading() = runTest {
       createViewModel()
       assertThat(categoryViewModel.state.value).isEqualTo(Loading)
