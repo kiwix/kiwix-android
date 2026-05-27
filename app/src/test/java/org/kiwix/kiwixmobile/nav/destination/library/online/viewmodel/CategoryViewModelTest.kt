@@ -53,7 +53,7 @@ import org.kiwix.kiwixmobile.core.R as CoreR
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CategoryViewModelTest {
-  private val application: Application = mockk()
+  private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val kiwixService: KiwixService = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
@@ -76,8 +76,6 @@ class CategoryViewModelTest {
     networkStates.value = NetworkState.CONNECTED
     CategorySessionCache.hasFetched = false
 
-    every { application.getString(any()) } returns ""
-
     every {
       application.getString(CoreR.string.no_network_connection)
     } returns errorMessage
@@ -88,19 +86,6 @@ class CategoryViewModelTest {
 
     every { connectivityBroadcastReceiver.action } returns "test"
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      every {
-        application.registerReceiver(any(), any(), any())
-      } returns mockk()
-    } else {
-      @Suppress("UnspecifiedRegisterReceiverFlag")
-      every {
-        application.registerReceiver(any(), any())
-      } returns mockk()
-    }
-
-    every { application.unregisterReceiver(any()) } just Runs
 
     every {
       kiwixDataStore.cachedOnlineCategoryList
