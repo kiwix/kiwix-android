@@ -24,8 +24,9 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.io.File
@@ -35,15 +36,16 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 class FileOperationHandlerImpl @Inject constructor(
-  private val context: Context
+  private val context: Context,
+  @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : FileOperationHandler {
-  @Suppress("MagicNumber", "InjectDispatcher")
+  @Suppress("MagicNumber")
   override suspend fun copy(
     sourceUri: Uri,
     destinationFile: File,
     onProgress: suspend (Int) -> Unit
   ) {
-    withContext(Dispatchers.IO) {
+    withContext(dispatcher) {
       val contentResolver = context.contentResolver
       val parcelFileDescriptor =
         contentResolver.openFileDescriptor(sourceUri, "r")
@@ -139,8 +141,7 @@ class FileOperationHandlerImpl @Inject constructor(
     return flags and DocumentsContract.Document.FLAG_SUPPORTS_MOVE != ZERO
   }
 
-  @Suppress("InjectDispatcher")
-  override suspend fun delete(uri: Uri, selectedFile: DocumentFile) = withContext(Dispatchers.IO) {
+  override suspend fun delete(uri: Uri, selectedFile: DocumentFile) = withContext(dispatcher) {
     runCatching {
       DocumentsContract.deleteDocument(context.contentResolver, uri)
     }.onFailure {
