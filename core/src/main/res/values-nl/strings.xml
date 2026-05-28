@@ -88,7 +88,7 @@
   <string name="pref_credits">Bijdragers en licenties</string>
   <string name="pref_credits_title">Vermeldingen</string>
   <string name="tts_lang_not_supported">De taal van deze pagina wordt niet ondersteund. Het artikel is mogelijk niet goed leesbaar.</string>
-  <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
+  <string name="no_reader_application_installed">Kon geen geïnstalleerde toepassing vinden voor dit type bestand</string>
   <string name="no_email_application_installed">Installeer een e-mailprogramma</string>
   <string name="no_app_found_to_select_bookmark_file">Geen app gevonden om een bladwijzerbestand te selecteren</string>
   <string name="no_section_info">Geen inhoudskoppen gevonden</string>
@@ -252,7 +252,7 @@
   <string name="complete">Afgerond</string>
   <string name="paused_state">Gepauzeerd</string>
   <string name="failed_state">Mislukt: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Het ZIM-bestand kon niet worden gedownload. Probeer de applicatie opnieuw te installeren vanuit de Play Store.</string>
+  <string name="custom_download_error_message_for_authentication_failed">Het ZIM-bestand kon niet worden gedownload. Probeer de toepassing opnieuw te installeren vanuit de Play Store.</string>
   <string name="save">Opslaan</string>
   <string name="note">Aantekening</string>
   <string name="take_notes">Aantekeningen maken</string>

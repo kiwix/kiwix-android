@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Tensama0415
 * YeBoy371
 * Ykhwong
 -->
@@ -11,6 +12,13 @@
   <string name="receive_files_title">파일 받기</string>
   <string name="no_app_found_to_open">ZIM 파일을 선택하기 위한 앱이 없습니다!</string>
   <string name="select_zim_file">읽을 ZIM 파일 선택</string>
+  <string name="swipe_down_to_scan_storage">아래로 스와이프하여 새 책을 위해 기기를 스캔하기…</string>
+  <string name="auto_detect_books">책을 자동으로 감지</string>
+  <string name="auto_detect_books_description">앱을 처음 실행하면 저장소 스캔 권한을 요청합니다. 권한을 허용하면 ZIM 파일을 수동으로 추가할 필요 없이 자동으로 감지합니다.</string>
+  <string name="select_category">분류 선택</string>
+  <string name="no_category_available">사용할 수 있는 분류 없음</string>
+  <string name="your_selected_category">선택된 분류:</string>
   <string name="other_categories">다른 분류:</string>
   <string name="all_categories">모든 분류</string>
+  <string name="select_category_content_description">이 분류를 선택하면 해당 언어로 다운로드할 수 있는 책이 맨 위에 우선적으로 표시됩니다.</string>
 </resources>

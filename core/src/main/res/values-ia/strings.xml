@@ -23,6 +23,7 @@
   <string name="menu_wifi_hotspot">Puncto de accesso a WiFi</string>
   <string name="save_media">Salveguardar multimedia</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
+  <string name="invalid_media_source">Le file multimedial seligite non ha essite trovate.</string>
   <string name="save_media_saved">Multimedia salveguardate in %s</string>
   <string name="search_label">Cercar</string>
   <string name="searched_list">Lista cercate</string>
@@ -100,6 +101,9 @@
   <string name="pref_clear_all_bookmarks_title">Rader marcapaginas</string>
   <string name="clear_all_history_dialog_title">Rader tote le historia?</string>
   <string name="share">Condivider</string>
+  <string name="share_article">Condivider articulo</string>
+  <string name="unable_to_share_article">Impossibile condivider articulo</string>
+  <string name="please_wait_for_page_to_load">Per favor attende que le pagina se carga completemente</string>
   <string name="selected_file_cab_app_chooser_title">Condivider files ZIM con:</string>
   <string name="delete">Deler</string>
   <string name="cancel">Cancellar</string>
@@ -405,4 +409,10 @@
   <string name="confirmation_validate_zim_files">Es tu secur de voler validar le sequente files ZIM?\n\n%s</string>
   <string name="validating_zim_file">Validation del file ZIM in curso…</string>
   <string name="validating_zim_files">Validation del files ZIM in curso…</string>
+  <string name="menu_add_to_homescreen">Adder al schermo initial</string>
+  <string name="added_to_homescreen">Accesso directe addite al schermo initial</string>
+  <string name="add_shortcut_title">Adder accesso directe</string>
+  <string name="shortcut_name_label">Nomine del accesso directe</string>
+  <string name="open_xiaomi_settings">Aperir parametros</string>
+  <string name="xiaomi_permission_required">Iste parametro require le permission de adder un accesso directe ante de adder un al schermo initial. Per favor concede iste permission in le parametros.</string>
 </resources>
