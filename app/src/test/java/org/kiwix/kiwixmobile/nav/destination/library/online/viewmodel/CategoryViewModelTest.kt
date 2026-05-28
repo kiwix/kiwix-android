@@ -20,10 +20,8 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
 import android.os.Build
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,12 +45,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.SaveCategoryAndFinish
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.kiwixmobile.core.R as CoreR
@@ -144,7 +138,7 @@ class CategoryViewModelTest {
   }
 
   @Nested
-  inner class ObserveCategories {
+  inner class ObserveCategoriesTests {
     @Test
     fun whenObserveCategoriesReturnsSuccess_emitsContent() = runTest {
       val categoriesList = listOf(createCategory())

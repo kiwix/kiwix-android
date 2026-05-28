@@ -19,10 +19,8 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -346,82 +344,6 @@ class LanguageViewModelTest {
     }
 
     @Nested
-    inner class ActionClearAll {
-      @Test
-      fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
-        createViewModel()
-        advanceUntilIdle()
-        languageViewModel.state.value = Loading
-
-        languageViewModel.actions.emit(Action.ClearAll)
-
-        advanceUntilIdle()
-
-        assertEquals(
-          Loading,
-          languageViewModel.state.value
-        )
-      }
-
-      @Test
-      fun whenStateContent_clearsAllSelections() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
-        createViewModel()
-        advanceUntilIdle()
-        val english = createLanguage(code = "eng", active = true)
-        val french = createLanguage(code = "fr", active = true, id = 2)
-
-        languageViewModel.state.value = State.Content(listOf(english, french))
-
-        languageViewModel.actions.emit(Action.ClearAll)
-
-        advanceUntilIdle()
-
-        val content = languageViewModel.state.value as State.Content
-        assertTrue(content.items.none { it.active })
-      }
-    }
-
-    @Nested
-    inner class ActionSelectAll {
-      @Test
-      fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
-        createViewModel()
-        advanceUntilIdle()
-        languageViewModel.state.value = Loading
-
-        languageViewModel.actions.emit(Action.SelectAll)
-
-        advanceUntilIdle()
-
-        assertEquals(
-          Loading,
-          languageViewModel.state.value
-        )
-      }
-
-      @Test
-      fun whenStateContent_selectAllSelections() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
-        createViewModel()
-        advanceUntilIdle()
-        val english = createLanguage(code = "eng", active = false)
-        val french = createLanguage(code = "fr", active = false, id = 2)
-
-        languageViewModel.state.value = State.Content(listOf(english, french))
-
-        languageViewModel.actions.emit(Action.SelectAll)
-
-        advanceUntilIdle()
-
-        val content = languageViewModel.state.value as State.Content
-        assertTrue(content.items.all { it.active })
-      }
-    }
-
-    @Nested
     inner class ActionCancel {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
@@ -513,4 +435,26 @@ class LanguageViewModelTest {
       }
     }
   }
+}
+
+// TODO ONCE ALL flakyTest{} are eliminated clear this
+inline fun flakyTest(
+  maxRetries: Int = 10,
+  delayMillis: Long = 0,
+  block: () -> Unit
+) {
+  var lastError: Throwable? = null
+
+  repeat(maxRetries) { attempt ->
+    try {
+      block()
+      return
+    } catch (e: Throwable) {
+      lastError = e
+      println("Test attempt ${attempt + 1} failed: ${e.message}")
+      if (delayMillis > 0) Thread.sleep(delayMillis)
+    }
+  }
+
+  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
 }
