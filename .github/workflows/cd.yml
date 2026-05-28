@@ -123,8 +123,9 @@ jobs:
             echo "Gradle build successful."
             exit 0
           fi
-
-          if grep -q "Try another version code." gradle_output.log; then
+          
+          if grep -qi "version code" gradle_output.log &&
+            grep -Eqi "(already been used|try another version code)" gradle_output.log; then
             echo "Upload skipped because very same version."
             exit 0
           fi
