@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.MountInfo
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
@@ -35,16 +36,24 @@ class MountFileSystemChecker @Inject constructor(
     mountPoints: List<MountInfo>,
     path: String
   ): FileSystemCapability {
-    if (mountPoints.isEmpty()) return INCONCLUSIVE
-    return mountPoints.maxBy { it.matchCount(path) }
-      ?.takeIf { it.matchCount(path) > 0 }
-      ?.let {
-        when {
-          it.isVirtual -> recursivelyDetermineFilesystem(mountPoints - it, it.device)
-          it.supports4GBFiles -> CAN_WRITE_4GB
-          it.doesNotSupport4GBFiles -> CANNOT_WRITE_4GB
-          else -> INCONCLUSIVE
-        }
-      } ?: INCONCLUSIVE
+    val mountInfo = getBestMatchingMountPoint(mountPoints, path)
+      ?: return INCONCLUSIVE
+
+    return when {
+      mountInfo.isVirtual ->
+        recursivelyDetermineFilesystem(mountPoints - mountInfo, mountInfo.device)
+
+      mountInfo.supports4GBFiles -> CAN_WRITE_4GB
+      mountInfo.doesNotSupport4GBFiles -> CANNOT_WRITE_4GB
+      else -> INCONCLUSIVE
+    }
+  }
+
+  private fun getBestMatchingMountPoint(
+    mountPoints: List<MountInfo>,
+    path: String
+  ): MountInfo? {
+    val mountPoint = mountPoints.maxByOrNull { it.matchCount(path) }
+    return mountPoint?.takeIf { it.matchCount(path) > ZERO }
   }
 }

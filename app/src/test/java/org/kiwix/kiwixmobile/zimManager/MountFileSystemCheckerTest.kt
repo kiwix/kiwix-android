@@ -71,7 +71,8 @@ class MountFileSystemCheckerTest {
       MountInfo("device2", "/other", "vfat")
     )
     every { mountPointProducer.produce() } returns mountPoints
-    val capability = mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
+    val capability =
+      mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
     assertThat(capability).isEqualTo(CAN_WRITE_4GB)
   }
 
@@ -81,7 +82,8 @@ class MountFileSystemCheckerTest {
       MountInfo("device1", "/storage/emulated/0", "vfat")
     )
     every { mountPointProducer.produce() } returns mountPoints
-    val capability = mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
+    val capability =
+      mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
     assertThat(capability).isEqualTo(CANNOT_WRITE_4GB)
   }
 
@@ -92,7 +94,8 @@ class MountFileSystemCheckerTest {
       MountInfo("/data/media", "/dev/block/vold", "ext4")
     )
     every { mountPointProducer.produce() } returns mountPoints
-    val capability = mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
+    val capability =
+      mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
     assertThat(capability).isEqualTo(CAN_WRITE_4GB)
   }
 
@@ -102,7 +105,21 @@ class MountFileSystemCheckerTest {
       MountInfo("device1", "/storage/emulated/0", "unknown_fs")
     )
     every { mountPointProducer.produce() } returns mountPoints
-    val capability = mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
+    val capability =
+      mountFileSystemChecker.checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
     assertThat(capability).isEqualTo(INCONCLUSIVE)
+  }
+
+  @Test
+  fun `uses most specific matching mount point`() {
+    val mountPoints = listOf(
+      MountInfo("device1", "/storage", "vfat"),
+      MountInfo("device2", "/storage/emulated/0", "ext4")
+    )
+
+    every { mountPointProducer.produce() } returns mountPoints
+    val capability = mountFileSystemChecker
+      .checkFilesystemSupports4GbFiles("/storage/emulated/0/Download")
+    assertThat(capability).isEqualTo(CAN_WRITE_4GB)
   }
 }

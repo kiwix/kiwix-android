@@ -62,12 +62,20 @@ class FileWritingFileSystemChecker(
   private fun readCapability(resultFile: File) =
     try {
       FileSystemCapability.valueOf(resultFile.readText())
-    } catch (_: IllegalArgumentException) {
+    } catch (_: Exception) {
       INCONCLUSIVE
     }
 
   private fun FileSystemCapability.alsoSaveTo(resultFile: File) =
-    also { resultFile.writeText(name) }
+    also {
+      try {
+        resultFile.writeText(name)
+      } catch (e: Exception) {
+        e.message?.let { message ->
+          Log.d("Fat32Checker", "Failed to save filesystem capability to cache: $message")
+        }
+      }
+    }
 }
 
 private fun File.deleteIfExists() {

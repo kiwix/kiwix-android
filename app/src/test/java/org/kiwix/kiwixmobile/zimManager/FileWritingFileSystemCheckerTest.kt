@@ -23,6 +23,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -140,5 +141,101 @@ class FileWritingFileSystemCheckerTest {
     // Test file should be deleted
     val testFile = File(root, "large_file_test.txt")
     assertThat(testFile.exists()).isFalse()
+  }
+
+  @Test
+  fun `does not invoke writer when cache contains CAN_WRITE_4GB`() {
+    val root = tempFolder.root
+    File(root, ".kiwix_4gb_writing_test_result")
+      .writeText(CAN_WRITE_4GB.name)
+
+    checker.checkFilesystemSupports4GbFiles(root.absolutePath)
+
+    verify(exactly = 0) {
+      testFileWriter(any(), any())
+    }
+  }
+
+  @Test
+  fun `does not invoke writer when cache contains CANNOT_WRITE_4GB`() {
+    val root = tempFolder.root
+    File(root, ".kiwix_4gb_writing_test_result")
+      .writeText(CANNOT_WRITE_4GB.name)
+
+    checker.checkFilesystemSupports4GbFiles(root.absolutePath)
+
+    verify(exactly = 0) {
+      testFileWriter(any(), any())
+    }
+  }
+
+  @Test
+  fun `performs writing test when cache contains invalid value`() {
+    val root = tempFolder.root
+
+    File(root, ".kiwix_4gb_writing_test_result")
+      .writeText("INVALID")
+
+    every { testFileWriter(any(), any()) } returns Unit
+
+    val capability = checker.checkFilesystemSupports4GbFiles(root.absolutePath)
+
+    assertThat(capability).isEqualTo(CAN_WRITE_4GB)
+
+    verify(exactly = 1) {
+      testFileWriter(any(), any())
+    }
+  }
+
+  @Test
+  fun `passes correct file path and file size to writer`() {
+    val root = tempFolder.root
+    val expectedFile = File(root, "large_file_test.txt")
+
+    every { testFileWriter(any(), any()) } returns Unit
+
+    checker.checkFilesystemSupports4GbFiles(root.absolutePath)
+
+    verify(exactly = 1) {
+      testFileWriter(
+        expectedFile.absolutePath,
+        Fat32Checker.FOUR_GIGABYTES_IN_BYTES
+      )
+    }
+  }
+
+  @Test
+  fun `performs writing test when cache read throws exception`() {
+    val root = tempFolder.root
+    val cacheFile = File(root, ".kiwix_4gb_writing_test_result")
+    // Create a directory with the same name so readText() throws an IOException
+    cacheFile.mkdir()
+
+    every { testFileWriter(any(), any()) } returns Unit
+
+    val capability = checker.checkFilesystemSupports4GbFiles(root.absolutePath)
+    assertThat(capability).isEqualTo(CAN_WRITE_4GB)
+
+    verify(exactly = 1) {
+      testFileWriter(any(), any())
+    }
+  }
+
+  @Test
+  fun `does not crash when cache write throws exception`() {
+    val root = tempFolder.root
+    val cacheFile = File(root, ".kiwix_4gb_writing_test_result")
+    // Create a directory with the same name so writeText() throws an IOException
+    cacheFile.mkdir()
+
+    every { testFileWriter(any(), any()) } returns Unit
+
+    val capability = checker.checkFilesystemSupports4GbFiles(root.absolutePath)
+    assertThat(capability).isEqualTo(CAN_WRITE_4GB)
+
+    // Even if caching failed, the capability should be correctly returned
+    verify(exactly = 1) {
+      testFileWriter(any(), any())
+    }
   }
 }
