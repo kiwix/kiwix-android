@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -131,7 +130,6 @@ open class LanguageViewModel @Inject constructor(
       sortedOthers
     }
   }
-
 
 
   @VisibleForTesting
