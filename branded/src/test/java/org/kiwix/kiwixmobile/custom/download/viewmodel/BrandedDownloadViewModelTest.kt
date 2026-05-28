@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.custom.download.viewmodel
 
 import app.cash.turbine.test
 import com.tonyodev.fetch2.Error
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +36,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
 import org.kiwix.kiwixmobile.custom.download.Action.DatabaseEmission
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadBranded
 import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
+import org.kiwix.kiwixmobile.custom.download.effects.RequestNotificationPermission
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
@@ -56,7 +58,8 @@ internal class BrandedDownloadViewModelTest {
   private val downloadBranded: DownloadBranded = mockk()
   private val navigateToBrandedReader: NavigateToBrandedReader = mockk()
 
-  private val kiwixDataStore: KiwixDataStore = mockk()
+  private val kiwixPermissionChecker: KiwixPermissionChecker = mockk()
+  private val requestNotificationPermission: RequestNotificationPermission = mockk()
 
   @RegisterExtension
   val dispatcherRule = MainDispatcherRule()
@@ -86,7 +89,8 @@ internal class BrandedDownloadViewModelTest {
       setPreferredStorageWithMostSpace,
       downloadBranded,
       navigateToBrandedReader,
-      kiwixDataStore,
+      kiwixPermissionChecker,
+      requestNotificationPermission,
       dispatcherRule.dispatcher
     )
   }
@@ -97,6 +101,64 @@ internal class BrandedDownloadViewModelTest {
       val effect = awaitItem()
       assertEquals(setPreferredStorageWithMostSpace, effect)
       cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Nested
+  inner class OnDownloadButtonClick {
+    @Test
+    fun withPermission_emitsClickedDownloadAction() = runTest {
+      coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns true
+
+      brandedDownloadViewModel.effects.test {
+        skipItems(1)
+        brandedDownloadViewModel.onDownloadButtonClick()
+        advanceUntilIdle()
+        assertEquals(downloadBranded, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun withoutPermission_emitsRequestNotificationPermissionEffect() = runTest {
+      coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns false
+
+      brandedDownloadViewModel.effects.test {
+        skipItems(1)
+        brandedDownloadViewModel.onDownloadButtonClick()
+        advanceUntilIdle()
+        assertEquals(requestNotificationPermission, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+  }
+
+  @Nested
+  inner class OnRetryButtonClick {
+    @Test
+    fun withPermission_emitsClickedRetryAction() = runTest {
+      coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns true
+
+      brandedDownloadViewModel.effects.test {
+        skipItems(1)
+        brandedDownloadViewModel.onRetryButtonClick()
+        advanceUntilIdle()
+        assertEquals(downloadBranded, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun withoutPermission_emitsRequestNotificationPermissionEffect() = runTest {
+      coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns false
+
+      brandedDownloadViewModel.effects.test {
+        skipItems(1)
+        brandedDownloadViewModel.onRetryButtonClick()
+        advanceUntilIdle()
+        assertEquals(requestNotificationPermission, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
     }
   }
 

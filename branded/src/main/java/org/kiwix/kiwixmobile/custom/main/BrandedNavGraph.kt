@@ -126,8 +126,7 @@ fun BrandedNavGraph(
     composable(CustomDestination.Downloads.route) {
       val brandedDownloadViewModel: BrandedDownloadViewModel = viewModel(factory = viewModelFactory)
       BrandedDownloadRoute(
-        brandedDownloadViewModel,
-        alertDialogShower
+        brandedDownloadViewModel
       )
     }
     composable(

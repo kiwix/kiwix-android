@@ -18,22 +18,27 @@
 
 package org.kiwix.kiwixmobile.custom.download.viewmodel
 
+import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.test.core.app.ApplicationProvider
 import com.tonyodev.fetch2.Error
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
-import org.kiwix.kiwixmobile.custom.download.State
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadScreen
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadScreenTags
+import org.kiwix.kiwixmobile.custom.download.State
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -81,7 +86,7 @@ class BrandedDownloadScreenUITest {
   fun downloadRequired_showsDownloadRequiredButton() {
     setScreenContent(State.DownloadRequired)
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_REQUIRED_BUTTON).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_BUTTON_TESTING_TAG).assertExists()
   }
 
   @Test
@@ -90,7 +95,7 @@ class BrandedDownloadScreenUITest {
 
     setScreenContent(State.DownloadRequired, onDownloadClick = { clicked = true })
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_REQUIRED_BUTTON).performClick()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_BUTTON_TESTING_TAG).performClick()
 
     assertTrue(clicked)
   }
@@ -110,7 +115,8 @@ class BrandedDownloadScreenUITest {
 
     setScreenContent(State.DownloadInProgress(listOf(item)))
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_ETA_TEXT).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_ETA_TEXT_TESTING_TAG)
+      .assertExists()
   }
 
   @Test
@@ -119,21 +125,50 @@ class BrandedDownloadScreenUITest {
 
     setScreenContent(State.DownloadInProgress(listOf(item)))
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_STATE_TEXT).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_STATE_TEXT_TESTING_TAG)
+      .assertTextContains("In Progress")
   }
 
   @Test
-  fun downloadFailed_showsErrorText() {
-    setScreenContent(failItem)
+  fun authenticationFailure_showsCustomErrorMessage() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val authFailedState = State.DownloadFailed(
+      DownloadState.Failed(
+        reason = Error.REQUEST_NOT_SUCCESSFUL,
+        zimUrl = "https://user:password@example.com/file.zim"
+      )
+    )
+    setScreenContent(authFailedState)
+    val expectedMessage = context.getString(
+      R.string.failed_state,
+      context.getString(R.string.custom_download_error_message_for_authentication_failed)
+    )
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.ERROR_MESSAGE_TEXT_TESTING_TAG)
+      .assertTextEquals(expectedMessage)
+  }
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.ERROR_MESSAGE_TEXT).assertExists()
+  @Test
+  fun nonAuthenticationFailure_showsDefaultErrorMessage() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    setScreenContent(
+      State.DownloadFailed(
+        DownloadState.Failed(
+          reason = Error.REQUEST_NOT_SUCCESSFUL,
+          zimUrl = "https://example.com/file.zim"
+        )
+      )
+    )
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.ERROR_MESSAGE_TEXT_TESTING_TAG)
+      .assertTextEquals(
+        context.getString(R.string.failed_state, "REQUEST_NOT_SUCCESSFUL")
+      )
   }
 
   @Test
   fun downloadFailed_showsRetryButton() {
     setScreenContent(failItem)
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON_TESTING_TAG).assertExists()
   }
 
   @Test
@@ -142,7 +177,7 @@ class BrandedDownloadScreenUITest {
 
     setScreenContent(failItem, onRetryClick = { clicked = true })
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON).performClick()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON_TESTING_TAG).performClick()
 
     assertTrue(clicked)
   }
@@ -151,6 +186,7 @@ class BrandedDownloadScreenUITest {
   fun downloadCompleted_showsDownloadCompletedText() {
     setScreenContent(State.DownloadComplete)
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_COMPLETE_TEXT).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_COMPLETE_TEXT_TESTING_TAG)
+      .assertExists()
   }
 }
