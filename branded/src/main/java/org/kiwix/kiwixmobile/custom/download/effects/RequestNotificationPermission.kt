@@ -34,7 +34,7 @@ class RequestNotificationPermission @Inject constructor(
   private val kiwixPermissionChecker: KiwixPermissionChecker,
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val coreActivity = (activity as? CoreMainActivity) ?: return
+    val coreActivity = activity as? CoreMainActivity ?: return
     if (!kiwixPermissionChecker.shouldShowRationale(coreActivity, POST_NOTIFICATIONS)) {
       coreActivity.requestNotificationPermission()
     } else {
