@@ -261,6 +261,8 @@ suspend fun <T> TestScope.testFlow(
 }
 
 val TURBINE_TIMEOUT = 5000.toDuration(DurationUnit.MILLISECONDS)
+
+// TODO ONCE ALL flakyTest{} are eliminated clear this
 inline fun flakyTest(
   maxRetries: Int = 10,
   delayMillis: Long = 0,

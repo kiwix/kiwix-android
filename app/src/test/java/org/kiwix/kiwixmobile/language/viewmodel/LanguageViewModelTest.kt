@@ -556,7 +556,7 @@ class LanguageViewModelTest {
   }
 }
 
-// TODO: ONCE ALL flakyTest{} are eliminated clear this
+// TODO ONCE ALL flakyTest{} are eliminated clear this
 inline fun flakyTest(
   maxRetries: Int = 10,
   delayMillis: Long = 0,
