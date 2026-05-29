@@ -174,6 +174,34 @@ class FileOperationHandlerImplTest {
 
   @Nested
   inner class Move {
+    private fun mockDocumentCursor(flags: Int): Cursor {
+      val cursor = mockk<Cursor>()
+
+      every {
+        DocumentsContract.isDocumentUri(context, sourceUri)
+      } returns true
+
+      every {
+        contentResolver.query(
+          sourceUri,
+          arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
+          null,
+          null,
+          null
+        )
+      } returns cursor
+
+      every {
+        cursor.moveToFirst()
+      } returns true
+
+      every {
+        cursor.getInt(ZERO)
+      } returns flags
+
+      return cursor
+    }
+
     @Test
     fun whenParentUriNull_fallsBackToCopyAndReturnsTrue() = runTest {
       val destinationFile = File("test")
@@ -205,27 +233,7 @@ class FileOperationHandlerImplTest {
     inner class TryMoveWithDocumentContract {
       @Test
       fun whenDocumentCanMoveSucceeds_returnsTrue() = runTest {
-        val cursor = mockk<Cursor>()
-
-        every {
-          DocumentsContract.isDocumentUri(context, sourceUri)
-        } returns true
-
-        every {
-          contentResolver.query(
-            sourceUri,
-            arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
-            null,
-            null,
-            null
-          )
-        } returns cursor
-
-        every { cursor.moveToFirst() } returns true
-
-        every {
-          cursor.getInt(ZERO)
-        } returns DocumentsContract.Document.FLAG_SUPPORTS_MOVE
+        mockDocumentCursor(DocumentsContract.Document.FLAG_SUPPORTS_MOVE)
 
         every {
           DocumentsContract.moveDocument(
@@ -282,27 +290,7 @@ class FileOperationHandlerImplTest {
 
       @Test
       fun whenMoveDocumentThrows_returnsFalse() = runTest {
-        val cursor = mockk<Cursor>()
-
-        every {
-          DocumentsContract.isDocumentUri(context, sourceUri)
-        } returns true
-
-        every {
-          contentResolver.query(
-            sourceUri,
-            arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
-            null,
-            null,
-            null
-          )
-        } returns cursor
-
-        every { cursor.moveToFirst() } returns true
-
-        every {
-          cursor.getInt(0)
-        } returns DocumentsContract.Document.FLAG_SUPPORTS_MOVE
+        mockDocumentCursor(DocumentsContract.Document.FLAG_SUPPORTS_MOVE)
 
         every {
           DocumentsContract.moveDocument(
@@ -408,24 +396,7 @@ class FileOperationHandlerImplTest {
 
       @Test
       fun whenDocumentDoesNotSupportMove_returnsFalse() = runTest {
-        val cursor = mockk<Cursor>()
-
-        every {
-          DocumentsContract.isDocumentUri(context, sourceUri)
-        } returns true
-
-        every {
-          contentResolver.query(
-            sourceUri,
-            arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
-            null,
-            null,
-            null
-          )
-        } returns cursor
-
-        every { cursor.moveToFirst() } returns true
-        every { cursor.getInt(0) } returns 0
+        mockDocumentCursor(0)
 
         val result =
           fileOperationHandler.move(
@@ -441,27 +412,7 @@ class FileOperationHandlerImplTest {
 
       @Test
       fun whenDocumentSupportsMove_returnsTrue() = runTest {
-        val cursor = mockk<Cursor>()
-
-        every {
-          DocumentsContract.isDocumentUri(context, sourceUri)
-        } returns true
-
-        every {
-          contentResolver.query(
-            sourceUri,
-            arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
-            null,
-            null,
-            null
-          )
-        } returns cursor
-
-        every { cursor.moveToFirst() } returns true
-
-        every {
-          cursor.getInt(0)
-        } returns DocumentsContract.Document.FLAG_SUPPORTS_MOVE
+        mockDocumentCursor(DocumentsContract.Document.FLAG_SUPPORTS_MOVE)
 
         every {
           DocumentsContract.moveDocument(

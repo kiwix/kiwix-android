@@ -33,7 +33,6 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -348,7 +347,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       kiwixMainActivity,
       kiwixDataStore,
       StorageCalculator(kiwixDataStore),
-      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()), Dispatchers.IO),
+      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()), dispatcher.dispatcher),
       FileOperationHandlerImpl(kiwixMainActivity, dispatcher.dispatcher),
       CopyMoveProgressBarControllerImpl(kiwixMainActivity)
     ).apply {
@@ -370,7 +369,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         destinationFile.name,
         "testCopyMove_1.zim"
       )
-      withContext(Dispatchers.IO) {
+      withContext(dispatcher.dispatcher) {
         deleteBothPreviousFiles()
       }
 
