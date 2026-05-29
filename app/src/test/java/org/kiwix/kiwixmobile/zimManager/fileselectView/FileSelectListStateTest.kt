@@ -18,6 +18,54 @@
 
 package org.kiwix.kiwixmobile.zimManager.fileselectView
 
+import io.mockk.every
+import io.mockk.mockk
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
+
 class FileSelectListStateTest {
-  // Will add test case here.
+  @Test
+  fun `selectedBooks should return only selected BookOnDisk items`() {
+    val selectedBook = mockBook(isSelected = true)
+    val unselectedBook = mockBook(isSelected = false)
+
+    val state = FileSelectListState(bookOnDiskListItems = listOf(selectedBook, unselectedBook))
+    assertThat(state.selectedBooks)
+      .containsExactly(selectedBook)
+  }
+
+  @Test
+  fun `selectedBooks should ignore non BookOnDisk items`() {
+    val selectedBook = mockBook(isSelected = true)
+
+    val otherItem = mockk<BooksOnDiskListItem>(relaxed = true)
+
+    val state = FileSelectListState(bookOnDiskListItems = listOf(selectedBook, otherItem))
+    assertThat(state.selectedBooks)
+      .containsExactly(selectedBook)
+  }
+
+  @Test
+  fun `selectedBooks should return empty list when no books selected`() {
+    val book1 = mockBook(isSelected = false)
+    val book2 = mockBook(isSelected = false)
+
+    val state = FileSelectListState(bookOnDiskListItems = listOf(book1, book2))
+    assertThat(state.selectedBooks).isEmpty()
+  }
+
+  @Test
+  fun `selectionMode should default to NORMAL`() {
+    val state = FileSelectListState(bookOnDiskListItems = emptyList())
+    assertThat(state.selectionMode).isEqualTo(NORMAL)
+  }
+
+  private fun mockBook(isSelected: Boolean): BookOnDisk {
+    return mockk<BookOnDisk> {
+      every { this@mockk.isSelected } returns isSelected
+    }
+  }
 }
