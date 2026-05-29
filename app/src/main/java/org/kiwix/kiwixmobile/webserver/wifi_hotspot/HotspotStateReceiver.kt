@@ -63,7 +63,7 @@ class HotspotStateReceiver @Inject constructor(
     FAILED(WIFI_AP_STATE_FAILED);
 
     companion object {
-      fun from(state: Int) = HotspotState.values().firstOrNull { state == it.state }
+      fun from(state: Int) = HotspotState.entries.firstOrNull { state == it.state }
     }
   }
 }
