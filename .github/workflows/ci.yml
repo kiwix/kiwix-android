@@ -223,8 +223,8 @@ jobs:
             bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-release.sh
 
-  automated-tests-custom-apps:
-    name: Automated tests for Custom app
+  automated-tests-branded-apps:
+    name: Automated tests for Branded app
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
@@ -284,7 +284,7 @@ jobs:
           channel: canary
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Test custom app
+      - name: Test branded app
         uses: reactivecircus/android-emulator-runner@v2
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
