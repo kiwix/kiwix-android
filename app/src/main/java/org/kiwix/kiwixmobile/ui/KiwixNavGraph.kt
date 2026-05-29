@@ -19,11 +19,11 @@
 package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
-import android.os.Bundle
 import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -46,21 +46,21 @@ import androidx.navigation.navDeepLink
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
-import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.BOOKMARK_SCREEN
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.DOWNLOAD_SCREEN
 import org.kiwix.kiwixmobile.core.main.HELP_SCREEN
-import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.HISTORY_SCREEN
 import org.kiwix.kiwixmobile.core.main.INTRO_SCREEN
 import org.kiwix.kiwixmobile.core.main.LANGUAGE_SCREEN
 import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_SCREEN
-import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_SCREEN
+import org.kiwix.kiwixmobile.core.main.NOTES_SCREEN
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SEARCH_SCREEN
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.main.ZIM_HOST_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.notes.NotesScreenRoute
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
@@ -81,11 +82,12 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferScreenRoute
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
+import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
@@ -96,7 +98,8 @@ fun KiwixNavGraph(
   startDestination: String,
   modifier: Modifier = Modifier,
   viewModelFactory: ViewModelProvider.Factory,
-  alertDialogShower: AlertDialogShower
+  alertDialogShower: AlertDialogShower,
+  snackBarHostState: SnackbarHostState
 ) {
   NavHost(
     navController = navController,
@@ -117,15 +120,28 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-      val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
-
-      FragmentContainer(R.id.localLibraryFragmentContainer) {
-        LocalLibraryFragment().apply {
-          arguments = Bundle().apply {
-            putString(ZIM_FILE_URI_KEY, zimFileUri)
-          }
+      val context = LocalContext.current
+      val activity = context as KiwixMainActivity
+      val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
+      val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
+      LaunchedEffect(Unit) {
+        localLibraryViewModel.apply {
+          initialize(
+            activity.getStorageDeviceList(),
+            validateZimViewModel,
+            alertDialogShower,
+            snackBarHostState,
+            activity.supportFragmentManager
+          )
         }
       }
+      val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
+      LocalLibraryRoute(
+        localLibraryViewModel = localLibraryViewModel,
+        navController = navController,
+        zimFileUriArg = zimFileUri,
+        snackBarHostState = snackBarHostState
+      )
     }
 
     composable(KiwixDestination.Downloads.route) {
@@ -220,7 +236,6 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-
       val context = LocalActivity.current
       val coreMainActivity = context as CoreMainActivity
 
@@ -297,22 +312,22 @@ sealed class KiwixDestination(val route: String) {
   object Reader : KiwixDestination(READER_FRAGMENT)
 
   object Library :
-    KiwixDestination("$LOCAL_LIBRARY_FRAGMENT?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}") {
+    KiwixDestination("$LOCAL_LIBRARY_SCREEN?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}") {
     fun createRoute(zimFileUri: String = "") =
-      "$LOCAL_LIBRARY_FRAGMENT?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}"
+      "$LOCAL_LIBRARY_SCREEN?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}"
   }
 
-  object Downloads : KiwixDestination(DOWNLOAD_FRAGMENT)
-  object Bookmarks : KiwixDestination(BOOKMARK_FRAGMENT)
-  object Notes : KiwixDestination(NOTES_FRAGMENT)
+  object Downloads : KiwixDestination(DOWNLOAD_SCREEN)
+  object Bookmarks : KiwixDestination(BOOKMARK_SCREEN)
+  object Notes : KiwixDestination(NOTES_SCREEN)
   object Intro : KiwixDestination(INTRO_SCREEN)
-  object History : KiwixDestination(HISTORY_FRAGMENT)
+  object History : KiwixDestination(HISTORY_SCREEN)
   object Language : KiwixDestination(LANGUAGE_SCREEN)
-  object ZimHost : KiwixDestination(ZIM_HOST_FRAGMENT)
+  object ZimHost : KiwixDestination(ZIM_HOST_SCREEN)
   object Help : KiwixDestination(HELP_SCREEN)
   object Settings : KiwixDestination(SETTINGS_SCREEN)
   object Search : KiwixDestination(
-    SEARCH_FRAGMENT +
+    SEARCH_SCREEN +
       "?$NAV_ARG_SEARCH_STRING={$NAV_ARG_SEARCH_STRING}" +
       "&$TAG_FROM_TAB_SWITCHER={$TAG_FROM_TAB_SWITCHER}" +
       "&$EXTRA_IS_WIDGET_VOICE={$EXTRA_IS_WIDGET_VOICE}"
@@ -322,7 +337,7 @@ sealed class KiwixDestination(val route: String) {
       isOpenedFromTabView: Boolean = false,
       isVoice: Boolean = false
     ): String {
-      return SEARCH_FRAGMENT +
+      return SEARCH_SCREEN +
         "?$NAV_ARG_SEARCH_STRING=$searchString" +
         "&$TAG_FROM_TAB_SWITCHER=$isOpenedFromTabView" +
         "&$EXTRA_IS_WIDGET_VOICE=$isVoice"

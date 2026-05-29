@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <item type="id" name="readerFragmentContainer" />
-  <item type="id" name="localLibraryFragmentContainer" />
-  <item type="id" name="bookmarksFragmentContainer" />
   <item type="id" name="downloadFragmentContainer" />
-  <item type="id" name="notesFragmentContainer" />
-  <item type="id" name="historyFragmentContainer" />
-  <item type="id" name="zimHostFragmentContainer" />
-  <item type="id" name="settingsFragmentContainer" />
-  <item type="id" name="searchFragmentContainer" />
-  <item type="id" name="localFileTransferFragmentContainer" />
 </resources>

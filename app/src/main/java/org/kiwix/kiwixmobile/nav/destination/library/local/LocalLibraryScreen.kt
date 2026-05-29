@@ -52,6 +52,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -63,6 +64,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -86,8 +88,7 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.models.toPainter
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -99,11 +100,15 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiState
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.NoFileView
 import kotlin.math.roundToInt
 
 const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
 const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
 const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
+const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
+const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 const val SHOW_SWIPE_DOWN_TO_SCAN_FILE_SYSTEM_TEXT_TESTING_TAG =
   "showSwipeDownToScanFileSystemTextTestingTag"
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
@@ -112,7 +117,8 @@ private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun LocalLibraryScreen(
-  state: LocalLibraryScreenState,
+  state: LocalLibraryUiState,
+  actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState,
   onRefresh: () -> Unit,
   onDownloadButtonClick: () -> Unit,
@@ -122,17 +128,18 @@ fun LocalLibraryScreen(
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
+  snackbarHostState: SnackbarHostState,
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackbarHostState) },
       topBar = {
         KiwixAppBar(
-          title = stringResource(R.string.library),
+          title = screenTitle(state.fileSelectListState),
           navigationIcon = navigationIcon,
-          actionMenuItems = state.actionMenuItems,
+          actionMenuItems = actionMenuItems,
           topAppBarScrollBehavior = scrollBehavior
         )
       },
@@ -168,10 +175,18 @@ fun LocalLibraryScreen(
   }
 }
 
+@Composable
+private fun screenTitle(fileSelectListState: FileSelectListState): String =
+  if (fileSelectListState.selectedBooks.isNotEmpty()) {
+    "${fileSelectListState.selectedBooks.size}"
+  } else {
+    stringResource(R.string.library)
+  }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LocalLibraryMainContent(
-  state: LocalLibraryScreenState,
+  state: LocalLibraryUiState,
   onRefresh: () -> Unit,
   contentPadding: PaddingValues,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
@@ -183,22 +198,22 @@ private fun LocalLibraryMainContent(
   listState: LazyListState
 ) {
   SwipeRefreshLayout(
-    isRefreshing = state.swipeRefreshItem.first,
-    isEnabled = state.swipeRefreshItem.second,
+    isRefreshing = state.isSwipeRefreshing,
+    isEnabled = !state.scanning.isScanning,
     onRefresh = onRefresh,
     modifier = Modifier
       .fillMaxSize()
       .padding(contentPadding)
   ) {
     OnBackPressed(onUserBackPressed, navHostController)
-    if (state.scanningProgressItem.first) {
+    if (state.scanning.isScanning) {
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
-        progress = state.scanningProgressItem.second
+        progress = state.scanning.progress
       )
     }
-    if (state.noFilesViewItem.third || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
-      NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
+    if (state.noFileView.isVisible || state.fileSelectListState.bookOnDiskListItems.isEmpty()) {
+      NoFilesView(state.noFileView, onDownloadButtonClick)
     } else {
       BookItemList(
         state.fileSelectListState,
@@ -295,7 +310,7 @@ private fun LocalLibraryBackToTopButton(
 
 @Composable
 fun NoFilesView(
-  noFilesViewItem: Triple<String, String, Boolean>,
+  noFilesView: NoFileView,
   onDownloadButtonClick: () -> Unit
 ) {
   Column(
@@ -308,13 +323,13 @@ fun NoFilesView(
   ) {
     Text(
       modifier = Modifier.testTag(NO_FILE_TEXT_TESTING_TAG),
-      text = noFilesViewItem.first,
+      text = noFilesView.title,
       style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
       textAlign = TextAlign.Center
     )
     Spacer(modifier = Modifier.height(EIGHT_DP))
     KiwixButton(
-      buttonText = noFilesViewItem.second,
+      buttonText = noFilesView.buttonText,
       clickListener = onDownloadButtonClick,
       modifier = Modifier.testTag(DOWNLOAD_BUTTON_TESTING_TAG)
     )
@@ -326,29 +341,26 @@ fun NoFilesView(
 @Composable
 private fun SwipeDownToScanFileSystemText() {
   val infiniteTransition = rememberInfiniteTransition(label = "swipeAnim")
-
+  val density = LocalDensity.current
+  val targetOffsetPx = with(density) { TWENTY_DP.toPx() }
   val offsetY by infiniteTransition.animateFloat(
     initialValue = ZERO.toFloat(),
-    targetValue = 24f,
+    targetValue = targetOffsetPx,
     animationSpec = infiniteRepeatable(
-      animation =
-        tween(SWIPE_DOWN_IMAGE_ANIMATION_TIME, easing = FastOutSlowInEasing),
+      animation = tween(SWIPE_DOWN_IMAGE_ANIMATION_TIME, easing = FastOutSlowInEasing),
       repeatMode = RepeatMode.Restart
     ),
     label = "swipeOffset"
   )
-
-  val alpha = 1f - (offsetY / 24f).coerceIn(ZERO.toFloat(), 1f)
-
+  val alpha = 1f - (offsetY / targetOffsetPx).coerceIn(ZERO.toFloat(), 1f)
   Row(
     modifier = Modifier
-      .fillMaxWidth()
       .padding(EIGHT_DP),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center
   ) {
     Icon(
-      painter = IconItem.Drawable(drawable.ic_swipe_down).toPainter(),
+      painter = painterResource(id = drawable.ic_swipe_down),
       contentDescription = null,
       modifier = Modifier
         .offset { IntOffset(x = 0, y = offsetY.roundToInt()) }

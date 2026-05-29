@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
-import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import org.kiwix.kiwixmobile.core.R.string
@@ -37,7 +37,7 @@ import javax.inject.Inject
  */
 class ProcessSelectedZimFilesForStandalone @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  private val activity: Activity
+  private val context: Context
 ) {
   private var selectedZimFileCallback: SelectedZimFileCallback? = null
 
@@ -74,7 +74,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
   private suspend fun processSingleFile(uri: Uri) {
     val (file, errorMessage) = getZimFileFromUri(uri)
     if (file == null) {
-      activity.toast(errorMessage)
+      context.toast(errorMessage)
     } else {
       selectedZimFileCallback?.navigateToReaderFragment(file)
     }
@@ -100,7 +100,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
       selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)
       // Notify user after all files are processed
       if (index == uris.lastIndex) {
-        activity.toast(activity.getString(string.your_selected_files_added_to_library))
+        context.toast(context.getString(string.your_selected_files_added_to_library))
       }
     }
   }
@@ -116,24 +116,25 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
     uri: Uri
   ): Pair<File?, String> {
     val filePath =
-      FileUtils.getLocalFilePathByUri(
-        activity.applicationContext,
-        uri
-      )
+      FileUtils.getLocalFilePathByUri(context.applicationContext, uri)
     if (filePath == null || !File(filePath).isFileExist()) {
       Log.e(
         TAG_KIWIX,
         "ZIM file not found in storage. File Uri = $uri\nRetrieved Path = $filePath"
       )
-      return null to activity.getString(string.error_file_not_found, "$uri")
+      return null to context.getString(string.error_file_not_found, "$uri")
     }
     val file = File(filePath)
     return if (!FileUtils.isValidZimFile(file.path)) {
       Log.e(TAG_KIWIX, "Invalid ZIM file. Path = ${file.path}")
-      null to activity.getString(string.error_file_invalid, file.path)
+      null to context.getString(string.error_file_invalid, file.path)
     } else {
       file to ""
     }
+  }
+
+  fun dispose() {
+    selectedZimFileCallback = null
   }
 }
 

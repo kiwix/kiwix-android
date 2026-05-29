@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+package org.kiwix.kiwixmobile.core.utils.effects
 
 import android.content.Context
 import android.view.View
@@ -27,7 +27,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
-import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
 
 internal class CloseKeyboardTest {
   private val activity: AppCompatActivity = mockk()

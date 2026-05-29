@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.intro.composable.INTRO_SUB_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.zimManager.THREE
+import org.kiwix.kiwixmobile.nav.destination.library.local.THREE
 
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 

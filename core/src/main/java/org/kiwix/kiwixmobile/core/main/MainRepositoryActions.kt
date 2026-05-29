@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
-import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
@@ -34,7 +33,6 @@ import javax.inject.Inject
 
 private const val TAG = "MainPresenter"
 
-@ActivityScope
 class MainRepositoryActions @Inject constructor(
   private val dataSource: DataSource,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher

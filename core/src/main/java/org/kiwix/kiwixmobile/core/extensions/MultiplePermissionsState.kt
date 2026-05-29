@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,28 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.base
 
-import org.kiwix.kiwixmobile.core.base.BaseContract.Presenter
-import org.kiwix.kiwixmobile.core.base.BaseContract.View
+package org.kiwix.kiwixmobile.core.extensions
 
-/**
- * All presenters should inherit from this presenter.
- */
-@Suppress("UnnecessaryAbstractClass")
-abstract class BasePresenter<T : View<*>?> : Presenter<T> {
-  @JvmField
-  var view: T? = null
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
 
-  override fun attachView(view: T) {
-    this.view = view
-  }
-
-  override fun detachView(view: T) {
-    // Detach the view only if it matches the one currently attached.
-    // Bug Fix #4409
-    if (this.view == view) {
-      this.view = null
-    }
+@OptIn(ExperimentalPermissionsApi::class)
+fun MultiplePermissionsState.handlePermissionRequest(
+  onGranted: () -> Unit,
+  onRationale: () -> Unit
+) {
+  when {
+    allPermissionsGranted -> onGranted.invoke()
+    shouldShowRationale -> onRationale.invoke()
+    else -> launchMultiplePermissionRequest()
   }
 }

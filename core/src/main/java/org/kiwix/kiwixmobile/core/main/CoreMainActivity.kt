@@ -38,6 +38,7 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -93,17 +94,17 @@ private const val ADAPTIVE_ICON_INSET_DP = 36
 
 // Fragments names for compose based navigation.
 const val READER_FRAGMENT = "readerFragment"
-const val LOCAL_LIBRARY_FRAGMENT = "localLibraryFragment"
-const val DOWNLOAD_FRAGMENT = "downloadsFragment"
-const val BOOKMARK_FRAGMENT = "bookmarkFragment"
-const val NOTES_FRAGMENT = "notesFragment"
+const val LOCAL_LIBRARY_SCREEN = "localLibraryScreen"
+const val DOWNLOAD_SCREEN = "downloadsScreen"
+const val BOOKMARK_SCREEN = "bookmarkScreen"
+const val NOTES_SCREEN = "notesScreen"
 const val INTRO_SCREEN = "introScreen"
-const val HISTORY_FRAGMENT = "historyFragment"
+const val HISTORY_SCREEN = "historyScreen"
 const val LANGUAGE_SCREEN = "languageScreen"
-const val ZIM_HOST_FRAGMENT = "zimHostFragment"
+const val ZIM_HOST_SCREEN = "zimHostScreen"
 const val HELP_SCREEN = "helpScreen"
 const val SETTINGS_SCREEN = "settingsScreen"
-const val SEARCH_FRAGMENT = "searchFragment"
+const val SEARCH_SCREEN = "searchScreen"
 const val LOCAL_FILE_TRANSFER_SCREEN = "localFileTransferScreen"
 
 // Zim host deep link for opening the ZimHost fragment from notification.
@@ -154,6 +155,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * Such as opening/closing leftDrawer.
    */
   lateinit var uiCoroutineScope: CoroutineScope
+  lateinit var snackBarHostState: SnackbarHostState
 
   /**
    * Managing the leftDrawerMenu in compose way so that when app's language changed

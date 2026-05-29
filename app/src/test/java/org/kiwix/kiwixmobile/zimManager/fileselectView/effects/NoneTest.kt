@@ -16,19 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.extensions
+package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
+import androidx.appcompat.app.AppCompatActivity
+import io.mockk.Called
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalPermissionsApi::class)
-fun MultiplePermissionsState.handlePermissionRequest(
-  onGranted: () -> Unit,
-  onRationale: () -> Unit
-) {
-  when {
-    allPermissionsGranted -> onGranted()
-    shouldShowRationale -> onRationale()
-    else -> launchMultiplePermissionRequest()
+class NoneTest {
+  @Test
+  fun `invokeWith should do nothing`() {
+    val activity = mockk<AppCompatActivity>(relaxed = true)
+
+    None.invokeWith(activity)
+
+    verify { activity wasNot Called }
   }
 }

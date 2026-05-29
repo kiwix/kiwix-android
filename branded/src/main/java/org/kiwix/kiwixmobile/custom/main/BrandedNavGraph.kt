@@ -40,14 +40,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
-import org.kiwix.kiwixmobile.core.main.BOOKMARK_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.BOOKMARK_SCREEN
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.DOWNLOAD_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.DOWNLOAD_SCREEN
 import org.kiwix.kiwixmobile.core.main.HELP_SCREEN
-import org.kiwix.kiwixmobile.core.main.HISTORY_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.NOTES_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.HISTORY_SCREEN
+import org.kiwix.kiwixmobile.core.main.NOTES_SCREEN
 import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
-import org.kiwix.kiwixmobile.core.main.SEARCH_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.SEARCH_SCREEN
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
@@ -193,14 +193,14 @@ fun FragmentContainer(
 sealed class CustomDestination(val route: String) {
   object Reader : CustomDestination(READER_FRAGMENT)
 
-  object History : CustomDestination(HISTORY_FRAGMENT)
-  object Notes : CustomDestination(NOTES_FRAGMENT)
-  object Bookmarks : CustomDestination(BOOKMARK_FRAGMENT)
+  object History : CustomDestination(HISTORY_SCREEN)
+  object Notes : CustomDestination(NOTES_SCREEN)
+  object Bookmarks : CustomDestination(BOOKMARK_SCREEN)
   object Help : CustomDestination(HELP_SCREEN)
   object Settings : CustomDestination(SETTINGS_SCREEN)
-  object Downloads : CustomDestination(DOWNLOAD_FRAGMENT)
+  object Downloads : CustomDestination(DOWNLOAD_SCREEN)
   object Search : CustomDestination(
-    SEARCH_FRAGMENT +
+    SEARCH_SCREEN +
       "?$NAV_ARG_SEARCH_STRING={$NAV_ARG_SEARCH_STRING}" +
       "&$TAG_FROM_TAB_SWITCHER={$TAG_FROM_TAB_SWITCHER}" +
       "&$EXTRA_IS_WIDGET_VOICE={$EXTRA_IS_WIDGET_VOICE}"
@@ -210,7 +210,7 @@ sealed class CustomDestination(val route: String) {
       isOpenedFromTabView: Boolean = false,
       isVoice: Boolean = false
     ): String {
-      return SEARCH_FRAGMENT +
+      return SEARCH_SCREEN +
         "?$NAV_ARG_SEARCH_STRING=$searchString" +
         "&$TAG_FROM_TAB_SWITCHER=$isOpenedFromTabView" +
         "&$EXTRA_IS_WIDGET_VOICE=$isVoice"

@@ -31,7 +31,7 @@ import android.os.Environment
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -44,19 +44,19 @@ class AndroidPermissionChecker @Inject constructor(
     if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       true
     } else {
-      ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED
+      checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED
     }
 
   override suspend fun hasReadExternalStoragePermission(): Boolean =
     if (isAndroid13orAbove() || kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
       true
     } else {
-      ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED
+      checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED
     }
 
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   override suspend fun hasNearbyWifiPermission(): Boolean =
-    ContextCompat.checkSelfPermission(context, NEARBY_WIFI_DEVICES) == PERMISSION_GRANTED
+    checkSelfPermission(context, NEARBY_WIFI_DEVICES) == PERMISSION_GRANTED
 
   /**
    * Checks ACCESS_FINE_LOCATION permission.
@@ -68,7 +68,7 @@ class AndroidPermissionChecker @Inject constructor(
     require(!isAndroid13orAbove()) {
       "hasFineLocationPermission should not be called on API 33+. Use hasNearbyWifiPermission() instead."
     }
-    return ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+    return checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
   }
 
   override fun shouldShowRationale(activity: Activity, permission: String): Boolean =
@@ -83,13 +83,17 @@ class AndroidPermissionChecker @Inject constructor(
 
   override suspend fun hasNotificationPermission(): Boolean =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !kiwixDataStore.prefIsTest.first()) {
-      ContextCompat.checkSelfPermission(context, POST_NOTIFICATIONS) == PERMISSION_GRANTED
+      checkSelfPermission(context, POST_NOTIFICATIONS) == PERMISSION_GRANTED
     } else {
       true
     }
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
   override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
+  override fun isAndroid11OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
   override suspend fun isManageExternalStoragePermissionGranted(): Boolean =
     if (kiwixDataStore.isNotPlayStoreBuildWithAndroid11OrAbove() &&
       !kiwixDataStore.prefIsTest.first() &&

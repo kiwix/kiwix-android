@@ -25,6 +25,7 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.documentfile.provider.DocumentFile
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
@@ -46,6 +47,7 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
@@ -56,7 +58,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerImpl
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -161,7 +163,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       TestUtils.deleteTemporaryFilesOfTestCases(context)
 
       // Test multiple files copying.
-      navigateToLocalLibraryFragment()
+      navigateToLocalLibraryScreen()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
       selectedFile = getSelectedFile("testzim.zim")
@@ -228,7 +230,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       TestUtils.deleteTemporaryFilesOfTestCases(context)
 
       // Test multiple files copying.
-      navigateToLocalLibraryFragment()
+      navigateToLocalLibraryScreen()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
       selectedFile = getSelectedFile("testzim.zim")
@@ -253,11 +255,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun assertZimFileAddedInTheLocalLibrary() {
-    navigateToLocalLibraryFragment()
+    navigateToLocalLibraryScreen()
     copyMoveFileHandler { assertZimFileAddedInTheLocalLibrary(composeTestRule) }
   }
 
-  private fun navigateToLocalLibraryFragment() {
+  private fun navigateToLocalLibraryScreen() {
     UiThreadStatement.runOnUiThread {
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
@@ -272,12 +274,32 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun showMoveFileToPublicDirectoryDialog(urisList: List<Uri>) {
-    kiwixMainActivity.lifecycleScope.launch {
-      val localLibraryFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<LocalLibraryFragment>()
-          .firstOrNull()
-      localLibraryFragment?.handleSelectedFileUri(urisList)
+    composeTestRule.runOnIdle {
+      kiwixMainActivity = composeTestRule.activity
+
+      val localLibraryViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[LocalLibraryViewModel::class.java]
+
+      val validateZimViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[ValidateZimViewModel::class.java]
+      val storageDeviceList = runBlocking { kiwixMainActivity.getStorageDeviceList() }
+      localLibraryViewModel.initialize(
+        storageDeviceList = storageDeviceList,
+        validateZimViewModel = validateZimViewModel,
+        kiwixMainActivity.alertDialogShower,
+        kiwixMainActivity.snackBarHostState,
+        kiwixMainActivity.supportFragmentManager
+      )
+      kiwixMainActivity.lifecycleScope.launch {
+        localLibraryViewModel.handleSelectedFileUri(urisList)
+        localLibraryViewModel.sideEffects.collect { effect ->
+          effect.invokeWith(kiwixMainActivity)
+        }
+      }
     }
   }
 

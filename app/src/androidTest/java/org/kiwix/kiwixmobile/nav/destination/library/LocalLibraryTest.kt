@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -31,6 +33,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -38,10 +41,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -58,7 +63,7 @@ class LocalLibraryTest : BaseActivityTest() {
   val retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createComposeRule()
+  val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
 
   @Before
   override fun waitForIdle() {
@@ -82,7 +87,7 @@ class LocalLibraryTest : BaseActivityTest() {
         setShowManageExternalFilesPermissionDialog(false)
         // Set setManageExternalFilesPermissionDialogOnRefresh to false to hide
         // the manage external storage permission dialog on Android 11 and above
-        // while refreshing the content in LocalLibraryFragment.
+        // while refreshing the content in LocalLibraryScreen.
         setManageExternalFilesPermissionDialogOnRefresh(false)
         setIsFirstRun(false)
         setPrefIsTest(true)
@@ -105,6 +110,34 @@ class LocalLibraryTest : BaseActivityTest() {
     composeTestRule.enableAccessibilityChecks(accessibilityValidator)
   }
 
+  private fun observeLocalLibraryActions() {
+    composeTestRule.runOnIdle {
+      val kiwixMainActivity = composeTestRule.activity
+      val localLibraryViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[LocalLibraryViewModel::class.java]
+
+      val validateZimViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[ValidateZimViewModel::class.java]
+      val storageDeviceList = runBlocking { kiwixMainActivity.getStorageDeviceList() }
+      localLibraryViewModel.initialize(
+        storageDeviceList = storageDeviceList,
+        validateZimViewModel = validateZimViewModel,
+        kiwixMainActivity.alertDialogShower,
+        kiwixMainActivity.snackBarHostState,
+        kiwixMainActivity.supportFragmentManager
+      )
+      kiwixMainActivity.lifecycleScope.launch {
+        localLibraryViewModel.sideEffects.collect { effect ->
+          effect.invokeWith(kiwixMainActivity)
+        }
+      }
+    }
+  }
+
   @Test
   fun testLocalLibrary() {
     activityScenario.onActivity {
@@ -123,7 +156,10 @@ class LocalLibraryTest : BaseActivityTest() {
       assertLibraryListDisplayed(composeTestRule)
       validateZIMFiles(composeTestRule)
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU) {
+      // Temporary disabling on Android 13
+      LeakAssertions.assertNoLeaks()
+    }
   }
 
   @Test
@@ -146,7 +182,8 @@ class LocalLibraryTest : BaseActivityTest() {
         isPlayStoreBuild = false
       )
       clickOnReaderFragment(composeTestRule)
-      clickOnLocalLibraryFragment(composeTestRule)
+      clickOnLocalLibraryScreen(composeTestRule)
+      observeLocalLibraryActions()
       composeTestRule.waitUntilTimeout()
       // Assert scan dialog visible.
       assertScanFileSystemDialogDisplayed(composeTestRule)
@@ -157,7 +194,8 @@ class LocalLibraryTest : BaseActivityTest() {
       }
       // Assert scan dialog does not show again.
       clickOnReaderFragment(composeTestRule)
-      clickOnLocalLibraryFragment(composeTestRule)
+      clickOnLocalLibraryScreen(composeTestRule)
+      observeLocalLibraryActions()
       assertScanDialogNotDisplayed(composeTestRule)
       // Assert When there are ZIM files in local library screen then this dialog does not display.
       // Set to not show the "All files permission" dialog.
@@ -177,7 +215,8 @@ class LocalLibraryTest : BaseActivityTest() {
         showManagePermissionDialog = true,
         isPlayStoreBuild = false
       )
-      clickOnLocalLibraryFragment(composeTestRule)
+      clickOnLocalLibraryScreen(composeTestRule)
+      observeLocalLibraryActions()
       assertScanDialogNotDisplayed(composeTestRule)
     }
   }

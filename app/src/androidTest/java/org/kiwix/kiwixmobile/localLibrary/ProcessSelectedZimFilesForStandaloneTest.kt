@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -38,12 +39,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -76,7 +78,11 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
         setIntroShown()
         setPrefLanguage("en")
         setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
+        setIsScanFileSystemDialogShown(true)
+        setShowManageExternalFilesPermissionDialog(false)
+        setManageExternalFilesPermissionDialogOnRefresh(false)
         setIsPlayStoreBuild(false)
+        setIsFirstRun(false)
         setPrefIsTest(true)
       }
     }
@@ -139,21 +145,41 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
   private fun prepareLocalLibraryForTest() {
     deleteAllFilesInDirectory(parentFile)
     TestUtils.deleteTemporaryFilesOfTestCases(context)
-    navigateToLocalLibraryFragment()
+    navigateToLocalLibraryScreen()
     deleteZimFilesIfExistInLocalLibrary()
   }
 
   private fun triggerProcessSelectedZimFiles(urisList: List<Uri>) {
-    kiwixMainActivity.lifecycleScope.launch {
-      val localLibraryFragment =
-        kiwixMainActivity.supportFragmentManager.fragments
-          .filterIsInstance<LocalLibraryFragment>()
-          .firstOrNull()
-      localLibraryFragment?.handleSelectedFileUri(urisList)
+    composeTestRule.runOnIdle {
+      kiwixMainActivity = composeTestRule.activity
+
+      val localLibraryViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[LocalLibraryViewModel::class.java]
+
+      val validateZimViewModel = ViewModelProvider(
+        kiwixMainActivity,
+        kiwixMainActivity.viewModelFactory
+      )[ValidateZimViewModel::class.java]
+      val storageDeviceList = runBlocking { kiwixMainActivity.getStorageDeviceList() }
+      localLibraryViewModel.initialize(
+        storageDeviceList = storageDeviceList,
+        validateZimViewModel = validateZimViewModel,
+        kiwixMainActivity.alertDialogShower,
+        kiwixMainActivity.snackBarHostState,
+        kiwixMainActivity.supportFragmentManager
+      )
+      kiwixMainActivity.lifecycleScope.launch {
+        localLibraryViewModel.handleSelectedFileUri(urisList)
+        localLibraryViewModel.sideEffects.collect { effect ->
+          effect.invokeWith(kiwixMainActivity)
+        }
+      }
     }
   }
 
-  private fun navigateToLocalLibraryFragment() {
+  private fun navigateToLocalLibraryScreen() {
     composeTestRule.apply {
       runOnUiThread {
         kiwixMainActivity.navigate(KiwixDestination.Library.route)

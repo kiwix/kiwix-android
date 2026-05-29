@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.local
 
-import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import androidx.documentfile.provider.DocumentFile
@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import java.io.File
@@ -61,7 +60,7 @@ import javax.inject.Inject
  */
 class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  private val activity: Activity,
+  private val context: Context,
   private val copyMoveFileHandler: CopyMoveFileHandler,
   private val storageCalculator: StorageCalculator
 ) : CopyMoveFileHandler.FileCopyMoveCallback {
@@ -71,6 +70,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private var lifecycleScope: CoroutineScope? = null
   private var alertDialogShower: AlertDialogShower? = null
   private var isSingleFileSelected = false
+  private var storageDeviceList: List<StorageDevice> = emptyList()
 
   /**
    * Manages the selected action by user when processing the multiple files.
@@ -83,12 +83,14 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * Must be called before using this class.
    */
   fun init(
+    storageDeviceList: List<StorageDevice>,
     lifecycleScope: CoroutineScope,
     alertDialogShower: AlertDialogShower,
     snackBarHostState: SnackbarHostState,
     fragmentManager: FragmentManager,
     selectedZimFileCallback: SelectedZimFileCallback
   ) {
+    this.storageDeviceList = storageDeviceList
     this.lifecycleScope = lifecycleScope
     this.fragmentManager = fragmentManager
     this.selectedZimFileCallback = selectedZimFileCallback
@@ -150,7 +152,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     val documentFile = when (uri.scheme) {
       "file" -> DocumentFile.fromFile(File("$uri"))
       else -> {
-        DocumentFile.fromSingleUri(activity, uri)
+        DocumentFile.fromSingleUri(context, uri)
       }
     }
 
@@ -161,6 +163,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     }
 
     copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+      storageDeviceList,
       uri,
       documentFile,
       // pass if fileName is null then we will validate it after copying/moving
@@ -180,14 +183,14 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     isFromMultipleFiles: Boolean
   ) {
     val errorMessage =
-      activity.getString(string.error_file_invalid, fileName ?: uri.toString())
+      context.getString(string.error_file_invalid, fileName ?: uri.toString())
     if (isFromMultipleFiles) {
       selectedZimFileCallback?.showFileCopyMoveErrorDialog(errorMessage) {
         // Continue with next file
         processSelectedFiles(selectedZimFileUriList.drop(ONE), isAfterRetry = true)
       }
     } else {
-      activity.toast(errorMessage)
+      context.toast(errorMessage)
     }
   }
 
@@ -202,7 +205,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     if (uris.isEmpty()) {
       // All files processed successfully.
       multipleFilesProcessAction = null
-      activity.toast(activity.getString(string.your_selected_files_added_to_library))
+      context.toast(context.getString(string.your_selected_files_added_to_library))
       return
     }
     val uri = uris.first()
@@ -236,11 +239,11 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private fun showStorageSelectionSnackBar(message: String) {
     snackBarHostState?.snack(
       message = message,
-      actionLabel = activity.getString(string.change_storage),
+      actionLabel = context.getString(string.change_storage),
       lifecycleScope = lifecycleScope!!,
       actionClick = {
         lifecycleScope?.launch {
-          showStorageSelectDialog((activity as KiwixMainActivity).getStorageDeviceList())
+          showStorageSelectDialog(storageDeviceList)
         }
       }
     )
@@ -254,7 +257,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         setStorageDeviceList(storageDeviceList)
         setShouldShowStorageSelected(true)
       }
-      .show(fragmentManager, activity.getString(string.pref_storage))
+      .show(fragmentManager, context.getString(string.pref_storage))
 
   /**
    * Stores the newly selected storage path in preferences
@@ -297,21 +300,21 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   override fun insufficientSpaceInStorage(availableSpace: Long) {
     val message =
       """
-      ${activity.getString(string.move_no_space)}
-      ${activity.getString(string.space_available)} ${Bytes(availableSpace).humanReadable}
+      ${context.getString(string.move_no_space)}
+      ${context.getString(string.space_available)} ${Bytes(availableSpace).humanReadable}
       """.trimIndent()
 
     showStorageSelectionSnackBar(message)
   }
 
   override fun filesystemDoesNotSupportedCopyMoveFilesOver4GB() {
-    showStorageSelectionSnackBar(activity.getString(R.string.file_system_does_not_support_4gb))
+    showStorageSelectionSnackBar(context.getString(R.string.file_system_does_not_support_4gb))
   }
 
   override fun onError(errorMessage: String) {
     if (isSingleFileSelected) {
       multipleFilesProcessAction = null
-      activity.toast(errorMessage)
+      context.toast(errorMessage)
     } else {
       selectedZimFileCallback?.showFileCopyMoveErrorDialog(errorMessage) {
         // Continue with remaining files after error

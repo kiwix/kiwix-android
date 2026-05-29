@@ -38,6 +38,9 @@ interface KiwixPermissionChecker {
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
   fun isAndroid13orAbove(): Boolean
 
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
+  fun isAndroid11OrAbove(): Boolean
+
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
   fun isAndroid8OrAbove(): Boolean
 

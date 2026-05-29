@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,17 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.di.modules
 
-import dagger.Binds
-import dagger.Module
-import org.kiwix.kiwixmobile.core.di.ActivityScope
+package org.kiwix.kiwixmobile.core.utils.effects
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ManageExternalFilesPermissionDialog
 
-@Module
-abstract class ActivityModule {
-  @Binds
-  @ActivityScope
-  abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
+@RequiresApi(Build.VERSION_CODES.R)
+class ManageExternalFilesPermissionDialog(private val dialogShower: AlertDialogShower) :
+  SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    dialogShower.show(
+      ManageExternalFilesPermissionDialog,
+      { activity.navigateToSettings() }
+    )
+  }
 }
