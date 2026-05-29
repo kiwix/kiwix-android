@@ -262,7 +262,7 @@ class DownloadRobot : BaseRobot() {
               true // Text changed!
             }
           }
-        } catch (_: Exception) {
+        } catch (_: AssertionError) {
           true // Any other error, we treat as "it's not paused anymore" or "it's gone"
         }
       }
@@ -293,7 +293,7 @@ class DownloadRobot : BaseRobot() {
             .onFirst()
             .assertTextEquals(pauseState)
           true
-        } catch (_: Exception) {
+        } catch (_: AssertionError) {
           false
         }
       }
@@ -336,7 +336,7 @@ class DownloadRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
-    try {
+    runCatching {
       val pauseState = kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state)
       val nodes =
         composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).fetchSemanticsNodes()
@@ -347,7 +347,7 @@ class DownloadRobot : BaseRobot() {
           resumeDownload(composeTestRule)
         }
       }
-    } catch (_: Exception) {
+    }.onFailure {
       // Ignore errors during check
     }
   }
@@ -383,7 +383,7 @@ class DownloadRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     kiwixMainActivity: KiwixMainActivity
   ) {
-    try {
+    runCatching {
       val nodes =
         composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
       if (nodes.isNotEmpty()) {
@@ -392,8 +392,8 @@ class DownloadRobot : BaseRobot() {
         clickOnYesButton(composeTestRule)
         composeTestRule.waitForIdle()
       }
-    } catch (e: Exception) {
-      Log.e(KIWIX_DOWNLOAD_TEST, "Failed to stop downloading: ${e.message}")
+    }.onFailure {
+      Log.e(KIWIX_DOWNLOAD_TEST, "Failed to stop downloading: ${it.message}")
     }
   }
 

@@ -150,7 +150,7 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         searchD3JsDocsFile(composeTestRule)
         downloadZimFile(composeTestRule)
-        try {
+        runCatching {
           assertDownloadStart(composeTestRule)
           pauseDownload(composeTestRule)
           assertDownloadPaused(composeTestRule, kiwixMainActivity)
@@ -160,12 +160,12 @@ class DownloadTest : BaseActivityTest() {
             composeTestRule = composeTestRule,
             kiwixMainActivity = kiwixMainActivity
           )
-        } catch (ignore: Exception) {
+        }.onFailure {
           // do nothing as ZIM file already downloaded, since we are downloading the smallest file
           // so it can be downloaded immediately after starting.
           Log.e(
             KIWIX_DOWNLOAD_TEST,
-            "Could not pause download. Original exception = $ignore"
+            "Could not pause download. Original exception = $it"
           )
         }
         UiThreadStatement.runOnUiThread {
@@ -235,18 +235,18 @@ class DownloadTest : BaseActivityTest() {
       stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
       searchD3JsDocsFile(composeTestRule)
       downloadZimFile(composeTestRule)
-      try {
+      runCatching {
         assertDownloadStart(composeTestRule)
         pauseDownload(composeTestRule)
         assertDownloadPaused(composeTestRule, kiwixMainActivity)
         resumeDownload(composeTestRule)
         assertDownloadResumed(composeTestRule, kiwixMainActivity)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-      } catch (ignore: Exception) {
+      }.onFailure {
         // do nothing as ZIM file already downloaded
         Log.e(
           KIWIX_DOWNLOAD_TEST,
-          "Could not complete pause/resume cycle. It might have finished: $ignore"
+          "Could not complete pause/resume cycle. It might have finished: $it"
         )
       }
       // select the default device language to perform other test cases.
@@ -292,12 +292,12 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         searchD3JsDocsFile(composeTestRule)
         downloadZimFile(composeTestRule)
-        try {
+        runCatching {
           assertDownloadStart(composeTestRule)
           pauseDownload(composeTestRule)
           assertDownloadPaused(composeTestRule, kiwixMainActivity)
-        } catch (ignore: Exception) {
-          Log.e(KIWIX_DOWNLOAD_TEST, "Could not pause before restart: $ignore")
+        }.onFailure {
+          Log.e(KIWIX_DOWNLOAD_TEST, "Could not pause before restart: $it")
         }
       }
 
@@ -318,15 +318,15 @@ class DownloadTest : BaseActivityTest() {
 
       downloadRobot {
         waitForDataToLoad(composeTestRule = composeTestRule)
-        try {
+        runCatching {
           assertDownloadPaused(composeTestRule, kiwixMainActivity)
           resumeDownload(composeTestRule)
           assertDownloadResumed(composeTestRule, kiwixMainActivity)
           stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
-        } catch (ignore: Exception) {
+        }.onFailure {
           Log.e(
             KIWIX_DOWNLOAD_TEST,
-            "Could not complete resume after restart. It might have finished: $ignore"
+            "Could not complete resume after restart. It might have finished: $it"
           )
         }
       }
