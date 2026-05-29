@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -76,6 +77,9 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
+
+  @get:Rule
+  private val dispatcher = MainDispatcherRule()
   private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
@@ -345,7 +349,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       kiwixDataStore,
       StorageCalculator(kiwixDataStore),
       Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()), Dispatchers.IO),
-      FileOperationHandlerImpl(kiwixMainActivity),
+      FileOperationHandlerImpl(kiwixMainActivity, dispatcher.dispatcher),
       CopyMoveProgressBarControllerImpl(kiwixMainActivity)
     ).apply {
       setAlertDialogShower(AlertDialogShower())
