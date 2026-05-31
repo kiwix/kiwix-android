@@ -93,7 +93,7 @@ fun OnlineBookItem(
       modifier = Modifier
         .fillMaxWidth()
         .padding(FIVE_DP)
-        .testTag("$ONLINE_BOOK_ITEM_TESTING_TAG$index")
+        .testTag(ONLINE_BOOK_ITEM_TESTING_TAG)
         .clickable(enabled = isClickable) {
           onBookItemClick.invoke(item)
         },

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.content.ContextCompat
@@ -41,6 +42,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -61,7 +63,6 @@ class OnlineBookItemUITest {
   val composeTestRule = createComposeRule()
 
   private val context get() = RuntimeEnvironment.getApplication()
-  private val testIndex = 0
 
   private lateinit var mockOnBookItemClick: (BookItem) -> Unit
   private lateinit var mockAvailableSpaceCalculator: AvailableSpaceCalculator
@@ -124,7 +125,7 @@ class OnlineBookItemUITest {
   ) {
     composeTestRule.setContent {
       OnlineBookItem(
-        index = testIndex,
+        index = ZERO,
         item = item,
         bookUtils = mockBookUtils,
         availableSpaceCalculator = mockAvailableSpaceCalculator,
@@ -134,13 +135,11 @@ class OnlineBookItemUITest {
     composeTestRule.waitForIdle()
   }
 
-  private val singleItemTag = "$ONLINE_BOOK_ITEM_TESTING_TAG$testIndex"
-
   @Test
   fun onlineBookItem_whenRendered_cardIsDisplayed() {
     setContent()
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[ZERO]
       .assertIsDisplayed()
   }
 
@@ -148,7 +147,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_whenDescriptionIsEmpty_cardStillRendersWithoutCrash() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(description = "")))
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[ZERO]
       .assertIsDisplayed()
   }
 
@@ -156,7 +155,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_whenNoTags_cardRendersWithoutCrash() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(tags = "")))
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
       .assertIsDisplayed()
   }
 
@@ -164,7 +163,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_bookTitleIsInTree() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(title = "Kotlin")))
     composeTestRule
-      .onNode(hasContentDescription("Kotlin$testIndex"))
+      .onNode(hasContentDescription("Kotlin$ZERO"))
       .assertExists()
   }
 
@@ -172,7 +171,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_bookDescriptionIsInTree() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(description = "A programming language")))
     composeTestRule
-      .onNode(hasContentDescription("A programming language$testIndex"))
+      .onNode(hasContentDescription("A programming language$ZERO"))
       .assertExists()
   }
 
@@ -189,7 +188,7 @@ class OnlineBookItemUITest {
     setContent(item = mockBookItem(book = mockLibkiwixBook(size = "51200")))
     val expectedSize = Byte("51200").humanReadable
     composeTestRule
-      .onNode(hasContentDescription("$expectedSize$testIndex"))
+      .onNode(hasContentDescription("$expectedSize$ZERO"))
       .assertExists()
   }
 
@@ -206,7 +205,7 @@ class OnlineBookItemUITest {
     val date = "2024-01-01"
     setContent(item = mockBookItem(book = mockLibkiwixBook(date = date)))
     composeTestRule
-      .onNode(hasContentDescription("$date$testIndex"))
+      .onNode(hasContentDescription("$date$ZERO"))
       .assertExists()
   }
 
@@ -252,7 +251,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_whenTagsPresent_cardRendersWithoutCrash() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(tags = "_videos:yes;_pictures:yes")))
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
       .assertExists()
   }
 
@@ -261,7 +260,7 @@ class OnlineBookItemUITest {
     val item = mockBookItem(fileSystemState = CanWrite4GbFile)
     setContent(item = item)
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
       .performClick()
     verify(exactly = 1) { mockOnBookItemClick.invoke(item) }
   }
@@ -276,9 +275,9 @@ class OnlineBookItemUITest {
   fun onlineBookItem_multipleClicks_callbackInvokedEachTime() {
     val item = mockBookItem(fileSystemState = CanWrite4GbFile)
     setContent(item = item)
-    composeTestRule.onNodeWithTag(singleItemTag).performClick()
-    composeTestRule.onNodeWithTag(singleItemTag).performClick()
-    composeTestRule.onNodeWithTag(singleItemTag).performClick()
+    composeTestRule.onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).performClick()
+    composeTestRule.onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).performClick()
+    composeTestRule.onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).performClick()
     verify(exactly = 3) { mockOnBookItemClick.invoke(item) }
   }
 
@@ -287,7 +286,7 @@ class OnlineBookItemUITest {
     val item = mockBookItem(fileSystemState = NotEnoughSpaceFor4GbFile)
     setContent(item = item)
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
       .performClick()
     verify(exactly = 1) { mockOnBookItemClick.invoke(item) }
   }
@@ -300,7 +299,7 @@ class OnlineBookItemUITest {
     )
     setContent(item = item)
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
       .performClick()
     verify(exactly = 1) { mockOnBookItemClick.invoke(item) }
   }
@@ -313,7 +312,7 @@ class OnlineBookItemUITest {
     )
     setContent(item = item)
     composeTestRule
-      .onNodeWithTag(singleItemTag)
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
       .performClick()
     verify(exactly = 1) { mockOnBookItemClick.invoke(item) }
   }
@@ -466,13 +465,13 @@ class OnlineBookItemUITest {
     }
     composeTestRule.waitForIdle()
     composeTestRule
-      .onNodeWithTag("${ONLINE_BOOK_ITEM_TESTING_TAG}0")
+      .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0]
       .assertExists()
     composeTestRule
-      .onNodeWithTag("${ONLINE_BOOK_ITEM_TESTING_TAG}1")
+      .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[1]
       .assertExists()
     composeTestRule
-      .onNodeWithTag("${ONLINE_BOOK_ITEM_TESTING_TAG}0")
+      .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0]
       .assertIsDisplayed()
   }
 
@@ -529,7 +528,7 @@ class OnlineBookItemUITest {
     }
     composeTestRule.waitForIdle()
     composeTestRule
-      .onNodeWithTag("${ONLINE_BOOK_ITEM_TESTING_TAG}0")
+      .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0]
       .performClick()
     verify(exactly = 1) { onClickItem1.invoke(any()) }
     verify(exactly = 0) { onClickItem2.invoke(any()) }
