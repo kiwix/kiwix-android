@@ -22,8 +22,11 @@ import android.Manifest
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
@@ -49,6 +52,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -87,12 +91,12 @@ class SearchScreenTestForBrandedApp {
   var retryRule = RetryRule()
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
-  val composeTestRule = createAndroidComposeRule<BrandedMainActivity>()
+  val composeTestRule = createComposeRule()
 
   private lateinit var brandedMainActivity: BrandedMainActivity
   private lateinit var uiDevice: UiDevice
   private lateinit var downloadingZimFile: File
-  private var activityScenario: ActivityScenario<BrandedMainActivity>? = null
+  private lateinit var activityScenario: ActivityScenario<BrandedMainActivity>
 
   private val scientificAllianceZIMUrl =
     "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2025-06.zim"
@@ -117,15 +121,20 @@ class SearchScreenTestForBrandedApp {
         setPrefIsTest(true)
       }
     }
-    activityScenario = composeTestRule.activityRule.scenario
-    activityScenario?.onActivity {
-      brandedMainActivity = it
-      AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-    }
+    activityScenario =
+      ActivityScenario.launch(BrandedMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+        }
+      }
   }
 
   @Test
   fun searchScreen() {
+    activityScenario.onActivity {
+      brandedMainActivity = it
+    }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -205,7 +214,9 @@ class SearchScreenTestForBrandedApp {
           "fad",
           "forum"
         )
-
+      activityScenario.onActivity {
+        brandedMainActivity = it
+      }
       testFlakyView({
         // test with a large ZIM file to properly test the scenario
         downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -260,6 +271,9 @@ class SearchScreenTestForBrandedApp {
 
   @Test
   fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {
+    activityScenario.onActivity {
+      brandedMainActivity = it
+    }
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
@@ -292,7 +306,7 @@ class SearchScreenTestForBrandedApp {
       // open note screen.
       openNoteFragment(brandedMainActivity as CoreMainActivity, composeTestRule)
       composeTestRule.waitUntilTimeout()
-      clickOnNavigationIcon(composeTestRule)
+      composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
       // after came back check the previously loaded article is still showing or not.
       assertAFoolForYouArticleLoaded(composeTestRule)
     }

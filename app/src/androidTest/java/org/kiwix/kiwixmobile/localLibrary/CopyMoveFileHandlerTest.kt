@@ -247,8 +247,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         storageDeviceList = storageDeviceList,
         validateZimViewModel = validateZimViewModel,
         kiwixMainActivity.alertDialogShower,
-        kiwixMainActivity.snackBarHostState,
-        kiwixMainActivity.supportFragmentManager
+        kiwixMainActivity.snackBarHostState
       )
       kiwixMainActivity.lifecycleScope.launch {
         localLibraryViewModel.handleSelectedFileUri(urisList)

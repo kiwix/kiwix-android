@@ -83,8 +83,7 @@ class LocalLibraryTest : BaseActivityTest() {
         storageDeviceList = storageDeviceList,
         validateZimViewModel = validateZimViewModel,
         kiwixMainActivity.alertDialogShower,
-        kiwixMainActivity.snackBarHostState,
-        kiwixMainActivity.supportFragmentManager
+        kiwixMainActivity.snackBarHostState
       )
       kiwixMainActivity.lifecycleScope.launch {
         localLibraryViewModel.sideEffects.collect { effect ->
