@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.download
 
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -78,32 +79,34 @@ class DownloadRobot : BaseRobot() {
   // Increasing the default timeout for data loading because, on the Android 16 Emulator,
   // the internet connection is slow, and the library download takes longer.
   fun waitForDataToLoad(
-    retryCountForDataToLoad: Int = 20,
-    composeTestRule: ComposeContentTestRule
+    composeTestRule: ComposeContentTestRule,
+    maxRetries: Int = 20
   ) {
-    try {
-      composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
-          .fetchSemanticsNodes().isNotEmpty()
-      }
-    } catch (e: ComposeTimeoutException) {
-      Log.e(
-        KIWIX_DOWNLOAD_TEST,
-        "Timeout waiting for data to load. Nodes with tag $ONLINE_BOOK_ITEM_TESTING_TAG: " +
-          "${
-            composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
-              .fetchSemanticsNodes().size
-          }"
-      )
-      if (retryCountForDataToLoad > 0) {
-        // refresh the data if there is "Swipe Down for Library" visible on the screen.
-        refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule)
-        waitForDataToLoad(retryCountForDataToLoad - 1, composeTestRule)
+    repeat(maxRetries) { attempt ->
+      try {
+        composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+            .fetchSemanticsNodes().isNotEmpty()
+        }
+        Log.d(KIWIX_DOWNLOAD_TEST, "Online library loaded")
         return
+      } catch (_: ComposeTimeoutException) {
+        val nodeCount =
+          composeTestRule
+            .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+            .fetchSemanticsNodes()
+            .size
+
+        Log.e(
+          KIWIX_DOWNLOAD_TEST,
+          "Attempt ${attempt + 1}/$maxRetries failed. Found $nodeCount items."
+        )
+
+        refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule)
       }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
     }
+    // throw the exception when there is no more retry left.
+    throw AssertionError("Couldn't load the online library list.")
   }
 
   fun checkLanguageFilterAppliedToOnlineContent(
@@ -304,31 +307,41 @@ class DownloadRobot : BaseRobot() {
 
   // wait for 5 minutes for downloading the ZIM file
   fun waitUntilDownloadComplete(
-    retryCountForDownloadingZimFile: Int = 30,
     composeTestRule: ComposeContentTestRule,
-    kiwixMainActivity: KiwixMainActivity
+    kiwixMainActivity: KiwixMainActivity,
+    timeoutMillis: Long = 5 * 60 * 1000L
   ) {
-    val nodes =
-      composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).fetchSemanticsNodes()
-    if (nodes.isEmpty()) {
-      Log.e(KIWIX_DOWNLOAD_TEST, "Download complete (Stop button not found)")
-      return
-    }
+    try {
+      val startTime = System.currentTimeMillis()
+      composeTestRule.waitUntil(timeoutMillis) {
+        resumeDownloadIfPaused(composeTestRule, kiwixMainActivity)
+        val downloadInProgress =
+          composeTestRule
+            .onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes()
+            .isNotEmpty()
 
-    if (retryCountForDownloadingZimFile > 0) {
-      resumeDownloadIfPaused(composeTestRule, kiwixMainActivity)
-      Log.e(
-        KIWIX_DOWNLOAD_TEST,
-        "Downloading in progress, retryCount = $retryCountForDownloadingZimFile"
+        if (downloadInProgress) {
+          Log.d(
+            KIWIX_DOWNLOAD_TEST,
+            "Download in progress. Elapsed=${(System.currentTimeMillis() - startTime) / 1000}s"
+          )
+        }
+        !downloadInProgress
+      }
+
+      Log.d(KIWIX_DOWNLOAD_TEST, "Download completed successfully")
+    } catch (e: ComposeTimeoutException) {
+      val stopButtons =
+        composeTestRule
+          .onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
+          .fetchSemanticsNodes()
+
+      throw AssertionError(
+        "Download did not complete within ${timeoutMillis / 1000}s. " +
+          "Stop buttons remaining=${stopButtons.size}",
+        e
       )
-      composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-      waitUntilDownloadComplete(
-        retryCountForDownloadingZimFile - 1,
-        composeTestRule,
-        kiwixMainActivity
-      )
-    } else {
-      throw RuntimeException("Couldn't download the ZIM file within timeout.")
     }
   }
 
@@ -338,14 +351,20 @@ class DownloadRobot : BaseRobot() {
   ) {
     runCatching {
       val pauseState = kiwixMainActivity.getString(org.kiwix.kiwixmobile.core.R.string.paused_state)
-      val nodes =
-        composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).fetchSemanticsNodes()
-      if (nodes.isNotEmpty()) {
-        val text = nodes[0].config[androidx.compose.ui.semantics.SemanticsProperties.Text][0].text
-        if (text == pauseState) {
-          Log.e(KIWIX_DOWNLOAD_TEST, "Download paused, resuming...")
-          resumeDownload(composeTestRule)
-        }
+      val pausedDownloadExists =
+        composeTestRule
+          .onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+          .fetchSemanticsNodes()
+          .any { node ->
+            node.config
+              .getOrNull(androidx.compose.ui.semantics.SemanticsProperties.Text)
+              ?.firstOrNull()
+              ?.text == pauseState
+          }
+
+      if (pausedDownloadExists) {
+        Log.d(KIWIX_DOWNLOAD_TEST, "Download paused, resuming...")
+        resumeDownload(composeTestRule)
       }
     }.onFailure {
       // Ignore errors during check

@@ -33,6 +33,7 @@ import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -73,26 +74,38 @@ class OnlineCategoryRobot : BaseRobot() {
 
   fun waitForCategoryToLoad(
     composeTestRule: ComposeContentTestRule,
-    retryCountForDataToLoad: Int = 20
+    retryCount: Int = 20
   ) {
-    try {
-      composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        composeTestRule
-          .onAllNodesWithContentDescription(
-            context.getString(R.string.select_category_content_description)
-          )[0].isDisplayed()
-      }
-    } catch (e: ComposeTimeoutException) {
-      if (retryCountForDataToLoad > 0) {
-        waitForCategoryToLoad(
-          retryCountForDataToLoad = retryCountForDataToLoad - 1,
-          composeTestRule = composeTestRule
-        )
+    repeat(retryCount) { attempt ->
+      try {
+        composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          composeTestRule
+            .onAllNodesWithContentDescription(context.getString(R.string.select_category_content_description))
+            .fetchSemanticsNodes()
+            .isNotEmpty()
+        }
+        Log.d("CategoryTest", "Category list loaded")
         return
+      } catch (_: ComposeTimeoutException) {
+        Log.d(
+          "CategoryTest",
+          "Category list not loaded yet. Attempt ${attempt + 1}/$retryCount"
+        )
       }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't load the category list.\n Original exception = $e")
     }
+
+    val nodeCount =
+      composeTestRule
+        .onAllNodesWithContentDescription(
+          context.getString(R.string.select_category_content_description)
+        )
+        .fetchSemanticsNodes()
+        .size
+    // throw the exception when there is no more retry left.
+    throw AssertionError(
+      "Category list did not load after $retryCount attempts. " +
+        "Found $nodeCount matching nodes."
+    )
   }
 
   fun assertCategorySelected(composeTestRule: ComposeContentTestRule, matchLanguage: String) {

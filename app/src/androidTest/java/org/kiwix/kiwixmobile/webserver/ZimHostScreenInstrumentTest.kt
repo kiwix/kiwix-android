@@ -254,7 +254,9 @@ class ZimHostScreenInstrumentTest {
   private fun loadZimFileInApplication(zimFileName: String) {
     val loadFileStream =
       ZimHostScreenInstrumentTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-        ?: error("Error loading resource for $zimFileName")
+    require(loadFileStream != null) {
+      "Unable to load the $zimFileName. Please check is it exist in resources folder."
+    }
     val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), zimFileName) }
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()

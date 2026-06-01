@@ -145,7 +145,7 @@ class LibraryRobot : BaseRobot() {
       clickOnDeleteZimFile(composeTestRule)
       pauseForBetterTestPerformance()
       assertNoFilesTextDisplayed(composeTestRule)
-    } catch (e: Exception) {
+    } catch (e: AssertionError) {
       Log.i(
         "TEST_DELETE_ZIM",
         "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +

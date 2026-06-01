@@ -177,13 +177,14 @@ class DonationDialogTest : BaseActivityTest() {
   private fun loadZIMFileInApplication() {
     openLocalLibraryScreen()
     deleteAllZIMFilesFromApplication()
+    val zimFileName = "testzim.zim"
     val loadFileStream =
-      DonationDialogTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      DonationDialogTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+    require(loadFileStream != null) {
+      "Unable to load the $zimFileName. Please check is it exist in resources folder."
+    }
     val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        "testzim.zim"
-      )
+      File(context.getExternalFilesDirs(null)[0], zimFileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
