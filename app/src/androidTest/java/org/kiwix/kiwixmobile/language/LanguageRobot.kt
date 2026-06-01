@@ -81,7 +81,7 @@ class LanguageRobot : BaseRobot() {
 
   fun waitForLanguageToLoad(
     composeTestRule: ComposeContentTestRule,
-    retryCount: Int = 20
+    retryCount: Int = 10
   ) {
     repeat(retryCount) { attempt ->
       try {

@@ -80,7 +80,7 @@ class DownloadRobot : BaseRobot() {
   // the internet connection is slow, and the library download takes longer.
   fun waitForDataToLoad(
     composeTestRule: ComposeContentTestRule,
-    maxRetries: Int = 20
+    maxRetries: Int = 10
   ) {
     repeat(maxRetries) { attempt ->
       try {

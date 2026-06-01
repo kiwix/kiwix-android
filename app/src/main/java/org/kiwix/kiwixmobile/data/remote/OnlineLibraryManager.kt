@@ -65,8 +65,8 @@ class OnlineLibraryManager @Inject constructor() {
    * @return A full URL string with query parameters applied.
    *
    * Example:
-   * buildLibraryUrl("https://library.kiwix.org", start = 100, count = 50, lang = "en")
-   * returns: "https://library.kiwix.org/v2/entries?start=100&count=50&lang=en"
+   * buildLibraryUrl("https://opds.library.kiwix.org", start = 100, count = 50, lang = "en")
+   * returns: "https://opds.library.kiwix.org/v2/entries?start=100&count=50&lang=en"
    */
   fun buildLibraryUrl(
     baseUrl: String,

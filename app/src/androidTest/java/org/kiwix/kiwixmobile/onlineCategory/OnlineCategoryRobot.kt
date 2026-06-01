@@ -74,7 +74,7 @@ class OnlineCategoryRobot : BaseRobot() {
 
   fun waitForCategoryToLoad(
     composeTestRule: ComposeContentTestRule,
-    retryCount: Int = 20
+    retryCount: Int = 10
   ) {
     repeat(retryCount) { attempt ->
       try {

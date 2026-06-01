@@ -61,7 +61,7 @@ import org.kiwix.kiwixmobile.utils.StandardActions
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class LanguageFragmentTest {
+class LanguageScreenTest {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()

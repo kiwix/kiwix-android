@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
@@ -41,7 +40,6 @@ const val READ_TIMEOUT = 300L
 const val CALL_TIMEOUT = 300L
 const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
 const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/"
-const val KIWIX_LANGUAGE_URL = "https://library.kiwix.org/"
 
 @Module
 class NetworkModule {
@@ -66,10 +64,4 @@ class NetworkModule {
   @OPDSKiwixService
   fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
     ServiceCreator.newHackListService(okHttpClient, KIWIX_OPDS_LIBRARY_URL)
-
-  @Provides
-  @Singleton
-  @CategoryKiwixService
-  fun provideCategoryKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    ServiceCreator.newHackListService(okHttpClient, KIWIX_LANGUAGE_URL)
 }
