@@ -296,7 +296,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       StorageCalculator(kiwixDataStore),
       Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()), dispatcher.dispatcher),
       FileOperationHandlerImpl(kiwixMainActivity, dispatcher.dispatcher),
-      CopyMoveProgressBarControllerImpl(kiwixMainActivity)
+      CopyMoveProgressBarControllerImpl(kiwixMainActivity),
+      dispatcher.dispatcher
     ).apply {
       setAlertDialogShower(AlertDialogShower())
     }
