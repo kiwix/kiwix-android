@@ -555,25 +555,3 @@ class LanguageViewModelTest {
     }
   }
 }
-
-// TODO ONCE ALL flakyTest{} are eliminated clear this
-inline fun flakyTest(
-  maxRetries: Int = 10,
-  delayMillis: Long = 0,
-  block: () -> Unit
-) {
-  var lastError: Throwable? = null
-
-  repeat(maxRetries) { attempt ->
-    try {
-      block()
-      return
-    } catch (e: Throwable) {
-      lastError = e
-      println("Test attempt ${attempt + 1} failed: ${e.message}")
-      if (delayMillis > 0) Thread.sleep(delayMillis)
-    }
-  }
-
-  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
-}

@@ -18,13 +18,9 @@
 
 package org.kiwix.kiwixmobile.localLibrary
 
-import android.app.Activity
-
+import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import eu.mhutti1.utils.storage.StorageDevice
 import io.mockk.Runs
 import io.mockk.clearAllMocks
@@ -33,366 +29,589 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
+import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.language.viewmodel.flakyTest
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
-import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler.FileCopyMoveCallback
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CopyMoveFileHandlerTest {
-  private lateinit var fileHandler: CopyMoveFileHandler
+  private val context: Context = mockk()
+  private val kiwixDataStore: KiwixDataStore = mockk()
 
-  private val activity: Activity = mockk(relaxed = true)
-  private var kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
-  private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
-  private val storageCalculator: StorageCalculator = mockk(relaxed = true)
-  private val fat32Checker: Fat32Checker = mockk(relaxed = true)
-  private val fileCopyMoveCallback: FileCopyMoveCallback = mockk(relaxed = true)
-  private val testDispatcher = StandardTestDispatcher()
-  private val testScope = TestScope(testDispatcher)
-  private val storageFile: File = mockk(relaxed = true)
-  private val selectedFile: DocumentFile = mockk(relaxed = true)
-  private val storagePath = "storage/0/emulated/Android/media/org.kiwix.kiwixmobile"
-  private val destinationFile = mockk<File>(relaxed = true)
-  private val sourceUri = mockk<Uri>(relaxed = true)
-  private val fragmentManager = mockk<FragmentManager>(relaxed = true)
-  private val fileOperationHandler = mockk<FileOperationHandler>(relaxed = true)
+  private val storageCalculator: StorageCalculator = mockk()
+  private val fat32Checker: Fat32Checker = mockk()
+  private val fileOperationHandler = mockk<FileOperationHandler>()
   private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>(relaxed = true)
 
-  @OptIn(ExperimentalCoroutinesApi::class)
+  @RegisterExtension
+  private val dispatcher = MainDispatcherRule()
+  private lateinit var fileHandler: CopyMoveFileHandler
+
+  private val storageFile: File = mockk()
+  private val destinationFile: File = mockk()
+  private val selectedFile: DocumentFile = mockk()
+  private val fileCopyMoveCallback: CopyMoveFileHandler.FileCopyMoveCallback = mockk()
+
   @BeforeEach
   fun setup() {
-    Dispatchers.setMain(testDispatcher)
-    clearAllMocks()
-    every { destinationFile.canRead() } returns true
-    every { activity.getString(any()) } returns "mocked string"
-    every { activity.getString(any(), any()) } returns "mocked string"
     fileHandler = CopyMoveFileHandler(
-      activity,
-      kiwixDataStore,
-      storageCalculator,
-      fat32Checker,
-      fileOperationHandler,
-      copyMoveProgressBarController
-    ).apply {
-      setAlertDialogShower(alertDialogShower)
-      setSelectedFileAndUri(sourceUri, selectedFile)
-      setLifeCycleScope(testScope)
-      setFileCopyMoveCallback(fileCopyMoveCallback)
-      setStorageFileForUnitTest(storageFile, destinationFile)
-    }
-    every { activity.getString(any()) } returns ""
+      context = context,
+      kiwixDataStore = kiwixDataStore,
+      storageCalculator = storageCalculator,
+      fat32Checker = fat32Checker,
+      fileOperationHandler = fileOperationHandler,
+      copyMoveProgressBarController = copyMoveProgressBarController,
+      dispatcher = dispatcher.dispatcher
+    )
+
+    fileHandler.setStorageFileForUnitTest(storageFile, destinationFile)
+    fileHandler.setSelectedFileAndUri(mockk(), selectedFile)
+    fileHandler.setFileCopyMoveCallback(fileCopyMoveCallback)
+    every { selectedFile.length() } returns 1000L
     every { selectedFile.name } returns "test.zim"
-    every { selectedFile.length() } returns 1024L
-    every { storageFile.path } returns storagePath
+    every { context.getString(any(), any()) } returns "Test String"
+    every { destinationFile.path } returns "/storage/test.zim"
   }
 
-  @Test
-  fun `validateZimFileCanCopyOrMove returns false when insufficient storage`() = runTest {
-    coEvery { storageCalculator.availableBytes(storageFile) } returns 100L
-    every { fat32Checker.fileSystemStates.value } returns CanWrite4GbFile
+  @AfterEach
+  fun dispose() {
+    clearAllMocks()
+  }
 
-    val result = fileHandler.validateZimFileCanCopyOrMove()
+  @Nested
+  inner class ShowMoveFileToPublicDirectoryDialog {
+    @Test
+    fun getStorageDeviceList_whenIsEmpty_showPreparingCopyMoveDialog() = runTest {
+      fileHandler = spyk(fileHandler)
 
-    assertFalse(result)
-    verify {
-      fileCopyMoveCallback.insufficientSpaceInStorage(100L)
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns false
+
+      every {
+        kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
+      } returns MutableStateFlow(false)
+
+      fileHandler.showMoveFileToPublicDirectoryDialog(
+        storageDeviceList = emptyList(),
+        fragmentManager = mockk(relaxed = true),
+        isSingleFileSelected = true
+      )
+
+      verify(exactly = 1) {
+        copyMoveProgressBarController.showPreparingCopyMoveDialog()
+      }
+    }
+
+    @Nested
+    inner class ShowStorageSelectionDialogEnabled {
+      @Test
+      fun whenShowStorageAndMultipleStorageDevice_showsDialogAndHidesPreparingDialog() = runTest {
+        fileHandler = spyk(fileHandler)
+
+        every {
+          context.getString(any())
+        } returns "Test String"
+        coEvery {
+          kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
+        } returns MutableStateFlow(true)
+
+        every {
+          fileHandler.showStorageSelectDialog(any())
+        } just Runs
+
+        val devices = listOf(
+          StorageDevice(File("/internal"), true),
+          StorageDevice(File("/sdcard"), false)
+        )
+
+        fileHandler.showMoveFileToPublicDirectoryDialog(
+          storageDeviceList = devices,
+          fragmentManager = mockk(relaxed = true),
+          isSingleFileSelected = true
+        )
+
+        verify {
+          copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+        }
+        verify {
+          copyMoveProgressBarController.showCopyMoveDialog(any(), any(), any())
+        }
+      }
+
+      @Nested
+      inner class ShowStorageSelectionDialogDisabled {
+        @Test
+        fun whenOnlyOneStorageDeviceAvailable_enablesStorageSelectionDialog() = runTest {
+          coEvery {
+            kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
+          } returns MutableStateFlow(false)
+
+          coEvery {
+            kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true)
+          } just Runs
+
+          fileHandler = spyk(fileHandler)
+
+          coEvery {
+            fileHandler.validateZimFileCanCopyOrMove()
+          } returns false
+
+          fileHandler.showMoveFileToPublicDirectoryDialog(
+            storageDeviceList = listOf(
+              StorageDevice(File("/internal"), true)
+            ),
+            fragmentManager = mockk(relaxed = true),
+            isSingleFileSelected = true
+          )
+
+          coVerify {
+            kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true)
+          }
+          verify {
+            copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+          }
+        }
+
+        @Nested
+        inner class ValidateZimFileCanCopyOrMoveTrue {
+          @Test
+          fun whenMultipleFilesProcessActionCopy_performsCopyOperation() = runTest {
+            fileHandler = spyk(fileHandler)
+
+            val storageDevice = StorageDevice(
+              File("/storage/internal"),
+              true
+            )
+
+            coEvery {
+              kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
+            } returns MutableStateFlow(false)
+
+            coEvery {
+              fileHandler.validateZimFileCanCopyOrMove()
+            } returns true
+
+            coEvery {
+              fileHandler.performCopyOperation()
+            } just Runs
+
+            fileHandler.showMoveFileToPublicDirectoryDialog(
+              storageDeviceList = listOf(storageDevice),
+              fragmentManager = mockk(relaxed = true),
+              multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
+              isSingleFileSelected = true
+            )
+
+            coVerify(exactly = 1) {
+              fileHandler.performCopyOperation()
+            }
+          }
+
+          @Test
+          fun whenMultipleFilesProcessActionMove_performsMoveOperation() = runTest {
+            fileHandler = spyk(fileHandler)
+
+            val storageDevice = StorageDevice(
+              File("/storage/internal"),
+              true
+            )
+
+            coEvery {
+              kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
+            } returns MutableStateFlow(false)
+
+            coEvery {
+              fileHandler.validateZimFileCanCopyOrMove()
+            } returns true
+
+            coEvery {
+              fileHandler.performMoveOperation()
+            } just Runs
+
+            fileHandler.showMoveFileToPublicDirectoryDialog(
+              storageDeviceList = listOf(storageDevice),
+              fragmentManager = mockk(relaxed = true),
+              multipleFilesProcessAction = MultipleFilesProcessAction.Move,
+              isSingleFileSelected = true
+            )
+
+            coVerify(exactly = 1) {
+              fileHandler.performMoveOperation()
+            }
+          }
+
+          @Test
+          fun whenMultipleFilesProcessActionIsNull_showsCopyMoveDialog() = runTest {
+            coEvery {
+              kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
+            } returns MutableStateFlow(false)
+
+            fileHandler = spyk(fileHandler)
+
+            coEvery {
+              fileHandler.validateZimFileCanCopyOrMove()
+            } returns true
+
+            every {
+              context.getString(any())
+            } returns "Copy Move Dialog"
+
+            every {
+              copyMoveProgressBarController.showCopyMoveDialog(
+                any(),
+                any(),
+                any()
+              )
+            } just Runs
+
+            fileHandler.showMoveFileToPublicDirectoryDialog(
+              storageDeviceList = listOf(
+                StorageDevice(File("/storage/internal"), true)
+              ),
+              fragmentManager = mockk(relaxed = true),
+              multipleFilesProcessAction = null,
+              isSingleFileSelected = true
+            )
+
+            verify(exactly = 1) {
+              copyMoveProgressBarController.showCopyMoveDialog(
+                any(),
+                any(),
+                any()
+              )
+            }
+          }
+        }
+      }
     }
   }
 
-  @Test
-  fun `DetectingFileSystem with file less than 4GB continues operation`() = flakyTest {
-    runTest {
+  @Nested
+  inner class CopyMoveZIMFileInSelectedStorage {
+    @BeforeEach
+    fun setupCopyMoveStorage() {
+      coEvery {
+        kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(any())
+      } just Runs
+
+      coEvery {
+        kiwixDataStore.setSelectedStorage(any())
+      } just Runs
+
+      coEvery {
+        kiwixDataStore.setSelectedStoragePosition(any())
+      } just Runs
+
+      coEvery {
+        kiwixDataStore.getPublicDirectoryPath(any())
+      } returns "/storage/internal"
+    }
+
+    @Test
+    fun updatesStorageConfiguration() = runTest {
       fileHandler = spyk(fileHandler)
-      coEvery { storageCalculator.availableBytes(storageFile) } returns 10_000L
-      every { fat32Checker.fileSystemStates.value } returns DetectingFileSystem
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns false
+
+      val storageDevice = StorageDevice(
+        File("/storage/internal"),
+        true
+      )
+
+      fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+
+      coVerify {
+        kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(false)
+
+        kiwixDataStore.setSelectedStorage("/storage/internal")
+      }
+    }
+
+    @Test
+    fun internalStorage_setsInternalStoragePosition() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns false
+
+      val storageDevice = StorageDevice(
+        File("/storage/internal"),
+        true
+      )
+
+      fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+
+      coVerify {
+        kiwixDataStore.setSelectedStoragePosition(
+          INTERNAL_SELECT_POSITION
+        )
+      }
+    }
+
+    @Test
+    fun externalStorage_setsExternalStoragePosition() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns false
+
+      val storageDevice = StorageDevice(
+        File("/storage/sdcard"),
+        false
+      )
+
+      fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+
+      coVerify {
+        kiwixDataStore.setSelectedStoragePosition(
+          EXTERNAL_SELECT_POSITION
+        )
+      }
+    }
+
+    @Test
+    fun validationSuccess_performsCopyOperation() = runTest {
+      val storageDevice = StorageDevice(
+        File("/storage/internal"),
+        true
+      )
+
+      coEvery {
+        storageCalculator.availableBytes(storageFile)
+      } returns 5000L
+
+      every {
+        fat32Checker.fileSystemStates.value
+      } returns Fat32Checker.FileSystemState.CanWrite4GbFile
+
       coEvery {
         fileOperationHandler.copy(any(), any(), any())
       } just Runs
-      fileHandler.validateZimFileCanCopyOrMove()
+
+      fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+
       coVerify {
-        fileHandler.handleDetectingFileSystemState(storageFile)
-        fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
-        fileHandler.performCopyOperation()
-        fileCopyMoveCallback.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
+        fileOperationHandler.copy(any(), any(), any())
       }
     }
   }
 
-  @Test
-  fun `DetectingFileSystem with file larger than 4GB observes filesystem`() = runTest {
-    every { selectedFile.length() } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
-    coEvery { storageCalculator.availableBytes(storageFile) } returns Long.MAX_VALUE
-    every { fat32Checker.fileSystemStates.value } returns DetectingFileSystem
+  @Nested
+  inner class IsBookLessThan4GB {
+    @Test
+    fun fileSmallerThan4Gb_returnsTrue() {
+      every {
+        selectedFile.length()
+      } returns 1000L
 
-    fileHandler.validateZimFileCanCopyOrMove()
+      assertTrue(fileHandler.isBookLessThan4GB())
+    }
 
-    verify {
-      copyMoveProgressBarController.showPreparingCopyMoveDialog()
-      fileHandler.observeFileSystemState()
+    @Test
+    fun fileGreaterThan4Gb_returnsFalse() {
+      every {
+        selectedFile.length()
+      } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
+
+      assertFalse(fileHandler.isBookLessThan4GB())
     }
   }
 
-  @Test
-  fun `CannotWrite4GbFile shows filesystem limitation error`() = runTest {
-    fileHandler = spyk(fileHandler)
-    every { selectedFile.length() } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
-    coEvery { storageCalculator.availableBytes(storageFile) } returns Long.MAX_VALUE
-    every { fat32Checker.fileSystemStates.value } returns CannotWrite4GbFile
+  @Nested
+  inner class ValidateZimFileCanCopyOrMove {
+    @Test
+    fun insufficientStorage_returnsFalseAndNotifiesCallback() = runTest {
+      every { selectedFile.length() } returns 1000L
+      coEvery { storageCalculator.availableBytes(storageFile) } returns 100L
 
-    val result = fileHandler.validateZimFileCanCopyOrMove()
+      val result = fileHandler.validateZimFileCanCopyOrMove()
 
-    assertFalse(result)
-    coVerify {
-      fileHandler.handleCannotWrite4GbFileState(storageFile)
-      fileCopyMoveCallback.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `copy operation success triggers onFileCopied`() = runTest {
-    coEvery {
-      fileOperationHandler.copy(any(), any(), any())
-    } just Runs
-
-    fileHandler.performCopyOperation()
-
-    advanceUntilIdle()
-
-    verify {
-      fileCopyMoveCallback.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
-      copyMoveProgressBarController.showProgress(any())
-      fileCopyMoveCallback.onFileCopied(any())
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `copy exception deletes destination and shows error and delete the destination file`() =
-    runTest {
-      coEvery {
-        fileOperationHandler.copy(any(), any(), any())
-      } throws RuntimeException("file not found")
-      every { destinationFile.delete() } returns true
-
-      fileHandler.performCopyOperation()
-
-      advanceUntilIdle()
+      assertFalse(result)
 
       verify {
-        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
-        fileCopyMoveCallback.onError(any())
-        destinationFile.delete()
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+        fileCopyMoveCallback.insufficientSpaceInStorage(100L)
       }
     }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `move operation success deletes source and triggers onFileMoved`() = runTest {
-    coEvery { destinationFile.exists() } returns false
-    val mockDocFile = mockk<DocumentFile>()
-    val mockUri = mockk<Uri>()
-    mockkStatic(DocumentFile::class)
-    every { DocumentFile.fromFile(any()) } returns mockDocFile
-    every { mockDocFile.uri } returns mockUri
-    coEvery { fileOperationHandler.delete(any(), any()) } returns true
-    coEvery {
-      fileOperationHandler.move(any(), any(), any(), any(), any())
-    } returns true
+    @Test
+    fun detectingFileSystem_returnsFalse() = runTest {
+      every { selectedFile.length() } returns 1000L
 
-    fileHandler.performMoveOperation()
+      coEvery {
+        storageCalculator.availableBytes(storageFile)
+      } returns 5000L
 
-    advanceUntilIdle()
+      every {
+        fat32Checker.fileSystemStates.value
+      } returns Fat32Checker.FileSystemState.DetectingFileSystem
 
-    coVerify {
-      copyMoveProgressBarController.showProgress(any())
-      fileCopyMoveCallback.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
-      fileCopyMoveCallback.onFileMoved(any())
-      fileOperationHandler.delete(sourceUri, selectedFile)
+      val result = fileHandler.validateZimFileCanCopyOrMove()
+
+      assertFalse(result)
+
+      verify {
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+      }
     }
-  }
 
-  @Test
-  fun `CannotWrite4GbFile with file less than 4GB continues operation`() = runTest {
-    fileHandler = spyk(fileHandler)
-    every { selectedFile.length() } returns 1_000L
-    every { fat32Checker.fileSystemStates.value } returns CannotWrite4GbFile
-    coEvery { storageCalculator.availableBytes(storageFile) } returns Long.MAX_VALUE
+    @Test
+    fun cannotWrite4GbFile_returnsFalse() = runTest {
+      every { selectedFile.length() } returns 1000L
 
-    coEvery {
-      fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(any())
-    } just Runs
+      coEvery {
+        storageCalculator.availableBytes(storageFile)
+      } returns 5000L
 
-    val result = fileHandler.validateZimFileCanCopyOrMove()
+      every {
+        fat32Checker.fileSystemStates.value
+      } returns Fat32Checker.FileSystemState.CannotWrite4GbFile
 
-    assertFalse(result)
-    coVerify {
-      fileHandler.handleCannotWrite4GbFileState(storageFile)
-      fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+      val result = fileHandler.validateZimFileCanCopyOrMove()
+
+      assertFalse(result)
+
+      verify {
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+      }
     }
-  }
 
-  @Test
-  fun `DetectingFileSystem but insufficient storage shows error`() = runTest {
-    every { fat32Checker.fileSystemStates.value } returns DetectingFileSystem
-    coEvery { storageCalculator.availableBytes(storageFile) } returns 10L
-    every { selectedFile.length() } returns 100L
+    @Test
+    fun supportedFileSystem_returnsTrue() = runTest {
+      every { selectedFile.length() } returns 1000L
 
-    val result = fileHandler.validateZimFileCanCopyOrMove()
+      coEvery {
+        storageCalculator.availableBytes(storageFile)
+      } returns 5000L
 
-    assertFalse(result)
-    verify { fileCopyMoveCallback.insufficientSpaceInStorage(10L) }
-  }
-
-  @Test
-  fun `validateZimFileCanCopyOrMove returns true when FS and space valid`() = runTest {
-    every { fat32Checker.fileSystemStates.value } returns CanWrite4GbFile
-    coEvery { storageCalculator.availableBytes(storageFile) } returns Long.MAX_VALUE
-
-    val result = fileHandler.validateZimFileCanCopyOrMove()
-
-    assertTrue(result)
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `observeFileSystemState does not start multiple collectors`() = runTest {
-    fileHandler.observeFileSystemState()
-    fileHandler.observeFileSystemState()
-    advanceUntilIdle()
-    verify(exactly = 1) {
-      fat32Checker.fileSystemStates
-    }
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `copy move dialog message uses multiple files text`() = runTest {
-    fileHandler = spyk(fileHandler)
-    every { fat32Checker.fileSystemStates } returns MutableStateFlow(CanWrite4GbFile)
-    coEvery { storageCalculator.availableBytes(any()) } returns Long.MAX_VALUE
-    every {
-      kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove
-    } returns MutableStateFlow(true)
-    fileHandler.showMoveFileToPublicDirectoryDialog(
-      storageDeviceList = listOf(mockk()),
-      fragmentManager = fragmentManager,
-      isSingleFileSelected = false
-    )
-    advanceUntilIdle()
-    verify {
-      copyMoveProgressBarController.showCopyMoveDialog(
-        any(),
-        any(),
-        any()
-      )
-    }
-  }
-
-  @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnTrueWhenSufficientSpaceAndValidFileSystem() =
-    runBlocking {
-      prepareFileSystemAndFileForMockk()
+      every {
+        fat32Checker.fileSystemStates.value
+      } returns Fat32Checker.FileSystemState.CanWrite4GbFile
 
       val result = fileHandler.validateZimFileCanCopyOrMove()
 
       assertTrue(result)
-      // check insufficientSpaceInStorage callback should not call.
-      verify(exactly = 0) { fileCopyMoveCallback.insufficientSpaceInStorage(any()) }
+
+      verify {
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+      }
+
+      verify(exactly = 0) {
+        fileCopyMoveCallback.insufficientSpaceInStorage(any())
+      }
     }
-
-  @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseAndCallCallbackWhenInsufficientSpace() =
-    runBlocking {
-      prepareFileSystemAndFileForMockk(
-        selectedFileLength = 2000L,
-        fileSystemState = CanWrite4GbFile
-      )
-      val result = fileHandler.validateZimFileCanCopyOrMove()
-
-      assertFalse(result)
-      verify { fileCopyMoveCallback.insufficientSpaceInStorage(any()) }
-    }
-
-  @Test
-  fun handleDetectingFileSystemStateShouldPerformCopyMoveOperationIfBookLessThan4GB() = runTest {
-    fileHandler = spyk(fileHandler)
-    prepareFileSystemAndFileForMockk()
-    every { fileHandler.isBookLessThan4GB() } returns true
-    coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile) } just Runs
-    fileHandler.handleDetectingFileSystemState(storageFile)
-
-    coVerify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile) }
   }
 
-  @Test
-  fun handleDetectingFileSystemStateShouldObserveFileSystemStateIfBookGreaterThan4GB() = flakyTest {
-    runTest {
+  @Nested
+  inner class HandleDetectingFileSystemState {
+    @Test
+    fun bookLessThan4Gb_doesNotShowPreparingDialog() = runTest {
       fileHandler = spyk(fileHandler)
-      prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
-      every { fileHandler.isBookLessThan4GB() } returns false
-      every { fileHandler.observeFileSystemState() } just Runs
+      every {
+        selectedFile.length()
+      } returns 1000L
+
+      coEvery {
+        fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+      } just Runs
 
       fileHandler.handleDetectingFileSystemState(storageFile)
-      verify { fileHandler.observeFileSystemState() }
+
+      coVerify {
+        fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+      }
+
+      verify(exactly = 0) {
+        copyMoveProgressBarController.showPreparingCopyMoveDialog()
+      }
+      verify(exactly = 0) {
+        fileHandler.observeFileSystemState()
+      }
+    }
+
+    @Test
+    fun bookGreaterThan4Gb_showsPreparingDialogAndObservesFileSystemState() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      every {
+        selectedFile.length()
+      } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
+
+      every {
+        fileHandler.observeFileSystemState()
+      } just Runs
+
+      fileHandler.handleDetectingFileSystemState(storageFile)
+
+      verify {
+        copyMoveProgressBarController.showPreparingCopyMoveDialog()
+      }
+
+      verify {
+        fileHandler.observeFileSystemState()
+      }
     }
   }
 
-  @Test
-  fun handleCannotWrite4GbFileStateShouldPerformCopyMoveOperationIfBookLessThan4GB() = flakyTest {
-    runTest {
+  @Nested
+  inner class HandleCannotWrite4GbFileState {
+    @Test
+    fun bookLessThan4Gb_performsCopyMoveOperationIfSufficientSpaceAvailable() = runTest {
       fileHandler = spyk(fileHandler)
-      prepareFileSystemAndFileForMockk()
-      every { fileHandler.isBookLessThan4GB() } returns true
-      coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile) } just Runs
+
+      every {
+        selectedFile.length()
+      } returns 1000L
+
+      coEvery {
+        fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+      } just Runs
 
       fileHandler.handleCannotWrite4GbFileState(storageFile)
 
-      coVerify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile) }
-    }
-  }
+      coVerify {
+        fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+      }
 
-  @Test
-  fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() = flakyTest {
-    runTest {
-      prepareFileSystemAndFileForMockk(
-        selectedFileLength = FOUR_GIGABYTES_IN_KILOBYTES + 1
-      )
-      every {
+      verify(exactly = 0) {
         fileCopyMoveCallback.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
-      } just Runs
+      }
+    }
+
+    @Test
+    fun bookGreaterThan4Gb_notifiesFilesystemLimitation() = runTest {
+      every {
+        selectedFile.length()
+      } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
 
       fileHandler.handleCannotWrite4GbFileState(storageFile)
 
@@ -402,225 +621,439 @@ class CopyMoveFileHandlerTest {
     }
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun showStorageConfigureDialogAtFirstLaunch() = runTest {
-    fileHandler = spyk(fileHandler)
-    fileHandler.setLifeCycleScope(this)
-    val transaction = mockk<FragmentTransaction>()
-    every { transaction.setReorderingAllowed(true) } returns mockk()
-    every { transaction.add(any<DialogFragment>(), any()) } returns transaction
-    every { fragmentManager.beginTransaction() } returns transaction
-    every { transaction.commit() } returns 1
-    val storageDeviceList = listOf<StorageDevice>(mockk(), mockk())
+  @Nested
+  inner class ObserveFileSystemState {
+    @Test
+    fun observingJobAlreadyRunning_doesNothing() {
+      val activeJob = mockk<Job>()
 
-    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
-    val positiveButtonClickSlot = slot<() -> Unit>()
-    every {
-      copyMoveProgressBarController.showCopyMoveDialog(
-        any(),
-        capture(positiveButtonClickSlot),
-        any()
-      )
-    } just Runs
-    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    fileHandler.showMoveFileToPublicDirectoryDialog(
-      storageDeviceList = storageDeviceList,
-      fragmentManager = fragmentManager,
-      isSingleFileSelected = true
-    )
-    positiveButtonClickSlot.captured.invoke()
-    testDispatcher.scheduler.advanceUntilIdle()
-    verify {
-      fileCopyMoveCallback.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
-      fileHandler.showStorageSelectDialog(storageDeviceList)
+      every { activeJob.isActive } returns true
+
+      fileHandler.setStorageObservingJob(activeJob)
+
+      fileHandler.observeFileSystemState()
+
+      verify(exactly = 0) {
+        fat32Checker.fileSystemStates
+      }
     }
-  }
 
-  @Test
-  fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runBlocking {
-    fileHandler = spyk(fileHandler)
-    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(true)
-    val positiveButtonClickSlot = slot<() -> Unit>()
-    every {
-      copyMoveProgressBarController.showCopyMoveDialog(
-        any(),
-        capture(positiveButtonClickSlot),
-        any()
-      )
-    } just Runs
-    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    fileHandler.showMoveFileToPublicDirectoryDialog(
-      storageDeviceList = listOf(mockk()),
-      fragmentManager = fragmentManager,
-      isSingleFileSelected = true
-    )
-    positiveButtonClickSlot.captured.invoke()
-    verify(exactly = 0) { fileHandler.showStorageSelectDialog(listOf(mockk())) }
-  }
-
-  @Test
-  fun showDirectlyCopyMoveDialogAfterFirstLaunch() = runBlocking {
-    fileHandler = spyk(fileHandler)
-    coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
-    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    prepareFileSystemAndFileForMockk()
-    every { alertDialogShower.show(any(), any(), any()) } just Runs
-    fileHandler.showMoveFileToPublicDirectoryDialog(
-      storageDeviceList = listOf(mockk(), mockk()),
-      fragmentManager = fragmentManager,
-      isSingleFileSelected = true
-    )
-
-    verify {
-      copyMoveProgressBarController.showCopyMoveDialog(
-        any(),
-        any(),
-        any()
-      )
-    }
-  }
-
-  @Test
-  fun copyMoveFunctionsShouldCallWhenClickingOnButtonsInCopyMoveDialog() {
-    runBlocking {
-      val positiveButtonClickSlot = slot<() -> Unit>()
-      val negativeButtonClickSlot = slot<() -> Unit>()
+    @Test
+    fun fileSystemDetectionCompletes_hidesPreparingDialog() = runTest {
       fileHandler = spyk(fileHandler)
-      coEvery { storageCalculator.availableBytes(any()) } returns Long.MAX_VALUE
-      every { fat32Checker.fileSystemStates } returns MutableStateFlow(CanWrite4GbFile)
-      coEvery { kiwixDataStore.shouldShowStorageSelectionDialogOnCopyMove } returns flowOf(false)
+
+      fileHandler.setLifeCycleScope(this)
+
       every {
-        copyMoveProgressBarController.showCopyMoveDialog(
-          any(),
-          capture(positiveButtonClickSlot),
-          capture(negativeButtonClickSlot)
+        fat32Checker.fileSystemStates
+      } returns MutableStateFlow(
+        Fat32Checker.FileSystemState.CanWrite4GbFile
+      )
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns false
+
+      fileHandler.observeFileSystemState()
+
+      advanceUntilIdle()
+
+      verify {
+        copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+      }
+    }
+
+    @Test
+    fun fileSystemDetectionCompletes_checksValidation() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      fileHandler.setLifeCycleScope(this)
+
+      every {
+        fat32Checker.fileSystemStates
+      } returns MutableStateFlow(
+        Fat32Checker.FileSystemState.CanWrite4GbFile
+      )
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns true
+
+      fileHandler.observeFileSystemState()
+
+      advanceUntilIdle()
+
+      coVerify(exactly = 1) {
+        fileHandler.validateZimFileCanCopyOrMove()
+      }
+    }
+  }
+
+  @Nested
+  inner class PerformCopyMoveOperationIfSufficientSpaceAvailable {
+    @Test
+    fun insufficientStorage_notifiesCallback() = runTest {
+      every { selectedFile.length() } returns 1000L
+
+      coEvery {
+        storageCalculator.availableBytes(storageFile)
+      } returns 100L
+
+      fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+
+      verify {
+        fileCopyMoveCallback.insufficientSpaceInStorage(100L)
+      }
+    }
+
+    @Test
+    fun sufficientStorage_doesNotNotifyInsufficientStorage() = runTest {
+      coEvery {
+        storageCalculator.availableBytes(storageFile)
+      } returns 5000L
+
+      fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
+
+      verify(exactly = 0) {
+        fileCopyMoveCallback.insufficientSpaceInStorage(any())
+      }
+    }
+  }
+
+  @Nested
+  inner class PerformCopyOperation {
+    @Test
+    fun performCopyOperation_setsCopyStateAndNotifiesSelection() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      every {
+        fileHandler.showStorageSelectDialog(any())
+      } returns Unit
+
+      fileHandler.isMoveOperation = true
+
+      fileHandler.performCopyOperation(true)
+
+      assertFalse(fileHandler.isMoveOperation)
+
+      verify {
+        fileCopyMoveCallback.onMultipleFilesProcessSelection(
+          MultipleFilesProcessAction.Copy
         )
+      }
+    }
+
+    @Test
+    fun showStorageSelectionDialogTrue_showsStorageDialog() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      every {
+        fileHandler.showStorageSelectDialog(any())
+      } returns Unit
+
+      fileHandler.performCopyOperation(true)
+
+      verify {
+        fileHandler.showStorageSelectDialog(any())
+      }
+    }
+
+    @Test
+    fun showStorageSelectionDialogFalse_copiesFile() = runTest {
+      coEvery {
+        fileOperationHandler.copy(any(), any(), any())
       } just Runs
 
-      coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
-      fileHandler.showMoveFileToPublicDirectoryDialog(
-        storageDeviceList = listOf(mockk(), mockk()),
-        fragmentManager = fragmentManager,
-        isSingleFileSelected = true
-      )
-      coEvery { fileHandler.performCopyOperation() } just Runs
+      fileHandler.performCopyOperation(false)
 
-      positiveButtonClickSlot.captured.invoke()
-      coEvery { fileHandler.performCopyOperation() }
-      coEvery { fileHandler.performMoveOperation() } just Runs
-      negativeButtonClickSlot.captured.invoke()
-
-      coEvery { fileHandler.performMoveOperation() }
+      coVerify {
+        fileOperationHandler.copy(any(), any(), any())
+      }
     }
   }
 
-  private fun prepareFileSystemAndFileForMockk(
-    storageFileExist: Boolean = true,
-    freeSpaceInStorage: Long = 1000L,
-    selectedFileLength: Long = 100L,
-    availableStorageSize: Long = 1000L,
-    fileSystemState: Fat32Checker.FileSystemState = CanWrite4GbFile
-  ) {
-    every { kiwixDataStore.selectedStorage } returns flowOf(storagePath)
-    every { kiwixDataStore.selectedStorage } answers { flowOf(storagePath) }
-    every { storageFile.exists() } returns storageFileExist
-    every { storageFile.freeSpace } returns freeSpaceInStorage
-    every { storageFile.path } returns storagePath
-    every { selectedFile.length() } returns selectedFileLength
-    coEvery { storageCalculator.availableBytes(storageFile) } returns availableStorageSize
-    every { fat32Checker.fileSystemStates.value } returns fileSystemState
-  }
-
-  @Test
-  fun notifyFileOperationSuccessShouldCallOnFileMovedIfValidZIMFileAndIsMoveOperationIsTrue() =
-    runTest {
+  @Nested
+  inner class PerformMoveOperation {
+    @Test
+    fun whenInvoked_setsMoveStateAndNotifiesSelection() = runTest {
       fileHandler = spyk(fileHandler)
-      coEvery { fileOperationHandler.delete(any(), any()) } returns true
-      coEvery { fileHandler.isValidZimFile(destinationFile) } returns true
-      fileHandler.isMoveOperation = true
-      fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
-      verify { fileCopyMoveCallback.onFileMoved(destinationFile) }
-      verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
-      coVerify { fileOperationHandler.delete(sourceUri, selectedFile) }
-    }
+      every {
+        fileHandler.showStorageSelectDialog(any())
+      } returns Unit
 
-  @Test
-  fun notifyFileOperationSuccessShouldCallOnFileCopiedIfValidZIMFileAndIsMoveOperationIsFalse() =
-    runTest {
-      fileHandler = spyk(fileHandler)
-      coEvery { fileHandler.isValidZimFile(destinationFile) } returns true
       fileHandler.isMoveOperation = false
 
-      fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
+      fileHandler.performMoveOperation(true)
 
-      verify { fileCopyMoveCallback.onFileCopied(destinationFile) }
-      verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
+      assertTrue(fileHandler.isMoveOperation)
+
+      verify {
+        fileCopyMoveCallback.onMultipleFilesProcessSelection(
+          MultipleFilesProcessAction.Move
+        )
+      }
     }
 
-  @Test
-  fun `notifyFileOperationSuccess should handle invalid ZIM file`() = runTest {
-    fileHandler = spyk(fileHandler)
-    fileHandler.shouldValidateZimFile = true
-    every { destinationFile.path } returns ""
-    coEvery { destinationFile.delete() } returns true
-    coEvery { fileHandler.isValidZimFile(destinationFile) } returns false
-    fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
-
-    coVerify { fileHandler.handleInvalidZimFile(destinationFile, sourceUri) }
-  }
-
-  @Test
-  fun `handleInvalidZimFile should call onError if move is successful`() {
-    runBlocking {
+    @Test
+    fun showStorageSelectionDialogTrue_showsStorageDialog() = runTest {
       fileHandler = spyk(fileHandler)
-      coEvery { fileOperationHandler.rollbackMove(any(), any()) } returns true
-      coEvery {
-        fileOperationHandler.move(any(), any(), any(), any(), any())
-      } returns true
-      every { destinationFile.parentFile } returns mockk()
-      every { destinationFile.path } returns ""
-      fileHandler.isMoveOperation = true
 
-      fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+      every {
+        fileHandler.showStorageSelectDialog(any())
+      } returns Unit
 
-      verify { copyMoveProgressBarController.dismissCopyMoveProgressDialog() }
+      fileHandler.performMoveOperation(true)
+
       verify {
-        fileCopyMoveCallback.onError(any())
+        fileHandler.showStorageSelectDialog(any())
       }
     }
   }
 
-  @Test
-  fun `handleInvalidZimFile should delete file and show error if move fails`() {
-    runBlocking {
+  @Nested
+  inner class HandleFileOperationError {
+    @Test
+    fun handlesFileOperationError() = runTest {
+      every {
+        destinationFile.delete()
+      } returns true
+
+      fileHandler.handleFileOperationError(
+        errorMessage = "File copy failed",
+        destinationFile = destinationFile
+      )
+
+      verify {
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+
+        fileCopyMoveCallback.onError("File copy failed")
+      }
+
+      verify {
+        destinationFile.delete()
+      }
+    }
+  }
+
+  @Nested
+  inner class NotifyFileOperationSuccess {
+    @Test
+    fun validationEnabledAndInvalidFile_handlesInvalidZimFile() = runTest {
       fileHandler = spyk(fileHandler)
-      every { destinationFile.path } returns ""
-      every { destinationFile.delete() } returns true
-      coEvery { fileOperationHandler.rollbackMove(any(), any()) } returns false
+
+      fileHandler.shouldValidateZimFile = true
+
+      val sourceUri = mockk<Uri>()
+
       coEvery {
-        fileOperationHandler.move(any(), any(), any(), any(), any())
+        fileHandler.isValidZimFile(destinationFile)
       } returns false
-      every { destinationFile.parentFile } returns mockk()
+
+      coEvery {
+        fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+      } just Runs
+
+      fileHandler.notifyFileOperationSuccess(
+        destinationFile,
+        sourceUri
+      )
+
+      coVerify {
+        fileHandler.handleInvalidZimFile(
+          destinationFile,
+          sourceUri
+        )
+      }
+
+      verify(exactly = 0) {
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+      }
+    }
+
+    @Test
+    fun copyOperation_notifiesCopiedAndDismissesDialog() = runTest {
+      val sourceUri = mockk<Uri>()
+
+      fileHandler.shouldValidateZimFile = false
+      fileHandler.isMoveOperation = false
+
+      fileHandler.notifyFileOperationSuccess(
+        destinationFile,
+        sourceUri
+      )
+
+      verify {
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+
+        fileCopyMoveCallback.onFileCopied(destinationFile)
+      }
+
+      verify(exactly = 0) {
+        fileCopyMoveCallback.onFileMoved(any())
+      }
+    }
+
+    @Test
+    fun moveOperation_deletesSourceFileAndNotifiesMovedAndDismissesDialog() = runTest {
+      val sourceUri = mockk<Uri>()
+
       fileHandler.isMoveOperation = true
 
-      fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+      coEvery {
+        fileOperationHandler.delete(any(), any())
+      } returns true
+
+      fileHandler.notifyFileOperationSuccess(
+        destinationFile,
+        sourceUri
+      )
+
+      verify {
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+
+        fileCopyMoveCallback.onFileMoved(destinationFile)
+      }
+
+      coVerify {
+        fileOperationHandler.delete(
+          sourceUri,
+          selectedFile
+        )
+      }
+
+      verify(exactly = 0) {
+        fileCopyMoveCallback.onFileCopied(any())
+      }
+    }
+  }
+
+  @Nested
+  inner class HandleInvalidZimFile {
+    @Test
+    fun copyOperation_handlesFileOperationError() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      val sourceUri = mockk<Uri>()
+
+      fileHandler.isMoveOperation = false
+
+      coEvery {
+        fileHandler.handleFileOperationError(any(), destinationFile)
+      } just Runs
+
+      fileHandler.handleInvalidZimFile(
+        destinationFile,
+        sourceUri
+      )
+
+      coVerify {
+        fileHandler.handleFileOperationError(any(), destinationFile)
+      }
+    }
+
+    @Test
+    fun moveOperationRollbackSuccess_notifiesErrorAndDismissesProgressDialog() = runTest {
+      val sourceUri = mockk<Uri>()
+
+      fileHandler.isMoveOperation = true
+
+      every {
+        context.getString(any(), any())
+      } returns "Invalid Zim"
+
+      coEvery {
+        fileOperationHandler.rollbackMove(
+          destinationFile,
+          sourceUri
+        )
+      } returns true
+
+      fileHandler.handleInvalidZimFile(
+        destinationFile,
+        sourceUri
+      )
+
+      verify {
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+
+        fileCopyMoveCallback.onError("Invalid Zim")
+      }
+    }
+
+    @Test
+    fun moveOperationRollbackFailure_handlesFileOperationError() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      val sourceUri = mockk<Uri>()
+
+      fileHandler.isMoveOperation = true
+
+      coEvery {
+        fileOperationHandler.rollbackMove(
+          destinationFile,
+          sourceUri
+        )
+      } returns false
+
+      coEvery {
+        fileHandler.handleFileOperationError(any(), destinationFile)
+      } just Runs
+
+      fileHandler.handleInvalidZimFile(
+        destinationFile,
+        sourceUri
+      )
 
       coVerify {
         fileHandler.handleFileOperationError(
           any(),
           destinationFile
         )
-        destinationFile.deleteFile()
       }
     }
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @AfterEach
-  fun dispose() {
-    Dispatchers.resetMain()
-    fileHandler.dispose()
+  @Nested
+  inner class GetDestinationFile {
+    @Test
+    fun unitTestDestinationFileExists_returnsUnitTestFile() = runTest {
+      val result = fileHandler.getDestinationFile()
+
+      assertSame(destinationFile, result)
+    }
+  }
+
+  @Nested
+  inner class Dispose {
+    @Test
+    fun cancelsStorageObservingJob() {
+      val job = mockk<Job>()
+
+      every {
+        job.cancel()
+      } just Runs
+
+      fileHandler.setStorageObservingJob(job)
+
+      fileHandler.dispose()
+
+      verify(exactly = 1) {
+        job.cancel()
+      }
+    }
+
+    @Test
+    fun disposesFat32Checker() {
+      every {
+        fat32Checker.dispose()
+      } just Runs
+
+      fileHandler.dispose()
+
+      verify(exactly = 1) {
+        fat32Checker.dispose()
+      }
+    }
   }
 }

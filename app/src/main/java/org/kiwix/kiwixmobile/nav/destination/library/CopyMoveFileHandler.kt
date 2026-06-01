@@ -24,13 +24,14 @@ import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -63,7 +64,8 @@ class CopyMoveFileHandler @Inject constructor(
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker,
   private val fileOperationHandler: FileOperationHandler,
-  private val copyMoveProgressBarController: CopyMoveProgressBarController
+  private val copyMoveProgressBarController: CopyMoveProgressBarController,
+  @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
@@ -82,6 +84,11 @@ class CopyMoveFileHandler @Inject constructor(
   fun setStorageFileForUnitTest(unitTestStorage: File, unitTestDestinationFile: File) {
     this.unitTestStorage = unitTestStorage
     this.unitTestDestinationFile = unitTestDestinationFile
+  }
+
+  @VisibleForTesting
+  fun setStorageObservingJob(job: Job?) {
+    storageObservingJob = job
   }
 
   private fun getCopyMoveTitle(): String =
@@ -234,7 +241,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun observeFileSystemState() {
     if (storageObservingJob?.isActive == true) return
-    storageObservingJob = lifecycleScope?.launch {
+    storageObservingJob = lifecycleScope?.launch(dispatcher) {
       // Wait until filesystem detection completes
       fat32Checker.fileSystemStates.first { it != DetectingFileSystem }
       copyMoveProgressBarController.hidePreparingCopyMoveDialog()
@@ -263,13 +270,13 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   private fun onCopyClicked(showStorageSelectionDialog: Boolean) {
-    lifecycleScope?.launch {
+    lifecycleScope?.launch(dispatcher) {
       performCopyOperation(showStorageSelectionDialog)
     }
   }
 
   private fun onMoveClicked(showStorageSelectionDialog: Boolean) {
-    lifecycleScope?.launch {
+    lifecycleScope?.launch(dispatcher) {
       performMoveOperation(showStorageSelectionDialog)
     }
   }
@@ -309,7 +316,7 @@ class CopyMoveFileHandler @Inject constructor(
         destinationFile,
         copyMoveProgressBarController::updateProgress
       )
-      withContext(Dispatchers.Main) {
+      withContext(dispatcher) {
         notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
       }
     } catch (ignore: Exception) {
@@ -332,7 +339,7 @@ class CopyMoveFileHandler @Inject constructor(
         destinationFile = destinationFile,
         copyMoveProgressBarController::updateProgress
       )
-      withContext(Dispatchers.Main) {
+      withContext(dispatcher) {
         if (moveSuccess) {
           notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
         } else {
