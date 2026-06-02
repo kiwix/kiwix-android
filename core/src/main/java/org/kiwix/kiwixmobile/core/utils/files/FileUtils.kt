@@ -112,7 +112,16 @@ object FileUtils {
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) {
     CoroutineScope(dispatcher).launch {
-      getFileCacheDir(context)?.deleteRecursively()
+      runCatching {
+        val cacheDir = getFileCacheDir(context) ?: return@launch
+        when {
+          !cacheDir.exists() -> Unit
+          cacheDir.isDirectory -> cacheDir.deleteRecursively()
+          else -> cacheDir.delete()
+        }
+      }.onFailure {
+        Log.w("DeleteCache", "Failed to delete cached files", it)
+      }
     }
   }
 
