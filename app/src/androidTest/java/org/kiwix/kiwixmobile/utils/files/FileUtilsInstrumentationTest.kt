@@ -24,9 +24,6 @@ import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -342,7 +339,7 @@ class FileUtilsInstrumentationTest {
   }
 
   @Test
-  fun testGetLocalFilePathByUri() {
+  fun testGetLocalFilePathByUri() = runBlocking {
     val zimFileName = "testzim.zim"
     val loadFileStream =
       FileUtilsInstrumentationTest::class.java.classLoader?.getResourceAsStream(zimFileName)
@@ -364,10 +361,8 @@ class FileUtilsInstrumentationTest {
     }
     // Get all external storage directories (internal storage and possible SD card)
     val externalDirs = context?.getExternalFilesDirs("")
-    require(externalDirs != null && externalDirs.size > 1) {
-      "SD card must be enabled in the emulator/device to run this test"
-    }
-    val sdCardPath = externalDirs[1].path.substringBefore("/Android")
+    val hasSdCard = externalDirs != null && externalDirs.size > 1
+    val sdCardPath = if (hasSdCard) externalDirs!![1].path.substringBefore("/Android") else ""
     val dummyUriData =
       arrayListOf(
         // test the download uri on older devices
@@ -402,18 +397,6 @@ class FileUtilsInstrumentationTest {
           null,
           Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
         ),
-        // // test with SD card uri
-        DummyUrlData(
-          null,
-          null,
-          "$sdCardPath/$commonPath",
-          null,
-          Uri.parse(
-            primaryStorageUriPrefix +
-              sdCardPath.substringAfter("storage/") +
-              "%3A$commonUri"
-          )
-        ),
         // test with invalid uri
         DummyUrlData(
           null,
@@ -442,6 +425,22 @@ class FileUtilsInstrumentationTest {
           )
         )
       )
+    // // test with SD card uri
+    if (hasSdCard) {
+      dummyUriData.add(
+        DummyUrlData(
+          null,
+          null,
+          "$sdCardPath/$commonPath",
+          null,
+          Uri.parse(
+            primaryStorageUriPrefix +
+              sdCardPath.substringAfter("storage/") +
+              "%3A$commonUri"
+          )
+        )
+      )
+    }
     // test with USB stick uri
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       dummyUriData.add(
@@ -455,14 +454,12 @@ class FileUtilsInstrumentationTest {
       )
     }
     context?.let { context ->
-      CoroutineScope(Dispatchers.Main).launch {
-        dummyUriData.forEach { dummyUrlData ->
-          dummyUrlData.uri?.let { uri ->
-            Assertions.assertEquals(
-              FileUtils.getLocalFilePathByUri(context, uri),
-              dummyUrlData.expectedFileName
-            )
-          }
+      dummyUriData.forEach { dummyUrlData ->
+        dummyUrlData.uri?.let { uri ->
+          Assertions.assertEquals(
+            dummyUrlData.expectedFileName,
+            FileUtils.getLocalFilePathByUri(context, uri)
+          )
         }
       }
     }

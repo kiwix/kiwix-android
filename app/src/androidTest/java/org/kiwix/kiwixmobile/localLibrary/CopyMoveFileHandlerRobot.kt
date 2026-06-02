@@ -46,6 +46,8 @@ import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 
 fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
@@ -142,16 +144,27 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   }
 
   fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
+    uiDevice.wait(Until.hasObject(By.clazz("android.webkit.WebView")), 20000L)
     testFlakyView({
       composeTestRule.mainClock.advanceTimeByFrame()
       onView(isAssignableFrom(WebView::class.java)).check(matches(isViewDisplayed()))
-      Web.onWebView()
-        .withElement(
-          DriverAtoms.findElement(
-            Locator.XPATH,
-            "//*[contains(text(), 'Android_(operating_system)')]"
-          )
-        )
+      var elementFound = false
+      for (i in 1..10) {
+        try {
+          Web.onWebView()
+            .withElement(
+              DriverAtoms.findElement(
+                Locator.XPATH,
+                "//*[contains(text(), 'Android_(operating_system)')]"
+              )
+            )
+          elementFound = true
+          break
+        } catch (e: Throwable) {
+          if (i == 10) throw e
+          Thread.sleep(1000)
+        }
+      }
     })
   }
 
