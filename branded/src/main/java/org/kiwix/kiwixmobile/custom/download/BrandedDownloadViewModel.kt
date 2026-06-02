@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadBranded
 import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
-import org.kiwix.kiwixmobile.custom.download.effects.RequestNotificationPermission
+import org.kiwix.kiwixmobile.core.utils.effects.RequestNotificationPermission
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import javax.inject.Inject
 
@@ -84,8 +84,16 @@ class BrandedDownloadViewModel @Inject constructor(
     handleActionWithPermission(ClickedRetry)
   }
 
+  fun onNotificationPermissionResult(granted: Boolean) {
+    if (granted) {
+      viewModelScope.launch(ioDispatcher) {
+        actions.emit(ClickedDownload)
+      }
+    }
+  }
+
   private fun handleActionWithPermission(action: Action) {
-    viewModelScope.launch {
+    viewModelScope.launch(ioDispatcher) {
       if (kiwixPermissionChecker.hasNotificationPermission()) {
         actions.emit(action)
       } else {

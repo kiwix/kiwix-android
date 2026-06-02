@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.custom.download.viewmodel
 
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -86,7 +88,9 @@ class BrandedDownloadScreenUITest {
   fun downloadRequired_showsDownloadRequiredButton() {
     setScreenContent(State.DownloadRequired)
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_BUTTON_TESTING_TAG).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+      .assertHasClickAction()
   }
 
   @Test
@@ -106,7 +110,7 @@ class BrandedDownloadScreenUITest {
 
     setScreenContent(State.DownloadInProgress(listOf(item)))
 
-    composeRule.onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG).assertExists()
+    composeRule.onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG).assertIsDisplayed()
   }
 
   @Test
@@ -168,7 +172,9 @@ class BrandedDownloadScreenUITest {
   fun downloadFailed_showsRetryButton() {
     setScreenContent(failItem)
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON_TESTING_TAG).assertExists()
+    composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+      .assertHasClickAction()
   }
 
   @Test
@@ -186,7 +192,10 @@ class BrandedDownloadScreenUITest {
   fun downloadCompleted_showsDownloadCompletedText() {
     setScreenContent(State.DownloadComplete)
 
-    composeRule.onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_COMPLETE_TEXT_TESTING_TAG)
-      .assertExists()
+    val context = ApplicationProvider.getApplicationContext<Context>()
+
+    composeRule
+      .onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_COMPLETE_TEXT_TESTING_TAG)
+      .assertTextEquals(context.getString(R.string.complete))
   }
 }

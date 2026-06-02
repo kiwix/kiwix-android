@@ -16,12 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.download.effects
+package org.kiwix.kiwixmobile.core.utils.effects
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -29,19 +28,31 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import javax.inject.Inject
 
+sealed interface NotificationPermissionAction {
+  data object RequestNotificationPermission : NotificationPermissionAction
+  data object None : NotificationPermissionAction
+}
+
 class RequestNotificationPermission @Inject constructor(
   private val alertDialogShower: AlertDialogShower,
   private val kiwixPermissionChecker: KiwixPermissionChecker,
-) : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    val coreActivity = activity as? CoreMainActivity ?: return
-    if (!kiwixPermissionChecker.shouldShowRationale(coreActivity, POST_NOTIFICATIONS)) {
-      coreActivity.requestNotificationPermission()
+) : SideEffect<NotificationPermissionAction> {
+  override fun invokeWith(activity: AppCompatActivity): NotificationPermissionAction {
+    val coreActivity = activity as? CoreMainActivity
+      ?: return NotificationPermissionAction.None
+
+    return if (!kiwixPermissionChecker.shouldShowRationale(
+        coreActivity,
+        POST_NOTIFICATIONS
+      )
+    ) {
+      NotificationPermissionAction.RequestNotificationPermission
     } else {
       alertDialogShower.show(
         KiwixDialog.NotificationPermissionDialog,
         coreActivity::navigateToAppSettings
       )
+      NotificationPermissionAction.None
     }
   }
 }

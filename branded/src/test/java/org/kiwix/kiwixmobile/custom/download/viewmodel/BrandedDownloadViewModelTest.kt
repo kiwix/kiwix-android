@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadBranded
 import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
-import org.kiwix.kiwixmobile.custom.download.effects.RequestNotificationPermission
+import org.kiwix.kiwixmobile.core.utils.effects.RequestNotificationPermission
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
@@ -101,6 +101,39 @@ internal class BrandedDownloadViewModelTest {
       val effect = awaitItem()
       assertEquals(setPreferredStorageWithMostSpace, effect)
       cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Nested
+  inner class OnNotificationPermissionResult {
+    @Test
+    fun granted_emitsDownloadEffect() = runTest {
+      brandedDownloadViewModel.effects.test {
+        skipItems(1)
+
+        brandedDownloadViewModel.onNotificationPermissionResult(true)
+
+        advanceUntilIdle()
+
+        assertEquals(downloadBranded, awaitItem())
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun denied_doesNotEmitEffect() = runTest {
+      brandedDownloadViewModel.effects.test {
+        skipItems(1)
+
+        brandedDownloadViewModel.onNotificationPermissionResult(false)
+
+        advanceUntilIdle()
+
+        expectNoEvents()
+
+        cancelAndIgnoreRemainingEvents()
+      }
     }
   }
 

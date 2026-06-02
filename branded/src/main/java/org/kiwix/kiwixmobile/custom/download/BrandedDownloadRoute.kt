@@ -18,19 +18,37 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
+import org.kiwix.kiwixmobile.core.utils.effects.NotificationPermissionAction
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BrandedDownloadRoute(
   brandedDownloadViewModel: BrandedDownloadViewModel
 ) {
   val state by brandedDownloadViewModel.state.collectAsStateWithLifecycle()
+  val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    rememberPermissionState(POST_NOTIFICATIONS) { granted ->
+      brandedDownloadViewModel.onNotificationPermissionResult(granted)
+    }
+  } else {
+    null
+  }
 
-  brandedDownloadViewModel.effects.CollectSideEffectWithActivity { effect, coreActivity ->
-    effect.invokeWith(coreActivity)
+  brandedDownloadViewModel.effects.CollectSideEffectWithActivity { effect, activity ->
+    when (effect.invokeWith(activity)) {
+      NotificationPermissionAction.RequestNotificationPermission ->
+        permissionState?.launchPermissionRequest()
+
+      NotificationPermissionAction.None -> Unit
+    }
   }
 
   BrandedDownloadScreen(
