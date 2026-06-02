@@ -18,29 +18,17 @@
 package org.kiwix.kiwixmobile.search
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
-import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -52,18 +40,15 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
 import java.net.URI
 
 class SearchScreenInstrumentTest : BaseActivityTest() {
@@ -78,53 +63,14 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
   val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
-  private lateinit var uiDevice: UiDevice
   private lateinit var downloadingZimFile: File
   private lateinit var testZimFile: File
 
   @Before
   override fun waitForIdle() {
-    uiDevice =
-      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-        if (isSystemUINotRespondingDialogVisible(this)) {
-          closeSystemDialogs(context, this)
-        }
-        waitForIdle()
-      }
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-      accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    } else {
-      accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    super.waitForIdle()
+    launchMainActivity()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
@@ -133,7 +79,7 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
-    testZimFile = getTestZimFile()
+    testZimFile = getZimFileFromResourceFolder(context, "testzim.zim")
     openKiwixReaderFragmentWithFile(testZimFile)
     search { checkZimFileSearchSuccessful(composeTestRule) }
     openSearchWithQuery("Android", testZimFile)
@@ -318,7 +264,7 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
-    testZimFile = getTestZimFile()
+    testZimFile = getZimFileFromResourceFolder(context, "testzim.zim")
     openKiwixReaderFragmentWithFile(testZimFile)
     search { checkZimFileSearchSuccessful(composeTestRule) }
     openSearchWithQuery("Android ", testZimFile)
@@ -379,30 +325,6 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
         )
       }
     }
-  }
-
-  private fun getTestZimFile(): File {
-    val zimFileName = "testzim.zim"
-    val loadFileStream =
-      SearchScreenInstrumentTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-    require(loadFileStream != null) {
-      "Unable to load the $zimFileName. Please check is it exist in resources folder."
-    }
-    val zimFile =
-      File(context.getExternalFilesDirs(null)[0], zimFileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
   }
 
   private fun getDownloadingZimFile(): File {

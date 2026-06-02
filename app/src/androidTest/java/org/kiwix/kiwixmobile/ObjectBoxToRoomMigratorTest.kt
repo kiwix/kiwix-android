@@ -18,23 +18,11 @@
 
 package org.kiwix.kiwixmobile
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.room.Room
-import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
@@ -44,58 +32,30 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 import org.kiwix.kiwixmobile.migration.entities.NotesEntity
 import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 
-@RunWith(AndroidJUnit4::class)
-class ObjectBoxToRoomMigratorTest {
-  private lateinit var context: Context
+class ObjectBoxToRoomMigratorTest : BaseActivityTest() {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var boxStore: BoxStore
   private lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
   private val migrationMaxTime = 35000
-  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @Before
-  fun setup() {
-    context = ApplicationProvider.getApplicationContext()
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setIsPlayStoreBuild(true)
-        setPrefIsTest(true)
-      }
-    }
-    ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        it.navigate(KiwixDestination.Library.route)
-      }
+  override fun waitForIdle() {
+    super.waitForIdle()
+    launchMainActivity {
+      it.navigate(KiwixDestination.Library.route)
     }
     kiwixRoomDatabase =
       Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)

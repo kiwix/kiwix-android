@@ -27,26 +27,16 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -55,17 +45,14 @@ import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.SELECT_FILE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
 
 class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -74,48 +61,15 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-  private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var kiwixMainActivity: KiwixMainActivity
-  private lateinit var uiDevice: UiDevice
   private val fileName = "testzim.zim"
 
   @Before
   override fun waitForIdle() {
     Intents.init()
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      uiDevice = this
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    kiwixDataStore = KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setIsPlayStoreBuild(true)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    super.waitForIdle()
+    launchMainActivity()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
@@ -128,7 +82,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+        updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
         intending(hasAction(Intent.ACTION_CHOOSER))
           .respondWith(
             Instrumentation.ActivityResult(
@@ -166,7 +120,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+        updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
         val viewIntent = Intent(Intent.ACTION_VIEW).apply {
           setDataAndType(uri, "application/octet-stream")
           addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -212,7 +166,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
-    runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+    updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
     ).onActivity {}
@@ -248,36 +202,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     }
   }
 
-  private fun getSelectedFile(): File {
-    val loadFileStream =
-      CopyMoveFileHandlerTest::class.java.classLoader?.getResourceAsStream(fileName)
-    require(loadFileStream != null) {
-      "Unable to load the $fileName. Please check is it exist in resources folder."
-    }
-    val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        fileName
-      )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
-  }
-
   private fun copyFileToDownloadsFolder(
     context: Context,
     fileName: String,
-    content: ByteArray = getSelectedFile().readBytes()
+    content: ByteArray = getZimFileFromResourceFolder(context, fileName).readBytes()
   ): Uri {
     val contentValues =
       ContentValues().apply {

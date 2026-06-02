@@ -17,40 +17,23 @@
  */
 package org.kiwix.kiwixmobile.settings
 
-import android.Manifest
-import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
-class KiwixSettingsFragmentTest {
+class KiwixSettingsFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -59,64 +42,13 @@ class KiwixSettingsFragmentTest {
   val composeTestRule = createComposeRule()
 
   lateinit var kiwixMainActivity: KiwixMainActivity
-  lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
-
-  private val permissions =
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
-
-  @Rule
-  @JvmField
-  var permissionRules: GrantPermissionRule =
-    GrantPermissionRule.grant(*permissions)
 
   @Before
-  fun setup() {
+  override fun waitForIdle() {
+    super.waitForIdle()
     // Go to IntroFragment
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(
-          InstrumentationRegistry.getInstrumentation().targetContext.applicationContext,
-          this
-        )
-      }
-      waitForIdle()
-    }
-    KiwixDataStore(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).apply {
-      runBlocking {
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setIsPlayStoreBuild(true)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-      }
-    }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-      accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    } else {
-      accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    launchMainActivity()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
     activityScenario.onActivity {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Intro.route)

@@ -18,21 +18,9 @@
 
 package org.kiwix.kiwixmobile.reader
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -41,17 +29,12 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.THREE_MONTHS_IN_MILLISECONDS
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class DonationDialogTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -62,49 +45,20 @@ class DonationDialogTest : BaseActivityTest() {
   val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
-  private lateinit var kiwixDataStore: KiwixDataStore
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    kiwixDataStore = KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    super.waitForIdle()
+    launchMainActivity()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
   fun showDonationPopupWhenApplicationIsThreeMonthOldAndHaveAtleastOneZIMFile() {
     loadZIMFileInApplication()
-    runBlocking {
-      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L)
-      kiwixDataStore.setLaterClickedMilliSeconds(0L)
+    updateKiwixDataStore {
+      setLastDonationPopupShownInMilliSeconds(0L)
+      setLaterClickedMilliSeconds(0L)
     }
     openReaderFragment()
     donation { assertDonationDialogDisplayed(composeTestRule) }
@@ -112,7 +66,7 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun shouldNotShowDonationPopupWhenApplicationIsThreeMonthOldAndDoNotHaveAnyZIMFile() {
-    runBlocking { kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L) }
+    updateKiwixDataStore { setLastDonationPopupShownInMilliSeconds(0L) }
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -124,8 +78,8 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun shouldNotShowPopupIfTimeSinceLastPopupIsLessThanThreeMonth() {
-    runBlocking {
-      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(
+    updateKiwixDataStore {
+      setLastDonationPopupShownInMilliSeconds(
         System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS / 2)
       )
     }
@@ -136,8 +90,8 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun shouldShowDonationPopupIfTimeSinceLastPopupExceedsThreeMonths() {
-    runBlocking {
-      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(
+    updateKiwixDataStore {
+      setLastDonationPopupShownInMilliSeconds(
         System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000)
       )
     }
@@ -148,9 +102,9 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun testShouldShowDonationPopupWhenLaterClickedTimeExceedsThreeMonths() {
-    runBlocking {
-      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L)
-      kiwixDataStore.setLaterClickedMilliSeconds(System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000))
+    updateKiwixDataStore {
+      setLastDonationPopupShownInMilliSeconds(0L)
+      setLaterClickedMilliSeconds(System.currentTimeMillis() - (THREE_MONTHS_IN_MILLISECONDS + 1000))
     }
     loadZIMFileInApplication()
     openReaderFragment()
@@ -159,9 +113,9 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Test
   fun testShouldNotShowPopupIfLaterClickedTimeIsLessThanThreeMonths() {
-    runBlocking {
-      kiwixDataStore.setLastDonationPopupShownInMilliSeconds(0L)
-      kiwixDataStore.setLaterClickedMilliSeconds(System.currentTimeMillis() - 10000L)
+    updateKiwixDataStore {
+      setLastDonationPopupShownInMilliSeconds(0L)
+      setLaterClickedMilliSeconds(System.currentTimeMillis() - 10000L)
     }
     loadZIMFileInApplication()
     openReaderFragment()
@@ -177,26 +131,7 @@ class DonationDialogTest : BaseActivityTest() {
   private fun loadZIMFileInApplication() {
     openLocalLibraryScreen()
     deleteAllZIMFilesFromApplication()
-    val zimFileName = "testzim.zim"
-    val loadFileStream =
-      DonationDialogTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-    require(loadFileStream != null) {
-      "Unable to load the $zimFileName. Please check is it exist in resources folder."
-    }
-    val zimFile =
-      File(context.getExternalFilesDirs(null)[0], zimFileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
+    getZimFileFromResourceFolder(context, "testzim.zim")
     refreshZIMFilesList()
   }
 

@@ -19,23 +19,12 @@
 package org.kiwix.kiwixmobile.note
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavOptions
-import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.launch
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -46,18 +35,13 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class NoteFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -71,41 +55,9 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    KiwixDataStore(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          kiwixMainActivity = it
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    super.waitForIdle()
+    launchMainActivity { kiwixMainActivity = it }
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
@@ -266,25 +218,7 @@ class NoteFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
-
-    val loadFileStream =
-      NoteFragmentTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-    require(loadFileStream != null) {
-      "Unable to load the $zimFileName. Please check is it exist in resources folder."
-    }
-    val zimFile = File(context.getExternalFilesDirs(null)[0], zimFileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
+    val zimFile = getZimFileFromResourceFolder(context, zimFileName)
     UiThreadStatement.runOnUiThread {
       val navOptions = NavOptions.Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)

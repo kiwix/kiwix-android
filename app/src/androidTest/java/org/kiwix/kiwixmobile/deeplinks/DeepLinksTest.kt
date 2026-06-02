@@ -33,14 +33,7 @@ import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -50,7 +43,6 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.OPENING_ZIM_FILE_DELAY
@@ -59,11 +51,10 @@ import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class DeepLinksTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -72,39 +63,11 @@ class DeepLinksTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-  private lateinit var kiwixDataStore: KiwixDataStore
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    kiwixDataStore = KiwixDataStore(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setShowStorageSelectionDialogOnCopyMove(false)
-        setIsFirstRun(false)
-        setIsPlayStoreBuild(true)
-        setPrefIsTest(true)
-      }
-    }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    super.waitForIdle()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
@@ -209,21 +172,8 @@ class DeepLinksTest : BaseActivityTest() {
   }
 
   private fun loadZimFileInApplicationAndReturnSchemeTypeUri(schemeType: String): Uri? {
-    val loadFileStream =
-      DeepLinksTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = runBlocking { File(kiwixDataStore.defaultStorage(), "testzim.zim") }
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
+    val destinationDirectory = runBlocking { File(kiwixDataStore.defaultStorage()) }
+    val zimFile = getZimFileFromResourceFolder(context, "testzim.zim", destinationDirectory)
     return when (schemeType) {
       "file" -> Uri.fromFile(zimFile)
       "content" ->

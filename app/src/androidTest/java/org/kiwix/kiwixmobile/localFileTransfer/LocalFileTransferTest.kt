@@ -18,45 +18,26 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.Manifest
-import android.app.Instrumentation
-import android.content.Context
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.tryPerformAccessibilityChecks
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
-class LocalFileTransferTest {
+class LocalFileTransferTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -64,64 +45,18 @@ class LocalFileTransferTest {
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
 
-  private lateinit var context: Context
-  private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
-  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
-  private val permissions =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      arrayOf(
-        Manifest.permission.NEARBY_WIFI_DEVICES
-      )
-    } else {
-      arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_FINE_LOCATION
-      )
-    }
-
-  @Rule
-  @JvmField
-  var permissionRules: GrantPermissionRule =
-    GrantPermissionRule.grant(*permissions)
-
   lateinit var kiwixMainActivity: KiwixMainActivity
 
-  private val instrumentation: Instrumentation by lazy {
-    InstrumentationRegistry.getInstrumentation()
-  }
-
   @Before
-  fun setup() {
-    context = instrumentation.targetContext.applicationContext
-    UiDevice.getInstance(instrumentation).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+  override fun waitForIdle() {
+    super.waitForIdle()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
   fun localFileTransfer() {
     shouldShowShowCaseFeatureToUser(false)
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          kiwixMainActivity = it
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
+    launchMainActivity { kiwixMainActivity = it }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
@@ -145,15 +80,10 @@ class LocalFileTransferTest {
   @Test
   fun showCaseFeature() {
     shouldShowShowCaseFeatureToUser(true)
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          kiwixMainActivity = it
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-          it.navigate(KiwixDestination.Library.route)
-        }
-      }
+    launchMainActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Library.route)
+    }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
     library {
       assertGetZimNearbyDeviceDisplayed(composeTestRule)
@@ -180,14 +110,10 @@ class LocalFileTransferTest {
   @Test
   fun testShowCaseFeatureShowOnce() {
     shouldShowShowCaseFeatureToUser(false)
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          kiwixMainActivity = it
-          it.navigate(KiwixDestination.Library.route)
-        }
-      }
+    launchMainActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Library.route)
+    }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
     library {
       // test show case view show once.
@@ -199,16 +125,14 @@ class LocalFileTransferTest {
   }
 
   private fun shouldShowShowCaseFeatureToUser(shouldShowShowCase: Boolean) {
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setShowCaseViewForFileTransferShown(shouldShowShowCase)
-        setPrefLanguage("en")
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
+    updateKiwixDataStore {
+      setWifiOnly(false)
+      setIntroShown()
+      setShowCaseViewForFileTransferShown(shouldShowShowCase)
+      setPrefLanguage("en")
+      setIsScanFileSystemDialogShown(true)
+      setIsFirstRun(false)
+      setPrefIsTest(true)
     }
   }
 }
