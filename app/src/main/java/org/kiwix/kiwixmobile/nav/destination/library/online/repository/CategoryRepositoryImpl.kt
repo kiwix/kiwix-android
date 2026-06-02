@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.retry
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 import javax.inject.Inject
 
 class CategoryRepositoryImpl @Inject constructor(
-  @CategoryKiwixService private val kiwixService: KiwixService,
+  @OPDSKiwixService private val kiwixService: KiwixService,
   private val kiwixDataStore: KiwixDataStore,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CategoryRepository {
