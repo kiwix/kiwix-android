@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.localLibrary
 
+import android.webkit.WebView
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
@@ -26,6 +27,10 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed as isViewDisplayed
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
@@ -138,8 +143,8 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
 
   fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.waitUntilTimeout()
       composeTestRule.mainClock.advanceTimeByFrame()
+      onView(isAssignableFrom(WebView::class.java)).check(matches(isViewDisplayed()))
       Web.onWebView()
         .withElement(
           DriverAtoms.findElement(
