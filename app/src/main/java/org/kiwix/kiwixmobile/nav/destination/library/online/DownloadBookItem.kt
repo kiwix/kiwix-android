@@ -68,6 +68,8 @@ const val DOWNLOAD_BOOK_ITEM_TESTING_TAG = "downloadBookItemTestingTag"
 const val DOWNLOADING_PAUSE_BUTTON_TESTING_TAG = "downloadingPauseButtonTestingTag"
 const val DOWNLOADING_STOP_BUTTON_TESTING_TAG = "downloadingStopButtonTestingTag"
 const val DOWNLOADING_STATE_TEXT_TESTING_TAG = "downloadingStateTextTestingTag"
+const val PAUSE_ICON_TESTING_TAG = "pauseIconTestingTag"
+const val RESUME_ICON_TESTING_TAG = "resumeIconTestingTag"
 
 @Composable
 fun DownloadBookItem(
@@ -171,7 +173,14 @@ fun PauseStopButtonsRow(
         "/${context.getString(string.tts_resume)}/${item.hashCode()}"
       Icon(
         painter = getPauseResumeButtonIcon(isPaused).toPainter(),
-        contentDescription = contentDescription
+        contentDescription = contentDescription,
+        modifier = Modifier.testTag(
+          if (isPaused) {
+            RESUME_ICON_TESTING_TAG
+          } else {
+            PAUSE_ICON_TESTING_TAG
+          }
+        )
       )
     }
 

@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.os.Build
 import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -28,6 +31,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.content.ContextCompat
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -133,6 +137,17 @@ class OnlineBookItemUITest {
       )
     }
     composeTestRule.waitForIdle()
+  }
+
+  @Test
+  fun onlineBookItem_checksAvailableSpaceWhenRendered() {
+    val book = mockLibkiwixBook()
+
+    setContent(item = mockBookItem(book = book))
+
+    coVerify(exactly = 1) {
+      mockAvailableSpaceCalculator.hasAvailableSpaceForBook(book)
+    }
   }
 
   @Test
@@ -425,6 +440,51 @@ class OnlineBookItemUITest {
       .onNodeWithTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
       .performClick()
     verify(exactly = 0) { mockOnBookItemClick.invoke(any()) }
+  }
+
+  @Test
+  fun onlineBookItem_overlayVisibilityUpdatesWhenAvailableSpaceChanges() {
+    val book = mockLibkiwixBook()
+
+    var item by mutableStateOf(
+      mockBookItem(book = book)
+    )
+
+    coEvery {
+      mockAvailableSpaceCalculator.hasAvailableSpaceForBook(book)
+    } returns false
+
+    composeTestRule.setContent {
+      OnlineBookItem(
+        index = ZERO,
+        item = item,
+        bookUtils = mockBookUtils,
+        availableSpaceCalculator = mockAvailableSpaceCalculator,
+        onBookItemClick = mockOnBookItemClick
+      )
+    }
+
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
+      .assertExists()
+
+    coEvery {
+      mockAvailableSpaceCalculator.hasAvailableSpaceForBook(book)
+    } returns true
+
+    composeTestRule.runOnUiThread {
+      item = item.copy(
+        fileSystemState = DetectingFileSystem
+      )
+    }
+
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
+      .assertDoesNotExist()
   }
 
   @Test

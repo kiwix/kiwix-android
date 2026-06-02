@@ -19,6 +19,9 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.os.Build
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
@@ -156,6 +159,15 @@ class DownloadBookItemUITest {
   }
 
   @Test
+  fun downloadBookItem_whenDescriptionIsEmpty_emptyDescriptionIsDisplayed() {
+    setContent(item = mockLibraryDownloadItem(description = ""))
+
+    composeTestRule
+      .onNode(hasContentDescription(testIndex.toString()))
+      .assertExists()
+  }
+
+  @Test
   fun downloadBookItem_downloadStateTextTagIsDisplayed() {
     setContent()
     composeTestRule
@@ -270,18 +282,18 @@ class DownloadBookItemUITest {
   }
 
   @Test
-  fun downloadBookItem_whenDownloadPaused_pauseResumeButtonIsDisplayed() {
+  fun downloadBookItem_whenDownloadPaused_resumeIconIsDisplayed() {
     setContent(item = mockLibraryDownloadItem(downloadState = DownloadState.Paused))
     composeTestRule
-      .onNode(hasTestTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG))
+      .onNodeWithTag(RESUME_ICON_TESTING_TAG, useUnmergedTree = true)
       .assertIsDisplayed()
   }
 
   @Test
-  fun downloadBookItem_whenDownloadRunning_pauseResumeButtonIsDisplayed() {
+  fun downloadBookItem_whenDownloadRunning_pauseIconIsDisplayed() {
     setContent(item = mockLibraryDownloadItem(downloadState = DownloadState.Running))
     composeTestRule
-      .onNode(hasTestTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG))
+      .onNode(hasTestTag(PAUSE_ICON_TESTING_TAG), useUnmergedTree = true)
       .assertIsDisplayed()
   }
 
@@ -344,6 +356,42 @@ class DownloadBookItemUITest {
   }
 
   @Test
+  fun downloadBookItem_whenRecomposedWithSameKeys_onStopClickCalledOnlyOnce() {
+    val item = mockLibraryDownloadItem(
+      id = 1L,
+      currentDownloadState = Status.FAILED,
+      downloadState = DownloadState.Failed(Error.UNKNOWN_IO_ERROR, null),
+      downloadError = Error.UNKNOWN_IO_ERROR
+    )
+
+    lateinit var triggerRecompose: MutableState<Int>
+
+    composeTestRule.setContent {
+      triggerRecompose = remember { mutableStateOf(0) }
+      triggerRecompose.value
+
+      DownloadBookItem(
+        index = testIndex,
+        item = item,
+        onPauseResumeClick = mockOnPauseResumeClick,
+        onStopClick = mockOnStopClick
+      )
+    }
+
+    composeTestRule.waitForIdle()
+
+    verify(exactly = 1) { mockOnStopClick.invoke(item) }
+
+    composeTestRule.runOnIdle {
+      triggerRecompose.value++
+    }
+
+    composeTestRule.waitForIdle()
+
+    verify(exactly = 1) { mockOnStopClick.invoke(item) }
+  }
+
+  @Test
   fun downloadBookItem_whenFailedWithUnknown_onStopClickCalledByLaunchedEffect() {
     setContent(
       item = mockLibraryDownloadItem(
@@ -368,6 +416,54 @@ class DownloadBookItemUITest {
   }
 
   @Test
+  fun downloadBookItem_whenDownloadStateChanges_stateTextUpdates() {
+    lateinit var itemState: MutableState<LibraryDownloadItem>
+
+    val runningItem = mockLibraryDownloadItem(
+      downloadState = DownloadState.Running,
+      eta = Seconds(90L)
+    )
+
+    composeTestRule.setContent {
+      itemState = remember { mutableStateOf(runningItem) }
+
+      DownloadBookItem(
+        index = testIndex,
+        item = itemState.value,
+        onPauseResumeClick = mockOnPauseResumeClick,
+        onStopClick = mockOnStopClick
+      )
+    }
+
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNode(
+        hasContentDescription(
+          runningItem.readableEta.toString() + runningItem.hashCode()
+        )
+      )
+      .assertIsDisplayed()
+
+    val pausedItem = runningItem.copy(
+      downloadState = DownloadState.Paused
+    )
+
+    composeTestRule.runOnIdle {
+      itemState.value = pausedItem
+    }
+
+    composeTestRule.waitForIdle()
+    val expectedPausedDescription =
+      DownloadState.Paused.toReadableState(context).toString() +
+        pausedItem.hashCode()
+
+    composeTestRule
+      .onNode(hasContentDescription(expectedPausedDescription))
+      .assertIsDisplayed()
+  }
+
+  @Test
   fun downloadBookItem_bookIconIsDisplayed() {
     val favicon = "https://kiwix.org/favicon.png"
     setContent(item = mockLibraryDownloadItem(favIconUrl = favicon))
@@ -376,5 +472,27 @@ class DownloadBookItemUITest {
     composeTestRule
       .onNode(hasContentDescription(expectedDesc))
       .assertIsDisplayed()
+  }
+
+  @Test
+  fun downloadBookItem_whenTotalSizeBytesIsNegative_sizeTextIsEmpty() {
+    setContent(
+      item = mockLibraryDownloadItem(bytesDownloaded = 512L, totalSizeBytes = -1L)
+    )
+
+    composeTestRule
+      .onNode(hasText("/"))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun downloadBookItem_whenBytesDownloadedIsNegative_sizeTextIsEmpty() {
+    setContent(
+      item = mockLibraryDownloadItem(bytesDownloaded = -1L, totalSizeBytes = 1024L)
+    )
+
+    composeTestRule
+      .onNode(hasText("/"))
+      .assertDoesNotExist()
   }
 }
