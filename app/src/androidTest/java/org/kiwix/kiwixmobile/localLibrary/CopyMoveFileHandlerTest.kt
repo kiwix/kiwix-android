@@ -36,7 +36,6 @@ import com.google.android.apps.common.testing.accessibility.framework.integratio
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Assert
@@ -308,7 +307,10 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   private fun getSelectedFile(fileName: String): File {
     val loadFileStream =
-      CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
+      CopyMoveFileHandlerTest::class.java.classLoader?.getResourceAsStream(fileName)
+    require(loadFileStream != null) {
+      "Unable to load the $fileName. Please check is it exist in resources folder."
+    }
     val zimFile = File(context.getExternalFilesDirs(null)[0], fileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
@@ -369,9 +371,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         destinationFile.name,
         "testCopyMove_1.zim"
       )
-      withContext(dispatcher.dispatcher) {
-        deleteBothPreviousFiles()
-      }
+      deleteBothPreviousFiles()
 
       // test when there is no zim file available in the storage it should return the same fileName
       selectedFile = File(parentFile, selectedFileName)

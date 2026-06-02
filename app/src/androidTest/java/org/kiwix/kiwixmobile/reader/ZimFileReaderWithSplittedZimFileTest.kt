@@ -156,8 +156,12 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
     }
 
   private fun createAndGetSplitedZimFile(shouldCreateExtraZeroSizeFile: Boolean = false): File? {
+    val zimFileName = "testzim.zim"
     val loadFileStream =
-      EncodedUrlTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      EncodedUrlTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+    require(loadFileStream != null) {
+      "Unable to load the $zimFileName. Please check is it exist in resources folder."
+    }
     val storageDir = context.getExternalFilesDirs(null)[0]
 
     // Delete existing parts if they exist

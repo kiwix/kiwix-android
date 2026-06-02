@@ -40,7 +40,6 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -362,7 +361,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     InstrumentationRegistry.getInstrumentation().runOnMainSync {
       saveHandler.handleMessage(msg)
     }
-    val savedFile = runBlocking { waitForDownloadedImageFile(kiwixWebView.kiwixDataStore) }
+    val savedFile = waitForDownloadedImageFile()
 
     Assertions.assertNotNull(savedFile)
     Assertions.assertTrue(savedFile.exists())
@@ -370,7 +369,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     Assertions.assertTrue(savedFile.extension == "png")
   }
 
-  private suspend fun waitForDownloadedImageFile(kiwixDataStore: KiwixDataStore): File {
+  private fun waitForDownloadedImageFile(): File {
     repeat(20) {
       val projection = arrayOf(
         MediaStore.Images.Media.DATA
@@ -436,13 +435,14 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   }
 
   private fun getLocalZIMFile(): File {
+    val zimFileName = "testzim.zim"
     val loadFileStream =
-      KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      KiwixReaderFragmentTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+    require(loadFileStream != null) {
+      "Unable to load the $zimFileName. Please check is it exist in resources folder."
+    }
     val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        "testzim.zim"
-      )
+      File(context.getExternalFilesDirs(null)[0], zimFileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.intro.composable.INTRO_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.intro.composable.INTRO_SUB_HEADING_TEXT_TESTING_TAG
@@ -49,40 +50,49 @@ class IntroRobot : BaseRobot() {
       waitForIdle()
       onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
         .assertTextEquals(context.getString(string.get_started).uppercase())
-      attempt(10) {
-        onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.welcome_to_the_family))
-        onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.humankind_knowledge))
-      }
-      composeTestRule.onRoot().tryPerformAccessibilityChecks()
-      attempt(10) {
-        scrollToPage(ONE, composeTestRule)
-        onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.save_books_offline))
-        onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.download_books_message))
-      }
-      composeTestRule.onRoot().tryPerformAccessibilityChecks()
-      attempt(10) {
-        scrollToPage(TWO, composeTestRule)
-        onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.save_books_in_desired_storage))
-        onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.storage_location_hint))
-      }
-      composeTestRule.onRoot().tryPerformAccessibilityChecks()
+      assertIntroPage(
+        ZERO,
+        context.getString(string.welcome_to_the_family),
+        context.getString(string.humankind_knowledge)
+      )
+
+      assertIntroPage(
+        ONE,
+        context.getString(string.save_books_offline),
+        context.getString(string.download_books_message)
+      )
+
+      assertIntroPage(
+        TWO,
+        context.getString(string.save_books_in_desired_storage),
+        context.getString(string.storage_location_hint)
+      )
+
       if (!BuildConfig.IS_PLAYSTORE) {
-        attempt(10) {
-          scrollToPage(THREE, composeTestRule)
-          onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
-            .assertTextEquals(context.getString(R.string.auto_detect_books))
-          onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
-            .assertTextEquals(context.getString(R.string.auto_detect_books_description))
-        }
-        composeTestRule.onRoot().tryPerformAccessibilityChecks()
+        assertIntroPage(
+          THREE,
+          context.getString(R.string.auto_detect_books),
+          context.getString(R.string.auto_detect_books_description)
+        )
       }
     }
+  }
+
+  private fun ComposeTestRule.assertIntroPage(
+    page: Int,
+    heading: String,
+    subHeading: String
+  ) {
+    attempt(10) {
+      scrollToPage(page, this)
+      onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
+        .assertTextEquals(heading)
+
+      onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
+        .assertTextEquals(subHeading)
+    }
+
+    onRoot().tryPerformAccessibilityChecks()
   }
 
   private fun scrollToPage(index: Int, composeTestRule: ComposeTestRule) {

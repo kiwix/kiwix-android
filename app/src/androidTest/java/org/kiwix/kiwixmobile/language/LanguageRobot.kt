@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.language
 
 import androidx.compose.ui.test.ComposeTimeoutException
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -31,6 +30,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -81,25 +81,36 @@ class LanguageRobot : BaseRobot() {
 
   fun waitForLanguageToLoad(
     composeTestRule: ComposeContentTestRule,
-    retryCountForDataToLoad: Int = 20
+    retryCount: Int = 10
   ) {
-    try {
-      composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-        composeTestRule
-          .onAllNodesWithContentDescription(
-            context.getString(string.select_language_content_description)
-          )[0].isDisplayed()
-      }
-    } catch (e: ComposeTimeoutException) {
-      if (retryCountForDataToLoad > 0) {
-        waitForLanguageToLoad(
-          retryCountForDataToLoad = retryCountForDataToLoad - 1,
-          composeTestRule = composeTestRule
-        )
+    repeat(retryCount) { attempt ->
+      try {
+        composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          composeTestRule
+            .onAllNodesWithContentDescription(context.getString(string.select_language_content_description))
+            .fetchSemanticsNodes()
+            .isNotEmpty()
+        }
+        Log.d("LanguageTest", "Language list loaded")
         return
+      } catch (_: ComposeTimeoutException) {
+        Log.d(
+          "LanguageTest",
+          "Language list not loaded yet. Attempt ${attempt + 1}/$retryCount"
+        )
       }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't load the language list.\n Original exception = $e")
     }
+    val nodeCount =
+      composeTestRule
+        .onAllNodesWithContentDescription(
+          context.getString(string.select_language_content_description)
+        )
+        .fetchSemanticsNodes()
+        .size
+    // throw the exception when there is no more retry left.
+    throw AssertionError(
+      "Language list did not load after $retryCount attempts. " +
+        "Found $nodeCount matching nodes."
+    )
   }
 }

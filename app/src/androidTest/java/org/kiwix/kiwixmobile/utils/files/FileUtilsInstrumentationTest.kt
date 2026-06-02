@@ -343,9 +343,13 @@ class FileUtilsInstrumentationTest {
 
   @Test
   fun testGetLocalFilePathByUri() {
+    val zimFileName = "testzim.zim"
     val loadFileStream =
-      FileUtilsInstrumentationTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(testDir, "testzim.zim")
+      FileUtilsInstrumentationTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+    require(loadFileStream != null) {
+      "Unable to load the $zimFileName. Please check is it exist in resources folder."
+    }
+    val zimFile = File(testDir, zimFileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -406,7 +410,7 @@ class FileUtilsInstrumentationTest {
           null,
           Uri.parse(
             primaryStorageUriPrefix +
-              sdCardPath?.substringAfter("storage/") +
+              sdCardPath.substringAfter("storage/") +
               "%3A$commonUri"
           )
         ),

@@ -39,8 +39,8 @@ import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -61,7 +61,7 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  @CategoryKiwixService private val kiwixService: KiwixService,
+  @OPDSKiwixService private val kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   @IoDispatcher val dispatcher: CoroutineDispatcher
 ) : ViewModel() {

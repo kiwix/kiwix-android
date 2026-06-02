@@ -21,7 +21,6 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.CategoryKiwixService
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.sharedFunctions.MOCK_BASE_URL
 import javax.inject.Singleton
@@ -36,14 +35,6 @@ class TestNetworkModule {
   @Provides
   @OPDSKiwixService
   fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    KiwixService.ServiceCreator.newHackListService(
-      okHttpClient,
-      MOCK_BASE_URL
-    )
-
-  @Provides
-  @CategoryKiwixService
-  fun provideCategoryKiwixService(okHttpClient: OkHttpClient): KiwixService =
     KiwixService.ServiceCreator.newHackListService(
       okHttpClient,
       MOCK_BASE_URL

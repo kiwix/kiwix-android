@@ -250,7 +250,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   private fun getSelectedFile(): File {
     val loadFileStream =
-      CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
+      CopyMoveFileHandlerTest::class.java.classLoader?.getResourceAsStream(fileName)
+    require(loadFileStream != null) {
+      "Unable to load the $fileName. Please check is it exist in resources folder."
+    }
     val zimFile =
       File(
         context.getExternalFilesDirs(null)[0],

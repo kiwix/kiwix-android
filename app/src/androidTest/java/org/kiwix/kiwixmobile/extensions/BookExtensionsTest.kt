@@ -70,7 +70,10 @@ class BookExtensionsTest {
   private fun getZimFile(zimFileName: String): File {
     val context = InstrumentationRegistry.getInstrumentation().targetContext
     val loadFileStream =
-      BookExtensionsTest::class.java.classLoader!!.getResourceAsStream(zimFileName)
+      BookExtensionsTest::class.java.classLoader?.getResourceAsStream(zimFileName)
+    require(loadFileStream != null) {
+      "Unable to load the $zimFileName. Please check is it exist in resources folder."
+    }
     val zimFile = File(context.getExternalFilesDir(null), zimFileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
