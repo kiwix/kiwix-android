@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
@@ -113,4 +114,7 @@ interface CoreComponent {
 
   @IoDispatcher
   fun provideIoDispatcher(): CoroutineDispatcher
+
+  @MainDispatcher
+  fun provideMainDispatcher(): CoroutineDispatcher
 }
