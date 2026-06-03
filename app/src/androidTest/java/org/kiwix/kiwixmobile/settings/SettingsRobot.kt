@@ -138,12 +138,9 @@ class SettingsRobot : BaseRobot() {
   private fun clickOnStorageItem(position: Int, composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      val nodes = onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true).fetchSemanticsNodes()
-      if (position < nodes.size) {
-        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
-          .performScrollTo()
-        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
-      }
+      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+        .performScrollTo()
+      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
     }
   }
 
@@ -159,16 +156,13 @@ class SettingsRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
-        val nodes = onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true).fetchSemanticsNodes()
-        if (position < nodes.size) {
-          waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
-            onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
-              .fetchSemanticsNodes()[position]
-              .config[SemanticsProperties.Selected]
-          }
-          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
-            .assertIsSelected()
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
+            .fetchSemanticsNodes()[position]
+            .config[SemanticsProperties.Selected]
         }
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+          .assertIsSelected()
       }
     })
   }

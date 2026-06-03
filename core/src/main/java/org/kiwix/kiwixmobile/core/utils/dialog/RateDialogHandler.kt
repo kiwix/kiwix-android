@@ -21,19 +21,16 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.util.Log
-import androidx.annotation.IdRes
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -48,114 +45,35 @@ class RateDialogHandler @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) {
   private var alertDialogShower: AlertDialogShower? = null
-  private val visitCounterPref by lazy { RateAppCounter(activity) }
-  private var tempVisitCount = 0
 
   fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower
   }
 
-  private fun showRateDialog(iconResId: Int) {
-    alertDialogShower?.show(
-      KiwixDialog.ShowRate(IconItem.MipmapImage(iconResId), activity),
-      {
-        // User clicked "Rate!" — mark as handled and launch In-App Review flow
-        // for the playStore variant.
-        visitCounterPref.noThanksState = true
-        launchInAppReviewFlow()
-      },
-      {
-        // User clicked "No Thanks" — mark as handled, do not trigger review flow.
-        visitCounterPref.noThanksState = true
-      },
-      {
-        // User clicked "Later" — reset the triggers without calling
-        // launchReviewFlow(), so this does not consume the Play Store review quota.
-        tempVisitCount = 0
-        visitCounterPref.resetTriggers()
-      }
-    )
-  }
-
-  /**
-   * Launches the Google Play In-App Review flow. The Play Store manages quotas
-   * internally and may not always show the review dialog, but calling this
-   * ensures the best chance of a seamless in-app rating experience.
-   */
-  @Suppress("TooGenericExceptionCaught")
-  private fun launchInAppReviewFlow() {
-    try {
-      val reviewManager = ReviewManagerFactory.create(activity)
-
-      reviewManager.requestReviewFlow()
-        .addOnCompleteListener { requestTask ->
-          if (requestTask.isSuccessful) {
-            val reviewInfo = requestTask.result
-            reviewManager.launchReviewFlow(activity, reviewInfo)
-              .addOnCompleteListener { launchTask ->
-                if (!launchTask.isSuccessful) {
-                  Log.e(TAG, "Failed to launch review flow", launchTask.exception)
-                  goToRateApp()
-                }
-              }
-          } else {
-            Log.e(TAG, "Failed to request review flow", requestTask.exception)
-            goToRateApp()
-          }
-        }
-    } catch (exception: Exception) {
-      Log.e(TAG, "Unexpected error while launching in-app review", exception)
-      goToRateApp()
-    }
-  }
-
-  internal fun goToRateApp() {
-    val kiwixLocalMarketUri = "market://details?id=${activity.packageName}".toUri()
-    val kiwixBrowserMarketUri =
-      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
-    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri).apply {
-      addFlags(
-        Intent.FLAG_ACTIVITY_NO_HISTORY or
-          Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-          Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-      )
-    }
-    try {
-      activity.startActivity(goToMarket)
-    } catch (_: ActivityNotFoundException) {
-      activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
-    }
-  }
-
-  fun checkForRateDialog(
-    @IdRes iconResId: Int
-  ) {
-    tempVisitCount = visitCounterPref.count
-    ++tempVisitCount
-    visitCounterPref.count = tempVisitCount
+  fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
-      if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {
-        showRateDialog(iconResId)
+      val currentCount = kiwixDataStore.rateAppCount.first()
+      val newCount = currentCount + 1
+      kiwixDataStore.setRateAppCount(newCount)
+
+      if (shouldShowRateDialog(newCount) && NetworkUtils.isNetworkAvailable(activity)) {
+        kiwixDataStore.resetRateAppTriggers()
+        launchInAppReviewFlow()
       }
     }
   }
 
-  internal suspend fun shouldShowRateDialog(): Boolean {
-    val meetVisitCount = tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
-    val meetDownload = visitCounterPref.downloadCompletedState
-    val meetReading = visitCounterPref.readingCount >= READING_MILESTONE_THRESHOLD
+  internal suspend fun shouldShowRateDialog(newCount: Int): Boolean {
+    val meetVisitCount = newCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
+    val meetDownload = kiwixDataStore.rateAppDownloadCompleted.first()
+    val meetReading = kiwixDataStore.rateAppReadingCount.first() >= READING_MILESTONE_THRESHOLD
 
     return isPlayStoreVariant() &&
       (meetVisitCount || meetDownload || meetReading) &&
-      !visitCounterPref.noThanksState && isTwoWeekPassed() &&
+      isTwoWeekPassed() &&
       isZimFilesAvailableInLibrary()
   }
 
-  /**
-   * Checks if this is the playStore variant. The rating dialog should only be
-   * shown for playStore builds since the standalone variant does not have a
-   * corresponding Play Store listing (different package name with `.standalone` suffix).
-   */
   internal suspend fun isPlayStoreVariant(): Boolean =
     kiwixDataStore.isPlayStoreBuild.first()
 
@@ -175,6 +93,44 @@ class RateDialogHandler @Inject constructor(
     val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
     // Check if the time difference is at least 2 weeks
     return timeDifference >= twoWeeksInMillis
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  internal fun launchInAppReviewFlow() {
+    try {
+      val reviewManager = ReviewManagerFactory.create(activity)
+      reviewManager.requestReviewFlow()
+        .addOnCompleteListener { requestTask ->
+          if (requestTask.isSuccessful) {
+            val reviewInfo = requestTask.result
+            reviewManager.launchReviewFlow(activity, reviewInfo)
+          } else {
+            Log.e(TAG, "Failed to request review flow", requestTask.exception)
+            goToRateApp()
+          }
+        }
+    } catch (exception: Exception) {
+      Log.e(TAG, "Unexpected error while launching in-app review", exception)
+      goToRateApp()
+    }
+  }
+
+  internal fun goToRateApp() {
+    val kiwixLocalMarketUri =
+      "market://details?id=${activity.packageName}".toUri()
+    val kiwixBrowserMarketUri =
+      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
+    goToMarket.addFlags(
+      Intent.FLAG_ACTIVITY_NO_HISTORY or
+        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+    )
+    try {
+      activity.startActivity(goToMarket)
+    } catch (_: ActivityNotFoundException) {
+      activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
+    }
   }
 
   companion object {

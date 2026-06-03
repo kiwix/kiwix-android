@@ -286,7 +286,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     super.onStart()
     externalLinkOpener.setAlertDialogShower(alertDialogShower)
     rateDialogHandler.setAlertDialogShower(alertDialogShower)
-    rateDialogHandler.checkForRateDialog(getIconResId())
+    rateDialogHandler.checkForRateDialog()
   }
 
   override fun onResume() {

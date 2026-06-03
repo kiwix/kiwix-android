@@ -180,7 +180,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.RateAppCounter
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -2364,9 +2363,9 @@ abstract class CoreReaderFragment :
           )
           lifecycleScope.launch {
             repositoryActions?.saveHistory(history)
-            context?.let { ctx ->
-              val counter = RateAppCounter(ctx)
-              counter.readingCount = counter.readingCount + 1
+            kiwixDataStore?.let { dataStore ->
+              val currentReadingCount = dataStore.rateAppReadingCount.first()
+              dataStore.setRateAppReadingCount(currentReadingCount + 1)
             }
           }
         }
