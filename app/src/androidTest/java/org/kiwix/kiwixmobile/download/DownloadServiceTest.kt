@@ -63,6 +63,7 @@ class DownloadServiceTest : BaseActivityTest() {
   override fun waitForIdle() {
     super.waitForIdle()
     updateKiwixDataStore {
+      setShowStorageOption(false)
       setSelectedOnlineContentCategory("")
       setSelectedOnlineContentLanguage("")
     }
