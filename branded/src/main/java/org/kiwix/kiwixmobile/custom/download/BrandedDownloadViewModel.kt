@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,6 +37,7 @@ import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.effects.RequestNotificationPermission
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
 import org.kiwix.kiwixmobile.custom.download.Action.DatabaseEmission
@@ -47,7 +47,6 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadBranded
 import org.kiwix.kiwixmobile.custom.download.effects.NavigateToBrandedReader
-import org.kiwix.kiwixmobile.core.utils.effects.RequestNotificationPermission
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import javax.inject.Inject
 
@@ -63,18 +62,16 @@ class BrandedDownloadViewModel @Inject constructor(
 ) : ViewModel() {
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()
-  val actions = MutableSharedFlow<Action>(Channel.UNLIMITED)
+  private val actions = MutableSharedFlow<Action>(Channel.UNLIMITED)
   private val _effects = MutableSharedFlow<SideEffect<*>>()
   val effects: Flow<SideEffect<*>> = _effects
     .onStart { emit(setPreferredStorageWithMostSpace) }
+  val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
   init {
     observeActions()
     observeDownloads(downloadRoomDao)
   }
-
-  @VisibleForTesting
-  fun getStateForTesting() = _state
 
   fun onDownloadButtonClick() {
     handleActionWithPermission(ClickedDownload)
@@ -115,9 +112,7 @@ class BrandedDownloadViewModel @Inject constructor(
     }
   }
 
-  private fun observeDownloads(
-    downloadRoomDao: DownloadRoomDao
-  ) {
+  private fun observeDownloads(downloadRoomDao: DownloadRoomDao) {
     viewModelScope.launch(ioDispatcher) {
       downloadRoomDao.downloads()
         .map { it.map(::DownloadItem) }

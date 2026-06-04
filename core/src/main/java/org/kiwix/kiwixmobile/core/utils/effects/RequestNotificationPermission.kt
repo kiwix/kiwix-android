@@ -41,11 +41,7 @@ class RequestNotificationPermission @Inject constructor(
     val coreActivity = activity as? CoreMainActivity
       ?: return NotificationPermissionAction.None
 
-    return if (!kiwixPermissionChecker.shouldShowRationale(
-        coreActivity,
-        POST_NOTIFICATIONS
-      )
-    ) {
+    return if (!kiwixPermissionChecker.shouldShowRationale(coreActivity, POST_NOTIFICATIONS)) {
       NotificationPermissionAction.RequestNotificationPermission
     } else {
       alertDialogShower.show(

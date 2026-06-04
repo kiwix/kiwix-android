@@ -26,6 +26,7 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import com.tonyodev.fetch2.Error
@@ -34,6 +35,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.custom.R.string
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
@@ -171,7 +173,8 @@ class BrandedDownloadScreenUITest {
   @Test
   fun downloadFailed_showsRetryButton() {
     setScreenContent(failItem)
-
+    composeRule
+      .onNodeWithTag(BrandedDownloadScreenTags.ERROR_MESSAGE_TEXT_TESTING_TAG).assertIsDisplayed()
     composeRule.onNodeWithTag(BrandedDownloadScreenTags.RETRY_BUTTON_TESTING_TAG)
       .assertIsDisplayed()
       .assertHasClickAction()
@@ -191,11 +194,18 @@ class BrandedDownloadScreenUITest {
   @Test
   fun downloadCompleted_showsDownloadCompletedText() {
     setScreenContent(State.DownloadComplete)
-
     val context = ApplicationProvider.getApplicationContext<Context>()
-
     composeRule
       .onNodeWithTag(BrandedDownloadScreenTags.DOWNLOAD_COMPLETE_TEXT_TESTING_TAG)
       .assertTextEquals(context.getString(R.string.complete))
+  }
+
+  @Test
+  fun downloadRequired_showsInvalidInstallationMessage() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    setScreenContent(State.DownloadRequired)
+    composeRule
+      .onNodeWithText(context.getString(string.invalid_installation))
+      .assertIsDisplayed()
   }
 }

@@ -52,14 +52,11 @@ class RequestNotificationPermissionTest {
   }
 
   @Test
-  fun invokeWith_whenActivityIsNotCoreMainActivity_returnsNothing() {
+  fun invokeWith_nonCoreMainActivity_returnsNone() {
     val activity: AppCompatActivity = mockk()
     val request = requestNotificationPermission.invokeWith(activity)
 
-    assertEquals(
-      NotificationPermissionAction.None,
-      request
-    )
+    assertEquals(NotificationPermissionAction.None, request)
 
     verify(exactly = 0) {
       alertDialogShower.show(any(), any())
@@ -75,7 +72,7 @@ class RequestNotificationPermissionTest {
     private val activity: CoreMainActivity = mockk()
 
     @Test
-    fun shouldShowRationale_whenFalse_requestsPermission() {
+    fun invokeWith_rationaleNotRequired_returnsRequestNotificationPermission() {
       every {
         kiwixPermissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)
       } returns false
@@ -94,7 +91,7 @@ class RequestNotificationPermissionTest {
     }
 
     @Test
-    fun shouldShowRationale_whenTrue_showsAlertDialog() {
+    fun invokeWith_rationaleRequired_showsDialogAndReturnsNone() {
       every {
         kiwixPermissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)
       } returns true

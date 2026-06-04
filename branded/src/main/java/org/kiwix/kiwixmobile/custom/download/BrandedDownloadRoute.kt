@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.custom.download
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,11 +29,9 @@ import org.kiwix.kiwixmobile.core.utils.effects.NotificationPermissionAction
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun BrandedDownloadRoute(
-  brandedDownloadViewModel: BrandedDownloadViewModel
-) {
+fun BrandedDownloadRoute(brandedDownloadViewModel: BrandedDownloadViewModel) {
   val state by brandedDownloadViewModel.state.collectAsStateWithLifecycle()
-  val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+  val permissionState = if (brandedDownloadViewModel.isAndroid13OrAbove) {
     rememberPermissionState(POST_NOTIFICATIONS) { granted ->
       brandedDownloadViewModel.onNotificationPermissionResult(granted)
     }
@@ -47,7 +44,7 @@ fun BrandedDownloadRoute(
       NotificationPermissionAction.RequestNotificationPermission ->
         permissionState?.launchPermissionRequest()
 
-      NotificationPermissionAction.None -> Unit
+      else -> Unit
     }
   }
 
