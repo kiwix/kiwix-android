@@ -19,23 +19,13 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -44,18 +34,13 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class LocalLibraryTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -67,47 +52,18 @@ class LocalLibraryTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context, this)
-      }
-      waitForIdle()
+    super.waitForIdle()
+    updateKiwixDataStore {
+      // set `setShowManageExternalFilesPermissionDialog` false for hiding
+      // manage external storage permission dialog on android 11 and above
+      setShowManageExternalFilesPermissionDialog(false)
+      // Set setManageExternalFilesPermissionDialogOnRefresh to false to hide
+      // the manage external storage permission dialog on Android 11 and above
+      // while refreshing the content in LocalLibraryScreen.
+      setManageExternalFilesPermissionDialogOnRefresh(false)
     }
-    KiwixDataStore(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        // set `setShowManageExternalFilesPermissionDialog` false for hiding
-        // manage external storage permission dialog on android 11 and above
-        setShowManageExternalFilesPermissionDialog(false)
-        // Set setManageExternalFilesPermissionDialogOnRefresh to false to hide
-        // the manage external storage permission dialog on Android 11 and above
-        // while refreshing the content in LocalLibraryScreen.
-        setManageExternalFilesPermissionDialogOnRefresh(false)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    launchMainActivity()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   private fun observeLocalLibraryActions() {
@@ -149,7 +105,7 @@ class LocalLibraryTest : BaseActivityTest() {
       deleteZimIfExists(composeTestRule)
     }
     // load a zim file to test, After downloading zim file library list is visible or not
-    loadZimFileInReader("testzim.zim")
+    getZimFileFromResourceFolder(context, "testzim.zim")
     library {
       refreshList(composeTestRule)
       waitUntilZimFilesRefreshing(composeTestRule)
@@ -205,7 +161,7 @@ class LocalLibraryTest : BaseActivityTest() {
         showManagePermissionDialog = false,
         isPlayStoreBuild = false
       )
-      loadZimFileInReader("testzim.zim")
+      getZimFileFromResourceFolder(context, "testzim.zim")
       refreshList(composeTestRule)
       waitUntilZimFilesRefreshing(composeTestRule)
       clickOnReaderFragment(composeTestRule)
@@ -221,43 +177,18 @@ class LocalLibraryTest : BaseActivityTest() {
     }
   }
 
-  private fun loadZimFileInReader(zimFileName: String) {
-    val loadFileStream =
-      LocalLibraryTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-    require(loadFileStream != null) {
-      "Unable to load the $zimFileName. Please check is it exist in resources folder."
-    }
-    val zimFile = File(context.getExternalFilesDirs(null)[0], zimFileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-  }
-
   private fun showScanFileSystemDialog(
     scanFileSystemDialogShown: Boolean,
     isTest: Boolean,
     showManagePermissionDialog: Boolean,
     isPlayStoreBuild: Boolean
   ) {
-    KiwixDataStore(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).apply {
-      lifeCycleScope.launch {
-        setIsScanFileSystemDialogShown(scanFileSystemDialogShown)
-        setIsScanFileSystemTest(true)
-        setManageExternalFilesPermissionDialogOnRefresh(showManagePermissionDialog)
-        setIsPlayStoreBuild(isPlayStoreBuild)
-        setPrefIsTest(isTest)
-      }
+    updateKiwixDataStore {
+      setIsScanFileSystemDialogShown(scanFileSystemDialogShown)
+      setIsScanFileSystemTest(true)
+      setManageExternalFilesPermissionDialogOnRefresh(showManagePermissionDialog)
+      setIsPlayStoreBuild(isPlayStoreBuild)
+      setPrefIsTest(isTest)
     }
   }
 

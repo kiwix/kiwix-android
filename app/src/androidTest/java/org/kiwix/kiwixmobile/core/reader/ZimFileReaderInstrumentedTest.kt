@@ -18,13 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.reader
 
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -37,63 +30,20 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.viewmodel.MAX_SUGGEST_WORD_COUNT
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.reader.EncodedUrlTest
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
-import java.io.FileOutputStream
 
 class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        }
-      }
-  }
-
-  private suspend fun copyZimFile(name: String): File {
-    val loadFileStream =
-      EncodedUrlTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.getExternalFilesDirs(null)[0], name)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      FileOutputStream(zimFile).use { outputStream ->
-        val buffer = ByteArray(1024)
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          outputStream.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
+    super.waitForIdle()
+    launchMainActivity()
   }
 
   private suspend fun createZimFileReader(): ZimFileReader {
-    val zimFile = copyZimFile("testzim.zim")
+    val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
     val zimReaderSource = ZimReaderSource(zimFile)
     val archive = zimReaderSource.createArchive()!!
     return ZimFileReader(zimReaderSource, archive, SuggestionSearcher(archive))
@@ -213,7 +163,7 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       corruptedFile.delete()
 
       // ── Verify Factory.create with valid file ──
-      val validZimFile = copyZimFile("testzim_factory.zim")
+      val validZimFile = getZimFileFromResourceFolder(context, "testzim.zim")
       val validSource = ZimReaderSource(validZimFile)
       val validResult = factory.create(validSource, false)
       assertNotNull(validResult)

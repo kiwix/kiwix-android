@@ -249,6 +249,27 @@ object TestUtils {
   }
 
   @JvmStatic
+  fun getZimFileFromResourceFolder(
+    context: Context,
+    zimFileName: String,
+    destinationDirectory: File = context.getExternalFilesDirs(null)[0]
+  ): File {
+    val loadFileStream =
+      requireNotNull(javaClass.classLoader?.getResourceAsStream(zimFileName)) {
+        "Unable to load $zimFileName. Please ensure it exists in the resources folder."
+      }
+    val zimFile = File(destinationDirectory, zimFileName)
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      zimFile.outputStream().use { output ->
+        inputStream.copyTo(output)
+      }
+    }
+    return zimFile
+  }
+
+  @JvmStatic
   @Singleton
   fun getOkkHttpClientForTesting(): OkHttpClient =
     OkHttpClient().newBuilder()

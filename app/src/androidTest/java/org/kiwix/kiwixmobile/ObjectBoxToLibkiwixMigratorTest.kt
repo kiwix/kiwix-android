@@ -18,18 +18,12 @@
 
 package org.kiwix.kiwixmobile
 
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -44,9 +38,7 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.page.bookmark.models.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.migration.di.component.DaggerMigrationComponent
 import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
@@ -54,13 +46,12 @@ import org.kiwix.kiwixmobile.migration.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 
 class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
@@ -117,32 +108,10 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
+    super.waitForIdle()
+    launchMainActivity {
+      it.navigate(KiwixDestination.Library.route)
     }
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setIsPlayStoreBuild(true)
-        setPrefIsTest(true)
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-        onActivity {
-          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-          it.navigate(KiwixDestination.Library.route)
-        }
-      }
     val migrationComponent = DaggerMigrationComponent.builder()
       .coreComponent(CoreApp.coreComponent)
       .build()
@@ -177,30 +146,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     runBlocking { clearBookOnDisk() }
 
     // add a file in fileSystem because we need to actual file path for making object of Archive.
-    zimFile = getZimFile("testzim.zim")
-  }
-
-  private fun getZimFile(zimFileName: String): File {
-    val loadFileStream =
-      ObjectBoxToLibkiwixMigratorTest::class.java.classLoader.getResourceAsStream(zimFileName)
-    val zimFile =
-      File(
-        context.getExternalFilesDirs(null)[0],
-        zimFileName
-      )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
+    zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
   }
 
   @Test
@@ -251,14 +197,14 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       clearBookOnDisk()
 
       // Test if data successfully migrated to libkiwix and existing data is preserved
-      zimFile = getZimFile("testzim.zim")
-      val secondZimFile = getZimFile("small.zim")
+      zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
+      val secondZimFile = getZimFileFromResourceFolder(context, "small.zim")
       val archive = Archive(secondZimFile.path)
       val book = Book().apply {
         update(archive)
       }
       objectBoxToLibkiwixMigrator.libkiwixBookOnDisk.insert(listOf(book))
-      val thirdZim = getZimFile("characters_encoding.zim")
+      val thirdZim = getZimFileFromResourceFolder(context, "characters_encoding.zim")
       val thirdEntity = BookOnDiskEntity(
         id = 0,
         file = thirdZim,

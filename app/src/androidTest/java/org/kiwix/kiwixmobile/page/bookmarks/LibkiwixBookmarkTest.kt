@@ -31,15 +31,8 @@ import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavOptions
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,20 +45,16 @@ import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SNACKBAR
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class LibkiwixBookmarkTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -79,23 +68,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
+    super.waitForIdle()
     kiwixMainActivity = composeTestRule.activity
 
     composeTestRule.apply {
@@ -104,15 +77,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   private fun waitComposeToSettleViews() {
@@ -281,7 +246,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   }
 
   private fun openZimFileInReader() {
-    val zimFile = getZimFile()
+    val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
     composeTestRule.apply {
       runOnUiThread {
         kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -295,29 +260,5 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       }
       waitComposeToSettleViews()
     }
-  }
-
-  private fun getZimFile(): File {
-    val zimFileName = "testzim.zim"
-    val loadFileStream =
-      LibkiwixBookmarkTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-    require(loadFileStream != null) {
-      "Unable to load the $zimFileName. Please check is it exist in resources folder."
-    }
-    val zimFile =
-      File(context.getExternalFilesDirs(null)[0], zimFileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
   }
 }

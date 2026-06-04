@@ -20,14 +20,8 @@ package org.kiwix.kiwixmobile.utils
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 /**
@@ -47,24 +41,5 @@ object StandardActions {
 
   fun closeDrawer(coreMainActivity: CoreMainActivity) {
     coreMainActivity.closeNavigationDrawer()
-  }
-
-  @JvmStatic
-  fun deleteZimIfExists(zimName: String, adapterId: Int) {
-    try {
-      Espresso.onData(TestUtils.withContent(zimName)).inAdapterView(
-        ViewMatchers.withId(
-          adapterId
-        )
-      ).perform(ViewActions.longClick())
-      BaristaDialogInteractions.clickDialogPositiveButton()
-      Log.i("TEST_DELETE_ZIM", "Successfully deleted ZIM file [$zimName]")
-    } catch (e: RuntimeException) {
-      Log.i(
-        "TEST_DELETE_ZIM",
-        "Failed to delete ZIM file [" + zimName + "]... " +
-          "Probably because it doesn't exist"
-      )
-    }
   }
 }

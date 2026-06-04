@@ -19,21 +19,9 @@
 package org.kiwix.kiwixmobile
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
-import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.json.JSONArray
 import org.json.JSONObject
@@ -43,7 +31,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -53,44 +40,17 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_L
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_OCCURRENCES_OF_LANGUAGE
 import org.kiwix.kiwixmobile.core.utils.datastore.PreferencesKeys
 import org.kiwix.kiwixmobile.core.utils.datastore.SharedPreferenceToDatastoreMigrator
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
-@RunWith(AndroidJUnit4::class)
-class SharedPreferenceToDatastoreMigratorTest {
+class SharedPreferenceToDatastoreMigratorTest : BaseActivityTest() {
   @get:Rule
   val tmpFolder = TemporaryFolder()
-  private lateinit var context: Context
-  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @Before
-  fun setup() {
-    context = ApplicationProvider.getApplicationContext()
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsPlayStoreBuild(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-        it.navigate(KiwixDestination.Library.route)
-      }
+  override fun waitForIdle() {
+    super.waitForIdle()
+    launchMainActivity {
+      it.navigate(KiwixDestination.Library.route)
     }
   }
 

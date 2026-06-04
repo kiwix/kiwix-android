@@ -17,9 +17,6 @@
  */
 package org.kiwix.kiwixmobile.splash
 
-import android.Manifest
-import android.content.Context
-import android.os.Build
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
@@ -29,36 +26,23 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
-class KiwixSplashActivityTest {
+class KiwixSplashActivityTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -66,37 +50,11 @@ class KiwixSplashActivityTest {
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
 
-  @Rule
-  @JvmField
-  val permissionRule: GrantPermissionRule? =
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      GrantPermissionRule.grant(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-      )
-    } else {
-      null
-    }
-  private lateinit var context: Context
-
   @Before
-  fun setUp() {
+  override fun waitForIdle() {
+    super.waitForIdle()
     Intents.init()
-    context = InstrumentationRegistry.getInstrumentation().targetContext
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
@@ -150,10 +108,9 @@ class KiwixSplashActivityTest {
   }
 
   private fun shouldShowIntro(value: Boolean) {
-    val dataStore = KiwixDataStore(context)
-    runBlocking {
-      dataStore.setIntroShown(value)
-      dataStore.setPrefIsTest(true)
+    updateKiwixDataStore {
+      setIntroShown(value)
+      setPrefIsTest(true)
     }
   }
 }

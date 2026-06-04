@@ -28,15 +28,9 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -49,7 +43,6 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
@@ -59,14 +52,13 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerI
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class CopyMoveFileHandlerTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -78,7 +70,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   @get:Rule
   private val dispatcher = MainDispatcherRule()
-  private lateinit var kiwixDataStore: KiwixDataStore
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
   private lateinit var destinationFile: File
@@ -86,24 +77,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
-      }
-      waitForIdle()
-    }
-    kiwixDataStore = KiwixDataStore(context).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setIsPlayStoreBuild(true)
-        setPrefIsTest(true)
-      }
-    }
+    super.waitForIdle()
     composeTestRule.apply {
       runOnUiThread {
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
@@ -112,14 +86,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       kiwixMainActivity = activity
       waitForIdle()
     }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
@@ -127,7 +94,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile("testzim.zim")
+      selectedFile = getZimFileFromResourceFolder(context, "testzim.zim")
       composeTestRule.apply {
         waitForIdle()
         runOnUiThread {
@@ -137,7 +104,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitUntilTimeout() // to properly load the library screen.
       }
       // test with first launch
-      runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+      updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
@@ -168,8 +135,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       navigateToLocalLibraryScreen()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
-      selectedFile = getSelectedFile("testzim.zim")
-      val secondValidZimFile = getSelectedFile("small.zim")
+      selectedFile = getZimFileFromResourceFolder(context, "testzim.zim")
+      val secondValidZimFile = getZimFileFromResourceFolder(context, "small.zim")
       showMoveFileToPublicDirectoryDialog(
         mutableListOf(
           invalidZimFile,
@@ -194,7 +161,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile("testzim.zim")
+      selectedFile = getZimFileFromResourceFolder(context, "testzim.zim")
       composeTestRule.apply {
         waitForIdle()
         runOnUiThread {
@@ -204,7 +171,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitUntilTimeout() // to properly load the library screen.
       }
       // test with first launch
-      runBlocking { kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true) }
+      updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the permission dialog.
       copyMoveFileHandler {
@@ -219,7 +186,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       // delete the parent directory so that all the previous file will be deleted.
       deleteAllFilesInDirectory(parentFile)
       library { refreshList(composeTestRule) }
-      selectedFile = getSelectedFile("testzim.zim")
+      selectedFile = getZimFileFromResourceFolder(context, "testzim.zim")
       showMoveFileToPublicDirectoryDialog(listOf(Uri.fromFile(selectedFile)))
       // should show the copyMove dialog.
       copyMoveFileHandler {
@@ -235,8 +202,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       navigateToLocalLibraryScreen()
       deleteZimFilesIfExistInLocalLibrary()
       val invalidZimFile = getInvalidZimFileUri(".mp4")
-      selectedFile = getSelectedFile("testzim.zim")
-      val secondValidZimFile = getSelectedFile("small.zim")
+      selectedFile = getZimFileFromResourceFolder(context, "testzim.zim")
+      val secondValidZimFile = getZimFileFromResourceFolder(context, "small.zim")
       showMoveFileToPublicDirectoryDialog(
         mutableListOf(
           invalidZimFile,
@@ -305,28 +272,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     }
   }
 
-  private fun getSelectedFile(fileName: String): File {
-    val loadFileStream =
-      CopyMoveFileHandlerTest::class.java.classLoader?.getResourceAsStream(fileName)
-    require(loadFileStream != null) {
-      "Unable to load the $fileName. Please check is it exist in resources folder."
-    }
-    val zimFile = File(context.getExternalFilesDirs(null)[0], fileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
-  }
-
   private fun getInvalidZimFileUri(extension: String): Uri {
     val zimFile = File(context.getExternalFilesDirs(null)[0], "testzim$extension")
     if (zimFile.exists()) zimFile.delete()
@@ -390,7 +335,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      selectedFile = getSelectedFile("testzim.zim")
+      selectedFile = getZimFileFromResourceFolder(context, "testzim.zim")
       composeTestRule.apply {
         runOnUiThread {
           kiwixMainActivity.navigate(KiwixDestination.Library.route)
@@ -398,11 +343,9 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         waitForIdle()
         waitUntilTimeout() // to properly load the library screen.
       }
-      runBlocking {
-        kiwixDataStore.apply {
-          setShowStorageSelectionDialogOnCopyMove(false)
-          setIsPlayStoreBuild(true)
-        }
+      updateKiwixDataStore {
+        setShowStorageSelectionDialogOnCopyMove(false)
+        setIsPlayStoreBuild(true)
       }
       // test opening images
       showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".jpg")))

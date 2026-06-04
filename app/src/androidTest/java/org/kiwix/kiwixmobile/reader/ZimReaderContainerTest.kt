@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
@@ -55,12 +56,7 @@ class ZimReaderContainerTest {
 
   @Before
   fun setup() {
-    testZimFile = File(targetContext.cacheDir, zimFileName)
-    this::class.java.classLoader!!.getResourceAsStream(zimFileName)!!.use { input ->
-      testZimFile.outputStream().use { output ->
-        input.copyTo(output)
-      }
-    }
+    testZimFile = getZimFileFromResourceFolder(targetContext, zimFileName, targetContext.cacheDir)
 
     val realFactory = object : ZimFileReader.Factory {
       override suspend fun create(

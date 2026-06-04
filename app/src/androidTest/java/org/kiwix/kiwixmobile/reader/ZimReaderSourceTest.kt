@@ -38,6 +38,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -51,12 +52,7 @@ class ZimReaderSourceTest {
 
   @Before
   fun setup() {
-    testZimFile = File(targetContext.cacheDir, zimFileName)
-    this::class.java.classLoader!!.getResourceAsStream(zimFileName)!!.use { input ->
-      testZimFile.outputStream().use { output ->
-        input.copyTo(output)
-      }
-    }
+    testZimFile = getZimFileFromResourceFolder(targetContext, zimFileName, targetContext.cacheDir)
   }
 
   @After

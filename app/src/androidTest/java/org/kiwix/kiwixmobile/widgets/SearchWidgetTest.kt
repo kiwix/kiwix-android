@@ -25,15 +25,6 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.launch
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,11 +32,9 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixSearchWidget
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils
 
 class SearchWidgetTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -55,43 +44,12 @@ class SearchWidgetTest : BaseActivityTest() {
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
   private lateinit var kiwixMainActivity: KiwixMainActivity
-  private lateinit var uiDevice: UiDevice
 
   @Before
   override fun waitForIdle() {
-    uiDevice =
-      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-        if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-          TestUtils.closeSystemDialogs(context, this)
-        }
-        waitForIdle()
-      }
-    context.let {
-      KiwixDataStore(it).apply {
-        lifeCycleScope.launch {
-          setWifiOnly(false)
-          setIntroShown()
-          setPrefLanguage("en")
-          setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-          setIsScanFileSystemDialogShown(true)
-          setIsFirstRun(false)
-          setIsPlayStoreBuild(true)
-          setPrefIsTest(true)
-        }
-      }
-    }
-    activityScenario =
-      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-        moveToState(Lifecycle.State.RESUMED)
-      }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {
-      setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    super.waitForIdle()
+    launchMainActivity()
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test

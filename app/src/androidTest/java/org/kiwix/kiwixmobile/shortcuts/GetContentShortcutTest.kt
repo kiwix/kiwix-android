@@ -18,48 +18,28 @@
 
 package org.kiwix.kiwixmobile.shortcuts
 
-import android.app.Instrumentation
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
-import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.main.ACTION_GET_CONTENT
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
-class GetContentShortcutTest {
+class GetContentShortcutTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -68,55 +48,15 @@ class GetContentShortcutTest {
   val composeTestRule = createComposeRule()
   lateinit var kiwixMainActivity: KiwixMainActivity
 
-  private val instrumentation: Instrumentation by lazy(InstrumentationRegistry::getInstrumentation)
-  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
   @Before
-  fun setUp() {
-    UiDevice.getInstance(instrumentation).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(instrumentation.targetContext.applicationContext, this)
-      }
-      waitForIdle()
+  override fun waitForIdle() {
+    super.waitForIdle()
+    updateKiwixDataStore {
+      setShowCaseViewForFileTransferShown()
+      setExternalLinkPopup(true)
     }
-    KiwixDataStore(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).apply {
-      lifeCycleScope.launch {
-        setWifiOnly(false)
-        setIntroShown()
-        setShowCaseViewForFileTransferShown()
-        setExternalLinkPopup(true)
-        setPrefLanguage("en")
-        setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())
-        setIsScanFileSystemDialogShown(true)
-        setIsFirstRun(false)
-        setPrefIsTest(true)
-      }
-    }
-    ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        kiwixMainActivity = it
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
-      }
-    }
-    val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-      accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java),
-          matchesCheck(SpeakableTextPresentCheck::class.java)
-        )
-      )
-    } else {
-      accessibilityValidator.setSuppressingResultMatcher(
-        anyOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java)
-        )
-      )
-    }
-    composeTestRule.enableAccessibilityChecks(accessibilityValidator)
+    launchMainActivity { kiwixMainActivity = it }
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test

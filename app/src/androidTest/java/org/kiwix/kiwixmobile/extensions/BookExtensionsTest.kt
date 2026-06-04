@@ -28,10 +28,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
+import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
-import java.io.File
-import java.io.FileOutputStream
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
@@ -54,7 +53,10 @@ class BookExtensionsTest {
     )
 
     // Load a real ZIM file and create a Book backed by an Archive
-    val zimFile = getZimFile("testzim.zim")
+    val zimFile = getZimFileFromResourceFolder(
+      InstrumentationRegistry.getInstrumentation().targetContext,
+      "testzim.zim"
+    )
     val archive = Archive(zimFile.path)
     val book = Book().apply { update(archive) }
     val result = book.getFavicon()
@@ -62,30 +64,8 @@ class BookExtensionsTest {
     assertNotNull("getFavicon should not return null for a real ZIM file", result)
     assertTrue(
       "getFavicon should return a non-empty string for a real ZIM file",
-      result!!.isNotEmpty()
+      result?.isNotEmpty() == true
     )
     zimFile.delete()
-  }
-
-  private fun getZimFile(zimFileName: String): File {
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-    val loadFileStream =
-      BookExtensionsTest::class.java.classLoader?.getResourceAsStream(zimFileName)
-    require(loadFileStream != null) {
-      "Unable to load the $zimFileName. Please check is it exist in resources folder."
-    }
-    val zimFile = File(context.getExternalFilesDir(null), zimFileName)
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      FileOutputStream(zimFile).use { outputStream ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          outputStream.write(buffer, 0, length)
-        }
-      }
-    }
-    return zimFile
   }
 }
