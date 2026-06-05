@@ -31,6 +31,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.assertIsDisplayed
+import org.junit.jupiter.api.fail
 import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
@@ -284,8 +286,12 @@ class SettingsRobot : BaseRobot() {
       waitForIdle()
       val title =
         context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
+      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        .performScrollToNode(
+          hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        )
       onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
-        .assertExists()
+        .assertIsDisplayed()
     }
   }
 
@@ -312,6 +318,17 @@ class SettingsRobot : BaseRobot() {
       waitForIdle()
       val title =
         context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
+      try {
+        composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+          .performScrollToNode(
+            hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
+          )
+        fail {
+          "Rate App item is showing in \"Standalone\" version."
+        }
+      } catch (_: AssertionError) {
+        // If it throws the error, that means it does not exist on the screen.
+      }
       onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
         .assertDoesNotExist()
     }
