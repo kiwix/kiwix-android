@@ -37,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -113,6 +114,7 @@ private fun DownloadRequiredView(onDownloadClick: () -> Unit) {
     )
     Spacer(modifier = Modifier.height(TWENTY_DP))
     KiwixButton(
+      modifier = Modifier.testTag(BrandedDownloadScreenTags.DOWNLOAD_BUTTON_TESTING_TAG),
       clickListener = onDownloadClick,
       buttonText = stringResource(id = string.download)
     )
@@ -125,7 +127,10 @@ private fun DownloadInProgressView(downloadItem: DownloadItem) {
     modifier = Modifier.wrapContentSize(Alignment.Center),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Text(text = downloadItem.readableEta.toString())
+    Text(
+      modifier = Modifier.testTag(BrandedDownloadScreenTags.DOWNLOAD_ETA_TEXT_TESTING_TAG),
+      text = downloadItem.readableEta.toString()
+    )
 
     Spacer(modifier = Modifier.height(TWENTY_DP))
 
@@ -138,7 +143,10 @@ private fun DownloadInProgressView(downloadItem: DownloadItem) {
         progressBarStyle = ProgressBarStyle.HORIZONTAL
       )
       Spacer(modifier = Modifier.width(FIVE_DP))
-      Text(text = downloadItem.downloadState.toReadableState(LocalContext.current).toString())
+      Text(
+        modifier = Modifier.testTag(BrandedDownloadScreenTags.DOWNLOAD_STATE_TEXT_TESTING_TAG),
+        text = downloadItem.downloadState.toReadableState(LocalContext.current).toString()
+      )
     }
   }
 }
@@ -151,11 +159,13 @@ private fun DownloadErrorView(onRetryClick: () -> Unit, downloadFailed: Download
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Text(
+      modifier = Modifier.testTag(BrandedDownloadScreenTags.ERROR_MESSAGE_TEXT_TESTING_TAG),
       text = getActualErrorMessage(downloadFailed, context),
       textAlign = TextAlign.Center
     )
     Spacer(modifier = Modifier.height(TWENTY_DP))
     KiwixButton(
+      modifier = Modifier.testTag(BrandedDownloadScreenTags.RETRY_BUTTON_TESTING_TAG),
       clickListener = onRetryClick,
       buttonText = stringResource(id = R.string.retry)
     )
@@ -196,8 +206,18 @@ private fun DownloadCompleteView() {
     contentAlignment = Alignment.TopCenter
   ) {
     Text(
+      modifier = Modifier.testTag(BrandedDownloadScreenTags.DOWNLOAD_COMPLETE_TEXT_TESTING_TAG),
       text = stringResource(id = string.complete),
       textAlign = TextAlign.Center
     )
   }
+}
+
+object BrandedDownloadScreenTags {
+  const val DOWNLOAD_BUTTON_TESTING_TAG = "download_button"
+  const val RETRY_BUTTON_TESTING_TAG = "retry_button"
+  const val DOWNLOAD_ETA_TEXT_TESTING_TAG = "download_eta"
+  const val ERROR_MESSAGE_TEXT_TESTING_TAG = "error_message"
+  const val DOWNLOAD_STATE_TEXT_TESTING_TAG = "download_state"
+  const val DOWNLOAD_COMPLETE_TEXT_TESTING_TAG = "download_complete"
 }
