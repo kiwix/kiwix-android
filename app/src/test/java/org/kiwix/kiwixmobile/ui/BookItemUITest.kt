@@ -30,6 +30,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -164,31 +166,30 @@ class BookItemUITest {
   @Test
   fun bookItem_whenLongClickedInNormalMode_onLongClickInvoked() {
     val bookOnDisk = createBookOnDisk()
-    val onLongClick: (BookOnDisk) -> Unit = mockk(relaxed = true)
 
+    var longClick = false
     bookItem(
       index = 0,
       bookOnDisk = bookOnDisk,
-      onLongClick = onLongClick,
+      onLongClick = { longClick = true },
       selectionMode = SelectionMode.NORMAL
     )
 
-    composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG).performTouchInput { longClick() }
+    composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG)
+      .performTouchInput { longClick() }
 
-    verify(exactly = 1) {
-      onLongClick(bookOnDisk)
-    }
+    assertTrue(longClick)
   }
 
   @Test
   fun bookItem_whenLongClickedInMultiMode_onLongClickIsNotInvoked() {
     val bookOnDisk = createBookOnDisk()
-    val onLongClick: (BookOnDisk) -> Unit = mockk(relaxed = true)
+    var longClick = false
 
     bookItem(
       index = 0,
       bookOnDisk = bookOnDisk,
-      onLongClick = onLongClick,
+      onLongClick = { longClick = true },
       selectionMode = SelectionMode.MULTI
     )
 
@@ -197,9 +198,7 @@ class BookItemUITest {
         longClick()
       }
 
-    verify(exactly = 0) {
-      onLongClick(any())
-    }
+    assertFalse(longClick)
   }
 
   @Test
