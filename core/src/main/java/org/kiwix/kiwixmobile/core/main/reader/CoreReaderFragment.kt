@@ -2363,10 +2363,7 @@ abstract class CoreReaderFragment :
           )
           lifecycleScope.launch {
             repositoryActions?.saveHistory(history)
-            kiwixDataStore?.let { dataStore ->
-              val currentReadingCount = dataStore.rateAppReadingCount.first()
-              dataStore.setRateAppReadingCount(currentReadingCount + 1)
-            }
+            kiwixDataStore?.incrementRateAppReadingCount()
           }
         }
       }

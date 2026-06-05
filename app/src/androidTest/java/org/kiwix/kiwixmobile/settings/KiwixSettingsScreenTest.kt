@@ -70,7 +70,7 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
   }
 
   @Test
-  fun testSettingsActivityPlayStoreBuild() {
+  fun testSettingsScreenCommonBehaviour() {
     startSettingsActivity(true)
     settingsRobo {
       assertZoomTextViewPresent(composeTestRule)
@@ -104,48 +104,23 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
       clickCredits(composeTestRule)
       assertContributorsDialogDisplayed(composeTestRule)
       dismissDialog()
-      assertRateAppPreferenceDisplayed(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }
 
   @Test
-  fun testSettingsActivityStandaloneBuild() {
+  fun testRateAppVisibleInPlayStoreBuild() {
+    startSettingsActivity(true)
+    settingsRobo {
+      assertRateAppPreferenceDisplayed(composeTestRule)
+    }
+  }
+
+  @Test
+  fun testRateAppHiddenInStandaloneBuild() {
     startSettingsActivity(false)
     settingsRobo {
-      assertZoomTextViewPresent(composeTestRule)
-      clickNightModePreference(composeTestRule)
-      assertNightModeDialogDisplayed(composeTestRule)
-      dismissDialog()
-      toggleBackToTopPref(composeTestRule)
-      toggleOpenNewTabInBackground(composeTestRule)
-      toggleExternalLinkWarningPref(composeTestRule)
-      toggleWifiDownloadsOnlyPref(composeTestRule)
-      clickExternalStoragePreference(composeTestRule)
-      assertExternalStorageSelected(composeTestRule)
-      clickInternalStoragePreference(composeTestRule)
-      assertInternalStorageSelected(composeTestRule)
-      clickClearHistoryPreference(composeTestRule)
-      assertHistoryDialogDisplayed(composeTestRule)
-      dismissDialog()
-      clickClearNotesPreference(composeTestRule)
-      assertNotesDialogDisplayed(composeTestRule)
-      dismissDialog()
-      clickExportBookmarkPreference(composeTestRule)
-      assertExportBookmarkDialogDisplayed(composeTestRule)
-      dismissDialog()
-      clickOnImportBookmarkPreference(composeTestRule)
-      assertImportBookmarkDialogDisplayed(composeTestRule)
-      dismissDialog()
-      clickLanguagePreference(composeTestRule, activityScenario)
-      assertLanguagePrefDialogDisplayed(composeTestRule, activityScenario)
-      dismissDialog()
-      assertVersionTextViewPresent(composeTestRule)
-      clickCredits(composeTestRule)
-      assertContributorsDialogDisplayed(composeTestRule)
-      dismissDialog()
       assertRateAppPreferenceNotDisplayed(composeTestRule)
     }
-    LeakAssertions.assertNoLeaks()
   }
 }

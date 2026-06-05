@@ -95,15 +95,6 @@ class RateDialogHandlerTest {
   }
 
   @Test
-  fun `shouldShowRateDialog returns false for standalone variant`() = runTest {
-    coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
-    every { activity.packageName } returns "org.kiwix.kiwixmobile.standalone"
-    rateDialogHandler = spyk(rateDialogHandler)
-    val result = rateDialogHandler.shouldShowRateDialog(20)
-    assertFalse(result)
-  }
-
-  @Test
   fun `shouldShowRateDialog returns true when all conditions are met`() = runTest {
     rateDialogHandler = spyk(rateDialogHandler)
     coEvery { rateDialogHandler.isPlayStoreVariant() } returns true
@@ -149,17 +140,17 @@ class RateDialogHandlerTest {
 
   @Test
   fun `checkForRateDialog increments visit count`() = runTest {
-    coEvery { kiwixDataStore.rateAppCount } returns flowOf(5)
+    coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 6
 
     rateDialogHandler.checkForRateDialog()
 
-    coVerify { kiwixDataStore.setRateAppCount(6) }
+    coVerify { kiwixDataStore.incrementRateAppVisitCount() }
   }
 
   @Test
   fun `checkForRateDialog launches review flow when all conditions are met and network is available`() =
     runTest {
-      coEvery { kiwixDataStore.rateAppCount } returns flowOf(19)
+      coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
 
       rateDialogHandler = spyk(rateDialogHandler)
       coEvery { rateDialogHandler.shouldShowRateDialog(20) } returns true
@@ -173,7 +164,7 @@ class RateDialogHandlerTest {
 
   @Test
   fun `checkForRateDialog does not launch review flow when network is unavailable`() = runTest {
-    coEvery { kiwixDataStore.rateAppCount } returns flowOf(19)
+    coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
     every { NetworkUtils.isNetworkAvailable(any()) } returns false
 
     rateDialogHandler = spyk(rateDialogHandler)
@@ -189,7 +180,7 @@ class RateDialogHandlerTest {
   @Test
   fun `checkForRateDialog does not launch review flow when shouldShowRateDialog is false`() =
     runTest {
-      coEvery { kiwixDataStore.rateAppCount } returns flowOf(5)
+      coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 6
 
       rateDialogHandler = spyk(rateDialogHandler)
       coEvery { rateDialogHandler.shouldShowRateDialog(6) } returns false

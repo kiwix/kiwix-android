@@ -644,7 +644,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  protected abstract fun getIconResId(): Int
+
   abstract fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()

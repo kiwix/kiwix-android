@@ -52,9 +52,7 @@ class RateDialogHandler @Inject constructor(
 
   fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
-      val currentCount = kiwixDataStore.rateAppCount.first()
-      val newCount = currentCount + 1
-      kiwixDataStore.setRateAppCount(newCount)
+      val newCount = kiwixDataStore.incrementRateAppVisitCount()
 
       if (shouldShowRateDialog(newCount) && NetworkUtils.isNetworkAvailable(activity)) {
         kiwixDataStore.resetRateAppTriggers()
