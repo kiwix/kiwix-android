@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.intro.intro
+import org.kiwix.kiwixmobile.splash.splash
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.ui.KiwixDestination
@@ -46,15 +46,15 @@ class KiwixSettingsFragmentTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
     super.waitForIdle()
-    // Go to IntroFragment
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
+    // Go to IntroScreen
     activityScenario.onActivity {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Intro.route)
     }
     composeTestRule.waitForIdle()
-    intro {
+    splash {
       swipeLeft(composeTestRule)
       clickGetStarted(composeTestRule) {}
     }

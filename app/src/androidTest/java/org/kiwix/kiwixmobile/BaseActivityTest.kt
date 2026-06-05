@@ -19,10 +19,10 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
@@ -37,9 +37,6 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.Rule
@@ -52,7 +49,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
-  protected val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
   protected lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
   protected val kiwixDataStore by lazy {
     KiwixDataStore(context)
