@@ -28,7 +28,6 @@ import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -40,13 +39,13 @@ import org.kiwix.kiwixmobile.intro.composable.INTRO_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.intro.composable.INTRO_SUB_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
 import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.nav.destination.library.local.THREE
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun splash(func: SplashRobot.() -> Unit) = SplashRobot().applyWithViewHierarchyPrinting(func)
 
 class SplashRobot : BaseRobot() {
-  fun swipeLeft(composeTestRule: ComposeTestRule) {
+  fun swipeLeft(composeTestRule: ComposeTestRule, isPlayStoreBuild: Boolean) {
     composeTestRule.apply {
       waitForIdle()
       assertIntroPage(
@@ -67,7 +66,7 @@ class SplashRobot : BaseRobot() {
         context.getString(string.storage_location_hint)
       )
 
-      if (!BuildConfig.IS_PLAYSTORE) {
+      if (!isPlayStoreBuild) {
         assertIntroPage(
           THREE,
           context.getString(R.string.auto_detect_books),

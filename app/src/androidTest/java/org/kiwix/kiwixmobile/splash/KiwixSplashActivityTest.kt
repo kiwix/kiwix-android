@@ -24,6 +24,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
@@ -55,7 +57,7 @@ class KiwixSplashActivityTest : BaseActivityTest() {
     shouldShowIntro(true)
     launchMainActivity()
     splash {
-      swipeLeft(composeTestRule)
+      swipeLeft(composeTestRule, runBlocking { kiwixDataStore.isPlayStoreBuild.first() })
       clickGetStarted(composeTestRule) {}
     }
     LeakAssertions.assertNoLeaks()
