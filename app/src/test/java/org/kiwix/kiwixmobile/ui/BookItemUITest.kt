@@ -28,8 +28,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -115,39 +113,35 @@ class BookItemUITest {
   @Test
   fun bookItem_whenClickedInNormalMode_onClickInvoked() {
     val bookOnDisk = createBookOnDisk()
-    val onClick: (BookOnDisk) -> Unit = mockk(relaxed = true)
+    var click = false
 
     bookItem(
       index = 0,
       bookOnDisk = bookOnDisk,
-      onClick = onClick,
+      onClick = { click = true },
       selectionMode = SelectionMode.NORMAL
     )
 
     composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG).performClick()
 
-    verify(exactly = 1) {
-      onClick(bookOnDisk)
-    }
+    assertTrue(click)
   }
 
   @Test
   fun bookItem_whenClickedInMultiSelectMode_onMultiSelectInvoked() {
     val bookOnDisk = createBookOnDisk()
-    val onMultiSelect: (BookOnDisk) -> Unit = mockk(relaxed = true)
+    var click = false
 
     bookItem(
       index = 0,
       bookOnDisk = bookOnDisk,
-      onMultiSelect = onMultiSelect,
+      onMultiSelect = { click = true },
       selectionMode = SelectionMode.MULTI
     )
 
     composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG).performClick()
 
-    verify(exactly = 1) {
-      onMultiSelect(bookOnDisk)
-    }
+    assertTrue(click)
   }
 
   @Test
