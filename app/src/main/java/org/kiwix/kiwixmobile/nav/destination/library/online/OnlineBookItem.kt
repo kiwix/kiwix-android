@@ -69,6 +69,10 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 
 const val ONLINE_BOOK_ITEM_TESTING_TAG = "onlineBookItemTestingTag"
 const val ONLINE_BOOK_SIZE_TEXT_TESTING_TAG = "onlineBookSizeTextTestingTag"
+const val ONLINE_BOOK_OVERLAY_TESTING_TAG = "onlineBookOverlayTestingTag"
+const val ONLINE_BOOK_DATE_TEXT_TESTING_TAG = "onlineBookDateTextTestingTag"
+const val ONLINE_BOOK_CREATOR_TEXT_TESTING_TAG = "onlineBookCreatorTextTestingTag"
+const val ONLINE_BOOK_LANGUAGE_TEXT_TESTING_TAG = "onlineBookLanguageTextTestingTag"
 
 @Composable
 fun OnlineBookItem(
@@ -147,6 +151,7 @@ private fun ShowDetectingFileSystemUi(
         .semantics {
           contentDescription = context.getString(R.string.detecting_file_system)
         }
+        .testTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
         .throttledClickable(
           onClick = handleStorageCheckClick,
           onLongClick = handleStorageCheckClick
@@ -188,8 +193,16 @@ private fun BookCreatorAndLanguageRow(item: BookItem, bookUtils: BookUtils) {
       .padding(end = SIXTEEN_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    BookCreator(item.book.creator, Modifier.weight(1f))
-    BookLanguage(bookUtils.getLanguage(item.book.language))
+    BookCreator(
+      item.book.creator,
+      Modifier
+        .weight(1f)
+        .testTag(ONLINE_BOOK_CREATOR_TEXT_TESTING_TAG)
+    )
+    BookLanguage(
+      bookUtils.getLanguage(item.book.language),
+      Modifier.testTag(ONLINE_BOOK_LANGUAGE_TEXT_TESTING_TAG)
+    )
   }
 }
 
@@ -209,7 +222,11 @@ private fun BookSizeAndDateRow(item: BookItem, index: Int) {
         .testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG),
       index = index
     )
-    BookDate(item.book.date, index)
+    BookDate(
+      date = item.book.date,
+      index = index,
+      modifier = Modifier.testTag(ONLINE_BOOK_DATE_TEXT_TESTING_TAG)
+    )
   }
 }
 
@@ -224,10 +241,11 @@ private fun BookCreator(creator: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun BookLanguage(language: String) {
+private fun BookLanguage(language: String, modifier: Modifier = Modifier) {
   Text(
     text = language,
     style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = modifier.semantics { contentDescription = language }
   )
 }
