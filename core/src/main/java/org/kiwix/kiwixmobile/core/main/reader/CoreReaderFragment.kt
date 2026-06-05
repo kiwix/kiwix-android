@@ -136,6 +136,7 @@ import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
@@ -2051,20 +2052,25 @@ abstract class CoreReaderFragment :
       }
 
       Intent.ACTION_VIEW ->
-        if (
-          (intent.type == null || intent.type != "application/octet-stream") &&
-          // Added condition to handle ZIM files. When opening from storage, the intent may
-          // return null for the type, triggering the search unintentionally. This condition
-          // prevents such occurrences.
-          intent.scheme !in listOf("file", "content", "zim", ZIM_HOST_DEEP_LINK_SCHEME)
-        ) {
-          val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
-          openSearch(
-            searchString = searchString,
-            isOpenedFromTabView = false,
-            isVoice = false
-          )
-        }
+        intent.let(::handleActionViewIntent)
+    }
+  }
+
+  private fun handleActionViewIntent(intent: Intent) {
+    if (intent.hasExtra(ZIM_FILE_URI_KEY)) return
+    if (
+      (intent.type == null || intent.type != "application/octet-stream") &&
+      // Added condition to handle ZIM files. When opening from storage, the intent may
+      // return null for the type, triggering the search unintentionally. This condition
+      // prevents such occurrences.
+      intent.scheme !in listOf("file", "content", "zim", ZIM_HOST_DEEP_LINK_SCHEME)
+    ) {
+      val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
+      openSearch(
+        searchString = searchString,
+        isOpenedFromTabView = false,
+        isVoice = false
+      )
     }
   }
 

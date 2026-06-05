@@ -40,7 +40,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
+import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
@@ -168,6 +170,26 @@ class DeepLinksTest : BaseActivityTest() {
     composeTestRule.waitForIdle()
     deepLink {
       checkZimHostScreenVisible(composeTestRule)
+    }
+  }
+
+  @Test
+  fun testShortcutIntentDeepLink() {
+    loadZimFileInApplicationAndReturnSchemeTypeUri("file")?.let { zimFileUri ->
+      val intent = Intent(Intent.ACTION_VIEW).apply {
+        setClassName(context, KiwixMainActivity::class.java.name)
+        putExtra(ZIM_FILE_URI_KEY, zimFileUri.toString())
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      }
+      ActivityScenario.launch<KiwixMainActivity>(intent).onActivity {}
+      composeTestRule.mainClock.advanceTimeBy(OPENING_ZIM_FILE_DELAY + 500)
+      composeTestRule.waitForIdle()
+      deepLink {
+        checkZimFileLoadedSuccessful(composeTestRule)
+      }
+      composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG).assertDoesNotExist()
+    } ?: kotlin.run {
+      fail("Couldn't get file type Uri for ZIM file")
     }
   }
 
