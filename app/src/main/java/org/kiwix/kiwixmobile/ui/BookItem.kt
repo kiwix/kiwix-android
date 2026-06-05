@@ -59,9 +59,11 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
-
-const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
-const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -96,7 +98,7 @@ fun BookItem(
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
-      BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
+      BookContent(bookOnDisk, selectionMode, onMultiSelect, index)
     }
   }
 }
@@ -106,7 +108,6 @@ private fun BookContent(
   bookOnDisk: BookOnDisk,
   selectionMode: SelectionMode,
   onMultiSelect: ((BookOnDisk) -> Unit)?,
-  onClick: ((BookOnDisk) -> Unit)?,
   index: Int,
 ) {
   Row(
@@ -116,7 +117,7 @@ private fun BookContent(
     verticalAlignment = Alignment.CenterVertically
   ) {
     if (selectionMode == SelectionMode.MULTI) {
-      BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
+      BookCheckbox(bookOnDisk, onMultiSelect, index)
     }
     BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
     BookDetails(Modifier.weight(1f), bookOnDisk, index)
@@ -126,21 +127,16 @@ private fun BookContent(
 @Composable
 private fun BookCheckbox(
   bookOnDisk: BookOnDisk,
-  selectionMode: SelectionMode,
   onMultiSelect: ((BookOnDisk) -> Unit)?,
-  onClick: ((BookOnDisk) -> Unit)?,
   index: Int
 ) {
   Checkbox(
     checked = bookOnDisk.isSelected,
     onCheckedChange = {
-      when (selectionMode) {
-        SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
-        SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
-      }
+      onMultiSelect?.invoke(bookOnDisk)
     },
     modifier = Modifier
-      .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
+      .testTag("$CHECKBOX_TESTING_TAG$index")
       .semantics { contentDescription = "${bookOnDisk.isSelected}$index" }
   )
 }
@@ -152,15 +148,15 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
     AsyncImage(
       model = iconSource,
       contentDescription = stringResource(R.string.fav_icon) + iconSource.hashCode(),
-      modifier = modifier,
+      modifier = modifier.testTag(ONLINE_LIBRARY_IMAGE_TEST_TAG),
       placeholder = painterResource(R.drawable.default_zim_file_icon),
-      error = painterResource(R.drawable.default_zim_file_icon),
+      error = painterResource(R.drawable.default_zim_file_icon)
     )
   } else {
     Image(
       painter = Base64String(iconSource).toPainter(),
       contentDescription = stringResource(R.string.fav_icon) + iconSource.hashCode(),
-      modifier = modifier
+      modifier = modifier.testTag(OFFLINE_IMAGE_TEST_TAG)
     )
   }
 }
@@ -196,7 +192,9 @@ private fun BookArticleCount(articleCount: String, index: Int) {
     text = articleCount,
     style = MaterialTheme.typography.bodyMedium,
     color = MaterialTheme.colorScheme.onTertiary,
-    modifier = Modifier.semantics { contentDescription = "$articleCount$index" }
+    modifier = Modifier
+      .testTag(BOOK_ARTICLE_COUNT_TEST_TAG)
+      .semantics { contentDescription = "$articleCount$index" }
   )
 }
 
@@ -239,4 +237,13 @@ fun BookDescription(bookDescription: String, index: Int) {
     color = MaterialTheme.colorScheme.onSecondary,
     modifier = Modifier.semantics { contentDescription = "$bookDescription$index" }
   )
+}
+
+object BookItemScreen {
+  const val ONLINE_LIBRARY_IMAGE_TEST_TAG = "onlineLibraryImageTestingTag"
+  const val OFFLINE_IMAGE_TEST_TAG = "localLibraryImageTestingTag"
+
+  const val BOOK_ARTICLE_COUNT_TEST_TAG = "bookArticleCountTestingTag"
+  const val CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
+  const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
 }
