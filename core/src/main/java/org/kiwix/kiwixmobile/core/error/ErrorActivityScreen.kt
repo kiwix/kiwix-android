@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -37,6 +36,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -83,41 +83,39 @@ fun ErrorActivityScreen(
     Black
   }
   KiwixTheme {
-    Column(
-      modifier = Modifier
-        .fillMaxSize()
-        .systemBarsPadding()
-        .imePadding()
-        .padding(SIXTEEN_DP),
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      CrashTitle(crashTitleStringId)
-      AppIcon()
-      CrashMessage(messageStringId, crashMessageAndCheckboxTextColor)
-      DetailsIncludedInErrorReport(
-        diagnosticDetailsItems,
-        Modifier
-          .weight(1f)
-          .padding(top = SEVENTEEN_DP, bottom = EIGHT_DP),
-        crashMessageAndCheckboxTextColor
-      )
-
-      // Buttons on the ErrorActivity.
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .navigationBarsPadding(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+    Scaffold(modifier = Modifier.fillMaxSize().systemBarsPadding()) { paddingValues ->
+      Column(
+        modifier = Modifier.padding(paddingValues).padding(SIXTEEN_DP),
+        horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        KiwixButton(
-          buttonText = stringResource(R.string.crash_button_confirm),
-          clickListener = { sendDetailsButtonClickListener.invoke() },
+        CrashTitle(crashTitleStringId)
+        AppIcon()
+        CrashMessage(messageStringId, crashMessageAndCheckboxTextColor)
+        DetailsIncludedInErrorReport(
+          diagnosticDetailsItems,
+          Modifier
+            .weight(1f)
+            .padding(top = SEVENTEEN_DP, bottom = EIGHT_DP),
+          crashMessageAndCheckboxTextColor
         )
 
-        KiwixButton(
-          clickListener = { noThanksButtonClickListener.invoke() },
-          buttonText = stringResource(R.string.no_thanks)
-        )
+        // Buttons on the ErrorActivity.
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding(),
+          horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+          KiwixButton(
+            buttonText = stringResource(R.string.crash_button_confirm),
+            clickListener = { sendDetailsButtonClickListener.invoke() },
+          )
+
+          KiwixButton(
+            clickListener = { noThanksButtonClickListener.invoke() },
+            buttonText = stringResource(R.string.no_thanks)
+          )
+        }
       }
     }
   }

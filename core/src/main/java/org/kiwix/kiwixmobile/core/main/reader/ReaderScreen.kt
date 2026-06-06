@@ -51,7 +51,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -221,7 +220,6 @@ fun ReaderScreen(
         },
         floatingActionButton = { BackToTopFab(state) },
         modifier = Modifier
-          .systemBarsPadding()
           .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
@@ -253,9 +251,7 @@ fun ReaderScreen(
         visible = showTableOfContentDrawer.value,
         enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
         exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
-        modifier = Modifier
-          .systemBarsPadding()
-          .align(Alignment.CenterEnd)
+        modifier = Modifier.align(Alignment.CenterEnd)
       ) {
         TableDrawerSheet(
           title = state.tableOfContentTitle,
@@ -616,7 +612,7 @@ private fun BottomAppBarOfReaderScreen(
 ) {
   if (!shouldShowBottomAppBar) return
   BottomAppBar(
-    containerColor = MaterialTheme.colorScheme.surface,
+    containerColor = MaterialTheme.colorScheme.onPrimary,
     contentColor = MaterialTheme.colorScheme.onBackground,
     scrollBehavior = bottomAppBarScrollBehavior,
   ) {

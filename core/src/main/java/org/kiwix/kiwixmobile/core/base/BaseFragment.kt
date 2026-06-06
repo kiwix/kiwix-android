@@ -19,10 +19,7 @@
 package org.kiwix.kiwixmobile.core.base
 
 import android.content.Context
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.Fragment
-import org.kiwix.kiwixmobile.core.extensions.setStatusBarColor
 
 /**
  * All fragments should inherit from this fragment.
@@ -35,9 +32,4 @@ abstract class BaseFragment : Fragment() {
   }
 
   abstract fun inject(baseActivity: BaseActivity)
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    setStatusBarColor()
-    super.onViewCreated(view, savedInstanceState)
-  }
 }

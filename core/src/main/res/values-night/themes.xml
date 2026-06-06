@@ -20,8 +20,5 @@
     <item name="textSecondary">@color/mine_shaft_gray350</item>
     <item name="textTertiary">@color/mine_shaft_gray500</item>
     <item name="cardViewBackground">@color/mine_shaft_gray850</item>
-
-    <item name="android:statusBarColor" tools:ignore="NewApi">@color/mine_shaft_gray900</item>
-    <item name="android:navigationBarColor" tools:ignore="NewApi">@color/mine_shaft_gray900</item>
   </style>
 </resources>

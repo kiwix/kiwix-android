@@ -83,8 +83,8 @@ fun KiwixAppBar(
       actions = { ActionMenu(actionMenuItems) },
       scrollBehavior = topAppBarScrollBehavior,
       colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.surface,
-        scrolledContainerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.onPrimary,
+        scrolledContainerColor = MaterialTheme.colorScheme.onPrimary
       ),
       // Edge-to-Edge mode is already enabled in our application,
       // so we don't need to apply additional top insets.
@@ -209,7 +209,8 @@ private fun OverflowMenuItems(
 ) {
   DropdownMenu(
     expanded = overflowExpanded,
-    onDismissRequest = onDismiss
+    onDismissRequest = onDismiss,
+    containerColor = MaterialTheme.colorScheme.surface
   ) {
     overflowActions.forEachIndexed { index, menuItem ->
       DropdownMenuItem(

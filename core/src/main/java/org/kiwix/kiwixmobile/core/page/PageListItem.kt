@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.page
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -65,7 +64,6 @@ fun PageListItem(
         onClick = { onItemClick(page) },
         onLongClick = { onItemLongClick(page) }
       )
-      .background(MaterialTheme.colorScheme.surface)
       .padding(
         horizontal = SIXTEEN_DP,
         vertical = EIGHT_DP

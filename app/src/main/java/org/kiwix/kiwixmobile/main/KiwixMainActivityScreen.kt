@@ -187,7 +187,7 @@ fun BottomNavigationBar(
   )
   val currentDestinationRoute = navBackStackEntry?.destination?.route
   BottomAppBar(
-    containerColor = MaterialTheme.colorScheme.surface,
+    containerColor = MaterialTheme.colorScheme.onPrimary,
     contentColor = White.copy(alpha = 0.5f),
     scrollBehavior = bottomAppBarScrollBehaviour
   ) {
