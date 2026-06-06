@@ -104,12 +104,10 @@ class RateDialogHandler @Inject constructor(
             reviewManager.launchReviewFlow(activity, reviewInfo)
           } else {
             Log.e(TAG, "Failed to request review flow", requestTask.exception)
-            goToRateApp()
           }
         }
     } catch (exception: Exception) {
       Log.e(TAG, "Unexpected error while launching in-app review", exception)
-      goToRateApp()
     }
   }
 

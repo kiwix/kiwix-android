@@ -588,12 +588,6 @@ class KiwixDataStore @Inject constructor(
     prefs[PreferencesKeys.RATE_APP_COUNT] ?: 0
   }
 
-  suspend fun setRateAppCount(count: Int) {
-    context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.RATE_APP_COUNT] = count
-    }
-  }
-
   suspend fun incrementRateAppVisitCount(): Int {
     var newCount = 0
     context.kiwixDataStore.edit { prefs ->
@@ -608,20 +602,14 @@ class KiwixDataStore @Inject constructor(
     prefs[PreferencesKeys.RATE_APP_DOWNLOAD_COMPLETED] ?: false
   }
 
-  suspend fun setRateAppDownloadCompleted(completed: Boolean) {
+  suspend fun setRateAppDownloadCompleted() {
     context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.RATE_APP_DOWNLOAD_COMPLETED] = completed
+      prefs[PreferencesKeys.RATE_APP_DOWNLOAD_COMPLETED] = true
     }
   }
 
   val rateAppReadingCount: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
     prefs[PreferencesKeys.RATE_APP_READING_COUNT] ?: 0
-  }
-
-  suspend fun setRateAppReadingCount(count: Int) {
-    context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.RATE_APP_READING_COUNT] = count
-    }
   }
 
   suspend fun incrementRateAppReadingCount() {

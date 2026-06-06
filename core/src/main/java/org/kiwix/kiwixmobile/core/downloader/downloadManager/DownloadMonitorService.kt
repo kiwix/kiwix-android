@@ -417,7 +417,7 @@ class DownloadMonitorService : Service() {
         if (download.status == Status.COMPLETED) {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
-            kiwixDataStore.setRateAppDownloadCompleted(true)
+            kiwixDataStore.setRateAppDownloadCompleted()
             // to move these downloads in LibkiwixBookOnDisk.
             @Suppress("IgnoredReturnValue")
             downloadRoomDao.downloads().first()
