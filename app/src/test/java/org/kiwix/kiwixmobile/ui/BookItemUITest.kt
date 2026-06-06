@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.ui.BookItemScreen.CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
@@ -154,7 +154,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.NORMAL
     )
 
-    composeTestRule.onNodeWithTag("${CHECKBOX_TESTING_TAG}0").assertDoesNotExist()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertDoesNotExist()
   }
 
   @Test
@@ -162,9 +162,11 @@ class BookItemUITest {
     val bookOnDisk = createBookOnDisk()
 
     var longClick = false
+    var clickInvoked = false
     bookItem(
       index = 0,
       bookOnDisk = bookOnDisk,
+      onClick = { clickInvoked = true },
       onLongClick = { longClick = true },
       selectionMode = SelectionMode.NORMAL
     )
@@ -173,6 +175,7 @@ class BookItemUITest {
       .performTouchInput { longClick() }
 
     assertTrue(longClick)
+    assertFalse(clickInvoked)
   }
 
   @Test
@@ -205,7 +208,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag("${CHECKBOX_TESTING_TAG}0").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertIsDisplayed()
   }
 
   @Test
@@ -218,7 +221,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag("${CHECKBOX_TESTING_TAG}0").assertIsOn()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertIsOn()
   }
 
   @Test
@@ -231,7 +234,26 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag("${CHECKBOX_TESTING_TAG}0").assertIsOff()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertIsOff()
+  }
+
+  @Test
+  fun checkbox_whenClicked_invokesOnMultiSelect() {
+    val bookOnDisk = createBookOnDisk()
+    var invoked = false
+
+    bookItem(
+      index = 0,
+      bookOnDisk = bookOnDisk,
+      selectionMode = SelectionMode.MULTI,
+      onMultiSelect = { invoked = true }
+    )
+
+    composeTestRule
+      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0")
+      .performClick()
+
+    assertTrue(invoked)
   }
 
   @Test
@@ -252,5 +274,16 @@ class BookItemUITest {
     val expectedArticleCount = ArticleCount("").toHumanReadable(context)
 
     composeTestRule.onNodeWithText(expectedArticleCount).assertExists()
+  }
+
+  @Test
+  fun onlineLibraryImage_isDisplayed() {
+    composeTestRule.setContent {
+      BookIcon(iconSource = "https://example.com/icon.png", isOnlineLibrary = true)
+    }
+
+    composeTestRule
+      .onNodeWithTag(BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG)
+      .assertIsDisplayed()
   }
 }

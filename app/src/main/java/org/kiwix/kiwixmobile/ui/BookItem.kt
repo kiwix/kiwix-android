@@ -60,7 +60,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
-import org.kiwix.kiwixmobile.ui.BookItemScreen.CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG
@@ -136,7 +136,7 @@ private fun BookCheckbox(
       onMultiSelect?.invoke(bookOnDisk)
     },
     modifier = Modifier
-      .testTag("$CHECKBOX_TESTING_TAG$index")
+      .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
       .semantics { contentDescription = "${bookOnDisk.isSelected}$index" }
   )
 }
@@ -244,6 +244,6 @@ object BookItemScreen {
   const val OFFLINE_IMAGE_TEST_TAG = "localLibraryImageTestingTag"
 
   const val BOOK_ARTICLE_COUNT_TEST_TAG = "bookArticleCountTestingTag"
-  const val CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
+  const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
   const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
 }

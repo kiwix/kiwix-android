@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TES
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.sharedFunctions.TestApplication
@@ -262,7 +263,7 @@ class LocalLibraryScreenTest {
     // Verify the checkbox or selection state.
     // In BookItem, it uses BOOK_ITEM_CHECKBOX_TESTING_TAG + index
     composeTestRule
-      .onNodeWithTag("bookItemCheckboxTestingTag0")
+      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0")
       .assertIsDisplayed()
   }
 
