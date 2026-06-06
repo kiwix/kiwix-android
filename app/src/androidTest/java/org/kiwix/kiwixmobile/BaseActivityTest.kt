@@ -150,7 +150,6 @@ abstract class BaseActivityTest {
    * - [DuplicateClickableBoundsCheck]
    * - [SpeakableTextPresentCheck] (Android 14+ only)
    *
-   *
    * Sub classes can override this to provide the their own implementation.
    */
   protected open fun createAccessibilityValidator(): AccessibilityValidator {
