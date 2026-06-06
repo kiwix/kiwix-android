@@ -35,6 +35,8 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.ui.toUriParam
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -60,11 +62,14 @@ class ShareFilesTest {
   }
 
   @Test
-  fun invokeWith_validUris_navigatesToLocalFileTransfer() = runTest {
-    val books = listOf(
-      createDummyBook(uri),
-      createDummyBook(uri)
-    )
+  fun invokeWith_validUris_navigatesWithExpectedRoute() = runTest {
+    val uri1 = mockk<Uri>()
+    val uri2 = mockk<Uri>()
+
+    every { uri1.toString() } returns "uri1"
+    every { uri2.toString() } returns "uri2"
+
+    val books = listOf(createDummyBook(uri1), createDummyBook(uri2))
 
     ShareFiles(
       selectedBooks = books,
@@ -74,17 +79,21 @@ class ShareFilesTest {
 
     advanceUntilIdle()
 
-    verify(exactly = 1) {
-      activity.navigate(any<String>(), any<NavOptions>())
+    val expectedRoute =
+      KiwixDestination.LocalFileTransfer.createRoute(listOf(uri1, uri2).toUriParam())
+
+    verify {
+      activity.navigate(expectedRoute, any<NavOptions>())
     }
   }
 
   @Test
-  fun invokeWith_nullUri_filtersValueAndNavigates() = runTest {
-    val books = listOf(
-      createDummyBook(uri),
-      createDummyBook(null)
-    )
+  fun invokeWith_nullUri_isFilteredFromRoute() = runTest {
+    val validUri = mockk<Uri>()
+
+    every { validUri.toString() } returns "valid-uri"
+
+    val books = listOf(createDummyBook(validUri), createDummyBook(null))
 
     ShareFiles(
       selectedBooks = books,
@@ -94,8 +103,11 @@ class ShareFilesTest {
 
     advanceUntilIdle()
 
-    verify(exactly = 1) {
-      activity.navigate(any<String>(), any<NavOptions>())
+    val expectedRoute =
+      KiwixDestination.LocalFileTransfer.createRoute(listOf(validUri).toUriParam())
+
+    verify {
+      activity.navigate(expectedRoute, any<NavOptions>())
     }
   }
 
