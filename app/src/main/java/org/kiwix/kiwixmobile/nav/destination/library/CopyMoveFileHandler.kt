@@ -77,13 +77,11 @@ class CopyMoveFileHandler @Inject constructor(
   private lateinit var fragmentManager: FragmentManager
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
-  private var unitTestDestinationFile: File? = null
   private var storageDeviceList: List<StorageDevice> = emptyList()
 
   @VisibleForTesting
-  fun setStorageFileForUnitTest(unitTestStorage: File, unitTestDestinationFile: File) {
+  fun setStorageFileForUnitTest(unitTestStorage: File) {
     this.unitTestStorage = unitTestStorage
-    this.unitTestDestinationFile = unitTestDestinationFile
   }
 
   @VisibleForTesting
@@ -420,9 +418,6 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun getDestinationFile(): File {
-    // We could not perform the file operations in unit test so we are passing the mockk file from
-    // unit test cases.
-    unitTestDestinationFile?.let { return it }
     val root = getSelectedStorageRoot()
     val fileName = requireSelectedFile().name.orEmpty()
 

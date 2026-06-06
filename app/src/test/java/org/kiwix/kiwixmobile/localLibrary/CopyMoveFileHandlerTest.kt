@@ -29,7 +29,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.spyk
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -37,8 +39,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -56,6 +58,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
+import kotlin.io.path.createTempDirectory
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CopyMoveFileHandlerTest {
@@ -71,13 +74,16 @@ class CopyMoveFileHandlerTest {
   private val dispatcher = MainDispatcherRule()
   private lateinit var fileHandler: CopyMoveFileHandler
 
-  private val storageFile: File = mockk()
+  private var storageFile: File = File(System.getProperty("java.io.tmpdir"))
   private val destinationFile: File = mockk()
   private val selectedFile: DocumentFile = mockk()
+  private val sourceUri: Uri = mockk()
   private val fileCopyMoveCallback: CopyMoveFileHandler.FileCopyMoveCallback = mockk()
 
   @BeforeEach
   fun setup() {
+    mockkStatic(DocumentFile::class)
+    every { DocumentFile.fromFile(any()) } returns mockk(relaxed = true)
     fileHandler = CopyMoveFileHandler(
       context = context,
       kiwixDataStore = kiwixDataStore,
@@ -88,8 +94,8 @@ class CopyMoveFileHandlerTest {
       dispatcher = dispatcher.dispatcher
     )
 
-    fileHandler.setStorageFileForUnitTest(storageFile, destinationFile)
-    fileHandler.setSelectedFileAndUri(mockk(), selectedFile)
+    fileHandler.setStorageFileForUnitTest(storageFile)
+    fileHandler.setSelectedFileAndUri(sourceUri, selectedFile)
     fileHandler.setFileCopyMoveCallback(fileCopyMoveCallback)
     every { selectedFile.length() } returns 1000L
     every { selectedFile.name } returns "test.zim"
@@ -100,6 +106,7 @@ class CopyMoveFileHandlerTest {
   @AfterEach
   fun dispose() {
     clearAllMocks()
+    unmockkStatic(DocumentFile::class)
   }
 
   @Nested
@@ -801,12 +808,79 @@ class CopyMoveFileHandlerTest {
 
       every {
         fileHandler.showStorageSelectDialog(any())
-      } returns Unit
+      } just Runs
 
       fileHandler.performMoveOperation(true)
 
       verify {
         fileHandler.showStorageSelectDialog(any())
+      }
+    }
+  }
+
+  @Nested
+  inner class CopyZimFileToPublicDirectory {
+    @Test
+    fun moveSuccess_notifiesFileOperationSuccess() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      coEvery {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      } returns true
+
+      coEvery {
+        fileOperationHandler.delete(sourceUri, selectedFile)
+      } returns true
+
+      fileHandler.performMoveOperation(false)
+
+      coVerify(exactly = 1) {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      }
+
+      coVerify(exactly = 1) {
+        fileOperationHandler.delete(sourceUri, selectedFile)
+      }
+
+      verify {
+        fileCopyMoveCallback.onFileMoved(any())
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+      }
+    }
+
+    @Test
+    fun moveFailure_handlesFileOperationError() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      coEvery {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      } returns false
+
+      fileHandler.performMoveOperation(false)
+
+      coVerify(exactly = 1) {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      }
+
+      verify {
+        fileCopyMoveCallback.onError(any())
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+      }
+    }
+
+    @Test
+    fun moveThrowsException_handlesFileOperationError() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      coEvery {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      } throws RuntimeException("Unexpected Error")
+
+      fileHandler.performMoveOperation(false)
+
+      verify {
+        fileCopyMoveCallback.onError(any())
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
       }
     }
   }
@@ -819,10 +893,7 @@ class CopyMoveFileHandlerTest {
         destinationFile.delete()
       } returns true
 
-      fileHandler.handleFileOperationError(
-        errorMessage = "File copy failed",
-        destinationFile = destinationFile
-      )
+      fileHandler.handleFileOperationError("File copy failed", destinationFile)
 
       verify {
         copyMoveProgressBarController.dismissCopyMoveProgressDialog()
@@ -843,8 +914,6 @@ class CopyMoveFileHandlerTest {
       fileHandler = spyk(fileHandler)
 
       fileHandler.shouldValidateZimFile = true
-
-      val sourceUri = mockk<Uri>()
 
       coEvery {
         fileHandler.isValidZimFile(destinationFile)
@@ -873,8 +942,6 @@ class CopyMoveFileHandlerTest {
 
     @Test
     fun copyOperation_notifiesCopiedAndDismissesDialog() = runTest {
-      val sourceUri = mockk<Uri>()
-
       fileHandler.shouldValidateZimFile = false
       fileHandler.isMoveOperation = false
 
@@ -896,8 +963,6 @@ class CopyMoveFileHandlerTest {
 
     @Test
     fun moveOperation_deletesSourceFileAndNotifiesMovedAndDismissesDialog() = runTest {
-      val sourceUri = mockk<Uri>()
-
       fileHandler.isMoveOperation = true
 
       coEvery {
@@ -934,8 +999,6 @@ class CopyMoveFileHandlerTest {
     fun copyOperation_handlesFileOperationError() = runTest {
       fileHandler = spyk(fileHandler)
 
-      val sourceUri = mockk<Uri>()
-
       fileHandler.isMoveOperation = false
 
       coEvery {
@@ -954,8 +1017,6 @@ class CopyMoveFileHandlerTest {
 
     @Test
     fun moveOperationRollbackSuccess_notifiesErrorAndDismissesProgressDialog() = runTest {
-      val sourceUri = mockk<Uri>()
-
       fileHandler.isMoveOperation = true
 
       every {
@@ -984,8 +1045,6 @@ class CopyMoveFileHandlerTest {
     @Test
     fun moveOperationRollbackFailure_handlesFileOperationError() = runTest {
       fileHandler = spyk(fileHandler)
-
-      val sourceUri = mockk<Uri>()
 
       fileHandler.isMoveOperation = true
 
@@ -1017,10 +1076,51 @@ class CopyMoveFileHandlerTest {
   @Nested
   inner class GetDestinationFile {
     @Test
-    fun unitTestDestinationFileExists_returnsUnitTestFile() = runTest {
+    fun destinationFileDoesNotExist_returnsOriginalFileName() = runTest {
+      val root = createTempDirectory().toFile()
+
+      fileHandler.setStorageFileForUnitTest(root)
+
+      every { selectedFile.name } returns "test.zim"
+
       val result = fileHandler.getDestinationFile()
 
-      assertSame(destinationFile, result)
+      assertTrue(result.exists())
+      assertEquals("test.zim", result.name)
+    }
+
+    @Test
+    fun destinationFileExists_returnsIncrementedFileName() = runTest {
+      val root = createTempDirectory().toFile()
+
+      File(root, "test.zim").createNewFile()
+
+      fileHandler.setStorageFileForUnitTest(root)
+
+      every { selectedFile.name } returns "test.zim"
+
+      val result = fileHandler.getDestinationFile()
+
+      assertTrue(result.exists())
+      assertEquals("test_1.zim", result.name)
+    }
+
+    @Test
+    fun multipleDestinationFilesExist_returnsNextAvailableFileName() = runTest {
+      val root = createTempDirectory().toFile()
+
+      File(root, "test.zim").createNewFile()
+      File(root, "test_1.zim").createNewFile()
+      File(root, "test_2.zim").createNewFile()
+
+      fileHandler.setStorageFileForUnitTest(root)
+
+      every { selectedFile.name } returns "test.zim"
+
+      val result = fileHandler.getDestinationFile()
+
+      assertTrue(result.exists())
+      assertEquals("test_3.zim", result.name)
     }
   }
 
