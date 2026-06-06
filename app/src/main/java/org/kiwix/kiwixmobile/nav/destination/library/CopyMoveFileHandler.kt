@@ -84,11 +84,6 @@ class CopyMoveFileHandler @Inject constructor(
     this.unitTestStorage = unitTestStorage
   }
 
-  @VisibleForTesting
-  fun setStorageObservingJob(job: Job?) {
-    storageObservingJob = job
-  }
-
   private fun getCopyMoveTitle(): String =
     if (isMoveOperation) {
       context.getString(R.string.moving_zim_file, requireSelectedFile().name)

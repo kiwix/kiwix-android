@@ -29,12 +29,12 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -46,16 +46,20 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
+import org.kiwix.libzim.Archive
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 import kotlin.io.path.createTempDirectory
@@ -631,47 +635,27 @@ class CopyMoveFileHandlerTest {
   @Nested
   inner class ObserveFileSystemState {
     @Test
-    fun observingJobAlreadyRunning_doesNothing() {
-      val activeJob = mockk<Job>()
-
-      every { activeJob.isActive } returns true
-
-      fileHandler.setStorageObservingJob(activeJob)
-
-      fileHandler.observeFileSystemState()
-
-      verify(exactly = 0) {
-        fat32Checker.fileSystemStates
-      }
-    }
-
-    @Test
-    fun fileSystemDetectionCompletes_hidesPreparingDialog() = runTest {
+    fun observeFileSystemState_whenAlreadyObserving_doesNotStartSecondObserver() = runTest {
       fileHandler = spyk(fileHandler)
-
       fileHandler.setLifeCycleScope(this)
-
-      every {
-        fat32Checker.fileSystemStates
-      } returns MutableStateFlow(
-        Fat32Checker.FileSystemState.CanWrite4GbFile
-      )
-
-      coEvery {
-        fileHandler.validateZimFileCanCopyOrMove()
-      } returns false
-
+      val stateFlow =
+        MutableStateFlow<FileSystemState>(Fat32Checker.FileSystemState.DetectingFileSystem)
+      every { fat32Checker.fileSystemStates } returns stateFlow
+      coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns false
       fileHandler.observeFileSystemState()
-
+      fileHandler.observeFileSystemState()
+      stateFlow.value = Fat32Checker.FileSystemState.CanWrite4GbFile
       advanceUntilIdle()
-
-      verify {
+      verify(exactly = 1) {
         copyMoveProgressBarController.hidePreparingCopyMoveDialog()
       }
+      coVerify(exactly = 1) {
+        fileHandler.validateZimFileCanCopyOrMove()
+      }
     }
 
     @Test
-    fun fileSystemDetectionCompletes_checksValidation() = runTest {
+    fun fileSystemAlreadyDetected_checksValidationImmediately() = runTest {
       fileHandler = spyk(fileHandler)
 
       fileHandler.setLifeCycleScope(this)
@@ -687,6 +671,40 @@ class CopyMoveFileHandlerTest {
       } returns true
 
       fileHandler.observeFileSystemState()
+
+      advanceUntilIdle()
+
+      coVerify(exactly = 1) {
+        fileHandler.validateZimFileCanCopyOrMove()
+      }
+    }
+
+    @Test
+    fun observeFileSystemState_waitsUntilDetectionCompletes() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      fileHandler.setLifeCycleScope(this)
+
+      val stateFlow =
+        MutableStateFlow<FileSystemState>(
+          FileSystemState.DetectingFileSystem
+        )
+
+      every {
+        fat32Checker.fileSystemStates
+      } returns stateFlow
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns false
+
+      fileHandler.observeFileSystemState()
+
+      coVerify(exactly = 0) {
+        fileHandler.validateZimFileCanCopyOrMove()
+      }
+
+      stateFlow.value = FileSystemState.CanWrite4GbFile
 
       advanceUntilIdle()
 
@@ -714,15 +732,23 @@ class CopyMoveFileHandlerTest {
     }
 
     @Test
-    fun sufficientStorage_doesNotNotifyInsufficientStorage() = runTest {
+    fun sufficientStorage_startsCopyOperation() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      fileHandler.isMoveOperation = false
+
       coEvery {
         storageCalculator.availableBytes(storageFile)
       } returns 5000L
 
+      coEvery {
+        fileOperationHandler.copy(any(), any(), any())
+      } just Runs
+
       fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable(storageFile)
 
-      verify(exactly = 0) {
-        fileCopyMoveCallback.insufficientSpaceInStorage(any())
+      coVerify {
+        fileOperationHandler.copy(any(), any(), any())
       }
     }
   }
@@ -880,6 +906,23 @@ class CopyMoveFileHandlerTest {
 
       verify {
         fileCopyMoveCallback.onError(any())
+        copyMoveProgressBarController.dismissCopyMoveProgressDialog()
+      }
+    }
+
+    @Test
+    fun copyThrowsException_handlesFileOperationError() = runTest {
+      coEvery {
+        fileOperationHandler.copy(any(), any(), any())
+      } throws RuntimeException("Copy Failed")
+
+      fileHandler.performCopyOperation(false)
+
+      verify {
+        fileCopyMoveCallback.onError(any())
+      }
+
+      verify {
         copyMoveProgressBarController.dismissCopyMoveProgressDialog()
       }
     }
@@ -1127,23 +1170,6 @@ class CopyMoveFileHandlerTest {
   @Nested
   inner class Dispose {
     @Test
-    fun cancelsStorageObservingJob() {
-      val job = mockk<Job>()
-
-      every {
-        job.cancel()
-      } just Runs
-
-      fileHandler.setStorageObservingJob(job)
-
-      fileHandler.dispose()
-
-      verify(exactly = 1) {
-        job.cancel()
-      }
-    }
-
-    @Test
     fun disposesFat32Checker() {
       every {
         fat32Checker.dispose()
@@ -1155,5 +1181,97 @@ class CopyMoveFileHandlerTest {
         fat32Checker.dispose()
       }
     }
+  }
+
+  @Nested
+  inner class IsValidZimFile {
+    @Test
+    fun splittedZimFile_returnsTrue() = runTest {
+      val file = mockk<File>()
+
+      every { file.name } returns "wikipedia.zimaa"
+
+      assertTrue(
+        fileHandler.isValidZimFile(file)
+      )
+    }
+
+    @Test
+    fun validArchive_returnsTrue() = runTest {
+      mockkStatic(FileUtils::class)
+      mockkConstructor(ZimReaderSource::class)
+
+      val file = mockk<File>()
+      val archive = mockk<ArchiveWrapper>()
+      every { file.name } returns "test.zim"
+      every { FileUtils.isSplittedZimFile("test.zim") } returns false
+      coEvery { anyConstructed<ZimReaderSource>().createArchive() } returns archive
+      every { archive.hasMainEntry() } returns true
+
+      assertTrue(fileHandler.isValidZimFile(file))
+
+      verify {
+        archive.dispose()
+      }
+    }
+
+    @Test
+    fun archiveWithoutMainEntry_returnsFalse() = runTest {
+      mockkStatic(FileUtils::class)
+      mockkConstructor(ZimReaderSource::class)
+
+      val file = mockk<File>()
+      val archive = mockk<ArchiveWrapper>()
+      every { file.name } returns "test.zim"
+      every { FileUtils.isSplittedZimFile("test.zim") } returns false
+      coEvery { anyConstructed<ZimReaderSource>().createArchive() } returns archive
+      every { archive.hasMainEntry() } returns false
+
+      assertFalse(fileHandler.isValidZimFile(file))
+
+      verify {
+        archive.dispose()
+      }
+    }
+
+    @Test
+    fun createArchiveThrowsException_returnsFalse() = runTest {
+      mockkStatic(FileUtils::class)
+      mockkConstructor(ZimReaderSource::class)
+
+      val file = mockk<File>()
+      every { file.name } returns "test.zim"
+      every { FileUtils.isSplittedZimFile("test.zim") } returns false
+      coEvery { anyConstructed<ZimReaderSource>().createArchive() } throws RuntimeException()
+
+      assertFalse(fileHandler.isValidZimFile(file))
+    }
+
+    @Test
+    fun archiveDisposed_whenValidationCompletes() = runTest {
+      mockkStatic(FileUtils::class)
+      mockkConstructor(ZimReaderSource::class)
+
+      val file = mockk<File>()
+      val archive = mockk<ArchiveWrapper>()
+
+      every { file.name } returns "test.zim"
+      every { FileUtils.isSplittedZimFile("test.zim") } returns false
+      coEvery { anyConstructed<ZimReaderSource>().createArchive() } returns archive
+      every { archive.hasMainEntry() } throws RuntimeException()
+      assertFalse(fileHandler.isValidZimFile(file))
+
+      verify(exactly = 1) {
+        archive.dispose()
+      }
+    }
+  }
+}
+
+class ArchiveWrapper(fileName: String, private val hasMainEntry: Boolean) : Archive(fileName) {
+  override fun hasMainEntry(): Boolean = hasMainEntry
+
+  override fun dispose() {
+    // Do nothing
   }
 }
