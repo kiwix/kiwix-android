@@ -16,24 +16,10 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.di.modules
+package org.kiwix.kiwixmobile.core.di
 
-import dagger.Module
-import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import javax.inject.Qualifier
 
-@Module
-class CoroutineModule {
-  @Provides
-  @IoDispatcher
-  @Suppress("InjectDispatcher")
-  fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-  @Provides
-  @MainDispatcher
-  @Suppress("InjectDispatcher")
-  fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
-}
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MainDispatcher

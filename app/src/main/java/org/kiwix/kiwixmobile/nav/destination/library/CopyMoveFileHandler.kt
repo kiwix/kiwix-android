@@ -24,13 +24,14 @@ import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -63,7 +64,8 @@ class CopyMoveFileHandler @Inject constructor(
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker,
   private val fileOperationHandler: FileOperationHandler,
-  private val copyMoveProgressBarController: CopyMoveProgressBarController
+  private val copyMoveProgressBarController: CopyMoveProgressBarController,
+  @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
@@ -75,13 +77,11 @@ class CopyMoveFileHandler @Inject constructor(
   private lateinit var fragmentManager: FragmentManager
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
-  private var unitTestDestinationFile: File? = null
   private var storageDeviceList: List<StorageDevice> = emptyList()
 
   @VisibleForTesting
-  fun setStorageFileForUnitTest(unitTestStorage: File, unitTestDestinationFile: File) {
+  fun setStorageFileForUnitTest(unitTestStorage: File) {
     this.unitTestStorage = unitTestStorage
-    this.unitTestDestinationFile = unitTestDestinationFile
   }
 
   private fun getCopyMoveTitle(): String =
@@ -309,7 +309,7 @@ class CopyMoveFileHandler @Inject constructor(
         destinationFile,
         copyMoveProgressBarController::updateProgress
       )
-      withContext(Dispatchers.Main) {
+      withContext(mainDispatcher) {
         notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
       }
     } catch (ignore: Exception) {
@@ -332,7 +332,7 @@ class CopyMoveFileHandler @Inject constructor(
         destinationFile = destinationFile,
         copyMoveProgressBarController::updateProgress
       )
-      withContext(Dispatchers.Main) {
+      withContext(mainDispatcher) {
         if (moveSuccess) {
           notifyFileOperationSuccess(destinationFile, requireSelectedFileUri())
         } else {
@@ -413,9 +413,6 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun getDestinationFile(): File {
-    // We could not perform the file operations in unit test so we are passing the mockk file from
-    // unit test cases.
-    unitTestDestinationFile?.let { return it }
     val root = getSelectedStorageRoot()
     val fileName = requireSelectedFile().name.orEmpty()
 

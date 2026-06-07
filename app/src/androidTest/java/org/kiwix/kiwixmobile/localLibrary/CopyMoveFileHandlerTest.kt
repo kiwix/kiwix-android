@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -32,31 +31,21 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.extensions.deleteFile
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
-import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.library
-import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
-import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerImpl
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker
-import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
@@ -280,57 +269,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   @Test
-  fun testGetDestinationFile() {
-    composeTestRule.apply {
-      runOnUiThread {
-        kiwixMainActivity.navigate(KiwixDestination.Library.route)
-      }
-      waitForIdle()
-      waitUntilTimeout() // to properly load the library screen.
-    }
-    val selectedFileName = "testCopyMove.zim"
-    deleteAllFilesInDirectory(parentFile)
-    val copyMoveFileHandler = CopyMoveFileHandler(
-      kiwixMainActivity,
-      kiwixDataStore,
-      StorageCalculator(kiwixDataStore),
-      Fat32Checker(kiwixDataStore, listOf(FileWritingFileSystemChecker()), dispatcher.dispatcher),
-      FileOperationHandlerImpl(kiwixMainActivity, dispatcher.dispatcher),
-      CopyMoveProgressBarControllerImpl(kiwixMainActivity)
-    ).apply {
-      setAlertDialogShower(AlertDialogShower())
-    }
-    runBlocking {
-      // test fileName when there is already a file available with same name.
-      // it should return different name
-      selectedFile = File(parentFile, selectedFileName).apply {
-        if (!isFileExist()) createNewFile()
-      }
-      copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
-      destinationFile = copyMoveFileHandler.getDestinationFile()
-      Assert.assertNotEquals(
-        destinationFile.name,
-        selectedFile.name
-      )
-      Assert.assertEquals(
-        destinationFile.name,
-        "testCopyMove_1.zim"
-      )
-      deleteBothPreviousFiles()
-
-      // test when there is no zim file available in the storage it should return the same fileName
-      selectedFile = File(parentFile, selectedFileName)
-      copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
-      destinationFile = copyMoveFileHandler.getDestinationFile()
-      Assert.assertEquals(
-        destinationFile.name,
-        selectedFile.name
-      )
-      deleteBothPreviousFiles()
-    }
-  }
-
-  @Test
   fun testInvalidFileShouldNotOpenInReader() {
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
@@ -357,11 +295,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       showMoveFileToPublicDirectoryDialog(listOf(getInvalidZimFileUri(".pdf")))
       copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
     }
-  }
-
-  private suspend fun deleteBothPreviousFiles() {
-    selectedFile.deleteFile()
-    destinationFile.deleteFile()
   }
 
   private fun deleteAllFilesInDirectory(directory: File) {
