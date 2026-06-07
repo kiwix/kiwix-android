@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.intro
+package org.kiwix.kiwixmobile.splash
 
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeTestRule
@@ -28,28 +28,26 @@ import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.intro.HORIZONTAL_PAGER_TESTING_TAG
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.intro.composable.INTRO_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.intro.composable.INTRO_SUB_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
 import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.nav.destination.library.local.THREE
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
-fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
+fun splash(func: SplashRobot.() -> Unit) = SplashRobot().applyWithViewHierarchyPrinting(func)
 
-class IntroRobot : BaseRobot() {
-  fun swipeLeft(composeTestRule: ComposeTestRule) {
+class SplashRobot : BaseRobot() {
+  fun swipeLeft(composeTestRule: ComposeTestRule, isPlayStoreBuild: Boolean) {
     composeTestRule.apply {
       waitForIdle()
-      onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-        .assertTextEquals(context.getString(string.get_started).uppercase())
       assertIntroPage(
         ZERO,
         context.getString(string.welcome_to_the_family),
@@ -68,13 +66,15 @@ class IntroRobot : BaseRobot() {
         context.getString(string.storage_location_hint)
       )
 
-      if (!BuildConfig.IS_PLAYSTORE) {
+      if (!isPlayStoreBuild) {
         assertIntroPage(
           THREE,
           context.getString(R.string.auto_detect_books),
           context.getString(R.string.auto_detect_books_description)
         )
       }
+      onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+        .assertTextEquals(context.getString(string.get_started).uppercase())
     }
   }
 

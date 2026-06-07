@@ -19,6 +19,8 @@ package org.kiwix.kiwixmobile.settings
 
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
@@ -27,13 +29,13 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.intro.intro
+import org.kiwix.kiwixmobile.splash.splash
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
-class KiwixSettingsFragmentTest : BaseActivityTest() {
+class KiwixSettingsScreenTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -46,16 +48,15 @@ class KiwixSettingsFragmentTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
     super.waitForIdle()
-    // Go to IntroFragment
-    launchMainActivity()
-    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
-    activityScenario.onActivity {
+    // Go to IntroScreen
+    launchMainActivity {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Intro.route)
     }
+    composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
     composeTestRule.waitForIdle()
-    intro {
-      swipeLeft(composeTestRule)
+    splash {
+      swipeLeft(composeTestRule, runBlocking { kiwixDataStore.isPlayStoreBuild.first() })
       clickGetStarted(composeTestRule) {}
     }
     StandardActions.openDrawer(kiwixMainActivity as CoreMainActivity)

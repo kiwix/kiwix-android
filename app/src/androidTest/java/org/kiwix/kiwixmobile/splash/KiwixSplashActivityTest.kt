@@ -18,28 +18,24 @@
 package org.kiwix.kiwixmobile.splash
 
 import androidx.compose.ui.test.assertCountEquals
-import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.intent.Intents
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 @LargeTest
 class KiwixSplashActivityTest : BaseActivityTest() {
@@ -53,58 +49,32 @@ class KiwixSplashActivityTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
     super.waitForIdle()
-    Intents.init()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
 
   @Test
   fun testFirstRun() {
     shouldShowIntro(true)
-    ActivityScenario.launch(KiwixMainActivity::class.java)
-    testFlakyView({
-      composeTestRule.waitUntil(timeoutMillis = 5_000) {
-        composeTestRule
-          .onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-          .fetchSemanticsNodes()
-          .isNotEmpty()
-      }
-
-      composeTestRule
-        .onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-        .assertTextEquals(context.getString(R.string.get_started).uppercase())
-    }, 10)
-
+    launchMainActivity()
+    splash {
+      swipeLeft(composeTestRule, runBlocking { kiwixDataStore.isPlayStoreBuild.first() })
+      clickGetStarted(composeTestRule) {}
+    }
     LeakAssertions.assertNoLeaks()
   }
 
   @Test
   fun testNormalRun() {
-    shouldShowIntro(true)
-    val scenario = ActivityScenario.launch(KiwixMainActivity::class.java)
-
-    composeTestRule.waitUntil(timeoutMillis = 5_000) {
-      composeTestRule
-        .onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-        .fetchSemanticsNodes()
-        .isNotEmpty()
+    shouldShowIntro(false)
+    launchMainActivity()
+    composeTestRule.apply {
+      // Intro screen should not be displayed.
+      onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+        .assertCountEquals(0)
+      // Main screen should be displayed instead.
+      onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).assertIsDisplayed()
     }
-
-    composeTestRule
-      .onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-      .performClick()
-
-    scenario.recreate()
-
-    composeTestRule
-      .onAllNodesWithTag(GET_STARTED_BUTTON_TESTING_TAG)
-      .assertCountEquals(0)
-
     LeakAssertions.assertNoLeaks()
-  }
-
-  @After
-  fun endTest() {
-    Intents.release()
   }
 
   private fun shouldShowIntro(value: Boolean) {
