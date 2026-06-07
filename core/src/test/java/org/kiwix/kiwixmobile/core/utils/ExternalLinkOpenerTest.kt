@@ -29,24 +29,22 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -63,16 +61,15 @@ import org.robolectric.shadows.ShadowToast
   application = TestApplication::class
 )
 class ExternalLinkOpenerTest {
+  @RegisterExtension
+  private val dispatcher = MainDispatcherRule()
   private lateinit var kiwixDataStore: KiwixDataStore
   private val alertDialogShower = AlertDialogShower()
   private lateinit var activity: Activity
   private lateinit var activityController: ActivityController<Activity>
-  private val testDispatcher = StandardTestDispatcher()
-  private val coroutineScope = CoroutineScope(testDispatcher)
 
   @Before
   fun setUp() {
-    Dispatchers.setMain(testDispatcher)
     kiwixDataStore = mockk()
     activityController = Robolectric.buildActivity(Activity::class.java)
     activity = activityController.setup().get()
@@ -81,11 +78,10 @@ class ExternalLinkOpenerTest {
   @After
   fun tearDown() {
     activityController.pause().stop().destroy()
-    Dispatchers.resetMain()
   }
 
   @Test
-  fun alertDialogShowerOpensLinkIfConfirmButtonIsClicked() = runBlocking {
+  fun alertDialogShowerOpensLinkIfConfirmButtonIsClicked() = runTest {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -100,7 +96,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
       setAlertDialogShower(alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
     val dialogData = alertDialogShower.dialogState.value
     assertNotNull(dialogData)
     val (dialog, listeners, _) = dialogData!!
@@ -114,7 +110,7 @@ class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun alertDialogShowerOpensLinkIfGeoProtocolAdded() = runBlocking {
+  fun alertDialogShowerOpensLinkIfGeoProtocolAdded() = runTest {
     val uri = Uri.parse("geo:28.61388888888889,77.20833333333334")
     val intent = Intent(Intent.ACTION_VIEW, uri)
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
@@ -130,7 +126,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
       setAlertDialogShower(alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
     val dialogData = alertDialogShower.dialogState.value
     assertNotNull(dialogData)
     val (dialog, listeners, _) = dialogData!!
@@ -142,7 +138,7 @@ class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun alertDialogShowerDoesNoOpenLinkIfNegativeButtonIsClicked() = runBlocking {
+  fun alertDialogShowerDoesNoOpenLinkIfNegativeButtonIsClicked() = runTest {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -157,7 +153,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
       setAlertDialogShower(alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
     val dialogData = alertDialogShower.dialogState.value
     assertNotNull(dialogData)
     val (dialog, listeners, _) = dialogData!!
@@ -169,7 +165,7 @@ class ExternalLinkOpenerTest {
 
   @Test
   fun alertDialogShowerOpensLinkAndSavesPreferencesIfNeutralButtonIsClicked() =
-    runBlocking {
+    runTest {
       val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
       Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
         intent,
@@ -185,13 +181,13 @@ class ExternalLinkOpenerTest {
       val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
         setAlertDialogShower(alertDialogShower)
       }
-      externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+      externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
       val dialogData = alertDialogShower.dialogState.value
       assertNotNull(dialogData)
       val (dialog, listeners, _) = dialogData!!
       assert(dialog == KiwixDialog.ExternalLinkPopup)
       listeners[2].invoke()
-      testDispatcher.scheduler.advanceUntilIdle()
+      advanceUntilIdle()
       coVerify {
         kiwixDataStore.setExternalLinkPopup(false)
       }
@@ -200,7 +196,7 @@ class ExternalLinkOpenerTest {
     }
 
   @Test
-  fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() = runBlocking {
+  fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() = runTest {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -215,14 +211,14 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {
       setAlertDialogShower(alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
     val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
     assertNotNull(startedIntent)
     assert(startedIntent.dataString == "https://github.com/")
   }
 
   @Test
-  internal fun toastIfPackageManagerIsNotResolvable() = runBlocking {
+  internal fun toastIfPackageManagerIsNotResolvable() = runTest {
     // In Robolectric, PackageManager is not null, but we can make it return null for resolveActivity
     // or just not add any resolves.
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
@@ -231,7 +227,7 @@ class ExternalLinkOpenerTest {
       setAlertDialogShower(alertDialogShower)
     }
 
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = coroutineScope)
+    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
     val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
     assertNull(startedIntent)
     assert(
@@ -241,7 +237,7 @@ class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun openExternalLinkWithDialog_showsDialogIfIntentIsResolvable() = runBlocking {
+  fun openExternalLinkWithDialog_showsDialogIfIntentIsResolvable() = runTest {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
       intent,
@@ -266,7 +262,7 @@ class ExternalLinkOpenerTest {
   }
 
   @Test
-  fun openExternalLinkWithDialog_showsToastIfIntentIsNotResolvable() = runBlocking {
+  fun openExternalLinkWithDialog_showsToastIfIntentIsNotResolvable() = runTest {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     // No resolve info.
     val externalLinkOpener = ExternalLinkOpener(activity, kiwixDataStore).apply {

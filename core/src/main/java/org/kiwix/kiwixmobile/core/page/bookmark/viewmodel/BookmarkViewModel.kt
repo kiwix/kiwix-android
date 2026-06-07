@@ -61,7 +61,13 @@ class BookmarkViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: BookmarkState
   ): BookmarkState {
-    effects.tryEmit(UpdateAllBookmarksPreference(kiwixDataStore, action.isChecked, requireLifeCycleScope()))
+    effects.tryEmit(
+      UpdateAllBookmarksPreference(
+        kiwixDataStore,
+        action.isChecked,
+        requireLifeCycleScope()
+      )
+    )
     return state.copy(showAll = action.isChecked)
   }
 
