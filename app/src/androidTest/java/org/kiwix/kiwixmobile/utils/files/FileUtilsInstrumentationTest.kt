@@ -339,7 +339,7 @@ class FileUtilsInstrumentationTest {
   }
 
   @Test
-  fun testGetLocalFilePathByUri() = runBlocking {
+  fun testGetLocalFilePathByUri() {
     val zimFileName = "testzim.zim"
     val loadFileStream =
       FileUtilsInstrumentationTest::class.java.classLoader?.getResourceAsStream(zimFileName)
@@ -361,8 +361,10 @@ class FileUtilsInstrumentationTest {
     }
     // Get all external storage directories (internal storage and possible SD card)
     val externalDirs = context?.getExternalFilesDirs("")
-    val hasSdCard = externalDirs != null && externalDirs.size > 1
-    val sdCardPath = if (hasSdCard) externalDirs!![1].path.substringBefore("/Android") else ""
+    require(externalDirs != null && externalDirs.size > 1) {
+      "SD card must be enabled in the emulator/device to run this test"
+    }
+    val sdCardPath = externalDirs[1].path.substringBefore("/Android")
     val dummyUriData =
       arrayListOf(
         // test the download uri on older devices
@@ -423,11 +425,8 @@ class FileUtilsInstrumentationTest {
           Uri.parse(
             "${downloadDocumentUriPrefix}msf%3A1000000057"
           )
-        )
-      )
-    // // test with SD card uri
-    if (hasSdCard) {
-      dummyUriData.add(
+        ),
+        // test with SD card uri
         DummyUrlData(
           null,
           null,
@@ -440,7 +439,6 @@ class FileUtilsInstrumentationTest {
           )
         )
       )
-    }
     // test with USB stick uri
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       dummyUriData.add(
@@ -456,10 +454,12 @@ class FileUtilsInstrumentationTest {
     context?.let { context ->
       dummyUriData.forEach { dummyUrlData ->
         dummyUrlData.uri?.let { uri ->
-          Assertions.assertEquals(
-            dummyUrlData.expectedFileName,
-            FileUtils.getLocalFilePathByUri(context, uri)
-          )
+          runBlocking {
+            Assertions.assertEquals(
+              dummyUrlData.expectedFileName,
+              FileUtils.getLocalFilePathByUri(context, uri)
+            )
+          }
         }
       }
     }

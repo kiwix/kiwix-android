@@ -173,7 +173,7 @@ abstract class BaseActivityTest {
   @After
   fun tearDown() {
     if (::activityScenario.isInitialized) {
-      kotlin.runCatching {
+      runCatching {
         activityScenario.close()
       }
     }

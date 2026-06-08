@@ -272,6 +272,7 @@ abstract class CoreSettingsViewModel(
           )
         )
       }.onFailure {
+        Log.e("SettingsPresenter", it.message, it)
         sendAction(
           ShowSnackbar(
             context.getString(R.string.notes_deletion_unsuccessful),
