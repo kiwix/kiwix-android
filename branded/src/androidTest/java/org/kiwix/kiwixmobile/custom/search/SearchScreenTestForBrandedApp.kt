@@ -260,7 +260,6 @@ class SearchScreenTestForBrandedApp {
 
   @Test
   fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {
-
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()

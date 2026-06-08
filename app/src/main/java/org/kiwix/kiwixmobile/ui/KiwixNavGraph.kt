@@ -130,8 +130,7 @@ fun KiwixNavGraph(
             activity.getStorageDeviceList(),
             validateZimViewModel,
             alertDialogShower,
-            snackBarHostState,
-            activity.supportFragmentManager
+            snackBarHostState
           )
         }
       }

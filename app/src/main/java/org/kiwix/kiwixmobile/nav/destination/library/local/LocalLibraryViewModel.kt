@@ -28,7 +28,6 @@ import androidx.activity.result.ActivityResult
 import androidx.annotation.VisibleForTesting
 import androidx.compose.material3.SnackbarHostState
 import androidx.core.net.toUri
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.mhutti1.utils.storage.StorageDevice
@@ -201,8 +200,7 @@ class LocalLibraryViewModel @Inject constructor(
     storageDeviceList: List<StorageDevice>,
     validateZimViewModel: ValidateZimViewModel,
     alertDialogShower: AlertDialogShower,
-    snackBarHostState: SnackbarHostState,
-    fragmentManager: FragmentManager,
+    snackBarHostState: SnackbarHostState
   ) {
     this.validateZimViewModel = validateZimViewModel
     this.alertDialogShower = alertDialogShower
@@ -212,7 +210,6 @@ class LocalLibraryViewModel @Inject constructor(
       lifecycleScope = viewModelScope,
       alertDialogShower = alertDialogShower,
       snackBarHostState = snackBarHostState,
-      fragmentManager = fragmentManager,
       selectedZimFileCallback = this
     )
     observeCoroutineFlows()

@@ -126,8 +126,7 @@ class LocalLibraryViewModelTest {
       emptyList(),
       validateZimViewModel,
       alertDialogShower,
-      snackBarHostState,
-      fragmentManager
+      snackBarHostState
     )
     return vm
   }
@@ -421,7 +420,6 @@ class LocalLibraryViewModelTest {
         lifecycleScope = any(),
         alertDialogShower = alertDialogShower,
         snackBarHostState = snackBarHostState,
-        fragmentManager = fragmentManager,
         selectedZimFileCallback = viewModel
       )
     }
