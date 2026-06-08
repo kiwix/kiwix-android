@@ -41,7 +41,7 @@
 -keep class org.simpleframework.xml.util.** { *; }
 
 -keepattributes ElementList, Root
-
+-keep @org.simpleframework.xml.Root class * { *; }
 -keepclassmembers class * {
     @org.simpleframework.xml.* *;
 }
