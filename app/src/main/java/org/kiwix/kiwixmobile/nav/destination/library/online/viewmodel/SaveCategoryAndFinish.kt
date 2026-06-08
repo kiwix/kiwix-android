@@ -28,13 +28,14 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 data class SaveCategoryAndFinish(
   val category: Category,
   private val kiwixDataStore: KiwixDataStore,
-  private val lifecycleScope: CoroutineScope
+  private val lifecycleScope: CoroutineScope,
+  private val onDismiss: () -> Unit
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
       runCatching {
         kiwixDataStore.setSelectedOnlineContentCategory(category.category)
-        activity.onBackPressedDispatcher.onBackPressed()
+        onDismiss()
       }.onFailure {
         it.printStackTrace()
       }

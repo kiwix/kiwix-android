@@ -75,6 +75,8 @@ class CategoryViewModel @Inject constructor(
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
+  var onDismiss: () -> Unit = {}
+  private var isUnitTestCase: Boolean = false
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
@@ -83,6 +85,22 @@ class CategoryViewModel @Inject constructor(
       add(observeActions())
       add(observeCategories())
     }
+  }
+
+  /**
+   * Resets the state if it is stuck at [Saving] (after a previous category selection).
+   * This re-runs [observeCategories] to reload data from cache, ensuring the dialog
+   * shows content instantly when re-opened.
+   */
+  fun resetStateIfNeeded() {
+    if (state.value is Saving) {
+      coroutineJobs.add(observeCategories())
+    }
+  }
+
+  @VisibleForTesting
+  fun setIsUnitTestCase() {
+    isUnitTestCase = true
   }
 
   private fun observeActions() =
@@ -212,7 +230,8 @@ class CategoryViewModel @Inject constructor(
       SaveCategoryAndFinish(
         selectedCategory,
         kiwixDataStore,
-        viewModelScope
+        viewModelScope,
+        onDismiss
       )
     )
     return Saving

@@ -129,7 +129,6 @@ class CopyMoveFileHandlerTest {
 
       fileHandler.showMoveFileToPublicDirectoryDialog(
         storageDeviceList = emptyList(),
-        fragmentManager = mockk(relaxed = true),
         isSingleFileSelected = true
       )
 
@@ -162,7 +161,6 @@ class CopyMoveFileHandlerTest {
 
         fileHandler.showMoveFileToPublicDirectoryDialog(
           storageDeviceList = devices,
-          fragmentManager = mockk(relaxed = true),
           isSingleFileSelected = true
         )
 
@@ -196,7 +194,6 @@ class CopyMoveFileHandlerTest {
             storageDeviceList = listOf(
               StorageDevice(File("/internal"), true)
             ),
-            fragmentManager = mockk(relaxed = true),
             isSingleFileSelected = true
           )
 
@@ -233,7 +230,6 @@ class CopyMoveFileHandlerTest {
 
             fileHandler.showMoveFileToPublicDirectoryDialog(
               storageDeviceList = listOf(storageDevice),
-              fragmentManager = mockk(relaxed = true),
               multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
               isSingleFileSelected = true
             )
@@ -266,7 +262,6 @@ class CopyMoveFileHandlerTest {
 
             fileHandler.showMoveFileToPublicDirectoryDialog(
               storageDeviceList = listOf(storageDevice),
-              fragmentManager = mockk(relaxed = true),
               multipleFilesProcessAction = MultipleFilesProcessAction.Move,
               isSingleFileSelected = true
             )
@@ -304,7 +299,6 @@ class CopyMoveFileHandlerTest {
               storageDeviceList = listOf(
                 StorageDevice(File("/storage/internal"), true)
               ),
-              fragmentManager = mockk(relaxed = true),
               multipleFilesProcessAction = null,
               isSingleFileSelected = true
             )
