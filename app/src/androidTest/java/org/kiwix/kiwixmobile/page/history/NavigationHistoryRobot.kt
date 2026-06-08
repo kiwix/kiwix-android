@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -122,7 +123,7 @@ class NavigationHistoryRobot : BaseRobot() {
     try {
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
           .assert(androidx.compose.ui.test.hasText(context.getString(R.string.backward_history), ignoreCase = true))
       }
     } catch (e: AssertionError) {
@@ -148,7 +149,7 @@ class NavigationHistoryRobot : BaseRobot() {
     try {
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG, useUnmergedTree = true)
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
           .assert(androidx.compose.ui.test.hasText(context.getString(R.string.forward_history), ignoreCase = true))
       }
     } catch (e: AssertionError) {
@@ -176,7 +177,7 @@ class NavigationHistoryRobot : BaseRobot() {
     try {
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG, useUnmergedTree = true)
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
           .assert(androidx.compose.ui.test.hasText(context.getString(R.string.clear_all_history_dialog_title), ignoreCase = true))
       }
     } catch (e: AssertionError) {

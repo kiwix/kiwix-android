@@ -46,6 +46,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
 
+@Suppress("MaxLineLength")
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
 class FileUtilsSaveMediaTest {

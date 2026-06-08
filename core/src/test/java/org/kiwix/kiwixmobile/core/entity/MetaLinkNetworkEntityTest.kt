@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.simpleframework.xml.core.Persister
 
+@Suppress("MaxLineLength")
 class MetaLinkNetworkEntityTest {
   data class DummyUrl(val location: String, val priority: Int, val value: String)
 
