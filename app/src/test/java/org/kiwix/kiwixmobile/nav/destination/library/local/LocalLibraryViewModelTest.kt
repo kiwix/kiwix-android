@@ -412,7 +412,7 @@ class LocalLibraryViewModelTest {
     advanceUntilIdle()
 
     verify {
-      processSelectedZimFilesForStandalone.setSelectedZimFileCallback(viewModel)
+      processSelectedZimFilesForStandalone.init(viewModel)
     }
     verify {
       processSelectedZimFilesForPlayStore.init(

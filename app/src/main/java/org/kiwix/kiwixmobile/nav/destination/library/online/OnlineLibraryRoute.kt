@@ -37,6 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -52,26 +54,17 @@ import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
-import org.kiwix.kiwixmobile.ui.KiwixDestination
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
-import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-import org.kiwix.kiwixmobile.storage.StorageSelectDialog
-import androidx.lifecycle.ViewModelProvider
-import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
-import androidx.compose.runtime.produceState
-import eu.mhutti1.utils.storage.StorageDevice
-import androidx.compose.ui.res.stringResource
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ScrollToTop
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ScrollToTop
+import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
 const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
@@ -100,9 +93,6 @@ fun OnlineLibraryRoute(
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
   val lazyListState = rememberLazyListState()
-  val storageDevices by produceState<List<StorageDevice>>(emptyList()) {
-    value = activity.getStorageDeviceList()
-  }
 
   // Collect UI events
   HandleUiEvents(
@@ -173,48 +163,16 @@ fun OnlineLibraryRoute(
       navigationIcon = {
         NavigationIcon(
           iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
-          contentDescription = R.string.close_drawer,
+          contentDescription = string.close_drawer,
           onClick = { onlineLibraryViewModel.setShowCategoryDialog(false) }
         )
-      }
-    )
-  }
-
-  if (uiState.showStorageSelectDialog) {
-    StorageSelectDialog(
-      title = stringResource(R.string.choose_storage_to_download_book),
-      titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE,
-      storageDeviceList = storageDevices,
-      storageCalculator = onlineLibraryViewModel.availableSpaceCalculator.storageCalculator,
-      kiwixDataStore = onlineLibraryViewModel.kiwixDataStore,
-      shouldShowCheckboxSelected = false,
-      onDismiss = { onlineLibraryViewModel.setShowStorageSelectDialog(false) },
-      onSelectAction = { device ->
-        scope.launch {
-          onlineLibraryViewModel.kiwixDataStore.setShowStorageOption(false)
-          onlineLibraryViewModel.kiwixDataStore.setSelectedStorage(
-            onlineLibraryViewModel.kiwixDataStore.getPublicDirectoryPath(device.name)
-          )
-          onlineLibraryViewModel.kiwixDataStore.setSelectedStoragePosition(
-            if (device.isInternal) {
-              INTERNAL_SELECT_POSITION
-            } else {
-              EXTERNAL_SELECT_POSITION
-            }
-          )
-          onlineLibraryViewModel.setShowStorageSelectDialog(false)
-          onlineLibraryViewModel.onBookItemClick(
-            onlineLibraryViewModel.downloadBookItem ?: return@launch,
-            activity
-          )
-        }
       }
     )
   }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 private fun HandleUiEvents(
   viewModel: OnlineLibraryViewModel,
@@ -260,6 +218,12 @@ private fun HandleUiEvents(
           )
         }
 
+        is OnlineLibraryViewModel.UiEvent.SideEffects -> handleUISideEffects(
+          event.uISideEffects,
+          alertDialogShower = alertDialogShower,
+          kiwixMainActivity = activity
+        )
+
         is OnlineLibraryViewModel.UiEvent.ShowToast -> {
           activity.toast(event.message, Toast.LENGTH_SHORT)
         }
@@ -284,6 +248,19 @@ private fun HandleUiEvents(
 
         ScrollToTop -> lazyListState.scrollToItem(ZERO)
       }
+    }
+  }
+}
+
+private fun handleUISideEffects(
+  event: OnlineLibraryViewModel.UISideEffects,
+  alertDialogShower: AlertDialogShower,
+  kiwixMainActivity: KiwixMainActivity
+) {
+  when (event) {
+    is OnlineLibraryViewModel.UISideEffects.StorageSelectionDialog -> {
+      ShowStorageSelectionDialog(alertDialogShower, event.dialogConfig)
+        .invokeWith(kiwixMainActivity)
     }
   }
 }

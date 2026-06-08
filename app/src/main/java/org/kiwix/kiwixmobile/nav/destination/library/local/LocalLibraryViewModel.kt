@@ -81,6 +81,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.CopyMoveErrorDialog
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.FileSystemScanDialog
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog
@@ -94,10 +95,12 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestSelect
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestValidateZimFiles
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.OpenFilePicker
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ProcessZimFiles
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ScanStorage
+import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
@@ -154,6 +157,9 @@ class LocalLibraryViewModel @Inject constructor(
     data class CopyMoveErrorDialog(val errorMessage: String, val callBack: suspend () -> Unit) :
       LocalLibraryUiActions()
 
+    data class StorageSelectionDialog(val dialogConfig: StorageSelectDialogConfig) :
+      LocalLibraryUiActions()
+
     data class RequestReadWritePermission(val resultAction: ReadeWritePermissionResultAction) :
       LocalLibraryUiActions()
 
@@ -189,7 +195,6 @@ class LocalLibraryViewModel @Inject constructor(
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   private var onResumeJob: Job? = null
-
   val sideEffects = MutableSharedFlow<SideEffect<*>>()
   val localLibraryUiActions = MutableSharedFlow<LocalLibraryUiActions>()
 
@@ -204,7 +209,7 @@ class LocalLibraryViewModel @Inject constructor(
   ) {
     this.validateZimViewModel = validateZimViewModel
     this.alertDialogShower = alertDialogShower
-    processSelectedZimFilesForStandalone.setSelectedZimFileCallback(this)
+    processSelectedZimFilesForStandalone.init(this)
     processSelectedZimFilesForPlayStore.init(
       storageDeviceList = storageDeviceList,
       lifecycleScope = viewModelScope,
@@ -340,6 +345,9 @@ class LocalLibraryViewModel @Inject constructor(
         viewModelScope,
         action.callBack
       )
+
+      is StorageSelectionDialog ->
+        ShowStorageSelectionDialog(alertDialogShower, action.dialogConfig)
 
       FileSystemScanDialog -> ShowFileSystemScanDialog(
         alertDialogShower,
@@ -828,6 +836,10 @@ class LocalLibraryViewModel @Inject constructor(
     callBack: suspend () -> Unit
   ) {
     sendAction(CopyMoveErrorDialog(errorMessage, callBack))
+  }
+
+  override fun showStorageSelectionDialog(dialogConfig: StorageSelectDialogConfig) {
+    sendAction(StorageSelectionDialog(dialogConfig))
   }
 
   /**

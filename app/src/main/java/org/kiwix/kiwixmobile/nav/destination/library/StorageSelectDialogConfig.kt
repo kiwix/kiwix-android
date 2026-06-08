@@ -18,7 +18,10 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import androidx.compose.ui.unit.TextUnit
 import eu.mhutti1.utils.storage.StorageDevice
+import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 /**
  * Configuration for showing the StorageSelectDialog composable.
@@ -27,6 +30,9 @@ import eu.mhutti1.utils.storage.StorageDevice
 data class StorageSelectDialogConfig(
   val storageDeviceList: List<StorageDevice>,
   val title: String?,
+  val titleSize: TextUnit? = null,
+  val storageCalculator: StorageCalculator,
+  val kiwixDataStore: KiwixDataStore,
   val shouldShowCheckboxSelected: Boolean,
   val onSelectAction: (StorageDevice) -> Unit
 )

@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
-import androidx.compose.runtime.mutableStateOf
 import androidx.documentfile.provider.DocumentFile
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
@@ -72,14 +71,6 @@ class CopyMoveFileHandler @Inject constructor(
   private var storageObservingJob: Job? = null
   var isMoveOperation = false
   var shouldValidateZimFile: Boolean = false
-  private lateinit var alertDialogShower: AlertDialogShower
-
-  /**
-   * Holds the state for showing the storage selection dialog.
-   * When non-null, the hosting composable should render [StorageSelectDialog].
-   * The Pair contains: (storageDeviceList, onSelectAction).
-   */
-  val storageSelectDialogState = mutableStateOf<StorageSelectDialogConfig?>(null)
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
   private var storageDeviceList: List<StorageDevice> = emptyList()
@@ -153,20 +144,19 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) {
-    storageSelectDialogState.value = StorageSelectDialogConfig(
+    val dialogConfig = StorageSelectDialogConfig(
       storageDeviceList = storageDeviceList,
       title = context.getString(R.string.choose_storage_to_copy_move_zim_file),
       shouldShowCheckboxSelected = false,
+      kiwixDataStore = kiwixDataStore,
+      storageCalculator = storageCalculator,
       onSelectAction = { storageDevice ->
         lifecycleScope?.launch {
           copyMoveZIMFileInSelectedStorage(storageDevice)
         }
       }
     )
-  }
-
-  fun dismissStorageSelectDialog() {
-    storageSelectDialogState.value = null
+    fileCopyMoveCallback?.showStorageSelectionDialog(dialogConfig)
   }
 
   suspend fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
@@ -463,5 +453,6 @@ class CopyMoveFileHandler @Inject constructor(
     fun filesystemDoesNotSupportedCopyMoveFilesOver4GB()
     fun onError(errorMessage: String)
     fun onMultipleFilesProcessSelection(multipleFilesProcessAction: MultipleFilesProcessAction)
+    fun showStorageSelectionDialog(dialogConfig: StorageSelectDialogConfig)
   }
 }

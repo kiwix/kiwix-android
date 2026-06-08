@@ -60,7 +60,7 @@ import javax.inject.Inject
 class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val context: Context,
-  internal val copyMoveFileHandler: CopyMoveFileHandler,
+  private val copyMoveFileHandler: CopyMoveFileHandler,
   private val storageCalculator: StorageCalculator
 ) : CopyMoveFileHandler.FileCopyMoveCallback {
   private var snackBarHostState: SnackbarHostState? = null
@@ -98,6 +98,11 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     }
     this.snackBarHostState = snackBarHostState
   }
+
+  private fun requireLifecycleScope(): CoroutineScope =
+    requireNotNull(lifecycleScope) {
+      "Lifecycle scope is not set. Check the ProcessSelectedZimFilesForPlayStore.init method"
+    }
 
   /**
    * Returns whether this handler can process URIs in Play Store builds
@@ -230,27 +235,22 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     } ?: false
 
   /** Shows a snackbar suggesting the user to change storage. */
-  @Suppress("UnsafeCallOnNullableType")
   private fun showStorageSelectionSnackBar(message: String) {
     snackBarHostState?.snack(
       message = message,
       actionLabel = context.getString(string.change_storage),
-      lifecycleScope = lifecycleScope!!,
+      lifecycleScope = requireLifecycleScope(),
       actionClick = {
-        lifecycleScope?.launch {
-          showStorageSelectDialog(storageDeviceList)
-        }
+        val dialogConfig = StorageSelectDialogConfig(
+          storageDeviceList = storageDeviceList,
+          title = context.getString(string.pref_storage),
+          shouldShowCheckboxSelected = true,
+          kiwixDataStore = kiwixDataStore,
+          storageCalculator = storageCalculator,
+          onSelectAction = ::storeDeviceInPreferences
+        )
+        showStorageSelectionDialog(dialogConfig)
       }
-    )
-  }
-
-  /** Shows storage selection dialog to choose another storage device. */
-  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) {
-    copyMoveFileHandler.storageSelectDialogState.value = StorageSelectDialogConfig(
-      storageDeviceList = storageDeviceList,
-      title = context.getString(string.pref_storage),
-      shouldShowCheckboxSelected = true,
-      onSelectAction = ::storeDeviceInPreferences
     )
   }
 
@@ -258,10 +258,8 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * Stores the newly selected storage path in preferences
    * and retries copying/moving the ZIM file.
    */
-  private fun storeDeviceInPreferences(
-    storageDevice: StorageDevice
-  ) {
-    lifecycleScope.runSafelyInLifecycleScope {
+  private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
+    requireLifecycleScope().runSafelyInLifecycleScope {
       kiwixDataStore.apply {
         setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
         setSelectedStoragePosition(
@@ -306,6 +304,10 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     showStorageSelectionSnackBar(context.getString(R.string.file_system_does_not_support_4gb))
   }
 
+  override fun showStorageSelectionDialog(dialogConfig: StorageSelectDialogConfig) {
+    selectedZimFileCallback?.showStorageSelectionDialog(dialogConfig)
+  }
+
   override fun onError(errorMessage: String) {
     if (isSingleFileSelected) {
       multipleFilesProcessAction = null
@@ -338,7 +340,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         multipleFilesProcessAction = null
       }
 
-      else -> lifecycleScope?.launch {
+      else -> requireLifecycleScope().launch {
         selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)
         processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
       }

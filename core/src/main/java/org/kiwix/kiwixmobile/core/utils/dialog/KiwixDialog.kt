@@ -156,6 +156,19 @@ sealed class KiwixDialog(
     constructor(copyMoveFileDialogDescription: String) : this(listOf(copyMoveFileDialogDescription))
   }
 
+  data class StorageSelectionDialog(
+    private val customViewBottomPadding: Dp,
+    private val customGetView: @Composable (() -> Unit)?
+  ) : KiwixDialog(
+      title = null,
+      message = null,
+      cancelable = true,
+      confirmButtonText = R.string.empty_string,
+      dismissButtonText = null,
+      customComposeView = customGetView,
+      customComposeViewBottomPadding = customViewBottomPadding
+    )
+
   data class CopyMoveProgressBarDialog(
     private val customViewBottomPadding: Dp,
     private val customGetView: @Composable (() -> Unit)?

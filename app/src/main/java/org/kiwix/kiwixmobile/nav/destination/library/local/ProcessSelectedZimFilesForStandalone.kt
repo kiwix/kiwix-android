@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import java.io.File
 import javax.inject.Inject
 
@@ -41,7 +42,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
 ) {
   private var selectedZimFileCallback: SelectedZimFileCallback? = null
 
-  fun setSelectedZimFileCallback(selectedZimFileCallback: SelectedZimFileCallback) {
+  fun init(selectedZimFileCallback: SelectedZimFileCallback) {
     this.selectedZimFileCallback = selectedZimFileCallback
   }
 
@@ -142,4 +143,5 @@ interface SelectedZimFileCallback {
   fun navigateToReaderFragment(file: File)
   fun addBookToLibkiwixBookOnDisk(file: File)
   fun showFileCopyMoveErrorDialog(errorMessage: String, callBack: suspend () -> Unit)
+  fun showStorageSelectionDialog(dialogConfig: StorageSelectDialogConfig)
 }
