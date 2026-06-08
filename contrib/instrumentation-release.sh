@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+
+TEST_CLASSES="org.kiwix.kiwixmobile.download.DownloadTest,\
+org.kiwix.kiwixmobile.onlineCategory.OnlineCategoryTest,\
+org.kiwix.kiwixmobile.language.LanguageScreenTest"
+
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
 adb logcat -c
@@ -37,7 +42,7 @@ fi
 
 retry=0
 while [ $retry -le 3 ]; do
-  if ./gradlew connectedDebugAndroidTest -PtestingMinimizedBuild -Pandroid.testInstrumentationRunnerArguments.class=org.kiwix.kiwixmobile.download.DownloadTest "-Dorg.gradle.jvmargs=-Xmx16G -XX:+UseParallelGC" -Dfile.encoding=UTF-8; then
+  if ./gradlew connectedDebugAndroidTest -PtestingMinimizedBuild -Pandroid.testInstrumentationRunnerArguments.class="$TEST_CLASSES" "-Dorg.gradle.jvmargs=-Xmx16G -XX:+UseParallelGC" -Dfile.encoding=UTF-8; then
     echo "connectedDebugAndroidTest for release variant succeeded" >&2
     break
   else
