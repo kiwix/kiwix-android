@@ -38,10 +38,13 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper.getMainLooper
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -62,7 +65,9 @@ import javax.inject.Inject
 class WifiDirectManager @Inject constructor(
   private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
-  private val manager: WifiP2pManager?
+  private val manager: WifiP2pManager?,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
@@ -274,13 +279,14 @@ class WifiDirectManager @Inject constructor(
         val fileReceiverDeviceAddress =
           if (groupInfo.isGroupOwner) inetAddress else groupInfo.groupOwnerAddress
         context.toast(R.string.preparing_files, Toast.LENGTH_LONG)
-        val senderDevice = SenderDevice(context, this, fileReceiverDeviceAddress)
+        val senderDevice =
+          SenderDevice(context, this, fileReceiverDeviceAddress, ioDispatcher, mainDispatcher)
         val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
         onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
         Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
-        val receiverDevice = ReceiverDevice(this)
+        val receiverDevice = ReceiverDevice(this, ioDispatcher, mainDispatcher)
         val isReceivedFileSuccessFully = receiverDevice.receive()
         onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
         Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")

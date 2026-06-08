@@ -25,21 +25,12 @@ import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.di.ServiceScope
-import org.kiwix.kiwixmobile.webserver.KiwixServer
-import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 
 @Module
 class ServiceModule {
-  @Provides
-  @ServiceScope
-  fun providesWebServerHelper(
-    kiwixServerFactory: KiwixServer.Factory,
-    ipAddressCallbacks: IpAddressCallbacks
-  ): WebServerHelper = WebServerHelper(kiwixServerFactory, ipAddressCallbacks)
-
   @Provides
   @ServiceScope
   fun providesIpAddressCallbacks(service: Service): IpAddressCallbacks =

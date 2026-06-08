@@ -41,8 +41,11 @@ object StorageDeviceUtils {
   }
 
   @JvmStatic
-  suspend fun getReadableStorage(context: Context): List<StorageDevice> {
-    var kiwixDataStore: KiwixDataStore? = KiwixDataStore(context)
+  suspend fun getReadableStorage(
+    context: Context,
+    ioDispatcher: CoroutineDispatcher
+  ): List<StorageDevice> {
+    var kiwixDataStore: KiwixDataStore? = KiwixDataStore(context, ioDispatcher)
     val storageDevices =
       ArrayList<StorageDevice>().apply {
         add(environmentDevices(context))

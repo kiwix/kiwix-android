@@ -18,11 +18,13 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.content.Context
-import org.kiwix.kiwixmobile.core.utils.files.Log
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.IOException
 import java.net.InetAddress
@@ -46,11 +48,12 @@ private const val TIME_OUT = 15000
 internal class SenderDevice(
   private val context: Context,
   private val wifiDirectManager: WifiDirectManager,
-  private val fileReceiverDeviceAddress: InetAddress
+  private val fileReceiverDeviceAddress: InetAddress,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) {
-  @Suppress("InjectDispatcher")
   suspend fun send(fileItems: List<FileItem?>) =
-    withContext(Dispatchers.IO) {
+    withContext(ioDispatcher) {
       // Delay trying to connect with receiver, to allow slow receiver devices to setup server
       delay(FOR_SLOW_RECEIVER)
       val hostAddress = fileReceiverDeviceAddress.hostAddress
@@ -94,7 +97,7 @@ internal class SenderDevice(
     fileIndex: Int,
     fileStatus: FileItem.FileStatus
   ) {
-    withContext(Dispatchers.Main) {
+    withContext(mainDispatcher) {
       wifiDirectManager.changeStatus(fileIndex, fileStatus)
     }
   }

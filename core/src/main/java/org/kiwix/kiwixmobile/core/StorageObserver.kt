@@ -19,13 +19,13 @@
 package org.kiwix.kiwixmobile.core
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -35,16 +35,18 @@ import org.kiwix.libkiwix.Book
 import java.io.File
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class StorageObserver @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val fileSearch: FileSearch,
   private val zimReaderFactory: ZimFileReader.Factory,
   private val libkiwixBookmarks: LibkiwixBookmarks,
-  private val libkiwixBookFactory: LibkiwixBookFactory
+  private val libkiwixBookFactory: LibkiwixBookFactory,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher = ioDispatcher
   ): Flow<List<Book>> = flow {
     val files = scanFiles(scanningProgressListener).first()
     val downloads = downloadRoomDao.downloads().first()

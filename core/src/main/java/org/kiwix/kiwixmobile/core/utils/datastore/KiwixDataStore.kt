@@ -26,7 +26,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -36,8 +36,9 @@ import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.ThemeConfig.Theme.Companion.from
-import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.io.File
@@ -55,7 +56,10 @@ val Context.kiwixDataStore by preferencesDataStore(
 )
 
 @Singleton
-class KiwixDataStore @Inject constructor(val context: Context) {
+class KiwixDataStore @Inject constructor(
+  val context: Context,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+) {
   val textZoom: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
     prefs[PreferencesKeys.TEXT_ZOOM] ?: DEFAULT_ZOOM
   }
@@ -466,14 +470,12 @@ class KiwixDataStore @Inject constructor(val context: Context) {
       path.substringBefore(context.getString(R.string.android_directory_seperator))
     }
 
-  @Suppress("InjectDispatcher")
-  suspend fun defaultStorage(): String = withContext(Dispatchers.IO) {
+  suspend fun defaultStorage(): String = withContext(ioDispatcher) {
     context.getExternalFilesDirs(null)[ZERO]?.path
       ?: context.filesDir.path // a workaround for emulators
   }
 
-  @Suppress("InjectDispatcher")
-  private suspend fun defaultPublicStorage(): String = withContext(Dispatchers.IO) {
+  private suspend fun defaultPublicStorage(): String = withContext(ioDispatcher) {
     ContextWrapper(context).externalMediaDirs[ZERO]?.path
       ?: context.filesDir.path // a workaround for emulators
   }

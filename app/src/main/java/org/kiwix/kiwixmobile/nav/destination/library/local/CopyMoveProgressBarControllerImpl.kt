@@ -34,9 +34,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.COPY_MOVE_DIALOG_TITLE_TEXT_SIZE
@@ -50,7 +51,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.COPY_MOVE_DIALOG_TITLE_TEST
 import javax.inject.Inject
 
 class CopyMoveProgressBarControllerImpl @Inject constructor(
-  private val context: Context
+  private val context: Context,
+  @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : CopyMoveProgressBarController {
   /**
    * Holds the state for the copy/move progress bar.
@@ -117,9 +119,8 @@ class CopyMoveProgressBarControllerImpl @Inject constructor(
     }
   }
 
-  @Suppress("InjectDispatcher")
   override suspend fun updateProgress(progress: Int) {
-    withContext(Dispatchers.Main) {
+    withContext(mainDispatcher) {
       progressBarState.value =
         context.getString(R.string.percentage, progress) to progress
     }

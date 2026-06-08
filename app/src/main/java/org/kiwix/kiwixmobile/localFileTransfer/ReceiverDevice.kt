@@ -17,10 +17,10 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -37,11 +37,14 @@ import java.net.ServerSocket
  * A single Task is used for the entire file transfer (the server socket accepts connections as
  * many times as the no. of files).
  */
-internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) {
-  @Suppress("InjectDispatcher")
+internal class ReceiverDevice(
+  private val wifiDirectManager: WifiDirectManager,
+  val ioDispatcher: CoroutineDispatcher,
+  private val mainDispatcher: CoroutineDispatcher
+) {
   suspend fun receive(): Boolean {
     return try {
-      withContext(Dispatchers.IO) {
+      withContext(ioDispatcher) {
         ServerSocket(WifiDirectManager.fileTransferPort).use { serverSocket ->
           Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.fileTransferPort)
           val zimStorageRootPath = wifiDirectManager.zimStorageRootPath()
@@ -92,7 +95,7 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
     fileIndex: Int,
     fileStatus: FileItem.FileStatus
   ) {
-    withContext(Dispatchers.Main) {
+    withContext(mainDispatcher) {
       wifiDirectManager.changeStatus(fileIndex, fileStatus)
     }
   }
