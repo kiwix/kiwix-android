@@ -38,7 +38,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -52,7 +51,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -135,7 +133,6 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
@@ -223,7 +220,6 @@ fun ReaderScreen(
         },
         floatingActionButton = { BackToTopFab(state) },
         modifier = Modifier
-          .systemBarsPadding()
           .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
           .semantics { testTag = READER_SCREEN_TESTING_TAG }
@@ -255,9 +251,7 @@ fun ReaderScreen(
         visible = showTableOfContentDrawer.value,
         enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
         exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
-        modifier = Modifier
-          .systemBarsPadding()
-          .align(Alignment.CenterEnd)
+        modifier = Modifier.align(Alignment.CenterEnd)
       ) {
         TableDrawerSheet(
           title = state.tableOfContentTitle,
@@ -355,15 +349,10 @@ fun TableDrawerSheet(
   selectedWebView: KiwixWebView?,
   showTableOfContentDrawer: MutableState<Boolean>
 ) {
-  val drawerBackgroundColor = if (isSystemInDarkTheme()) {
-    MineShaftGray700
-  } else {
-    White
-  }
   ModalDrawerSheet(
     modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
     drawerShape = RectangleShape,
-    drawerContainerColor = drawerBackgroundColor
+    drawerContainerColor = MaterialTheme.colorScheme.surface
   ) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
       item {

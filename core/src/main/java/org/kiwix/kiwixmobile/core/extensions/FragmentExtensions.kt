@@ -19,20 +19,13 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
-import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 inline fun <reified T : ViewModel> Fragment.viewModel(
@@ -41,11 +34,6 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
 
 fun Fragment.toast(stringId: Int, length: Int = Toast.LENGTH_LONG) {
   requireActivity().toast(stringId, length)
-}
-
-fun Fragment.isKeyboardVisible(): Boolean {
-  val insets = ViewCompat.getRootWindowInsets(requireView()) ?: return false
-  return insets.isVisible(WindowInsetsCompat.Type.ime())
 }
 
 fun Fragment.closeKeyboard() {
@@ -60,22 +48,3 @@ fun View.closeKeyboard() {
 }
 
 val Fragment.coreMainActivity get() = activity as CoreMainActivity
-
-/**
- * Updates the Activity window’s background color to match the current theme (light or dark).
- *
- * Since the status bar is drawn over the window background in edge-to-edge mode,
- * this effectively controls the visible status bar color and ensures proper
- * contrast with dark mode or light mode.
- */
-fun Fragment.setStatusBarColor() {
-  CoroutineScope(Dispatchers.Main).launch {
-    val isDarkTheme = CoreApp.instance.themeConfig.isDarkTheme()
-    val windowBackGroundColor = if (isDarkTheme) {
-      Color.BLACK
-    } else {
-      Color.WHITE
-    }
-    activity?.window?.decorView?.setBackgroundColor(windowBackGroundColor)
-  }
-}

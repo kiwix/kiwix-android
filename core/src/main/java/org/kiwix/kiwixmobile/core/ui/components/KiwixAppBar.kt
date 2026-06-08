@@ -209,7 +209,8 @@ private fun OverflowMenuItems(
 ) {
   DropdownMenu(
     expanded = overflowExpanded,
-    onDismissRequest = onDismiss
+    onDismissRequest = onDismiss,
+    containerColor = MaterialTheme.colorScheme.surface
   ) {
     overflowActions.forEachIndexed { index, menuItem ->
       DropdownMenuItem(

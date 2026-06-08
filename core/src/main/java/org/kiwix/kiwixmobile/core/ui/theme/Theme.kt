@@ -18,12 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
+import androidx.core.view.WindowCompat
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_TEXT_SIZE
 
@@ -62,9 +67,22 @@ fun KiwixTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   content: @Composable () -> Unit
 ) {
+  val view = LocalView.current
   val colorScheme = when {
     darkTheme -> DarkColorScheme
     else -> LightColorScheme
+  }
+
+  // Set the systemBarColor according to our theme.
+  if (!view.isInEditMode) {
+    val windowBackGroundColor = colorScheme.onPrimary.toArgb()
+    SideEffect {
+      val window = (view.context as Activity).window
+      val insetsController = WindowCompat.getInsetsController(window, view)
+      window?.decorView?.setBackgroundColor(windowBackGroundColor)
+      insetsController.isAppearanceLightStatusBars = !darkTheme
+      insetsController.isAppearanceLightNavigationBars = !darkTheme
+    }
   }
 
   MaterialTheme(
@@ -88,11 +106,7 @@ fun KiwixDialogTheme(
   content: @Composable () -> Unit
 ) {
   val colorScheme = when {
-    darkTheme -> DarkColorScheme.copy(
-      background = MineShaftGray700,
-      onSurfaceVariant = MineShaftGray350
-    )
-
+    darkTheme -> DarkColorScheme.copy(onSurfaceVariant = MineShaftGray350)
     else -> LightColorScheme.copy(onSurfaceVariant = ScorpionGray)
   }
   MaterialTheme(
