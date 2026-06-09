@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.utils.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.unit.dp
+import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -43,13 +44,15 @@ class ShowStorageSelectionDialog(
             storageCalculator = dialogConfig.storageCalculator,
             kiwixDataStore = dialogConfig.kiwixDataStore,
             shouldShowStorageSelected = false,
-            onSelectAction = {
-              dialogConfig.onSelectAction.invoke(it)
-              dialogShower.dismiss()
-            }
+            onSelectAction = ::handleStorageSelection
           )
         }
       )
     )
+  }
+
+  internal fun handleStorageSelection(selectedDevice: StorageDevice) {
+    dialogConfig.onSelectAction(selectedDevice)
+    dialogShower.dismiss()
   }
 }

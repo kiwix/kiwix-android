@@ -42,8 +42,10 @@ import org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDia
 import org.kiwix.kiwixmobile.core.utils.effects.ReadPermissionRequiredDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ScanStorage
+import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
@@ -350,6 +352,16 @@ class LocalLibraryViewModelTest {
   ) {
     assertTrue(it is ShowFileCopyMoveErrorDialog)
   }
+
+  @Test
+  fun `StorageSelectionDialog emits ShowStorageSelectionDialog side effect`() =
+    testActionSideEffect(
+      LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog(
+        mockk(relaxed = true)
+      )
+    ) {
+      assertTrue(it is ShowStorageSelectionDialog)
+    }
 
   @Test
   fun `ManageFilesPermissionDialog emits correct side effect on Android 13+`() = runTest {
@@ -1036,6 +1048,29 @@ class LocalLibraryViewModelTest {
 
       assertThat(dialogAction.errorMessage).isEqualTo(errorMessage)
       assertThat(dialogAction.callBack).isEqualTo(callback)
+
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `showStorageSelectionDialog emits storage selection dialog action`() = runTest {
+    val dialogConfig = mockk<StorageSelectDialogConfig>()
+
+    viewModel.localLibraryUiActions.test {
+      viewModel.showStorageSelectionDialog(dialogConfig)
+
+      val action = awaitItem()
+
+      assertThat(action)
+        .isInstanceOf(
+          LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog::class.java
+        )
+
+      val dialogAction =
+        action as LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog
+
+      assertThat(dialogAction.dialogConfig).isEqualTo(dialogConfig)
 
       cancelAndIgnoreRemainingEvents()
     }

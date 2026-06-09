@@ -158,7 +158,7 @@ sealed class KiwixDialog(
 
   data class StorageSelectionDialog(
     private val customViewBottomPadding: Dp,
-    private val customGetView: @Composable (() -> Unit)?
+    val customGetView: @Composable (() -> Unit)?
   ) : KiwixDialog(
       title = null,
       message = null,

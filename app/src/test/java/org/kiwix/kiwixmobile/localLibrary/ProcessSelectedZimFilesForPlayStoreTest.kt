@@ -33,6 +33,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
@@ -45,12 +46,15 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForPlayStore
 import org.kiwix.kiwixmobile.nav.destination.library.local.SelectedZimFileCallback
 import java.io.File
@@ -118,8 +122,9 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     }
 
   @Test
-  fun `processSelectedFiles should show insufficient space when not enough storage`() =
+  fun `insufficient storage and clicking change storage shows storage selection dialog`() =
     testScope.runTest {
+      mockkStatic("org.kiwix.kiwixmobile.core.extensions.SnackbarHostStateExtensionKt")
       val uri = mockk<Uri>()
       val documentFile = mockk<DocumentFile>()
 
@@ -132,20 +137,62 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       every { activity.getString(R.string.move_no_space) } returns "Not enough space"
       every { activity.getString(R.string.space_available) } returns "Available"
       every { activity.getString(R.string.change_storage) } returns "Change Storage"
-
-      processSelectedZimFiles.processSelectedFiles(listOf(uri))
-      advanceUntilIdle()
-      coVerify(exactly = 0) {
-        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+      val actionClickSlot = slot<(() -> Unit)?>()
+      every {
+        snackBarHostState.snack(
           any(),
           any(),
-          any(),
+          captureNullable(actionClickSlot),
           any(),
           any(),
           any()
         )
+      } just Runs
+      processSelectedZimFiles.processSelectedFiles(listOf(uri))
+      advanceUntilIdle()
+      verify(exactly = 0) {
+        selectedZimFileCallback.showStorageSelectionDialog(any())
+      }
+
+      actionClickSlot.captured?.invoke()
+
+      verify {
+        selectedZimFileCallback.showStorageSelectionDialog(any())
       }
     }
+
+  @Test
+  fun `filesystemDoesNotSupportedCopyMoveFilesOver4GB shows snackbar`() {
+    mockkStatic("org.kiwix.kiwixmobile.core.extensions.SnackbarHostStateExtensionKt")
+
+    every {
+      activity.getString(string.file_system_does_not_support_4gb)
+    } returns "File system does not support files over 4GB"
+
+    every {
+      snackBarHostState.snack(
+        message = "File system does not support files over 4GB",
+        actionLabel = any(),
+        actionClick = any(),
+        snackbarDuration = any(),
+        lifecycleScope = any(),
+        snackBarResult = any()
+      )
+    } just Runs
+
+    processSelectedZimFiles.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
+
+    verify {
+      snackBarHostState.snack(
+        message = "File system does not support files over 4GB",
+        actionLabel = any(),
+        actionClick = any(),
+        snackbarDuration = any(),
+        lifecycleScope = any(),
+        snackBarResult = any()
+      )
+    }
+  }
 
   @Test
   fun `processSelectedFiles should process single file when there is sufficient storage`() =
@@ -314,6 +361,17 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
     coVerify {
       selectedZimFileCallback.showFileCopyMoveErrorDialog(errorMessage, any())
+    }
+  }
+
+  @Test
+  fun `showStorageSelectionDialog delegates to selectedZimFileCallback`() {
+    val dialogConfig = mockk<StorageSelectDialogConfig>()
+
+    processSelectedZimFiles.showStorageSelectionDialog(dialogConfig)
+
+    verify {
+      selectedZimFileCallback.showStorageSelectionDialog(dialogConfig)
     }
   }
 

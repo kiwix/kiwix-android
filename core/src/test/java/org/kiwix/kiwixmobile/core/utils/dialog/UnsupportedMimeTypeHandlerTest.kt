@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.utils
+package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
 import android.net.Uri
@@ -41,8 +41,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import org.kiwix.sharedFunctions.MainDispatcherRule
