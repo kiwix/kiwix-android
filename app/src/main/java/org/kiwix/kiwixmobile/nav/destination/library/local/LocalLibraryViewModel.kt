@@ -103,6 +103,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFilesUseCase
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigationDrawerToggle
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
@@ -138,6 +139,7 @@ class LocalLibraryViewModel @Inject constructor(
   private val kiwixPermissionChecker: KiwixPermissionChecker,
   val kiwixDataStore: KiwixDataStore,
   private val zimReaderFactory: ZimFileReader.Factory,
+  private val deleteFilesUseCase: DeleteFilesUseCase,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(), SelectedZimFileCallback {
   /**
@@ -323,7 +325,9 @@ class LocalLibraryViewModel @Inject constructor(
     when (action) {
       is RequestMultiSelection -> noSideEffectSelectBook(action.bookOnDisk)
       is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
-      RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
+      RequestDeleteMultiSelection ->
+        DeleteFiles(selectionsFromState(), alertDialogShower, deleteFilesUseCase, ioDispatcher)
+
       RequestShareMultiSelection -> ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
       MultiModeFinished -> noSideEffectAndClearSelectionState()
       UserClickedDownloadBooksButton -> NavigateToDownloads
