@@ -36,12 +36,6 @@ fun Fragment.toast(stringId: Int, length: Int = Toast.LENGTH_LONG) {
   requireActivity().toast(stringId, length)
 }
 
-fun Fragment.closeKeyboard() {
-  val inputMethodManager =
-    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-  inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-}
-
 fun View.closeKeyboard() {
   val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
   imm.hideSoftInputFromWindow(windowToken, 0)

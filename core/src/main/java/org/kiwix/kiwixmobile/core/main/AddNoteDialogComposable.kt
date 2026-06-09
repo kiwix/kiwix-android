@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -33,6 +34,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,14 +46,18 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
-import android.view.inputmethod.InputMethodManager
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
@@ -64,10 +70,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import java.io.File
 import java.io.IOException
 
@@ -183,10 +185,10 @@ class NoteOperations(
   private val metadata: NoteMetadata,
   private val kiwixDataStore: KiwixDataStore,
   private val mainRepositoryActions: MainRepositoryActions,
-  private val noteText: androidx.compose.runtime.MutableState<TextFieldValue>,
-  private val noteEdited: androidx.compose.runtime.MutableState<Boolean>,
+  private val noteText: TextFieldValue,
+  private val noteEdited: Boolean,
   private val snackBarHostState: SnackbarHostState,
-  private val menuController: NoteMenuController,
+  private val addNoteViewModel: AddNoteViewModel,
   private val requestPermission: () -> Unit
 ) {
   fun saveNote() {
@@ -224,12 +226,12 @@ class NoteOperations(
     }
     val noteFile = File(notesFolder.absolutePath, "${metadata.articleNoteFileName}.txt")
     try {
-      noteFile.writeText(noteText.value.text)
+      noteFile.writeText(noteText.text)
       context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
-      noteEdited.value = false
-      menuController.enableDeleteMenuItem()
+      // noteEdited.value = false
+      addNoteViewModel.enableDeleteMenuItem()
       addNoteToDao(noteFile.canonicalPath, metadata.getNoteTitle())
-      menuController.disableSaveMenuItem()
+      addNoteViewModel.disableSaveMenuItem()
     } catch (e: IOException) {
       e.printStackTrace()
       context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
@@ -263,11 +265,11 @@ class NoteOperations(
         "${metadata.articleNoteFileName}.txt"
       )
       val noteDeleted = noteFile.delete()
-      val editedNoteText = noteText.value.text
+      val editedNoteText = noteText.text
       if (noteDeleted) {
-        noteText.value = TextFieldValue("")
+        // noteText.value = TextFieldValue("")
         mainRepositoryActions.deleteNote(metadata.getNoteTitle())
-        menuController.disableAllMenuItems()
+        addNoteViewModel.disableAllMenuItems()
         showUndoSnackbar(editedNoteText)
       } else {
         context.toast(R.string.note_delete_unsuccessful, Toast.LENGTH_LONG)
@@ -284,19 +286,14 @@ class NoteOperations(
           text = editedNoteText,
           selection = TextRange(editedNoteText.length)
         )
-        if (noteText.value.text != restoreNoteTextFieldValue.text) {
-          noteEdited.value = true
-          menuController.enableSaveMenuItem()
-          menuController.enableShareMenuItem()
-        }
-        noteText.value = restoreNoteTextFieldValue
+        addNoteViewModel.restoreNoteText(restoreNoteTextFieldValue)
       },
       lifecycleScope = scope
     )
   }
 
   fun shareNote() {
-    if (noteEdited.value && metadata.isZimFileExist) {
+    if (noteEdited && metadata.isZimFileExist) {
       saveNote()
     }
     val noteFile = File("${metadata.zimNotesDirectory}${metadata.articleNoteFileName}.txt")
@@ -328,44 +325,6 @@ class NoteOperations(
   }
 }
 
-/** Controls the enable/disable state of menu items. */
-class NoteMenuController(
-  private val menuItems: androidx.compose.runtime.MutableState<List<ActionMenuItem>>,
-  private val isZimFileExist: Boolean
-) {
-  private fun updateMenuItem(vararg contentDescription: Int, isEnabled: Boolean) {
-    menuItems.value = menuItems.value.map { item ->
-      if (contentDescription.contains(item.contentDescription)) {
-        item.copy(isEnabled = isEnabled)
-      } else {
-        item
-      }
-    }
-  }
-
-  fun disableAllMenuItems() {
-    updateMenuItem(R.string.delete, R.string.share, R.string.save, isEnabled = false)
-  }
-
-  fun disableSaveMenuItem() {
-    updateMenuItem(R.string.save, isEnabled = false)
-  }
-
-  fun enableDeleteMenuItem() {
-    updateMenuItem(R.string.delete, isEnabled = true)
-  }
-
-  fun enableSaveMenuItem() {
-    if (isZimFileExist) {
-      updateMenuItem(R.string.save, isEnabled = true)
-    }
-  }
-
-  fun enableShareMenuItem() {
-    updateMenuItem(R.string.share, isEnabled = true)
-  }
-}
-
 /**
  * Pure composable replacement for the old AddNoteDialog DialogFragment.
  * Contains all the business logic for note CRUD operations.
@@ -374,65 +333,40 @@ class NoteMenuController(
 @Suppress("LongMethod")
 @Composable
 fun AddNoteDialogComposable(
+  addNoteViewModel: AddNoteViewModel,
   config: AddNoteDialogConfig,
-  zimReaderContainer: ZimReaderContainer,
-  kiwixDataStore: KiwixDataStore,
   alertDialogShower: AlertDialogShower,
-  mainRepositoryActions: MainRepositoryActions,
   onDismiss: () -> Unit
 ) {
+  val uiState by addNoteViewModel.uiState.collectAsStateWithLifecycle()
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
   val snackBarHostState = remember { SnackbarHostState() }
-  val metadata = remember(config) { computeNoteMetadata(config, zimReaderContainer) }
+  val metadata =
+    remember(config) { computeNoteMetadata(config, addNoteViewModel.zimReaderContainer) }
 
-  val noteText = remember { mutableStateOf(TextFieldValue("")) }
-  val noteEdited = remember { mutableStateOf(false) }
-
-  val writePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE) { isGranted ->
-    if (isGranted) {
-      // If the user was trying to save, we could auto-save here,
-      // but for now, we just let them click Save again.
-      context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
+  val writePermissionState =
+    rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE) { isGranted ->
+      if (isGranted) {
+        // If the user was trying to save, we could auto-save here,
+        // but for now, we just let them click Save again.
+        context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
+      }
     }
-  }
 
-  val menuItems = remember {
-    mutableStateOf(
-      listOf(
-        ActionMenuItem(
-          Vector(Icons.Default.Delete),
-          R.string.delete,
-          { /* placeholder */ },
-          isEnabled = false,
-          testingTag = DELETE_MENU_BUTTON_TESTING_TAG
-        ),
-        ActionMenuItem(
-          Vector(Icons.Default.Share),
-          R.string.share,
-          { /* placeholder */ },
-          isEnabled = false,
-          testingTag = SHARE_MENU_BUTTON_TESTING_TAG
-        ),
-        ActionMenuItem(
-          Drawable(R.drawable.ic_save),
-          R.string.save,
-          { /* placeholder */ },
-          isEnabled = false,
-          testingTag = SAVE_MENU_BUTTON_TESTING_TAG
-        )
-      )
-    )
-  }
-
-  val menuController = remember(metadata) {
-    NoteMenuController(menuItems, metadata.isZimFileExist)
-  }
+  val menuItems = buildMenuItems(uiState)
 
   val noteOps = remember(metadata) {
     NoteOperations(
-      context, scope, metadata, kiwixDataStore, mainRepositoryActions,
-      noteText, noteEdited, snackBarHostState, menuController
+      context,
+      scope,
+      metadata,
+      addNoteViewModel.kiwixDataStore,
+      addNoteViewModel.repositoryActions,
+      uiState.noteText,
+      uiState.noteEdited,
+      snackBarHostState,
+      addNoteViewModel
     ) {
       if (writePermissionState.status.shouldShowRationale) {
         context.toast(R.string.ext_storage_permission_rationale_add_note, Toast.LENGTH_LONG)
@@ -451,7 +385,7 @@ fun AddNoteDialogComposable(
   }
 
   fun exitAddNoteDialog() {
-    if (noteEdited.value) {
+    if (uiState.noteEdited) {
       alertDialogShower.show(
         KiwixDialog.NotesDiscardConfirmation,
         {
@@ -464,44 +398,16 @@ fun AddNoteDialogComposable(
       hideKeyboard()
     }
   }
-
   // Wire up menu items with actual actions and load existing note
   LaunchedEffect(Unit) {
-    menuItems.value = listOf(
-      ActionMenuItem(
-        Vector(Icons.Default.Delete),
-        R.string.delete,
-        { noteOps.deleteNote() },
-        isEnabled = false,
-        testingTag = DELETE_MENU_BUTTON_TESTING_TAG
-      ),
-      ActionMenuItem(
-        Vector(Icons.Default.Share),
-        R.string.share,
-        { noteOps.shareNote() },
-        isEnabled = false,
-        testingTag = SHARE_MENU_BUTTON_TESTING_TAG
-      ),
-      ActionMenuItem(
-        Drawable(R.drawable.ic_save),
-        R.string.save,
-        { noteOps.saveNote() },
-        isEnabled = false,
-        testingTag = SAVE_MENU_BUTTON_TESTING_TAG
-      )
-    )
-
     // Display existing note
     val noteFile = File("${metadata.zimNotesDirectory}${metadata.articleNoteFileName}.txt")
     if (noteFile.exists()) {
       val noteFileText = noteFile.readText()
-      noteText.value =
-        TextFieldValue(noteFileText, selection = TextRange(noteFileText.length))
-      menuController.enableShareMenuItem()
-      menuController.enableDeleteMenuItem()
-      if (!metadata.isZimFileExist) {
-        menuController.disableSaveMenuItem()
-      }
+      addNoteViewModel.setInitialNoteText(
+        TextFieldValue(noteFileText, selection = TextRange(noteFileText.length)),
+        metadata.isZimFileExist
+      )
     }
   }
 
@@ -525,15 +431,16 @@ fun AddNoteDialogComposable(
             testingTag = ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
           )
         },
-        noteText = noteText.value,
-        actionMenuItems = menuItems.value,
+        noteText = uiState.noteText,
+        actionMenuItems = menuItems,
         onTextChange = { textFieldValue ->
-          if (noteText.value.text != textFieldValue.text) {
-            noteEdited.value = true
-            menuController.enableSaveMenuItem()
-            menuController.enableShareMenuItem()
-          }
-          noteText.value = textFieldValue
+          addNoteViewModel.onTextChanged(textFieldValue)
+          // if (noteText.value.text != textFieldValue.text) {
+          //   noteEdited.value = true
+          //   addNoteViewModel.enableSaveMenuItem()
+          //   addNoteViewModel.enableShareMenuItem()
+          // }
+          // noteText.value = textFieldValue
         },
         snackBarHostState = snackBarHostState
       )
@@ -541,3 +448,28 @@ fun AddNoteDialogComposable(
     }
   }
 }
+
+private fun buildMenuItems(uiState: AddNoteViewModel.AddNoteUiState) =
+  listOf(
+    ActionMenuItem(
+      Vector(Icons.Default.Delete),
+      R.string.delete,
+      { noteOps.deleteNote() },
+      isEnabled = uiState.isDeleteMenuButtonEnable,
+      testingTag = DELETE_MENU_BUTTON_TESTING_TAG
+    ),
+    ActionMenuItem(
+      Vector(Icons.Default.Share),
+      R.string.share,
+      { noteOps.shareNote() },
+      isEnabled = uiState.isShareMenuButtonEnable,
+      testingTag = SHARE_MENU_BUTTON_TESTING_TAG
+    ),
+    ActionMenuItem(
+      Drawable(R.drawable.ic_save),
+      R.string.save,
+      { noteOps.saveNote() },
+      isEnabled = uiState.isSaveMenuButtonEnable,
+      testingTag = SAVE_MENU_BUTTON_TESTING_TAG
+    )
+  )

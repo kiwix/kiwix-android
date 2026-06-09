@@ -88,6 +88,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineDispatcher
@@ -126,6 +127,7 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.AddNoteDialogComposable
 import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
@@ -143,6 +145,7 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
@@ -266,6 +269,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var externalLinkOpener: ExternalLinkOpener? = null
+
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+  val addNoteViewModel by lazy { viewModel<AddNoteViewModel>(viewModelFactory) }
 
   @JvmField
   @Inject
@@ -547,15 +554,10 @@ abstract class CoreReaderFragment :
         }
         // Full-screen AddNoteDialog composable
         addNoteDialogConfig.value?.let { config ->
-          val container = zimReaderContainer ?: return@let
-          val dataStore = kiwixDataStore ?: return@let
-          val repoActions = repositoryActions ?: return@let
           AddNoteDialogComposable(
+            addNoteViewModel = addNoteViewModel,
             config = config,
-            zimReaderContainer = container,
-            kiwixDataStore = dataStore,
             alertDialogShower = alertDialogShower as AlertDialogShower,
-            mainRepositoryActions = repoActions,
             onDismiss = { addNoteDialogConfig.value = null }
           )
         }

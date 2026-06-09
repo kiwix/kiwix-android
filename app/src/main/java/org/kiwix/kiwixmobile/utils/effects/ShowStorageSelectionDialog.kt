@@ -43,7 +43,7 @@ class ShowStorageSelectionDialog(
             storageDeviceList = dialogConfig.storageDeviceList,
             storageCalculator = dialogConfig.storageCalculator,
             kiwixDataStore = dialogConfig.kiwixDataStore,
-            shouldShowStorageSelected = false,
+            shouldShowStorageSelected = dialogConfig.shouldShowCheckboxSelected,
             onSelectAction = ::handleStorageSelection
           )
         }
