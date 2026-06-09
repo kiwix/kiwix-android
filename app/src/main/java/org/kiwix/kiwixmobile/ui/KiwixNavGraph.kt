@@ -86,6 +86,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
@@ -147,9 +148,11 @@ fun KiwixNavGraph(
       val activity = LocalActivity.current as KiwixMainActivity
       val onlineLibraryViewModel: OnlineLibraryViewModel =
         viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
+      val categoryViewModel: CategoryViewModel =
+        viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
       OnlineLibraryRoute(
         onlineLibraryViewModel = onlineLibraryViewModel,
-        viewModelFactory = viewModelFactory,
+        categoryViewModel = categoryViewModel,
         alertDialogShower = alertDialogShower,
         navController = navController,
         activity = activity

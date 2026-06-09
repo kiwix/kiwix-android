@@ -35,10 +35,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -57,8 +56,10 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
@@ -74,7 +75,7 @@ const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 @Composable
 fun OnlineLibraryRoute(
   onlineLibraryViewModel: OnlineLibraryViewModel,
-  viewModelFactory: ViewModelProvider.Factory,
+  categoryViewModel: CategoryViewModel,
   alertDialogShower: AlertDialogShower,
   navController: NavHostController,
   activity: KiwixMainActivity
@@ -155,19 +156,8 @@ fun OnlineLibraryRoute(
     }
   )
 
-  if (uiState.showCategoryDialog) {
-    val categoryViewModel: CategoryViewModel = viewModel(factory = viewModelFactory)
-    categoryViewModel.onDismiss = { onlineLibraryViewModel.setShowCategoryDialog(false) }
-    OnlineCategoryDialogScreen(
-      categoryViewModel = categoryViewModel,
-      navigationIcon = {
-        NavigationIcon(
-          iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
-          contentDescription = string.close_drawer,
-          onClick = { onlineLibraryViewModel.setShowCategoryDialog(false) }
-        )
-      }
-    )
+  ShowCategoryDialog(categoryViewModel, uiState.showCategoryDialog) {
+    onlineLibraryViewModel.setShowCategoryDialog(false)
   }
 }
 
@@ -333,5 +323,34 @@ private fun handleBackPress(
     } else {
       FragmentActivityExtensions.Super.ShouldCall
     }
+  }
+}
+
+@Composable
+private fun ShowCategoryDialog(
+  categoryViewModel: CategoryViewModel,
+  showCategoryDialog: Boolean,
+  onDismiss: () -> Unit
+) {
+  if (!showCategoryDialog) return
+  categoryViewModel.apply {
+    setOnDismissCallback(onDismiss)
+    onDialogOpened()
+  }
+  KiwixBasicDialogFrame(
+    onDismissRequest = onDismiss,
+    dialogPadding = TEN_DP,
+    topPaddingForContent = ZERO.dp
+  ) {
+    OnlineCategoryDialogScreen(
+      categoryViewModel = categoryViewModel,
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
+          contentDescription = string.close_drawer,
+          onClick = onDismiss
+        )
+      }
+    )
   }
 }

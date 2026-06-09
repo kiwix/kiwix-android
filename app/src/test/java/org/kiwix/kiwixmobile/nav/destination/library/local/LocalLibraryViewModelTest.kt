@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.material3.SnackbarHostState
-import androidx.fragment.app.FragmentManager
 import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.clearMocks
@@ -71,7 +70,6 @@ class LocalLibraryViewModelTest {
   private val zimReaderFactory: ZimFileReader.Factory = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val validateZimViewModel: ValidateZimViewModel = mockk(relaxed = true)
-  private val fragmentManager: FragmentManager = mockk(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
 
   @RegisterExtension

@@ -108,7 +108,9 @@ class CategoryViewModelTest {
         kiwixService,
         connectivityBroadcastReceiver,
         mainDispatcher.dispatcher
-      )
+      ).apply {
+        setOnDismissCallback { }
+      }
   }
 
   @Nested
@@ -256,16 +258,19 @@ class CategoryViewModelTest {
           createViewModel()
           advanceUntilIdle()
 
-          val categories = listOf(createCategory(active = true))
+          val categories = listOf(createCategory(active = false))
+          val content = State.Content(categories)
 
-          categoryViewModel.state.value = State.Content(categories)
+          categoryViewModel.state.value = content
           categoryViewModel.actions.emit(
             Action.Select(CategoryListItem.CategoryItem(categories.first()))
           )
 
           advanceUntilIdle()
-
-          assertEquals(State.Saving, categoryViewModel.state.value)
+          val expectedContent = content.select(
+            CategoryListItem.CategoryItem(categories.first())
+          )
+          assertEquals(State.Saving(expectedContent), categoryViewModel.state.value)
         }
 
         @Test
@@ -494,6 +499,45 @@ class CategoryViewModelTest {
           categoryViewModel.state.value
         )
       }
+    }
+  }
+
+  @Nested
+  inner class OnDialogOpen() {
+    @Test
+    fun onDialogOpened_whenSavingState_restoresContent() {
+      createViewModel()
+
+      val content = State.Content(
+        listOf(createCategory())
+      )
+
+      categoryViewModel.state.value = State.Saving(content)
+
+      categoryViewModel.onDialogOpened()
+
+      assertEquals(
+        content,
+        categoryViewModel.state.value
+      )
+    }
+
+    @Test
+    fun onDialogOpened_whenNotSavingState_doesNothing() {
+      createViewModel()
+
+      val content = State.Content(
+        listOf(createCategory())
+      )
+
+      categoryViewModel.state.value = content
+
+      categoryViewModel.onDialogOpened()
+
+      assertEquals(
+        content,
+        categoryViewModel.state.value
+      )
     }
   }
 }

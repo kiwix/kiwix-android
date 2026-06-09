@@ -62,8 +62,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Load
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 
 const val CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG = "categoryItemRadioButtonTestingTag"
-const val ONLINE_CATEGORY_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG =
-  "onlineCategoryDialogCloseImageButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -88,7 +86,7 @@ fun OnlineCategoryDialogScreen(
     ) { paddingValues ->
       Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
         when (state) {
-          Loading, Saving -> {
+          Loading, is Saving -> {
             LoadingScreen()
           }
 

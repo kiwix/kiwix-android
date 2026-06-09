@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.ui.theme
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -68,6 +68,7 @@ fun KiwixTheme(
   content: @Composable () -> Unit
 ) {
   val view = LocalView.current
+  val activity = LocalActivity.current
   val colorScheme = when {
     darkTheme -> DarkColorScheme
     else -> LightColorScheme
@@ -77,9 +78,9 @@ fun KiwixTheme(
   if (!view.isInEditMode) {
     val windowBackGroundColor = colorScheme.onPrimary.toArgb()
     SideEffect {
-      val window = (view.context as Activity).window
+      val window = activity?.window ?: return@SideEffect
       val insetsController = WindowCompat.getInsetsController(window, view)
-      window?.decorView?.setBackgroundColor(windowBackGroundColor)
+      window.decorView.setBackgroundColor(windowBackGroundColor)
       insetsController.isAppearanceLightStatusBars = !darkTheme
       insetsController.isAppearanceLightNavigationBars = !darkTheme
     }
