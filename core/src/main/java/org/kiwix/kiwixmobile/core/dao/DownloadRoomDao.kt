@@ -26,7 +26,7 @@ import androidx.room.Update
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.COMPLETED
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
@@ -47,6 +48,10 @@ import javax.inject.Inject
 abstract class DownloadRoomDao {
   @Inject
   lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
 
   @Query("SELECT * FROM DownloadRoomEntity")
   abstract fun getAllDownloads(): Flow<List<DownloadRoomEntity>>
@@ -69,7 +74,7 @@ abstract class DownloadRoomDao {
         // In the OPDS stream, the favicon is a URL instead of a Base64 string.
         // So when a download is completed, we extract the illustration directly from the archive.
         val booksOnDisk = completedDownloads.map { download ->
-          val archive = withContext(Dispatchers.IO) {
+          val archive = withContext(ioDispatcher) {
             Archive(download.file)
           }
           Book().apply { update(archive) }

@@ -24,7 +24,6 @@ import android.os.IBinder
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -32,6 +31,7 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.serverAddress
 import org.kiwix.kiwixmobile.webserver.RESTART_SERVER
@@ -61,7 +61,12 @@ class HotspotService :
   @Inject
   @IoDispatcher
   lateinit var ioDispatcher: CoroutineDispatcher
-  private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+  @Inject
+  @MainDispatcher
+  lateinit var mainDispatcher: CoroutineDispatcher
+
+  private lateinit var serviceScope: CoroutineScope
 
   private var zimHostCallbacks: ZimHostCallbacks? = null
   private val serviceBinder: IBinder = HotspotBinder(this)
@@ -73,6 +78,7 @@ class HotspotService :
       .build()
       .inject(this)
     super.onCreate()
+    serviceScope = CoroutineScope(SupervisorJob() + mainDispatcher)
     hotspotStateReceiver?.let(::registerReceiver)
   }
 

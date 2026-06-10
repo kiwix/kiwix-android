@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.data.remote
 
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -32,7 +32,9 @@ import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
 import javax.inject.Inject
 
-class OnlineLibraryManager @Inject constructor() {
+class OnlineLibraryManager @Inject constructor(
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
   var totalResult = ZERO
   suspend fun parseOPDSStreamAndGetBooks(
     content: String?,
@@ -117,7 +119,7 @@ class OnlineLibraryManager @Inject constructor() {
 
   private suspend fun extractTotalResults(
     xml: String,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher = ioDispatcher
   ): Int = withContext(dispatcher) {
     val factory = XmlPullParserFactory.newInstance()
     val parser = factory.newPullParser()

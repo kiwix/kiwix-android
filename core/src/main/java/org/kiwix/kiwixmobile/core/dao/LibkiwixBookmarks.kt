@@ -57,7 +57,9 @@ import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 
+@Singleton
 class LibkiwixBookmarks @Inject constructor(
   @Named(BOOKMARK_LIBRARY) private val library: Library,
   @Named(BOOKMARK_MANAGER) private val manager: Manager,
@@ -111,7 +113,7 @@ class LibkiwixBookmarks @Inject constructor(
     if (initialized) return
 
     initMutex.withLock {
-      if (initialized) return
+      if (initialized) return@withLock
       withContext(dispatcher) {
         // Check if bookmark folder exist if not then create the folder first.
         if (!File(bookmarksFolderPath()).isFileExist()) File(bookmarksFolderPath()).mkdir()

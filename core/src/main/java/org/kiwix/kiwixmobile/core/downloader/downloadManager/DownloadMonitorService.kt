@@ -43,7 +43,6 @@ import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -57,6 +56,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -74,8 +74,13 @@ const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 @Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
+
   private var updaterJob: Job? = null
-  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+  private lateinit var scope: CoroutineScope
   private val notificationManager: NotificationManager by lazy {
     getSystemService(NOTIFICATION_SERVICE) as NotificationManager
   }
@@ -127,6 +132,7 @@ class DownloadMonitorService : Service() {
       .build()
       .inject(this)
     super.onCreate()
+    scope = CoroutineScope(SupervisorJob() + ioDispatcher)
     fetch.addListener(fetchListener, true)
     setupUpdater()
     startForegroundService()
@@ -317,8 +323,8 @@ class DownloadMonitorService : Service() {
    * 3. Resets their `pauseReason` to `NONE` and updates the status to `QUEUED`
    *    so they can continue downloading normally.
    */
-  private fun startPausedDownloadsDueToAndroidServiceLimitation(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-    CoroutineScope(dispatcher).launch {
+  private fun startPausedDownloadsDueToAndroidServiceLimitation() {
+    CoroutineScope(ioDispatcher).launch {
       downloadRoomDao.getDownloadsPausedByService()
         .forEach {
           fetch.resume(it.downloadId.toInt())

@@ -25,7 +25,6 @@ import com.android.build.gradle.api.ApkVariantOutput
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
-import org.gradle.kotlin.dsl.project
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -120,6 +119,11 @@ class AppConfigurer {
 
       aaptOptions {
         cruncherEnabled = true
+      }
+      sourceSets {
+        getByName("androidTest") {
+          java.srcDirs("${target.rootDir}/core/src/sharedTestFunctions/java")
+        }
       }
     }
     configureDependencies(target)

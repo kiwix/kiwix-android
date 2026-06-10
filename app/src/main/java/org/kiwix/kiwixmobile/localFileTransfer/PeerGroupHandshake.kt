@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.io.InputStream
@@ -42,12 +42,14 @@ import java.net.Socket
  * After obtaining the IP address, the sender also shares metadata regarding the file transfer
  * (no. of files & their names) with the receiver.
  */
-abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
+abstract class PeerGroupHandshake(
+  private var groupInfo: WifiP2pInfo,
+  private val ioDispatcher: CoroutineDispatcher
+) {
   private val handshakeMessage = "Request Kiwix File Sharing"
 
-  @Suppress("InjectDispatcher")
   suspend fun handshake(): InetAddress? =
-    withContext(Dispatchers.IO) {
+    withContext(ioDispatcher) {
       Log.d(TAG, "Handshake in progress")
       when {
         groupInfo.groupFormed && groupInfo.isGroupOwner && isActive ->

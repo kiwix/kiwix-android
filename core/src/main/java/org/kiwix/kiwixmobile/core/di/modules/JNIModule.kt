@@ -21,10 +21,6 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.libkiwix.Library
@@ -51,23 +47,6 @@ class JNIModule {
 
   @Provides
   @Singleton
-  fun providesLibkiwixBookmarks(
-    @Named(BOOKMARK_LIBRARY) library: Library,
-    @Named(BOOKMARK_MANAGER) manager: Manager,
-    kiwixDataStore: KiwixDataStore,
-    libkiwixBookOnDisk: LibkiwixBookOnDisk,
-    zimReaderContainer: ZimReaderContainer
-  ): LibkiwixBookmarks =
-    LibkiwixBookmarks(
-      library,
-      manager,
-      kiwixDataStore,
-      libkiwixBookOnDisk,
-      zimReaderContainer
-    )
-
-  @Provides
-  @Singleton
   @Named(LOCAL_BOOKS_LIBRARY)
   fun provideLocalBooksLibrary(): Library = Library()
 
@@ -77,14 +56,6 @@ class JNIModule {
   fun providesLocalBooksManager(
     @Named(LOCAL_BOOKS_LIBRARY) library: Library
   ): Manager = Manager(library)
-
-  @Provides
-  @Singleton
-  fun providesLibkiwixBooks(
-    @Named(LOCAL_BOOKS_LIBRARY) library: Library,
-    @Named(LOCAL_BOOKS_MANAGER) manager: Manager,
-    kiwixDataStore: KiwixDataStore,
-  ): LibkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore)
 
   /**
    * We are not making this singleton because we need multiple objects of this.

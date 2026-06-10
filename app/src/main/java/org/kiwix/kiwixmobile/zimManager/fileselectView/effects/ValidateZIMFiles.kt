@@ -25,11 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
@@ -43,11 +40,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 data class ValidateZIMFiles(
   private val booksOnDiskListItems: List<BookOnDisk>,
   private val dialogShower: DialogShower,
-  private val validateZimViewModel: ValidateZimViewModel
+  private val validateZimViewModel: ValidateZimViewModel,
+  private val ioDispatcher: CoroutineDispatcher
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    (activity as BaseActivity).cachedComponent.inject(this)
-
     val name = booksOnDiskListItems.joinToString(separator = "\n") { it.book.title }
     dialogShower.show(ValidateZimFilesConfirmation(name), {
       startValidatingZimFiles(booksOnDiskListItems, validateZimViewModel, dialogShower)
@@ -57,10 +53,9 @@ data class ValidateZIMFiles(
   private fun startValidatingZimFiles(
     booksOnDiskListItems: List<BookOnDisk>,
     validateZimViewModel: ValidateZimViewModel,
-    dialogShower: DialogShower,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dialogShower: DialogShower
   ) {
-    CoroutineScope(dispatcher).launch {
+    CoroutineScope(ioDispatcher).launch {
       validateZimViewModel.startValidation(booksOnDiskListItems, false)
     }
     dialogShower.show(

@@ -22,21 +22,24 @@ import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class DeletePageItemsTest {
+  @get:Rule
+  private val dispatcher = MainDispatcherRule()
   private val pageDao: PageDao = mockk(relaxed = true)
   val activity: AppCompatActivity = mockk()
   private val zimReaderSource: ZimReaderSource = mockk()
   private val item1 = historyItem(zimReaderSource = zimReaderSource)
   private val item2 = historyItem(zimReaderSource = zimReaderSource)
-  private val viewModelScope = CoroutineScope(Dispatchers.Main)
+  private val viewModelScope = CoroutineScope(dispatcher.dispatcher)
 
   @Test
   fun `delete with selected items only deletes the selected items`() =

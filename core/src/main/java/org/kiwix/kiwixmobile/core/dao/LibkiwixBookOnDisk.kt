@@ -46,7 +46,9 @@ import org.kiwix.libkiwix.Manager
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 
+@Singleton
 class LibkiwixBookOnDisk @Inject constructor(
   @Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
   @Named(LOCAL_BOOKS_MANAGER) private val manager: Manager,

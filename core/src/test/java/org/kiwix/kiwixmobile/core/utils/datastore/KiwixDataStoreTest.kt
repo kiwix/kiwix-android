@@ -29,11 +29,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
@@ -45,6 +47,9 @@ import java.util.Locale
 class KiwixDataStoreTest {
   private lateinit var context: Context
   private lateinit var kiwixDataStore: KiwixDataStore
+
+  @get:Rule
+  private val ioDispatcher = MainDispatcherRule()
 
   @Before
   fun setUp() = runTest {

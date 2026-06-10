@@ -33,6 +33,7 @@ import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -45,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Illustration
 import org.kiwix.libzim.Archive
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.sharedFunctions.libkiwixBook
 import java.io.File
 
@@ -67,6 +69,9 @@ class StorageObserverTest {
 
   private lateinit var storageObserver: StorageObserver
 
+  @RegisterExtension
+  private val ioDispatcher = MainDispatcherRule()
+
   @BeforeEach fun init() {
     clearAllMocks()
     coEvery { kiwixDataStore.selectedStorage } returns flowOf("a")
@@ -81,7 +86,8 @@ class StorageObserverTest {
       fileSearch,
       readerFactory,
       libkiwixBookmarks,
-      libkiwixBookFactory
+      libkiwixBookFactory,
+      ioDispatcher.dispatcher
     )
   }
 

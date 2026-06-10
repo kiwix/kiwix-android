@@ -32,8 +32,10 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.custom.main.BrandedFileValidator
 import org.kiwix.kiwixmobile.custom.main.ValidationState
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class BrandedFileValidatorTest {
@@ -41,11 +43,14 @@ class BrandedFileValidatorTest {
   private lateinit var brandedFileValidator: BrandedFileValidator
   private lateinit var assetManager: AssetManager
 
+  @RegisterExtension
+  private val ioDispatcher = MainDispatcherRule()
+
   @BeforeEach
   fun setUp() {
     context = mockk(relaxed = true)
     assetManager = mockk(relaxed = true)
-    brandedFileValidator = BrandedFileValidator(context)
+    brandedFileValidator = BrandedFileValidator(context, ioDispatcher.dispatcher)
   }
 
   @Test

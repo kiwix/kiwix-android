@@ -124,11 +124,6 @@ android {
       enableSplit = false
     }
   }
-  sourceSets {
-    getByName("androidTest") {
-      java.srcDirs("$rootDir/core/src/sharedTestFunctions/java")
-    }
-  }
   // By default, Android generates dependency metadata (a file containing information
   // about all the dependencies used in the project) and includes it in both APKs and app bundles.
   // This metadata is particularly useful for the Google Play Store, as it provides actionable

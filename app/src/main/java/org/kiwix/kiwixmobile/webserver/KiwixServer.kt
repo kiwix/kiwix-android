@@ -19,8 +19,9 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.content.Context
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
@@ -43,11 +44,12 @@ class KiwixServer @Inject constructor(
 ) {
   class Factory @Inject constructor(
     private val context: Context,
-    private val zimReaderContainer: ZimReaderContainer
+    private val zimReaderContainer: ZimReaderContainer,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
   ) {
     @Suppress("NestedBlockDepth", "InjectDispatcher")
     suspend fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer =
-      withContext(Dispatchers.IO) {
+      withContext(ioDispatcher) {
         val kiwixLibrary = Library()
         selectedBooksPath.forEach { path ->
           try {
