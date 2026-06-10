@@ -19,20 +19,36 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.main.AddNoteDialogComposable
+import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
+import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 class OpenNote(
-  private val noteListItem: NoteListItem
+  private val noteListItem: NoteListItem,
+  private val alertDialogShower: AlertDialogShower,
+  private val addNoteViewModel: AddNoteViewModel
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity as CoreMainActivity
-    // Find the current CoreReaderFragment and set the addNoteDialog state
-    val readerFragment = activity.supportFragmentManager.fragments
-      .filterIsInstance<CoreReaderFragment>()
-      .firstOrNull()
-    readerFragment?.showAddNoteDialogForNote(noteListItem)
+    val config = AddNoteDialogConfig(noteListItem = noteListItem)
+    alertDialogShower.show(
+      KiwixDialog.AddNoteDialogDialog(
+        ZERO.dp,
+        {
+          AddNoteDialogComposable(
+            addNoteViewModel = addNoteViewModel,
+            config = config,
+            onDismiss = { alertDialogShower.dismiss() }
+          )
+        }
+      )
+    )
   }
 }

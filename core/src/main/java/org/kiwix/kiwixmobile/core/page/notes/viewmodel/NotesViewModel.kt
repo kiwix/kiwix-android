@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
@@ -37,11 +38,13 @@ import javax.inject.Inject
 class NotesViewModel @Inject constructor(
   notesRoomDao: NotesRoomDao,
   zimReaderContainer: ZimReaderContainer,
-  kiwixDataStore: KiwixDataStore
+  kiwixDataStore: KiwixDataStore,
+  addNoteViewModel: AddNoteViewModel
 ) : PageViewModel<NoteListItem, NotesState>(notesRoomDao, kiwixDataStore, zimReaderContainer),
   PageViewModelClickListener {
   init {
     setOnItemClickListener(this)
+    setAddNoteViewModel(addNoteViewModel)
   }
 
   override fun initialState(): NotesState {
@@ -59,7 +62,13 @@ class NotesViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: NotesState
   ): NotesState {
-    effects.tryEmit(UpdateAllNotesPreference(kiwixDataStore, action.isChecked, requireLifeCycleScope()))
+    effects.tryEmit(
+      UpdateAllNotesPreference(
+        kiwixDataStore,
+        action.isChecked,
+        requireLifeCycleScope()
+      )
+    )
     return state.copy(showAll = action.isChecked)
   }
 
@@ -73,5 +82,11 @@ class NotesViewModel @Inject constructor(
     ShowDeleteNotesDialog(effects, state, pageDao, viewModelScope, requireAlertDialogShower())
 
   override fun onItemClick(page: Page) =
-    ShowOpenNoteDialog(effects, page, zimReaderContainer, requireAlertDialogShower())
+    ShowOpenNoteDialog(
+      effects,
+      page,
+      zimReaderContainer,
+      requireAlertDialogShower(),
+      requireAddNoteViewModel()
+    )
 }

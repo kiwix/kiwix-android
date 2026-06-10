@@ -18,62 +18,39 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 class OpenNoteTest {
   @Test
-  fun `invokeWith finds CoreReaderFragment and calls showAddNoteDialogForNote`() {
+  fun `invokeWith shows AddNoteDialogDialog`() {
     val noteListItem: NoteListItem = mockk()
-    val readerFragment: CoreReaderFragment = mockk(relaxed = true)
-    val fragmentManager: FragmentManager = mockk()
+    val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
+    val addNoteViewModel: AddNoteViewModel = mockk(relaxed = true)
     val activity: CoreMainActivity = mockk(relaxed = true)
 
-    every { activity.supportFragmentManager } returns fragmentManager
-    every { fragmentManager.fragments } returns listOf(readerFragment)
-    every { readerFragment.showAddNoteDialogForNote(noteListItem) } just Runs
+    val slot = slot<KiwixDialog>()
 
-    val openNote = OpenNote(noteListItem)
-    openNote.invokeWith(activity)
+    every { alertDialogShower.show(capture(slot)) } returns Unit
 
-    verify { readerFragment.showAddNoteDialogForNote(noteListItem) }
-  }
+    OpenNote(
+      noteListItem,
+      alertDialogShower,
+      addNoteViewModel
+    ).invokeWith(activity)
 
-  @Test
-  fun `invokeWith does nothing when no CoreReaderFragment is present`() {
-    val noteListItem: NoteListItem = mockk()
-    val otherFragment: Fragment = mockk()
-    val fragmentManager: FragmentManager = mockk()
-    val activity: CoreMainActivity = mockk(relaxed = true)
+    verify(exactly = 1) {
+      alertDialogShower.show(any())
+    }
 
-    every { activity.supportFragmentManager } returns fragmentManager
-    every { fragmentManager.fragments } returns listOf(otherFragment)
-
-    val openNote = OpenNote(noteListItem)
-    // Should not throw or crash
-    openNote.invokeWith(activity)
-  }
-
-  @Test
-  fun `invokeWith does nothing when fragment list is empty`() {
-    val noteListItem: NoteListItem = mockk()
-    val fragmentManager: FragmentManager = mockk()
-    val activity: CoreMainActivity = mockk(relaxed = true)
-
-    every { activity.supportFragmentManager } returns fragmentManager
-    every { fragmentManager.fragments } returns emptyList()
-
-    val openNote = OpenNote(noteListItem)
-    // Should not throw or crash
-    openNote.invokeWith(activity)
+    assert(slot.captured is KiwixDialog.AddNoteDialogDialog)
   }
 }

@@ -81,10 +81,12 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -153,7 +155,6 @@ import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialogScreen
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
-import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
@@ -224,7 +225,6 @@ abstract class CoreReaderFragment :
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
   private val navigationHistoryDialogState = mutableStateOf<NavigationHistoryDialogState?>(null)
-  val addNoteDialogConfig = mutableStateOf<AddNoteDialogConfig?>(null)
 
   @JvmField
   @Inject
@@ -272,7 +272,7 @@ abstract class CoreReaderFragment :
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-  val addNoteViewModel by lazy { viewModel<AddNoteViewModel>(viewModelFactory) }
+  private val addNoteViewModel by lazy { viewModel<AddNoteViewModel>(viewModelFactory) }
 
   @JvmField
   @Inject
@@ -551,15 +551,6 @@ abstract class CoreReaderFragment :
               DialogHost(alertDialogShower as AlertDialogShower)
             }
           }
-        }
-        // Full-screen AddNoteDialog composable
-        addNoteDialogConfig.value?.let { config ->
-          AddNoteDialogComposable(
-            addNoteViewModel = addNoteViewModel,
-            config = config,
-            alertDialogShower = alertDialogShower as AlertDialogShower,
-            onDismiss = { addNoteDialogConfig.value = null }
-          )
         }
         DisposableEffect(Unit) {
           onDispose {
@@ -1554,7 +1545,7 @@ abstract class CoreReaderFragment :
 
   private fun sharePdfFile(pdfFile: java.io.File) {
     try {
-      val uri = androidx.core.content.FileProvider.getUriForFile(
+      val uri = FileProvider.getUriForFile(
         requireContext(),
         requireContext().packageName + ".fileprovider",
         pdfFile
@@ -1594,22 +1585,25 @@ abstract class CoreReaderFragment :
    */
   protected abstract fun createNewTab()
 
-  /** Shows the AddNoteDialog as a composable full-screen Dialog */
   private fun showAddNoteDialog() {
-    if (addNoteDialogConfig.value != null) return
     val webView = (activity as? WebViewProvider)?.getCurrentWebView()
-    addNoteDialogConfig.value = AddNoteDialogConfig(
+    val config = AddNoteDialogConfig(
       articleTitle = webView?.title,
       currentWebViewUrl = webView?.url,
       currentWebViewTitle = webView?.title
     )
-  }
 
-  /** Called by OpenNote SideEffect to show AddNoteDialog for a note item */
-  fun showAddNoteDialogForNote(noteListItem: NoteListItem) {
-    if (addNoteDialogConfig.value != null) return
-    addNoteDialogConfig.value = AddNoteDialogConfig(
-      noteListItem = noteListItem
+    alertDialogShower?.show(
+      KiwixDialog.AddNoteDialogDialog(
+        ZERO.dp,
+        {
+          AddNoteDialogComposable(
+            addNoteViewModel = addNoteViewModel,
+            config = config,
+            onDismiss = { (alertDialogShower as AlertDialogShower).dismiss() }
+          )
+        }
+      )
     )
   }
 

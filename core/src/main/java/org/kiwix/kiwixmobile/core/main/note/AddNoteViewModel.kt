@@ -18,93 +18,202 @@
 
 package org.kiwix.kiwixmobile.core.main.note
 
+import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.DismissDialog
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.RequestStoragePermission
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShareNote
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowDiscardConfirmationDialog
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowToast
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowUndoDeleteSnackbar
+import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadata
+import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadataFactory
+import org.kiwix.kiwixmobile.core.main.note.repository.NoteRepository
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.StorageUtils.isExternalStorageWritable
+import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.io.File
+import javax.inject.Inject
 
-class AddNoteViewModel(
-  val kiwixDataStore: KiwixDataStore,
-  val repositoryActions: MainRepositoryActions,
-  val zimReaderContainer: ZimReaderContainer
+class AddNoteViewModel @Inject constructor(
+  private val noteRepository: NoteRepository,
+  val zimReaderContainer: ZimReaderContainer,
+  private val noteMetadataFactory: NoteMetadataFactory,
+  private val kiwixPermissionChecker: KiwixPermissionChecker,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   data class AddNoteUiState(
     val articleTitle: String = "",
-    val noteText: TextFieldValue = TextFieldValue(""),
+    val noteTextFieldValue: TextFieldValue = TextFieldValue(""),
     val noteEdited: Boolean = false,
     val isSaveMenuButtonEnable: Boolean = false,
     val isDeleteMenuButtonEnable: Boolean = false,
     val isShareMenuButtonEnable: Boolean = false
   )
 
+  sealed interface AddNoteEffect {
+    data class ShowToast(
+      @StringRes val messageRes: Int,
+      val duration: Int = Toast.LENGTH_SHORT
+    ) : AddNoteEffect
+
+    data class ShareNote(val noteFile: File) : AddNoteEffect
+
+    data object RequestStoragePermission : AddNoteEffect
+
+    data class ShowUndoDeleteSnackbar(val deletedText: String) : AddNoteEffect
+    data object DismissDialog : AddNoteEffect
+    data object ShowDiscardConfirmationDialog : AddNoteEffect
+  }
+
   private val _uiState = MutableStateFlow(AddNoteUiState())
   val uiState = _uiState.asStateFlow()
 
-  fun onTextChanged(textFieldValue: TextFieldValue) {
-    val currentText = _uiState.value.noteText.text
+  private val _effects = MutableSharedFlow<AddNoteEffect>()
+  val effects = _effects.asSharedFlow()
+  private var noteMetadata: NoteMetadata? = null
 
-    if (currentText != textFieldValue.text) {
-      _uiState.update {
-        it.copy(
-          noteText = textFieldValue,
-          noteEdited = true,
-          isSaveMenuButtonEnable = true,
-          isShareMenuButtonEnable = true
-        )
-      }
-    } else {
-      _uiState.update {
-        it.copy(noteText = textFieldValue)
-      }
+  fun initialize(config: AddNoteDialogConfig) {
+    noteMetadata = noteMetadataFactory.create(config, zimReaderContainer)
+    _uiState.update {
+      it.copy(articleTitle = requireNoteMetadata().articleTitle.orEmpty())
     }
   }
 
-  fun disableAllMenuItems() {
-    _uiState.update {
-      it.copy(
-        isDeleteMenuButtonEnable = false,
-        isShareMenuButtonEnable = false,
-        isSaveMenuButtonEnable = false
+  fun setInitialNoteText() {
+    viewModelScope.launch {
+      val noteFileContent = withContext(ioDispatcher) {
+        noteRepository.loadNote(requireNoteMetadata())
+      }
+      val textFieldValue =
+        TextFieldValue(noteFileContent.text, TextRange(noteFileContent.text.length))
+      _uiState.update { it.copy(noteTextFieldValue = textFieldValue) }
+      updateMenuState(
+        shareEnabled = noteFileContent.fileExists,
+        deleteEnabled = noteFileContent.fileExists,
+        saveEnabled = requireNoteMetadata().isZimFileExist
       )
     }
   }
 
-  fun disableSaveMenuItem() {
-    _uiState.update { it.copy(isSaveMenuButtonEnable = false) }
+  private fun requireNoteMetadata() = requireNotNull(noteMetadata) {
+    "NoteMetadata is not set. Check the AddNoteViewModel.initialize method"
   }
 
-  fun enableDeleteMenuItem() {
-    _uiState.update { it.copy(isDeleteMenuButtonEnable = true) }
-  }
+  fun onTextChanged(textFieldValue: TextFieldValue) {
+    val currentText = _uiState.value.noteTextFieldValue.text
 
-  fun enableSaveMenuItem() {
-    if (isZimFileExist) {
-      _uiState.update { it.copy(isSaveMenuButtonEnable = true) }
-    }
-  }
-
-  fun enableShareMenuItem() {
-    _uiState.update { it.copy(isShareMenuButtonEnable = true) }
-  }
-
-  fun setInitialNoteText(textFieldValue: TextFieldValue, isZimFileExist: Boolean) {
-    _uiState.update { it.copy(noteText = textFieldValue) }
-    enableShareMenuItem()
-    enableDeleteMenuItem()
-    if (!isZimFileExist) {
-      disableSaveMenuItem()
+    if (currentText != textFieldValue.text) {
+      _uiState.update {
+        it.copy(noteTextFieldValue = textFieldValue, noteEdited = true)
+      }
+      updateMenuState(saveEnabled = true, shareEnabled = true)
+    } else {
+      _uiState.update {
+        it.copy(noteTextFieldValue = textFieldValue)
+      }
     }
   }
 
   fun restoreNoteText(restoreNoteTextFieldValue: TextFieldValue) {
-    if (uiState.value.noteText.text != restoreNoteTextFieldValue.text) {
-      _uiState.update { it.copy(noteEdited = true) }
-      enableSaveMenuItem()
-      enableShareMenuItem()
+    if (uiState.value.noteTextFieldValue.text != restoreNoteTextFieldValue.text) {
+      _uiState.update { it.copy(noteEdited = true, noteTextFieldValue = restoreNoteTextFieldValue) }
+      updateMenuState(saveEnabled = true, shareEnabled = true)
+    }
+  }
+
+  fun saveNote() {
+    viewModelScope.launch {
+      if (!isExternalStorageWritable()) {
+        sendEffect(ShowToast(R.string.note_save_error_storage_not_writable))
+        return@launch
+      }
+      if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
+        Log.d("AddNoteDialog", "WRITE_EXTERNAL_STORAGE permission not granted")
+        sendEffect(RequestStoragePermission)
+        return@launch
+      }
+      val noteSaved = withContext(ioDispatcher) {
+        noteRepository.saveNote(requireNoteMetadata(), uiState.value.noteTextFieldValue.text)
+      }
+      if (noteSaved) {
+        _uiState.update { it.copy(noteEdited = false) }
+        updateMenuState(deleteEnabled = true, saveEnabled = false)
+        sendEffect(ShowToast(R.string.note_save_successful))
+      } else {
+        sendEffect(ShowToast(R.string.note_save_unsuccessful))
+      }
+    }
+  }
+
+  fun shareNote() {
+    if (uiState.value.noteEdited && requireNoteMetadata().isZimFileExist) {
+      saveNote()
+    }
+    val noteFile =
+      File("${requireNoteMetadata().zimNotesDirectory}${requireNoteMetadata().articleNoteFileName}.txt")
+    if (noteFile.exists()) {
+      sendEffect(ShareNote(noteFile))
+    } else {
+      sendEffect(ShowToast(R.string.note_share_error_file_missing))
+    }
+  }
+
+  fun deleteNote() {
+    viewModelScope.launch {
+      val editedNoteText = uiState.value.noteTextFieldValue.text
+      val noteDeleted = withContext(ioDispatcher) {
+        noteRepository.deleteNote(requireNoteMetadata())
+      }
+      if (noteDeleted) {
+        _uiState.update { it.copy(noteTextFieldValue = TextFieldValue("")) }
+        updateMenuState(saveEnabled = false, deleteEnabled = false, shareEnabled = false)
+        sendEffect(ShowUndoDeleteSnackbar(editedNoteText))
+      } else {
+        sendEffect(ShowToast(R.string.note_delete_unsuccessful))
+      }
+    }
+  }
+
+  fun sendEffect(effect: AddNoteEffect) {
+    viewModelScope.launch { _effects.emit(effect) }
+  }
+
+  private fun updateMenuState(
+    saveEnabled: Boolean = uiState.value.isSaveMenuButtonEnable,
+    deleteEnabled: Boolean = uiState.value.isDeleteMenuButtonEnable,
+    shareEnabled: Boolean = uiState.value.isShareMenuButtonEnable
+  ) {
+    _uiState.update {
+      it.copy(
+        isShareMenuButtonEnable = shareEnabled,
+        isSaveMenuButtonEnable = saveEnabled,
+        isDeleteMenuButtonEnable = deleteEnabled
+      )
+    }
+  }
+
+  fun closeDialog() {
+    if (uiState.value.noteEdited) {
+      sendEffect(ShowDiscardConfirmationDialog)
+    } else {
+      sendEffect(DismissDialog)
     }
   }
 }

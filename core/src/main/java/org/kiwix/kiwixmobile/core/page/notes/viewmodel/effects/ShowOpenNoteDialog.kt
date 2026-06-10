@@ -22,19 +22,21 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenNote
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ShowNoteDialog
 
 data class ShowOpenNoteDialog(
   private val effects: MutableSharedFlow<SideEffect<*>>,
   private val page: Page,
   private val zimReaderContainer: ZimReaderContainer,
-  private val dialogShower: DialogShower
+  private val dialogShower: AlertDialogShower,
+  private val addNoteViewModel: AddNoteViewModel
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
@@ -43,7 +45,7 @@ data class ShowOpenNoteDialog(
       { effects.tryEmit(OpenPage(page, zimReaderContainer)) },
       {
         val item = page as NoteListItem
-        effects.tryEmit(OpenNote(item))
+        effects.tryEmit(OpenNote(item, dialogShower, addNoteViewModel))
       }
     )
   }

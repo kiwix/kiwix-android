@@ -44,7 +44,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
@@ -60,6 +59,7 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.StorageUtils.isExternalStorageWritable
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
@@ -244,7 +244,7 @@ abstract class CoreSettingsViewModel(
 
   fun clearAllNotes() {
     viewModelScope.launch {
-      if (!instance.isExternalStorageWritable) {
+      if (!isExternalStorageWritable()) {
         sendAction(
           ShowSnackbar(
             context.getString(R.string.notes_deletion_unsuccessful),
