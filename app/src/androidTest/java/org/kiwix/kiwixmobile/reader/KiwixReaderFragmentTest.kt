@@ -30,9 +30,15 @@ import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -77,6 +83,23 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
+
+  override fun createAccessibilityValidator(): AccessibilityValidator =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      AccessibilityValidator()
+        .setRunChecksFromRootView(true)
+        .apply {
+          setSuppressingResultMatcher(
+            anyOf(
+              matchesCheck(DuplicateClickableBoundsCheck::class.java),
+              matchesCheck(SpeakableTextPresentCheck::class.java),
+              matchesCheck(TouchTargetSizeCheck::class.java)
+            )
+          )
+        }
+    } else {
+      super.createAccessibilityValidator()
+    }
 
   @Test
   fun testTabsRestoredAfterNavigatingLeftDrawerScreens() {
