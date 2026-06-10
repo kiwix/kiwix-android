@@ -41,8 +41,8 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.ui.BOOK_ITEM_CHECKBOX_TESTING_TAG
-import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
