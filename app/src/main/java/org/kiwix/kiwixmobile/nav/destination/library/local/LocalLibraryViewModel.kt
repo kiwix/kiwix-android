@@ -326,7 +326,7 @@ class LocalLibraryViewModel @Inject constructor(
       is RequestMultiSelection -> noSideEffectSelectBook(action.bookOnDisk)
       is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
       RequestDeleteMultiSelection ->
-        DeleteFiles(selectionsFromState(), alertDialogShower, deleteFilesUseCase, ioDispatcher)
+        DeleteFiles(selectionsFromState(), alertDialogShower, deleteFilesUseCase, viewModelScope, ioDispatcher)
 
       RequestShareMultiSelection -> ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
       MultiModeFinished -> noSideEffectAndClearSelectionState()

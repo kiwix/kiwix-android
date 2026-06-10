@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
@@ -34,6 +34,7 @@ class DeleteFiles(
   private val booksOnDiskListItems: List<BookOnDisk>,
   private val dialogShower: DialogShower,
   private val deleteFilesUseCase: DeleteFilesUseCase,
+  private val viewModelScope: CoroutineScope,
   private val ioDispatcher: CoroutineDispatcher
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
@@ -51,7 +52,7 @@ class DeleteFiles(
   private fun deleteBooks(
     activity: AppCompatActivity
   ) {
-    activity.lifecycleScope.launch {
+    viewModelScope.launch {
       val deleted =
         withContext(ioDispatcher) {
           deleteFilesUseCase(booksOnDiskListItems)
