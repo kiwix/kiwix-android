@@ -47,7 +47,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -96,12 +95,10 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
-import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import javax.inject.Provider
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@ExtendWith(InstantExecutorExtension::class)
 class OnlineLibraryViewModelTest {
   @RegisterExtension
   val dispatcherRule = MainDispatcherRule()
