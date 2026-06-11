@@ -327,7 +327,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
     }
     val saveHandler = KiwixWebView.SaveHandler(
-      kiwixWebView.zimReaderContainer
+      kiwixWebView.zimReaderContainer,
+      kiwixWebView.mainDispatcher,
+      kiwixWebView.ioDispatcher
     )
 
     // Must run on main thread because Handler uses MainLooper
