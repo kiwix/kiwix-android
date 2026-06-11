@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.main.note
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -41,7 +40,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
@@ -101,9 +99,6 @@ fun AddNoteDialogComposable(
   val writePermissionState =
     rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE) { isGranted ->
       addNoteViewModel.onStoragePermissionResult(isGranted, activity)
-      if (isGranted) {
-        context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
-      }
     }
 
   HandleSideEffects(
@@ -169,9 +164,6 @@ private fun HandleSideEffects(
         }
 
         is AddNoteEffect.RequestStoragePermission -> {
-          if (writePermissionState.status.shouldShowRationale) {
-            addNoteViewModel.sendEffect(AddNoteEffect.ShowToast(R.string.ext_storage_permission_rationale_add_note))
-          }
           writePermissionState.launchPermissionRequest()
         }
 
