@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.main.note
 
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Activity
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.ui.text.TextRange
@@ -40,6 +42,7 @@ import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.Share
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowDiscardConfirmationDialog
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowToast
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowUndoDeleteSnackbar
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ReadPermissionRequiredDialog
 import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadata
 import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadataFactory
 import org.kiwix.kiwixmobile.core.main.note.repository.NoteRepository
@@ -79,6 +82,7 @@ class AddNoteViewModel @Inject constructor(
     data class ShowUndoDeleteSnackbar(val deletedText: String) : AddNoteEffect
     data object DismissDialog : AddNoteEffect
     data object ShowDiscardConfirmationDialog : AddNoteEffect
+    data object ReadPermissionRequiredDialog : AddNoteEffect
   }
 
   private val _uiState = MutableStateFlow(AddNoteUiState())
@@ -214,5 +218,18 @@ class AddNoteViewModel @Inject constructor(
     } else {
       sendEffect(DismissDialog)
     }
+  }
+
+  fun onStoragePermissionResult(isGranted: Boolean, activity: Activity) {
+    if (isGranted) {
+      saveNote()
+      return
+    }
+    val effect = if (kiwixPermissionChecker.shouldShowRationale(activity, WRITE_EXTERNAL_STORAGE)) {
+      ShowToast(R.string.ext_storage_permission_rationale_add_note)
+    } else {
+      ReadPermissionRequiredDialog
+    }
+    sendEffect(effect)
   }
 }

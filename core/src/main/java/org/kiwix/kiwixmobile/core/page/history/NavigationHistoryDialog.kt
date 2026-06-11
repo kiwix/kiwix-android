@@ -38,6 +38,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,36 +47,53 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
+import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 @Suppress("ComposableLambdaParameterNaming")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationHistoryDialogScreen(
+fun NavigationHistoryDialog(
   @StringRes titleId: Int,
   navigationHistoryList: MutableList<NavigationHistoryListItem>,
-  actionMenuItems: List<ActionMenuItem>,
   onNavigationItemClick: ((NavigationHistoryListItem) -> Unit),
-  navigationIcon: @Composable () -> Unit
+  onClearNavigationHistoryClick: () -> Unit,
+  onDialogDismissRequest: () -> Unit
 ) {
-  KiwixDialogTheme {
+  // Use a separate AlertDialogShower because this dialog is already hosted by one.
+  // Reusing the same instance for ClearAllNavigationHistory would dismiss the
+  // NavigationHistory dialog instead of showing the clearNavigationHistory dialog above it.
+  val alertDialogShower = remember { AlertDialogShower() }
+  KiwixBasicDialogFrame(
+    onDismissRequest = onDialogDismissRequest,
+    dialogPadding = TEN_DP,
+    topPaddingForContent = ZERO.dp
+  ) {
     Scaffold(
       topBar = {
         KiwixAppBar(
           title = stringResource(titleId),
-          navigationIcon = navigationIcon,
-          actionMenuItems = actionMenuItems
+          navigationIcon = { NavigationIconItem(onDialogDismissRequest) },
+          actionMenuItems =
+            buildMenuItems(navigationHistoryList, alertDialogShower, onClearNavigationHistoryClick)
         )
       }
     ) { paddingValues ->
@@ -95,12 +113,43 @@ fun NavigationHistoryDialogScreen(
               .semantics { testTag = NO_ITEMS_TEXT_TESTING_TAG }
           )
         } else {
-          NavigationHistoryList(navigationHistoryList, onNavigationItemClick)
+          NavigationHistoryList(navigationHistoryList) {
+            onNavigationItemClick.invoke(it)
+            onDialogDismissRequest
+          }
         }
       }
     }
+    DialogHost(alertDialogShower)
   }
 }
+
+@Composable
+private fun NavigationIconItem(onDialogDismissRequest: () -> Unit) {
+  NavigationIcon(
+    iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+    onClick = onDialogDismissRequest
+  )
+}
+
+private fun buildMenuItems(
+  list: MutableList<NavigationHistoryListItem>,
+  alertDialogShower: AlertDialogShower,
+  onClearNavigationHistoryClick: () -> Unit,
+) = listOf(
+  ActionMenuItem(
+    IconItem.Drawable(R.drawable.ic_delete_white_24dp),
+    R.string.pref_clear_all_history_title,
+    {
+      alertDialogShower.show(
+        KiwixDialog.ClearAllNavigationHistory,
+        { onClearNavigationHistoryClick.invoke() }
+      )
+    },
+    isEnabled = list.isNotEmpty(),
+    testingTag = DELETE_MENU_ICON_TESTING_TAG
+  )
+)
 
 @Composable
 fun NavigationHistoryList(

@@ -45,6 +45,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect
@@ -93,12 +94,13 @@ fun AddNoteDialogComposable(
   val alertDialogShower = remember { AlertDialogShower() }
   val uiState by addNoteViewModel.uiState.collectAsStateWithLifecycle()
   val context = LocalContext.current
-  val activity = LocalActivity.current
+  val activity = LocalActivity.current ?: return
   val snackBarHostState = remember { SnackbarHostState() }
   val scope = rememberCoroutineScope()
 
   val writePermissionState =
     rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE) { isGranted ->
+      addNoteViewModel.onStoragePermissionResult(isGranted, activity)
       if (isGranted) {
         context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
       }
@@ -111,7 +113,7 @@ fun AddNoteDialogComposable(
     snackBarHostState = snackBarHostState,
     writePermissionState = writePermissionState,
     onDismissDialog = {
-      activity?.currentFocus?.closeKeyboard()
+      activity.currentFocus?.closeKeyboard()
       onDismiss()
     },
     alertDialogShower = alertDialogShower
@@ -169,9 +171,8 @@ private fun HandleSideEffects(
         is AddNoteEffect.RequestStoragePermission -> {
           if (writePermissionState.status.shouldShowRationale) {
             addNoteViewModel.sendEffect(AddNoteEffect.ShowToast(R.string.ext_storage_permission_rationale_add_note))
-          } else {
-            writePermissionState.launchPermissionRequest()
           }
+          writePermissionState.launchPermissionRequest()
         }
 
         is AddNoteEffect.ShareNote -> {
@@ -189,6 +190,13 @@ private fun HandleSideEffects(
               alertDialogShower.dismiss()
               onDismissDialog.invoke()
             }
+          )
+        }
+
+        is AddNoteEffect.ReadPermissionRequiredDialog -> {
+          alertDialogShower.show(
+            KiwixDialog.ReadPermissionRequired,
+            { context.navigateToAppSettings() }
           )
         }
 

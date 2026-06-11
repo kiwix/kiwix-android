@@ -51,22 +51,18 @@ import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -82,8 +78,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -117,10 +111,10 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
@@ -130,8 +124,6 @@ import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.extensions.viewModel
-import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
-import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
@@ -147,12 +139,13 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
-import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
-import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialogScreen
+import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
@@ -166,7 +159,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
@@ -224,7 +216,6 @@ abstract class CoreReaderFragment :
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
-  private val navigationHistoryDialogState = mutableStateOf<NavigationHistoryDialogState?>(null)
 
   @JvmField
   @Inject
@@ -505,53 +496,6 @@ abstract class CoreReaderFragment :
         )
         DialogHost(alertDialogShower as AlertDialogShower)
         // Full-screen NavigationHistoryDialog composable
-        navigationHistoryDialogState.value?.let { state ->
-          Dialog(
-            onDismissRequest = { navigationHistoryDialogState.value = null },
-            properties = DialogProperties(
-              usePlatformDefaultWidth = false,
-              decorFitsSystemWindows = false
-            )
-          ) {
-            Surface(
-              modifier = Modifier.fillMaxSize(),
-              color = MaterialTheme.colorScheme.surface
-            ) {
-              NavigationHistoryDialogScreen(
-                state.titleId,
-                state.historyList,
-                listOf(
-                  ActionMenuItem(
-                    IconItem.Drawable(R.drawable.ic_delete_white_24dp),
-                    R.string.pref_clear_all_history_title,
-                    {
-                      (alertDialogShower as AlertDialogShower).show(
-                        KiwixDialog.ClearAllNavigationHistory,
-                        {
-                          navigationHistoryDialogState.value = null
-                          clearHistory()
-                        }
-                      )
-                    },
-                    isEnabled = state.historyList.isNotEmpty(),
-                    testingTag = DELETE_MENU_ICON_TESTING_TAG
-                  )
-                ),
-                { item ->
-                  navigationHistoryDialogState.value = null
-                  onItemClicked(item)
-                },
-                {
-                  NavigationIcon(
-                    iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
-                    onClick = { navigationHistoryDialogState.value = null }
-                  )
-                }
-              )
-              DialogHost(alertDialogShower as AlertDialogShower)
-            }
-          }
-        }
         DisposableEffect(Unit) {
           onDispose {
             // Dispose UI resources when this Compose view is removed. Compose disposes
@@ -872,25 +816,26 @@ abstract class CoreReaderFragment :
     }
   }
 
-  /** Shows the NavigationHistoryDialog as a composable full-screen Dialog */
   private fun showNavigationHistoryDialog(isForwardHistory: Boolean) {
-    navigationHistoryDialogState.value = NavigationHistoryDialogState(
-      titleId = if (isForwardHistory) {
-        string.forward_history
-      } else {
-        string.backward_history
-      },
-      historyList = navigationHistoryList.toMutableList()
+    alertDialogShower?.show(
+      KiwixDialog.NavigationHistoryDialog(
+        ZERO.dp,
+        {
+          NavigationHistoryDialog(
+            titleId = if (isForwardHistory) {
+              string.forward_history
+            } else {
+              string.backward_history
+            },
+            navigationHistoryList,
+            { onItemClicked(it) },
+            onClearNavigationHistoryClick = { clearHistory() },
+            onDialogDismissRequest = { (alertDialogShower as? AlertDialogShower)?.dismiss() },
+          )
+        }
+      )
     )
   }
-
-  /**
-   * State for showing the NavigationHistoryDialog composable.
-   */
-  private data class NavigationHistoryDialogState(
-    @StringRes val titleId: Int,
-    val historyList: MutableList<NavigationHistoryListItem>
-  )
 
   override fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
     loadUrlWithCurrentWebview(navigationHistoryListItem.pageUrl)

@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.main.note
 
+import android.Manifest
+import android.app.Activity
 import androidx.compose.ui.text.input.TextFieldValue
 import app.cash.turbine.test
 import io.mockk.coEvery
@@ -54,6 +56,7 @@ import kotlin.io.path.createTempDirectory
 class AddNoteViewModelTest {
   @get:Rule
   val dispatcherRule = MainDispatcherRule()
+  private lateinit var activity: Activity
   private lateinit var noteRepository: NoteRepository
   private lateinit var zimReaderContainer: ZimReaderContainer
   private lateinit var noteMetadataFactory: NoteMetadataFactory
@@ -65,6 +68,7 @@ class AddNoteViewModelTest {
   @Before
   fun setUp() {
     mockkObject(StorageUtils)
+    activity = mockk()
     noteRepository = mockk()
     zimReaderContainer = mockk(relaxed = true)
     noteMetadataFactory = mockk()
@@ -393,6 +397,64 @@ class AddNoteViewModelTest {
 
     coVerify {
       noteRepository.saveNote(noteMetadata, "Edited")
+    }
+  }
+
+  @Test
+  fun `onStoragePermissionResult emits rationale toast when permission denied and rationale should be shown`() =
+    runTest {
+      every {
+        kiwixPermissionChecker.shouldShowRationale(
+          activity,
+          android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+      } returns true
+
+      viewModel.effects.test {
+        viewModel.onStoragePermissionResult(isGranted = false, activity = activity)
+
+        assertEquals(
+          AddNoteViewModel.AddNoteEffect.ShowToast(R.string.ext_storage_permission_rationale_add_note),
+          awaitItem()
+        )
+      }
+    }
+
+  @Test
+  fun `onStoragePermissionResult emits read permission dialog when permission denied permanently`() =
+    runTest {
+      every {
+        kiwixPermissionChecker.shouldShowRationale(
+          activity,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+      } returns false
+
+      viewModel.effects.test {
+        viewModel.onStoragePermissionResult(isGranted = false, activity = activity)
+
+        assertEquals(
+          AddNoteViewModel.AddNoteEffect.ReadPermissionRequiredDialog,
+          awaitItem()
+        )
+      }
+    }
+
+  @Test
+  fun `onStoragePermissionResult saves note when permission granted`() = runTest {
+    initializeViewModel()
+
+    viewModel.onTextChanged(TextFieldValue("My Note"))
+
+    every { isExternalStorageWritable() } returns true
+    coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
+    coEvery { noteRepository.saveNote(noteMetadata, "My Note") } returns true
+
+    viewModel.onStoragePermissionResult(isGranted = true, activity = activity)
+    advanceUntilIdle()
+
+    coVerify(exactly = 1) {
+      noteRepository.saveNote(noteMetadata, "My Note")
     }
   }
 }
