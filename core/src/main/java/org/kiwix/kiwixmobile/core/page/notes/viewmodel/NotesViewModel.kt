@@ -63,11 +63,7 @@ class NotesViewModel @Inject constructor(
     state: NotesState
   ): NotesState {
     effects.tryEmit(
-      UpdateAllNotesPreference(
-        kiwixDataStore,
-        action.isChecked,
-        requireLifeCycleScope()
-      )
+      UpdateAllNotesPreference(kiwixDataStore, action.isChecked, requireLifeCycleScope())
     )
     return state.copy(showAll = action.isChecked)
   }

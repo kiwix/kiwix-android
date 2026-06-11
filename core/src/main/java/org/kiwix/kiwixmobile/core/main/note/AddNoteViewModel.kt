@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.DismissDialog
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.RequestStoragePermission
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShareNote

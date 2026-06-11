@@ -178,7 +178,7 @@ class SearchRobot {
     })
   }
 
-  fun openNoteFragment(
+  fun openNoteScreen(
     coreMainActivity: CoreMainActivity,
     composeTestRule: ComposeContentTestRule
   ) {

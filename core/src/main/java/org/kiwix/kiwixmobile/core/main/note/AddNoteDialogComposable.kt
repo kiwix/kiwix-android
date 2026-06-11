@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.core.main.note
 
 import android.Manifest
 import android.content.Context
@@ -47,7 +47,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.DismissDialog
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
@@ -82,7 +81,6 @@ data class AddNoteDialogConfig(
 )
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Suppress("LongMethod")
 @Composable
 fun AddNoteDialogComposable(
   addNoteViewModel: AddNoteViewModel,

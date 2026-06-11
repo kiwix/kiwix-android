@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2025 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.core.main.note
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -57,6 +57,7 @@ const val ADD_NOTE_TEXT_FILED_TESTING_TAG = "addNoteTextFiledTestingTag"
 const val SAVE_MENU_BUTTON_TESTING_TAG = "saveMenuButtonTestingTag"
 const val SHARE_MENU_BUTTON_TESTING_TAG = "shareMenuButtonTestingTag"
 const val DELETE_MENU_BUTTON_TESTING_TAG = "deleteMenuButtonTestingTag"
+const val NOTE_TEXT_PLACEHOLDER_TESTING_TAG = "noteTextPlaceholderTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -126,7 +127,12 @@ private fun NoteTextField(
       .padding(bottom = TEN_DP)
       .padding(horizontal = FOUR_DP)
       .testTag(ADD_NOTE_TEXT_FILED_TESTING_TAG),
-    placeholder = { Text(text = stringResource(R.string.note)) },
+    placeholder = {
+      Text(
+        text = stringResource(R.string.note),
+        modifier = Modifier.testTag(NOTE_TEXT_PLACEHOLDER_TESTING_TAG)
+      )
+    },
     singleLine = false,
     shape = RectangleShape,
     keyboardOptions = KeyboardOptions(

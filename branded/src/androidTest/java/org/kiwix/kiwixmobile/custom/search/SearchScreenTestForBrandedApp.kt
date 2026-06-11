@@ -152,7 +152,7 @@ class SearchScreenTestForBrandedApp {
       }
     })
     UiThreadStatement.runOnUiThread {
-      brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
+      brandedMainActivity.navigate(brandedMainActivity.readerScreenRoute)
     }
     openZimFileInReader(zimFile = downloadingZimFile)
     openSearchWithQuery()
@@ -234,7 +234,7 @@ class SearchScreenTestForBrandedApp {
         }
       })
       UiThreadStatement.runOnUiThread {
-        brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
+        brandedMainActivity.navigate(brandedMainActivity.readerScreenRoute)
       }
       openZimFileInReader(zimFile = downloadingZimFile)
       openSearchWithQuery(searchTerms[0])
@@ -292,7 +292,7 @@ class SearchScreenTestForBrandedApp {
         }
     })
     UiThreadStatement.runOnUiThread {
-      brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
+      brandedMainActivity.navigate(brandedMainActivity.readerScreenRoute)
     }
     openZimFileInReader(zimFile = downloadingZimFile)
     search {
@@ -304,7 +304,7 @@ class SearchScreenTestForBrandedApp {
       assertAFoolForYouArticleLoaded(composeTestRule)
       composeTestRule.waitUntilTimeout()
       // open note screen.
-      openNoteFragment(brandedMainActivity as CoreMainActivity, composeTestRule)
+      openNoteScreen(brandedMainActivity as CoreMainActivity, composeTestRule)
       composeTestRule.waitUntilTimeout()
       composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
       // after came back check the previously loaded article is still showing or not.

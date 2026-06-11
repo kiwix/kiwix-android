@@ -38,7 +38,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadata
 import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadataFactory
 import org.kiwix.kiwixmobile.core.main.note.repository.NoteRepository

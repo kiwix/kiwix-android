@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.main.note.helper
 
 import android.content.Context
-import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.StorageUtils.getNotesDirectory
 import javax.inject.Inject

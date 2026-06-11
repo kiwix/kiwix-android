@@ -37,12 +37,12 @@ import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.main.ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.note.ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.note.ADD_NOTE_TEXT_FILED_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.note.DELETE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.note.SAVE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAKE_NOTE_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
@@ -133,7 +133,7 @@ class NoteRobot : BaseRobot() {
     })
   }
 
-  fun openNoteFragment(
+  fun openNoteScreen(
     coreMainActivity: CoreMainActivity,
     composeTestRule: ComposeContentTestRule
   ) {

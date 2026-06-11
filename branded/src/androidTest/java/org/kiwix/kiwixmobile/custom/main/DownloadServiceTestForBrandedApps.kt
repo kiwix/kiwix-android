@@ -145,7 +145,7 @@ class DownloadServiceTestForBrandedApps {
           }
       })
       UiThreadStatement.runOnUiThread {
-        brandedMainActivity.navigate(brandedMainActivity.readerFragmentRoute)
+        brandedMainActivity.navigate(brandedMainActivity.readerScreenRoute)
       }
       openZimFileInReader(zimFile = downloadingZimFile)
       // press the home button so that application goes into background

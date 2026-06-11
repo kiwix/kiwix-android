@@ -130,8 +130,8 @@ import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.extensions.viewModel
-import org.kiwix.kiwixmobile.core.main.AddNoteDialogComposable
-import org.kiwix.kiwixmobile.core.main.AddNoteDialogConfig
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
@@ -1609,7 +1609,7 @@ abstract class CoreReaderFragment :
 
   private fun goToBookmarks(): Boolean {
     val parentActivity = requireActivity() as CoreMainActivity
-    parentActivity.navigate(parentActivity.bookmarksFragmentRoute)
+    parentActivity.navigate(parentActivity.bookmarksScreenRoute)
     return true
   }
 

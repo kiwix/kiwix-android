@@ -43,7 +43,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
-class NoteFragmentTest : BaseActivityTest() {
+class NoteScreenTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -61,7 +61,7 @@ class NoteFragmentTest : BaseActivityTest() {
   }
 
   @Test
-  fun verifyNoteFragment() {
+  fun verifyNoteScreen() {
     activityScenario.onActivity {
       it.navigate(KiwixDestination.Notes.route)
     }
@@ -83,7 +83,7 @@ class NoteFragmentTest : BaseActivityTest() {
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
       pressBack()
-      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      openNoteScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
@@ -103,7 +103,7 @@ class NoteFragmentTest : BaseActivityTest() {
     }
 
     note {
-      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      openNoteScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
@@ -126,7 +126,7 @@ class NoteFragmentTest : BaseActivityTest() {
       writeDemoNote(composeTestRule)
       saveNote(composeTestRule)
       closeAddNoteDialog(composeTestRule)
-      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      openNoteScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenNote(composeTestRule)
@@ -145,7 +145,7 @@ class NoteFragmentTest : BaseActivityTest() {
         writeDemoNote(composeTestRule)
         saveNote(composeTestRule)
         closeAddNoteDialog(composeTestRule)
-        openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+        openNoteScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
         assertToolbarExist(composeTestRule)
         clickOnSavedNote(composeTestRule)
         clickOnOpenNote(composeTestRule)
@@ -193,7 +193,7 @@ class NoteFragmentTest : BaseActivityTest() {
       saveNote(composeTestRule)
       closeAddNoteDialog(composeTestRule)
       clickOnBackwardButton(composeTestRule)
-      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      openNoteScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       clickOnSavedNote(composeTestRule)
       clickOnOpenArticle(composeTestRule)
       assertAndroidArticleLoadedInReader(composeTestRule)
@@ -203,7 +203,7 @@ class NoteFragmentTest : BaseActivityTest() {
   private fun deletePreviouslySavedNotes() {
     // delete the notes if any saved to properly run the test scenario
     note {
-      openNoteFragment(kiwixMainActivity as CoreMainActivity, composeTestRule)
+      openNoteScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
       assertToolbarExist(composeTestRule)
       clickOnTrashIcon(composeTestRule)
       assertDeleteNoteDialogDisplayed(composeTestRule)
