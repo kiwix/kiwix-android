@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.localLibrary
 
-import android.webkit.WebView
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
@@ -27,16 +26,13 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed as isViewDisplayed
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
@@ -44,10 +40,9 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Until
 
 fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
@@ -91,18 +86,6 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
-  fun selectInternalStorageIfDialogShown(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitUntilTimeout()
-      // If the storage selection dialog is shown, select internal storage.
-      // If it's not shown (auto-selected storage), just proceed.
-      val storageDialog = onAllNodesWithTag(STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG)
-      if (storageDialog.fetchSemanticsNodes().isNotEmpty()) {
-        clickOnInternalStorage(composeTestRule)
-      }
-    }
-  }
-
   fun clickOnInternalStorage(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
@@ -144,27 +127,23 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   }
 
   fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
-    uiDevice.wait(Until.hasObject(By.clazz("android.webkit.WebView")), 20000L)
+    // Wait for copying the ZIM file and opening in the reader.
+    composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+      composeTestRule
+        .onAllNodesWithTag(READER_SCREEN_TESTING_TAG)
+        .fetchSemanticsNodes()
+        .isNotEmpty()
+    }
     testFlakyView({
+      composeTestRule.waitUntilTimeout()
       composeTestRule.mainClock.advanceTimeByFrame()
-      onView(isAssignableFrom(WebView::class.java)).check(matches(isViewDisplayed()))
-      var elementFound = false
-      for (i in 1..10) {
-        try {
-          Web.onWebView()
-            .withElement(
-              DriverAtoms.findElement(
-                Locator.XPATH,
-                "//*[contains(text(), 'Android_(operating_system)')]"
-              )
-            )
-          elementFound = true
-          break
-        } catch (e: Throwable) {
-          if (i == 10) throw e
-          Thread.sleep(1000)
-        }
-      }
+      Web.onWebView()
+        .withElement(
+          DriverAtoms.findElement(
+            Locator.XPATH,
+            "//*[contains(text(), 'Android_(operating_system)')]"
+          )
+        )
     })
   }
 

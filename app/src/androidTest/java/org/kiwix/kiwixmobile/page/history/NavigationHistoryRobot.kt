@@ -18,8 +18,9 @@
 package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
-import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
@@ -45,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -52,10 +54,6 @@ fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
   NavigationHistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class NavigationHistoryRobot : BaseRobot() {
-  private var retryCountForClearNavigationHistory = 5
-  private var retryCountForBackwardNavigationHistory = 5
-  private var retryCountForForwardNavigationHistory = 5
-
   fun checkZimFileLoadedSuccessful(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitUntilTimeout()
@@ -124,23 +122,19 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    try {
-      composeTestRule.apply {
-        waitForIdle()
-        onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
-          .filter(hasText(context.getString(R.string.backward_history), ignoreCase = true))
-          .onFirst()
-          .assertExists()
-      }
-    } catch (e: AssertionError) {
-      pauseForBetterTestPerformance(composeTestRule)
-      if (retryCountForBackwardNavigationHistory > 0) {
-        retryCountForBackwardNavigationHistory--
-        assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
-      } else {
-        throw e
-      }
+    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+      composeTestRule
+        .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .filter(hasText(context.getString(R.string.backward_history), ignoreCase = true))
+        .fetchSemanticsNodes()
+        .isNotEmpty()
     }
+
+    composeTestRule
+      .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+      .filter(hasText(context.getString(R.string.backward_history), ignoreCase = true))
+      .onFirst()
+      .assertIsDisplayed()
   }
 
   fun clickOnBackwardButton(composeTestRule: ComposeContentTestRule) {
@@ -152,23 +146,19 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertForwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    try {
-      composeTestRule.apply {
-        waitForIdle()
-        onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
-          .filter(hasText(context.getString(R.string.forward_history), ignoreCase = true))
-          .onFirst()
-          .assertExists()
-      }
-    } catch (e: AssertionError) {
-      pauseForBetterTestPerformance(composeTestRule)
-      if (retryCountForForwardNavigationHistory > 0) {
-        retryCountForForwardNavigationHistory--
-        assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
-      } else {
-        throw e
-      }
+    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+      composeTestRule
+        .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .filter(hasText(context.getString(R.string.forward_history), ignoreCase = true))
+        .fetchSemanticsNodes()
+        .isNotEmpty()
     }
+
+    composeTestRule
+      .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+      .filter(hasText(context.getString(R.string.forward_history), ignoreCase = true))
+      .onFirst()
+      .assertIsDisplayed()
   }
 
   fun clickOnDeleteHistory(composeTestRule: ComposeContentTestRule) {
@@ -182,21 +172,19 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertDeleteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    try {
-      composeTestRule.apply {
-        waitForIdle()
-        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-          .assert(androidx.compose.ui.test.hasText(context.getString(R.string.clear_all_history_dialog_title), ignoreCase = true))
-      }
-    } catch (e: AssertionError) {
-      pauseForBetterTestPerformance(composeTestRule)
-      if (retryCountForClearNavigationHistory > 0) {
-        retryCountForClearNavigationHistory--
-        assertDeleteDialogDisplayed(composeTestRule)
-      } else {
-        throw e
-      }
+    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+      composeTestRule
+        .onAllNodesWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .fetchSemanticsNodes()
+        .isNotEmpty()
     }
+
+    composeTestRule
+      .onNode(
+        hasTestTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG) and
+          hasText(context.getString(R.string.clear_all_history_dialog_title), ignoreCase = true)
+      )
+      .assertIsDisplayed()
   }
 
   private fun pauseForBetterTestPerformance(composeTestRule: ComposeContentTestRule) {

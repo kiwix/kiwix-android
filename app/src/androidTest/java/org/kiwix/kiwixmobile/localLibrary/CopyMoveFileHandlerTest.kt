@@ -61,7 +61,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   private val dispatcher = MainDispatcherRule()
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
-  private lateinit var destinationFile: File
   private lateinit var parentFile: File
 
   @Before
@@ -99,7 +98,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
         clickOnCopy(composeTestRule)
-        selectInternalStorageIfDialogShown(composeTestRule)
+        assertStorageSelectionDialogDisplayed(composeTestRule)
+        clickOnInternalStorage(composeTestRule)
         assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
@@ -165,7 +165,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
         clickOnMove(composeTestRule)
-        selectInternalStorageIfDialogShown(composeTestRule)
+        assertStorageSelectionDialogDisplayed(composeTestRule)
+        clickOnInternalStorage(composeTestRule)
         assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()

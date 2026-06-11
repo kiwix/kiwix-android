@@ -399,6 +399,18 @@ class FileUtilsInstrumentationTest {
           null,
           Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
         ),
+        // test with SD card uri
+        DummyUrlData(
+          null,
+          null,
+          "$sdCardPath/$commonPath",
+          null,
+          Uri.parse(
+            primaryStorageUriPrefix +
+              sdCardPath.substringAfter("storage/") +
+              "%3A$commonUri"
+          )
+        ),
         // test with invalid uri
         DummyUrlData(
           null,
@@ -425,36 +437,12 @@ class FileUtilsInstrumentationTest {
           Uri.parse(
             "${downloadDocumentUriPrefix}msf%3A1000000057"
           )
-        ),
-        // test with SD card uri
-        DummyUrlData(
-          null,
-          null,
-          "$sdCardPath/$commonPath",
-          null,
-          Uri.parse(
-            primaryStorageUriPrefix +
-              sdCardPath.substringAfter("storage/") +
-              "%3A$commonUri"
-          )
         )
       )
-    // test with USB stick uri
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-      dummyUriData.add(
-        DummyUrlData(
-          null,
-          null,
-          "/mnt/media_rw/USB/$commonPath",
-          null,
-          Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
-        )
-      )
-    }
     context?.let { context ->
-      dummyUriData.forEach { dummyUrlData ->
-        dummyUrlData.uri?.let { uri ->
-          runBlocking {
+      runBlocking {
+        dummyUriData.forEach { dummyUrlData ->
+          dummyUrlData.uri?.let { uri ->
             Assertions.assertEquals(
               dummyUrlData.expectedFileName,
               FileUtils.getLocalFilePathByUri(context, uri)

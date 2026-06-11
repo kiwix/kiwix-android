@@ -144,7 +144,6 @@ import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
@@ -212,7 +211,6 @@ abstract class CoreReaderFragment :
   FragmentActivityExtensions,
   WebViewProvider,
   ReadAloudCallbacks,
-  NavigationHistoryClickListener,
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
@@ -495,7 +493,6 @@ abstract class CoreReaderFragment :
           navHostController = (requireActivity() as CoreMainActivity).navController
         )
         DialogHost(alertDialogShower as AlertDialogShower)
-        // Full-screen NavigationHistoryDialog composable
         DisposableEffect(Unit) {
           onDispose {
             // Dispose UI resources when this Compose view is removed. Compose disposes
@@ -837,12 +834,12 @@ abstract class CoreReaderFragment :
     )
   }
 
-  override fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
+  private fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
     loadUrlWithCurrentWebview(navigationHistoryListItem.pageUrl)
   }
 
   @Suppress("InjectDispatcher")
-  override fun clearHistory() {
+  private fun clearHistory() {
     getCurrentWebView()?.clearHistory()
     CoroutineScope(Dispatchers.IO).launch {
       repositoryActions?.clearWebViewPageHistory()
