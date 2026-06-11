@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 
@@ -26,7 +25,7 @@ private fun ZimReaderContainer.redirectOrOriginal(contentUrl: String): String =
   if (isRedirect(contentUrl)) getRedirect(contentUrl) else contentUrl
 
 private fun contentUrl(articleUrl: String): String =
-  "${ZimFileReader.CONTENT_PREFIX}$articleUrl".toUri().toString()
+  "${ZimFileReader.CONTENT_PREFIX}$articleUrl"
 
 fun ZimReaderContainer.urlSuffixToParsableUrl(suffixUrl: String): String =
   redirectOrOriginal(contentUrl(suffixUrl))
