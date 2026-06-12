@@ -18,14 +18,14 @@
 
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
-import jakarta.inject.Inject
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 
-class DeleteFilesUseCase @Inject constructor(
+data class DeleteFilesUseCase @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val zimReaderContainer: ZimReaderContainer
 ) {
@@ -42,17 +42,16 @@ class DeleteFilesUseCase @Inject constructor(
     }
   }
 
+  @Suppress("ReturnCount")
   private suspend fun deleteBook(
     book: BooksOnDiskListItem.BookOnDisk
   ): Boolean {
-    val file = book.zimReaderSource.file
+    val file = book.zimReaderSource.file ?: return false
 
-    file?.let {
-      FileUtils.deleteZimFile(it.path)
+    FileUtils.deleteZimFile(file.path)
 
-      if (it.isFileExist()) {
-        return@deleteBook false
-      }
+    if (file.isFileExist()) {
+      return false
     }
 
     libkiwixBookOnDisk.delete(book.book.id)
