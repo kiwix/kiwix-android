@@ -34,7 +34,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -58,6 +57,7 @@ import org.kiwix.kiwixmobile.custom.testutils.TestUtils.getOkkHttpClientForTesti
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
@@ -71,7 +71,11 @@ class DownloadServiceTestForBrandedApps {
       Manifest.permission.READ_EXTERNAL_STORAGE,
       Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
-  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+  @get:Rule
+  val mainDispatcherRule = MainDispatcherRule()
+
+  private val lifeCycleScope = CoroutineScope(mainDispatcherRule.dispatcher + SupervisorJob())
 
   @get:Rule
   var permissionRules: GrantPermissionRule =

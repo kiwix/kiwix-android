@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.main
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -52,8 +50,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -69,6 +67,7 @@ import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
@@ -104,6 +103,10 @@ class KiwixMainActivity : CoreMainActivity() {
   override val searchFragmentRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
+  @Inject
+  @MainDispatcher
+  lateinit var mainDispatcher: CoroutineDispatcher
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
@@ -197,14 +200,13 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  @Suppress("InjectDispatcher")
   private fun runMigrations() {
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
       migratedToPerAppLanguage()
     }
     // run the migration on background thread to avoid any UI related issues.
-    CoroutineScope(Dispatchers.IO).launch {
+    CoroutineScope(ioDispatcher).launch {
       (applicationContext as KiwixApp).kiwixComponent
         .provideObjectBoxDataMigrationHandler()
         .migrate()
@@ -322,10 +324,11 @@ class KiwixMainActivity : CoreMainActivity() {
       when (it.scheme) {
         "file",
         "content" -> {
-          Handler(Looper.getMainLooper()).postDelayed({
+          lifecycleScope.launch(mainDispatcher) {
+            delay(OPENING_ZIM_FILE_DELAY)
             openLocalLibraryWithZimFilePath("$it")
             clearIntentDataAndAction()
-          }, OPENING_ZIM_FILE_DELAY)
+          }
         }
 
         "zim" -> {

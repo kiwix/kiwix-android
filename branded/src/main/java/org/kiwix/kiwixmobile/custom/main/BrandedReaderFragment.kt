@@ -27,7 +27,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -239,7 +238,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            coreReaderLifeCycleScope?.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
+            coreReaderLifeCycleScope?.runSafelyInLifecycleScope {
               openZimFile(
                 ZimReaderSource(
                   file = it.file,
@@ -258,7 +257,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
 
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            coreReaderLifeCycleScope?.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
+            coreReaderLifeCycleScope?.runSafelyInLifecycleScope {
               openZimFile(ZimReaderSource(it.obbFile), true)
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.

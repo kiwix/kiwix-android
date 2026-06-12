@@ -19,8 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -28,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.cachedComponent
@@ -163,11 +162,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun openHomeScreen() {
     runSafelyInCoreReaderLifecycleScope {
       // Run safely because it is runs after 300 MS.
-      Handler(Looper.getMainLooper()).postDelayed({
-        if (webViewList.isEmpty()) {
-          hideTabSwitcher(false)
-        }
-      }, OPEN_HOME_SCREEN_DELAY)
+      delay(OPEN_HOME_SCREEN_DELAY)
+      if (webViewList.isEmpty()) {
+        hideTabSwitcher(false)
+      }
     }
   }
 
