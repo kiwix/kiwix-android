@@ -38,7 +38,7 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun titleToUrl_whenAlreadyArticleUrl_returnsOriginalValue() {
+  fun titleToUrl_whenTitleStartsWithArticlePrefix_returnsSameTitle() {
     val result = container.titleToUrl("A/Kiwix")
 
     assertEquals(
@@ -78,6 +78,21 @@ class ZimReaderContainerUtilsTest {
     val result = container.titleToUrl("Unknown")
 
     assertNull(result)
+  }
+
+  @Test
+  fun titleToUrl_whenTitleIsEmpty_delegatesToPageUrlLookup() {
+    every {
+      container.getPageUrlFromTitle("")
+    } returns null
+
+    val result = container.titleToUrl("")
+
+    assertNull(result)
+
+    verify(exactly = 1) {
+      container.getPageUrlFromTitle("")
+    }
   }
 
   @Test
