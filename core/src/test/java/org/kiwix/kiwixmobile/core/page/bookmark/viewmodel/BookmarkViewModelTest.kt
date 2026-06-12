@@ -22,19 +22,15 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
@@ -49,18 +45,20 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
-import org.kiwix.sharedFunctions.InstantExecutorExtension
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@ExtendWith(InstantExecutorExtension::class)
 internal class BookmarkViewModelTest {
+  @JvmField
+  @RegisterExtension
+  val mainDispatcherRule = MainDispatcherRule()
   private val testDispatcher = UnconfinedTestDispatcher()
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val dialogShower: AlertDialogShower = mockk()
-  private val viewModelScope = CoroutineScope(testDispatcher)
+  private val viewModelScope = CoroutineScope(mainDispatcherRule.dispatcher)
 
   private lateinit var viewModel: BookmarkViewModel
 
@@ -70,7 +68,6 @@ internal class BookmarkViewModelTest {
   @BeforeEach
   fun init() {
     clearAllMocks()
-    Dispatchers.setMain(testDispatcher)
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { kiwixDataStore.showBookmarksOfAllBooks } returns flowOf(true)
@@ -81,11 +78,6 @@ internal class BookmarkViewModelTest {
         setAlertDialogShower(dialogShower)
         setLifeCycleScope(viewModelScope)
       }
-  }
-
-  @AfterEach
-  fun tearDown() {
-    Dispatchers.resetMain()
   }
 
   @Test
