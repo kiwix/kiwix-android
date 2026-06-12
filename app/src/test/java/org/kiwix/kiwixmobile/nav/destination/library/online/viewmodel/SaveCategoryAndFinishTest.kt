@@ -48,16 +48,14 @@ class SaveCategoryAndFinishTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
-    every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
-    every { onBackPressedDispatcher.onBackPressed() } answers { }
+    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category1 = Category(category = "wikipedia", active = true)
     val category2 = Category(category = "gutenberg", active = true)
     val categories = listOf(category1, category2)
-    SaveCategoryAndFinish(categories, kiwixDataStore, lifeCycleScope).invokeWith(activity)
+    SaveCategoryAndFinish(categories, kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentCategory("wikipedia,gutenberg") }
     testScheduler.advanceUntilIdle()
-    verify { onBackPressedDispatcher.onBackPressed() }
+    verify { onDismiss() }
   }
 }

@@ -495,7 +495,7 @@ class CategoryViewModelTest {
           categoryViewModel.actions.emit(Action.Save)
           advanceUntilIdle()
 
-          assertEquals(State.Saving, categoryViewModel.state.value)
+          assertThat(categoryViewModel.state.value).isInstanceOf(State.Saving::class.java)
 
           assertThat(sideEffect).isInstanceOf(SaveCategoryAndFinish::class.java)
           val saveEffect = sideEffect as SaveCategoryAndFinish
