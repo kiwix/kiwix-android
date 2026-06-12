@@ -28,9 +28,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.mhutti1.utils.storage.StorageDevice
-import androidx.appcompat.app.AppCompatDelegate
 import org.kiwix.kiwixmobile.core.utils.LocaleHelper
-import javax.inject.Provider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
