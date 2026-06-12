@@ -17,7 +17,18 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
+import android.content.Context
+import android.os.Environment.MEDIA_MOUNTED
+import android.os.Environment.getExternalStorageState
+
 object StorageUtils {
   @JvmStatic fun getFileNameFromUrl(url: String?): String =
     NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "")
+
+  // Checks if external storage is available for read and write
+  fun isExternalStorageWritable(): Boolean =
+    MEDIA_MOUNTED == getExternalStorageState()
+
+  fun getNotesDirectory(context: Context) =
+    context.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
 }

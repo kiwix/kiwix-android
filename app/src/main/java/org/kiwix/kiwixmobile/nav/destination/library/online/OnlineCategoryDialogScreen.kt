@@ -86,7 +86,7 @@ fun OnlineCategoryDialogScreen(
     ) { paddingValues ->
       Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
         when (state) {
-          Loading, Saving -> {
+          Loading, is Saving -> {
             LoadingScreen()
           }
 

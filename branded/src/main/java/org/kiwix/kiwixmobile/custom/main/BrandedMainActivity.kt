@@ -58,12 +58,12 @@ class BrandedMainActivity : CoreMainActivity() {
   override val appName: String by lazy { getString(R.string.app_name) }
 
   override val searchFragmentRoute: String = CustomDestination.Search.route
-  override val bookmarksFragmentRoute: String = CustomDestination.Bookmarks.route
-  override val settingsFragmentRoute: String = CustomDestination.Settings.route
-  override val readerFragmentRoute: String = CustomDestination.Reader.route
-  override val historyFragmentRoute: String = CustomDestination.History.route
-  override val notesFragmentRoute: String = CustomDestination.Notes.route
-  override val helpFragmentRoute: String = CustomDestination.Help.route
+  override val bookmarksScreenRoute: String = CustomDestination.Bookmarks.route
+  override val settingsScreenRoute: String = CustomDestination.Settings.route
+  override val readerScreenRoute: String = CustomDestination.Reader.route
+  override val historyScreenRoute: String = CustomDestination.History.route
+  override val notesScreenRoute: String = CustomDestination.Notes.route
+  override val helpScreenRoute: String = CustomDestination.Help.route
   override val cachedComponent by lazy { brandedActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 

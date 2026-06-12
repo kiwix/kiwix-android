@@ -22,44 +22,41 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.pageState
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.testFlow
-import org.kiwix.sharedFunctions.InstantExecutorExtension
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@ExtendWith(InstantExecutorExtension::class)
 internal class PageViewModelTest {
+  @JvmField
+  @RegisterExtension
+  val mainDispatcherRule = MainDispatcherRule()
   private val pageDao: PageDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
@@ -70,18 +67,12 @@ internal class PageViewModelTest {
 
   @BeforeEach
   fun init() {
-    Dispatchers.setMain(UnconfinedTestDispatcher())
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     coEvery { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { pageDao.pages() } returns itemsFromDb
     viewModel = TestablePageViewModel(zimReaderContainer, kiwixDataStore, pageDao)
-  }
-
-  @AfterEach
-  fun tearDown() {
-    Dispatchers.resetMain()
   }
 
   @Test
@@ -158,6 +149,7 @@ internal class PageViewModelTest {
         val page = PageImpl(isSelected = true, zimReaderSource = zimReaderSource)
         viewModel.getMutableStateForTestCases().value = TestablePageState(listOf(page))
         viewModel.actions.tryEmit(OnItemClick(page))
+        advanceUntilIdle()
       },
       assert = {
         assertThat(awaitItem()).isEqualTo(TestablePageState())
@@ -214,6 +206,7 @@ internal class PageViewModelTest {
       triggerAction = {
         viewModel.getMutableStateForTestCases().value = TestablePageState(listOf(page))
         viewModel.actions.tryEmit(OnItemLongClick(page))
+        advanceUntilIdle()
       },
       assert = {
         assertThat(awaitItem()).isEqualTo(TestablePageState())

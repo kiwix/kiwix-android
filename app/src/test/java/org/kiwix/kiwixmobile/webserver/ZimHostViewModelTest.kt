@@ -19,8 +19,6 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.app.Application
-import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,7 +28,6 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -55,7 +52,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event
 import org.kiwix.libkiwix.Book
 import org.kiwix.sharedFunctions.MainDispatcherRule
-import kotlin.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ZimHostViewModelTest {
@@ -545,26 +541,6 @@ class ZimHostViewModelTest {
 
     viewModel.loadBooks(isBrandedApp = false)
     advanceUntilIdle()
-  }
-}
-
-suspend fun <T> TestScope.testFlow(
-  flow: Flow<T>,
-  triggerAction: suspend () -> Unit,
-  assert: suspend TurbineTestContext<T>.() -> Unit,
-  timeout: Duration? = null
-) {
-  flow.test(timeout = timeout) {
-    triggerAction()
-    assert()
-    cancelAndIgnoreRemainingEvents()
-  }
-}
-
-suspend inline fun <reified T> ReceiveTurbine<*>.awaitItemOfType(): T {
-  while (true) {
-    val item = awaitItem()
-    if (item is T) return item
   }
 }
 

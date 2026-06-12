@@ -39,6 +39,7 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Spe
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
+import org.junit.After
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
@@ -167,5 +168,14 @@ abstract class BaseActivityTest {
           setSuppressingResultMatcher(anyOf(matchesCheck(DuplicateClickableBoundsCheck::class.java)))
         }
       }
+  }
+
+  @After
+  fun tearDown() {
+    if (::activityScenario.isInitialized) {
+      runCatching {
+        activityScenario.close()
+      }
+    }
   }
 }

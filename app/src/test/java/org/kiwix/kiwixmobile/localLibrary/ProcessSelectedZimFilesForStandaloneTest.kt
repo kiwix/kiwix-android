@@ -75,7 +75,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
       kiwixDataStore,
       activity
     )
-    processSelectedZimFiles.setSelectedZimFileCallback(selectedZimFileCallback)
+    processSelectedZimFiles.init(selectedZimFileCallback)
   }
 
   @Test

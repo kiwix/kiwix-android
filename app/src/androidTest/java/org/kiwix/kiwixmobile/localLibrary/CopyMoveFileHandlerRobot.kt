@@ -32,6 +32,7 @@ import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -125,6 +127,13 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   }
 
   fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
+    // Wait for copying the ZIM file and opening in the reader.
+    composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+      composeTestRule
+        .onAllNodesWithTag(READER_SCREEN_TESTING_TAG)
+        .fetchSemanticsNodes()
+        .isNotEmpty()
+    }
     testFlakyView({
       composeTestRule.waitUntilTimeout()
       composeTestRule.mainClock.advanceTimeByFrame()

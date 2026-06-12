@@ -111,12 +111,12 @@ class KiwixMainActivity : CoreMainActivity() {
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
-  override val bookmarksFragmentRoute: String = KiwixDestination.Bookmarks.route
-  override val settingsFragmentRoute: String = KiwixDestination.Settings.route
-  override val historyFragmentRoute: String = KiwixDestination.History.route
-  override val notesFragmentRoute: String = KiwixDestination.Notes.route
-  override val readerFragmentRoute: String = KiwixDestination.Reader.route
-  override val helpFragmentRoute: String = KiwixDestination.Help.route
+  override val bookmarksScreenRoute: String = KiwixDestination.Bookmarks.route
+  override val settingsScreenRoute: String = KiwixDestination.Settings.route
+  override val historyScreenRoute: String = KiwixDestination.History.route
+  override val notesScreenRoute: String = KiwixDestination.Notes.route
+  override val readerScreenRoute: String = KiwixDestination.Reader.route
+  override val helpScreenRoute: String = KiwixDestination.Help.route
   override val topLevelDestinationsRoute =
     setOf(
       KiwixDestination.Downloads.route,

@@ -18,38 +18,37 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.NOTE_LIST_ITEM_TAG
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
+import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 class OpenNote(
-  private val noteListItem: NoteListItem
+  private val noteListItem: NoteListItem,
+  private val alertDialogShower: AlertDialogShower,
+  private val addNoteViewModel: AddNoteViewModel
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity as CoreMainActivity
-    showAddNoteDialog(activity)
-  }
-
-  private fun showAddNoteDialog(activity: AppCompatActivity) {
-    val coreMainActivity: CoreMainActivity = activity as CoreMainActivity
-    val fragmentTransaction: FragmentTransaction =
-      coreMainActivity.supportFragmentManager.beginTransaction()
-    val previousInstance: Fragment? =
-      coreMainActivity.supportFragmentManager.findFragmentByTag(AddNoteDialog.TAG)
-
-    if (previousInstance == null) {
-      val dialogFragment = AddNoteDialog()
-      val bundle = Bundle().apply {
-        putSerializable(NOTE_LIST_ITEM_TAG, noteListItem)
-      }
-      dialogFragment.arguments = bundle
-      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
-    }
+    val config = AddNoteDialogConfig(noteListItem = noteListItem)
+    alertDialogShower.show(
+      KiwixDialog.AddNoteDialogDialog(
+        ZERO.dp,
+        {
+          AddNoteDialogComposable(
+            addNoteViewModel = addNoteViewModel,
+            config = config,
+            onDismiss = { alertDialogShower.dismiss() }
+          )
+        }
+      )
+    )
   }
 }

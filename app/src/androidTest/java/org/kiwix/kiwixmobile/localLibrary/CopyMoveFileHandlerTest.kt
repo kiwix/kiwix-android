@@ -61,7 +61,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   private val dispatcher = MainDispatcherRule()
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
-  private lateinit var destinationFile: File
   private lateinit var parentFile: File
 
   @Before
@@ -249,8 +248,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         storageDeviceList = storageDeviceList,
         validateZimViewModel = validateZimViewModel,
         kiwixMainActivity.alertDialogShower,
-        kiwixMainActivity.snackBarHostState,
-        kiwixMainActivity.supportFragmentManager
+        kiwixMainActivity.snackBarHostState
       )
       kiwixMainActivity.lifecycleScope.launch {
         localLibraryViewModel.handleSelectedFileUri(urisList)

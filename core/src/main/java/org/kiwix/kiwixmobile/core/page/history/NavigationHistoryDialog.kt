@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2023 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,130 +18,186 @@
 
 package org.kiwix.kiwixmobile.core.page.history
 
-import android.app.Dialog
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
-import androidx.compose.ui.platform.ComposeView
-import androidx.fragment.app.DialogFragment
-import org.kiwix.kiwixmobile.core.CoreApp
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import javax.inject.Inject
 
-class NavigationHistoryDialog(
-  @StringRes private val titleId: Int,
-  private val navigationHistoryList: MutableList<NavigationHistoryListItem>,
-  private val navigationHistoryClickListener: NavigationHistoryClickListener
-) : DialogFragment() {
-  private var composeView: ComposeView? = null
-
-  @Inject
-  lateinit var alertDialogShower: AlertDialogShower
-
-  override fun onStart() {
-    super.onStart()
-    dialog?.let {
-      it.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-    }
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    CoreApp.coreComponent
-      .activityComponentBuilder()
-      .activity(requireActivity())
-      .build()
-      .inject(this)
-  }
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    super.onCreateView(inflater, container, savedInstanceState)
-    return ComposeView(requireContext()).apply {
-      setContent {
-        NavigationHistoryDialogScreen(
-          titleId,
-          navigationHistoryList,
-          listOf(
-            ActionMenuItem(
-              IconItem.Drawable(R.drawable.ic_delete_white_24dp),
-              R.string.pref_clear_all_history_title,
-              { showConfirmClearHistoryDialog() },
-              isEnabled = navigationHistoryList.isNotEmpty(),
-              testingTag = DELETE_MENU_ICON_TESTING_TAG
-            )
-          ),
-          { onItemClick(it) },
-          {
-            NavigationIcon(
-              iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
-              onClick = {
-                dismissNavigationHistoryDialog()
-              }
-            )
-          }
+@Suppress("ComposableLambdaParameterNaming")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NavigationHistoryDialog(
+  @StringRes titleId: Int,
+  navigationHistoryList: MutableList<NavigationHistoryListItem>,
+  onNavigationItemClick: ((NavigationHistoryListItem) -> Unit),
+  onClearNavigationHistoryClick: () -> Unit,
+  onDialogDismissRequest: () -> Unit
+) {
+  // Use a separate AlertDialogShower because this dialog is already hosted by one.
+  // Reusing the same instance for ClearAllNavigationHistory would dismiss the
+  // NavigationHistory dialog instead of showing the clearNavigationHistory dialog above it.
+  val alertDialogShower = remember { AlertDialogShower() }
+  KiwixBasicDialogFrame(
+    onDismissRequest = onDialogDismissRequest,
+    dialogPadding = TEN_DP,
+    topPaddingForContent = ZERO.dp
+  ) {
+    Scaffold(
+      topBar = {
+        KiwixAppBar(
+          title = stringResource(titleId),
+          navigationIcon = { NavigationIconItem(onDialogDismissRequest) },
+          actionMenuItems =
+            buildMenuItems(navigationHistoryList, alertDialogShower, onClearNavigationHistoryClick)
         )
-        DialogHost(alertDialogShower)
       }
-    }.also {
-      composeView = it
-    }
-  }
-
-  private fun showConfirmClearHistoryDialog() {
-    alertDialogShower.show(KiwixDialog.ClearAllNavigationHistory, ::clearHistory)
-  }
-
-  private fun clearHistory() {
-    dismissNavigationHistoryDialog()
-    navigationHistoryClickListener.clearHistory()
-  }
-
-  // Add onBackPressedCallBack to respond to user pressing 'Back' button on navigation bar
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    val dialog = Dialog(requireContext(), theme)
-    requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallBack)
-    return dialog
-  }
-
-  private val onBackPressedCallBack =
-    object : OnBackPressedCallback(true) {
-      override fun handleOnBackPressed() {
-        dismissNavigationHistoryDialog()
+    ) { paddingValues ->
+      Box(
+        modifier = Modifier
+          .fillMaxSize()
+          .background(Color.Transparent)
+          .imePadding()
+          .padding(paddingValues),
+      ) {
+        if (navigationHistoryList.isEmpty()) {
+          Text(
+            text = stringResource(R.string.no_history),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier
+              .align(Alignment.Center)
+              .semantics { testTag = NO_ITEMS_TEXT_TESTING_TAG }
+          )
+        } else {
+          NavigationHistoryList(navigationHistoryList) {
+            onNavigationItemClick.invoke(it)
+            onDialogDismissRequest
+          }
+        }
       }
     }
-
-  private fun dismissNavigationHistoryDialog() {
-    dialog?.dismiss()
+    DialogHost(alertDialogShower)
   }
+}
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    composeView?.disposeComposition()
-    composeView = null
-    onBackPressedCallBack.remove()
+@Composable
+private fun NavigationIconItem(onDialogDismissRequest: () -> Unit) {
+  NavigationIcon(
+    iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+    onClick = onDialogDismissRequest
+  )
+}
+
+private fun buildMenuItems(
+  list: MutableList<NavigationHistoryListItem>,
+  alertDialogShower: AlertDialogShower,
+  onClearNavigationHistoryClick: () -> Unit,
+) = listOf(
+  ActionMenuItem(
+    IconItem.Drawable(R.drawable.ic_delete_white_24dp),
+    R.string.pref_clear_all_history_title,
+    {
+      alertDialogShower.show(
+        KiwixDialog.ClearAllNavigationHistory,
+        { onClearNavigationHistoryClick.invoke() }
+      )
+    },
+    isEnabled = list.isNotEmpty(),
+    testingTag = DELETE_MENU_ICON_TESTING_TAG
+  )
+)
+
+@Composable
+fun NavigationHistoryList(
+  navigationHistoryList: MutableList<NavigationHistoryListItem>,
+  onNavigationItemClick: (NavigationHistoryListItem) -> Unit
+) {
+  LazyColumn {
+    itemsIndexed(navigationHistoryList) { index, item ->
+      NavigationHistoryItem(index, item, onNavigationItemClick)
+    }
   }
+}
 
-  private fun onItemClick(item: NavigationHistoryListItem) {
-    dismissNavigationHistoryDialog()
-    navigationHistoryClickListener.onItemClicked(item)
-  }
+@Composable
+private fun NavigationHistoryItem(
+  index: Int,
+  item: NavigationHistoryListItem,
+  onNavigationItemClick: (NavigationHistoryListItem) -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable(
+        onClick = { onNavigationItemClick(item) },
+      )
+      .padding(
+        horizontal = SIXTEEN_DP,
+        vertical = EIGHT_DP
+      ),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Image(
+      painter = IconItem.MipmapImage(R.mipmap.ic_launcher_round).toPainter(),
+      contentDescription = stringResource(R.string.fav_icon) + index,
+      modifier = Modifier
+        .size(PAGE_LIST_ITEM_FAVICON_SIZE)
+    )
 
-  companion object {
-    const val TAG = "NavigationHistoryDialog"
+    Spacer(modifier = Modifier.width(SIXTEEN_DP))
+
+    Text(
+      text = item.title,
+      style = MaterialTheme.typography.bodyLarge,
+      modifier = Modifier
+        .weight(1f)
+        .semantics { contentDescription = "${item.title}$index" },
+      maxLines = ONE,
+      overflow = TextOverflow.Ellipsis
+    )
   }
 }

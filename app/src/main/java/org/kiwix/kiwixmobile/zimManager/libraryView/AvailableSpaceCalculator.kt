@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class AvailableSpaceCalculator @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
-  private val storageCalculator: StorageCalculator
+  val storageCalculator: StorageCalculator
 ) {
   suspend fun hasAvailableSpaceFor(bookItem: BookItem): AvailableSpaceResult {
     val trueAvailableBytes = downloadRoomDao.allDownloads()

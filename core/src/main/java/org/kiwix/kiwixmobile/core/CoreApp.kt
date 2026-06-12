@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.core
 import android.app.Application
 import android.content.Context
 import android.os.Build
-import android.os.Environment.MEDIA_MOUNTED
-import android.os.Environment.getExternalStorageState
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
@@ -121,8 +119,4 @@ abstract class CoreApp : Application() {
   }
 
   fun getMainActivity() = coreMainActivity
-
-  // Checks if external storage is available for read and write
-  val isExternalStorageWritable: Boolean
-    get() = MEDIA_MOUNTED == getExternalStorageState()
 }

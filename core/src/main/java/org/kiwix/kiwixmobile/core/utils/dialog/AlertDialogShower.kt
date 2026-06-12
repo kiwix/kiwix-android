@@ -134,11 +134,27 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
   }
 }
 
+/**
+ * A reusable base dialog container used throughout the app.
+ *
+ * This composable wraps [BasicAlertDialog] and applies the app's dialog theme,
+ * styling, padding, shape, and background. It provides a consistent dialog
+ * frame while allowing callers to supply custom content.
+ *
+ * @param onDismissRequest Callback invoked when the dialog should be dismissed.
+ * @param cancelable Whether the dialog can be dismissed by outside clicks or
+ * back press events. If `false`, dismiss requests are ignored.
+ * @param dialogPadding Outer padding applied around the dialog.
+ * @param topPaddingForContent Top padding applied to the dialog content.
+ * @param content The content displayed inside the dialog.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixBasicDialogFrame(
   onDismissRequest: () -> Unit,
   cancelable: Boolean = true,
+  dialogPadding: Dp = DIALOG_PADDING,
+  topPaddingForContent: Dp = DIALOG_DEFAULT_PADDING_FOR_CONTENT,
   content: @Composable ColumnScope.() -> Unit
 ) {
   KiwixDialogTheme {
@@ -147,7 +163,7 @@ fun KiwixBasicDialogFrame(
         if (cancelable) onDismissRequest()
       },
       properties = DialogProperties(usePlatformDefaultWidth = false),
-      modifier = Modifier.padding(DIALOG_PADDING)
+      modifier = Modifier.padding(dialogPadding)
     ) {
       Surface(
         modifier = Modifier
@@ -158,8 +174,7 @@ fun KiwixBasicDialogFrame(
         color = MaterialTheme.colorScheme.background
       ) {
         Column(
-          modifier = Modifier
-            .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT),
+          modifier = Modifier.padding(top = topPaddingForContent),
           content = content
         )
       }

@@ -31,6 +31,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkStatic
 import io.mockk.verify
@@ -46,6 +47,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -53,6 +55,7 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
@@ -129,7 +132,6 @@ class CopyMoveFileHandlerTest {
 
       fileHandler.showMoveFileToPublicDirectoryDialog(
         storageDeviceList = emptyList(),
-        fragmentManager = mockk(relaxed = true),
         isSingleFileSelected = true
       )
 
@@ -162,7 +164,6 @@ class CopyMoveFileHandlerTest {
 
         fileHandler.showMoveFileToPublicDirectoryDialog(
           storageDeviceList = devices,
-          fragmentManager = mockk(relaxed = true),
           isSingleFileSelected = true
         )
 
@@ -196,7 +197,6 @@ class CopyMoveFileHandlerTest {
             storageDeviceList = listOf(
               StorageDevice(File("/internal"), true)
             ),
-            fragmentManager = mockk(relaxed = true),
             isSingleFileSelected = true
           )
 
@@ -233,7 +233,6 @@ class CopyMoveFileHandlerTest {
 
             fileHandler.showMoveFileToPublicDirectoryDialog(
               storageDeviceList = listOf(storageDevice),
-              fragmentManager = mockk(relaxed = true),
               multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
               isSingleFileSelected = true
             )
@@ -266,7 +265,6 @@ class CopyMoveFileHandlerTest {
 
             fileHandler.showMoveFileToPublicDirectoryDialog(
               storageDeviceList = listOf(storageDevice),
-              fragmentManager = mockk(relaxed = true),
               multipleFilesProcessAction = MultipleFilesProcessAction.Move,
               isSingleFileSelected = true
             )
@@ -304,7 +302,6 @@ class CopyMoveFileHandlerTest {
               storageDeviceList = listOf(
                 StorageDevice(File("/storage/internal"), true)
               ),
-              fragmentManager = mockk(relaxed = true),
               multipleFilesProcessAction = null,
               isSingleFileSelected = true
             )
@@ -1263,6 +1260,97 @@ class CopyMoveFileHandlerTest {
 
       verify(exactly = 1) {
         archive.dispose()
+      }
+    }
+  }
+
+  @Nested
+  inner class ShowStorageSelectDialog {
+    @Test
+    fun `showStorageSelectDialog delegates dialog config to callback`() {
+      every {
+        context.getString(R.string.choose_storage_to_copy_move_zim_file)
+      } returns "Choose Storage"
+
+      val storageDevices = listOf(
+        StorageDevice(File("/internal"), true),
+        StorageDevice(File("/sdcard"), false)
+      )
+
+      fileHandler.showStorageSelectDialog(storageDevices)
+
+      verify {
+        fileCopyMoveCallback.showStorageSelectionDialog(any())
+      }
+    }
+
+    @Test
+    fun `showStorageSelectDialog creates expected dialog config`() {
+      every {
+        context.getString(R.string.choose_storage_to_copy_move_zim_file)
+      } returns "Choose Storage"
+
+      val storageDevices = listOf(
+        StorageDevice(File("/internal"), true),
+        StorageDevice(File("/sdcard"), false)
+      )
+
+      val slot = slot<StorageSelectDialogConfig>()
+
+      every {
+        fileCopyMoveCallback.showStorageSelectionDialog(capture(slot))
+      } just Runs
+
+      fileHandler.showStorageSelectDialog(storageDevices)
+
+      assertEquals(
+        storageDevices,
+        slot.captured.storageDeviceList
+      )
+
+      assertEquals(
+        "Choose Storage",
+        slot.captured.title
+      )
+
+      assertFalse(
+        slot.captured.shouldShowCheckboxSelected
+      )
+    }
+
+    @Test
+    fun `onSelectAction copies file to selected storage`() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      fileHandler.setLifeCycleScope(this)
+
+      every {
+        context.getString(R.string.choose_storage_to_copy_move_zim_file)
+      } returns "Choose Storage"
+
+      val storageDevice = StorageDevice(
+        File("/internal"),
+        true
+      )
+
+      val slot = slot<StorageSelectDialogConfig>()
+
+      every {
+        fileCopyMoveCallback.showStorageSelectionDialog(capture(slot))
+      } just Runs
+
+      coEvery {
+        fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+      } just Runs
+
+      fileHandler.showStorageSelectDialog(listOf(storageDevice))
+
+      slot.captured.onSelectAction(storageDevice)
+
+      advanceUntilIdle()
+
+      coVerify {
+        fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
       }
     }
   }

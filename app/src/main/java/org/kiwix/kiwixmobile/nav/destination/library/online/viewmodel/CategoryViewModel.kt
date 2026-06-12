@@ -75,7 +75,12 @@ class CategoryViewModel @Inject constructor(
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
+  private var onDismiss: (() -> Unit)? = null
   private val coroutineJobs = mutableListOf<Job>()
+
+  fun setOnDismissCallback(onDismiss: () -> Unit) {
+    this.onDismiss = onDismiss
+  }
 
   init {
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -164,10 +169,7 @@ class CategoryViewModel @Inject constructor(
       emit(emptyList())
     }
 
-  private fun reduce(
-    action: Action,
-    currentState: State
-  ): State {
+  private fun reduce(action: Action, currentState: State): State {
     return when (action) {
       is Error -> State.Error(action.errorMessage)
 
@@ -212,10 +214,23 @@ class CategoryViewModel @Inject constructor(
       SaveCategoryAndFinish(
         selectedCategory,
         kiwixDataStore,
-        viewModelScope
+        viewModelScope,
+        requireOnDismissCallBack()
       )
     )
-    return Saving
+    return Saving(currentState)
+  }
+
+  private fun requireOnDismissCallBack() = requireNotNull(onDismiss) {
+    "onDismiss callback is not set. " +
+      "Set CategoryViewModel.setOnDismissCallback() before using the callback"
+  }
+
+  fun onDialogOpened() {
+    val current = state.value
+    if (current is Saving) {
+      state.value = current.items
+    }
   }
 
   @VisibleForTesting
@@ -229,6 +244,7 @@ class CategoryViewModel @Inject constructor(
     }
     coroutineJobs.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
+    onDismiss = null
     super.onCleared()
   }
 }

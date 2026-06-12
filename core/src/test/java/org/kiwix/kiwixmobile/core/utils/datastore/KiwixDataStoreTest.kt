@@ -39,6 +39,7 @@ import org.robolectric.annotation.Config
 import java.io.File
 import java.util.Locale
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class KiwixDataStoreTest {

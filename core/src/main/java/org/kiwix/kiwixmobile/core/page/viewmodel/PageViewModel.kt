@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.onEach
 import org.jetbrains.annotations.VisibleForTesting
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
@@ -60,6 +61,11 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
 
   private lateinit var alertDialogShower: AlertDialogShower
   private lateinit var lifeCycleScope: CoroutineScope
+  private lateinit var addNoteViewModel: AddNoteViewModel
+
+  fun setAddNoteViewModel(addNoteViewModel: AddNoteViewModel) {
+    this.addNoteViewModel = addNoteViewModel
+  }
 
   fun setAlertDialogShower(shower: AlertDialogShower) {
     alertDialogShower = shower
@@ -67,6 +73,13 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
 
   fun setLifeCycleScope(scope: CoroutineScope) {
     lifeCycleScope = scope
+  }
+
+  fun requireAddNoteViewModel(): AddNoteViewModel {
+    require(::addNoteViewModel.isInitialized) {
+      "AddNoteViewModel is not initialized. Set the AddNoteViewModel to viewModel"
+    }
+    return addNoteViewModel
   }
 
   fun requireAlertDialogShower(): AlertDialogShower {

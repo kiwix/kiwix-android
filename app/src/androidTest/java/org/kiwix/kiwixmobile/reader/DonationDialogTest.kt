@@ -124,7 +124,7 @@ class DonationDialogTest : BaseActivityTest() {
 
   private fun openReaderFragment() {
     UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(kiwixMainActivity.readerFragmentRoute)
+      kiwixMainActivity.navigate(kiwixMainActivity.readerScreenRoute)
     }
   }
 

@@ -35,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavHostController
@@ -55,12 +56,16 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ScrollToTop
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 
 const val LANGUAGE_MENU_ICON_TESTING_TAG = "languageMenuIconTestingTag"
 const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
@@ -70,6 +75,7 @@ const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 @Composable
 fun OnlineLibraryRoute(
   onlineLibraryViewModel: OnlineLibraryViewModel,
+  categoryViewModel: CategoryViewModel,
   alertDialogShower: AlertDialogShower,
   navController: NavHostController,
   activity: KiwixMainActivity
@@ -104,6 +110,7 @@ fun OnlineLibraryRoute(
   val actionMenuItems = buildActionMenuItems(
     isSearchActive = uiState.isSearchActive,
     onSearchClick = onlineLibraryViewModel::openSearchView,
+    onCategoryClick = { onlineLibraryViewModel.setShowCategoryDialog(true) },
     activity = activity,
     navController = navController
   )
@@ -148,10 +155,14 @@ fun OnlineLibraryRoute(
       )
     }
   )
+
+  ShowCategoryDialog(categoryViewModel, uiState.showCategoryDialog) {
+    onlineLibraryViewModel.setShowCategoryDialog(false)
+  }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 private fun HandleUiEvents(
   viewModel: OnlineLibraryViewModel,
@@ -197,6 +208,12 @@ private fun HandleUiEvents(
           )
         }
 
+        is OnlineLibraryViewModel.UiEvent.SideEffects -> handleUISideEffects(
+          event.uISideEffects,
+          alertDialogShower = alertDialogShower,
+          kiwixMainActivity = activity
+        )
+
         is OnlineLibraryViewModel.UiEvent.ShowToast -> {
           activity.toast(event.message, Toast.LENGTH_SHORT)
         }
@@ -225,6 +242,19 @@ private fun HandleUiEvents(
   }
 }
 
+private fun handleUISideEffects(
+  event: OnlineLibraryViewModel.UISideEffects,
+  alertDialogShower: AlertDialogShower,
+  kiwixMainActivity: KiwixMainActivity
+) {
+  when (event) {
+    is OnlineLibraryViewModel.UISideEffects.StorageSelectionDialog -> {
+      ShowStorageSelectionDialog(alertDialogShower, event.dialogConfig)
+        .invokeWith(kiwixMainActivity)
+    }
+  }
+}
+
 @OptIn(ExperimentalPermissionsApi::class)
 private fun handlePermissionEvents(
   notificationPermission: PermissionState?,
@@ -240,6 +270,7 @@ private fun handlePermissionEvents(
 private fun buildActionMenuItems(
   isSearchActive: Boolean,
   onSearchClick: () -> Unit,
+  onCategoryClick: () -> Unit,
   activity: KiwixMainActivity,
   navController: NavHostController
 ): List<ActionMenuItem> = listOfNotNull(
@@ -256,15 +287,7 @@ private fun buildActionMenuItems(
   ActionMenuItem(
     IconItem.Drawable(drawable.ic_category),
     org.kiwix.kiwixmobile.R.string.select_category,
-    {
-      val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
-      if (activity.supportFragmentManager
-          .findFragmentByTag(ONLINE_CATEGORY_DIALOG_TAG) == null
-      ) {
-        OnlineCategoryDialog()
-          .show(fragmentTransaction, ONLINE_CATEGORY_DIALOG_TAG)
-      }
-    },
+    onCategoryClick,
     isEnabled = true,
     testingTag = CATEGORY_MENU_ICON_TESTING_TAG
   ),
@@ -300,5 +323,34 @@ private fun handleBackPress(
     } else {
       FragmentActivityExtensions.Super.ShouldCall
     }
+  }
+}
+
+@Composable
+private fun ShowCategoryDialog(
+  categoryViewModel: CategoryViewModel,
+  showCategoryDialog: Boolean,
+  onDismiss: () -> Unit
+) {
+  if (!showCategoryDialog) return
+  categoryViewModel.apply {
+    setOnDismissCallback(onDismiss)
+    onDialogOpened()
+  }
+  KiwixBasicDialogFrame(
+    onDismissRequest = onDismiss,
+    dialogPadding = TEN_DP,
+    topPaddingForContent = ZERO.dp
+  ) {
+    OnlineCategoryDialogScreen(
+      categoryViewModel = categoryViewModel,
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
+          contentDescription = string.close_drawer,
+          onClick = onDismiss
+        )
+      }
+    )
   }
 }

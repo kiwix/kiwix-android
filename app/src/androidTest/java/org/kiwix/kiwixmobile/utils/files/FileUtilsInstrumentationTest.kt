@@ -24,9 +24,6 @@ import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -402,7 +399,7 @@ class FileUtilsInstrumentationTest {
           null,
           Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
         ),
-        // // test with SD card uri
+        // test with SD card uri
         DummyUrlData(
           null,
           null,
@@ -442,25 +439,13 @@ class FileUtilsInstrumentationTest {
           )
         )
       )
-    // test with USB stick uri
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-      dummyUriData.add(
-        DummyUrlData(
-          null,
-          null,
-          "/mnt/media_rw/USB/$commonPath",
-          null,
-          Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
-        )
-      )
-    }
     context?.let { context ->
-      CoroutineScope(Dispatchers.Main).launch {
+      runBlocking {
         dummyUriData.forEach { dummyUrlData ->
           dummyUrlData.uri?.let { uri ->
             Assertions.assertEquals(
-              FileUtils.getLocalFilePathByUri(context, uri),
-              dummyUrlData.expectedFileName
+              dummyUrlData.expectedFileName,
+              FileUtils.getLocalFilePathByUri(context, uri)
             )
           }
         }

@@ -19,10 +19,9 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.UUID
 
 object NetworkUtils {
@@ -36,22 +35,6 @@ object NetworkUtils {
       context
         .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return connectivity.isNetworkAvailable()
-  }
-
-  /**
-   * check if network of type WIFI is connected
-   *
-   * @return true if WIFI is connected
-   *
-   * TODO method isWiFi should be renamed to isWifiConnected to
-   *  express the state which is checked
-   *  (postponed to refactoring deprecated android.net.* usage)
-   */
-  fun isWiFi(context: Context): Boolean {
-    val connectivity =
-      context
-        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return connectivity.isWifi()
   }
 
   fun getFileNameFromUrl(url: String?): String {

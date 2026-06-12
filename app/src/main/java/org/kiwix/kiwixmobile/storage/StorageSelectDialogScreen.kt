@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG = "storageSelectionDialogTestingTag"
+val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16.sp
 
 @Composable
 fun StorageSelectDialogScreen(
@@ -54,7 +56,7 @@ fun StorageSelectDialogScreen(
     Column(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(TEN_DP)
+        .padding(vertical = TEN_DP)
     ) {
       StorageSelectDialogTitle(title, titleSize)
       StorageDeviceList(

@@ -82,6 +82,7 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.StorageUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -770,10 +771,8 @@ internal class CoreSettingsViewModelTest {
   inner class ClearAllNotesTest {
     @Test
     fun `clearAllNotes when external storage is not writable shows failure snackbar`() = runTest {
-      val mockApp: CoreApp = mockk(relaxed = true)
-      mockkObject(CoreApp.Companion)
-      every { CoreApp.instance } returns mockApp
-      every { mockApp.isExternalStorageWritable } returns false
+      mockkObject(StorageUtils)
+      every { StorageUtils.isExternalStorageWritable() } returns false
 
       viewModel.actions.test {
         viewModel.clearAllNotes()
@@ -789,10 +788,8 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearAllNotes when no write permission shows permission snackbar`() = runTest {
-      val mockApp: CoreApp = mockk(relaxed = true)
-      mockkObject(CoreApp.Companion)
-      every { CoreApp.instance } returns mockApp
-      every { mockApp.isExternalStorageWritable } returns true
+      mockkObject(StorageUtils)
+      every { StorageUtils.isExternalStorageWritable() } returns true
       coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns false
 
       viewModel.actions.test {
@@ -809,10 +806,8 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearAllNotes success shows success snackbar`() = runTest {
-      val mockApp: CoreApp = mockk(relaxed = true)
-      mockkObject(CoreApp.Companion)
-      every { CoreApp.instance } returns mockApp
-      every { mockApp.isExternalStorageWritable } returns true
+      mockkObject(StorageUtils)
+      every { StorageUtils.isExternalStorageWritable() } returns true
       coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
       coEvery { dataSource.clearNotes() } just Runs
 
@@ -830,10 +825,8 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearAllNotes failure shows failure snackbar`() = runTest {
-      val mockApp: CoreApp = mockk(relaxed = true)
-      mockkObject(CoreApp.Companion)
-      every { CoreApp.instance } returns mockApp
-      every { mockApp.isExternalStorageWritable } returns true
+      mockkObject(StorageUtils)
+      every { StorageUtils.isExternalStorageWritable() } returns true
       coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
       coEvery { dataSource.clearNotes() } throws RuntimeException("DB error")
 
@@ -850,10 +843,8 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearAllNotes handles exception with null message`() = runTest {
-      val mockApp: CoreApp = mockk(relaxed = true)
-      mockkObject(CoreApp.Companion)
-      every { CoreApp.instance } returns mockApp
-      every { mockApp.isExternalStorageWritable } returns true
+      mockkObject(StorageUtils)
+      every { StorageUtils.isExternalStorageWritable() } returns true
       coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
       coEvery { dataSource.clearNotes() } throws RuntimeException(null as String?)
 
@@ -895,10 +886,8 @@ internal class CoreSettingsViewModelTest {
 
     @Test
     fun `clearAllNotes does not check permission if storage not writable`() = runTest {
-      val mockApp: CoreApp = mockk(relaxed = true)
-      mockkObject(CoreApp.Companion)
-      every { CoreApp.instance } returns mockApp
-      every { mockApp.isExternalStorageWritable } returns false
+      mockkObject(StorageUtils)
+      every { StorageUtils.isExternalStorageWritable() } returns false
 
       viewModel.clearAllNotes()
 

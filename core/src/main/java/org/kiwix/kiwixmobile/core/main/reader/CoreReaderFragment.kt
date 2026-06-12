@@ -51,8 +51,6 @@ import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
@@ -79,11 +77,14 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineDispatcher
@@ -110,10 +111,10 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
@@ -122,7 +123,7 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
+import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
@@ -138,9 +139,11 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
@@ -208,7 +211,6 @@ abstract class CoreReaderFragment :
   FragmentActivityExtensions,
   WebViewProvider,
   ReadAloudCallbacks,
-  NavigationHistoryClickListener,
   ShowDonationDialogCallback {
   protected val webViewList = mutableStateListOf<KiwixWebView>()
   private val webUrlsFlow = MutableStateFlow("")
@@ -256,6 +258,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var externalLinkOpener: ExternalLinkOpener? = null
+
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+  private val addNoteViewModel by lazy { viewModel<AddNoteViewModel>(viewModelFactory) }
 
   @JvmField
   @Inject
@@ -367,36 +373,6 @@ abstract class CoreReaderFragment :
   private var pendingIntent: Intent? = null
 
   @Volatile var isWebViewHistoryRestoring = false
-
-  private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
-    registerForActivityResult(
-      ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-      if (isGranted) {
-        // Successfully granted permission, so opening the note keeper
-        showAddNoteDialog()
-      } else {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          /* shouldShowRequestPermissionRationale() returns false when:
-           *  1) User has previously checked on "Don't ask me again", and/or
-           *  2) Permission has been disabled on device
-           */
-          context?.toast(
-            string.ext_storage_permission_rationale_add_note,
-            Toast.LENGTH_LONG
-          )
-        } else {
-          context?.toast(
-            string.ext_storage_write_permission_denied_add_note,
-            Toast.LENGTH_LONG
-          )
-          alertDialogShower?.show(
-            KiwixDialog.ReadPermissionRequired,
-            requireActivity()::navigateToAppSettings
-          )
-        }
-      }
-    }
 
   fun runSafelyInCoreReaderLifecycleScope(func: suspend CoroutineScope.() -> Unit) {
     runCatching {
@@ -837,37 +813,33 @@ abstract class CoreReaderFragment :
     }
   }
 
-  /** Creates the full screen NavigationHistoryDialog, which is a DialogFragment  */
   private fun showNavigationHistoryDialog(isForwardHistory: Boolean) {
-    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-    val previousInstance =
-      requireActivity().supportFragmentManager.findFragmentByTag(NavigationHistoryDialog.TAG)
-
-    // To prevent multiple instances of the DialogFragment
-    if (previousInstance == null) {
-      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
-       *  returning null means that the NavigationHistoryDialog is currently not on display (as doesn't exist)
-       **/
-      val dialogFragment = NavigationHistoryDialog(
-        if (isForwardHistory) {
-          string.forward_history
-        } else {
-          string.backward_history
-        },
-        navigationHistoryList,
-        this
+    alertDialogShower?.show(
+      KiwixDialog.NavigationHistoryDialog(
+        ZERO.dp,
+        {
+          NavigationHistoryDialog(
+            titleId = if (isForwardHistory) {
+              string.forward_history
+            } else {
+              string.backward_history
+            },
+            navigationHistoryList,
+            { onItemClicked(it) },
+            onClearNavigationHistoryClick = { clearHistory() },
+            onDialogDismissRequest = { (alertDialogShower as? AlertDialogShower)?.dismiss() },
+          )
+        }
       )
-      dialogFragment.show(fragmentTransaction, NavigationHistoryDialog.TAG)
-      // For DialogFragments, show() handles the fragment commit and display
-    }
+    )
   }
 
-  override fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
+  private fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
     loadUrlWithCurrentWebview(navigationHistoryListItem.pageUrl)
   }
 
   @Suppress("InjectDispatcher")
-  override fun clearHistory() {
+  private fun clearHistory() {
     getCurrentWebView()?.clearHistory()
     CoroutineScope(Dispatchers.IO).launch {
       repositoryActions?.clearWebViewPageHistory()
@@ -1163,8 +1135,6 @@ abstract class CoreReaderFragment :
       // to handle if service is already unbounded
     }
     unRegisterReadAloudService()
-    storagePermissionForNotesLauncher?.unregister()
-    storagePermissionForNotesLauncher = null
     donationDialogHandler?.setDonationDialogCallBack(null)
     donationDialogHandler = null
     composeView?.disposeComposition()
@@ -1467,11 +1437,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun onAddNoteMenuClicked() {
-    runSafelyInCoreReaderLifecycleScope {
-      if (requestExternalStorageWritePermissionForNotes()) {
-        showAddNoteDialog()
-      }
-    }
+    showAddNoteDialog()
   }
 
   /**
@@ -1521,7 +1487,7 @@ abstract class CoreReaderFragment :
 
   private fun sharePdfFile(pdfFile: java.io.File) {
     try {
-      val uri = androidx.core.content.FileProvider.getUriForFile(
+      val uri = FileProvider.getUriForFile(
         requireContext(),
         requireContext().packageName + ".fileprovider",
         pdfFile
@@ -1561,45 +1527,31 @@ abstract class CoreReaderFragment :
    */
   protected abstract fun createNewTab()
 
-  /** Creates the full screen AddNoteDialog, which is a DialogFragment  */
   private fun showAddNoteDialog() {
-    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-    val previousInstance =
-      requireActivity().supportFragmentManager.findFragmentByTag(AddNoteDialog.TAG)
+    val webView = (activity as? WebViewProvider)?.getCurrentWebView()
+    val config = AddNoteDialogConfig(
+      articleTitle = webView?.title,
+      currentWebViewUrl = webView?.url,
+      currentWebViewTitle = webView?.title
+    )
 
-    // To prevent multiple instances of the DialogFragment
-    if (previousInstance == null) {
-      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
-       *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
-       **/
-      val dialogFragment = AddNoteDialog()
-      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
-      // For DialogFragments, show() handles the fragment commit and display
-    }
-  }
-
-  @Suppress("NestedBlockDepth")
-  private suspend fun requestExternalStorageWritePermissionForNotes(): Boolean {
-    var isPermissionGranted = false
-    if (kiwixDataStore?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-    ) {
-      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_GRANTED
-      ) {
-        isPermissionGranted = true
-      } else {
-        storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-      }
-    } else {
-      isPermissionGranted = true
-    }
-    return isPermissionGranted
+    alertDialogShower?.show(
+      KiwixDialog.AddNoteDialogDialog(
+        ZERO.dp,
+        {
+          AddNoteDialogComposable(
+            addNoteViewModel = addNoteViewModel,
+            config = config,
+            onDismiss = { (alertDialogShower as AlertDialogShower).dismiss() }
+          )
+        }
+      )
+    )
   }
 
   private fun goToBookmarks(): Boolean {
     val parentActivity = requireActivity() as CoreMainActivity
-    parentActivity.navigate(parentActivity.bookmarksFragmentRoute)
+    parentActivity.navigate(parentActivity.bookmarksScreenRoute)
     return true
   }
 

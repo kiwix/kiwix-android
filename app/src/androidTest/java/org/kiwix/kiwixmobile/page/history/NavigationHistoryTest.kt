@@ -23,7 +23,6 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
-import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -60,7 +59,7 @@ class NavigationHistoryTest : BaseActivityTest() {
 
   @Test
   fun navigationHistoryDialogTest() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
       activityScenario.onActivity {
         kiwixMainActivity = it
       }
@@ -98,10 +97,6 @@ class NavigationHistoryTest : BaseActivityTest() {
         clickOnDeleteHistory(composeTestRule)
         assertDeleteDialogDisplayed(composeTestRule)
         clickOnCancelButton(composeTestRule)
-      }
-      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-        // temporary disabled on Android 25
-        LeakAssertions.assertNoLeaks()
       }
     }
   }

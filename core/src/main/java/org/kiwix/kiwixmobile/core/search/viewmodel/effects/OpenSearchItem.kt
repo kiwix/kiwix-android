@@ -33,7 +33,7 @@ data class OpenSearchItem(
   private val openInNewTab: Boolean = false
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val readerFragmentRoute = (activity as CoreMainActivity).readerFragmentRoute
+    val readerFragmentRoute = (activity as CoreMainActivity).readerScreenRoute
     activity.navigate(readerFragmentRoute)
     activity.setNavigationResultOnCurrent(
       SearchItemToOpen(

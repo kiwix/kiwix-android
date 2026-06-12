@@ -180,11 +180,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   var bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior? = null
 
   var activityResultForwarder: ((Int, Int, Intent?) -> Unit)? = null
-  abstract val bookmarksFragmentRoute: String
-  abstract val settingsFragmentRoute: String
-  abstract val historyFragmentRoute: String
-  abstract val notesFragmentRoute: String
-  abstract val helpFragmentRoute: String
+  abstract val bookmarksScreenRoute: String
+  abstract val settingsScreenRoute: String
+  abstract val historyScreenRoute: String
+  abstract val notesScreenRoute: String
+  abstract val helpScreenRoute: String
+  abstract val readerScreenRoute: String
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinationsRoute: Set<String>
   abstract val mainActivity: AppCompatActivity
@@ -394,7 +395,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   protected fun openHelpFragment() {
     handleDrawerOnNavigation()
-    navigate(helpFragmentRoute)
+    navigate(helpScreenRoute)
   }
 
   fun navigationDrawerIsOpen(): Boolean = leftDrawerState.isOpen
@@ -453,12 +454,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   private fun openSettings() {
     handleDrawerOnNavigation()
-    navigate(settingsFragmentRoute)
+    navigate(settingsScreenRoute)
   }
 
   private fun openHistory() {
     handleDrawerOnNavigation()
-    navigate(historyFragmentRoute)
+    navigate(historyScreenRoute)
   }
 
   abstract fun openSearch(
@@ -478,10 +479,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     val navOptions = NavOptions.Builder()
       .setLaunchSingleTop(true)
-      .setPopUpTo(readerFragmentRoute, inclusive = true)
+      .setPopUpTo(readerScreenRoute, inclusive = true)
       .build()
     // Navigate to reader screen.
-    navigate(readerFragmentRoute, navOptions)
+    navigate(readerScreenRoute, navOptions)
     // Set arguments on current destination(reader).
     setNavigationResultOnCurrent(zimFileUri, ZIM_FILE_URI_KEY)
     setNavigationResultOnCurrent(pageUrl, PAGE_URL_KEY)
@@ -490,12 +491,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   private fun openBookmarks() {
     handleDrawerOnNavigation()
-    navigate(bookmarksFragmentRoute)
+    navigate(bookmarksScreenRoute)
   }
 
   private fun openNotes() {
     handleDrawerOnNavigation()
-    navigate(notesFragmentRoute)
+    navigate(notesScreenRoute)
   }
 
   protected fun handleDrawerOnNavigation() {
@@ -640,7 +641,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   protected abstract fun getIconResId(): Int
-  abstract val readerFragmentRoute: String
   abstract fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()

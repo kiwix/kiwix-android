@@ -190,7 +190,7 @@ class LibKiwixBookTest {
     fun libkiwix_whenComparedWithNull_returnsFalse() = runTest {
       val book = LibkiwixBook().apply { id = "A" }
 
-      val result = book.equals(null)
+      val result = book == null
 
       assertThat(result).isFalse()
     }

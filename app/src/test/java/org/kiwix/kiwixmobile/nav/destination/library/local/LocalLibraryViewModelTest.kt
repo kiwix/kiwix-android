@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.material3.SnackbarHostState
-import androidx.fragment.app.FragmentManager
 import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.clearMocks
@@ -43,8 +42,10 @@ import org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDia
 import org.kiwix.kiwixmobile.core.utils.effects.ReadPermissionRequiredDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ScanStorage
+import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
@@ -71,7 +72,6 @@ class LocalLibraryViewModelTest {
   private val zimReaderFactory: ZimFileReader.Factory = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val validateZimViewModel: ValidateZimViewModel = mockk(relaxed = true)
-  private val fragmentManager: FragmentManager = mockk(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
 
   @RegisterExtension
@@ -126,8 +126,7 @@ class LocalLibraryViewModelTest {
       emptyList(),
       validateZimViewModel,
       alertDialogShower,
-      snackBarHostState,
-      fragmentManager
+      snackBarHostState
     )
     return vm
   }
@@ -355,6 +354,16 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
+  fun `StorageSelectionDialog emits ShowStorageSelectionDialog side effect`() =
+    testActionSideEffect(
+      LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog(
+        mockk(relaxed = true)
+      )
+    ) {
+      assertTrue(it is ShowStorageSelectionDialog)
+    }
+
+  @Test
   fun `ManageFilesPermissionDialog emits correct side effect on Android 13+`() = runTest {
     every { kiwixPermissionChecker.isAndroid11OrAbove() } returns true
     viewModel.sideEffects.test {
@@ -413,7 +422,7 @@ class LocalLibraryViewModelTest {
     advanceUntilIdle()
 
     verify {
-      processSelectedZimFilesForStandalone.setSelectedZimFileCallback(viewModel)
+      processSelectedZimFilesForStandalone.init(viewModel)
     }
     verify {
       processSelectedZimFilesForPlayStore.init(
@@ -421,7 +430,6 @@ class LocalLibraryViewModelTest {
         lifecycleScope = any(),
         alertDialogShower = alertDialogShower,
         snackBarHostState = snackBarHostState,
-        fragmentManager = fragmentManager,
         selectedZimFileCallback = viewModel
       )
     }
@@ -1040,6 +1048,29 @@ class LocalLibraryViewModelTest {
 
       assertThat(dialogAction.errorMessage).isEqualTo(errorMessage)
       assertThat(dialogAction.callBack).isEqualTo(callback)
+
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `showStorageSelectionDialog emits storage selection dialog action`() = runTest {
+    val dialogConfig = mockk<StorageSelectDialogConfig>()
+
+    viewModel.localLibraryUiActions.test {
+      viewModel.showStorageSelectionDialog(dialogConfig)
+
+      val action = awaitItem()
+
+      assertThat(action)
+        .isInstanceOf(
+          LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog::class.java
+        )
+
+      val dialogAction =
+        action as LocalLibraryViewModel.LocalLibraryUiActions.StorageSelectionDialog
+
+      assertThat(dialogAction.dialogConfig).isEqualTo(dialogConfig)
 
       cancelAndIgnoreRemainingEvents()
     }

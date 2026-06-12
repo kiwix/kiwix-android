@@ -25,6 +25,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
@@ -60,4 +61,9 @@ abstract class CoreViewModelModule {
   @IntoMap
   @ViewModelKey(ValidateZimViewModel::class)
   abstract fun bindValidateZimViewModel(validateZimViewModel: ValidateZimViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(AddNoteViewModel::class)
+  abstract fun bindAddNoteViewModel(addNoteViewModel: AddNoteViewModel): ViewModel
 }
