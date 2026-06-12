@@ -37,7 +37,6 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
-import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
@@ -282,12 +281,12 @@ class DownloadMonitorService : Service() {
       .setOngoing(false)
       .setOnlyAlertOnce(true)
       .addAction(
-        drawable.fetch_notification_resume,
+        com.tonyodev.fetch2.R.drawable.fetch_notification_resume,
         getString(R.string.yes),
         yesPendingIntent
       )
       .addAction(
-        drawable.fetch_notification_cancel,
+        com.tonyodev.fetch2.R.drawable.fetch_notification_cancel,
         getString(R.string.no),
         noPendingIntent
       )

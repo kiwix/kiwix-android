@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_CATEGORY_LIST_TEST_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -72,8 +72,8 @@ class OnlineCategoryRobot : BaseRobot() {
     matchLanguage: String
   ) {
     composeTestRule.onNodeWithTag(ONLINE_CATEGORY_LIST_TEST_TAG)
-      .performScrollToNode(hasTestTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage"))
-    composeTestRule.onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
+      .performScrollToNode(hasTestTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage"))
+    composeTestRule.onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
       .performClick()
   }
 
@@ -117,8 +117,8 @@ class OnlineCategoryRobot : BaseRobot() {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag(ONLINE_CATEGORY_LIST_TEST_TAG)
-        .performScrollToNode(hasTestTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage"))
-      onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
+        .performScrollToNode(hasTestTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage"))
+      onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
         .assertIsOn()
     }
   }

@@ -20,10 +20,9 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.app.Application
 import android.os.Build
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -43,7 +42,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineCategoryDialogScreen
 import org.kiwix.kiwixmobile.nav.destination.library.online.toSentenceCaseCategory
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
@@ -193,14 +192,9 @@ class OnlineCategoryDialogScreenTest {
 
     composeRule
       .onNodeWithTag(
-        "${CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG}science",
+        "${CATEGORY_ITEM_CHECKBOX_TESTING_TAG}science",
         useUnmergedTree = true
-      ).assert(
-        SemanticsMatcher.expectValue(
-          SemanticsProperties.Selected,
-          true
-        )
-      )
+      ).assertIsOn()
   }
 
   @Test
@@ -219,15 +213,10 @@ class OnlineCategoryDialogScreenTest {
 
     composeRule
       .onNodeWithTag(
-        "${CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG}science",
+        "${CATEGORY_ITEM_CHECKBOX_TESTING_TAG}science",
         useUnmergedTree = true
       )
-      .assert(
-        SemanticsMatcher.expectValue(
-          SemanticsProperties.Selected,
-          false
-        )
-      )
+      .assertIsOff()
   }
 
   @Test
