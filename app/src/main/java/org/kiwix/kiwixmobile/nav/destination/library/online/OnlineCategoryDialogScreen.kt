@@ -67,7 +67,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Erro
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 
-const val CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG = "categoryItemRadioButtonTestingTag"
+const val CATEGORY_ITEM_CHECKBOX_TESTING_TAG = "categoryItemCheckboxTestingTag"
 const val ONLINE_CATEGORY_LIST_TEST_TAG = "category_list"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -197,7 +197,7 @@ private fun CategoryItemRow(
       modifier = Modifier
         .padding(ComposeDimens.SIXTEEN_DP)
         .semantics {
-          testTag = "$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG${category.category}"
+          testTag = "$CATEGORY_ITEM_CHECKBOX_TESTING_TAG${category.category}"
         },
       checked = category.active,
       onCheckedChange = {
