@@ -36,6 +36,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,7 +65,6 @@ import org.kiwix.kiwixmobile.custom.testutils.TestUtils.getOkkHttpClientForTesti
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
-import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
@@ -77,9 +77,7 @@ class SearchScreenTestForBrandedApp {
       Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
-  @get:Rule
-  val mainDispatcherRule = MainDispatcherRule()
-  private val lifeCycleScope = CoroutineScope(mainDispatcherRule.dispatcher + SupervisorJob())
+  private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
   @get:Rule
   var permissionRules: GrantPermissionRule =

@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import javax.inject.Singleton
 
@@ -53,8 +55,12 @@ open class DatabaseModule {
 
   @Singleton
   @Provides
-  fun provideDownloadRoomDao(db: KiwixRoomDatabase, libkiwixBookOnDisk: LibkiwixBookOnDisk) =
-    db.downloadRoomDao().also {
-      it.libkiwixBookOnDisk = libkiwixBookOnDisk
-    }
+  fun provideDownloadRoomDao(
+    db: KiwixRoomDatabase,
+    libkiwixBookOnDisk: LibkiwixBookOnDisk,
+    @IoDispatcher ioDispatcher: CoroutineDispatcher
+  ) = db.downloadRoomDao().also {
+    it.libkiwixBookOnDisk = libkiwixBookOnDisk
+    it.ioDispatcher = ioDispatcher
+  }
 }

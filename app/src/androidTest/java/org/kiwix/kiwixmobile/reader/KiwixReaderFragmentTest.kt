@@ -61,7 +61,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
@@ -73,9 +72,6 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
 
   @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
-
-  @get:Rule
-  private val dispatcher = MainDispatcherRule()
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"

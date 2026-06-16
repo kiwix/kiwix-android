@@ -35,48 +35,19 @@ class MainDispatcherRule(
   val dispatcher: TestDispatcher = StandardTestDispatcher()
 ) :
   TestWatcher(), BeforeEachCallback, AfterEachCallback {
-  private var isMainOverridden = false
-
   override fun starting(description: Description?) {
-    if (shouldOverrideMain()) {
-      Dispatchers.setMain(dispatcher)
-      isMainOverridden = true
-    }
+    Dispatchers.setMain(dispatcher)
   }
 
   override fun finished(description: Description?) {
-    if (isMainOverridden) {
-      Dispatchers.resetMain()
-      isMainOverridden = false
-    }
+    Dispatchers.resetMain()
   }
 
   override fun beforeEach(context: ExtensionContext?) {
-    if (shouldOverrideMain()) {
-      Dispatchers.setMain(dispatcher)
-      isMainOverridden = true
-    }
+    Dispatchers.setMain(dispatcher)
   }
 
   override fun afterEach(context: ExtensionContext?) {
-    if (isMainOverridden) {
-      Dispatchers.resetMain()
-      isMainOverridden = false
-    }
-  }
-
-  private fun shouldOverrideMain(): Boolean {
-    return try {
-      val runtime = System.getProperty("java.runtime.name")
-      val isAndroidRuntime = runtime?.contains("Android", ignoreCase = true) == true
-      if (isAndroidRuntime) {
-        val fingerprint = android.os.Build.FINGERPRINT
-        fingerprint?.contains("robolectric", ignoreCase = true) == true
-      } else {
-        true
-      }
-    } catch (_: Throwable) {
-      true
-    }
+    Dispatchers.resetMain()
   }
 }
