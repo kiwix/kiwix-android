@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.review.ReviewManager
@@ -43,9 +44,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.compat.CompatHelper
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 @ExperimentalCoroutinesApi
@@ -55,6 +56,7 @@ class RateDialogHandlerTest {
   private lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
   private lateinit var rateDialogHandler: RateDialogHandler
   private lateinit var packageManager: PackageManager
+  private lateinit var connectivityManager: ConnectivityManager
 
   @BeforeEach
   fun setup() {
@@ -68,10 +70,10 @@ class RateDialogHandlerTest {
     coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(false)
     coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(0)
     libkiwixBookOnDisk = mockk(relaxed = true)
+    connectivityManager = mockk(relaxed = true)
 
     mockkObject(CompatHelper.Companion)
-    mockkObject(NetworkUtils)
-    every { NetworkUtils.isNetworkAvailable(any()) } returns true
+    every { connectivityManager.isNetworkAvailable() } returns true
 
     // Set up default behavior for two weeks passed and books available:
     val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
@@ -83,7 +85,7 @@ class RateDialogHandlerTest {
     coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
 
     rateDialogHandler =
-      RateDialogHandler(activity, libkiwixBookOnDisk, kiwixDataStore)
+      RateDialogHandler(activity, libkiwixBookOnDisk, kiwixDataStore, connectivityManager)
 
     mockkStatic("androidx.lifecycle.LifecycleOwnerKt")
     val mockLifecycleScope = mockk<LifecycleCoroutineScope>(relaxed = true)
@@ -163,7 +165,7 @@ class RateDialogHandlerTest {
   @Test
   fun `checkForRateDialog does not launch review flow when network is unavailable`() = runTest {
     coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
-    every { NetworkUtils.isNetworkAvailable(any()) } returns false
+    every { connectivityManager.isNetworkAvailable() } returns false
 
     val mockReviewManager = mockk<ReviewManager>(relaxed = true)
     mockkStatic(ReviewManagerFactory::class)

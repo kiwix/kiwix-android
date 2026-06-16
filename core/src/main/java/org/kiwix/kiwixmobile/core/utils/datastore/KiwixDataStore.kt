@@ -622,7 +622,6 @@ class KiwixDataStore @Inject constructor(
   suspend fun resetRateAppTriggers() {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.RATE_APP_COUNT] = 0
-      prefs[PreferencesKeys.RATE_APP_DOWNLOAD_COMPLETED] = false
       prefs[PreferencesKeys.RATE_APP_READING_COUNT] = 0
     }
   }

@@ -19,8 +19,6 @@ package org.kiwix.kiwixmobile.settings
 
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
@@ -62,7 +60,7 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
     composeTestRule.waitForIdle()
     splash {
-      swipeLeft(composeTestRule, runBlocking { kiwixDataStore.isPlayStoreBuild.first() })
+      swipeLeft(composeTestRule, isPlayStoreBuild)
       clickGetStarted(composeTestRule) {}
     }
     StandardActions.openDrawer(kiwixMainActivity as CoreMainActivity)

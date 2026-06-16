@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -27,11 +28,11 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
@@ -42,22 +43,39 @@ const val READING_MILESTONE_THRESHOLD = 10
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  private val kiwixDataStore: KiwixDataStore
+  private val kiwixDataStore: KiwixDataStore,
+  private val connectivityManager: ConnectivityManager
 ) {
-  private var alertDialogShower: AlertDialogShower? = null
-
-  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
-    this.alertDialogShower = alertDialogShower
-  }
-
   fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
       val newCount = kiwixDataStore.incrementRateAppVisitCount()
 
-      if (shouldShowRateDialog(newCount) && NetworkUtils.isNetworkAvailable(activity)) {
+      if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {
         kiwixDataStore.resetRateAppTriggers()
         launchInAppReviewFlow()
       }
+    }
+  }
+
+  /**
+   * Opens the Play Store page for the app when the user explicitly taps
+   * "Rate App" in Settings.
+   */
+  fun goToRateApp() {
+    val kiwixLocalMarketUri =
+      "market://details?id=${activity.packageName}".toUri()
+    val kiwixBrowserMarketUri =
+      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
+    goToMarket.addFlags(
+      Intent.FLAG_ACTIVITY_NO_HISTORY or
+        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+    )
+    try {
+      activity.startActivity(goToMarket)
+    } catch (_: ActivityNotFoundException) {
+      activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
     }
   }
 
@@ -94,7 +112,7 @@ class RateDialogHandler @Inject constructor(
   }
 
   @Suppress("TooGenericExceptionCaught")
-  internal fun launchInAppReviewFlow() {
+  private fun launchInAppReviewFlow() {
     try {
       val reviewManager = ReviewManagerFactory.create(activity)
       reviewManager.requestReviewFlow()
@@ -108,24 +126,6 @@ class RateDialogHandler @Inject constructor(
         }
     } catch (exception: Exception) {
       Log.e(TAG, "Unexpected error while launching in-app review", exception)
-    }
-  }
-
-  internal fun goToRateApp() {
-    val kiwixLocalMarketUri =
-      "market://details?id=${activity.packageName}".toUri()
-    val kiwixBrowserMarketUri =
-      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
-    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
-    goToMarket.addFlags(
-      Intent.FLAG_ACTIVITY_NO_HISTORY or
-        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-    )
-    try {
-      activity.startActivity(goToMarket)
-    } catch (_: ActivityNotFoundException) {
-      activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
     }
   }
 
