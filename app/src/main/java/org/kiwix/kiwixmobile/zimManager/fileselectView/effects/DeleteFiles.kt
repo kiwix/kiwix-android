@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteZims
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 
-class DeleteFiles(
+data class DeleteFiles(
   private val booksOnDiskListItems: List<BookOnDisk>,
   private val dialogShower: DialogShower,
   private val deleteFilesUseCase: DeleteFilesUseCase,

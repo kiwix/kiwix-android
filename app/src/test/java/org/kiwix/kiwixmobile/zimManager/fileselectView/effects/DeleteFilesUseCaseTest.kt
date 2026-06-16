@@ -27,6 +27,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -54,15 +55,11 @@ class DeleteFilesUseCaseTest {
 
   @BeforeEach
   fun setup() {
+    clearAllMocks()
     mockkObject(FileUtils)
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
 
-    coEvery {
-      file1.isFileExist()
-    } returns false
-    coEvery {
-      file2.isFileExist(any())
-    } returns false
+    coEvery { any<File>().isFileExist() } returns false
 
     coEvery {
       FileUtils.deleteZimFile(file1.path)
@@ -79,7 +76,7 @@ class DeleteFilesUseCaseTest {
 
   @AfterEach
   fun tearDown() {
-    clearAllMocks()
+    unmockkAll()
   }
 
   @Test

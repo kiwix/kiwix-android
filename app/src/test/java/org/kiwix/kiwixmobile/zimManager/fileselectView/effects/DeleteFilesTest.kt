@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import io.mockk.Runs
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -71,6 +72,7 @@ class DeleteFilesTest {
 
   @BeforeEach
   fun setup() {
+    clearAllMocks()
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
 
     deleteFiles =
@@ -81,7 +83,7 @@ class DeleteFilesTest {
         viewModelScope,
         ioDispatcher.dispatcher
       )
-    every { activity.toast(any<Int>(), any()) } just Runs
+    every { activity.toast(any<Int>()) } just Runs
   }
 
   @AfterEach
@@ -102,16 +104,19 @@ class DeleteFilesTest {
   }
 
   @Test
-  fun invokeWith_whenDeleteClicked_callsDeleteFilesUseCase() {
+  fun invokeWith_whenDeleteClicked_callsDeleteFilesUseCase() = runTest {
     val clickSlot = slot<() -> Unit>()
 
     every {
       dialogShower.show(any(), capture(clickSlot))
     } just Runs
 
+    coEvery { deleteFilesUseCase(any()) } returns true
+
     deleteFiles.invokeWith(activity)
 
     clickSlot.captured.invoke()
+    advanceUntilIdle()
     coVerify(exactly = 1) {
       deleteFilesUseCase(listOf(book1, book2))
     }
