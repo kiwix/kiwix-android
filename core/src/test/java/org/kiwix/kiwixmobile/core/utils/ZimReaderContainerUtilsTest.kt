@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 
 class ZimReaderContainerUtilsTest {
@@ -111,6 +112,9 @@ class ZimReaderContainerUtilsTest {
     verify {
       container.isRedirect(articleUrl)
     }
+    verify(exactly = 0) {
+      container.getRedirect(any())
+    }
   }
 
   @Test
@@ -134,5 +138,37 @@ class ZimReaderContainerUtilsTest {
       container.isRedirect(articleUrl)
       container.getRedirect(articleUrl)
     }
+  }
+
+  @Test
+  fun urlSuffixToParsableUrl_withUnicodeCharacters_returnsCorrectUrl() {
+    val suffix = "A/Café_भारत_日本"
+
+    every {
+      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
+    } returns false
+
+    val result = container.urlSuffixToParsableUrl(suffix)
+
+    assertEquals(
+      "${ZimFileReader.CONTENT_PREFIX}$suffix",
+      result
+    )
+  }
+
+  @Test
+  fun urlSuffixToParsableUrl_withSpecialCharacters_returnsCorrectUrl() {
+    val suffix = "A/C%2B%2B_(programming_language)"
+
+    every {
+      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
+    } returns false
+
+    val result = container.urlSuffixToParsableUrl(suffix)
+
+    assertEquals(
+      "${ZimFileReader.CONTENT_PREFIX}$suffix",
+      result
+    )
   }
 }
