@@ -89,6 +89,7 @@ import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.nav.destination.library.local.ExternalZimIntentHandler
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
@@ -110,6 +111,9 @@ class KiwixMainActivity : CoreMainActivity() {
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
+
+  @Inject
+  lateinit var externalZimIntentHandler: ExternalZimIntentHandler
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
@@ -324,10 +328,14 @@ class KiwixMainActivity : CoreMainActivity() {
       when (it.scheme) {
         "file",
         "content" -> {
-          lifecycleScope.launch(mainDispatcher) {
-            delay(OPENING_ZIM_FILE_DELAY)
-            openLocalLibraryWithZimFilePath("$it")
-            clearIntentDataAndAction()
+          intent.let { nonNullIntent ->
+            externalZimIntentHandler.handleIntent(
+              activity = this,
+              intent = nonNullIntent,
+              coroutineScope = lifecycleScope,
+              openZimFromFilePath = { path -> openZimFromFilePath(path) },
+              clearIntentDataAndAction = { clearIntentDataAndAction() }
+            )
           }
         }
 
@@ -364,15 +372,11 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  private fun clearIntentDataAndAction() {
+  internal fun clearIntentDataAndAction() {
     // if used once then clear it to avoid affecting any other functionality
     // of the application.
     intent.action = null
     intent.data = null
-  }
-
-  private fun openLocalLibraryWithZimFilePath(path: String) {
-    navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
   }
 
   private fun handleNotificationIntent(intent: Intent?) {
@@ -392,7 +396,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  private fun openZimFromFilePath(path: String, pageUrl: String? = null) {
+  internal fun openZimFromFilePath(path: String, pageUrl: String? = null) {
     val isAlreadyOnReader =
       navController.currentDestination?.route == KiwixDestination.Reader.route
     if (!isAlreadyOnReader) {
