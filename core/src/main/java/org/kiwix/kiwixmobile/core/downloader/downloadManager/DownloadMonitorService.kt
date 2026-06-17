@@ -46,6 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -80,7 +81,7 @@ class DownloadMonitorService : Service() {
   lateinit var ioDispatcher: CoroutineDispatcher
 
   private var updaterJob: Job? = null
-  private lateinit var scope: CoroutineScope
+  private var scope: CoroutineScope? = null
   private val notificationManager: NotificationManager by lazy {
     getSystemService(NOTIFICATION_SERVICE) as NotificationManager
   }
@@ -153,7 +154,7 @@ class DownloadMonitorService : Service() {
   }
 
   private fun setupUpdater() {
-    updaterJob = scope.launch {
+    updaterJob = scope?.launch {
       taskFlow.collect { task ->
         runCatching {
           task.invoke()
@@ -540,6 +541,8 @@ class DownloadMonitorService : Service() {
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
     updaterJob?.cancel()
+    scope?.cancel()
+    scope = null
     unregisterNetworkCallback()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_REMOVE)

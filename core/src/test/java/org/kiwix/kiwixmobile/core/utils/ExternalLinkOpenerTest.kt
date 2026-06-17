@@ -62,7 +62,8 @@ import org.robolectric.shadows.ShadowToast
 )
 class ExternalLinkOpenerTest {
   @RegisterExtension
-  private val dispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private lateinit var kiwixDataStore: KiwixDataStore
   private val alertDialogShower = AlertDialogShower()
   private lateinit var activity: Activity

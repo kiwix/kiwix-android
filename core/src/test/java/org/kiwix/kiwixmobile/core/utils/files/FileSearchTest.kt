@@ -52,7 +52,8 @@ class FileSearchTest {
   private val scanningProgressListener: ScanningProgressListener = mockk()
 
   @RegisterExtension
-  private val ioDispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @BeforeEach
   fun init() {
@@ -63,12 +64,12 @@ class FileSearchTest {
     every { Environment.getExternalStorageDirectory() } returns externalStorageDirectory
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
-    coEvery { StorageDeviceUtils.getReadableStorage(context) } returns
+    coEvery { StorageDeviceUtils.getReadableStorage(context, mainDispatcherRule.dispatcher) } returns
       arrayListOf(
         storageDevice
       )
     every { storageDevice.name } returns "/deviceDir"
-    fileSearch = FileSearch(context)
+    fileSearch = FileSearch(context, mainDispatcherRule.dispatcher)
   }
 
   @AfterEach

@@ -45,6 +45,7 @@ import retrofit2.Response
 @OptIn(ExperimentalCoroutinesApi::class)
 class OnlineLibraryRepositoryImplTest {
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
   private val onlineLibraryManager: OnlineLibraryManager = mockk()
   private val kiwixService: KiwixService = mockk()

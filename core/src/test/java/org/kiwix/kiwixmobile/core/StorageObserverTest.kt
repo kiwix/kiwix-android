@@ -70,7 +70,8 @@ class StorageObserverTest {
   private lateinit var storageObserver: StorageObserver
 
   @RegisterExtension
-  private val ioDispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @BeforeEach fun init() {
     clearAllMocks()
@@ -87,7 +88,7 @@ class StorageObserverTest {
       readerFactory,
       libkiwixBookmarks,
       libkiwixBookFactory,
-      ioDispatcher.dispatcher
+      mainDispatcherRule.dispatcher
     )
   }
 

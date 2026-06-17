@@ -39,7 +39,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class StorageSelectDialogScreenTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeRule = createComposeRule()
   private val storageCalculator = mockk<StorageCalculator>(relaxed = true)
   private val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)

@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.CoreApp
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import kotlinx.coroutines.MainCoroutineDispatcher
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
@@ -238,7 +239,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            coreReaderLifeCycleScope?.runSafelyInLifecycleScope {
+            coreReaderLifeCycleScope?.runSafelyInLifecycleScope((mainDispatcher as MainCoroutineDispatcher).immediate) {
               openZimFile(
                 ZimReaderSource(
                   file = it.file,
@@ -257,7 +258,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
 
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            coreReaderLifeCycleScope?.runSafelyInLifecycleScope {
+            coreReaderLifeCycleScope?.runSafelyInLifecycleScope((mainDispatcher as MainCoroutineDispatcher).immediate) {
               openZimFile(ZimReaderSource(it.obbFile), true)
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.

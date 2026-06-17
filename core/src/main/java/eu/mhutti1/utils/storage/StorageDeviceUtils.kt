@@ -23,7 +23,6 @@ import android.content.ContextWrapper
 import android.os.Build
 import android.os.Environment
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -35,16 +34,17 @@ object StorageDeviceUtils {
   @JvmStatic
   suspend fun getWritableStorage(
     context: Context,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher
   ) = withContext(dispatcher) {
     validate(externalMediaFilesDirsDevices(context), true)
   }
 
   @JvmStatic
   suspend fun getReadableStorage(
-    context: Context
+    context: Context,
+    ioDispatcher: CoroutineDispatcher
   ): List<StorageDevice> {
-    var kiwixDataStore: KiwixDataStore? = KiwixDataStore(context)
+    var kiwixDataStore: KiwixDataStore? = KiwixDataStore(context, ioDispatcher)
     val storageDevices =
       ArrayList<StorageDevice>().apply {
         add(environmentDevices(context))

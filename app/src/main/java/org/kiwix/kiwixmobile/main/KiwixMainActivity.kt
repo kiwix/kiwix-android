@@ -278,7 +278,7 @@ class KiwixMainActivity : CoreMainActivity() {
    */
   suspend fun getStorageDeviceList(): List<StorageDevice> {
     if (storageDeviceList.isEmpty()) {
-      storageDeviceList.addAll(StorageDeviceUtils.getWritableStorage(this))
+      storageDeviceList.addAll(StorageDeviceUtils.getWritableStorage(this, ioDispatcher))
     }
     return storageDeviceList
   }

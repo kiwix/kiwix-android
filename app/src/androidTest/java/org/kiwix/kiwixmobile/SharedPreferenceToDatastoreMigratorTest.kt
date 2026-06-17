@@ -43,7 +43,8 @@ import org.kiwix.kiwixmobile.core.utils.datastore.SharedPreferenceToDatastoreMig
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 class SharedPreferenceToDatastoreMigratorTest : BaseActivityTest() {
-  @get:Rule
+  @Rule
+  @JvmField
   val tmpFolder = TemporaryFolder()
 
   @Before

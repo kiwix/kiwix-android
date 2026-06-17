@@ -42,6 +42,7 @@ class ThemeConfigTest {
   private lateinit var context: Context
 
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
 
   @OptIn(ExperimentalCoroutinesApi::class)

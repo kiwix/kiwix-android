@@ -57,7 +57,8 @@ class DownloadManagerRequesterTest {
   private lateinit var mainActivity: CoreMainActivity
 
   @RegisterExtension
-  private var dispatcher = MainDispatcherRule()
+  @JvmField
+  var mainDispatcherRule = MainDispatcherRule()
 
   @BeforeEach
   fun setup() {
@@ -80,7 +81,7 @@ class DownloadManagerRequesterTest {
       kiwixDataStore,
       context,
       downloadRoomDao,
-      dispatcher.dispatcher
+      mainDispatcherRule.dispatcher
     )
   }
 

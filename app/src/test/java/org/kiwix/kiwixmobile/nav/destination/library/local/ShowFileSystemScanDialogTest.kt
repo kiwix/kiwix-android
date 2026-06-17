@@ -46,7 +46,8 @@ class ShowFileSystemScanDialogTest {
   private val activity: AppCompatActivity = mockk(relaxed = true)
 
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private lateinit var testScope: TestScope
 
   @Before

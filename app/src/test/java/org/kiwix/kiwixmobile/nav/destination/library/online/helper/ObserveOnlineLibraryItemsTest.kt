@@ -48,6 +48,7 @@ class ObserveOnlineLibraryItemsTest {
   private val fat32Checker: Fat32Checker = mockk()
 
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
 
   private lateinit var observeOnlineLibraryItems: ObserveOnlineLibraryItems

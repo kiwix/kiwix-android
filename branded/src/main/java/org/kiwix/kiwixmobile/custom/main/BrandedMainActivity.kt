@@ -66,7 +66,6 @@ class BrandedMainActivity : CoreMainActivity() {
   override val cachedComponent by lazy { brandedActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 
-  @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     brandedActivityComponent.inject(this)
     super.onCreate(savedInstanceState)

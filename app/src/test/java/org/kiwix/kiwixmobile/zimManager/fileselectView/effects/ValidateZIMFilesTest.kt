@@ -44,7 +44,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 @OptIn(ExperimentalCoroutinesApi::class)
 class ValidateZIMFilesTest {
   @RegisterExtension
-  private val ioDispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Test
   fun `invokeWith should show confirmation dialog with joined titles`() {
@@ -65,7 +66,7 @@ class ValidateZIMFilesTest {
       booksOnDiskListItems = listOf(book1, book2),
       dialogShower = dialogShower,
       validateZimViewModel = validateZimViewModel,
-      ioDispatcher = ioDispatcher.dispatcher
+      ioDispatcher = mainDispatcherRule.dispatcher
     )
 
     effect.invokeWith(activity)
@@ -104,7 +105,7 @@ class ValidateZIMFilesTest {
       booksOnDiskListItems = books,
       dialogShower = dialogShower,
       validateZimViewModel = validateZimViewModel,
-      ioDispatcher = ioDispatcher.dispatcher
+      ioDispatcher = mainDispatcherRule.dispatcher
     )
 
     effect.invokeWith(activity)

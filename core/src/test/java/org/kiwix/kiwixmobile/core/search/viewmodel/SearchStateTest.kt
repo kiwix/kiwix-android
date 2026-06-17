@@ -35,7 +35,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class SearchStateTest {
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test

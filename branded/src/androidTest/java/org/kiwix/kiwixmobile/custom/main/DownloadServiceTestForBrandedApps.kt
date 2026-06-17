@@ -74,7 +74,8 @@ class DownloadServiceTestForBrandedApps {
 
   private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-  @get:Rule
+  @Rule
+  @JvmField
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
 
@@ -86,7 +87,8 @@ class DownloadServiceTestForBrandedApps {
   @JvmField
   var retryRule = RetryRule()
 
-  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @JvmField
   val composeTestRule = createComposeRule()
   private lateinit var brandedMainActivity: BrandedMainActivity
   private lateinit var uiDevice: UiDevice

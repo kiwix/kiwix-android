@@ -101,6 +101,7 @@ import javax.inject.Provider
 @OptIn(ExperimentalCoroutinesApi::class)
 class OnlineLibraryViewModelTest {
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
   private val downloader: Downloader = mockk(relaxed = true)
   private val downloaderProvider: Provider<Downloader> = mockk(relaxed = true)

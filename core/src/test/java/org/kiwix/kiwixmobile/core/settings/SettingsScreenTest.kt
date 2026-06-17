@@ -69,7 +69,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class SettingsScreenTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeTestRule = createComposeRule()
 
   private val context get() = RuntimeEnvironment.getApplication()

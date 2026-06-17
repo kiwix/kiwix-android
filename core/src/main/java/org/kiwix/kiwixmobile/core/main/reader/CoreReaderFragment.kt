@@ -110,6 +110,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
@@ -264,6 +265,10 @@ abstract class CoreReaderFragment :
   @Inject
   @MainDispatcher
   lateinit var mainDispatcher: CoroutineDispatcher
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
 
   private val addNoteViewModel by lazy { viewModel<AddNoteViewModel>(viewModelFactory) }
 
@@ -2248,7 +2253,6 @@ abstract class CoreReaderFragment :
    *    openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
    *  }
    */
-  @Suppress("InjectDispatcher")
   private fun saveTabStates(onComplete: () -> Unit = {}) {
     CoroutineScope(mainDispatcher).launch {
       savingTabsMutex.withLock {
@@ -2257,7 +2261,7 @@ abstract class CoreReaderFragment :
           if (view.url == null) return@forEachIndexed
           getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
         }
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
           // clear the previous history saved in database
           repositoryActions?.clearWebViewPageHistory()
           // Store new history in database.

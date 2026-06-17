@@ -61,6 +61,7 @@ internal class BrandedDownloadViewModelTest {
   private val requestNotificationPermission: RequestNotificationPermission = mockk()
 
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
   private lateinit var brandedDownloadViewModel: BrandedDownloadViewModel
   private lateinit var downloadsFlow: MutableSharedFlow<List<DownloadModel>>

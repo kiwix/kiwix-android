@@ -40,9 +40,8 @@ class BrandedFileValidator @Inject constructor(
 ) {
   suspend fun validate(
     onFilesFound: suspend (ValidationState) -> Unit,
-    onNoFilesFound: suspend () -> Unit,
-    dispatcher: CoroutineDispatcher = ioDispatcher
-  ) = withContext(dispatcher) {
+    onNoFilesFound: suspend () -> Unit
+  ) = withContext(ioDispatcher) {
     when (val installationState = detectInstallationState()) {
       is HasBothFiles,
       is HasFile -> onFilesFound(installationState)

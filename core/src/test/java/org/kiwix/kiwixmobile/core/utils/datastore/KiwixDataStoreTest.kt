@@ -48,8 +48,9 @@ class KiwixDataStoreTest {
   private lateinit var context: Context
   private lateinit var kiwixDataStore: KiwixDataStore
 
-  @get:Rule
-  private val ioDispatcher = MainDispatcherRule()
+  @Rule
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Before
   fun setUp() = runTest {

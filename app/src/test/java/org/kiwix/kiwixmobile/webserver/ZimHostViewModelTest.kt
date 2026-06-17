@@ -55,7 +55,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ZimHostViewModelTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 
   private val context: Application = mockk(relaxed = true)

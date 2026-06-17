@@ -32,14 +32,15 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class DeletePageItemsTest {
-  @get:Rule
-  private val dispatcher = MainDispatcherRule()
+  @Rule
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private val pageDao: PageDao = mockk(relaxed = true)
   val activity: AppCompatActivity = mockk()
   private val zimReaderSource: ZimReaderSource = mockk()
   private val item1 = historyItem(zimReaderSource = zimReaderSource)
   private val item2 = historyItem(zimReaderSource = zimReaderSource)
-  private val viewModelScope = CoroutineScope(dispatcher.dispatcher)
+  private val viewModelScope = CoroutineScope(mainDispatcherRule.dispatcher)
 
   @Test
   fun `delete with selected items only deletes the selected items`() =

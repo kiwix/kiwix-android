@@ -47,7 +47,8 @@ class ShowFileCopyMoveErrorDialogTest {
   private lateinit var testScope: TestScope
 
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Before
   fun setup() {

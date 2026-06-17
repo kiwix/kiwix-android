@@ -44,13 +44,14 @@ class BrandedFileValidatorTest {
   private lateinit var assetManager: AssetManager
 
   @RegisterExtension
-  private val ioDispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @BeforeEach
   fun setUp() {
     context = mockk(relaxed = true)
     assetManager = mockk(relaxed = true)
-    brandedFileValidator = BrandedFileValidator(context, ioDispatcher.dispatcher)
+    brandedFileValidator = BrandedFileValidator(context, mainDispatcherRule.dispatcher)
   }
 
   @Test

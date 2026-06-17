@@ -50,7 +50,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class BrandedDownloadScreenUITest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeRule = createComposeRule()
 
   private fun setScreenContent(

@@ -40,7 +40,8 @@ class Fat32CheckerTest {
     protected val fileSystemChecker: FileSystemChecker = mockk()
     protected lateinit var fat32Checker: Fat32Checker
 
-    @get:Rule
+    @Rule
+    @JvmField
     val dispatcherRule = MainDispatcherRule()
 
     protected val pathWithSpace: String = File(System.getProperty("java.io.tmpdir")!!).absolutePath

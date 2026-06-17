@@ -73,7 +73,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   private val recentSearchRoomDao: RecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()

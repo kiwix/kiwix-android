@@ -45,15 +45,14 @@ class StorageObserver @Inject constructor(
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
   fun getBooksOnFileSystem(
-    scanningProgressListener: ScanningProgressListener,
-    dispatcher: CoroutineDispatcher = ioDispatcher
+    scanningProgressListener: ScanningProgressListener
   ): Flow<List<Book>> = flow {
     val files = scanFiles(scanningProgressListener).first()
     val downloads = downloadRoomDao.downloads().first()
     val result = toFilesThatAreNotDownloading(files, downloads)
       .mapNotNull { convertToLibkiwixBook(it) }
     emit(result)
-  }.flowOn(dispatcher)
+  }.flowOn(ioDispatcher)
 
   private fun scanFiles(scanningProgressListener: ScanningProgressListener): Flow<List<File>> =
     fileSearch.scan(scanningProgressListener)

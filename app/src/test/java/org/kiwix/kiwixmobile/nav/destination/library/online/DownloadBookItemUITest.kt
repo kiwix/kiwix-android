@@ -57,7 +57,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class DownloadBookItemUITest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeTestRule = createComposeRule()
 
   private val testIndex = 0

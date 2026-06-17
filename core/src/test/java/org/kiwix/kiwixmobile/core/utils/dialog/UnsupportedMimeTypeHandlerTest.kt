@@ -48,7 +48,8 @@ import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UnsupportedMimeTypeHandlerTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 
   private val activity: Activity = mockk(relaxed = true)

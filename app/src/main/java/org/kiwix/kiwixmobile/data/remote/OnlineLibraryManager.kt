@@ -117,10 +117,7 @@ class OnlineLibraryManager @Inject constructor(
    */
   fun getStartOffset(pageIndex: Int, pageSize: Int): Int = pageIndex * pageSize
 
-  private suspend fun extractTotalResults(
-    xml: String,
-    dispatcher: CoroutineDispatcher = ioDispatcher
-  ): Int = withContext(dispatcher) {
+  private suspend fun extractTotalResults(xml: String): Int = withContext(ioDispatcher) {
     val factory = XmlPullParserFactory.newInstance()
     val parser = factory.newPullParser()
     parser.setInput(StringReader(xml))

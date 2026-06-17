@@ -136,6 +136,7 @@ private class TestCoreSettingsViewModel(
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreSettingsViewModelTest {
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
   private val context: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)

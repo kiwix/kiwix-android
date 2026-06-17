@@ -79,7 +79,8 @@ class SearchScreenTestForBrandedApp {
 
   private val lifeCycleScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-  @get:Rule
+  @Rule
+  @JvmField
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
 
@@ -91,7 +92,8 @@ class SearchScreenTestForBrandedApp {
   @JvmField
   var retryRule = RetryRule()
 
-  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @JvmField
   val composeTestRule = createComposeRule()
 
   private lateinit var brandedMainActivity: BrandedMainActivity
