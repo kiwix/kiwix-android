@@ -46,7 +46,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
-import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class CopyMoveFileHandlerTest : BaseActivityTest() {
@@ -57,10 +56,6 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   @Rule(order = COMPOSE_TEST_RULE_ORDER)
   @JvmField
   val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
-
-  @Rule
-  @JvmField
-  val mainDispatcherRule = MainDispatcherRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var selectedFile: File
