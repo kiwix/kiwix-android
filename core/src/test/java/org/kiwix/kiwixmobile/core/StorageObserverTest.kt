@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core
 
+import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -41,7 +42,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
-import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Illustration
 import org.kiwix.libzim.Archive
@@ -88,11 +88,10 @@ class StorageObserverTest {
   @Test
   fun `books from disk are filtered by current downloads`() = runTest {
     withFiltering()
-    testFlow(
-      flow = booksOnFileSystem(),
-      triggerAction = {},
-      assert = { assertThat(awaitItem()).isEqualTo(listOf<Book>()) }
-    )
+    booksOnFileSystem().test {
+      assertThat(awaitItem()).isEqualTo(listOf<Book>())
+      awaitComplete()
+    }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
@@ -106,17 +105,14 @@ class StorageObserverTest {
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
     every { zimFileReader.zimReaderSource } returns zimReaderSource
-    testFlow(
-      flow = booksOnFileSystem(),
-      triggerAction = {},
-      assert = {
-        assertThat(awaitItem()).isEqualTo(
-          listOfNotNull<Book>(
-            expectedBook.nativeBook
-          )
+    booksOnFileSystem().test {
+      assertThat(awaitItem()).isEqualTo(
+        listOfNotNull<Book>(
+          expectedBook.nativeBook
         )
-      }
-    )
+      )
+      awaitComplete()
+    }
     // test the book is added to bookmark's library.
     coVerify { libkiwixBookmarks.addBookToLibrary(archive = any()) }
     verify { zimFileReader.dispose() }

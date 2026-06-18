@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -44,7 +44,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.util.UUID
 
@@ -53,7 +52,6 @@ internal class BookmarkViewModelTest {
   @JvmField
   @RegisterExtension
   val mainDispatcherRule = MainDispatcherRule()
-  private val testDispatcher = UnconfinedTestDispatcher()
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
@@ -111,24 +109,20 @@ internal class BookmarkViewModelTest {
 
   @Test
   fun `offerUpdateToShowAllToggle offers UpdateAllBookmarksPreference`() = runTest {
-    testFlow(
-      flow = viewModel.effects,
-      triggerAction = {
-        viewModel.offerUpdateToShowAllToggle(
-          Action.UserClickedShowAllToggle(false),
-          bookmarkState()
+    viewModel.effects.test {
+      viewModel.offerUpdateToShowAllToggle(
+        Action.UserClickedShowAllToggle(false),
+        bookmarkState()
+      )
+      assertThat(awaitItem()).isEqualTo(
+        UpdateAllBookmarksPreference(
+          kiwixDataStore,
+          false,
+          viewModelScope
         )
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(
-          UpdateAllBookmarksPreference(
-            kiwixDataStore,
-            false,
-            viewModelScope
-          )
-        )
-      }
-    )
+      )
+      cancelAndIgnoreRemainingEvents()
+    }
   }
 
   @Test

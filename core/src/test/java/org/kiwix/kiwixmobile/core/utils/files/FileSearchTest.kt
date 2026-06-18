@@ -23,7 +23,6 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Environment
 import android.provider.MediaStore.MediaColumns
-import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -32,8 +31,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
@@ -78,11 +75,10 @@ class FileSearchTest {
     @Test
     fun `scan of directory that doesn't exist returns nothing`() = runTest {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
-      testFlow(
-        flow = fileSearch.scan(scanningProgressListener),
-        triggerAction = {},
-        assert = { assertThat(awaitItem()).isEqualTo(emptyList<File>()) }
-      )
+      fileSearch.scan(scanningProgressListener).test {
+        assertThat(awaitItem()).isEmpty()
+        awaitComplete()
+      }
     }
 
     @Test
@@ -92,11 +88,10 @@ class FileSearchTest {
       File.createTempFile("willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parent
-      testFlow(
-        flow = fileSearch.scan(scanningProgressListener),
-        triggerAction = {},
-        assert = { assertThat(awaitItem()).containsExactlyInAnyOrder(zimFile, zimaaFile) }
-      )
+      fileSearch.scan(scanningProgressListener).test {
+        assertThat(awaitItem()).containsExactlyInAnyOrder(zimFile, zimaaFile)
+        awaitComplete()
+      }
     }
 
     @Test
@@ -112,11 +107,10 @@ class FileSearchTest {
         )
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parentFile.parent
-      testFlow(
-        flow = fileSearch.scan(scanningProgressListener),
-        triggerAction = {},
-        assert = { assertThat(awaitItem()[0]).isEqualTo(zimFile) }
-      )
+      fileSearch.scan(scanningProgressListener).test {
+        assertThat(awaitItem()[0]).isEqualTo(zimFile)
+        awaitComplete()
+      }
     }
   }
 
@@ -126,11 +120,10 @@ class FileSearchTest {
     fun `scan media store, if files are readable they are returned`() = runTest {
       val fileToFind = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(fileToFind)
-      testFlow(
-        flow = fileSearch.scan(scanningProgressListener),
-        triggerAction = {},
-        assert = { assertThat(awaitItem()).isEqualTo(listOf(fileToFind)) }
-      )
+      fileSearch.scan(scanningProgressListener).test {
+        assertThat(awaitItem()).isEqualTo(listOf(fileToFind))
+        awaitComplete()
+      }
     }
 
     @Test
@@ -138,11 +131,10 @@ class FileSearchTest {
       val unreadableFile = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(unreadableFile)
       unreadableFile.delete()
-      testFlow(
-        flow = fileSearch.scan(scanningProgressListener),
-        triggerAction = {},
-        assert = { assertThat(awaitItem()).isEqualTo(listOf<File>()) }
-      )
+      fileSearch.scan(scanningProgressListener).test {
+        assertThat(awaitItem()).isEmpty()
+        awaitComplete()
+      }
     }
 
     private fun expectFromMediaStore(fileToFind: File) {
@@ -170,18 +162,5 @@ class FileSearchTest {
     } catch (ignore: Exception) {
       ignore.printStackTrace()
     }
-  }
-}
-
-suspend fun <T> TestScope.testFlow(
-  flow: Flow<T>,
-  triggerAction: suspend () -> Unit,
-  assert: suspend TurbineTestContext<T>.() -> Unit
-) {
-  flow.test {
-    triggerAction()
-    assert()
-    cancelAndIgnoreRemainingEvents()
-    ensureAllEventsConsumed()
   }
 }
