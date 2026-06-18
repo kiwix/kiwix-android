@@ -56,6 +56,7 @@ class DeleteFilesUseCaseTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
+    mockkStatic(FileUtils::class)
     mockkObject(FileUtils)
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
 
@@ -100,6 +101,26 @@ class DeleteFilesUseCaseTest {
 
     assertFalse(result)
 
+    coVerify(exactly = 1) {
+      FileUtils.deleteZimFile(file1.path)
+    }
+    coVerify(exactly = 0) {
+      libkiwixBookOnDisk.delete(book.book.id)
+    }
+  }
+
+  @Test
+  fun invoke_whenFileIsNull_returnsFalseAndDoesNotDeleteBook() = runTest {
+    val libkiwixBook = LibkiwixBook(_id = "")
+    book = BookOnDisk(book = libkiwixBook, zimReaderSource = ZimReaderSource())
+
+    val result = deleteFilesUseCase(listOf(book))
+
+    assertFalse(result)
+
+    coVerify(exactly = 0) {
+      FileUtils.deleteZimFile(any())
+    }
     coVerify(exactly = 0) {
       libkiwixBookOnDisk.delete(book.book.id)
     }
