@@ -624,6 +624,7 @@ private fun BottomAppBarOfReaderScreen(
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+      // TODO: Replace the icon and click with viewModel.
       // Bookmark Icon
       BottomAppBarButtonIcon(
         onClick = bookmarkButtonItem.first,

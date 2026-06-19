@@ -19,15 +19,25 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.app.Application
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion
+import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
+import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -45,7 +55,9 @@ class BrandedReaderViewModel @Inject constructor(
   alertDialogShower: AlertDialogShower,
   zimReaderContainer: ZimReaderContainer,
   zimFileManager: ZimFileManager,
-  kiwixPermissionChecker: KiwixPermissionChecker
+  kiwixPermissionChecker: KiwixPermissionChecker,
+  repositoryActions: MainRepositoryActions,
+  bookmarkManager: BookmarkManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -55,8 +67,40 @@ class BrandedReaderViewModel @Inject constructor(
   alertDialogShower,
   zimReaderContainer,
   zimFileManager,
-  kiwixPermissionChecker
+  kiwixPermissionChecker,
+  repositoryActions,
+  bookmarkManager
 ) {
+  override suspend fun initialize(coreMainActivity: CoreMainActivity) {
+    enableLeftDrawer()
+    loadPageFromNavigationArguments(coreMainActivity)
+    if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+      // If "external links" are disabled in a custom app,
+      // this sets the shared preference to not show the external link popup
+      // when opening external links.
+      kiwixDataStore.setExternalLinkPopup(false)
+    }
+  }
+
+  private suspend fun loadPageFromNavigationArguments(coreMainActivity: CoreMainActivity) {
+    val pageUrl =
+      coreMainActivity.getObservableNavigationResult<String>(PAGE_URL_KEY)?.value.orEmpty()
+    if (pageUrl.isNotEmpty()) {
+      loadUrlWithCurrentWebview(pageUrl)
+      // Setup bookmark for current book
+      // See https://github.com/kiwix/kiwix-android/issues/3541
+      zimReaderContainer.zimFileReader?.let(::observeBookmarks)
+    } else {
+      isWebViewHistoryRestoring = true
+      if (isZimFileAlreadyOpenedInReader()) {
+        manageExternalLaunchAndRestoringViewState()
+      } else {
+        openObbOrZim(true)
+      }
+    }
+    emitEffect(ReaderEffect.ConsumeObservable<String>(PAGE_URL_KEY))
+  }
+
   override fun shouldShowSpellCheckedSuggestions(): Boolean =
     BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED
 
@@ -112,7 +156,81 @@ class BrandedReaderViewModel @Inject constructor(
     )
   }
 
+  /**
+   * Returns the tint color for the navigation icon.
+   *
+   * If the custom app is configured to show the app icon in place of the hamburger icon
+   * (i.e., [BuildConfig.DISABLE_TITLE] is true), the tint is set to [Color.Unspecified] to preserve
+   * the original colors of the image.
+   *
+   * Otherwise, [White] is used as the default tint, which is suitable for vector icons.
+   */
+  override fun navigationIconTint(): Color =
+    if (BuildConfig.DISABLE_TITLE) {
+      Color.Unspecified
+    } else {
+      White
+    }
+
+  /**
+   * Restores the view state when the webViewHistory data is valid.
+   * This method restores the tabs with webView pages history.
+   */
+  override suspend fun restoreViewStateOnValidWebViewHistory(
+    webViewHistoryItemList: List<WebViewHistoryItem>,
+    currentTab: Int,
+    // Unused in custom apps as there is only one ZIM file that is already set.
+    restoreOrigin: RestoreOrigin,
+    onComplete: () -> Unit
+  ) {
+    restoreTabs(webViewHistoryItemList, currentTab, onComplete)
+  }
+
+  /**
+   * Restores the view state when the attempt to read web view history from the room database fails
+   * due to the absence of any history records. In this case, it navigates to the homepage of the
+   * ZIM file, as custom apps are expected to have the ZIM file readily available.
+   */
+  override suspend fun restoreViewStateOnInvalidWebViewHistory() {
+    openHomeScreen()
+  }
+
   override fun showNoBookOpenViews() {
     updateState { copy(showNoBookOpenInReader = false) }
   }
+
+  /**
+   * Overrides the method to hide/show the placeholder from toolbar.
+   * When the "setting title" is disabled/enabled in a custom app,
+   * this function set the visibility of placeholder in toolbar when showing the tabs.
+   */
+  override fun showSearchPlaceHolderInToolbar(isTabSwitcherShowing: Boolean) {
+    if (BuildConfig.DISABLE_TITLE) {
+      // If custom apps are configured to show the placeholder,
+      // and if tabs are visible, hide the placeholder.
+      // If tabs are hidden, show the placeholder.
+      updateToolbarSearchPlaceholderVisibility(!isTabSwitcherShowing)
+    } else {
+      // Permanently hide the placeholder if the custom app is not configured to show it.
+      updateToolbarSearchPlaceholderVisibility(false)
+    }
+  }
+
+  /**
+   * Checks whether a ZIM file is currently opened and active in the reader.
+   *
+   * This method verifies these conditions:
+   * 1. A ZIM file reader instance is available.
+   * 2. The underlying ZIM file source still exists in storage.
+   * 3. The currently opened ZIM file can open with libkiwix(Validates previous opened ZIM file).
+   * 4. The currently opened archive is not null.
+   *
+   * @return `true` if a valid and accessible ZIM file is currently opened in the reader;
+   *         otherwise `false`.
+   */
+  private suspend fun isZimFileAlreadyOpenedInReader(): Boolean =
+    zimReaderContainer.zimFileReader != null &&
+      zimReaderContainer.zimReaderSource?.exists() == true &&
+      zimReaderContainer.zimReaderSource?.canOpenInLibkiwix() == true &&
+      zimReaderContainer.zimFileReader?.jniKiwixReader != null
 }

@@ -50,6 +50,10 @@ class TabsManager @Inject constructor() {
 
   fun getCurrentWebView(): KiwixWebView? = webViewList.getOrNull(currentWebViewIndex)
 
+  fun setCurrentWebViewIndex(index: Int) {
+    currentWebViewIndex = index
+  }
+
   /**
    * Update the currentWebViewIndex.
    */
@@ -73,7 +77,7 @@ class TabsManager @Inject constructor() {
    * Removed the entire webView list, and return it list of removed webView.
    * So that caller can perform the restoreAllTabs operation.
    */
-  fun closeAllTabs(): List<KiwixWebView> {
+  fun clearAndGetWebViewList(): List<KiwixWebView> {
     val currentWebViewList = webViewList.toMutableList()
     clear()
     return currentWebViewList

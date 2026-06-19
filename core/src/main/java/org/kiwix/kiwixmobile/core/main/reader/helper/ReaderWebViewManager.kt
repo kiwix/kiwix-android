@@ -31,6 +31,8 @@ class ReaderWebViewManager @Inject constructor(
   val webViewList: SnapshotStateList<KiwixWebView>
     get() = tabsManager.webViewList
 
+  val currentWebViewIndex: Int = tabsManager.currentWebViewIndex
+
   /**
    * Initializes a new instance of `KiwixWebView` with the specified URL.
    *
@@ -49,7 +51,7 @@ class ReaderWebViewManager @Inject constructor(
     callback: WebViewCallback,
     videoView: FrameLayout,
     shouldLoadUrl: Boolean = true
-  ) {
+  ): KiwixWebView {
     val webView = webViewFactory.create(callback, videoView)
     tabsManager.addWebView(webView)
     if (selectTab) {
@@ -61,6 +63,7 @@ class ReaderWebViewManager @Inject constructor(
     }
     // TODO: Improve according to compose lifeCycle.
     // saveTabs()
+    return webView
   }
 
   private fun loadUrl(url: String?, webview: KiwixWebView) {
@@ -78,9 +81,15 @@ class ReaderWebViewManager @Inject constructor(
     tabsManager.selectTab(index)
   }
 
-  fun clearWebViewList() {
-    tabsManager.clear()
+  fun clearAndGetWebViewList(): List<KiwixWebView> = tabsManager.clearAndGetWebViewList()
+
+  fun restoreTabs(webViewList: List<KiwixWebView>) {
+    tabsManager.webViewList.addAll(webViewList)
   }
 
   fun getCurrentWebView(): KiwixWebView? = tabsManager.getCurrentWebView()
+
+  fun setCurrentWebViewIndex(index: Int) {
+    tabsManager.setCurrentWebViewIndex(index)
+  }
 }
