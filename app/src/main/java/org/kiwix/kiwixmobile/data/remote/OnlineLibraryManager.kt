@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.data.remote
 
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -76,12 +77,17 @@ class OnlineLibraryManager @Inject constructor() {
     lang: String? = null,
     category: String? = null
   ): String {
-    val params = mutableListOf("start=$start", "count=$count")
-    query?.takeIf { it.isNotBlank() }?.let { params += "q=$it" }
-    lang?.takeIf { it.isNotBlank() }?.let { params += "lang=$it" }
-    category?.takeIf { it.isNotBlank() }?.let { params += "category=$it" }
+    val cleanBaseUrl = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+    val builder = "$cleanBaseUrl$OPDS_LIBRARY_ENDPOINT".toUri()
+      .buildUpon()
+      .appendQueryParameter("start", start.toString())
+      .appendQueryParameter("count", count.toString())
 
-    return "$baseUrl/${OPDS_LIBRARY_ENDPOINT}?${params.joinToString("&")}"
+    query?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("q", it) }
+    lang?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("lang", it) }
+    category?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("category", it) }
+
+    return builder.build().toString()
   }
 
   /**
