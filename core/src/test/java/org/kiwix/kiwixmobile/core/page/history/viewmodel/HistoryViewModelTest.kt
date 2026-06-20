@@ -2,7 +2,6 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import app.cash.turbine.test
 import io.mockk.clearAllMocks
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
@@ -49,7 +48,7 @@ internal class HistoryViewModelTest {
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
-    coEvery { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
+    every { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { historyRoomDao.history() } returns itemsFromDb
     every { historyRoomDao.pages() } returns historyRoomDao.history()
     viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore).apply {
@@ -60,7 +59,8 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `Initial state returns initial state`() {
-    assertThat(viewModel.initialState()).isEqualTo(historyState())
+    val state = viewModel.initialState()
+    assertThat(state).isEqualTo(historyState(showAll = state.showAll))
   }
 
   @Test

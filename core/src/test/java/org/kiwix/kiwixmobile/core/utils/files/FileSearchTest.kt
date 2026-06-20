@@ -26,11 +26,12 @@ import android.provider.MediaStore.MediaColumns
 import app.cash.turbine.test
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
-import io.mockk.clearMocks
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
@@ -50,7 +51,7 @@ class FileSearchTest {
 
   @BeforeEach
   fun init() {
-    clearMocks(context, externalStorageDirectory, contentResolver, storageDevice)
+    clearAllMocks()
     deleteTempDirectory()
     mockkStatic(StorageDeviceUtils::class)
     mockkStatic(Environment::class)
@@ -67,7 +68,7 @@ class FileSearchTest {
 
   @AfterAll
   fun teardown() {
-    deleteTempDirectory()
+    unmockkAll()
   }
 
   @Nested
@@ -136,6 +137,22 @@ class FileSearchTest {
         awaitComplete()
       }
     }
+
+    @Test
+    fun `scan media store, if files are in trash folder they are not returned even if readable`() =
+      runTest {
+        val tempDir = File(System.getProperty("java.io.tmpdir"), "kiwix_trash_test}")
+        tempDir.mkdirs()
+        val trashDir = File(tempDir, ".Trash").apply { mkdirs() }
+        val trashFile = File(trashDir, "trash_file.zim").apply { createNewFile() }
+
+        expectFromMediaStore(trashFile)
+        fileSearch.scan(scanningProgressListener).test {
+          assertThat(awaitItem()).isEmpty()
+          awaitComplete()
+        }
+        tempDir.deleteRecursively()
+      }
 
     private fun expectFromMediaStore(fileToFind: File) {
       val cursor = mockk<Cursor>()
