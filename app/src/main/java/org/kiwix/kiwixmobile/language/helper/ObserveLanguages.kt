@@ -50,6 +50,7 @@ class ObserveLanguages @Inject constructor(
       hasFetched && !cachedLanguageList.isNullOrEmpty() -> {
         Result.Success(cachedLanguageList)
       }
+
       isOnline -> {
         var result: Result? = null
         repository.fetchLanguages().collect { languages ->
@@ -63,6 +64,7 @@ class ObserveLanguages @Inject constructor(
         }
         result ?: resolveCache(cachedLanguageList, errorNoLanguage)
       }
+
       else -> {
         resolveCache(cachedLanguageList, errorNoNetwork)
       }
