@@ -143,7 +143,6 @@ import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
 import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
-import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
@@ -321,7 +320,7 @@ abstract class CoreReaderFragment :
       onStopTtsClick = { stopTts() },
       kiwixWebViewList = webViewList,
       bookmarkButtonItem = Triple(
-        { toggleBookmark() },
+        { coreReaderViewModel.onBookmarkButtonClicked() },
         { goToBookmarks() },
         IconItem.Drawable(R.drawable.ic_bookmark_border_24dp)
       ),
@@ -1703,13 +1702,6 @@ abstract class CoreReaderFragment :
           List<String?>::contains
         ).collect { isBookmarked ->
           this@CoreReaderFragment.isBookmarked = isBookmarked
-          readerScreenState.update {
-            copy(
-              bookmarkButtonItem = bookmarkButtonItem.copy(
-                third = getBookMarkButtonIcon(isBookmarked)
-              )
-            )
-          }
         }
       }
       updateUrlFlow()
@@ -1723,13 +1715,6 @@ abstract class CoreReaderFragment :
       )
     }
   }
-
-  private fun getBookMarkButtonIcon(isBookmarked: Boolean) =
-    if (isBookmarked) {
-      IconItem.Drawable(R.drawable.ic_bookmark_24dp)
-    } else {
-      IconItem.Drawable(R.drawable.ic_bookmark_border_24dp)
-    }
 
   private fun safelyCancelBookmarkJob() {
     bookmarkingJob?.cancel()
@@ -1833,57 +1818,6 @@ abstract class CoreReaderFragment :
         hideTabSwitcher()
       }
     }
-  }
-
-  @Suppress("NestedBlockDepth")
-  private fun toggleBookmark() {
-    try {
-      lifecycleScope.launch {
-        getCurrentWebView()?.url?.let { articleUrl ->
-          zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-            val libKiwixBook = getLibkiwixBook(zimFileReader)
-            if (isBookmarked) {
-              repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
-              readerScreenState.value.snackBarHostState.snack(
-                context?.getString(string.bookmark_removed).orEmpty(),
-                lifecycleScope = lifecycleScope
-              )
-            } else {
-              getCurrentWebView()?.title?.let {
-                repositoryActions?.saveBookmark(
-                  LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
-                )
-                readerScreenState.value.snackBarHostState.snack(
-                  context?.getString(string.bookmark_added).orEmpty(),
-                  lifecycleScope = lifecycleScope,
-                  actionLabel = context?.getString(string.open),
-                  actionClick = { goToBookmarks() }
-                )
-              }
-            }
-          }
-        } ?: run {
-          context?.toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
-        }
-      }
-    } catch (_: Exception) {
-      // Catch the exception while saving the bookmarks for splitted zim files.
-      // we have an issue with split zim files, see #3827
-      context?.toast(string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
-    }
-  }
-
-  /**
-   * Returns the libkiwix book everytime when user saves or remove the bookmark.
-   * the object will be created once to avoid creating it multiple times.
-   */
-  private fun getLibkiwixBook(zimFileReader: ZimFileReader): Book {
-    libkiwixBook?.let { return it }
-    val book = Book().apply {
-      update(zimFileReader.jniKiwixReader)
-    }
-    libkiwixBook = book
-    return book
   }
 
   override fun onResume() {

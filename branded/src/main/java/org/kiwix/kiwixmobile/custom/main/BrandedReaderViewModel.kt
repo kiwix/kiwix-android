@@ -19,31 +19,44 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.app.Application
+import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
-import androidx.compose.ui.graphics.Color.Companion.Unspecified
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
+import org.kiwix.libkiwix.Book
+import java.io.File
+import java.util.Locale
 import javax.inject.Inject
 
 class BrandedReaderViewModel @Inject constructor(
@@ -57,7 +70,10 @@ class BrandedReaderViewModel @Inject constructor(
   zimFileManager: ZimFileManager,
   kiwixPermissionChecker: KiwixPermissionChecker,
   repositoryActions: MainRepositoryActions,
-  bookmarkManager: BookmarkManager
+  bookmarkManager: BookmarkManager,
+  readerHistoryManager: ReaderHistoryManager,
+  private val brandedFileValidator: BrandedFileValidator,
+  readerSessionManager: ReaderSessionManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -69,9 +85,14 @@ class BrandedReaderViewModel @Inject constructor(
   zimFileManager,
   kiwixPermissionChecker,
   repositoryActions,
-  bookmarkManager
+  bookmarkManager,
+  readerHistoryManager,
+  readerSessionManager
 ) {
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
+    if (enforcedLanguage(coreMainActivity)) {
+      return
+    }
     enableLeftDrawer()
     loadPageFromNavigationArguments(coreMainActivity)
     if (BuildConfig.DISABLE_EXTERNAL_LINK) {
@@ -98,7 +119,122 @@ class BrandedReaderViewModel @Inject constructor(
         openObbOrZim(true)
       }
     }
-    emitEffect(ReaderEffect.ConsumeObservable<String>(PAGE_URL_KEY))
+    emitEffect(ReaderEffect.ConsumeObservable(listOf(PAGE_URL_KEY to String::class.java)))
+  }
+
+  /**
+   * Opens a ZIM file or an OBB file based on the validation of available files.
+   *
+   * This method uses the `customFileValidator` to check for the presence of required files.
+   * Depending on the validation results, it performs the following actions:
+   *
+   * - If a valid ZIM file is found:
+   *   - It opens the ZIM file and creates a `ZimReaderSource` for it.
+   *   - Saves the book information in the database to be displayed in the `ZimHostFragment`.
+   *   - Manages the external launch and restores the view state if specified.
+   *
+   * - If both ZIM and OBB files are found:
+   *   - The ZIM file is deleted, and the OBB file is opened instead.
+   *   - Manages the external launch and restores the view state if specified.
+   *
+   * If no valid files are found and the app is not in test mode, the user is navigated to
+   * the `customDownloadFragment` to facilitate downloading the required files.
+   *
+   * @param shouldManageExternalLaunch Indicates whether to manage external launch and
+   *                                   restore the view state after opening the file. Default is false.
+   */
+  private suspend fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
+    brandedFileValidator.validate(
+      onFilesFound = {
+        when (it) {
+          is ValidationState.HasFile -> {
+            viewModelScope.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
+              openZimFile(
+                ZimReaderSource(
+                  file = it.file,
+                  null,
+                  it.assetFileDescriptorList
+                )
+              )
+              if (shouldManageExternalLaunch) {
+                // Open the previous loaded pages after ZIM file loads.
+                manageExternalLaunchAndRestoringViewState()
+              }
+              saveBookToLibrary(it.file)
+            }
+          }
+
+          is ValidationState.HasBothFiles -> {
+            it.zimFile.delete()
+            viewModelScope.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
+              openZimFile(ZimReaderSource(it.obbFile))
+              if (shouldManageExternalLaunch) {
+                // Open the previous loaded pages after ZIM file loads.
+                manageExternalLaunchAndRestoringViewState()
+              }
+              saveBookToLibrary(it.obbFile)
+            }
+          }
+
+          else -> {}
+        }
+      },
+      onNoFilesFound = {
+        if (!kiwixDataStore.prefIsTest.first()) {
+          openDownloadScreen()
+        }
+      }
+    )
+  }
+
+  private suspend fun enforcedLanguage(coreMainActivity: CoreMainActivity): Boolean {
+    // TODO : migrate this method with compose lifeCycle.
+    // This runs in branded apps when there is an enforced language set in the build config.
+    val currentLocaleCode = Locale.getDefault().toString()
+    if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
+      kiwixDataStore.let { kiwixDataStore ->
+        AppCompatDelegate.setApplicationLocales(
+          LocaleListCompat.forLanguageTags(BuildConfig.ENFORCED_LANG)
+        )
+        kiwixDataStore.setPrefLanguage(BuildConfig.ENFORCED_LANG)
+      }
+      coreMainActivity.recreate()
+      return true
+    }
+    return false
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private suspend fun saveBookToLibrary(zimFile: File?) {
+    viewModelScope.runSafelyInLifecycleScope {
+      zimReaderContainer.zimFileReader?.let { zimFileReader ->
+        try {
+          // Save book in the database to display it in `ZimHostFragment`.
+          // Check if the file is not null. If the file is null,
+          // it means we have created zimFileReader with a fileDescriptor,
+          // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
+          val file = zimFile ?: createDemoFile()
+          // Wrapped in try-catch because if the reader scope is cancelled (for example,
+          // when the user navigates to another screen), the scope and related variables
+          // may be cleared from the Fragment. Accessing them would then throw an error.
+          // The `Book.update()` method is not a suspend function, and coroutine
+          // cancellation is only checked at suspension points. As a result, this
+          // block may still execute even after the lifecycle scope has been cancelled.
+          val book = Book().apply { update(zimFileReader.jniKiwixReader) }
+          repositoryActions.saveBook(book)
+        } catch (e: Exception) {
+          Log.e(TAG_KIWIX, "Could not save book in library. Original exception = $e")
+        }
+      }
+    }
+  }
+
+  private suspend fun createDemoFile() {
+    runCatching {
+      File(getDemoFilePathForBrandedApp(context)).also {
+        if (!it.isFileExist()) it.createNewFile()
+      }
+    }
   }
 
   override fun shouldShowSpellCheckedSuggestions(): Boolean =
@@ -179,6 +315,7 @@ class BrandedReaderViewModel @Inject constructor(
   override suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
+    currentZimFile: String?,
     // Unused in custom apps as there is only one ZIM file that is already set.
     restoreOrigin: RestoreOrigin,
     onComplete: () -> Unit

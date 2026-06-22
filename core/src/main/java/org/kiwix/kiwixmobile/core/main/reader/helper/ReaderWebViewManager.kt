@@ -22,12 +22,19 @@ import android.widget.FrameLayout
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
 class ReaderWebViewManager @Inject constructor(
   private val tabsManager: TabsManager,
   private val webViewFactory: WebViewFactory
 ) {
+  sealed interface RestoreTabsResult {
+    data object TabsRestored : RestoreTabsResult
+    data class ErrorInRestoringTabs(val throwable: Throwable) : RestoreTabsResult
+  }
+
   val webViewList: SnapshotStateList<KiwixWebView>
     get() = tabsManager.webViewList
 
@@ -83,9 +90,24 @@ class ReaderWebViewManager @Inject constructor(
 
   fun clearAndGetWebViewList(): List<KiwixWebView> = tabsManager.clearAndGetWebViewList()
 
-  fun restoreTabs(webViewList: List<KiwixWebView>) {
+  fun restoreDeletedTabs(webViewList: List<KiwixWebView>) {
     tabsManager.webViewList.addAll(webViewList)
   }
+
+  suspend fun restoreTabs(
+    webViewHistoryItemList: List<WebViewHistoryItem>,
+    currentTab: Int,
+    createWebView: () -> KiwixWebView
+  ): RestoreTabsResult =
+    runCatching {
+      setCurrentWebViewIndex(ZERO)
+      webViewList.removeFirstOrNull()
+      webViewHistoryItemList.forEach { webViewHistoryItem ->
+        tabsManager.restoreTabState(createWebView(), webViewHistoryItem)
+      }
+      selectTab(currentTab)
+      RestoreTabsResult.TabsRestored
+    }.getOrElse { RestoreTabsResult.ErrorInRestoringTabs(it) }
 
   fun getCurrentWebView(): KiwixWebView? = tabsManager.getCurrentWebView()
 

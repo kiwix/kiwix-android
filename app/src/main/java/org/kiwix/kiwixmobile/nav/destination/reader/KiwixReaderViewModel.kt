@@ -19,30 +19,46 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
 import org.kiwix.kiwixmobile.core.main.reader.OPEN_HOME_SCREEN_DELAY
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
+import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
+import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import java.io.File
 import javax.inject.Inject
 
 class KiwixReaderViewModel @Inject constructor(
@@ -56,7 +72,9 @@ class KiwixReaderViewModel @Inject constructor(
   zimFileManager: ZimFileManager,
   kiwixPermissionChecker: KiwixPermissionChecker,
   repositoryActions: MainRepositoryActions,
-  bookmarkManager: BookmarkManager
+  bookmarkManager: BookmarkManager,
+  readerHistoryManager: ReaderHistoryManager,
+  readerSessionManager: ReaderSessionManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -68,22 +86,129 @@ class KiwixReaderViewModel @Inject constructor(
   zimFileManager,
   kiwixPermissionChecker,
   repositoryActions,
-  bookmarkManager
+  bookmarkManager,
+  readerHistoryManager,
+  readerSessionManager
 ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
+    enableLeftDrawer()
+    openPageInBookFromNavigationArguments(coreMainActivity)
+  }
+
+  @Suppress("MagicNumber")
+  private suspend fun openPageInBookFromNavigationArguments(coreMainActivity: CoreMainActivity) {
+    showProgressBarWithProgress(30)
+    val zimFileUri = getNavigationResult(ZIM_FILE_URI_KEY, coreMainActivity)
+    val pageUrl = getNavigationResult(PAGE_URL_KEY, coreMainActivity)
+    val searchItemTitle = getNavigationResult(SEARCH_ITEM_TITLE_KEY, coreMainActivity)
+    if (pageUrl.isNotEmpty()) {
+      if (zimFileUri.isNotEmpty()) {
+        tryOpeningZimFile(zimFileUri)
+      } else {
+        // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
+        // This is necessary because we are not opening the ZIM file again; the bookmark is
+        // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
+        // See https://github.com/kiwix/kiwix-android/issues/3541
+        zimReaderContainer.zimFileReader?.let(::observeBookmarks)
+      }
+      hideProgressBar()
+      loadUrlWithCurrentWebview(pageUrl)
+    } else {
+      if (zimFileUri.isNotEmpty()) {
+        tryOpeningZimFile(zimFileUri)
+      } else {
+        isWebViewHistoryRestoring = true
+        val restoreOrigin =
+          if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
+        manageExternalLaunchAndRestoringViewState(restoreOrigin)
+      }
+    }
+    // Consume the argument.
+    emitEffect(
+      ReaderEffect.ConsumeObservable(
+        listOf(
+          ZIM_FILE_URI_KEY to String::class.java,
+          PAGE_URL_KEY to String::class.java,
+          SEARCH_ITEM_TITLE_KEY to String::class.java
+        )
+      )
+    )
+  }
+
+  private fun getNavigationResult(key: String, coreMainActivity: CoreMainActivity) =
+    coreMainActivity.getObservableNavigationResult<String>(key)?.value.orEmpty()
+
+  private suspend fun tryOpeningZimFile(zimFileUri: String) {
+    // Stop any ongoing WebView loading and clear the WebView list
+    // before setting a new ZIM file to the reader. This helps prevent native crashes.
+    // The WebView's `shouldInterceptRequest` method continues to be invoked until the WebView is
+    // fully destroyed, which can cause a native crash. This happens because a new ZIM file is set
+    // in the reader while the WebView is still trying to access content from the old archive.
+    stopOngoingLoadingAndClearWebViewList()
+    // Close the previously opened book in the reader before opening a new ZIM file
+    // to avoid native crashes due to "null pointer dereference." These crashes can occur
+    // when setting a new ZIM file in the archive while the previous one is being disposed of.
+    // Since the WebView may still asynchronously request data from the disposed archive,
+    // we close the previous book before opening a new ZIM file in the archive.
+    closeZimBook()
+    // Update the reader screen title to prevent showing the previously set title
+    // when creating the new archive object.
+    updateTitle()
+    val filePath = FileUtils.getLocalFilePathByUri(context.applicationContext, zimFileUri.toUri())
+    if (filePath == null || !File(filePath).isFileExist()) {
+      // Close the previously opened book in the reader. Since this file is not found,
+      // it will not be set in the zimFileReader. The previously opened ZIM file
+      // will be saved when we move between fragments. If we return to the reader again,
+      // it will attempt to open the last opened ZIM file with the last loaded URL,
+      // which is inside the non-existing ZIM file. This leads to unexpected behavior.
+      exitBook()
+      emitEffect(ReaderEffect.ShowToast(context.getString(string.error_file_not_found, zimFileUri)))
+      return
+    }
+    val zimReaderSource = ZimReaderSource(File(filePath))
+    openZimFile(zimReaderSource)
   }
 
   override suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
+    currentZimFile: String?,
     restoreOrigin: RestoreOrigin,
     onComplete: () -> Unit
   ) {
+    when (restoreOrigin) {
+      FromExternalLaunch -> {
+        val zimReaderSource = fromDatabaseValue(currentZimFile)
+        if (zimReaderSource?.canOpenInLibkiwix() == true) {
+          if (zimReaderContainer.zimReaderSource == null) {
+            openZimFile(zimReaderSource)
+            Log.d(
+              TAG_KIWIX,
+              "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
+            )
+          } else {
+            zimReaderContainer.zimFileReader?.let(::observeBookmarks)
+          }
+          restoreTabs(webViewHistoryItemList, currentTab, onComplete)
+        } else {
+          emitEffect(
+            ReaderEffect.ShowSnackbar(context.getString(string.zim_not_opened))
+          )
+          exitBook() // hide the options for zim file to avoid unexpected UI behavior
+        }
+      }
+
+      FromSearchScreen -> {
+        restoreTabs(webViewHistoryItemList, currentTab, onComplete)
+      }
+    }
   }
 
   override suspend fun restoreViewStateOnInvalidWebViewHistory() {
+    Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
+    exitBook()
   }
 
   override fun openSearch(

@@ -45,6 +45,9 @@ class ZimFileManager @Inject constructor(
   val zimFileReader: ZimFileReader?
     get() = zimReaderContainer.zimFileReader
 
+  val zimReaderSource: ZimReaderSource?
+    get() = zimReaderContainer.zimReaderSource
+
   sealed interface OpenZimResult {
     data object Success : OpenZimResult
     data object InvalidFile : OpenZimResult
