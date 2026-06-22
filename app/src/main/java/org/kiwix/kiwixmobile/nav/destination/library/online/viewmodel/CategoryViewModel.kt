@@ -33,7 +33,6 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
@@ -42,12 +41,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCatego
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Error
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Filter
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 import javax.inject.Inject
 
@@ -107,6 +100,7 @@ class CategoryViewModel @Inject constructor(
     ) {
       is ObserveCategories.Result.Success ->
         actions.emit(Action.UpdateCategory(result.categories))
+
       is ObserveCategories.Result.Error ->
         actions.emit(Action.Error(result.message))
     }
@@ -126,13 +120,20 @@ class CategoryViewModel @Inject constructor(
   }
 
   private fun updateCategory(action: Action.UpdateCategory, currentState: State): State =
-    if (currentState is State.Loading) State.Content(action.categories) else currentState
+    if (currentState == State.Loading) State.Content(action.categories) else currentState
 
   private fun filter(action: Action.Filter, currentState: State): State =
     if (currentState is State.Content) filterContent(action.filter, currentState) else currentState
 
   private fun select(action: Action.Select, currentState: State): State =
-    if (currentState is State.Content) updateSelection(action.category, currentState) else currentState
+    if (currentState is State.Content) {
+      updateSelection(
+        action.category,
+        currentState
+      )
+    } else {
+      currentState
+    }
 
   private fun saveAction(currentState: State): State =
     if (currentState is State.Content) save(currentState) else currentState

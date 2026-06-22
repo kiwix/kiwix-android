@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -50,11 +51,23 @@ object LocaleHelper {
   }
 
   @JvmStatic
-  fun getLocalizedString(context: Context, kiwixDataStore: KiwixDataStore, resId: Int, vararg args: Any): String = try {
-    val config = android.content.res.Configuration(context.resources.configuration)
+  fun getLocalizedString(
+    context: Context,
+    kiwixDataStore: KiwixDataStore,
+    resId: Int,
+    vararg args: Any
+  ): String = try {
+    val config = Configuration(context.resources.configuration)
     config.setLocale(getAppLocale(context, kiwixDataStore))
     val localizedContext = context.createConfigurationContext(config)
-    if (args.isEmpty()) localizedContext.getString(resId) else localizedContext.getString(resId, *args)
+    if (args.isEmpty()) {
+      localizedContext.getString(resId)
+    } else {
+      localizedContext.getString(
+        resId,
+        *args
+      )
+    }
   } catch (_: Throwable) {
     if (args.isEmpty()) context.getString(resId) else context.getString(resId, *args)
   }

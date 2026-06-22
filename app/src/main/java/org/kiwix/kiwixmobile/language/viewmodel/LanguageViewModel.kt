@@ -90,6 +90,7 @@ class LanguageViewModel @Inject constructor(
         val sortedLanguages = sortLanguages(result.languages)
         actions.emit(UpdateLanguages(sortedLanguages))
       }
+
       is ObserveLanguages.Result.Error ->
         actions.emit(Error(result.message))
     }
