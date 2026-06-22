@@ -34,7 +34,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -66,7 +66,7 @@ class FileSearchTest {
     fileSearch = FileSearch(context)
   }
 
-  @AfterAll
+  @AfterEach
   fun teardown() {
     unmockkAll()
   }
