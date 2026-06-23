@@ -49,11 +49,14 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager.BookmarkSaveResult
+import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.None
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenBookmarks
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenSearch
@@ -69,7 +72,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -89,13 +91,14 @@ abstract class CoreReaderViewModel(
   val readerWebViewManager: ReaderWebViewManager,
   val alertDialogShower: AlertDialogShower,
   val zimReaderContainer: ZimReaderContainer,
-  private val zimFileManager: ZimFileManager,
+  val zimFileManager: ZimFileManager,
   val kiwixPermissionChecker: KiwixPermissionChecker,
   val repositoryActions: MainRepositoryActions,
   private val bookmarkManager: BookmarkManager,
   private val readerHistoryManager: ReaderHistoryManager,
   private val readerSessionManager: ReaderSessionManager,
-  private val readerIntentManager: ReaderIntentManager
+  private val readerIntentManager: ReaderIntentManager,
+  val pendingSearchItemManager: PendingSearchItemManager
 ) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener {
   data class PreviousNextPageButtonItem(
     val isEnable: Boolean = false,
@@ -241,14 +244,13 @@ abstract class CoreReaderViewModel(
   }
 
   protected fun updateState(transform: ReaderUiState.() -> ReaderUiState) {
-    _uiState.update { it.transform() }
+    _uiState.update(transform)
   }
 
   fun emitEffect(effect: ReaderEffect) {
   }
 
   @Volatile var isWebViewHistoryRestoring = false
-  private var searchItemToOpen: SearchItemToOpen? = null
   private var zimReaderSource: ZimReaderSource? = null
 
   /**
@@ -277,7 +279,16 @@ abstract class CoreReaderViewModel(
     IconItem.Vector(Icons.Filled.Menu)
   }
 
-  override fun onTabMenuClicked() {}
+  override fun onTabMenuClicked() {
+    launchInViewModelScope {
+      if (uiState.value.showTabSwitcher) {
+        hideTabSwitcher()
+      } else {
+        showTabSwitcher()
+      }
+    }
+  }
+
   override fun onHomeMenuClicked() {}
   override fun onAddNoteMenuClicked() {}
   override fun onShareMenuClicked() {}
@@ -531,78 +542,40 @@ abstract class CoreReaderViewModel(
     loadUrlWithCurrentWebview("javascript:($documentParserJs)()")
   }
 
-  suspend fun openZimFile(zimReaderSource: ZimReaderSource) {
+  open suspend fun openZimFile(zimReaderSource: ZimReaderSource) {
     if (isBrandedApp() || kiwixPermissionChecker.hasReadExternalStoragePermission()) {
-      if (zimReaderSource.canOpenInLibkiwix()) {
-        // Show content if there is `Open Library` button showing
-        // and we are opening the ZIM file
-        hideNoBookOpenViews()
-        openAndSetInContainer(zimReaderSource)
-        updateTitle()
-      } else {
-        exitBook()
-        invalidZimFileFound {
-          showInvalidZimFileToast(zimReaderSource)
+      val result =
+        zimFileManager.openZimFileInReader(zimReaderSource, shouldShowSpellCheckedSuggestions())
+      when (result) {
+        is Success -> {
+          // Show content if there is `Open Library` button showing
+          // and we are opening the ZIM file
+          hideNoBookOpenViews()
+          openMainPage()
+          readerMenuState?.onFileOpened(urlIsValid())
+          observeBookmarks(result.zimFileReader)
+          updateTitle()
         }
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
+
+        InvalidFile -> {
+          exitBook()
+          invalidZimFileFound {
+            emitEffect(
+              ReaderEffect.ShowToast(
+                context.getString(
+                  string.error_file_invalid,
+                  zimReaderSource.toDatabase()
+                )
+              )
+            )
+          }
+          Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
+        }
       }
     } else {
       this.zimReaderSource = zimReaderSource
       emitEffect(ReaderEffect.RequestReadStoragePermission)
     }
-  }
-
-  private fun showInvalidZimFileToast(zimReaderSource: ZimReaderSource) {
-    emitEffect(
-      ReaderEffect.ShowToast(
-        context.getString(
-          string.error_file_invalid,
-          zimReaderSource.toDatabase()
-        )
-      )
-    )
-  }
-
-  /**
-   * Creates the ZimFileReader and loads the MainPage.
-   * Subclasses override this method to provide the showSearchSuggestion based on configuration.
-   *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
-   */
-  open suspend fun openAndSetInContainer(
-    zimReaderSource: ZimReaderSource,
-    showSearchSuggestionsSpellChecked: Boolean = false
-  ) {
-    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
-    zimReaderContainer.setZimReaderSource(zimReaderSource, showSearchSuggestionsSpellChecked)
-
-    zimReaderContainer.zimFileReader?.let { zimFileReader ->
-      openMainPage()
-      readerMenuState?.onFileOpened(urlIsValid())
-      observeBookmarks(zimFileReader)
-    } ?: run {
-      // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
-      // disable all controls for this ZIM file. This prevents potential crashes.
-      // See issue #4161 for more details.
-      exitBook()
-      invalidZimFileFound {
-        showInvalidZimFileToast(zimReaderSource)
-      }
-    }
-  }
-
-  private fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource?) {
-    if (isNotPreviouslyOpenZim(zimReaderSource)) {
-      stopOngoingLoadingAndClearWebViewList()
-    }
-  }
-
-  private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
-    zimReaderSource != null && zimReaderSource != zimReaderContainer.zimReaderSource
-
-  protected fun stopOngoingLoadingAndClearWebViewList() {
-    readerWebViewManager.destroyAllTabs()
   }
 
   /**
@@ -748,8 +721,7 @@ abstract class CoreReaderViewModel(
     // to open the specified item, then sets `searchItemToOpen` to null to prevent
     // any unexpected behavior on future calls.
     isWebViewHistoryRestoring = false
-    searchItemToOpen?.let(::openSearchItem)
-    searchItemToOpen = null
+    pendingSearchItemManager.consume()?.let(::openSearchItem)
 
     handlePendingIntent()
     // When the restoration completes than save the tabs history.
@@ -790,19 +762,6 @@ abstract class CoreReaderViewModel(
   private fun clearActivityIntentAction() {
     // if used once then clear it to avoid affecting any other functionality of the application
     emitEffect(ReaderEffect.ClearActivityIntentAction)
-  }
-
-  /**
-   * Stores the specified search item to be opened later.
-   *
-   * This method saves the provided `SearchItemToOpen` object, which will be used to
-   * open the searched item after the tabs have been restored.
-   *
-   * @param item The search item to be opened after restoring the tabs.
-   */
-  fun onSearchItemReceived(item: SearchItemToOpen) {
-    searchItemToOpen = item
-    emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED to SearchItemToOpen::class.java)))
   }
 
   /**
@@ -1148,7 +1107,7 @@ abstract class CoreReaderViewModel(
 
   override fun onCleared() {
     bookmarkManager.stopObserving()
-    searchItemToOpen = null
+    pendingSearchItemManager.consume()
     super.onCleared()
   }
 }

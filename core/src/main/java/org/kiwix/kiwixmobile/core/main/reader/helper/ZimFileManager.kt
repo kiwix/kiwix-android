@@ -21,20 +21,25 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
 import javax.inject.Inject
 
 class ZimFileManager @Inject constructor(
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val readerWebViewManager: ReaderWebViewManager
 ) {
   suspend fun openZimFileInReader(
     source: ZimReaderSource,
     showSearchSuggestionsSpellChecked: Boolean
   ): OpenZimResult {
+    if (!source.canOpenInLibkiwix()) return InvalidFile
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
     zimReaderContainer.setZimReaderSource(source, showSearchSuggestionsSpellChecked)
-    return if (zimReaderContainer.zimFileReader != null) {
-      OpenZimResult.Success
-    } else {
-      OpenZimResult.InvalidFile
+    return zimReaderContainer.zimFileReader?.let {
+      Success(it)
+    } ?: run {
+      InvalidFile
     }
   }
 
@@ -48,8 +53,21 @@ class ZimFileManager @Inject constructor(
   val zimReaderSource: ZimReaderSource?
     get() = zimReaderContainer.zimReaderSource
 
+  private fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource?) {
+    if (isNotPreviouslyOpenZim(zimReaderSource)) {
+      stopOngoingLoadingAndClearWebViewList()
+    }
+  }
+
+  private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
+    zimReaderSource != null && zimReaderSource != zimReaderContainer.zimReaderSource
+
+  fun stopOngoingLoadingAndClearWebViewList() {
+    readerWebViewManager.destroyAllTabs()
+  }
+
   sealed interface OpenZimResult {
-    data object Success : OpenZimResult
+    data class Success(val zimFileReader: ZimFileReader) : OpenZimResult
     data object InvalidFile : OpenZimResult
   }
 }

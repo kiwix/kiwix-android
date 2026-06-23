@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrande
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
@@ -81,7 +82,8 @@ class BrandedReaderViewModel @Inject constructor(
   readerHistoryManager: ReaderHistoryManager,
   private val brandedFileValidator: BrandedFileValidator,
   readerSessionManager: ReaderSessionManager,
-  readerIntentManager: ReaderIntentManager
+  readerIntentManager: ReaderIntentManager,
+  pendingSearchItemManager: PendingSearchItemManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -96,7 +98,8 @@ class BrandedReaderViewModel @Inject constructor(
   bookmarkManager,
   readerHistoryManager,
   readerSessionManager,
-  readerIntentManager
+  readerIntentManager,
+  pendingSearchItemManager
 ) {
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
     if (enforcedLanguage(coreMainActivity)) {

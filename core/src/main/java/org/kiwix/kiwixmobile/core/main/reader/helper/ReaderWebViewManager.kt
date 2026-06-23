@@ -29,6 +29,7 @@ import kotlin.collections.get
 
 class ReaderWebViewManager @Inject constructor(
   private val tabsManager: TabsManager,
+  private val readerSessionManager: ReaderSessionManager,
   private val webViewFactory: WebViewFactory
 ) {
   sealed interface RestoreTabsResult {
@@ -110,7 +111,7 @@ class ReaderWebViewManager @Inject constructor(
       setCurrentWebViewIndex(ZERO)
       webViewList.removeFirstOrNull()
       webViewHistoryItemList.forEach { webViewHistoryItem ->
-        tabsManager.restoreTabState(createWebView(), webViewHistoryItem)
+        readerSessionManager.restoreTabState(createWebView(), webViewHistoryItem)
       }
       selectTab(currentTab)
       RestoreTabsResult.TabsRestored

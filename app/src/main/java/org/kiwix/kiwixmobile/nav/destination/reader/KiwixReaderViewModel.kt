@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
@@ -74,7 +75,8 @@ class KiwixReaderViewModel @Inject constructor(
   bookmarkManager: BookmarkManager,
   readerHistoryManager: ReaderHistoryManager,
   readerSessionManager: ReaderSessionManager,
-  readerIntentManager: ReaderIntentManager
+  readerIntentManager: ReaderIntentManager,
+  pendingSearchItemManager: PendingSearchItemManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -89,7 +91,8 @@ class KiwixReaderViewModel @Inject constructor(
   bookmarkManager,
   readerHistoryManager,
   readerSessionManager,
-  readerIntentManager
+  readerIntentManager,
+  pendingSearchItemManager
 ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
@@ -147,7 +150,7 @@ class KiwixReaderViewModel @Inject constructor(
     // The WebView's `shouldInterceptRequest` method continues to be invoked until the WebView is
     // fully destroyed, which can cause a native crash. This happens because a new ZIM file is set
     // in the reader while the WebView is still trying to access content from the old archive.
-    stopOngoingLoadingAndClearWebViewList()
+    zimFileManager.stopOngoingLoadingAndClearWebViewList()
     // Close the previously opened book in the reader before opening a new ZIM file
     // to avoid native crashes due to "null pointer dereference." These crashes can occur
     // when setting a new ZIM file in the archive while the previous one is being disposed of.

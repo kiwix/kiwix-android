@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -40,7 +41,8 @@ fun CoreReaderScreen(
       ?.collect { item ->
         item ?: return@collect
 
-        viewModel.onSearchItemReceived(item)
+        viewModel.pendingSearchItemManager.store(item)
+        viewModel.emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED to SearchItemToOpen::class.java)))
       }
   }
 
