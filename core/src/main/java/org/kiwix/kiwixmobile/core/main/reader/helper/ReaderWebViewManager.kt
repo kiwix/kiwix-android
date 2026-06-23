@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
+import kotlin.collections.get
 
 class ReaderWebViewManager @Inject constructor(
   private val tabsManager: TabsManager,
@@ -88,10 +89,16 @@ class ReaderWebViewManager @Inject constructor(
     tabsManager.selectTab(index)
   }
 
-  fun clearAndGetWebViewList(): List<KiwixWebView> = tabsManager.clearAndGetWebViewList()
+  fun closeTab(index: Int): KiwixWebView? = tabsManager.closeTab(index)
+
+  fun closeAllTabs(): List<KiwixWebView> = tabsManager.closeAllTabs()
+
+  fun restoreDeletedTab(kiwixWebView: KiwixWebView, index: Int) {
+    tabsManager.restoreTab(kiwixWebView, index)
+  }
 
   fun restoreDeletedTabs(webViewList: List<KiwixWebView>) {
-    tabsManager.webViewList.addAll(webViewList)
+    tabsManager.restoreTabs(webViewList)
   }
 
   suspend fun restoreTabs(
@@ -113,5 +120,45 @@ class ReaderWebViewManager @Inject constructor(
 
   fun setCurrentWebViewIndex(index: Int) {
     tabsManager.setCurrentWebViewIndex(index)
+  }
+
+  fun safelyGetWebView(position: Int, newMainPageTab: () -> KiwixWebView?): KiwixWebView? =
+    if (webViewList.isEmpty()) newMainPageTab() else webViewList[safePosition(position)]
+
+  private fun safePosition(position: Int): Int =
+    when {
+      position < 0 -> 0
+      position >= webViewList.size -> webViewList.size - 1
+      else -> position
+    }
+
+  fun destroyAllTabs() {
+    runCatching {
+      webViewList.apply {
+        forEach { webView ->
+          // Stop any ongoing loading of the WebView
+          webView.stopLoading()
+          // Clear the navigation history of the WebView
+          webView.clearHistory()
+          // Clear cached resources to prevent loading old content
+          webView.clearCache(true)
+          // Pause any ongoing activity in the WebView to prevent resource usage
+          webView.onPause()
+          // Break the reference chain from WebView → Fragment (via callback)
+          // to prevent memory leaks through InputMethodManager/DecorView retention.
+          webView.dispose()
+          // Forcefully destroy the WebView before setting the new ZIM file
+          // to ensure that it does not continue attempting to load internal links
+          // from the previous ZIM file, which could cause errors.
+          webView.destroy()
+        }
+        // Clear the WebView list after destroying the WebViews
+        closeAllTabs()
+      }
+    }.onFailure {
+      it.printStackTrace()
+      // Clear the WebView list in case of an error
+      closeAllTabs()
+    }
   }
 }

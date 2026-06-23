@@ -23,8 +23,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
@@ -41,6 +39,7 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
@@ -74,7 +73,8 @@ class KiwixReaderViewModel @Inject constructor(
   repositoryActions: MainRepositoryActions,
   bookmarkManager: BookmarkManager,
   readerHistoryManager: ReaderHistoryManager,
-  readerSessionManager: ReaderSessionManager
+  readerSessionManager: ReaderSessionManager,
+  readerIntentManager: ReaderIntentManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -88,7 +88,8 @@ class KiwixReaderViewModel @Inject constructor(
   repositoryActions,
   bookmarkManager,
   readerHistoryManager,
-  readerSessionManager
+  readerSessionManager,
+  readerIntentManager
 ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
@@ -127,7 +128,7 @@ class KiwixReaderViewModel @Inject constructor(
     }
     // Consume the argument.
     emitEffect(
-      ReaderEffect.ConsumeObservable(
+      ReaderEffect.ConsumeSavedStateHandle(
         listOf(
           ZIM_FILE_URI_KEY to String::class.java,
           PAGE_URL_KEY to String::class.java,
@@ -262,14 +263,9 @@ class KiwixReaderViewModel @Inject constructor(
     enableLeftDrawer()
     emitEffect(ReaderEffect.ShowActivityBottomAppBar)
     if (readerWebViewManager.webViewList.isEmpty()) {
-      // TODO: Remove this comment when readerMenuState is implemented in the KiwixReaderViewModel.
-      // readerMenuState?.hideTabSwitcher()
+      readerMenuState?.hideTabSwitcher()
       exitBook(shouldCloseZimBook)
     } else {
-      // Reset the top margin of web views to 0 to remove any previously set margin
-      // This ensures that the web views are displayed without any additional
-      // top margin for kiwix main app.
-      // setTopMarginToWebViews(0)
       updateState {
         copy(
           showBottomBar = true,
@@ -277,8 +273,7 @@ class KiwixReaderViewModel @Inject constructor(
           progress = ZERO
         )
       }
-      // TODO: Remove this comment when readerMenuState is implemented in the KiwixReaderViewModel.
-      // readerMenuState?.showWebViewOptions(urlIsValid())
+      readerMenuState?.showWebViewOptions(urlIsValid())
       readerWebViewManager.selectTab(readerWebViewManager.currentWebViewIndex)
     }
   }

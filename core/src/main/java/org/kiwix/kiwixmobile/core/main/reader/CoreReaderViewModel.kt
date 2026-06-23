@@ -24,7 +24,10 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,16 +40,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager.BookmarkSaveResult
@@ -55,6 +54,10 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.None
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenBookmarks
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenSearch
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -64,6 +67,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -76,23 +80,23 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
-import java.io.IOException
 
 abstract class CoreReaderViewModel(
   val context: Application,
   val kiwixDataStore: KiwixDataStore,
   val externalLinkOpener: ExternalLinkOpener,
-  val unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
+  private val unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
   val readerWebViewManager: ReaderWebViewManager,
   val alertDialogShower: AlertDialogShower,
   val zimReaderContainer: ZimReaderContainer,
-  val zimFileManager: ZimFileManager,
+  private val zimFileManager: ZimFileManager,
   val kiwixPermissionChecker: KiwixPermissionChecker,
   val repositoryActions: MainRepositoryActions,
-  val bookmarkManager: BookmarkManager,
-  val readerhistoryManager: ReaderHistoryManager,
-  val readerSessionManager: ReaderSessionManager
-) : ViewModel(), WebViewCallback {
+  private val bookmarkManager: BookmarkManager,
+  private val readerHistoryManager: ReaderHistoryManager,
+  private val readerSessionManager: ReaderSessionManager,
+  private val readerIntentManager: ReaderIntentManager
+) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener {
   data class PreviousNextPageButtonItem(
     val isEnable: Boolean = false,
     val onClick: () -> Unit,
@@ -119,7 +123,12 @@ abstract class CoreReaderViewModel(
     val showTtsControls: Boolean = false,
     val showTabSwitcher: Boolean = false,
     val showBottomBar: Boolean = true,
-    val bookmarkButtonItem: BookmarkButtonItem = BookmarkButtonItem(false, {}, {}),
+    val bookmarkButtonItem: BookmarkButtonItem = BookmarkButtonItem(
+      IconItem.Drawable(R.drawable.ic_bookmark_border_24dp),
+      false,
+      {},
+      {}
+    ),
     val showNoBookOpenInReader: Boolean = false,
     val searchPlaceHolderItemForBrandedApps: Boolean = false,
     val previousPageButtonItem: PreviousNextPageButtonItem = PreviousNextPageButtonItem(
@@ -136,6 +145,7 @@ abstract class CoreReaderViewModel(
     data object HomeClicked : ReaderAction
 
     data object BookmarkClicked : ReaderAction
+    data object BookmarkLongClicked : ReaderAction
 
     data object PreviousClicked : ReaderAction
 
@@ -143,7 +153,8 @@ abstract class CoreReaderViewModel(
 
     data object CloseAllTabs : ReaderAction
 
-    data class SelectTab(val index: Int) : ReaderAction
+    data class SelectTab(val position: Int) : ReaderAction
+    data class CloseTab(val position: Int) : ReaderAction
   }
 
   sealed interface ReaderEffect {
@@ -167,13 +178,15 @@ abstract class CoreReaderViewModel(
     data object HideActivityBottomAppBar : ReaderEffect
     data object RequestReadStoragePermission : ReaderEffect
     data class NavigateTo(val route: String, val navOptions: NavOptions? = null) : ReaderEffect
-    data class ConsumeObservable(val target: List<Pair<String, Class<*>>>) : ReaderEffect
+    data class ConsumeSavedStateHandle(val target: List<Pair<String, Class<*>>>) : ReaderEffect
+    data object ClearActivityIntentAction : ReaderEffect
   }
 
   private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
   val uiState: StateFlow<ReaderUiState> get() = _uiState.asStateFlow()
   private val webUrlsFlow = MutableStateFlow("")
   private var documentParserJs: String? = null
+  protected var readerMenuState: ReaderMenuState? = null
 
   init {
     viewModelScope.launch {
@@ -187,7 +200,14 @@ abstract class CoreReaderViewModel(
           )
         }
       }
+      kiwixDataStore.backToTop.collect {
+        if (!it) {
+          hideBackToTopButton()
+        }
+        // Showing backToTop button based on webView scrolling.
+      }
     }
+    readerMenuState = createMainMenu()
   }
 
   private fun getBookMarkButtonIcon(isBookmarked: Boolean) =
@@ -198,6 +218,26 @@ abstract class CoreReaderViewModel(
     }
 
   fun onAction(action: ReaderAction) {
+    when (action) {
+      ReaderAction.BookmarkClicked -> onBookmarkButtonClicked()
+      ReaderAction.BookmarkLongClicked -> openBookmarkScreen()
+      ReaderAction.CloseAllTabs -> closeAllTabs()
+      ReaderAction.HomeClicked -> TODO()
+      ReaderAction.NextClicked -> TODO()
+      ReaderAction.OpenLibrary -> TODO()
+      ReaderAction.PreviousClicked -> TODO()
+      is ReaderAction.SelectTab -> {
+        launchInViewModelScope {
+          hideTabSwitcher()
+          selectTab(action.position)
+
+          // Bug Fix #592
+          updateBottomToolbarArrowsAlpha()
+        }
+      }
+
+      is ReaderAction.CloseTab -> closeTab(action.position)
+    }
   }
 
   protected fun updateState(transform: ReaderUiState.() -> ReaderUiState) {
@@ -210,14 +250,6 @@ abstract class CoreReaderViewModel(
   @Volatile var isWebViewHistoryRestoring = false
   private var searchItemToOpen: SearchItemToOpen? = null
   private var zimReaderSource: ZimReaderSource? = null
-  private val savingTabsMutex = Mutex()
-
-  /**
-   * Handles actions that require the ZIM file to be fully loaded in the reader
-   * before opening the search screen. The search screen depends on the ZIM file,
-   * as its results come from the ZimFileReader.
-   */
-  private var pendingIntent: Intent? = null
 
   /**
    * Returns true if user enables the backToTop setting from setting screen.
@@ -230,6 +262,30 @@ abstract class CoreReaderViewModel(
       copy(loading = true, progress = progress)
     }
   }
+
+  /**
+   * Provides the navigationIcon based on condition.
+   * Subclasses like CustomReaderFragment override this method to provide custom
+   * behavior, such as set the app icon on hamburger when configure to not show the title.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open fun navigationIcon() = if (readerMenuState?.isInTabSwitcher == true) {
+    IconItem.Drawable(R.drawable.ic_round_add_white_36dp)
+  } else {
+    IconItem.Vector(Icons.Filled.Menu)
+  }
+
+  override fun onTabMenuClicked() {}
+  override fun onHomeMenuClicked() {}
+  override fun onAddNoteMenuClicked() {}
+  override fun onShareMenuClicked() {}
+  override fun onRandomArticleMenuClicked() {}
+  override fun onReadAloudMenuClicked() {}
+  override fun onSearchMenuClickedMenuClicked() {}
+  override fun onAddToHomeScreenMenuClicked() {}
+  override fun onFindInPageMenuClicked() {}
 
   override fun webViewUrlLoading() {
     viewModelScope.launch {
@@ -246,7 +302,7 @@ abstract class CoreReaderViewModel(
     updateBottomToolbarArrowsAlpha()
     viewModelScope.launch {
       val currentWebView = readerWebViewManager.getCurrentWebView()
-      readerhistoryManager.saveHistory(
+      readerHistoryManager.saveHistory(
         currentWebView?.url,
         currentWebView?.title,
         zimFileManager.zimFileReader
@@ -264,23 +320,23 @@ abstract class CoreReaderViewModel(
     // If a URL fails to load, update the bookmark toggle.
     // This fixes the scenario where the previous page is bookmarked and the next
     // page fails to load, ensuring the bookmark toggle is unset correctly.
-    // updateUrlFlow()
-    // Log.d(
-    //   TAG_KIWIX,
-    //   String.format(
-    //     getString(string.error_article_url_not_found),
-    //     failingUrl
-    //   )
-    // )
+    updateUrlFlow()
+    Log.d(
+      TAG_KIWIX,
+      String.format(
+        context.getString(string.error_article_url_not_found),
+        failingUrl
+      )
+    )
   }
 
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
-    // updateUrlFlow()
-    // showProgressBarWithProgress(progress)
-    // if (progress == HUNDERED) {
-    //   hideProgressBar()
-    //   Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
-    // }
+    updateUrlFlow()
+    showProgressBarWithProgress(progress)
+    if (progress == HUNDERED) {
+      hideProgressBar()
+      Log.d(TAG_KIWIX, "Loaded URL: " + readerWebViewManager.getCurrentWebView()?.url)
+    }
     (webView.context as AppCompatActivity).invalidateOptionsMenu()
   }
 
@@ -289,7 +345,7 @@ abstract class CoreReaderViewModel(
   }
 
   private fun updateTabIcon(size: Int) {
-    // readerMenuState?.updateTabIcon(size)
+    readerMenuState?.updateTabIcon(size)
   }
 
   override fun webViewPageChanged(page: Int, maxPages: Int) {
@@ -362,7 +418,9 @@ abstract class CoreReaderViewModel(
               ReaderEffect.ShowSnackbar(context.getString(string.new_tab_snack_bar)) {
                 val tabsSize = readerWebViewManager.tabsSize()
                 if (tabsSize > 1) {
-                  readerWebViewManager.selectTab(tabsSize - 1)
+                  launchInViewModelScope {
+                    selectTab(tabsSize - 1)
+                  }
                 }
               }
             )
@@ -378,13 +436,19 @@ abstract class CoreReaderViewModel(
     shouldLoadUrl: Boolean = true
   ): KiwixWebView {
     addFullScreenItemIfNotAttached()
-    return readerWebViewManager.createNewTab(
+    val webView = readerWebViewManager.createNewTab(
       url,
       selectTab,
       shouldLoadUrl = shouldLoadUrl,
       callback = this@CoreReaderViewModel,
       videoView = requireNotNull(uiState.value.videoView)
     )
+    if (selectTab) {
+      launchInViewModelScope {
+        selectTab(readerWebViewManager.webViewList.size - 1)
+      }
+    }
+    return webView
   }
 
   /**
@@ -405,6 +469,16 @@ abstract class CoreReaderViewModel(
         ViewGroup.LayoutParams.MATCH_PARENT
       )
     }
+
+  protected suspend fun selectTab(position: Int) {
+    readerWebViewManager.setCurrentWebViewIndex(position)
+    val webView = readerWebViewManager.safelyGetWebView(position) { newMainPageTab() } ?: return
+    safelyAddWebView(webView)
+    updateBottomToolbarVisibility()
+    updateUrlFlow()
+    updateTableOfContents()
+    updateTitle()
+  }
 
   override fun openExternalUrl(intent: Intent) {
     viewModelScope.launch {
@@ -505,7 +579,7 @@ abstract class CoreReaderViewModel(
 
     zimReaderContainer.zimFileReader?.let { zimFileReader ->
       openMainPage()
-      // readerMenuState?.onFileOpened(urlIsValid())
+      readerMenuState?.onFileOpened(urlIsValid())
       observeBookmarks(zimFileReader)
     } ?: run {
       // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
@@ -528,33 +602,7 @@ abstract class CoreReaderViewModel(
     zimReaderSource != null && zimReaderSource != zimReaderContainer.zimReaderSource
 
   protected fun stopOngoingLoadingAndClearWebViewList() {
-    try {
-      readerWebViewManager.webViewList.apply {
-        forEach { webView ->
-          // Stop any ongoing loading of the WebView
-          webView.stopLoading()
-          // Clear the navigation history of the WebView
-          webView.clearHistory()
-          // Clear cached resources to prevent loading old content
-          webView.clearCache(true)
-          // Pause any ongoing activity in the WebView to prevent resource usage
-          webView.onPause()
-          // Break the reference chain from WebView → Fragment (via callback)
-          // to prevent memory leaks through InputMethodManager/DecorView retention.
-          webView.dispose()
-          // Forcefully destroy the WebView before setting the new ZIM file
-          // to ensure that it does not continue attempting to load internal links
-          // from the previous ZIM file, which could cause errors.
-          webView.destroy()
-        }
-        // Clear the WebView list after destroying the WebViews
-        readerWebViewManager.clearAndGetWebViewList()
-      }
-    } catch (e: IOException) {
-      e.printStackTrace()
-      // Clear the WebView list in case of an error
-      readerWebViewManager.clearAndGetWebViewList()
-    }
+    readerWebViewManager.destroyAllTabs()
   }
 
   /**
@@ -591,7 +639,7 @@ abstract class CoreReaderViewModel(
       )
     }
     hideProgressBar()
-    // readerMenuState?.hideBookSpecificMenuItems()
+    readerMenuState?.hideBookSpecificMenuItems()
     if (shouldCloseZimBook) {
       closeZimBook()
     }
@@ -636,16 +684,10 @@ abstract class CoreReaderViewModel(
     "${CONTENT_PREFIX}$articleUrl".toUri().toString()
 
   private fun redirectOrOriginal(contentUrl: String): String {
-    zimReaderContainer?.let {
-      return@redirectOrOriginal if (it.isRedirect(contentUrl)) {
-        it.getRedirect(
-          contentUrl
-        )
-      } else {
-        contentUrl
-      }
-    } ?: run {
-      return@redirectOrOriginal contentUrl
+    return if (zimReaderContainer.isRedirect(contentUrl)) {
+      zimReaderContainer.getRedirect(contentUrl)
+    } else {
+      contentUrl
     }
   }
 
@@ -723,75 +765,31 @@ abstract class CoreReaderViewModel(
   }
 
   private fun handlePendingIntent() {
-    pendingIntent?.let {
-      startIntentBasedOnAction(it)
-    }
-    pendingIntent = null
-  }
+    readerIntentManager.consumePendingIntent()?.let {
+      Log.d(TAG_KIWIX, "action: ${it.action}")
+      when (val result = readerIntentManager.parse(it)) {
+        None -> {
+          // Do nothing. Activity will handle this intent.
+        }
 
-  private fun startIntentBasedOnAction(intent: Intent?) {
-    // Log.d(TAG_KIWIX, "action: ${requireActivity().intent?.action}")
-    when (intent?.action) {
-      Intent.ACTION_PROCESS_TEXT -> {
-        goToSearchWithText(intent)
-        // see https://github.com/kiwix/kiwix-android/issues/2607
-        intent.action = null
-        // if used once then clear it to avoid affecting any other functionality of the application
-        // requireActivity().intent.action = null
+        OpenBookmarks -> openBookmarkScreen().also {
+          clearActivityIntentAction()
+        }
+
+        is OpenSearch -> openSearch(
+          result.query,
+          isOpenedFromTabView = result.isOpenedFromTabView,
+          result.isVoice
+        ).also { clearActivityIntentAction() }
       }
-
-      CoreSearchWidget.TEXT_CLICKED -> {
-        goToSearch(false)
-        intent.action = null
-        // requireActivity().intent.action = null
-      }
-
-      CoreSearchWidget.STAR_CLICKED -> {
-        emitEffect(ReaderEffect.OpenBookmarkScreen)
-        intent.action = null
-        // requireActivity().intent.action = null
-      }
-
-      CoreSearchWidget.MIC_CLICKED -> {
-        goToSearch(true)
-        intent.action = null
-        // requireActivity().intent.action = null
-      }
-
-      Intent.ACTION_VIEW ->
-        intent.let(::handleActionViewIntent)
+      // see https://github.com/kiwix/kiwix-android/issues/2607
+      it.action = null
     }
   }
 
-  private fun handleActionViewIntent(intent: Intent) {
-    if (intent.hasExtra(ZIM_FILE_URI_KEY)) return
-    if (
-      (intent.type == null || intent.type != "application/octet-stream") &&
-      // Added condition to handle ZIM files. When opening from storage, the intent may
-      // return null for the type, triggering the search unintentionally. This condition
-      // prevents such occurrences.
-      intent.scheme !in listOf("file", "content", "zim", ZIM_HOST_DEEP_LINK_SCHEME)
-    ) {
-      val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
-      openSearch(
-        searchString = searchString.orEmpty(),
-        isOpenedFromTabView = false,
-        isVoice = false
-      )
-    }
-  }
-
-  private fun goToSearchWithText(intent: Intent) {
-    val searchString = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-    openSearch(
-      searchString.orEmpty(),
-      isOpenedFromTabView = false,
-      isVoice = false
-    )
-  }
-
-  private fun goToSearch(isVoice: Boolean) {
-    openSearch("", isOpenedFromTabView = false, isVoice)
+  private fun clearActivityIntentAction() {
+    // if used once then clear it to avoid affecting any other functionality of the application
+    emitEffect(ReaderEffect.ClearActivityIntentAction)
   }
 
   /**
@@ -802,8 +800,9 @@ abstract class CoreReaderViewModel(
    *
    * @param item The search item to be opened after restoring the tabs.
    */
-  private fun storeSearchItem(item: SearchItemToOpen) {
+  fun onSearchItemReceived(item: SearchItemToOpen) {
     searchItemToOpen = item
+    emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED to SearchItemToOpen::class.java)))
   }
 
   /**
@@ -824,7 +823,6 @@ abstract class CoreReaderViewModel(
         loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
       }
     }
-    emitEffect(ReaderEffect.ConsumeObservable(listOf(TAG_FILE_SEARCHED to SearchItemToOpen::class.java)))
   }
 
   protected fun newMainPageTab(): KiwixWebView? =
@@ -860,47 +858,51 @@ abstract class CoreReaderViewModel(
       )
     }
     showSearchPlaceHolderInToolbar(false)
-    // TODO: Uncomment this line when the readerMenuState is implemented here.
-    // readerMenuState?.showWebViewOptions(urlIsValid())
-    readerWebViewManager.selectTab(readerWebViewManager.currentWebViewIndex)
+    readerMenuState?.showWebViewOptions(urlIsValid())
+    selectTab(readerWebViewManager.currentWebViewIndex)
   }
 
   private fun closeTab(index: Int) {
-    // if (currentTtsWebViewIndex == index) {
-    //   onReadAloudStop()
-    // }
-    // // Check if the index is valid; RecyclerView gives the index -1 for already removed views.
-    // // Address those issues when the user frequently clicks on the close icon of the same tab.
-    // // See https://github.com/kiwix/kiwix-android/issues/3790 for more details.
-    // if (index == RecyclerView.NO_POSITION) return
-    // tempZimSourceForUndo = zimReaderContainer?.zimReaderSource
-    // tempWebViewForUndo = webViewList[index]
-    // webViewList.removeAt(index)
-    // if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
-    //   currentWebViewIndex--
-    // }
-    // readerScreenState.value.snackBarHostState.snack(
-    //   requireActivity().getString(string.tab_closed),
-    //   actionLabel = requireActivity().getString(string.undo),
-    //   actionClick = { restoreDeletedTab(index) },
-    //   lifecycleScope = lifecycleScope,
-    //   snackBarResult = { result ->
-    //     if (result == SnackbarResult.Dismissed && isAdded) {
-    //       saveTabStates()
-    //       if (webViewList.isEmpty()) {
-    //         closeZimBook()
-    //       }
-    //     }
-    //   }
-    // )
+    val removedTab = readerWebViewManager.closeTab(index) ?: return
+    emitEffect(
+      ReaderEffect.ShowSnackbar(
+        message = context.getString(string.tab_closed),
+        actionLabel = context.getString(string.undo),
+        actionClick = { restoreDeletedTab(removedTab, index) },
+        snackBarResult = { result ->
+          if (result == SnackbarResult.Dismissed) {
+            launchInViewModelScope {
+              readerSessionManager.saveReaderSession()
+            }
+            if (readerWebViewManager.webViewList.isEmpty()) {
+              closeZimBook()
+            }
+          }
+        }
+      )
+    )
     openHomeScreen()
+  }
+
+  private fun restoreDeletedTab(removedTab: KiwixWebView, index: Int) {
+    if (readerWebViewManager.webViewList.isEmpty()) {
+      reopenBook()
+    }
+    readerWebViewManager.restoreDeletedTab(removedTab, index)
+    emitEffect(
+      ReaderEffect.ShowSnackbar(message = context.getString(string.tab_restored))
+    )
+    // TODO: Uncomment this when tts is implemented.
+    // setUpWithTextToSpeech(removedTab)
+    updateBottomToolbarVisibility()
+    safelyAddWebView(removedTab)
   }
 
   private fun closeAllTabs() {
     // TODO: Uncomment this line when the read aloud feature is implemented here.
     // onReadAloudStop()
     // tempZimSourceForUndo = zimReaderContainer.zimReaderSource
-    val tempList = readerWebViewManager.clearAndGetWebViewList()
+    val tempList = readerWebViewManager.closeAllTabs()
     openHomeScreen()
     emitEffect(
       ReaderEffect.ShowSnackbar(
@@ -942,16 +944,14 @@ abstract class CoreReaderViewModel(
   }
 
   private fun updateBottomToolbarVisibility() {
-    // updateState {
-    // TODO: Uncomment this line when the readerMenuState is implemented here.
-    // copy(showBottomBar = readerMenuState?.isInTabSwitcher == false)
-    // }
+    updateState {
+      copy(showBottomBar = readerMenuState?.isInTabSwitcher == false)
+    }
   }
 
   private fun reopenBook() {
     hideNoBookOpenViews()
-    // TODO: Uncomment this line when the readerMenuState is implemented here.
-    // readerMenuState?.showBookSpecificMenuItems()
+    readerMenuState?.showBookSpecificMenuItems()
   }
 
   private fun showTabSwitcher() {
@@ -967,8 +967,7 @@ abstract class CoreReaderViewModel(
       )
     }
     showSearchPlaceHolderInToolbar(true)
-    // TODO: Uncomment this line when the readerMenuState is implemented here.
-    // readerMenuState?.showTabSwitcherOptions()
+    readerMenuState?.showTabSwitcherOptions()
   }
 
   fun onBookmarkButtonClicked() {
@@ -990,7 +989,7 @@ abstract class CoreReaderViewModel(
             ReaderEffect.ShowSnackbar(
               message = context.getString(string.bookmark_added),
               actionLabel = context.getString(string.open),
-              actionClick = { emitEffect(ReaderEffect.OpenBookmarkScreen) }
+              actionClick = { openBookmarkScreen() }
             )
           )
         }
@@ -1006,6 +1005,10 @@ abstract class CoreReaderViewModel(
     }
   }
 
+  fun openBookmarkScreen() {
+    emitEffect(ReaderEffect.OpenBookmarkScreen)
+  }
+
   protected suspend fun restoreTabs(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
@@ -1019,9 +1022,9 @@ abstract class CoreReaderViewModel(
     }
     when (result) {
       ReaderWebViewManager.RestoreTabsResult.TabsRestored -> {
+        selectTab(currentTab)
         onComplete.invoke()
-        // TODO: Uncomment this line when the readerMenuState is implemented here.
-        // readerMenuState?.showWebViewOptions(urlIsValid())
+        readerMenuState?.showWebViewOptions(urlIsValid())
       }
 
       is ReaderWebViewManager.RestoreTabsResult.ErrorInRestoringTabs -> {
@@ -1120,12 +1123,32 @@ abstract class CoreReaderViewModel(
    */
   open fun navigationIconTint() = White
 
+  /**
+   * Creates the main menu for the reader.
+   * Subclasses may override this method to customize the main menu creation process.
+   * For custom apps like CustomReaderFragment, this method dynamically generates the menu
+   * based on the app's configuration, considering features like "read aloud" and "tabs."
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  protected open fun createMainMenu(): ReaderMenuState =
+    ReaderMenuState(
+      this,
+      isUrlValidInitially = urlIsValid(),
+      disableReadAloud = false,
+      disableTabs = false,
+      disableSearch = false,
+      isPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+    )
+
   protected fun launchInViewModelScope(block: suspend CoroutineScope.() -> Unit) {
     viewModelScope.launch { block() }
   }
 
   override fun onCleared() {
     bookmarkManager.stopObserving()
+    searchItemToOpen = null
     super.onCleared()
   }
 }

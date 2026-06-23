@@ -87,14 +87,23 @@ class TabsManager @Inject constructor(
    * Removed the entire webView list, and return it list of removed webView.
    * So that caller can perform the restoreAllTabs operation.
    */
-  fun clearAndGetWebViewList(): List<KiwixWebView> {
+  fun closeAllTabs(): List<KiwixWebView> {
     val currentWebViewList = webViewList.toMutableList()
     clear()
     return currentWebViewList
   }
 
+  fun restoreTab(kiwixWebView: KiwixWebView, index: Int) {
+    _webViewList.add(index, kiwixWebView)
+  }
+
+  fun restoreTabs(webViewList: List<KiwixWebView>) {
+    clear()
+    _webViewList.addAll(webViewList)
+  }
+
   fun clear() {
-    webViewList.clear()
+    _webViewList.clear()
   }
 
   fun isEmpty(): Boolean = webViewList.isEmpty()

@@ -4,13 +4,16 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,6 +29,20 @@ fun CoreReaderScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val snackbarHostState = remember { SnackbarHostState() }
+  val backStackEntry = navHostController.currentBackStackEntry
+  LaunchedEffect(backStackEntry) {
+    backStackEntry
+      ?.savedStateHandle
+      ?.getStateFlow<SearchItemToOpen?>(
+        TAG_FILE_SEARCHED,
+        null
+      )
+      ?.collect { item ->
+        item ?: return@collect
+
+        viewModel.onSearchItemReceived(item)
+      }
+  }
 
   val readerScreenState = remember(uiState) {
     ReaderScreenState(
@@ -44,7 +61,7 @@ fun CoreReaderScreen(
       kiwixWebViewList = uiState.kiwixWebViews,
       bookmarkButtonItem = Triple(
         { viewModel.onAction(CoreReaderViewModel.ReaderAction.BookmarkClicked) },
-        { /* long click - open bookmarks */ },
+        { viewModel.onAction(CoreReaderViewModel.ReaderAction.BookmarkLongClicked) },
         org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable(0)
       ),
       previousPageButtonItem = Triple(
@@ -65,16 +82,18 @@ fun CoreReaderScreen(
       readerScreenTitle = uiState.title,
       showTabSwitcher = uiState.showTabSwitcher,
       currentWebViewPosition = uiState.selectedWebViewIndex,
-      onTabClickListener = object : org.kiwix.kiwixmobile.core.main.reader.TabClickListener {
+      onTabClickListener = object : TabClickListener {
         override fun onSelectTab(position: Int) {
           viewModel.onAction(CoreReaderViewModel.ReaderAction.SelectTab(position))
         }
 
         override fun onCloseTab(position: Int) {
-          /* close tab - not yet implemented */
+          viewModel.onAction(CoreReaderViewModel.ReaderAction.CloseTab(position))
         }
       },
-      searchPlaceHolderItemForBrandedApps = false to {},
+      searchPlaceHolderItemForBrandedApps = false to {
+        viewModel.openSearch(searchString = "", isOpenedFromTabView = false, false)
+      },
       appName = "",
       donateButtonClick = {},
       laterButtonClick = {},

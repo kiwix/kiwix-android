@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.custom.main
 import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.viewModelScope
@@ -36,15 +38,18 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
+import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -54,6 +59,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
+import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
@@ -73,7 +80,8 @@ class BrandedReaderViewModel @Inject constructor(
   bookmarkManager: BookmarkManager,
   readerHistoryManager: ReaderHistoryManager,
   private val brandedFileValidator: BrandedFileValidator,
-  readerSessionManager: ReaderSessionManager
+  readerSessionManager: ReaderSessionManager,
+  readerIntentManager: ReaderIntentManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -87,7 +95,8 @@ class BrandedReaderViewModel @Inject constructor(
   repositoryActions,
   bookmarkManager,
   readerHistoryManager,
-  readerSessionManager
+  readerSessionManager,
+  readerIntentManager
 ) {
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
     if (enforcedLanguage(coreMainActivity)) {
@@ -119,7 +128,7 @@ class BrandedReaderViewModel @Inject constructor(
         openObbOrZim(true)
       }
     }
-    emitEffect(ReaderEffect.ConsumeObservable(listOf(PAGE_URL_KEY to String::class.java)))
+    emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(PAGE_URL_KEY to String::class.java)))
   }
 
   /**
@@ -308,6 +317,20 @@ class BrandedReaderViewModel @Inject constructor(
       White
     }
 
+  override fun navigationIcon(): IconItem = when {
+    readerMenuState?.isInTabSwitcher == true -> {
+      IconItem.Drawable(drawable.ic_round_add_white_36dp)
+    }
+
+    BuildConfig.DISABLE_TITLE -> {
+      // if the title is disable then set the app logo to hamburger icon,
+      // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
+      IconItem.MipmapImage(R.mipmap.ic_launcher)
+    }
+
+    else -> IconItem.Vector(Icons.Filled.Menu)
+  }
+
   /**
    * Restores the view state when the webViewHistory data is valid.
    * This method restores the tabs with webView pages history.
@@ -370,4 +393,21 @@ class BrandedReaderViewModel @Inject constructor(
       zimReaderContainer.zimReaderSource?.exists() == true &&
       zimReaderContainer.zimReaderSource?.canOpenInLibkiwix() == true &&
       zimReaderContainer.zimFileReader?.jniKiwixReader != null
+
+  /**
+   * Overrides the method to create the main menu for the app. The branded app can be configured to disable
+   * features like "read aloud" and "tabs," and this method dynamically generates the menu based on the
+   * provided configuration. It takes into account whether read aloud and tabs are enabled or disabled
+   * and creates the menu accordingly.
+   */
+  override fun createMainMenu(): ReaderMenuState =
+    ReaderMenuState(
+      this,
+      isUrlValidInitially = urlIsValid(),
+      disableReadAloud = BuildConfig.DISABLE_READ_ALOUD,
+      disableTabs = BuildConfig.DISABLE_TABS,
+      disableSearch = BuildConfig.DISABLE_TITLE,
+      // Custom apps usually don't need homescreen shortcuts
+      isPinShortcutSupported = false
+    )
 }
