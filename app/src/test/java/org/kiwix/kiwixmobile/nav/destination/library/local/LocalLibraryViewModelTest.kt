@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.ReadeWritePermissionResultAction.ScanStorage
 import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFilesUseCase
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
@@ -72,6 +73,7 @@ class LocalLibraryViewModelTest {
   private val zimReaderFactory: ZimFileReader.Factory = mockk(relaxed = true)
   private val alertDialogShower: AlertDialogShower = mockk(relaxed = true)
   private val validateZimViewModel: ValidateZimViewModel = mockk(relaxed = true)
+  private val deleteFilesUseCase = mockk<DeleteFilesUseCase>(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
 
   @RegisterExtension
@@ -120,6 +122,7 @@ class LocalLibraryViewModelTest {
       kiwixPermissionChecker,
       kiwixDataStore,
       zimReaderFactory,
+      deleteFilesUseCase,
       mainDispatcherRule.dispatcher
     )
     vm.initialize(

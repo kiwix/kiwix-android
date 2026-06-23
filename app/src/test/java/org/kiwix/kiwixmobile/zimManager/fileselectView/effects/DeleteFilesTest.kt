@@ -19,117 +19,150 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import io.mockk.Runs
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
-import io.mockk.unmockkObject
-import io.mockk.unmockkStatic
+import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.assertj.core.api.Assertions.assertThat
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.di.components.KiwixActivityComponent
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DeleteFilesTest {
+  private var file1 = File("/storage/kiwix.zim")
+  private val libkiwixBook1 = LibkiwixBook(_id = "book-id-1", _title = "Book 1", file = file1)
+  private val book1 = BookOnDisk(book = libkiwixBook1, zimReaderSource = ZimReaderSource(file1))
+
+  private var file2 = File("/storage/test.zim")
+  private val libkiwixBook2 = LibkiwixBook(_id = "book-id-2", _title = "Book 2", file = file2)
+  private val book2 = BookOnDisk(book = libkiwixBook2, zimReaderSource = ZimReaderSource(file2))
+  private val booksOnDiskListItems: List<BookOnDisk> = listOf(book1, book2)
+  private val dialogShower: DialogShower = mockk()
+  private val deleteFilesUseCase: DeleteFilesUseCase = mockk()
+
+  private val activity: CoreMainActivity = mockk()
+
+  private lateinit var deleteFiles: DeleteFiles
+
+  @RegisterExtension
+  private val ioDispatcher = MainDispatcherRule()
+
+  private val viewModelScope = CoroutineScope(ioDispatcher.dispatcher)
+
   @BeforeEach
-  fun before() {
-    mockkObject(FileUtils)
-    mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
+  fun setup() {
+    clearAllMocks()
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
+
+    deleteFiles =
+      DeleteFiles(
+        booksOnDiskListItems,
+        dialogShower,
+        deleteFilesUseCase,
+        viewModelScope,
+        ioDispatcher.dispatcher
+      )
+    every { activity.toast(any<Int>()) } just Runs
   }
 
   @AfterEach
-  fun tearDown() {
+  fun cleanup() {
     unmockkAll()
-    unmockkObject(FileUtils)
-    unmockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
-    unmockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
   }
 
   @Test
-  fun `invokeWith should show delete confirmation dialog`() {
-    val activity = mockActivity()
-    val dialogShower = mockk<DialogShower>(relaxed = true)
+  fun invokeWith_showsDeleteDialogWithBookTitles() {
+    deleteFiles.invokeWith(activity)
 
-    val dialogSlot = slot<KiwixDialog>()
+    verify {
+      dialogShower.show(
+        KiwixDialog.DeleteZims("Book 1\nBook 2"),
+        any()
+      )
+    }
+  }
+
+  @Test
+  fun invokeWith_whenDeleteClicked_callsDeleteFilesUseCase() = runTest {
+    val clickSlot = slot<() -> Unit>()
 
     every {
-      dialogShower.show(capture(dialogSlot), any())
+      dialogShower.show(any(), capture(clickSlot))
     } just Runs
 
-    val book1 = mockBook("Wikipedia")
-    val book2 = mockBook("Wiktionary")
+    coEvery { deleteFilesUseCase(any()) } returns true
 
-    val effect = DeleteFiles(
-      booksOnDiskListItems = listOf(book1, book2),
-      dialogShower = dialogShower
-    )
+    deleteFiles.invokeWith(activity)
 
-    injectDependencies(effect)
-
-    effect.invokeWith(activity)
-
-    val dialog = dialogSlot.captured as KiwixDialog.DeleteZims
-
-    assertThat(dialog.args)
-      .containsExactly("Wikipedia\nWiktionary")
+    clickSlot.captured.invoke()
+    advanceUntilIdle()
+    coVerify(exactly = 1) {
+      deleteFilesUseCase(listOf(book1, book2))
+    }
   }
 
-  private fun mockActivity(): KiwixMainActivity {
-    val activity = mockk<KiwixMainActivity>(relaxed = true)
+  @Test
+  fun invokeWith_whenDeleteSucceeds_showsSuccessToast() = runTest {
+    val clickSlot = slot<() -> Unit>()
 
-    val component = mockk<KiwixActivityComponent>(relaxed = true)
+    every {
+      dialogShower.show(any(), capture(clickSlot))
+    } just Runs
 
-    every { activity.cachedComponent } returns component
-    every { component.inject(any<DeleteFiles>()) } just Runs
+    coEvery {
+      deleteFilesUseCase(any())
+    } returns true
 
-    return activity
+    deleteFiles.invokeWith(activity)
+
+    clickSlot.captured.invoke()
+    advanceUntilIdle()
+    verify {
+      activity.toast(R.string.delete_zims_toast)
+    }
   }
 
-  private fun injectDependencies(effect: DeleteFiles) {
-    effect.libkiwixBookOnDisk = mockk(relaxed = true)
-    effect.zimReaderContainer = mockk(relaxed = true)
-  }
+  @Test
+  fun invokeWith_whenDeleteFails_showsFailureToast() = runTest {
+    val clickSlot = slot<() -> Unit>()
 
-  private fun mockBook(
-    title: String,
-    zimReaderSource: ZimReaderSource = mockk(relaxed = true),
-    fileExists: Boolean = false
-  ): BookOnDisk {
-    val book = mockk<BookOnDisk>(relaxed = true)
+    every {
+      dialogShower.show(any(), capture(clickSlot))
+    } just Runs
 
-    val innerBook = mockk<LibkiwixBook>(relaxed = true)
+    coEvery {
+      deleteFilesUseCase(any())
+    } returns false
 
-    val file = mockk<File>(relaxed = true)
+    deleteFiles.invokeWith(activity)
 
-    every { innerBook.title } returns title
-    every { innerBook.id } returns "book-id"
+    clickSlot.captured.invoke()
 
-    every { book.book } returns innerBook
-    every { book.zimReaderSource } returns zimReaderSource
+    advanceUntilIdle()
 
-    every { zimReaderSource.file } returns file
-
-    every { file.path } returns "/tmp/test.zim"
-
-    coEvery { file.isFileExist() } returns fileExists
-
-    return book
+    verify {
+      activity.toast(R.string.delete_zim_failed)
+    }
   }
 }

@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 
 @ActivityScope
@@ -36,7 +35,6 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 )
 interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(readerFragment: KiwixReaderFragment)
-  fun inject(deleteFiles: DeleteFiles)
   fun inject(validateZIMFiles: ValidateZIMFiles)
   fun inject(kiwixMainActivity: KiwixMainActivity)
 

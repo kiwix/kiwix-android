@@ -19,77 +19,59 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteZims
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import javax.inject.Inject
 
 data class DeleteFiles(
   private val booksOnDiskListItems: List<BookOnDisk>,
-  private val dialogShower: DialogShower
-) :
-  SideEffect<Unit> {
-  @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
-
-  @Inject lateinit var zimReaderContainer: ZimReaderContainer
-
-  @Suppress("InjectDispatcher")
+  private val dialogShower: DialogShower,
+  private val deleteFilesUseCase: DeleteFilesUseCase,
+  private val viewModelScope: CoroutineScope,
+  private val ioDispatcher: CoroutineDispatcher
+) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    (activity as BaseActivity).cachedComponent.inject(this)
-
-    val name = booksOnDiskListItems.joinToString(separator = "\n") { it.book.title }
-
-    dialogShower.show(DeleteZims(name), {
-      activity.lifecycleScope.launch {
-        val deleteResult =
-          withContext(Dispatchers.IO) {
-            booksOnDiskListItems.deleteAll()
-          }
-        activity.toast(
-          if (deleteResult) {
-            R.string.delete_zims_toast
-          } else {
-            R.string.delete_zim_failed
-          }
-        )
-      }
-    })
+    dialogShower.show(
+      DeleteZims(dialogTitle()),
+      { deleteBooks(activity) }
+    )
   }
 
-  private suspend fun List<BookOnDisk>.deleteAll(): Boolean {
-    return fold(true) { acc, book ->
-      acc &&
-        deleteSpecificZimFile(book).also {
-          if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
-            zimReaderContainer.setZimReaderSource(null)
-          }
+  private fun dialogTitle() =
+    booksOnDiskListItems.joinToString("\n") {
+      it.book.title
+    }
+
+  private fun deleteBooks(
+    activity: AppCompatActivity
+  ) {
+    viewModelScope.launch {
+      val deleted =
+        withContext(ioDispatcher) {
+          deleteFilesUseCase(booksOnDiskListItems)
         }
+
+      showResult(activity, deleted)
     }
   }
 
-  private suspend fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
-    val file = book.zimReaderSource.file
-    file?.let {
-      @Suppress("UnreachableCode")
-      FileUtils.deleteZimFile(it.path)
-    }
-    if (file?.isFileExist() == true) {
-      return false
-    }
-    libkiwixBookOnDisk.delete(book.book.id)
-    return true
+  private fun showResult(
+    activity: AppCompatActivity,
+    success: Boolean
+  ) {
+    activity.toast(
+      if (success) {
+        R.string.delete_zims_toast
+      } else {
+        R.string.delete_zim_failed
+      }
+    )
   }
 }
