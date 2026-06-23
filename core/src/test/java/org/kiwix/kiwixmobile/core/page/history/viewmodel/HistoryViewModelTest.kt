@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import app.cash.turbine.test
 import io.mockk.clearAllMocks
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class HistoryViewModelTest {
@@ -49,7 +48,7 @@ internal class HistoryViewModelTest {
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
-    coEvery { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
+    every { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { historyRoomDao.history() } returns itemsFromDb
     every { historyRoomDao.pages() } returns historyRoomDao.history()
     viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore).apply {
@@ -60,7 +59,8 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `Initial state returns initial state`() {
-    assertThat(viewModel.initialState()).isEqualTo(historyState())
+    val state = viewModel.initialState()
+    assertThat(state).isEqualTo(historyState(showAll = state.showAll))
   }
 
   @Test
@@ -85,20 +85,16 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `offerUpdateToShowAllToggle offers UpdateAllHistoryPreference`() = runTest {
-    testFlow(
-      flow = viewModel.effects,
-      triggerAction = {
-        viewModel.offerUpdateToShowAllToggle(
-          UserClickedShowAllToggle(false),
-          historyState()
-        )
-      },
-      assert = {
-        assertThat(awaitItem()).isEqualTo(
-          UpdateAllHistoryPreference(kiwixDataStore, false, viewModelScope)
-        )
-      }
-    )
+    viewModel.effects.test {
+      viewModel.offerUpdateToShowAllToggle(
+        UserClickedShowAllToggle(false),
+        historyState()
+      )
+      assertThat(awaitItem()).isEqualTo(
+        UpdateAllHistoryPreference(kiwixDataStore, false, viewModelScope)
+      )
+      cancelAndIgnoreRemainingEvents()
+    }
   }
 
   @Test
