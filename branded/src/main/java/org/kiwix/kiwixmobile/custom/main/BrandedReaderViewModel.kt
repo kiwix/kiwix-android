@@ -62,6 +62,7 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.libkiwix.Book
 import java.io.File
@@ -85,7 +86,8 @@ class BrandedReaderViewModel @Inject constructor(
   readerSessionManager: ReaderSessionManager,
   readerIntentManager: ReaderIntentManager,
   pendingSearchItemManager: PendingSearchItemManager,
-  readerArticleManager: ReaderArticleManager
+  readerArticleManager: ReaderArticleManager,
+  readAloudManager: ReadAloudManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -102,7 +104,8 @@ class BrandedReaderViewModel @Inject constructor(
   readerSessionManager,
   readerIntentManager,
   pendingSearchItemManager,
-  readerArticleManager
+  readerArticleManager,
+  readAloudManager
 ) {
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
     if (enforcedLanguage(coreMainActivity)) {

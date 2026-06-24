@@ -18,11 +18,13 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Application
 import android.content.Intent
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,7 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
@@ -53,16 +54,24 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager.BookmarkSaveResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.AudioFocusGain
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.AudioFocusLoss
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.SpeakingEnded
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.SpeakingStarted
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.StartReadAloud
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.StartReadSelection
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsPaused
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsResumed
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
@@ -81,7 +90,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -118,7 +126,8 @@ abstract class CoreReaderViewModel(
   private val readerSessionManager: ReaderSessionManager,
   private val readerIntentManager: ReaderIntentManager,
   val pendingSearchItemManager: PendingSearchItemManager,
-  val readerArticleManager: ReaderArticleManager
+  val readerArticleManager: ReaderArticleManager,
+  val readAloudManager: ReadAloudManager
 ) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener {
   data class PreviousNextPageButtonItem(
     val isEnable: Boolean = false,
@@ -157,8 +166,10 @@ abstract class CoreReaderViewModel(
     val previousPageButtonItem: PreviousNextPageButtonItem = PreviousNextPageButtonItem(
       false,
       {},
-      {}),
+      {}
+    ),
     val nextPageButtonItem: PreviousNextPageButtonItem = PreviousNextPageButtonItem(false, {}, {}),
+    val pauseTtsButtonText: String = ""
   )
 
   sealed interface ReaderAction {
@@ -204,6 +215,24 @@ abstract class CoreReaderViewModel(
     data class ConsumeSavedStateHandle(val target: List<Pair<String, Class<*>>>) : ReaderEffect
     data object ClearActivityIntentAction : ReaderEffect
     data class SharePdfFile(val pdfFile: File) : ReaderEffect
+    data class OpenRandomArticle(val articleUrl: String) : ReaderEffect
+    data object RequestXiaomiShortcutPermission : ReaderEffect
+    data class ShowAddShortcutDialog(
+      val initialName: String,
+      val zimFileReader: org.kiwix.kiwixmobile.core.reader.ZimFileReader
+    ) : ReaderEffect
+
+    data object RequestNotificationPermission : ReaderEffect
+    data object TtsSpeakingStarted : ReaderEffect
+    data object TtsSpeakingEnded : ReaderEffect
+    data object TtsPausedByAudioFocus : ReaderEffect
+    data object TtsResumedByAudioFocus : ReaderEffect
+    data object TtsStoppedByAudioFocusLoss : ReaderEffect
+    data class TtsPauseOrResume(val isPaused: Boolean) : ReaderEffect
+
+    // data class StartReadAloud : ReaderEffect
+    data object StopReadAloud : ReaderEffect
+    data object InitializeTts : ReaderEffect
   }
 
   private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
@@ -213,25 +242,84 @@ abstract class CoreReaderViewModel(
   protected var readerMenuState: ReaderMenuState? = null
 
   init {
-    viewModelScope.launch {
-      bookmarkManager.bookmarkState.collect {
-        updateState {
-          copy(
-            bookmarkButtonItem = bookmarkButtonItem.copy(
-              isBookmarked = it.isBookmarked,
-              icon = getBookMarkButtonIcon(it.isBookmarked)
-            )
-          )
-        }
-      }
-      kiwixDataStore.backToTop.collect {
-        if (!it) {
-          hideBackToTopButton()
-        }
-        // Showing backToTop button based on webView scrolling.
+    observeSettings()
+    readerMenuState = createMainMenu()
+    readAloudManager.setUpTTS()
+    setTtsCallback()
+  }
+
+  private fun setTtsCallback() {
+    readAloudManager.setTtsStateCallback { state ->
+      when (state) {
+        AudioFocusGain -> updateTtsPausedButtonText(string.tts_pause)
+        AudioFocusLoss -> updateTtsPausedButtonText(string.tts_resume)
+        SpeakingEnded -> onReadAloudSpeakEnded()
+        SpeakingStarted -> updateState { copy(showTtsControls = true) }
+        StartReadAloud -> startReadAloud()
+        StartReadSelection -> startReadSelection()
+        TtsPaused -> updateTtsPausedButtonText(string.tts_resume)
+        TtsResumed -> updateTtsPausedButtonText(string.tts_pause)
       }
     }
-    readerMenuState = createMainMenu()
+  }
+
+  private fun updateTtsPausedButtonText(@StringRes string: Int) {
+    updateState { copy(pauseTtsButtonText = context.getString(string)) }
+  }
+
+  private fun observeSettings() {
+    viewModelScope.apply {
+      launch {
+        bookmarkManager.bookmarkState.collect {
+          updateState {
+            copy(
+              bookmarkButtonItem = bookmarkButtonItem.copy(
+                isBookmarked = it.isBookmarked,
+                icon = getBookMarkButtonIcon(it.isBookmarked)
+              )
+            )
+          }
+        }
+      }
+      launch {
+        kiwixDataStore.backToTop.collect {
+          if (!it) {
+            hideBackToTopButton()
+          }
+          // Showing backToTop button based on webView scrolling.
+        }
+      }
+    }
+  }
+
+  private fun onReadAloudSpeakEnded() {
+    readerMenuState?.onTextToSpeechStopped()
+    updateState {
+      copy(
+        showTtsControls = false,
+        pauseTtsButtonText = context.getString(string.tts_pause)
+      )
+    }
+  }
+
+  private fun startReadSelection() {
+    readerWebViewManager.getCurrentWebView()?.let {
+      readAloudManager.readSelection(it)
+    }
+  }
+
+  private fun startReadAloud() {
+    val webView = readerWebViewManager.getCurrentWebView() ?: return
+    val index = readerWebViewManager.currentWebViewIndex
+    readAloudManager.startReadAloud(webView, index)
+  }
+
+  fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
+    readAloudManager.pauseTts()
+  }
+
+  fun onReadAloudStop() {
+    readAloudManager.stopReadAloud()
   }
 
   private fun getBookMarkButtonIcon(isBookmarked: Boolean) =
@@ -241,15 +329,23 @@ abstract class CoreReaderViewModel(
       IconItem.Drawable(R.drawable.ic_bookmark_border_24dp)
     }
 
+  private fun goBack() {
+    readerWebViewManager.goBack()
+  }
+
+  private fun goForward() {
+    readerWebViewManager.goForward()
+  }
+
   fun onAction(action: ReaderAction) {
     when (action) {
       ReaderAction.BookmarkClicked -> onBookmarkButtonClicked()
       ReaderAction.BookmarkLongClicked -> openBookmarkScreen()
       ReaderAction.CloseAllTabs -> closeAllTabs()
-      ReaderAction.HomeClicked -> TODO()
-      ReaderAction.NextClicked -> TODO()
-      ReaderAction.OpenLibrary -> TODO()
-      ReaderAction.PreviousClicked -> TODO()
+      ReaderAction.HomeClicked -> openMainPage()
+      ReaderAction.NextClicked -> goForward()
+      ReaderAction.OpenLibrary -> openLocalLibrary()
+      ReaderAction.PreviousClicked -> goBack()
       is ReaderAction.SelectTab -> {
         launchInViewModelScope {
           hideTabSwitcher()
@@ -262,6 +358,14 @@ abstract class CoreReaderViewModel(
 
       is ReaderAction.CloseTab -> closeTab(action.position)
     }
+  }
+
+  /**
+   * This method calls when "NoBookOpenView" click. It is only available in Kiwix app.
+   * So KiwixReaderViewModel is responsibile for proving its functionality.
+   */
+  open fun openLocalLibrary() {
+    // Do nothing here.
   }
 
   protected fun updateState(transform: ReaderUiState.() -> ReaderUiState) {
@@ -367,7 +471,40 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  override fun onReadAloudMenuClicked() {}
+  override fun onReadAloudMenuClicked() {
+    launchInViewModelScope {
+      if (!kiwixPermissionChecker.hasNotificationPermission()) {
+        emitEffect(ReaderEffect.RequestNotificationPermission)
+        return@launchInViewModelScope
+      }
+      if (uiState.value.showTtsControls) {
+        stopReadAloud()
+        return@launchInViewModelScope
+      }
+      startReadAloudFlow()
+    }
+  }
+
+  private suspend fun stopReadAloud() {
+    if (isBackToTopEnabled()) {
+      showBackToTopButton()
+    }
+    readAloudManager.stopReadAloud()
+  }
+
+  private suspend fun startReadAloudFlow() {
+    if (isBackToTopEnabled()) {
+      hideBackToTopButton()
+    }
+
+    updateTtsPausedButtonText(string.tts_pause)
+    if (readAloudManager.isTtsInitialed()) {
+      startReadAloud()
+    } else {
+      readAloudManager.initializeTTS(false)
+    }
+  }
+
   override fun onSearchMenuClickedMenuClicked() {
     launchInViewModelScope {
       readerSessionManager.saveReaderSession {
@@ -580,7 +717,11 @@ abstract class CoreReaderViewModel(
       shouldLoadUrl = shouldLoadUrl,
       callback = this@CoreReaderViewModel,
       videoView = requireNotNull(uiState.value.videoView)
-    )
+    ).apply {
+      setUpWithTextToSpeech(this)
+      // TODO uncomment this when documentPrser is implmented.
+      // documentParser?.initInterface(it)
+    }
     if (selectTab) {
       launchInViewModelScope {
         selectTab(readerWebViewManager.webViewList.size - 1)
@@ -949,6 +1090,9 @@ abstract class CoreReaderViewModel(
   }
 
   private fun closeTab(index: Int) {
+    if (readAloudManager.currentTtsIndex == index) {
+      onReadAloudStop()
+    }
     val removedTab = readerWebViewManager.closeTab(index) ?: return
     emitEffect(
       ReaderEffect.ShowSnackbar(
@@ -978,16 +1122,13 @@ abstract class CoreReaderViewModel(
     emitEffect(
       ReaderEffect.ShowSnackbar(message = context.getString(string.tab_restored))
     )
-    // TODO: Uncomment this when tts is implemented.
-    // setUpWithTextToSpeech(removedTab)
+    setUpWithTextToSpeech(removedTab)
     updateBottomToolbarVisibility()
     safelyAddWebView(removedTab)
   }
 
   private fun closeAllTabs() {
-    // TODO: Uncomment this line when the read aloud feature is implemented here.
-    // onReadAloudStop()
-    // tempZimSourceForUndo = zimReaderContainer.zimReaderSource
+    onReadAloudStop()
     val tempList = readerWebViewManager.closeAllTabs()
     openHomeScreen()
     emitEffect(
@@ -1015,8 +1156,7 @@ abstract class CoreReaderViewModel(
       emitEffect(ReaderEffect.ShowToast(context.getString(string.tabs_restored)))
       reopenBook()
       showTabSwitcher()
-      // TODO: Uncomment this line when the read aloud feature is implemented here.
-      // setUpWithTextToSpeech(tempWebViewListForUndo[tempWebViewListForUndo.lastIndex])
+      setUpWithTextToSpeech(tempWebViewListForUndo[tempWebViewListForUndo.lastIndex])
       updateBottomToolbarVisibility()
       safelyAddWebView(tempWebViewListForUndo[tempWebViewListForUndo.lastIndex])
     }
@@ -1089,6 +1229,27 @@ abstract class CoreReaderViewModel(
         }
       }
     }
+  }
+
+  private fun setUpWithTextToSpeech(kiwixWebView: KiwixWebView?) {
+    kiwixWebView?.let {
+      readAloudManager.initWebView(it)
+    }
+  }
+
+  fun onNotificationPermissionResult(isGranted: Boolean, activity: CoreMainActivity) {
+    if (isGranted) {
+      onReadAloudMenuClicked()
+      return
+    }
+    val effect = if (!kiwixPermissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)) {
+      ReaderEffect.RequestNotificationPermission
+    } else {
+      ReaderEffect.ShowKiwixDialog(
+        KiwixDialog.NotificationPermissionDialog
+      ) { activity.navigateToAppSettings() }
+    }
+    emitEffect(effect)
   }
 
   fun openBookmarkScreen() {
@@ -1235,6 +1396,7 @@ abstract class CoreReaderViewModel(
   override fun onCleared() {
     bookmarkManager.stopObserving()
     pendingSearchItemManager.consume()
+    readAloudManager.stopReadAloudSafely()
     super.onCleared()
   }
 }

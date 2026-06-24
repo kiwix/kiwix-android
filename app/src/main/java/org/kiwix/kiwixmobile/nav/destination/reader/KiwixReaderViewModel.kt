@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
@@ -78,7 +79,8 @@ class KiwixReaderViewModel @Inject constructor(
   readerSessionManager: ReaderSessionManager,
   readerIntentManager: ReaderIntentManager,
   pendingSearchItemManager: PendingSearchItemManager,
-  readerArticleManager: ReaderArticleManager
+  readerArticleManager: ReaderArticleManager,
+  readAloudManager: ReadAloudManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -95,7 +97,8 @@ class KiwixReaderViewModel @Inject constructor(
   readerSessionManager,
   readerIntentManager,
   pendingSearchItemManager,
-  readerArticleManager
+  readerArticleManager,
+  readAloudManager
 ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
@@ -282,5 +285,12 @@ class KiwixReaderViewModel @Inject constructor(
       readerMenuState?.showWebViewOptions(urlIsValid())
       readerWebViewManager.selectTab(readerWebViewManager.currentWebViewIndex)
     }
+  }
+
+  override fun openLocalLibrary() {
+    val navOptions = NavOptions.Builder()
+      .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
+      .build()
+    emitEffect(ReaderEffect.NavigateTo(KiwixDestination.Library.route, navOptions))
   }
 }

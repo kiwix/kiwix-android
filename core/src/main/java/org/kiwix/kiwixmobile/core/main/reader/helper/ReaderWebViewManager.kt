@@ -70,14 +70,24 @@ class ReaderWebViewManager @Inject constructor(
     if (shouldLoadUrl) {
       loadUrl(url, webView)
     }
-    // TODO: Improve according to compose lifeCycle.
-    // saveTabs()
     return webView
   }
 
   private fun loadUrl(url: String?, webview: KiwixWebView) {
     if (url != null && !url.endsWith("null")) {
       webview.loadUrl(url)
+    }
+  }
+
+  fun goBack() {
+    if (getCurrentWebView()?.canGoBack() == true) {
+      getCurrentWebView()?.goBack()
+    }
+  }
+
+  fun goForward() {
+    if (getCurrentWebView()?.canGoForward() == true) {
+      getCurrentWebView()?.goForward()
     }
   }
 
