@@ -18,24 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
-import android.os.Bundle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.core.net.toUri
-import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
-class TabsManager @Inject constructor(
-  private val zimReaderContainer: ZimReaderContainer
-) {
+class TabsManager @Inject constructor() {
   private val _webViewList = mutableStateListOf<KiwixWebView>()
 
   val webViewList: SnapshotStateList<KiwixWebView>

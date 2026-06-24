@@ -24,9 +24,20 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
@@ -42,14 +53,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager.BookmarkSaveResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
@@ -67,11 +81,15 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.ShortcutResult
+import org.kiwix.kiwixmobile.core.utils.ShortcutUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -82,6 +100,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
+import java.io.File
 
 abstract class CoreReaderViewModel(
   val context: Application,
@@ -98,7 +117,8 @@ abstract class CoreReaderViewModel(
   private val readerHistoryManager: ReaderHistoryManager,
   private val readerSessionManager: ReaderSessionManager,
   private val readerIntentManager: ReaderIntentManager,
-  val pendingSearchItemManager: PendingSearchItemManager
+  val pendingSearchItemManager: PendingSearchItemManager,
+  val readerArticleManager: ReaderArticleManager
 ) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener {
   data class PreviousNextPageButtonItem(
     val isEnable: Boolean = false,
@@ -170,10 +190,10 @@ abstract class CoreReaderViewModel(
     ) : ReaderEffect
 
     data class ShowToast(val message: String) : ReaderEffect
-
     data object OpenDonationPage : ReaderEffect
     data object OpenLibrary : ReaderEffect
-    data class ShowOpenInNewTabDialog(val url: String) : ReaderEffect
+    data class ShowKiwixDialog(val kiwixDialog: KiwixDialog, val onClick: () -> Unit) : ReaderEffect
+    data object ShowAddNoteDialog : ReaderEffect
     data object OpenBookmarkScreen : ReaderEffect
     data object DisableLeftSideBar : ReaderEffect
     data object EnableLeftSideBar : ReaderEffect
@@ -183,6 +203,7 @@ abstract class CoreReaderViewModel(
     data class NavigateTo(val route: String, val navOptions: NavOptions? = null) : ReaderEffect
     data class ConsumeSavedStateHandle(val target: List<Pair<String, Class<*>>>) : ReaderEffect
     data object ClearActivityIntentAction : ReaderEffect
+    data class SharePdfFile(val pdfFile: File) : ReaderEffect
   }
 
   private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
@@ -289,14 +310,134 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  override fun onHomeMenuClicked() {}
-  override fun onAddNoteMenuClicked() {}
-  override fun onShareMenuClicked() {}
-  override fun onRandomArticleMenuClicked() {}
+  override fun onHomeMenuClicked() {
+    launchInViewModelScope {
+      if (uiState.value.showTabSwitcher) {
+        hideTabSwitcher()
+      }
+      newMainPageTab()
+    }
+  }
+
+  override fun onAddNoteMenuClicked() {
+    emitEffect(ReaderEffect.ShowAddNoteDialog)
+  }
+
+  override fun onShareMenuClicked() {
+    launchInViewModelScope {
+      val webView = readerWebViewManager.getCurrentWebView() ?: return@launchInViewModelScope
+      val pdfResult = readerArticleManager.createPdf(webView)
+      when (val result = pdfResult.getOrNull()) {
+        is ReaderArticleManager.CreatePdfResult.Success -> {
+          emitEffect(ReaderEffect.SharePdfFile(result.file))
+        }
+
+        is ReaderArticleManager.CreatePdfResult.Failure -> {
+          Log.e(TAG_KIWIX, "Failed to generate PDF for sharing: ${result.throwable}")
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.unable_to_share_article)))
+        }
+
+        ReaderArticleManager.CreatePdfResult.PageStillLoading -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.please_wait_for_page_to_load)))
+        }
+
+        ReaderArticleManager.CreatePdfResult.CacheDirUnavailable,
+        null -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.unable_to_share_article)))
+        }
+      }
+    }
+  }
+
+  override fun onRandomArticleMenuClicked() {
+    launchInViewModelScope {
+      when (val result = readerArticleManager.getRandomArticle()) {
+        is ReaderArticleManager.GetRandomArticleResult.Success -> {
+          loadUrlWithCurrentWebview(result.articleUrl)
+        }
+
+        ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.error_loading_random_article_zim_not_loaded)))
+        }
+
+        ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.could_not_find_random_article)))
+        }
+      }
+    }
+  }
+
   override fun onReadAloudMenuClicked() {}
-  override fun onSearchMenuClickedMenuClicked() {}
-  override fun onAddToHomeScreenMenuClicked() {}
-  override fun onFindInPageMenuClicked() {}
+  override fun onSearchMenuClickedMenuClicked() {
+    launchInViewModelScope {
+      readerSessionManager.saveReaderSession {
+        // Pass this function to saveTabStates so that after saving
+        // the tab state in the database, it will open the search fragment.
+        openSearch(isOpenedFromTabView = readerMenuState?.isInTabSwitcher == true)
+      }
+    }
+  }
+
+  override fun onAddToHomeScreenMenuClicked() {
+    val reader = zimReaderContainer.zimFileReader
+    if (reader == null) {
+      Log.e(TAG_KIWIX, "Reader or ZimFileReader is null, cannot add to home screen")
+      return
+    }
+
+    // On Xiaomi/MIUI devices, check shortcut permission first
+    val effect = if (ShortcutUtils.isXiaomiDevice() &&
+      !ShortcutUtils.isShortcutPermissionGranted(context)
+    ) {
+      // Show permission dialog first, then proceed to naming dialog after user grants permission
+      ReaderEffect.ShowKiwixDialog(
+        KiwixDialog.XiaomiShortcutPermission
+      ) {
+        // "Open Settings" button — open MIUI permission editor
+        ShortcutUtils.openMiuiPermissionEditor(context)
+      }
+    } else {
+      // Permission is granted (or not Xiaomi) — show the shortcut naming dialog
+      val initialName = reader.title
+      val nameState = mutableStateOf(initialName)
+
+      val dialog = KiwixDialog.AddShortcut(
+        customGetView = {
+          val name by remember { nameState }
+          Column {
+            OutlinedTextField(
+              value = name,
+              onValueChange = { nameState.value = it },
+              label = { Text(stringResource(string.shortcut_name_label)) },
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = EIGHT_DP)
+            )
+          }
+        }
+      )
+      ReaderEffect.ShowKiwixDialog(dialog) {
+        val result = ShortcutUtils.addBookShortcut(
+          context = context,
+          zimFileReader = reader,
+          pageUrl = readerWebViewManager.getCurrentWebView()?.url,
+          customName = nameState.value
+        )
+        if (result == ShortcutResult.NotSupported) {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.shortcut_disabled_message)))
+        }
+      }
+    }
+    emitEffect(effect)
+  }
+
+  /**
+   * Initiates the "find in page" UI for searching within the current WebView content.
+   * If the `compatCallback` is active, it sets up the WebView to search for the
+   * specified title and displays the search input UI.
+   */
+  override fun onFindInPageMenuClicked() {
+  }
 
   override fun webViewUrlLoading() {
     viewModelScope.launch {
@@ -352,7 +493,7 @@ abstract class CoreReaderViewModel(
   }
 
   override fun webViewTitleUpdated(title: String) {
-    // updateTabIcon(webViewList.size)
+    updateTabIcon(readerWebViewManager.webViewList.size)
   }
 
   private fun updateTabIcon(size: Int) {
@@ -405,40 +546,26 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  /**
-   * Displays a dialog prompting the user to open the provided URL in a new tab.
-   * CustomReaderFragment override this method to customize the
-   * behavior of the "Open in New Tab" dialog. In this specific implementation,
-   * If the custom app is set to disable the tabs feature,
-   * it will not show the dialog with the ability to open the URL in a new tab,
-   * it provide additional customization for custom apps.
-   *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
-   */
   protected open fun showOpenInNewTabDialog(url: String) {
-    // TODO: replace this with sideEffect.
-    alertDialogShower.show(
-      KiwixDialog.YesNoDialog.OpenInNewTab,
-      {
-        viewModelScope.launch {
-          val openInBackground = kiwixDataStore.openNewTabInBackground.first()
-          createNewTab(url, selectTab = !openInBackground)
-          if (openInBackground) {
-            emitEffect(
-              ReaderEffect.ShowSnackbar(context.getString(string.new_tab_snack_bar)) {
-                val tabsSize = readerWebViewManager.tabsSize()
-                if (tabsSize > 1) {
-                  launchInViewModelScope {
-                    selectTab(tabsSize - 1)
-                  }
+    val effect = ReaderEffect.ShowKiwixDialog(KiwixDialog.YesNoDialog.OpenInNewTab) {
+      launchInViewModelScope {
+        val openInBackground = kiwixDataStore.openNewTabInBackground.first()
+        createNewTab(url, selectTab = !openInBackground)
+        if (openInBackground) {
+          emitEffect(
+            ReaderEffect.ShowSnackbar(context.getString(string.new_tab_snack_bar)) {
+              val tabsSize = readerWebViewManager.tabsSize()
+              if (tabsSize > 1) {
+                launchInViewModelScope {
+                  selectTab(tabsSize - 1)
                 }
               }
-            )
-          }
+            }
+          )
         }
       }
-    )
+    }
+    emitEffect(effect)
   }
 
   private fun createNewTab(

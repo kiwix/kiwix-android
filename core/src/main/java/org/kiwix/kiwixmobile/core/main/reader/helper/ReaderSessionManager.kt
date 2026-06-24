@@ -61,7 +61,7 @@ class ReaderSessionManager @Inject constructor(
 
   private val savingTabsMutex = Mutex()
 
-  suspend fun saveReaderSession() {
+  suspend fun saveReaderSession(onComplete: () -> Unit = {}) {
     savingTabsMutex.withLock {
       clearAndSaveLatestReaderSession(getWebViewHistoryList())
       val source = zimFileManager.zimReaderSource?.toDatabase()
@@ -73,6 +73,7 @@ class ReaderSessionManager @Inject constructor(
         TAG_KIWIX,
         "Save current zim file to preferences: $source"
       )
+      onComplete.invoke()
     }
   }
 

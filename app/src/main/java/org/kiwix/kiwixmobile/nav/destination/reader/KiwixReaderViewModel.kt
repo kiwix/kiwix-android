@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.reader.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
@@ -76,7 +77,8 @@ class KiwixReaderViewModel @Inject constructor(
   readerHistoryManager: ReaderHistoryManager,
   readerSessionManager: ReaderSessionManager,
   readerIntentManager: ReaderIntentManager,
-  pendingSearchItemManager: PendingSearchItemManager
+  pendingSearchItemManager: PendingSearchItemManager,
+  readerArticleManager: ReaderArticleManager
 ) : CoreReaderViewModel(
   context,
   kiwixDataStore,
@@ -92,7 +94,8 @@ class KiwixReaderViewModel @Inject constructor(
   readerHistoryManager,
   readerSessionManager,
   readerIntentManager,
-  pendingSearchItemManager
+  pendingSearchItemManager,
+  readerArticleManager
 ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
