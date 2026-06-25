@@ -111,7 +111,8 @@ class BrandedReaderViewModel @Inject constructor(
     if (enforcedLanguage(coreMainActivity)) {
       return
     }
-    updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR) }
+    val appName = kiwixDataStore.appName.first()
+    updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR, appName = appName) }
     enableLeftDrawer()
     loadPageFromNavigationArguments(coreMainActivity)
     if (BuildConfig.DISABLE_EXTERNAL_LINK) {
@@ -367,6 +368,16 @@ class BrandedReaderViewModel @Inject constructor(
 
   override fun showNoBookOpenViews() {
     updateState { copy(showNoBookOpenInReader = false) }
+  }
+
+  /**
+   * Overrides the method to show the donation popup. When the "Support url" is disabled
+   * in a custom app, this function stop to show the donationPopup.
+   */
+  override fun showDonationLayout() {
+    if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+      super.showDonationLayout()
+    }
   }
 
   /**

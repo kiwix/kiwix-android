@@ -23,6 +23,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
@@ -103,7 +104,8 @@ class KiwixReaderViewModel @Inject constructor(
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
-    updateState { copy(isTocButtonEnable = true) }
+    val appName = kiwixDataStore.appName.first()
+    updateState { copy(isTocButtonEnable = true, appName = appName) }
     enableLeftDrawer()
     openPageInBookFromNavigationArguments(coreMainActivity)
   }

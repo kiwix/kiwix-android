@@ -90,6 +90,10 @@ class ReaderWebViewManager @Inject constructor(
     }
   }
 
+  fun backToTop() {
+    getCurrentWebView()?.pageUp(true)
+  }
+
   fun goBack() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.goBack()

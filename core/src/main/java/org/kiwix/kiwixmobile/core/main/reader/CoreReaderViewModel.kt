@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -54,6 +55,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -140,6 +142,7 @@ abstract class CoreReaderViewModel(
   )
 
   data class ReaderUiState(
+    val appName: String = "",
     val title: String = "",
     val loading: Boolean = false,
     val progress: Int = ZERO,
@@ -164,29 +167,34 @@ abstract class CoreReaderViewModel(
     val isTocButtonEnable: Boolean = false,
     val showTableOfContentDrawer: Boolean = false,
     val tableOfContentTitle: String = "",
-    val documentSections: List<DocumentSection> = emptyList()
+    val documentSections: List<DocumentSection> = emptyList(),
+    val showDonationPopup: Boolean = false
   )
 
   sealed interface ReaderAction {
-
+    data object BackToTopButtonClick : ReaderAction
     data object OpenLibrary : ReaderAction
-
     data object HomeClicked : ReaderAction
-
     data object BookmarkClicked : ReaderAction
     data object BookmarkLongClicked : ReaderAction
-
     data object PreviousClicked : ReaderAction
     data object PreviousLongClicked : ReaderAction
-
     data object NextClicked : ReaderAction
     data object NextLongClicked : ReaderAction
     data object OpenTocDrawer : ReaderAction
-
+    data object CloseTocDrawer : ReaderAction
     data object CloseAllTabs : ReaderAction
-
     data class SelectTab(val position: Int) : ReaderAction
     data class CloseTab(val position: Int) : ReaderAction
+    data object PauseTts : ReaderAction
+    data object StopTts : ReaderAction
+    data object DonateButtonClick : ReaderAction
+    data object DonateLaterButtonClick : ReaderAction
+    data class OpenSearch(
+      val searchString: String = "",
+      val isOpenedFromTabView: Boolean = false,
+      val isVoice: Boolean = false
+    ) : ReaderAction
   }
 
   sealed interface ReaderEffect {
@@ -194,6 +202,7 @@ abstract class CoreReaderViewModel(
     data class ShowSnackbar(
       val message: String,
       val actionLabel: String? = null,
+      val snackbarDuration: SnackbarDuration = SnackbarDuration.Short,
       val actionClick: (() -> Unit) = {},
       val snackBarResult: (SnackbarResult) -> Unit = {}
     ) : ReaderEffect
@@ -206,6 +215,8 @@ abstract class CoreReaderViewModel(
     data object OpenBookmarkScreen : ReaderEffect
     data object DisableLeftSideBar : ReaderEffect
     data object EnableLeftSideBar : ReaderEffect
+    data object OpenActivitySideBar : ReaderEffect
+    data object CloseActivitySideBar : ReaderEffect
     data object ShowActivityBottomAppBar : ReaderEffect
     data object HideActivityBottomAppBar : ReaderEffect
     data object RequestReadStoragePermission : ReaderEffect
@@ -220,7 +231,7 @@ abstract class CoreReaderViewModel(
   private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
   val uiState: StateFlow<ReaderUiState> get() = _uiState.asStateFlow()
   private val webUrlsFlow = MutableStateFlow("")
-  protected var readerMenuState: ReaderMenuState? = null
+  var readerMenuState: ReaderMenuState? = null
   private var documentParser: DocumentParser? = null
 
   init {
@@ -355,6 +366,12 @@ abstract class CoreReaderViewModel(
       ReaderAction.PreviousClicked -> goBack()
       ReaderAction.PreviousLongClicked -> showBackwordForwardHistory(false)
       ReaderAction.OpenTocDrawer -> updateState { copy(showTableOfContentDrawer = true) }
+      ReaderAction.CloseTocDrawer -> updateState { copy(showTableOfContentDrawer = false) }
+      ReaderAction.BackToTopButtonClick -> readerWebViewManager.backToTop()
+      ReaderAction.PauseTts -> readAloudManager.pauseTts()
+      ReaderAction.StopTts -> launchInViewModelScope { stopReadAloud() }
+      ReaderAction.DonateButtonClick -> donateButtonClick()
+      ReaderAction.DonateLaterButtonClick -> donateLaterButtonClick()
       is ReaderAction.SelectTab -> {
         launchInViewModelScope {
           hideTabSwitcher()
@@ -364,6 +381,12 @@ abstract class CoreReaderViewModel(
           updateBottomToolbarArrowsAlpha()
         }
       }
+
+      is ReaderAction.OpenSearch -> openSearch(
+        searchString = action.searchString,
+        isOpenedFromTabView = action.isOpenedFromTabView,
+        isVoice = action.isVoice
+      )
 
       is ReaderAction.CloseTab -> closeTab(action.position)
     }
@@ -408,20 +431,6 @@ abstract class CoreReaderViewModel(
       copy(loading = true, progress = progress)
     }
   }
-
-  /**
-   * Provides the visibility state and click action for the TOC (Table of Contents) button
-   * shown in the reader's bottom app bar.
-   *
-   * @return A [Pair] containing:
-   *  - [Boolean]: Indicates whether the TOC button should be enabled (e.g., can be disabled
-   *               in certain custom app configurations where the sidebar is turned off).
-   *  - [() -> Unit]: The action to perform when the TOC button is clicked.
-   *
-   * Note: If modifying this method, ensure it is thoroughly tested in custom app variants
-   * where sidebar behavior may differ.
-   */
-  open fun getTocButtonStateAndAction(): Pair<Boolean, () -> Unit> = true to { openToc() }
 
   /**
    * Provides the navigationIcon based on condition.
@@ -626,7 +635,7 @@ abstract class CoreReaderViewModel(
       )
     )
     delay(TOC_SHOWING_WAITING_TIME)
-    updateState { copy(showTableOfContentDrawer = true) }
+    onAction(ReaderAction.OpenTocDrawer)
   }
 
   override fun webViewUrlFinishedLoading() {
@@ -1274,6 +1283,23 @@ abstract class CoreReaderViewModel(
     }
   }
 
+  fun onReadStoragePermissionResult(isGranted: Boolean) {
+    if (isGranted) {
+      launchInViewModelScope {
+        zimReaderSource?.let { openZimFile(it) }
+      }
+      return
+    }
+    emitEffect(
+      ReaderEffect.ShowSnackbar(
+        context.getString(string.request_storage),
+        context.getString(string.menu_settings),
+        snackbarDuration = SnackbarDuration.Long,
+        actionClick = { context.navigateToAppSettings() }
+      )
+    )
+  }
+
   fun onNotificationPermissionResult(isGranted: Boolean, activity: CoreMainActivity) {
     if (isGranted) {
       onReadAloudMenuClicked()
@@ -1334,6 +1360,70 @@ abstract class CoreReaderViewModel(
   open fun showSearchPlaceHolderInToolbar(isTabSwitcherShowing: Boolean) {
     updateState {
       copy(searchPlaceHolderItemForBrandedApps = false)
+    }
+  }
+
+  protected open fun showDonationLayout() {
+    updateState { copy(showDonationPopup = true) }
+  }
+
+  fun onUserBackPressed(coreMainActivity: CoreMainActivity?): FragmentActivityExtensions.Super {
+    when {
+      coreMainActivity?.navigationDrawerIsOpen() == true -> {
+        coreMainActivity.closeNavigationDrawer()
+        return FragmentActivityExtensions.Super.ShouldNotCall
+      }
+
+      uiState.value.showTabSwitcher -> {
+        launchInViewModelScope {
+          val currentWebViewIndex = readerWebViewManager.currentWebViewIndex
+          val webViewListSize = readerWebViewManager.tabsSize()
+          selectTab(
+            if (currentWebViewIndex < webViewListSize) {
+              currentWebViewIndex
+            } else {
+              webViewListSize - 1
+            }
+          )
+          hideTabSwitcher()
+        }
+        return FragmentActivityExtensions.Super.ShouldNotCall
+      }
+
+      // TODO: uncomment this when compatCallback functionality is migrated to compose.
+      // compatCallback?.isActive == true -> {
+      //   compatCallback?.finish()
+      //   return FragmentActivityExtensions.Super.ShouldNotCall
+      // }
+
+      uiState.value.showTableOfContentDrawer -> {
+        onAction(ReaderAction.CloseTocDrawer)
+        return FragmentActivityExtensions.Super.ShouldNotCall
+      }
+
+      readerWebViewManager.getCurrentWebView()?.canGoBack() == true -> {
+        // Otherwise, go to the previous page.
+        readerWebViewManager.getCurrentWebView()?.goBack()
+        return FragmentActivityExtensions.Super.ShouldNotCall
+      }
+
+      else -> return FragmentActivityExtensions.Super.ShouldCall
+    }
+  }
+
+  private fun donateButtonClick() {
+    launchInViewModelScope {
+      // TODO: uncomment this when donation functionality is implement in viewModel
+      // donationDialogHandler?.updateLastDonationPopupShownTime()
+      // openKiwixSupportUrl()
+      updateState { copy(showDonationPopup = false) }
+    }
+  }
+
+  private fun donateLaterButtonClick() {
+    launchInViewModelScope {
+      // donationDialogHandler?.donateLater()
+      updateState { copy(showDonationPopup = false) }
     }
   }
 
@@ -1406,6 +1496,32 @@ abstract class CoreReaderViewModel(
    * By default, this returns [White], which is appropriate for vector icons that rely on tinting.
    */
   open fun navigationIconTint() = White
+
+  /**
+   * Handles clicks on the navigation icon.
+   * - If the tab switcher is active, triggers the home menu action.
+   * - Otherwise, toggles the navigation drawer: opens it if closed, closes it if open.
+   */
+  open fun navigationIconClick(isNavigationDrawerOpen: Boolean) {
+    if (readerMenuState?.isInTabSwitcher == true) {
+      onHomeMenuClicked()
+      return
+    }
+
+    val effect = if (isNavigationDrawerOpen) {
+      ReaderEffect.CloseActivitySideBar
+    } else {
+      ReaderEffect.OpenActivitySideBar
+    }
+    emitEffect(effect)
+  }
+
+  fun navigationIconContentDescription() =
+    if (readerMenuState?.isInTabSwitcher == true) {
+      string.search_open_in_new_tab
+    } else {
+      string.open_drawer
+    }
 
   /**
    * Creates the main menu for the reader.

@@ -479,23 +479,23 @@ abstract class CoreReaderFragment :
             )
           }
         }
-        ReaderScreen(
-          state = readerScreenState.value,
-          actionMenuItems = readerMenuState?.menuItems.orEmpty(),
-          navigationIcon = {
-            NavigationIcon(
-              iconItem = navigationIcon(),
-              contentDescription = navigationIconContentDescription(),
-              onClick = { navigationIconClick() },
-              iconTint = navigationIconTint()
-            )
-          },
-          mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
-          documentSections = documentSections,
-          showTableOfContentDrawer = shouldTableOfContentDrawer,
-          onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
-          navHostController = (requireActivity() as CoreMainActivity).navController
-        )
+        // ReaderScreen(
+        //   state = readerScreenState.value,
+        //   actionMenuItems = readerMenuState?.menuItems.orEmpty(),
+        //   navigationIcon = {
+        //     NavigationIcon(
+        //       iconItem = navigationIcon(),
+        //       contentDescription = navigationIconContentDescription(),
+        //       onClick = { navigationIconClick() },
+        //       iconTint = navigationIconTint()
+        //     )
+        //   },
+        //   mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
+        //   documentSections = documentSections,
+        //   showTableOfContentDrawer = shouldTableOfContentDrawer,
+        //   onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
+        //   navHostController = (requireActivity() as CoreMainActivity).navController
+        // )
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
           onDispose {
