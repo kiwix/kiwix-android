@@ -30,7 +30,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class ZimSearchResultGeneratorTest {
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private val zimFileReader: ZimFileReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =

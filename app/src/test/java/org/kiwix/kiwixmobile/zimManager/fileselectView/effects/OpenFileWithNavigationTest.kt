@@ -44,7 +44,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 class OpenFileWithNavigationTest {
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private val scope = TestScope(mainDispatcherRule.dispatcher)
 
   private val zimReaderSource = mockk<ZimReaderSource>()

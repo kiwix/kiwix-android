@@ -77,7 +77,8 @@ class LocalLibraryViewModelTest {
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
 
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   private val testDispatcher get() = mainDispatcherRule.dispatcher
 

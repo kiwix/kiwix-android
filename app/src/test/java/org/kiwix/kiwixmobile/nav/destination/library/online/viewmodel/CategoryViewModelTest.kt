@@ -59,6 +59,7 @@ class CategoryViewModelTest {
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
 
   @RegisterExtension
+  @JvmField
   val mainDispatcher = MainDispatcherRule()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
   private lateinit var categoryViewModel: CategoryViewModel

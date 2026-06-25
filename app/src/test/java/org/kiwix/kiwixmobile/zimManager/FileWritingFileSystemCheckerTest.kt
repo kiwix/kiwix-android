@@ -38,7 +38,8 @@ import java.io.File
 import java.io.IOException
 
 class FileWritingFileSystemCheckerTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val tempFolder = TemporaryFolder()
 
   private val testFileWriter: (String, Long) -> Unit = mockk()

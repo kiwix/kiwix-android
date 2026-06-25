@@ -30,6 +30,7 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class HistoryViewModelTest {
   @RegisterExtension
+  @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private val historyRoomDao: HistoryRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()

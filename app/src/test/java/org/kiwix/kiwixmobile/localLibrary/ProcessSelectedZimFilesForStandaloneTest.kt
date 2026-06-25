@@ -29,12 +29,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
-import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestDispatcher
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -49,7 +46,6 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForStandalone
 import org.kiwix.kiwixmobile.nav.destination.library.local.SelectedZimFileCallback
 import java.io.File
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProcessSelectedZimFilesForStandaloneTest {
@@ -58,18 +54,11 @@ class ProcessSelectedZimFilesForStandaloneTest {
   private val activity: Activity = mockk(relaxed = true)
   private val selectedZimFileCallback: SelectedZimFileCallback = mockk(relaxed = true)
 
-  private lateinit var testDispatcher: TestDispatcher
-  private lateinit var testScope: TestScope
-
   @BeforeEach
   fun setup() {
-    clearAllMocks()
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
     mockkStatic(FileUtils::class)
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
-
-    testDispatcher = StandardTestDispatcher()
-    testScope = TestScope(testDispatcher)
 
     processSelectedZimFiles = ProcessSelectedZimFilesForStandalone(
       kiwixDataStore,
@@ -80,7 +69,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
   @Test
   fun `canHandleUris should return true when not play store build with android 11 or above`() =
-    testScope.runTest {
+    runTest {
       coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
 
       val result = processSelectedZimFiles.canHandleUris()
@@ -90,7 +79,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
   @Test
   fun `canHandleUris should return false when play store build with android 11 or above`() =
-    testScope.runTest {
+    runTest {
       coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
 
       val result = processSelectedZimFiles.canHandleUris()
@@ -100,7 +89,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
   @Test
   fun `processSelectedFiles should call navigateToReaderFragment for valid single file`() =
-    testScope.runTest {
+    runTest {
       val uri = createValidUri()
 
       coEvery { selectedZimFileCallback.navigateToReaderFragment(any()) } just Runs
@@ -111,7 +100,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
     }
 
   @Test
-  fun `processSelectedFiles should show toast when file is invalid`() = testScope.runTest {
+  fun `processSelectedFiles should show toast when file is invalid`() = runTest {
     val uri = mockk<Uri>()
     val filePath = "/storage/emulated/0/test.jpg"
 
@@ -127,7 +116,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
   }
 
   @Test
-  fun `processSelectedFiles should show toast when file not found`() = testScope.runTest {
+  fun `processSelectedFiles should show toast when file not found`() = runTest {
     val uri = mockk<Uri>()
 
     coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns null
@@ -144,7 +133,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
   }
 
   @Test
-  fun `processSelectedFiles should add multiple valid files to library`() = testScope.runTest {
+  fun `processSelectedFiles should add multiple valid files to library`() = runTest {
     val uri1 = createValidUri("content://test1", "/storage/emulated/0/test1.zim")
     val uri2 = createValidUri("content://test2", "/storage/emulated/0/test2.zim")
 
@@ -163,7 +152,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
   @Test
   fun `processSelectedFiles should show error dialog for invalid file in multiple selection`() =
-    testScope.runTest {
+    runTest {
       val invalidUri = createValidUri("content://invalid", "/storage/emulated/0/test.jpg")
       val validUri = createValidUri("content://valid", "/storage/emulated/0/test.zim")
 
@@ -185,7 +174,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
   @Test
   fun `processMultipleFiles should continue with next file after error dialog callback`() =
-    testScope.runTest {
+    runTest {
       val invalidUri = createValidUri("content://invalid", "/storage/emulated/0/test.jpg")
       val validUri = createValidUri("content://valid", "/storage/emulated/0/test.zim")
       val callbackSlot = slot<suspend () -> Unit>()
@@ -216,7 +205,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
   @AfterEach
   fun tearDown() {
-    unmockkAll()
+    clearAllMocks()
   }
 
   private fun createValidUri(

@@ -340,7 +340,12 @@ class LocalLibraryViewModel @Inject constructor(
       is RequestReadWritePermission -> None // We handle this on UI.
       ReadPermissionDialog -> ReadPermissionRequiredDialog(alertDialogShower)
       RequestValidateZimFiles ->
-        ValidateZIMFiles(selectionsFromState(), alertDialogShower, validateZimViewModel)
+        ValidateZIMFiles(
+          selectionsFromState(),
+          alertDialogShower,
+          validateZimViewModel,
+          ioDispatcher
+        )
 
       ManageFilesPermissionDialog ->
         if (kiwixPermissionChecker.isAndroid11OrAbove()) {

@@ -22,84 +22,71 @@ import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchConfiguration
 import com.tonyodev.fetch2.FetchNotificationManager
 import com.tonyodev.fetch2okhttp.OkHttpDownloader
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
+import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-object DownloaderModule {
-  @Provides
+abstract class DownloaderModule {
+  @Binds
   @Singleton
-  fun providesDownloader(
-    downloadRequester: DownloadRequester,
-    downloadRoomDao: DownloadRoomDao,
-    @OPDSKiwixService kiwixService: KiwixService
-  ): Downloader =
-    DownloaderImpl(downloadRequester, downloadRoomDao, kiwixService)
+  abstract fun bindDownloader(impl: DownloaderImpl): Downloader
 
-  @Provides
+  @Binds
   @Singleton
-  fun providesDownloadRequester(
-    fetch: Fetch,
-    kiwixDataStore: KiwixDataStore,
-    context: Context,
-    downloadRoomDao: DownloadRoomDao,
-    @IoDispatcher ioDispatcher: CoroutineDispatcher
-  ): DownloadRequester =
-    DownloadManagerRequester(fetch, kiwixDataStore, context, downloadRoomDao, ioDispatcher)
+  abstract fun bindDownloadRequester(impl: DownloadManagerRequester): DownloadRequester
 
-  @Provides
-  @Singleton
-  fun provideFetch(fetchConfiguration: FetchConfiguration): Fetch =
-    Fetch.getInstance(fetchConfiguration)
+  companion object {
+    @Provides
+    @Singleton
+    fun provideFetch(fetchConfiguration: FetchConfiguration): Fetch =
+      Fetch.getInstance(fetchConfiguration)
 
-  @Provides
-  @Singleton
-  fun provideFetchConfiguration(
-    context: Context,
-    okHttpDownloader: OkHttpDownloader,
-    fetchNotificationManager: FetchNotificationManager
-  ): FetchConfiguration =
-    FetchConfiguration.Builder(context).apply {
-      setDownloadConcurrentLimit(5)
-      enableLogging(BuildConfig.DEBUG)
-      enableRetryOnNetworkGain(true)
-      setHttpDownloader(okHttpDownloader)
-      preAllocateFileOnCreation(false)
-      setNotificationManager(fetchNotificationManager)
-    }.build().also(Fetch.Impl::setDefaultInstanceConfiguration)
+    @Provides
+    @Singleton
+    fun provideFetchConfiguration(
+      context: Context,
+      okHttpDownloader: OkHttpDownloader,
+      fetchNotificationManager: FetchNotificationManager
+    ): FetchConfiguration =
+      FetchConfiguration.Builder(context).apply {
+        setDownloadConcurrentLimit(FIVE)
+        enableLogging(BuildConfig.DEBUG)
+        enableRetryOnNetworkGain(true)
+        setHttpDownloader(okHttpDownloader)
+        preAllocateFileOnCreation(false)
+        setNotificationManager(fetchNotificationManager)
+      }.build().also(Fetch.Impl::setDefaultInstanceConfiguration)
 
-  @Provides
-  @Singleton
-  fun provideOkHttpDownloader() = OkHttpDownloader(
-    OkHttpClient.Builder()
-      .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
-      .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
-      .addInterceptor(BasicAuthInterceptor())
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .build()
-  )
+    @Provides
+    @Singleton
+    fun provideOkHttpDownloader() = OkHttpDownloader(
+      OkHttpClient.Builder()
+        .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
+        .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
+        .addInterceptor(BasicAuthInterceptor())
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .build()
+    )
 
-  @Provides
-  @Singleton
-  fun provideFetchDownloadNotificationManager(context: Context, downloadRoomDao: DownloadRoomDao):
-    FetchNotificationManager = FetchDownloadNotificationManager(context, downloadRoomDao)
+    @Provides
+    @Singleton
+    fun provideFetchDownloadNotificationManager(context: Context, downloadRoomDao: DownloadRoomDao):
+      FetchNotificationManager = FetchDownloadNotificationManager(context, downloadRoomDao)
+  }
 }

@@ -62,7 +62,8 @@ abstract class BaseActivityTest {
       arrayOf(POST_NOTIFICATIONS, NEARBY_WIFI_DEVICES)
     }
 
-  @get:Rule
+  @Rule
+  @JvmField
   var permissionRules: GrantPermissionRule = GrantPermissionRule.grant(*permissions())
 
   val context: Context by lazy {

@@ -24,30 +24,32 @@ import android.provider.MediaStore.MediaColumns
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.forEachRow
 import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.File
 import javax.inject.Inject
 
-class FileSearch @Inject constructor(private val context: Context) {
+class FileSearch @Inject constructor(
+  private val context: Context,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
   private val zimFileExtensions = arrayOf("zim", "zimaa")
 
   fun scan(
-    scanningProgressListener: ScanningProgressListener,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    scanningProgressListener: ScanningProgressListener
   ): Flow<List<File>> {
     val fileSystemFlow = flow {
       emit(scanFileSystem(scanningProgressListener))
-    }.flowOn(dispatcher)
+    }.flowOn(ioDispatcher)
 
     val mediaStoreFlow = flow {
       emit(scanMediaStore())
-    }.flowOn(dispatcher)
+    }.flowOn(ioDispatcher)
 
     return combine(fileSystemFlow, mediaStoreFlow) { filesSystemFiles, mediaStoreFiles ->
       filesSystemFiles + mediaStoreFiles
@@ -97,7 +99,7 @@ class FileSearch @Inject constructor(private val context: Context) {
   }
 
   private suspend fun directoryRoots() =
-    StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name)
+    StorageDeviceUtils.getReadableStorage(context, ioDispatcher).map(StorageDevice::name)
 
   private fun scanDirectory(directory: String): List<File> {
     return File(directory).walk()

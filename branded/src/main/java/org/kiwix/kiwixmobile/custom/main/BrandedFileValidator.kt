@@ -24,8 +24,8 @@ import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
@@ -34,12 +34,14 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-class BrandedFileValidator @Inject constructor(private val context: Context) {
+class BrandedFileValidator @Inject constructor(
+  private val context: Context,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
   suspend fun validate(
     onFilesFound: suspend (ValidationState) -> Unit,
-    onNoFilesFound: suspend () -> Unit,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ) = withContext(dispatcher) {
+    onNoFilesFound: suspend () -> Unit
+  ) = withContext(ioDispatcher) {
     when (val installationState = detectInstallationState()) {
       is HasBothFiles,
       is HasFile -> onFilesFound(installationState)

@@ -42,6 +42,7 @@ class ThemeConfigTest {
   private lateinit var context: Context
 
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
 
   @OptIn(ExperimentalCoroutinesApi::class)
@@ -49,7 +50,7 @@ class ThemeConfigTest {
   fun setUp() {
     kiwixDataStore = mockk()
     context = mockk()
-    themeConfig = ThemeConfig(kiwixDataStore, context)
+    themeConfig = ThemeConfig(kiwixDataStore, context, dispatcherRule.dispatcher)
   }
 
   @Test

@@ -70,9 +70,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
   @JvmField
   val retryRule = RetryRule()
 
-  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @JvmField
   val composeTestRule = createComposeRule()
-
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
@@ -327,7 +327,9 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       }
     }
     val saveHandler = KiwixWebView.SaveHandler(
-      kiwixWebView.zimReaderContainer
+      kiwixWebView.zimReaderContainer,
+      kiwixWebView.mainDispatcher,
+      kiwixWebView.ioDispatcher
     )
 
     // Must run on main thread because Handler uses MainLooper

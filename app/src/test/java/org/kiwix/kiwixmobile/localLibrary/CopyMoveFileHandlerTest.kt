@@ -78,7 +78,9 @@ class CopyMoveFileHandlerTest {
   private val copyMoveProgressBarController = mockk<CopyMoveProgressBarController>(relaxed = true)
 
   @RegisterExtension
-  private val dispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+
   private lateinit var fileHandler: CopyMoveFileHandler
 
   private var storageFile: File = File(System.getProperty("java.io.tmpdir"))
@@ -98,7 +100,7 @@ class CopyMoveFileHandlerTest {
       fat32Checker = fat32Checker,
       fileOperationHandler = fileOperationHandler,
       copyMoveProgressBarController = copyMoveProgressBarController,
-      mainDispatcher = dispatcher.dispatcher
+      mainDispatcher = mainDispatcherRule.dispatcher
     )
 
     fileHandler.setStorageFileForUnitTest(storageFile)

@@ -12,7 +12,8 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class KiwixAppStartupBenchmark {
-  @get:Rule
+    @Rule
+  @JvmField
   val benchmarkRule = MacrobenchmarkRule()
 
   // Cold start with no compilation: App process is not in memory.

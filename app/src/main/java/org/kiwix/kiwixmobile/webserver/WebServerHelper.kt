@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.webserver
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -28,6 +29,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_PORT
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP
@@ -50,7 +53,9 @@ const val FINDING_IP_ADDRESS_RETRY_TIME = 1_000L
 
 class WebServerHelper @Inject constructor(
   private val kiwixServerFactory: KiwixServer.Factory,
-  private val ipAddressCallbacks: IpAddressCallbacks
+  private val ipAddressCallbacks: IpAddressCallbacks,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) {
   private var kiwixServer: KiwixServer? = null
   private var isServerStarted = false
@@ -120,9 +125,8 @@ class WebServerHelper @Inject constructor(
    * - Automatically cancels if [serviceScope] is cancelled (e.g. lifecycle aware).
    */
   @OptIn(FlowPreview::class)
-  @Suppress("InjectDispatcher")
   fun pollForValidIpAddress(serviceScope: CoroutineScope) {
-    serviceScope.launch(Dispatchers.Main) {
+    serviceScope.launch(mainDispatcher) {
       ipPollingFlow()
         .timeout(FINDING_IP_ADDRESS_TIMEOUT.seconds)
         .catch {
@@ -140,7 +144,7 @@ class WebServerHelper @Inject constructor(
    * - If the returned IP is not [INVALID_IP], the flow completes.
    * - The flow runs entirely on [Dispatchers.IO].
    */
-  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  @Suppress("TooGenericExceptionCaught")
   private fun ipPollingFlow(): Flow<String?> = flow {
     while (true) {
       // if ip address is not found wait for 1 second to again getting the ip address.
@@ -156,7 +160,7 @@ class WebServerHelper @Inject constructor(
 
       if (ip != INVALID_IP) break
     }
-  }.flowOn(Dispatchers.IO)
+  }.flowOn(ioDispatcher)
 
   companion object {
     private const val TAG = "WebServerHelper"

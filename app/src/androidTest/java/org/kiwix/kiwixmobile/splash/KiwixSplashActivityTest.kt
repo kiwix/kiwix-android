@@ -43,7 +43,8 @@ class KiwixSplashActivityTest : BaseActivityTest() {
   @JvmField
   val retryRule = RetryRule()
 
-  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @JvmField
   val composeTestRule = createComposeRule()
 
   @Before

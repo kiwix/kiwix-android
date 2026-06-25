@@ -53,7 +53,8 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 @OptIn(ExperimentalCoroutinesApi::class)
 class LanguageViewModelTest {
   @RegisterExtension
-  private val ioDispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val kiwixService: KiwixService = mockk()
@@ -69,7 +70,7 @@ class LanguageViewModelTest {
         kiwixDataStore,
         kiwixService,
         connectivityBroadcastReceiver,
-        ioDispatcher.dispatcher
+        mainDispatcherRule.dispatcher
       )
   }
 

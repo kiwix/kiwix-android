@@ -63,7 +63,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class OnlineLibraryScreenTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeTestRule = createComposeRule()
 
   private val context get() = RuntimeEnvironment.getApplication()

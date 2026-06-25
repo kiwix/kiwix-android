@@ -66,9 +66,10 @@ class DeleteFilesTest {
   private lateinit var deleteFiles: DeleteFiles
 
   @RegisterExtension
-  private val ioDispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
-  private val viewModelScope = CoroutineScope(ioDispatcher.dispatcher)
+  private val viewModelScope = CoroutineScope(mainDispatcherRule.dispatcher)
 
   @BeforeEach
   fun setup() {
@@ -81,7 +82,7 @@ class DeleteFilesTest {
         dialogShower,
         deleteFilesUseCase,
         viewModelScope,
-        ioDispatcher.dispatcher
+        mainDispatcherRule.dispatcher
       )
     every { activity.toast(any<Int>()) } just Runs
   }

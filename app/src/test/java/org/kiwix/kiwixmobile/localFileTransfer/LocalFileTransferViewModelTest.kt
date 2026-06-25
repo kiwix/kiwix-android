@@ -47,6 +47,7 @@ class LocalFileTransferViewModelTest {
   private lateinit var viewModel: LocalFileTransferViewModel
 
   @RegisterExtension
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
 
   @BeforeEach

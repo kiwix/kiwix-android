@@ -29,8 +29,8 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
@@ -41,6 +41,8 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -68,6 +70,14 @@ open class KiwixWebView constructor(
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
+
+  @Inject
+  @MainDispatcher
+  lateinit var mainDispatcher: CoroutineDispatcher
 
   private var kiwixWebChromeClient: KiwixWebChromeClient? = null
   private var textZoomJob: Job? = null
@@ -138,7 +148,7 @@ open class KiwixWebView constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer).obtainMessage()
+        val msg = SaveHandler(zimReaderContainer, mainDispatcher, ioDispatcher).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -151,7 +161,7 @@ open class KiwixWebView constructor(
     textZoomJob?.cancel()
     textZoomJob = kiwixDataStore.textZoom
       .onEach { settings.textZoom = it }
-      .launchIn(CoroutineScope(SupervisorJob() + Dispatchers.Main))
+      .launchIn(CoroutineScope(SupervisorJob() + mainDispatcher))
   }
 
   override fun onDetachedFromWindow() {
@@ -187,7 +197,9 @@ open class KiwixWebView constructor(
   }
 
   class SaveHandler(
-    private val zimReaderContainer: ZimReaderContainer
+    private val zimReaderContainer: ZimReaderContainer,
+    private val mainDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher
   ) : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
       val url = msg.data.getString("url", null)
@@ -198,7 +210,7 @@ open class KiwixWebView constructor(
       val appContext = ContextCompat.getContextForLanguage(instance)
 
       @Suppress("InjectDispatcher")
-      CoroutineScope(Dispatchers.IO).launch {
+      CoroutineScope(ioDispatcher).launch {
         val result = FileUtils.downloadFileFromUrl(
           context = appContext,
           url = url,
@@ -206,7 +218,7 @@ open class KiwixWebView constructor(
           zimReaderContainer = zimReaderContainer
         )
 
-        withContext(Dispatchers.Main) {
+        withContext(mainDispatcher) {
           when (result) {
             is SaveResult.MediaSaved -> {
               appContext.toast(

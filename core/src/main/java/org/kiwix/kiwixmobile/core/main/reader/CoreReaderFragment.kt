@@ -32,9 +32,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.print.PdfPrint
 import android.print.PrintAttributes
 import android.print.PrintAttributes.Margins
@@ -93,6 +91,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -111,6 +110,8 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
@@ -261,6 +262,14 @@ abstract class CoreReaderFragment :
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+  @Inject
+  @MainDispatcher
+  lateinit var mainDispatcher: CoroutineDispatcher
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
+
   private val addNoteViewModel by lazy { viewModel<AddNoteViewModel>(viewModelFactory) }
 
   @JvmField
@@ -357,7 +366,7 @@ abstract class CoreReaderFragment :
   val coreReaderLifeCycleScope: CoroutineScope?
     get() {
       if (readerLifeCycleScope == null) {
-        readerLifeCycleScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        readerLifeCycleScope = CoroutineScope(SupervisorJob() + mainDispatcher)
       }
       return readerLifeCycleScope
     }
@@ -1847,12 +1856,11 @@ abstract class CoreReaderFragment :
   protected open fun openHomeScreen() {
     runSafelyInCoreReaderLifecycleScope {
       // Run safely because it is runs after 300 MS.
-      Handler(Looper.getMainLooper()).postDelayed({
-        if (webViewList.isEmpty()) {
-          createNewTab()
-          hideTabSwitcher()
-        }
-      }, OPEN_HOME_SCREEN_DELAY)
+      delay(OPEN_HOME_SCREEN_DELAY)
+      if (webViewList.isEmpty()) {
+        createNewTab()
+        hideTabSwitcher()
+      }
     }
   }
 
@@ -2062,9 +2070,10 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   private fun contentsDrawerHint() {
-    Handler(Looper.getMainLooper()).postDelayed({
+    runSafelyInCoreReaderLifecycleScope {
+      delay(500)
       shouldTableOfContentDrawer.update { true }
-    }, 500)
+    }
     alertDialogShower?.show(KiwixDialog.ContentsDrawerHint)
   }
 
@@ -2244,16 +2253,15 @@ abstract class CoreReaderFragment :
    *    openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
    *  }
    */
-  @Suppress("InjectDispatcher")
   private fun saveTabStates(onComplete: () -> Unit = {}) {
-    CoroutineScope(Dispatchers.Main).launch {
+    CoroutineScope(mainDispatcher).launch {
       savingTabsMutex.withLock {
         val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
         webViewList.forEachIndexed { index, view ->
           if (view.url == null) return@forEachIndexed
           getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
         }
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
           // clear the previous history saved in database
           repositoryActions?.clearWebViewPageHistory()
           // Store new history in database.

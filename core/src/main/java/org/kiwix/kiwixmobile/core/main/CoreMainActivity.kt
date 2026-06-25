@@ -54,8 +54,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.navOptions
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -63,6 +63,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
@@ -133,6 +134,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
@@ -233,7 +238,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
 
     setMainActivityToCoreApp()
-    lifecycleScope.launch(Dispatchers.IO) {
+    lifecycleScope.launch(ioDispatcher) {
       createApplicationShortcuts()
     }
   }
@@ -314,10 +319,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * required app metadata. If no ongoing downloads exist, the service is stopped
    * to avoid unnecessary background work.
    */
-  @Suppress("InjectDispatcher")
   fun startDownloadMonitorServiceIfOngoingDownloads(isAppStart: Boolean = false) {
     if (!isDownloadMonitorServiceRunning) {
-      CoroutineScope(Dispatchers.IO).launch {
+      CoroutineScope(ioDispatcher).launch {
         runCatching {
           if (downloadRoomDao.getOngoingDownloads().isNotEmpty() || !isAppStart) {
             startService(

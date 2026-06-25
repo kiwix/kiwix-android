@@ -44,7 +44,8 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class AddNoteDialogScreenTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeRule = createComposeRule()
 
   private val snackbarHostState = SnackbarHostState()

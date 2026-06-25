@@ -61,7 +61,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   @JvmField
   val retryRule = RetryRule()
 
-  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @Rule(order = COMPOSE_TEST_RULE_ORDER)
+  @JvmField
   val composeTestRule = createAndroidComposeRule<KiwixMainActivity>()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity

@@ -48,7 +48,8 @@ import org.kiwix.kiwixmobile.core.R as CoreR
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class ZimHostScreenTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeTestRule = createComposeRule()
 
   private val context get() = RuntimeEnvironment.getApplication()

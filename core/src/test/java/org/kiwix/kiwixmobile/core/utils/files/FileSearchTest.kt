@@ -38,6 +38,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class FileSearchTest {
@@ -49,6 +51,10 @@ class FileSearchTest {
   private val storageDevice: StorageDevice = mockk()
   private val scanningProgressListener: ScanningProgressListener = mockk()
 
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+
   @BeforeEach
   fun init() {
     clearAllMocks()
@@ -58,12 +64,12 @@ class FileSearchTest {
     every { Environment.getExternalStorageDirectory() } returns externalStorageDirectory
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
-    coEvery { StorageDeviceUtils.getReadableStorage(context) } returns
+    coEvery { StorageDeviceUtils.getReadableStorage(context, mainDispatcherRule.dispatcher) } returns
       arrayListOf(
         storageDevice
       )
     every { storageDevice.name } returns "/deviceDir"
-    fileSearch = FileSearch(context)
+    fileSearch = FileSearch(context, mainDispatcherRule.dispatcher)
   }
 
   @AfterEach

@@ -19,13 +19,17 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
+import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.OutputStream
 
-class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager, groupInfo: WifiP2pInfo) :
-  PeerGroupHandshake(groupInfo) {
+class ReceiverHandShake(
+  private val wifiDirectManager: WifiDirectManager,
+  groupInfo: WifiP2pInfo,
+  ioDispatcher: CoroutineDispatcher
+) : PeerGroupHandshake(groupInfo, ioDispatcher) {
   companion object {
     private const val TAG = "ReceiverHandshake"
   }

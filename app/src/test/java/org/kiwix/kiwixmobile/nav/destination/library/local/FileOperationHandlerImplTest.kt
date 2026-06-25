@@ -52,7 +52,8 @@ class FileOperationHandlerImplTest {
   private val context: Context = mockk()
 
   @RegisterExtension
-  private val dispatcher = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   private val contentResolver: ContentResolver = mockk()
   private val selectedFile: DocumentFile = mockk()
@@ -73,7 +74,7 @@ class FileOperationHandlerImplTest {
     every { destinationFile.path } returns "parent/test"
     mockkStatic(DocumentsContract::class)
 
-    fileOperationHandler = FileOperationHandlerImpl(context, dispatcher.dispatcher)
+    fileOperationHandler = FileOperationHandlerImpl(context, mainDispatcherRule.dispatcher)
   }
 
   @AfterEach

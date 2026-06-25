@@ -19,13 +19,17 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
+import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.InputStream
 import java.io.ObjectOutputStream
 import java.io.OutputStream
 
-class SenderHandShake(private val wifiDirectManager: WifiDirectManager, groupInfo: WifiP2pInfo) :
-  PeerGroupHandshake(groupInfo) {
+class SenderHandShake(
+  private val wifiDirectManager: WifiDirectManager,
+  groupInfo: WifiP2pInfo,
+  ioDispatcher: CoroutineDispatcher
+) : PeerGroupHandshake(groupInfo, ioDispatcher) {
   override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream) {
     try {
       ObjectOutputStream(outputStream).use { objectOutputStream ->

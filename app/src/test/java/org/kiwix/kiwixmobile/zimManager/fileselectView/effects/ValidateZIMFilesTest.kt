@@ -38,24 +38,20 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.di.components.KiwixActivityComponent
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ValidateZIMFilesTest {
   @RegisterExtension
-  private val mainDispatcherRule = MainDispatcherRule()
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Test
   fun `invokeWith should show confirmation dialog with joined titles`() {
     val activity = mockk<KiwixMainActivity>(relaxed = true)
-    val component = mockk<KiwixActivityComponent>(relaxed = true)
     val dialogShower = mockk<DialogShower>(relaxed = true)
     val validateZimViewModel = mockk<ValidateZimViewModel>(relaxed = true)
-
-    every { activity.cachedComponent } returns component
-    every { component.inject(any<ValidateZIMFiles>()) } just Runs
 
     val book1 = mockBook("Wikipedia")
     val book2 = mockBook("Wiktionary")
@@ -69,7 +65,8 @@ class ValidateZIMFilesTest {
     val effect = ValidateZIMFiles(
       booksOnDiskListItems = listOf(book1, book2),
       dialogShower = dialogShower,
-      validateZimViewModel = validateZimViewModel
+      validateZimViewModel = validateZimViewModel,
+      ioDispatcher = mainDispatcherRule.dispatcher
     )
 
     effect.invokeWith(activity)
@@ -80,54 +77,51 @@ class ValidateZIMFilesTest {
   }
 
   @Test
-  fun `confirm action should start validation and show validating dialog`() =
-    runTest(mainDispatcherRule.dispatcher) {
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
-      val component = mockk<KiwixActivityComponent>(relaxed = true)
-      val dialogShower = mockk<AlertDialogShower>(relaxed = true)
-      val validateZimViewModel = mockk<ValidateZimViewModel>(relaxed = true)
+  fun `confirm action should start validation and show validating dialog`() = runTest {
+    val activity = mockk<KiwixMainActivity>(relaxed = true)
+    val dialogShower = mockk<AlertDialogShower>(relaxed = true)
+    val validateZimViewModel = mockk<ValidateZimViewModel>(relaxed = true)
 
-      every { activity.cachedComponent } returns component
-      every { component.inject(any<ValidateZIMFiles>()) } just Runs
-      every { validateZimViewModel.items } returns MutableStateFlow(emptyList())
-      every { validateZimViewModel.allZIMValidated } returns MutableStateFlow(false)
+    every { validateZimViewModel.items } returns MutableStateFlow(emptyList())
+    every { validateZimViewModel.allZIMValidated } returns MutableStateFlow(false)
 
-      val confirmationSlot = slot<KiwixDialog>()
-      val confirmCallbackSlot = slot<() -> Unit>()
+    val confirmationSlot = slot<KiwixDialog>()
+    val confirmCallbackSlot = slot<() -> Unit>()
 
-      every {
-        dialogShower.show(
-          capture(confirmationSlot),
-          capture(confirmCallbackSlot)
-        )
-      } just Runs
-
-      every {
-        dialogShower.show(any<KiwixDialog.ValidatingZimFiles>())
-      } just Runs
-
-      val books = listOf(mockBook("Wikipedia"))
-
-      val effect = ValidateZIMFiles(
-        booksOnDiskListItems = books,
-        dialogShower = dialogShower,
-        validateZimViewModel = validateZimViewModel
+    every {
+      dialogShower.show(
+        capture(confirmationSlot),
+        capture(confirmCallbackSlot)
       )
+    } just Runs
 
-      effect.invokeWith(activity)
+    every {
+      dialogShower.show(any<KiwixDialog.ValidatingZimFiles>())
+    } just Runs
 
-      confirmCallbackSlot.captured.invoke()
+    val books = listOf(mockBook("Wikipedia"))
 
-      advanceUntilIdle()
+    val effect = ValidateZIMFiles(
+      booksOnDiskListItems = books,
+      dialogShower = dialogShower,
+      validateZimViewModel = validateZimViewModel,
+      ioDispatcher = mainDispatcherRule.dispatcher
+    )
 
-      coVerify(exactly = 1) {
-        validateZimViewModel.startValidation(books, false)
-      }
+    effect.invokeWith(activity)
 
-      verify(exactly = 1) {
-        dialogShower.show(any<KiwixDialog.ValidatingZimFiles>())
-      }
+    confirmCallbackSlot.captured.invoke()
+
+    advanceUntilIdle()
+
+    coVerify(exactly = 1) {
+      validateZimViewModel.startValidation(books, false)
     }
+
+    verify(exactly = 1) {
+      dialogShower.show(any<KiwixDialog.ValidatingZimFiles>())
+    }
+  }
 
   private fun mockBook(title: String): BookOnDisk {
     val book = mockk<BookOnDisk>()

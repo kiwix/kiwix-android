@@ -74,7 +74,8 @@ import org.threeten.bp.format.DateTimeFormatter
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class PageScreenTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val composeTestRule = createComposeRule()
 
   private val context get() = RuntimeEnvironment.getApplication()

@@ -54,7 +54,8 @@ import kotlin.io.path.createTempDirectory
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddNoteViewModelTest {
-  @get:Rule
+  @Rule
+  @JvmField
   val dispatcherRule = MainDispatcherRule()
   private lateinit var activity: Activity
   private lateinit var noteRepository: NoteRepository

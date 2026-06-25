@@ -18,11 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import javax.inject.Inject
@@ -30,11 +31,11 @@ import javax.inject.Inject
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
   private val downloadRoomDao: DownloadRoomDao,
-  @OPDSKiwixService private val kiwixService: KiwixService
+  @OPDSKiwixService private val kiwixService: KiwixService,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : Downloader {
-  @Suppress("InjectDispatcher")
   override fun download(book: LibkiwixBook) {
-    CoroutineScope(Dispatchers.IO).launch {
+    CoroutineScope(ioDispatcher).launch {
       runCatching {
         urlProvider(book)?.let {
           downloadRoomDao.addIfDoesNotExist(it, book, downloadRequester)

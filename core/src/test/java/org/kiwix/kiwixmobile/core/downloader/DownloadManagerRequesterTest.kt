@@ -32,14 +32,12 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
@@ -48,6 +46,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 class DownloadManagerRequesterTest {
   private lateinit var fetch: Fetch
@@ -56,7 +55,10 @@ class DownloadManagerRequesterTest {
   private lateinit var downloadRoomDao: DownloadRoomDao
   private lateinit var requester: DownloadManagerRequester
   private lateinit var mainActivity: CoreMainActivity
-  private lateinit var dispatcher: TestDispatcher
+
+  @RegisterExtension
+  @JvmField
+  var mainDispatcherRule = MainDispatcherRule()
 
   @BeforeEach
   fun setup() {
@@ -73,20 +75,19 @@ class DownloadManagerRequesterTest {
     every { kiwixDataStore.wifiOnly } returns flowOf(false)
   }
 
-  private fun createRequester(testScheduler: TestCoroutineScheduler) {
-    dispatcher = StandardTestDispatcher(testScheduler)
+  private fun createRequester() {
     requester = DownloadManagerRequester(
       fetch,
       kiwixDataStore,
       context,
       downloadRoomDao,
-      dispatcher
+      mainDispatcherRule.dispatcher
     )
   }
 
   @Test
   fun `cancel should call fetch delete`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
 
     requester.cancel(downloadId)
@@ -104,7 +105,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `cancel should remove from Room DB when Fetch returns error`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -126,7 +127,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `retryDownload should call fetch retry`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
 
     requester.retryDownload(downloadId)
@@ -145,7 +146,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `retryDownload should re-enqueue when Fetch returns error`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -171,7 +172,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `retryDownload should not re-enqueue when stale entity is null`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -193,7 +194,7 @@ class DownloadManagerRequesterTest {
 
   @Test
   fun `pauseResumeDownload should call fetch resume when isPause is true`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
 
     requester.pauseResumeDownload(downloadId, isPause = true)
@@ -211,7 +212,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `pauseResumeDownload should re-enqueue when resuming a stale download`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
     val url = "https://example.com/test.zim"
     val errorCallbackSlot = slot<Func<Error>>()
@@ -241,7 +242,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `pauseResumeDownload should call fetch pause when isPause is false`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
 
     requester.pauseResumeDownload(downloadId, isPause = false)
@@ -253,7 +254,7 @@ class DownloadManagerRequesterTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `pauseResumeDownload should not re-enqueue when stale entity has null url`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadId = 42L
     val errorCallbackSlot = slot<Func<Error>>()
     every {
@@ -277,7 +278,7 @@ class DownloadManagerRequesterTest {
 
   @Test
   fun `enqueue should create fetch request with WiFi only config`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadRequest = mockk<DownloadRequest>(relaxed = true)
 
     every { kiwixDataStore.wifiOnly } returns flowOf(true)
@@ -294,7 +295,7 @@ class DownloadManagerRequesterTest {
 
   @Test
   fun `enqueue should create fetch request with all network config`() = runTest {
-    createRequester(testScheduler)
+    createRequester()
     val downloadRequest = mockk<DownloadRequest>(relaxed = true)
 
     every { kiwixDataStore.wifiOnly } returns flowOf(false)
