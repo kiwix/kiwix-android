@@ -426,4 +426,10 @@
   <string name="confirmation_validate_zim_files">هل أنت متأكد من رغبتك في التحقق من صحة ملفات ZIM التالية؟! لا! لا! %s</string>
   <string name="validating_zim_file">جارٍ التحقق من صحة ملف ZIM…</string>
   <string name="validating_zim_files">جارٍ التحقق من صحة ملفات ZIM…</string>
+  <string name="menu_add_to_homescreen">أضف إلى الشاشة الرئيسية</string>
+  <string name="added_to_homescreen">تمت إضافة اختصار إلى الشاشة الرئيسية</string>
+  <string name="add_shortcut_title">إضافة اختصار</string>
+  <string name="shortcut_name_label">اسم الاختصار</string>
+  <string name="open_xiaomi_settings">افتح الإعدادات</string>
+  <string name="xiaomi_permission_required">يتطلب هذا الجهاز منح إذن الوصول إلى الاختصارات قبل إضافة اختصار إلى الشاشة الرئيسية. يُرجى منح الإذن في الإعدادات.</string>
 </resources>
