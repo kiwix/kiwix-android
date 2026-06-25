@@ -195,7 +195,7 @@ class BrandedMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun createApplicationShortcuts() {
+  override suspend fun createApplicationShortcuts() {
     // Remove previously added dynamic shortcuts for old ids if any found.
     removeOutdatedIdShortcuts()
     // Create a shortcut for opening the "New tab"

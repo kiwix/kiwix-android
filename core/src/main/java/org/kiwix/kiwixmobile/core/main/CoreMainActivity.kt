@@ -82,6 +82,7 @@ import javax.inject.Inject
 import kotlin.system.exitProcess
 import androidx.core.graphics.createBitmap
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val KIWIX_SUPPORT_URL = "https://donate.kiwix.org"
 const val PAGE_URL_KEY = "pageUrl"
@@ -134,6 +135,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject
   @IoDispatcher
@@ -239,8 +241,20 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
     setMainActivityToCoreApp()
     lifecycleScope.launch(ioDispatcher) {
+      setIsDebugBuild(BuildConfig.DEBUG)
       createApplicationShortcuts()
     }
+  }
+
+  /**
+   * Set the build type in [KiwixDataStore] so that we can easily test the scenarios based on
+   * build type.
+   *
+   * @see KiwixDataStore.setIsDebugBuild
+   * @see KiwixDataStore.isDebugBuild
+   */
+  private suspend fun setIsDebugBuild(isDebugBuild: Boolean) {
+    kiwixDataStore.setIsDebugBuild(isDebugBuild)
   }
 
   /**
@@ -645,7 +659,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   protected abstract fun getIconResId(): Int
-  abstract fun createApplicationShortcuts()
+  abstract suspend fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()
 }

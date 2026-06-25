@@ -101,7 +101,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
@@ -146,7 +145,6 @@ import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
-import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
@@ -168,7 +166,6 @@ import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialog
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ShortcutResult
@@ -193,8 +190,6 @@ import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
 import javax.inject.Inject
 import kotlin.concurrent.Volatile
 import kotlin.math.max
@@ -294,6 +289,7 @@ abstract class CoreReaderFragment :
   private var readAloudService: ReadAloudService? = null
   private val navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
+  private val coreReaderViewModel by lazy { viewModel<CoreReaderViewModel>(viewModelFactory) }
   private val pdfPrinter by lazy {
     PdfPrint(
       PrintAttributes.Builder()
@@ -1229,10 +1225,6 @@ abstract class CoreReaderFragment :
   protected fun newMainPageTab(): KiwixWebView? =
     newTab(contentUrl(zimReaderContainer?.mainPage))
 
-  private fun newTabInBackground(url: String) {
-    newTab(url, false)
-  }
-
   /**
    * Creates a new instance of `KiwixWebView` and adds it to the list of web views.
    *
@@ -1570,36 +1562,15 @@ abstract class CoreReaderFragment :
    * - When fullscreen mode is exited, the drawer is re-enabled.
    */
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
-    if (isFullScreen) {
-      readerScreenState.update {
-        copy(
-          fullScreenItem = fullScreenItem.copy(first = true),
-          shouldShowBottomAppBar = false
-        )
-      }
-      (activity as? CoreMainActivity)?.disableLeftDrawer()
-    } else {
-      readerScreenState.update {
-        copy(fullScreenItem = fullScreenItem.copy(first = false), shouldShowBottomAppBar = true)
-      }
-      enableLeftDrawer()
-    }
+    coreReaderViewModel.onFullscreenVideoToggled(isFullScreen)
   }
 
   override fun openExternalUrl(intent: Intent) {
-    runSafelyInCoreReaderLifecycleScope {
-      externalLinkOpener?.openExternalUrl(intent, lifecycleScope = this)
-    }
+    coreReaderViewModel.openExternalUrl(intent)
   }
 
   override fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?) {
-    runSafelyInCoreReaderLifecycleScope {
-      unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(
-        url,
-        documentType,
-        this
-      )
-    }
+    coreReaderViewModel.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
   }
 
   suspend fun openZimFile(
@@ -2330,78 +2301,19 @@ abstract class CoreReaderFragment :
   }
 
   override fun webViewUrlLoading() {
-    runSafelyInCoreReaderLifecycleScope {
-      if (kiwixDataStore?.isFirstRun?.first() == true && !BuildConfig.DEBUG) {
-        contentsDrawerHint()
-        kiwixDataStore?.setIsFirstRun(false) // It is no longer the first run
-      }
-    }
+    coreReaderViewModel.webViewUrlLoading()
   }
 
-  @Suppress("MagicNumber")
   override fun webViewUrlFinishedLoading() {
-    if (isAdded) {
-      updateTableOfContents()
-      updateBottomToolbarArrowsAlpha()
-      val zimFileReader = zimReaderContainer?.zimFileReader
-      if (hasValidFileAndUrl(getCurrentWebView()?.url, zimFileReader)) {
-        val timeStamp = System.currentTimeMillis()
-        val sdf = SimpleDateFormat(
-          "d MMM yyyy",
-          getCurrentLocale(
-            requireActivity()
-          )
-        )
-        @Suppress("UnsafeCallOnNullableType")
-        getCurrentWebView()?.let {
-          val history = HistoryItem(
-            it.url!!,
-            it.title!!,
-            sdf.format(Date(timeStamp)),
-            timeStamp,
-            zimFileReader!!
-          )
-          lifecycleScope.launch {
-            repositoryActions?.saveHistory(history)
-          }
-        }
-      }
-      updateBottomToolbarVisibility()
-      if (!isWebViewHistoryRestoring) {
-        saveTabStates()
-      }
-    }
+    coreReaderViewModel.webViewUrlFinishedLoading()
   }
-
-  private fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?): Boolean =
-    url != null && zimFileReader != null
 
   override fun webViewFailedLoading(failingUrl: String) {
-    if (isAdded) {
-      // If a URL fails to load, update the bookmark toggle.
-      // This fixes the scenario where the previous page is bookmarked and the next
-      // page fails to load, ensuring the bookmark toggle is unset correctly.
-      updateUrlFlow()
-      Log.d(
-        TAG_KIWIX,
-        String.format(
-          getString(string.error_article_url_not_found),
-          failingUrl
-        )
-      )
-    }
+    coreReaderViewModel.webViewFailedLoading(failingUrl)
   }
 
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
-    if (isAdded) {
-      updateUrlFlow()
-      showProgressBarWithProgress(progress)
-      if (progress == HUNDERED) {
-        hideProgressBar()
-        Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
-      }
-      (webView.context as AppCompatActivity).invalidateOptionsMenu()
-    }
+    coreReaderViewModel.webViewProgressChanged(progress, webView)
   }
 
   override fun onAddToHomeScreenMenuClicked() {
@@ -2467,41 +2379,12 @@ abstract class CoreReaderFragment :
     updateTabIcon(webViewList.size)
   }
 
-  @Suppress("MagicNumber")
   override fun webViewPageChanged(page: Int, maxPages: Int) {
-    if (!isBackToTopEnabled) return
-    hideBackToTopTimer?.apply {
-      cancel()
-      start()
-    }
-    val scrollY = getCurrentWebView()?.scrollY ?: return
-    if (scrollY > 200 && !readerScreenState.value.showTtsControls) {
-      showBackToTopButton()
-    } else {
-      hideBackToTopButton()
-    }
+    coreReaderViewModel.webViewPageChanged(page, maxPages)
   }
 
   override fun webViewLongClick(url: String) {
-    var handleEvent = false
-    when {
-      url.startsWith(CONTENT_PREFIX) -> {
-        // This is my web site, so do not override; let my WebView load the page
-        handleEvent = true
-      }
-
-      url.startsWith("file://") -> {
-        // To handle help page (loaded from resources)
-        handleEvent = true
-      }
-
-      url.startsWith(ZimFileReader.UI_URI.toString()) -> {
-        handleEvent = true
-      }
-    }
-    if (handleEvent) {
-      zimReaderContainer?.getRedirect(url)?.let(::showOpenInNewTabDialog)
-    }
+    coreReaderViewModel.webViewLongClick(url)
   }
 
   /**
@@ -2516,27 +2399,27 @@ abstract class CoreReaderFragment :
    * to verify proper functionality.
    */
   protected open fun showOpenInNewTabDialog(url: String) {
-    alertDialogShower?.show(
-      KiwixDialog.YesNoDialog.OpenInNewTab,
-      {
-        if (isOpenNewTabInBackground) {
-          newTabInBackground(url)
-          readerScreenState.value.snackBarHostState.snack(
-            message = context?.getString(string.new_tab_snack_bar).orEmpty(),
-            lifecycleScope = lifecycleScope,
-            actionLabel = context?.getString(string.open),
-            actionClick = {
-              if (webViewList.size > 1) {
-                selectTab(webViewList.size - 1)
-              }
-            }
-          )
-        } else {
-          newTab(url)
-        }
-        Unit
-      }
-    )
+    // alertDialogShower?.show(
+    //   KiwixDialog.YesNoDialog.OpenInNewTab,
+    //   {
+    //     if (isOpenNewTabInBackground) {
+    //       newTabInBackground(url)
+    //       readerScreenState.value.snackBarHostState.snack(
+    //         message = context?.getString(string.new_tab_snack_bar).orEmpty(),
+    //         lifecycleScope = lifecycleScope,
+    //         actionLabel = context?.getString(string.open),
+    //         actionClick = {
+    //           if (webViewList.size > 1) {
+    //             selectTab(webViewList.size - 1)
+    //           }
+    //         }
+    //       )
+    //     } else {
+    //       newTab(url)
+    //     }
+    //     Unit
+    //   }
+    // )
   }
 
   protected suspend fun manageExternalLaunchAndRestoringViewState(

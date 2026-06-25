@@ -451,7 +451,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun getIconResId() = mipmap.ic_launcher
 
-  override fun createApplicationShortcuts() {
+  override suspend fun createApplicationShortcuts() {
     // Remove previously added dynamic shortcuts for old ids if any found.
     removeOutdatedIdShortcuts()
     ShortcutManagerCompat.addDynamicShortcuts(this, dynamicShortcutList())

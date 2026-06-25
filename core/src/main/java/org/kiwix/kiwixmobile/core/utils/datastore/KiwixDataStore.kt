@@ -514,6 +514,17 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  val isDebugBuild: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.IS_DEBUG_BUILD] ?: false
+    }
+
+  suspend fun setIsDebugBuild(isDebugBuild: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.IS_DEBUG_BUILD] = isDebugBuild
+    }
+  }
+
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
   suspend fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     isPlayStoreBuild.first() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
@@ -609,6 +620,7 @@ class KiwixDataStore @Inject constructor(
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH = "pref_show_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
+    const val IS_DEBUG_BUILD = "is_debug_build"
     const val PREF_BOOKMARKS_MIGRATED = "pref_bookmarks_migrated"
     const val PREF_RECENT_SEARCH_MIGRATED = "pref_recent_search_migrated"
     const val PREF_HISTORY_MIGRATED = "pref_history_migrated"
