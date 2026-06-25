@@ -23,10 +23,13 @@ import android.content.Intent
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
-import androidx.annotation.StringRes
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,18 +37,27 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.update
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
+import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.io.IOException
 
 abstract class CoreReaderViewModel(
   val context: Application,
@@ -54,7 +66,9 @@ abstract class CoreReaderViewModel(
   val unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
   val readerWebViewManager: ReaderWebViewManager,
   val alertDialogShower: AlertDialogShower,
-  val zimReaderContainer: ZimReaderContainer
+  val zimReaderContainer: ZimReaderContainer,
+  val zimFileManager: ZimFileManager,
+  val kiwixPermissionChecker: KiwixPermissionChecker
 ) : ViewModel(), WebViewCallback {
   data class ReaderUiState(
     val title: String = "",
@@ -67,7 +81,10 @@ abstract class CoreReaderViewModel(
     val showBackToTop: Boolean = false,
     val showTtsControls: Boolean = false,
     val showTabSwitcher: Boolean = false,
-    val showBottomBar: Boolean = true
+    val showBottomBar: Boolean = true,
+    val isBookmarked: Boolean = false,
+    val showNoBookOpenInReader: Boolean = false,
+    val searchPlaceHolderItemForBrandedApps: Boolean = false
   )
 
   sealed interface ReaderAction {
@@ -89,25 +106,34 @@ abstract class CoreReaderViewModel(
 
   sealed interface ReaderEffect {
 
-    data class ShowSnackbar(@StringRes val message: Int, val actionClick: (() -> Unit)) :
+    data class ShowSnackbar(val message: String, val actionClick: (() -> Unit)) :
       ReaderEffect
+
+    data class ShowToast(val message: String) : ReaderEffect
 
     data object OpenDonationPage : ReaderEffect
     data object OpenLibrary : ReaderEffect
     data class ShowOpenInNewTabDialog(val url: String) : ReaderEffect
     data object DisableLeftSideBar : ReaderEffect
     data object EnableLeftSideBar : ReaderEffect
+    data object RequestReadStoragePermission : ReaderEffect
+    data class NavigateTo(val route: String, val navOptions: NavOptions? = null) : ReaderEffect
   }
 
-  protected abstract val mutableUiState: MutableStateFlow<ReaderUiState>
-  val uiState: StateFlow<ReaderUiState> get() = mutableUiState.asStateFlow()
-  abstract fun onAction(action: ReaderAction)
+  private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
+  val uiState: StateFlow<ReaderUiState> get() = _uiState.asStateFlow()
+  fun onAction(action: ReaderAction) {
+  }
 
   protected fun updateState(transform: ReaderUiState.() -> ReaderUiState) {
-    mutableUiState.update { it.transform() }
+    _uiState.update { it.transform() }
   }
 
-  protected abstract fun emitEffect(effect: ReaderEffect)
+  fun emitEffect(effect: ReaderEffect) {
+  }
+
+  private var bookmarkJob: Job? = null
+  private var zimReaderSource: ZimReaderSource? = null
 
   /**
    * Returns true if user enables the backToTop setting from setting screen.
@@ -259,7 +285,7 @@ abstract class CoreReaderViewModel(
           createNewTab(url, selectTab = !openInBackground)
           if (openInBackground) {
             emitEffect(
-              ReaderEffect.ShowSnackbar(string.new_tab_snack_bar) {
+              ReaderEffect.ShowSnackbar(context.getString(string.new_tab_snack_bar)) {
                 val tabsSize = readerWebViewManager.tabsSize()
                 if (tabsSize > 1) {
                   readerWebViewManager.selectTab(tabsSize - 1)
@@ -326,7 +352,7 @@ abstract class CoreReaderViewModel(
    * - When fullscreen mode is exited, the drawer is re-enabled.
    */
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
-    mutableUiState.update {
+    _uiState.update {
       it.copy(shouldShowFullScreen = isFullScreen, showBottomBar = !isFullScreen)
     }
     val effect = if (isFullScreen) {
@@ -336,4 +362,250 @@ abstract class CoreReaderViewModel(
     }
     emitEffect(effect)
   }
+
+  suspend fun openZimFile(zimReaderSource: ZimReaderSource) {
+    if (isBrandedApp() || kiwixPermissionChecker.hasReadExternalStoragePermission()) {
+      if (zimReaderSource.canOpenInLibkiwix()) {
+        // Show content if there is `Open Library` button showing
+        // and we are opening the ZIM file
+        hideNoBookOpenViews()
+        openAndSetInContainer(zimReaderSource)
+        updateTitle()
+      } else {
+        exitBook()
+        invalidZimFileFound {
+          showInvalidZimFileToast(zimReaderSource)
+        }
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
+      }
+    } else {
+      this.zimReaderSource = zimReaderSource
+      emitEffect(ReaderEffect.RequestReadStoragePermission)
+    }
+  }
+
+  private fun showInvalidZimFileToast(zimReaderSource: ZimReaderSource) {
+    emitEffect(
+      ReaderEffect.ShowToast(
+        context.getString(
+          string.error_file_invalid,
+          zimReaderSource.toDatabase()
+        )
+      )
+    )
+  }
+
+  /**
+   * Creates the ZimFileReader and loads the MainPage.
+   * Subclasses override this method to provide the showSearchSuggestion based on configuration.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open suspend fun openAndSetInContainer(
+    zimReaderSource: ZimReaderSource,
+    showSearchSuggestionsSpellChecked: Boolean = false
+  ) {
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
+    zimReaderContainer.setZimReaderSource(zimReaderSource, showSearchSuggestionsSpellChecked)
+
+    zimReaderContainer.zimFileReader?.let { zimFileReader ->
+      openMainPage()
+      // readerMenuState?.onFileOpened(urlIsValid())
+      observeBookmarks(zimFileReader)
+    } ?: run {
+      // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
+      // disable all controls for this ZIM file. This prevents potential crashes.
+      // See issue #4161 for more details.
+      exitBook()
+      invalidZimFileFound {
+        showInvalidZimFileToast(zimReaderSource)
+      }
+    }
+  }
+
+  private fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource?) {
+    if (isNotPreviouslyOpenZim(zimReaderSource)) {
+      stopOngoingLoadingAndClearWebViewList()
+    }
+  }
+
+  private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
+    zimReaderSource != null && zimReaderSource != zimReaderContainer.zimReaderSource
+
+  protected fun stopOngoingLoadingAndClearWebViewList() {
+    try {
+      readerWebViewManager.webViewList.apply {
+        forEach { webView ->
+          // Stop any ongoing loading of the WebView
+          webView.stopLoading()
+          // Clear the navigation history of the WebView
+          webView.clearHistory()
+          // Clear cached resources to prevent loading old content
+          webView.clearCache(true)
+          // Pause any ongoing activity in the WebView to prevent resource usage
+          webView.onPause()
+          // Break the reference chain from WebView → Fragment (via callback)
+          // to prevent memory leaks through InputMethodManager/DecorView retention.
+          webView.dispose()
+          // Forcefully destroy the WebView before setting the new ZIM file
+          // to ensure that it does not continue attempting to load internal links
+          // from the previous ZIM file, which could cause errors.
+          webView.destroy()
+        }
+        // Clear the WebView list after destroying the WebViews
+        readerWebViewManager.clearWebViewList()
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
+      // Clear the WebView list in case of an error
+      readerWebViewManager.clearWebViewList()
+    }
+  }
+
+  /**
+   * Sets the title for toolbar, controlling the title of toolbar.
+   * Subclasses like BrandedViewModel override this method to provide custom
+   * behavior, such as hiding the title when configured not to show it.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with branded apps
+   * to verify proper functionality.
+   */
+  open suspend fun updateTitle() {
+    val appName = kiwixDataStore.appName.first()
+    updateState {
+      copy(title = getValidTitle(zimReaderContainer.zimFileTitle, appName))
+    }
+  }
+
+  private fun getValidTitle(zimFileTitle: String?, appName: String): String =
+    if (isInvalidTitle(zimFileTitle)) {
+      appName
+    } else {
+      zimFileTitle.toString()
+    }
+
+  private fun isInvalidTitle(zimFileTitle: String?): Boolean =
+    zimFileTitle == null || zimFileTitle.trim { it <= ' ' }.isEmpty()
+
+  protected suspend fun exitBook(shouldCloseZimBook: Boolean = true) {
+    showNoBookOpenViews()
+    updateState {
+      copy(
+        showBottomBar = false,
+        title = context.getString(string.reader)
+      )
+    }
+    hideProgressBar()
+    // readerMenuState?.hideBookSpecificMenuItems()
+    if (shouldCloseZimBook) {
+      zimFileManager.close()
+    }
+  }
+
+  protected fun hideProgressBar() {
+    updateState {
+      copy(loading = false, progress = ZERO)
+    }
+  }
+
+  protected fun urlIsValid(): Boolean = readerWebViewManager.getCurrentWebView()?.url != null
+
+  private fun openMainPage() {
+    val articleUrl = zimReaderContainer.mainPage
+    openArticle(articleUrl)
+  }
+
+  private fun openArticle(articleUrl: String?) {
+    articleUrl?.let {
+      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(it)))
+    }
+  }
+
+  private fun loadUrl(url: String?, webview: KiwixWebView) {
+    if (url != null && !url.endsWith("null")) {
+      webview.loadUrl(url)
+    }
+  }
+
+  protected fun loadUrlWithCurrentWebview(url: String?) {
+    readerWebViewManager.getCurrentWebView()?.let { loadUrl(url, it) }
+  }
+
+  private fun contentUrl(articleUrl: String?): String =
+    "${CONTENT_PREFIX}$articleUrl".toUri().toString()
+
+  private fun redirectOrOriginal(contentUrl: String): String {
+    zimReaderContainer?.let {
+      return@redirectOrOriginal if (it.isRedirect(contentUrl)) {
+        it.getRedirect(
+          contentUrl
+        )
+      } else {
+        contentUrl
+      }
+    } ?: run {
+      return@redirectOrOriginal contentUrl
+    }
+  }
+
+  open fun showNoBookOpenViews() {
+    updateState { copy(showNoBookOpenInReader = true) }
+  }
+
+  private fun hideNoBookOpenViews() {
+    updateState { copy(showNoBookOpenInReader = false) }
+  }
+
+  private fun observeBookmarks(zimFileReader: ZimFileReader) {
+    bookmarkJob?.cancel()
+
+    bookmarkJob = viewModelScope.launch {
+      // TODO: replace this with a more efficient way to observe bookmark changes for
+      //  the current URL, such as using a flow that emits changes for the current URL instead of
+      //  combining all bookmark URLs with the current URL flow.
+
+      // combine(
+      //   bookmarkRepository.bookmarkUrlsForCurrentBook(zimFileReader.id),
+      //   currentUrlFlow
+      // ) { bookmarkedUrls, currentUrl ->
+      //
+      //   currentUrl in bookmarkedUrls
+      //
+      // }.collect { isBookmarked ->
+      //
+      //   updateState {
+      //     copy(isBookmarked = isBookmarked)
+      //   }
+      // }
+    }
+  }
+
+  /**
+   * Opens the search screen with the provided search string and configuration.
+   * Subclasses override this method to provide custom behavior for opening the search screen.
+   */
+  abstract fun openSearch(
+    searchString: String = "",
+    isOpenedFromTabView: Boolean = false,
+    isVoice: Boolean = false
+  )
+
+  /**
+   * Called when the provided ZIM file is invalid and cannot be opened in the reader.
+   * Accepts a callback that will be invoked in the child viewModel.
+   */
+
+  abstract fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit)
+
+  /**
+   * Returns a boolean value based on child viewModel implementation,
+   * indicating whether to show spell-checked suggestions in search.
+   */
+  abstract fun shouldShowSpellCheckedSuggestions(): Boolean
+
+  /**
+   * Returns a boolean value based on child viewModel implementation, indicating whether the app is a branded app or not.
+   */
+  abstract fun isBrandedApp(): Boolean
 }

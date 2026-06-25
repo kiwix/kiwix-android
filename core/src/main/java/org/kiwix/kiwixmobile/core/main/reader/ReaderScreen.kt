@@ -472,6 +472,7 @@ private fun searchPlaceHolderIfActive(
   {
     SearchPlaceholder(
       stringResource(R.string.search_label),
+      // TODO: Replace this viewModel openSearch click.
       searchPlaceHolderItemForBrandedApps.second
     )
   }

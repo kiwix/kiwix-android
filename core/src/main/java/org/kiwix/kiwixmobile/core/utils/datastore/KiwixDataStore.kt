@@ -595,6 +595,17 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  val appName: Flow<String> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.APP_NAME] ?: "Kiwix"
+    }
+
+  suspend fun setAppName(appName: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.APP_NAME] = appName
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -644,5 +655,6 @@ class KiwixDataStore @Inject constructor(
     const val CACHED_ONLINE_CATEGORIES = "cachedOnlineCategories"
     private const val KEY_ONLINE_CATEGORY_NAME = "onlineCategoryName"
     private const val KEY_ONLINE_CATEGORY_ID = "onlineCategoryId"
+    const val APP_NAME = "appName"
   }
 }

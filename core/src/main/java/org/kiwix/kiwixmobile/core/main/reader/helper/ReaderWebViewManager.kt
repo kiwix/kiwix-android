@@ -78,5 +78,9 @@ class ReaderWebViewManager @Inject constructor(
     tabsManager.selectTab(index)
   }
 
+  fun clearWebViewList() {
+    tabsManager.clear()
+  }
+
   fun getCurrentWebView(): KiwixWebView? = tabsManager.getCurrentWebView()
 }

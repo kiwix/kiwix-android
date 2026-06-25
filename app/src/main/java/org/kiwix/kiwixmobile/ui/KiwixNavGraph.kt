@@ -60,8 +60,8 @@ import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_SCREEN
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
@@ -83,11 +83,12 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderViewModel
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
@@ -108,6 +109,7 @@ fun KiwixNavGraph(
     modifier = modifier
   ) {
     composable(route = KiwixDestination.Reader.route) { backStackEntry ->
+      val kiwixReaderViewModel: KiwixReaderViewModel = viewModel(factory = viewModelFactory)
       FragmentContainer(R.id.readerFragmentContainer) {
         KiwixReaderFragment()
       }

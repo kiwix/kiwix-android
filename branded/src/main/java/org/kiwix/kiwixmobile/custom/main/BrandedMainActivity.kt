@@ -241,4 +241,10 @@ class BrandedMainActivity : CoreMainActivity() {
       }
     }
   }
+
+  override fun setAppName() {
+    lifecycleScope.launch {
+      kiwixDataStore.setAppName(getString(R.string.app_name))
+    }
+  }
 }

@@ -662,4 +662,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract suspend fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()
+
+  /**
+   * Sets the application name for the current activity. This is used in various places such as
+   * the donation page, readerScreen, etc. Child activities should provide the implementation to
+   * set the app name according to their context. For example, in the main Kiwix app,
+   * it will set the app name as "Kiwix", while in branded apps,
+   * it will set the app name as the respective branded app name.
+   */
+  abstract fun setAppName()
 }

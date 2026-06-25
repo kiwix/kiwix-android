@@ -409,10 +409,6 @@ class BrandedReaderFragment : CoreReaderFragment() {
     newMainPageTab()
   }
 
-  override fun showNoBookOpenViews() {
-    readerScreenState.update { copy(isNoBookOpenInReader = false) }
-  }
-
   /**
    * Overrides the method to show the donation popup. When the "Support url" is disabled
    * in a custom app, this function stop to show the donationPopup.
