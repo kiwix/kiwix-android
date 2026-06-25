@@ -18,25 +18,11 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
-import android.net.ConnectivityManager
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.UUID
 
 object NetworkUtils {
-  /**
-   * check availability of any network
-   *
-   * @return true if a network is ready to be used
-   */
-  fun isNetworkAvailable(context: Context): Boolean {
-    val connectivity: ConnectivityManager =
-      context
-        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return connectivity.isNetworkAvailable()
-  }
-
   fun getFileNameFromUrl(url: String?): String {
     var filename = ""
     url?.let { url1 ->

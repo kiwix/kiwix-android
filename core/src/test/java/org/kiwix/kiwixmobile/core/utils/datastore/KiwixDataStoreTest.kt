@@ -766,4 +766,52 @@ class KiwixDataStoreTest {
     val path = "/storage/emulated/0/Android/media/org.kiwix.kiwixmobile"
     assertThat(kiwixDataStore.getPublicDirectoryPath(path)).isEqualTo("/storage/emulated/0")
   }
+
+  @Test
+  fun `incrementRateAppVisitCount increments visit count and returns new count`() = runTest {
+    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(0)
+    val newCount1 = kiwixDataStore.incrementRateAppVisitCount()
+    assertThat(newCount1).isEqualTo(1)
+    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(1)
+
+    val newCount2 = kiwixDataStore.incrementRateAppVisitCount()
+    assertThat(newCount2).isEqualTo(2)
+    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(2)
+  }
+
+  @Test
+  fun `incrementRateAppReadingCount increments reading count`() = runTest {
+    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(0)
+    kiwixDataStore.incrementRateAppReadingCount()
+    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(1)
+
+    kiwixDataStore.incrementRateAppReadingCount()
+    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(2)
+  }
+
+  @Test
+  fun `setRateAppDownloadCompleted sets completed flag to true`() = runTest {
+    assertThat(kiwixDataStore.rateAppDownloadCompleted.first()).isFalse()
+    kiwixDataStore.setRateAppDownloadCompleted()
+    assertThat(kiwixDataStore.rateAppDownloadCompleted.first()).isTrue()
+  }
+
+  @Test
+  fun `resetRateAppTriggers resets all triggers to default`() = runTest {
+    kiwixDataStore.incrementRateAppVisitCount()
+    kiwixDataStore.incrementRateAppReadingCount()
+    kiwixDataStore.setRateAppDownloadCompleted()
+
+    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(1)
+    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(1)
+    assertThat(kiwixDataStore.rateAppDownloadCompleted.first()).isTrue()
+
+    kiwixDataStore.resetRateAppTriggers()
+
+    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(0)
+    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(0)
+    // Download completed state should be preserved since the user
+    // already downloaded a ZIM file. Only visit and reading counts reset.
+    assertThat(kiwixDataStore.rateAppDownloadCompleted.first()).isTrue()
+  }
 }

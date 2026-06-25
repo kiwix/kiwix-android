@@ -285,8 +285,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onStart() {
     super.onStart()
     externalLinkOpener.setAlertDialogShower(alertDialogShower)
-    rateDialogHandler.setAlertDialogShower(alertDialogShower)
-    rateDialogHandler.checkForRateDialog(getIconResId())
+    rateDialogHandler.checkForRateDialog()
   }
 
   override fun onResume() {
@@ -644,7 +643,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  protected abstract fun getIconResId(): Int
   abstract fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()

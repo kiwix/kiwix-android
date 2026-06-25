@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val THIRTY_TREE = 33
@@ -98,6 +99,9 @@ class DownloadMonitorService : Service() {
 
   @Inject
   lateinit var connectivityManager: ConnectivityManager
+
+  @Inject
+  lateinit var kiwixDataStore: KiwixDataStore
 
   private var appName: String? = "kiwix"
 
@@ -413,6 +417,7 @@ class DownloadMonitorService : Service() {
         if (download.status == Status.COMPLETED) {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
+            kiwixDataStore.setRateAppDownloadCompleted()
             // to move these downloads in LibkiwixBookOnDisk.
             @Suppress("IgnoredReturnValue")
             downloadRoomDao.downloads().first()

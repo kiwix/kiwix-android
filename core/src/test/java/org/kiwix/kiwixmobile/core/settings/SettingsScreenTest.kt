@@ -65,6 +65,7 @@ import org.robolectric.annotation.Config
  * This ensures we test real user-visible behavior, not internal
  * composable implementation details.
  */
+@Suppress("LargeClass")
 @OptIn(ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
@@ -780,5 +781,45 @@ class SettingsScreenTest {
     composeTestRule
       .onNodeWithText(context.getString(R.string.pref_theme))
       .assertIsDisplayed()
+  }
+
+  @Test
+  fun settingsScreen_ratingCategory_hiddenWhenDisabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowRatingCategory = false)
+      )
+    )
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_rating_category_title))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun settingsScreen_ratingCategory_visibleWhenEnabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowRatingCategory = true)
+      )
+    )
+    scrollToText(context.getString(R.string.pref_rating_category_title))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_rating_category_title))
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun settingsScreen_ratingCategory_rateItem_isClickable() {
+    val viewModel = createMockViewModel(
+      uiState = SettingsUiState(shouldShowRatingCategory = true)
+    )
+    renderSettingsScreen(viewModel)
+    val appName = ""
+    val title = context.getString(R.string.pref_rate_app_title, appName)
+    scrollToTag(PREFERENCE_ITEM_TESTING_TAG + title)
+    composeTestRule
+      .onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
+      .performClick()
+    verify { viewModel.sendAction(Action.RateApp) }
   }
 }

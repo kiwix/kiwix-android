@@ -19,8 +19,6 @@ package org.kiwix.kiwixmobile.settings
 
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
@@ -49,7 +47,12 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
     super.waitForIdle()
-    // Go to IntroScreen
+  }
+
+  private fun startSettingsActivity(isPlayStoreBuild: Boolean) {
+    updateKiwixDataStore {
+      setIsPlayStoreBuild(isPlayStoreBuild)
+    }
     launchMainActivity {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Intro.route)
@@ -57,7 +60,7 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
     composeTestRule.waitForIdle()
     splash {
-      swipeLeft(composeTestRule, runBlocking { kiwixDataStore.isPlayStoreBuild.first() })
+      swipeLeft(composeTestRule, isPlayStoreBuild)
       clickGetStarted(composeTestRule) {}
     }
     StandardActions.openDrawer(kiwixMainActivity as CoreMainActivity)
@@ -65,7 +68,8 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
   }
 
   @Test
-  fun testSettingsActivity() {
+  fun testSettingsScreenCommonBehaviour() {
+    startSettingsActivity(true)
     settingsRobo {
       assertZoomTextViewPresent(composeTestRule)
       clickNightModePreference(composeTestRule)
@@ -100,5 +104,21 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
       dismissDialog()
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testRateAppVisibleInPlayStoreBuild() {
+    startSettingsActivity(true)
+    settingsRobo {
+      assertRateAppPreferenceDisplayed(composeTestRule)
+    }
+  }
+
+  @Test
+  fun testRateAppHiddenInStandaloneBuild() {
+    startSettingsActivity(false)
+    settingsRobo {
+      assertRateAppPreferenceNotDisplayed(composeTestRule)
+    }
   }
 }

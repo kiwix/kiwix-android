@@ -584,6 +584,48 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  val rateAppCount: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.RATE_APP_COUNT] ?: 0
+  }
+
+  suspend fun incrementRateAppVisitCount(): Int {
+    var newCount = 0
+    context.kiwixDataStore.edit { prefs ->
+      val currentCount = prefs[PreferencesKeys.RATE_APP_COUNT] ?: 0
+      newCount = currentCount + 1
+      prefs[PreferencesKeys.RATE_APP_COUNT] = newCount
+    }
+    return newCount
+  }
+
+  val rateAppDownloadCompleted: Flow<Boolean> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.RATE_APP_DOWNLOAD_COMPLETED] ?: false
+  }
+
+  suspend fun setRateAppDownloadCompleted() {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.RATE_APP_DOWNLOAD_COMPLETED] = true
+    }
+  }
+
+  val rateAppReadingCount: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.RATE_APP_READING_COUNT] ?: 0
+  }
+
+  suspend fun incrementRateAppReadingCount() {
+    context.kiwixDataStore.edit { prefs ->
+      val currentCount = prefs[PreferencesKeys.RATE_APP_READING_COUNT] ?: 0
+      prefs[PreferencesKeys.RATE_APP_READING_COUNT] = currentCount + 1
+    }
+  }
+
+  suspend fun resetRateAppTriggers() {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.RATE_APP_COUNT] = 0
+      prefs[PreferencesKeys.RATE_APP_READING_COUNT] = 0
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"

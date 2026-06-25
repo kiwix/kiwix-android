@@ -101,6 +101,10 @@ class KiwixSettingsViewModel @Inject constructor(
     settingsUiState.update { it.copy(shouldShowLanguageCategory = true) }
   }
 
+  override suspend fun showRatingCategory() {
+    settingsUiState.update { it.copy(shouldShowRatingCategory = kiwixDataStore.isPlayStoreBuild.first()) }
+  }
+
   /**
    * Shows or hides the progress bar while the application is fetching
    * storage information in the background. The progress bar is displayed

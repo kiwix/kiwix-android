@@ -2363,6 +2363,7 @@ abstract class CoreReaderFragment :
           )
           lifecycleScope.launch {
             repositoryActions?.saveHistory(history)
+            kiwixDataStore?.incrementRateAppReadingCount()
           }
         }
       }

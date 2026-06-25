@@ -31,9 +31,12 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.assertIsDisplayed
+import org.junit.jupiter.api.fail
 import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.DIALOG_PREFERENCE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.settings.PREFERENCE_ITEM_TESTING_TAG
@@ -278,6 +281,20 @@ class SettingsRobot : BaseRobot() {
     clickPreferenceItem(context.getString(R.string.pref_info_version), composeTestRule)
   }
 
+  fun assertRateAppPreferenceDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      val title =
+        context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
+      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        .performScrollToNode(
+          hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        )
+      onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        .assertIsDisplayed()
+    }
+  }
+
   fun selectAlbanianLanguage(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
@@ -294,5 +311,26 @@ class SettingsRobot : BaseRobot() {
 
   fun dismissDialog() {
     pressBack()
+  }
+
+  fun assertRateAppPreferenceNotDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      val title =
+        context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
+      try {
+        composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+          .performScrollToNode(
+            hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
+          )
+        fail {
+          "Rate App item is showing in \"Standalone\" version."
+        }
+      } catch (_: AssertionError) {
+        // If it throws the error, that means it does not exist on the screen.
+      }
+      onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        .assertDoesNotExist()
+    }
   }
 }

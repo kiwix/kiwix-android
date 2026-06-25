@@ -82,4 +82,8 @@ class BrandedSettingsViewModel @Inject constructor(
   override suspend fun showPermissionItem() {
     settingsUiState.update { it.copy(permissionItem = false to "") }
   }
+
+  override suspend fun showRatingCategory() {
+    settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
+  }
 }

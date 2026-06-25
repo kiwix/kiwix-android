@@ -30,6 +30,7 @@ sealed class Action {
   object AllowPermission : Action()
   object RequestWriteStoragePermission : Action()
   object NavigateToAppSettingsDialog : Action()
+  object RateApp : Action()
   data class OnStorageItemClick(val storageDevice: StorageDevice) : Action()
   data class ShowSnackbar(val message: String, val lifecycleScope: CoroutineScope) : Action()
 }

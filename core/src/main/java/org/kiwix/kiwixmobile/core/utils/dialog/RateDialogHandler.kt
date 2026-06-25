@@ -20,91 +20,48 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import androidx.annotation.IdRes
+import android.net.ConnectivityManager
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
+const val READING_MILESTONE_THRESHOLD = 10
 
 @ActivityScope
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
-  private val libkiwixBookOnDisk: LibkiwixBookOnDisk
+  private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
+  private val kiwixDataStore: KiwixDataStore,
+  private val connectivityManager: ConnectivityManager
 ) {
-  private var alertDialogShower: AlertDialogShower? = null
-  private var visitCounterPref: RateAppCounter? = null
-  private var tempVisitCount = 0
-
-  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
-    this.alertDialogShower = alertDialogShower
-  }
-
-  private fun showRateDialog(iconResId: Int) {
-    alertDialogShower?.show(
-      KiwixDialog.ShowRate(IconItem.MipmapImage(iconResId), activity),
-      {
-        visitCounterPref?.noThanksState = true
-        goToRateApp(activity)
-      },
-      {
-        visitCounterPref?.noThanksState = true
-      },
-      {
-        tempVisitCount = 0
-        visitCounterPref?.count = tempVisitCount
-      }
-    )
-  }
-
-  fun checkForRateDialog(
-    @IdRes iconResId: Int
-  ) {
-    visitCounterPref = RateAppCounter(activity)
-    tempVisitCount = visitCounterPref?.count ?: 0
-    ++tempVisitCount
-    visitCounterPref?.count = tempVisitCount
+  fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
-      if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {
-        showRateDialog(iconResId)
+      val newCount = kiwixDataStore.incrementRateAppVisitCount()
+
+      if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {
+        kiwixDataStore.resetRateAppTriggers()
+        launchInAppReviewFlow()
       }
     }
   }
 
-  private suspend fun shouldShowRateDialog(): Boolean {
-    return tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
-      visitCounterPref?.noThanksState == false && isTwoWeekPassed() &&
-      isZimFilesAvailableInLibrary() && !BuildConfig.DEBUG
-  }
-
-  private suspend fun isZimFilesAvailableInLibrary(): Boolean {
-    // If it is a custom app, return true since custom apps always have the ZIM file.
-    if (activity.isBrandedApp()) return true
-    // For Kiwix app, check if there are ZIM files available in the library.
-    return libkiwixBookOnDisk.getBooks().isNotEmpty()
-  }
-
-  @Suppress("MagicNumber")
-  private fun isTwoWeekPassed(): Boolean {
-    val firstTimeInstallTime =
-      activity.packageManager
-        .getPackageInformation(activity.packageName, 0).firstInstallTime
-    val timeDifference = System.currentTimeMillis() - firstTimeInstallTime
-    val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
-    // Check if the time difference is at least 2 weeks
-    return timeDifference >= twoWeeksInMillis
-  }
-
-  private fun goToRateApp(activity: Activity) {
+  /**
+   * Opens the Play Store page for the app when the user explicitly taps
+   * "Rate App" in Settings.
+   */
+  fun goToRateApp() {
     val kiwixLocalMarketUri =
       "market://details?id=${activity.packageName}".toUri()
     val kiwixBrowserMarketUri =
@@ -120,5 +77,59 @@ class RateDialogHandler @Inject constructor(
     } catch (_: ActivityNotFoundException) {
       activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
     }
+  }
+
+  internal suspend fun shouldShowRateDialog(newCount: Int): Boolean {
+    val meetVisitCount = newCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
+    val meetDownload = kiwixDataStore.rateAppDownloadCompleted.first()
+    val meetReading = kiwixDataStore.rateAppReadingCount.first() >= READING_MILESTONE_THRESHOLD
+
+    return isPlayStoreVariant() &&
+      (meetVisitCount || meetDownload || meetReading) &&
+      isTwoWeekPassed() &&
+      isZimFilesAvailableInLibrary()
+  }
+
+  internal suspend fun isPlayStoreVariant(): Boolean =
+    kiwixDataStore.isPlayStoreBuild.first()
+
+  internal suspend fun isZimFilesAvailableInLibrary(): Boolean {
+    // If it is a custom app, return true since custom apps always have the ZIM file.
+    if (activity.isBrandedApp()) return true
+    // For Kiwix app, check if there are ZIM files available in the library.
+    return libkiwixBookOnDisk.getBooks().isNotEmpty()
+  }
+
+  @Suppress("MagicNumber")
+  internal fun isTwoWeekPassed(): Boolean {
+    val firstTimeInstallTime =
+      activity.packageManager
+        .getPackageInformation(activity.packageName, 0).firstInstallTime
+    val timeDifference = System.currentTimeMillis() - firstTimeInstallTime
+    val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
+    // Check if the time difference is at least 2 weeks
+    return timeDifference >= twoWeeksInMillis
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private fun launchInAppReviewFlow() {
+    try {
+      val reviewManager = ReviewManagerFactory.create(activity)
+      reviewManager.requestReviewFlow()
+        .addOnCompleteListener { requestTask ->
+          if (requestTask.isSuccessful) {
+            val reviewInfo = requestTask.result
+            reviewManager.launchReviewFlow(activity, reviewInfo)
+          } else {
+            Log.e(TAG, "Failed to request review flow", requestTask.exception)
+          }
+        }
+    } catch (exception: Exception) {
+      Log.e(TAG, "Unexpected error while launching in-app review", exception)
+    }
+  }
+
+  companion object {
+    private const val TAG = "RateDialogHandler"
   }
 }

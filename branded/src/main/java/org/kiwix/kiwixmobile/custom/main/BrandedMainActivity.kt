@@ -101,8 +101,6 @@ class BrandedMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun getIconResId() = R.mipmap.ic_launcher
-
   /**
    * Hide the 'ZimHostFragment' option from the navigation menu
    * because we are now using fd (FileDescriptor)
