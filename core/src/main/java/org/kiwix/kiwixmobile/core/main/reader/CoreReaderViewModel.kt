@@ -80,9 +80,13 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
+import org.kiwix.kiwixmobile.core.main.reader.helper.documentparser.DocumentParser
+import org.kiwix.kiwixmobile.core.main.reader.helper.documentparser.DocumentParser.SectionsListener
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.None
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenBookmarks
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenSearch
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -104,11 +108,12 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
+
+const val TOC_SHOWING_WAITING_TIME = 500L
 
 abstract class CoreReaderViewModel(
   val context: Application,
@@ -129,17 +134,9 @@ abstract class CoreReaderViewModel(
   val readerArticleManager: ReaderArticleManager,
   val readAloudManager: ReadAloudManager
 ) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener {
-  data class PreviousNextPageButtonItem(
-    val isEnable: Boolean = false,
-    val onClick: () -> Unit,
-    val onLongClick: () -> Unit,
-  )
-
   data class BookmarkButtonItem(
     val icon: IconItem = IconItem.Drawable(R.drawable.ic_bookmark_border_24dp),
-    val isBookmarked: Boolean = false,
-    val onClick: () -> Unit,
-    val onLongClick: () -> Unit,
+    val isBookmarked: Boolean = false
   )
 
   data class ReaderUiState(
@@ -157,19 +154,17 @@ abstract class CoreReaderViewModel(
     val showBottomBar: Boolean = true,
     val bookmarkButtonItem: BookmarkButtonItem = BookmarkButtonItem(
       IconItem.Drawable(R.drawable.ic_bookmark_border_24dp),
-      false,
-      {},
-      {}
+      false
     ),
     val showNoBookOpenInReader: Boolean = false,
     val searchPlaceHolderItemForBrandedApps: Boolean = false,
-    val previousPageButtonItem: PreviousNextPageButtonItem = PreviousNextPageButtonItem(
-      false,
-      {},
-      {}
-    ),
-    val nextPageButtonItem: PreviousNextPageButtonItem = PreviousNextPageButtonItem(false, {}, {}),
-    val pauseTtsButtonText: String = ""
+    val isPreviousPageButtonEnable: Boolean = false,
+    val isNextPageButtonEnable: Boolean = false,
+    val pauseTtsButtonText: String = "",
+    val isTocButtonEnable: Boolean = false,
+    val showTableOfContentDrawer: Boolean = false,
+    val tableOfContentTitle: String = "",
+    val documentSections: List<DocumentSection> = emptyList()
   )
 
   sealed interface ReaderAction {
@@ -182,8 +177,11 @@ abstract class CoreReaderViewModel(
     data object BookmarkLongClicked : ReaderAction
 
     data object PreviousClicked : ReaderAction
+    data object PreviousLongClicked : ReaderAction
 
     data object NextClicked : ReaderAction
+    data object NextLongClicked : ReaderAction
+    data object OpenTocDrawer : ReaderAction
 
     data object CloseAllTabs : ReaderAction
 
@@ -202,9 +200,9 @@ abstract class CoreReaderViewModel(
 
     data class ShowToast(val message: String) : ReaderEffect
     data object OpenDonationPage : ReaderEffect
-    data object OpenLibrary : ReaderEffect
     data class ShowKiwixDialog(val kiwixDialog: KiwixDialog, val onClick: () -> Unit) : ReaderEffect
     data object ShowAddNoteDialog : ReaderEffect
+    data class ShowNavigationHistoryDialog(val isForward: Boolean) : ReaderEffect
     data object OpenBookmarkScreen : ReaderEffect
     data object DisableLeftSideBar : ReaderEffect
     data object EnableLeftSideBar : ReaderEffect
@@ -215,37 +213,45 @@ abstract class CoreReaderViewModel(
     data class ConsumeSavedStateHandle(val target: List<Pair<String, Class<*>>>) : ReaderEffect
     data object ClearActivityIntentAction : ReaderEffect
     data class SharePdfFile(val pdfFile: File) : ReaderEffect
-    data class OpenRandomArticle(val articleUrl: String) : ReaderEffect
-    data object RequestXiaomiShortcutPermission : ReaderEffect
-    data class ShowAddShortcutDialog(
-      val initialName: String,
-      val zimFileReader: org.kiwix.kiwixmobile.core.reader.ZimFileReader
-    ) : ReaderEffect
-
     data object RequestNotificationPermission : ReaderEffect
-    data object TtsSpeakingStarted : ReaderEffect
-    data object TtsSpeakingEnded : ReaderEffect
-    data object TtsPausedByAudioFocus : ReaderEffect
-    data object TtsResumedByAudioFocus : ReaderEffect
-    data object TtsStoppedByAudioFocusLoss : ReaderEffect
     data class TtsPauseOrResume(val isPaused: Boolean) : ReaderEffect
-
-    // data class StartReadAloud : ReaderEffect
-    data object StopReadAloud : ReaderEffect
-    data object InitializeTts : ReaderEffect
   }
 
   private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
   val uiState: StateFlow<ReaderUiState> get() = _uiState.asStateFlow()
   private val webUrlsFlow = MutableStateFlow("")
-  private var documentParserJs: String? = null
   protected var readerMenuState: ReaderMenuState? = null
+  private var documentParser: DocumentParser? = null
 
   init {
     observeSettings()
     readerMenuState = createMainMenu()
     readAloudManager.setUpTTS()
     setTtsCallback()
+    setupDocumentParser()
+  }
+
+  private fun requireDocumentParser() = requireNotNull(documentParser) {
+    "DocumentParser is not initialized. Call CoreReaderViewModel.setupDocumentParser before using it"
+  }
+
+  private fun setupDocumentParser() {
+    documentParser = DocumentParser(requireNotNull(documentSectionListener)).apply {
+      loadDocumentParserJs(context)
+    }
+  }
+
+  private var documentSectionListener: SectionsListener? = object : SectionsListener {
+    override fun sectionsLoaded(
+      title: String,
+      sections: List<DocumentSection>
+    ) {
+      updateState { copy(tableOfContentTitle = title, documentSections = sections) }
+    }
+
+    override fun clearSections() {
+      updateState { copy(documentSections = emptyList()) }
+    }
   }
 
   private fun setTtsCallback() {
@@ -344,8 +350,11 @@ abstract class CoreReaderViewModel(
       ReaderAction.CloseAllTabs -> closeAllTabs()
       ReaderAction.HomeClicked -> openMainPage()
       ReaderAction.NextClicked -> goForward()
+      ReaderAction.NextLongClicked -> showBackwordForwardHistory(true)
       ReaderAction.OpenLibrary -> openLocalLibrary()
       ReaderAction.PreviousClicked -> goBack()
+      ReaderAction.PreviousLongClicked -> showBackwordForwardHistory(false)
+      ReaderAction.OpenTocDrawer -> updateState { copy(showTableOfContentDrawer = true) }
       is ReaderAction.SelectTab -> {
         launchInViewModelScope {
           hideTabSwitcher()
@@ -357,6 +366,16 @@ abstract class CoreReaderViewModel(
       }
 
       is ReaderAction.CloseTab -> closeTab(action.position)
+    }
+  }
+
+  private fun showBackwordForwardHistory(isForward: Boolean) {
+    val result = readerWebViewManager.getWebViewNavigationHistory(isForward)
+    when (result) {
+      is HistoryFound -> emitEffect(ReaderEffect.ShowNavigationHistoryDialog(isForward))
+      NoHistoryFound -> {
+        // Do nothing when no history is found.
+      }
     }
   }
 
@@ -389,6 +408,20 @@ abstract class CoreReaderViewModel(
       copy(loading = true, progress = progress)
     }
   }
+
+  /**
+   * Provides the visibility state and click action for the TOC (Table of Contents) button
+   * shown in the reader's bottom app bar.
+   *
+   * @return A [Pair] containing:
+   *  - [Boolean]: Indicates whether the TOC button should be enabled (e.g., can be disabled
+   *               in certain custom app configurations where the sidebar is turned off).
+   *  - [() -> Unit]: The action to perform when the TOC button is clicked.
+   *
+   * Note: If modifying this method, ensure it is thoroughly tested in custom app variants
+   * where sidebar behavior may differ.
+   */
+  open fun getTocButtonStateAndAction(): Pair<Boolean, () -> Unit> = true to { openToc() }
 
   /**
    * Provides the navigationIcon based on condition.
@@ -579,11 +612,21 @@ abstract class CoreReaderViewModel(
   override fun webViewUrlLoading() {
     viewModelScope.launch {
       if (kiwixDataStore.isFirstRun.first() && !kiwixDataStore.isDebugBuild.first()) {
-        // TODO: replace this with action or effect.
-        // contentsDrawerHint()
+        contentsDrawerHint()
         kiwixDataStore.setIsFirstRun(false) // It is no longer the first run
       }
     }
+  }
+
+  private suspend fun contentsDrawerHint() {
+    emitEffect(
+      ReaderEffect.ShowKiwixDialog(
+        KiwixDialog.ContentsDrawerHint,
+        onClick = {}
+      )
+    )
+    delay(TOC_SHOWING_WAITING_TIME)
+    updateState { copy(showTableOfContentDrawer = true) }
   }
 
   override fun webViewUrlFinishedLoading() {
@@ -719,8 +762,7 @@ abstract class CoreReaderViewModel(
       videoView = requireNotNull(uiState.value.videoView)
     ).apply {
       setUpWithTextToSpeech(this)
-      // TODO uncomment this when documentPrser is implmented.
-      // documentParser?.initInterface(it)
+      requireDocumentParser().initInterface(this)
     }
     if (selectTab) {
       launchInViewModelScope {
@@ -794,20 +836,15 @@ abstract class CoreReaderViewModel(
     val currentWebView = readerWebViewManager.getCurrentWebView()
     updateState {
       copy(
-        previousPageButtonItem = previousPageButtonItem.copy(isEnable = currentWebView?.canGoBack() == true),
-        nextPageButtonItem = nextPageButtonItem.copy(isEnable = currentWebView?.canGoForward() == true)
+        isPreviousPageButtonEnable = currentWebView?.canGoBack() == true,
+        isNextPageButtonEnable = currentWebView?.canGoForward() == true
       )
     }
   }
 
-  private fun addFileReader() {
-    documentParserJs = context.readFile("js/documentParser.js")
-    // TODO: Uncomment this when documentSections is implemented to store the parsed sections of the document.
-    // documentSections?.clear()
-  }
-
   private fun updateTableOfContents() {
-    loadUrlWithCurrentWebview("javascript:($documentParserJs)()")
+    val js = requireDocumentParser().requireDocumentParserJs()
+    loadUrlWithCurrentWebview("javascript:($js)()")
   }
 
   open suspend fun openZimFile(zimReaderSource: ZimReaderSource) {
@@ -1397,6 +1434,8 @@ abstract class CoreReaderViewModel(
     bookmarkManager.stopObserving()
     pendingSearchItemManager.consume()
     readAloudManager.stopReadAloudSafely()
+    documentSectionListener = null
+    documentParser = null
     super.onCleared()
   }
 }

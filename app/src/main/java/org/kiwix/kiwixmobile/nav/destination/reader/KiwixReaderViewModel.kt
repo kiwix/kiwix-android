@@ -103,6 +103,7 @@ class KiwixReaderViewModel @Inject constructor(
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
   override suspend fun initialize(coreMainActivity: CoreMainActivity) {
+    updateState { copy(isTocButtonEnable = true) }
     enableLeftDrawer()
     openPageInBookFromNavigationArguments(coreMainActivity)
   }

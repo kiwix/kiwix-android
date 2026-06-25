@@ -22,16 +22,27 @@ import android.widget.FrameLayout
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
+import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
-import kotlin.collections.get
 
 class ReaderWebViewManager @Inject constructor(
   private val tabsManager: TabsManager,
   private val readerSessionManager: ReaderSessionManager,
   private val webViewFactory: WebViewFactory
 ) {
+  sealed interface WebViewNavigationHistoryResult {
+    data class HistoryFound(
+      val isForwardHistory: Boolean,
+      val list: List<NavigationHistoryListItem>
+    ) : WebViewNavigationHistoryResult
+
+    data object NoHistoryFound : WebViewNavigationHistoryResult
+  }
+
   sealed interface RestoreTabsResult {
     data object TabsRestored : RestoreTabsResult
     data class ErrorInRestoringTabs(val throwable: Throwable) : RestoreTabsResult
@@ -88,6 +99,35 @@ class ReaderWebViewManager @Inject constructor(
   fun goForward() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.goForward()
+    }
+  }
+
+  fun getWebViewNavigationHistory(isForwardHistory: Boolean): WebViewNavigationHistoryResult {
+    val webView = getCurrentWebView() ?: return NoHistoryFound
+
+    if (isForwardHistory && !webView.canGoForward()) return NoHistoryFound
+    if (!isForwardHistory && !webView.canGoBack()) return NoHistoryFound
+    val historyList = webView.copyBackForwardList()
+
+    val navigationItems = buildList {
+      val indices = if (isForwardHistory) {
+        historyList.currentIndex until historyList.size
+      } else {
+        historyList.currentIndex downTo ZERO
+      }
+
+      indices.forEach { index ->
+        if (index != historyList.currentIndex) {
+          historyList.getItemAtIndex(index)?.let {
+            add(NavigationHistoryListItem(title = it.title, pageUrl = it.url))
+          }
+        }
+      }
+    }
+    return if (navigationItems.isEmpty()) {
+      NoHistoryFound
+    } else {
+      HistoryFound(isForwardHistory = isForwardHistory, list = navigationItems)
     }
   }
 

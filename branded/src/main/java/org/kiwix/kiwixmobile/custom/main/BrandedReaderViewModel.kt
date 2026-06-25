@@ -111,6 +111,7 @@ class BrandedReaderViewModel @Inject constructor(
     if (enforcedLanguage(coreMainActivity)) {
       return
     }
+    updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR) }
     enableLeftDrawer()
     loadPageFromNavigationArguments(coreMainActivity)
     if (BuildConfig.DISABLE_EXTERNAL_LINK) {

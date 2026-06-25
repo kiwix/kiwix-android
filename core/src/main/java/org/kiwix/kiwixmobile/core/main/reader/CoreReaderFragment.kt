@@ -128,8 +128,8 @@ import org.kiwix.kiwixmobile.core.main.CompatFindActionModeCallback
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
-import org.kiwix.kiwixmobile.core.main.DocumentParser
-import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
+import org.kiwix.kiwixmobile.core.main.reader.helper.documentparser.DocumentParser
+import org.kiwix.kiwixmobile.core.main.reader.helper.documentparser.DocumentParser.SectionsListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
