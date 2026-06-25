@@ -33,6 +33,7 @@
   <string name="menu_wifi_hotspot">託管書籍</string>
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
+  <string name="invalid_media_source">找不到所選媒體。</string>
   <string name="save_media_saved">已將媒體儲存至 %s</string>
   <string name="search_label">搜尋</string>
   <string name="searched_list">搜尋清單</string>
@@ -110,6 +111,9 @@
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
   <string name="clear_all_history_dialog_title">清除所有歷史記錄？</string>
   <string name="share">分享</string>
+  <string name="share_article">分享條目</string>
+  <string name="unable_to_share_article">無法分享條目</string>
+  <string name="please_wait_for_page_to_load">請稍候讓頁面完全載入</string>
   <string name="selected_file_cab_app_chooser_title">分享 ZIM 檔案以：</string>
   <string name="delete">刪除</string>
   <string name="cancel">取消</string>
@@ -322,7 +326,7 @@
   <string name="delete_selected_bookmarks">刪除所選的書籤？</string>
   <string name="import_bookmarks_dialog_title">匯入書籤？</string>
   <string name="export_all_bookmarks_dialog_title">匯出所有書籤？</string>
-  <string name="export_all_bookmarks_dialog_message" fuzzy="true">匯出時會在 \n%s 資料夾中產生 bookmark.xml 檔案。</string>
+  <string name="export_all_bookmarks_dialog_message">匯出時會在 \n%s 資料夾中產生 bookmark.xml 檔案。</string>
   <string name="bookmark_imported_message">已匯入所有書籤。</string>
   <string name="error_invalid_bookmark_file">錯誤：所選檔案不是有效的書籤檔案。</string>
   <string name="send_report">傳送診斷報告</string>
@@ -415,4 +419,10 @@
   <string name="confirmation_validate_zim_files">您確定要驗證以下 ZIM 檔案嗎？\n\n%s</string>
   <string name="validating_zim_file">正在驗證 ZIM 檔案…</string>
   <string name="validating_zim_files">正在驗證 ZIM 檔案…</string>
+  <string name="menu_add_to_homescreen">新增到主螢幕</string>
+  <string name="added_to_homescreen">主畫面已新增捷徑</string>
+  <string name="add_shortcut_title">新增捷徑</string>
+  <string name="shortcut_name_label">捷徑名稱</string>
+  <string name="open_xiaomi_settings">開啟設定</string>
+  <string name="xiaomi_permission_required">此設備需要先授予捷徑權限才能將捷徑新增至主畫面。請在設定中授予權限。</string>
 </resources>

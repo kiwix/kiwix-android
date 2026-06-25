@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Zeqid
 * Əkrəm
 -->
 <resources>
-  <string name="retry">Yenidən sına</string>
+  <string name="retry">Yenidən cəhd edin</string>
   <string name="invalid_installation">Quraşdırılma alınmadı. Zəhmət olmasa, \"ZIM\" yükləyin.\n \"Wi-Fi\"ın aktiv və cihazınızda kifayət qədər yaddaşın olmağına əmin olun.</string>
 </resources>

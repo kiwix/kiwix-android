@@ -55,12 +55,17 @@
   <string name="pref_display_title">Weisen</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
+  <string name="pref_theme">Faarfscheema</string>
+  <string name="theme_system">System</string>
+  <string name="theme_light">Hell</string>
+  <string name="theme_dark">Däischter</string>
   <string name="pref_back_to_top">Zeréck no uewen</string>
   <string name="pref_back_to_top_summary">Weist e Knäppchen ënnen op der Säit fir no uewen ze scrollen</string>
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
   <string name="tts_lang_not_supported">D’Sprooch vun dëser Säit gëtt net ënnerstëtzt. Et ass méiglech, datt den Artikel net richteg gelies ka ginn.</string>
+  <string name="no_reader_application_installed">Fir dëse Fichierstyp gouf keng installéiert App fonnt</string>
   <string name="no_email_application_installed">Installéiert wgl. en E-Mail-Client</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_history_title">Historique läschen</string>
@@ -71,9 +76,13 @@
   <string name="pref_export_bookmark_title">Lieszeechen exportéieren</string>
   <string name="pref_export_bookmark_summary">All gespäichert Lieszeechen exportéieren</string>
   <string name="export_bookmark_saved">D’Lieszeeche goufen an de Fichier %s exportéiert</string>
+  <string name="all_history_cleared">De kompletten Historique gouf geläscht</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
+  <string name="clear_all_history_dialog_title">De kompletten Historique läschen?</string>
   <string name="share">Deelen</string>
   <string name="share_article">Artikel deelen</string>
+  <string name="unable_to_share_article">Den Artikel konnt net gedeelt ginn</string>
+  <string name="please_wait_for_page_to_load">Waart wgl., bis d\'Säit komplett gelueden ass</string>
   <string name="selected_file_cab_app_chooser_title">ZIM-Fichier deele mat:</string>
   <string name="delete">Läschen</string>
   <string name="cancel">Ofbriechen</string>
@@ -106,6 +115,7 @@
   <string name="download">Eroflueden</string>
   <string name="download_notification_channel_description">ZIM-Fichieren eroflueden…</string>
   <string name="space_available">Plaz disponibel:</string>
+  <string name="move_no_space">Net genuch Plaz fir ze réckelen/kopéieren.</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keng Biller</string>
   <string name="zim_no_vid">Keng Videoen</string>
@@ -216,7 +226,7 @@
   <string name="export_all_bookmarks_dialog_message">Beim Exportéiere gëtt ee Fichier „bookmark.xml\" am Dossier \n„%s\" ugeluecht.</string>
   <string name="bookmark_imported_message">All d’Lieszeeche goufen importéiert.</string>
   <string name="error_invalid_bookmark_file">Feeler: Den ausgewielte Fichier ass kee valabele Lieszeechefichier.</string>
-  <string name="diagnostic_report_message" fuzzy="true">Schéckt ons wgl. all déi follgend Detailer fir datt mir de Problem feststelle kënnen</string>
+  <string name="diagnostic_report_message">Fir eis bei der Diagnos vum Problem ze hëllefen, reproduzéiert wgl. fir d\'éischt de Problem a schéckt eis dann den Diagnostikrapport.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-Zoom</string>
   <string name="search_open_in_new_tab">An engem neien Tab opmaachen</string>

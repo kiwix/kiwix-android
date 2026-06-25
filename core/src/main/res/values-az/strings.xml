@@ -5,33 +5,75 @@
 * Macofe
 * MohitMali
 * Verman1
+* Zeqid
 -->
 <resources>
   <string name="menu_help">Kömək</string>
   <string name="menu_home">Ana səhifə</string>
-  <string name="menu_settings">Nizamlamalar</string>
+  <string name="menu_settings">Parametrlər</string>
   <string name="menu_search_in_text">Mətndə axtar</string>
   <string name="bookmarks">Əlfəcinlər</string>
   <string name="menu_random_article">Təsadüfi məqalə</string>
+  <string name="menu_read_aloud">Səsli oxut</string>
+  <string name="menu_read_aloud_stop">Səsli oxumağı dayandır</string>
+  <string name="menu_support_kiwix">Kiwix-ə dəstək olun</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s-ə dəstək olun</string>
+  <string name="menu_about_app">%s tətbiqi haqqında</string>
+  <string name="external_redirect_message">İndi %s-ə yönləndiriləcəksiniz.</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="search_label">Axtar</string>
-  <string name="choose_file" fuzzy="true">ZIM məzmunlu fayl seç (*.zim)</string>
+  <string name="searched_list">Axtarılan siyahı</string>
+  <string name="more_options">Digər parametrlər</string>
+  <string name="choose_file">ZIM məzmunlu faylı seçin (*.zim)</string>
   <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
-  <string name="error_file_not_found">Xəta: Seçilmiş ZIM fayl mövcud deyil. %s</string>
+  <string name="hotspot_failed_title">Hotspot başladılamadı</string>
+  <string name="go_to_wifi_settings_label">Wifi parametrlərinə keçin</string>
+  <string name="connection_refused">Bağlantı rədd edildi.</string>
+  <string name="no_books_selected_toast_message">Zəhmət olmasa əvvəlcə kitabları seçin</string>
+  <string name="server_failed_message">Serveri başlatmaq mümkün olmadı. Zəhmət olmasa hotspotu açın.</string>
+  <string name="server_failed_toast_message">Serveri başlatmaq mümkün olmadı.</string>
+  <string name="server_started_successfully_toast_message">Server uğurla başladıldı.</string>
+  <string name="server_stopped_successfully_toast_message">Server uğurla dayandırıldı.</string>
+  <string name="hotspot_turned_on">Hotspot açıqdır</string>
+  <string name="progress_dialog_starting_server">Server başladılır</string>
+  <string name="wifi_dialog_title">WiFi bağlantısı tapıldı</string>
+  <string name="wifi_dialog_body">Digər cihazlardakı kitabları görmək üçün, bütün cihazların eyni WiFi şəbəkəsinə qoşulduğundan əmin olun.</string>
+  <string name="hotspot_dialog_neutral_button">DAVAM EDİN</string>
+  <string name="hotspot_channel_description">Hotspot/serverinizin vəziyyəti haqqında yeniləmələr.</string>
+  <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
+  <string name="start_server_label">Serveri başladın</string>
+  <string name="stop_server_label">Serveri dayandırın</string>
+  <string name="error_ip_address_not_found">IP ünvanı tapılmadı.</string>
+  <string name="server_started_message">Serverə daxil olmaq üçün bu IP ünvanını brauzerinizə daxil edin %s</string>
+  <string name="share_host_address">URL-i digər tətbiqlər vasitəsilə paylaşın</string>
+  <string name="error_file_not_found">Xəta: Seçilmiş ZIM faylı mövcud deyil. %s</string>
+  <string name="unable_to_read_zim_file">Bu ZIM faylını oxumaq mümkün olmadı!</string>
+  <string name="zim_not_opened">ZIM faylını açmaq mümkün olamdı</string>
   <string name="error_file_invalid">Xəta: Seçilmiş ZIM faylı yararlı deyil. %s</string>
   <string name="error_article_url_not_found">Xəta: Məqalənin (Url: %1$s) yüklənməsi alınmadı.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Məqaləni yükləmək mümkün olmadı. ZIM faylı düzgün yüklənməyib.</string>
+  <string name="could_not_find_random_article">Təsadüfi məqalə tapmaq mümkün olmadı. Zəhmət olmasa, daha sonra yenidən cəhd edin.</string>
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Məlumat</string>
   <string name="pref_info_version">Versiya</string>
+  <string name="pref_theme">Tema</string>
+  <string name="theme_system">Sistem</string>
+  <string name="theme_light">İşıqlı</string>
+  <string name="theme_dark">Qaranlıq</string>
   <string name="pref_back_to_top">Əvvələ qayıt</string>
-  <string name="pref_back_to_top_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
+  <string name="pref_back_to_top_summary">Səhifənin sonuna səhifənin əvvəlinə qaytarma düyməsi əlavə edin</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Dili seçin</string>
-  <string name="no_section_info" fuzzy="true">Məzmunun heç bir başlıqı tapılmadı.</string>
+  <string name="pref_credits">Töhfəçilər və Lisenziyalar</string>
+  <string name="pref_credits_title">Töhfə verənlər</string>
+  <string name="tts_lang_not_supported">Bu səhifənin dili dəstəklənmir. Məqalə düzgün oxunmaya bilər.</string>
+  <string name="no_reader_application_installed">Bu fayl növü üçün quraşdırılmış tətbiq tapılmadı</string>
+  <string name="no_section_info">Məzmun Başlıqları Tapılmadı</string>
   <string name="rate_dialog_title">Xahiş edirik bizi dəyərləndirin</string>
   <string name="rate_dialog_positive">Dəyərləndir!</string>
   <string name="no_thanks">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>
   <string name="library">Kitabxana</string>
-  <string name="note_delete_successful">Qeyd silinməsi yerinə yetirildi</string>
+  <string name="note_delete_successful">Qeyd uğurla silindi</string>
   <string name="note_delete_unsuccessful">Qeyd silinmədi</string>
 </resources>
