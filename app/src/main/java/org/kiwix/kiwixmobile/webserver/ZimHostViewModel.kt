@@ -111,10 +111,11 @@ class ZimHostViewModel @Inject constructor(
   private val _events = MutableSharedFlow<Event>(extraBufferCapacity = Int.MAX_VALUE)
   val events = _events.asSharedFlow()
 
-  fun loadBooks(isBrandedApp: Boolean) {
+  fun loadBooks() {
     viewModelScope.launch(ioDispatcher) {
       val previouslyHostedBookIds = kiwixDataStore.hostedBookIds.first()
       val books = dataSource.getLanguageCategorizedBooks().first()
+      val isBrandedApp = kiwixDataStore.isBrandedApp.first()
       val zimFileReader = zimReaderContainer.zimFileReader
       val processedBooks = processBooks(books, previouslyHostedBookIds, isBrandedApp, zimFileReader)
       _uiState.update { it.copy(books = processedBooks) }

@@ -22,7 +22,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import javax.inject.Inject
 
 class PendingSearchItemManager @Inject constructor() {
-
   private var pendingItem: SearchItemToOpen? = null
 
   fun store(item: SearchItemToOpen) {

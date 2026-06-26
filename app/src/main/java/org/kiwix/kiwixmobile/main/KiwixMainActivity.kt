@@ -519,4 +519,10 @@ class KiwixMainActivity : CoreMainActivity() {
       kiwixDataStore.setAppName(getString(R.string.app_name))
     }
   }
+
+  override fun setIsBrandedApp() {
+    lifecycleScope.launch {
+      kiwixDataStore.setIsBrandedApp(true)
+    }
+  }
 }

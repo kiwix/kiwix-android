@@ -47,8 +47,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
@@ -56,8 +58,10 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.KIWIX_SUPPORT_URL
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
@@ -79,6 +83,8 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
@@ -87,9 +93,8 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.documentparser.DocumentPars
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.None
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenBookmarks
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenSearch
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
+import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -99,6 +104,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
+import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -114,9 +121,11 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
+import kotlin.Int
 
 const val TOC_SHOWING_WAITING_TIME = 500L
 
+@Suppress("LongParameterList", "LargeClass")
 abstract class CoreReaderViewModel(
   val context: Application,
   val kiwixDataStore: KiwixDataStore,
@@ -134,8 +143,9 @@ abstract class CoreReaderViewModel(
   private val readerIntentManager: ReaderIntentManager,
   val pendingSearchItemManager: PendingSearchItemManager,
   val readerArticleManager: ReaderArticleManager,
-  val readAloudManager: ReadAloudManager
-) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener {
+  val readAloudManager: ReadAloudManager,
+  val donationDialogHandler: DonationDialogHandler
+) : ViewModel(), WebViewCallback, ReaderMenuState.MenuClickListener, ShowDonationDialogCallback {
   data class BookmarkButtonItem(
     val icon: IconItem = IconItem.Drawable(R.drawable.ic_bookmark_border_24dp),
     val isBookmarked: Boolean = false
@@ -190,6 +200,10 @@ abstract class CoreReaderViewModel(
     data object StopTts : ReaderAction
     data object DonateButtonClick : ReaderAction
     data object DonateLaterButtonClick : ReaderAction
+    data object ClearNavigationHistory : ReaderAction
+    data class NavigationHistoryItemClick(val navigationHistoryListItem: NavigationHistoryListItem) :
+      ReaderAction
+
     data class OpenSearch(
       val searchString: String = "",
       val isOpenedFromTabView: Boolean = false,
@@ -198,7 +212,6 @@ abstract class CoreReaderViewModel(
   }
 
   sealed interface ReaderEffect {
-
     data class ShowSnackbar(
       val message: String,
       val actionLabel: String? = null,
@@ -207,12 +220,10 @@ abstract class CoreReaderViewModel(
       val snackBarResult: (SnackbarResult) -> Unit = {}
     ) : ReaderEffect
 
+    data class ShowAddNoteDialog(val kiwixWebView: KiwixWebView?) : ReaderEffect
     data class ShowToast(val message: String) : ReaderEffect
-    data object OpenDonationPage : ReaderEffect
     data class ShowKiwixDialog(val kiwixDialog: KiwixDialog, val onClick: () -> Unit) : ReaderEffect
-    data object ShowAddNoteDialog : ReaderEffect
-    data class ShowNavigationHistoryDialog(val isForward: Boolean) : ReaderEffect
-    data object OpenBookmarkScreen : ReaderEffect
+    data class ShowNavigationHistoryDialog(val result: HistoryFound) : ReaderEffect
     data object DisableLeftSideBar : ReaderEffect
     data object EnableLeftSideBar : ReaderEffect
     data object OpenActivitySideBar : ReaderEffect
@@ -221,18 +232,21 @@ abstract class CoreReaderViewModel(
     data object HideActivityBottomAppBar : ReaderEffect
     data object RequestReadStoragePermission : ReaderEffect
     data class NavigateTo(val route: String, val navOptions: NavOptions? = null) : ReaderEffect
-    data class ConsumeSavedStateHandle(val target: List<Pair<String, Class<*>>>) : ReaderEffect
+    data class ConsumeSavedStateHandle(val keys: List<String>) : ReaderEffect
     data object ClearActivityIntentAction : ReaderEffect
     data class SharePdfFile(val pdfFile: File) : ReaderEffect
     data object RequestNotificationPermission : ReaderEffect
-    data class TtsPauseOrResume(val isPaused: Boolean) : ReaderEffect
   }
 
   private val _uiState: MutableStateFlow<ReaderUiState> = MutableStateFlow(ReaderUiState())
   val uiState: StateFlow<ReaderUiState> get() = _uiState.asStateFlow()
+  private val _effects = MutableSharedFlow<ReaderEffect>(extraBufferCapacity = Int.MAX_VALUE)
+  val effects = _effects.asSharedFlow()
   private val webUrlsFlow = MutableStateFlow("")
   var readerMenuState: ReaderMenuState? = null
   private var documentParser: DocumentParser? = null
+
+  val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
   init {
     observeSettings()
@@ -240,6 +254,7 @@ abstract class CoreReaderViewModel(
     readAloudManager.setUpTTS()
     setTtsCallback()
     setupDocumentParser()
+    setDonationDialogCallBack()
   }
 
   private fun requireDocumentParser() = requireNotNull(documentParser) {
@@ -280,7 +295,9 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  private fun updateTtsPausedButtonText(@StringRes string: Int) {
+  private fun updateTtsPausedButtonText(
+    @StringRes string: Int
+  ) {
     updateState { copy(pauseTtsButtonText = context.getString(string)) }
   }
 
@@ -331,7 +348,9 @@ abstract class CoreReaderViewModel(
     readAloudManager.startReadAloud(webView, index)
   }
 
+  @Suppress("UnusedParameter")
   fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
+    // TODO remove unused paramter when implemented the ReadAloudService
     readAloudManager.pauseTts()
   }
 
@@ -354,6 +373,7 @@ abstract class CoreReaderViewModel(
     readerWebViewManager.goForward()
   }
 
+  @Suppress("CyclomaticComplexMethod")
   fun onAction(action: ReaderAction) {
     when (action) {
       ReaderAction.BookmarkClicked -> onBookmarkButtonClicked()
@@ -372,6 +392,8 @@ abstract class CoreReaderViewModel(
       ReaderAction.StopTts -> launchInViewModelScope { stopReadAloud() }
       ReaderAction.DonateButtonClick -> donateButtonClick()
       ReaderAction.DonateLaterButtonClick -> donateLaterButtonClick()
+      ReaderAction.ClearNavigationHistory -> clearNavigationHistory()
+      is ReaderAction.NavigationHistoryItemClick -> loadUrlWithCurrentWebview(action.navigationHistoryListItem.pageUrl)
       is ReaderAction.SelectTab -> {
         launchInViewModelScope {
           hideTabSwitcher()
@@ -392,10 +414,16 @@ abstract class CoreReaderViewModel(
     }
   }
 
+  private fun clearNavigationHistory() {
+    readerSessionManager.clearWebViewHistory()
+    updateBottomToolbarArrowsAlpha()
+    emitEffect(ReaderEffect.ShowToast(context.getString(string.navigation_history_cleared)))
+  }
+
   private fun showBackwordForwardHistory(isForward: Boolean) {
     val result = readerWebViewManager.getWebViewNavigationHistory(isForward)
     when (result) {
-      is HistoryFound -> emitEffect(ReaderEffect.ShowNavigationHistoryDialog(isForward))
+      is HistoryFound -> emitEffect(ReaderEffect.ShowNavigationHistoryDialog(result))
       NoHistoryFound -> {
         // Do nothing when no history is found.
       }
@@ -415,6 +443,9 @@ abstract class CoreReaderViewModel(
   }
 
   fun emitEffect(effect: ReaderEffect) {
+    launchInViewModelScope {
+      _effects.emit(effect)
+    }
   }
 
   @Volatile var isWebViewHistoryRestoring = false
@@ -446,6 +477,10 @@ abstract class CoreReaderViewModel(
     IconItem.Vector(Icons.Filled.Menu)
   }
 
+  override fun showDonationDialog() {
+    showDonationLayout()
+  }
+
   override fun onTabMenuClicked() {
     launchInViewModelScope {
       if (uiState.value.showTabSwitcher) {
@@ -466,7 +501,7 @@ abstract class CoreReaderViewModel(
   }
 
   override fun onAddNoteMenuClicked() {
-    emitEffect(ReaderEffect.ShowAddNoteDialog)
+    emitEffect(ReaderEffect.ShowAddNoteDialog(readerWebViewManager.getCurrentWebView()))
   }
 
   override fun onShareMenuClicked() {
@@ -616,6 +651,7 @@ abstract class CoreReaderViewModel(
    * specified title and displays the search input UI.
    */
   override fun onFindInPageMenuClicked() {
+    // TODO implement this with compose UI and remove the acivity actionbar UI.
   }
 
   override fun webViewUrlLoading() {
@@ -689,6 +725,7 @@ abstract class CoreReaderViewModel(
     readerMenuState?.updateTabIcon(size)
   }
 
+  @Suppress("MagicNumber")
   override fun webViewPageChanged(page: Int, maxPages: Int) {
     viewModelScope.launch {
       if (!isBackToTopEnabled()) return@launch
@@ -859,7 +896,9 @@ abstract class CoreReaderViewModel(
   open suspend fun openZimFile(zimReaderSource: ZimReaderSource) {
     if (isBrandedApp() || kiwixPermissionChecker.hasReadExternalStoragePermission()) {
       val result =
-        zimFileManager.openZimFileInReader(zimReaderSource, shouldShowSpellCheckedSuggestions())
+        zimFileManager.openZimFileInReader(zimReaderSource, shouldShowSpellCheckedSuggestions()) {
+          readerWebViewManager.destroyAllTabs()
+        }
       when (result) {
         is Success -> {
           // Show content if there is `Open Library` button showing
@@ -1315,10 +1354,6 @@ abstract class CoreReaderViewModel(
     emitEffect(effect)
   }
 
-  fun openBookmarkScreen() {
-    emitEffect(ReaderEffect.OpenBookmarkScreen)
-  }
-
   protected suspend fun restoreTabs(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
@@ -1367,6 +1402,7 @@ abstract class CoreReaderViewModel(
     updateState { copy(showDonationPopup = true) }
   }
 
+  @Suppress("ReturnCount")
   fun onUserBackPressed(coreMainActivity: CoreMainActivity?): FragmentActivityExtensions.Super {
     when {
       coreMainActivity?.navigationDrawerIsOpen() == true -> {
@@ -1390,7 +1426,7 @@ abstract class CoreReaderViewModel(
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
 
-      // TODO: uncomment this when compatCallback functionality is migrated to compose.
+      // TODO uncomment this when compatCallback functionality is migrated to compose.
       // compatCallback?.isActive == true -> {
       //   compatCallback?.finish()
       //   return FragmentActivityExtensions.Super.ShouldNotCall
@@ -1413,18 +1449,24 @@ abstract class CoreReaderViewModel(
 
   private fun donateButtonClick() {
     launchInViewModelScope {
-      // TODO: uncomment this when donation functionality is implement in viewModel
-      // donationDialogHandler?.updateLastDonationPopupShownTime()
-      // openKiwixSupportUrl()
+      donationDialogHandler.updateLastDonationPopupShownTime()
+      openKiwixSupportUrl()
       updateState { copy(showDonationPopup = false) }
     }
   }
 
   private fun donateLaterButtonClick() {
     launchInViewModelScope {
-      // donationDialogHandler?.donateLater()
+      donationDialogHandler.donateLater()
       updateState { copy(showDonationPopup = false) }
     }
+  }
+
+  protected open fun openKiwixSupportUrl() {
+    externalLinkOpener.openExternalLinkWithDialog(
+      KIWIX_SUPPORT_URL.toUri().browserIntent(),
+      context.getString(R.string.support_donation_platform)
+    )
   }
 
   /**
@@ -1451,7 +1493,8 @@ abstract class CoreReaderViewModel(
   abstract fun shouldShowSpellCheckedSuggestions(): Boolean
 
   /**
-   * Returns a boolean value based on child viewModel implementation, indicating whether the app is a branded app or not.
+   * Returns a boolean value based on child viewModel implementation,
+   * indicating whether the app is a branded app or not.
    */
   abstract fun isBrandedApp(): Boolean
 
@@ -1459,7 +1502,12 @@ abstract class CoreReaderViewModel(
    * Initializes the reader view model, sub viewModels should override this method
    * to provide custom initialization logic.
    */
-  abstract suspend fun initialize(coreMainActivity: CoreMainActivity)
+  abstract suspend fun initialize(
+    coreMainActivity: CoreMainActivity,
+    alertDialogShower: AlertDialogShower
+  )
+
+  abstract fun openBookmarkScreen()
 
   /**
    * Restores the view state after successfully reading valid webViewHistory from room database.
@@ -1542,8 +1590,20 @@ abstract class CoreReaderViewModel(
       isPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
     )
 
+  private fun setDonationDialogCallBack() {
+    donationDialogHandler.setDonationDialogCallBack(this)
+  }
+
   protected fun launchInViewModelScope(block: suspend CoroutineScope.() -> Unit) {
     viewModelScope.launch { block() }
+  }
+
+  open fun onResume() {
+    updateBottomToolbarVisibility()
+    if (readAloudManager.tts == null) {
+      readAloudManager.setUpTTS()
+    }
+    launchInViewModelScope { donationDialogHandler.attemptToShowDonationPopup() }
   }
 
   override fun onCleared() {
@@ -1552,6 +1612,7 @@ abstract class CoreReaderViewModel(
     readAloudManager.stopReadAloudSafely()
     documentSectionListener = null
     documentParser = null
+    donationDialogHandler.setDonationDialogCallBack(null)
     super.onCleared()
   }
 }

@@ -47,7 +47,9 @@ class BookmarkManager @Inject constructor(
     data object BookmarkRemoved : BookmarkSaveResult
 
     // Can be improved with failure sealed class with proper error if the logic grow.
-    data class Failure(@StringRes val messageId: Int) : BookmarkSaveResult
+    data class Failure(
+      @StringRes val messageId: Int
+    ) : BookmarkSaveResult
   }
 
   private var libkiwixBook: Book? = null

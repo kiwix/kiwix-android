@@ -22,7 +22,6 @@ import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -85,14 +84,14 @@ object ActivityExtensions {
   ) {
     getObservableNavigationResult<T>(key)?.observe(owner) {
       observer.onChanged(it)
-      coreMainActivity.safelyConsumeObservable<T>(key)
+      coreMainActivity.safelyConsumeObservable(key)
     }
   }
 
-  fun <T> Activity.safelyConsumeObservable(key: String = "result") =
+  fun Activity.safelyConsumeObservable(key: String = "result") =
     runCatching {
       if (coreMainActivity.isNavControllerInitialized) {
-        coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+        coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<Any?>(key)
       } else {
         // do nothing.
       }
@@ -149,7 +148,4 @@ object ActivityExtensions {
    */
   fun Activity.isBrandedApp(): Boolean =
     packageName != "org.kiwix.kiwixmobile" && packageName != "org.kiwix.kiwixmobile.standalone"
-
-  fun Activity.isLandScapeMode(): Boolean =
-    resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }

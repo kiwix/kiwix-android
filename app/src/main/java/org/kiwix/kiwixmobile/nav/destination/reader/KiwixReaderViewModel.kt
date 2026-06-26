@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
+import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -64,6 +65,7 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class KiwixReaderViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,
@@ -81,29 +83,40 @@ class KiwixReaderViewModel @Inject constructor(
   readerIntentManager: ReaderIntentManager,
   pendingSearchItemManager: PendingSearchItemManager,
   readerArticleManager: ReaderArticleManager,
-  readAloudManager: ReadAloudManager
+  readAloudManager: ReadAloudManager,
+  donationDialogHandler: DonationDialogHandler
 ) : CoreReaderViewModel(
-  context,
-  kiwixDataStore,
-  externalLinkOpener,
-  unsupportedMimeTypeHandler,
-  readerWebViewManager,
-  alertDialogShower,
-  zimReaderContainer,
-  zimFileManager,
-  kiwixPermissionChecker,
-  repositoryActions,
-  bookmarkManager,
-  readerHistoryManager,
-  readerSessionManager,
-  readerIntentManager,
-  pendingSearchItemManager,
-  readerArticleManager,
-  readAloudManager
-) {
+    context,
+    kiwixDataStore,
+    externalLinkOpener,
+    unsupportedMimeTypeHandler,
+    readerWebViewManager,
+    alertDialogShower,
+    zimReaderContainer,
+    zimFileManager,
+    kiwixPermissionChecker,
+    repositoryActions,
+    bookmarkManager,
+    readerHistoryManager,
+    readerSessionManager,
+    readerIntentManager,
+    pendingSearchItemManager,
+    readerArticleManager,
+    readAloudManager,
+    donationDialogHandler
+  ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
-  override suspend fun initialize(coreMainActivity: CoreMainActivity) {
+
+  override fun openBookmarkScreen() {
+    emitEffect(ReaderEffect.NavigateTo(KiwixDestination.Bookmarks.route))
+  }
+
+  override suspend fun initialize(
+    coreMainActivity: CoreMainActivity,
+    alertDialogShower: AlertDialogShower
+  ) {
+    externalLinkOpener.setAlertDialogShower(alertDialogShower)
     val appName = kiwixDataStore.appName.first()
     updateState { copy(isTocButtonEnable = true, appName = appName) }
     enableLeftDrawer()
@@ -141,11 +154,7 @@ class KiwixReaderViewModel @Inject constructor(
     // Consume the argument.
     emitEffect(
       ReaderEffect.ConsumeSavedStateHandle(
-        listOf(
-          ZIM_FILE_URI_KEY to String::class.java,
-          PAGE_URL_KEY to String::class.java,
-          SEARCH_ITEM_TITLE_KEY to String::class.java
-        )
+        listOf(ZIM_FILE_URI_KEY, PAGE_URL_KEY, SEARCH_ITEM_TITLE_KEY)
       )
     )
   }
@@ -159,7 +168,7 @@ class KiwixReaderViewModel @Inject constructor(
     // The WebView's `shouldInterceptRequest` method continues to be invoked until the WebView is
     // fully destroyed, which can cause a native crash. This happens because a new ZIM file is set
     // in the reader while the WebView is still trying to access content from the old archive.
-    zimFileManager.stopOngoingLoadingAndClearWebViewList()
+    readerWebViewManager.destroyAllTabs()
     // Close the previously opened book in the reader before opening a new ZIM file
     // to avoid native crashes due to "null pointer dereference." These crashes can occur
     // when setting a new ZIM file in the archive while the previous one is being disposed of.
@@ -295,5 +304,20 @@ class KiwixReaderViewModel @Inject constructor(
       .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
       .build()
     emitEffect(ReaderEffect.NavigateTo(KiwixDestination.Library.route, navOptions))
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (uiState.value.shouldShowFullScreen) {
+      hideNavBar()
+    }
+  }
+
+  private fun hideNavBar() {
+    emitEffect(ReaderEffect.HideActivityBottomAppBar)
+  }
+
+  private fun showNavBar() {
+    emitEffect(ReaderEffect.ShowActivityBottomAppBar)
   }
 }

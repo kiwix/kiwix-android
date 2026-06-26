@@ -135,6 +135,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private var drawerToggle: ActionBarDrawerToggle? = null
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
+
   @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   @Inject
@@ -242,6 +243,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     setMainActivityToCoreApp()
     lifecycleScope.launch(ioDispatcher) {
       setIsDebugBuild(BuildConfig.DEBUG)
+      setAppName()
+      setIsBrandedApp()
       createApplicationShortcuts()
     }
   }
@@ -671,4 +674,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    * it will set the app name as the respective branded app name.
    */
   abstract fun setAppName()
+  abstract fun setIsBrandedApp()
 }

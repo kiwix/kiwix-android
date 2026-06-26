@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 import android.os.Bundle
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -39,6 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 import kotlin.math.max
 
+@Suppress("LongParameterList")
 class ReaderSessionManager @Inject constructor(
   private val tabsManager: TabsManager,
   private val zimFileManager: ZimFileManager,
@@ -67,7 +70,7 @@ class ReaderSessionManager @Inject constructor(
       val source = zimFileManager.zimReaderSource?.toDatabase()
       kiwixDataStore.apply {
         setCurrentZimFile(source.orEmpty())
-        setCurrentTab(tabsManager.currentWebViewIndex)
+        setCurrentTab(tabsManager.currentWebViewIndex.intValue)
       }
       Log.d(
         TAG_KIWIX,
@@ -204,5 +207,12 @@ class ReaderSessionManager @Inject constructor(
       )
     }
     return null
+  }
+
+  fun clearWebViewHistory() {
+    tabsManager.getCurrentWebView()?.clearHistory()
+    CoroutineScope(ioDispatcher).launch {
+      mainRepositoryActions.clearWebViewPageHistory()
+    }
   }
 }

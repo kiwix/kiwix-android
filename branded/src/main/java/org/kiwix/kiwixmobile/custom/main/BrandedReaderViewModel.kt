@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
+import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
@@ -31,7 +32,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -41,16 +45,20 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
 import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -60,15 +68,12 @@ import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.core.R.drawable
-import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.libkiwix.Book
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class BrandedReaderViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,
@@ -87,30 +92,36 @@ class BrandedReaderViewModel @Inject constructor(
   readerIntentManager: ReaderIntentManager,
   pendingSearchItemManager: PendingSearchItemManager,
   readerArticleManager: ReaderArticleManager,
-  readAloudManager: ReadAloudManager
+  readAloudManager: ReadAloudManager,
+  donationDialogHandler: DonationDialogHandler
 ) : CoreReaderViewModel(
-  context,
-  kiwixDataStore,
-  externalLinkOpener,
-  unsupportedMimeTypeHandler,
-  readerWebViewManager,
-  alertDialogShower,
-  zimReaderContainer,
-  zimFileManager,
-  kiwixPermissionChecker,
-  repositoryActions,
-  bookmarkManager,
-  readerHistoryManager,
-  readerSessionManager,
-  readerIntentManager,
-  pendingSearchItemManager,
-  readerArticleManager,
-  readAloudManager
-) {
-  override suspend fun initialize(coreMainActivity: CoreMainActivity) {
+    context,
+    kiwixDataStore,
+    externalLinkOpener,
+    unsupportedMimeTypeHandler,
+    readerWebViewManager,
+    alertDialogShower,
+    zimReaderContainer,
+    zimFileManager,
+    kiwixPermissionChecker,
+    repositoryActions,
+    bookmarkManager,
+    readerHistoryManager,
+    readerSessionManager,
+    readerIntentManager,
+    pendingSearchItemManager,
+    readerArticleManager,
+    readAloudManager,
+    donationDialogHandler
+  ) {
+  override suspend fun initialize(
+    coreMainActivity: CoreMainActivity,
+    alertDialogShower: AlertDialogShower
+  ) {
     if (enforcedLanguage(coreMainActivity)) {
       return
     }
+    externalLinkOpener.setAlertDialogShower(alertDialogShower)
     val appName = kiwixDataStore.appName.first()
     updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR, appName = appName) }
     enableLeftDrawer()
@@ -121,6 +132,10 @@ class BrandedReaderViewModel @Inject constructor(
       // when opening external links.
       kiwixDataStore.setExternalLinkPopup(false)
     }
+  }
+
+  override fun openBookmarkScreen() {
+    emitEffect(ReaderEffect.NavigateTo(CustomDestination.Bookmarks.route))
   }
 
   private suspend fun loadPageFromNavigationArguments(coreMainActivity: CoreMainActivity) {
@@ -139,7 +154,7 @@ class BrandedReaderViewModel @Inject constructor(
         openObbOrZim(true)
       }
     }
-    emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(PAGE_URL_KEY to String::class.java)))
+    emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(PAGE_URL_KEY)))
   }
 
   /**
@@ -431,4 +446,13 @@ class BrandedReaderViewModel @Inject constructor(
       // Custom apps usually don't need homescreen shortcuts
       isPinShortcutSupported = false
     )
+
+  override fun openKiwixSupportUrl() {
+    if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+      externalLinkOpener.openExternalLinkWithDialog(
+        BuildConfig.SUPPORT_URL.toUri().browserIntent(),
+        context.getString(string.support_donation_platform)
+      )
+    }
+  }
 }

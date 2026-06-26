@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils.dialog
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -35,7 +35,7 @@ import java.io.File
 import javax.inject.Inject
 
 class UnsupportedMimeTypeHandler @Inject constructor(
-  private val activity: Activity,
+  private val context: Context,
   private val zimReaderContainer: ZimReaderContainer
 ) {
   private var alertDialogShower: AlertDialogShower? = null
@@ -66,7 +66,7 @@ class UnsupportedMimeTypeHandler @Inject constructor(
   ) {
     lifecycleScope.launch {
       val result = FileUtils.downloadFileFromUrl(
-        context = activity,
+        context = context,
         url = url,
         src = null,
         zimReaderContainer = zimReaderContainer
@@ -79,12 +79,12 @@ class UnsupportedMimeTypeHandler @Inject constructor(
 
         is SaveResult.InvalidSource -> {
           Log.e("MEDIA_SAVE", R.string.invalid_media_source.toString())
-          activity.toast(R.string.invalid_media_source)
+          context.toast(R.string.invalid_media_source)
         }
 
         is SaveResult.Error -> {
           Log.e("MEDIA_SAVE", result.message, result.throwable)
-          activity.toast(R.string.save_media_error)
+          context.toast(R.string.save_media_error)
         }
       }
     }
@@ -98,11 +98,8 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     if (openFile) {
       openFile(result.file, documentType)
     } else {
-      activity.toast(
-        activity.getString(
-          R.string.save_media_saved,
-          result.file.absolutePath
-        )
+      context.toast(
+        context.getString(R.string.save_media_saved, result.file.absolutePath)
       )
     }
   }
@@ -115,11 +112,8 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     if (openFile) {
       openUri(result.uri, documentType)
     } else {
-      activity.toast(
-        activity.getString(
-          R.string.save_media_saved,
-          result.displayName
-        )
+      context.toast(
+        context.getString(R.string.save_media_saved, result.displayName)
       )
     }
   }
@@ -128,8 +122,8 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     if (!savedFile.isFileExist()) return
     val uri =
       FileProvider.getUriForFile(
-        activity,
-        "${activity.packageName}.fileprovider",
+        context,
+        "${context.packageName}.fileprovider",
         savedFile
       )
     openUri(uri, documentType)
@@ -142,10 +136,10 @@ class UnsupportedMimeTypeHandler @Inject constructor(
       addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 
-    if (intent.resolveActivity(activity.packageManager) != null) {
-      activity.startActivity(intent)
+    if (intent.resolveActivity(context.packageManager) != null) {
+      context.startActivity(intent)
     } else {
-      activity.toast(R.string.no_reader_application_installed)
+      context.toast(R.string.no_reader_application_installed)
     }
   }
 }

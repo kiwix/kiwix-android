@@ -60,6 +60,7 @@ class PendingIntentParser @Inject constructor() {
     }
   }
 
+  @Suppress("ReturnCount")
   private fun parseActionViewIntent(intent: Intent): ReaderIntentAction {
     if (intent.hasExtra(ZIM_FILE_URI_KEY)) return None
     val hasValidScheme =

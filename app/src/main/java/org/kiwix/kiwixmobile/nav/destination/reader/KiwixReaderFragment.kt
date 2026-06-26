@@ -115,9 +115,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
       // Consume the argument.
       kiwixMainActivity?.apply {
-        safelyConsumeObservable<String>(ZIM_FILE_URI_KEY)
-        safelyConsumeObservable<String>(PAGE_URL_KEY)
-        safelyConsumeObservable<String>(SEARCH_ITEM_TITLE_KEY)
+        safelyConsumeObservable(ZIM_FILE_URI_KEY)
+        safelyConsumeObservable(PAGE_URL_KEY)
+        safelyConsumeObservable(SEARCH_ITEM_TITLE_KEY)
       }
     }
   }

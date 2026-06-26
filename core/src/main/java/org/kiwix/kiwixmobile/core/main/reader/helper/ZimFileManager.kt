@@ -18,23 +18,21 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
-import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
 import javax.inject.Inject
 
-class ZimFileManager @Inject constructor(
-  private val zimReaderContainer: ZimReaderContainer,
-  private val readerWebViewManager: ReaderWebViewManager
-) {
+class ZimFileManager @Inject constructor(private val zimReaderContainer: ZimReaderContainer) {
   suspend fun openZimFileInReader(
     source: ZimReaderSource,
-    showSearchSuggestionsSpellChecked: Boolean
+    showSearchSuggestionsSpellChecked: Boolean,
+    destroyAllWebViews: () -> Unit
   ): OpenZimResult {
     if (!source.canOpenInLibkiwix()) return InvalidFile
-    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource, destroyAllWebViews)
     zimReaderContainer.setZimReaderSource(source, showSearchSuggestionsSpellChecked)
     return zimReaderContainer.zimFileReader?.let {
       Success(it)
@@ -53,18 +51,17 @@ class ZimFileManager @Inject constructor(
   val zimReaderSource: ZimReaderSource?
     get() = zimReaderContainer.zimReaderSource
 
-  private fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource?) {
+  private fun clearWebViewListIfNotPreviouslyOpenZimFile(
+    zimReaderSource: ZimReaderSource?,
+    destroyAllWebViews: () -> Unit
+  ) {
     if (isNotPreviouslyOpenZim(zimReaderSource)) {
-      stopOngoingLoadingAndClearWebViewList()
+      destroyAllWebViews.invoke()
     }
   }
 
   private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
     zimReaderSource != null && zimReaderSource != zimReaderContainer.zimReaderSource
-
-  fun stopOngoingLoadingAndClearWebViewList() {
-    readerWebViewManager.destroyAllTabs()
-  }
 
   sealed interface OpenZimResult {
     data class Success(val zimFileReader: ZimFileReader) : OpenZimResult

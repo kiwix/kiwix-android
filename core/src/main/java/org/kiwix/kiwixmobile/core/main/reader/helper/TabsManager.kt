@@ -18,13 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
@@ -34,8 +32,7 @@ class TabsManager @Inject constructor() {
   val webViewList: SnapshotStateList<KiwixWebView>
     get() = _webViewList
 
-  var currentWebViewIndex by mutableIntStateOf(ZERO)
-    private set
+  var currentWebViewIndex = mutableIntStateOf(ZERO)
 
   /**
    * Add the webView in the current list.
@@ -45,14 +42,14 @@ class TabsManager @Inject constructor() {
   fun addWebView(webView: KiwixWebView, selectTab: Boolean = true) {
     webViewList.add(webView)
     if (selectTab) {
-      currentWebViewIndex = webViewList.lastIndex
+      setCurrentWebViewIndex(webViewList.lastIndex)
     }
   }
 
-  fun getCurrentWebView(): KiwixWebView? = webViewList.getOrNull(currentWebViewIndex)
+  fun getCurrentWebView(): KiwixWebView? = webViewList.getOrNull(currentWebViewIndex.intValue)
 
   fun setCurrentWebViewIndex(index: Int) {
-    currentWebViewIndex = index
+    currentWebViewIndex.update { index }
   }
 
   /**
@@ -60,7 +57,7 @@ class TabsManager @Inject constructor() {
    */
   fun selectTab(index: Int) {
     if (index !in webViewList.indices) return
-    currentWebViewIndex = index
+    setCurrentWebViewIndex(index)
   }
 
   /**
@@ -70,8 +67,8 @@ class TabsManager @Inject constructor() {
   fun closeTab(index: Int): KiwixWebView? {
     if (index !in webViewList.indices) return null
     val removed = webViewList.removeAt(index)
-    if (currentWebViewIndex >= webViewList.size) {
-      currentWebViewIndex = maxOf(ZERO, webViewList.lastIndex)
+    if (currentWebViewIndex.intValue >= webViewList.size) {
+      setCurrentWebViewIndex(maxOf(ZERO, webViewList.lastIndex))
     }
     return removed
   }

@@ -606,6 +606,17 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  val isBrandedApp: Flow<Boolean> =
+    context.kiwixDataStore.data.map { pref ->
+      pref[PreferencesKeys.IS_BRANDED_APP] ?: false
+    }
+
+  suspend fun setIsBrandedApp(isBrandedApp: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.IS_BRANDED_APP] = isBrandedApp
+    }
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -656,5 +667,6 @@ class KiwixDataStore @Inject constructor(
     private const val KEY_ONLINE_CATEGORY_NAME = "onlineCategoryName"
     private const val KEY_ONLINE_CATEGORY_ID = "onlineCategoryId"
     const val APP_NAME = "appName"
+    const val IS_BRANDED_APP = "isBrandedApp"
   }
 }

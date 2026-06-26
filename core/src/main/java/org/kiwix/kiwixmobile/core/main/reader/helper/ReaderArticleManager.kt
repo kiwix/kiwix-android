@@ -89,6 +89,7 @@ class ReaderArticleManager @Inject constructor(
       )
     }
 
+  @Suppress("ReturnCount")
   suspend fun getRandomArticle(retryCount: Int = 2): GetRandomArticleResult {
     if (zimReaderContainer.zimFileReader == null) {
       return GetRandomArticleResult.NoZimFileLoaded

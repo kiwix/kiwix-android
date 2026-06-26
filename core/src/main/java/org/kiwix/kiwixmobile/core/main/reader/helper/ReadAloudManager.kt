@@ -58,7 +58,7 @@ class ReadAloudManager @Inject constructor(
   }
 
   private var ttsStateCallback: ((TtsState) -> Unit)? = null
-  private var tts: KiwixTextToSpeech? = null
+  var tts: KiwixTextToSpeech? = null
   private var isReadAloudServiceRunning = false
 
   // This is for if the read aloud is currently reading the selected text inside webView.

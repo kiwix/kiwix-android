@@ -169,7 +169,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
         }
       }
     }
-    brandedMainActivity?.safelyConsumeObservable<String>(PAGE_URL_KEY)
+    brandedMainActivity?.safelyConsumeObservable(PAGE_URL_KEY)
   }
 
   /**

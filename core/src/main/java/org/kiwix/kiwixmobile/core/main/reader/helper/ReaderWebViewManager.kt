@@ -22,8 +22,8 @@ import android.widget.FrameLayout
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -51,7 +51,7 @@ class ReaderWebViewManager @Inject constructor(
   val webViewList: SnapshotStateList<KiwixWebView>
     get() = tabsManager.webViewList
 
-  val currentWebViewIndex: Int = tabsManager.currentWebViewIndex
+  val currentWebViewIndex: Int = tabsManager.currentWebViewIndex.intValue
 
   /**
    * Initializes a new instance of `KiwixWebView` with the specified URL.
@@ -106,6 +106,7 @@ class ReaderWebViewManager @Inject constructor(
     }
   }
 
+  @Suppress("ReturnCount")
   fun getWebViewNavigationHistory(isForwardHistory: Boolean): WebViewNavigationHistoryResult {
     val webView = getCurrentWebView() ?: return NoHistoryFound
 

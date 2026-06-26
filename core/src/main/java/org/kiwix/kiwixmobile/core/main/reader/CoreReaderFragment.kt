@@ -155,7 +155,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
-import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
@@ -479,23 +478,6 @@ abstract class CoreReaderFragment :
             )
           }
         }
-        // ReaderScreen(
-        //   state = readerScreenState.value,
-        //   actionMenuItems = readerMenuState?.menuItems.orEmpty(),
-        //   navigationIcon = {
-        //     NavigationIcon(
-        //       iconItem = navigationIcon(),
-        //       contentDescription = navigationIconContentDescription(),
-        //       onClick = { navigationIconClick() },
-        //       iconTint = navigationIconTint()
-        //     )
-        //   },
-        //   mainActivityBottomAppBarScrollBehaviour = (requireActivity() as CoreMainActivity).bottomAppBarScrollBehaviour,
-        //   documentSections = documentSections,
-        //   showTableOfContentDrawer = shouldTableOfContentDrawer,
-        //   onUserBackPressed = { onUserBackPressed(activity as? CoreMainActivity) },
-        //   navHostController = (requireActivity() as CoreMainActivity).navController
-        // )
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
           onDispose {
@@ -1877,7 +1859,7 @@ abstract class CoreReaderFragment :
         loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
       }
     }
-    requireActivity().safelyConsumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
+    requireActivity().safelyConsumeObservable(TAG_FILE_SEARCHED)
   }
 
   private fun handlePendingIntent() {

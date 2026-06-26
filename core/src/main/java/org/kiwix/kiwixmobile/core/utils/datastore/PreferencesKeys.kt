@@ -82,4 +82,5 @@ object PreferencesKeys {
     stringPreferencesKey(KiwixDataStore.SELECTED_ONLINE_CONTENT_CATEGORY)
   val CACHED_ONLINE_CATEGORIES = stringPreferencesKey(KiwixDataStore.CACHED_ONLINE_CATEGORIES)
   val APP_NAME = stringPreferencesKey(KiwixDataStore.APP_NAME)
+  val IS_BRANDED_APP = booleanPreferencesKey(KiwixDataStore.IS_BRANDED_APP)
 }
