@@ -86,7 +86,6 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
@@ -107,10 +106,6 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject
   @MainDispatcher
   lateinit var mainDispatcher: CoroutineDispatcher
-
-  @Inject
-  lateinit var kiwixDataStore: KiwixDataStore
-
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
 
@@ -451,7 +446,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun getIconResId() = mipmap.ic_launcher
 
-  override fun createApplicationShortcuts() {
+  override suspend fun createApplicationShortcuts() {
     // Remove previously added dynamic shortcuts for old ids if any found.
     removeOutdatedIdShortcuts()
     ShortcutManagerCompat.addDynamicShortcuts(this, dynamicShortcutList())
@@ -517,5 +512,17 @@ class KiwixMainActivity : CoreMainActivity() {
         .build()
 
     return listOf(newTabShortcut, getContentShortcut)
+  }
+
+  override fun setAppName() {
+    lifecycleScope.launch {
+      kiwixDataStore.setAppName(getString(R.string.app_name))
+    }
+  }
+
+  override fun setIsBrandedApp() {
+    lifecycleScope.launch {
+      kiwixDataStore.setIsBrandedApp(true)
+    }
   }
 }

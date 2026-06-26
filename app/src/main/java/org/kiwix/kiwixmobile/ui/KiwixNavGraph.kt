@@ -20,20 +20,11 @@ package org.kiwix.kiwixmobile.ui
 
 import android.net.Uri
 import androidx.activity.compose.LocalActivity
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -43,7 +34,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_SCREEN
@@ -60,8 +50,10 @@ import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
 import org.kiwix.kiwixmobile.core.main.SEARCH_SCREEN
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
+import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderScreen
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
@@ -83,11 +75,11 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryRoute
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryRoute
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderViewModel
 import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostRoute
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
@@ -108,9 +100,19 @@ fun KiwixNavGraph(
     modifier = modifier
   ) {
     composable(route = KiwixDestination.Reader.route) { backStackEntry ->
-      FragmentContainer(R.id.readerFragmentContainer) {
-        KiwixReaderFragment()
+      val activity = LocalActivity.current as CoreMainActivity
+      val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
+      val kiwixReaderViewModel: KiwixReaderViewModel = viewModel(factory = viewModelFactory)
+      LaunchedEffect(Unit) {
+        kiwixReaderViewModel.initialize(activity, alertDialogShower)
       }
+      CoreReaderScreen(
+        viewModel = kiwixReaderViewModel,
+        addNoteViewModel = addNoteViewModel,
+        navHostController = navController,
+        alertDialogShower = alertDialogShower,
+        activity = activity,
+      )
     }
     composable(
       route = KiwixDestination.Library.route,
@@ -121,8 +123,7 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-      val context = LocalContext.current
-      val activity = context as KiwixMainActivity
+      val activity = LocalActivity.current as KiwixMainActivity
       val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
       val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
       LaunchedEffect(Unit) {
@@ -275,38 +276,6 @@ fun KiwixNavGraph(
         viewModel = viewModel,
         alertDialogShower = alertDialogShower
       )
-    }
-  }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FragmentContainer(
-  fragmentId: Int,
-  fragmentProvider: () -> Fragment
-) {
-  val context = LocalContext.current
-  val fragmentManager = remember {
-    (context as AppCompatActivity).supportFragmentManager
-  }
-
-  AndroidView(
-    modifier = Modifier.fillMaxSize(),
-    factory = { ctx ->
-      FragmentContainerView(ctx).apply { id = fragmentId }
-    }
-  )
-
-  // Lifecycle-safe fragment transaction
-  // LaunchedEffect ensures this runs once per fragmentManager + fragmentId combination
-  LaunchedEffect(fragmentManager, fragmentId) {
-    fragmentManager.commit(
-      // Allow state loss only if the fragmentManager has already saved its state
-      // This prevents IllegalStateException ("Can not perform this action after onSaveInstanceState")
-      // Bug fix #4454
-      allowStateLoss = fragmentManager.isStateSaved
-    ) {
-      replace(fragmentId, fragmentProvider())
     }
   }
 }

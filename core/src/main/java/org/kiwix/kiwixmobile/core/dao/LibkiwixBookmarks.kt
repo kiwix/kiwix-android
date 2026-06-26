@@ -25,17 +25,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_MANAGER
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -402,8 +401,7 @@ class LibkiwixBookmarks @Inject constructor(
       .forEach { (_, value) ->
         value.forEach { bookmarkItem ->
           // This is a special case where two urls have the same title in a zim file.
-          val coreApp = kiwixDataStore.context as CoreApp
-          val zimFileReader = getZimFileReaderFromBookmark(bookmarkItem, coreApp)
+          val zimFileReader = getZimFileReaderFromBookmark(bookmarkItem)
           // get the redirect entry so that we can delete the other bookmark.
           zimFileReader?.getPageUrlFrom(bookmarkItem.title)?.let {
             // check if the bookmark url is not equals to redirect entry,
@@ -412,16 +410,13 @@ class LibkiwixBookmarks @Inject constructor(
               deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
             }
           }
-          if (!coreApp.getMainActivity().isBrandedApp()) zimFileReader?.dispose()
+          if (!kiwixDataStore.isBrandedApp.first()) zimFileReader?.dispose()
         }
       }
   }
 
-  private suspend fun getZimFileReaderFromBookmark(
-    bookmarkItem: LibkiwixBookmarkItem,
-    coreApp: CoreApp
-  ): ZimFileReader? {
-    return if (coreApp.getMainActivity().isBrandedApp()) {
+  private suspend fun getZimFileReaderFromBookmark(bookmarkItem: LibkiwixBookmarkItem): ZimFileReader? {
+    return if (kiwixDataStore.isBrandedApp.first()) {
       // in custom apps we are using the assetFileDescriptor so we do not have the filePath
       // and in custom apps there is only a single zim file so we are directly
       // getting the zimFileReader object.

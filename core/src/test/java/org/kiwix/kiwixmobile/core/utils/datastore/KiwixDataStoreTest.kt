@@ -31,6 +31,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.zim_manager.Category
@@ -765,5 +767,22 @@ class KiwixDataStoreTest {
   fun `getPublicDirectoryPath removes Android segment below Q`() = runTest {
     val path = "/storage/emulated/0/Android/media/org.kiwix.kiwixmobile"
     assertThat(kiwixDataStore.getPublicDirectoryPath(path)).isEqualTo("/storage/emulated/0")
+  }
+
+  @Test
+  fun `setIsDebugBuild marks as debug build`() = runTest {
+    kiwixDataStore.setIsDebugBuild(true)
+    assertTrue(kiwixDataStore.isDebugBuild.first())
+  }
+
+  @Test
+  fun `isDebugBuild returns false by default`() = runTest {
+    assertThat(kiwixDataStore.isDebugBuild.first()).isFalse()
+  }
+
+  @Test
+  fun `setIsDebugBuild marks as non debug build`() = runTest {
+    kiwixDataStore.setIsDebugBuild(false)
+    assertFalse(kiwixDataStore.isDebugBuild.first())
   }
 }

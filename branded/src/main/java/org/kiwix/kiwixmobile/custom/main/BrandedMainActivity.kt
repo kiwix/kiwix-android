@@ -195,7 +195,7 @@ class BrandedMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun createApplicationShortcuts() {
+  override suspend fun createApplicationShortcuts() {
     // Remove previously added dynamic shortcuts for old ids if any found.
     removeOutdatedIdShortcuts()
     // Create a shortcut for opening the "New tab"
@@ -239,6 +239,18 @@ class BrandedMainActivity : CoreMainActivity() {
       if (it.id == "new_tab") {
         ShortcutManagerCompat.removeDynamicShortcuts(this, arrayListOf(it.id))
       }
+    }
+  }
+
+  override fun setAppName() {
+    lifecycleScope.launch {
+      kiwixDataStore.setAppName(getString(R.string.app_name))
+    }
+  }
+
+  override fun setIsBrandedApp() {
+    lifecycleScope.launch {
+      kiwixDataStore.setIsBrandedApp(true)
     }
   }
 }

@@ -21,6 +21,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
+import android.print.PdfPrint
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
@@ -47,6 +48,7 @@ import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.KiwixPermissionModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
+import org.kiwix.kiwixmobile.core.di.modules.ReaderModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -69,7 +71,8 @@ import javax.inject.Singleton
     CoreViewModelModule::class,
     SearchModule::class,
     MutexModule::class,
-    KiwixPermissionModule::class
+    KiwixPermissionModule::class,
+    ReaderModule::class
   ]
 )
 interface CoreComponent {
@@ -117,4 +120,5 @@ interface CoreComponent {
 
   @MainDispatcher
   fun provideMainDispatcher(): CoroutineDispatcher
+  fun providePdfPrinter(): PdfPrint
 }

@@ -169,7 +169,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
         }
       }
     }
-    brandedMainActivity?.safelyConsumeObservable<String>(PAGE_URL_KEY)
+    brandedMainActivity?.safelyConsumeObservable(PAGE_URL_KEY)
   }
 
   /**
@@ -407,10 +407,6 @@ class BrandedReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  override fun showNoBookOpenViews() {
-    readerScreenState.update { copy(isNoBookOpenInReader = false) }
   }
 
   /**

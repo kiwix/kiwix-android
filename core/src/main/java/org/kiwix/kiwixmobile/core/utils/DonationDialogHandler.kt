@@ -18,18 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import android.app.Activity
+import android.content.Context
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 const val THREE_MONTHS_IN_MILLISECONDS = 90 * 24 * 60 * 60 * 1000L
 
 class DonationDialogHandler @Inject constructor(
-  private val activity: Activity,
+  private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk
 ) {
@@ -58,7 +57,7 @@ class DonationDialogHandler @Inject constructor(
 
   fun shouldShowInitialPopup(currentMillis: Long): Boolean {
     val appInstallTime =
-      activity.packageManager.getPackageInformation(activity.packageName, ZERO).firstInstallTime
+      context.packageManager.getPackageInformation(context.packageName, ZERO).firstInstallTime
     return isThreeMonthsElapsed(currentMillis, appInstallTime)
   }
 
@@ -75,7 +74,7 @@ class DonationDialogHandler @Inject constructor(
   }
 
   suspend fun isZimFilesAvailableInLibrary(): Boolean =
-    if (activity.isBrandedApp()) true else libkiwixBookOnDisk.getBooks().isNotEmpty()
+    if (kiwixDataStore.isBrandedApp.first()) true else libkiwixBookOnDisk.getBooks().isNotEmpty()
 
   suspend fun updateLastDonationPopupShownTime() {
     kiwixDataStore.setLastDonationPopupShownInMilliSeconds(System.currentTimeMillis())

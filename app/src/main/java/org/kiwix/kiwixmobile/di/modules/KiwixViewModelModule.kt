@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
 @Module(includes = [CoreViewModelModule::class])
@@ -80,4 +81,9 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(LocalFileTransferViewModel::class)
   abstract fun bindLocalFileTransferViewModel(localFileTransferViewModel: LocalFileTransferViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(KiwixReaderViewModel::class)
+  abstract fun bindKiwixReaderViewModel(kiwixReaderViewModel: KiwixReaderViewModel): ViewModel
 }
