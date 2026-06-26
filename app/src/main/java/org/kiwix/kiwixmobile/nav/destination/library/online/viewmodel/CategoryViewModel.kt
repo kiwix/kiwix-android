@@ -22,60 +22,50 @@ import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Error
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Filter
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.UpdateCategory
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 import javax.inject.Inject
 
 class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  @OPDSKiwixService private val kiwixService: KiwixService,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  @IoDispatcher val dispatcher: CoroutineDispatcher
+  private val observeCategories: ObserveCategories,
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : ViewModel() {
   sealed class Action {
     data class UpdateCategory(val categories: List<Category>) : Action()
     data class Filter(val filter: String) : Action()
     data class Select(val category: CategoryItem) : Action()
     data class Error(val errorMessage: String) : Action()
+    object Save : Action()
+    object ClearAll : Action()
+    object SelectAll : Action()
+    object Cancel : Action()
   }
 
-  val state = MutableStateFlow<State>(Loading)
+  val state = MutableStateFlow<State>(State.Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private var onDismiss: (() -> Unit)? = null
+
   private val coroutineJobs = mutableListOf<Job>()
 
   fun setOnDismissCallback(onDismiss: () -> Unit) {
@@ -90,6 +80,9 @@ class CategoryViewModel @Inject constructor(
     }
   }
 
+  private fun getString(resId: Int, vararg args: Any): String =
+    LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
+
   private fun observeActions() =
     actions
       .map { action -> reduce(action, state.value) }
@@ -97,122 +90,69 @@ class CategoryViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
-  private fun observeCategories() = viewModelScope.launch(dispatcher) {
-    state.value = Loading
-
-    val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
-    val isOnline = connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
-    if (CategorySessionCache.hasFetched && !cachedCategoryList.isNullOrEmpty()) {
-      actions.emit(UpdateCategory(cachedCategoryList))
-      return@launch
-    }
-
-    if (isOnline) {
-      fetchCategoriesFlow().collect { categories ->
-        if (categories.isNotEmpty()) {
-          kiwixDataStore.saveOnlineCategoryList(categories)
-          CategorySessionCache.hasFetched = true
-          actions.emit(UpdateCategory(categories))
-        } else {
-          emitCachedCategories(cachedCategoryList, true)
-        }
-      }
-      return@launch
-    }
-
-    emitCachedCategories(cachedCategoryList, false)
-  }
-
-  private suspend fun emitCachedCategories(cachedCategoryList: List<Category>?, isOnline: Boolean) {
-    if (!cachedCategoryList.isNullOrEmpty()) {
-      actions.emit(UpdateCategory(cachedCategoryList))
-    } else {
-      val errorMessage = if (isOnline) {
-        context.getString(string.no_category_available)
-      } else {
-        context.getString(R.string.no_network_connection)
-      }
-      actions.emit(Error(errorMessage))
-    }
-  }
-
-  @Suppress("MagicNumber")
-  private fun fetchCategoriesFlow() = flow {
-    val feed = kiwixService.getCategories()
-
-    val categories = feed.entries.orEmpty().mapIndexed { index, entry ->
-      Category(
-        category = entry.title,
-        active = kiwixDataStore.selectedOnlineContentCategory.first() == entry.title,
-        id = (index + ONE).toLong()
+  private fun observeCategories() = viewModelScope.launch {
+    state.value = State.Loading
+    when (
+      val result = observeCategories(
+        errorNoCategory = getString(string.no_category_available),
+        errorNoNetwork = getString(R.string.no_network_connection)
       )
-    }
+    ) {
+      is ObserveCategories.Result.Success ->
+        actions.emit(Action.UpdateCategory(result.categories))
 
-    val categoryList =
-      when {
-        categories.isEmpty() -> emptyList()
-        else -> buildList {
-          add(
-            Category(
-              category = "",
-              active = kiwixDataStore.selectedOnlineContentCategory.first().isEmpty(),
-              id = ZERO.toLong()
-            )
-          )
-          addAll(categories)
-        }
-      }
-    emit(categoryList)
-  }.retry(5)
-    .catch { e ->
-      e.printStackTrace()
-      emit(emptyList())
+      is ObserveCategories.Result.Error ->
+        actions.emit(Action.Error(result.message))
     }
+  }
 
   private fun reduce(action: Action, currentState: State): State {
     return when (action) {
-      is Error -> State.Error(action.errorMessage)
-
-      is UpdateCategory ->
-        when (currentState) {
-          Loading -> Content(action.categories)
-          else -> currentState
-        }
-
-      is Filter -> {
-        when (currentState) {
-          is Content -> filterContent(action.filter, currentState)
-          else -> currentState
-        }
-      }
-
-      is Select ->
-        when (currentState) {
-          is Content -> {
-            val newState = updateSelection(action.category, currentState)
-            save(newState)
-          }
-
-          else -> currentState
-        }
+      is Action.Error -> State.Error(action.errorMessage)
+      is Action.UpdateCategory -> updateCategory(action, currentState)
+      is Action.Filter -> filter(action, currentState)
+      is Action.Select -> select(action, currentState)
+      Action.Save -> saveAction(currentState)
+      Action.ClearAll -> clearAll(currentState)
+      Action.SelectAll -> selectAll(currentState)
+      Action.Cancel -> cancel(currentState)
     }
   }
 
+  private fun updateCategory(action: Action.UpdateCategory, currentState: State): State =
+    if (currentState == State.Loading) State.Content(action.categories) else currentState
+
+  private fun filter(action: Action.Filter, currentState: State): State =
+    if (currentState is State.Content) filterContent(action.filter, currentState) else currentState
+
+  private fun select(action: Action.Select, currentState: State): State =
+    if (currentState is State.Content) {
+      updateSelection(
+        action.category,
+        currentState
+      )
+    } else {
+      currentState
+    }
+
+  private fun saveAction(currentState: State): State =
+    if (currentState is State.Content) save(currentState) else currentState
+
   private fun filterContent(
     filter: String,
-    currentState: Content
+    currentState: State.Content
   ) = currentState.updateFilter(filter)
 
   private fun updateSelection(
     categoryItem: CategoryItem,
-    currentState: Content
+    currentState: State.Content
   ) = currentState.select(categoryItem)
 
-  private fun save(currentState: Content): State {
-    val selectedCategory = currentState.items.first { it.active }
+  private fun save(currentState: State.Content): State {
+    val selectedCategories = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveCategoryAndFinish(
-        selectedCategory,
+        selectedCategories,
         kiwixDataStore,
         viewModelScope,
         requireOnDismissCallBack()
@@ -233,6 +173,30 @@ class CategoryViewModel @Inject constructor(
     }
   }
 
+  private fun clearAll(currentState: State): State =
+    if (currentState is State.Content) {
+      currentState.copy(items = currentState.items.map { it.copy(active = false) })
+    } else {
+      currentState
+    }
+
+  private fun selectAll(currentState: State): State =
+    if (currentState is State.Content) {
+      currentState.copy(items = currentState.items.map { it.copy(active = it.id != 0L) })
+    } else {
+      currentState
+    }
+
+  private fun cancel(currentState: State): State {
+    if (currentState !is State.Content) return currentState
+    effects.tryEmit(object : SideEffect<Unit> {
+      override fun invokeWith(activity: AppCompatActivity) {
+        activity.onBackPressedDispatcher.onBackPressed()
+      }
+    })
+    return currentState
+  }
+
   @VisibleForTesting
   fun onClearedExposed() {
     onCleared()
@@ -247,8 +211,4 @@ class CategoryViewModel @Inject constructor(
     onDismiss = null
     super.onCleared()
   }
-}
-
-object CategorySessionCache {
-  var hasFetched: Boolean = false
 }

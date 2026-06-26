@@ -60,6 +60,7 @@ class HistoryRoomDaoTest {
   }
 
   @Test
+  @Suppress("LongMethod")
   fun testHistoryRoomDao() =
     runBlocking {
       // delete all the history from database to properly run the test cases.

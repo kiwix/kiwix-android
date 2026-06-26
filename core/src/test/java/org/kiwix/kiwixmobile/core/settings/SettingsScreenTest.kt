@@ -68,6 +68,7 @@ import org.robolectric.annotation.Config
 @OptIn(ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
+@Suppress("LargeClass")
 class SettingsScreenTest {
   @Rule
   @JvmField

@@ -34,9 +34,9 @@ class StateTest {
       val content = Content(listOf(category(), category(isActive = true)))
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MAX_VALUE),
+          HeaderItem(HeaderItem.SELECTED),
           CategoryItem(category(isActive = true)),
-          HeaderItem(Long.MIN_VALUE),
+          HeaderItem(HeaderItem.OTHER),
           CategoryItem(category())
         )
       )
@@ -50,8 +50,30 @@ class StateTest {
         ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MIN_VALUE),
+          HeaderItem(HeaderItem.OTHER),
           CategoryItem(category(category = "matchesFilter"))
+        )
+      )
+    }
+
+    @Test
+    fun `select updates category items and moves them to selected section`() {
+      val cat1 = category(id = 1L, category = "wikipedia", isActive = false)
+      val cat2 = category(id = 2L, category = "gutenberg", isActive = false)
+      val content = Content(listOf(cat1, cat2))
+
+      val initialOrder = content.viewItems
+      assertThat(initialOrder).hasSize(3) // 1 header (OTHER) + 2 categories
+
+      val selectedWikiItem = CategoryItem(cat1)
+      val updatedContent = content.select(selectedWikiItem)
+
+      assertThat(updatedContent.viewItems).isEqualTo(
+        listOf(
+          HeaderItem(HeaderItem.SELECTED),
+          CategoryItem(cat1.copy(active = true)),
+          HeaderItem(HeaderItem.OTHER),
+          CategoryItem(cat2)
         )
       )
     }

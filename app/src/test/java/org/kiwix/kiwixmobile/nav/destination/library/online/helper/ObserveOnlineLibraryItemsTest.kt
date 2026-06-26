@@ -88,17 +88,23 @@ class ObserveOnlineLibraryItemsTest {
     "All languages"
   }
 
+  private val getDisplayLanguage: (String) -> String = { langCode ->
+    if (langCode == "en") "English" else langCode
+  }
+
   @Test
   fun `emits books in main section when no downloads`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(listOf(book("1"), book("2"))),
       getString = getString,
-      getSimpleString = getSimpleString
+      getSimpleString = getSimpleString,
+      getDisplayLanguage = getDisplayLanguage
     ).first()
 
     assertTrue(result.any { it is LibraryListItem.DividerItem })
@@ -112,13 +118,15 @@ class ObserveOnlineLibraryItemsTest {
 
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(listOf(local)),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(listOf(localLibBook, book("2"))),
       getString = getString,
-      getSimpleString = getSimpleString
+      getSimpleString = getSimpleString,
+      getDisplayLanguage = getDisplayLanguage
     ).first()
 
     assertTrue(result.none { it is LibraryListItem.BookItem && it.book == localLibBook })
@@ -131,13 +139,15 @@ class ObserveOnlineLibraryItemsTest {
 
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
       downloads = flowOf(listOf(download)),
       networkBooks = flowOf(listOf(b1)),
       getString = getString,
-      getSimpleString = getSimpleString
+      getSimpleString = getSimpleString,
+      getDisplayLanguage = getDisplayLanguage
     ).first()
 
     assertTrue(result.any { it is LibraryListItem.LibraryDownloadItem })
@@ -150,13 +160,15 @@ class ObserveOnlineLibraryItemsTest {
 
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
       downloads = flowOf(listOf(download)),
       networkBooks = flowOf(listOf(b1)),
       getString = getString,
-      getSimpleString = getSimpleString
+      getSimpleString = getSimpleString,
+      getDisplayLanguage = getDisplayLanguage
     ).first()
 
     val mainBooks = result.filterIsInstance<LibraryListItem.BookItem>()
@@ -168,13 +180,15 @@ class ObserveOnlineLibraryItemsTest {
   fun `uses language specific title when language selected`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("en")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(listOf(book("1"))),
       getString = getString,
-      getSimpleString = getSimpleString
+      getSimpleString = getSimpleString,
+      getDisplayLanguage = getDisplayLanguage
     ).first()
 
     val divider = result.first() as LibraryListItem.DividerItem
@@ -186,13 +200,15 @@ class ObserveOnlineLibraryItemsTest {
   fun `no section added when no books`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+    every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
 
     val result = observeOnlineLibraryItems(
       localBooks = flowOf(emptyList()),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(emptyList()),
       getString = getString,
-      getSimpleString = getSimpleString
+      getSimpleString = getSimpleString,
+      getDisplayLanguage = getDisplayLanguage
     ).first()
 
     assertTrue(result.isEmpty())

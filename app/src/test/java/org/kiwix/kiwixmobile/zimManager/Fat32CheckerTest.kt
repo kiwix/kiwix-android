@@ -250,7 +250,8 @@ class Fat32CheckerTest {
   class InteractionTests : BaseTest() {
     @Test
     fun `invokes checker with correct path`() = runTest(dispatcherRule.dispatcher) {
-      every { fileSystemChecker.checkFilesystemSupports4GbFiles(pathWithSpace) } returns CAN_WRITE_4GB
+      val expectedPath = File(pathWithSpace).path
+      every { fileSystemChecker.checkFilesystemSupports4GbFiles(expectedPath) } returns CAN_WRITE_4GB
 
       val checker = createChecker(pathWithSpace)
 
@@ -260,7 +261,7 @@ class Fat32CheckerTest {
       }
 
       verify(atLeast = 1) {
-        fileSystemChecker.checkFilesystemSupports4GbFiles(pathWithSpace)
+        fileSystemChecker.checkFilesystemSupports4GbFiles(expectedPath)
       }
     }
   }

@@ -261,13 +261,15 @@ class KiwixDataStore @Inject constructor(
   val cachedLanguageList: Flow<List<Language>?> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.CACHED_LANGUAGE_CODES]?.let { jsonString ->
+        val selectedLanguages =
+          selectedOnlineContentLanguage.first().split(",").filter { it.isNotEmpty() }.toSet()
         val jsonArray = JSONArray(jsonString)
         List(jsonArray.length()) { i ->
           val obj = jsonArray.getJSONObject(i)
           Language(
             languageCode = obj.getString(KEY_LANGUAGE_CODE),
             occurrencesOfLanguage = obj.getInt(KEY_OCCURRENCES_OF_LANGUAGE),
-            active = selectedOnlineContentLanguage.first() == obj.getString(KEY_LANGUAGE_CODE),
+            active = obj.getString(KEY_LANGUAGE_CODE) in selectedLanguages,
             id = obj.getLong(KEY_LANGUAGE_ID)
           )
         }
@@ -464,7 +466,7 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
-  suspend fun getPublicDirectoryPath(path: String): String =
+  fun getPublicDirectoryPath(path: String): String =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       path
     } else {
@@ -558,12 +560,14 @@ class KiwixDataStore @Inject constructor(
   val cachedOnlineCategoryList: Flow<List<Category>?> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.CACHED_ONLINE_CATEGORIES]?.let { jsonString ->
+        val selectedCategories =
+          selectedOnlineContentCategory.first().split(",").filter { it.isNotEmpty() }.toSet()
         val jsonArray = JSONArray(jsonString)
         List(jsonArray.length()) { i ->
           val obj = jsonArray.getJSONObject(i)
           Category(
             category = obj.getString(KEY_ONLINE_CATEGORY_NAME),
-            active = selectedOnlineContentCategory.first() == obj.getString(KEY_ONLINE_CATEGORY_NAME),
+            active = obj.getString(KEY_ONLINE_CATEGORY_NAME) in selectedCategories,
             id = obj.getLong(KEY_ONLINE_CATEGORY_ID)
           )
         }

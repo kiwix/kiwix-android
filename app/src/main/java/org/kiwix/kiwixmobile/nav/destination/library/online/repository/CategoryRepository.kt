@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.language.viewmodel
+package org.kiwix.kiwixmobile.nav.destination.library.online.repository
 
-import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import kotlinx.coroutines.flow.Flow
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 
-sealed class Action {
-  data class UpdateLanguages(val languages: List<Language>) : Action()
-  data class Filter(val filter: String) : Action()
-  data class Select(val language: LanguageItem) : Action()
-  data class Error(val errorMessage: String) : Action()
-  object Save : Action()
-  object Cancel : Action()
+interface CategoryRepository {
+  fun fetchCategories(): Flow<List<Category>>
 }
