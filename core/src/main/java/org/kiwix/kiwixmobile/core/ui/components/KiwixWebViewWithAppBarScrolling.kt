@@ -31,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,35 +70,40 @@ fun KiwixWebViewWithAppBarScrolling(
   val scope = rememberCoroutineScope()
   val settleJob = remember { mutableStateOf<Job?>(null) }
 
-  key(kiwixWebView) {
-    DisposableEffect(Unit) {
-      val listener = createScrollListener(
-        topAppBarScrollBehavior,
-        bottomAppBarScrollBehavior,
-        shouldUpdateAppBars,
-        { accumulatedScroll },
-        { accumulatedScroll = it },
-        scope,
-        settleJob
-      )
-      kiwixWebView.setOnScrollChangeListener(listener)
-      onDispose { kiwixWebView.setOnScrollChangeListener(null) }
-    }
-
-    AndroidView(
-      factory = { context ->
-        FrameLayout(context).apply {
-          (kiwixWebView.parent as? ViewGroup)?.removeView(kiwixWebView)
-          kiwixWebView.layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-          addView(kiwixWebView)
-        }
-      },
-      modifier = Modifier.fillMaxSize()
+  DisposableEffect(kiwixWebView) {
+    val listener = createScrollListener(
+      topAppBarScrollBehavior,
+      bottomAppBarScrollBehavior,
+      shouldUpdateAppBars,
+      { accumulatedScroll },
+      { accumulatedScroll = it },
+      scope,
+      settleJob
     )
+    kiwixWebView.setOnScrollChangeListener(listener)
+    onDispose { kiwixWebView.setOnScrollChangeListener(null) }
   }
+
+  AndroidView(
+    factory = { context ->
+      FrameLayout(context).apply {
+        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+      }
+    },
+    update = { host ->
+      if (host.getChildAt(0) !== kiwixWebView) {
+        (kiwixWebView.parent as? ViewGroup)?.removeView(kiwixWebView)
+        host.removeAllViews()
+        kiwixWebView.layoutParams = FrameLayout.LayoutParams(
+          FrameLayout.LayoutParams.MATCH_PARENT,
+          FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        host.addView(kiwixWebView)
+        kiwixWebView.refreshVisibleContentForAccessibility()
+      }
+    },
+    modifier = Modifier.fillMaxSize()
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

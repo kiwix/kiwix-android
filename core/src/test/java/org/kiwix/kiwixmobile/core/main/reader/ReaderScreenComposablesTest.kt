@@ -27,6 +27,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -681,5 +682,53 @@ class ReaderScreenComposablesTest {
       .performClick()
 
     assertTrue("onCloseTab callback should be triggered with index 0", closedIndex == 0)
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_onSelectTab_triggersCallbackFromPreviewCard() {
+    var selectedIndex = -1
+    val webView = mockk<KiwixWebView>(relaxed = true)
+    every { webView.title } returns "Article title"
+    every { webView.url } returns "zim://content/A/Article"
+
+    val state = createTestState(
+      showTabSwitcher = true
+    ).copy(
+      kiwixWebViewList = listOf(webView),
+      onTabClickListener = object : TabClickListener {
+        override fun onSelectTab(position: Int) {
+          selectedIndex = position
+        }
+
+        override fun onCloseTab(position: Int) { // no-op
+        }
+      }
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithContentDescription("Article title0", useUnmergedTree = true)
+      .performClick()
+
+    assertTrue("onSelectTab callback should be triggered with index 0", selectedIndex == 0)
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_displaysCurrentPagePreviewText() {
+    val webView = mockk<KiwixWebView>(relaxed = true)
+    every { webView.title } returns "Article title"
+    every { webView.url } returns "zim://content/A/Article"
+
+    val state = createTestState(
+      showTabSwitcher = true
+    ).copy(
+      kiwixWebViewList = listOf(webView)
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule.onNodeWithText("Article title").assertExists()
+    composeTestRule.onNodeWithText("zim://content/A/Article").assertExists()
   }
 }

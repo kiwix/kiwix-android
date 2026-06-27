@@ -26,6 +26,7 @@ import android.os.Message
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
@@ -111,6 +112,9 @@ open class KiwixWebView constructor(
     }
     setInitialScale(INITIAL_SCALE)
     clearCache(true)
+    isFocusable = true
+    isFocusableInTouchMode = true
+    importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
     webViewClient = coreWebViewClient
     kiwixWebChromeClient =
       KiwixWebChromeClient(callback, videoView, this).apply {
@@ -168,6 +172,19 @@ open class KiwixWebView constructor(
     super.onDetachedFromWindow()
     textZoomJob?.cancel()
     textZoomJob = null
+  }
+
+  fun refreshVisibleContentForAccessibility() {
+    post {
+      requestLayout()
+      invalidate()
+      postInvalidateOnAnimation()
+      sendAccessibilityEventUnchecked(
+        AccessibilityEvent.obtain(AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED).apply {
+          contentChangeTypes = AccessibilityEvent.CONTENT_CHANGE_TYPE_SUBTREE
+        }
+      )
+    }
   }
 
   override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
