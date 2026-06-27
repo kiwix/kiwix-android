@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCa
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
+import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -147,7 +148,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         requireActivity().applicationContext,
         uri
       )
-      if (filePath != null && File(filePath).isFileExist()) {
+      if (filePath != null && File(filePath).canReadFile()) {
         ZimReaderSource(File(filePath))
       } else {
         val afdList = FileUtils.getAssetFileDescriptorFromUri(requireContext(), uri)

@@ -740,21 +740,6 @@ class LocalLibraryViewModel @Inject constructor(
     }
   }
 
-  fun processZimFileArguments(zimFileUri: String) {
-    viewModelScope.launch {
-      if (zimFileUri.isNotEmpty()) {
-        val selectedUris = listOf(zimFileUri.toUri())
-        if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
-          sendAction(RequestReadWritePermission(ProcessZimFiles(selectedUris)))
-        } else if (!kiwixPermissionChecker.isManageExternalStoragePermissionGranted()) {
-          sendAction(ManageFilesPermissionDialog)
-        } else {
-          handleSelectedFileUri(selectedUris)
-        }
-      }
-    }
-  }
-
   fun processSelectedZimFiles(intent: Intent?) {
     viewModelScope.launch {
       val uriList = extractUrisFromIntent(intent)

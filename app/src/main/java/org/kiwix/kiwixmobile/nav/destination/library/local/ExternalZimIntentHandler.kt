@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
@@ -35,16 +37,19 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.libkiwix.Book
 import java.io.File
-import java.lang.ref.WeakReference
 import java.util.Collections
 import javax.inject.Inject
+
+private const val REQUEST_STORAGE_PERMISSION = 100
 
 @Suppress("LongParameterList", "TooGenericExceptionCaught")
 class ExternalZimIntentHandler @Inject constructor(
@@ -54,22 +59,46 @@ class ExternalZimIntentHandler @Inject constructor(
   private val zimReaderFactory: ZimFileReader.Factory,
   private val processSelectedZimFilesForStandalone: ProcessSelectedZimFilesForStandalone,
   private val processSelectedZimFilesForPlayStore: ProcessSelectedZimFilesForPlayStore,
+  private val kiwixPermissionChecker: KiwixPermissionChecker,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : SelectedZimFileCallback {
+) {
   private val activeImports = Collections.synchronizedSet(mutableSetOf<String>())
-  private var activityRef: WeakReference<KiwixMainActivity>? = null
 
-  fun handleIntent(activity: KiwixMainActivity, intent: Intent, coroutineScope: CoroutineScope) {
+  fun handleIntent(
+    activity: KiwixMainActivity,
+    intent: Intent,
+    coroutineScope: CoroutineScope,
+    openZimFromFilePath: (String) -> Unit,
+    clearIntentDataAndAction: () -> Unit
+  ) {
     val uri = intent.data ?: return
-    activityRef = WeakReference(activity)
     coroutineScope.launch {
-      if (isValidZim(activity, uri)) {
-        activity.openZimFromFilePath(uri.toString())
-        importZim(activity, uri, coroutineScope)
+      // Check if we need to request permission for Standalone Android 11+
+      val needsManageStoragePermission = !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+        !kiwixPermissionChecker.isManageExternalStoragePermissionGranted()
+
+      val needsWriteStoragePermission = !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() &&
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
+        !kiwixPermissionChecker.hasWriteExternalStoragePermission()
+
+      if (needsManageStoragePermission) {
+        ManageExternalFilesPermissionDialog(activity.alertDialogShower).invokeWith(activity)
+      } else if (needsWriteStoragePermission) {
+        ActivityCompat.requestPermissions(
+          activity,
+          arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+          REQUEST_STORAGE_PERMISSION
+        )
       } else {
-        activity.toast(string.cannot_open_file)
+        if (isValidZim(activity, uri)) {
+          openZimFromFilePath(uri.toString())
+          importZim(activity, uri, coroutineScope, openZimFromFilePath)
+        } else {
+          activity.toast(string.cannot_open_file)
+        }
       }
-      activity.clearIntentDataAndAction()
+      clearIntentDataAndAction()
     }
   }
 
@@ -89,7 +118,8 @@ class ExternalZimIntentHandler @Inject constructor(
   private suspend fun importZim(
     activity: KiwixMainActivity,
     uri: Uri,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    openZimFromFilePath: (String) -> Unit
   ) {
     val importKey = FileUtils.getLocalFilePathByUri(activity, uri) ?: uri.toString()
     if (!activeImports.add(importKey)) {
@@ -105,6 +135,34 @@ class ExternalZimIntentHandler @Inject constructor(
       return
     }
 
+    val callback = object : SelectedZimFileCallback {
+      override fun navigateToReaderFragment(file: File) {
+        CoroutineScope(Dispatchers.Main).launch {
+          openZimFromFilePath(file.path)
+        }
+        addBookToLibkiwixBookOnDisk(file)
+      }
+
+      override fun addBookToLibkiwixBookOnDisk(file: File) {
+        this@ExternalZimIntentHandler.addBookToLibkiwixBookOnDisk(file)
+      }
+
+      override fun showFileCopyMoveErrorDialog(errorMessage: String, callBack: suspend () -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+          activity.alertDialogShower.show(
+            KiwixDialog.FileCopyMoveError(errorMessage),
+            { CoroutineScope(ioDispatcher).launch { callBack.invoke() } }
+          )
+        }
+      }
+
+      override fun showStorageSelectionDialog(dialogConfig: StorageSelectDialogConfig) {
+        CoroutineScope(Dispatchers.Main).launch {
+          ShowStorageSelectionDialog(activity.alertDialogShower, dialogConfig).invokeWith(activity)
+        }
+      }
+    }
+
     coroutineScope.launch(ioDispatcher) {
       try {
         if (kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()) {
@@ -113,11 +171,11 @@ class ExternalZimIntentHandler @Inject constructor(
             coroutineScope,
             activity.alertDialogShower,
             activity.snackBarHostState,
-            this@ExternalZimIntentHandler
+            callback
           )
           processSelectedZimFilesForPlayStore.processSelectedFiles(listOf(uri))
         } else {
-          processSelectedZimFilesForStandalone.init(this@ExternalZimIntentHandler)
+          processSelectedZimFilesForStandalone.init(callback)
           processSelectedZimFilesForStandalone.processSelectedFiles(listOf(uri))
         }
       } catch (e: Exception) {
@@ -128,15 +186,7 @@ class ExternalZimIntentHandler @Inject constructor(
     }
   }
 
-  override fun navigateToReaderFragment(file: File) {
-    val activity = activityRef?.get() ?: return
-    CoroutineScope(Dispatchers.Main).launch {
-      activity.openZimFromFilePath(file.path)
-    }
-    addBookToLibkiwixBookOnDisk(file)
-  }
-
-  override fun addBookToLibkiwixBookOnDisk(file: File) {
+  fun addBookToLibkiwixBookOnDisk(file: File) {
     CoroutineScope(ioDispatcher).launch {
       runCatching {
         zimReaderFactory.create(ZimReaderSource(file), false)
@@ -148,23 +198,6 @@ class ExternalZimIntentHandler @Inject constructor(
       }.onFailure {
         Log.e("ExternalZimIntentHandler", "Failed to save book: ${file.path}", it)
       }
-    }
-  }
-
-  override fun showFileCopyMoveErrorDialog(errorMessage: String, callBack: suspend () -> Unit) {
-    val activity = activityRef?.get() ?: return
-    CoroutineScope(Dispatchers.Main).launch {
-      activity.alertDialogShower.show(
-        KiwixDialog.FileCopyMoveError(errorMessage),
-        { CoroutineScope(ioDispatcher).launch { callBack.invoke() } }
-      )
-    }
-  }
-
-  override fun showStorageSelectionDialog(dialogConfig: StorageSelectDialogConfig) {
-    val activity = activityRef?.get() ?: return
-    CoroutineScope(Dispatchers.Main).launch {
-      ShowStorageSelectionDialog(activity.alertDialogShower, dialogConfig).invokeWith(activity)
     }
   }
 }

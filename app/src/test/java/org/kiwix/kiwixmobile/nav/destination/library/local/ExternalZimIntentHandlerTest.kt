@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -63,11 +64,15 @@ class ExternalZimIntentHandlerTest {
     mockk(relaxed = true)
   private val processSelectedZimFilesForPlayStore: ProcessSelectedZimFilesForPlayStore =
     mockk(relaxed = true)
+  private val kiwixPermissionChecker: KiwixPermissionChecker = mockk(relaxed = true)
 
   private lateinit var handler: ExternalZimIntentHandler
   private val activity: KiwixMainActivity = mockk(relaxed = true)
   private val intent: Intent = mockk(relaxed = true)
   private val uri: Uri = mockk(relaxed = true)
+
+  private val openZimMock = mockk<(String) -> Unit>(relaxed = true)
+  private val clearIntentMock = mockk<() -> Unit>(relaxed = true)
 
   @BeforeEach
   fun setUp() {
@@ -86,6 +91,9 @@ class ExternalZimIntentHandlerTest {
     coEvery { FileUtils.getLocalFilePathByUri(any(), any()) } returns "/storage/test.zim"
     every { FileUtils.getAssetFileDescriptorFromUri(any(), any()) } returns emptyList()
 
+    coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns true
+    coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
+
     handler = ExternalZimIntentHandler(
       kiwixDataStore,
       libkiwixBookOnDisk,
@@ -93,6 +101,7 @@ class ExternalZimIntentHandlerTest {
       zimReaderFactory,
       processSelectedZimFilesForStandalone,
       processSelectedZimFilesForPlayStore,
+      kiwixPermissionChecker,
       testDispatcher
     )
   }
@@ -123,11 +132,11 @@ class ExternalZimIntentHandlerTest {
   fun `handleIntent with invalid ZIM shows toast and clears intent`() = runTest {
     coEvery { anyConstructed<ZimReaderSource>().canOpenInLibkiwix() } returns false
 
-    handler.handleIntent(activity, intent, this)
+    handler.handleIntent(activity, intent, this, openZimMock, clearIntentMock)
     advanceUntilIdle()
 
-    verify(exactly = 0) { activity.openZimFromFilePath(any(), any()) }
-    verify { activity.clearIntentDataAndAction() }
+    verify(exactly = 0) { openZimMock.invoke(any()) }
+    verify { clearIntentMock.invoke() }
   }
 
   @Test
@@ -136,12 +145,12 @@ class ExternalZimIntentHandlerTest {
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns false
     coEvery { libkiwixBookOnDisk.getBooks() } returns emptyList()
 
-    handler.handleIntent(activity, intent, this)
+    handler.handleIntent(activity, intent, this, openZimMock, clearIntentMock)
     advanceUntilIdle()
 
-    verify { activity.openZimFromFilePath("content://test.zim") }
+    verify { openZimMock.invoke("content://test.zim") }
     coVerify { processSelectedZimFilesForStandalone.processSelectedFiles(listOf(uri)) }
-    verify { activity.clearIntentDataAndAction() }
+    verify { clearIntentMock.invoke() }
   }
 
   @Test
@@ -150,12 +159,12 @@ class ExternalZimIntentHandlerTest {
     coEvery { kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove() } returns true
     coEvery { libkiwixBookOnDisk.getBooks() } returns emptyList()
 
-    handler.handleIntent(activity, intent, this)
+    handler.handleIntent(activity, intent, this, openZimMock, clearIntentMock)
     advanceUntilIdle()
 
-    verify { activity.openZimFromFilePath("content://test.zim") }
+    verify { openZimMock.invoke("content://test.zim") }
     verify { processSelectedZimFilesForPlayStore.init(any(), any(), any(), any(), any()) }
     coVerify { processSelectedZimFilesForPlayStore.processSelectedFiles(listOf(uri)) }
-    verify { activity.clearIntentDataAndAction() }
+    verify { clearIntentMock.invoke() }
   }
 }

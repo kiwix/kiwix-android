@@ -124,7 +124,6 @@ fun LocalLibraryRoute(
   )
   LaunchedEffect(zimFileUriArg) {
     LanguageUtils(mainActivity).changeFont(mainActivity, localLibraryViewModel.kiwixDataStore)
-    localLibraryViewModel.processZimFileArguments(zimFileUriArg)
   }
 }
 

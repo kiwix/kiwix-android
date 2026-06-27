@@ -372,7 +372,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  internal fun clearIntentDataAndAction() {
+  private fun clearIntentDataAndAction() {
     // if used once then clear it to avoid affecting any other functionality
     // of the application.
     intent.action = null
@@ -396,7 +396,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  internal fun openZimFromFilePath(path: String, pageUrl: String? = null) {
+  private fun openZimFromFilePath(path: String, pageUrl: String? = null) {
     val isAlreadyOnReader =
       navController.currentDestination?.route == KiwixDestination.Reader.route
     if (!isAlreadyOnReader) {
