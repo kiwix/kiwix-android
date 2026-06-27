@@ -30,12 +30,14 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.util.concurrent.atomic.AtomicLong
 
 open class CoreWebViewClient(
   protected val callback: WebViewCallback,
   protected val zimReaderContainer: ZimReaderContainer
 ) : WebViewClient() {
   private var urlWithAnchor: String? = null
+  private val visualStateRequestId = AtomicLong()
 
   @Suppress("ReturnCount")
   override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -101,7 +103,18 @@ open class CoreWebViewClient(
       return
     }
     jumpToAnchor(view, url)
-    callback.webViewUrlFinishedLoading()
+    view.postVisualStateCallback(
+      visualStateRequestId.incrementAndGet(),
+      object : WebView.VisualStateCallback() {
+        override fun onComplete(requestId: Long) {
+          callback.webViewUrlFinishedLoading(view)
+        }
+      }
+    )
+  }
+
+  override fun onPageCommitVisible(view: WebView, url: String?) {
+    (view as? KiwixWebView)?.refreshVisibleContentForAccessibility()
   }
 
   /*

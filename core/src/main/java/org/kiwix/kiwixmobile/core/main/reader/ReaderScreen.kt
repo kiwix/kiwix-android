@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -91,6 +88,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -102,7 +100,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -157,6 +154,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Article
 
 const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
@@ -735,16 +734,16 @@ fun TabSwitcherView(
     ) {
       itemsIndexed(webViews, key = { _, item -> item.hashCode() }) { index, webView ->
         val context = LocalContext.current
-        val title = remember(webView) {
-          webView.title?.fromHtml()?.toString()
-            ?: context.getString(R.string.menu_home)
-        }
+        val title = webView.title?.fromHtml()?.toString().orEmpty()
+          .ifBlank { context.getString(R.string.menu_home) }
+        val currentPage = webView.url?.fromHtml()?.toString().orEmpty()
+          .ifBlank { context.getString(R.string.menu_home) }
 
         TabItemView(
           index = index,
           title = title,
+          currentPage = currentPage,
           isSelected = index == selectedIndex,
-          webView = webView,
           onTabClickListener = onTabClickListener,
         )
       }
@@ -818,8 +817,8 @@ private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
 fun TabItemView(
   index: Int,
   title: String,
+  currentPage: String,
   isSelected: Boolean,
-  webView: KiwixWebView,
   modifier: Modifier = Modifier,
   onTabClickListener: TabClickListener
 ) {
@@ -835,9 +834,10 @@ fun TabItemView(
     ) {
       TabItemHeader(title, index, onTabClickListener)
       TabItemCard(
-        webView,
         cardWidth,
         cardHeight,
+        title,
+        currentPage,
         onTabClickListener,
         borderColor,
         cardElevation,
@@ -883,9 +883,10 @@ private fun TabItemHeader(
 
 @Composable
 private fun TabItemCard(
-  webView: KiwixWebView,
   cardWidth: Dp,
   cardHeight: Dp,
+  title: String,
+  currentPage: String,
   onTabClickListener: TabClickListener,
   borderColor: Color,
   elevation: Dp,
@@ -898,27 +899,47 @@ private fun TabItemCard(
     modifier = Modifier
       .width(cardWidth)
       .height(cardHeight)
-      .semantics { hideFromAccessibility() }
+      .clickable { onTabClickListener.onSelectTab(index) }
+      .semantics { contentDescription = "$title$index" }
   ) {
-    AndroidView(
-      factory = { context ->
-        FrameLayout(context).apply {
-          (webView.parent as? ViewGroup)?.removeView(webView)
-          addView(webView)
-          val clickableView = View(context).apply {
-            layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            // Prevent clicking inside the webView when tabs are active.
-            setOnClickListener { onTabClickListener.onSelectTab(index) }
-            contentDescription = "${webView.contentDescription}${webView.hashCode()}"
-          }
-          addView(clickableView)
-        }
-      },
+    Column(
       modifier = Modifier
         .fillMaxSize()
-        .semantics { hideFromAccessibility() }
-    )
+        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+        .padding(TWELVE_DP),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      PreviewIcon(Icons.Outlined.Article)
+      Spacer(modifier = Modifier.height(TWELVE_DP))
+      Text(
+        text = title,
+        style = MaterialTheme.typography.bodyMedium,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+        textAlign = TextAlign.Center
+      )
+      Spacer(modifier = Modifier.height(FOUR_DP))
+      Text(
+        text = currentPage,
+        style = MaterialTheme.typography.bodySmall,
+        maxLines = 3,
+        overflow = TextOverflow.Ellipsis,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center
+      )
+    }
   }
+}
+
+@Composable
+private fun PreviewIcon(icon: ImageVector) {
+  Icon(
+    imageVector = icon,
+    contentDescription = null,
+    modifier = Modifier.size(24.dp),
+    tint = MaterialTheme.colorScheme.primary
+  )
 }
 
 @Composable

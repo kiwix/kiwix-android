@@ -22,7 +22,7 @@ import android.webkit.WebView
 
 interface WebViewCallback {
   fun webViewUrlLoading()
-  fun webViewUrlFinishedLoading()
+  fun webViewUrlFinishedLoading(webView: WebView)
   fun webViewFailedLoading(failingUrl: String)
   fun openExternalUrl(intent: Intent)
   fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?)

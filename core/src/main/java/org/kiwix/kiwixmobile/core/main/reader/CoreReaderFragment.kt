@@ -1155,8 +1155,9 @@ abstract class CoreReaderFragment :
     compatCallback = null
   }
 
-  private fun updateTableOfContents() {
-    loadUrlWithCurrentWebview("javascript:($documentParserJs)()")
+  private fun updateTableOfContents(webView: KiwixWebView? = getCurrentWebView()) {
+    val parserScript = documentParserJs ?: return
+    webView?.evaluateJavascript("($parserScript)()", null)
   }
 
   protected fun loadUrlWithCurrentWebview(url: String?) {
@@ -1353,6 +1354,7 @@ abstract class CoreReaderFragment :
     readerScreenState.update {
       copy(selectedWebView = webView)
     }
+    webView.refreshVisibleContentForAccessibility()
   }
 
   protected fun selectTab(position: Int) {
@@ -2339,34 +2341,38 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("MagicNumber")
-  override fun webViewUrlFinishedLoading() {
+  override fun webViewUrlFinishedLoading(webView: WebView) {
     if (isAdded) {
-      updateTableOfContents()
-      updateBottomToolbarArrowsAlpha()
-      val zimFileReader = zimReaderContainer?.zimFileReader
-      if (hasValidFileAndUrl(getCurrentWebView()?.url, zimFileReader)) {
-        val timeStamp = System.currentTimeMillis()
-        val sdf = SimpleDateFormat(
-          "d MMM yyyy",
-          getCurrentLocale(
-            requireActivity()
+      val loadedWebView = webView as? KiwixWebView
+      loadedWebView?.refreshVisibleContentForAccessibility()
+      if (loadedWebView == getCurrentWebView()) {
+        updateTableOfContents(loadedWebView)
+        updateBottomToolbarArrowsAlpha()
+        val zimFileReader = zimReaderContainer?.zimFileReader
+        if (hasValidFileAndUrl(loadedWebView?.url, zimFileReader)) {
+          val timeStamp = System.currentTimeMillis()
+          val sdf = SimpleDateFormat(
+            "d MMM yyyy",
+            getCurrentLocale(
+              requireActivity()
+            )
           )
-        )
-        @Suppress("UnsafeCallOnNullableType")
-        getCurrentWebView()?.let {
-          val history = HistoryItem(
-            it.url!!,
-            it.title!!,
-            sdf.format(Date(timeStamp)),
-            timeStamp,
-            zimFileReader!!
-          )
-          lifecycleScope.launch {
-            repositoryActions?.saveHistory(history)
+          @Suppress("UnsafeCallOnNullableType")
+          loadedWebView?.let {
+            val history = HistoryItem(
+              it.url!!,
+              it.title!!,
+              sdf.format(Date(timeStamp)),
+              timeStamp,
+              zimFileReader!!
+            )
+            lifecycleScope.launch {
+              repositoryActions?.saveHistory(history)
+            }
           }
         }
+        updateBottomToolbarVisibility()
       }
-      updateBottomToolbarVisibility()
       if (!isWebViewHistoryRestoring) {
         saveTabStates()
       }
@@ -2394,11 +2400,13 @@ abstract class CoreReaderFragment :
 
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
-      updateUrlFlow()
-      showProgressBarWithProgress(progress)
-      if (progress == HUNDERED) {
-        hideProgressBar()
-        Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
+      if (webView == getCurrentWebView()) {
+        updateUrlFlow()
+        showProgressBarWithProgress(progress)
+        if (progress == HUNDERED) {
+          hideProgressBar()
+          Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
+        }
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()
     }
