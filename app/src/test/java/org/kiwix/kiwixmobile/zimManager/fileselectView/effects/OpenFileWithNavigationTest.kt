@@ -46,6 +46,7 @@ class OpenFileWithNavigationTest {
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
   private val scope = TestScope(mainDispatcherRule.dispatcher)
 
   private val zimReaderSource = mockk<ZimReaderSource>()
@@ -60,7 +61,7 @@ class OpenFileWithNavigationTest {
   fun `invokeWith should show error toast when file cannot open`() = runTest {
     val activity = mockk<AppCompatActivity>(relaxed = true)
 
-    coEvery { zimReaderSource.canOpenInLibkiwix() } returns false
+    coEvery { zimReaderSource.canOpenInLibkiwix(testDispatcher) } returns false
     every { zimReaderSource.toDatabase() } returns "test.zim"
 
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
@@ -72,7 +73,7 @@ class OpenFileWithNavigationTest {
     val effect = OpenFileWithNavigation(
       zimReaderSource,
       scope,
-      mainDispatcherRule.dispatcher
+      testDispatcher
     )
 
     effect.invokeWith(activity)
@@ -89,7 +90,7 @@ class OpenFileWithNavigationTest {
   fun `invokeWith should navigate to reader when file can open`() = runTest {
     val activity = mockk<CoreMainActivity>(relaxed = true)
 
-    coEvery { zimReaderSource.canOpenInLibkiwix() } returns true
+    coEvery { zimReaderSource.canOpenInLibkiwix(testDispatcher) } returns true
     every { zimReaderSource.toDatabase() } returns "test.zim"
 
     mockkObject(ActivityExtensions)
@@ -103,7 +104,7 @@ class OpenFileWithNavigationTest {
     val effect = OpenFileWithNavigation(
       zimReaderSource,
       scope,
-      mainDispatcherRule.dispatcher
+      testDispatcher
     )
 
     effect.invokeWith(activity)

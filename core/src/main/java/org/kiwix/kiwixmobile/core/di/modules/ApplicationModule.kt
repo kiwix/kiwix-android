@@ -57,7 +57,8 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun providesZimFileReaderFactory(): ZimFileReader.Factory = ZimFileReader.Factory.Impl()
+  internal fun providesZimFileReaderFactory(impl: ZimFileReader.Factory.Impl): ZimFileReader.Factory =
+    impl
 
   @Provides
   @Singleton

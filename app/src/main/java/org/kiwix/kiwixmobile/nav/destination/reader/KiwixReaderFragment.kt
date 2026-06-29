@@ -255,7 +255,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           kiwixDataStore?.currentZimFile?.map { value ->
             fromDatabaseValue(value)
           }?.first()
-        if (zimReaderSource?.canOpenInLibkiwix() == true) {
+        if (zimReaderSource?.canOpenInLibkiwix(ioDispatcher) == true) {
           if (zimReaderContainer?.zimReaderSource == null) {
             openZimFile(zimReaderSource)
             Log.d(

@@ -68,9 +68,9 @@ class ZimReaderSource(
     }
   }
 
-  suspend fun canOpenInLibkiwix(): Boolean {
+  suspend fun canOpenInLibkiwix(ioDispatcher: CoroutineDispatcher): Boolean {
     return when {
-      file?.canReadFile() == true -> true
+      file?.canReadFile(ioDispatcher) == true -> true
       assetFileDescriptorList?.isNotEmpty() == true &&
         assetFileDescriptorList.first().parcelFileDescriptor?.fd
           ?.let(::isFileDescriptorCanOpenWithLibkiwix) == true -> true
@@ -79,8 +79,8 @@ class ZimReaderSource(
     }
   }
 
-  suspend fun createArchive(): Archive? {
-    if (canOpenInLibkiwix()) {
+  suspend fun createArchive(ioDispatcher: CoroutineDispatcher): Archive? {
+    if (canOpenInLibkiwix(ioDispatcher)) {
       return when {
         file != null -> Archive(file.canonicalPath)
         assetFileDescriptorList?.isNotEmpty() == true -> {

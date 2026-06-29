@@ -78,7 +78,7 @@ class DeleteFilesUseCaseTest {
     book = BookOnDisk(book = libkiwixBook, zimReaderSource = ZimReaderSource(file1))
 
     deleteFilesUseCase =
-      DeleteFilesUseCase(libkiwixBookOnDisk, zimReaderContainer)
+      DeleteFilesUseCase(libkiwixBookOnDisk, zimReaderContainer, mainDispatcherRule.dispatcher)
   }
 
   @AfterEach

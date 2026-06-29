@@ -48,11 +48,12 @@ class StorageCalculator @Inject constructor(
   suspend fun availableBytes(file: File? = null): Long {
     val storageFile = getStorageFile(file)
     return if (storageFile.isFileExist(ioDispatcher)) {
-      storageFile.freeSpace()
+      storageFile.freeSpace(ioDispatcher)
     } else {
       0L
     }
   }
 
-  suspend fun totalBytes(file: File) = if (file.isFileExist(ioDispatcher)) file.totalSpace() else 0L
+  suspend fun totalBytes(file: File) =
+    if (file.isFileExist(ioDispatcher)) file.totalSpace(ioDispatcher) else 0L
 }

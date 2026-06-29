@@ -27,13 +27,13 @@ import java.io.File
 suspend fun File.isFileExist(dispatcher: CoroutineDispatcher): Boolean =
   withContext(dispatcher) { exists() }
 
-suspend fun File.freeSpace(dispatcher: CoroutineDispatcher = Dispatchers.IO): Long =
+suspend fun File.freeSpace(dispatcher: CoroutineDispatcher): Long =
   withContext(dispatcher) { freeSpace }
 
-suspend fun File.totalSpace(dispatcher: CoroutineDispatcher = Dispatchers.IO): Long =
+suspend fun File.totalSpace(dispatcher: CoroutineDispatcher): Long =
   withContext(dispatcher) { totalSpace }
 
-suspend fun File.canReadFile(dispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean =
+suspend fun File.canReadFile(dispatcher: CoroutineDispatcher): Boolean =
   withContext(dispatcher) { canRead() }
 
 suspend fun File.deleteFile(dispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean =

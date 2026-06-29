@@ -404,7 +404,7 @@ class CopyMoveFileHandler @Inject constructor(
     var archive: Archive? = null
     return try {
       // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
-      archive = ZimReaderSource(destinationFile).createArchive()
+      archive = ZimReaderSource(destinationFile).createArchive(ioDispatcher)
       archive?.hasMainEntry() == true
     } catch (_: Exception) {
       // if it is a invalid ZIM file

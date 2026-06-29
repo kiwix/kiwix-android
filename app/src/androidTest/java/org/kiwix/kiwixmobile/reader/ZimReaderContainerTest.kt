@@ -59,6 +59,7 @@ class ZimReaderContainerTest {
   @Rule
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
 
   @Before
   fun setup() {
@@ -70,12 +71,13 @@ class ZimReaderContainerTest {
         showSearchSuggestionsSpellChecked: Boolean
       ): ZimFileReader? = try {
         val archive: Archive =
-          zimReaderSource.createArchive() ?: return null
+          zimReaderSource.createArchive(testDispatcher) ?: return null
         val searcher = SuggestionSearcher(archive)
         ZimFileReader(
           zimReaderSource = zimReaderSource,
           jniKiwixReader = archive,
-          searcher = searcher
+          searcher = searcher,
+          ioDispatcher = testDispatcher
         )
       } catch (_: Exception) {
         null

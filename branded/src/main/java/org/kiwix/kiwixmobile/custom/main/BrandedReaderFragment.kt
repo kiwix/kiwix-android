@@ -187,7 +187,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
   private suspend fun isZimFileAlreadyOpenedInReader(): Boolean =
     zimReaderContainer?.zimFileReader != null &&
       zimReaderContainer?.zimReaderSource?.exists(ioDispatcher) == true &&
-      zimReaderContainer?.zimReaderSource?.canOpenInLibkiwix() == true &&
+      zimReaderContainer?.zimReaderSource?.canOpenInLibkiwix(ioDispatcher) == true &&
       zimReaderContainer?.zimFileReader?.jniKiwixReader != null
 
   /**

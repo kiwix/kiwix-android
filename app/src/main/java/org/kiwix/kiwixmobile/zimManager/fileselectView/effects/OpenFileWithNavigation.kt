@@ -41,7 +41,7 @@ data class OpenFileWithNavigation(
   override fun invokeWith(activity: AppCompatActivity) {
     coroutineScope.launch {
       val canOpenInLibkiwix = withContext(ioDispatcher) {
-        zimReaderSource.canOpenInLibkiwix()
+        zimReaderSource.canOpenInLibkiwix(ioDispatcher)
       }
       if (!canOpenInLibkiwix) {
         activity.toast(
