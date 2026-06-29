@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * AnnaTheProgrammer777
+* Brettchenweber
 * FF-11
 * Justman10000
+* Random user 1234
 * Susann Schweden
 -->
 <resources>
@@ -13,4 +15,13 @@
   <string name="receive_files_title">Dateien empfangen</string>
   <string name="no_app_found_to_open">Keine App gefunden, um ZIM-Datei auszuwählen!</string>
   <string name="select_zim_file">ZIM-Datei zum Lesen auswählen</string>
+  <string name="swipe_down_to_scan_storage">Wischen Sie nach unten, um Ihr Gerät nach neuen Büchern zu scannen…</string>
+  <string name="auto_detect_books">Ihre Bücher automatisch erkennen lassen</string>
+  <string name="auto_detect_books_description">Beim ersten Start werden Sie gefragt, ob die App Ihren Speicher scannen darf. Wenn Sie es erlauben, werden ZIM-Dateien automatisch erkannt, ohne dass Sie sie manuell hinzufügen müssen.</string>
+  <string name="select_category">Kategorie wählen</string>
+  <string name="no_category_available">Keine Kategorien verfügbar</string>
+  <string name="your_selected_category">Kategorie auswählen:</string>
+  <string name="other_categories">Andere Kategorien:</string>
+  <string name="all_categories">Alle Kategorien</string>
+  <string name="select_category_content_description">Wenn diese Sprache ausgewählt wird, werden herunterladbare Bücher in dieser Sprache ganz oben angezeigt.</string>
 </resources>

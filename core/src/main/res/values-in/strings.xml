@@ -3,6 +3,7 @@
 * Akmaie Ajam
 * Arifin.wijaya
 * Arifpedia
+* Bayahiu
 * Bennylin
 * Esiahaan
 * Iwan Novirion
@@ -218,7 +219,7 @@
   <string name="download_books">Unduh buku-buku</string>
   <string name="humankind_knowledge">Humankind’s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">Selamat datang di keluarga</string>
-  <string name="save_books_offline">Simpan buku-buku offline</string>
+  <string name="save_books_offline">Simpan buku secara luring</string>
   <string name="download_books_message">Unduh buku dan baca di mana pun Anda berada.</string>
   <string name="save_books_in_desired_storage">Simpan buku di penyimpanan yang diinginkan</string>
   <string name="storage_location_hint">Anda dapat memilih lokasi penyimpanan yang diinginkan, baik kartu SD atau penyimpanan internal, untuk mengunduh file ZIM dari halaman Pengaturan.</string>
