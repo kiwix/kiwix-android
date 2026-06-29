@@ -18,21 +18,29 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import org.kiwix.kiwixmobile.core.extensions.update
+import android.util.Log
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class TabsManager @Inject constructor() {
-  private val _webViewList = mutableStateListOf<KiwixWebView>()
+  data class TabsState(
+    val webViews: List<KiwixWebView> = emptyList(),
+    val selectedIndex: Int = ZERO
+  ) {
+    val currentWebView: KiwixWebView?
+      get() = webViews.getOrNull(selectedIndex)
+  }
 
-  val webViewList: SnapshotStateList<KiwixWebView>
-    get() = _webViewList
+  private val _tabState = MutableStateFlow(TabsState())
+  val tabState = _tabState.asStateFlow()
 
-  var currentWebViewIndex = mutableIntStateOf(ZERO)
+  fun currentState() = _tabState.value
 
   /**
    * Add the webView in the current list.
@@ -40,24 +48,33 @@ class TabsManager @Inject constructor() {
    * @param selectTab: A boolean value, if false it will add the webView in background.
    */
   fun addWebView(webView: KiwixWebView, selectTab: Boolean = true) {
-    webViewList.add(webView)
-    if (selectTab) {
-      setCurrentWebViewIndex(webViewList.lastIndex)
+    _tabState.update { state ->
+      val list = state.webViews + webView
+      state.copy(
+        webViews = list,
+        selectedIndex = if (selectTab) list.lastIndex else state.selectedIndex
+      )
     }
+    Log.e("HISTORY", "addWebView: ${currentState().webViews}")
   }
 
-  fun getCurrentWebView(): KiwixWebView? = webViewList.getOrNull(currentWebViewIndex.intValue)
+  fun getCurrentWebView(): KiwixWebView? = tabState.value.currentWebView
 
   fun setCurrentWebViewIndex(index: Int) {
-    currentWebViewIndex.update { index }
+    _tabState.update { it.copy(selectedIndex = index) }
   }
 
   /**
    * Update the currentWebViewIndex.
    */
   fun selectTab(index: Int) {
-    if (index !in webViewList.indices) return
-    setCurrentWebViewIndex(index)
+    _tabState.update { state ->
+      if (index !in state.webViews.indices) {
+        state
+      } else {
+        state.copy(selectedIndex = index)
+      }
+    }
   }
 
   /**
@@ -65,11 +82,27 @@ class TabsManager @Inject constructor() {
    * So that caller can perform the restoreTab operation.
    */
   fun closeTab(index: Int): KiwixWebView? {
-    if (index !in webViewList.indices) return null
-    val removed = webViewList.removeAt(index)
-    if (currentWebViewIndex.intValue >= webViewList.size) {
-      setCurrentWebViewIndex(maxOf(ZERO, webViewList.lastIndex))
-    }
+    val state = _tabState.value
+    if (index !in state.webViews.indices) return null
+
+    val removed = state.webViews[index]
+
+    val list = state.webViews.toMutableList()
+    list.removeAt(index)
+
+    val selected =
+      when {
+        list.isEmpty() -> ZERO
+        state.selectedIndex > list.lastIndex -> list.lastIndex
+        state.selectedIndex > index -> state.selectedIndex - 1
+        else -> state.selectedIndex
+      }
+
+    _tabState.value = state.copy(
+      webViews = list,
+      selectedIndex = selected
+    )
+
     return removed
   }
 
@@ -77,26 +110,38 @@ class TabsManager @Inject constructor() {
    * Removed the entire webView list, and return it list of removed webView.
    * So that caller can perform the restoreAllTabs operation.
    */
-  fun closeAllTabs(): List<KiwixWebView> {
-    val currentWebViewList = webViewList.toMutableList()
-    clear()
+  fun closeAllTabs(): TabsState {
+    val currentWebViewList = tabState.value
+    clearTabsState()
     return currentWebViewList
   }
 
   fun restoreTab(kiwixWebView: KiwixWebView, index: Int) {
-    _webViewList.add(index, kiwixWebView)
+    _tabState.update { state ->
+      val list = state.webViews.toMutableList()
+
+      val safeIndex = index.coerceIn(ZERO, list.size)
+      list.add(safeIndex, kiwixWebView)
+
+      state.copy(
+        webViews = list,
+        selectedIndex =
+          if (safeIndex <= state.selectedIndex) {
+            state.selectedIndex + 1
+          } else {
+            state.selectedIndex
+          }
+      )
+    }
   }
 
-  fun restoreTabs(webViewList: List<KiwixWebView>) {
-    clear()
-    _webViewList.addAll(webViewList)
+  fun restoreTabs(tabsState: TabsState) {
+    _tabState.update { tabsState }
   }
 
-  fun clear() {
-    _webViewList.clear()
+  fun clearTabsState() {
+    _tabState.update { TabsState() }
   }
 
-  fun isEmpty(): Boolean = webViewList.isEmpty()
-
-  fun size(): Int = webViewList.size
+  fun size(): Int = tabState.value.webViews.size
 }

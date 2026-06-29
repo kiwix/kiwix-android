@@ -140,6 +140,7 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.S
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateLaterButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderUiState
+import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -280,7 +281,7 @@ fun ReaderScreen(
         TableDrawerSheet(
           title = state.tableOfContentTitle,
           sections = state.documentSections,
-          state.selectedWebView
+          state.tabsState.currentWebView
         ) { onReaderAction(CloseTocDrawer) }
       }
     }
@@ -347,7 +348,7 @@ private fun ReaderContentLayout(
         state.shouldShowFullScreen -> ShowFullScreenView(state.videoView)
 
         else -> {
-          state.selectedWebView?.let { selectedWebView ->
+          state.tabsState.currentWebView?.let { selectedWebView ->
             KiwixWebViewWithAppBarScrolling(
               selectedWebView,
               topAppBarScrollBehavior,
@@ -482,8 +483,7 @@ private fun TabSwitcherAnimated(state: ReaderUiState, onReaderAction: (ReaderAct
       .semantics { testTag = TAB_SWITCHER_VIEW_TESTING_TAG },
   ) {
     TabSwitcherView(
-      state.kiwixWebViews,
-      state.selectedWebViewIndex,
+      state.tabsState,
       onReaderAction
     )
   }
@@ -740,8 +740,7 @@ private fun ShowDonationLayout(state: ReaderUiState, onReaderAction: (ReaderActi
 
 @Composable
 fun TabSwitcherView(
-  webViews: List<KiwixWebView>,
-  selectedIndex: Int,
+  tabsState: TabsManager.TabsState,
   onReaderAction: (ReaderAction) -> Unit
 ) {
   val state = rememberLazyListState()
@@ -755,7 +754,7 @@ fun TabSwitcherView(
       horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
       state = state
     ) {
-      itemsIndexed(webViews, key = { _, item -> item.hashCode() }) { index, webView ->
+      itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
         val context = LocalContext.current
         val title = remember(webView) {
           webView.title?.fromHtml()?.toString()
@@ -765,14 +764,14 @@ fun TabSwitcherView(
         TabItemView(
           index = index,
           title = title,
-          isSelected = index == selectedIndex,
+          isSelected = index == tabsState.selectedIndex,
           webView = webView,
           onReaderAction = onReaderAction,
         )
       }
     }
     LaunchedEffect(Unit) {
-      state.animateScrollToItem(selectedIndex)
+      state.animateScrollToItem(tabsState.selectedIndex)
     }
     CloseAllTabButton { onReaderAction(CloseAllTabs) }
   }

@@ -53,7 +53,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_SCREEN
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderScreen
+import org.kiwix.kiwixmobile.core.main.reader.ReaderScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarkScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.HistoryScreenRoute
@@ -103,10 +103,7 @@ fun KiwixNavGraph(
       val activity = LocalActivity.current as CoreMainActivity
       val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
       val kiwixReaderViewModel: KiwixReaderViewModel = viewModel(factory = viewModelFactory)
-      LaunchedEffect(Unit) {
-        kiwixReaderViewModel.initialize(activity, alertDialogShower)
-      }
-      CoreReaderScreen(
+      ReaderScreenRoute(
         viewModel = kiwixReaderViewModel,
         addNoteViewModel = addNoteViewModel,
         navHostController = navController,

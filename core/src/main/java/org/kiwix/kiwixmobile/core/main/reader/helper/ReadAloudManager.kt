@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.S
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.StartReadSelection
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsPaused
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsResumed
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.ShowTTSLanguageDownloadDialog
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
@@ -55,6 +56,7 @@ class ReadAloudManager @Inject constructor(
     data object AudioFocusGain : TtsState
     data object TtsPaused : TtsState
     data object TtsResumed : TtsState
+    data object ShowTTSLanguageDownloadDialog : TtsState
   }
 
   private var ttsStateCallback: ((TtsState) -> Unit)? = null
@@ -136,7 +138,7 @@ class ReadAloudManager @Inject constructor(
   }
 
   fun initWebView(kiwixWebView: KiwixWebView) {
-    requireTts().initWebView(kiwixWebView)
+    tts?.initWebView(kiwixWebView)
   }
 
   fun stopReadAloudSafely() {
@@ -179,7 +181,9 @@ class ReadAloudManager @Inject constructor(
 
   fun startReadAloud(kiwixWebView: KiwixWebView, index: Int) {
     currentTtsIndex = index
-    requireTts().readAloud(kiwixWebView)
+    requireTts().readAloud(kiwixWebView) {
+      requireTtsStateCallback().invoke(ShowTTSLanguageDownloadDialog)
+    }
   }
 
   fun pauseTts() {

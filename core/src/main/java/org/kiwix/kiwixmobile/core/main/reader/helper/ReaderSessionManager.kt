@@ -21,9 +21,7 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 import android.os.Bundle
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -47,7 +45,7 @@ class ReaderSessionManager @Inject constructor(
   private val zimFileManager: ZimFileManager,
   private val kiwixDataStore: KiwixDataStore,
   private val mainRepositoryActions: MainRepositoryActions,
-  private val zimReaderContainer: ZimReaderContainer,
+  val zimReaderContainer: ZimReaderContainer,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   sealed interface RestoreSessionResult {
@@ -70,7 +68,7 @@ class ReaderSessionManager @Inject constructor(
       val source = zimFileManager.zimReaderSource?.toDatabase()
       kiwixDataStore.apply {
         setCurrentZimFile(source.orEmpty())
-        setCurrentTab(tabsManager.currentWebViewIndex.intValue)
+        setCurrentTab(tabsManager.currentState().selectedIndex)
       }
       Log.d(
         TAG_KIWIX,
@@ -154,11 +152,13 @@ class ReaderSessionManager @Inject constructor(
 
   private suspend fun getWebViewHistoryList(): List<WebViewHistoryEntity> {
     val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
-    tabsManager.webViewList.forEachIndexed { index, view ->
+    tabsManager.currentState().webViews.forEachIndexed { index, view ->
       if (view.url == null) return@forEachIndexed
       getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
     }
-    return webViewHistoryEntityList
+    return webViewHistoryEntityList.also {
+      android.util.Log.e("HISTORY", "getWebViewHistoryList: $it")
+    }
   }
 
   /**
@@ -209,10 +209,14 @@ class ReaderSessionManager @Inject constructor(
     return null
   }
 
-  fun clearWebViewHistory() {
+  suspend fun clearWebViewHistory() {
     tabsManager.getCurrentWebView()?.clearHistory()
-    CoroutineScope(ioDispatcher).launch {
-      mainRepositoryActions.clearWebViewPageHistory()
+    runCatching {
+      withContext(ioDispatcher) {
+        mainRepositoryActions.clearWebViewPageHistory()
+      }
+    }.onFailure {
+      it.printStackTrace()
     }
   }
 }

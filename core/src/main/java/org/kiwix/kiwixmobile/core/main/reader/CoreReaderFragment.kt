@@ -1021,7 +1021,7 @@ abstract class CoreReaderFragment :
   private fun startReadAloud() {
     currentTtsWebViewIndex = currentWebViewIndex
     getCurrentWebView()?.let {
-      tts?.readAloud(it)
+      // tts?.readAloud(it)
     }
   }
 

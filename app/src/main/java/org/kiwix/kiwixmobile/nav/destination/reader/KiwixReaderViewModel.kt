@@ -129,27 +129,26 @@ class KiwixReaderViewModel @Inject constructor(
     val zimFileUri = getNavigationResult(ZIM_FILE_URI_KEY, coreMainActivity)
     val pageUrl = getNavigationResult(PAGE_URL_KEY, coreMainActivity)
     val searchItemTitle = getNavigationResult(SEARCH_ITEM_TITLE_KEY, coreMainActivity)
+
+    if (zimFileUri.isNotEmpty()) {
+      tryOpeningZimFile(zimFileUri)
+    } else if (pageUrl.isNotEmpty()) {
+      // Set up bookmarks for the current book when opening bookmarks from the
+      // Bookmark screen. Since the current book is already open, the ZIM file
+      // does not need to be reopened.
+      // See https://github.com/kiwix/kiwix-android/issues/3541
+      zimReaderContainer.zimFileReader?.let(::observeBookmarks)
+    }
+
     if (pageUrl.isNotEmpty()) {
-      if (zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(zimFileUri)
-      } else {
-        // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
-        // This is necessary because we are not opening the ZIM file again; the bookmark is
-        // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
-        // See https://github.com/kiwix/kiwix-android/issues/3541
-        zimReaderContainer.zimFileReader?.let(::observeBookmarks)
-      }
       hideProgressBar()
       loadUrlWithCurrentWebview(pageUrl)
-    } else {
-      if (zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(zimFileUri)
-      } else {
-        isWebViewHistoryRestoring = true
-        val restoreOrigin =
-          if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
-        manageExternalLaunchAndRestoringViewState(restoreOrigin)
-      }
+    } else if (zimFileUri.isEmpty()) {
+      isWebViewHistoryRestoring = true
+      val restoreOrigin =
+        if (searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
+
+      manageExternalLaunchAndRestoringViewState(restoreOrigin)
     }
     // Consume the argument.
     emitEffect(
@@ -203,6 +202,7 @@ class KiwixReaderViewModel @Inject constructor(
     when (restoreOrigin) {
       FromExternalLaunch -> {
         val zimReaderSource = fromDatabaseValue(currentZimFile)
+        Log.e("ZIM_READER", "restoreViewStateOnValidWebViewHistory: $zimReaderSource")
         if (zimReaderSource?.canOpenInLibkiwix() == true) {
           if (zimReaderContainer.zimReaderSource == null) {
             openZimFile(zimReaderSource)
@@ -260,7 +260,7 @@ class KiwixReaderViewModel @Inject constructor(
       // Run safely because it is runs after 300 MS.
       delay(OPEN_HOME_SCREEN_DELAY)
       runCatching {
-        if (readerWebViewManager.webViewList.isEmpty()) {
+        if (readerWebViewManager.webViewList().isEmpty()) {
           hideTabSwitcher(false)
         }
       }
@@ -283,7 +283,7 @@ class KiwixReaderViewModel @Inject constructor(
   override suspend fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
     enableLeftDrawer()
     emitEffect(ReaderEffect.ShowActivityBottomAppBar)
-    if (readerWebViewManager.webViewList.isEmpty()) {
+    if (readerWebViewManager.webViewList().isEmpty()) {
       readerMenuState?.hideTabSwitcher()
       exitBook(shouldCloseZimBook)
     } else {

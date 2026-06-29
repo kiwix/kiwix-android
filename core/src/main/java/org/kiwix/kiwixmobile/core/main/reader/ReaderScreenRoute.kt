@@ -2,19 +2,27 @@ package org.kiwix.kiwixmobile.core.main.reader
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
 import android.widget.Toast
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -34,6 +42,7 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.C
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NavigationHistoryItemClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderEffect
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -45,7 +54,7 @@ import java.io.IOException
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun CoreReaderScreen(
+fun ReaderScreenRoute(
   viewModel: CoreReaderViewModel,
   addNoteViewModel: AddNoteViewModel,
   activity: CoreMainActivity,
@@ -80,6 +89,14 @@ fun CoreReaderScreen(
         viewModel.emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED)))
       }
   }
+  LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResume() }
+  LaunchedEffect(Unit) {
+    viewModel.initialize(activity, alertDialogShower)
+    // Update the title when Compose is ready to fix the issue
+    // where the user opens pages from history, notes, or bookmarks.
+    viewModel.updateTitle()
+  }
+  BindReadAloudService(activity, viewModel)
   CollectEffect(
     viewModel,
     addNoteViewModel,
@@ -101,6 +118,40 @@ fun CoreReaderScreen(
     mainActivityBottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
     navigationIcon = { NavigationItem(viewModel, activity) }
   )
+}
+
+@Composable
+private fun BindReadAloudService(
+  activity: CoreMainActivity,
+  viewModel: CoreReaderViewModel
+) {
+  var boundService by remember { mutableStateOf<ReadAloudService?>(null) }
+
+  val connection = remember {
+    object : ServiceConnection {
+      override fun onServiceConnected(name: ComponentName?, binder: IBinder) {
+        val service = (binder as ReadAloudService.ReadAloudBinder).service.get()
+        boundService = service
+        service?.registerCallBack(viewModel)
+      }
+
+      override fun onServiceDisconnected(name: ComponentName?) {
+        // Do Nothing
+      }
+    }
+  }
+
+  DisposableEffect(Unit) {
+    activity.bindService(
+      Intent(activity, ReadAloudService::class.java),
+      connection,
+      Context.BIND_AUTO_CREATE
+    )
+    onDispose {
+      boundService?.registerCallBack(null)
+      runCatching { activity.unbindService(connection) }
+    }
+  }
 }
 
 @Composable
@@ -150,6 +201,9 @@ private fun CollectEffect(
 
         is ReaderEffect.ShowAddNoteDialog ->
           showAddNoteDialog(alertDialogShower, addNoteViewModel, effect.kiwixWebView)
+
+        ReaderEffect.ShowTTSLanguageDialog ->
+          activity.externalLinkOpener.showTTSLanguageDownloadDialog()
       }
     }
   }
