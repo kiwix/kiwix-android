@@ -18,6 +18,7 @@
 * Lynzrand
 * McDutchie
 * MohitMali
+* Peterxy
 * Peterxy12
 * Prmsh
 * Shuiwater
@@ -53,6 +54,7 @@
   <string name="menu_wifi_hotspot">无线热点</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
+  <string name="invalid_media_source">找不到所选媒体。</string>
   <string name="save_media_saved">已将媒体保存至 %s</string>
   <string name="search_label">搜索</string>
   <string name="searched_list">已搜索项目列表</string>
@@ -130,6 +132,9 @@
   <string name="pref_clear_all_bookmarks_title">清除书签</string>
   <string name="clear_all_history_dialog_title">清空所有历史？</string>
   <string name="share">分享</string>
+  <string name="share_article">分享条目</string>
+  <string name="unable_to_share_article">无法分享条目</string>
+  <string name="please_wait_for_page_to_load">请稍候页面完全加载</string>
   <string name="selected_file_cab_app_chooser_title">将 ZIM 文件分享给：</string>
   <string name="delete">删除</string>
   <string name="cancel">取消</string>
@@ -435,4 +440,10 @@
   <string name="confirmation_validate_zim_files">您确定要验证以下ZIM文件吗？\n\n%s</string>
   <string name="validating_zim_file">正在验证ZIM文件…</string>
   <string name="validating_zim_files">正在验证ZIM文件…</string>
+  <string name="menu_add_to_homescreen">添加到主屏幕</string>
+  <string name="added_to_homescreen">主屏幕已添加快捷方式</string>
+  <string name="add_shortcut_title">添加快捷方式</string>
+  <string name="shortcut_name_label">快捷方式名称</string>
+  <string name="open_xiaomi_settings">打开设置</string>
+  <string name="xiaomi_permission_required">此设备需要先授予快捷方式权限才能将快捷方式添加到主屏幕。请在设置中授予权限。</string>
 </resources>

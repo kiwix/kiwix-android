@@ -25,7 +25,7 @@
   <string name="choose_file">Абярыце файл зьместу (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новай укладцы?</string>
   <string name="hotspot_service_channel_name">Сэрвісны канал пункту досягу</string>
-  <string name="hotspot_failed_title">Не атрымалася запусьціць пункт досягу</string>
+  <string name="hotspot_failed_title">Не ўдалося запусьціць пункт досягу</string>
   <string name="hotspot_failed_message">Падобна, што ваш пункт доступу ўжо ўключаны. Каб працягнуць, адключыце пункт доступу вай-фай.</string>
   <string name="go_to_wifi_settings_label">Перайсьці да наладаў вай-фаю</string>
   <string name="connection_refused">У падключэньні адмоўлена.</string>
@@ -39,7 +39,7 @@
   <string name="hotspot_details_message">Дэталі вашага лякальнага пункту досягу. \nSSID: %1$s \nСпокліч: %2$s</string>
   <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены. %s</string>
   <string name="error_file_invalid">Памылка: абраны файл ня ёсьць слушным ZIM-файлам. %s</string>
-  <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>
+  <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не ўдалася.</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Вэрсія</string>
   <string name="pref_back_to_top">Вярнуцца ўгару</string>
@@ -79,6 +79,7 @@
   <string name="local_zims">Прылада</string>
   <string name="remote_zims">Анляйн</string>
   <string name="library">Бібліятэка</string>
+  <string name="download">Сьцягнуць</string>
   <string name="download_notification_channel_name">Назва каналу абвесткаў сьцягваньня</string>
   <string name="help_2">Што робіць Kiwix?</string>
   <string name="help_4">Хоць Kiwix пачаткова быў распрацаваны для афляйнавай падтрымкі Вікіпэдыі, але можа чытаць іншыя віды зьместу.</string>
@@ -96,6 +97,7 @@
   <string name="do_not_ask_anymore">Болей не пытаць</string>
   <string name="your_languages">Выбраныя мовы:</string>
   <string name="other_languages">Іншыя мовы:</string>
+  <string name="downloading">Сьцягваецца</string>
   <string name="crash_description" fuzzy="true">Падобна, што мы паламаліся.\n\nЦі можаце дапамагчы нам выправіць гэтую праблему, адаслаўшы наступную інфармацыю?</string>
   <string name="crash_checkbox_language">Вашыя моўныя налады</string>
   <string name="crash_checkbox_zimfiles">Сьпіс вашых ZIM-файлаў</string>
@@ -116,4 +118,5 @@
   <string name="status">Статус</string>
   <string name="no_bookmarks">Няма закладак</string>
   <string name="action_copy">Капіяваць</string>
+  <string name="downloading_state">Сьцягваньне</string>
 </resources>

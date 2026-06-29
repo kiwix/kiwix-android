@@ -21,7 +21,8 @@
   <string name="menu_wifi_hotspot">Безжично жариште</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
-  <string name="save_media_saved">Медијата е зачувана во %s</string>
+  <string name="invalid_media_source">Избраната податотека не е пронајдена.</string>
+  <string name="save_media_saved">Потатотеки е зачувани во %s</string>
   <string name="search_label">Пребарај</string>
   <string name="searched_list">Пребаран список</string>
   <string name="more_options">Повеќе можности</string>
@@ -333,7 +334,7 @@
   <string name="preparing_file_for_copy">Подготовка за копирање/преместување</string>
   <string name="action_copy">Копирај</string>
   <string name="move">Премести</string>
-  <string name="copying_zim_file">Ја копирам ZIM податотеката %s…</string>
+  <string name="copying_zim_file">Ја копирам ZIM-податотеката %s…</string>
   <string name="moving_zim_file">Ја преместувам ZIM-податотеката %s…</string>
   <string name="copy_move_files_dialog_description">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка.\nДали сакате да ја прекопирате или преместите таму?</string>
   <string name="copy_move_multiple_files_dialog_description">Кивикс бара ZIM-податотеките да стојат во своја податочна папка.\nДали сакате да ги прекопирате или преместите таму?</string>
@@ -406,4 +407,10 @@
   <string name="confirmation_validate_zim_files">Дали сигурно сакате да ги проверите следниве ZIM-податотеки?\n\n%s</string>
   <string name="validating_zim_file">Проверувам ZIM-податотека…</string>
   <string name="validating_zim_files">Проверувам ZIM-податотеки…</string>
+  <string name="menu_add_to_homescreen">Додај во Почетен екран</string>
+  <string name="added_to_homescreen">Ставена кратенка во Почетен екран</string>
+  <string name="add_shortcut_title">Додај кратенка</string>
+  <string name="shortcut_name_label">Име на кратенката</string>
+  <string name="open_xiaomi_settings">Отвори нагодувања</string>
+  <string name="xiaomi_permission_required">На овој уред треба да му се даде дозвола за кратенки со ставање на кратенка на почетниот екран. Дајте ја дозволата во нагодувањата.</string>
 </resources>
