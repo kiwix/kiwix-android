@@ -1478,7 +1478,7 @@ abstract class CoreReaderFragment :
         FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
       val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
       if (pdfFile.isFileExist(ioDispatcher)) {
-        pdfFile.deleteFile()
+        pdfFile.deleteFile(ioDispatcher)
       }
       pdfFile.createNewFile()
       val printAdapter = webView.createPrintDocumentAdapter(title)

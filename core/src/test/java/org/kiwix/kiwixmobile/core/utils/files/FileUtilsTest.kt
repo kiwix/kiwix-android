@@ -63,7 +63,7 @@ class FileUtilsTest {
     every { Log.w(any(), any<String>()) } returns 0
     every { Log.w(any(), any<String>(), any()) } returns 0
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
-    coEvery { any<File>().deleteFile() } returns true
+    coEvery { any<File>().deleteFile(testDispatcher) } returns true
   }
 
   @AfterEach
@@ -156,7 +156,7 @@ class FileUtilsTest {
   fun deleteZimFile_whenZimFile_returnsWithoutError() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
-    coEvery { any<File>().deleteFile() } returns true
+    coEvery { any<File>().deleteFile(testDispatcher) } returns true
     FileUtils.deleteZimFile(path)
   }
 
@@ -164,21 +164,21 @@ class FileUtilsTest {
   fun deleteZimFile_whenZimFileWithPart_returnsWithoutError() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns true
-    coEvery { any<File>().deleteFile() } returns true
+    coEvery { any<File>().deleteFile(testDispatcher) } returns true
     FileUtils.deleteZimFile(path)
   }
 
   @Test
   fun deleteZimFile_whenPathEndsWithPartPart_returnsCompletes() = runTest {
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
-    coEvery { any<File>().deleteFile() } returns true
+    coEvery { any<File>().deleteFile(testDispatcher) } returns true
     FileUtils.deleteZimFile("/storage/emulated/0/wiki.zim.part.part")
   }
 
   @Test
   fun deleteZimFile_whenSplitFileEndsWithPartPart_stripsAndCompletes() = runTest {
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
-    coEvery { any<File>().deleteFile() } returns true
+    coEvery { any<File>().deleteFile(testDispatcher) } returns true
     FileUtils.deleteZimFile("/storage/emulated/0/wiki.zimaa.part.part")
   }
 

@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.io.File
@@ -36,7 +35,7 @@ suspend fun File.totalSpace(dispatcher: CoroutineDispatcher): Long =
 suspend fun File.canReadFile(dispatcher: CoroutineDispatcher): Boolean =
   withContext(dispatcher) { canRead() }
 
-suspend fun File.deleteFile(dispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean =
+suspend fun File.deleteFile(dispatcher: CoroutineDispatcher): Boolean =
   withContext(dispatcher) { delete() }
 
 suspend fun File.hasContent(dispatcher: CoroutineDispatcher): Boolean =

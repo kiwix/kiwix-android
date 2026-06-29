@@ -143,7 +143,7 @@ object FileUtils {
               filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
             val fileChunk = File(chunkPath)
             if (fileChunk.isFileExist(ioDispatcher)) {
-              fileChunk.deleteFile()
+              fileChunk.deleteFile(ioDispatcher)
             } else if (!deleteZimFileParts(chunkPath)) {
               break@fileloop
             }
@@ -152,7 +152,7 @@ object FileUtils {
           alphabetFirst++
         }
       } else {
-        file.deleteFile()
+        file.deleteFile(ioDispatcher)
         deleteZimFileParts(filePath)
       }
     }
@@ -165,12 +165,12 @@ object FileUtils {
   ): Boolean {
     val file = File(path + ChunkUtils.PART)
     if (file.isFileExist(ioDispatcher)) {
-      file.deleteFile()
+      file.deleteFile(ioDispatcher)
       return true
     }
     val singlePart = File("$path.part")
     if (singlePart.isFileExist(ioDispatcher)) {
-      singlePart.deleteFile()
+      singlePart.deleteFile(ioDispatcher)
       return true
     }
     return false
