@@ -18,16 +18,20 @@
 package org.kiwix.kiwixmobile.core.reader
 
 import android.webkit.WebResourceResponse
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.net.HttpURLConnection
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: Factory) {
+class ZimReaderContainer @Inject constructor(
+  private val zimFileReaderFactory: Factory,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
   var zimFileReader: ZimFileReader? = null
     set(value) {
       field?.dispose()
@@ -42,8 +46,8 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return
     }
-    zimFileReader = withContext(Dispatchers.IO) {
-      if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix()) {
+    zimFileReader = withContext(ioDispatcher) {
+      if (zimReaderSource?.exists(ioDispatcher) == true && zimReaderSource.canOpenInLibkiwix()) {
         zimFileReaderFactory.create(zimReaderSource, showSearchSuggestionsSpellChecked)
       } else {
         null

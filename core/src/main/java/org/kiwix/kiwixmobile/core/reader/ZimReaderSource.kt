@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
@@ -57,9 +58,9 @@ class ZimReaderSource(
       }
   }
 
-  suspend fun exists(): Boolean {
+  suspend fun exists(ioDispatcher: CoroutineDispatcher): Boolean {
     return when {
-      file != null -> file.isFileExist()
+      file != null -> file.isFileExist(ioDispatcher)
       assetFileDescriptorList?.isNotEmpty() == true ->
         assetFileDescriptorList.first().parcelFileDescriptor.fileDescriptor.valid()
 

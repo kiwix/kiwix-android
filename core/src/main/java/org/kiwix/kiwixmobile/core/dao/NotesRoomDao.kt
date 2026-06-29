@@ -96,7 +96,7 @@ abstract class NotesRoomDao : PageDao {
   ) {
     CoroutineScope(dispatcher).launch {
       val noteFile = File(noteFilePath)
-      if (noteFile.isFileExist()) {
+      if (noteFile.isFileExist(dispatcher)) {
         noteFile.deleteFile()
       }
     }

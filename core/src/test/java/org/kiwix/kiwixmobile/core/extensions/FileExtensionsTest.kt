@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,10 +25,15 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class FileExtensionsTest {
-  private val testDispatcher = StandardTestDispatcher()
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
   private lateinit var tempFile: File
 
   @BeforeEach
@@ -45,18 +49,18 @@ class FileExtensionsTest {
   }
 
   @Test
-  fun `isFileExist should return true for existing file`() = runTest(testDispatcher) {
+  fun `isFileExist should return true for existing file`() = runTest {
     assertTrue(tempFile.isFileExist(testDispatcher))
   }
 
   @Test
-  fun `isFileExist should return false for non-existing file`() = runTest(testDispatcher) {
+  fun `isFileExist should return false for non-existing file`() = runTest {
     val nonExistentFile = File("non_existent_file_path.tmp")
     assertFalse(nonExistentFile.isFileExist(testDispatcher))
   }
 
   @Test
-  fun `deleteFile should delete the file and return true`() = runTest(testDispatcher) {
+  fun `deleteFile should delete the file and return true`() = runTest {
     assertTrue(tempFile.isFileExist(testDispatcher), "File should exist before deletion")
     val result = tempFile.deleteFile(testDispatcher)
     assertTrue(result, "deleteFile should return true")
@@ -64,25 +68,25 @@ class FileExtensionsTest {
   }
 
   @Test
-  fun `deleteFile should return false when file does not exist`() = runTest(testDispatcher) {
+  fun `deleteFile should return false when file does not exist`() = runTest {
     val nonExistentFile = File("non_existent.tmp")
     val result = nonExistentFile.deleteFile(testDispatcher)
     assertFalse(result)
   }
 
   @Test
-  fun `canReadFile should return true for readable file`() = runTest(testDispatcher) {
+  fun `canReadFile should return true for readable file`() = runTest {
     assertTrue(tempFile.canReadFile(testDispatcher))
   }
 
   @Test
-  fun `canReadFile should return false for non-existing file`() = runTest(testDispatcher) {
+  fun `canReadFile should return false for non-existing file`() = runTest {
     val file = File("does_not_exist.tmp")
     assertFalse(file.canReadFile(testDispatcher))
   }
 
   @Test
-  fun `freeSpace should return the actual free space`() = runTest(testDispatcher) {
+  fun `freeSpace should return the actual free space`() = runTest {
     val expectedFreeSpace = tempFile.freeSpace
     val actualFreeSpace = tempFile.freeSpace(testDispatcher)
     assertEquals(
@@ -93,7 +97,7 @@ class FileExtensionsTest {
   }
 
   @Test
-  fun `totalSpace should return the actual total space`() = runTest(testDispatcher) {
+  fun `totalSpace should return the actual total space`() = runTest {
     val expectedTotalSpace = tempFile.totalSpace
     val actualTotalSpace = tempFile.totalSpace(testDispatcher)
     assertEquals(
@@ -104,7 +108,7 @@ class FileExtensionsTest {
   }
 
   @Test
-  fun `totalSpace should be greater than or equal to freeSpace`() = runTest(testDispatcher) {
+  fun `totalSpace should be greater than or equal to freeSpace`() = runTest {
     val expectedTotalSpace = tempFile.totalSpace
     val expectedFreeSpace = tempFile.freeSpace
     val actualTotalSpace = tempFile.totalSpace(testDispatcher)
@@ -115,20 +119,20 @@ class FileExtensionsTest {
   }
 
   @Test
-  fun `hasContent should return true for file with content`() = runTest(testDispatcher) {
+  fun `hasContent should return true for file with content`() = runTest {
     tempFile.writeText("kiwix test content")
     assertTrue(tempFile.hasContent(testDispatcher))
   }
 
   @Test
-  fun `hasContent should return false for empty file`() = runTest(testDispatcher) {
+  fun `hasContent should return false for empty file`() = runTest {
     // tempFile is created empty by default
     assertEquals(0L, tempFile.length(), "Temp file should be empty")
     assertFalse(tempFile.hasContent(testDispatcher))
   }
 
   @Test
-  fun `hasContent should return false for non-existing file`() = runTest(testDispatcher) {
+  fun `hasContent should return false for non-existing file`() = runTest {
     val nonExistentFile = File("non_existent_file_path.tmp")
     assertFalse(nonExistentFile.hasContent(testDispatcher))
   }

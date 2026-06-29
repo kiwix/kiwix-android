@@ -186,7 +186,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
    */
   private suspend fun isZimFileAlreadyOpenedInReader(): Boolean =
     zimReaderContainer?.zimFileReader != null &&
-      zimReaderContainer?.zimReaderSource?.exists() == true &&
+      zimReaderContainer?.zimReaderSource?.exists(ioDispatcher) == true &&
       zimReaderContainer?.zimReaderSource?.canOpenInLibkiwix() == true &&
       zimReaderContainer?.zimFileReader?.jniKiwixReader != null
 
@@ -320,7 +320,7 @@ class BrandedReaderFragment : CoreReaderFragment() {
   private suspend fun createDemoFile() {
     runCatching {
       File(getDemoFilePathForBrandedApp(CoreApp.instance)).also {
-        if (!it.isFileExist()) it.createNewFile()
+        if (!it.isFileExist(ioDispatcher)) it.createNewFile()
       }
     }
   }

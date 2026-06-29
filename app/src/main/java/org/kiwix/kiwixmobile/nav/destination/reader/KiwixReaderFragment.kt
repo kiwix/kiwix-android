@@ -145,7 +145,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       requireActivity().applicationContext,
       zimFileUri.toUri()
     )
-    if (filePath == null || !File(filePath).isFileExist()) {
+    if (filePath == null || !File(filePath).isFileExist(ioDispatcher)) {
       // Close the previously opened book in the reader. Since this file is not found,
       // it will not be set in the zimFileReader. The previously opened ZIM file
       // will be saved when we move between fragments. If we return to the reader again,

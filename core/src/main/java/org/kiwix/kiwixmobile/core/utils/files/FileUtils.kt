@@ -61,6 +61,7 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+@Suppress("DispatcherInjection")
 object FileUtils {
   private val fileOperationMutex = Mutex()
   private const val SPELLING_DB_CACHED_DIRECTORY = "SpellingsDBCachedDir"
@@ -126,7 +127,7 @@ object FileUtils {
   }
 
   @JvmStatic
-  suspend fun deleteZimFile(path: String) {
+  suspend fun deleteZimFile(path: String, ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
     fileOperationMutex.withLock {
       var filePath = path
       if (filePath.substring(filePath.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
@@ -141,7 +142,7 @@ object FileUtils {
             val chunkPath =
               filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
             val fileChunk = File(chunkPath)
-            if (fileChunk.isFileExist()) {
+            if (fileChunk.isFileExist(ioDispatcher)) {
               fileChunk.deleteFile()
             } else if (!deleteZimFileParts(chunkPath)) {
               break@fileloop
@@ -158,14 +159,17 @@ object FileUtils {
   }
 
   @Suppress("ReturnCount")
-  private suspend fun deleteZimFileParts(path: String): Boolean {
+  private suspend fun deleteZimFileParts(
+    path: String,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): Boolean {
     val file = File(path + ChunkUtils.PART)
-    if (file.isFileExist()) {
+    if (file.isFileExist(ioDispatcher)) {
       file.deleteFile()
       return true
     }
     val singlePart = File("$path.part")
-    if (singlePart.isFileExist()) {
+    if (singlePart.isFileExist(ioDispatcher)) {
       singlePart.deleteFile()
       return true
     }
@@ -259,7 +263,8 @@ object FileUtils {
 
   private suspend fun getFullFilePathFromFilePath(
     context: Context,
-    filePath: String?
+    filePath: String?,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   ): String? {
     var actualFilePath: String? = null
     if (filePath?.isNotEmpty() == true) {
@@ -267,7 +272,7 @@ object FileUtils {
         // Check if the volume is part of the file path and remove it
         val trimmedFilePath = filePath.removePrefix(volume)
         val file = File("$volume/$trimmedFilePath")
-        if (file.isFileExist()) {
+        if (file.isFileExist(ioDispatcher)) {
           actualFilePath = file.path
         }
       }
@@ -551,11 +556,14 @@ object FileUtils {
 
   @Suppress("NestedBlockDepth")
   @JvmStatic
-  suspend fun getAllZimParts(book: LibkiwixBook): List<File> {
+  suspend fun getAllZimParts(
+    book: LibkiwixBook,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): List<File> {
     val files = ArrayList<File>()
     book.file?.let {
       if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
-        if (it.isFileExist()) {
+        if (it.isFileExist(ioDispatcher)) {
           files.add(it)
         } else {
           files.add(File("$it.part"))
@@ -566,8 +574,8 @@ object FileUtils {
           for (secondCharacter in 'a'..'z') {
             path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
             when {
-              File(path).isFileExist() -> files.add(File(path))
-              File("$path.part").isFileExist() -> files.add(File("$path.part"))
+              File(path).isFileExist(ioDispatcher) -> files.add(File(path))
+              File("$path.part").isFileExist(ioDispatcher) -> files.add(File("$path.part"))
               else -> return@getAllZimParts files
             }
           }
@@ -577,8 +585,9 @@ object FileUtils {
     return files
   }
 
+  @Suppress("ReturnCount")
   @JvmStatic
-  suspend fun hasPart(file: File): Boolean {
+  suspend fun hasPart(file: File, ioDispatcher: CoroutineDispatcher = Dispatchers.IO): Boolean {
     var tempFile = file
     tempFile = File(getFileName(tempFile.path))
     if (tempFile.path.endsWith(".zim")) {
@@ -592,9 +601,9 @@ object FileUtils {
       for (secondCharacter in 'a'..'z') {
         val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
         val fileChunk = File("$chunkPath.part")
-        if (fileChunk.isFileExist()) {
+        if (fileChunk.isFileExist(ioDispatcher)) {
           return true
-        } else if (!File(chunkPath).isFileExist()) {
+        } else if (!File(chunkPath).isFileExist(ioDispatcher)) {
           return false
         }
       }
@@ -603,10 +612,10 @@ object FileUtils {
   }
 
   @JvmStatic
-  suspend fun getFileName(fileName: String) =
+  suspend fun getFileName(fileName: String, ioDispatcher: CoroutineDispatcher = Dispatchers.IO) =
     when {
-      File(fileName).isFileExist() -> fileName
-      File("$fileName.part").isFileExist() -> "$fileName.part"
+      File(fileName).isFileExist(ioDispatcher) -> fileName
+      File("$fileName.part").isFileExist(ioDispatcher) -> "$fileName.part"
       else -> "${fileName}aa"
     }
 

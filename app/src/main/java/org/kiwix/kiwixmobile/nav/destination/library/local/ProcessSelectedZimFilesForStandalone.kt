@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -38,7 +40,8 @@ import javax.inject.Inject
  */
 class ProcessSelectedZimFilesForStandalone @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  private val context: Context
+  private val context: Context,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private var selectedZimFileCallback: SelectedZimFileCallback? = null
 
@@ -118,7 +121,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
   ): Pair<File?, String> {
     val filePath =
       FileUtils.getLocalFilePathByUri(context.applicationContext, uri)
-    if (filePath == null || !File(filePath).isFileExist()) {
+    if (filePath == null || !File(filePath).isFileExist(ioDispatcher)) {
       Log.e(
         TAG_KIWIX,
         "ZIM file not found in storage. File Uri = $uri\nRetrieved Path = $filePath"

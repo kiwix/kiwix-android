@@ -116,13 +116,13 @@ class LibkiwixBookmarks @Inject constructor(
       if (initialized) return@withLock
       withContext(dispatcher) {
         // Check if bookmark folder exist if not then create the folder first.
-        if (!File(bookmarksFolderPath()).isFileExist()) File(bookmarksFolderPath()).mkdir()
+        if (!File(bookmarksFolderPath()).isFileExist(dispatcher)) File(bookmarksFolderPath()).mkdir()
         // Check if library file exist if not then create the file to save the library with book information.
-        if (!libraryFile().isFileExist()) libraryFile().createNewFile()
+        if (!libraryFile().isFileExist(dispatcher)) libraryFile().createNewFile()
         // set up manager to read the library from this file
         manager.readFile(libraryFile().canonicalPath)
         // Check if bookmark file exist if not then create the file to save the bookmarks.
-        if (!bookmarkFile().isFileExist()) bookmarkFile().createNewFile()
+        if (!bookmarkFile().isFileExist(dispatcher)) bookmarkFile().createNewFile()
         // set up manager to read the bookmarks from this file
         manager.readBookmarkFile(bookmarkFile().canonicalPath)
         initialized = true
@@ -470,9 +470,13 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  private suspend fun exportedFile(fileName: String): File {
+  @Suppress("InjectDispatcher")
+  private suspend fun exportedFile(
+    fileName: String,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): File {
     val rootFolder = File(EXPORT_BOOK_MARK_PATH)
-    if (!rootFolder.isFileExist()) rootFolder.mkdir()
+    if (!rootFolder.isFileExist(ioDispatcher)) rootFolder.mkdir()
     return sequence {
       yield(File(rootFolder, fileName))
       yieldAll(
@@ -483,7 +487,7 @@ class LibkiwixBookmarks @Inject constructor(
           )
         }
       )
-    }.first { !it.isFileExist() }
+    }.first { !it.isFileExist(ioDispatcher) }
   }
 
   suspend fun importBookmarks(bookmarkFile: File) {

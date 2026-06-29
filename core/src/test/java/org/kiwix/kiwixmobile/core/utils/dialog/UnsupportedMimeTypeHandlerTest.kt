@@ -74,9 +74,10 @@ class UnsupportedMimeTypeHandlerTest {
     every { activity.toast(any<Int>()) } returns Unit
     every { activity.toast(any<String>()) } returns Unit
     every { FileProvider.getUriForFile(any(), any(), any()) } returns mockk()
-    coEvery { any<File>().isFileExist() } returns true
+    coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns true
 
-    handler = UnsupportedMimeTypeHandler(activity, zimReaderContainer)
+    handler =
+      UnsupportedMimeTypeHandler(activity, zimReaderContainer, mainDispatcherRule.dispatcher)
     handler.setAlertDialogShower(alertDialogShower)
     handler.intent = mockk(relaxed = true)
   }

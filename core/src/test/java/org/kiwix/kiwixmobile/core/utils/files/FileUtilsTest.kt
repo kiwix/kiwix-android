@@ -37,13 +37,19 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class FileUtilsTest {
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
   private val mockFile: File = mockk()
   private val testBook = LibkiwixBook().apply { file = mockFile }
   private val testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c"
@@ -56,7 +62,7 @@ class FileUtilsTest {
     every { Log.e(any(), any()) } returns 0
     every { Log.w(any(), any<String>()) } returns 0
     every { Log.w(any(), any<String>(), any()) } returns 0
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile() } returns true
   }
 
@@ -91,15 +97,15 @@ class FileUtilsTest {
   @Test
   fun getAllZimParts_whenNoFileExistsAtAnyLocation_returnsEmptyList() = runTest {
     every { mockFile.path } returns "${fileName}zimab"
-    coEvery { mockFile.isFileExist() } returns false
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { mockFile.isFileExist(testDispatcher) } returns false
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
     assertEquals(0, FileUtils.getAllZimParts(testBook).size)
   }
 
   private fun testWith(extension: String, fileExists: Boolean) = runTest {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
-    coEvery { mockFile.isFileExist() } returns fileExists
+    coEvery { mockFile.isFileExist(testDispatcher) } returns fileExists
     val coreApp = mockk<CoreApp>()
     CoreApp.instance = coreApp
     every { coreApp.packageName } returns "mock_package"
@@ -117,15 +123,15 @@ class FileUtilsTest {
   @Test
   fun getFileName_whenFileExists_returnsOriginalName() = runTest {
     val path = "/storage/emulated/0/test.zimaa"
-    coEvery { any<File>().isFileExist() } returns true
-    assertEquals(path, FileUtils.getFileName(path))
+    coEvery { any<File>().isFileExist(testDispatcher) } returns true
+    assertEquals(path, FileUtils.getFileName(path, mainDispatcherRule.dispatcher))
   }
 
   @Test
   fun getFileName_whenNeitherFileExist_returnsAaSuffix() = runTest {
     val path = "/storage/emulated/0/test.zimaa"
-    coEvery { any<File>().isFileExist() } returns false
-    assertEquals("${path}aa", FileUtils.getFileName(path))
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
+    assertEquals("${path}aa", FileUtils.getFileName(path, mainDispatcherRule.dispatcher))
   }
 
   // ======== hasPart ========
@@ -133,14 +139,14 @@ class FileUtilsTest {
   @Test
   fun hasPart_whenFileEndsWithZimAndExists_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
-    coEvery { any<File>().isFileExist() } returns true
+    coEvery { any<File>().isFileExist(testDispatcher) } returns true
     assertFalse(FileUtils.hasPart(File(path)))
   }
 
   @Test
   fun hasPart_whenNoFilesExistForZimPath_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
     assertFalse(FileUtils.hasPart(File(path)))
   }
 
@@ -149,7 +155,7 @@ class FileUtilsTest {
   @Test
   fun deleteZimFile_whenZimFile_returnsWithoutError() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile() } returns true
     FileUtils.deleteZimFile(path)
   }
@@ -157,21 +163,21 @@ class FileUtilsTest {
   @Test
   fun deleteZimFile_whenZimFileWithPart_returnsWithoutError() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
-    coEvery { any<File>().isFileExist() } returns true
+    coEvery { any<File>().isFileExist(testDispatcher) } returns true
     coEvery { any<File>().deleteFile() } returns true
     FileUtils.deleteZimFile(path)
   }
 
   @Test
   fun deleteZimFile_whenPathEndsWithPartPart_returnsCompletes() = runTest {
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile() } returns true
     FileUtils.deleteZimFile("/storage/emulated/0/wiki.zim.part.part")
   }
 
   @Test
   fun deleteZimFile_whenSplitFileEndsWithPartPart_stripsAndCompletes() = runTest {
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile() } returns true
     FileUtils.deleteZimFile("/storage/emulated/0/wiki.zimaa.part.part")
   }

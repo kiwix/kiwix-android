@@ -1477,7 +1477,7 @@ abstract class CoreReaderFragment :
       val cacheDir =
         FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
       val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
-      if (pdfFile.isFileExist()) {
+      if (pdfFile.isFileExist(ioDispatcher)) {
         pdfFile.deleteFile()
       }
       pdfFile.createNewFile()

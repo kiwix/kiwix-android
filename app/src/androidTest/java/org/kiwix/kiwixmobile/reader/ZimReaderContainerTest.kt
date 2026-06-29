@@ -30,6 +30,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -53,6 +55,10 @@ class ZimReaderContainerTest {
 
   private fun getMainEntryPath(): String =
     container.mainPage ?: "A/index.html"
+
+  @Rule
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Before
   fun setup() {
@@ -76,7 +82,7 @@ class ZimReaderContainerTest {
       }
     }
 
-    container = ZimReaderContainer(realFactory)
+    container = ZimReaderContainer(realFactory, mainDispatcherRule.dispatcher)
   }
 
   @After

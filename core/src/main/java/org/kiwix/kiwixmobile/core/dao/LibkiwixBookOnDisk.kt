@@ -83,11 +83,11 @@ class LibkiwixBookOnDisk @Inject constructor(
       if (isManagerInitialized) return@withLock true
       withContext(dispatcher) {
         // Check if ZIM files folder exist if not then create the folder first.
-        if (!File(localBookFolderPath()).isFileExist()) {
+        if (!File(localBookFolderPath()).isFileExist(dispatcher)) {
           File(localBookFolderPath()).mkdirs()
         }
         // Check if library file exist if not then create the file to save the library with book information.
-        if (!libraryFile().isFileExist()) {
+        if (!libraryFile().isFileExist(dispatcher)) {
           libraryFile().createNewFile()
         }
         // set up manager to read the library from this file
@@ -138,10 +138,10 @@ class LibkiwixBookOnDisk @Inject constructor(
       .filterNotNull()
       .mapLatest { booksList ->
         removeBooksThatAreInTrashFolder(booksList)
-        removeBooksThatDoNotExist(booksList.toMutableList())
+        removeBooksThatDoNotExist(booksList.toMutableList(), dispatcher)
         booksList.mapNotNull { book ->
           try {
-            if (book.zimReaderSource.exists() &&
+            if (book.zimReaderSource.exists(dispatcher) &&
               !isInTrashFolder(book.zimReaderSource.toDatabase())
             ) {
               book
@@ -211,8 +211,11 @@ class LibkiwixBookOnDisk @Inject constructor(
     return libraryBooksList.any { it == bookId }
   }
 
-  private suspend fun removeBooksThatDoNotExist(books: MutableList<LibkiwixBook>) {
-    delete(books.filterNot { it.zimReaderSource.exists() })
+  private suspend fun removeBooksThatDoNotExist(
+    books: MutableList<LibkiwixBook>,
+    ioDispatcher: CoroutineDispatcher
+  ) {
+    delete(books.filterNot { it.zimReaderSource.exists(ioDispatcher) })
   }
 
   // Remove the existing books from database which are showing on the library screen.

@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class DeleteFilesUseCaseTest {
@@ -53,6 +55,10 @@ class DeleteFilesUseCaseTest {
   private val file2 = File("/storage/test.zim")
   private lateinit var book: BookOnDisk
 
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+
   @BeforeEach
   fun setup() {
     clearAllMocks()
@@ -60,7 +66,7 @@ class DeleteFilesUseCaseTest {
     mockkObject(FileUtils)
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
 
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns false
 
     coEvery {
       FileUtils.deleteZimFile(file1.path)
@@ -94,7 +100,7 @@ class DeleteFilesUseCaseTest {
   @Test
   fun invoke_whenFileStillExists_returnsFalseAndDoesNotDeleteBook() = runTest {
     coEvery {
-      file1.isFileExist()
+      file1.isFileExist(mainDispatcherRule.dispatcher)
     } returns true
 
     val result = deleteFilesUseCase(listOf(book))
@@ -183,7 +189,7 @@ class DeleteFilesUseCaseTest {
   @Test
   fun invoke_whenOneBookFails_returnsFalse() = runTest {
     coEvery {
-      file2.isFileExist()
+      file2.isFileExist(mainDispatcherRule.dispatcher)
     } returns true
 
     val failingBook =
