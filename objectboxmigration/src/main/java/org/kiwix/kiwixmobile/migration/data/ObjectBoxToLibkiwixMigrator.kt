@@ -21,11 +21,13 @@ package org.kiwix.kiwixmobile.migration.data
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -50,6 +52,10 @@ class ObjectBoxToLibkiwixMigrator {
 
   @Inject
   lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
   private val migrationMutex = Mutex()
 
   suspend fun migrateObjectBoxDataToLibkiwix() {
@@ -68,7 +74,7 @@ class ObjectBoxToLibkiwixMigrator {
       bookOnDiskEntity.file.let { file ->
         // set zimReaderSource for previously saved books(before we introduced the zimReaderSource)
         val zimReaderSource = ZimReaderSource(file)
-        if (zimReaderSource.canOpenInLibkiwix()) {
+        if (zimReaderSource.canOpenInLibkiwix(ioDispatcher)) {
           bookOnDiskEntity.zimReaderSource = zimReaderSource
         }
       }
@@ -108,7 +114,7 @@ class ObjectBoxToLibkiwixMigrator {
           // set zimReaderSource for previously saved bookmarks
           if (bookmarkEntity.zimReaderSource == null) {
             val zimReaderSource = ZimReaderSource(File(filePath))
-            if (zimReaderSource.canOpenInLibkiwix()) {
+            if (zimReaderSource.canOpenInLibkiwix(ioDispatcher)) {
               bookmarkEntity.zimReaderSource = zimReaderSource
             }
           }

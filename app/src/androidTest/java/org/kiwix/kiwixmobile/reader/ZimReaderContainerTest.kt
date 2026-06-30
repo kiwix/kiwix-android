@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.reader
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -41,6 +42,7 @@ import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 
+@Suppress("InjectDispatcher")
 @RunWith(AndroidJUnit4::class)
 class ZimReaderContainerTest {
   private lateinit var container: ZimReaderContainer
@@ -54,6 +56,8 @@ class ZimReaderContainerTest {
   private fun getMainEntryPath(): String =
     container.mainPage ?: "A/index.html"
 
+  private val testDispatcher = Dispatchers.IO
+
   @Before
   fun setup() {
     testZimFile = getZimFileFromResourceFolder(targetContext, zimFileName, targetContext.cacheDir)
@@ -64,19 +68,20 @@ class ZimReaderContainerTest {
         showSearchSuggestionsSpellChecked: Boolean
       ): ZimFileReader? = try {
         val archive: Archive =
-          zimReaderSource.createArchive() ?: return null
+          zimReaderSource.createArchive(testDispatcher) ?: return null
         val searcher = SuggestionSearcher(archive)
         ZimFileReader(
           zimReaderSource = zimReaderSource,
           jniKiwixReader = archive,
-          searcher = searcher
+          searcher = searcher,
+          ioDispatcher = testDispatcher
         )
       } catch (_: Exception) {
         null
       }
     }
 
-    container = ZimReaderContainer(realFactory)
+    container = ZimReaderContainer(realFactory, testDispatcher)
   }
 
   @After

@@ -23,6 +23,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -101,12 +102,13 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
       createAndGetSplitedZimFile(true)?.let { zimFile ->
         // test the articleCount and mediaCount of this zim file.
         val zimReaderSource = ZimReaderSource(zimFile)
-        val archive = zimReaderSource.createArchive()
+        val archive = zimReaderSource.createArchive(Dispatchers.IO)
         val zimFileReader =
           ZimFileReader(
             zimReaderSource,
             archive!!,
-            SuggestionSearcher(archive)
+            SuggestionSearcher(archive),
+            Dispatchers.IO
           )
         Assert.assertEquals(zimFileReader.mediaCount, 16)
         Assert.assertEquals(zimFileReader.articleCount, 4)

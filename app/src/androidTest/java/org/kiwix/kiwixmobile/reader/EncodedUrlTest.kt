@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -42,12 +43,13 @@ class EncodedUrlTest : BaseActivityTest() {
     runBlocking {
       val zimFile = getZimFileFromResourceFolder(context, "characters_encoding.zim")
       val zimReaderSource = ZimReaderSource(zimFile)
-      val archive = zimReaderSource.createArchive()
+      val archive = zimReaderSource.createArchive(Dispatchers.IO)
       val zimFileReader =
         ZimFileReader(
           zimReaderSource,
           archive!!,
-          SuggestionSearcher(archive)
+          SuggestionSearcher(archive),
+          ioDispatcher = Dispatchers.IO
         )
       val encodedUrls =
         arrayOf(

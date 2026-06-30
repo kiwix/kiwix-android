@@ -19,7 +19,9 @@
 package org.kiwix.kiwixmobile.core.settings
 
 import eu.mhutti1.utils.storage.Bytes
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.freeSpace
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.totalSpace
@@ -28,7 +30,8 @@ import java.io.File
 import javax.inject.Inject
 
 class StorageCalculator @Inject constructor(
-  private val kiwixDataStore: KiwixDataStore
+  private val kiwixDataStore: KiwixDataStore,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private suspend fun getStorageFile(file: File? = null) =
     file ?: File(kiwixDataStore.selectedStorage.first())
@@ -44,12 +47,13 @@ class StorageCalculator @Inject constructor(
 
   suspend fun availableBytes(file: File? = null): Long {
     val storageFile = getStorageFile(file)
-    return if (storageFile.isFileExist()) {
-      storageFile.freeSpace()
+    return if (storageFile.isFileExist(ioDispatcher)) {
+      storageFile.freeSpace(ioDispatcher)
     } else {
       0L
     }
   }
 
-  suspend fun totalBytes(file: File) = if (file.isFileExist()) file.totalSpace() else 0L
+  suspend fun totalBytes(file: File) =
+    if (file.isFileExist(ioDispatcher)) file.totalSpace(ioDispatcher) else 0L
 }

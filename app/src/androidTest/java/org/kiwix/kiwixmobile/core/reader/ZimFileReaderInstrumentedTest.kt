@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.reader
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -45,8 +46,8 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
   private suspend fun createZimFileReader(): ZimFileReader {
     val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
     val zimReaderSource = ZimReaderSource(zimFile)
-    val archive = zimReaderSource.createArchive()!!
-    return ZimFileReader(zimReaderSource, archive, SuggestionSearcher(archive))
+    val archive = zimReaderSource.createArchive(Dispatchers.IO)!!
+    return ZimFileReader(zimReaderSource, archive, SuggestionSearcher(archive), Dispatchers.IO)
   }
 
   @Test
@@ -149,7 +150,7 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       assertNull(reader.getPageUrlFrom("index"))
 
       // ── Verify Factory.create with non-existent file ──
-      val factory = ZimFileReader.Factory.Impl()
+      val factory = ZimFileReader.Factory.Impl(Dispatchers.IO)
       val nonExistentSource = ZimReaderSource(File("/non/existent/path/fakefile.zim"))
       assertNull(factory.create(nonExistentSource, false))
 

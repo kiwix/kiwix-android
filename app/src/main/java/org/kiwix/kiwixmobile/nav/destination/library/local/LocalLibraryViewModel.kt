@@ -815,7 +815,7 @@ class LocalLibraryViewModel @Inject constructor(
 
   override fun navigateToReaderFragment(file: File) {
     viewModelScope.launch {
-      if (!file.canReadFile()) {
+      if (!file.canReadFile(ioDispatcher)) {
         context.toast(string.unable_to_read_zim_file)
       } else {
         // Save the ZIM file to the libkiwix to display it on the local library screen.

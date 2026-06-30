@@ -33,6 +33,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.BOOKMARK_MANAGER
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
@@ -59,13 +60,15 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
+@Suppress("LongParameterList")
 @Singleton
 class LibkiwixBookmarks @Inject constructor(
   @Named(BOOKMARK_LIBRARY) private val library: Library,
   @Named(BOOKMARK_MANAGER) private val manager: Manager,
   private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  private val zimReaderContainer: ZimReaderContainer?
+  private val zimReaderContainer: ZimReaderContainer?,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : PageDao {
   /**
    * Request new data from Libkiwix when changes occur inside it; otherwise,
@@ -116,13 +119,13 @@ class LibkiwixBookmarks @Inject constructor(
       if (initialized) return@withLock
       withContext(dispatcher) {
         // Check if bookmark folder exist if not then create the folder first.
-        if (!File(bookmarksFolderPath()).isFileExist()) File(bookmarksFolderPath()).mkdir()
+        if (!File(bookmarksFolderPath()).isFileExist(dispatcher)) File(bookmarksFolderPath()).mkdir()
         // Check if library file exist if not then create the file to save the library with book information.
-        if (!libraryFile().isFileExist()) libraryFile().createNewFile()
+        if (!libraryFile().isFileExist(dispatcher)) libraryFile().createNewFile()
         // set up manager to read the library from this file
         manager.readFile(libraryFile().canonicalPath)
         // Check if bookmark file exist if not then create the file to save the bookmarks.
-        if (!bookmarkFile().isFileExist()) bookmarkFile().createNewFile()
+        if (!bookmarkFile().isFileExist(dispatcher)) bookmarkFile().createNewFile()
         // set up manager to read the bookmarks from this file
         manager.readBookmarkFile(bookmarkFile().canonicalPath)
         initialized = true
@@ -428,11 +431,12 @@ class LibkiwixBookmarks @Inject constructor(
       zimReaderContainer?.zimFileReader
     } else {
       bookmarkItem.zimReaderSource?.let {
-        it.createArchive()?.let { archive ->
+        it.createArchive(ioDispatcher)?.let { archive ->
           ZimFileReader(
             it,
             archive,
-            SuggestionSearcher(archive)
+            SuggestionSearcher(archive),
+            ioDispatcher
           )
         }
       }
@@ -470,9 +474,13 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  private suspend fun exportedFile(fileName: String): File {
+  @Suppress("InjectDispatcher")
+  private suspend fun exportedFile(
+    fileName: String,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): File {
     val rootFolder = File(EXPORT_BOOK_MARK_PATH)
-    if (!rootFolder.isFileExist()) rootFolder.mkdir()
+    if (!rootFolder.isFileExist(ioDispatcher)) rootFolder.mkdir()
     return sequence {
       yield(File(rootFolder, fileName))
       yieldAll(
@@ -483,7 +491,7 @@ class LibkiwixBookmarks @Inject constructor(
           )
         }
       )
-    }.first { !it.isFileExist() }
+    }.first { !it.isFileExist(ioDispatcher) }
   }
 
   suspend fun importBookmarks(bookmarkFile: File) {
@@ -505,7 +513,7 @@ class LibkiwixBookmarks @Inject constructor(
     kiwixDataStore.context.toast(R.string.bookmark_imported_message)
 
     if (bookmarkFile.exists()) {
-      bookmarkFile.deleteFile()
+      bookmarkFile.deleteFile(ioDispatcher)
     }
   }
 

@@ -57,9 +57,9 @@ class ZimIntegrityChecker @Inject constructor(private val zimReaderContainer: Zi
       var archive: Archive? = null
       try {
         archive = if (isBrandedApp) {
-          zimReaderContainer.zimFileReader?.zimReaderSource?.createArchive()
+          zimReaderContainer.zimFileReader?.zimReaderSource?.createArchive(dispatcher)
         } else {
-          zimReaderSource.createArchive()
+          zimReaderSource.createArchive(dispatcher)
         }
         var isZIMFileValid = archive?.check() == true
         if (archive?.isMultiPart == true || isBrandedApp || !isZIMFileValid) {

@@ -25,6 +25,7 @@ import androidx.core.content.FileProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import java.io.File
 
+@Suppress("InjectDispatcher")
 @RunWith(AndroidJUnit4::class)
 class ZimReaderSourceTest {
   private lateinit var testZimFile: File
@@ -49,6 +51,8 @@ class ZimReaderSourceTest {
   private val targetContext =
     InstrumentationRegistry.getInstrumentation().targetContext
   private val tempFiles = mutableListOf<File>()
+
+  private val testDispatcher = Dispatchers.IO
 
   @Before
   fun setup() {
@@ -66,9 +70,9 @@ class ZimReaderSourceTest {
   fun fileSourceTest() = runTest {
     val source = ZimReaderSource(testZimFile)
     // Normal operations
-    assertTrue(source.exists())
-    assertTrue(source.canOpenInLibkiwix())
-    val archive = source.createArchive()
+    assertTrue(source.exists(testDispatcher))
+    assertTrue(source.canOpenInLibkiwix(testDispatcher))
+    val archive = source.createArchive(testDispatcher)
     assertNotNull(archive)
     archive?.dispose()
     assertEquals(testZimFile.canonicalPath, source.toDatabase())
@@ -94,15 +98,15 @@ class ZimReaderSourceTest {
       tempFiles += this
     }
     val corruptSource = ZimReaderSource(corruptFile)
-    assertTrue(corruptSource.exists())
-    assertTrue(corruptSource.canOpenInLibkiwix())
+    assertTrue(corruptSource.exists(testDispatcher))
+    assertTrue(corruptSource.canOpenInLibkiwix(testDispatcher))
 
     // Non-existent file
     val missingFile = File(targetContext.cacheDir, "ghost.zim")
     val missingSource = ZimReaderSource(missingFile)
-    assertFalse(missingSource.exists())
-    assertFalse(missingSource.canOpenInLibkiwix())
-    assertNull(missingSource.createArchive())
+    assertFalse(missingSource.exists(testDispatcher))
+    assertFalse(missingSource.canOpenInLibkiwix(testDispatcher))
+    assertNull(missingSource.createArchive(testDispatcher))
 
     // fromDatabaseValue (file path)
     val dbSource = ZimReaderSource.fromDatabaseValue(testZimFile.absolutePath)
@@ -124,17 +128,17 @@ class ZimReaderSourceTest {
 
           // Single descriptor
           val singleSource = ZimReaderSource(assetFileDescriptorList = listOf(fdFull))
-          assertTrue(singleSource.exists())
-          assertTrue(singleSource.canOpenInLibkiwix())
-          val archive = singleSource.createArchive()
+          assertTrue(singleSource.exists(testDispatcher))
+          assertTrue(singleSource.canOpenInLibkiwix(testDispatcher))
+          val archive = singleSource.createArchive(testDispatcher)
           assertNotNull(archive)
           archive?.dispose()
 
           // Chunked descriptors
           val multiSource = ZimReaderSource(assetFileDescriptorList = listOf(fd1, fd2))
-          assertTrue(multiSource.exists())
-          assertTrue(multiSource.canOpenInLibkiwix())
-          val multiArchive = multiSource.createArchive()
+          assertTrue(multiSource.exists(testDispatcher))
+          assertTrue(multiSource.canOpenInLibkiwix(testDispatcher))
+          val multiArchive = multiSource.createArchive(testDispatcher)
           assertNotNull(multiArchive)
           multiArchive?.dispose()
 
@@ -152,9 +156,9 @@ class ZimReaderSourceTest {
     // Empty descriptor list
     val emptyDescriptorSource = ZimReaderSource(assetFileDescriptorList = emptyList())
 
-    assertFalse(emptyDescriptorSource.exists())
-    assertFalse(emptyDescriptorSource.canOpenInLibkiwix())
-    assertNull(emptyDescriptorSource.createArchive())
+    assertFalse(emptyDescriptorSource.exists(testDispatcher))
+    assertFalse(emptyDescriptorSource.canOpenInLibkiwix(testDispatcher))
+    assertNull(emptyDescriptorSource.createArchive(testDispatcher))
 
     // Default ZimReaderSource
     val defaultSource = ZimReaderSource()
@@ -186,9 +190,9 @@ class ZimReaderSourceTest {
 
     // Invalid URI
     val invalidUriSource = ZimReaderSource(Uri.parse("content://invalid/nonexistent"))
-    assertFalse(invalidUriSource.exists())
-    assertFalse(invalidUriSource.canOpenInLibkiwix())
-    assertNull(invalidUriSource.createArchive())
+    assertFalse(invalidUriSource.exists(testDispatcher))
+    assertFalse(invalidUriSource.canOpenInLibkiwix(testDispatcher))
+    assertNull(invalidUriSource.createArchive(testDispatcher))
 
     // fromDatabaseValue with URI
     val dbUriSource = ZimReaderSource.fromDatabaseValue(uri.toString())

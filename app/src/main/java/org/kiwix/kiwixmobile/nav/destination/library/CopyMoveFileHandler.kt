@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -63,6 +64,7 @@ class CopyMoveFileHandler @Inject constructor(
   private val fileOperationHandler: FileOperationHandler,
   private val copyMoveProgressBarController: CopyMoveProgressBarController,
   @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
@@ -358,7 +360,7 @@ class CopyMoveFileHandler @Inject constructor(
     copyMoveProgressBarController.dismissCopyMoveProgressDialog()
     fileCopyMoveCallback?.onError("$errorMessage").also {
       // Clean up the destination file if an error occurs
-      destinationFile.deleteFile()
+      destinationFile.deleteFile(ioDispatcher)
     }
   }
 
@@ -402,7 +404,7 @@ class CopyMoveFileHandler @Inject constructor(
     var archive: Archive? = null
     return try {
       // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
-      archive = ZimReaderSource(destinationFile).createArchive()
+      archive = ZimReaderSource(destinationFile).createArchive(ioDispatcher)
       archive?.hasMainEntry() == true
     } catch (_: Exception) {
       // if it is a invalid ZIM file
@@ -423,7 +425,7 @@ class CopyMoveFileHandler @Inject constructor(
           File(root, fileName.replace(".", "_$it."))
         }
       )
-    }.first { !it.isFileExist() }
+    }.first { !it.isFileExist(ioDispatcher) }
 
     destinationFile.createNewFile()
     return destinationFile

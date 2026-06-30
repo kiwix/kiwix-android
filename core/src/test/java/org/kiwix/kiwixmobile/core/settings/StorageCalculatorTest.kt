@@ -23,10 +23,15 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 internal class StorageCalculatorTest {
-  private val storageCalculator = StorageCalculator(mockk())
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val storageCalculator = StorageCalculator(mockk(), mainDispatcherRule.dispatcher)
   private val file: File = mockk()
 
   @Test

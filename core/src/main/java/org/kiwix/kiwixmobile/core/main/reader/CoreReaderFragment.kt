@@ -1131,7 +1131,7 @@ abstract class CoreReaderFragment :
     tempWebViewListForUndo.forEach { it.dispose() }
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
-    activity?.let(::deleteCachedFiles)
+    activity?.let { deleteCachedFiles(it, ioDispatcher) }
     documentSectionListener = null
     documentParser = null
     stopReadAloudSafely()
@@ -1477,8 +1477,8 @@ abstract class CoreReaderFragment :
       val cacheDir =
         FileUtils.getFileCacheDir(requireContext()) ?: return@runSafelyInCoreReaderLifecycleScope
       val pdfFile = File(cacheDir, "$slugifiedTitle.pdf")
-      if (pdfFile.isFileExist()) {
-        pdfFile.deleteFile()
+      if (pdfFile.isFileExist(ioDispatcher)) {
+        pdfFile.deleteFile(ioDispatcher)
       }
       pdfFile.createNewFile()
       val printAdapter = webView.createPrintDocumentAdapter(title)
@@ -1607,7 +1607,7 @@ abstract class CoreReaderFragment :
     isBrandedApp: Boolean = false
   ) {
     if (isBrandedApp || hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      if (zimReaderSource.canOpenInLibkiwix()) {
+      if (zimReaderSource.canOpenInLibkiwix(ioDispatcher)) {
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
         hideNoBookOpenViews()

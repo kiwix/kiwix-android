@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -45,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForStandalone
 import org.kiwix.kiwixmobile.nav.destination.library.local.SelectedZimFileCallback
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,6 +56,11 @@ class ProcessSelectedZimFilesForStandaloneTest {
   private val activity: Activity = mockk(relaxed = true)
   private val selectedZimFileCallback: SelectedZimFileCallback = mockk(relaxed = true)
 
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
+
   @BeforeEach
   fun setup() {
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
@@ -62,7 +69,8 @@ class ProcessSelectedZimFilesForStandaloneTest {
 
     processSelectedZimFiles = ProcessSelectedZimFilesForStandalone(
       kiwixDataStore,
-      activity
+      activity,
+      mainDispatcherRule.dispatcher
     )
     processSelectedZimFiles.init(selectedZimFileCallback)
   }
@@ -104,8 +112,8 @@ class ProcessSelectedZimFilesForStandaloneTest {
     val uri = mockk<Uri>()
     val filePath = "/storage/emulated/0/test.jpg"
 
-    coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns filePath
-    coEvery { any<File>().isFileExist() } returns true
+    coEvery { FileUtils.getLocalFilePathByUri(any(), uri, testDispatcher) } returns filePath
+    coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns true
     every { FileUtils.isValidZimFile(filePath) } returns false
     every { activity.getString(R.string.error_file_invalid, filePath) } returns "Invalid file"
     every { activity.toast(any<String>(), any()) } just Runs
@@ -119,8 +127,8 @@ class ProcessSelectedZimFilesForStandaloneTest {
   fun `processSelectedFiles should show toast when file not found`() = runTest {
     val uri = mockk<Uri>()
 
-    coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns null
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { FileUtils.getLocalFilePathByUri(any(), uri, testDispatcher) } returns null
+    coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns false
     every { uri.toString() } returns "content://test"
     every {
       activity.getString(R.string.error_file_not_found, "content://test")
@@ -214,8 +222,8 @@ class ProcessSelectedZimFilesForStandaloneTest {
   ): Uri {
     val uri = mockk<Uri>()
     every { uri.toString() } returns uriString
-    coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns filePath
-    coEvery { any<File>().isFileExist() } returns true
+    coEvery { FileUtils.getLocalFilePathByUri(any(), uri, testDispatcher) } returns filePath
+    coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns true
     every { FileUtils.isValidZimFile(filePath) } returns true
     return uri
   }

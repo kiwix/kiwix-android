@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.mimetype
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -42,12 +43,13 @@ class MimeTypeTest : BaseActivityTest() {
     runBlocking {
       val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
       val zimSource = ZimReaderSource(zimFile)
-      val archive = zimSource.createArchive()
+      val archive = zimSource.createArchive(Dispatchers.IO)
       val zimFileReader =
         ZimFileReader(
           zimSource,
           archive!!,
-          SuggestionSearcher(archive)
+          SuggestionSearcher(archive),
+          Dispatchers.IO
         )
       zimFileReader.getRandomArticleUrl()?.let { randomArticle ->
         val mimeType = zimFileReader.getMimeTypeFromUrl(randomArticle)

@@ -449,7 +449,7 @@ class KiwixDataStore @Inject constructor(
             setSelectedStoragePosition(ZERO)
           }
 
-        !File(storage).isFileExist() ->
+        !File(storage).isFileExist(ioDispatcher) ->
           getPublicDirectoryPath(defaultPublicStorage()).also {
             setSelectedStoragePosition(ZERO)
           }

@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.page.bookmarks
 
 import io.objectbox.BoxStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -94,14 +95,15 @@ class ImportBookmarkTest : BaseActivityTest() {
     super.waitForIdle()
     launchMainActivity()
     boxStore = DatabaseModule.boxStore
-    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore)
+    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore, Dispatchers.IO)
     libkiwixBookmarks =
       LibkiwixBookmarks(
         library,
         manager,
         kiwixDataStore,
         libkiwixBookOnDisk,
-        null
+        null,
+        Dispatchers.IO
       )
   }
 

@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
 class DeleteFilesUseCaseTest {
@@ -53,6 +55,11 @@ class DeleteFilesUseCaseTest {
   private val file2 = File("/storage/test.zim")
   private lateinit var book: BookOnDisk
 
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
+
   @BeforeEach
   fun setup() {
     clearAllMocks()
@@ -60,10 +67,10 @@ class DeleteFilesUseCaseTest {
     mockkObject(FileUtils)
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.FileExtensionsKt")
 
-    coEvery { any<File>().isFileExist() } returns false
+    coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns false
 
     coEvery {
-      FileUtils.deleteZimFile(file1.path)
+      FileUtils.deleteZimFile(file1.path, testDispatcher)
     } just Runs
 
     val libkiwixBook =
@@ -72,7 +79,7 @@ class DeleteFilesUseCaseTest {
     book = BookOnDisk(book = libkiwixBook, zimReaderSource = ZimReaderSource(file1))
 
     deleteFilesUseCase =
-      DeleteFilesUseCase(libkiwixBookOnDisk, zimReaderContainer)
+      DeleteFilesUseCase(libkiwixBookOnDisk, zimReaderContainer, testDispatcher)
   }
 
   @AfterEach
@@ -94,7 +101,7 @@ class DeleteFilesUseCaseTest {
   @Test
   fun invoke_whenFileStillExists_returnsFalseAndDoesNotDeleteBook() = runTest {
     coEvery {
-      file1.isFileExist()
+      file1.isFileExist(testDispatcher)
     } returns true
 
     val result = deleteFilesUseCase(listOf(book))
@@ -102,7 +109,7 @@ class DeleteFilesUseCaseTest {
     assertFalse(result)
 
     coVerify(exactly = 1) {
-      FileUtils.deleteZimFile(file1.path)
+      FileUtils.deleteZimFile(file1.path, testDispatcher)
     }
     coVerify(exactly = 0) {
       libkiwixBookOnDisk.delete(book.book.id)
@@ -119,7 +126,7 @@ class DeleteFilesUseCaseTest {
     assertFalse(result)
 
     coVerify(exactly = 0) {
-      FileUtils.deleteZimFile(any())
+      FileUtils.deleteZimFile(any(), testDispatcher)
     }
     coVerify(exactly = 0) {
       libkiwixBookOnDisk.delete(book.book.id)
@@ -183,7 +190,7 @@ class DeleteFilesUseCaseTest {
   @Test
   fun invoke_whenOneBookFails_returnsFalse() = runTest {
     coEvery {
-      file2.isFileExist()
+      file2.isFileExist(testDispatcher)
     } returns true
 
     val failingBook =
