@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
@@ -122,6 +123,6 @@ interface CoreComponent {
   @MainDispatcher
   fun provideMainDispatcher(): CoroutineDispatcher
   fun providePdfPrinter(): PdfPrint
-
   fun provideTabsManager(): TabsManager
+  fun provideReaderIntentManager(): ReaderIntentManager
 }

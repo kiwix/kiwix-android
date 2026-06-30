@@ -65,7 +65,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
@@ -300,9 +299,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     pendingIntentFlow.value = intent
-    supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onNewIntent(intent, this)
-    }
   }
 
   private fun handleGetContentIntent(intent: Intent?) {

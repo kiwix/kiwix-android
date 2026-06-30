@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -43,8 +42,6 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
-import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
-import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
@@ -82,16 +79,6 @@ open class KiwixWebView constructor(
   private var kiwixWebChromeClient: KiwixWebChromeClient? = null
   private var textZoomJob: Job? = null
 
-  private fun setWindowVisibility(isFullScreen: Boolean) {
-    (context as Activity).window.apply {
-      if (isFullScreen) {
-        showFullScreenMode(this)
-      } else {
-        closeFullScreenMode(this)
-      }
-    }
-  }
-
   init {
     if (BuildConfig.DEBUG) {
       WebView.setWebContentsDebuggingEnabled(true)
@@ -117,7 +104,6 @@ open class KiwixWebView constructor(
         setOnToggledFullscreen(
           object : ToggledFullscreenCallback {
             override fun toggledFullscreen(fullscreen: Boolean) {
-              setWindowVisibility(fullscreen)
               callback.onFullscreenVideoToggled(fullscreen)
             }
           }

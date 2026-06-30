@@ -31,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.safelyConsumeObservable
+import org.kiwix.kiwixmobile.core.extensions.enterFullscreen
+import org.kiwix.kiwixmobile.core.extensions.exitFullscreen
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -45,6 +47,7 @@ import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -53,6 +56,7 @@ import java.io.File
 import java.io.IOException
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@Suppress("LongMethod")
 @Composable
 fun ReaderScreenRoute(
   viewModel: CoreReaderViewModel,
@@ -89,12 +93,22 @@ fun ReaderScreenRoute(
         viewModel.emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED)))
       }
   }
+  LaunchedEffect(uiState.shouldShowFullScreen) {
+    with(activity.window) {
+      if (uiState.shouldShowFullScreen) {
+        enterFullscreen()
+      } else {
+        exitFullscreen()
+      }
+    }
+  }
   LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResume() }
   LaunchedEffect(Unit) {
     viewModel.initialize(activity, alertDialogShower)
     // Update the title when Compose is ready to fix the issue
     // where the user opens pages from history, notes, or bookmarks.
     viewModel.updateTitle()
+    LanguageUtils(activity).changeFont(activity, viewModel.kiwixDataStore)
   }
   BindReadAloudService(activity, viewModel)
   CollectEffect(

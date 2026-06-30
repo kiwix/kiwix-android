@@ -156,9 +156,7 @@ class ReaderSessionManager @Inject constructor(
       if (view.url == null) return@forEachIndexed
       getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
     }
-    return webViewHistoryEntityList.also {
-      android.util.Log.e("HISTORY", "getWebViewHistoryList: $it")
-    }
+    return webViewHistoryEntityList
   }
 
   /**

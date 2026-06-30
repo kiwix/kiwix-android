@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
+import org.kiwix.kiwixmobile.core.main.reader.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
@@ -93,7 +94,8 @@ class BrandedReaderViewModel @Inject constructor(
   pendingSearchItemManager: PendingSearchItemManager,
   readerArticleManager: ReaderArticleManager,
   readAloudManager: ReadAloudManager,
-  donationDialogHandler: DonationDialogHandler
+  donationDialogHandler: DonationDialogHandler,
+  findInPageManager: FindInPageManager
 ) : CoreReaderViewModel(
     context,
     kiwixDataStore,
@@ -112,7 +114,8 @@ class BrandedReaderViewModel @Inject constructor(
     pendingSearchItemManager,
     readerArticleManager,
     readAloudManager,
-    donationDialogHandler
+    donationDialogHandler,
+    findInPageManager
   ) {
   override suspend fun initialize(
     coreMainActivity: CoreMainActivity,
@@ -344,7 +347,7 @@ class BrandedReaderViewModel @Inject constructor(
     }
 
   override fun navigationIcon(): IconItem = when {
-    readerMenuState?.isInTabSwitcher == true -> {
+    uiState.value.showTabSwitcher -> {
       IconItem.Drawable(drawable.ic_round_add_white_36dp)
     }
 

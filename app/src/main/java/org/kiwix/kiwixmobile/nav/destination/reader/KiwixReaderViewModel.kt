@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
+import org.kiwix.kiwixmobile.core.main.reader.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.OPEN_HOME_SCREEN_DELAY
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
@@ -84,7 +85,8 @@ class KiwixReaderViewModel @Inject constructor(
   pendingSearchItemManager: PendingSearchItemManager,
   readerArticleManager: ReaderArticleManager,
   readAloudManager: ReadAloudManager,
-  donationDialogHandler: DonationDialogHandler
+  donationDialogHandler: DonationDialogHandler,
+  findInPageManager: FindInPageManager
 ) : CoreReaderViewModel(
     context,
     kiwixDataStore,
@@ -103,7 +105,8 @@ class KiwixReaderViewModel @Inject constructor(
     pendingSearchItemManager,
     readerArticleManager,
     readAloudManager,
-    donationDialogHandler
+    donationDialogHandler,
+    findInPageManager
   ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
@@ -267,6 +270,15 @@ class KiwixReaderViewModel @Inject constructor(
     }
   }
 
+  override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
+    if (isFullScreen) {
+      hideNavBar()
+    } else {
+      showNavBar()
+    }
+    super.onFullscreenVideoToggled(isFullScreen)
+  }
+
   /**
    * Hides the tab switcher and optionally closes the ZIM book based on the `shouldCloseZimBook` parameter.
    *
@@ -285,17 +297,19 @@ class KiwixReaderViewModel @Inject constructor(
     emitEffect(ReaderEffect.ShowActivityBottomAppBar)
     if (readerWebViewManager.webViewList().isEmpty()) {
       readerMenuState?.hideTabSwitcher()
+      updateState { copy(showTabSwitcher = false) }
       exitBook(shouldCloseZimBook)
     } else {
       updateState {
         copy(
           showBottomBar = true,
           loading = false,
-          progress = ZERO
+          progress = ZERO,
+          showTabSwitcher = false
         )
       }
       readerMenuState?.showWebViewOptions(urlIsValid())
-      readerWebViewManager.selectTab(readerWebViewManager.currentWebViewIndex)
+      selectTab(readerWebViewManager.currentWebViewIndex)
     }
   }
 

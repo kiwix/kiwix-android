@@ -45,6 +45,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -105,6 +106,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BACK_TO_TOP_HIDE_DELAY_MS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
@@ -145,7 +147,8 @@ abstract class CoreReaderViewModel(
   val pendingSearchItemManager: PendingSearchItemManager,
   val readerArticleManager: ReaderArticleManager,
   val readAloudManager: ReadAloudManager,
-  val donationDialogHandler: DonationDialogHandler
+  val donationDialogHandler: DonationDialogHandler,
+  val findInPageManager: FindInPageManager
 ) : ViewModel(),
   WebViewCallback,
   ReaderMenuState.MenuClickListener,
@@ -181,7 +184,8 @@ abstract class CoreReaderViewModel(
     val showTableOfContentDrawer: Boolean = false,
     val tableOfContentTitle: String = "",
     val documentSections: List<DocumentSection> = emptyList(),
-    val showDonationPopup: Boolean = false
+    val showDonationPopup: Boolean = false,
+    val findInPageUiState: FindInPageManager.FindInPageUiState = FindInPageManager.FindInPageUiState()
   )
 
   sealed interface ReaderAction {
@@ -212,6 +216,11 @@ abstract class CoreReaderViewModel(
       val isOpenedFromTabView: Boolean = false,
       val isVoice: Boolean = false
     ) : ReaderAction
+
+    data class FindInPageQueryChanged(val query: String) : ReaderAction
+    data object FindInPageNextClicked : ReaderAction
+    data object FindInPagePreviousClicked : ReaderAction
+    data object FindInPageCloseClicked : ReaderAction
   }
 
   sealed interface ReaderEffect {
@@ -249,6 +258,7 @@ abstract class CoreReaderViewModel(
   private val webUrlsFlow = MutableStateFlow("")
   var readerMenuState: ReaderMenuState? = null
   private var documentParser: DocumentParser? = null
+  private var hideBackToTopJob: Job? = null
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
@@ -275,10 +285,6 @@ abstract class CoreReaderViewModel(
     observeTabsState()
   }
 
-  private fun requireDocumentParser() = requireNotNull(documentParser) {
-    "DocumentParser is not initialized. Call CoreReaderViewModel.setupDocumentParser before using it"
-  }
-
   private fun setupDocumentParser() {
     documentParser = DocumentParser(requireNotNull(documentSectionListener)).apply {
       loadDocumentParserJs(context)
@@ -291,7 +297,7 @@ abstract class CoreReaderViewModel(
         AudioFocusGain -> updateTtsPausedButtonText(string.tts_pause)
         AudioFocusLoss -> updateTtsPausedButtonText(string.tts_resume)
         SpeakingEnded -> onReadAloudSpeakEnded()
-        SpeakingStarted -> updateState { copy(showTtsControls = true) }
+        SpeakingStarted -> onReadAloudSpeakStarted()
         StartReadAloud -> startReadAloud()
         StartReadSelection -> startReadSelection()
         TtsPaused -> updateTtsPausedButtonText(string.tts_resume)
@@ -341,6 +347,11 @@ abstract class CoreReaderViewModel(
         }
       }
     }
+  }
+
+  private fun onReadAloudSpeakStarted() {
+    updateState { copy(showTtsControls = true) }
+    readerMenuState?.onTextToSpeechStarted()
   }
 
   private fun onReadAloudSpeakEnded() {
@@ -431,6 +442,10 @@ abstract class CoreReaderViewModel(
       )
 
       is ReaderAction.CloseTab -> closeTab(action.position)
+      is ReaderAction.FindInPageQueryChanged -> onFindSearchChanged(action.query)
+      ReaderAction.FindInPageNextClicked -> onFindNextClicked()
+      ReaderAction.FindInPagePreviousClicked -> onFindPreviousClicked()
+      ReaderAction.FindInPageCloseClicked -> closeFindInPage()
     }
   }
 
@@ -493,7 +508,7 @@ abstract class CoreReaderViewModel(
    * WARNING: If modifying this method, ensure thorough testing with custom apps
    * to verify proper functionality.
    */
-  open fun navigationIcon() = if (readerMenuState?.isInTabSwitcher == true) {
+  open fun navigationIcon() = if (uiState.value.showTabSwitcher) {
     IconItem.Drawable(R.drawable.ic_round_add_white_36dp)
   } else {
     IconItem.Vector(Icons.Filled.Menu)
@@ -608,7 +623,7 @@ abstract class CoreReaderViewModel(
       readerSessionManager.saveReaderSession {
         // Pass this function to saveTabStates so that after saving
         // the tab state in the database, it will open the search fragment.
-        openSearch(isOpenedFromTabView = readerMenuState?.isInTabSwitcher == true)
+        openSearch(isOpenedFromTabView = uiState.value.showTabSwitcher)
       }
     }
   }
@@ -672,7 +687,25 @@ abstract class CoreReaderViewModel(
    * specified title and displays the search input UI.
    */
   override fun onFindInPageMenuClicked() {
-    // TODO implement this with compose UI and remove the acivity actionbar UI.
+    findInPageManager.setWebView(getCurrentWebView())
+    updateState { copy(findInPageUiState = findInPageUiState.copy(visible = true)) }
+  }
+
+  private fun onFindSearchChanged(text: String) {
+    findInPageManager.search(text)
+  }
+
+  private fun onFindNextClicked() {
+    findInPageManager.findNext()
+  }
+
+  private fun onFindPreviousClicked() {
+    findInPageManager.findPrevious()
+  }
+
+  private fun closeFindInPage() {
+    findInPageManager.stop()
+    updateState { copy(findInPageUiState = findInPageUiState.copy(visible = false)) }
   }
 
   override fun webViewUrlLoading() {
@@ -751,17 +784,22 @@ abstract class CoreReaderViewModel(
   override fun webViewPageChanged(page: Int, maxPages: Int) {
     viewModelScope.launch {
       if (!isBackToTopEnabled()) return@launch
-      // TODO implement backToTopTimer.
-      // hideBackToTopTimer?.apply {
-      //   cancel()
-      //   start()
-      // }
+      restartHideBackToTopTimer()
       val scrollY = getCurrentWebView().scrollY
       if (scrollY > 200 && !uiState.value.showTtsControls) {
         showBackToTopButton()
       } else {
         hideBackToTopButton()
       }
+    }
+  }
+
+  private fun restartHideBackToTopTimer() {
+    hideBackToTopJob?.cancel()
+
+    hideBackToTopJob = viewModelScope.launch {
+      delay(BACK_TO_TOP_HIDE_DELAY_MS)
+      hideBackToTopButton()
     }
   }
 
@@ -831,7 +869,7 @@ abstract class CoreReaderViewModel(
       videoView = requireNotNull(uiState.value.videoView)
     ).apply {
       setUpWithTextToSpeech(this)
-      requireDocumentParser().initInterface(this)
+      documentParser?.initInterface(this)
     }
     if (selectTab) {
       launchInViewModelScope {
@@ -912,7 +950,7 @@ abstract class CoreReaderViewModel(
   }
 
   private fun updateTableOfContents() {
-    val js = requireDocumentParser().requireDocumentParserJs()
+    val js = documentParser?.requireDocumentParserJs()
     loadUrlWithCurrentWebview("javascript:($js)()")
   }
 
@@ -929,6 +967,7 @@ abstract class CoreReaderViewModel(
           hideNoBookOpenViews()
           openMainPage()
           readerMenuState?.onFileOpened(urlIsValid())
+          updateState { copy(showTabSwitcher = false) }
           observeBookmarks(result.zimFileReader)
           updateTitle()
         }
@@ -1171,7 +1210,8 @@ abstract class CoreReaderViewModel(
       copy(
         showBottomBar = true,
         loading = false,
-        progress = ZERO
+        progress = ZERO,
+        showTabSwitcher = false
       )
     }
     showSearchPlaceHolderInToolbar(false)
@@ -1258,7 +1298,7 @@ abstract class CoreReaderViewModel(
 
   private fun updateBottomToolbarVisibility() {
     updateState {
-      copy(showBottomBar = readerMenuState?.isInTabSwitcher == false)
+      copy(showBottomBar = !uiState.value.showTabSwitcher)
     }
   }
 
@@ -1276,7 +1316,8 @@ abstract class CoreReaderViewModel(
         loading = false,
         progress = ZERO,
         title = "",
-        showBackToTopButton = false
+        showBackToTopButton = false,
+        showTabSwitcher = true
       )
     }
     showSearchPlaceHolderInToolbar(true)
@@ -1372,6 +1413,7 @@ abstract class CoreReaderViewModel(
         selectTab(currentTab)
         onComplete.invoke()
         readerMenuState?.showWebViewOptions(urlIsValid())
+        updateState { copy(showTabSwitcher = false) }
       }
 
       is ReaderWebViewManager.RestoreTabsResult.ErrorInRestoringTabs -> {
@@ -1428,11 +1470,10 @@ abstract class CoreReaderViewModel(
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
 
-      // TODO uncomment this when compatCallback functionality is migrated to compose.
-      // compatCallback?.isActive == true -> {
-      //   compatCallback?.finish()
-      //   return FragmentActivityExtensions.Super.ShouldNotCall
-      // }
+      uiState.value.findInPageUiState.visible -> {
+        closeFindInPage()
+        return FragmentActivityExtensions.Super.ShouldNotCall
+      }
 
       uiState.value.showTableOfContentDrawer -> {
         onAction(ReaderAction.CloseTocDrawer)
@@ -1553,7 +1594,7 @@ abstract class CoreReaderViewModel(
    * - Otherwise, toggles the navigation drawer: opens it if closed, closes it if open.
    */
   open fun navigationIconClick(isNavigationDrawerOpen: Boolean) {
-    if (readerMenuState?.isInTabSwitcher == true) {
+    if (uiState.value.showTabSwitcher) {
       onHomeMenuClicked()
       return
     }
@@ -1567,7 +1608,7 @@ abstract class CoreReaderViewModel(
   }
 
   fun navigationIconContentDescription() =
-    if (readerMenuState?.isInTabSwitcher == true) {
+    if (uiState.value.showTabSwitcher) {
       string.search_open_in_new_tab
     } else {
       string.open_drawer
@@ -1616,6 +1657,8 @@ abstract class CoreReaderViewModel(
     documentParser = null
     zimReaderSource = null
     donationDialogHandler.setDonationDialogCallBack(null)
+    hideBackToTopJob?.cancel()
+    hideBackToTopJob = null
     super.onCleared()
   }
 }

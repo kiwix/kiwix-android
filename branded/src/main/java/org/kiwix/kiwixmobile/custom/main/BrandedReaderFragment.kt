@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
@@ -47,7 +46,6 @@ import org.kiwix.kiwixmobile.core.main.reader.ReaderMenuState
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForBrandedApp
@@ -119,19 +117,19 @@ class BrandedReaderFragment : CoreReaderFragment() {
       White
     }
 
-  override fun navigationIcon(): IconItem = when {
-    readerMenuState?.isInTabSwitcher == true -> {
-      IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_round_add_white_36dp)
-    }
-
-    BuildConfig.DISABLE_TITLE -> {
-      // if the title is disable then set the app logo to hamburger icon,
-      // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
-      IconItem.MipmapImage(R.mipmap.ic_launcher)
-    }
-
-    else -> IconItem.Vector(Icons.Filled.Menu)
-  }
+  // override fun navigationIcon(): IconItem = when {
+  //   // readerMenuState?.isInTabSwitcher == true -> {
+  //   //   IconItem.Drawable(org.kiwix.kiwixmobile.core.R.drawable.ic_round_add_white_36dp)
+  //   // }
+  //
+  //   BuildConfig.DISABLE_TITLE -> {
+  //     // if the title is disable then set the app logo to hamburger icon,
+  //     // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
+  //     IconItem.MipmapImage(R.mipmap.ic_launcher)
+  //   }
+  //
+  //   else -> IconItem.Vector(Icons.Filled.Menu)
+  // }
 
   /**
    * Overrides the method to hide/show the placeholder from toolbar.

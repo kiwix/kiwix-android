@@ -142,6 +142,7 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.D
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderUiState
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
+import org.kiwix.kiwixmobile.core.ui.components.FindInPageAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
@@ -318,7 +319,17 @@ private fun ReaderTopBar(
   onReaderAction: (ReaderAction) -> Unit,
   navigationIcon: @Composable () -> Unit,
 ) {
-  if (!state.shouldShowFullScreen) {
+  if (state.shouldShowFullScreen) return
+  if (state.findInPageUiState.visible) {
+    FindInPageAppBar(
+      query = state.findInPageUiState.query,
+      resultText = state.findInPageUiState.resultText,
+      onQueryChange = { onReaderAction(ReaderAction.FindInPageQueryChanged(it)) },
+      onPreviousClick = { onReaderAction(ReaderAction.FindInPagePreviousClicked) },
+      onNextClick = { onReaderAction(ReaderAction.FindInPageNextClicked) },
+      onCloseClick = { onReaderAction(ReaderAction.FindInPageCloseClicked) }
+    )
+  } else {
     KiwixAppBar(
       title = if (state.showTabSwitcher) "" else state.title,
       navigationIcon = navigationIcon,

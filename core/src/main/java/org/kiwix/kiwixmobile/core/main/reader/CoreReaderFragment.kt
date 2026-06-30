@@ -54,7 +54,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -170,7 +169,6 @@ import org.kiwix.kiwixmobile.core.utils.ShortcutResult
 import org.kiwix.kiwixmobile.core.utils.ShortcutUtils
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -470,14 +468,14 @@ abstract class CoreReaderFragment :
           // where the user opens pages from history, notes, or bookmarks.
           updateTitle()
         }
-        LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
-          readerScreenState.update {
-            copy(
-              currentWebViewPosition = currentWebViewIndex,
-              showTabSwitcher = readerMenuState?.isInTabSwitcher == true
-            )
-          }
-        }
+        // LaunchedEffect(currentWebViewIndex, readerMenuState?.isInTabSwitcher) {
+        //   readerScreenState.update {
+        //     copy(
+        //       currentWebViewPosition = currentWebViewIndex,
+        //       showTabSwitcher = readerMenuState?.isInTabSwitcher == true
+        //     )
+        //   }
+        // }
         DialogHost(alertDialogShower as AlertDialogShower)
         DisposableEffect(Unit) {
           onDispose {
@@ -569,32 +567,6 @@ abstract class CoreReaderFragment :
    */
   open fun getTocButtonStateAndAction(): Pair<Boolean, () -> Unit> = true to { openToc() }
 
-  private fun navigationIconContentDescription() =
-    if (readerMenuState?.isInTabSwitcher == true) {
-      string.search_open_in_new_tab
-    } else {
-      string.open_drawer
-    }
-
-  /**
-   * Handles clicks on the navigation icon.
-   * - If the tab switcher is active, triggers the home menu action.
-   * - Otherwise, toggles the navigation drawer: opens it if closed, closes it if open.
-   */
-  open fun navigationIconClick() {
-    if (readerMenuState?.isInTabSwitcher == true) {
-      onHomeMenuClicked()
-      return
-    }
-
-    val activity = activity as? CoreMainActivity
-    if (activity?.navigationDrawerIsOpen() == true) {
-      activity.closeNavigationDrawer()
-    } else {
-      activity?.openNavigationDrawer()
-    }
-  }
-
   /**
    * Returns the tint color to be applied to the navigation icon.
    *
@@ -604,20 +576,6 @@ abstract class CoreReaderFragment :
    * By default, this returns [White], which is appropriate for vector icons that rely on tinting.
    */
   open fun navigationIconTint() = White
-
-  /**
-   * Provides the navigationIcon based on condition.
-   * Subclasses like CustomReaderFragment override this method to provide custom
-   * behavior, such as set the app icon on hamburger when configure to not show the title.
-   *
-   * WARNING: If modifying this method, ensure thorough testing with custom apps
-   * to verify proper functionality.
-   */
-  open fun navigationIcon() = if (readerMenuState?.isInTabSwitcher == true) {
-    IconItem.Drawable(R.drawable.ic_round_add_white_36dp)
-  } else {
-    IconItem.Vector(Icons.Filled.Menu)
-  }
 
   private fun addAlertDialogToDialogHost() {
     externalLinkOpener?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
@@ -645,21 +603,19 @@ abstract class CoreReaderFragment :
     composeView = it
   }
 
+  @Suppress("UnusedParameter")
   private fun handleIntentExtras(intent: Intent) {
-    if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      val openInNewTab =
-        isInTabSwitcher ||
-          intent.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false)
-      searchForTitle(
-        intent.getStringExtra(TAG_FILE_SEARCHED),
-        openInNewTab
-      )
-      selectTab(webViewList.size - 1)
-    }
+    // if (intent.hasExtra(TAG_FILE_SEARCHED)) {
+    //   val openInNewTab =
+    //     isInTabSwitcher ||
+    //       intent.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false)
+    //   searchForTitle(
+    //     intent.getStringExtra(TAG_FILE_SEARCHED),
+    //     openInNewTab
+    //   )
+    //   selectTab(webViewList.size - 1)
+    // }
   }
-
-  private val isInTabSwitcher: Boolean
-    get() = readerMenuState?.isInTabSwitcher == true
 
   private fun setupDocumentParser() {
     documentParser = DocumentParser(requireNotNull(documentSectionListener))
@@ -1364,7 +1320,7 @@ abstract class CoreReaderFragment :
     saveTabStates {
       // Pass this function to saveTabStates so that after saving
       // the tab state in the database, it will open the search fragment.
-      openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
+      // openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
     }
   }
 
@@ -1820,9 +1776,9 @@ abstract class CoreReaderFragment :
   }
 
   private fun updateBottomToolbarVisibility() {
-    readerScreenState.update {
-      copy(shouldShowBottomAppBar = readerMenuState?.isInTabSwitcher == false)
-    }
+    // readerScreenState.update {
+    //   copy(shouldShowBottomAppBar = readerMenuState?.isInTabSwitcher == false)
+    // }
   }
 
   private fun goToSearch(isVoice: Boolean) {

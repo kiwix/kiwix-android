@@ -95,9 +95,6 @@ class ReaderMenuState(
     put(MenuItemType.FindInPage, true)
   }
 
-  var isInTabSwitcher by mutableStateOf(false)
-    private set
-
   private var isReadingAloud by mutableStateOf(false)
 
   private var webViewCount by mutableIntStateOf(0)
@@ -113,7 +110,6 @@ class ReaderMenuState(
   }
 
   fun showWebViewOptions(valid: Boolean) {
-    hideTabSwitcher()
     urlIsValid = valid
     setVisibility(
       urlIsValid,
@@ -171,7 +167,6 @@ class ReaderMenuState(
   }
 
   fun showTabSwitcherOptions() {
-    isInTabSwitcher = true
     setVisibility(
       false,
       MenuItemType.RandomArticle,
@@ -184,7 +179,6 @@ class ReaderMenuState(
   }
 
   fun hideTabSwitcher() {
-    isInTabSwitcher = false
     updateMenuItems()
   }
 

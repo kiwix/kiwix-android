@@ -33,7 +33,6 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.IconCompat
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -45,7 +44,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -73,16 +75,15 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServ
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
-import androidx.core.graphics.createBitmap
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 const val KIWIX_SUPPORT_URL = "https://donate.kiwix.org"
 const val PAGE_URL_KEY = "pageUrl"
@@ -144,6 +145,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
+
+  /**
+   * Stores the pending intent for reader screen.
+   */
+  @Inject
+  lateinit var readerIntentManager: ReaderIntentManager
 
   /**
    * We have migrated the UI in compose, so providing the compose based navigation to activity
@@ -246,6 +253,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       setAppName()
       setIsBrandedApp()
       createApplicationShortcuts()
+    }
+
+    intent?.let {
+      readerIntentManager.storePendingIntent(intent)
     }
   }
 
@@ -393,9 +404,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     this.intent.action = intent.action
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onNewIntent(intent, this)
-    }
+    readerIntentManager.storePendingIntent(intent)
   }
 
   override fun getCurrentWebView(): KiwixWebView? {

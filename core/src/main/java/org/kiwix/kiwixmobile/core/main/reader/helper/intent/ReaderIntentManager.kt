@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile.core.main.reader.helper.intent
 import android.content.Intent
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ReaderIntentManager @Inject constructor(private val pendingIntentParser: PendingIntentParser) {
   private var pendingIntent: Intent? = null
 
