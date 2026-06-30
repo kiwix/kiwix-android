@@ -24,6 +24,7 @@ import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -111,7 +112,7 @@ class FileUtilsInstrumentationTest {
       }
       val book = LibkiwixBook()
       book.file = File(fileName + "bg")
-      val files = getAllZimParts(book)
+      val files = getAllZimParts(book, Dispatchers.IO)
 
       // Testing the data returned
       Assert.assertEquals(
@@ -156,7 +157,7 @@ class FileUtilsInstrumentationTest {
       Assert.assertEquals(
         "if the fileName ends with .zim and exists in memory, return false",
         false,
-        hasPart(file1)
+        hasPart(file1, Dispatchers.IO)
       )
 
       // FileName ends with .part
@@ -165,7 +166,7 @@ class FileUtilsInstrumentationTest {
       Assert.assertEquals(
         "if the fileName ends with .part and exists in memory, return true",
         false,
-        hasPart(file2)
+        hasPart(file2, Dispatchers.IO)
       )
 
       // FileName ends with .zim, however, only the FileName.zim.part file exists in memory
@@ -175,7 +176,7 @@ class FileUtilsInstrumentationTest {
       Assert.assertEquals(
         "if the fileName ends with .zim, but instead the .zim.part file exists in memory",
         true,
-        hasPart(file4)
+        hasPart(file4, Dispatchers.IO)
       )
 
       // FileName ends with .zimXX
@@ -201,27 +202,27 @@ class FileUtilsInstrumentationTest {
         }
         char1++
       }
-      Assert.assertEquals(false, hasPart(testCall))
+      Assert.assertEquals(false, hasPart(testCall, Dispatchers.IO))
 
       // Case : FileName.zim is the calling file, but neither FileName.zim,
       //        nor FileName.zim.part exist
       // In this case the answer will be the same as that
       //        in the previous (FileName.zimXX) case
       val testCall2 = File("$baseName.zim")
-      Assert.assertEquals(false, hasPart(testCall2))
+      Assert.assertEquals(false, hasPart(testCall2, Dispatchers.IO))
 
       // Case : FileName.zimXX.part exists for some "XX" between "aa" till "bl"
       // And FileName.zimXX exists for all "XX" from "aa', till "bk",
       //        and then it does not exist
       val t = File("$baseName.zimaj.part")
       t.createNewFile()
-      Assert.assertEquals(true, hasPart(testCall))
+      Assert.assertEquals(true, hasPart(testCall, Dispatchers.IO))
 
       // Case : FileName.zim is the calling file, but neither FileName.zim,
       //        nor FileName.zim.part exist
       // In this case the answer will be the same as that in the
       //        previous (FileName.zimXX) case
-      Assert.assertEquals(true, hasPart(testCall2))
+      Assert.assertEquals(true, hasPart(testCall2, Dispatchers.IO))
     }
 
   @After
@@ -445,7 +446,7 @@ class FileUtilsInstrumentationTest {
           dummyUrlData.uri?.let { uri ->
             Assertions.assertEquals(
               dummyUrlData.expectedFileName,
-              FileUtils.getLocalFilePathByUri(context, uri)
+              FileUtils.getLocalFilePathByUri(context, uri, Dispatchers.IO)
             )
           }
         }
@@ -579,7 +580,7 @@ class FileUtilsInstrumentationTest {
     context?.let { context ->
       assertEquals(
         expectedPath,
-        documentProviderContentQuery(context, uri, documentsContractWrapper)
+        documentProviderContentQuery(context, uri, documentsContractWrapper, Dispatchers.IO)
       )
     }
   }

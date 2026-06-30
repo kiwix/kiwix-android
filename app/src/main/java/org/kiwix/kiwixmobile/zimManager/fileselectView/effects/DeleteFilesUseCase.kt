@@ -51,7 +51,7 @@ data class DeleteFilesUseCase @Inject constructor(
   ): Boolean {
     val file = book.zimReaderSource.file ?: return false
 
-    FileUtils.deleteZimFile(file.path)
+    FileUtils.deleteZimFile(file.path, ioDispatcher)
 
     if (file.isFileExist(ioDispatcher)) {
       return false

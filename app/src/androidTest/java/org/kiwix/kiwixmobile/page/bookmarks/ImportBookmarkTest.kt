@@ -95,7 +95,7 @@ class ImportBookmarkTest : BaseActivityTest() {
     super.waitForIdle()
     launchMainActivity()
     boxStore = DatabaseModule.boxStore
-    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore)
+    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore, Dispatchers.IO)
     libkiwixBookmarks =
       LibkiwixBookmarks(
         library,

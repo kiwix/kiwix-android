@@ -58,6 +58,7 @@ class DeleteFilesUseCaseTest {
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
 
   @BeforeEach
   fun setup() {
@@ -69,7 +70,7 @@ class DeleteFilesUseCaseTest {
     coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns false
 
     coEvery {
-      FileUtils.deleteZimFile(file1.path)
+      FileUtils.deleteZimFile(file1.path, testDispatcher)
     } just Runs
 
     val libkiwixBook =
@@ -78,7 +79,7 @@ class DeleteFilesUseCaseTest {
     book = BookOnDisk(book = libkiwixBook, zimReaderSource = ZimReaderSource(file1))
 
     deleteFilesUseCase =
-      DeleteFilesUseCase(libkiwixBookOnDisk, zimReaderContainer, mainDispatcherRule.dispatcher)
+      DeleteFilesUseCase(libkiwixBookOnDisk, zimReaderContainer, testDispatcher)
   }
 
   @AfterEach
@@ -100,7 +101,7 @@ class DeleteFilesUseCaseTest {
   @Test
   fun invoke_whenFileStillExists_returnsFalseAndDoesNotDeleteBook() = runTest {
     coEvery {
-      file1.isFileExist(mainDispatcherRule.dispatcher)
+      file1.isFileExist(testDispatcher)
     } returns true
 
     val result = deleteFilesUseCase(listOf(book))
@@ -108,7 +109,7 @@ class DeleteFilesUseCaseTest {
     assertFalse(result)
 
     coVerify(exactly = 1) {
-      FileUtils.deleteZimFile(file1.path)
+      FileUtils.deleteZimFile(file1.path, testDispatcher)
     }
     coVerify(exactly = 0) {
       libkiwixBookOnDisk.delete(book.book.id)
@@ -125,7 +126,7 @@ class DeleteFilesUseCaseTest {
     assertFalse(result)
 
     coVerify(exactly = 0) {
-      FileUtils.deleteZimFile(any())
+      FileUtils.deleteZimFile(any(), testDispatcher)
     }
     coVerify(exactly = 0) {
       libkiwixBookOnDisk.delete(book.book.id)
@@ -189,7 +190,7 @@ class DeleteFilesUseCaseTest {
   @Test
   fun invoke_whenOneBookFails_returnsFalse() = runTest {
     coEvery {
-      file2.isFileExist(mainDispatcherRule.dispatcher)
+      file2.isFileExist(testDispatcher)
     } returns true
 
     val failingBook =

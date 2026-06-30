@@ -120,7 +120,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
     uri: Uri
   ): Pair<File?, String> {
     val filePath =
-      FileUtils.getLocalFilePathByUri(context.applicationContext, uri)
+      FileUtils.getLocalFilePathByUri(context.applicationContext, uri, ioDispatcher)
     if (filePath == null || !File(filePath).isFileExist(ioDispatcher)) {
       Log.e(
         TAG_KIWIX,

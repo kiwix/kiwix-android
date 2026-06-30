@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.dao
 import android.os.Build
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -33,6 +32,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks.Companion.TAG
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.modules.LOCAL_BOOKS_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.LOCAL_BOOKS_MANAGER
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -52,7 +52,8 @@ import javax.inject.Singleton
 class LibkiwixBookOnDisk @Inject constructor(
   @Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
   @Named(LOCAL_BOOKS_MANAGER) private val manager: Manager,
-  private val kiwixDataStore: KiwixDataStore
+  private val kiwixDataStore: KiwixDataStore,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val initMutex = Mutex()
   private var isManagerInitialized = false
@@ -77,17 +78,17 @@ class LibkiwixBookOnDisk @Inject constructor(
   private suspend fun libraryFile(): File =
     File("${localBookFolderPath()}/library.xml")
 
-  private suspend fun ensureInitialized(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+  private suspend fun ensureInitialized() {
     if (isManagerInitialized) return
     initMutex.withLock {
       if (isManagerInitialized) return@withLock true
-      withContext(dispatcher) {
+      withContext(ioDispatcher) {
         // Check if ZIM files folder exist if not then create the folder first.
-        if (!File(localBookFolderPath()).isFileExist(dispatcher)) {
+        if (!File(localBookFolderPath()).isFileExist(ioDispatcher)) {
           File(localBookFolderPath()).mkdirs()
         }
         // Check if library file exist if not then create the file to save the library with book information.
-        if (!libraryFile().isFileExist(dispatcher)) {
+        if (!libraryFile().isFileExist(ioDispatcher)) {
           libraryFile().createNewFile()
         }
         // set up manager to read the library from this file
@@ -97,10 +98,9 @@ class LibkiwixBookOnDisk @Inject constructor(
     }
   }
 
-  @Suppress("InjectDispatcher")
   private val localBooksFlow: MutableStateFlow<List<LibkiwixBook>?> by lazy {
     MutableStateFlow<List<LibkiwixBook>?>(null).also { flow ->
-      CoroutineScope(Dispatchers.IO).launch {
+      CoroutineScope(ioDispatcher).launch {
         runCatching {
           flow.emit(getBooksList())
         }.onFailure { it.printStackTrace() }
@@ -108,8 +108,8 @@ class LibkiwixBookOnDisk @Inject constructor(
     }
   }
 
-  private suspend fun getBooksList(dispatcher: CoroutineDispatcher = Dispatchers.IO): List<LibkiwixBook> =
-    withContext(dispatcher) {
+  private suspend fun getBooksList(): List<LibkiwixBook> =
+    withContext(ioDispatcher) {
       // if reading library failed, return empty list
       ensureInitialized()
       if (!booksChanged && localBooksList.isNotEmpty()) {
@@ -133,15 +133,15 @@ class LibkiwixBookOnDisk @Inject constructor(
     }
 
   @OptIn(ExperimentalCoroutinesApi::class)
-  fun books(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+  fun books() =
     localBooksFlow
       .filterNotNull()
       .mapLatest { booksList ->
         removeBooksThatAreInTrashFolder(booksList)
-        removeBooksThatDoNotExist(booksList.toMutableList(), dispatcher)
+        removeBooksThatDoNotExist(booksList.toMutableList())
         booksList.mapNotNull { book ->
           try {
-            if (book.zimReaderSource.exists(dispatcher) &&
+            if (book.zimReaderSource.exists(ioDispatcher) &&
               !isInTrashFolder(book.zimReaderSource.toDatabase())
             ) {
               book
@@ -154,13 +154,12 @@ class LibkiwixBookOnDisk @Inject constructor(
         }
       }
       .map { it.map(::BookOnDisk) }
-      .flowOn(dispatcher)
+      .flowOn(ioDispatcher)
 
   suspend fun getBooks() = getBooksList().map(::BookOnDisk)
 
-  @Suppress("InjectDispatcher")
   suspend fun insert(libkiwixBooks: List<Book>) {
-    withContext(Dispatchers.IO) {
+    withContext(ioDispatcher) {
       ensureInitialized()
       val existingBookIds = library.booksIds.toSet()
       val existingBookPaths = existingBookIds
@@ -212,8 +211,7 @@ class LibkiwixBookOnDisk @Inject constructor(
   }
 
   private suspend fun removeBooksThatDoNotExist(
-    books: MutableList<LibkiwixBook>,
-    ioDispatcher: CoroutineDispatcher
+    books: MutableList<LibkiwixBook>
   ) {
     delete(books.filterNot { it.zimReaderSource.exists(ioDispatcher) })
   }

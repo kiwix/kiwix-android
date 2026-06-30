@@ -70,7 +70,6 @@ class ZimFileReader constructor(
     class Impl @Inject constructor(
       @IoDispatcher private val ioDispatcher: CoroutineDispatcher
     ) : Factory {
-      @Suppress("InjectDispatcher")
       override suspend fun create(
         zimReaderSource: ZimReaderSource,
         showSearchSuggestionsSpellChecked: Boolean

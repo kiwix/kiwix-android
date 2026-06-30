@@ -99,7 +99,7 @@ class FileUtilsTest {
     every { mockFile.path } returns "${fileName}zimab"
     coEvery { mockFile.isFileExist(testDispatcher) } returns false
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
-    assertEquals(0, FileUtils.getAllZimParts(testBook).size)
+    assertEquals(0, FileUtils.getAllZimParts(testBook, testDispatcher).size)
   }
 
   private fun testWith(extension: String, fileExists: Boolean) = runTest {
@@ -109,7 +109,7 @@ class FileUtilsTest {
     val coreApp = mockk<CoreApp>()
     CoreApp.instance = coreApp
     every { coreApp.packageName } returns "mock_package"
-    val files = FileUtils.getAllZimParts(testBook)
+    val files = FileUtils.getAllZimParts(testBook, testDispatcher)
     assertEquals(1, files.size)
     if (fileExists) {
       assertEquals(testBook.file, files[0])
@@ -140,14 +140,14 @@ class FileUtilsTest {
   fun hasPart_whenFileEndsWithZimAndExists_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns true
-    assertFalse(FileUtils.hasPart(File(path)))
+    assertFalse(FileUtils.hasPart(File(path), testDispatcher))
   }
 
   @Test
   fun hasPart_whenNoFilesExistForZimPath_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
-    assertFalse(FileUtils.hasPart(File(path)))
+    assertFalse(FileUtils.hasPart(File(path), testDispatcher))
   }
 
   // ======== deleteZimFile ========
@@ -157,7 +157,7 @@ class FileUtilsTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile(testDispatcher) } returns true
-    FileUtils.deleteZimFile(path)
+    FileUtils.deleteZimFile(path, testDispatcher)
   }
 
   @Test
@@ -165,21 +165,21 @@ class FileUtilsTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns true
     coEvery { any<File>().deleteFile(testDispatcher) } returns true
-    FileUtils.deleteZimFile(path)
+    FileUtils.deleteZimFile(path, testDispatcher)
   }
 
   @Test
   fun deleteZimFile_whenPathEndsWithPartPart_returnsCompletes() = runTest {
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile(testDispatcher) } returns true
-    FileUtils.deleteZimFile("/storage/emulated/0/wiki.zim.part.part")
+    FileUtils.deleteZimFile("/storage/emulated/0/wiki.zim.part.part", testDispatcher)
   }
 
   @Test
   fun deleteZimFile_whenSplitFileEndsWithPartPart_stripsAndCompletes() = runTest {
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
     coEvery { any<File>().deleteFile(testDispatcher) } returns true
-    FileUtils.deleteZimFile("/storage/emulated/0/wiki.zimaa.part.part")
+    FileUtils.deleteZimFile("/storage/emulated/0/wiki.zimaa.part.part", testDispatcher)
   }
 
   // ======== isValidZimFile ========
@@ -230,7 +230,7 @@ class FileUtilsTest {
     every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
     assertEquals(
       "/storage/emulated/0/test.zim",
-      FileUtils.getLocalFilePathByUri(mockContext, mockUri)
+      FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher)
     )
   }
 
@@ -244,7 +244,7 @@ class FileUtilsTest {
     every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
     assertEquals(
       "/storage/emulated/0/test.zim",
-      FileUtils.getLocalFilePathByUri(mockContext, mockUri)
+      FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher)
     )
   }
 

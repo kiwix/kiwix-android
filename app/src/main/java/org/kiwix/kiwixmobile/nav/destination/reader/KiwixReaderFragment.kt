@@ -143,7 +143,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     updateTitle()
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext,
-      zimFileUri.toUri()
+      zimFileUri.toUri(),
+      ioDispatcher
     )
     if (filePath == null || !File(filePath).isFileExist(ioDispatcher)) {
       // Close the previously opened book in the reader. Since this file is not found,
