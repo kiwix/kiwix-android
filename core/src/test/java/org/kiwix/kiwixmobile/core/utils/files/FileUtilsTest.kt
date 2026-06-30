@@ -276,7 +276,7 @@ class FileUtilsTest {
     every { mockWrapper.getDocumentId(mockUri) } returns "raw:/storage/emulated/0/test.zim"
     assertEquals(
       "/storage/emulated/0/test.zim",
-      FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper)
+      FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper, testDispatcher)
     )
   }
 
@@ -288,7 +288,7 @@ class FileUtilsTest {
     every { mockWrapper.getDocumentId(mockUri) } returns "raw:/storage/emulated/0/test.zimaa"
     assertEquals(
       "/storage/emulated/0/test.zimaa",
-      FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper)
+      FileUtils.documentProviderContentQuery(mockContext, mockUri, mockWrapper, testDispatcher)
     )
   }
 
