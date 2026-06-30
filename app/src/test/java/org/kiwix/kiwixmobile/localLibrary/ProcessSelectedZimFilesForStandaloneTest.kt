@@ -59,6 +59,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
 
   @BeforeEach
   fun setup() {
@@ -111,7 +112,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
     val uri = mockk<Uri>()
     val filePath = "/storage/emulated/0/test.jpg"
 
-    coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns filePath
+    coEvery { FileUtils.getLocalFilePathByUri(any(), uri, testDispatcher) } returns filePath
     coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns true
     every { FileUtils.isValidZimFile(filePath) } returns false
     every { activity.getString(R.string.error_file_invalid, filePath) } returns "Invalid file"
@@ -126,7 +127,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
   fun `processSelectedFiles should show toast when file not found`() = runTest {
     val uri = mockk<Uri>()
 
-    coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns null
+    coEvery { FileUtils.getLocalFilePathByUri(any(), uri, testDispatcher) } returns null
     coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns false
     every { uri.toString() } returns "content://test"
     every {
@@ -221,7 +222,7 @@ class ProcessSelectedZimFilesForStandaloneTest {
   ): Uri {
     val uri = mockk<Uri>()
     every { uri.toString() } returns uriString
-    coEvery { FileUtils.getLocalFilePathByUri(any(), uri) } returns filePath
+    coEvery { FileUtils.getLocalFilePathByUri(any(), uri, testDispatcher) } returns filePath
     coEvery { any<File>().isFileExist(mainDispatcherRule.dispatcher) } returns true
     every { FileUtils.isValidZimFile(filePath) } returns true
     return uri
