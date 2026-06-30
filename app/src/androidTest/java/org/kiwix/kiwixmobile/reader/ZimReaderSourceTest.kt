@@ -25,6 +25,7 @@ import androidx.core.content.FileProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -34,15 +35,14 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
-import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
+@Suppress("InjectDispatcher")
 @RunWith(AndroidJUnit4::class)
 class ZimReaderSourceTest {
   private lateinit var testZimFile: File
@@ -52,10 +52,7 @@ class ZimReaderSourceTest {
     InstrumentationRegistry.getInstrumentation().targetContext
   private val tempFiles = mutableListOf<File>()
 
-  @Rule
-  @JvmField
-  val mainDispatcherRule = MainDispatcherRule()
-  private val testDispatcher = mainDispatcherRule.dispatcher
+  private val testDispatcher = Dispatchers.IO
 
   @Before
   fun setup() {

@@ -47,7 +47,7 @@ class OpenFileWithNavigationTest {
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private val testDispatcher = mainDispatcherRule.dispatcher
-  private val scope = TestScope(mainDispatcherRule.dispatcher)
+  private val scope = TestScope(testDispatcher)
 
   private val zimReaderSource = mockk<ZimReaderSource>()
 
