@@ -43,6 +43,6 @@ abstract class WebViewHistoryRoomDao {
     clearWebViewPagesHistory()
   }
 
-  @Query("DELETE FROM sqlite_sequence WHERE name='PageHistoryRoomEntity'")
+  @Query("DELETE FROM sqlite_sequence WHERE name='WebViewHistoryEntity'")
   abstract fun resetPrimaryKey()
 }
