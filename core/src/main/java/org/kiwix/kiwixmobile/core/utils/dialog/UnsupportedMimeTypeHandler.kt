@@ -45,12 +45,17 @@ class UnsupportedMimeTypeHandler @Inject constructor(
     this.alertDialogShower = alertDialogShower
   }
 
+  private fun requireAlertDialogShower() = requireNotNull(alertDialogShower) {
+    "AlertDialogShower is not not." +
+      " Call UnsupportedMimeTypeHandler.setAlertDialogShower before calling it"
+  }
+
   fun showSaveOrOpenUnsupportedFilesDialog(
     url: String?,
     documentType: String?,
     lifecycleScope: CoroutineScope
   ) {
-    alertDialogShower?.show(
+    requireAlertDialogShower().show(
       KiwixDialog.SaveOrOpenUnsupportedFiles,
       { openOrSaveFile(url, documentType, true, lifecycleScope) },
       { openOrSaveFile(url, documentType, false, lifecycleScope) },

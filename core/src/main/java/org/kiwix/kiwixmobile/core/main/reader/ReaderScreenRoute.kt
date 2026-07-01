@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.view.ActionMode
 import android.widget.Toast
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
@@ -43,6 +44,7 @@ import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ClearNavigationHistory
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NavigationHistoryItemClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderEffect
+import org.kiwix.kiwixmobile.core.main.reader.helper.selection.WebViewSelectionActionMode
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
@@ -79,29 +81,8 @@ fun ReaderScreenRoute(
   } else {
     null
   }
-  val backStackEntry = navHostController.currentBackStackEntry
-  LaunchedEffect(backStackEntry) {
-    backStackEntry
-      ?.savedStateHandle
-      ?.getStateFlow<SearchItemToOpen?>(
-        TAG_FILE_SEARCHED,
-        null
-      )
-      ?.collect { item ->
-        item ?: return@collect
-        viewModel.pendingSearchItemManager.store(item)
-        viewModel.emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED)))
-      }
-  }
-  LaunchedEffect(uiState.shouldShowFullScreen) {
-    with(activity.window) {
-      if (uiState.shouldShowFullScreen) {
-        enterFullscreen()
-      } else {
-        exitFullscreen()
-      }
-    }
-  }
+  CollectFileSearched(navHostController, viewModel)
+  HandleFullScreenMode(uiState.shouldShowFullScreen, activity)
   LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResume() }
   LaunchedEffect(Unit) {
     viewModel.initialize(activity, alertDialogShower)
@@ -111,6 +92,7 @@ fun ReaderScreenRoute(
     LanguageUtils(activity).changeFont(activity, viewModel.kiwixDataStore)
   }
   BindReadAloudService(activity, viewModel)
+  RegisterWebViewSelectionListener(activity, viewModel)
   CollectEffect(
     viewModel,
     addNoteViewModel,
@@ -132,6 +114,64 @@ fun ReaderScreenRoute(
     mainActivityBottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
     navigationIcon = { NavigationItem(viewModel, activity) }
   )
+}
+
+@Composable
+private fun RegisterWebViewSelectionListener(
+  activity: CoreMainActivity,
+  viewModel: CoreReaderViewModel
+) {
+  DisposableEffect(activity) {
+    activity.registerSelectionActionModeListener(
+      object : WebViewSelectionActionMode {
+        override fun onActionModeStarted(actionMode: ActionMode) {
+          viewModel.onSelectionActionModeStarted(actionMode, activity)
+        }
+
+        override fun onActionModeFinished(actionMode: ActionMode) {
+          viewModel.onSelectionActionModeFinished(actionMode)
+        }
+      }
+    )
+
+    onDispose {
+      activity.registerSelectionActionModeListener(null)
+    }
+  }
+}
+
+@Composable
+private fun HandleFullScreenMode(shouldShowFullScreen: Boolean, activity: CoreMainActivity) {
+  LaunchedEffect(shouldShowFullScreen) {
+    with(activity.window) {
+      if (shouldShowFullScreen) {
+        enterFullscreen()
+      } else {
+        exitFullscreen()
+      }
+    }
+  }
+}
+
+@Composable
+private fun CollectFileSearched(
+  navHostController: NavHostController,
+  viewModel: CoreReaderViewModel
+) {
+  val backStackEntry = navHostController.currentBackStackEntry
+  LaunchedEffect(backStackEntry) {
+    backStackEntry
+      ?.savedStateHandle
+      ?.getStateFlow<SearchItemToOpen?>(
+        TAG_FILE_SEARCHED,
+        null
+      )
+      ?.collect { item ->
+        item ?: return@collect
+        viewModel.pendingSearchItemManager.store(item)
+        viewModel.emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED)))
+      }
+  }
 }
 
 @Composable

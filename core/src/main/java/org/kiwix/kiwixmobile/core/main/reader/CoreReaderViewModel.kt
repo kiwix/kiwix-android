@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.core.main.reader
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Application
 import android.content.Intent
+import android.view.ActionMode
+import android.view.Menu
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
@@ -131,6 +133,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 const val TOC_SHOWING_WAITING_TIME = 500L
+const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
+const val HIDE_TAB_SWITCHER_DELAY: Long = 300
+const val OPEN_HOME_SCREEN_DELAY: Long = 300
 
 @Suppress("LongParameterList", "LargeClass")
 abstract class CoreReaderViewModel(
@@ -139,9 +144,8 @@ abstract class CoreReaderViewModel(
   val externalLinkOpener: ExternalLinkOpener,
   private val unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
   val readerWebViewManager: ReaderWebViewManager,
-  val alertDialogShower: AlertDialogShower,
   val zimReaderContainer: ZimReaderContainer,
-  val zimFileManager: ZimFileManager,
+  private val zimFileManager: ZimFileManager,
   val kiwixPermissionChecker: KiwixPermissionChecker,
   val repositoryActions: MainRepositoryActions,
   private val bookmarkManager: BookmarkManager,
@@ -149,10 +153,10 @@ abstract class CoreReaderViewModel(
   private val readerSessionManager: ReaderSessionManager,
   private val readerIntentManager: ReaderIntentManager,
   val pendingSearchItemManager: PendingSearchItemManager,
-  val readerArticleManager: ReaderArticleManager,
-  val readAloudManager: ReadAloudManager,
+  private val readerArticleManager: ReaderArticleManager,
+  private val readAloudManager: ReadAloudManager,
   val donationDialogHandler: DonationDialogHandler,
-  val findInPageManager: FindInPageManager
+  private val findInPageManager: FindInPageManager
 ) : ViewModel(),
   WebViewCallback,
   ReaderMenuState.MenuClickListener,
@@ -263,6 +267,7 @@ abstract class CoreReaderViewModel(
   var readerMenuState: ReaderMenuState? = null
   private var documentParser: DocumentParser? = null
   private var hideBackToTopJob: Job? = null
+  private var actionMode: ActionMode? = null
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
@@ -632,6 +637,29 @@ abstract class CoreReaderViewModel(
     }
   }
 
+  private fun startReadAloudWithWebViewSelection() {
+    if (readAloudManager.isTtsInitialed()) {
+      startReadSelection()
+    } else {
+      readAloudManager.initializeTTS(true)
+    }
+  }
+
+  fun onSelectionActionModeStarted(actionMode: ActionMode, activity: CoreMainActivity) {
+    if (this.actionMode == null) {
+      this.actionMode = actionMode
+      val menu = actionMode.menu
+      // Inflate custom menu icon.
+      activity.menuInflater.inflate(R.menu.menu_webview_action, menu)
+      configureWebViewSelectionHandler(menu)
+    }
+  }
+
+  fun onSelectionActionModeFinished(actionMode: ActionMode) {
+    actionMode.finish()
+    this.actionMode = null
+  }
+
   override fun onSearchMenuClickedMenuClicked() {
     launchInViewModelScope {
       readerSessionManager.saveReaderSession {
@@ -782,8 +810,6 @@ abstract class CoreReaderViewModel(
       hideProgressBar()
       Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().url)
     }
-    // TODO uncomment this when we implemented the webView's option menu.
-    // (webView.context as AppCompatActivity).invalidateOptionsMenu()
   }
 
   override fun webViewTitleUpdated(title: String) {
@@ -896,7 +922,7 @@ abstract class CoreReaderViewModel(
   /**
    * Attached the full-screen item for videos in readerState if not already attached.
    */
-  protected fun addFullScreenItemIfNotAttached() {
+  private fun addFullScreenItemIfNotAttached() {
     if (uiState.value.videoView == null) {
       updateState {
         copy(videoView = getVideoView())
@@ -1190,12 +1216,12 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  protected fun newMainPageTab(): KiwixWebView {
+  private fun newMainPageTab(): KiwixWebView {
     val mainPageUrl = readerWebViewManager.contentUrl(zimReaderContainer.mainPage)
     return createNewTab(mainPageUrl)
   }
 
-  protected fun getCurrentWebView(): KiwixWebView =
+  private fun getCurrentWebView(): KiwixWebView =
     readerWebViewManager.getCurrentWebView() ?: newMainPageTab()
 
   protected open fun openHomeScreen() {
@@ -1658,8 +1684,33 @@ abstract class CoreReaderViewModel(
       isPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
     )
 
+  /**
+   * Configures the selection handler for the WebView.
+   * Subclasses like BrandedReaderViewModel override this method to customize
+   * the behavior of the selection handler menu. In this specific implementation,
+   * it sets up a menu item for reading aloud selected text.
+   * If the custom app is set to disable the read-aloud feature,
+   * the menu item will be hidden by BrandedReaderViewModel.
+   * it provides additional customization for custom apps.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with branded apps
+   * to verify proper functionality.
+   */
+  protected open fun configureWebViewSelectionHandler(menu: Menu?) {
+    menu?.findItem(R.id.menu_speak_text)?.setOnMenuItemClickListener {
+      startReadAloudWithWebViewSelection()
+      actionMode?.finish()
+      true
+    }
+  }
+
   private fun setDonationDialogCallBack() {
     donationDialogHandler.setDonationDialogCallBack(this)
+  }
+
+  protected fun addAlertDialogToDialogHost(alertDialogShower: AlertDialogShower) {
+    externalLinkOpener.setAlertDialogShower(alertDialogShower)
+    unsupportedMimeTypeHandler.setAlertDialogShower(alertDialogShower)
   }
 
   protected fun launchInViewModelScope(
@@ -1687,6 +1738,12 @@ abstract class CoreReaderViewModel(
     donationDialogHandler.setDonationDialogCallBack(null)
     hideBackToTopJob?.cancel()
     hideBackToTopJob = null
+    actionMode = null
     super.onCleared()
   }
+}
+
+enum class RestoreOrigin {
+  FromSearchScreen,
+  FromExternalLaunch
 }

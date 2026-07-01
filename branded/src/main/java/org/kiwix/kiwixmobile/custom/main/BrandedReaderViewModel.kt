@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.app.Application
 import android.util.Log
+import android.view.Menu
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -73,6 +74,8 @@ import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 
+const val OPENING_DOWNLOAD_SCREEN_DELAY = 300L
+
 @Suppress("LongParameterList")
 class BrandedReaderViewModel @Inject constructor(
   context: Application,
@@ -80,7 +83,6 @@ class BrandedReaderViewModel @Inject constructor(
   externalLinkOpener: ExternalLinkOpener,
   unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
   readerWebViewManager: ReaderWebViewManager,
-  alertDialogShower: AlertDialogShower,
   zimReaderContainer: ZimReaderContainer,
   zimFileManager: ZimFileManager,
   kiwixPermissionChecker: KiwixPermissionChecker,
@@ -102,7 +104,6 @@ class BrandedReaderViewModel @Inject constructor(
     externalLinkOpener,
     unsupportedMimeTypeHandler,
     readerWebViewManager,
-    alertDialogShower,
     zimReaderContainer,
     zimFileManager,
     kiwixPermissionChecker,
@@ -124,7 +125,7 @@ class BrandedReaderViewModel @Inject constructor(
     if (enforcedLanguage(coreMainActivity)) {
       return
     }
-    externalLinkOpener.setAlertDialogShower(alertDialogShower)
+    addAlertDialogToDialogHost(alertDialogShower)
     val appName = kiwixDataStore.appName.first()
     updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR, appName = appName) }
     enableLeftDrawer()
@@ -226,7 +227,6 @@ class BrandedReaderViewModel @Inject constructor(
   }
 
   private suspend fun enforcedLanguage(coreMainActivity: CoreMainActivity): Boolean {
-    // TODO : migrate this method with compose lifeCycle.
     // This runs in branded apps when there is an enforced language set in the build config.
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
@@ -457,6 +457,18 @@ class BrandedReaderViewModel @Inject constructor(
       // Custom apps usually don't need homescreen shortcuts
       isPinShortcutSupported = false
     )
+
+  /**
+   * Overrides the method to configure the WebView selection handler. When the "read aloud" feature is disabled
+   * in a branded app, this function hides the corresponding option from the menu that appears when the user selects
+   * text in the WebView. This prevents the "read aloud" option from being displayed in the menu when it's disabled.
+   */
+  override fun configureWebViewSelectionHandler(menu: Menu?) {
+    if (BuildConfig.DISABLE_READ_ALOUD) {
+      menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
+    }
+    super.configureWebViewSelectionHandler(menu)
+  }
 
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {

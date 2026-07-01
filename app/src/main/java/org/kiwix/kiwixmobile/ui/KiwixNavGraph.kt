@@ -46,7 +46,7 @@ import org.kiwix.kiwixmobile.core.main.LANGUAGE_SCREEN
 import org.kiwix.kiwixmobile.core.main.LOCAL_FILE_TRANSFER_SCREEN
 import org.kiwix.kiwixmobile.core.main.LOCAL_LIBRARY_SCREEN
 import org.kiwix.kiwixmobile.core.main.NOTES_SCREEN
-import org.kiwix.kiwixmobile.core.main.READER_FRAGMENT
+import org.kiwix.kiwixmobile.core.main.READER_SCREEN
 import org.kiwix.kiwixmobile.core.main.SEARCH_SCREEN
 import org.kiwix.kiwixmobile.core.main.SETTINGS_SCREEN
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
@@ -278,7 +278,7 @@ fun KiwixNavGraph(
 }
 
 sealed class KiwixDestination(val route: String) {
-  object Reader : KiwixDestination(READER_FRAGMENT)
+  object Reader : KiwixDestination(READER_SCREEN)
 
   object Library :
     KiwixDestination("$LOCAL_LIBRARY_SCREEN?$ZIM_FILE_URI_KEY={$ZIM_FILE_URI_KEY}") {

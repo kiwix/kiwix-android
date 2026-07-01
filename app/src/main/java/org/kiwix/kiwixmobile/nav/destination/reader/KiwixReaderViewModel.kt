@@ -73,7 +73,6 @@ class KiwixReaderViewModel @Inject constructor(
   externalLinkOpener: ExternalLinkOpener,
   unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
   readerWebViewManager: ReaderWebViewManager,
-  alertDialogShower: AlertDialogShower,
   zimReaderContainer: ZimReaderContainer,
   zimFileManager: ZimFileManager,
   kiwixPermissionChecker: KiwixPermissionChecker,
@@ -93,7 +92,6 @@ class KiwixReaderViewModel @Inject constructor(
     externalLinkOpener,
     unsupportedMimeTypeHandler,
     readerWebViewManager,
-    alertDialogShower,
     zimReaderContainer,
     zimFileManager,
     kiwixPermissionChecker,
@@ -119,7 +117,7 @@ class KiwixReaderViewModel @Inject constructor(
     coreMainActivity: CoreMainActivity,
     alertDialogShower: AlertDialogShower
   ) {
-    externalLinkOpener.setAlertDialogShower(alertDialogShower)
+    addAlertDialogToDialogHost(alertDialogShower)
     val appName = kiwixDataStore.appName.first()
     updateState { copy(isTocButtonEnable = true, appName = appName) }
     enableLeftDrawer()

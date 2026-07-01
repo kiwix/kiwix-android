@@ -27,7 +27,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.view.ActionMode
-import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -48,7 +47,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -76,6 +74,7 @@ import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.selection.WebViewSelectionActionMode
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -96,7 +95,7 @@ private const val ADAPTIVE_ICON_SIZE_DP = 108
 private const val ADAPTIVE_ICON_INSET_DP = 36
 
 // Fragments names for compose based navigation.
-const val READER_FRAGMENT = "readerFragment"
+const val READER_SCREEN = "readerScreen"
 const val LOCAL_LIBRARY_SCREEN = "localLibraryScreen"
 const val DOWNLOAD_SCREEN = "downloadsScreen"
 const val BOOKMARK_SCREEN = "bookmarkScreen"
@@ -124,7 +123,7 @@ const val LEFT_DRAWER_HELP_ITEM_TESTING_TAG = "leftDrawerHelpItemTestingTag"
 const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingTag"
 const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
 
-abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
+abstract class CoreMainActivity : BaseActivity() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   abstract val searchFragmentRoute: String
 
@@ -151,6 +150,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
    */
   @Inject
   lateinit var readerIntentManager: ReaderIntentManager
+
+  private var selectionActionModeListener: WebViewSelectionActionMode? = null
 
   /**
    * We have migrated the UI in compose, so providing the compose based navigation to activity
@@ -307,7 +308,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     activityResultForwarder?.invoke(requestCode, resultCode, data)
-    activeFragments().iterator().forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
   override fun onStart() {
@@ -368,18 +368,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  @Suppress("DEPRECATION")
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    activeFragments().iterator().forEach {
-      it.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-  }
-
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (drawerToggle?.isDrawerIndicatorEnabled == true) {
       return drawerToggle?.onOptionsItemSelected(item) == true
@@ -387,29 +375,24 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return super.onOptionsItemSelected(item)
   }
 
+  fun registerSelectionActionModeListener(listener: WebViewSelectionActionMode?) {
+    selectionActionModeListener = listener
+  }
+
   override fun onActionModeStarted(mode: ActionMode) {
     super.onActionModeStarted(mode)
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onActionModeStarted(mode, this)
-    }
+    selectionActionModeListener?.onActionModeStarted(mode)
   }
 
   override fun onActionModeFinished(mode: ActionMode) {
     super.onActionModeFinished(mode)
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onActionModeFinished(mode, this)
-    }
+    selectionActionModeListener?.onActionModeFinished(mode)
   }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     this.intent.action = intent.action
     readerIntentManager.storePendingIntent(intent)
-  }
-
-  override fun getCurrentWebView(): KiwixWebView? {
-    return activeFragments().filterIsInstance<WebViewProvider>().firstOrNull()
-      ?.getCurrentWebView()
   }
 
   override fun onSupportNavigateUp(): Boolean =
@@ -451,22 +434,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       )
     }
   }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-      return super.onCreateOptionsMenu(menu)
-    }
-    var returnValue = true
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      if (it.onCreateOptionsMenu(menu, this) == FragmentActivityExtensions.Super.ShouldCall) {
-        returnValue = super.onCreateOptionsMenu(menu)
-      }
-    }
-    return returnValue
-  }
-
-  private fun activeFragments(): MutableList<Fragment> =
-    supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
     navController.currentDestination?.getAction(action.actionId)?.run {

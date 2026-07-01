@@ -24,13 +24,11 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.custom.main.BrandedMainActivity
-import org.kiwix.kiwixmobile.custom.main.BrandedReaderFragment
 
 @ActivityScope
 @Subcomponent(modules = [BrandedActivityModule::class])
 interface BrandedActivityComponent : CoreActivityComponent {
   fun inject(brandedMainActivity: BrandedMainActivity)
-  fun inject(brandedReaderFragment: BrandedReaderFragment)
 
   @Subcomponent.Builder
   interface Builder {
