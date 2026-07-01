@@ -133,6 +133,21 @@ class KiwixReaderViewModel @Inject constructor(
     val pageUrl = getNavigationResult(PAGE_URL_KEY, coreMainActivity)
     val searchItemTitle = getNavigationResult(SEARCH_ITEM_TITLE_KEY, coreMainActivity)
 
+    // Open the ZIM file with arguments.
+    openZimFileWithArguments(zimFileUri, pageUrl, searchItemTitle)
+    // Consume the argument.
+    emitEffect(
+      ReaderEffect.ConsumeSavedStateHandle(
+        listOf(ZIM_FILE_URI_KEY, PAGE_URL_KEY, SEARCH_ITEM_TITLE_KEY)
+      )
+    )
+  }
+
+  override suspend fun openZimFileWithArguments(
+    zimFileUri: String,
+    pageUrl: String,
+    searchItemTitle: String
+  ) {
     if (zimFileUri.isNotEmpty()) {
       tryOpeningZimFile(zimFileUri)
     } else if (pageUrl.isNotEmpty()) {
@@ -153,12 +168,6 @@ class KiwixReaderViewModel @Inject constructor(
 
       manageExternalLaunchAndRestoringViewState(restoreOrigin)
     }
-    // Consume the argument.
-    emitEffect(
-      ReaderEffect.ConsumeSavedStateHandle(
-        listOf(ZIM_FILE_URI_KEY, PAGE_URL_KEY, SEARCH_ITEM_TITLE_KEY)
-      )
-    )
   }
 
   private fun getNavigationResult(key: String, coreMainActivity: CoreMainActivity) =

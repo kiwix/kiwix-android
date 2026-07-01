@@ -19,21 +19,28 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper.intent
 
 import android.content.Intent
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ReaderIntentManager @Inject constructor(private val pendingIntentParser: PendingIntentParser) {
-  private var pendingIntent: Intent? = null
+  private var pendingAction: ReaderIntentAction = ReaderIntentAction.None
+  private val _events = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+  val events = _events.asSharedFlow()
 
   fun storePendingIntent(intent: Intent?) {
-    pendingIntent = intent
+    pendingAction = intent?.let(pendingIntentParser::parse) ?: ReaderIntentAction.None
+    _events.tryEmit(Unit)
   }
 
-  fun consumePendingIntent(): Intent? = pendingIntent.also {
-    pendingIntent = null
+  fun openZimFileFromPath(path: String, pageUrl: String) {
+    pendingAction = ReaderIntentAction.OpenZim(path, pageUrl)
+    _events.tryEmit(Unit)
   }
 
-  fun parse(intent: Intent): ReaderIntentAction = pendingIntentParser.parse(intent)
+  fun consumePendingAction(): ReaderIntentAction =
+    pendingAction.also { pendingAction = ReaderIntentAction.None }
 }

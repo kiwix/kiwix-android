@@ -26,18 +26,17 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
@@ -95,7 +94,8 @@ class BrandedReaderViewModel @Inject constructor(
   readerArticleManager: ReaderArticleManager,
   readAloudManager: ReadAloudManager,
   donationDialogHandler: DonationDialogHandler,
-  findInPageManager: FindInPageManager
+  findInPageManager: FindInPageManager,
+  @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : CoreReaderViewModel(
     context,
     kiwixDataStore,
@@ -186,7 +186,7 @@ class BrandedReaderViewModel @Inject constructor(
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            viewModelScope.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
+            launchInViewModelScope((mainDispatcher as MainCoroutineDispatcher).immediate) {
               openZimFile(
                 ZimReaderSource(
                   file = it.file,
@@ -204,7 +204,7 @@ class BrandedReaderViewModel @Inject constructor(
 
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            viewModelScope.runSafelyInLifecycleScope(Dispatchers.Main.immediate) {
+            launchInViewModelScope((mainDispatcher as MainCoroutineDispatcher).immediate) {
               openZimFile(ZimReaderSource(it.obbFile))
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
@@ -244,7 +244,7 @@ class BrandedReaderViewModel @Inject constructor(
 
   @Suppress("TooGenericExceptionCaught")
   private suspend fun saveBookToLibrary(zimFile: File?) {
-    viewModelScope.runSafelyInLifecycleScope {
+    launchInViewModelScope {
       zimReaderContainer.zimFileReader?.let { zimFileReader ->
         try {
           // Save book in the database to display it in `ZimHostFragment`.
@@ -285,7 +285,7 @@ class BrandedReaderViewModel @Inject constructor(
   }
 
   private fun openDownloadScreen() {
-    viewModelScope.launch {
+    launchInViewModelScope {
       delay(OPENING_DOWNLOAD_SCREEN_DELAY)
       val navOptions = NavOptions.Builder()
         .setPopUpTo(CustomDestination.Reader.route, true)
@@ -382,6 +382,14 @@ class BrandedReaderViewModel @Inject constructor(
    */
   override suspend fun restoreViewStateOnInvalidWebViewHistory() {
     openHomeScreen()
+  }
+
+  override suspend fun openZimFileWithArguments(
+    zimFileUri: String,
+    pageUrl: String,
+    searchItemTitle: String
+  ) {
+    // Do nothing here as branded apps does not open ZIM files from storage.
   }
 
   override fun showNoBookOpenViews() {

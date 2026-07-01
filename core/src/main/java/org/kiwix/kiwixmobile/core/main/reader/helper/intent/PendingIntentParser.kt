@@ -35,6 +35,7 @@ class PendingIntentParser @Inject constructor() {
       val isOpenedFromTabView: Boolean
     ) : ReaderIntentAction
 
+    data class OpenZim(val zimFileUri: String, val pageUrl: String) : ReaderIntentAction
     data object OpenBookmarks : ReaderIntentAction
     data object None : ReaderIntentAction
   }

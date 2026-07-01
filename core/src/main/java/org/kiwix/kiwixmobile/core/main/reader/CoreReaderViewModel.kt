@@ -60,6 +60,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.extensions.runSafelyInLifecycleScope
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KIWIX_SUPPORT_URL
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -95,6 +96,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.documentparser.DocumentPars
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.None
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenBookmarks
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenSearch
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenZim
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
@@ -125,6 +127,8 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 const val TOC_SHOWING_WAITING_TIME = 500L
 
@@ -283,6 +287,7 @@ abstract class CoreReaderViewModel(
     readAloudManager.setUpTTS()
     setDonationDialogCallBack()
     observeTabsState()
+    observeReaderPendingIntent()
   }
 
   private fun setupDocumentParser() {
@@ -345,6 +350,15 @@ abstract class CoreReaderViewModel(
         _uiState.update {
           it.copy(tabsState = tabsState)
         }
+      }
+    }
+  }
+
+  private fun observeReaderPendingIntent() {
+    launchInViewModelScope {
+      readerIntentManager.events.collect {
+        if (isWebViewHistoryRestoring) return@collect
+        handlePendingIntent()
       }
     }
   }
@@ -1129,25 +1143,25 @@ abstract class CoreReaderViewModel(
   }
 
   private fun handlePendingIntent() {
-    readerIntentManager.consumePendingIntent()?.let {
-      Log.d(TAG_KIWIX, "action: ${it.action}")
-      when (val result = readerIntentManager.parse(it)) {
-        None -> {
-          // Do nothing. Activity will handle this intent.
-        }
-
-        OpenBookmarks -> openBookmarkScreen().also {
-          clearActivityIntentAction()
-        }
-
-        is OpenSearch -> openSearch(
-          result.query,
-          isOpenedFromTabView = result.isOpenedFromTabView,
-          result.isVoice
-        ).also { clearActivityIntentAction() }
+    val result = readerIntentManager.consumePendingAction()
+    Log.d(TAG_KIWIX, "action: $result}")
+    when (result) {
+      None -> {
+        // Do nothing. Activity will handle this intent.
       }
-      // see https://github.com/kiwix/kiwix-android/issues/2607
-      it.action = null
+
+      OpenBookmarks -> openBookmarkScreen().also { clearActivityIntentAction() }
+
+      is OpenSearch -> openSearch(
+        result.query,
+        isOpenedFromTabView = result.isOpenedFromTabView,
+        result.isVoice
+      ).also { clearActivityIntentAction() }
+
+      is OpenZim ->
+        launchInViewModelScope {
+          openZimFileWithArguments(result.zimFileUri, result.pageUrl, "")
+        }
     }
   }
 
@@ -1579,6 +1593,17 @@ abstract class CoreReaderViewModel(
   abstract suspend fun restoreViewStateOnInvalidWebViewHistory()
 
   /**
+   * Open the ZIM file from arguments send by the readerIntentManager.
+   * Sub viewmodel should provide their own implementation for this.
+   * Currently this method is only used inside the KiwixReaderViewModel.
+   */
+  abstract suspend fun openZimFileWithArguments(
+    zimFileUri: String,
+    pageUrl: String,
+    searchItemTitle: String
+  )
+
+  /**
    * Returns the tint color to be applied to the navigation icon.
    *
    * Subclasses (e.g., BrandedReaderViewModel) can override this method to provide custom behavior,
@@ -1637,8 +1662,11 @@ abstract class CoreReaderViewModel(
     donationDialogHandler.setDonationDialogCallBack(this)
   }
 
-  protected fun launchInViewModelScope(block: suspend CoroutineScope.() -> Unit) {
-    viewModelScope.launch { block() }
+  protected fun launchInViewModelScope(
+    context: CoroutineContext = EmptyCoroutineContext,
+    block: suspend CoroutineScope.() -> Unit
+  ) {
+    viewModelScope.runSafelyInLifecycleScope(context) { block() }
   }
 
   open fun onResume() {

@@ -87,7 +87,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
@@ -388,15 +387,13 @@ class KiwixMainActivity : CoreMainActivity() {
       navController.currentDestination?.route == KiwixDestination.Reader.route
     if (!isAlreadyOnReader) {
       navigate(KiwixDestination.Reader.route)
+      setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
+      pageUrl?.let { setNavigationResultOnCurrent(it, PAGE_URL_KEY) }
+      return
     }
-    setNavigationResultOnCurrent(path, ZIM_FILE_URI_KEY)
-    pageUrl?.let { setNavigationResultOnCurrent(it, PAGE_URL_KEY) }
-    if (isAlreadyOnReader) {
-      supportFragmentManager.fragments
-        .filterIsInstance<KiwixReaderFragment>()
-        .firstOrNull()
-        ?.openPageInBookFromNavigationArguments()
-    }
+    // If the reader screen is already open. Then emit in readerIntentManager it will handle
+    // this and open the file in reader.
+    readerIntentManager.openZimFileFromPath(path, pageUrl.orEmpty())
   }
 
   override val zimHostDrawerMenuItem: DrawerMenuItem? by lazy {
