@@ -18,14 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.os.Build
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -33,11 +27,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
-import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 object ActivityExtensions {
   private val Activity.coreMainActivity: CoreMainActivity get() = this as CoreMainActivity
@@ -85,14 +76,14 @@ object ActivityExtensions {
   ) {
     getObservableNavigationResult<T>(key)?.observe(owner) {
       observer.onChanged(it)
-      coreMainActivity.safelyConsumeObservable<T>(key)
+      coreMainActivity.safelyConsumeObservable(key)
     }
   }
 
-  fun <T> Activity.safelyConsumeObservable(key: String = "result") =
+  fun Activity.safelyConsumeObservable(key: String = "result") =
     runCatching {
       if (coreMainActivity.isNavControllerInitialized) {
-        coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+        coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<Any?>(key)
       } else {
         // do nothing.
       }
@@ -120,28 +111,6 @@ object ActivityExtensions {
     }
   }
 
-  suspend fun Activity.hasNotificationPermission(kiwixDataStore: KiwixDataStore?) =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-      kiwixDataStore?.prefIsTest?.first() == false
-    ) {
-      ContextCompat.checkSelfPermission(
-        this,
-        POST_NOTIFICATIONS
-      ) == PackageManager.PERMISSION_GRANTED
-    } else {
-      true
-    }
-
-  fun Activity.requestNotificationPermission() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      ActivityCompat.requestPermissions(
-        this,
-        arrayOf(POST_NOTIFICATIONS),
-        REQUEST_POST_NOTIFICATION_PERMISSION
-      )
-    }
-  }
-
   /**
    * Checks if the package name of the current activity's application is not equal to
    * 'org.kiwix.kiwixmobile' or 'org.kiwix.kiwixmobile.standalone',
@@ -149,7 +118,4 @@ object ActivityExtensions {
    */
   fun Activity.isBrandedApp(): Boolean =
     packageName != "org.kiwix.kiwixmobile" && packageName != "org.kiwix.kiwixmobile.standalone"
-
-  fun Activity.isLandScapeMode(): Boolean =
-    resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }

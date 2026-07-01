@@ -62,6 +62,7 @@ class DonationDialogHandlerTest {
     donationDialogHandler =
       DonationDialogHandler(activity, kiwixDataStore, libkiwixBookOnDisk)
     donationDialogHandler.setDonationDialogCallBack(showDonationDialogCallback)
+    every { kiwixDataStore.isBrandedApp } returns flowOf(true)
   }
 
   @Test
@@ -234,7 +235,7 @@ class DonationDialogHandlerTest {
     runTest {
       with(mockk<ActivityExtensions>()) {
         every { activity.packageName } returns "org.kiwix.kiwixcustom"
-        every { activity.isBrandedApp() } returns true
+        every { kiwixDataStore.isBrandedApp } returns flowOf(true)
         val result = donationDialogHandler.isZimFilesAvailableInLibrary()
         assertTrue(result)
       }
@@ -245,7 +246,7 @@ class DonationDialogHandlerTest {
     runTest {
       with(mockk<ActivityExtensions>()) {
         every { activity.packageName } returns "org.kiwix.kiwixmobile"
-        every { activity.isBrandedApp() } returns false
+        every { kiwixDataStore.isBrandedApp } returns flowOf(false)
         coEvery { libkiwixBookOnDisk.getBooks() } returns emptyList()
         val result = donationDialogHandler.isZimFilesAvailableInLibrary()
         assertFalse(result)
@@ -257,7 +258,7 @@ class DonationDialogHandlerTest {
     runTest {
       with(mockk<ActivityExtensions>()) {
         every { activity.packageName } returns "org.kiwix.kiwixmobile"
-        every { activity.isBrandedApp() } returns false
+        every { kiwixDataStore.isBrandedApp } returns flowOf(false)
         coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
         val result = donationDialogHandler.isZimFilesAvailableInLibrary()
         assertTrue(result)

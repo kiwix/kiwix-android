@@ -31,6 +31,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.zim_manager.Category
@@ -765,5 +767,50 @@ class KiwixDataStoreTest {
   fun `getPublicDirectoryPath removes Android segment below Q`() = runTest {
     val path = "/storage/emulated/0/Android/media/org.kiwix.kiwixmobile"
     assertThat(kiwixDataStore.getPublicDirectoryPath(path)).isEqualTo("/storage/emulated/0")
+  }
+
+  @Test
+  fun `setIsDebugBuild marks as debug build`() = runTest {
+    kiwixDataStore.setIsDebugBuild(true)
+    assertTrue(kiwixDataStore.isDebugBuild.first())
+  }
+
+  @Test
+  fun `isDebugBuild returns false by default`() = runTest {
+    assertThat(kiwixDataStore.isDebugBuild.first()).isFalse()
+  }
+
+  @Test
+  fun `setIsDebugBuild marks as non debug build`() = runTest {
+    kiwixDataStore.setIsDebugBuild(false)
+    assertFalse(kiwixDataStore.isDebugBuild.first())
+  }
+
+  @Test
+  fun `setAppName updates the appName`() = runTest {
+    kiwixDataStore.setAppName("Wikivoyage")
+    assertThat(kiwixDataStore.appName.first()).isEqualTo("Wikivoyage")
+  }
+
+  @Test
+  fun `appName returns kiwix by default`() = runTest {
+    assertThat(kiwixDataStore.appName.first()).isEqualTo("Kiwix")
+  }
+
+  @Test
+  fun `setIsDebugBuild marks as true`() = runTest {
+    kiwixDataStore.setIsBrandedApp(true)
+    assertTrue(kiwixDataStore.isBrandedApp.first())
+  }
+
+  @Test
+  fun `isBrandedApp returns false by default`() = runTest {
+    assertThat(kiwixDataStore.isBrandedApp.first()).isFalse()
+  }
+
+  @Test
+  fun `setIsDebugBuild marks as false`() = runTest {
+    kiwixDataStore.setIsBrandedApp(false)
+    assertFalse(kiwixDataStore.isBrandedApp.first())
   }
 }

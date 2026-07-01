@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadViewModel
 import org.kiwix.kiwixmobile.custom.help.BrandedHelpViewModel
+import org.kiwix.kiwixmobile.custom.main.BrandedReaderViewModel
 import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 
 @Module(includes = [CoreViewModelModule::class])
@@ -38,10 +39,15 @@ abstract class BrandedViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(BrandedHelpViewModel::class)
-  abstract fun bindCustomHelpViewModel(brandedHelpViewModel: BrandedHelpViewModel): ViewModel
+  abstract fun bindBrandedHelpViewModel(brandedHelpViewModel: BrandedHelpViewModel): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(BrandedSettingsViewModel::class)
-  abstract fun bindCustomSettingsViewModel(brandedSettingsViewModel: BrandedSettingsViewModel): ViewModel
+  abstract fun bindBrandedSettingsViewModel(brandedSettingsViewModel: BrandedSettingsViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(BrandedReaderViewModel::class)
+  abstract fun bindBrandedReaderViewModel(brandedReaderViewModel: BrandedReaderViewModel): ViewModel
 }

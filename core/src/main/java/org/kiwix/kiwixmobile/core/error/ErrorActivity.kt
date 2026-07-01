@@ -41,6 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
@@ -52,7 +53,6 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActiv
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.APP_NAME_KEY
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel.Validati
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.ValidateZimDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -89,6 +90,8 @@ open class ErrorActivity : BaseActivity() {
 
   @Inject
   lateinit var fileLogger: FileLogger
+
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
 
   private var exception: Throwable? = null
   var appName: String? = null
@@ -208,7 +211,8 @@ open class ErrorActivity : BaseActivity() {
     val zimBooks = withContext(dispatcher) { libkiwixBookOnDisk.getBooks() }
     showValidationDialog.value = true
     CoroutineScope(dispatcher).launch {
-      validateZimViewModel.startValidation(zimBooks, isBrandedApp())
+      val isBrandedApp = kiwixDataStore.isBrandedApp.first()
+      validateZimViewModel.startValidation(zimBooks, isBrandedApp)
     }
   }
 

@@ -18,15 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import android.view.View
 import android.view.Window
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
-fun View.showFullScreenMode(window: Window) {
-  WindowCompat.setDecorFitsSystemWindows(window, false)
-  WindowInsetsControllerCompat(window, window.decorView).apply {
+fun Window.enterFullscreen() {
+  WindowCompat.setDecorFitsSystemWindows(this, false)
+  WindowInsetsControllerCompat(this, decorView).apply {
     hide(WindowInsetsCompat.Type.systemBars())
     hide(WindowInsetsCompat.Type.displayCutout())
     systemBarsBehavior =
@@ -34,9 +33,9 @@ fun View.showFullScreenMode(window: Window) {
   }
 }
 
-fun View.closeFullScreenMode(window: Window) {
-  WindowCompat.setDecorFitsSystemWindows(window, false)
-  WindowInsetsControllerCompat(window, window.decorView).apply {
+fun Window.exitFullscreen() {
+  WindowCompat.setDecorFitsSystemWindows(this, false)
+  WindowInsetsControllerCompat(this, decorView).apply {
     show(WindowInsetsCompat.Type.systemBars())
     show(WindowInsetsCompat.Type.displayCutout())
   }

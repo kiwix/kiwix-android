@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,8 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.core.main.reader.helper
 
-interface WebViewProvider {
-  fun getCurrentWebView(): KiwixWebView?
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
+import javax.inject.Inject
+
+class PendingSearchItemManager @Inject constructor() {
+  private var pendingItem: SearchItemToOpen? = null
+
+  fun store(item: SearchItemToOpen) {
+    pendingItem = item
+  }
+
+  fun consume(): SearchItemToOpen? {
+    val item = pendingItem
+    pendingItem = null
+    return item
+  }
 }

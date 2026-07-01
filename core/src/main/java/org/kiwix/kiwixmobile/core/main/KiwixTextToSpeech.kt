@@ -107,7 +107,7 @@ class KiwixTextToSpeech internal constructor(
   /**
    * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).
    */
-  fun readAloud(webView: WebView) {
+  fun readAloud(webView: WebView, showTtsLanguageDownloadDialog: () -> Unit) {
     if (currentTTSTask?.paused == true) {
       onSpeakingListener.onSpeakingEnded()
       currentTTSTask = null
@@ -132,8 +132,8 @@ class KiwixTextToSpeech internal constructor(
       } else {
         tts.language = locale
         if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
-          val activity = context as CoreMainActivity?
-          activity?.externalLinkOpener?.showTTSLanguageDownloadDialog()
+          // Invoke show TTS language download dialog. Since this page language is not supported.
+          showTtsLanguageDownloadDialog.invoke()
         } else if (requestAudioFocus()) {
           loadURL(webView)
         }

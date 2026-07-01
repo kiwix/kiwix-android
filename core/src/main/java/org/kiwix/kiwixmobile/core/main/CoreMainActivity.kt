@@ -27,13 +27,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.view.ActionMode
-import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.IconCompat
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -45,8 +43,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -73,15 +73,16 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServ
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.selection.WebViewSelectionActionMode
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
-import androidx.core.graphics.createBitmap
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 const val KIWIX_SUPPORT_URL = "https://donate.kiwix.org"
 const val PAGE_URL_KEY = "pageUrl"
@@ -94,7 +95,7 @@ private const val ADAPTIVE_ICON_SIZE_DP = 108
 private const val ADAPTIVE_ICON_INSET_DP = 36
 
 // Fragments names for compose based navigation.
-const val READER_FRAGMENT = "readerFragment"
+const val READER_SCREEN = "readerScreen"
 const val LOCAL_LIBRARY_SCREEN = "localLibraryScreen"
 const val DOWNLOAD_SCREEN = "downloadsScreen"
 const val BOOKMARK_SCREEN = "bookmarkScreen"
@@ -122,7 +123,7 @@ const val LEFT_DRAWER_HELP_ITEM_TESTING_TAG = "leftDrawerHelpItemTestingTag"
 const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingTag"
 const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
 
-abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
+abstract class CoreMainActivity : BaseActivity() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   abstract val searchFragmentRoute: String
 
@@ -135,12 +136,22 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
+  @Inject lateinit var kiwixDataStore: KiwixDataStore
+
   @Inject
   @IoDispatcher
   lateinit var ioDispatcher: CoroutineDispatcher
 
   @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
+
+  /**
+   * Stores the pending intent for reader screen.
+   */
+  @Inject
+  lateinit var readerIntentManager: ReaderIntentManager
+
+  private var selectionActionModeListener: WebViewSelectionActionMode? = null
 
   /**
    * We have migrated the UI in compose, so providing the compose based navigation to activity
@@ -239,8 +250,26 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
     setMainActivityToCoreApp()
     lifecycleScope.launch(ioDispatcher) {
+      setIsDebugBuild(BuildConfig.DEBUG)
+      setAppName()
+      setIsBrandedApp()
       createApplicationShortcuts()
     }
+
+    intent?.let {
+      readerIntentManager.storePendingIntent(intent)
+    }
+  }
+
+  /**
+   * Set the build type in [KiwixDataStore] so that we can easily test the scenarios based on
+   * build type.
+   *
+   * @see KiwixDataStore.setIsDebugBuild
+   * @see KiwixDataStore.isDebugBuild
+   */
+  private suspend fun setIsDebugBuild(isDebugBuild: Boolean) {
+    kiwixDataStore.setIsDebugBuild(isDebugBuild)
   }
 
   /**
@@ -279,7 +308,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     activityResultForwarder?.invoke(requestCode, resultCode, data)
-    activeFragments().iterator().forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
   override fun onStart() {
@@ -340,18 +368,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  @Suppress("DEPRECATION")
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    activeFragments().iterator().forEach {
-      it.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-  }
-
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (drawerToggle?.isDrawerIndicatorEnabled == true) {
       return drawerToggle?.onOptionsItemSelected(item) == true
@@ -359,31 +375,24 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return super.onOptionsItemSelected(item)
   }
 
+  fun registerSelectionActionModeListener(listener: WebViewSelectionActionMode?) {
+    selectionActionModeListener = listener
+  }
+
   override fun onActionModeStarted(mode: ActionMode) {
     super.onActionModeStarted(mode)
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onActionModeStarted(mode, this)
-    }
+    selectionActionModeListener?.onActionModeStarted(mode)
   }
 
   override fun onActionModeFinished(mode: ActionMode) {
     super.onActionModeFinished(mode)
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onActionModeFinished(mode, this)
-    }
+    selectionActionModeListener?.onActionModeFinished(mode)
   }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     this.intent.action = intent.action
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onNewIntent(intent, this)
-    }
-  }
-
-  override fun getCurrentWebView(): KiwixWebView? {
-    return activeFragments().filterIsInstance<WebViewProvider>().firstOrNull()
-      ?.getCurrentWebView()
+    readerIntentManager.storePendingIntent(intent)
   }
 
   override fun onSupportNavigateUp(): Boolean =
@@ -425,22 +434,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       )
     }
   }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-      return super.onCreateOptionsMenu(menu)
-    }
-    var returnValue = true
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      if (it.onCreateOptionsMenu(menu, this) == FragmentActivityExtensions.Super.ShouldCall) {
-        returnValue = super.onCreateOptionsMenu(menu)
-      }
-    }
-    return returnValue
-  }
-
-  private fun activeFragments(): MutableList<Fragment> =
-    supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
     navController.currentDestination?.getAction(action.actionId)?.run {
@@ -645,7 +638,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   protected abstract fun getIconResId(): Int
-  abstract fun createApplicationShortcuts()
+  abstract suspend fun createApplicationShortcuts()
   abstract fun hideBottomAppBar()
   abstract fun showBottomAppBar()
+
+  /**
+   * Sets the application name for the current activity. This is used in various places such as
+   * the donation page, readerScreen, etc. Child activities should provide the implementation to
+   * set the app name according to their context. For example, in the main Kiwix app,
+   * it will set the app name as "Kiwix", while in branded apps,
+   * it will set the app name as the respective branded app name.
+   */
+  abstract fun setAppName()
+  abstract fun setIsBrandedApp()
 }

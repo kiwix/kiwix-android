@@ -74,6 +74,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -116,9 +117,32 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.BookmarkButtonItem
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkLongClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseAllTabs
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTab
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTocDrawer
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.HomeClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextLongClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenLibrary
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenSearch
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenTocDrawer
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousLongClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTab
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BackToTopButtonClick
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PauseTts
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.StopTts
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateButtonClick
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateLaterButtonClick
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderUiState
+import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
+import org.kiwix.kiwixmobile.core.ui.components.FindInPageAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
@@ -176,10 +200,10 @@ const val TTS_CONTROL_STOP_BUTTON_TESTING_TAG = "ttsControlStopButtonTestingTag"
 @Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
 @Composable
 fun ReaderScreen(
-  state: ReaderScreenState,
+  state: ReaderUiState,
+  snackBarHost: SnackbarHostState,
+  onReaderAction: (ReaderAction) -> Unit,
   actionMenuItems: List<ActionMenuItem>,
-  showTableOfContentDrawer: MutableState<Boolean>,
-  documentSections: MutableList<DocumentSection>?,
   onUserBackPressed: () -> FragmentActivityExtensions.Super,
   navHostController: NavHostController,
   mainActivityBottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
@@ -196,29 +220,30 @@ fun ReaderScreen(
   KiwixTheme {
     Box(Modifier.fillMaxSize()) {
       Scaffold(
-        snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+        snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHost) },
         topBar = {
           ReaderTopBar(
             state,
             actionMenuItems,
             topAppBarScrollBehavior,
+            onReaderAction,
             navigationIcon
           )
         },
         bottomBar = {
-          if (!state.isNoBookOpenInReader) {
+          if (!state.showNoBookOpenInReader) {
             BottomAppBarOfReaderScreen(
               state.bookmarkButtonItem,
-              state.previousPageButtonItem,
-              state.onHomeButtonClick,
-              state.nextPageButtonItem,
-              state.tocButtonItem,
-              state.shouldShowBottomAppBar,
-              bottomAppBarScrollBehavior
+              state.isPreviousPageButtonEnable,
+              state.isNextPageButtonEnable,
+              state.isTocButtonEnable,
+              state.showBottomBar,
+              bottomAppBarScrollBehavior,
+              onReaderAction
             )
           }
         },
-        floatingActionButton = { BackToTopFab(state) },
+        floatingActionButton = { BackToTopFab(state.showBackToTopButton, onReaderAction) },
         modifier = Modifier
           .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
@@ -227,38 +252,38 @@ fun ReaderScreen(
         OnBackPressed(onUserBackPressed, navHostController)
         ReaderContentLayout(
           state,
+          onReaderAction,
           Modifier.padding(paddingValues),
           bottomAppBarScrollBehavior,
           topAppBarScrollBehavior,
           shouldUpdateTopAppBarAndBottomAppBarOnScrolling
         )
       }
-      LaunchedEffect(showTableOfContentDrawer.value) {
-        shouldUpdateTopAppBarAndBottomAppBarOnScrolling.value = !showTableOfContentDrawer.value
+      LaunchedEffect(state.showTableOfContentDrawer) {
+        shouldUpdateTopAppBarAndBottomAppBarOnScrolling.value = !state.showTableOfContentDrawer
       }
-      if (showTableOfContentDrawer.value) {
+      if (state.showTableOfContentDrawer) {
         // Showing the background color on screen so that it look same as navigation drawer.
         val overlayContentDescription = stringResource(android.R.string.untitled)
         Box(
           Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.3f))
-            .clickable { showTableOfContentDrawer.update { false } }
+            .clickable { onReaderAction(CloseTocDrawer) }
             .semantics { contentDescription = overlayContentDescription }
         )
       }
       AnimatedVisibility(
-        visible = showTableOfContentDrawer.value,
+        visible = state.showTableOfContentDrawer,
         enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
         exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
         modifier = Modifier.align(Alignment.CenterEnd)
       ) {
         TableDrawerSheet(
           title = state.tableOfContentTitle,
-          sections = documentSections.orEmpty(),
-          state.selectedWebView,
-          showTableOfContentDrawer
-        )
+          sections = state.documentSections,
+          state.tabsState.currentWebView
+        ) { onReaderAction(CloseTocDrawer) }
       }
     }
   }
@@ -288,19 +313,30 @@ fun OnBackPressed(
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 private fun ReaderTopBar(
-  state: ReaderScreenState,
+  state: ReaderUiState,
   actionMenuItems: List<ActionMenuItem>,
   topAppBarScrollBehavior: TopAppBarScrollBehavior,
+  onReaderAction: (ReaderAction) -> Unit,
   navigationIcon: @Composable () -> Unit,
 ) {
-  if (!state.fullScreenItem.first) {
+  if (state.shouldShowFullScreen) return
+  if (state.findInPageUiState.visible) {
+    FindInPageAppBar(
+      query = state.findInPageUiState.query,
+      resultText = state.findInPageUiState.resultText,
+      onQueryChange = { onReaderAction(ReaderAction.FindInPageQueryChanged(it)) },
+      onPreviousClick = { onReaderAction(ReaderAction.FindInPagePreviousClicked) },
+      onNextClick = { onReaderAction(ReaderAction.FindInPageNextClicked) },
+      onCloseClick = { onReaderAction(ReaderAction.FindInPageCloseClicked) }
+    )
+  } else {
     KiwixAppBar(
-      title = if (state.showTabSwitcher) "" else state.readerScreenTitle,
+      title = if (state.showTabSwitcher) "" else state.title,
       navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItems,
       topAppBarScrollBehavior = topAppBarScrollBehavior,
       searchBar =
-        searchPlaceHolderIfActive(state.searchPlaceHolderItemForBrandedApps)
+        searchPlaceHolderIfActive(state.searchPlaceHolderItemForBrandedApps, onReaderAction)
     )
   }
 }
@@ -308,21 +344,22 @@ private fun ReaderTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReaderContentLayout(
-  state: ReaderScreenState,
+  state: ReaderUiState,
+  onReaderAction: (ReaderAction) -> Unit,
   modifier: Modifier = Modifier,
   bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
   topAppBarScrollBehavior: TopAppBarScrollBehavior,
   shouldUpdateTopAppBarAndBottomAppBarOnScrolling: MutableState<Boolean>,
 ) {
   Box(modifier = modifier.fillMaxSize()) {
-    TabSwitcherAnimated(state)
+    TabSwitcherAnimated(state, onReaderAction)
     if (!state.showTabSwitcher) {
       when {
-        state.isNoBookOpenInReader -> NoBookOpenView(state.onOpenLibraryButtonClicked)
-        state.fullScreenItem.first -> ShowFullScreenView(state)
+        state.showNoBookOpenInReader -> NoBookOpenView { onReaderAction(OpenLibrary) }
+        state.shouldShowFullScreen -> ShowFullScreenView(state.videoView)
 
         else -> {
-          state.selectedWebView?.let { selectedWebView ->
+          state.tabsState.currentWebView?.let { selectedWebView ->
             KiwixWebViewWithAppBarScrolling(
               selectedWebView,
               topAppBarScrollBehavior,
@@ -332,8 +369,8 @@ private fun ReaderContentLayout(
           }
           ShowProgressBarIfZIMFilePageIsLoading(state)
           Column(Modifier.align(Alignment.BottomCenter)) {
-            TtsControls(state)
-            ShowDonationLayout(state)
+            TtsControls(state, onReaderAction)
+            ShowDonationLayout(state, onReaderAction)
           }
         }
       }
@@ -347,7 +384,7 @@ fun TableDrawerSheet(
   title: String,
   sections: List<DocumentSection>,
   selectedWebView: KiwixWebView?,
-  showTableOfContentDrawer: MutableState<Boolean>
+  closeTocClick: () -> Unit
 ) {
   ModalDrawerSheet(
     modifier = Modifier.width(NAVIGATION_DRAWER_WIDTH),
@@ -365,7 +402,7 @@ fun TableDrawerSheet(
             .clickable {
               onTableOfContentHeaderClick(
                 selectedWebView,
-                showTableOfContentDrawer
+                closeTocClick
               )
             }
             .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
@@ -388,7 +425,7 @@ fun TableDrawerSheet(
                 selectedWebView,
                 index,
                 sections,
-                showTableOfContentDrawer
+                closeTocClick
               )
             }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
@@ -401,17 +438,17 @@ fun TableDrawerSheet(
 
 private fun onTableOfContentHeaderClick(
   selectedWebView: KiwixWebView?,
-  showTableOfContentDrawer: MutableState<Boolean>
+  closeTocClick: () -> Unit
 ) {
   selectedWebView?.scrollY = ZERO
-  showTableOfContentDrawer.update { false }
+  closeTocClick.invoke()
 }
 
 private fun onTableOfContentSectionClick(
   selectedWebView: KiwixWebView?,
   position: Int,
   sections: List<DocumentSection>,
-  showTableOfContentDrawer: MutableState<Boolean>
+  closeTocClick: () -> Unit
 ) {
   if (hasItemForPositionInDocumentSectionsList(position, sections)) {
     val targetId = sections[position].id.replace("'", "\\'")
@@ -420,7 +457,7 @@ private fun onTableOfContentSectionClick(
       null
     )
   }
-  showTableOfContentDrawer.update { false }
+  closeTocClick.invoke()
 }
 
 private fun hasItemForPositionInDocumentSectionsList(
@@ -436,7 +473,7 @@ private fun hasItemForPositionInDocumentSectionsList(
 }
 
 @Composable
-private fun TabSwitcherAnimated(state: ReaderScreenState) {
+private fun TabSwitcherAnimated(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
   val transitionSpec = remember {
     slideInVertically(
       initialOffsetY = { -it },
@@ -457,23 +494,21 @@ private fun TabSwitcherAnimated(state: ReaderScreenState) {
       .semantics { testTag = TAB_SWITCHER_VIEW_TESTING_TAG },
   ) {
     TabSwitcherView(
-      state.kiwixWebViewList,
-      state.currentWebViewPosition,
-      state.onTabClickListener,
-      state.onCloseAllTabs
+      state.tabsState,
+      onReaderAction
     )
   }
 }
 
 @Composable
 private fun searchPlaceHolderIfActive(
-  searchPlaceHolderItemForBrandedApps: Pair<Boolean, () -> Unit>
-): (@Composable () -> Unit)? = if (searchPlaceHolderItemForBrandedApps.first) {
+  searchPlaceHolderItemForBrandedApps: Boolean,
+  onReaderAction: (ReaderAction) -> Unit
+): (@Composable () -> Unit)? = if (searchPlaceHolderItemForBrandedApps) {
   {
     SearchPlaceholder(
-      stringResource(R.string.search_label),
-      searchPlaceHolderItemForBrandedApps.second
-    )
+      stringResource(R.string.search_label)
+    ) { onReaderAction(OpenSearch()) }
   }
 } else {
   null
@@ -513,19 +548,19 @@ fun SearchPlaceholder(hint: String, searchPlaceHolderClick: () -> Unit) {
 }
 
 @Composable
-private fun ShowFullScreenView(state: ReaderScreenState) {
-  state.fullScreenItem.second?.let { videoView ->
-    AndroidView(factory = { videoView })
+private fun ShowFullScreenView(videoView: FrameLayout?) {
+  videoView?.let { view ->
+    AndroidView(factory = { view })
   }
 }
 
 @Composable
-private fun BoxScope.ShowProgressBarIfZIMFilePageIsLoading(state: ReaderScreenState) {
-  if (state.pageLoadingItem.first) {
+private fun BoxScope.ShowProgressBarIfZIMFilePageIsLoading(state: ReaderUiState) {
+  if (state.loading) {
     ContentLoadingProgressBar(
       modifier = Modifier.align(Alignment.TopCenter),
       progressBarStyle = ProgressBarStyle.HORIZONTAL,
-      progress = state.pageLoadingItem.second
+      progress = state.progress
     )
   }
 }
@@ -556,11 +591,11 @@ private fun NoBookOpenView(
 }
 
 @Composable
-private fun TtsControls(state: ReaderScreenState) {
+private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
   if (state.showTtsControls) {
     Row {
       Button(
-        onClick = state.onPauseTtsClick,
+        onClick = { onReaderAction(PauseTts) },
         modifier = Modifier
           .weight(1f)
           .alpha(TTS_BUTTONS_CONTROL_ALPHA)
@@ -572,7 +607,7 @@ private fun TtsControls(state: ReaderScreenState) {
       }
       Spacer(modifier = Modifier.width(FOUR_DP))
       Button(
-        onClick = state.onStopTtsClick,
+        onClick = { onReaderAction(StopTts) },
         modifier = Modifier
           .weight(1f)
           .alpha(TTS_BUTTONS_CONTROL_ALPHA)
@@ -588,27 +623,26 @@ private fun TtsControls(state: ReaderScreenState) {
 }
 
 @Composable
-private fun BackToTopFab(state: ReaderScreenState) {
-  if (state.showBackToTopButton) {
-    KiwixFloatingActionButton(
-      icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
-      onClick = state.backToTopButtonClick,
-      contentDescription = stringResource(R.string.pref_back_to_top),
-      shouldPulse = true
-    )
-  }
+private fun BackToTopFab(showBackToTop: Boolean, onReaderAction: (ReaderAction) -> Unit) {
+  if (!showBackToTop) return
+  KiwixFloatingActionButton(
+    icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
+    onClick = { onReaderAction(BackToTopButtonClick) },
+    contentDescription = stringResource(R.string.pref_back_to_top),
+    shouldPulse = true
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomAppBarOfReaderScreen(
-  bookmarkButtonItem: Triple<() -> Unit, () -> Unit, Drawable>,
-  previousPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
-  onHomeButtonClick: () -> Unit,
-  nextPageButtonItem: Triple<() -> Unit, () -> Unit, Boolean>,
-  tocButtonItem: Pair<Boolean, () -> Unit>,
+  bookmarkButtonItem: BookmarkButtonItem,
+  isPreviousPageButtonEnable: Boolean,
+  isNextPageButtonEnable: Boolean,
+  isTocButtonEnable: Boolean,
   shouldShowBottomAppBar: Boolean,
-  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior
+  bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
+  onReaderAction: (ReaderAction) -> Unit
 ) {
   if (!shouldShowBottomAppBar) return
   BottomAppBar(
@@ -625,41 +659,41 @@ private fun BottomAppBarOfReaderScreen(
     ) {
       // Bookmark Icon
       BottomAppBarButtonIcon(
-        onClick = bookmarkButtonItem.first,
-        onLongClick = bookmarkButtonItem.second,
-        buttonIcon = bookmarkButtonItem.third,
+        onClick = { onReaderAction(BookmarkClicked) },
+        onLongClick = { onReaderAction(BookmarkLongClicked) },
+        buttonIcon = bookmarkButtonItem.icon,
         contentDescription = stringResource(R.string.bookmarks),
         testingTag = READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG
       )
       // Back Icon(for going to previous page)
       BottomAppBarButtonIcon(
-        onClick = previousPageButtonItem.first,
-        onLongClick = previousPageButtonItem.second,
+        onClick = { onReaderAction(PreviousClicked) },
+        onLongClick = { onReaderAction(PreviousLongClicked) },
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_left_24dp),
-        shouldEnable = previousPageButtonItem.third,
+        shouldEnable = isPreviousPageButtonEnable,
         contentDescription = stringResource(R.string.go_to_previous_page),
         testingTag = READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
       )
       // Home Icon(to open the home page of ZIM file)
       BottomAppBarButtonIcon(
-        onClick = onHomeButtonClick,
+        onClick = { onReaderAction(HomeClicked) },
         buttonIcon = Drawable(R.drawable.action_home),
         contentDescription = stringResource(R.string.menu_home),
         testingTag = READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG
       )
       // Forward Icon(for going to next page)
       BottomAppBarButtonIcon(
-        onClick = nextPageButtonItem.first,
-        onLongClick = nextPageButtonItem.second,
+        onClick = { onReaderAction(NextClicked) },
+        onLongClick = { onReaderAction(NextLongClicked) },
         buttonIcon = Drawable(R.drawable.ic_keyboard_arrow_right_24dp),
-        shouldEnable = nextPageButtonItem.third,
+        shouldEnable = isNextPageButtonEnable,
         contentDescription = stringResource(R.string.go_to_next_page),
         testingTag = READER_BOTTOM_BAR_NEXT_SCREEN_BUTTON_TESTING_TAG
       )
       // Toggle Icon(to open the table of content in right side bar)
       BottomAppBarButtonIcon(
-        shouldEnable = tocButtonItem.first,
-        onClick = tocButtonItem.second,
+        shouldEnable = isTocButtonEnable,
+        onClick = { onReaderAction(OpenTocDrawer) },
         buttonIcon = Drawable(R.drawable.ic_toc_24dp),
         contentDescription = stringResource(R.string.table_of_contents),
         testingTag = READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG
@@ -703,13 +737,13 @@ private fun BottomAppBarButtonIcon(
 }
 
 @Composable
-private fun ShowDonationLayout(state: ReaderScreenState) {
-  if (state.shouldShowDonationPopup) {
+private fun ShowDonationLayout(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
+  if (state.showDonationPopup) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
       DonationLayout(
         state.appName,
-        state.donateButtonClick,
-        state.laterButtonClick
+        { onReaderAction(DonateButtonClick) },
+        { onReaderAction(DonateLaterButtonClick) }
       )
     }
   }
@@ -717,10 +751,8 @@ private fun ShowDonationLayout(state: ReaderScreenState) {
 
 @Composable
 fun TabSwitcherView(
-  webViews: List<KiwixWebView>,
-  selectedIndex: Int,
-  onTabClickListener: TabClickListener,
-  onCloseAllTabs: () -> Unit
+  tabsState: TabsManager.TabsState,
+  onReaderAction: (ReaderAction) -> Unit
 ) {
   val state = rememberLazyListState()
   Box(modifier = Modifier.fillMaxSize()) {
@@ -733,7 +765,7 @@ fun TabSwitcherView(
       horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
       state = state
     ) {
-      itemsIndexed(webViews, key = { _, item -> item.hashCode() }) { index, webView ->
+      itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
         val context = LocalContext.current
         val title = remember(webView) {
           webView.title?.fromHtml()?.toString()
@@ -743,16 +775,16 @@ fun TabSwitcherView(
         TabItemView(
           index = index,
           title = title,
-          isSelected = index == selectedIndex,
+          isSelected = index == tabsState.selectedIndex,
           webView = webView,
-          onTabClickListener = onTabClickListener,
+          onReaderAction = onReaderAction,
         )
       }
     }
     LaunchedEffect(Unit) {
-      state.animateScrollToItem(selectedIndex)
+      state.animateScrollToItem(tabsState.selectedIndex)
     }
-    CloseAllTabButton(onCloseAllTabs)
+    CloseAllTabButton { onReaderAction(CloseAllTabs) }
   }
 }
 
@@ -821,7 +853,7 @@ fun TabItemView(
   isSelected: Boolean,
   webView: KiwixWebView,
   modifier: Modifier = Modifier,
-  onTabClickListener: TabClickListener
+  onReaderAction: (ReaderAction) -> Unit
 ) {
   val cardElevation = if (isSelected) EIGHT_DP else TWO_DP
   val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
@@ -833,12 +865,12 @@ fun TabItemView(
         .padding(horizontal = EIGHT_DP, vertical = FOUR_DP)
         .width(cardWidth)
     ) {
-      TabItemHeader(title, index, onTabClickListener)
+      TabItemHeader(title, index, onReaderAction)
       TabItemCard(
         webView,
         cardWidth,
         cardHeight,
-        onTabClickListener,
+        onReaderAction,
         borderColor,
         cardElevation,
         index
@@ -851,7 +883,7 @@ fun TabItemView(
 private fun TabItemHeader(
   title: String,
   index: Int,
-  onTabClickListener: TabClickListener
+  onReaderAction: (ReaderAction) -> Unit
 ) {
   Row(
     modifier = Modifier
@@ -870,7 +902,7 @@ private fun TabItemHeader(
       style = MaterialTheme.typography.labelSmall
     )
     IconButton(
-      onClick = { onTabClickListener.onCloseTab(index) },
+      onClick = { onReaderAction(CloseTab(index)) },
       modifier = Modifier.size(CLOSE_TAB_ICON_SIZE)
     ) {
       Icon(
@@ -886,7 +918,7 @@ private fun TabItemCard(
   webView: KiwixWebView,
   cardWidth: Dp,
   cardHeight: Dp,
-  onTabClickListener: TabClickListener,
+  onReaderAction: (ReaderAction) -> Unit,
   borderColor: Color,
   elevation: Dp,
   index: Int
@@ -908,7 +940,7 @@ private fun TabItemCard(
           val clickableView = View(context).apply {
             layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
             // Prevent clicking inside the webView when tabs are active.
-            setOnClickListener { onTabClickListener.onSelectTab(index) }
+            setOnClickListener { onReaderAction(SelectTab(index)) }
             contentDescription = "${webView.contentDescription}${webView.hashCode()}"
           }
           addView(clickableView)

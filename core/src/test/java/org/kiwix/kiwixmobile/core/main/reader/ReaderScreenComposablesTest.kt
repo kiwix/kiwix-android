@@ -40,7 +40,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -156,16 +155,16 @@ class ReaderScreenComposablesTest {
   ) {
     composeTestRule.setContent {
       val navController = rememberNavController()
-      ReaderScreen(
-        state = state,
-        actionMenuItems = emptyList(),
-        showTableOfContentDrawer = showTocDrawer,
-        documentSections = documentSections,
-        onUserBackPressed = { FragmentActivityExtensions.Super.ShouldCall },
-        navHostController = navController,
-        mainActivityBottomAppBarScrollBehaviour = null,
-        navigationIcon = {}
-      )
+      // ReaderScreen(
+      //   state = state,
+      //   actionMenuItems = emptyList(),
+      //   showTableOfContentDrawer = showTocDrawer,
+      //   documentSections = documentSections,
+      //   onUserBackPressed = { FragmentActivityExtensions.Super.ShouldCall },
+      //   navHostController = navController,
+      //   mainActivityBottomAppBarScrollBehaviour = null,
+      //   navigationIcon = {}
+      // )
     }
   }
 

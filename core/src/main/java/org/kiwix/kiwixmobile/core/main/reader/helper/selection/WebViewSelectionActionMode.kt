@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,20 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.base
+package org.kiwix.kiwixmobile.core.main.reader.helper.selection
 
-import android.content.Context
-import androidx.fragment.app.Fragment
+import android.view.ActionMode
 
-/**
- * All fragments should inherit from this fragment.
- */
-
-abstract class BaseFragment : Fragment() {
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    inject(activity as BaseActivity)
-  }
-
-  abstract fun inject(baseActivity: BaseActivity)
+interface WebViewSelectionActionMode {
+  fun onActionModeStarted(actionMode: ActionMode)
+  fun onActionModeFinished(actionMode: ActionMode)
 }

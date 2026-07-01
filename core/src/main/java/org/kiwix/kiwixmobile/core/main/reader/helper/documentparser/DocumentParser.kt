@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,29 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.core.main.reader.helper.documentparser
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import org.kiwix.kiwixmobile.core.main.reader.DocumentSection
-import kotlin.collections.List
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 
-class DocumentParser(private val listener: DocumentParser.SectionsListener) {
+class DocumentParser(private val listener: SectionsListener) {
   private var title: String = ""
   private val sections = mutableListOf<DocumentSection>()
+  private var documentParserJs: String? = null
+
+  fun loadDocumentParserJs(context: Context) {
+    documentParserJs = context.readFile("js/documentParser.js")
+    sections.clear()
+  }
+
+  fun requireDocumentParserJs() = requireNotNull(documentParserJs) {
+    "DocumentParserJs is not loaded. Call DocumentParser.loadDocumentParser before using it"
+  }
 
   fun initInterface(webView: WebView) {
     webView.addJavascriptInterface(ParserCallback(), "DocumentParser")

@@ -18,21 +18,9 @@
 
 package org.kiwix.kiwixmobile.core.base
 
-import android.content.Intent
-import android.view.ActionMode
-import android.view.Menu
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-
 interface FragmentActivityExtensions {
   enum class Super {
     ShouldCall,
     ShouldNotCall
   }
-
-  fun onActionModeStarted(actionMode: ActionMode, activity: AppCompatActivity): Super = ShouldCall
-  fun onActionModeFinished(actionMode: ActionMode, activity: AppCompatActivity): Super = ShouldCall
-  fun onBackPressed(activity: AppCompatActivity): Super = ShouldCall
-  fun onNewIntent(intent: Intent, activity: AppCompatActivity): Super = ShouldCall
-  fun onCreateOptionsMenu(menu: Menu, activity: AppCompatActivity): Super = ShouldCall
 }
