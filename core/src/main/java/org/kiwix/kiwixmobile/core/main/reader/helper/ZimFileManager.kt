@@ -32,7 +32,7 @@ class ZimFileManager @Inject constructor(private val zimReaderContainer: ZimRead
     destroyAllWebViews: () -> Unit
   ): OpenZimResult {
     if (!source.canOpenInLibkiwix()) return InvalidFile
-    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource, destroyAllWebViews)
+    clearWebViewListIfNotPreviouslyOpenZimFile(source, destroyAllWebViews)
     zimReaderContainer.setZimReaderSource(source, showSearchSuggestionsSpellChecked)
     return zimReaderContainer.zimFileReader?.let {
       Success(it)
@@ -52,16 +52,16 @@ class ZimFileManager @Inject constructor(private val zimReaderContainer: ZimRead
     get() = zimReaderContainer.zimReaderSource
 
   private fun clearWebViewListIfNotPreviouslyOpenZimFile(
-    zimReaderSource: ZimReaderSource?,
+    newSource: ZimReaderSource?,
     destroyAllWebViews: () -> Unit
   ) {
-    if (isNotPreviouslyOpenZim(zimReaderSource)) {
+    if (isNotPreviouslyOpenZim(newSource)) {
       destroyAllWebViews.invoke()
     }
   }
 
-  private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
-    zimReaderSource != null && zimReaderSource != zimReaderContainer.zimReaderSource
+  private fun isNotPreviouslyOpenZim(newSource: ZimReaderSource?): Boolean =
+    newSource != null && newSource != zimReaderSource
 
   sealed interface OpenZimResult {
     data class Success(val zimFileReader: ZimFileReader) : OpenZimResult

@@ -36,12 +36,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_SHADOW_ELEVATION
+
+const val FIND_IN_PAGE_PREVIOUS_BUTTON = "findInPagePreviousButton"
+const val FIND_IN_PAGE_NEXT_BUTTON = "findInPageNextButton"
+const val FIND_IN_PAGE_RESULT_TEXT = "findInPageResultText"
+const val FIND_IN_SEARCH_VIEW_TESTING_TAG = "finInPageSearchViewTestingTag"
+const val FIND_IN_PAGE_SEARCH_CLEAR_BUTTON_TESTING_TAG = "findInPageSearchClearButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,23 +100,30 @@ private fun FindInPageBar(
       modifier = Modifier.weight(1f),
       value = query,
       onValueChange = onQueryChange,
-      onClearClick = { onQueryChange("") }
+      onClearClick = { onQueryChange("") },
+      searchViewTextFiledTestTag = FIND_IN_SEARCH_VIEW_TESTING_TAG,
+      clearButtonTestTag = FIND_IN_PAGE_SEARCH_CLEAR_BUTTON_TESTING_TAG
     )
 
     Text(
       text = resultText,
-      modifier = Modifier.padding(horizontal = EIGHT_DP),
+      modifier = Modifier
+        .padding(horizontal = EIGHT_DP)
+        .testTag(FIND_IN_PAGE_RESULT_TEXT),
       style = MaterialTheme.typography.bodyMedium
     )
 
-    IconButton(onClick = onPreviousClick) {
+    IconButton(
+      modifier = Modifier.testTag(FIND_IN_PAGE_PREVIOUS_BUTTON),
+      onClick = onPreviousClick
+    ) {
       Icon(
         painter = painterResource(R.drawable.action_find_previous),
         contentDescription = stringResource(R.string.previous)
       )
     }
 
-    IconButton(onClick = onNextClick) {
+    IconButton(modifier = Modifier.testTag(FIND_IN_PAGE_NEXT_BUTTON), onClick = onNextClick) {
       Icon(
         painter = painterResource(R.drawable.action_find_next),
         contentDescription = stringResource(R.string.next)

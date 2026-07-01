@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -108,7 +109,8 @@ class KiwixTextToSpeechTest {
     val task = kiwixTts.TTSTask(listOf("Hello"))
     task.paused = true
     kiwixTts.currentTTSTask = task
-    kiwixTts.readAloud(webView)
+    kiwixTts.readAloud(webView) {
+    }
     verify { speakingListener.onSpeakingEnded() }
     assertThat(kiwixTts.currentTTSTask).isNull()
   }
@@ -119,7 +121,8 @@ class KiwixTextToSpeechTest {
     kiwixTts.currentTTSTask = null
     every { tts.isSpeaking } returns true
     every { tts.stop() } returns SUCCESS
-    kiwixTts.readAloud(webView)
+    kiwixTts.readAloud(webView) {
+    }
     verify { tts.stop() }
     verify { tts.setOnUtteranceProgressListener(null) }
     verify { speakingListener.onSpeakingEnded() }
@@ -130,7 +133,8 @@ class KiwixTextToSpeechTest {
     injectMockTts()
     every { tts.isSpeaking } returns false
     every { zimReaderContainer.language } returns "mul"
-    kiwixTts.readAloud(webView)
+    kiwixTts.readAloud(webView) {
+    }
     verify(exactly = 0) { webView.loadUrl(any()) }
     assertThat(ShadowToast.getTextOfLatestToast())
       .isEqualTo(context.getString(R.string.tts_not_enabled))
@@ -142,7 +146,8 @@ class KiwixTextToSpeechTest {
     every { tts.isSpeaking } returns false
     every { zimReaderContainer.language } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_NOT_SUPPORTED
-    kiwixTts.readAloud(webView)
+    kiwixTts.readAloud(webView) {
+    }
     verify { tts.isLanguageAvailable(any()) }
     verify(exactly = 0) { webView.loadUrl(any()) }
     assertThat(ShadowToast.getTextOfLatestToast())
@@ -217,7 +222,8 @@ class KiwixTextToSpeechTest {
   fun `shutdown abandons audio focus request`() {
     injectMockTts()
     grantAudioFocus()
-    kiwixTts.readAloud(setupReadAloudForSuccess())
+    kiwixTts.readAloud(setupReadAloudForSuccess()) {
+    }
     kiwixTts.shutdown()
     verify { audioManager.abandonAudioFocusRequest(any()) }
   }
@@ -287,7 +293,8 @@ class KiwixTextToSpeechTest {
   fun `readAloud loads processed content when everything is valid`() {
     injectMockTts()
     grantAudioFocus()
-    kiwixTts.readAloud(setupReadAloudForSuccess())
+    kiwixTts.readAloud(setupReadAloudForSuccess()) {
+    }
     verify {
       webView.loadUrl(match { it.contains("body = document.getElementsByTagName") })
     }
@@ -300,7 +307,8 @@ class KiwixTextToSpeechTest {
       audioManager.requestAudioFocus(any<AudioFocusRequest>())
     } returns AudioManager.AUDIOFOCUS_REQUEST_FAILED
 
-    kiwixTts.readAloud(setupReadAloudForSuccess())
+    kiwixTts.readAloud(setupReadAloudForSuccess()) {
+    }
 
     verify(exactly = 0) { webView.loadUrl(any()) }
   }
@@ -315,7 +323,8 @@ class KiwixTextToSpeechTest {
     mockkObject(LanguageUtils.Companion)
     every { LanguageUtils.iSO3ToLocale(any()) } returns null
 
-    kiwixTts.readAloud(webView)
+    kiwixTts.readAloud(webView) {
+    }
 
     verify(exactly = 0) { webView.loadUrl(any()) }
   }
@@ -339,10 +348,12 @@ class KiwixTextToSpeechTest {
     val voice: Voice = mockk(relaxed = true)
     every { voice.features } returns setOf(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)
     every { tts.voice } returns voice
+    var showTtsDownloadDialog = false
+    kiwixTts.readAloud(webView) {
+      showTtsDownloadDialog = true
+    }
 
-    kiwixTts.readAloud(webView)
-
-    verify { activity.externalLinkOpener.showTTSLanguageDownloadDialog() }
+    assertTrue(showTtsDownloadDialog)
   }
 
   @Test

@@ -71,6 +71,7 @@ import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager.BookmarkSaveResult
+import org.kiwix.kiwixmobile.core.main.reader.helper.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.AudioFocusGain

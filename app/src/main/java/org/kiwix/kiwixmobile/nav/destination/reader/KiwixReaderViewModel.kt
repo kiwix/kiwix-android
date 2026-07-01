@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel
-import org.kiwix.kiwixmobile.core.main.reader.FindInPageManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.OPEN_HOME_SCREEN_DELAY
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.reader.RestoreOrigin.FromExternalLaunch

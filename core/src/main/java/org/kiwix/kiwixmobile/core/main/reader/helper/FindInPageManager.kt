@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main.reader
+package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.webkit.WebView
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,7 +90,12 @@ class FindInPageManager @Inject constructor() {
   }
 
   fun stop() {
-    webView?.clearMatches()
+    webView?.apply {
+      clearMatches()
+      setFindListener(null)
+    }
+    webView = null
     findListener = null
+    _uiState.value = FindInPageUiState()
   }
 }
