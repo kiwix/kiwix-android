@@ -21,10 +21,13 @@ package org.kiwix.kiwixmobile.core.downloader
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.entity.ApkInfo
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import javax.inject.Inject
 
@@ -33,7 +36,25 @@ class DownloaderImpl @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   @OPDSKiwixService private val kiwixService: KiwixService,
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  private val downloadApkDao: DownloadApkDao,
+  private val kiwixService: KiwixService
 ) : Downloader {
+  @Suppress("InjectDispatcher")
+  override fun downloadApk(url: String) {
+    CoroutineScope(ioDispatcher).launch {
+      runCatching {
+        downloadApkDao.addDownload(
+          downloadRequester = downloadRequester,
+          url = url
+        )
+        downloadRequester.startApkDownloadService()
+      }.onFailure {
+        it.printStackTrace()
+      }
+    }
+  }
+
+  @Suppress("InjectDispatcher")
   override fun download(book: LibkiwixBook) {
     CoroutineScope(ioDispatcher).launch {
       runCatching {
@@ -57,6 +78,10 @@ class DownloaderImpl @Inject constructor(
 
   override fun cancelDownload(downloadId: Long) {
     downloadRequester.cancel(downloadId)
+  }
+
+  override fun cancelApkDownload(downloadId: Long) {
+    downloadRequester.cancelApk(downloadId)
   }
 
   override fun retryDownload(downloadId: Long) {

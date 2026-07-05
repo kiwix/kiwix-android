@@ -62,6 +62,11 @@ class DownloadManagerRequester @Inject constructor(
     startDownloadMonitorService()
   }
 
+  override fun cancelApk(downloadId: Long) {
+    fetch.delete(downloadId.toInt())
+    startApkDownloadService()
+  }
+
   override fun retryDownload(downloadId: Long) {
     fetch.retry(
       id = downloadId.toInt(),
@@ -101,6 +106,10 @@ class DownloadManagerRequester @Inject constructor(
 
   override fun startDownloadMonitorService() {
     (context as CoreApp).getMainActivity().startDownloadMonitorServiceIfOngoingDownloads()
+  }
+
+  override fun startApkDownloadService() {
+    (context as CoreApp).getMainActivity().startDownloadApkServiceIfOngoingApkDownload()
   }
 }
 

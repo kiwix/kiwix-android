@@ -482,6 +482,13 @@ sealed class KiwixDialog(
     dismissButtonText = R.string.open_note
   )
 
+  object ShowUpdateDialog : KiwixDialog(
+    R.string.new_update_available_title,
+    R.string.new_update_available_message,
+    confirmButtonText = R.string.update,
+    dismissButtonText = R.string.rate_dialog_neutral
+  )
+
   object XiaomiShortcutPermission : KiwixDialog(
     R.string.add_shortcut_title,
     R.string.xiaomi_permission_required,
@@ -495,6 +502,13 @@ sealed class KiwixDialog(
     android.R.string.ok,
     android.R.string.cancel,
     customComposeView = customGetView
+  )
+
+  object ShowReDownloadDialog : KiwixDialog(
+    null,
+    R.string.error_during_installing_apk,
+    confirmButtonText = R.string.download_again,
+    dismissButtonText = R.string.cancel
   )
 }
 

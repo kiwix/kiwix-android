@@ -19,8 +19,12 @@
 package org.kiwix.kiwixmobile.main
 
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -37,6 +41,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.os.LocaleListCompat
@@ -48,6 +53,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
@@ -66,9 +72,11 @@ import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.dao.DownloadApkDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_APK_COMPLETE_INTENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
@@ -88,9 +96,12 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.core.utils.workManager.UpdateWorkManager
+import org.kiwix.kiwixmobile.core.utils.workManager.WorkType
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import java.io.File
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
@@ -110,6 +121,9 @@ class KiwixMainActivity : CoreMainActivity() {
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
+
+  @Inject
+  lateinit var apkDao: DownloadApkDao
 
   override val mainActivity: AppCompatActivity by lazy { this }
   override val appName: String by lazy { getString(R.string.app_name) }
@@ -172,7 +186,14 @@ class KiwixMainActivity : CoreMainActivity() {
         alertDialogShower = alertDialogShower,
         snackBarHostState = snackBarHostState
       )
+      val context = LocalContext.current
       LaunchedEffect(Unit) {
+        /**
+         * If the app is running for the first time, we run the WorkManager immediately.
+         * For consecutive runs after that, we initialize a periodic WorkManager,
+         * which only queues unique requests wit the same tag name.
+         */
+        initializeUpdateWorkManager(context, apkDao)
         // Load the menu when UI is attached to screen.
         leftDrawerMenu.addAll(leftNavigationDrawerMenuItems)
       }
@@ -221,6 +242,7 @@ class KiwixMainActivity : CoreMainActivity() {
       safelyHandleDeepLink(intent)
       handleBackgroundTimeoutLimitIntent(intent)
       handleShortcutIntent(intent)
+      handleOnApkCompleteIntent(intent)
     }
   }
 
@@ -238,9 +260,54 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  private fun handleOnApkCompleteIntent(intent: Intent?) {
+    if (intent?.hasExtra(DOWNLOAD_APK_COMPLETE_INTENT) == true) {
+      val currentId = navController.currentDestination?.id
+      val targetId = navController.graph.findNode(KiwixDestination.Update.route)?.id
+
+      if (currentId != targetId) {
+        navigate(KiwixDestination.Update.route) {
+          launchSingleTop = true
+          popUpTo(navController.graph.findStartDestination().id)
+        }
+      }
+    }
+  }
+
   private fun safelyHandleDeepLink(intent: Intent) {
     if (intent.data != null && intent.extras != null) {
       navController.handleDeepLink(intent)
+    }
+  }
+
+  private suspend fun initializeUpdateWorkManager(
+    context: Context,
+    apkDao: DownloadApkDao
+  ) {
+    if (kiwixDataStore.showIntro.first()) {
+      cleanUpPreviousDownloadedApkFile(context, apkDao)
+      UpdateWorkManager.startWork(this, WorkType.IMMEDIATE)
+    } else {
+      UpdateWorkManager.startWork(this, WorkType.PERIODIC)
+    }
+  }
+
+  /**
+   * This function check if the updated apk is in completed state after the update and run once
+   * at first app startup to perform a cleanup of redundant apk file in the storage.
+   */
+  private suspend fun cleanUpPreviousDownloadedApkFile(context: Context, apkDao: DownloadApkDao) {
+    val previousApkInfoStatus = apkDao.getDownload()?.status ?: return
+    if (previousApkInfoStatus == Status.COMPLETED) {
+      /* Hard coded dir path need more research to get access to media
+       path but previous context.externalMediaDirs is deprecated */
+      val apkDir = File(
+        Environment.getExternalStorageDirectory(),
+        "Android/media/${context.packageName}/Kiwix"
+      )
+      val previousApkFile = apkDir.listFiles { file -> file.extension == "apk" }?.firstOrNull()
+      previousApkFile?.delete()
+      apkDao.resetDownloadInfoState()
     }
   }
 

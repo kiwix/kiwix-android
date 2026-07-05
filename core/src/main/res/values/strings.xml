@@ -427,10 +427,23 @@
   <string name="confirmation_validate_zim_files">Are you sure you want to validate the following ZIM files?\n\n%s</string>
   <string name="validating_zim_file">Validating ZIM file…</string>
   <string name="validating_zim_files">Validating ZIM files…</string>
+  <string name="new_update_available_message">A new version of Kiwix is available. You can update it now.</string>
+  <string name="update">update</string>
+  <string name="update_title">Update</string>
+  <string name="install">install</string>
+  <string name="new_update_available_title">Update Kiwix</string>
+  <string name="error_during_installing_apk">An error was encountered while installing the apk. File no longer exists in storage</string>
   <string name="menu_add_to_homescreen">Add to Home Screen</string>
   <string name="added_to_homescreen">Shortcut added to Home Screen</string>
   <string name="add_shortcut_title">Add shortcut</string>
   <string name="shortcut_name_label">Shortcut name</string>
   <string name="open_xiaomi_settings">Open Settings</string>
   <string name="xiaomi_permission_required">This device requires shortcut permission to be granted before adding a shortcut to the home screen. Please grant the permission in settings.</string>
+  <string name="new_update_available_message">New update available for kiwix</string>
+  <string name="update">Update</string>
+  <string name="new_update_available_title">New Update available</string>
+  <string name="error_during_installing_apk">An error was encountered installation of apk. File no longer exists</string>
+  <string name="download_again">re-download</string>
+  <string name="downloading_new_update">Downloading New update</string>
+  <string name="stop_download">Stop download</string>
 </resources>

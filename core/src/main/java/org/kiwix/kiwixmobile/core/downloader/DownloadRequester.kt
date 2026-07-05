@@ -22,7 +22,9 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 interface DownloadRequester {
   suspend fun enqueue(downloadRequest: DownloadRequest): Long
   fun cancel(downloadId: Long)
+  fun cancelApk(downloadId: Long)
   fun retryDownload(downloadId: Long)
   fun pauseResumeDownload(downloadId: Long, isPause: Boolean)
   fun startDownloadMonitorService()
+  fun startApkDownloadService()
 }

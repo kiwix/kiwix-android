@@ -33,6 +33,9 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
+import org.kiwix.kiwixmobile.update.UpdateViewModel
+import org.kiwix.kiwixmobile.update.viewmodel.UpdateViewModel
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 
 @Module(includes = [CoreViewModelModule::class])
 abstract class KiwixViewModelModule {
@@ -55,6 +58,11 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(LanguageViewModel::class)
   abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(UpdateViewModel::class)
+  abstract fun bindUpdateViewModel(updateViewModel: UpdateViewModel): ViewModel
 
   @Binds
   @IntoMap
