@@ -60,6 +60,16 @@ class KiwixDataStore @Inject constructor(
   val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
+  val ttsSpeed: Flow<Float> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.PREF_TTS_SPEED] ?: DEFAULT_TTS_SPEED
+  }
+
+  suspend fun setTtsSpeed(value: Float) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_TTS_SPEED] = value
+    }
+  }
+
   val textZoom: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
     prefs[PreferencesKeys.TEXT_ZOOM] ?: DEFAULT_ZOOM
   }
@@ -681,6 +691,8 @@ class KiwixDataStore @Inject constructor(
     const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_THEME = "pref_dark_mode"
+    const val PREF_TTS_SPEED = "pref_tts_speed"
+    const val DEFAULT_TTS_SPEED = 1.0f
     const val TEXT_ZOOM = "true_text_zoom"
     const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"

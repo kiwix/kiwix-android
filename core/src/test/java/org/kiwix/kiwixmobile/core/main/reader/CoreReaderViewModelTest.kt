@@ -23,6 +23,7 @@ import android.app.Application
 import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -343,6 +344,13 @@ internal class CoreReaderViewModelTest {
     fun `onReadAloudStop should call readAloudManager stopReadAloud`() {
       viewModel.onReadAloudStop()
       assertThat(true).isTrue()
+    }
+
+    @Test
+    fun `ChangeTtsSpeed action should save speed to kiwixDataStore`() = runTest {
+      viewModel.onAction(ReaderAction.ChangeTtsSpeed(1.25f))
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setTtsSpeed(1.25f) }
     }
   }
 
@@ -730,6 +738,9 @@ internal class CoreReaderViewModelTest {
       mainDispatcher
     ) {
     var openBookmarkScreenCalled = false
+    fun testUpdateState(transform: ReaderUiState.() -> ReaderUiState) {
+      updateState(transform)
+    }
     override fun openLocalLibrary() {}
 
     override fun openSearch(
