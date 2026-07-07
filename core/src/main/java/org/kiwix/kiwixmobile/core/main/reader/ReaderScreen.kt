@@ -64,6 +64,8 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -138,6 +140,7 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.O
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenSearch
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenTocDrawer
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PauseTts
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ChangeTtsSpeed
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousLongClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTab
@@ -597,6 +600,7 @@ private fun NoBookOpenView(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
   if (state.showTtsControls) {
     Row {
@@ -610,6 +614,37 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
           text = state.pauseTtsButtonText.uppercase(),
           fontWeight = FontWeight.Bold
         )
+      }
+      Spacer(modifier = Modifier.width(FOUR_DP))
+      var expanded by remember { mutableStateOf(false) }
+      Box(modifier = Modifier.weight(1f)) {
+        Button(
+          onClick = { expanded = true },
+          modifier = Modifier
+            .fillMaxWidth()
+            .alpha(TTS_BUTTONS_CONTROL_ALPHA)
+        ) {
+          Text(
+            text = state.ttsSpeedText.uppercase(),
+            fontWeight = FontWeight.Bold
+          )
+        }
+        DropdownMenu(
+          expanded = expanded,
+          onDismissRequest = { expanded = false }
+        ) {
+          @Suppress("MagicNumber")
+          val speeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.5f)
+          speeds.forEach { speed ->
+            DropdownMenuItem(
+              text = { Text("${speed}X") },
+              onClick = {
+                expanded = false
+                onReaderAction(ChangeTtsSpeed(speed))
+              }
+            )
+          }
+        }
       }
       Spacer(modifier = Modifier.width(FOUR_DP))
       Button(

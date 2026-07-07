@@ -197,6 +197,7 @@ abstract class CoreReaderViewModel(
     val tableOfContentTitle: String = "",
     val documentSections: List<DocumentSection> = emptyList(),
     val showDonationPopup: Boolean = false,
+    val ttsSpeedText: String = "1.0X",
     val findInPageUiState: FindInPageManager.FindInPageUiState = FindInPageManager.FindInPageUiState()
   )
 
@@ -217,6 +218,7 @@ abstract class CoreReaderViewModel(
     data class CloseTab(val position: Int) : ReaderAction
     data object PauseTts : ReaderAction
     data object StopTts : ReaderAction
+    data class ChangeTtsSpeed(val speed: Float) : ReaderAction
     data object DonateButtonClick : ReaderAction
     data object DonateLaterButtonClick : ReaderAction
     data object ClearNavigationHistory : ReaderAction
@@ -345,11 +347,19 @@ abstract class CoreReaderViewModel(
 
   private fun observeSettings() =
     viewModelScope.launch {
-      kiwixDataStore.backToTop.collect {
-        if (!it) {
-          hideBackToTopButton()
+      launch {
+        kiwixDataStore.backToTop.collect {
+          if (!it) {
+            hideBackToTopButton()
+          }
+          // Showing backToTop button based on webView scrolling.
         }
-        // Showing backToTop button based on webView scrolling.
+      }
+      launch {
+        kiwixDataStore.ttsSpeed.collect { speed ->
+          updateState { copy(ttsSpeedText = "${speed}X") }
+          readAloudManager.tts?.speechRate = speed
+        }
       }
     }
 
@@ -465,6 +475,7 @@ abstract class CoreReaderViewModel(
       ReaderAction.BackToTopButtonClick -> backToTop()
       ReaderAction.PauseTts -> readAloudManager.pauseTts()
       ReaderAction.StopTts -> launchInViewModelScope { stopReadAloud() }
+      is ReaderAction.ChangeTtsSpeed -> changeTtsSpeed(action.speed)
       ReaderAction.DonateButtonClick -> donateButtonClick()
       ReaderAction.DonateLaterButtonClick -> donateLaterButtonClick()
       ReaderAction.ClearNavigationHistory -> clearNavigationHistory()
@@ -652,6 +663,12 @@ abstract class CoreReaderViewModel(
       showBackToTopButton()
     }
     readAloudManager.stopReadAloud()
+  }
+
+  private fun changeTtsSpeed(speed: Float) {
+    launchInViewModelScope {
+      kiwixDataStore.setTtsSpeed(speed)
+    }
   }
 
   private suspend fun startReadAloudFlow() {

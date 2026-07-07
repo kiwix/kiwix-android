@@ -43,6 +43,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import kotlinx.coroutines.flow.flowOf
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
@@ -56,6 +58,7 @@ class KiwixTextToSpeechTest {
   private val speakingListener: KiwixTextToSpeech.OnSpeakingListener = mockk(relaxed = true)
   private val focusListener: AudioManager.OnAudioFocusChangeListener = mockk(relaxed = true)
   private val zimReaderContainer: ZimReaderContainer = mockk(relaxed = true)
+  private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
   private val webView: WebView = mockk(relaxed = true)
   private val tts: TextToSpeech = mockk(relaxed = true)
   private lateinit var context: Context
@@ -66,6 +69,7 @@ class KiwixTextToSpeechTest {
   fun setUp() {
     clearAllMocks()
     ShadowToast.reset()
+    every { kiwixDataStore.ttsSpeed } returns flowOf(1.0f)
     context = spyk(ApplicationProvider.getApplicationContext())
     audioManager = mockk(relaxed = true)
     every { context.getSystemService(Context.AUDIO_SERVICE) } returns audioManager
@@ -74,7 +78,8 @@ class KiwixTextToSpeechTest {
       initListener,
       speakingListener,
       focusListener,
-      zimReaderContainer
+      zimReaderContainer,
+      kiwixDataStore
     )
   }
 
@@ -338,7 +343,8 @@ class KiwixTextToSpeechTest {
       initListener,
       speakingListener,
       focusListener,
-      zimReaderContainer
+      zimReaderContainer,
+      kiwixDataStore
     )
     injectMockTts()
     every { tts.isSpeaking } returns false
@@ -485,5 +491,83 @@ class KiwixTextToSpeechTest {
 
     verify(exactly = 0) { speakingListener.onSpeakingStarted() }
     assertThat(kiwixTts.currentTTSTask).isNull()
+  }
+
+  @Test
+  fun `setting speechRate when initialized sets it on textToSpeech`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = 1.5f
+
+    verify { tts.setSpeechRate(1.5f) }
+    assertThat(kiwixTts.speechRate).isEqualTo(1.5f)
+  }
+
+  @Test
+  fun `setting speechRate when not initialized does not set it on textToSpeech`() {
+    injectMockTts()
+    kiwixTts.isInitialized = false
+
+    kiwixTts.speechRate = 1.5f
+
+    verify(exactly = 0) { tts.setSpeechRate(any()) }
+    assertThat(kiwixTts.speechRate).isEqualTo(1.5f)
+  }
+
+  @Test
+  fun `initializeTTS success sets speech rate from datastore`() {
+    every { kiwixDataStore.ttsSpeed } returns flowOf(2.0f)
+    val listener = initializeTtsAndGetListener()
+    injectMockTts()
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    listener.onInit(TextToSpeech.SUCCESS)
+
+    assertThat(kiwixTts.speechRate).isEqualTo(2.0f)
+    verify { tts.setSpeechRate(2.0f) }
+  }
+
+  @Test
+  fun `setting speechRate when speaking pauses and resumes the active task`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    val task = spyk(kiwixTts.TTSTask(listOf("Hello", "World")))
+    task.paused = false
+    kiwixTts.currentTTSTask = task
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = 1.5f
+
+    verify(exactly = 1) { task.pause() }
+    verify(exactly = 1) { task.start() }
+  }
+
+  @Test
+  fun `setting speechRate when stopped does not pause or resume any task`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    kiwixTts.currentTTSTask = null
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = 1.5f
+
+    assertThat(kiwixTts.speechRate).isEqualTo(1.5f)
+  }
+
+  @Test
+  fun `setting speechRate when task is paused does not pause or resume the task`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    val task = spyk(kiwixTts.TTSTask(listOf("Hello")))
+    task.paused = true
+    kiwixTts.currentTTSTask = task
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = 1.5f
+
+    verify(exactly = 0) { task.pause() }
+    verify(exactly = 0) { task.start() }
   }
 }
