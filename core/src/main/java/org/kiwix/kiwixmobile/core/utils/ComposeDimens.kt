@@ -176,6 +176,7 @@ object ComposeDimens {
   // Search screen dimens
   val OPEN_IN_NEW_TAB_ICON_SIZE = 43.dp
   val SEARCH_ITEM_TEXT_SIZE = 16.sp
+  val SEARCH_ITEM_SNIPPET_TEXT_SIZE = 13.sp
   val LOAD_MORE_PROGRESS_BAR_SIZE = 40.dp
 
   // Settings screen dimes

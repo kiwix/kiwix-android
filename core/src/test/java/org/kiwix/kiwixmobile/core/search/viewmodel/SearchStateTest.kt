@@ -66,11 +66,79 @@ internal class SearchStateTest {
       assertThat(
         SearchState(
           searchTerm,
-          SearchResultsWithTerm("", suggestionSearchWrapper, mockk()),
+          SearchResultsWithTerm("", ZimSearchResultSet.Title(suggestionSearchWrapper), mockk()),
           emptyList(),
           FromWebView
         ).getVisibleResults(0, ioDispatcher = mainDispatcherRule.dispatcher)
       ).isEqualTo(listOf(SearchListItem.ZimSearchResultListItem(searchTerm, "")))
+    }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  internal fun `visibleResults use full text search results when in page content mode`() =
+    runTest {
+      val searchTerm = "notEmpty"
+      val pageUrl = "A/page"
+      val snippet = "a sentence with the <b>notEmpty</b> match"
+      val searchWrapper: SearchWrapper = mockk()
+      val searchIteratorWrapper: SearchIteratorWrapper = mockk()
+      val entry: EntryWrapper = mockk()
+      every { searchIteratorWrapper.hasNext() } returnsMany listOf(true, false)
+      every { searchIteratorWrapper.next() } returns entry
+      every { searchIteratorWrapper.snippet } returns snippet
+      every { entry.title } returns searchTerm
+      every { entry.path } returns pageUrl
+      every { searchWrapper.getResults(0, 20) } returns searchIteratorWrapper
+      assertThat(
+        SearchState(
+          searchTerm,
+          SearchResultsWithTerm("", ZimSearchResultSet.PageContent(searchWrapper), mockk()),
+          emptyList(),
+          FromWebView
+        ).getVisibleResults(0, ioDispatcher = mainDispatcherRule.dispatcher)
+      ).isEqualTo(listOf(SearchListItem.ZimSearchResultListItem(searchTerm, pageUrl, snippet)))
+    }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  internal fun `each page content result keeps its own snippet, not the next one's`() =
+    runTest {
+      // Regression test: the snippet must be read from the iterator's current
+      // position *before* next() advances it. libzim's getSnippet() reflects the
+      // iterator's current position, and next() returns the current entry then
+      // advances. If the snippet is read after next(), every result shows the
+      // *next* result's snippet. This stateful mock reproduces those semantics.
+      val titles = listOf("first", "second")
+      val paths = listOf("A/first", "A/second")
+      val snippets = listOf("first snippet", "second snippet")
+      var position = 0
+      val searchWrapper: SearchWrapper = mockk()
+      val searchIteratorWrapper: SearchIteratorWrapper = mockk()
+      every { searchIteratorWrapper.hasNext() } answers { position < titles.size }
+      // getSnippet() reads the *current* position.
+      every { searchIteratorWrapper.snippet } answers { snippets[position] }
+      // next() returns the current entry, then advances the cursor.
+      every { searchIteratorWrapper.next() } answers {
+        val entry: EntryWrapper = mockk()
+        every { entry.title } returns titles[position]
+        every { entry.path } returns paths[position]
+        position++
+        entry
+      }
+      every { searchWrapper.getResults(0, 20) } returns searchIteratorWrapper
+      assertThat(
+        SearchState(
+          "term",
+          SearchResultsWithTerm("", ZimSearchResultSet.PageContent(searchWrapper), mockk()),
+          emptyList(),
+          FromWebView
+        ).getVisibleResults(0, ioDispatcher = mainDispatcherRule.dispatcher)
+      ).isEqualTo(
+        listOf(
+          SearchListItem.ZimSearchResultListItem(titles[0], paths[0], snippets[0]),
+          SearchListItem.ZimSearchResultListItem(titles[1], paths[1], snippets[1])
+        )
+      )
     }
 
   @OptIn(ExperimentalCoroutinesApi::class)
@@ -82,6 +150,21 @@ internal class SearchStateTest {
         SearchState(
           "",
           SearchResultsWithTerm("", null, mockk()),
+          results,
+          FromWebView
+        ).getVisibleResults(0, ioDispatcher = mainDispatcherRule.dispatcher)
+      ).isEqualTo(results)
+    }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  internal fun `visibleResults use recentResults when zimSearchResultSet is null`() =
+    runTest {
+      val results = listOf(RecentSearchListItem("", ""))
+      assertThat(
+        SearchState(
+          "notEmpty",
+          SearchResultsWithTerm("notEmpty", null, mockk()),
           results,
           FromWebView
         ).getVisibleResults(0, ioDispatcher = mainDispatcherRule.dispatcher)
@@ -130,7 +213,11 @@ internal class SearchStateTest {
       every { suggestionSearchWrapper.getResults(any(), any()) } returns searchIteratorWrapper
 
       val searchResultsWithTerm =
-        SearchResultsWithTerm(searchTerm, suggestionSearchWrapper, mockk())
+        SearchResultsWithTerm(
+          searchTerm,
+          ZimSearchResultSet.Title(suggestionSearchWrapper),
+          mockk()
+        )
       val searchState = SearchState(searchTerm, searchResultsWithTerm, emptyList(), FromWebView)
       var list: List<SearchListItem>? = emptyList()
       var list1: List<SearchListItem>? = emptyList()

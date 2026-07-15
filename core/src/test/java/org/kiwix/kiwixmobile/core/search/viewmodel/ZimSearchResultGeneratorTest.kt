@@ -39,8 +39,9 @@ internal class ZimSearchResultGeneratorTest {
 
   @Test
   internal fun `empty search term returns empty list`() = runTest {
-    assertThat(zimSearchResultGenerator.generateSearchResults("", zimFileReader))
-      .isEqualTo(null)
+    assertThat(
+      zimSearchResultGenerator.generateSearchResults("", SearchMode.TITLE, zimFileReader)
+    ).isEqualTo(null)
   }
 
   @Test
@@ -48,9 +49,46 @@ internal class ZimSearchResultGeneratorTest {
     val searchTerm = "a"
     val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
     every { zimFileReader.searchSuggestions(searchTerm) } returns suggestionSearchWrapper
-    assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
-      .isEqualTo(suggestionSearchWrapper)
+    assertThat(
+      zimSearchResultGenerator.generateSearchResults(searchTerm, SearchMode.TITLE, zimFileReader)
+    ).isEqualTo(ZimSearchResultSet.Title(suggestionSearchWrapper))
     verify {
+      zimFileReader.searchSuggestions(searchTerm)
+    }
+  }
+
+  @Test
+  internal fun `page content mode returns full text search results`() = runTest {
+    val searchTerm = "a"
+    val searchWrapper: SearchWrapper = mockk()
+    every { zimFileReader.searchFullText(searchTerm) } returns searchWrapper
+    assertThat(
+      zimSearchResultGenerator.generateSearchResults(
+        searchTerm,
+        SearchMode.PAGE_CONTENT,
+        zimFileReader
+      )
+    ).isEqualTo(ZimSearchResultSet.PageContent(searchWrapper))
+    verify {
+      zimFileReader.searchFullText(searchTerm)
+    }
+  }
+
+  @Test
+  internal fun `page content mode falls back to title search without full text index`() = runTest {
+    val searchTerm = "a"
+    val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
+    every { zimFileReader.searchFullText(searchTerm) } returns null
+    every { zimFileReader.searchSuggestions(searchTerm) } returns suggestionSearchWrapper
+    assertThat(
+      zimSearchResultGenerator.generateSearchResults(
+        searchTerm,
+        SearchMode.PAGE_CONTENT,
+        zimFileReader
+      )
+    ).isEqualTo(ZimSearchResultSet.Title(suggestionSearchWrapper))
+    verify {
+      zimFileReader.searchFullText(searchTerm)
       zimFileReader.searchSuggestions(searchTerm)
     }
   }

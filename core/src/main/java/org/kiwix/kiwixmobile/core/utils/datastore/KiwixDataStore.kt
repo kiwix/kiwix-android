@@ -126,6 +126,21 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  /**
+   * The last used search mode in the search screen, stored as the name of the
+   * [org.kiwix.kiwixmobile.core.search.viewmodel.SearchMode] enum value.
+   */
+  val searchMode: Flow<String> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SEARCH_MODE].orEmpty()
+    }
+
+  suspend fun setSearchMode(searchMode: String) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SEARCH_MODE] = searchMode
+    }
+  }
+
   val wifiOnly: Flow<Boolean> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_WIFI_ONLY] ?: true
@@ -660,6 +675,8 @@ class KiwixDataStore @Inject constructor(
   }
 
   companion object {
+    const val PREF_SEARCH_MODE = "pref_search_mode"
+
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_STORAGE = "pref_select_folder"

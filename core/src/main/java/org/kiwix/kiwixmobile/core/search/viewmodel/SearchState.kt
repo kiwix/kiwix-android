@@ -25,7 +25,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.libzim.SuggestionSearch
 
 data class SearchState(
   val searchTerm: String,
@@ -33,14 +32,20 @@ data class SearchState(
   val recentResults: List<SearchListItem.RecentSearchListItem>,
   val searchOrigin: SearchOrigin
 ) {
+  @Suppress("ReturnCount")
   suspend fun getVisibleResults(
     startIndex: Int,
     job: Job? = null,
     ioDispatcher: CoroutineDispatcher
   ): List<SearchListItem>? {
     if (searchTerm.isEmpty()) return recentResults
+    // Results of a search across all books are computed up front and are not
+    // paginated; return them on the first page and nothing afterwards.
+    searchResultsWithTerm.globalResults?.let { globalResults ->
+      return if (startIndex == 0) globalResults else null
+    }
     return searchResultsWithTerm.searchMutex?.withLock {
-      searchResultsWithTerm.suggestionSearch?.let {
+      searchResultsWithTerm.zimSearchResultSet?.let {
         yield()
         withContext(ioDispatcher) {
           fetchSearchResults(it, startIndex, job)
@@ -53,7 +58,7 @@ data class SearchState(
 
   @Suppress("MagicNumber")
   private suspend fun fetchSearchResults(
-    suggestionSearch: SuggestionSearch,
+    zimSearchResultSet: ZimSearchResultSet,
     startIndex: Int,
     job: Job?
   ): List<SearchListItem.ZimSearchResultListItem>? {
@@ -65,14 +70,35 @@ data class SearchState(
     runCatching {
       val safeEndIndex = startIndex + 20
       yield()
-      val searchIterator = suggestionSearch.getResults(startIndex, safeEndIndex)
-      while (searchIterator.hasNext()) {
-        // check if the previous job is cancel while retrieving the data for
-        // previous searched item then break the execution of code.
-        if (job?.isActive == false) break
-        yield()
-        val entry = searchIterator.next()
-        results.add(SearchListItem.ZimSearchResultListItem(entry.title, entry.path))
+      when (zimSearchResultSet) {
+        is ZimSearchResultSet.Title -> {
+          val searchIterator =
+            zimSearchResultSet.suggestionSearch.getResults(startIndex, safeEndIndex)
+          while (searchIterator.hasNext()) {
+            // check if the previous job is cancel while retrieving the data for
+            // previous searched item then break the execution of code.
+            if (job?.isActive == false) break
+            yield()
+            val entry = searchIterator.next()
+            results.add(SearchListItem.ZimSearchResultListItem(entry.title, entry.path))
+          }
+        }
+
+        is ZimSearchResultSet.PageContent -> {
+          val searchIterator = zimSearchResultSet.search.getResults(startIndex, safeEndIndex)
+          while (searchIterator.hasNext()) {
+            if (job?.isActive == false) break
+            yield()
+            // A quote of the sentence containing the match; shown under the
+            // page title so the user can see why the page matched. The snippet
+            // must be read from the iterator's *current* position, before
+            // next() advances it, otherwise each result would show the next
+            // result's snippet.
+            val snippet = runCatching { searchIterator.snippet }.getOrNull()
+            val entry = searchIterator.next()
+            results.add(SearchListItem.ZimSearchResultListItem(entry.title, entry.path, snippet))
+          }
+        }
       }
     }.onFailure {
       Log.e(

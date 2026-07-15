@@ -34,6 +34,7 @@ object PreferencesKeys {
     booleanPreferencesKey(KiwixDataStore.PREF_EXTERNAL_LINK_POPUP)
   val PREF_WIFI_ONLY = booleanPreferencesKey(KiwixDataStore.PREF_WIFI_ONLY)
   val PREF_THEME = stringPreferencesKey(KiwixDataStore.PREF_THEME)
+  val PREF_SEARCH_MODE = stringPreferencesKey(KiwixDataStore.PREF_SEARCH_MODE)
   val PREF_SHOW_INTRO = booleanPreferencesKey(KiwixDataStore.PREF_SHOW_INTRO)
   val PREF_SHOW_SHOWCASE = booleanPreferencesKey(KiwixDataStore.PREF_SHOW_SHOWCASE)
   val PREF_BOOKMARKS_MIGRATED = booleanPreferencesKey(KiwixDataStore.PREF_BOOKMARKS_MIGRATED)

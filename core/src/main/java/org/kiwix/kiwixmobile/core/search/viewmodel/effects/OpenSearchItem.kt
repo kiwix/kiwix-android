@@ -39,7 +39,8 @@ data class OpenSearchItem(
       SearchItemToOpen(
         searchListItem.value,
         openInNewTab,
-        searchListItem.url?.addContentPrefix
+        searchListItem.url?.addContentPrefix,
+        (searchListItem as? SearchListItem.ZimSearchResultListItem)?.zimReaderSourceDatabaseValue
       ),
       TAG_FILE_SEARCHED
     )
@@ -50,5 +51,11 @@ data class OpenSearchItem(
 data class SearchItemToOpen(
   val pageTitle: String,
   val shouldOpenInNewTab: Boolean,
-  val pageUrl: String?
+  val pageUrl: String?,
+  /**
+   * For a result from a search across all books, the
+   * [org.kiwix.kiwixmobile.core.reader.ZimReaderSource.toDatabase] value of the
+   * book the result belongs to, so the reader can switch to it before opening.
+   */
+  val zimReaderSourceDatabaseValue: String? = null
 ) : Parcelable

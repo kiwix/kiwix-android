@@ -21,9 +21,14 @@ package org.kiwix.kiwixmobile.core.search
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,6 +49,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,11 +58,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -65,11 +75,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
+import androidx.compose.ui.text.withStyle
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchMode
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchScreenUiState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -82,12 +97,14 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LOAD_MORE_PROGRESS_BAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.OPEN_IN_NEW_TAB_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_SNIPPET_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ZERO
 
 const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
@@ -97,6 +114,10 @@ const val OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG = "openItemInNewTagIconTestingTa
 const val LOADING_ITEMS_BEFORE = 3
 
 const val VOICE_SEARCH_TESTING_TAG = "voiceSearchTestingTag"
+const val SEARCH_IN_TITLE_CHIP_TESTING_TAG = "searchInTitleChipTestingTag"
+const val SEARCH_IN_PAGE_CONTENT_CHIP_TESTING_TAG = "searchInPageContentChipTestingTag"
+const val SEARCH_IN_ALL_BOOKS_CHIP_TESTING_TAG = "searchInAllBooksChipTestingTag"
+const val SEARCH_LIST_TESTING_TAG = "searchListTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")
@@ -146,14 +167,104 @@ private fun SearchScreenContent(
   lazyListState: LazyListState
 ) {
   val progressBarTrackColor = MaterialTheme.colorScheme.background
-  Box(
+  Column(
     modifier = Modifier
       .fillMaxSize()
       .padding(
         top = innerPadding.calculateTopPadding(),
         start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
         end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
-      ),
+      )
+  ) {
+    SearchModeChips(
+      searchMode = state.searchMode,
+      onSearchModeChanged = { searchViewModel.onSearchModeChanged(it) },
+      searchAllBooks = state.searchAllBooks,
+      onSearchAllBooksChanged = { searchViewModel.onSearchAllBooksChanged(it) }
+    )
+    SearchResults(
+      state,
+      searchViewModel,
+      lazyListState,
+      progressBarTrackColor,
+      // Give the results the remaining height so the list is properly bounded
+      // and can scroll independently of the search-mode chips above it.
+      modifier = Modifier.weight(1f)
+    )
+  }
+}
+
+@Composable
+private fun SearchModeChips(
+  searchMode: SearchMode,
+  onSearchModeChanged: (SearchMode) -> Unit,
+  searchAllBooks: Boolean,
+  onSearchAllBooksChanged: (Boolean) -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .horizontalScroll(rememberScrollState())
+      .padding(horizontal = EIGHT_DP),
+    horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
+  ) {
+    SearchModeChip(
+      selected = searchMode == SearchMode.TITLE,
+      onClick = { onSearchModeChanged(SearchMode.TITLE) },
+      label = stringResource(R.string.search_in_titles),
+      testTag = SEARCH_IN_TITLE_CHIP_TESTING_TAG
+    )
+    SearchModeChip(
+      selected = searchMode == SearchMode.PAGE_CONTENT,
+      onClick = { onSearchModeChanged(SearchMode.PAGE_CONTENT) },
+      label = stringResource(R.string.search_in_page_content),
+      testTag = SEARCH_IN_PAGE_CONTENT_CHIP_TESTING_TAG
+    )
+    SearchModeChip(
+      selected = searchAllBooks,
+      onClick = { onSearchAllBooksChanged(!searchAllBooks) },
+      label = stringResource(R.string.search_in_all_books),
+      testTag = SEARCH_IN_ALL_BOOKS_CHIP_TESTING_TAG
+    )
+  }
+}
+
+@Composable
+private fun SearchModeChip(
+  selected: Boolean,
+  onClick: () -> Unit,
+  label: String,
+  testTag: String
+) {
+  // Highlight the focused chip so dpad users can see where they are.
+  var isFocused by remember { mutableStateOf(false) }
+  FilterChip(
+    selected = selected,
+    onClick = onClick,
+    label = { Text(label) },
+    modifier = Modifier
+      .onFocusChanged { isFocused = it.hasFocus }
+      .then(
+        if (isFocused) {
+          Modifier.border(TWO_DP, MaterialTheme.colorScheme.primary, RoundedCornerShape(EIGHT_DP))
+        } else {
+          Modifier
+        }
+      )
+      .testTag(testTag)
+  )
+}
+
+@Composable
+private fun SearchResults(
+  state: SearchScreenUiState,
+  searchViewModel: SearchViewModel,
+  lazyListState: LazyListState,
+  progressBarTrackColor: Color,
+  modifier: Modifier = Modifier
+) {
+  Box(
+    modifier = modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
     when {
@@ -169,6 +280,7 @@ private fun SearchScreenContent(
         LazyColumn(
           modifier = Modifier
             .fillMaxSize()
+            .testTag(SEARCH_LIST_TESTING_TAG)
             // hides keyboard when scrolled
             .hideKeyboardOnLazyColumnScroll(lazyListState),
           state = lazyListState
@@ -325,6 +437,9 @@ private fun SearchListItem(
   onItemClick: (SearchListItem) -> Unit,
   onItemLongClick: ((SearchListItem) -> Unit)? = null
 ) {
+  // Draw a clear border around the focused item so that users navigating with
+  // a dpad (TV remotes, devices without a touch screen) can see where they are.
+  var isFocused by remember { mutableStateOf(false) }
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -335,6 +450,13 @@ private fun SearchListItem(
         shape = RoundedCornerShape(EIGHT_DP),
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
       )
+      .then(
+        if (isFocused) {
+          Modifier.border(TWO_DP, MaterialTheme.colorScheme.primary, RoundedCornerShape(EIGHT_DP))
+        } else {
+          Modifier
+        }
+      )
       .clip(RoundedCornerShape(EIGHT_DP)),
     verticalAlignment = Alignment.CenterVertically
   ) {
@@ -342,18 +464,23 @@ private fun SearchListItem(
       modifier = Modifier
         .weight(1f)
         .fillMaxHeight()
+        .onFocusChanged { isFocused = it.hasFocus }
         .combinedClickable(
           onClick = { onItemClick(searchListItem) },
           onLongClick = { onItemLongClick?.invoke(searchListItem) }
         )
         .semantics { testTag = SEARCH_ITEM_TESTING_TAG }
-        .padding(horizontal = EIGHT_DP),
+        .padding(horizontal = EIGHT_DP, vertical = SIX_DP),
       contentAlignment = Alignment.CenterStart
     ) {
-      Text(
-        text = searchListItem.value,
-        fontSize = SEARCH_ITEM_TEXT_SIZE
-      )
+      Column {
+        Text(
+          text = searchListItem.value,
+          fontSize = SEARCH_ITEM_TEXT_SIZE
+        )
+        SearchResultBookLabel(searchListItem)
+        SearchResultSnippet(searchListItem)
+      }
     }
 
     IconButton(
@@ -371,6 +498,63 @@ private fun SearchListItem(
     }
   }
 }
+
+/**
+ * Shows the book a result belongs to (search across all books only), so the
+ * user knows which ZIM file each result came from.
+ */
+@Composable
+private fun SearchResultBookLabel(searchListItem: SearchListItem) {
+  val bookTitle = (searchListItem as? SearchListItem.ZimSearchResultListItem)
+    ?.bookTitle
+    ?.takeIf(String::isNotBlank) ?: return
+  Text(
+    text = bookTitle,
+    fontSize = SEARCH_ITEM_SNIPPET_TEXT_SIZE,
+    color = MaterialTheme.colorScheme.primary,
+    maxLines = 1,
+    overflow = Ellipsis,
+    modifier = Modifier.padding(top = THREE_DP)
+  )
+}
+
+/**
+ * Shows a short quote of the sentence where the search term was found (full
+ * text search results only), with the matched words emphasised.
+ */
+@Composable
+private fun SearchResultSnippet(searchListItem: SearchListItem) {
+  val snippet = (searchListItem as? SearchListItem.ZimSearchResultListItem)
+    ?.snippet
+    ?.takeIf(String::isNotBlank) ?: return
+  Text(
+    text = snippet.parseSnippetBoldMarkup(),
+    fontSize = SEARCH_ITEM_SNIPPET_TEXT_SIZE,
+    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+    maxLines = 2,
+    overflow = Ellipsis,
+    modifier = Modifier.padding(top = THREE_DP)
+  )
+}
+
+/**
+ * Converts a Xapian snippet ("...text with the <b>match</b> emphasised...")
+ * into an [AnnotatedString] with the `<b>` parts rendered in bold.
+ */
+private fun String.parseSnippetBoldMarkup(): AnnotatedString {
+  val snippet = this
+  return buildAnnotatedString {
+    var appendedUpTo = 0
+    BOLD_MARKUP.findAll(snippet).forEach { match ->
+      append(snippet.substring(appendedUpTo, match.range.first))
+      withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(match.groupValues[1]) }
+      appendedUpTo = match.range.last + 1
+    }
+    append(snippet.substring(appendedUpTo))
+  }
+}
+
+private val BOLD_MARKUP = Regex("<b>(.*?)</b>", RegexOption.DOT_MATCHES_ALL)
 
 @Composable
 fun InfiniteListHandler(

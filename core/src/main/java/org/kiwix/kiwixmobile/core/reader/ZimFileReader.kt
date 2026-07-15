@@ -42,6 +42,9 @@ import org.kiwix.libkiwix.SpellingsDB
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
 import org.kiwix.libzim.Item
+import org.kiwix.libzim.Query
+import org.kiwix.libzim.Search
+import org.kiwix.libzim.Searcher
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.ByteArrayInputStream
@@ -120,6 +123,9 @@ class ZimFileReader constructor(
 
   private var spellingsDB: SpellingsDB? = null
 
+  // Lazily created full-text searcher; not every ZIM file has a full-text index.
+  private var fullTextSearcher: Searcher? = null
+
   /**
    * Note that the value returned is NOT unique for each zim file. Versions of the same wiki
    * (complete, nopic, novid, etc) may return the same title.
@@ -188,6 +194,33 @@ class ZimFileReader constructor(
     } catch (exception: Exception) {
       // to handled the exception if there is no FT Xapian index found in the current zim file
       Log.e(TAG, "Unable to search in this file as it does not have FT Xapian index. $exception")
+      null
+    }
+
+  /**
+   * Runs a full-text search over the page content of this ZIM file.
+   *
+   * @return the [Search] for the given query, or null if the ZIM file has no
+   *         full-text Xapian index (or the search failed for any other reason).
+   */
+  fun searchFullText(query: String): Search? =
+    try {
+      getOrCreateFullTextSearcher()?.search(Query(query))
+    } catch (exception: Exception) {
+      Log.e(
+        TAG,
+        "Unable to run the full text search for query = $query." +
+          " Probably this ZIM file does not have a full-text index. $exception"
+      )
+      null
+    }
+
+  @Synchronized
+  private fun getOrCreateFullTextSearcher(): Searcher? =
+    fullTextSearcher ?: try {
+      Searcher(jniKiwixReader).also { fullTextSearcher = it }
+    } catch (exception: Exception) {
+      Log.e(TAG, "Could not create the full text searcher. $exception")
       null
     }
 
@@ -447,6 +480,7 @@ class ZimFileReader constructor(
   fun dispose() {
     jniKiwixReader.dispose()
     searcher.dispose()
+    fullTextSearcher?.dispose()
     spellingsDB?.dispose()
   }
 

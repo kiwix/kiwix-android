@@ -22,11 +22,10 @@ import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import io.mockk.mockk
 import io.mockk.verify
@@ -284,8 +283,8 @@ class SearchScreenUITest {
         isLoadingMore = false
       )
     )
-    composeTestRule.onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG, true)[8]
-      .performScrollTo()
+    composeTestRule.onNodeWithTag(SEARCH_LIST_TESTING_TAG)
+      .performScrollToIndex(items.size - 1)
 
     composeTestRule.waitForIdle()
 
@@ -306,8 +305,8 @@ class SearchScreenUITest {
         isLoadingMore = true
       )
     )
-    composeTestRule.onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG, true)[8]
-      .performScrollTo()
+    composeTestRule.onNodeWithTag(SEARCH_LIST_TESTING_TAG)
+      .performScrollToIndex(items.size - 1)
 
     composeTestRule.waitForIdle()
 
@@ -327,8 +326,8 @@ class SearchScreenUITest {
     )
 
     repeat(3) {
-      composeTestRule.onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG, true)[8]
-        .performScrollTo()
+      composeTestRule.onNodeWithTag(SEARCH_LIST_TESTING_TAG)
+        .performScrollToIndex(items.size - 1)
     }
 
     composeTestRule.waitForIdle()

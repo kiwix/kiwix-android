@@ -335,6 +335,9 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
   <string name="search_open_in_new_tab">Open in new tab</string>
+  <string name="search_in_titles">Titles</string>
+  <string name="search_in_page_content">Page content</string>
+  <string name="search_in_all_books">All books</string>
   <string name="reader">Reader</string>
   <string name="no_open_book">No open book</string>
   <string name="open_library">Open library</string>

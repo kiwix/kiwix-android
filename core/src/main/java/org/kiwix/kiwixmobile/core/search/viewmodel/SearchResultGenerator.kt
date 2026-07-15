@@ -22,25 +22,39 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 interface SearchResultGenerator {
   suspend fun generateSearchResults(
     searchTerm: String,
+    searchMode: SearchMode,
     zimFileReader: ZimFileReader?
-  ): SuggestionSearch?
+  ): ZimSearchResultSet?
 }
 
 class ZimSearchResultGenerator @Inject constructor(
   @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchResultGenerator {
-  override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
+  override suspend fun generateSearchResults(
+    searchTerm: String,
+    searchMode: SearchMode,
+    zimFileReader: ZimFileReader?
+  ) =
     if (searchTerm.isBlank() || zimFileReader == null) {
       null
     } else {
       withContext(ioDispatcher) {
-        zimFileReader.searchSuggestions(searchTerm)
+        when (searchMode) {
+          SearchMode.TITLE -> titleSearchResults(searchTerm, zimFileReader)
+          SearchMode.PAGE_CONTENT ->
+            zimFileReader.searchFullText(searchTerm)
+              ?.let { ZimSearchResultSet.PageContent(it) }
+              // Fall back to the title search for ZIM files without a full-text index.
+              ?: titleSearchResults(searchTerm, zimFileReader)
+        }
       }
     }
+
+  private fun titleSearchResults(searchTerm: String, zimFileReader: ZimFileReader) =
+    zimFileReader.searchSuggestions(searchTerm)?.let { ZimSearchResultSet.Title(it) }
 }

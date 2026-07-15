@@ -1252,6 +1252,14 @@ abstract class CoreReaderViewModel(
    * resulting URL is then loaded in the current web view.
    */
   private suspend fun openSearchItem(item: SearchItemToOpen) {
+    val targetSourceDatabaseValue = item.zimReaderSourceDatabaseValue
+    if (targetSourceDatabaseValue != null &&
+      targetSourceDatabaseValue != zimReaderContainer.zimReaderSource?.toDatabase()
+    ) {
+      // The result comes from another book (search across all books), so open
+      // that book before loading the page.
+      openBookOfSearchItem(targetSourceDatabaseValue) ?: return
+    }
     if (item.shouldOpenInNewTab) {
       newMainPageTab()
     }
@@ -1260,6 +1268,18 @@ abstract class CoreReaderViewModel(
         loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
       }
     }
+  }
+
+  /**
+   * Opens the book a cross-book search result belongs to, returning null when it
+   * cannot be opened (e.g. the file is gone), in which case the result is not opened.
+   */
+  private suspend fun openBookOfSearchItem(sourceDatabaseValue: String): Unit? {
+    val zimReaderSource = ZimReaderSource.fromDatabaseValue(sourceDatabaseValue)
+      ?.takeIf { it.canOpenInLibkiwix() } ?: return null
+    closeZimBook()
+    openZimFile(zimReaderSource)
+    return Unit
   }
 
   private suspend fun newMainPageTab(): KiwixWebView =
