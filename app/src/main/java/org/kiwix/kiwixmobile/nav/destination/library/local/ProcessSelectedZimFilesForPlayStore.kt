@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -124,20 +123,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   suspend fun processSelectedFiles(uris: List<Uri>, isAfterRetry: Boolean = false) {
     storeSelectedFiles(uris)
     selectedStoragePath = kiwixDataStore.selectedStorage.first()
-    val totalSelectedFileSize = getTotalSizeOfSelectedZIMFiles(uris)
-    // Exclude files already in the app directory from the space calculation,
-    // since they don't need to be copied/moved.
-    val sizeAlreadyInAppDir = getSizeOfFilesAlreadyInAppDirectory(uris, selectedStoragePath)
-    val additionalSpaceNeeded = totalSelectedFileSize - sizeAlreadyInAppDir
-    if (additionalSpaceNeeded > ZERO) {
-      val availableSpaceInStorage =
-        storageCalculator.availableBytes(File(selectedStoragePath))
-      if (availableSpaceInStorage < additionalSpaceNeeded) {
-        // Not enough storage → show storage selection dialog/snackbar
-        insufficientSpaceInStorage(availableSpaceInStorage)
-        return
-      }
-    }
 
     if (uris.size == 1 && !isAfterRetry) {
       isSingleFileSelected = true
@@ -228,22 +213,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     processSingleFile(uri, true)
   }
 
-  /** Returns total size of all selected ZIM files. */
-  private fun getTotalSizeOfSelectedZIMFiles(urisList: List<Uri>): Long {
-    var totalFilesSize = 0L
-    urisList.forEach { uri ->
-      val documentFile =
-        when (uri.scheme) {
-          "file" -> DocumentFile.fromFile(File("$uri"))
-          else -> {
-            DocumentFile.fromSingleUri(kiwixDataStore.context, uri)
-          }
-        }
-      totalFilesSize = totalFilesSize.plus(documentFile?.length() ?: ZERO.toLong())
-    }
-    return totalFilesSize
-  }
-
   /** Validates whether the given file is a valid ZIM or a split ZIM file. */
   private fun isValidZimFile(fileName: String?): Boolean =
     fileName?.let {
@@ -268,30 +237,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     } else {
       null
     }
-  }
-
-  /**
-   * Returns the total size of files from the given URIs that already exist
-   * in the app's public directory. Used to exclude these files from the
-   * upfront storage space check.
-   */
-  private fun getSizeOfFilesAlreadyInAppDirectory(
-    uris: List<Uri>,
-    selectedStoragePath: String
-  ): Long {
-    var totalSize = 0L
-    uris.forEach { uri ->
-      val documentFile = when (uri.scheme) {
-        "file" -> DocumentFile.fromFile(File("$uri"))
-        else -> DocumentFile.fromSingleUri(context, uri)
-      }
-      val fileName = documentFile?.name ?: return@forEach
-      val fileInAppDir = File(selectedStoragePath, fileName)
-      if (fileInAppDir.exists() && fileInAppDir.length() == documentFile.length()) {
-        totalSize += documentFile.length()
-      }
-    }
-    return totalSize
   }
 
   /** Shows a snackbar suggesting the user to change storage. */

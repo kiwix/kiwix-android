@@ -201,6 +201,21 @@ class CopyMoveFileHandler @Inject constructor(
     val storageFile = getSelectedStorageRoot()
     // hide the dialog if already showing
     copyMoveProgressBarController.hidePreparingCopyMoveDialog()
+    if (isMoveOperation) {
+      return when (fat32Checker.fileSystemStates.value) {
+        DetectingFileSystem -> {
+          handleDetectingFileSystemState(storageFile)
+          false
+        }
+
+        CannotWrite4GbFile -> {
+          handleCannotWrite4GbFileState(storageFile)
+          false
+        }
+
+        else -> true
+      }
+    }
     val availableSpace = storageCalculator.availableBytes(storageFile)
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
@@ -253,6 +268,12 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun performCopyMoveOperationIfSufficientSpaceAvailable(storageFile: File) {
+    // For move operations, skip the space check as the move is a rename
+    // that doesn't consume additional storage.
+    if (isMoveOperation) {
+      performCopyMoveOperation()
+      return
+    }
     val availableSpace = storageCalculator.availableBytes(storageFile)
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
