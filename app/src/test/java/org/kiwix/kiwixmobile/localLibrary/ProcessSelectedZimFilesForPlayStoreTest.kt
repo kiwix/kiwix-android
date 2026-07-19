@@ -33,6 +33,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -55,6 +56,7 @@ import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.local.ProcessSelectedZimFilesForPlayStore
@@ -83,6 +85,8 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     clearAllMocks()
     mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
     mockkStatic(DocumentFile::class)
+    mockkStatic(FileUtils::class)
+    mockkObject(FileUtils)
 
     processSelectedZimFiles = ProcessSelectedZimFilesForPlayStore(
       kiwixDataStore,
@@ -124,18 +128,39 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     }
 
   @Test
-  fun `insufficient storage and clicking change storage shows storage selection dialog`() =
+  fun `processSelectedFiles should show copy move dialog even if space is insufficient`() =
     testScope.runTest {
-      mockkStatic("org.kiwix.kiwixmobile.core.extensions.SnackbarHostStateExtensionKt")
       val uri = mockk<Uri>()
       val documentFile = mockk<DocumentFile>()
 
       every { uri.scheme } returns "content"
       every { DocumentFile.fromSingleUri(any(), uri) } returns documentFile
       every { documentFile.length() } returns 1000L
-      every { documentFile.name } returns "test.file"
+      every { documentFile.name } returns "test.zim"
+      every { FileUtils.isValidZimFile("test.zim") } returns true
+      every { FileUtils.isSplittedZimFile("test.zim") } returns false
 
       coEvery { storageCalculator.availableBytes(any()) } returns 500L
+
+      processSelectedZimFiles.processSelectedFiles(listOf(uri))
+      advanceUntilIdle()
+
+      coVerify {
+        copyMoveFileHandler.showMoveFileToPublicDirectoryDialog(
+          any(),
+          uri,
+          documentFile,
+          false,
+          null,
+          true
+        )
+      }
+    }
+
+  @Test
+  fun `insufficientSpaceInStorage and clicking change storage shows storage selection dialog`() =
+    testScope.runTest {
+      mockkStatic("org.kiwix.kiwixmobile.core.extensions.SnackbarHostStateExtensionKt")
 
       every { activity.getString(R.string.move_no_space) } returns "Not enough space"
       every { activity.getString(R.string.space_available) } returns "Available"
@@ -151,7 +176,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
           any()
         )
       } just Runs
-      processSelectedZimFiles.processSelectedFiles(listOf(uri))
+      processSelectedZimFiles.insufficientSpaceInStorage(500L)
       advanceUntilIdle()
       verify(exactly = 0) {
         selectedZimFileCallback.showStorageSelectionDialog(any())
