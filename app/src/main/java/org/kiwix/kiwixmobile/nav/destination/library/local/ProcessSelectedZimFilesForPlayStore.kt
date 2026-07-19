@@ -225,18 +225,47 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * This avoids unnecessary copy/move operations for files the user has
    * already placed in the app directory.
    */
-  @VisibleForTesting
-  suspend fun getExistingFileInAppDirectory(documentFile: DocumentFile?): File? {
-    val fileName = documentFile?.name ?: return null
+  @Suppress("Deprecation")
+  private suspend fun getAppSpecificDirs(): List<File> {
+    val dirs = mutableListOf<File>()
+    context.externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
+    context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
+    context.filesDir?.let { dirs.add(it) }
+    context.cacheDir?.let { dirs.add(it) }
+
     if (selectedStoragePath.isEmpty()) {
       selectedStoragePath = kiwixDataStore.selectedStorage.first()
     }
-    val fileInAppDir = File(selectedStoragePath, fileName)
-    return if (fileInAppDir.exists() && fileInAppDir.length() == documentFile.length()) {
-      fileInAppDir
-    } else {
-      null
+    if (selectedStoragePath.isNotEmpty()) {
+      dirs.add(File(selectedStoragePath))
     }
+    return dirs
+  }
+
+  @VisibleForTesting
+  suspend fun getExistingFileInAppDirectory(documentFile: DocumentFile?): File? {
+    val fileName = documentFile?.name ?: return null
+    val fileSize = documentFile.length()
+    val appSpecificDirs = getAppSpecificDirs()
+
+    var existingFile: File? = null
+    for (dir in appSpecificDirs) {
+      // In unit tests, relaxed mock File objects may return null paths.
+      // We skip them to avoid NullPointerException in File constructor.
+      val dirPath = try {
+        dir.path
+      } catch (_: Exception) {
+        null
+      }
+      if (!dirPath.isNullOrEmpty()) {
+        val fileInDir = File(dirPath, fileName)
+        if (fileInDir.exists() && fileInDir.length() == fileSize) {
+          existingFile = fileInDir
+          break
+        }
+      }
+    }
+    return existingFile
   }
 
   /** Shows a snackbar suggesting the user to change storage. */
