@@ -77,6 +77,7 @@ class CopyMoveFileHandler @Inject constructor(
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
   private var storageDeviceList: List<StorageDevice> = emptyList()
+  private var showStorageSelectionDialog = false
 
   @VisibleForTesting
   fun setStorageFileForUnitTest(unitTestStorage: File) {
@@ -123,12 +124,19 @@ class CopyMoveFileHandler @Inject constructor(
         kiwixDataStore.setShowStorageSelectionDialogOnCopyMove(true)
       }
       copyMoveProgressBarController.hidePreparingCopyMoveDialog()
-      if (validateZimFileCanCopyOrMove()) {
-        when (multipleFilesProcessAction) {
-          MultipleFilesProcessAction.Copy -> performCopyOperation()
-          MultipleFilesProcessAction.Move -> performMoveOperation()
-          null -> showCopyMoveDialog()
-        }
+      if (multipleFilesProcessAction == null) {
+        showCopyMoveDialog()
+      } else {
+        processActionWhenDefined(multipleFilesProcessAction)
+      }
+    }
+  }
+
+  private suspend fun processActionWhenDefined(action: MultipleFilesProcessAction) {
+    if (validateZimFileCanCopyOrMove()) {
+      when (action) {
+        MultipleFilesProcessAction.Copy -> performCopyOperation(skipValidation = true)
+        MultipleFilesProcessAction.Move -> performMoveOperation(skipValidation = true)
       }
     }
   }
@@ -185,9 +193,9 @@ class CopyMoveFileHandler @Inject constructor(
 
   private suspend fun performCopyMoveOperation() {
     if (isMoveOperation) {
-      performMoveOperation()
+      performMoveOperation(showStorageSelectionDialog, skipValidation = true)
     } else {
-      performCopyOperation()
+      performCopyOperation(showStorageSelectionDialog, skipValidation = true)
     }
   }
 
@@ -279,13 +287,13 @@ class CopyMoveFileHandler @Inject constructor(
 
   private fun onCopyClicked(showStorageSelectionDialog: Boolean) {
     requireLifeCycleScope().launch {
-      performCopyOperation(showStorageSelectionDialog)
+      performCopyOperation(showStorageSelectionDialog, skipValidation = false)
     }
   }
 
   private fun onMoveClicked(showStorageSelectionDialog: Boolean) {
     requireLifeCycleScope().launch {
-      performMoveOperation(showStorageSelectionDialog)
+      performMoveOperation(showStorageSelectionDialog, skipValidation = false)
     }
   }
 
@@ -295,23 +303,35 @@ class CopyMoveFileHandler @Inject constructor(
     context.getString(R.string.copy_move_multiple_files_dialog_description)
   }
 
-  suspend fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
+  suspend fun performCopyOperation(
+    showStorageSelectionDialog: Boolean = false,
+    skipValidation: Boolean = true
+  ) {
     isMoveOperation = false
+    this.showStorageSelectionDialog = showStorageSelectionDialog
     fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
-    if (showStorageSelectionDialog) {
-      showStorageSelectDialog(storageDeviceList)
-    } else {
-      copyZimFileToPublicAppDirectory()
+    if (skipValidation || validateZimFileCanCopyOrMove()) {
+      if (showStorageSelectionDialog) {
+        showStorageSelectDialog(storageDeviceList)
+      } else {
+        copyZimFileToPublicAppDirectory()
+      }
     }
   }
 
-  suspend fun performMoveOperation(showStorageSelectionDialog: Boolean = false) {
+  suspend fun performMoveOperation(
+    showStorageSelectionDialog: Boolean = false,
+    skipValidation: Boolean = true
+  ) {
     isMoveOperation = true
+    this.showStorageSelectionDialog = showStorageSelectionDialog
     fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
-    if (showStorageSelectionDialog) {
-      showStorageSelectDialog(storageDeviceList)
-    } else {
-      moveZimFileToPublicAppDirectory()
+    if (skipValidation || validateZimFileCanCopyOrMove()) {
+      if (showStorageSelectionDialog) {
+        showStorageSelectDialog(storageDeviceList)
+      } else {
+        moveZimFileToPublicAppDirectory()
+      }
     }
   }
 
