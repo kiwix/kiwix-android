@@ -79,6 +79,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     hiltRule.injectOnce()
     Intents.init()
     super.waitForIdle()
+    deleteTestZimFromAppSpecificDirs()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
@@ -92,7 +93,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
+        updateKiwixDataStore {
+          setShowStorageSelectionDialogOnCopyMove(true)
+          setIsPlayStoreBuild(true)
+        }
         intending(hasAction(Intent.ACTION_CHOOSER))
           .respondWith(
             Instrumentation.ActivityResult(
@@ -117,9 +121,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
-        deleteAllFilesInDirectory(
-          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
-        )
+        deleteTestZimFromAppSpecificDirs()
         deleteZimFileFromDownloadsFolder(uri)
       }
     }
@@ -134,7 +136,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
+        updateKiwixDataStore {
+          setShowStorageSelectionDialogOnCopyMove(true)
+          setIsPlayStoreBuild(true)
+        }
         ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(uri)).onActivity {}
         composeTestRule.waitForIdle()
         copyMoveFileHandler {
@@ -147,9 +152,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
-        deleteAllFilesInDirectory(
-          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
-        )
+        deleteTestZimFromAppSpecificDirs()
         deleteZimFileFromDownloadsFolder(uri)
       }
     }
@@ -175,7 +178,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
-    updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
+    updateKiwixDataStore {
+      setShowStorageSelectionDialogOnCopyMove(true)
+      setIsPlayStoreBuild(true)
+    }
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
     ).onActivity {}
@@ -238,13 +244,28 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     return uri
   }
 
-  private fun deleteAllFilesInDirectory(directory: File) {
-    if (directory.isDirectory) {
-      directory.listFiles()?.forEach { file ->
-        if (file.isDirectory) {
-          // Recursively delete files in subdirectories
-          deleteAllFilesInDirectory(file)
+  @Suppress("Deprecation")
+  private fun deleteTestZimFromAppSpecificDirs() {
+    val dirs = mutableListOf<File>()
+    context.externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
+    context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
+    context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
+    context.filesDir?.let { dirs.add(it) }
+    context.cacheDir?.let { dirs.add(it) }
+    runBlocking {
+      val selectedStoragePath = kiwixDataStore.selectedStorage.first()
+      if (selectedStoragePath.isNotEmpty()) {
+        dirs.add(File(selectedStoragePath))
+      }
+    }
+    dirs.distinctBy { it.absolutePath }.forEach { dir ->
+      dir.listFiles()?.forEach { file ->
+        if (file.name.contains(fileName, ignoreCase = true)) {
+          file.delete()
         }
+      }
+      val file = File(dir, fileName)
+      if (file.exists()) {
         file.delete()
       }
     }
@@ -252,6 +273,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @After
   fun release() {
+    deleteTestZimFromAppSpecificDirs()
     Intents.release()
   }
 }

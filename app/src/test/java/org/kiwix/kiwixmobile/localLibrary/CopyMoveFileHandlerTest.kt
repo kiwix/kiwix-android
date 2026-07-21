@@ -139,6 +139,7 @@ class CopyMoveFileHandlerTest {
 
       fileHandler.showMoveFileToPublicDirectoryDialog(
         storageDeviceList = emptyList(),
+        multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
         isSingleFileSelected = true
       )
 
@@ -204,6 +205,7 @@ class CopyMoveFileHandlerTest {
             storageDeviceList = listOf(
               StorageDevice(File("/internal"), true)
             ),
+            multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
             isSingleFileSelected = true
           )
 
