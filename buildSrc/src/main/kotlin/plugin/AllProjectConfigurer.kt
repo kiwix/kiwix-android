@@ -40,6 +40,7 @@ class AllProjectConfigurer {
     target.plugins.apply("kotlin-kapt")
     target.plugins.apply("com.google.devtools.ksp")
     target.plugins.apply("kotlin-parcelize")
+    target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")

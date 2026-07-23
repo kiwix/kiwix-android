@@ -28,6 +28,8 @@ object Versions {
 
   const val kotlin_ksp: String = "2.0.0-1.0.24"
 
+  const val xmlutil_serialization: String = "0.90.2"
+
   const val com_google_dagger: String = "2.53.1"
 
   const val androidx_test: String = "1.7.0"

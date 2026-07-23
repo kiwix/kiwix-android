@@ -19,6 +19,7 @@ buildscript {
 plugins {
   buildSrcVersions
   id("org.jetbrains.kotlin.plugin.compose") version Versions.org_jetbrains_kotlin apply false
+  id("org.jetbrains.kotlin.plugin.serialization") version Versions.org_jetbrains_kotlin apply false
 }
 
 allprojects {

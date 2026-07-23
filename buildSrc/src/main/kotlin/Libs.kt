@@ -69,6 +69,12 @@ object Libs {
   const val converter_simplexml: String = "com.squareup.retrofit2:converter-simplexml:" +
     Versions.com_squareup_retrofit2
 
+  const val converter_kotlinx_serialization: String = "com.squareup.retrofit2:converter-kotlinx-serialization:" +
+    Versions.com_squareup_retrofit2
+
+  const val xmlutil_serialization: String = "io.github.pdvrieze.xmlutil:serialization:" +
+    Versions.xmlutil_serialization
+
   /**
    * https://github.com/square/retrofit
    */

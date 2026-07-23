@@ -15,16 +15,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-@file:Suppress("DEPRECATION")
-
 package org.kiwix.kiwixmobile.core.data.remote
 
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import nl.adaptivity.xmlutil.serialization.XML
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Url
 
@@ -47,13 +47,18 @@ interface KiwixService {
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
-    @Suppress("DEPRECATION")
+    private val xml = XML {
+      defaultPolicy {
+        ignoreUnknownChildren()
+      }
+    }
+
     fun newHackListService(okHttpClient: OkHttpClient, baseUrl: String): KiwixService {
       val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addConverterFactory(xml.asConverterFactory("application/xml".toMediaType()))
         .build()
       return retrofit.create(KiwixService::class.java)
     }
