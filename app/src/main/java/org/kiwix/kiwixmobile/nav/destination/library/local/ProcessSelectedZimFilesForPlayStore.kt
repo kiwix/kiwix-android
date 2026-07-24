@@ -127,6 +127,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
 
     if (uris.size == 1 && !isAfterRetry) {
       isSingleFileSelected = true
+      multipleFilesProcessAction = null
       processSingleFile(uris.first())
     } else {
       isSingleFileSelected = false
@@ -350,6 +351,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   }
 
   override fun insufficientSpaceInStorage(availableSpace: Long) {
+    if (isSingleFileSelected) {
+      multipleFilesProcessAction = null
+    }
     val message =
       """
       ${context.getString(string.move_no_space)}
@@ -360,6 +364,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   }
 
   override fun filesystemDoesNotSupportedCopyMoveFilesOver4GB() {
+    if (isSingleFileSelected) {
+      multipleFilesProcessAction = null
+    }
     showStorageSelectionSnackBar(context.getString(R.string.file_system_does_not_support_4gb))
   }
 
@@ -394,7 +401,10 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         if (isSplittedZimFile(file.path)) {
           showWarningDialogForSplittedZimFile()
         } else {
-          selectedZimFileCallback?.navigateToReaderScreen(file = file)
+          requireLifecycleScope().launch {
+            selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)
+            selectedZimFileCallback?.navigateToReaderScreen(file = file)
+          }
         }
         multipleFilesProcessAction = null
       }
