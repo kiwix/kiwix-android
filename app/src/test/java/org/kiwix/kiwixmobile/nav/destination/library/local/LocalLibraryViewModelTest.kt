@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -59,6 +61,8 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class LocalLibraryViewModelTest {
+  private val libkiwixBookFactory: LibkiwixBookFactory = mockk(relaxed = true)
+  private val libkiwixBookmarks: LibkiwixBookmarks = mockk(relaxed = true)
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk(relaxed = true)
   private val storageObserver: StorageObserver = mockk(relaxed = true)
   private val dataSource: DataSource = mockk(relaxed = true)
@@ -124,6 +128,8 @@ class LocalLibraryViewModelTest {
       kiwixDataStore,
       zimReaderFactory,
       deleteFilesUseCase,
+      libkiwixBookFactory,
+      libkiwixBookmarks,
       mainDispatcherRule.dispatcher
     )
     vm.initialize(

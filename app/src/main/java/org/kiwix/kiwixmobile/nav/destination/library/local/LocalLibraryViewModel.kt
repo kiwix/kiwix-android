@@ -50,6 +50,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import android.os.FileObserver
+import android.content.ContextWrapper
+import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -127,7 +133,7 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
  * - File selection and multi-selection
  * - Side effects for file operations (delete, share, validate, navigate)
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LargeClass")
 @HiltViewModel
 class LocalLibraryViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -141,8 +147,12 @@ class LocalLibraryViewModel @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   private val zimReaderFactory: ZimFileReader.Factory,
   private val deleteFilesUseCase: DeleteFilesUseCase,
+  private val libkiwixBookFactory: LibkiwixBookFactory,
+  private val libkiwixBookmarks: LibkiwixBookmarks,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(), SelectedZimFileCallback {
+  private val fileObservers = mutableListOf<FileObserver>()
+
   /**
    * Sealed class representing all file selection actions.
    */
@@ -219,6 +229,7 @@ class LocalLibraryViewModel @Inject constructor(
       selectedZimFileCallback = this
     )
     observeCoroutineFlows()
+    registerFileObservers()
   }
 
   fun onResume() {
@@ -292,6 +303,8 @@ class LocalLibraryViewModel @Inject constructor(
     clearObservers()
     onResumeJob?.cancel()
     onResumeJob = null
+    fileObservers.forEach { it.stopWatching() }
+    fileObservers.clear()
     processSelectedZimFilesForPlayStore.dispose()
     processSelectedZimFilesForStandalone.dispose()
     super.onCleared()
@@ -300,6 +313,104 @@ class LocalLibraryViewModel @Inject constructor(
   @VisibleForTesting
   fun onClearedExposed() {
     onCleared()
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private fun registerFileObservers() {
+    viewModelScope.launch(ioDispatcher) {
+      try {
+        val dirs = mutableListOf<File>()
+        ContextWrapper(context).externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
+        context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
+        context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
+        context.filesDir?.let { dirs.add(it) }
+        context.cacheDir?.let { dirs.add(it) }
+
+        val selectedStoragePath = try {
+          kiwixDataStore.selectedStorage.first()
+        } catch (_: Exception) {
+          ""
+        }
+        if (selectedStoragePath.isNotEmpty()) {
+          dirs.add(File(selectedStoragePath))
+        }
+
+        val distinctDirs = dirs.distinctBy { it.absolutePath }
+        distinctDirs.forEach { dir ->
+          val zimFilesSubDir = File(dir, "ZIMFiles")
+          val dirsToWatch = listOf(dir, zimFilesSubDir)
+          dirsToWatch.forEach { watchDir ->
+            if (watchDir.exists() && watchDir.isDirectory) {
+              val observer = createFileObserver(watchDir)
+              fileObservers.add(observer)
+              observer.startWatching()
+            }
+          }
+        }
+      } catch (e: Exception) {
+        e.printStackTrace()
+      }
+    }
+  }
+
+  private fun createFileObserver(watchDir: File): FileObserver {
+    val mask = FileObserver.CREATE or FileObserver.MOVED_TO
+    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+      object : FileObserver(watchDir, mask) {
+        override fun onEvent(event: Int, path: String?) {
+          if (path != null) {
+            handleFileEvent(watchDir, path)
+          }
+        }
+      }
+    } else {
+      @Suppress("DEPRECATION")
+      object : FileObserver(watchDir.path, mask) {
+        override fun onEvent(event: Int, path: String?) {
+          if (path != null) {
+            handleFileEvent(watchDir, path)
+          }
+        }
+      }
+    }
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private fun handleFileEvent(watchDir: File, path: String) {
+    if (FileUtils.isValidZimFile(path) || isSplittedZimFile(path)) {
+      val file = File(watchDir, path)
+      if (file.exists() && file.isFile) {
+        viewModelScope.launch(ioDispatcher) {
+          try {
+            val book = convertFileToBook(file)
+            if (book != null) {
+              libkiwixBookOnDisk.insert(listOf(book))
+            }
+          } catch (e: Exception) {
+            e.printStackTrace()
+          }
+        }
+      }
+    }
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private suspend fun convertFileToBook(file: File): Book? {
+    return zimReaderFactory.create(ZimReaderSource(file), false)
+      ?.let { zimFileReader ->
+        try {
+          libkiwixBookFactory.create().apply {
+            update(zimFileReader.jniKiwixReader)
+          }.also {
+            // add the book to libkiwix library to validate the imported bookmarks
+            libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
+            zimFileReader.dispose()
+          }
+        } catch (e: Exception) {
+          zimFileReader.dispose()
+          null
+        }
+      }
   }
 
   private fun scanBooksFromStorage() =

@@ -226,11 +226,14 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * This avoids unnecessary copy/move operations for files the user has
    * already placed in the app directory.
    */
-  @Suppress("Deprecation")
+  private var appSpecificDirsCache: List<File>? = null
+
   private suspend fun getAppSpecificDirs(): List<File> {
+    appSpecificDirsCache?.let { return it }
     val dirs = mutableListOf<File>()
-    context.externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
+    android.content.ContextWrapper(context).externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
     context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
+    context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
     context.filesDir?.let { dirs.add(it) }
     context.cacheDir?.let { dirs.add(it) }
 
@@ -240,7 +243,25 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     if (selectedStoragePath.isNotEmpty()) {
       dirs.add(File(selectedStoragePath))
     }
-    return dirs
+    val uniqueDirs = dirs.distinctBy { it.absolutePath }
+    appSpecificDirsCache = uniqueDirs
+    return uniqueDirs
+  }
+
+  private fun findFileRecursively(dir: File, fileName: String, fileSize: Long): File? {
+    var foundFile: File? = null
+    val files = dir.listFiles()
+    if (files != null) {
+      for (file in files) {
+        if (file.isDirectory) {
+          foundFile = findFileRecursively(file, fileName, fileSize)
+        } else if (file.isFile && file.name.equals(fileName, ignoreCase = true) && file.length() == fileSize) {
+          foundFile = file
+        }
+        if (foundFile != null) break
+      }
+    }
+    return foundFile
   }
 
   @VisibleForTesting
@@ -259,9 +280,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         null
       }
       if (!dirPath.isNullOrEmpty()) {
-        val fileInDir = File(dirPath, fileName)
-        if (fileInDir.exists() && fileInDir.length() == fileSize) {
-          existingFile = fileInDir
+        val foundFile = findFileRecursively(File(dirPath), fileName, fileSize)
+        if (foundFile != null) {
+          existingFile = foundFile
           break
         }
       }
