@@ -40,7 +40,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicInteger
@@ -68,7 +70,7 @@ class KiwixTextToSpeech internal constructor(
   @JvmField var currentTTSTask: TTSTask? = null
   private lateinit var tts: TextToSpeech
 
-  var speechRate: Float = 1.0f
+  var speechRate: Float = DEFAULT_TTS_SPEED
     set(value) {
       field = value
       if (isInitialized) {
@@ -288,7 +290,7 @@ class KiwixTextToSpeech internal constructor(
     @JvmField var paused = true
     fun pause() {
       paused = true
-      if (currentPiece.get() > 0) {
+      if (currentPiece.get() > ZERO) {
         currentPiece.decrementAndGet()
       }
       tts.setOnUtteranceProgressListener(null)

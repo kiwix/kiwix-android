@@ -72,6 +72,9 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreReaderViewModelTest {
+  companion object {
+    private const val TEST_TTS_SPEED = 1.25f
+  }
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
@@ -348,9 +351,9 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun `ChangeTtsSpeed action should save speed to kiwixDataStore`() = runTest {
-      viewModel.onAction(ReaderAction.ChangeTtsSpeed(1.25f))
+      viewModel.onAction(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED))
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setTtsSpeed(1.25f) }
+      coVerify { kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED) }
     }
   }
 
@@ -738,9 +741,6 @@ internal class CoreReaderViewModelTest {
       mainDispatcher
     ) {
     var openBookmarkScreenCalled = false
-    fun testUpdateState(transform: ReaderUiState.() -> ReaderUiState) {
-      updateState(transform)
-    }
     override fun openLocalLibrary() {}
 
     override fun openSearch(

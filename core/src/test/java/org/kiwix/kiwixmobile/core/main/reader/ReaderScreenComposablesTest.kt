@@ -63,6 +63,10 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class ReaderScreenComposablesTest {
+  companion object {
+    private const val TEST_TTS_SPEED = 1.5f
+  }
+
   @Rule
   @JvmField
   val composeTestRule = createComposeRule()
@@ -608,5 +612,34 @@ class ReaderScreenComposablesTest {
       )
       .performClick()
     assertEquals(ReaderAction.CloseTab(0), action)
+  }
+
+  @Test
+  fun readerScreen_ttsSpeedControls_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(showTtsControls = true, ttsSpeedText = "1.0X")
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    // 1. Assert speed button is displayed with the correct text
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+
+    // 2. Perform click to show dropdown menu
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    // 3. Select 1.5X speed
+    composeTestRule
+      .onNodeWithTag("TTS_SPEED_OPTION_1.5X", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    // 4. Assert callback with correct action and speed parameter
+    assertEquals(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED), action)
   }
 }
