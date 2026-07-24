@@ -294,7 +294,7 @@ abstract class CoreReaderViewModel(
   private fun observeCoroutineFlows() {
     clearObservers()
     coroutineJobs.apply {
-      add(observeSettings())
+      addAll(observeSettings())
       add(observeFindInPage())
       add(observeTabsState())
       add(observeReaderPendingIntent())
@@ -345,23 +345,23 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  private fun observeSettings() =
-    viewModelScope.launch {
-      launch {
+  private fun observeSettings(): List<Job> =
+    listOf(
+      viewModelScope.launch {
         kiwixDataStore.backToTop.collect {
           if (!it) {
             hideBackToTopButton()
           }
           // Showing backToTop button based on webView scrolling.
         }
-      }
-      launch {
+      },
+      viewModelScope.launch {
         kiwixDataStore.ttsSpeed.collect { speed ->
           updateState { copy(ttsSpeedText = "${speed}X") }
           readAloudManager.tts?.speechRate = speed
         }
       }
-    }
+    )
 
   private fun observeFindInPage() =
     viewModelScope.launch {

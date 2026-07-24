@@ -841,4 +841,25 @@ class KiwixDataStoreTest {
     kiwixDataStore.setRateAppPromptShown()
     assertThat(kiwixDataStore.rateAppPromptShown.first()).isTrue()
   }
+
+  @Test
+  fun `ttsSpeed returns DEFAULT_TTS_SPEED by default`() = runTest {
+    kiwixDataStore.ttsSpeed.test {
+      assertThat(awaitItem()).isEqualTo(KiwixDataStore.DEFAULT_TTS_SPEED)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `setTtsSpeed persists the given value`() = runTest {
+    kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED)
+    kiwixDataStore.ttsSpeed.test {
+      assertThat(awaitItem()).isEqualTo(TEST_TTS_SPEED)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  companion object {
+    private const val TEST_TTS_SPEED = 1.5f
+  }
 }
