@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryR
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
 
+
 @KiwixScope
 @Component(
   dependencies = [CoreComponent::class],
@@ -54,7 +55,7 @@ interface KiwixComponent {
   fun provideFileOperationHandler(): FileOperationHandler
   fun provideCopyMoveProgressBarController(): CopyMoveProgressBarController
   fun provideOnlineLibraryRepository(): OnlineLibraryRepository
-  fun provideKiwixOpdsServiceFactory(): KiwixOpdsServiceFactory
+
   fun provideLanguageRepository(): LanguageRepository
   fun provideCategoryRepository(): CategoryRepository
 }

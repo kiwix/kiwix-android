@@ -20,9 +20,7 @@ package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
-import org.kiwix.kiwixmobile.data.remote.opds.KiwixOpdsServiceFactory
-import org.kiwix.kiwixmobile.data.remote.opds.KiwixOpdsServiceFactoryImpl
+
 import org.kiwix.kiwixmobile.language.repository.LanguageRepository
 import org.kiwix.kiwixmobile.language.repository.LanguageRepositoryImpl
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepository
@@ -36,10 +34,7 @@ class DataModule {
   fun provideOnlineLibraryRepository(
     onlineLibraryRepositoryImpl: OnlineLibraryRepositoryImpl
   ): OnlineLibraryRepository = onlineLibraryRepositoryImpl
-  @Provides
-  fun provideKiwixOpdsServiceFactory(
-    onlineLibraryManager: OnlineLibraryManager
-  ): KiwixOpdsServiceFactory = KiwixOpdsServiceFactoryImpl(onlineLibraryManager)
+
 
   @Provides
   fun provideLanguageRepository(
