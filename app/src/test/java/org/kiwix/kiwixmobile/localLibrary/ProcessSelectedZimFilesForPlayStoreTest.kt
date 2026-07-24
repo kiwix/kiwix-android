@@ -339,6 +339,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
 
     processSelectedZimFiles.onFileCopied(file)
+    advanceUntilIdle()
 
     verify { selectedZimFileCallback.navigateToReaderScreen(file) }
   }
@@ -351,6 +352,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
     processSelectedZimFiles.processSelectedFiles(listOf(uri))
     processSelectedZimFiles.onFileMoved(file)
+    advanceUntilIdle()
 
     verify { selectedZimFileCallback.navigateToReaderScreen(file) }
   }
