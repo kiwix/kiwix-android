@@ -18,21 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
-import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Application
-import app.cash.turbine.test
-import io.mockk.clearAllMocks
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -40,11 +36,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderEffect
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
@@ -57,46 +52,47 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
-import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreReaderViewModelTest {
+  private val context = mockk<Application>(relaxed = true)
+  private val kiwixDataStore = mockk<KiwixDataStore>()
+  private val externalLinkOpener = mockk<ExternalLinkOpener>()
+  private val unsupportedMimeTypeHandler = mockk<UnsupportedMimeTypeHandler>()
+  private val readerWebViewManager = mockk<ReaderWebViewManager>()
+  private val zimReaderContainer = mockk<ZimReaderContainer>()
+  private val zimFileManager = mockk<ZimFileManager>()
+  private val kiwixPermissionChecker = mockk<KiwixPermissionChecker>()
+  private val repositoryActions = mockk<MainRepositoryActions>()
+  private val bookmarkManager = mockk<BookmarkManager>()
+  private val readerHistoryManager = mockk<ReaderHistoryManager>()
+  private val readerSessionManager = mockk<ReaderSessionManager>()
+  private val readerIntentManager = mockk<ReaderIntentManager>()
+  private val pendingSearchItemManager = mockk<PendingSearchItemManager>()
+  private val readerArticleManager = mockk<ReaderArticleManager>()
+  private val readAloudManager = mockk<ReadAloudManager>()
+  private val donationDialogHandler = mockk<DonationDialogHandler>()
+  private val findInPageManager = mockk<FindInPageManager>(relaxed = true)
+
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 
-  private val context = mockk<Application>(relaxed = true)
-  private val kiwixDataStore = mockk<KiwixDataStore>(relaxed = true)
-  private val externalLinkOpener = mockk<ExternalLinkOpener>(relaxed = true)
-  private val unsupportedMimeTypeHandler = mockk<UnsupportedMimeTypeHandler>(relaxed = true)
-  private val readerWebViewManager = mockk<ReaderWebViewManager>(relaxed = true)
-  private val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
-  private val zimFileManager = mockk<ZimFileManager>(relaxed = true)
-  private val kiwixPermissionChecker = mockk<KiwixPermissionChecker>(relaxed = true)
-  private val repositoryActions = mockk<MainRepositoryActions>(relaxed = true)
-  private val bookmarkManager = mockk<BookmarkManager>(relaxed = true)
-  private val readerHistoryManager = mockk<ReaderHistoryManager>(relaxed = true)
-  private val readerSessionManager = mockk<ReaderSessionManager>(relaxed = true)
-  private val readerIntentManager = mockk<ReaderIntentManager>(relaxed = true)
-  private val readerIntentManagerFlow = MutableStateFlow(Unit)
-  private val pendingSearchItemManager = mockk<PendingSearchItemManager>(relaxed = true)
-  private val readerArticleManager = mockk<ReaderArticleManager>(relaxed = true)
-  private val readAloudManager = mockk<ReadAloudManager>(relaxed = true)
-  private val donationDialogHandler = mockk<DonationDialogHandler>(relaxed = true)
-  private val findInPageManager = mockk<FindInPageManager>(relaxed = true)
-  private val mockWebView = mockk<KiwixWebView>(relaxed = true)
+  private val coreMainActivity = mockk<CoreMainActivity>()
 
-  // private lateinit var viewModel: TestCoreReaderViewModel
+  private val alertDialogShower = mockk<AlertDialogShower>()
+
+  private lateinit var viewModel: CoreReaderViewModel
 
   // @BeforeEach
   // fun setup() {
@@ -137,250 +133,340 @@ internal class CoreReaderViewModelTest {
   //   every { zimReaderContainer.zimFileReader } returns null
   //
   //   coEvery { readerArticleManager.getRandomArticle() } returns ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded
-  //
-  //   viewModel = TestCoreReaderViewModel(
-  //     context = context,
-  //     kiwixDataStore = kiwixDataStore,
-  //     externalLinkOpener = externalLinkOpener,
-  //     unsupportedMimeTypeHandler = unsupportedMimeTypeHandler,
-  //     readerWebViewManager = readerWebViewManager,
-  //     zimReaderContainer = zimReaderContainer,
-  //     zimFileManager = zimFileManager,
-  //     kiwixPermissionChecker = kiwixPermissionChecker,
-  //     repositoryActions = repositoryActions,
-  //     bookmarkManager = bookmarkManager,
-  //     readerHistoryManager = readerHistoryManager,
-  //     readerSessionManager = readerSessionManager,
-  //     readerIntentManager = readerIntentManager,
-  //     pendingSearchItemManager = pendingSearchItemManager,
-  //     readerArticleManager = readerArticleManager,
-  //     readAloudManager = readAloudManager,
-  //     donationDialogHandler = donationDialogHandler,
-  //     findInPageManager = findInPageManager,
-  //     mainDispatcher = mainDispatcherRule.mainDispatcher
-  //   )
   // }
-  //
-  // @AfterEach
-  // fun tearDown() {
-  //   Dispatchers.resetMain()
-  // }
+  @BeforeEach
+  fun setup() {
+    every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
+
+    viewModel = TestCoreReaderViewModel(
+      context,
+      kiwixDataStore,
+      externalLinkOpener,
+      unsupportedMimeTypeHandler,
+      readerWebViewManager,
+      zimReaderContainer,
+      zimFileManager,
+      kiwixPermissionChecker,
+      repositoryActions,
+      bookmarkManager,
+      readerHistoryManager,
+      readerSessionManager,
+      readerIntentManager,
+      pendingSearchItemManager,
+      readerArticleManager,
+      readAloudManager,
+      donationDialogHandler,
+      findInPageManager,
+      mainDispatcherRule.mainDispatcher
+    )
+  }
+
+  @AfterEach
+  fun tearDown() {
+  }
+
+  @Test
+  fun dummy() = runTest {
+    viewModel.initialize(coreMainActivity, alertDialogShower)
+    advanceUntilIdle()
+  }
 
   @Nested
   inner class Initialization {
+    @Nested
+    inner class ObserveCoroutineFlows {
+      @Test
+      fun observeSettings_whenBackToTopIsFalse_hidesBackToTopButton() = runTest {
+        every { kiwixDataStore.backToTop } returns flowOf(false)
 
-  }
+        // Assuming the button is shown
+        viewModel.getUiState().update { it.copy(showBackToTopButton = true) }
 
-  @Nested
-  inner class ReaderActions {
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  }
+        assertThat(viewModel.uiState.value.showBackToTopButton).isFalse()
+      }
 
-  @Nested
-  inner class Bookmark {
+      @Test
+      fun observeSettings_whenBackToTopIsTrue_doesNotHidesBackToTopButton() = runTest {
+        every { kiwixDataStore.backToTop } returns flowOf(true)
 
-  }
+        // Assuming the button is shown
+        viewModel.getUiState().update { it.copy(showBackToTopButton = true) }
 
-  @Nested
-  inner class ReadAloud {
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  }
+        assertThat(viewModel.uiState.value.showBackToTopButton).isTrue()
+      }
 
-  @Nested
-  inner class Tabs {
+      @Test
+      fun observeFindInPage_emitsNewUiState_updatesReaderUiState() = runTest {
+        val newFindInPageState =
+          FindInPageManager.FindInPageUiState(visible = true, query = "android")
+        every { findInPageManager.uiState } returns MutableStateFlow(newFindInPageState)
 
-  }
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  @Nested
-  inner class WebViewCallbacks {
+        assertThat(viewModel.uiState.value.findInPageUiState).isEqualTo(newFindInPageState)
+      }
 
-  }
+      @Test
+      fun observeTabsState_emitsNewState_updatesReaderUiStateAndTabIcon() = runTest {
+        val mockWebView = mockk<KiwixWebView>(relaxed = true)
+        val newTabsState = TabsManager.TabsState(webViews = listOf(mockWebView))
+        every { readerWebViewManager.tabsState } returns MutableStateFlow(newTabsState)
 
-  @Nested
-  inner class Permissions {
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  }
+        assertThat(viewModel.readerMenuState).isEqualTo(newTabsState.webViews.size)
+        assertThat(viewModel.uiState.value.tabsState).isEqualTo(newTabsState)
+      }
 
-  @Nested
-  inner class Navigation {
+      @Test
+      fun observeReaderPendingIntent_whenNotRestoringHistory_handlesPendingIntent() = runTest {
+        val pendingIntentFlow = MutableSharedFlow<Unit>()
+        every { readerIntentManager.events } returns pendingIntentFlow
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
 
-  }
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  @Nested
-  inner class FindInPage {
+        pendingIntentFlow.emit(Unit)
+        advanceUntilIdle()
 
-  }
+        verify { readerIntentManager.consumePendingAction() }
+      }
 
-  @Nested
-  inner class SessionRestore {
+      @Test
+      fun observeReaderPendingIntent_whenRestoringHistory_ignoresPendingIntent() = runTest {
+        val pendingIntentFlow = MutableSharedFlow<Unit>()
+        every { readerIntentManager.events } returns pendingIntentFlow
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
 
-  }
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  @Nested
-  inner class Donation {
+        viewModel.isWebViewHistoryRestoring = true
 
-  }
+        pendingIntentFlow.emit(Unit)
+        advanceUntilIdle()
 
-  @Nested
-  inner class BackPress {
+        verify(exactly = 0) { readerIntentManager.consumePendingAction() }
+      }
 
-  }
+      @Test
+      fun observeBookmarkState_emitsBookmarkedTrue_updatesBookmarkButtonItem() = runTest {
+        val bookmarkState = BookmarkManager.BookmarkState(isBookmarked = true)
+        every { bookmarkManager.bookmarkState } returns MutableStateFlow(bookmarkState)
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  @Nested
-  inner class Cleanup {
+        assertThat(viewModel.uiState.value.bookmarkButtonItem.icon).isEqualTo(IconItem.Drawable(R.drawable.ic_bookmark_24dp))
+        assertThat(viewModel.uiState.value.bookmarkButtonItem.isBookmarked).isTrue()
+      }
 
-  }
+      @Test
+      fun observeBookmarkState_emitsBookmarkedFalse_updatesBookmarkButtonItem() = runTest {
+        val bookmarkState = BookmarkManager.BookmarkState(isBookmarked = false)
+        every { bookmarkManager.bookmarkState } returns MutableStateFlow(bookmarkState)
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+        advanceUntilIdle()
 
-  // @Nested
-  // inner class NavigationActionTests {
-  //   @Test
-  //   fun `OpenTocDrawer should update state to show table of contents`() {
-  //     val initialState = viewModel.uiState.value
-  //     assertThat(initialState.showTableOfContentDrawer).isFalse()
-  //
-  //     viewModel.onAction(ReaderAction.OpenTocDrawer)
-  //
-  //     assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
-  //   }
-  //
-  //   @Test
-  //   fun `CloseTocDrawer should update state to hide table of contents`() {
-  //     // First open the drawer
-  //     viewModel.onAction(ReaderAction.OpenTocDrawer)
-  //     assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
-  //
-  //     // Then close it
-  //     viewModel.onAction(ReaderAction.CloseTocDrawer)
-  //
-  //     assertThat(viewModel.uiState.value.showTableOfContentDrawer).isFalse()
-  //   }
-  // }
+        assertThat(viewModel.uiState.value.bookmarkButtonItem.icon).isEqualTo(IconItem.Drawable(R.drawable.ic_bookmark_border_24dp))
+        assertThat(viewModel.uiState.value.bookmarkButtonItem.isBookmarked).isFalse()
+      }
+    }
 
-  // @Nested
-  // inner class TabManagementActionTests {
-  //   @Test
-  //   fun `CloseTab should call readerWebViewManager closeTab`() {
-  //     viewModel.onAction(ReaderAction.CloseTab(0))
-  //
-  //     verify { readerWebViewManager.closeTab(0) }
-  //   }
-  //
-  //   @Test
-  //   fun `CloseAllTabs should call readerWebViewManager closeAllTabs`() {
-  //     viewModel.onAction(ReaderAction.CloseAllTabs)
-  //
-  //     verify { readerWebViewManager.closeAllTabs() }
-  //   }
-  //
-  //   @Test
-  //   fun `SelectTab should execute tab selection logic`() {
-  //     val tabPosition = 1
-  //     viewModel.onAction(ReaderAction.SelectTab(tabPosition))
-  //
-  //     // SelectTab triggers async operations, this verifies no exception is thrown
-  //     assertThat(true).isTrue()
-  //   }
-  // }
+    @Nested
+    inner class ReaderActions
 
-  // @Nested
-  // inner class FindInPageActionTests {
-  //   @Test
-  //   fun `FindInPageQueryChanged should call findInPageManager search`() {
-  //     val query = "test search"
-  //     viewModel.onAction(ReaderAction.FindInPageQueryChanged(query))
-  //
-  //     verify { findInPageManager.search(query) }
-  //   }
-  //
-  //   @Test
-  //   fun `FindInPageNextClicked should call findInPageManager findNext`() {
-  //     viewModel.onAction(ReaderAction.FindInPageNextClicked)
-  //
-  //     verify { findInPageManager.findNext() }
-  //   }
-  //
-  //   @Test
-  //   fun `FindInPagePreviousClicked should call findInPageManager findPrevious`() {
-  //     viewModel.onAction(ReaderAction.FindInPagePreviousClicked)
-  //
-  //     verify { findInPageManager.findPrevious() }
-  //   }
-  //
-  //   @Test
-  //   fun `FindInPageCloseClicked should call findInPageManager stop`() {
-  //     viewModel.onAction(ReaderAction.FindInPageCloseClicked)
-  //
-  //     verify { findInPageManager.stop() }
-  //   }
-  // }
+    @Nested
+    inner class Bookmark
 
-  // @Nested
-  // inner class WebViewCallbackTests {
-  //   @Test
-  //   fun `webViewTitleUpdated should not throw exception`() {
-  //     val newTitle = "New Article Title"
-  //     viewModel.webViewTitleUpdated(newTitle)
-  //
-  //     verify { readerWebViewManager.tabsSize() }
-  //   }
-  //
-  //   @Test
-  //   fun `onFullscreenVideoToggled to true should hide bottom bar`() {
-  //     val initialState = viewModel.uiState.value
-  //     assertThat(initialState.shouldShowFullScreen).isFalse()
-  //     assertThat(initialState.showBottomBar).isTrue()
-  //
-  //     viewModel.onFullscreenVideoToggled(true)
-  //
-  //     assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue()
-  //     assertThat(viewModel.uiState.value.showBottomBar).isFalse()
-  //   }
-  //
-  //   @Test
-  //   fun `onFullscreenVideoToggled to false should show bottom bar`() {
-  //     viewModel.onFullscreenVideoToggled(true)
-  //     assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue()
-  //
-  //     viewModel.onFullscreenVideoToggled(false)
-  //
-  //     assertThat(viewModel.uiState.value.shouldShowFullScreen).isFalse()
-  //     assertThat(viewModel.uiState.value.showBottomBar).isTrue()
-  //   }
-  //
-  //   @Test
-  //   fun `webViewPageChanged should update page information`() {
-  //     viewModel.webViewPageChanged(page = 5, maxPages = 20)
-  //     assertThat(true).isTrue()
-  //   }
-  //
-  //   @Test
-  //   fun `webViewPageChanged with single page should handle correctly`() {
-  //     viewModel.webViewPageChanged(page = 1, maxPages = 1)
-  //     assertThat(true).isTrue()
-  //   }
-  //
-  //   @Test
-  //   fun `webViewLongClick should handle long click event`() {
-  //     val url = "https://example.com/article"
-  //     viewModel.webViewLongClick(url)
-  //     assertThat(true).isTrue()
-  //   }
-  //
-  //   @Test
-  //   fun `webViewLongClick with empty URL should handle gracefully`() {
-  //     viewModel.webViewLongClick("")
-  //     assertThat(true).isTrue()
-  //   }
-  // }
+    @Nested
+    inner class ReadAloud
 
-  // @Nested
-  // inner class NavigationIconTests {
-  //   @Test
-  //   fun `navigationIcon should return valid icon`() {
-  //     val icon = viewModel.navigationIcon()
-  //
-  //     assertThat(icon).isNotNull()
-  //   }
+    @Nested
+    inner class Tabs
+
+    @Nested
+    inner class WebViewCallbacks
+
+    @Nested
+    inner class Permissions
+
+    @Nested
+    inner class Navigation
+
+    @Nested
+    inner class FindInPage
+
+    @Nested
+    inner class SessionRestore
+
+    @Nested
+    inner class Donation
+
+    @Nested
+    inner class BackPress
+
+    @Nested
+    inner class Cleanup
+
+    // @Nested
+    // inner class NavigationActionTests {
+    //   @Test
+    //   fun `OpenTocDrawer should update state to show table of contents`() {
+    //     val initialState = viewModel.uiState.value
+    //     assertThat(initialState.showTableOfContentDrawer).isFalse()
+    //
+    //     viewModel.onAction(ReaderAction.OpenTocDrawer)
+    //
+    //     assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+    //   }
+    //
+    //   @Test
+    //   fun `CloseTocDrawer should update state to hide table of contents`() {
+    //     // First open the drawer
+    //     viewModel.onAction(ReaderAction.OpenTocDrawer)
+    //     assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+    //
+    //     // Then close it
+    //     viewModel.onAction(ReaderAction.CloseTocDrawer)
+    //
+    //     assertThat(viewModel.uiState.value.showTableOfContentDrawer).isFalse()
+    //   }
+    // }
+
+    // @Nested
+    // inner class TabManagementActionTests {
+    //   @Test
+    //   fun `CloseTab should call readerWebViewManager closeTab`() {
+    //     viewModel.onAction(ReaderAction.CloseTab(0))
+    //
+    //     verify { readerWebViewManager.closeTab(0) }
+    //   }
+    //
+    //   @Test
+    //   fun `CloseAllTabs should call readerWebViewManager closeAllTabs`() {
+    //     viewModel.onAction(ReaderAction.CloseAllTabs)
+    //
+    //     verify { readerWebViewManager.closeAllTabs() }
+    //   }
+    //
+    //   @Test
+    //   fun `SelectTab should execute tab selection logic`() {
+    //     val tabPosition = 1
+    //     viewModel.onAction(ReaderAction.SelectTab(tabPosition))
+    //
+    //     // SelectTab triggers async operations, this verifies no exception is thrown
+    //     assertThat(true).isTrue()
+    //   }
+    // }
+
+    // @Nested
+    // inner class FindInPageActionTests {
+    //   @Test
+    //   fun `FindInPageQueryChanged should call findInPageManager search`() {
+    //     val query = "test search"
+    //     viewModel.onAction(ReaderAction.FindInPageQueryChanged(query))
+    //
+    //     verify { findInPageManager.search(query) }
+    //   }
+    //
+    //   @Test
+    //   fun `FindInPageNextClicked should call findInPageManager findNext`() {
+    //     viewModel.onAction(ReaderAction.FindInPageNextClicked)
+    //
+    //     verify { findInPageManager.findNext() }
+    //   }
+    //
+    //   @Test
+    //   fun `FindInPagePreviousClicked should call findInPageManager findPrevious`() {
+    //     viewModel.onAction(ReaderAction.FindInPagePreviousClicked)
+    //
+    //     verify { findInPageManager.findPrevious() }
+    //   }
+    //
+    //   @Test
+    //   fun `FindInPageCloseClicked should call findInPageManager stop`() {
+    //     viewModel.onAction(ReaderAction.FindInPageCloseClicked)
+    //
+    //     verify { findInPageManager.stop() }
+    //   }
+    // }
+
+    // @Nested
+    // inner class WebViewCallbackTests {
+    //   @Test
+    //   fun `webViewTitleUpdated should not throw exception`() {
+    //     val newTitle = "New Article Title"
+    //     viewModel.webViewTitleUpdated(newTitle)
+    //
+    //     verify { readerWebViewManager.tabsSize() }
+    //   }
+    //
+    //   @Test
+    //   fun `onFullscreenVideoToggled to true should hide bottom bar`() {
+    //     val initialState = viewModel.uiState.value
+    //     assertThat(initialState.shouldShowFullScreen).isFalse()
+    //     assertThat(initialState.showBottomBar).isTrue()
+    //
+    //     viewModel.onFullscreenVideoToggled(true)
+    //
+    //     assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue()
+    //     assertThat(viewModel.uiState.value.showBottomBar).isFalse()
+    //   }
+    //
+    //   @Test
+    //   fun `onFullscreenVideoToggled to false should show bottom bar`() {
+    //     viewModel.onFullscreenVideoToggled(true)
+    //     assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue()
+    //
+    //     viewModel.onFullscreenVideoToggled(false)
+    //
+    //     assertThat(viewModel.uiState.value.shouldShowFullScreen).isFalse()
+    //     assertThat(viewModel.uiState.value.showBottomBar).isTrue()
+    //   }
+    //
+    //   @Test
+    //   fun `webViewPageChanged should update page information`() {
+    //     viewModel.webViewPageChanged(page = 5, maxPages = 20)
+    //     assertThat(true).isTrue()
+    //   }
+    //
+    //   @Test
+    //   fun `webViewPageChanged with single page should handle correctly`() {
+    //     viewModel.webViewPageChanged(page = 1, maxPages = 1)
+    //     assertThat(true).isTrue()
+    //   }
+    //
+    //   @Test
+    //   fun `webViewLongClick should handle long click event`() {
+    //     val url = "https://example.com/article"
+    //     viewModel.webViewLongClick(url)
+    //     assertThat(true).isTrue()
+    //   }
+    //
+    //   @Test
+    //   fun `webViewLongClick with empty URL should handle gracefully`() {
+    //     viewModel.webViewLongClick("")
+    //     assertThat(true).isTrue()
+    //   }
+    // }
+
+    // @Nested
+    // inner class NavigationIconTests {
+    //   @Test
+    //   fun `navigationIcon should return valid icon`() {
+    //     val icon = viewModel.navigationIcon()
+    //
+    //     assertThat(icon).isNotNull()
+    //   }
 
     // @Test
     // fun `navigationIconClick emit effects`() = runTest {
@@ -475,177 +561,168 @@ internal class CoreReaderViewModelTest {
 
   // @Nested
   // inner class PendingIntentTest {
-    // TODO we will refactor these test cases in the future to make them
-    //  more robust and less dependent on implementation details.
-    // @Test
-    // fun `None pending intent does nothing`() = runTest {
-    //   viewModel = spyk(viewModel)
-    //   every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
-    //
-    //   readerIntentManagerFlow.emit(Unit)
-    //
-    //   advanceUntilIdle()
-    //
-    //   verify(exactly = 0) {
-    //     viewModel.openBookmarkScreen()
-    //   }
-    //
-    //   coVerify(exactly = 0) {
-    //     viewModel.openZimFileWithArguments(any(), any(), any())
-    //   }
-    // }
-
-    // @Test
-    // fun `OpenBookmarks opens bookmark screen and clears activity intent`() = runTest {
-    //   every {
-    //     readerIntentManager.consumePendingAction()
-    //   } returns PendingIntentParser.ReaderIntentAction.OpenBookmarks
-    //
-    //   readerIntentManagerFlow.emit(Unit)
-    //
-    //   advanceUntilIdle()
-    //   Assertions.assertTrue(viewModel.openBookmarkScreenCalled)
-    //
-    //   viewModel.effects.test {
-    //     Assertions.assertEquals(ReaderEffect.ClearActivityIntentAction, awaitItem())
-    //   }
-    // }
-    //
-    // @Test
-    // fun `OpenSearch opens search and clears intent`() = runTest {
-    //   viewModel = spyk(viewModel)
-    //   every {
-    //     readerIntentManager.consumePendingAction()
-    //   } returns PendingIntentParser.ReaderIntentAction.OpenSearch(
-    //     "kiwix",
-    //     isVoice = true,
-    //     false
-    //   )
-    //
-    //   readerIntentManagerFlow.emit(Unit)
-    //
-    //   advanceUntilIdle()
-    //
-    //   verify {
-    //     viewModel.openSearch(
-    //       "kiwix",
-    //       isVoice = true,
-    //       isOpenedFromTabView = false
-    //     )
-    //   }
-    // }
-    //
-    // @Test
-    // fun `OpenZim opens zim from arguments`() = runTest {
-    //   viewModel = spyk(viewModel)
-    //   every {
-    //     readerIntentManager.consumePendingAction()
-    //   } returns PendingIntentParser.ReaderIntentAction.OpenZim(
-    //     "uri",
-    //     "page"
-    //   )
-    //
-    //   readerIntentManagerFlow.emit(Unit)
-    //
-    //   advanceUntilIdle()
-    //
-    //   coVerify {
-    //     viewModel.openZimFileWithArguments(
-    //       "uri",
-    //       "page",
-    //       ""
-    //     )
-    //   }
-    // }
-  }
-
-  /**
-   * Test implementation of CoreReaderViewModel for testing purposes.
-   * Provides default implementations for abstract methods.
-   */
-  // class TestCoreReaderViewModel(
-  //   context: Application,
-  //   kiwixDataStore: KiwixDataStore,
-  //   externalLinkOpener: ExternalLinkOpener,
-  //   unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
-  //   readerWebViewManager: ReaderWebViewManager,
-  //   zimReaderContainer: ZimReaderContainer,
-  //   zimFileManager: ZimFileManager,
-  //   kiwixPermissionChecker: KiwixPermissionChecker,
-  //   repositoryActions: MainRepositoryActions,
-  //   bookmarkManager: BookmarkManager,
-  //   readerHistoryManager: ReaderHistoryManager,
-  //   readerSessionManager: ReaderSessionManager,
-  //   readerIntentManager: ReaderIntentManager,
-  //   pendingSearchItemManager: PendingSearchItemManager,
-  //   readerArticleManager: ReaderArticleManager,
-  //   readAloudManager: ReadAloudManager,
-  //   donationDialogHandler: DonationDialogHandler,
-  //   findInPageManager: FindInPageManager,
-  //   mainDispatcher: MainCoroutineDispatcher
-  // ) : CoreReaderViewModel(
-  //   context,
-  //   kiwixDataStore,
-  //   externalLinkOpener,
-  //   unsupportedMimeTypeHandler,
-  //   readerWebViewManager,
-  //   zimReaderContainer,
-  //   zimFileManager,
-  //   kiwixPermissionChecker,
-  //   repositoryActions,
-  //   bookmarkManager,
-  //   readerHistoryManager,
-  //   readerSessionManager,
-  //   readerIntentManager,
-  //   pendingSearchItemManager,
-  //   readerArticleManager,
-  //   readAloudManager,
-  //   donationDialogHandler,
-  //   findInPageManager,
-  //   mainDispatcher
-  // ) {
-  //   var openBookmarkScreenCalled = false
-  //   override fun openLocalLibrary() {}
+  // TODO we will refactor these test cases in the future to make them
+  //  more robust and less dependent on implementation details.
+  // @Test
+  // fun `None pending intent does nothing`() = runTest {
+  //   viewModel = spyk(viewModel)
+  //   every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
   //
-  //   override fun openSearch(
-  //     searchString: String,
-  //     isOpenedFromTabView: Boolean,
-  //     isVoice: Boolean
-  //   ) {
+  //   readerIntentManagerFlow.emit(Unit)
+  //
+  //   advanceUntilIdle()
+  //
+  //   verify(exactly = 0) {
+  //     viewModel.openBookmarkScreen()
   //   }
   //
-  //   override fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {}
-  //
-  //   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
-  //
-  //   override fun isBrandedApp(): Boolean = false
-  //
-  //   override suspend fun initialize(
-  //     coreMainActivity: CoreMainActivity,
-  //     alertDialogShower: AlertDialogShower
-  //   ) {
-  //   }
-  //
-  //   override fun openBookmarkScreen() {
-  //     openBookmarkScreenCalled = true
-  //   }
-  //
-  //   override suspend fun restoreViewStateOnValidWebViewHistory(
-  //     webViewHistoryItemList: List<WebViewHistoryItem>,
-  //     currentTab: Int,
-  //     currentZimFile: String?,
-  //     restoreOrigin: RestoreOrigin,
-  //     onComplete: suspend () -> Unit
-  //   ) {
-  //   }
-  //
-  //   override suspend fun restoreViewStateOnInvalidWebViewHistory() {}
-  //
-  //   override suspend fun openZimFileWithArguments(
-  //     zimFileUri: String,
-  //     pageUrl: String,
-  //     searchItemTitle: String
-  //   ) {
+  //   coVerify(exactly = 0) {
+  //     viewModel.openZimFileWithArguments(any(), any(), any())
   //   }
   // }
+
+  // @Test
+  // fun `OpenBookmarks opens bookmark screen and clears activity intent`() = runTest {
+  //   every {
+  //     readerIntentManager.consumePendingAction()
+  //   } returns PendingIntentParser.ReaderIntentAction.OpenBookmarks
+  //
+  //   readerIntentManagerFlow.emit(Unit)
+  //
+  //   advanceUntilIdle()
+  //   Assertions.assertTrue(viewModel.openBookmarkScreenCalled)
+  //
+  //   viewModel.effects.test {
+  //     Assertions.assertEquals(ReaderEffect.ClearActivityIntentAction, awaitItem())
+  //   }
+  // }
+  //
+  // @Test
+  // fun `OpenSearch opens search and clears intent`() = runTest {
+  //   viewModel = spyk(viewModel)
+  //   every {
+  //     readerIntentManager.consumePendingAction()
+  //   } returns PendingIntentParser.ReaderIntentAction.OpenSearch(
+  //     "kiwix",
+  //     isVoice = true,
+  //     false
+  //   )
+  //
+  //   readerIntentManagerFlow.emit(Unit)
+  //
+  //   advanceUntilIdle()
+  //
+  //   verify {
+  //     viewModel.openSearch(
+  //       "kiwix",
+  //       isVoice = true,
+  //       isOpenedFromTabView = false
+  //     )
+  //   }
+  // }
+  //
+  // @Test
+  // fun `OpenZim opens zim from arguments`() = runTest {
+  //   viewModel = spyk(viewModel)
+  //   every {
+  //     readerIntentManager.consumePendingAction()
+  //   } returns PendingIntentParser.ReaderIntentAction.OpenZim(
+  //     "uri",
+  //     "page"
+  //   )
+  //
+  //   readerIntentManagerFlow.emit(Unit)
+  //
+  //   advanceUntilIdle()
+  //
+  //   coVerify {
+  //     viewModel.openZimFileWithArguments(
+  //       "uri",
+  //       "page",
+  //       ""
+  //     )
+  //   }
+  // }
+}
+
+/**
+ * Test implementation of CoreReaderViewModel for testing purposes.
+ * Provides default implementations for abstract methods.
+ */
+private class TestCoreReaderViewModel(
+  context: Application,
+  kiwixDataStore: KiwixDataStore,
+  externalLinkOpener: ExternalLinkOpener,
+  unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler,
+  readerWebViewManager: ReaderWebViewManager,
+  zimReaderContainer: ZimReaderContainer,
+  zimFileManager: ZimFileManager,
+  kiwixPermissionChecker: KiwixPermissionChecker,
+  repositoryActions: MainRepositoryActions,
+  bookmarkManager: BookmarkManager,
+  readerHistoryManager: ReaderHistoryManager,
+  readerSessionManager: ReaderSessionManager,
+  readerIntentManager: ReaderIntentManager,
+  pendingSearchItemManager: PendingSearchItemManager,
+  readerArticleManager: ReaderArticleManager,
+  readAloudManager: ReadAloudManager,
+  donationDialogHandler: DonationDialogHandler,
+  findInPageManager: FindInPageManager,
+  mainDispatcher: MainCoroutineDispatcher
+) : CoreReaderViewModel(
+    context,
+    kiwixDataStore,
+    externalLinkOpener,
+    unsupportedMimeTypeHandler,
+    readerWebViewManager,
+    zimReaderContainer,
+    zimFileManager,
+    kiwixPermissionChecker,
+    repositoryActions,
+    bookmarkManager,
+    readerHistoryManager,
+    readerSessionManager,
+    readerIntentManager,
+    pendingSearchItemManager,
+    readerArticleManager,
+    readAloudManager,
+    donationDialogHandler,
+    findInPageManager,
+    mainDispatcher
+  ) {
+  override fun openSearch(
+    searchString: String,
+    isOpenedFromTabView: Boolean,
+    isVoice: Boolean
+  ) {
+  }
+
+  override fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
+  }
+
+  override fun shouldShowSpellCheckedSuggestions(): Boolean = false
+
+  override fun isBrandedApp(): Boolean = false
+
+  override fun openBookmarkScreen() {
+  }
+
+  override suspend fun restoreViewStateOnValidWebViewHistory(
+    webViewHistoryItemList: List<WebViewHistoryItem>,
+    currentTab: Int,
+    currentZimFile: String?,
+    restoreOrigin: RestoreOrigin,
+    onComplete: suspend () -> Unit
+  ) {
+  }
+
+  override suspend fun restoreViewStateOnInvalidWebViewHistory() {
+  }
+
+  override suspend fun openZimFileWithArguments(
+    zimFileUri: String,
+    pageUrl: String,
+    searchItemTitle: String
+  ) {
+  }
 }
