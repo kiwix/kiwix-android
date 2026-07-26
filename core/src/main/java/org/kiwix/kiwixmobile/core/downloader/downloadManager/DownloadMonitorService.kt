@@ -305,7 +305,14 @@ class DownloadMonitorService : Service() {
     NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       .setContentTitle(kiwixDataStore.appName.first())
       .setContentText(getString(string.download_notification_channel_description))
-      .setSmallIcon(R.mipmap.ic_launcher)
+      // Match the per-download notification icon so the status bar shows
+      // a single, consistent download glyph while a download is running.
+      // Previously this used R.mipmap.ic_launcher (a colorful adaptive
+      // icon), which clashed with the monochrome stat_sys_download icon
+      // set by FetchDownloadNotificationManager on per-item notifications
+      // and made the status-bar icon flicker between the two as the
+      // notifications refreshed (issue #5000).
+      .setSmallIcon(android.R.drawable.stat_sys_download)
       .setWhen(System.currentTimeMillis())
       .build()
 
