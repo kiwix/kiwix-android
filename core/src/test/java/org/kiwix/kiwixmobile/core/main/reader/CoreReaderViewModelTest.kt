@@ -432,6 +432,37 @@ internal class CoreReaderViewModelTest {
           }
         }
     }
+
+    @Test
+    fun readAloudManagerSetsUpTTS() = runTest {
+      viewModel.initialize(coreMainActivity, alertDialogShower)
+
+      verify { readAloudManager.setUpTTS() }
+    }
+
+    @Test
+    fun donationDialogHandlerSetsUpDonation() = runTest {
+      viewModel.initialize(coreMainActivity, alertDialogShower)
+
+      verify { donationDialogHandler.setDonationDialogCallBack(any()) }
+    }
+
+    @Test
+    fun initialize_createsAndSetsReaderMenuState() = runTest {
+      viewModel.initialize(coreMainActivity, alertDialogShower)
+
+      assertThat(viewModel.readerMenuState).isNotNull
+    }
+
+    @Test
+    fun initialize_initializesExternalLinkOpenerAndUnsupportedMimeTypeHandler() = runTest {
+      every { externalLinkOpener.initialize(any(), any()) } just Runs
+      every { unsupportedMimeTypeHandler.initialize(any(), any()) } just Runs
+      viewModel.initialize(coreMainActivity, alertDialogShower)
+
+      verify { externalLinkOpener.initialize(coreMainActivity, alertDialogShower) }
+      verify { unsupportedMimeTypeHandler.initialize(coreMainActivity, alertDialogShower) }
+    }
   }
 
   @Nested
