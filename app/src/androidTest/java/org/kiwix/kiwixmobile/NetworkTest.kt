@@ -48,11 +48,13 @@ import java.util.concurrent.TimeUnit.SECONDS
 /**
  * Created by mhutti1 on 14/04/17.
  */
+import nl.adaptivity.xmlutil.serialization.XML
+
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class NetworkTest {
-  @Rule
   @JvmField
+  @Rule
   val retryRule = RetryRule()
 
   private lateinit var mockWebServer: MockWebServer
@@ -69,6 +71,11 @@ class NetworkTest {
         .callTimeout(TEST_TIMEOUT, SECONDS)
         .addNetworkInterceptor(HttpLoggingInterceptor().apply { level = BASIC })
         .build(),
+      XML {
+        defaultPolicy {
+          ignoreUnknownChildren()
+        }
+      },
       mockWebServer.url("/").toString()
     )
     Log.d(TAG, "MockWebServer started on port $TEST_PORT")

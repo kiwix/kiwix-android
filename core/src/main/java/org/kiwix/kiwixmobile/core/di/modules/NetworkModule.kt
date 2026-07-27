@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
+import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
@@ -61,7 +62,17 @@ class NetworkModule {
 
   @Provides
   @Singleton
+  fun provideXML(): XML {
+    return XML {
+      defaultPolicy {
+        ignoreUnknownChildren()
+      }
+    }
+  }
+
+  @Provides
+  @Singleton
   @OPDSKiwixService
-  fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    ServiceCreator.newHackListService(okHttpClient, KIWIX_OPDS_LIBRARY_URL)
+  fun provideKiwixService(okHttpClient: OkHttpClient, xml: XML): KiwixService =
+    ServiceCreator.newHackListService(okHttpClient, xml, KIWIX_OPDS_LIBRARY_URL)
 }

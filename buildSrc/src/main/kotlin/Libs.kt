@@ -63,17 +63,11 @@ object Libs {
   const val converter_scalars: String = "com.squareup.retrofit2:converter-scalars:" +
     Versions.com_squareup_retrofit2
 
-  /**
-   * https://github.com/square/retrofit
-   */
-  const val converter_simplexml: String = "com.squareup.retrofit2:converter-simplexml:" +
-    Versions.com_squareup_retrofit2
+  const val CONVERTER_KOTLINX_SERIALIZATION: String =
+    "com.squareup.retrofit2:converter-kotlinx-serialization:" + Versions.com_squareup_retrofit2
 
-  const val converter_kotlinx_serialization: String = "com.squareup.retrofit2:converter-kotlinx-serialization:" +
-    Versions.com_squareup_retrofit2
-
-  const val xmlutil_serialization: String = "io.github.pdvrieze.xmlutil:serialization:" +
-    Versions.xmlutil_serialization
+  const val XMLUTIL_SERIALIZATION: String = "io.github.pdvrieze.xmlutil:serialization:" +
+    Versions.XMLUTIL_SERIALIZATION
 
   /**
    * https://github.com/square/retrofit

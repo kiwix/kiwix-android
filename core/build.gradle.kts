@@ -47,8 +47,8 @@ dependencies {
     exclude(group = "stax", module = "stax-api")
     exclude(group = "stax", module = "stax")
   }
-  implementation(Libs.xmlutil_serialization)
-  implementation(Libs.converter_kotlinx_serialization)
+  implementation(Libs.XMLUTIL_SERIALIZATION)
+  implementation(Libs.CONVERTER_KOTLINX_SERIALIZATION)
 
   // Leak canary
   debugImplementation(Libs.leakcanary_android)

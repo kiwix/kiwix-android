@@ -47,13 +47,7 @@ interface KiwixService {
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
-    private val xml = XML {
-      defaultPolicy {
-        ignoreUnknownChildren()
-      }
-    }
-
-    fun newHackListService(okHttpClient: OkHttpClient, baseUrl: String): KiwixService {
+    fun newHackListService(okHttpClient: OkHttpClient, xml: XML, baseUrl: String): KiwixService {
       val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)

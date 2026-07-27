@@ -33,18 +33,6 @@
 #keep everything in libzim
 -keep class org.kiwix.libzim.** { *; }
 
-## SimpleXml
-
--keep public class org.simpleframework.** { *; }
--keep class org.simpleframework.xml.** { *; }
--keep class org.simpleframework.xml.core.** { *; }
--keep class org.simpleframework.xml.util.** { *; }
-
--keepattributes ElementList, Root
--keep @org.simpleframework.xml.Root class * { *; }
--keepclassmembers class * {
-    @org.simpleframework.xml.* *;
-}
 
 ## keep everything in MetaLinkNetworkEntity.kt
 
