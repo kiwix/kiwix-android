@@ -66,7 +66,6 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixShowCaseView
 import org.kiwix.kiwixmobile.core.ui.components.ShowcaseProperty
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_TEXT_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_SHOW_CASE_VIEW_SIZE
@@ -105,57 +104,55 @@ fun LocalFileTransferScreen(
 ) {
   val targets = remember { mutableStateMapOf<String, ShowcaseProperty>() }
   val context = LocalContext.current
-  KiwixTheme {
-    Scaffold(
-      topBar = {
-        KiwixAppBar(
-          title = stringResource(getAppBarTitle(state.isReceiver)),
-          actionMenuItems = actionMenuItems.map {
-            it.copy(
-              modifier =
-                Modifier.onGloballyPositioned { coordinates ->
-                  targets[SEARCH_ICON_TESTING_TAG] = ShowcaseProperty(
-                    index = ZERO,
-                    coordinates = coordinates,
-                    showCaseMessage = context.getString(string.click_nearby_devices_message)
-                  )
-                }
-            )
-          },
-          navigationIcon = navigationIcon
-        )
-      }
-    ) { padding ->
-      Column(
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(padding)
-          .background(Color.Transparent)
-      ) {
-        YourDeviceHeader(state.deviceName, context, targets)
-        HorizontalDivider(
-          color = DodgerBlue,
-          thickness = ONE_DP,
-          modifier = Modifier.padding(horizontal = FIVE_DP)
-        )
-        NearbyDevicesSection(
-          state.peers,
-          state.isPeerSearching,
-          onDeviceItemClick,
-          context,
-          targets
-        )
-        HorizontalDivider(
-          color = DodgerBlue,
-          thickness = ONE_DP,
-          modifier = Modifier
-            .padding(horizontal = FIVE_DP)
-        )
-        TransferFilesSection(state.transferFiles, context, targets)
-      }
+  Scaffold(
+    topBar = {
+      KiwixAppBar(
+        title = stringResource(getAppBarTitle(state.isReceiver)),
+        actionMenuItems = actionMenuItems.map {
+          it.copy(
+            modifier =
+              Modifier.onGloballyPositioned { coordinates ->
+                targets[SEARCH_ICON_TESTING_TAG] = ShowcaseProperty(
+                  index = ZERO,
+                  coordinates = coordinates,
+                  showCaseMessage = context.getString(string.click_nearby_devices_message)
+                )
+              }
+          )
+        },
+        navigationIcon = navigationIcon
+      )
     }
-    ShowShowCaseToUserIfNotShown(targets, state.shouldShowShowCase, onShowCaseDisplayed)
+  ) { padding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(padding)
+        .background(Color.Transparent)
+    ) {
+      YourDeviceHeader(state.deviceName, context, targets)
+      HorizontalDivider(
+        color = DodgerBlue,
+        thickness = ONE_DP,
+        modifier = Modifier.padding(horizontal = FIVE_DP)
+      )
+      NearbyDevicesSection(
+        state.peers,
+        state.isPeerSearching,
+        onDeviceItemClick,
+        context,
+        targets
+      )
+      HorizontalDivider(
+        color = DodgerBlue,
+        thickness = ONE_DP,
+        modifier = Modifier
+          .padding(horizontal = FIVE_DP)
+      )
+      TransferFilesSection(state.transferFiles, context, targets)
+    }
   }
+  ShowShowCaseToUserIfNotShown(targets, state.shouldShowShowCase, onShowCaseDisplayed)
 }
 
 private fun getAppBarTitle(isReceiver: Boolean) =

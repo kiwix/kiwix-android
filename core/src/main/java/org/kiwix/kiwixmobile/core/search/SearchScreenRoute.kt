@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,18 +35,19 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
 
 @Composable
 fun SearchScreenRoute(
   viewModelFactory: ViewModelProvider.Factory,
-  dialogShower: DialogShower,
   arguments: Bundle?,
   coreMainActivity: CoreMainActivity
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
   val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -73,25 +75,28 @@ fun SearchScreenRoute(
 
   // Search Results
   LaunchedEffect(Unit) {
-    viewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
+    viewModel.setAlertDialogShower(alertDialogShower)
     viewModel.actions.tryEmit(
       Action.CreatedWithArguments(Bundle(arguments))
     )
   }
 
-  SearchScreen(
-    uiState,
-    viewModel,
-    buildActionMenuItems(viewModel),
-    {
-      NavigationIcon(
-        onClick = {
-          viewModel.closeKeyboard()
-          coreMainActivity.onBackPressedDispatcher.onBackPressed()
-        }
-      )
-    }
-  )
+  KiwixTheme {
+    SearchScreen(
+      uiState,
+      viewModel,
+      buildActionMenuItems(viewModel),
+      {
+        NavigationIcon(
+          onClick = {
+            viewModel.closeKeyboard()
+            coreMainActivity.onBackPressedDispatcher.onBackPressed()
+          }
+        )
+      }
+    )
+    DialogHost(alertDialogShower)
+  }
 }
 
 private fun buildActionMenuItems(viewModel: SearchViewModel): List<ActionMenuItem> {

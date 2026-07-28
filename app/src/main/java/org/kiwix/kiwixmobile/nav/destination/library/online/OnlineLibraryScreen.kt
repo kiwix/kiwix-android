@@ -83,7 +83,6 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_MESSAGE_TEXT_SIZE
@@ -127,42 +126,40 @@ fun OnlineLibraryScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-  KiwixTheme {
-    Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
-      topBar = {
-        KiwixAppBar(
-          title = stringResource(string.download),
-          navigationIcon = navigationIcon,
-          actionMenuItems = actionMenuItems,
-          topAppBarScrollBehavior = scrollBehavior,
-          searchBar = searchBarIfActive(uiState, onlineLibraryViewModel)
-        )
-      },
-      floatingActionButton = {
-        OnlineLibraryBackToTopButton(
-          listState = listState,
-          scrollBehavior = scrollBehavior,
-          bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
-        )
-      },
-      modifier = Modifier
-        .nestedScroll(scrollBehavior.nestedScrollConnection)
-        .let { baseModifier ->
-          bottomAppBarScrollBehaviour?.let {
-            baseModifier.nestedScroll(it.nestedScrollConnection)
-          } ?: baseModifier
-        }
-    ) { paddingValues ->
-      OnlineLibraryMainContent(
-        uiState,
-        onlineLibraryViewModel,
-        paddingValues,
-        onUserBackPressed,
-        navHostController,
-        listState
+  Scaffold(
+    snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
+    topBar = {
+      KiwixAppBar(
+        title = stringResource(string.download),
+        navigationIcon = navigationIcon,
+        actionMenuItems = actionMenuItems,
+        topAppBarScrollBehavior = scrollBehavior,
+        searchBar = searchBarIfActive(uiState, onlineLibraryViewModel)
       )
-    }
+    },
+    floatingActionButton = {
+      OnlineLibraryBackToTopButton(
+        listState = listState,
+        scrollBehavior = scrollBehavior,
+        bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
+      )
+    },
+    modifier = Modifier
+      .nestedScroll(scrollBehavior.nestedScrollConnection)
+      .let { baseModifier ->
+        bottomAppBarScrollBehaviour?.let {
+          baseModifier.nestedScroll(it.nestedScrollConnection)
+        } ?: baseModifier
+      }
+  ) { paddingValues ->
+    OnlineLibraryMainContent(
+      uiState,
+      onlineLibraryViewModel,
+      paddingValues,
+      onUserBackPressed,
+      navHostController,
+      listState
+    )
   }
 }
 

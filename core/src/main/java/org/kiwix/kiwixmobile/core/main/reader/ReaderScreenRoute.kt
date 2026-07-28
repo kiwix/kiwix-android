@@ -69,10 +69,12 @@ import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import java.io.File
 import java.io.IOException
@@ -84,9 +86,9 @@ fun ReaderScreenRoute(
   viewModel: CoreReaderViewModel,
   addNoteViewModel: AddNoteViewModel,
   activity: CoreMainActivity,
-  alertDialogShower: AlertDialogShower,
   navHostController: NavHostController
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
   val uiState by viewModel.uiState.collectAsState()
   val lifeCycleScope = rememberCoroutineScope()
   val snackBarHostState = remember { SnackbarHostState() }
@@ -133,16 +135,19 @@ fun ReaderScreenRoute(
     readPermissionState,
     notificationPermission
   )
-  ReaderScreen(
-    state = uiState,
-    snackBarHost = snackBarHostState,
-    actionMenuItems = viewModel.readerMenuState?.menuItems.orEmpty(),
-    onReaderAction = viewModel::onAction,
-    onUserBackPressed = { viewModel.onUserBackPressed(activity) },
-    navHostController = navHostController,
-    mainActivityBottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
-    navigationIcon = { NavigationItem(viewModel, activity) }
-  )
+  KiwixTheme {
+    ReaderScreen(
+      state = uiState,
+      snackBarHost = snackBarHostState,
+      actionMenuItems = viewModel.readerMenuState?.menuItems.orEmpty(),
+      onReaderAction = viewModel::onAction,
+      onUserBackPressed = { viewModel.onUserBackPressed(activity) },
+      navHostController = navHostController,
+      mainActivityBottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
+      navigationIcon = { NavigationItem(viewModel, activity) }
+    )
+    DialogHost(alertDialogShower)
+  }
 }
 
 @Composable

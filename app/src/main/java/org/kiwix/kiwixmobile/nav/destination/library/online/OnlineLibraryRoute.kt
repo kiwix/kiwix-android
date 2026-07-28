@@ -56,9 +56,11 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
@@ -76,10 +78,10 @@ const val CATEGORY_MENU_ICON_TESTING_TAG = "categoryMenuIconTestingTag"
 fun OnlineLibraryRoute(
   onlineLibraryViewModel: OnlineLibraryViewModel,
   categoryViewModel: CategoryViewModel,
-  alertDialogShower: AlertDialogShower,
   navController: NavHostController,
   activity: KiwixMainActivity
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
   val uiState by onlineLibraryViewModel.uiState.collectAsState()
   val notificationPermission = if (onlineLibraryViewModel.isAndroid13OrAbove) {
     rememberPermissionState(POST_NOTIFICATIONS) {
@@ -118,42 +120,44 @@ fun OnlineLibraryRoute(
   LaunchedEffect(Unit) {
     onlineLibraryViewModel.loadInitialLibrary()
   }
-
-  OnlineLibraryScreen(
-    uiState = uiState,
-    onlineLibraryViewModel = onlineLibraryViewModel,
-    actionMenuItems = actionMenuItems,
-    listState = lazyListState,
-    snackBarHostState = snackbarHostState,
-    bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
-    onUserBackPressed = {
-      handleBackPress(activity, uiState.isSearchActive) {
-        onlineLibraryViewModel.closeSearchView()
-      }
-    },
-    navHostController = navController,
-    navigationIcon = {
-      NavigationIcon(
-        iconItem = if (uiState.isSearchActive) {
-          IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
-        } else {
-          IconItem.Vector(Icons.Filled.Menu)
-        },
-        contentDescription = string.open_drawer,
-        onClick = {
-          if (uiState.isSearchActive) {
-            onlineLibraryViewModel.closeSearchView()
+  KiwixTheme {
+    OnlineLibraryScreen(
+      uiState = uiState,
+      onlineLibraryViewModel = onlineLibraryViewModel,
+      actionMenuItems = actionMenuItems,
+      listState = lazyListState,
+      snackBarHostState = snackbarHostState,
+      bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
+      onUserBackPressed = {
+        handleBackPress(activity, uiState.isSearchActive) {
+          onlineLibraryViewModel.closeSearchView()
+        }
+      },
+      navHostController = navController,
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = if (uiState.isSearchActive) {
+            IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
           } else {
-            if (activity.navigationDrawerIsOpen()) {
-              activity.closeNavigationDrawer()
+            IconItem.Vector(Icons.Filled.Menu)
+          },
+          contentDescription = string.open_drawer,
+          onClick = {
+            if (uiState.isSearchActive) {
+              onlineLibraryViewModel.closeSearchView()
             } else {
-              activity.openNavigationDrawer()
+              if (activity.navigationDrawerIsOpen()) {
+                activity.closeNavigationDrawer()
+              } else {
+                activity.openNavigationDrawer()
+              }
             }
           }
-        }
-      )
-    }
-  )
+        )
+      }
+    )
+    DialogHost(alertDialogShower)
+  }
 
   ShowCategoryDialog(categoryViewModel, uiState.showCategoryDialog) {
     onlineLibraryViewModel.setShowCategoryDialog(false)

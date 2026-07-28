@@ -22,7 +22,6 @@ import android.net.Uri
 import androidx.activity.compose.LocalActivity
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -66,7 +65,6 @@ import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
 import org.kiwix.kiwixmobile.intro.IntroScreenRoute
 import org.kiwix.kiwixmobile.language.LanguageScreenRoute
@@ -91,7 +89,6 @@ fun KiwixNavGraph(
   startDestination: String,
   modifier: Modifier = Modifier,
   viewModelFactory: ViewModelProvider.Factory,
-  alertDialogShower: AlertDialogShower,
   snackBarHostState: SnackbarHostState
 ) {
   NavHost(
@@ -107,7 +104,6 @@ fun KiwixNavGraph(
         viewModel = kiwixReaderViewModel,
         addNoteViewModel = addNoteViewModel,
         navHostController = navController,
-        alertDialogShower = alertDialogShower,
         activity = activity,
       )
     }
@@ -122,18 +118,10 @@ fun KiwixNavGraph(
     ) { backStackEntry ->
       val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
       val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
-      LaunchedEffect(Unit) {
-        localLibraryViewModel.apply {
-          initialize(
-            validateZimViewModel,
-            alertDialogShower,
-            snackBarHostState
-          )
-        }
-      }
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
       LocalLibraryRoute(
         localLibraryViewModel = localLibraryViewModel,
+        validateZimViewModel = validateZimViewModel,
         navController = navController,
         zimFileUriArg = zimFileUri,
         snackBarHostState = snackBarHostState
@@ -149,7 +137,6 @@ fun KiwixNavGraph(
       OnlineLibraryRoute(
         onlineLibraryViewModel = onlineLibraryViewModel,
         categoryViewModel = categoryViewModel,
-        alertDialogShower = alertDialogShower,
         navController = navController,
         activity = activity
       )
@@ -158,16 +145,14 @@ fun KiwixNavGraph(
       val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
       BookmarkScreenRoute(
         navigateBack = navController::popBackStack,
-        viewModel = bookmarkViewModel,
-        alertDialogShower = alertDialogShower
+        viewModel = bookmarkViewModel
       )
     }
     composable(KiwixDestination.Notes.route) {
       val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
       NotesScreenRoute(
         navigateBack = navController::popBackStack,
-        notesViewModel = notesViewModel,
-        alertDialogShower = alertDialogShower
+        notesViewModel = notesViewModel
       )
     }
     composable(KiwixDestination.Intro.route) {
@@ -185,8 +170,7 @@ fun KiwixNavGraph(
       val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
       HistoryScreenRoute(
         navigateBack = navController::popBackStack,
-        viewModel = historyViewModel,
-        alertDialogShower = alertDialogShower
+        viewModel = historyViewModel
       )
     }
     composable(KiwixDestination.Language.route) {
@@ -201,7 +185,7 @@ fun KiwixNavGraph(
     ) {
       val activity = LocalActivity.current as KiwixMainActivity
       val viewModel: ZimHostViewModel = viewModel(factory = viewModelFactory)
-      ZimHostRoute(viewModel, alertDialogShower, activity)
+      ZimHostRoute(viewModel, activity)
     }
     composable(KiwixDestination.Help.route) {
       val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)
@@ -212,7 +196,6 @@ fun KiwixNavGraph(
     }
     composable(KiwixDestination.Settings.route) {
       val kiwixSettingsViewModel: KiwixSettingsViewModel = viewModel(factory = viewModelFactory)
-      kiwixSettingsViewModel.setAlertDialog(alertDialogShower)
       SettingsScreenRoute(
         kiwixSettingsViewModel,
         navController::popBackStack
@@ -240,7 +223,6 @@ fun KiwixNavGraph(
 
       SearchScreenRoute(
         viewModelFactory = viewModelFactory,
-        dialogShower = alertDialogShower,
         arguments = backStackEntry.arguments,
         coreMainActivity = coreMainActivity
       )
@@ -264,12 +246,10 @@ fun KiwixNavGraph(
         .orEmpty()
 
       val viewModel: LocalFileTransferViewModel = viewModel(factory = viewModelFactory)
-      viewModel.initialize(uris, alertDialogShower)
-
       LocalFileTransferScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = viewModel,
-        alertDialogShower = alertDialogShower
+        uris = uris
       )
     }
   }

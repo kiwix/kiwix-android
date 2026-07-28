@@ -24,6 +24,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -52,6 +53,7 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.NavigateBack
 import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.RequestPermission
@@ -61,9 +63,11 @@ import org.kiwix.kiwixmobile.localFileTransfer.UiEvent.ShowDialog
 @Composable
 internal fun LocalFileTransferScreenRoute(
   viewModel: LocalFileTransferViewModel,
-  alertDialogShower: AlertDialogShower,
-  navigateBack: () -> Unit
+  navigateBack: () -> Unit,
+  uris: List<Uri>
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
+  viewModel.initialize(uris, alertDialogShower)
   val context = LocalContext.current
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
   val locationPermission = rememberPermissionState(viewModel.locationPermission)
@@ -113,6 +117,7 @@ internal fun LocalFileTransferScreenRoute(
         )
       }
     )
+    DialogHost(alertDialogShower)
   }
 }
 

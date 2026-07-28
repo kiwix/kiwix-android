@@ -76,7 +76,6 @@ import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -108,28 +107,26 @@ fun SearchScreen(
   navigationIcon: @Composable() () -> Unit
 ) {
   val lazyListState = rememberLazyListState()
-  KiwixTheme {
-    Scaffold(
-      topBar = {
-        KiwixAppBar(
-          title = stringResource(R.string.empty_string),
-          navigationIcon = navigationIcon,
-          actionMenuItems = actionMenuItemList,
-          searchBar = {
-            KiwixSearchView(
-              value = state.searchText,
-              searchViewTextFiledTestTag = SEARCH_FIELD_TESTING_TAG,
-              onValueChange = { searchViewModel.onSearchValueChanged(it) },
-              onClearClick = { searchViewModel.onSearchClear() },
-              modifier = Modifier,
-              onKeyboardSubmitButtonClick = { searchViewModel.onKeyboardSubmitButtonClick(it) }
-            )
-          }
-        )
-      }
-    ) { innerPadding ->
-      SearchScreenContent(state, searchViewModel, innerPadding, lazyListState)
+  Scaffold(
+    topBar = {
+      KiwixAppBar(
+        title = stringResource(R.string.empty_string),
+        navigationIcon = navigationIcon,
+        actionMenuItems = actionMenuItemList,
+        searchBar = {
+          KiwixSearchView(
+            value = state.searchText,
+            searchViewTextFiledTestTag = SEARCH_FIELD_TESTING_TAG,
+            onValueChange = { searchViewModel.onSearchValueChanged(it) },
+            onClearClick = { searchViewModel.onSearchClear() },
+            modifier = Modifier,
+            onKeyboardSubmitButtonClick = { searchViewModel.onKeyboardSubmitButtonClick(it) }
+          )
+        }
+      )
     }
+  ) { innerPadding ->
+    SearchScreenContent(state, searchViewModel, innerPadding, lazyListState)
   }
   InfiniteListHandler(
     listState = lazyListState,

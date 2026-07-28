@@ -21,20 +21,15 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
@@ -64,31 +59,6 @@ class LocalLibraryTest : BaseActivityTest() {
     }
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
-  }
-
-  private fun observeLocalLibraryActions() {
-    composeTestRule.runOnIdle {
-      val kiwixMainActivity = composeTestRule.activity
-      val localLibraryViewModel = ViewModelProvider(
-        kiwixMainActivity,
-        kiwixMainActivity.viewModelFactory
-      )[LocalLibraryViewModel::class.java]
-
-      val validateZimViewModel = ViewModelProvider(
-        kiwixMainActivity,
-        kiwixMainActivity.viewModelFactory
-      )[ValidateZimViewModel::class.java]
-      localLibraryViewModel.initialize(
-        validateZimViewModel = validateZimViewModel,
-        kiwixMainActivity.alertDialogShower,
-        kiwixMainActivity.snackBarHostState
-      )
-      kiwixMainActivity.lifecycleScope.launch {
-        localLibraryViewModel.sideEffects.collect { effect ->
-          effect.invokeWith(kiwixMainActivity)
-        }
-      }
-    }
   }
 
   @Test
@@ -136,7 +106,6 @@ class LocalLibraryTest : BaseActivityTest() {
       )
       clickOnReaderScreen(composeTestRule)
       clickOnLocalLibraryScreen(composeTestRule)
-      observeLocalLibraryActions()
       composeTestRule.waitUntilTimeout()
       // Assert scan dialog visible.
       assertScanFileSystemDialogDisplayed(composeTestRule)
@@ -148,7 +117,6 @@ class LocalLibraryTest : BaseActivityTest() {
       // Assert scan dialog does not show again.
       clickOnReaderScreen(composeTestRule)
       clickOnLocalLibraryScreen(composeTestRule)
-      observeLocalLibraryActions()
       assertScanDialogNotDisplayed(composeTestRule)
       // Assert When there are ZIM files in local library screen then this dialog does not display.
       // Set to not show the "All files permission" dialog.
@@ -169,7 +137,6 @@ class LocalLibraryTest : BaseActivityTest() {
         isPlayStoreBuild = false
       )
       clickOnLocalLibraryScreen(composeTestRule)
-      observeLocalLibraryActions()
       assertScanDialogNotDisplayed(composeTestRule)
     }
   }

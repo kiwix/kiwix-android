@@ -120,7 +120,9 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -142,6 +144,8 @@ fun SettingsScreenRoute(
   coreSettingsViewModel: CoreSettingsViewModel,
   navigateBack: () -> Unit
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
+  coreSettingsViewModel.setAlertDialog(alertDialogShower)
   val activity = LocalActivity.current as CoreMainActivity
   // Not placing condition here. Because viewModel already verify whether
   // we should ask this permission or not. Compose suggested to avoid using remember inside conditionals.
@@ -150,7 +154,10 @@ fun SettingsScreenRoute(
   }
   // Setup viewModel data version name, observing the click events, etc.
   SetUpViewModelAndPermissionLauncher(coreSettingsViewModel, activity, writePermissionState)
-  SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
+  KiwixTheme {
+    SettingsScreen(coreSettingsViewModel) { NavigationIcon(onClick = navigateBack) }
+    DialogHost(alertDialogShower)
+  }
   // Change font according to app language.
   ChangeFontAccordingToLanguage(activity, coreSettingsViewModel.kiwixDataStore)
 }
@@ -297,39 +304,37 @@ internal fun SettingsScreen(
   navigationIcon: @Composable() () -> Unit
 ) {
   val uiState by coreSettingsViewModel.uiState.collectAsStateWithLifecycle()
-  KiwixTheme {
-    Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.snackbarHostState) },
-      topBar = {
-        KiwixAppBar(
-          title = stringResource(R.string.menu_settings),
-          navigationIcon = navigationIcon
-        )
-      }
-    ) { innerPadding ->
-      LazyColumn(
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(innerPadding)
-          .semantics {
-            testTag = SETTINGS_LIST_TESTING_TAG
-          }
-      ) {
-        item { DisplayCategory(coreSettingsViewModel) }
-        item { ExtrasCategory(coreSettingsViewModel, uiState) }
-        storageCategory(uiState, coreSettingsViewModel)
-        item { HistoryCategory(coreSettingsViewModel) }
-        item { NotesCategory(coreSettingsViewModel) }
-        item { BookmarksCategory(coreSettingsViewModel) }
-        item { PermissionCategory(coreSettingsViewModel, uiState) }
-        if (uiState.shouldShowLanguageCategory) {
-          item { LanguageCategory(uiState, coreSettingsViewModel) }
+  Scaffold(
+    snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.snackbarHostState) },
+    topBar = {
+      KiwixAppBar(
+        title = stringResource(R.string.menu_settings),
+        navigationIcon = navigationIcon
+      )
+    }
+  ) { innerPadding ->
+    LazyColumn(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(innerPadding)
+        .semantics {
+          testTag = SETTINGS_LIST_TESTING_TAG
         }
-        if (uiState.shouldShowRatingCategory) {
-          item { RatingCategory(coreSettingsViewModel) }
-        }
-        informationCategory(coreSettingsViewModel, uiState)
+    ) {
+      item { DisplayCategory(coreSettingsViewModel) }
+      item { ExtrasCategory(coreSettingsViewModel, uiState) }
+      storageCategory(uiState, coreSettingsViewModel)
+      item { HistoryCategory(coreSettingsViewModel) }
+      item { NotesCategory(coreSettingsViewModel) }
+      item { BookmarksCategory(coreSettingsViewModel) }
+      item { PermissionCategory(coreSettingsViewModel, uiState) }
+      if (uiState.shouldShowLanguageCategory) {
+        item { LanguageCategory(uiState, coreSettingsViewModel) }
       }
+      if (uiState.shouldShowRatingCategory) {
+        item { RatingCategory(coreSettingsViewModel) }
+      }
+      informationCategory(coreSettingsViewModel, uiState)
     }
   }
 }
@@ -646,7 +651,9 @@ private fun SwitchPreference(
       Switch(
         checked = checked,
         onCheckedChange = onCheckedChange,
-        modifier = Modifier.semantics { contentDescription = title }.testTag(title)
+        modifier = Modifier
+          .semantics { contentDescription = title }
+          .testTag(title)
       )
     }
   }
