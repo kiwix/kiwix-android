@@ -16,7 +16,7 @@
   <string name="menu_settings">Nastavitve</string>
   <string name="menu_search_in_text">Poišči na strani</string>
   <string name="bookmarks">Zaznamki</string>
-  <string name="menu_random_article">Naključni članek</string>
+  <string name="menu_random_page">Naključni članek</string>
   <string name="menu_read_aloud">Beri naglas</string>
   <string name="menu_read_aloud_stop">Prenehaj z branjem naglas</string>
   <string name="menu_support_kiwix">Podprite Kiwix</string>
@@ -69,8 +69,8 @@
   <string name="zim_not_opened">Datoteke ZIM ni mogoče odpreti</string>
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM. %s</string>
   <string name="error_article_url_not_found">Napaka: Nalaganje članka (url: %1$s) ni uspelo.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Članka ni mogoče naložiti. Datoteka ZIM ni pravilno naložena.</string>
-  <string name="could_not_find_random_article">Naključnega članka ni mogoče najti. Poskusite znova pozneje.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Članka ni mogoče naložiti. Datoteka ZIM ni pravilno naložena.</string>
+  <string name="could_not_find_random_page">Naključnega članka ni mogoče najti. Poskusite znova pozneje.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Različica</string>

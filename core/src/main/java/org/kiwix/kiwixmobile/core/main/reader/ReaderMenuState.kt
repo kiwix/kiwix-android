@@ -52,7 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 
 const val READ_ALOUD_MENU_ITEM_TESTING_TAG = "readAloudMenuItemTestingTag"
 const val TAKE_NOTE_MENU_ITEM_TESTING_TAG = "takeNoteMenuItemTestingTag"
-const val RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG = "randomArticleMenuItemTestingTag"
+const val RANDOM_PAGE_MENU_ITEM_TESTING_TAG = "randomPageMenuItemTestingTag"
 const val SHARE_ARTICLE_MENU_ITEM_TESTING_TAG = "shareArticleMenuItemTestingTag"
 const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 const val TABS_SIZE_TEXT_TESTING_TAG = "tabsSizeTextTestingTag"
@@ -73,7 +73,7 @@ class ReaderMenuState(
     fun onHomeMenuClicked()
     fun onAddNoteMenuClicked()
     fun onShareMenuClicked()
-    fun onRandomArticleMenuClicked()
+    fun onRandomPageMenuClicked()
     fun onReadAloudMenuClicked()
     fun onSearchMenuClickedMenuClicked()
     fun onAddToHomeScreenMenuClicked()
@@ -87,7 +87,7 @@ class ReaderMenuState(
     put(MenuItemType.TabSwitcher, true)
     put(MenuItemType.Share, true)
     put(MenuItemType.AddNote, true)
-    put(MenuItemType.RandomArticle, true)
+    put(MenuItemType.RandomPage, true)
     put(MenuItemType.ReadAloud, true)
     put(MenuItemType.AddToHomeScreen, true)
     put(MenuItemType.FindInPage, true)
@@ -111,7 +111,7 @@ class ReaderMenuState(
     urlIsValid = valid
     setVisibility(
       urlIsValid,
-      MenuItemType.RandomArticle,
+      MenuItemType.RandomPage,
       MenuItemType.Search,
       MenuItemType.ReadAloud,
       MenuItemType.Share,
@@ -142,7 +142,7 @@ class ReaderMenuState(
       MenuItemType.Search,
       MenuItemType.TabSwitcher,
       MenuItemType.Share,
-      MenuItemType.RandomArticle,
+      MenuItemType.RandomPage,
       MenuItemType.AddNote,
       MenuItemType.ReadAloud,
       MenuItemType.AddToHomeScreen,
@@ -156,7 +156,7 @@ class ReaderMenuState(
       MenuItemType.Search,
       MenuItemType.TabSwitcher,
       MenuItemType.Share,
-      MenuItemType.RandomArticle,
+      MenuItemType.RandomPage,
       MenuItemType.AddNote,
       MenuItemType.ReadAloud,
       MenuItemType.AddToHomeScreen,
@@ -167,7 +167,7 @@ class ReaderMenuState(
   fun showTabSwitcherOptions() {
     setVisibility(
       false,
-      MenuItemType.RandomArticle,
+      MenuItemType.RandomPage,
       MenuItemType.ReadAloud,
       MenuItemType.Share,
       MenuItemType.AddNote,
@@ -290,11 +290,11 @@ class ReaderMenuState(
       )
     }
 
-    if (menuItemVisibility[MenuItemType.RandomArticle] == true) {
+    if (menuItemVisibility[MenuItemType.RandomPage] == true) {
       menuItems += ActionMenuItem(
-        contentDescription = R.string.menu_random_article,
-        onClick = { menuClickListener.onRandomArticleMenuClicked() },
-        testingTag = RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG,
+        contentDescription = R.string.menu_random_page,
+        onClick = { menuClickListener.onRandomPageMenuClicked() },
+        testingTag = RANDOM_PAGE_MENU_ITEM_TESTING_TAG,
         isInOverflow = true
       )
     }
@@ -329,7 +329,7 @@ enum class MenuItemType {
   TabSwitcher,
   Share,
   AddNote,
-  RandomArticle,
+  RandomPage,
   ReadAloud,
   AddToHomeScreen,
   FindInPage

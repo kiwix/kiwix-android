@@ -136,7 +136,7 @@ internal class CoreReaderViewModelTest {
     // Mock zimReaderContainer - set zimFileReader to null to skip onAddToHomeScreenMenuClicked logic
     every { zimReaderContainer.zimFileReader } returns null
 
-    coEvery { readerArticleManager.getRandomArticle() } returns ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded
+    coEvery { readerArticleManager.getRandomPage() } returns ReaderArticleManager.GetRandomPageResult.NoZimFileLoaded
 
     viewModel = TestCoreReaderViewModel(
       context = context,
@@ -408,8 +408,8 @@ internal class CoreReaderViewModelTest {
     }
 
     @Test
-    fun `onRandomArticleMenuClicked should handle random article request`() {
-      viewModel.onRandomArticleMenuClicked()
+    fun `onRandomPageMenuClicked should handle random page request`() {
+      viewModel.onRandomPageMenuClicked()
       assertThat(true).isTrue()
     }
 

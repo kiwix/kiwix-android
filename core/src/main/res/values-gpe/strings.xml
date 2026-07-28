@@ -10,7 +10,7 @@
   <string name="menu_settings">Settings</string>
   <string name="menu_search_in_text">Find insyd page</string>
   <string name="bookmarks">Bookmarks</string>
-  <string name="menu_random_article">Random article</string>
+  <string name="menu_random_page">Random page</string>
   <string name="menu_read_aloud">Make you read aloud</string>
   <string name="menu_read_aloud_stop">Make you stop dey read aloud</string>
   <string name="menu_support_kiwix">Make you Support Kiwix</string>

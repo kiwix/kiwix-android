@@ -10,7 +10,7 @@
   <string name="menu_settings">Préferénsi</string>
   <string name="menu_search_in_text">Téangan dina téks</string>
   <string name="bookmarks">Tatanda buku</string>
-  <string name="menu_random_article">Artikel acak</string>
+  <string name="menu_random_page">Artikel acak</string>
   <string name="search_label">Paluruh</string>
   <string name="choose_file">Pilih Berkas Kontén (*.zim)</string>
   <string name="error_file_invalid">Kasalahan: Berkas nu dipilih lain berkas ZIM nu sah. %s</string>

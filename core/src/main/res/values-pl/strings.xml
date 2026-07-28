@@ -23,7 +23,7 @@
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_search_in_text">Znajdź na stronie</string>
   <string name="bookmarks">Zakładki</string>
-  <string name="menu_random_article">Losowy artykuł</string>
+  <string name="menu_random_page">Losowy artykuł</string>
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
   <string name="menu_support_kiwix">Wspieraj Kiwix</string>
@@ -70,8 +70,8 @@
   <string name="zim_not_opened">Nie można otworzyć pliku ZIM</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM. %s</string>
   <string name="error_article_url_not_found">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Nie można załadować artykułu. Plik ZIM nie został poprawnie załadowany.</string>
-  <string name="could_not_find_random_article">Nie można znaleźć losowego artykułu. Spróbuj ponownie później.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Nie można załadować artykułu. Plik ZIM nie został poprawnie załadowany.</string>
+  <string name="could_not_find_random_page">Nie można znaleźć losowego artykułu. Spróbuj ponownie później.</string>
   <string name="pref_display_title">Wyświetlanie</string>
   <string name="pref_info_title">Informacje</string>
   <string name="pref_info_version">Wersja</string>

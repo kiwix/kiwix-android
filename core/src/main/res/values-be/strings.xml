@@ -15,7 +15,7 @@
   <string name="menu_settings">Налады</string>
   <string name="menu_search_in_text">Знайсці ў тэксце</string>
   <string name="bookmarks">Закладкі</string>
-  <string name="menu_random_article">Выпадковы артыкул</string>
+  <string name="menu_random_page">Выпадковы артыкул</string>
   <string name="menu_read_aloud">Чытаць уголас</string>
   <string name="menu_read_aloud_stop">Спыніць чытанне ўголас</string>
   <string name="save_media">Захаваць медыя як…</string>

@@ -17,7 +17,7 @@
   <string name="menu_settings">הגדרות</string>
   <string name="menu_search_in_text">למצוא בדף</string>
   <string name="bookmarks">סימניות</string>
-  <string name="menu_random_article">ערך אקראי</string>
+  <string name="menu_random_page">ערך אקראי</string>
   <string name="menu_read_aloud">הקראה בקול</string>
   <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
   <string name="menu_support_kiwix">לתמוך בקיוויקס</string>
@@ -66,8 +66,8 @@
   <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־ZIM</string>
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין. %s</string>
   <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
-  <string name="error_loading_random_article_zim_not_loaded">לא ניתן לטעון ערך. קובץ ה־ZIM לא נטען כהלכה.</string>
-  <string name="could_not_find_random_article">לא ניתן למצוא ערך אקראי. נא לנסות שוב מאוחר יותר.</string>
+  <string name="error_loading_random_page_zim_not_loaded">לא ניתן לטעון ערך. קובץ ה־ZIM לא נטען כהלכה.</string>
+  <string name="could_not_find_random_page">לא ניתן למצוא ערך אקראי. נא לנסות שוב מאוחר יותר.</string>
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>

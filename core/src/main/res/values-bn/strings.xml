@@ -21,7 +21,7 @@
   <string name="menu_settings">সেটিংস</string>
   <string name="menu_search_in_text">পাতায় খুঁজুন</string>
   <string name="bookmarks">বুকমার্ক</string>
-  <string name="menu_random_article">অজানা নিবন্ধ</string>
+  <string name="menu_random_page">অজানা নিবন্ধ</string>
   <string name="menu_read_aloud">জোরে পড়ুন</string>
   <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
   <string name="menu_support_kiwix">কিউইক্সকে সমর্থন করুন</string>

@@ -19,7 +19,7 @@
   <string name="menu_settings">Agordoj</string>
   <string name="menu_search_in_text">Trovi en paĝo</string>
   <string name="bookmarks">Legosignoj</string>
-  <string name="menu_random_article">Hazarda artikolo</string>
+  <string name="menu_random_page">Hazarda artikolo</string>
   <string name="menu_read_aloud">Laŭtlegi</string>
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
   <string name="menu_support_kiwix">Subteni Kiwix</string>

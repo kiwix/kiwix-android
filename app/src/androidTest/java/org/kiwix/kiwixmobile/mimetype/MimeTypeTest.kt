@@ -51,16 +51,16 @@ class MimeTypeTest : BaseActivityTest() {
           SuggestionSearcher(archive),
           Dispatchers.IO
         )
-      zimFileReader.getRandomArticleUrl()?.let { randomArticle ->
-        val mimeType = zimFileReader.getMimeTypeFromUrl(randomArticle)
+      zimFileReader.getRandomPageUrl()?.let { randomPage ->
+        val mimeType = zimFileReader.getMimeTypeFromUrl(randomPage)
         if (mimeType?.contains("^([^ ]+).*$") == true || mimeType?.contains(";") == true) {
           Assert.fail(
             "Unable to get mime type from zim file. File = " +
-              " $zimFile and url of article = $randomArticle"
+              " $zimFile and url of page = $randomPage"
           )
         }
       } ?: kotlin.run {
-        Assert.fail("Unable to get article from zim file $zimFile")
+        Assert.fail("Unable to get page from zim file $zimFile")
       }
       // test mimetypes for some actual url
       Assert.assertEquals(

@@ -14,7 +14,7 @@
   <string name="menu_settings">Configuració</string>
   <string name="menu_search_in_text">Cercar a la pàgina</string>
   <string name="bookmarks">Marcadors</string>
-  <string name="menu_random_article">Article aleatori</string>
+  <string name="menu_random_page">Article aleatori</string>
   <string name="menu_read_aloud">Llegir en veu alta</string>
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>

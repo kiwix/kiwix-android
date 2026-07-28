@@ -12,7 +12,7 @@
   <string name="menu_settings">Voorkeure</string>
   <string name="menu_search_in_text">Soek in teks</string>
   <string name="bookmarks">Boekmerke</string>
-  <string name="menu_random_article">Lukrake artikel</string>
+  <string name="menu_random_page">Lukrake artikel</string>
   <string name="menu_read_aloud">Lees hardop</string>
   <string name="menu_read_aloud_stop">Hou op om hardop te lees</string>
   <string name="menu_support_kiwix">Ondersteun Kiwix</string>

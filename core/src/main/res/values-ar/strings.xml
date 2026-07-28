@@ -28,7 +28,7 @@
   <string name="menu_settings">الإعدادات</string>
   <string name="menu_search_in_text">البحث في الصفحة</string>
   <string name="bookmarks">العلامات المرجعية</string>
-  <string name="menu_random_article">مقالة عشوائية</string>
+  <string name="menu_random_page">مقالة عشوائية</string>
   <string name="menu_read_aloud">اقرأ بصوت عالٍ</string>
   <string name="menu_read_aloud_stop">توقف عن القراءة بصوت عالٍ</string>
   <string name="menu_support_kiwix">دعم كيويكس</string>
@@ -81,8 +81,8 @@
   <string name="zim_not_opened">غير قادر على فتح ملف ZIM</string>
   <string name="error_file_invalid">خطأ: الملف المحدد ليس ملف ZIM صالحاً. %s</string>
   <string name="error_article_url_not_found">خطأ: لم ينجح تحميل المقالة (Url: %1$s).</string>
-  <string name="error_loading_random_article_zim_not_loaded">لم يتمكن من تحميل المقال. ملف ZIM لم يحمل جيداً.</string>
-  <string name="could_not_find_random_article">لم يتمكن من العثور علي أي مقال{مقال عشوائي}. يرجي المحاولة مرة أخري لاحقاً.</string>
+  <string name="error_loading_random_page_zim_not_loaded">لم يتمكن من تحميل المقال. ملف ZIM لم يحمل جيداً.</string>
+  <string name="could_not_find_random_page">لم يتمكن من العثور علي أي مقال{مقال عشوائي}. يرجي المحاولة مرة أخري لاحقاً.</string>
   <string name="pref_display_title">العرض</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">الإصدار {النسخة}</string>

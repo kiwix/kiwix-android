@@ -258,85 +258,85 @@ class ReaderArticleManagerTest {
   }
 
   @Test
-  fun `getRandomArticle returns NoZimFileLoaded when no zim file is loaded`() = runTest {
+  fun `getRandomPage returns NoZimFileLoaded when no zim file is loaded`() = runTest {
     every { zimReaderContainer.zimFileReader } returns null
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded,
-      readerArticleManager.getRandomArticle()
+      ReaderArticleManager.GetRandomPageResult.NoZimFileLoaded,
+      readerArticleManager.getRandomPage()
     )
 
     verify(exactly = 0) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle returns Success when article is found`() = runTest {
+  fun `getRandomPage returns Success when page is found`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
-    every { zimReaderContainer.getRandomArticleUrl() } returns "A/B"
+    every { zimReaderContainer.getRandomPageUrl() } returns "A/B"
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.Success("A/B"),
-      readerArticleManager.getRandomArticle()
+      ReaderArticleManager.GetRandomPageResult.Success("A/B"),
+      readerArticleManager.getRandomPage()
     )
 
     verify(exactly = 1) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle retries until article is found`() = runTest {
+  fun `getRandomPage retries until page is found`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
     every {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     } returnsMany listOf(
       null,
       null,
-      "RandomArticle"
+      "RandomPage"
     )
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.Success("RandomArticle"),
-      readerArticleManager.getRandomArticle()
+      ReaderArticleManager.GetRandomPageResult.Success("RandomPage"),
+      readerArticleManager.getRandomPage()
     )
 
     verify(exactly = 3) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle returns FailedAfterRetries when retries are exhausted`() = runTest {
+  fun `getRandomPage returns FailedAfterRetries when retries are exhausted`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
-    every { zimReaderContainer.getRandomArticleUrl() } returns null
+    every { zimReaderContainer.getRandomPageUrl() } returns null
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries,
-      readerArticleManager.getRandomArticle()
+      ReaderArticleManager.GetRandomPageResult.FailedAfterRetries,
+      readerArticleManager.getRandomPage()
     )
 
     verify(exactly = 3) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle respects custom retry count`() = runTest {
+  fun `getRandomPage respects custom retry count`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
-    every { zimReaderContainer.getRandomArticleUrl() } returns null
+    every { zimReaderContainer.getRandomPageUrl() } returns null
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries,
-      readerArticleManager.getRandomArticle(retryCount = 5)
+      ReaderArticleManager.GetRandomPageResult.FailedAfterRetries,
+      readerArticleManager.getRandomPage(retryCount = 5)
     )
 
     verify(exactly = 6) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 }

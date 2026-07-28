@@ -15,7 +15,7 @@
   <string name="menu_settings">Saiti</string>
   <string name="menu_search_in_text">Nema a shafi</string>
   <string name="bookmarks"> Alamomin tuni</string>
-  <string name="menu_random_article">Labarun da suke a bazu</string>
+  <string name="menu_random_page">Labarun da suke a bazu</string>
   <string name="menu_read_aloud"> Daga murya</string>
   <string name="menu_read_aloud_stop">A daina karatu da babbar murya</string>
   <string name="menu_support_kiwix">Tallafa wa kiwix</string>

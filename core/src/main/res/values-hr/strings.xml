@@ -12,7 +12,7 @@
   <string name="menu_settings">Postavke</string>
   <string name="menu_search_in_text">Traži na stranici</string>
   <string name="bookmarks">Bilješke</string>
-  <string name="menu_random_article">Slučajni članak</string>
+  <string name="menu_random_page">Slučajni članak</string>
   <string name="menu_read_aloud">Pročitaj naglas</string>
   <string name="search_label">Traži</string>
   <string name="server_stopped_successfully_toast_message">Poslužitelj je uspješno zaustavljen.</string>

@@ -9,7 +9,7 @@
   <string name="menu_settings">Dewisiadau</string>
   <string name="menu_search_in_text">Chwilio yn y dudalen</string>
   <string name="bookmarks">Llyfrnodau</string>
-  <string name="menu_random_article">Erthygl ar hap</string>
+  <string name="menu_random_page">Erthygl ar hap</string>
   <string name="menu_read_aloud">Darllenwch yn uchel</string>
   <string name="menu_read_aloud_stop">Stopiwch ddarllen yn uchel</string>
   <string name="save_media">Cadw yr cyfrwng fel…</string>

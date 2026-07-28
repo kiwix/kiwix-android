@@ -619,19 +619,19 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  override fun onRandomArticleMenuClicked() {
+  override fun onRandomPageMenuClicked() {
     launchInViewModelScope {
-      when (val result = readerArticleManager.getRandomArticle()) {
-        is ReaderArticleManager.GetRandomArticleResult.Success -> {
-          readerWebViewManager.openArticle(result.articleUrl, getCurrentWebView())
+      when (val result = readerArticleManager.getRandomPage()) {
+        is ReaderArticleManager.GetRandomPageResult.Success -> {
+          readerWebViewManager.openArticle(result.pageUrl, getCurrentWebView())
         }
 
-        ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded -> {
-          emitEffect(ReaderEffect.ShowToast(context.getString(string.error_loading_random_article_zim_not_loaded)))
+        ReaderArticleManager.GetRandomPageResult.NoZimFileLoaded -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.error_loading_random_page_zim_not_loaded)))
         }
 
-        ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries -> {
-          emitEffect(ReaderEffect.ShowToast(context.getString(string.could_not_find_random_article)))
+        ReaderArticleManager.GetRandomPageResult.FailedAfterRetries -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.could_not_find_random_page)))
         }
       }
     }

@@ -20,7 +20,7 @@
   <string name="menu_settings">Asetukset</string>
   <string name="menu_search_in_text">Etsi sivulta</string>
   <string name="bookmarks">Kirjanmerkit</string>
-  <string name="menu_random_article">Satunnainen artikkeli</string>
+  <string name="menu_random_page">Satunnainen artikkeli</string>
   <string name="menu_read_aloud">Lue ääneen</string>
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
   <string name="menu_support_kiwix">Tue Kiwixiä</string>
@@ -70,8 +70,8 @@
   <string name="zim_not_opened">ZIM-tiedostoa ei voitu avata</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto. %s</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Artikkelin lataaminen epäonnistui. ZIM-tiedostoa ei ole ladattu oikein.</string>
-  <string name="could_not_find_random_article">Satunnaista artikkelia ei löytynyt. Yritä myöhemmin uudelleen.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Artikkelin lataaminen epäonnistui. ZIM-tiedostoa ei ole ladattu oikein.</string>
+  <string name="could_not_find_random_page">Satunnaista artikkelia ei löytynyt. Yritä myöhemmin uudelleen.</string>
   <string name="pref_display_title">Näytä</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>

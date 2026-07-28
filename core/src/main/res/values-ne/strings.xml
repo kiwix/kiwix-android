@@ -18,7 +18,7 @@
   <string name="menu_settings">मेरो अभिरुचिहरू</string>
   <string name="menu_search_in_text">पृष्ठमा खोज्नुहोस्</string>
   <string name="bookmarks">पुस्तक चिनोहरू</string>
-  <string name="menu_random_article">कुनै लेख</string>
+  <string name="menu_random_page">कुनै लेख</string>
   <string name="menu_read_aloud">पढेर सुनाउनुहोस्</string>
   <string name="menu_read_aloud_stop">पढेर सुनाउन बन्द गर्नुहोस्</string>
   <string name="menu_support_kiwix">किविक्सलाई समर्थन गर्नुहोस्</string>

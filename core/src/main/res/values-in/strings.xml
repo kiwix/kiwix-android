@@ -22,7 +22,7 @@
   <string name="menu_settings">Pengaturan</string>
   <string name="menu_search_in_text">Temukan dalam halaman</string>
   <string name="bookmarks">Markah</string>
-  <string name="menu_random_article">Artikel sembarang</string>
+  <string name="menu_random_page">Artikel sembarang</string>
   <string name="menu_read_aloud">Bacakan dengan lantang</string>
   <string name="menu_read_aloud_stop">Hentikan pembacaan lantang</string>
   <string name="menu_support_kiwix">Dukung Kiwix</string>
@@ -71,8 +71,8 @@
   <string name="zim_not_opened">Tidak dapat membuka berkas ZIM</string>
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah. %s</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Tidak dapat memuat artikel. Berkas ZIM tidak dimuat dengan benar.</string>
-  <string name="could_not_find_random_article">Tidak dapat menemukan artikel sembarang. Harap coba lagi nanti.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Tidak dapat memuat artikel. Berkas ZIM tidak dimuat dengan benar.</string>
+  <string name="could_not_find_random_page">Tidak dapat menemukan artikel sembarang. Harap coba lagi nanti.</string>
   <string name="pref_display_title">Tampilan</string>
   <string name="pref_info_title">Informasi</string>
   <string name="pref_info_version">Versi</string>

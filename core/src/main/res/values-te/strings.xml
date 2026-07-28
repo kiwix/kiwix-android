@@ -15,7 +15,7 @@
   <string name="menu_settings">అభిరుచులు</string>
   <string name="menu_search_in_text">పాఠ్యంలో వెతుకు</string>
   <string name="bookmarks">మడతపేజీలు</string>
-  <string name="menu_random_article">యాదృచ్ఛిక వ్యాసం</string>
+  <string name="menu_random_page">యాదృచ్ఛిక వ్యాసం</string>
   <string name="menu_read_aloud">బయటకి చదువు</string>
   <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
   <string name="menu_support_kiwix">కివిక్స్కు మద్దతు ఇవ్వండి</string>

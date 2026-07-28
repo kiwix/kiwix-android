@@ -17,7 +17,7 @@
   <string name="menu_settings">ڕێکخستنەکان</string>
   <string name="menu_search_in_text">دۆزینەوە لەنێو پەڕە</string>
   <string name="bookmarks">نیشانکراوەکان</string>
-  <string name="menu_random_article">وتاری ھەڕەمەکی</string>
+  <string name="menu_random_page">وتاری ھەڕەمەکی</string>
   <string name="menu_read_aloud">بە بەرزی بیخوێنەوە</string>
   <string name="menu_read_aloud_stop">بوەستە لە خوێندنەوە</string>
   <string name="menu_support_kiwix">پشتگیریی کیویکس بکە</string>
@@ -39,7 +39,7 @@
   <string name="start_server_label">ڕاژە دابگیرسێنە</string>
   <string name="stop_server_label">ڕاژە بوەستێنە</string>
   <string name="error_article_url_not_found">ھەڵە: بارکردنی وتار (Url: %1$s) شکستی ھێنا.</string>
-  <string name="could_not_find_random_article">نەتوانرا تا وتارێکی ھەڕەمەکی بدۆزرێتەوە. تکایە دواتر ھەوڵ بدەوە.</string>
+  <string name="could_not_find_random_page">نەتوانرا تا وتارێکی ھەڕەمەکی بدۆزرێتەوە. تکایە دواتر ھەوڵ بدەوە.</string>
   <string name="pref_display_title">پیشاندان</string>
   <string name="pref_info_title">زانیاری</string>
   <string name="pref_info_version">وەشان</string>

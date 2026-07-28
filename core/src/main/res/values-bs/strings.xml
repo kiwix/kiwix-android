@@ -9,7 +9,7 @@
   <string name="menu_settings">Postavke</string>
   <string name="menu_search_in_text">Pronađi na stranici</string>
   <string name="bookmarks">Oznake</string>
-  <string name="menu_random_article">Slučajni članak</string>
+  <string name="menu_random_page">Slučajni članak</string>
   <string name="menu_read_aloud">Čitaj naglas</string>
   <string name="menu_read_aloud_stop">Prestani čitati naglas</string>
   <string name="menu_support_kiwix">Podržite Kiwix</string>
@@ -57,8 +57,8 @@
   <string name="zim_not_opened">Nije moguće otvoriti ZIM datoteku</string>
   <string name="error_file_invalid">Greška: Odabrana datoteka nije važeća ZIM datoteka. %s</string>
   <string name="error_article_url_not_found">Greška: Učitavanje članka (Url: %1$s ) nije uspjelo.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Nije moguće učitati članak. ZIM datoteka nije ispravno učitana.</string>
-  <string name="could_not_find_random_article">Nije moguće pronaći nasumični članak. Pokušajte ponovo kasnije.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Nije moguće učitati članak. ZIM datoteka nije ispravno učitana.</string>
+  <string name="could_not_find_random_page">Nije moguće pronaći nasumični članak. Pokušajte ponovo kasnije.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Verzija</string>

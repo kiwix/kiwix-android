@@ -21,7 +21,7 @@
   <string name="menu_settings">Nastavení</string>
   <string name="menu_search_in_text">Najít na stránce</string>
   <string name="bookmarks">Záložky</string>
-  <string name="menu_random_article">Náhodný článek</string>
+  <string name="menu_random_page">Náhodný článek</string>
   <string name="menu_read_aloud">Číst nahlas</string>
   <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
   <string name="menu_support_kiwix">Podpořte Kiwix</string>

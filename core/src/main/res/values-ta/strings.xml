@@ -14,7 +14,7 @@
   <string name="menu_settings">விருப்பங்கள்</string>
   <string name="menu_search_in_text">பக்கத்தில் தேடிப் பெறு</string>
   <string name="bookmarks">நூற்குறிகள்</string>
-  <string name="menu_random_article">ஏதோவொரு கட்டுரை</string>
+  <string name="menu_random_page">ஏதோவொரு கட்டுரை</string>
   <string name="menu_read_aloud">உரத்து வாசி</string>
   <string name="menu_read_aloud_stop">உரத்து வாசிப்பதை நிறுத்து</string>
   <string name="menu_support_kiwix">கிவிக்ஸை ஆதரி</string>
