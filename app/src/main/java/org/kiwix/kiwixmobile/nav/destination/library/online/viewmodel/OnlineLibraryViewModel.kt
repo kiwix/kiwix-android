@@ -285,18 +285,22 @@ class OnlineLibraryViewModel @Inject constructor(
     getString = { resId, args -> context.getString(resId, *args) },
     getSimpleString = { resId -> context.getString(resId) }
   ).onEach {
-    _uiState.update { current ->
-      current.copy(
-        items = it,
-        noContentMessage = noContentMessageWhenItemsComesFromOnlineSource(it),
-        showNoContent = it.isEmpty()
-      )
-    }
+    updateLibraryItems(it)
   }.catch { throwable ->
     resetDownloadState()
     throwable.printStackTrace()
     Log.e("OnlineLibraryViewModel", "Error----$throwable")
   }.launchIn(viewModelScope)
+
+  private fun updateLibraryItems(items: List<LibraryListItem>) {
+    _uiState.update { current ->
+      current.copy(
+        items = items,
+        noContentMessage = noContentMessageWhenItemsComesFromOnlineSource(items),
+        showNoContent = items.isEmpty()
+      )
+    }
+  }
 
   private fun noContentMessageWhenItemsComesFromOnlineSource(items: List<LibraryListItem>): String =
     when {
@@ -448,11 +452,14 @@ class OnlineLibraryViewModel @Inject constructor(
           sendUiEvent(UiEvent.ScrollToTop)
         }
         resetDownloadState()
+        if (newBooks.isEmpty()) {
+          updateLibraryItems(emptyList())
+        }
       }
 
       is OnlineLibraryState.Error -> {
         if (networkBooks.value.isEmpty()) {
-          networkBooks.emit(emptyList())
+          updateLibraryItems(emptyList())
         }
         resetDownloadState()
       }
