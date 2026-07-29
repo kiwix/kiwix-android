@@ -49,7 +49,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
@@ -90,7 +90,7 @@ internal class CoreReaderViewModelTest {
   private val readerIntentManager = mockk<ReaderIntentManager>(relaxed = true)
   private val readerIntentManagerFlow = MutableStateFlow(Unit)
   private val pendingSearchItemManager = mockk<PendingSearchItemManager>(relaxed = true)
-  private val readerArticleManager = mockk<ReaderArticleManager>(relaxed = true)
+  private val readerPageManager = mockk<ReaderPageManager>(relaxed = true)
   private val readAloudManager = mockk<ReadAloudManager>(relaxed = true)
   private val donationDialogHandler = mockk<DonationDialogHandler>(relaxed = true)
   private val findInPageManager = mockk<FindInPageManager>(relaxed = true)
@@ -136,7 +136,7 @@ internal class CoreReaderViewModelTest {
     // Mock zimReaderContainer - set zimFileReader to null to skip onAddToHomeScreenMenuClicked logic
     every { zimReaderContainer.zimFileReader } returns null
 
-    coEvery { readerArticleManager.getRandomPage() } returns ReaderArticleManager.GetRandomPageResult.NoZimFileLoaded
+    coEvery { readerPageManager.getRandomPage() } returns ReaderPageManager.GetRandomPageResult.NoZimFileLoaded
 
     viewModel = TestCoreReaderViewModel(
       context = context,
@@ -153,7 +153,7 @@ internal class CoreReaderViewModelTest {
       readerSessionManager = readerSessionManager,
       readerIntentManager = readerIntentManager,
       pendingSearchItemManager = pendingSearchItemManager,
-      readerArticleManager = readerArticleManager,
+      readerPageManager = readerPageManager,
       readAloudManager = readAloudManager,
       donationDialogHandler = donationDialogHandler,
       findInPageManager = findInPageManager,
@@ -703,7 +703,7 @@ internal class CoreReaderViewModelTest {
     readerSessionManager: ReaderSessionManager,
     readerIntentManager: ReaderIntentManager,
     pendingSearchItemManager: PendingSearchItemManager,
-    readerArticleManager: ReaderArticleManager,
+    readerPageManager: ReaderPageManager,
     readAloudManager: ReadAloudManager,
     donationDialogHandler: DonationDialogHandler,
     findInPageManager: FindInPageManager,
@@ -723,7 +723,7 @@ internal class CoreReaderViewModelTest {
       readerSessionManager,
       readerIntentManager,
       pendingSearchItemManager,
-      readerArticleManager,
+      readerPageManager,
       readAloudManager,
       donationDialogHandler,
       findInPageManager,

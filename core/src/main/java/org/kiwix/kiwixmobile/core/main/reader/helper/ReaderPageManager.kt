@@ -30,12 +30,12 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import javax.inject.Inject
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager.CreatePdfResult.PageStillLoading
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager.CreatePdfResult.CacheDirUnavailable
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager.CreatePdfResult.PageStillLoading
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager.CreatePdfResult.CacheDirUnavailable
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import kotlin.coroutines.resume
 
-class ReaderArticleManager @Inject constructor(
+class ReaderPageManager @Inject constructor(
   private val context: Context,
   private val pdfPrinter: PdfPrint,
   private val zimReaderContainer: ZimReaderContainer
