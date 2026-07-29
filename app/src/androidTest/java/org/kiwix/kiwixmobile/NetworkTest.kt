@@ -44,11 +44,11 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.sharedFunctions.TEST_PORT
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit.SECONDS
+import nl.adaptivity.xmlutil.serialization.XML
 
 /**
  * Created by mhutti1 on 14/04/17.
  */
-import nl.adaptivity.xmlutil.serialization.XML
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
