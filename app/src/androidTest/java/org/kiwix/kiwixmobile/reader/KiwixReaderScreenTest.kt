@@ -54,9 +54,11 @@ import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.FIVE_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
@@ -113,6 +115,8 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       openSearchWithQuery("Android", zimFile)
       openAndroidArticleInNewTab(composeTestRule)
       checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
+      // Wait a bit to properly saving the history.
+      composeTestRule.waitUntilTimeout(FIVE_SECOND_DELAY)
       // open bookmark screen.
       bookmarks {
         openBookmarkScreen(kiwixMainActivity as CoreMainActivity, composeTestRule)
@@ -140,6 +144,8 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       openSearchWithQuery("Android", zimFile)
       openAndroidArticleInNewTab(composeTestRule)
       checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
+      // Wait a bit to properly saving the history.
+      composeTestRule.waitUntilTimeout(FIVE_SECOND_DELAY)
       // open local library screen.
       openLocalLibraryScreenViaBottomAppBar(composeTestRule)
       composeTestRule.waitForIdle()
