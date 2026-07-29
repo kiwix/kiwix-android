@@ -22,6 +22,7 @@ import android.view.KeyEvent
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -40,7 +41,7 @@ import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.FIVE_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -54,18 +55,25 @@ class SearchRobot : BaseRobot() {
   val searchResultForDownloadedZimFile = "A Fool for You"
 
   fun clickOnSearchItemInSearchList(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitUntilTimeout()
-      onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0].performClick()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(FIVE_SECOND_DELAY) {
+          onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+        }
+        onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0].performClick()
+      }
+    })
   }
 
   fun checkZimFileSearchSuccessful(composeTestRule: ComposeContentTestRule) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    composeTestRule.apply {
-      waitUntilTimeout()
-      onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).assertIsDisplayed()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(FIVE_SECOND_DELAY) {
+          onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).isDisplayed()
+        }
+        onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).assertIsDisplayed()
+      }
+    })
   }
 
   fun searchWithFrequentlyTypedWords(
@@ -89,17 +97,19 @@ class SearchRobot : BaseRobot() {
   }
 
   fun assertSearchSuccessful(searchResult: String, composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitUntil(
-        timeoutMillis = TEST_PAUSE_MS.toLong(),
-        condition = {
-          onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)
-            .fetchSemanticsNodes().isNotEmpty()
-        }
-      )
-      onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0]
-        .assert(hasText(searchResult))
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(
+          timeoutMillis = TEST_PAUSE_MS.toLong(),
+          condition = {
+            onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)
+              .fetchSemanticsNodes().isNotEmpty()
+          }
+        )
+        onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0]
+          .assert(hasText(searchResult))
+      }
+    })
   }
 
   fun deleteSearchedQueryFrequently(
@@ -126,7 +136,12 @@ class SearchRobot : BaseRobot() {
   private fun openSearchScreen(composeTestRule: ComposeContentTestRule) {
     testFlakyView(
       {
-        composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+        composeTestRule.apply {
+          waitUntil(FIVE_SECOND_DELAY) {
+            onNodeWithTag(SEARCH_ICON_TESTING_TAG).isDisplayed()
+          }
+          onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+        }
       }
     )
   }

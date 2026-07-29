@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.getOkkHttpClientForTesting
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
@@ -284,6 +285,10 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
   private fun openKiwixReaderScreenWithFile(zimFile: File) {
     composeTestRule.runOnUiThread {
       kiwixMainActivity.openZimFromFilePath(zimFile.absolutePath)
+    }
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntilTimeout()
     }
   }
 

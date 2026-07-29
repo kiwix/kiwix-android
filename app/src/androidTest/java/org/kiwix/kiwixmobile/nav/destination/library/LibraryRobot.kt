@@ -22,6 +22,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -30,10 +31,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
@@ -44,7 +45,6 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.BOOK_LIST_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
@@ -65,7 +65,9 @@ class LibraryRobot : BaseRobot() {
   fun assertGetZimNearbyDeviceDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).isDisplayed()
+        }
         onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).assertIsDisplayed()
       }
     })
@@ -76,7 +78,9 @@ class LibraryRobot : BaseRobot() {
     func: LocalFileTransferRobot.() -> Unit
   ) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+        onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).isDisplayed()
+      }
       onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).performClick()
     }
     localFileTransfer(func)
@@ -84,8 +88,12 @@ class LibraryRobot : BaseRobot() {
 
   fun assertLibraryListDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.waitForIdle()
-      composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
+      composeTestRule.apply {
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).isDisplayed()
+        }
+        onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
+      }
     })
   }
 
@@ -116,7 +124,9 @@ class LibraryRobot : BaseRobot() {
 
   fun waitUntilZimFilesRefreshing(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.waitUntilTimeout()
+      composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+        composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG).isNotDisplayed()
+      }
       composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG)
         .assertIsNotDisplayed()
     })
@@ -143,7 +153,7 @@ class LibraryRobot : BaseRobot() {
       }
       clickOnFileDeleteIcon(composeTestRule)
       clickOnDeleteZimFile(composeTestRule)
-      pauseForBetterTestPerformance()
+      composeTestRule.waitUntilTimeout()
       assertNoFilesTextDisplayed(composeTestRule)
     } catch (e: AssertionError) {
       Log.i(
@@ -155,9 +165,13 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnFileDeleteIcon(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
-      composeTestRule.onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG).performClick()
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG).isDisplayed()
+        }
+        onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG).performClick()
+      }
     })
   }
 
@@ -169,6 +183,9 @@ class LibraryRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG).isDisplayed()
+        }
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.file_system_scan_dialog_title))
       }
@@ -196,8 +213,9 @@ class LibraryRobot : BaseRobot() {
   fun assertManageExternalPermissionDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
-        composeTestRule.mainClock.advanceTimeByFrame()
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG).isDisplayed()
+        }
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.all_files_permission_needed))
       }
@@ -216,7 +234,9 @@ class LibraryRobot : BaseRobot() {
   fun clickOnReaderScreen(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntilTimeout()
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).isDisplayed()
+        }
         onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
       }
     })
@@ -225,7 +245,9 @@ class LibraryRobot : BaseRobot() {
   fun clickOnLocalLibraryScreen(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntilTimeout()
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).isDisplayed()
+        }
         onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
       }
     })
@@ -249,7 +271,7 @@ class LibraryRobot : BaseRobot() {
     }
     clickOnValidateZimFileIcon(composeTestRule)
     clickOnYesDialogButton(composeTestRule)
-    pauseForBetterTestPerformance()
+    composeTestRule.waitUntilTimeout()
     assertZIMFileValidatingDialogDisplayed(composeTestRule)
     clickOnYesDialogButton(composeTestRule)
   }
@@ -267,17 +289,17 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnValidateZimFileIcon(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
-      composeTestRule.onNodeWithTag(VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG).performClick()
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG).isDisplayed()
+        }
+        onNodeWithTag(VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG).performClick()
+      }
     })
   }
 
   private fun clickOnYesDialogButton(composeTestRule: ComposeContentTestRule) {
     clickOnDialogConfirmButton(composeTestRule)
-  }
-
-  private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 }

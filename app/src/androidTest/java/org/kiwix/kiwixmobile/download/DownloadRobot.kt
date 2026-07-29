@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARC
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.FIVE_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -119,6 +120,9 @@ class DownloadRobot : BaseRobot() {
     language: String
   ) {
     composeTestRule.apply {
+      waitUntil(FIVE_SECOND_DELAY) {
+        onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).isDisplayed()
+      }
       onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).assertTextEquals(language)
     }
   }
