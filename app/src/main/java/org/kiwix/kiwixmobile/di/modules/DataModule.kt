@@ -35,7 +35,6 @@ class DataModule {
     onlineLibraryRepositoryImpl: OnlineLibraryRepositoryImpl
   ): OnlineLibraryRepository = onlineLibraryRepositoryImpl
 
-
   @Provides
   fun provideLanguageRepository(
     languageRepositoryImpl: LanguageRepositoryImpl

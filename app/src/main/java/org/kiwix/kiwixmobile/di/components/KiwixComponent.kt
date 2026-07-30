@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryR
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
 
-
 @KiwixScope
 @Component(
   dependencies = [CoreComponent::class],

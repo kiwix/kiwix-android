@@ -130,7 +130,6 @@ class LanguageViewModel @Inject constructor(
     }
   }
 
-
   @VisibleForTesting
   fun onClearedExposed() {
     onCleared()
