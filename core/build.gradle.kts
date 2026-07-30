@@ -47,11 +47,8 @@ dependencies {
     exclude(group = "stax", module = "stax-api")
     exclude(group = "stax", module = "stax")
   }
-  implementation(Libs.converter_simplexml) {
-    exclude(group = "xpp3", module = "xpp3")
-    exclude(group = "stax", module = "stax-api")
-    exclude(group = "stax", module = "stax")
-  }
+  api(Libs.XMLUTIL_SERIALIZATION)
+  api(Libs.CONVERTER_KOTLINX_SERIALIZATION)
 
   // Leak canary
   debugImplementation(Libs.leakcanary_android)

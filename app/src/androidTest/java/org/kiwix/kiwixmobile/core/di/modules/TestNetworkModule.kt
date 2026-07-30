@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
+import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
@@ -33,10 +34,21 @@ class TestNetworkModule {
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient = OkHttpClient()
 
   @Provides
+  @Singleton
+  fun provideXML(): XML {
+    return XML {
+      defaultPolicy {
+        ignoreUnknownChildren()
+      }
+    }
+  }
+
+  @Provides
   @OPDSKiwixService
-  fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
+  fun provideKiwixService(okHttpClient: OkHttpClient, xml: XML): KiwixService =
     KiwixService.ServiceCreator.newHackListService(
       okHttpClient,
+      xml,
       MOCK_BASE_URL
     )
 }

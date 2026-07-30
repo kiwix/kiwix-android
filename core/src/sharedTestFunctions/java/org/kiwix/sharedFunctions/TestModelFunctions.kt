@@ -119,7 +119,7 @@ fun fileElement(
 ) = FileElement().apply {
   this.name = name
   this.urls = urls
-  this.hashes = hashes
+  this.hashes = hashes.map { MetaLinkNetworkEntity.Hash(it.key, it.value) }
   this.pieces = pieces
 }
 
@@ -128,7 +128,7 @@ fun pieces(
   pieceHashes: List<String> = listOf("hash")
 ) = Pieces().apply {
   this.hashType = hashType
-  this.pieceHashes = pieceHashes
+  this.pieceHashes = pieceHashes.map { MetaLinkNetworkEntity.PieceHash(it) }
 }
 
 fun url(

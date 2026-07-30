@@ -23,7 +23,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.simpleframework.xml.core.Persister
+import nl.adaptivity.xmlutil.serialization.XML
 
 @Suppress("MaxLineLength")
 class MetaLinkNetworkEntityTest {
@@ -50,10 +50,15 @@ class MetaLinkNetworkEntityTest {
 
     @BeforeEach
     fun setup() {
-      val serializer = Persister()
+      val xml = XML {
+        defaultPolicy {
+          ignoreUnknownChildren()
+        }
+      }
       val stream =
         MetaLinkNetworkEntityTest::class.java.classLoader!!.getResourceAsStream("wikipedia_af_all_nopic_2016-05.zim.meta4")
-      result = serializer.read(MetaLinkNetworkEntity::class.java, stream)
+      val xmlString = stream.bufferedReader().use { it.readText() }
+      result = xml.decodeFromString(MetaLinkNetworkEntity.serializer(), xmlString)
     }
 
     @Test
@@ -167,7 +172,9 @@ class MetaLinkNetworkEntityTest {
       @Test
       fun getHash_whenTypeDoesNotExist_returnsNull() = runTest {
         val file =
-          MetaLinkNetworkEntity.FileElement().apply { hashes = mapOf("sha-256" to "kiwix2208") }
+          MetaLinkNetworkEntity.FileElement().apply {
+            hashes = listOf(MetaLinkNetworkEntity.Hash("sha-256", "kiwix2208"))
+          }
         assertThat(file.getHash("md5")).isNull()
       }
 
@@ -190,7 +197,7 @@ class MetaLinkNetworkEntityTest {
           pieces = MetaLinkNetworkEntity.Pieces().apply {
             hashType = "sha-256"
             length = 220805
-            pieceHashes = pieceHashesList
+            pieceHashes = pieceHashesList.map { MetaLinkNetworkEntity.PieceHash(it) }
           }
         }
         assertThat(file.pieceHashes).containsExactly(pieceHashesList[0], pieceHashesList[1])

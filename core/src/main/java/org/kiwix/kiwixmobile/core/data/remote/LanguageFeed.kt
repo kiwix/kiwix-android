@@ -18,30 +18,28 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
+import kotlinx.serialization.Serializable
 import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Namespace
-import org.simpleframework.xml.Root
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-@Root(name = "feed", strict = false)
-@Namespace(reference = "http://www.w3.org/2005/Atom")
-class LanguageFeed {
-  @field:ElementList(name = "entry", inline = true, required = false)
+@Serializable
+@XmlSerialName("feed", namespace = "http://www.w3.org/2005/Atom", prefix = "")
+data class LanguageFeed(
+  @XmlSerialName("entry", namespace = "http://www.w3.org/2005/Atom", prefix = "")
   var entries: List<LanguageEntry>? = null
-}
+)
 
-@Root(name = "entry", strict = false)
-@Namespace(reference = "http://www.w3.org/2005/Atom")
-class LanguageEntry {
-  @field:Element(name = "title", required = false)
-  var title: String = ""
-
-  @field:Element(name = "language", required = false)
-  @Namespace(prefix = "dc", reference = "http://purl.org/dc/terms/")
-  var languageCode: String = ""
-
-  @field:Element(name = "count", required = false)
-  @Namespace(prefix = "thr", reference = "http://purl.org/syndication/thread/1.0")
+@Serializable
+@XmlSerialName("entry", namespace = "http://www.w3.org/2005/Atom", prefix = "")
+data class LanguageEntry(
+  @XmlElement(true)
+  @XmlSerialName("title", namespace = "http://www.w3.org/2005/Atom", prefix = "")
+  var title: String = "",
+  @XmlElement(true)
+  @XmlSerialName("language", namespace = "http://purl.org/dc/terms/", prefix = "dc")
+  var languageCode: String = "",
+  @XmlElement(true)
+  @XmlSerialName("count", namespace = "http://purl.org/syndication/thread/1.0", prefix = "thr")
   var count: Int = ZERO
-}
+)

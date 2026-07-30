@@ -44,15 +44,17 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.sharedFunctions.TEST_PORT
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit.SECONDS
+import nl.adaptivity.xmlutil.serialization.XML
 
 /**
  * Created by mhutti1 on 14/04/17.
  */
+
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class NetworkTest {
-  @Rule
   @JvmField
+  @Rule
   val retryRule = RetryRule()
 
   private lateinit var mockWebServer: MockWebServer
@@ -69,6 +71,11 @@ class NetworkTest {
         .callTimeout(TEST_TIMEOUT, SECONDS)
         .addNetworkInterceptor(HttpLoggingInterceptor().apply { level = BASIC })
         .build(),
+      XML {
+        defaultPolicy {
+          ignoreUnknownChildren()
+        }
+      },
       mockWebServer.url("/").toString()
     )
     Log.d(TAG, "MockWebServer started on port $TEST_PORT")

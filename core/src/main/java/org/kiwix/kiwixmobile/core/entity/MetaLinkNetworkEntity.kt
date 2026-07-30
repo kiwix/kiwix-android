@@ -17,74 +17,108 @@
  */
 package org.kiwix.kiwixmobile.core.entity
 
-import org.simpleframework.xml.Attribute
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.ElementMap
-import org.simpleframework.xml.Root
-import org.simpleframework.xml.Text
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import nl.adaptivity.xmlutil.serialization.XmlValue
 
-@Root(strict = false, name = "metalink")
+@Serializable
+@XmlSerialName("metalink", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
 class MetaLinkNetworkEntity {
-  @field:Element
+  @XmlElement(true)
+  @XmlSerialName("file", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
   var file: FileElement? = null
   val urls: List<Url>?
     get() = file?.urls
   val relevantUrl: Url
     get() = file?.urls?.get(0) ?: Url()
 
-  @Root(strict = false)
+  @Serializable
+  @XmlSerialName("file", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
   class FileElement {
-    @field:Attribute
+    @XmlElement(false)
     var name: String? = null
 
-    @field:ElementList(inline = true, entry = "url")
+    @XmlElement(true)
+    @XmlSerialName("url", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
     var urls: List<Url>? = null
 
-    @field:Element var size: Long = 0
+    @XmlElement(true)
+    @XmlSerialName("size", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
+    var size: Long = 0
 
-    @field:ElementMap(
-      entry = "hash",
-      key = "type",
-      attribute = true,
-      inline = true,
-      required = false
-    )
-    var hashes: Map<String, String>? = null
+    @XmlElement(true)
+    @XmlSerialName("hash", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
+    var hashes: List<Hash>? = null
 
-    @field:Element(required = false)
+    @XmlElement(true)
+    @XmlSerialName("pieces", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
     var pieces: Pieces? = null
-    val pieceHashes: List<String>?
-      get() = pieces?.pieceHashes
 
-    /**
-     * Get file hash
-     *
-     * @param type Hash type as defined in metalink file
-     * @return Hash value or `null`
-     */
-    fun getHash(type: String): String? = hashes?.get(type)
+    val pieceHashes: List<String>?
+      get() = pieces?.pieceHashStrings
+
+    fun getHash(type: String): String? = hashes?.find { it.type == type }?.value
   }
 
+  @Serializable
+  @XmlSerialName("hash", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
+  class Hash {
+    @XmlElement(false)
+    var type: String = ""
+
+    @XmlValue
+    var value: String = ""
+
+    constructor()
+
+    constructor(type: String, value: String) {
+      this.type = type
+      this.value = value
+    }
+  }
+
+  @Serializable
+  @XmlSerialName("pieces", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
   class Pieces {
-    @field:Attribute
+    @XmlElement(false)
     var length = 0
 
-    @field:Attribute(name = "type")
+    @XmlElement(false)
+    @XmlSerialName("type")
     var hashType: String? = null
 
-    @field:ElementList(inline = true, entry = "hash")
-    var pieceHashes: List<String>? = null
+    @XmlElement(true)
+    @XmlSerialName("hash", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
+    var pieceHashes: List<PieceHash>? = null
+
+    val pieceHashStrings: List<String>?
+      get() = pieceHashes?.map { it.value }
   }
 
+  @Serializable
+  @XmlSerialName("hash", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
+  class PieceHash {
+    @XmlValue
+    var value: String = ""
+
+    constructor()
+
+    constructor(value: String) {
+      this.value = value
+    }
+  }
+
+  @Serializable
+  @XmlSerialName("url", namespace = "urn:ietf:params:xml:ns:metalink", prefix = "")
   class Url {
-    @field:Attribute
+    @XmlElement(false)
     var location: String? = null
 
-    @field:Attribute
+    @XmlElement(false)
     var priority = 0
 
-    @field:Text
+    @XmlValue
     var value: String? = null
   }
 }
