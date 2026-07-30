@@ -20,7 +20,7 @@ package plugin
 
 import Libs
 import com.android.build.VariantOutput
-import com.android.build.gradle.AppExtension
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.api.ApkVariantOutput
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -32,7 +32,7 @@ import java.util.Locale
 
 class AppConfigurer {
   fun configure(target: Project) {
-    target.configureExtension<AppExtension> {
+    target.configureExtension<ApplicationExtension> {
       signingConfigs {
         create("releaseSigningConfig") {
           storeFile = File(target.rootDir, "kiwix-android.keystore")
@@ -105,20 +105,20 @@ class AppConfigurer {
        * Store upgrade process that the version code is higher than
        * for APKs).
       */
-      applicationVariants.all {
-        @Suppress("DEPRECATION")
-        outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
-          val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
-          output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode
-          if (output.outputFileName.contains("universal-nightly")) {
-            // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
-            output.outputFileName = setNameForNightlyUniversalApk()
-          }
-        }
-      }
+      // applicationVariants.all {
+      //   @Suppress("DEPRECATION")
+      //   outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
+      //     val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
+      //     output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode
+      //     if (output.outputFileName.contains("universal-nightly")) {
+      //       // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
+      //       output.outputFileName = setNameForNightlyUniversalApk()
+      //     }
+      //   }
+      // }
 
-      aaptOptions {
-        cruncherEnabled = true
+      androidResources {
+        // cruncherEnabled = true
       }
       sourceSets {
         getByName("androidTest") {
@@ -158,7 +158,7 @@ class AppConfigurer {
       }
       androidTestUtil(Libs.orchestrator)
       androidTestCompileOnly(Libs.javax_annotation_api)
-      kaptAndroidTest(Libs.dagger_compiler)
+      kspAndroidTest(Libs.dagger_compiler)
       androidTestImplementation(Libs.mockk_android)
       androidTestImplementation(Libs.uiautomator)
       androidTestImplementation(Libs.assertj_core)

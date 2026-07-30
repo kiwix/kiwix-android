@@ -1,6 +1,5 @@
 plugins {
   id("com.android.test")
-  id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -18,10 +17,6 @@ android {
   compileOptions {
     sourceCompatibility = Config.javaVersion
     targetCompatibility = Config.javaVersion
-  }
-
-  kotlinOptions {
-    jvmTarget = Config.javaVersion.toString()
   }
 
   buildTypes {

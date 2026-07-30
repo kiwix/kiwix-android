@@ -22,11 +22,14 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
-internal inline fun <reified T> Project.configureExtension(function: T.() -> Unit) =
+internal inline fun <reified T : Any> Project.configureExtension(function: T.() -> Unit) =
   extensions.getByType(T::class.java).function()
 
 internal fun DependencyHandlerScope.androidTestUtil(dependency: String) =
   addDependency("androidTestUtil", dependency)
+
+internal fun DependencyHandlerScope.kspAndroidTest(dependency: String) =
+  addDependency("kspAndroidTest", dependency)
 
 internal fun DependencyHandlerScope.kaptAndroidTest(dependency: String) =
   addDependency("kaptAndroidTest", dependency)

@@ -4,6 +4,7 @@ import com.android.build.gradle.internal.dsl.ProductFlavor
 import branded.BrandedApps
 import branded.createPublisher
 import branded.transactionWithCommit
+import com.android.build.api.dsl.ApplicationProductFlavor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -65,7 +66,7 @@ dependencies {
   implementation(project(":objectboxmigration"))
 }
 
-fun ProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {
+fun ApplicationProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {
   return tasks.register(
     "download${
       name.replaceFirstChar {
@@ -162,7 +163,7 @@ fun writeZimFileDataInChunk(
   outputStream?.close()
 }
 
-fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File): TaskProvider<Task> {
+fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File): TaskProvider<Task> {
   return tasks.register(
     "download${
       name.replaceFirstChar {
@@ -208,7 +209,7 @@ val String.removeAuthenticationFromUrl: String
       .trim()
       .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
 
-fun ProductFlavor.createPublishApkWithExpansionTask(
+fun ApplicationProductFlavor.createPublishApkWithExpansionTask(
   file: File,
   applicationVariants: DomainObjectSet<ApplicationVariant>
 ): TaskProvider<Task> {
@@ -242,7 +243,7 @@ fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: Produc
     .filter { !it.outputFileName.contains("universal") }
     .sortedBy { it.versionCodeOverride }
 
-fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskProvider<Task> {
+fun ApplicationProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskProvider<Task> {
   val capitalizedName =
     name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
   return tasks.register("publish${capitalizedName}ReleaseBundleWithPlayAssetDelivery") {
@@ -284,6 +285,6 @@ afterEvaluate {
       val downloadAndPutAssetTask = tasks.getByName("download${flavorName}ZimAndPutInAssetFolder")
       val bundleReleaseTask = tasks.getByName("bundle${flavorName}Release")
       releaseBundleWithPlayAssetDeliveryTask.dependsOn(bundleReleaseTask)
-      // bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
+      bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
     }
 }
