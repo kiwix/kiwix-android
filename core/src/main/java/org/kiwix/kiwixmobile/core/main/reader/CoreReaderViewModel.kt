@@ -623,7 +623,7 @@ abstract class CoreReaderViewModel(
     launchInViewModelScope {
       when (val result = readerPageManager.getRandomPage()) {
         is ReaderPageManager.GetRandomPageResult.Success -> {
-          readerWebViewManager.openArticle(result.pageUrl, getCurrentWebView())
+          readerWebViewManager.openPage(result.pageUrl, getCurrentWebView())
         }
 
         ReaderPageManager.GetRandomPageResult.NoZimFileLoaded -> {
@@ -1129,8 +1129,8 @@ abstract class CoreReaderViewModel(
     withContext(mainDispatcher) { getCurrentWebView().url != null }
 
   private suspend fun openMainPage() {
-    val articleUrl = zimReaderContainer.mainPage
-    readerWebViewManager.openArticle(articleUrl, getCurrentWebView())
+    val pageUrl = zimReaderContainer.mainPage
+    readerWebViewManager.openPage(pageUrl, getCurrentWebView())
   }
 
   protected suspend fun loadUrlWithCurrentWebview(url: String?) {
@@ -1411,10 +1411,10 @@ abstract class CoreReaderViewModel(
   private fun onBookmarkButtonClicked() {
     launchInViewModelScope {
       val pageTitle = getCurrentWebView().title
-      val articleUrl = getCurrentWebView().url
+      val pageUrl = getCurrentWebView().url
       val result = bookmarkManager.addBookmark(
         pageTitle,
-        articleUrl,
+        pageUrl,
         uiState.value.bookmarkButtonItem.isBookmarked
       )
       when (result) {

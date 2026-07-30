@@ -92,8 +92,8 @@ class ReaderWebViewManager @Inject constructor(
     }
   }
 
-  suspend fun openArticle(articleUrl: String?, kiwixWebView: KiwixWebView) {
-    articleUrl?.let {
+  suspend fun openPage(pageUrl: String?, kiwixWebView: KiwixWebView) {
+    pageUrl?.let {
       loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(it)), kiwixWebView)
     }
   }
@@ -102,8 +102,8 @@ class ReaderWebViewManager @Inject constructor(
     loadUrl(url, currentWebView)
   }
 
-  fun contentUrl(articleUrl: String?): String =
-    "${CONTENT_PREFIX}$articleUrl".toUri().toString()
+  fun contentUrl(pageUrl: String?): String =
+    "${CONTENT_PREFIX}$pageUrl".toUri().toString()
 
   private fun redirectOrOriginal(contentUrl: String): String {
     val zimReaderContainer = readerSessionManager.zimReaderContainer

@@ -198,7 +198,7 @@ class ReaderWebViewManagerTest {
       val webView = mockk<KiwixWebView>()
       val manager = spyk(readerWebViewManager)
 
-      manager.openArticle(null, webView)
+      manager.openPage(null, webView)
 
       verify(exactly = 0) {
         webView.loadUrl(any())
@@ -218,7 +218,7 @@ class ReaderWebViewManagerTest {
       every { container.isRedirect("content://article") } returns true
       every { container.getRedirect("content://article") } returns "redirect"
 
-      manager.openArticle("article", webView)
+      manager.openPage("article", webView)
 
       verify {
         webView.loadUrl("redirect")
@@ -237,7 +237,7 @@ class ReaderWebViewManagerTest {
       every { readerSessionManager.zimReaderContainer } returns container
       every { container.isRedirect("content://article") } returns false
 
-      manager.openArticle("article", webView)
+      manager.openPage("article", webView)
 
       verify {
         webView.loadUrl("content://article")
