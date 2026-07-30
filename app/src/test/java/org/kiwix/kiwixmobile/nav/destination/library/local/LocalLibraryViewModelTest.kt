@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDialog
@@ -79,6 +80,7 @@ class LocalLibraryViewModelTest {
   private val validateZimViewModel: ValidateZimViewModel = mockk(relaxed = true)
   private val deleteFilesUseCase = mockk<DeleteFilesUseCase>(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
+  private val storageDeviceProvider: StorageDeviceProvider = mockk(relaxed = true)
 
   @RegisterExtension
   @JvmField
@@ -128,8 +130,7 @@ class LocalLibraryViewModelTest {
       kiwixDataStore,
       zimReaderFactory,
       deleteFilesUseCase,
-      libkiwixBookFactory,
-      libkiwixBookmarks,
+      storageDeviceProvider,
       mainDispatcherRule.dispatcher
     )
     vm.initialize(

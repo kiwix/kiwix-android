@@ -235,10 +235,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     return uri
   }
 
-  @Suppress("Deprecation")
   private fun deleteTestZimFromAppSpecificDirs() {
     val dirs = mutableListOf<File>()
-    context.externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
     context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
     context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
     context.filesDir?.let { dirs.add(it) }

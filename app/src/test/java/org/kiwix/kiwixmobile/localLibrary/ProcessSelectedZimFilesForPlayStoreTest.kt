@@ -105,6 +105,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
     every { kiwixDataStore.selectedStorage } returns flowOf(storagePath)
     every { kiwixDataStore.context } returns activity
+    coEvery { storageDeviceProvider.getAppSpecificDirs() } returns listOf(File(storagePath))
   }
 
   @Test
@@ -424,6 +425,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       try {
         // Point selectedStorage to the temp directory
         every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        coEvery { storageDeviceProvider.getAppSpecificDirs() } returns listOf(appDir)
 
         val uri = createValidUri(fileSize = 100L)
 
@@ -459,6 +461,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       try {
         every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        coEvery { storageDeviceProvider.getAppSpecificDirs() } returns listOf(appDir)
         // File size = 1000, available space = 500 (insufficient for copy)
         // But since file is already in app dir, space check should be skipped
         val uri = createValidUri(fileSize = 1000L, availableSpace = 500L)
@@ -496,6 +499,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       try {
         every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        coEvery { storageDeviceProvider.getAppSpecificDirs() } returns listOf(appDir)
 
         val documentFile = mockk<DocumentFile>()
         every { documentFile.name } returns "test.zim"
@@ -527,6 +531,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
 
       try {
         every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        coEvery { storageDeviceProvider.getAppSpecificDirs() } returns listOf(appDir)
 
         val documentFile = mockk<DocumentFile>()
         every { documentFile.name } returns "test.zim"

@@ -220,34 +220,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       FileUtils.isValidZimFile(it) || isSplittedZimFile(it)
     } ?: false
 
-  /**
-   * Checks if a file with the same name and size already exists in the app's
-   * public directory. Returns the existing [File] if found, null otherwise.
-   * This avoids unnecessary copy/move operations for files the user has
-   * already placed in the app directory.
-   */
-  private var appSpecificDirsCache: List<File>? = null
-
-  private suspend fun getAppSpecificDirs(): List<File> {
-    appSpecificDirsCache?.let { return it }
-    val dirs = mutableListOf<File>()
-    android.content.ContextWrapper(context).externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
-    context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
-    context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
-    context.filesDir?.let { dirs.add(it) }
-    context.cacheDir?.let { dirs.add(it) }
-
-    if (selectedStoragePath.isEmpty()) {
-      selectedStoragePath = kiwixDataStore.selectedStorage.first()
-    }
-    if (selectedStoragePath.isNotEmpty()) {
-      dirs.add(File(selectedStoragePath))
-    }
-    val uniqueDirs = dirs.distinctBy { it.absolutePath }
-    appSpecificDirsCache = uniqueDirs
-    return uniqueDirs
-  }
-
   private fun findFileRecursively(dir: File, fileName: String, fileSize: Long): File? {
     var foundFile: File? = null
     val files = dir.listFiles()
@@ -268,7 +240,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   suspend fun getExistingFileInAppDirectory(documentFile: DocumentFile?): File? {
     val fileName = documentFile?.name ?: return null
     val fileSize = documentFile.length()
-    val appSpecificDirs = getAppSpecificDirs()
+    val appSpecificDirs = storageDeviceProvider.getAppSpecificDirs()
 
     var existingFile: File? = null
     for (dir in appSpecificDirs) {
@@ -318,7 +290,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * and retries copying/moving the ZIM file.
    */
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
-    requireLifecycleScope().runSafelyInLifecycleScope {
+    requireLifecycleScope().launch {
       kiwixDataStore.apply {
         setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
         setSelectedStoragePosition(
@@ -380,7 +352,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     } else {
       selectedZimFileCallback?.showFileCopyMoveErrorDialog(errorMessage) {
         // Continue with remaining files after error
-        processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
+        requireLifecycleScope().launch {
+          processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
+        }
       }
     }
   }
@@ -401,7 +375,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
           showWarningDialogForSplittedZimFile()
         } else {
           requireLifecycleScope().launch {
-            selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)
             selectedZimFileCallback?.navigateToReaderScreen(file = file)
           }
         }
