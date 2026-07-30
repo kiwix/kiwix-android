@@ -10,7 +10,7 @@
   <string name="menu_home">Agejdan</string>
   <string name="menu_settings">Iɣewwaṛen</string>
   <string name="menu_search_in_text">Nadi deg usebter</string>
-  <string name="menu_random_article">Amagrad agacuran</string>
+  <string name="menu_random_page">Amagrad agacuran</string>
   <string name="menu_about_app">Ɣef usnas n %s</string>
   <string name="save_media">Sekles amidya</string>
   <string name="search_label">Nadi</string>

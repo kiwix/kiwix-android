@@ -11,7 +11,7 @@
   <string name="menu_settings">අභිරුචි</string>
   <string name="menu_search_in_text">පෙළෙහි සොයන්න</string>
   <string name="bookmarks">පොත්යොමු</string>
-  <string name="menu_random_article">අහඹු ලිපිය</string>
+  <string name="menu_random_page">අහඹු ලිපිය</string>
   <string name="menu_read_aloud">හඬනගා කියවන්න</string>
   <string name="menu_read_aloud_stop">හඬනගා කියවීම නවත්වන්න</string>
   <string name="save_media">මාධ්‍යය සුරකින්න…</string>

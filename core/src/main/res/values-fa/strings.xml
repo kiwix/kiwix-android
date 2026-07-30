@@ -17,7 +17,7 @@
   <string name="menu_settings">تنظیمات</string>
   <string name="menu_search_in_text">جستجو در صفحه</string>
   <string name="bookmarks">نشانک‌ها</string>
-  <string name="menu_random_article">مقالهٔ تصادفی</string>
+  <string name="menu_random_page">مقالهٔ تصادفی</string>
   <string name="menu_read_aloud">با صدای بلند بخوان</string>
   <string name="menu_read_aloud_stop">خواندن با صدای بلند را متوقف کن</string>
   <string name="menu_support_kiwix">پشتیبانی از کیویکس</string>

@@ -15,7 +15,7 @@
   <string name="menu_settings">ഐച്ഛികങ്ങള്‍</string>
   <string name="menu_search_in_text">എഴുത്തിൽ തിരയുക</string>
   <string name="bookmarks">ബൂക്ക്മാർക്കുകൾ</string>
-  <string name="menu_random_article">ഏതെങ്കിലും ലേഖനം</string>
+  <string name="menu_random_page">ഏതെങ്കിലും ലേഖനം</string>
   <string name="menu_read_aloud">ഉച്ചത്തിൽ വായിക്കുക</string>
   <string name="menu_read_aloud_stop">ഉച്ചത്തിൽ വായിക്കുന്നത് നിർത്തുക</string>
   <string name="menu_support_kiwix">കിവിക്സിനെ പിന്തുണയ്ക്കുക</string>

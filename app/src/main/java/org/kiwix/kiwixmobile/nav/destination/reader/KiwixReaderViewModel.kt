@@ -44,7 +44,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
@@ -84,7 +84,7 @@ class KiwixReaderViewModel @Inject constructor(
   readerSessionManager: ReaderSessionManager,
   readerIntentManager: ReaderIntentManager,
   pendingSearchItemManager: PendingSearchItemManager,
-  readerArticleManager: ReaderArticleManager,
+  readerPageManager: ReaderPageManager,
   readAloudManager: ReadAloudManager,
   donationDialogHandler: DonationDialogHandler,
   findInPageManager: FindInPageManager,
@@ -105,7 +105,7 @@ class KiwixReaderViewModel @Inject constructor(
     readerSessionManager,
     readerIntentManager,
     pendingSearchItemManager,
-    readerArticleManager,
+    readerPageManager,
     readAloudManager,
     donationDialogHandler,
     findInPageManager,

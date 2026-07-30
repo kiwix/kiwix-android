@@ -295,52 +295,52 @@ internal class ReaderMenuStateTest {
     assertThat(hasMenuItem(TAKE_NOTE_MENU_ITEM_TESTING_TAG)).isFalse()
   }
 
-  // Random article menu item tests
+  // Random page menu item tests
 
   @Test
-  internal fun `random article menu item is present when url is valid`() {
-    assertThat(hasMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG)).isTrue()
+  internal fun `random page menu item is present when url is valid`() {
+    assertThat(hasMenuItem(RANDOM_PAGE_MENU_ITEM_TESTING_TAG)).isTrue()
   }
 
   @Test
-  internal fun `random article menu item is in overflow menu`() {
-    assertThat(findMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG).isInOverflow).isTrue()
+  internal fun `random page menu item is in overflow menu`() {
+    assertThat(findMenuItem(RANDOM_PAGE_MENU_ITEM_TESTING_TAG).isInOverflow).isTrue()
   }
 
   @Test
-  internal fun `random article menu item click invokes onRandomArticleMenuClicked`() {
-    findMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG).onClick()
-    verify { menuClickListener.onRandomArticleMenuClicked() }
+  internal fun `random page menu item click invokes onRandomPageMenuClicked`() {
+    findMenuItem(RANDOM_PAGE_MENU_ITEM_TESTING_TAG).onClick()
+    verify { menuClickListener.onRandomPageMenuClicked() }
   }
 
   @Test
-  internal fun `random article menu item is hidden when url is not valid`() {
+  internal fun `random page menu item is hidden when url is not valid`() {
     val state = ReaderMenuState(
       menuClickListener = menuClickListener,
       isUrlValidInitially = false
     )
     assertThat(
-      state.menuItems.any { it.testingTag == RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG }
+      state.menuItems.any { it.testingTag == RANDOM_PAGE_MENU_ITEM_TESTING_TAG }
     ).isFalse()
   }
 
   @Test
-  internal fun `random article menu item is hidden in tab switcher mode`() {
+  internal fun `random page menu item is hidden in tab switcher mode`() {
     readerMenuState.showTabSwitcherOptions()
-    assertThat(hasMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG)).isFalse()
+    assertThat(hasMenuItem(RANDOM_PAGE_MENU_ITEM_TESTING_TAG)).isFalse()
   }
 
   @Test
-  internal fun `random article menu item is hidden when book specific items are hidden`() {
+  internal fun `random page menu item is hidden when book specific items are hidden`() {
     readerMenuState.hideBookSpecificMenuItems()
-    assertThat(hasMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG)).isFalse()
+    assertThat(hasMenuItem(RANDOM_PAGE_MENU_ITEM_TESTING_TAG)).isFalse()
   }
 
   @Test
-  internal fun `random article menu item reappears when book specific items are shown`() {
+  internal fun `random page menu item reappears when book specific items are shown`() {
     readerMenuState.hideBookSpecificMenuItems()
     readerMenuState.showBookSpecificMenuItems()
-    assertThat(hasMenuItem(RANDOM_ARTICLE_MENU_ITEM_TESTING_TAG)).isTrue()
+    assertThat(hasMenuItem(RANDOM_PAGE_MENU_ITEM_TESTING_TAG)).isTrue()
   }
 
   // Read aloud menu item tests

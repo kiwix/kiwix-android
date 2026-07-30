@@ -16,7 +16,7 @@
   <string name="menu_settings">Innstillinger</string>
   <string name="menu_search_in_text">Finn i tekst</string>
   <string name="bookmarks">Bokmerker</string>
-  <string name="menu_random_article">Tilfeldig artikkel</string>
+  <string name="menu_random_page">Tilfeldig artikkel</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
   <string name="menu_support_kiwix">Støtt Kiwix</string>
@@ -54,8 +54,8 @@
   <string name="zim_not_opened">Kan ikke åpne ZIM-filen</string>
   <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil. %s</string>
   <string name="error_article_url_not_found">Feil: Kunne ikke laste inn artikkelen (Url: %1$s).</string>
-  <string name="error_loading_random_article_zim_not_loaded">Kan ikke laste inn artikkelen. ZIM-filen er ikke lastet inn riktig.</string>
-  <string name="could_not_find_random_article">Klarte ikke å hente en tilfeldig artikkel. Prøv igjen senere.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Kan ikke laste inn artikkelen. ZIM-filen er ikke lastet inn riktig.</string>
+  <string name="could_not_find_random_page">Klarte ikke å hente en tilfeldig artikkel. Prøv igjen senere.</string>
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
   <string name="pref_info_version">Versjon</string>

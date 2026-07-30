@@ -30,7 +30,7 @@
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_search_in_text">Sayfada bul</string>
   <string name="bookmarks">Yer imleri</string>
-  <string name="menu_random_article">Rastgele madde</string>
+  <string name="menu_random_page">Rastgele madde</string>
   <string name="menu_read_aloud">Yüksek sesle oku</string>
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
   <string name="menu_support_kiwix">Kiwix’i destekle</string>
@@ -82,8 +82,8 @@
   <string name="zim_not_opened">ZIM dosyası açılamıyor</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil. %s</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Makale açılamıyor. ZIM dosyası düzgün yüklenemedi.</string>
-  <string name="could_not_find_random_article">Rastgele bir makale bulunamadı. Lütfen daha sonra tekrar deneyin.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Makale açılamıyor. ZIM dosyası düzgün yüklenemedi.</string>
+  <string name="could_not_find_random_page">Rastgele bir makale bulunamadı. Lütfen daha sonra tekrar deneyin.</string>
   <string name="pref_display_title">Görüntüle</string>
   <string name="pref_info_title">Bilgi</string>
   <string name="pref_info_version">Sürüm</string>

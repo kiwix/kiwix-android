@@ -19,7 +19,7 @@
   <string name="menu_settings">Indstillinger</string>
   <string name="menu_search_in_text">Søg på siden</string>
   <string name="bookmarks">Bogmærker</string>
-  <string name="menu_random_article">Vilkårlig artikel</string>
+  <string name="menu_random_page">Vilkårlig artikel</string>
   <string name="menu_read_aloud">Læs højt</string>
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
   <string name="menu_support_kiwix">Støt Kiwix</string>
@@ -71,8 +71,8 @@
   <string name="zim_not_opened">Kan ikke åbne ZIM-filen</string>
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil. %s</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Artiklen kunne ikke indlæses. ZIM-filen er ikke indlæst korrekt.</string>
-  <string name="could_not_find_random_article">Kunne ikke finde en tilfældig artikel. Prøv igen senere.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Artiklen kunne ikke indlæses. ZIM-filen er ikke indlæst korrekt.</string>
+  <string name="could_not_find_random_page">Kunne ikke finde en tilfældig artikel. Prøv igen senere.</string>
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>

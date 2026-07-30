@@ -16,7 +16,7 @@
   <string name="menu_settings">Setări</string>
   <string name="menu_search_in_text">Găsește în pagină</string>
   <string name="bookmarks">Semn de carte</string>
-  <string name="menu_random_article">Articol aleatoriu</string>
+  <string name="menu_random_page">Articol aleatoriu</string>
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
   <string name="menu_support_kiwix">Susține Kiwix</string>
@@ -64,8 +64,8 @@
   <string name="zim_not_opened">Nu se poate deschide fișierul ZIM</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Nu se poate încărca articolul. Fișierul ZIM nu este încărcat corect.</string>
-  <string name="could_not_find_random_article">Imposibil de găsit un articol aleatoriu. Vă rugăm să încercați din nou mai târziu.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Nu se poate încărca articolul. Fișierul ZIM nu este încărcat corect.</string>
+  <string name="could_not_find_random_page">Imposibil de găsit un articol aleatoriu. Vă rugăm să încercați din nou mai târziu.</string>
   <string name="pref_display_title">Afișaj</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>

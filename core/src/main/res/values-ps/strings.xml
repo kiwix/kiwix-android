@@ -12,7 +12,7 @@
   <string name="menu_settings">غوره‌توبونه</string>
   <string name="menu_search_in_text">په مخ کې موندل</string>
   <string name="bookmarks">کتاب‌‌نښې</string>
-  <string name="menu_random_article">ناټاکلې ليکنه</string>
+  <string name="menu_random_page">ناټاکلې ليکنه</string>
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
   <string name="menu_support_kiwix">د کيويکس ملاتړ کول</string>
@@ -60,7 +60,7 @@
   <string name="zim_not_opened">زيم دوتنه نشي پرانېستلی</string>
   <string name="error_file_invalid">تېروتنه:ټاکل‌شوې دوتنه يوه باوري زيم دوتنه نه ده. %s</string>
   <string name="error_article_url_not_found">تېروتنه: د ليکنې بارېدل (وېبتړ: %1$s) نابرياله شو.</string>
-  <string name="error_loading_random_article_zim_not_loaded">ليکنه بارولی نشي. زيم دوتنه په سمه توگه نشي بارېدی.</string>
+  <string name="error_loading_random_page_zim_not_loaded">ليکنه بارولی نشي. زيم دوتنه په سمه توگه نشي بارېدی.</string>
   <string name="pref_display_title">ښکارېدنه</string>
   <string name="pref_info_title">مالومات</string>
   <string name="pref_info_version">بل‌بڼه</string>

@@ -42,9 +42,9 @@ import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
-class ReaderArticleManagerTest {
+class ReaderPageManagerTest {
   private lateinit var context: Context
-  private lateinit var readerArticleManager: ReaderArticleManager
+  private lateinit var readerPageManager: ReaderPageManager
 
   private val pdfPrinter = mockk<PdfPrint>()
   private val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
@@ -54,7 +54,7 @@ class ReaderArticleManagerTest {
     clearAllMocks()
     context = ApplicationProvider.getApplicationContext()
 
-    readerArticleManager = ReaderArticleManager(
+    readerPageManager = ReaderPageManager(
       context,
       pdfPrinter,
       zimReaderContainer
@@ -86,12 +86,12 @@ class ReaderArticleManagerTest {
       thirdArg<(File) -> Unit>().invoke(expectedFile)
     }
 
-    val result = readerArticleManager.createPdf(webView)
+    val result = readerPageManager.createPdf(webView)
 
     assertTrue(result.isSuccess)
 
     assertEquals(
-      ReaderArticleManager.CreatePdfResult.Success(expectedFile),
+      ReaderPageManager.CreatePdfResult.Success(expectedFile),
       result.getOrThrow()
     )
 
@@ -114,10 +114,10 @@ class ReaderArticleManagerTest {
 
     every { webView.progress } returns 50
 
-    val result = readerArticleManager.createPdf(webView)
+    val result = readerPageManager.createPdf(webView)
 
     assertEquals(
-      ReaderArticleManager.CreatePdfResult.PageStillLoading,
+      ReaderPageManager.CreatePdfResult.PageStillLoading,
       result.getOrThrow()
     )
 
@@ -148,12 +148,12 @@ class ReaderArticleManagerTest {
       onError("Printing failed")
     }
 
-    val result = readerArticleManager.createPdf(webView)
+    val result = readerPageManager.createPdf(webView)
 
     assertTrue(result.isSuccess)
 
     val failure =
-      result.getOrThrow() as ReaderArticleManager.CreatePdfResult.Failure
+      result.getOrThrow() as ReaderPageManager.CreatePdfResult.Failure
 
     assertEquals(
       "Printing failed",
@@ -185,7 +185,7 @@ class ReaderArticleManagerTest {
       thirdArg<(File) -> Unit>().invoke(generatedFile)
     }
 
-    readerArticleManager.createPdf(webView)
+    readerPageManager.createPdf(webView)
 
     assertEquals(
       "article.pdf",
@@ -217,7 +217,7 @@ class ReaderArticleManagerTest {
       thirdArg<(File) -> Unit>().invoke(generatedFile)
     }
 
-    readerArticleManager.createPdf(webView)
+    readerPageManager.createPdf(webView)
 
     assertEquals(
       "article.pdf",
@@ -252,91 +252,91 @@ class ReaderArticleManagerTest {
       thirdArg<(File) -> Unit>().invoke(secondArg())
     }
 
-    readerArticleManager.createPdf(webView)
+    readerPageManager.createPdf(webView)
 
     assertTrue(existingFile.exists())
   }
 
   @Test
-  fun `getRandomArticle returns NoZimFileLoaded when no zim file is loaded`() = runTest {
+  fun `getRandomPage returns NoZimFileLoaded when no zim file is loaded`() = runTest {
     every { zimReaderContainer.zimFileReader } returns null
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded,
-      readerArticleManager.getRandomArticle()
+      ReaderPageManager.GetRandomPageResult.NoZimFileLoaded,
+      readerPageManager.getRandomPage()
     )
 
     verify(exactly = 0) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle returns Success when article is found`() = runTest {
+  fun `getRandomPage returns Success when page is found`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
-    every { zimReaderContainer.getRandomArticleUrl() } returns "A/B"
+    every { zimReaderContainer.getRandomPageUrl() } returns "A/B"
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.Success("A/B"),
-      readerArticleManager.getRandomArticle()
+      ReaderPageManager.GetRandomPageResult.Success("A/B"),
+      readerPageManager.getRandomPage()
     )
 
     verify(exactly = 1) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle retries until article is found`() = runTest {
+  fun `getRandomPage retries until page is found`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
     every {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     } returnsMany listOf(
       null,
       null,
-      "RandomArticle"
+      "RandomPage"
     )
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.Success("RandomArticle"),
-      readerArticleManager.getRandomArticle()
+      ReaderPageManager.GetRandomPageResult.Success("RandomPage"),
+      readerPageManager.getRandomPage()
     )
 
     verify(exactly = 3) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle returns FailedAfterRetries when retries are exhausted`() = runTest {
+  fun `getRandomPage returns FailedAfterRetries when retries are exhausted`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
-    every { zimReaderContainer.getRandomArticleUrl() } returns null
+    every { zimReaderContainer.getRandomPageUrl() } returns null
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries,
-      readerArticleManager.getRandomArticle()
+      ReaderPageManager.GetRandomPageResult.FailedAfterRetries,
+      readerPageManager.getRandomPage()
     )
 
     verify(exactly = 3) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 
   @Test
-  fun `getRandomArticle respects custom retry count`() = runTest {
+  fun `getRandomPage respects custom retry count`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
-    every { zimReaderContainer.getRandomArticleUrl() } returns null
+    every { zimReaderContainer.getRandomPageUrl() } returns null
 
     assertEquals(
-      ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries,
-      readerArticleManager.getRandomArticle(retryCount = 5)
+      ReaderPageManager.GetRandomPageResult.FailedAfterRetries,
+      readerPageManager.getRandomPage(retryCount = 5)
     )
 
     verify(exactly = 6) {
-      zimReaderContainer.getRandomArticleUrl()
+      zimReaderContainer.getRandomPageUrl()
     }
   }
 }

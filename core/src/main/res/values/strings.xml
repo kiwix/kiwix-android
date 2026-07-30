@@ -5,7 +5,7 @@
   <string name="menu_settings">Settings</string>
   <string name="menu_search_in_text">Find in page</string>
   <string name="bookmarks">Bookmarks</string>
-  <string name="menu_random_article">Random article</string>
+  <string name="menu_random_page">Random page</string>
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
   <string name="menu_support_kiwix">Support Kiwix</string>
@@ -58,8 +58,8 @@
   <string name="zim_not_opened">Unable to open ZIM file</string>
   <string name="error_file_invalid">Error: The selected file is not a valid ZIM file. %s</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) failed.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Unable to load article. The ZIM file is not properly loaded.</string>
-  <string name="could_not_find_random_article">Unable to find a random article. Please try again later.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Unable to load page. The ZIM file is not properly loaded.</string>
+  <string name="could_not_find_random_page">Unable to find a random page. Please try again later.</string>
   <string name="pref_display_title">Display</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>

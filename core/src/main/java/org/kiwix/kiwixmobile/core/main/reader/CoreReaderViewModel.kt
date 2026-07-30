@@ -87,7 +87,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.S
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.StartReadSelection
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsPaused
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsResumed
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
@@ -156,7 +156,7 @@ abstract class CoreReaderViewModel(
   private val readerSessionManager: ReaderSessionManager,
   private val readerIntentManager: ReaderIntentManager,
   val pendingSearchItemManager: PendingSearchItemManager,
-  private val readerArticleManager: ReaderArticleManager,
+  private val readerPageManager: ReaderPageManager,
   private val readAloudManager: ReadAloudManager,
   private val donationDialogHandler: DonationDialogHandler,
   private val findInPageManager: FindInPageManager,
@@ -596,22 +596,22 @@ abstract class CoreReaderViewModel(
 
   override fun onShareMenuClicked() {
     launchInViewModelScope {
-      val pdfResult = readerArticleManager.createPdf(getCurrentWebView())
+      val pdfResult = readerPageManager.createPdf(getCurrentWebView())
       when (val result = pdfResult.getOrNull()) {
-        is ReaderArticleManager.CreatePdfResult.Success -> {
+        is ReaderPageManager.CreatePdfResult.Success -> {
           emitEffect(ReaderEffect.SharePdfFile(result.file))
         }
 
-        is ReaderArticleManager.CreatePdfResult.Failure -> {
+        is ReaderPageManager.CreatePdfResult.Failure -> {
           Log.e(TAG_KIWIX, "Failed to generate PDF for sharing: ${result.throwable}")
           emitEffect(ReaderEffect.ShowToast(context.getString(string.unable_to_share_article)))
         }
 
-        ReaderArticleManager.CreatePdfResult.PageStillLoading -> {
+        ReaderPageManager.CreatePdfResult.PageStillLoading -> {
           emitEffect(ReaderEffect.ShowToast(context.getString(string.please_wait_for_page_to_load)))
         }
 
-        ReaderArticleManager.CreatePdfResult.CacheDirUnavailable,
+        ReaderPageManager.CreatePdfResult.CacheDirUnavailable,
         null -> {
           emitEffect(ReaderEffect.ShowToast(context.getString(string.unable_to_share_article)))
         }
@@ -619,19 +619,19 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  override fun onRandomArticleMenuClicked() {
+  override fun onRandomPageMenuClicked() {
     launchInViewModelScope {
-      when (val result = readerArticleManager.getRandomArticle()) {
-        is ReaderArticleManager.GetRandomArticleResult.Success -> {
-          readerWebViewManager.openArticle(result.articleUrl, getCurrentWebView())
+      when (val result = readerPageManager.getRandomPage()) {
+        is ReaderPageManager.GetRandomPageResult.Success -> {
+          readerWebViewManager.openPage(result.pageUrl, getCurrentWebView())
         }
 
-        ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded -> {
-          emitEffect(ReaderEffect.ShowToast(context.getString(string.error_loading_random_article_zim_not_loaded)))
+        ReaderPageManager.GetRandomPageResult.NoZimFileLoaded -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.error_loading_random_page_zim_not_loaded)))
         }
 
-        ReaderArticleManager.GetRandomArticleResult.FailedAfterRetries -> {
-          emitEffect(ReaderEffect.ShowToast(context.getString(string.could_not_find_random_article)))
+        ReaderPageManager.GetRandomPageResult.FailedAfterRetries -> {
+          emitEffect(ReaderEffect.ShowToast(context.getString(string.could_not_find_random_page)))
         }
       }
     }
@@ -1129,8 +1129,8 @@ abstract class CoreReaderViewModel(
     withContext(mainDispatcher) { getCurrentWebView().url != null }
 
   private suspend fun openMainPage() {
-    val articleUrl = zimReaderContainer.mainPage
-    readerWebViewManager.openArticle(articleUrl, getCurrentWebView())
+    val pageUrl = zimReaderContainer.mainPage
+    readerWebViewManager.openPage(pageUrl, getCurrentWebView())
   }
 
   protected suspend fun loadUrlWithCurrentWebview(url: String?) {
@@ -1411,10 +1411,10 @@ abstract class CoreReaderViewModel(
   private fun onBookmarkButtonClicked() {
     launchInViewModelScope {
       val pageTitle = getCurrentWebView().title
-      val articleUrl = getCurrentWebView().url
+      val pageUrl = getCurrentWebView().url
       val result = bookmarkManager.addBookmark(
         pageTitle,
-        articleUrl,
+        pageUrl,
         uiState.value.bookmarkButtonItem.isBookmarked
       )
       when (result) {

@@ -14,7 +14,7 @@
   <string name="menu_settings">Thiết lập</string>
   <string name="menu_search_in_text">Tìm trong trang</string>
   <string name="bookmarks">Dấu trang</string>
-  <string name="menu_random_article">Bài viết ngẫu nhiên</string>
+  <string name="menu_random_page">Bài viết ngẫu nhiên</string>
   <string name="menu_read_aloud">Đọc to</string>
   <string name="menu_read_aloud_stop">Dừng đọc to</string>
   <string name="menu_support_kiwix">Hỗ trợ Kiwix</string>

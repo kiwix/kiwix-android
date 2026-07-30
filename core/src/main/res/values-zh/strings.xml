@@ -42,7 +42,7 @@
   <string name="menu_settings">设置</string>
   <string name="menu_search_in_text">在页面中查找</string>
   <string name="bookmarks">书签</string>
-  <string name="menu_random_article">随机条目</string>
+  <string name="menu_random_page">随机条目</string>
   <string name="menu_read_aloud">朗读</string>
   <string name="menu_read_aloud_stop">停止朗读</string>
   <string name="menu_support_kiwix">支持Kiwix</string>
@@ -95,8 +95,8 @@
   <string name="zim_not_opened">无法打开 ZIM 文件</string>
   <string name="error_file_invalid">错误：选定的文件不是有效的 ZIM 文件。 %s</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
-  <string name="error_loading_random_article_zim_not_loaded">无法加载文章。ZIM 文件未正确加载。</string>
-  <string name="could_not_find_random_article">无法找到随机文章。请稍后重试。</string>
+  <string name="error_loading_random_page_zim_not_loaded">无法加载文章。ZIM 文件未正确加载。</string>
+  <string name="could_not_find_random_page">无法找到随机文章。请稍后重试。</string>
   <string name="pref_display_title">显示</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_info_version">版本</string>

@@ -14,7 +14,7 @@
   <string name="menu_settings">Nastavenia</string>
   <string name="menu_search_in_text">Nájsť na stránke</string>
   <string name="bookmarks">Záložky</string>
-  <string name="menu_random_article">Náhodný článok</string>
+  <string name="menu_random_page">Náhodný článok</string>
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
   <string name="menu_support_kiwix">Podporiť Kiwix</string>
@@ -67,8 +67,8 @@
   <string name="zim_not_opened">Nepodarilo sa otvoriť súbor ZIM</string>
   <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný súbor ZIM. %s</string>
   <string name="error_article_url_not_found">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Nepodarilo sa načítať článok. Súbor ZIM nie je správne načítaný.</string>
-  <string name="could_not_find_random_article">Nepodarilo sa nájsť náhodný článok. Skúste to prosím neskôr.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Nepodarilo sa načítať článok. Súbor ZIM nie je správne načítaný.</string>
+  <string name="could_not_find_random_page">Nepodarilo sa nájsť náhodný článok. Skúste to prosím neskôr.</string>
   <string name="pref_display_title">Zobrazenie</string>
   <string name="pref_info_title">Informácie</string>
   <string name="pref_info_version">Verzia</string>

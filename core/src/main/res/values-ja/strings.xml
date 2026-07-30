@@ -21,7 +21,7 @@
   <string name="menu_settings">設定</string>
   <string name="menu_search_in_text">テキストで検索</string>
   <string name="bookmarks">ブックマーク</string>
-  <string name="menu_random_article">ランダム記事</string>
+  <string name="menu_random_page">ランダム記事</string>
   <string name="menu_read_aloud">読み上げる</string>
   <string name="menu_read_aloud_stop">読み上げをやめる</string>
   <string name="menu_support_kiwix">Kiwix をサポートする</string>

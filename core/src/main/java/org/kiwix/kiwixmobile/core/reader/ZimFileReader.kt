@@ -246,7 +246,7 @@ class ZimFileReader(
       null
     }
 
-  fun getRandomArticleUrl(): String? =
+  fun getRandomPageUrl(): String? =
     try {
       jniKiwixReader.randomEntry.path
     } catch (exception: Exception) {

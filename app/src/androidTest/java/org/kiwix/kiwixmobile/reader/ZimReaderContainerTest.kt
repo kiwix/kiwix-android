@@ -184,7 +184,7 @@ class ZimReaderContainerTest {
     assertEquals("", container.getRedirect("anything"))
     assertFalse(container.isRedirect("anything"))
     assertNull(container.getPageUrlFromTitle("anything"))
-    assertNull(container.getRandomArticleUrl())
+    assertNull(container.getRandomPageUrl())
 
     // Load reader
     container.setZimReaderSource(ZimReaderSource(testZimFile))
@@ -211,8 +211,8 @@ class ZimReaderContainerTest {
 
     assertNull(container.getPageUrlFromTitle("Nonexistent_Title_12345"))
 
-    // Random article
-    assertNotNull(container.getRandomArticleUrl())
+    // Random Page
+    assertNotNull(container.getRandomPageUrl())
 
     // Metadata
     container.setZimReaderSource(ZimReaderSource(testZimFile))

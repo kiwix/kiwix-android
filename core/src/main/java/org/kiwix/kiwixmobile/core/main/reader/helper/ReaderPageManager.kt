@@ -30,12 +30,12 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import javax.inject.Inject
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager.CreatePdfResult.PageStillLoading
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager.CreatePdfResult.CacheDirUnavailable
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager.CreatePdfResult.PageStillLoading
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager.CreatePdfResult.CacheDirUnavailable
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import kotlin.coroutines.resume
 
-class ReaderArticleManager @Inject constructor(
+class ReaderPageManager @Inject constructor(
   private val context: Context,
   private val pdfPrinter: PdfPrint,
   private val zimReaderContainer: ZimReaderContainer
@@ -47,10 +47,10 @@ class ReaderArticleManager @Inject constructor(
     data class Failure(val throwable: Throwable) : CreatePdfResult
   }
 
-  sealed interface GetRandomArticleResult {
-    data class Success(val articleUrl: String) : GetRandomArticleResult
-    data object NoZimFileLoaded : GetRandomArticleResult
-    data object FailedAfterRetries : GetRandomArticleResult
+  sealed interface GetRandomPageResult {
+    data class Success(val pageUrl: String) : GetRandomPageResult
+    data object NoZimFileLoaded : GetRandomPageResult
+    data object FailedAfterRetries : GetRandomPageResult
   }
 
   suspend fun createPdf(webView: KiwixWebView): Result<CreatePdfResult> =
@@ -91,23 +91,23 @@ class ReaderArticleManager @Inject constructor(
     }
 
   @Suppress("ReturnCount")
-  suspend fun getRandomArticle(retryCount: Int = 2): GetRandomArticleResult {
+  suspend fun getRandomPage(retryCount: Int = 2): GetRandomPageResult {
     if (zimReaderContainer.zimFileReader == null) {
-      return GetRandomArticleResult.NoZimFileLoaded
+      return GetRandomPageResult.NoZimFileLoaded
     }
 
-    val articleUrl = zimReaderContainer.getRandomArticleUrl() ?: if (retryCount > ZERO) {
+    val pageUrl = zimReaderContainer.getRandomPageUrl() ?: if (retryCount > ZERO) {
       Log.e(
         TAG_KIWIX,
-        "Random article URL is null, retrying... Remaining attempts: $retryCount"
+        "Random Page URL is null, retrying... Remaining attempts: $retryCount"
       )
-      return getRandomArticle(retryCount - 1)
+      return getRandomPage(retryCount - 1)
     } else {
-      Log.e(TAG_KIWIX, "Failed to load random article after multiple attempts")
-      return GetRandomArticleResult.FailedAfterRetries
+      Log.e(TAG_KIWIX, "Failed to load random page after multiple attempts")
+      return GetRandomPageResult.FailedAfterRetries
     }
 
-    Log.d(TAG_KIWIX, "getRandomArticle: $articleUrl")
-    return GetRandomArticleResult.Success(articleUrl)
+    Log.d(TAG_KIWIX, "getRandomPage: $pageUrl")
+    return GetRandomPageResult.Success(pageUrl)
   }
 }

@@ -73,7 +73,7 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
 
       // ── Verify searchSuggestions and related methods ──
       assertNotNull(reader.searchSuggestions("android"))
-      assertNotNull(reader.getRandomArticleUrl())
+      assertNotNull(reader.getRandomPageUrl())
       assertTrue(reader.getSuggestedSpelledWords("test", 5).isEmpty())
       assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
 
@@ -146,7 +146,7 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       assertEquals("", reader.tags)
       assertNull(reader.favicon)
       assertNull(reader.searchSuggestions("test"))
-      assertNull(reader.getRandomArticleUrl())
+      assertNull(reader.getRandomPageUrl())
       assertNull(reader.getPageUrlFrom("index"))
 
       // ── Verify Factory.create with non-existent file ──

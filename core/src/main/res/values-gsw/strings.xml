@@ -10,7 +10,7 @@
   <string name="menu_settings">Yystellige</string>
   <string name="menu_search_in_text">I de Syte finde</string>
   <string name="bookmarks">Läsezeiche</string>
-  <string name="menu_random_article">Zuefälligi Syte</string>
+  <string name="menu_random_page">Zuefälligi Syte</string>
   <string name="menu_read_aloud">Vorläse</string>
   <string name="menu_read_aloud_stop">Ufhöre vorläse</string>
   <string name="menu_support_kiwix">Kiwix unterstützä</string>

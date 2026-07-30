@@ -41,7 +41,7 @@
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_search_in_text">In Seite suchen</string>
   <string name="bookmarks">Lesezeichen</string>
-  <string name="menu_random_article">Zufälliger Artikel</string>
+  <string name="menu_random_page">Zufälliger Artikel</string>
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="menu_support_kiwix">Kiwix unterstützen</string>
@@ -94,8 +94,8 @@
   <string name="zim_not_opened">Konnte die ZIM-Datei nicht öffnen</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei. %s</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
-  <string name="error_loading_random_article_zim_not_loaded">Artikel kann nicht geladen werden. Die ZIM-Datei wurde nicht richtig geladen.</string>
-  <string name="could_not_find_random_article">Es wurde kein zufälliger Artikel gefunden. Bitte versuchen Sie es später noch einmal.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Artikel kann nicht geladen werden. Die ZIM-Datei wurde nicht richtig geladen.</string>
+  <string name="could_not_find_random_page">Es wurde kein zufälliger Artikel gefunden. Bitte versuchen Sie es später noch einmal.</string>
   <string name="pref_display_title">Anzeige</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>

@@ -19,7 +19,7 @@
   <string name="menu_settings">Mipangilio</string>
   <string name="menu_search_in_text">Tafuta katika ukurasa</string>
   <string name="bookmarks">Maalamisho</string>
-  <string name="menu_random_article">Ukurasa wa bahati</string>
+  <string name="menu_random_page">Ukurasa wa bahati</string>
   <string name="menu_read_aloud">Soma kwa sauti</string>
   <string name="menu_read_aloud_stop">Simama kusoma kwa sauti</string>
   <string name="menu_support_kiwix">Tuma ssaada kwa Kiwix</string>

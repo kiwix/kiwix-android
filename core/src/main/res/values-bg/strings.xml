@@ -17,7 +17,7 @@
   <string name="menu_settings">Настройки</string>
   <string name="menu_search_in_text">Търси в страницата</string>
   <string name="bookmarks">Отметки</string>
-  <string name="menu_random_article">Случайна статия</string>
+  <string name="menu_random_page">Случайна статия</string>
   <string name="menu_read_aloud">Четене на глас</string>
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
   <string name="save_media">Запази медията</string>

@@ -21,7 +21,7 @@
   <string name="menu_settings">設定</string>
   <string name="menu_search_in_text">於頁面中尋找</string>
   <string name="bookmarks">書籤</string>
-  <string name="menu_random_article">隨機條目</string>
+  <string name="menu_random_page">隨機條目</string>
   <string name="menu_read_aloud">朗讀</string>
   <string name="menu_read_aloud_stop">停止朗讀</string>
   <string name="menu_support_kiwix">支持 Kiwix</string>
@@ -74,8 +74,8 @@
   <string name="zim_not_opened">無法打開 ZIM 檔案</string>
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。 %s</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
-  <string name="error_loading_random_article_zim_not_loaded">無法載入條目。ZIM 檔案未正確載入。</string>
-  <string name="could_not_find_random_article">無法找到隨機條目。請稍後重試。</string>
+  <string name="error_loading_random_page_zim_not_loaded">無法載入條目。ZIM 檔案未正確載入。</string>
+  <string name="could_not_find_random_page">無法找到隨機條目。請稍後重試。</string>
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>

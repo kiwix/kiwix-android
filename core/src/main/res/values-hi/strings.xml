@@ -22,7 +22,7 @@
   <string name="menu_settings">पसंद</string>
   <string name="menu_search_in_text">पृष्ठ में ढूंढें</string>
   <string name="bookmarks">बूकमार्क</string>
-  <string name="menu_random_article">कोई भी लेख</string>
+  <string name="menu_random_page">कोई भी लेख</string>
   <string name="menu_read_aloud">पढ़ा कर सुनें</string>
   <string name="menu_read_aloud_stop">पढ़ा कर सुनना रोकें</string>
   <string name="menu_support_kiwix">किविक्स का समर्थन करें</string>
@@ -71,8 +71,8 @@
   <string name="zim_not_opened">ZIM फ़ाइल खोलने में असमर्थ</string>
   <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है। %s</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
-  <string name="error_loading_random_article_zim_not_loaded">लेख लोड करने में असमर्थ. ज़िम फ़ाइल ठीक से लोड नहीं की गई है।</string>
-  <string name="could_not_find_random_article">कोई यादृच्छिक लेख नहीं मिल सका। कृपया बाद में पुनः प्रयास करें।</string>
+  <string name="error_loading_random_page_zim_not_loaded">लेख लोड करने में असमर्थ. ज़िम फ़ाइल ठीक से लोड नहीं की गई है।</string>
+  <string name="could_not_find_random_page">कोई यादृच्छिक लेख नहीं मिल सका। कृपया बाद में पुनः प्रयास करें।</string>
   <string name="pref_display_title">प्रदर्शन</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
