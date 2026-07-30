@@ -51,9 +51,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import android.os.FileObserver
-import android.content.ContextWrapper
-import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
 import org.kiwix.kiwixmobile.BuildConfig
@@ -66,6 +63,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
@@ -75,6 +73,7 @@ import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -147,8 +146,7 @@ class LocalLibraryViewModel @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   private val zimReaderFactory: ZimFileReader.Factory,
   private val deleteFilesUseCase: DeleteFilesUseCase,
-  private val libkiwixBookFactory: LibkiwixBookFactory,
-  private val libkiwixBookmarks: LibkiwixBookmarks,
+  private val storageDeviceProvider: StorageDeviceProvider,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(), SelectedZimFileCallback {
   private val fileObservers = mutableListOf<FileObserver>()
@@ -229,7 +227,6 @@ class LocalLibraryViewModel @Inject constructor(
       selectedZimFileCallback = this
     )
     observeCoroutineFlows()
-    registerFileObservers()
   }
 
   fun onResume() {
@@ -289,6 +286,7 @@ class LocalLibraryViewModel @Inject constructor(
       add(scanBooksFromStorage())
       add(updateBookItems())
       add(processFileSelectActions())
+      add(registerFileObservers())
     }
   }
 
@@ -316,30 +314,15 @@ class LocalLibraryViewModel @Inject constructor(
   }
 
   @Suppress("TooGenericExceptionCaught")
-  private fun registerFileObservers() {
+  private fun registerFileObservers(): Job =
     viewModelScope.launch(ioDispatcher) {
       try {
-        val dirs = mutableListOf<File>()
-        ContextWrapper(context).externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
-        context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
-        context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
-        context.filesDir?.let { dirs.add(it) }
-        context.cacheDir?.let { dirs.add(it) }
-
-        val selectedStoragePath = try {
-          kiwixDataStore.selectedStorage.first()
-        } catch (_: Exception) {
-          ""
-        }
-        if (selectedStoragePath.isNotEmpty()) {
-          dirs.add(File(selectedStoragePath))
-        }
-
-        val distinctDirs = dirs.distinctBy { it.absolutePath }
+        val distinctDirs = storageDeviceProvider.getAppSpecificDirs()
         distinctDirs.forEach { dir ->
-          val zimFilesSubDir = File(dir, "ZIMFiles")
-          val dirsToWatch = listOf(dir, zimFilesSubDir)
-          dirsToWatch.forEach { watchDir ->
+          val dirsToWatch = mutableListOf<File>()
+          dirsToWatch.add(dir)
+          dir.listFiles()?.filter { it.isDirectory }?.let { dirsToWatch.addAll(it) }
+          dirsToWatch.distinctBy { it.absolutePath }.forEach { watchDir ->
             if (watchDir.exists() && watchDir.isDirectory) {
               val observer = createFileObserver(watchDir)
               fileObservers.add(observer)
@@ -351,7 +334,6 @@ class LocalLibraryViewModel @Inject constructor(
         e.printStackTrace()
       }
     }
-  }
 
   private fun createFileObserver(watchDir: File): FileObserver {
     val mask = FileObserver.CREATE or FileObserver.MOVED_TO
@@ -379,38 +361,16 @@ class LocalLibraryViewModel @Inject constructor(
   private fun handleFileEvent(watchDir: File, path: String) {
     if (FileUtils.isValidZimFile(path) || isSplittedZimFile(path)) {
       val file = File(watchDir, path)
-      if (file.exists() && file.isFile) {
-        viewModelScope.launch(ioDispatcher) {
+      viewModelScope.launch(ioDispatcher) {
+        if (file.isFileExist(ioDispatcher) && file.isFile) {
           try {
-            val book = convertFileToBook(file)
-            if (book != null) {
-              libkiwixBookOnDisk.insert(listOf(book))
-            }
+            addBookToLibkiwixBookOnDisk(file)
           } catch (e: Exception) {
             e.printStackTrace()
           }
         }
       }
     }
-  }
-
-  @Suppress("TooGenericExceptionCaught")
-  private suspend fun convertFileToBook(file: File): Book? {
-    return zimReaderFactory.create(ZimReaderSource(file), false)
-      ?.let { zimFileReader ->
-        try {
-          libkiwixBookFactory.create().apply {
-            update(zimFileReader.jniKiwixReader)
-          }.also {
-            // add the book to libkiwix library to validate the imported bookmarks
-            libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
-            zimFileReader.dispose()
-          }
-        } catch (e: Exception) {
-          zimFileReader.dispose()
-          null
-        }
-      }
   }
 
   private fun scanBooksFromStorage() =
