@@ -75,6 +75,7 @@ internal class CoreReaderViewModelTest {
   companion object {
     private const val TEST_TTS_SPEED = 1.25f
   }
+
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()

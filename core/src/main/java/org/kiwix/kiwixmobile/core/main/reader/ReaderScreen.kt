@@ -38,6 +38,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -60,12 +61,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,13 +74,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -182,9 +187,12 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import kotlin.math.abs
+import kotlin.math.round
+import java.util.Locale
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -203,6 +211,20 @@ const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
   "readerBottomBarTableContentButtonTestingTag"
 const val TTS_CONTROL_STOP_BUTTON_TESTING_TAG = "ttsControlStopButtonTestingTag"
 const val TTS_CONTROL_SPEED_BUTTON_TESTING_TAG = "ttsControlSpeedButtonTestingTag"
+const val TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG = "ttsControlPlayPauseButtonTestingTag"
+const val TTS_SPEED_SLIDER_TESTING_TAG = "ttsSpeedSliderTestingTag"
+const val TTS_SPEED_BOTTOM_SHEET_TESTING_TAG = "ttsSpeedBottomSheetTestingTag"
+const val TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG = "ttsSpeedDecrementButtonTestingTag"
+const val TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG = "ttsSpeedIncrementButtonTestingTag"
+
+private const val TTS_MIN_SPEED = 0.5f
+private const val TTS_MAX_SPEED = 2.5f
+private const val TTS_SPEED_STEP = 0.05f
+private const val TTS_SPEED_ROUND_FACTOR = 100f
+private const val TTS_SPEED_SLIDER_STEPS_FACTOR = 20f
+private const val TTS_SPEED_PRESET_TOLERANCE = 0.01f
+private const val TTS_SPEED_QUARTER_STEP = 0.75f
+private const val TTS_SPEED_ONE_TWENTY_FIVE_STEP = 1.25f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
@@ -601,77 +623,310 @@ private fun NoBookOpenView(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod", "MagicNumber")
 @Composable
 private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
+  var showSpeedBottomSheet by remember { mutableStateOf(false) }
+
+  // Dismiss bottom sheet when TTS controls become hidden
+  LaunchedEffect(state.showTtsControls) {
+    if (!state.showTtsControls) {
+      showSpeedBottomSheet = false
+    }
+  }
+
   if (state.showTtsControls) {
-    Row {
-      Button(
-        onClick = { onReaderAction(PauseTts) },
+    Surface(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
+      shape = RoundedCornerShape(28.dp),
+      color = MaterialTheme.colorScheme.surfaceContainer,
+      contentColor = MaterialTheme.colorScheme.onSurface,
+      shadowElevation = EIGHT_DP
+    ) {
+      Row(
         modifier = Modifier
-          .weight(1f)
-          .alpha(TTS_BUTTONS_CONTROL_ALPHA)
+          .fillMaxWidth()
+          .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
       ) {
+        // Left: Speed control button
+        Surface(
+          onClick = { showSpeedBottomSheet = true },
+          shape = CircleShape,
+          color = MaterialTheme.colorScheme.surfaceContainerHigh,
+          contentColor = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
+        ) {
+          Text(
+            text = state.ttsSpeedText.lowercase(),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.padding(horizontal = TWELVE_DP, vertical = EIGHT_DP)
+          )
+        }
+
+        // Center: Play / Pause button
+        val isPausedFromState = state.pauseTtsButtonText.equals(
+          stringResource(R.string.tts_resume),
+          ignoreCase = true
+        )
+        var localPaused by remember { mutableStateOf(isPausedFromState) }
+        LaunchedEffect(isPausedFromState) {
+          localPaused = isPausedFromState
+        }
+        Surface(
+          onClick = {
+            localPaused = !localPaused
+            onReaderAction(PauseTts)
+          },
+          shape = CircleShape,
+          color = MaterialTheme.colorScheme.primary,
+          contentColor = MaterialTheme.colorScheme.onPrimary,
+          modifier = Modifier
+            .size(48.dp)
+            .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
+        ) {
+          Box(contentAlignment = Alignment.Center) {
+            Icon(
+              painter = painterResource(
+                id = if (localPaused) R.drawable.ic_baseline_play else R.drawable.ic_baseline_pause
+              ),
+              contentDescription = state.pauseTtsButtonText,
+              tint = MaterialTheme.colorScheme.onPrimary,
+              modifier = Modifier.size(28.dp)
+            )
+          }
+        }
+
+        // Right: Close button
+        IconButton(
+          onClick = {
+            showSpeedBottomSheet = false
+            onReaderAction(StopTts)
+          },
+          modifier = Modifier.semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
+        ) {
+          Icon(
+            painter = painterResource(id = R.drawable.ic_clear_white_24dp),
+            contentDescription = stringResource(R.string.stop),
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(24.dp)
+          )
+        }
+      }
+    }
+  }
+
+  if (showSpeedBottomSheet) {
+    val currentSpeedFloat = state.ttsSpeedText
+      .removeSuffix("X")
+      .removeSuffix("x")
+      .toFloatOrNull() ?: KiwixDataStore.DEFAULT_TTS_SPEED
+    TtsSpeedBottomSheet(
+      currentSpeed = currentSpeedFloat,
+      onSpeedChanged = { onReaderAction(ChangeTtsSpeed(it)) },
+      onDismiss = { showSpeedBottomSheet = false }
+    )
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TtsSpeedBottomSheet(
+  currentSpeed: Float,
+  onSpeedChanged: (Float) -> Unit,
+  onDismiss: () -> Unit
+) {
+  val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  ModalBottomSheet(
+    onDismissRequest = onDismiss,
+    sheetState = sheetState,
+    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+    contentColor = MaterialTheme.colorScheme.onSurface,
+    modifier = Modifier.semantics { testTag = TTS_SPEED_BOTTOM_SHEET_TESTING_TAG }
+  ) {
+    TtsSpeedBottomSheetContent(
+      currentSpeed = currentSpeed,
+      onSpeedChanged = onSpeedChanged
+    )
+  }
+}
+
+@Suppress("LongMethod", "MagicNumber")
+@Composable
+fun TtsSpeedBottomSheetContent(
+  currentSpeed: Float,
+  onSpeedChanged: (Float) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  Column(
+    modifier = modifier
+      .fillMaxWidth()
+      .padding(horizontal = TWENTY_FOUR_DP, vertical = SIXTEEN_DP),
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Text(
+      text = String.format(Locale.US, "%.2fx", currentSpeed),
+      style = MaterialTheme.typography.titleLarge,
+      fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.onSurface,
+      modifier = Modifier.padding(bottom = SIXTEEN_DP)
+    )
+
+    TtsSpeedAdjusterRow(
+      currentSpeed = currentSpeed,
+      onSpeedChanged = onSpeedChanged
+    )
+
+    Spacer(modifier = Modifier.height(TWENTY_FOUR_DP))
+
+    TtsSpeedPresetsRow(
+      currentSpeed = currentSpeed,
+      onSpeedChanged = onSpeedChanged
+    )
+
+    Spacer(modifier = Modifier.height(SIXTEEN_DP))
+  }
+}
+
+@Suppress("LongMethod", "MagicNumber")
+@Composable
+private fun TtsSpeedAdjusterRow(
+  currentSpeed: Float,
+  onSpeedChanged: (Float) -> Unit
+) {
+  Row(
+    modifier = Modifier.fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.SpaceBetween
+  ) {
+    Surface(
+      onClick = {
+        val newSpeed = (
+          round((currentSpeed - TTS_SPEED_STEP) * TTS_SPEED_ROUND_FACTOR) / TTS_SPEED_ROUND_FACTOR
+        ).coerceAtLeast(TTS_MIN_SPEED)
+        onSpeedChanged(newSpeed)
+      },
+      shape = CircleShape,
+      color = MaterialTheme.colorScheme.surfaceContainerHigh,
+      contentColor = MaterialTheme.colorScheme.onSurface,
+      modifier = Modifier
+        .size(48.dp)
+        .semantics { testTag = TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG }
+    ) {
+      Box(contentAlignment = Alignment.Center) {
         Text(
-          text = state.pauseTtsButtonText.uppercase(),
-          fontWeight = FontWeight.Bold
+          text = "—",
+          style = MaterialTheme.typography.titleMedium,
+          fontWeight = FontWeight.Bold,
+          color = MaterialTheme.colorScheme.onSurface
         )
       }
-      Spacer(modifier = Modifier.width(FOUR_DP))
-      TtsSpeedButton(
-        ttsSpeedText = state.ttsSpeedText,
-        onSpeedSelected = { onReaderAction(ChangeTtsSpeed(it)) },
-        modifier = Modifier.weight(1f)
-      )
-      Spacer(modifier = Modifier.width(FOUR_DP))
-      Button(
-        onClick = { onReaderAction(StopTts) },
-        modifier = Modifier
-          .weight(1f)
-          .alpha(TTS_BUTTONS_CONTROL_ALPHA)
-          .semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
-      ) {
-        Text(
-          text = stringResource(R.string.stop).uppercase(),
-          fontWeight = FontWeight.Bold
+    }
+
+    Slider(
+      value = currentSpeed.coerceIn(TTS_MIN_SPEED, TTS_MAX_SPEED),
+      onValueChange = { rawVal ->
+        val snappedSpeed = round(rawVal * TTS_SPEED_SLIDER_STEPS_FACTOR) / TTS_SPEED_SLIDER_STEPS_FACTOR
+        onSpeedChanged(snappedSpeed)
+      },
+      valueRange = TTS_MIN_SPEED..TTS_MAX_SPEED,
+      colors = SliderDefaults.colors(
+        thumbColor = MaterialTheme.colorScheme.primary,
+        activeTrackColor = MaterialTheme.colorScheme.primary,
+        inactiveTrackColor = MaterialTheme.colorScheme.surfaceContainerHighest
+      ),
+      modifier = Modifier
+        .weight(1f)
+        .padding(horizontal = TWELVE_DP)
+        .semantics { testTag = TTS_SPEED_SLIDER_TESTING_TAG }
+    )
+
+    Surface(
+      onClick = {
+        val newSpeed = (
+          round((currentSpeed + TTS_SPEED_STEP) * TTS_SPEED_ROUND_FACTOR) / TTS_SPEED_ROUND_FACTOR
+        ).coerceAtMost(TTS_MAX_SPEED)
+        onSpeedChanged(newSpeed)
+      },
+      shape = CircleShape,
+      color = MaterialTheme.colorScheme.surfaceContainerHigh,
+      contentColor = MaterialTheme.colorScheme.onSurface,
+      modifier = Modifier
+        .size(48.dp)
+        .semantics { testTag = TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG }
+    ) {
+      Box(contentAlignment = Alignment.Center) {
+        Icon(
+          imageVector = Icons.Default.Add,
+          contentDescription = "Increase Speed",
+          tint = MaterialTheme.colorScheme.onSurface
         )
       }
     }
   }
 }
 
+@Suppress("MagicNumber")
 @Composable
-private fun TtsSpeedButton(
-  ttsSpeedText: String,
-  onSpeedSelected: (Float) -> Unit,
-  modifier: Modifier = Modifier
+private fun TtsSpeedPresetsRow(
+  currentSpeed: Float,
+  onSpeedChanged: (Float) -> Unit
 ) {
-  var expanded by remember { mutableStateOf(false) }
-  Box(modifier = modifier) {
-    Button(
-      onClick = { expanded = true },
-      modifier = Modifier
-        .fillMaxWidth()
-        .alpha(TTS_BUTTONS_CONTROL_ALPHA)
-        .semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
-    ) {
-      Text(
-        text = ttsSpeedText.uppercase(),
-        fontWeight = FontWeight.Bold
-      )
-    }
-    DropdownMenu(
-      expanded = expanded,
-      onDismissRequest = { expanded = false }
-    ) {
-      KiwixDataStore.SUPPORTED_TTS_SPEEDS.forEach { speed ->
-        DropdownMenuItem(
-          text = { Text("${speed}X") },
-          modifier = Modifier.semantics { testTag = "TTS_SPEED_OPTION_${speed}X" },
-          onClick = {
-            expanded = false
-            onSpeedSelected(speed)
-          }
-        )
+  val presets = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f, 2.5f)
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .horizontalScroll(rememberScrollState()),
+    horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
+    verticalAlignment = Alignment.Top
+  ) {
+    presets.forEach { presetSpeed ->
+      val isSelected = abs(currentSpeed - presetSpeed) < TTS_SPEED_PRESET_TOLERANCE
+      val presetText = if (
+        presetSpeed == TTS_SPEED_QUARTER_STEP || presetSpeed == TTS_SPEED_ONE_TWENTY_FIVE_STEP
+      ) {
+        String.format(Locale.US, "%.2f", presetSpeed)
+      } else {
+        String.format(Locale.US, "%.1f", presetSpeed)
+      }
+      Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        Surface(
+          onClick = { onSpeedChanged(presetSpeed) },
+          shape = RoundedCornerShape(20.dp),
+          color = if (isSelected) {
+            MaterialTheme.colorScheme.primaryContainer
+          } else {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+          },
+          contentColor = if (isSelected) {
+            MaterialTheme.colorScheme.onPrimaryContainer
+          } else {
+            MaterialTheme.colorScheme.onSurface
+          },
+          modifier = Modifier.semantics { testTag = "TTS_SPEED_PRESET_${presetSpeed}X" }
+        ) {
+          Text(
+            text = presetText,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.padding(horizontal = SIXTEEN_DP, vertical = TEN_DP)
+          )
+        }
+        if (presetSpeed == KiwixDataStore.DEFAULT_TTS_SPEED) {
+          Text(
+            text = "Normal",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = FOUR_DP)
+          )
+        }
       }
     }
   }

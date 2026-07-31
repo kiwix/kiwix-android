@@ -285,7 +285,7 @@ class ReaderScreenComposablesTest {
       )
     )
     composeTestRule
-      .onNodeWithText("PAUSE")
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
       .assertIsDisplayed()
     composeTestRule
       .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
@@ -296,7 +296,7 @@ class ReaderScreenComposablesTest {
   fun readerScreen_ttsControls_hiddenWhenInactive() {
     renderReaderScreen(createTestState(showTtsControls = false))
     composeTestRule
-      .onNodeWithText("PAUSE")
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
       .assertDoesNotExist()
     composeTestRule
       .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
@@ -314,7 +314,7 @@ class ReaderScreenComposablesTest {
       onReaderAction = { action = it }
     )
     composeTestRule
-      .onNodeWithText("PAUSE")
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
       .performClick()
     assertEquals(ReaderAction.PauseTts, action)
   }
@@ -615,31 +615,49 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
-  fun readerScreen_ttsSpeedControls_triggersCallback() {
-    var action: ReaderAction? = null
+  fun readerScreen_ttsSpeedButton_isDisplayed() {
     val state = createTestState(showTtsControls = true, ttsSpeedText = "1.0X")
-    renderReaderScreen(state, onReaderAction = { action = it })
-    composeTestRule.waitForIdle()
-
-    // 1. Assert speed button is displayed with the correct text
+    renderReaderScreen(state)
     composeTestRule
       .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
       .assertIsDisplayed()
+  }
 
-    // 2. Perform click to show dropdown menu
+  @Test
+  fun ttsSpeedBottomSheet_selectPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
     composeTestRule
-      .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
+      .onNodeWithText("1.5")
       .performClick()
     composeTestRule.waitForIdle()
 
-    // 3. Select 1.5X speed
-    composeTestRule
-      .onNodeWithTag("TTS_SPEED_OPTION_1.5X", useUnmergedTree = true)
-      .assertIsDisplayed()
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    // 4. Assert callback with correct action and speed parameter
     assertEquals(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_selectHalfSpeedPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("0.5")
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(0.5f), action)
   }
 }
