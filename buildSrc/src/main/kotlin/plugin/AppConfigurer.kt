@@ -19,9 +19,10 @@
 package plugin
 
 import Libs
-import com.android.build.VariantOutput
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.gradle.api.ApkVariantOutput
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.FilterConfiguration
+import com.android.build.api.variant.VariantOutputConfiguration
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
@@ -105,24 +106,31 @@ class AppConfigurer {
        * Store upgrade process that the version code is higher than
        * for APKs).
       */
-      // applicationVariants.all {
-      //   @Suppress("DEPRECATION")
-      //   outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
-      //     val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
-      //     output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode
-      //     if (output.outputFileName.contains("universal-nightly")) {
-      //       // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
-      //       output.outputFileName = setNameForNightlyUniversalApk()
-      //     }
-      //   }
-      // }
+      val androidComponents =
+        target.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
+      androidComponents.onVariants { variant ->
+        variant.outputs.forEach { output ->
+          val abi = output.filters
+            .find { it.filterType == FilterConfiguration.FilterType.ABI }
+            ?.identifier
+
+          val abiVersionCode = abiCodes[abi] ?: 7
+          output.versionCode.set(abiVersionCode * 1_000_000 * output.versionCode.get())
+          if (output.outputType == VariantOutputConfiguration.OutputType.UNIVERSAL &&
+            variant.name.contains("nightly", true)
+          ) {
+            // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
+            // variant.outputProviders.provideApkOutputToTask() = setNameForNightlyUniversalApk()
+          }
+        }
+      }
 
       androidResources {
         // cruncherEnabled = true
       }
       sourceSets {
         getByName("androidTest") {
-          java.srcDirs("${target.rootDir}/core/src/sharedTestFunctions/java")
+          java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
         }
       }
     }

@@ -30,20 +30,14 @@ class KiwixConfigurationPlugin : Plugin<Project> {
     allProjectConfigurer.applyPlugins(target)
     target.pluginManager.withPlugin("com.android.library") {
       allProjectConfigurer.configureLibraryExtension(target)
-      doDefaultConfiguration(target)
     }
     target.pluginManager.withPlugin("com.android.application") {
       allProjectConfigurer.configureApplicationExtension(target)
-      doDefaultConfiguration(target)
       appConfigurer.configure(target)
     }
     allProjectConfigurer.configurePlugins(target)
     allProjectConfigurer.applyScripts(target)
     allProjectConfigurer.configureDependencies(target)
     allProjectConfigurer.configureJacoco(target)
-  }
-
-  private fun doDefaultConfiguration(target: Project) {
-    allProjectConfigurer.configureCommonExtension(target)
   }
 }

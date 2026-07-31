@@ -89,12 +89,6 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
-    Versions.org_jetbrains_kotlin
-
-  /**
-   * https://kotlinlang.org/
-   */
   const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
     Versions.org_jetbrains_kotlin
 
@@ -282,8 +276,6 @@ object Libs {
    * https://github.com/material-components/material-components-android
    */
   const val material: String = "com.google.android.material:material:" + Versions.material
-
-  const val multidex: String = "androidx.multidex:multidex:" + Versions.multidex
 
   const val barista: String = "com.adevinta.android:barista:" + Versions.barista
 

@@ -1,6 +1,5 @@
-import com.android.build.gradle.api.ApkVariantOutput
-import com.android.build.gradle.api.ApplicationVariant
-import com.android.build.gradle.internal.dsl.ProductFlavor
+import branded.ApkCollector
+import branded.BrandedApp
 import branded.BrandedApps
 import branded.createPublisher
 import branded.transactionWithCommit
@@ -30,18 +29,19 @@ android {
 
   flavorDimensions += "default"
   productFlavors.apply {
-    BrandedApps.createDynamically(project.file("src"), this)
+    val brandedApps = BrandedApps.createDynamically(project.file("src"), this)
     all {
+      val brandedApp = brandedApps.getValue(name)
       // Added namespace for every branded app to make it compatible with gradle 8.0 and above.
       // This is now specified in the Gradle configuration instead of declaring
       // it directly in the AndroidManifest file.
       namespace = "org.kiwix.kiwixmobile.custom"
       File("$projectDir/src", "$name/$name.zim").let {
-        createDownloadTask(it)
-        createPublishApkWithExpansionTask(it, applicationVariants)
+        createDownloadTask(it, brandedApp)
+        createPublishApkWithExpansionTask(it)
       }
       File("$projectDir/../install_time_asset/src/main/assets", "$name.zim").let {
-        createDownloadTaskForPlayAssetDelivery(it)
+        createDownloadTaskForPlayAssetDelivery(it, brandedApp)
         createPublishBundleWithAssetPlayDelivery()
       }
     }
@@ -61,12 +61,24 @@ android {
   }
 }
 
+val apkCollector = ApkCollector()
+
+// The new way for getting the APKs info.
+androidComponents {
+  onVariants { variant ->
+    apkCollector.register(variant)
+  }
+}
+
 dependencies {
   // Keep the migration for branded apps, since they are released on playStore.
   implementation(project(":objectboxmigration"))
 }
 
-fun ApplicationProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {
+fun ApplicationProductFlavor.createDownloadTask(
+  file: File,
+  brandedApp: BrandedApp
+): TaskProvider<Task> {
   return tasks.register(
     "download${
       name.replaceFirstChar {
@@ -79,7 +91,7 @@ fun ApplicationProductFlavor.createDownloadTask(file: File): TaskProvider<Task> 
       if (!file.exists()) {
         file.createNewFile()
 
-        OkHttpClient().newCall(fetchRequest()).execute().use { response ->
+        OkHttpClient().newCall(fetchRequest(brandedApp.url)).execute().use { response ->
           if (response.isSuccessful) {
             response.body?.let { responseBody ->
               writeZimFileData(responseBody, file)
@@ -96,20 +108,20 @@ fun ApplicationProductFlavor.createDownloadTask(file: File): TaskProvider<Task> 
   }
 }
 
-fun ProductFlavor.fetchRequest(): Request {
-  val urlString = buildConfigFields["ZIM_URL"]!!.value.replace("\"", "")
-  return if (urlString.isAuthenticationUrl) {
+fun ApplicationProductFlavor.fetchRequest(urlString: String): Request {
+  val url = urlString.replace("\"", "")
+  return if (url.isAuthenticationUrl) {
     Request.Builder()
-      .url(URI.create(urlString.removeAuthenticationFromUrl).toURL())
+      .url(URI.create(url.removeAuthenticationFromUrl).toURL())
       .header(
         "Authorization",
         "Basic " +
-          Base64.getEncoder().encodeToString(System.getenv(urlString.secretKey).toByteArray())
+          Base64.getEncoder().encodeToString(System.getenv(url.secretKey).toByteArray())
       )
       .build()
   } else {
     Request.Builder()
-      .url(URI.create(urlString).toURL())
+      .url(URI.create(url).toURL())
       .build()
   }
 }
@@ -163,7 +175,10 @@ fun writeZimFileDataInChunk(
   outputStream?.close()
 }
 
-fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File): TaskProvider<Task> {
+fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(
+  file: File,
+  brandedApp: BrandedApp
+): TaskProvider<Task> {
   return tasks.register(
     "download${
       name.replaceFirstChar {
@@ -176,7 +191,7 @@ fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File):
       if (file.exists()) file.delete()
       file.createNewFile()
 
-      OkHttpClient().newCall(fetchRequest()).execute().use { response ->
+      OkHttpClient().newCall(fetchRequest(brandedApp.url)).execute().use { response ->
         if (response.isSuccessful) {
           response.body?.let { responseBody ->
             writeZimFileDataInChunk(responseBody, file)
@@ -209,10 +224,7 @@ val String.removeAuthenticationFromUrl: String
       .trim()
       .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
 
-fun ApplicationProductFlavor.createPublishApkWithExpansionTask(
-  file: File,
-  applicationVariants: DomainObjectSet<ApplicationVariant>
-): TaskProvider<Task> {
+fun ApplicationProductFlavor.createPublishApkWithExpansionTask(file: File): TaskProvider<Task> {
   val capitalizedName =
     name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
   return tasks.register("publish${capitalizedName}ReleaseApkWithExpansionFile") {
@@ -223,25 +235,15 @@ fun ApplicationProductFlavor.createPublishApkWithExpansionTask(
       println("packageName $packageName")
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
-          val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask).also {
-              print("createPublishApkWithExpansionTask: $it")
-            }
-          variants.forEach(::uploadApk)
-          uploadExpansionTo(file, variants[0].versionCodeOverride)
-          variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
-          addToTrackInDraft(variants)
+          val apks = apkCollector.findReleaseApks(name)
+          apks.forEach(::uploadApk)
+          uploadExpansionTo(file, apks.first().versionCode)
+          apks.drop(1).forEach { attachExpansionTo(apks.first().versionCode, it) }
+          addToTrackInDraft(apks)
         }
     }
   }
 }
-
-@Suppress("DEPRECATION")
-fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
-  find { it.name.equals("${productFlavor.name}Release", true) }!!
-    .outputs.filterIsInstance<ApkVariantOutput>()
-    .filter { !it.outputFileName.contains("universal") }
-    .sortedBy { it.versionCodeOverride }
 
 fun ApplicationProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskProvider<Task> {
   val capitalizedName =

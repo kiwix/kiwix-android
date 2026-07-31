@@ -2,7 +2,6 @@ import plugin.KiwixConfigurationPlugin
 
 plugins {
   id("com.android.library")
-  id("org.jetbrains.kotlin.android")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 android {

@@ -83,8 +83,6 @@ object Versions {
 
   const val material: String = "1.12.0"
 
-  const val multidex: String = "2.0.1"
-
   const val barista: String = "4.3.0"
 
   const val webkit: String = "1.12.1"

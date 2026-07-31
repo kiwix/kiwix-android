@@ -22,7 +22,7 @@ import Config
 import Libs
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.LibraryExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -30,16 +30,12 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
-    // target.plugins.apply("kotlin-android")
-    // target.plugins.apply("kotlin-kapt")
     target.plugins.apply("com.google.devtools.ksp")
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
@@ -53,146 +49,135 @@ class AllProjectConfigurer {
       defaultConfig {
         targetSdk = Config.targetSdk
       }
-      // configureAndroid(this, target, false)
+      configureBaseExtensions(this, target)
     }
   }
 
   fun configureLibraryExtension(target: Project) {
-    target.extensions.configure<ApplicationExtension> {
-      // configureAndroid(this, target, true)
+    target.extensions.configure<LibraryExtension> {
+      // The namespace cannot be directly set in `LibraryExtension`.
+      // The core module is configured as a library for both Kiwix and branded apps.
+      // Therefore, we set the namespace in `BaseExtension` for the core module,
+      // based on the boolean value of `isLibrary`. This value is passed from the
+      // `KiwixConfigurationPlugin`. If the current plugin is `LibraryPlugin`,
+      // indicating it is the core module, then this value will be true,
+      // and we set the namespace accordingly.
+      namespace = "org.kiwix.kiwixmobile.core"
+      configureBaseExtensions(this, target)
     }
   }
 
-  // private fun configureAndroid(
-  //   extension: CommonExtension<*, *, *, *, *, *>,
-  //   target: Project,
-  //   isLibrary: Boolean
-  // ) {
-  //   with(extension) {
-  //     // Using the same NDK version as in `java-libkiwix`, because with the default Gradle NDK,
-  //     // the debug symbols are not included in the Android App Bundle (AAB).
-  //     ndkVersion = Config.NDK_VERSION
-  //     // The namespace cannot be directly set in `LibraryExtension`.
-  //     // The core module is configured as a library for both Kiwix and branded apps.
-  //     // Therefore, we set the namespace in `BaseExtension` for the core module,
-  //     // based on the boolean value of `isLibrary`. This value is passed from the
-  //     // `KiwixConfigurationPlugin`. If the current plugin is `LibraryPlugin`,
-  //     // indicating it is the core module, then this value will be true,
-  //     // and we set the namespace accordingly.
-  //     if (isLibrary) {
-  //       namespace = "org.kiwix.kiwixmobile.core"
-  //     }
-  //
-  //     compileSdk = Config.compileSdk
-  //     defaultConfig {
-  //       minSdk = Config.minSdk
-  //       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  //     }
-  //
-  //     buildTypes {
-  //       getByName("debug") {
-  //         enableUnitTestCoverage = true
-  //         enableAndroidTestCoverage = true
-  //       }
-  //     }
-  //
-  //     compileOptions {
-  //       encoding = "UTF-8"
-  //       sourceCompatibility = Config.javaVersion
-  //       targetCompatibility = Config.javaVersion
-  //     }
-  //     target.tasks.withType(KotlinCompile::class.java) {
-  //       compilerOptions {
-  //         jvmTarget.set(JvmTarget.JVM_17)
-  //         freeCompilerArgs.add("-Xjvm-default=all-compatibility")
-  //       }
-  //     }
-  //     buildFeatures.apply {
-  //       viewBinding = true
-  //       /*
-  //        * By default, the generation of the `BuildConfig` class is turned off in Gradle `8.1.3`.
-  //        * Since we are setting and using `buildConfig` properties in our project,
-  //        * enabling this attribute will generate the `BuildConfig` file.
-  //        */
-  //       buildConfig = true
-  //       compose = true
-  //     }
-  //
-  //     testOptions {
-  //       execution = "ANDROIDX_TEST_ORCHESTRATOR"
-  //       unitTests.apply {
-  //         isReturnDefaultValues = true
-  //         isIncludeAndroidResources = true
-  //         all {
-  //           it.also { testTask ->
-  //             testTask.useJUnitPlatform()
-  //             testTask.testLogging {
-  //               setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
-  //               testTask.outputs.upToDateWhen { false }
-  //               showStandardStreams = true
-  //             }
-  //             testTask.extensions
-  //               .getByType(JacocoTaskExtension::class.java).apply {
-  //                 isIncludeNoLocationClasses = true
-  //                 excludes = listOf("jdk.internal.*")
-  //               }
-  //           }
-  //         }
-  //       }
-  //     }
-  //     packaging {
-  //       resources.excludes.apply {
-  //         add("META-INF/DEPENDENCIES")
-  //         add("META-INF/LICENSE")
-  //         add("META-INF/LICENSE.txt")
-  //         add("META-INF/LICENSE.md")
-  //         add("META-INF/LICENSE-notice.md")
-  //         add("META-INF/license.txt")
-  //         add("META-INF/NOTICE")
-  //         add("META-INF/NOTICE.txt")
-  //         add("META-INF/notice.txt")
-  //         add("META-INF/ASL2.0")
-  //       }
-  //       jniLibs.useLegacyPackaging = false
-  //     }
-  //     sourceSets {
-  //       getByName("test") {
-  //         java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
-  //         resources.srcDir("${target.rootDir}/core/src/test/resources")
-  //       }
-  //     }
-  //   }
-  // }
+  private fun configureBaseExtensions(
+    extension: CommonExtension,
+    target: Project
+  ) {
+    with(extension) {
+      // Using the same NDK version as in `java-libkiwix`, because with the default Gradle NDK,
+      // the debug symbols are not included in the Android App Bundle (AAB).
+      ndkVersion = Config.NDK_VERSION
+      compileSdk = Config.compileSdk
+      defaultConfig.apply {
+        minSdk = Config.minSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+      }
 
-  fun configureCommonExtension(target: Project) {
-    // target.configureExtension<CommonExtension<*, *, *, *, *, *>> {
-    //   lint {
-    //     abortOnError = true
-    //     checkAllWarnings = true
-    //     warningsAsErrors = true
-    //
-    //     disable.apply {
-    //       add("SyntheticAccessor")
-    //       add("GoogleAppIndexingApiWarning")
-    //       add("LockedOrientationActivity")
-    //       // TODO stop ignoring below this
-    //       add("LabelFor")
-    //       add("ConvertToWebp")
-    //       add("UnknownNullness")
-    //       add("SelectableText")
-    //       add("MissingTranslation")
-    //       add("IconDensities")
-    //       add("IconDipSize")
-    //       add("UnusedResources")
-    //       add("NonConstantResourceId")
-    //       add("NotifyDataSetChanged")
-    //       add("Aligned16KB") // TODO Remove when properly migrated to Android 16.
-    //       add("AndroidGradlePluginVersion")
-    //       add("MemberExtensionConflict")
-    //     }
-    //     lintConfig = target.rootProject.file("lintConfig.xml")
-    //   }
-    // }
+      buildTypes.named("debug") {
+        enableUnitTestCoverage = true
+        enableAndroidTestCoverage = true
+      }
+
+      compileOptions.apply {
+        encoding = "UTF-8"
+        sourceCompatibility = Config.javaVersion
+        targetCompatibility = Config.javaVersion
+      }
+      // target.tasks.withType(KotlinCompile::class.java) {
+      //   compilerOptions {
+      //     jvmTarget.set(JvmTarget.JVM_17)
+      //     freeCompilerArgs.add("-Xjvm-default=all-compatibility")
+      //   }
+      // }
+      buildFeatures.apply {
+        viewBinding = true
+        /*
+         * By default, the generation of the `BuildConfig` class is turned off in Gradle `8.1.3`.
+         * Since we are setting and using `buildConfig` properties in our project,
+         * enabling this attribute will generate the `BuildConfig` file.
+         */
+        buildConfig = true
+        compose = true
+        resValues = true
+      }
+
+      testOptions.apply {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        unitTests.apply {
+          isReturnDefaultValues = true
+          isIncludeAndroidResources = true
+          all {
+            it.also { testTask ->
+              testTask.useJUnitPlatform()
+              testTask.testLogging {
+                setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
+                testTask.outputs.upToDateWhen { false }
+                showStandardStreams = true
+              }
+              testTask.extensions
+                .getByType(JacocoTaskExtension::class.java).apply {
+                  isIncludeNoLocationClasses = true
+                  excludes = listOf("jdk.internal.*")
+                }
+            }
+          }
+        }
+      }
+      packaging.apply {
+        resources.excludes.apply {
+          add("META-INF/DEPENDENCIES")
+          add("META-INF/LICENSE")
+          add("META-INF/LICENSE.txt")
+          add("META-INF/LICENSE.md")
+          add("META-INF/LICENSE-notice.md")
+          add("META-INF/license.txt")
+          add("META-INF/NOTICE")
+          add("META-INF/NOTICE.txt")
+          add("META-INF/notice.txt")
+          add("META-INF/ASL2.0")
+        }
+        jniLibs.useLegacyPackaging = false
+      }
+      sourceSets.named("test") {
+        java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
+        resources.directories.add("${target.rootDir}/core/src/test/resources")
+      }
+
+      lint.apply {
+        abortOnError = true
+        checkAllWarnings = true
+        warningsAsErrors = true
+
+        disable.apply {
+          add("SyntheticAccessor")
+          add("GoogleAppIndexingApiWarning")
+          add("LockedOrientationActivity")
+          // TODO stop ignoring below this
+          add("LabelFor")
+          add("ConvertToWebp")
+          add("UnknownNullness")
+          add("SelectableText")
+          add("MissingTranslation")
+          add("IconDensities")
+          add("IconDipSize")
+          add("UnusedResources")
+          add("NonConstantResourceId")
+          add("NotifyDataSetChanged")
+          add("Aligned16KB") // TODO Remove when properly migrated to Android 16.
+          add("AndroidGradlePluginVersion")
+          add("MemberExtensionConflict")
+        }
+        lintConfig = target.rootProject.file("lintConfig.xml")
+      }
+    }
   }
 
   fun configureJacoco(target: Project) {
@@ -230,7 +215,6 @@ class AllProjectConfigurer {
       implementation(Libs.appcompat)
       implementation(Libs.appcompat_resource)
       implementation(Libs.material)
-      implementation(Libs.multidex)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
       testImplementation(Libs.TURBINE_FLOW_TEST)

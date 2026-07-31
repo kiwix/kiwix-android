@@ -28,8 +28,10 @@ typealias ProductFlavors = NamedDomainObjectContainer<out ApplicationProductFlav
 
 object BrandedApps {
 
-  fun createDynamically(srcFolder: File, productFlavors: ProductFlavors) {
-    productFlavors.create(brandedApps(srcFolder))
+  fun createDynamically(srcFolder: File, productFlavors: ProductFlavors): Map<String, BrandedApp> {
+    val apps = brandedApps(srcFolder).associateBy { it.name }
+    productFlavors.create(apps.values.toList())
+    return apps
   }
 
   private fun brandedApps(srcFolder: File) = srcFolder.walk()
