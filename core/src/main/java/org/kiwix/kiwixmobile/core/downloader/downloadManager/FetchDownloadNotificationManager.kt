@@ -199,9 +199,6 @@ class FetchDownloadNotificationManager @Inject constructor(
       .setOngoing(downloadNotification.isOnGoingNotification)
       .setGroup(downloadNotification.groupId.toString())
       .setGroupSummary(false)
-      // Alert (sound/vibration/status-bar flash) only for the first post of this
-      // notification; frequent progress updates re-post it silently so the
-      // status bar icon does not blink on every update. See #5000.
       .setOnlyAlertOnce(true)
     if (downloadNotification.isFailed || downloadNotification.isCompleted) {
       notificationBuilder.setProgress(ZERO, ZERO, false)
