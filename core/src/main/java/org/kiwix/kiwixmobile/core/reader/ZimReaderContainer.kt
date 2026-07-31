@@ -38,7 +38,6 @@ class ZimReaderContainer @Inject constructor(
       field = value
     }
 
-  @Suppress("InjectDispatcher")
   suspend fun setZimReaderSource(
     zimReaderSource: ZimReaderSource?,
     showSearchSuggestionsSpellChecked: Boolean = false

@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.webserver
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -122,7 +121,6 @@ class WebServerHelper @Inject constructor(
    * - If a valid IP is found, invokes [IpAddressCallbacks.onIpAddressInvalid].
    * - If no valid IP is found within [FINDING_IP_ADDRESS_TIMEOUT] seconds,
    * invokes [IpAddressCallbacks.onIpAddressInvalid].
-   * - The flow runs on [Dispatchers.IO] and results are collected on the Main thread.
    * - Automatically cancels if [serviceScope] is cancelled (e.g. lifecycle aware).
    */
   @OptIn(FlowPreview::class)
@@ -143,7 +141,6 @@ class WebServerHelper @Inject constructor(
   /**
    * Creates a [Flow] that emits the current IP address every [FINDING_IP_ADDRESS_RETRY_TIME] milliseconds.
    * - If the returned IP is not [INVALID_IP], the flow completes.
-   * - The flow runs entirely on [Dispatchers.IO].
    */
   @Suppress("TooGenericExceptionCaught")
   private fun ipPollingFlow(): Flow<String?> = flow {

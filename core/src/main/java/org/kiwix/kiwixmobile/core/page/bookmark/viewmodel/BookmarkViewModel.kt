@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
@@ -30,15 +31,18 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 
 class BookmarkViewModel @Inject constructor(
   libkiwixBookmarks: LibkiwixBookmarks,
   zimReaderContainer: ZimReaderContainer,
-  kiwixDataStore: KiwixDataStore
+  kiwixDataStore: KiwixDataStore,
+  @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : PageViewModel<LibkiwixBookmarkItem, BookmarkState>(
     libkiwixBookmarks,
     kiwixDataStore,
-    zimReaderContainer
+    zimReaderContainer,
+    ioDispatcher
   ) {
   override fun initialState(): BookmarkState {
     val showAll = runBlocking { kiwixDataStore.showBookmarksOfAllBooks.first() }
@@ -75,7 +79,14 @@ class BookmarkViewModel @Inject constructor(
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   override fun createDeletePageDialogEffect(state: BookmarkState, viewModelScope: CoroutineScope) =
-    ShowDeleteBookmarksDialog(effects, state, pageDao, viewModelScope, requireAlertDialogShower())
+    ShowDeleteBookmarksDialog(
+      effects,
+      state,
+      pageDao,
+      viewModelScope,
+      requireAlertDialogShower(),
+      ioDispatcher
+    )
 
   override fun copyWithNewItems(
     state: BookmarkState,

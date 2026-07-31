@@ -38,7 +38,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -52,6 +51,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -86,6 +86,10 @@ open class ErrorActivity : BaseActivity() {
 
   @Inject
   lateinit var mountPointProducer: MountPointProducer
+
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
 
   @Inject
   lateinit var fileLogger: FileLogger
@@ -202,10 +206,10 @@ open class ErrorActivity : BaseActivity() {
     }
   }
 
-  private suspend fun startValidatingZIMFiles(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-    val zimBooks = withContext(dispatcher) { libkiwixBookOnDisk.getBooks() }
+  private suspend fun startValidatingZIMFiles() {
+    val zimBooks = withContext(ioDispatcher) { libkiwixBookOnDisk.getBooks() }
     showValidationDialog.value = true
-    CoroutineScope(dispatcher).launch {
+    CoroutineScope(ioDispatcher).launch {
       val isBrandedApp = kiwixDataStore.isBrandedApp.first()
       validateZimViewModel.startValidation(zimBooks, isBrandedApp)
     }

@@ -215,7 +215,6 @@ abstract class CoreMainActivity : BaseActivity() {
    */
   private var wasLeftDrawerOpen = false
 
-  @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     val splashScreen = installSplashScreen()
     splashScreen.setKeepOnScreenCondition {

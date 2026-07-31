@@ -23,48 +23,54 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 internal class SaveSearchToRecentsTest {
   private val newRecentSearchDao: RecentSearchRoomDao = mockk()
   private val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
 
   private val activity: AppCompatActivity = mockk()
-  private val testDispatcher = CoroutineScope(Dispatchers.IO)
+
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
+  private val testScope = CoroutineScope(testDispatcher)
 
   @Test
-  fun `invoke with null Id does nothing`() =
-    runBlocking {
-      SaveSearchToRecents(
-        newRecentSearchDao,
-        searchListItem,
-        null,
-        testDispatcher
-      ).invokeWith(
-        activity
-      )
-      verify { newRecentSearchDao wasNot Called }
-    }
+  fun `invoke with null Id does nothing`() = runTest {
+    SaveSearchToRecents(
+      newRecentSearchDao,
+      searchListItem,
+      null,
+      this,
+      testDispatcher
+    ).invokeWith(
+      activity
+    )
+    verify { newRecentSearchDao wasNot Called }
+  }
 
   @Test
-  fun `invoke with non null Id saves search`() =
-    runBlocking {
-      val id = "8812214350305159407L"
-      SaveSearchToRecents(
-        newRecentSearchDao,
-        searchListItem,
-        id,
-        testDispatcher
-      ).invokeWith(activity)
-      delay(50)
-      verify {
-        newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX)
-      }
+  fun `invoke with non null Id saves search`() = runTest {
+    val id = "8812214350305159407L"
+    SaveSearchToRecents(
+      newRecentSearchDao,
+      searchListItem,
+      id,
+      testScope,
+      testDispatcher
+    ).invokeWith(activity)
+    delay(50)
+    verify {
+      newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX)
     }
+  }
 }

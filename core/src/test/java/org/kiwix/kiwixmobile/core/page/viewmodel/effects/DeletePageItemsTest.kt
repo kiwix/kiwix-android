@@ -50,7 +50,8 @@ internal class DeletePageItemsTest {
         DeletePageItems(
           historyState(listOf(item1, item2)),
           pageDao,
-          viewModelScope
+          viewModelScope,
+          mainDispatcherRule.dispatcher
         ).invokeWith(activity)
         verify { pageDao.deletePages(listOf(item1)) }
       }
@@ -64,7 +65,8 @@ internal class DeletePageItemsTest {
         DeletePageItems(
           historyState(listOf(item1, item2)),
           pageDao,
-          viewModelScope
+          viewModelScope,
+          mainDispatcherRule.dispatcher
         ).invokeWith(activity)
         verify { pageDao.deletePages(listOf(item1, item2)) }
       }

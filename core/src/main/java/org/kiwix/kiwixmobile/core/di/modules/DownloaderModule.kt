@@ -27,7 +27,6 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
-import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
@@ -49,6 +48,10 @@ abstract class DownloaderModule {
   @Binds
   @Singleton
   abstract fun bindDownloadRequester(impl: DownloadManagerRequester): DownloadRequester
+
+  @Binds
+  @Singleton
+  abstract fun bindFetchNotificationManager(impl: FetchDownloadNotificationManager): FetchNotificationManager
 
   companion object {
     @Provides
@@ -83,10 +86,5 @@ abstract class DownloaderModule {
         .followSslRedirects(true)
         .build()
     )
-
-    @Provides
-    @Singleton
-    fun provideFetchDownloadNotificationManager(context: Context, downloadRoomDao: DownloadRoomDao):
-      FetchNotificationManager = FetchDownloadNotificationManager(context, downloadRoomDao)
   }
 }

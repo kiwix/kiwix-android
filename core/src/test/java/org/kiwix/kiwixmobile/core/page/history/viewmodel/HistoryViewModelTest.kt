@@ -4,8 +4,6 @@ import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -32,11 +30,11 @@ internal class HistoryViewModelTest {
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
   private val historyRoomDao: HistoryRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
-  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   private lateinit var viewModel: HistoryViewModel
   private val zimReaderSource: ZimReaderSource = mockk()
@@ -52,10 +50,10 @@ internal class HistoryViewModelTest {
     every { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { historyRoomDao.history() } returns itemsFromDb
     every { historyRoomDao.pages() } returns historyRoomDao.history()
-    viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore).apply {
-      setAlertDialogShower(dialogShower)
-      setLifeCycleScope(viewModelScope)
-    }
+    viewModel =
+      HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore, testDispatcher).apply {
+        setAlertDialogShower(dialogShower)
+      }
   }
 
   @Test
@@ -92,7 +90,7 @@ internal class HistoryViewModelTest {
         historyState()
       )
       assertThat(awaitItem()).isEqualTo(
-        UpdateAllHistoryPreference(kiwixDataStore, false, viewModelScope)
+        UpdateAllHistoryPreference(kiwixDataStore, false, this)
       )
       cancelAndIgnoreRemainingEvents()
     }
@@ -137,13 +135,14 @@ internal class HistoryViewModelTest {
   @Test
   fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() =
     runTest {
-      assertThat(viewModel.createDeletePageDialogEffect(historyState(), viewModelScope)).isEqualTo(
+      assertThat(viewModel.createDeletePageDialogEffect(historyState(), this)).isEqualTo(
         ShowDeleteHistoryDialog(
           viewModel.effects,
           historyState(),
           historyRoomDao,
-          viewModelScope,
-          dialogShower
+          this,
+          dialogShower,
+          testDispatcher
         )
       )
     }

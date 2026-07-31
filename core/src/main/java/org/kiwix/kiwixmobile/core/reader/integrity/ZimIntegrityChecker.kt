@@ -19,14 +19,17 @@
 package org.kiwix.kiwixmobile.core.reader.integrity
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
-class ZimIntegrityChecker @Inject constructor(private val zimReaderContainer: ZimReaderContainer) {
+class ZimIntegrityChecker @Inject constructor(
+  private val zimReaderContainer: ZimReaderContainer,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
   /**
    * Validates a ZIM file and returns its verification result.
    *
@@ -51,7 +54,6 @@ class ZimIntegrityChecker @Inject constructor(private val zimReaderContainer: Zi
   suspend fun validateZIMFile(
     zimReaderSource: ZimReaderSource,
     isBrandedApp: Boolean,
-    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   ): ZimFileValidationResult =
     withContext(ioDispatcher) {
       var archive: Archive? = null

@@ -67,6 +67,8 @@ captures/
 !/.idea/copyright/
 !/.idea/kotlinCodeInsightSettings.xml
 app/jacoco.exec
+core/src/main/res/values-b+be+tarask/strings.xml
+core/src/main/res/values-b+be+tarask+old/strings.xml
 
 # F-Droid auto-publish file
 VERSION_INFO

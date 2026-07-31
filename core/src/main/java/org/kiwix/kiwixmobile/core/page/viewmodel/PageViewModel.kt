@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import org.jetbrains.annotations.VisibleForTesting
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
@@ -55,7 +55,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 abstract class PageViewModel<T : Page, S : PageState<T>>(
   protected val pageDao: PageDao,
   val kiwixDataStore: KiwixDataStore,
-  val zimReaderContainer: ZimReaderContainer
+  val zimReaderContainer: ZimReaderContainer,
+  @IoDispatcher protected val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   abstract fun initialState(): S
 
@@ -118,7 +119,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
       .onEach { newState -> _state.value = newState }
       .launchIn(viewModelScope)
 
-  private fun observePages(ioDispatcher: CoroutineDispatcher = Dispatchers.IO) =
+  private fun observePages() =
     pageDao.pages()
       .flowOn(ioDispatcher)
       .onEach { actions.tryEmit(UpdatePages(it)) }
