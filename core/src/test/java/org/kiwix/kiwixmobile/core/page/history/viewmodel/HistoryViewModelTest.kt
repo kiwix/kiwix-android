@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -31,6 +32,7 @@ internal class HistoryViewModelTest {
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private val testDispatcher = mainDispatcherRule.dispatcher
+  private val testScope = CoroutineScope(testDispatcher)
   private val historyRoomDao: HistoryRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
@@ -53,6 +55,7 @@ internal class HistoryViewModelTest {
     viewModel =
       HistoryViewModel(historyRoomDao, zimReaderContainer, kiwixDataStore, testDispatcher).apply {
         setAlertDialogShower(dialogShower)
+        setLifeCycleScope(testScope)
       }
   }
 
@@ -90,7 +93,7 @@ internal class HistoryViewModelTest {
         historyState()
       )
       assertThat(awaitItem()).isEqualTo(
-        UpdateAllHistoryPreference(kiwixDataStore, false, this)
+        UpdateAllHistoryPreference(kiwixDataStore, false, testScope)
       )
       cancelAndIgnoreRemainingEvents()
     }
@@ -135,12 +138,12 @@ internal class HistoryViewModelTest {
   @Test
   fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() =
     runTest {
-      assertThat(viewModel.createDeletePageDialogEffect(historyState(), this)).isEqualTo(
+      assertThat(viewModel.createDeletePageDialogEffect(historyState(), testScope)).isEqualTo(
         ShowDeleteHistoryDialog(
           viewModel.effects,
           historyState(),
           historyRoomDao,
-          this,
+          testScope,
           dialogShower,
           testDispatcher
         )

@@ -21,18 +21,20 @@ package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runBlocking
-import org.junit.Rule
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class DeletePageItemsTest {
-  @Rule
+  @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private val pageDao: PageDao = mockk(relaxed = true)
@@ -40,51 +42,30 @@ internal class DeletePageItemsTest {
   private val zimReaderSource: ZimReaderSource = mockk()
   private val item1 = historyItem(zimReaderSource = zimReaderSource)
   private val item2 = historyItem(zimReaderSource = zimReaderSource)
-  private val viewModelScope = CoroutineScope(mainDispatcherRule.dispatcher)
 
   @Test
-  fun `delete with selected items only deletes the selected items`() =
-    runBlocking {
-      retryTest {
-        item1.isSelected = true
-        DeletePageItems(
-          historyState(listOf(item1, item2)),
-          pageDao,
-          viewModelScope,
-          mainDispatcherRule.dispatcher
-        ).invokeWith(activity)
-        verify { pageDao.deletePages(listOf(item1)) }
-      }
-    }
+  fun `delete with selected items only deletes the selected items`() = runTest {
+    item1.isSelected = true
+    DeletePageItems(
+      historyState(listOf(item1, item2)),
+      pageDao,
+      this,
+      mainDispatcherRule.dispatcher
+    ).invokeWith(activity)
+    advanceUntilIdle()
+    verify { pageDao.deletePages(listOf(item1)) }
+  }
 
   @Test
-  fun `delete with no selected items deletes all items`() =
-    runBlocking {
-      retryTest {
-        item1.isSelected = false
-        DeletePageItems(
-          historyState(listOf(item1, item2)),
-          pageDao,
-          viewModelScope,
-          mainDispatcherRule.dispatcher
-        ).invokeWith(activity)
-        verify { pageDao.deletePages(listOf(item1, item2)) }
-      }
-    }
-
-  private fun retryTest(maxRetries: Int = 5, block: () -> Unit) {
-    var currentAttempt = 0
-    var success = false
-    while (currentAttempt < maxRetries && !success) {
-      try {
-        block()
-        success = true
-      } catch (e: AssertionError) {
-        currentAttempt++
-        if (currentAttempt >= maxRetries) {
-          throw e
-        }
-      }
-    }
+  fun `delete with no selected items deletes all items`() = runTest {
+    item1.isSelected = false
+    DeletePageItems(
+      historyState(listOf(item1, item2)),
+      pageDao,
+      this,
+      mainDispatcherRule.dispatcher
+    ).invokeWith(activity)
+    advanceUntilIdle()
+    verify { pageDao.deletePages(listOf(item1, item2)) }
   }
 }

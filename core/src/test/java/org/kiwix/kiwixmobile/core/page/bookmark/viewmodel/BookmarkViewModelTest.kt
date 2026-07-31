@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -52,6 +53,7 @@ internal class BookmarkViewModelTest {
   @RegisterExtension
   val mainDispatcherRule = MainDispatcherRule()
   private val testDispatcher = mainDispatcherRule.dispatcher
+  private val testScope = CoroutineScope(testDispatcher)
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
@@ -78,6 +80,7 @@ internal class BookmarkViewModelTest {
         testDispatcher
       ).apply {
         setAlertDialogShower(dialogShower)
+        setLifeCycleScope(testScope)
       }
   }
 
@@ -121,7 +124,7 @@ internal class BookmarkViewModelTest {
         UpdateAllBookmarksPreference(
           kiwixDataStore,
           false,
-          this
+          testScope
         )
       )
       cancelAndIgnoreRemainingEvents()
@@ -186,13 +189,13 @@ internal class BookmarkViewModelTest {
   @Test
   internal fun `createDeletePageDialogEffect returns correct dialog`() = runTest {
     assertThat(
-      viewModel.createDeletePageDialogEffect(bookmarkState(), this)
+      viewModel.createDeletePageDialogEffect(bookmarkState(), testScope)
     ).isEqualTo(
       ShowDeleteBookmarksDialog(
         viewModel.effects,
         bookmarkState(),
         libkiwixBookMarks,
-        this,
+        testScope,
         dialogShower,
         testDispatcher
       )
