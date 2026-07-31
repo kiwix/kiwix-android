@@ -116,6 +116,18 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
+  /**
+   * Suppress Fetch's group summary notification. Each download already posts its
+   * own progress notification, so the summary only adds an extra icon to the
+   * status bar during downloads. See #5000.
+   */
+  override fun updateGroupSummaryNotification(
+    groupId: Int,
+    notificationBuilder: NotificationCompat.Builder,
+    downloadNotifications: List<DownloadNotification>,
+    context: Context
+  ): Boolean = false
+
   override fun getSubtitleText(
     context: Context,
     downloadNotification: DownloadNotification
@@ -187,6 +199,10 @@ class FetchDownloadNotificationManager @Inject constructor(
       .setOngoing(downloadNotification.isOnGoingNotification)
       .setGroup(downloadNotification.groupId.toString())
       .setGroupSummary(false)
+      // Alert (sound/vibration/status-bar flash) only for the first post of this
+      // notification; frequent progress updates re-post it silently so the
+      // status bar icon does not blink on every update. See #5000.
+      .setOnlyAlertOnce(true)
     if (downloadNotification.isFailed || downloadNotification.isCompleted) {
       notificationBuilder.setProgress(ZERO, ZERO, false)
     } else {
@@ -336,6 +352,7 @@ class FetchDownloadNotificationManager @Inject constructor(
         .setOngoing(true)
         .setGroup(download.id.toString())
         .setGroupSummary(false)
+        .setOnlyAlertOnce(true)
         .setProgress(HUNDERED, download.progress, false)
         .addAction(
           drawable.fetch_notification_cancel,
