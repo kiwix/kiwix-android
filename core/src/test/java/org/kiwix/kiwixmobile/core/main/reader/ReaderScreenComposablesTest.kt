@@ -30,6 +30,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.navigation.compose.rememberNavController
 import io.mockk.every
@@ -659,5 +660,274 @@ class ReaderScreenComposablesTest {
     composeTestRule.waitForIdle()
 
     assertEquals(ReaderAction.ChangeTtsSpeed(0.5f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_selectQuarterSpeedPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("0.75")
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(0.75f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_selectOneAndQuarterPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("1.25")
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(1.25f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_selectDoubleSpeedPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("2.0")
+      .performScrollTo()
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(2.0f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_selectMaxSpeedPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("2.5")
+      .performScrollTo()
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(2.5f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_decrementButton_triggersSpeedChange() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(0.95f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_incrementButton_triggersSpeedChange() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(1.05f), action)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_decrementAtMinSpeed_clampedToMinimum() {
+    var lastSpeed: Float? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 0.5f,
+        onSpeedChanged = { lastSpeed = it }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(0.5f, lastSpeed)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_incrementAtMaxSpeed_clampedToMaximum() {
+    var lastSpeed: Float? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 2.5f,
+        onSpeedChanged = { lastSpeed = it }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(2.5f, lastSpeed)
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_headerDisplaysFormattedSpeed() {
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.25f,
+        onSpeedChanged = {}
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("1.25x")
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_sliderIsDisplayed() {
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = {}
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_SLIDER_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_normalLabelShownUnderDefaultPreset() {
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = {}
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("Normal")
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_allSevenPresetsDisplayed() {
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = {}
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule.onNodeWithText("0.5").assertExists()
+    composeTestRule.onNodeWithText("0.75").assertExists()
+    composeTestRule.onNodeWithText("1.0").assertExists()
+    composeTestRule.onNodeWithText("1.25").assertExists()
+    composeTestRule.onNodeWithText("1.5").assertExists()
+    composeTestRule.onNodeWithText("2.0").assertExists()
+    composeTestRule.onNodeWithText("2.5").assertExists()
+  }
+
+  @Test
+  fun readerScreen_ttsSpeedButton_displaysFormattedSpeed() {
+    val state = createTestState(
+      showTtsControls = true,
+      ttsSpeedText = "1.50X"
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("1.50x")
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_decrementAndIncrementButtons_displayed() {
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.0f,
+        onSpeedChanged = {}
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+    composeTestRule
+      .onNodeWithTag(TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun ttsSpeedBottomSheet_selectNormalPreset_triggersCallback() {
+    var action: ReaderAction? = null
+    composeTestRule.setContent {
+      TtsSpeedBottomSheetContent(
+        currentSpeed = 1.5f,
+        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+      )
+    }
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("1.0")
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(1.0f), action)
   }
 }
