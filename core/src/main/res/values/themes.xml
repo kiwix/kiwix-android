@@ -4,6 +4,12 @@
   <!--Top level theme to be used in AndroidManifest.xml-->
   <style name="KiwixTheme" parent="Base.KiwixTheme">
 
+    <!--WebView reads this attribute to decide whether the content it renders is
+        light or dark (see enableDarkeningOfContent in KiwixWebView). It must be
+        declared explicitly: without it the ZIM article stays light while the app
+        chrome follows the theme.-->
+    <item name="android:isLightTheme" tools:ignore="NewApi">true</item>
+
     <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
     <item name="colorPrimary">@color/denim_blue800</item>
 

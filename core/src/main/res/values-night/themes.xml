@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--Top level DayNight theme to be used in AndroidManifest.xml-->
   <style name="KiwixTheme" parent="Base.KiwixTheme">
+    <!--Tells WebView that the content it renders must be dark too; this is what
+        makes the ZIM article itself (not just the app chrome) follow night mode.
+        See enableDarkeningOfContent in KiwixWebView.-->
+    <item name="android:isLightTheme" tools:ignore="NewApi">false</item>
+
     <!-- Dark theme customisations here-->
     <item name="colorPrimary">@color/denim_blue200</item>
 

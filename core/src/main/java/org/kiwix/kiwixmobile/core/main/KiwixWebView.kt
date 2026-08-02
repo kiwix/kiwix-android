@@ -28,6 +28,8 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -86,6 +88,7 @@ open class KiwixWebView constructor(
       @Suppress("DEPRECATION")
       allowUniversalAccessFromFileURLs = true
     }
+    enableDarkeningOfContent()
     setInitialScale(INITIAL_SCALE)
     clearCache(true)
     webViewClient = coreWebViewClient
@@ -100,6 +103,22 @@ open class KiwixWebView constructor(
         )
       }
     webChromeClient = kiwixWebChromeClient
+  }
+
+  /**
+   * Lets the WebView darken the ZIM article itself when the app theme is dark.
+   *
+   * Without this the renderer is never told it is in dark mode: the app chrome
+   * follows [androidx.appcompat.app.AppCompatDelegate], but the document keeps
+   * rendering the ZIM's own (usually black-on-white) CSS. With darkening allowed
+   * the WebView reports `prefers-color-scheme: dark` to ZIMs that style
+   * themselves, and algorithmically darkens the ones that do not. It follows
+   * `android:isLightTheme`, which KiwixTheme declares in values/ and values-night/.
+   */
+  private fun enableDarkeningOfContent() {
+    if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+      WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, true)
+    }
   }
 
   override fun performLongClick(): Boolean {
