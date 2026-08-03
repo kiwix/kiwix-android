@@ -52,8 +52,6 @@ import org.kiwix.kiwixmobile.core.utils.files.SaveResult
 import org.kiwix.videowebview.VideoEnabledWebChromeClient.ToggledFullscreenCallback
 import org.kiwix.videowebview.VideoEnabledWebView
 
-private const val INITIAL_SCALE = 100
-
 @SuppressLint("ViewConstructor", "SetJavaScriptEnabled")
 @Suppress("LongParameterList")
 open class KiwixWebView constructor(
@@ -83,10 +81,10 @@ open class KiwixWebView constructor(
       useWideViewPort = true
       builtInZoomControls = true
       displayZoomControls = false
+      isHorizontalScrollBarEnabled = true
       @Suppress("DEPRECATION")
       allowUniversalAccessFromFileURLs = true
     }
-    setInitialScale(INITIAL_SCALE)
     clearCache(true)
     webViewClient = coreWebViewClient
     kiwixWebChromeClient =
