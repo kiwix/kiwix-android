@@ -62,10 +62,13 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderArticleManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
+import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -681,6 +684,199 @@ internal class CoreReaderViewModelTest {
           }
         }
     }
+
+    @Nested
+    inner class HomeClicked {
+      @Test
+      fun onAction_HomeClicked_callsOpenMainPage() = runTest {
+        every { zimReaderContainer.mainPage } returns "https://kiwix.org"
+        viewModel.onAction(ReaderAction.HomeClicked)
+        advanceUntilIdle()
+
+        coEvery { readerWebViewManager.openArticle("https://kiwix.org", mockWebView) }
+      }
+
+      @Test
+      fun onAction_NextClicked_callsGoForward() = runTest {
+        viewModel.onAction(ReaderAction.NextClicked)
+        advanceUntilIdle()
+
+        coVerify { mockWebView.goForward() }
+      }
+
+      @Nested
+      inner class NextLongClick {
+        @Test
+        fun showBackwordForwardHistory_emitsShowNavigationHistoryDialog() = runTest {
+          val historyFound = HistoryFound(
+            isForwardHistory = true,
+            list = listOf(NavigationHistoryListItem("Page 1", "url1"))
+          )
+
+          // Assuming isForwardHistory is true
+          every { readerWebViewManager.getWebViewNavigationHistory(true) } returns historyFound
+          viewModel.effects.test {
+            viewModel.onAction(ReaderAction.NextLongClicked)
+
+            val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowNavigationHistoryDialog
+            assertThat(effect.result).isEqualTo(historyFound)
+
+            cancelAndIgnoreRemainingEvents()
+          }
+        }
+
+        @Test
+        fun showBackwordForwardHistory_whenNoHistoryFound_doesNothing() = runTest {
+          // Assuming isForwardHistory is true
+          every { readerWebViewManager.getWebViewNavigationHistory(true) } returns NoHistoryFound
+          viewModel.effects.test {
+            viewModel.onAction(ReaderAction.NextLongClicked)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+          }
+        }
+      }
+
+      @Test
+      fun onAction_openLibrary_callsOpenLibrary() = runTest {
+        val viewModel = spyk(viewModel)
+
+        viewModel.onAction(ReaderAction.OpenLibrary)
+
+        // Only verifies function as doesn't have logic
+        verify { viewModel.openLocalLibrary() }
+      }
+
+      @Test
+      fun onAction_PreviousClicked_callsGoBack() = runTest {
+        viewModel.onAction(ReaderAction.PreviousClicked)
+        advanceUntilIdle()
+        coVerify { mockWebView.goBack() }
+      }
+
+      @Test
+      fun onAction_PreviousLongClicked_showBackwordForwardHistoryWhereIsForwardIsFalse() = runTest {
+        every { readerWebViewManager.getWebViewNavigationHistory(false) } returns NoHistoryFound
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.PreviousLongClicked)
+          expectNoEvents()
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+    }
+
+    @Test
+    fun onAction_OpenTocDrawer_setsShowTableOfContentDrawerToTrue() = runTest {
+      viewModel.onAction(ReaderAction.OpenTocDrawer)
+
+      assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+    }
+
+    @Test
+    fun onAction_CloseTocDrawer_setsShowTableOfContentDrawerToFalse() = runTest {
+      // initial value is false so setting it to true
+      viewModel.onAction(ReaderAction.OpenTocDrawer)
+      assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+
+      viewModel.onAction(ReaderAction.CloseTocDrawer)
+
+      assertThat(viewModel.uiState.value.showTableOfContentDrawer).isFalse()
+    }
+
+    @Test
+    fun onAction_BackToTopButtonClick_callsPageUpOnWebView() = runTest {
+      viewModel.onAction(ReaderAction.BackToTopButtonClick)
+      advanceUntilIdle()
+
+      verify { mockWebView.pageUp(true) }
+    }
+
+    @Test
+    fun onAction_PauseTts_callsPauseTts() = runTest {
+      every { readAloudManager.pauseTts() } just Runs
+
+      viewModel.onAction(ReaderAction.PauseTts)
+
+      verify { readAloudManager.pauseTts() }
+    }
+
+    @Test
+    fun onAction_StopTts_callsStopReadAloud() = runTest {
+      coEvery { readAloudManager.stopReadAloud() } just Runs
+
+      viewModel.onAction(ReaderAction.StopTts)
+      advanceUntilIdle()
+
+      coVerify { readAloudManager.stopReadAloud() }
+    }
+
+    @Test
+    fun onAction_DonateButtonClick_updatesDonationTimeAndOpensSupportUrl() = runTest {
+      val viewModel = spyk(viewModel)
+
+      coEvery { donationDialogHandler.updateLastDonationPopupShownTime() } just Runs
+      every { viewModel.openKiwixSupportUrl() } just Runs
+
+      viewModel.onAction(ReaderAction.DonateButtonClick)
+      advanceUntilIdle()
+
+      coVerify { donationDialogHandler.updateLastDonationPopupShownTime() }
+      verify { viewModel.openKiwixSupportUrl() }
+
+      assertThat(viewModel.uiState.value.showDonationPopup).isFalse()
+    }
+
+    @Test
+    fun onAction_DonateLaterButtonClick_updatesDonateLaterTime() = runTest {
+      val viewModel = spyk(viewModel)
+
+      coEvery { donationDialogHandler.donateLater(any()) } just Runs
+
+      viewModel.onAction(ReaderAction.DonateLaterButtonClick)
+      advanceUntilIdle()
+
+      coVerify { donationDialogHandler.donateLater(any()) }
+      assertThat(viewModel.uiState.value.showDonationPopup).isFalse()
+    }
+
+    @Test
+    fun onAction_ClearNavigationHistory_clearsNavigationHistory() = runTest {
+      // Assuming there's no history to go back/forward to
+      every { mockWebView.canGoBack() } returns false
+      every { mockWebView.canGoForward() } returns false
+
+      coEvery { readerSessionManager.clearWebViewHistory() } just Runs
+      every { context.getString(string.navigation_history_cleared) } returns "Navigation History Cleared"
+
+      viewModel.effects.test {
+        viewModel.onAction(ReaderAction.ClearNavigationHistory)
+        advanceUntilIdle()
+
+        coVerify { readerSessionManager.clearWebViewHistory() }
+
+        assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isFalse()
+        assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
+
+        val toastEffect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(toastEffect.message).isEqualTo("Navigation History Cleared")
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onAction_NavigationHistoryItemClick_loadsUrlWithCurrentWebview() = runTest {
+      val navigationHistoryItem = NavigationHistoryListItem("Page 1", "url1")
+
+      viewModel.onAction(ReaderAction.NavigationHistoryItemClick(navigationHistoryItem))
+      advanceUntilIdle()
+
+      coVerify {
+        readerWebViewManager.loadUrlWithCurrentWebview(navigationHistoryItem.pageUrl, mockWebView)
+      }
+    }
   }
 
   @Nested
@@ -776,6 +972,10 @@ internal class CoreReaderViewModelTest {
 
     public override fun openHomeScreen() {
       super.openHomeScreen()
+    }
+
+    public override fun openKiwixSupportUrl() {
+      super.openKiwixSupportUrl()
     }
 
     override suspend fun restoreViewStateOnValidWebViewHistory(

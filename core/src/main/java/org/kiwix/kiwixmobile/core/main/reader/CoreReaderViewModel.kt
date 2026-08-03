@@ -508,8 +508,7 @@ abstract class CoreReaderViewModel(
   }
 
   private fun showBackwordForwardHistory(isForward: Boolean) {
-    val result = readerWebViewManager.getWebViewNavigationHistory(isForward)
-    when (result) {
+    when (val result = readerWebViewManager.getWebViewNavigationHistory(isForward)) {
       is HistoryFound -> emitEffect(ReaderEffect.ShowNavigationHistoryDialog(result))
       NoHistoryFound -> {
         // Do nothing when no history is found.
