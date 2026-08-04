@@ -59,6 +59,8 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
+import org.kiwix.kiwixmobile.core.utils.COMPLETED_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -306,6 +308,9 @@ class DownloadMonitorService : Service() {
       .setContentTitle(kiwixDataStore.appName.first())
       .setContentText(getString(string.download_notification_channel_description))
       .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
+      .setOnlyAlertOnce(true)
       .setWhen(System.currentTimeMillis())
       .build()
 
@@ -462,7 +467,7 @@ class DownloadMonitorService : Service() {
       .setContentTitle(notificationTitle)
       .setContentText(getString(string.complete))
       .setOngoing(false)
-      .setGroup(download.id.toString())
+      .setGroup(COMPLETED_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(false)
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
@@ -499,7 +504,7 @@ class DownloadMonitorService : Service() {
     NotificationChannel(
       DOWNLOAD_NOTIFICATION_CHANNEL_ID,
       getString(string.download_notification_channel_name),
-      NotificationManager.IMPORTANCE_HIGH
+      NotificationManager.IMPORTANCE_DEFAULT
     ).apply {
       description = getString(string.download_notification_channel_description)
       setSound(null, null)
@@ -514,7 +519,7 @@ class DownloadMonitorService : Service() {
           ?: NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       downloadNotificationsBuilderMap[notificationId] = notificationBuilder
       notificationBuilder
-        .setGroup("$notificationId")
+        .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
         .setStyle(null)
         .setProgress(ZERO, ZERO, false)
         .setContentTitle(null)
