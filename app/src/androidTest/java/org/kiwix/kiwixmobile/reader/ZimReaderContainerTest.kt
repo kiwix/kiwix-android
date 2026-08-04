@@ -42,7 +42,6 @@ import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 
-@Suppress("InjectDispatcher")
 @RunWith(AndroidJUnit4::class)
 class ZimReaderContainerTest {
   private lateinit var container: ZimReaderContainer

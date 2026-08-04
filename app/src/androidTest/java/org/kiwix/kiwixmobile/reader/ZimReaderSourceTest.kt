@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import java.io.File
 
-@Suppress("InjectDispatcher")
 @RunWith(AndroidJUnit4::class)
 class ZimReaderSourceTest {
   private lateinit var testZimFile: File

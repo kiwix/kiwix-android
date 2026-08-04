@@ -72,7 +72,6 @@ const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 
-@Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
 
