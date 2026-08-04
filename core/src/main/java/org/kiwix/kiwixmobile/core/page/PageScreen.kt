@@ -88,6 +88,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_LEFT_RIGHT_MAR
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_ROW_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
@@ -108,10 +109,10 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
   deleteIconTitle: Int,
   noItemsString: String,
   switchIsCheckedFlow: Flow<Boolean>,
-  alertDialogShower: AlertDialogShower,
   navigateBack: () -> Unit,
   viewModel: PageViewModel<T, S>
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
   val state by viewModel.state.collectAsStateWithLifecycle()
   val activity = LocalActivity.current as CoreMainActivity
 
@@ -153,52 +154,54 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
   }
 
   BackHandler(enabled = isSearchActive || isInSelectionMode) { handleNavigationClick() }
-
-  PageScreen(
-    state = state,
-    searchText = searchText,
-    screenTitle = screenTitle,
-    switchString = switchString,
-    noItemsString = noItemsString,
-    searchQueryHint = searchQueryHint,
-    isSearchBarActive = isSearchActive,
-    isInSelectionMode = isInSelectionMode,
-    selectedCount = selectedCount,
-    switchIsCheckedFlow = switchIsCheckedFlow,
-    isBrandedApp = activity.isBrandedApp(),
-    navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
-    actionMenuItems = actionMenuList(
-      deleteIconTitle = deleteIconTitle,
-      isSearchActive = isSearchActive,
+  KiwixTheme {
+    PageScreen(
+      state = state,
+      searchText = searchText,
+      screenTitle = screenTitle,
+      switchString = switchString,
+      noItemsString = noItemsString,
+      searchQueryHint = searchQueryHint,
+      isSearchBarActive = isSearchActive,
       isInSelectionMode = isInSelectionMode,
-      onSearchClick = {
-        isSearchActive = true
+      selectedCount = selectedCount,
+      switchIsCheckedFlow = switchIsCheckedFlow,
+      isBrandedApp = activity.isBrandedApp(),
+      navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
+      actionMenuItems = actionMenuList(
+        deleteIconTitle = deleteIconTitle,
+        isSearchActive = isSearchActive,
+        isInSelectionMode = isInSelectionMode,
+        onSearchClick = {
+          isSearchActive = true
+        },
+        onDeleteClick = {
+          viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
+        },
+        onSelectionDeleteClick = {
+          viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
+        }
+      ),
+      onClearSearch = {
+        searchText = ""
+        viewModel.actions.tryEmit(Action.Filter(""))
       },
-      onDeleteClick = {
-        viewModel.actions.tryEmit(Action.UserClickedDeleteButton)
+      onSearchTextChange = { newText ->
+        searchText = newText
+        viewModel.actions.tryEmit(Action.Filter(newText.trim()))
       },
-      onSelectionDeleteClick = {
-        viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
-      }
-    ),
-    onClearSearch = {
-      searchText = ""
-      viewModel.actions.tryEmit(Action.Filter(""))
-    },
-    onSearchTextChange = { newText ->
-      searchText = newText
-      viewModel.actions.tryEmit(Action.Filter(newText.trim()))
-    },
-    onSwitchCheckedChange = { isChecked ->
-      viewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
-    },
-    onItemLongClick = { page ->
-      viewModel.actions.tryEmit(Action.OnItemLongClick(page))
-    },
-    onItemClick = { page ->
-      viewModel.actions.tryEmit(Action.OnItemClick(page))
-    },
-  )
+      onSwitchCheckedChange = { isChecked ->
+        viewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
+      },
+      onItemLongClick = { page ->
+        viewModel.actions.tryEmit(Action.OnItemLongClick(page))
+      },
+      onItemClick = { page ->
+        viewModel.actions.tryEmit(Action.OnItemClick(page))
+      },
+    )
+    DialogHost(alertDialogShower)
+  }
 }
 
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList", "LongMethod")
@@ -225,62 +228,60 @@ fun <T : Page, S : PageState<T>> PageScreen(
   actionMenuItems: List<ActionMenuItem>,
   navigationIcon: @Composable () -> Unit
 ) {
-  KiwixTheme {
-    Scaffold(
-      topBar = {
-        Column {
-          KiwixAppBar(
-            title = if (isInSelectionMode) {
-              stringResource(R.string.selected_items, selectedCount)
-            } else {
-              screenTitle
-            },
-            navigationIcon = navigationIcon,
-            actionMenuItems = actionMenuItems,
-            searchBar = searchBarIfActive(
-              isSearchBarActive = isSearchBarActive,
-              isInSelectionMode = isInSelectionMode,
-              searchQueryHint = searchQueryHint,
-              searchText = searchText,
-              onSearchTextChange = onSearchTextChange,
-              onClearSearch = onClearSearch
-            )
+  Scaffold(
+    topBar = {
+      Column {
+        KiwixAppBar(
+          title = if (isInSelectionMode) {
+            stringResource(R.string.selected_items, selectedCount)
+          } else {
+            screenTitle
+          },
+          navigationIcon = navigationIcon,
+          actionMenuItems = actionMenuItems,
+          searchBar = searchBarIfActive(
+            isSearchBarActive = isSearchBarActive,
+            isInSelectionMode = isInSelectionMode,
+            searchQueryHint = searchQueryHint,
+            searchText = searchText,
+            onSearchTextChange = onSearchTextChange,
+            onClearSearch = onClearSearch
           )
-          PageSwitchRow(
-            switchString = switchString,
-            switchIsEnabled = !isInSelectionMode,
-            switchIsCheckedFlow = switchIsCheckedFlow,
-            onSwitchCheckedChange = onSwitchCheckedChange,
-            isBrandedApp = isBrandedApp
-          )
-        }
+        )
+        PageSwitchRow(
+          switchString = switchString,
+          switchIsEnabled = !isInSelectionMode,
+          switchIsCheckedFlow = switchIsCheckedFlow,
+          onSwitchCheckedChange = onSwitchCheckedChange,
+          isBrandedApp = isBrandedApp
+        )
       }
-    ) { padding ->
-      val items = state.pageItems
-      Box(
-        modifier = Modifier
-          .padding(
-            top = padding.calculateTopPadding(),
-            start = padding.calculateStartPadding(LocalLayoutDirection.current),
-            end = padding.calculateEndPadding(LocalLayoutDirection.current)
-          )
-          .fillMaxSize()
-      ) {
-        if (items.isEmpty()) {
-          Text(
-            text = noItemsString,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier
-              .align(Alignment.Center)
-              .semantics { testTag = NO_ITEMS_TEXT_TESTING_TAG }
-          )
-        } else {
-          PageList(
-            visiblePageItems = state.visiblePageItems,
-            onItemClick = onItemClick,
-            onItemLongClick = onItemLongClick
-          )
-        }
+    }
+  ) { padding ->
+    val items = state.pageItems
+    Box(
+      modifier = Modifier
+        .padding(
+          top = padding.calculateTopPadding(),
+          start = padding.calculateStartPadding(LocalLayoutDirection.current),
+          end = padding.calculateEndPadding(LocalLayoutDirection.current)
+        )
+        .fillMaxSize()
+    ) {
+      if (items.isEmpty()) {
+        Text(
+          text = noItemsString,
+          style = MaterialTheme.typography.headlineSmall,
+          modifier = Modifier
+            .align(Alignment.Center)
+            .semantics { testTag = NO_ITEMS_TEXT_TESTING_TAG }
+        )
+      } else {
+        PageList(
+          visiblePageItems = state.visiblePageItems,
+          onItemClick = onItemClick,
+          onItemLongClick = onItemLongClick
+        )
       }
     }
   }

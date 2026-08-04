@@ -20,16 +20,14 @@ package org.kiwix.kiwixmobile.core.page.notes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.PageScreenRoute
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 
 @Composable
 fun NotesScreenRoute(
   navigateBack: () -> Unit,
-  notesViewModel: NotesViewModel,
-  alertDialogShower: AlertDialogShower
+  notesViewModel: NotesViewModel
 ) {
   PageScreenRoute(
     navigateBack = navigateBack,
@@ -39,7 +37,6 @@ fun NotesScreenRoute(
     switchString = stringResource(R.string.notes_from_all_books),
     searchQueryHint = stringResource(R.string.search_notes),
     deleteIconTitle = R.string.pref_clear_notes,
-    switchIsCheckedFlow = notesViewModel.kiwixDataStore.showNotesOfAllBooks,
-    alertDialogShower = alertDialogShower,
+    switchIsCheckedFlow = notesViewModel.kiwixDataStore.showNotesOfAllBooks
   )
 }

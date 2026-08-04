@@ -51,7 +51,6 @@ import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadRoute
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadViewModel
 import org.kiwix.kiwixmobile.custom.help.BrandedHelpViewModel
@@ -62,8 +61,7 @@ import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 fun BrandedNavGraph(
   navController: NavHostController,
   modifier: Modifier = Modifier,
-  viewModelFactory: ViewModelProvider.Factory,
-  alertDialogShower: AlertDialogShower
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   NavHost(
     navController = navController,
@@ -78,7 +76,6 @@ fun BrandedNavGraph(
         viewModel = brandedReaderViewModel,
         addNoteViewModel = addNoteViewModel,
         navHostController = navController,
-        alertDialogShower = alertDialogShower,
         activity = activity,
       )
     }
@@ -86,24 +83,21 @@ fun BrandedNavGraph(
       val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
       HistoryScreenRoute(
         navigateBack = navController::popBackStack,
-        viewModel = historyViewModel,
-        alertDialogShower = alertDialogShower
+        viewModel = historyViewModel
       )
     }
     composable(CustomDestination.Notes.route) {
       val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
       NotesScreenRoute(
         navigateBack = navController::popBackStack,
-        notesViewModel = notesViewModel,
-        alertDialogShower = alertDialogShower
+        notesViewModel = notesViewModel
       )
     }
     composable(CustomDestination.Bookmarks.route) {
       val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
       BookmarkScreenRoute(
         navigateBack = navController::popBackStack,
-        viewModel = bookmarkViewModel,
-        alertDialogShower = alertDialogShower
+        viewModel = bookmarkViewModel
       )
     }
     composable(CustomDestination.Help.route) {
@@ -115,7 +109,6 @@ fun BrandedNavGraph(
     }
     composable(CustomDestination.Settings.route) {
       val brandedSettingsViewModel: BrandedSettingsViewModel = viewModel(factory = viewModelFactory)
-      brandedSettingsViewModel.setAlertDialog(alertDialogShower)
       SettingsScreenRoute(
         brandedSettingsViewModel,
         navController::popBackStack
@@ -123,9 +116,7 @@ fun BrandedNavGraph(
     }
     composable(CustomDestination.Downloads.route) {
       val brandedDownloadViewModel: BrandedDownloadViewModel = viewModel(factory = viewModelFactory)
-      BrandedDownloadRoute(
-        brandedDownloadViewModel
-      )
+      BrandedDownloadRoute(brandedDownloadViewModel)
     }
     composable(
       route = CustomDestination.Search.route,
@@ -150,7 +141,6 @@ fun BrandedNavGraph(
 
       SearchScreenRoute(
         viewModelFactory = viewModelFactory,
-        dialogShower = alertDialogShower,
         arguments = backStackEntry.arguments,
         coreMainActivity = coreMainActivity
       )

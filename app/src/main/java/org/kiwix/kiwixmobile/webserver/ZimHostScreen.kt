@@ -57,16 +57,15 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MAXIMUM_HEIGHT_OF_QR_CODE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_BOOKS_LIST
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_QR_CODE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 
@@ -92,50 +91,48 @@ fun ZimHostScreen(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
-  KiwixTheme {
-    Scaffold(
-      topBar = {
-        KiwixAppBar(
-          title = stringResource(R.string.menu_wifi_hotspot),
-          navigationIcon = navigationIcon
-        )
-      },
-      modifier = Modifier.testTag(ZIM_HOST_SCREEN_TESTING_TAG)
-    ) { contentPadding ->
-      Column(
+  Scaffold(
+    topBar = {
+      KiwixAppBar(
+        title = stringResource(R.string.menu_wifi_hotspot),
+        navigationIcon = navigationIcon
+      )
+    },
+    modifier = Modifier.testTag(ZIM_HOST_SCREEN_TESTING_TAG)
+  ) { contentPadding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(contentPadding)
+    ) {
+      Row(
         modifier = Modifier
-          .fillMaxSize()
-          .padding(contentPadding)
+          .fillMaxWidth()
+          .padding(horizontal = SIXTEEN_DP),
+        verticalAlignment = Alignment.CenterVertically
       ) {
-        Row(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = SIXTEEN_DP),
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          ServerIpText(serverIpText, Modifier.weight(1f), LocalContext.current)
-          ShareIcon(showShareIcon, shareIconClick)
-        }
-        Box(modifier = Modifier.weight(1f)) {
-          BookItemList(
-            booksList,
-            selectionMode,
-            qrImageItem,
-            onClick,
-            onLongClick,
-            onMultiSelect
-          )
-        }
-        KiwixButton(
-          startServerButtonItem.first,
-          startServerButtonItem.third,
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(FOUR_DP)
-            .testTag(START_SERVER_BUTTON_TESTING_TAG),
-          buttonBackgroundColor = startServerButtonItem.second
+        ServerIpText(serverIpText, Modifier.weight(1f), LocalContext.current)
+        ShareIcon(showShareIcon, shareIconClick)
+      }
+      Box(modifier = Modifier.weight(1f)) {
+        BookItemList(
+          booksList,
+          selectionMode,
+          qrImageItem,
+          onClick,
+          onLongClick,
+          onMultiSelect
         )
       }
+      KiwixButton(
+        startServerButtonItem.first,
+        startServerButtonItem.third,
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(FOUR_DP)
+          .testTag(START_SERVER_BUTTON_TESTING_TAG),
+        buttonBackgroundColor = startServerButtonItem.second
+      )
     }
   }
 }

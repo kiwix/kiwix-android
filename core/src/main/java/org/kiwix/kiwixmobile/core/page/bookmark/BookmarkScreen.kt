@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.page.bookmark
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.PageScreenRoute
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
@@ -28,8 +27,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 @Composable
 fun BookmarkScreenRoute(
   navigateBack: () -> Unit,
-  viewModel: BookmarkViewModel,
-  alertDialogShower: AlertDialogShower
+  viewModel: BookmarkViewModel
 ) {
   PageScreenRoute(
     navigateBack = navigateBack,
@@ -39,7 +37,6 @@ fun BookmarkScreenRoute(
     switchString = stringResource(R.string.bookmarks_from_current_book),
     searchQueryHint = stringResource(R.string.search_bookmarks),
     deleteIconTitle = R.string.pref_clear_all_bookmarks_title,
-    switchIsCheckedFlow = viewModel.kiwixDataStore.showBookmarksOfAllBooks,
-    alertDialogShower = alertDialogShower,
+    switchIsCheckedFlow = viewModel.kiwixDataStore.showBookmarksOfAllBooks
   )
 }

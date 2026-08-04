@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.main.DrawerMenuGroup
 import org.kiwix.kiwixmobile.core.main.LeftDrawerMenu
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 
 @Suppress("LongParameterList")
 @Composable
@@ -53,8 +52,7 @@ fun BrandedMainActivityScreen(
   enableLeftDrawer: Boolean,
   customBackHandler: MutableState<(() -> BackPressActivityExtensions.Super)?>,
   uiCoroutineScope: CoroutineScope,
-  viewModelFactory: ViewModelProvider.Factory,
-  alertDialogShower: AlertDialogShower
+  viewModelFactory: ViewModelProvider.Factory
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -90,8 +88,7 @@ fun BrandedMainActivityScreen(
           BrandedNavGraph(
             navController = navController,
             modifier = Modifier.fillMaxSize(),
-            viewModelFactory = viewModelFactory,
-            alertDialogShower = alertDialogShower
+            viewModelFactory = viewModelFactory
           )
         }
       }

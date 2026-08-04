@@ -34,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,10 +51,14 @@ import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.note.SHARE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission
@@ -69,13 +74,25 @@ const val VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG = "validateZimFilesMenuButt
  * multiple app-level concerns that shouldn't be split.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@Suppress("LongMethod")
 @Composable
 fun LocalLibraryRoute(
   localLibraryViewModel: LocalLibraryViewModel,
+  validateZimViewModel: ValidateZimViewModel,
   navController: NavHostController,
   zimFileUriArg: String,
   snackBarHostState: SnackbarHostState
 ) {
+  val alertDialogShower = remember { AlertDialogShower() }
+  LaunchedEffect(Unit) {
+    localLibraryViewModel.apply {
+      initialize(
+        validateZimViewModel,
+        alertDialogShower,
+        snackBarHostState
+      )
+    }
+  }
   val mainActivity = LocalActivity.current as KiwixMainActivity
   val uiState = localLibraryViewModel.uiState.collectAsStateWithLifecycle()
   val readWritePermission =
@@ -95,33 +112,36 @@ fun LocalLibraryRoute(
   BackHandler(enabled = uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI) {
     localLibraryViewModel.finishMultiModeFinished()
   }
-  LocalLibraryScreen(
-    state = uiState.value,
-    actionMenuItems = actionMenuItems(
-      navController = navController,
-      selectionMode = uiState.value.fileSelectListState.selectionMode,
-      localLibraryViewModel = localLibraryViewModel
-    ) {
-      localLibraryViewModel.filePickerMenuButtonClick(filePickerLauncher)
-    },
-    listState = rememberLazyListState(),
-    snackbarHostState = snackBarHostState,
-    onRefresh = localLibraryViewModel::onSwipeRefresh,
-    onDownloadButtonClick = localLibraryViewModel::onDownloadButtonClick,
-    onClick = localLibraryViewModel::onBookItemClick,
-    onLongClick = localLibraryViewModel::onBookItemLongClick,
-    onMultiSelect = localLibraryViewModel::onMultiSelect,
-    bottomAppBarScrollBehaviour = mainActivity.bottomAppBarScrollBehaviour,
-    onUserBackPressed = localLibraryViewModel::handleUserBackPressed,
-    navHostController = navController,
-    navigationIcon = {
-      NavigationIcon(
-        iconItem = navigationIconItem(uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI),
-        contentDescription = string.open_drawer,
-        onClick = localLibraryViewModel::onNavigationIconClick
-      )
-    }
-  )
+  KiwixTheme {
+    LocalLibraryScreen(
+      state = uiState.value,
+      actionMenuItems = actionMenuItems(
+        navController = navController,
+        selectionMode = uiState.value.fileSelectListState.selectionMode,
+        localLibraryViewModel = localLibraryViewModel
+      ) {
+        localLibraryViewModel.filePickerMenuButtonClick(filePickerLauncher)
+      },
+      listState = rememberLazyListState(),
+      snackbarHostState = snackBarHostState,
+      onRefresh = localLibraryViewModel::onSwipeRefresh,
+      onDownloadButtonClick = localLibraryViewModel::onDownloadButtonClick,
+      onClick = localLibraryViewModel::onBookItemClick,
+      onLongClick = localLibraryViewModel::onBookItemLongClick,
+      onMultiSelect = localLibraryViewModel::onMultiSelect,
+      bottomAppBarScrollBehaviour = mainActivity.bottomAppBarScrollBehaviour,
+      onUserBackPressed = localLibraryViewModel::handleUserBackPressed,
+      navHostController = navController,
+      navigationIcon = {
+        NavigationIcon(
+          iconItem = navigationIconItem(uiState.value.fileSelectListState.selectionMode == SelectionMode.MULTI),
+          contentDescription = string.open_drawer,
+          onClick = localLibraryViewModel::onNavigationIconClick
+        )
+      }
+    )
+    DialogHost(alertDialogShower)
+  }
   LaunchedEffect(zimFileUriArg) {
     LanguageUtils(mainActivity).changeFont(mainActivity, localLibraryViewModel.kiwixDataStore)
     localLibraryViewModel.processZimFileArguments(zimFileUriArg)

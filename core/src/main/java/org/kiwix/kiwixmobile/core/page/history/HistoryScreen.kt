@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.page.history
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.PageScreenRoute
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
@@ -28,8 +27,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 @Composable
 fun HistoryScreenRoute(
   navigateBack: () -> Unit,
-  viewModel: HistoryViewModel,
-  alertDialogShower: AlertDialogShower
+  viewModel: HistoryViewModel
 ) {
   PageScreenRoute(
     navigateBack = navigateBack,
@@ -39,7 +37,6 @@ fun HistoryScreenRoute(
     switchString = stringResource(R.string.history_from_current_book),
     searchQueryHint = stringResource(R.string.search_history),
     deleteIconTitle = R.string.pref_clear_all_history_title,
-    switchIsCheckedFlow = viewModel.kiwixDataStore.showHistoryOfAllBooks,
-    alertDialogShower = alertDialogShower,
+    switchIsCheckedFlow = viewModel.kiwixDataStore.showHistoryOfAllBooks
   )
 }

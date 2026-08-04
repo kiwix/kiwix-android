@@ -53,7 +53,9 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event
@@ -79,12 +81,10 @@ const val SELECTED_ZIM_PATHS_KEY = "selected_zim_paths"
 const val RESTART_SERVER = "restart_server"
 
 @OptIn(ExperimentalPermissionsApi::class)
+@Suppress("LongMethod")
 @Composable
-fun ZimHostRoute(
-  viewModel: ZimHostViewModel,
-  alertDialogShower: AlertDialogShower,
-  activity: CoreMainActivity
-) {
+fun ZimHostRoute(viewModel: ZimHostViewModel, activity: CoreMainActivity) {
+  val alertDialogShower = remember { AlertDialogShower() }
   val lifecycleOwner = LocalLifecycleOwner.current
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
   val notificationPermission = if (viewModel.isAndroid13OrAbove) {
@@ -114,31 +114,34 @@ fun ZimHostRoute(
       }
     }
   }
-  ZimHostScreen(
-    serverIpText = uiState.serverIpDisplayText,
-    showShareIcon = uiState.showShareIcon,
-    shareIconClick = {
-      activity.startActivity(
-        Intent(Intent.ACTION_SEND).apply {
-          type = "text/plain"
-          putExtra(Intent.EXTRA_TEXT, uiState.serverIpAddress)
-        }
-      )
-    },
-    qrImageItem = uiState.qrVisible to uiState.qrIcon,
-    booksList = uiState.books,
-    startServerButtonItem = Triple(
-      stringResource(uiState.startServerButtonTextRes),
-      uiState.startServerButtonColor
-    ) { viewModel.startServerButtonClick() },
-    selectionMode = SelectionMode.MULTI,
-    onMultiSelect = { viewModel.onBookSelected(it) },
-    navigationIcon = {
-      NavigationIcon(onClick = {
-        activity.onBackPressedDispatcher.onBackPressed()
-      })
-    }
-  )
+  KiwixTheme {
+    ZimHostScreen(
+      serverIpText = uiState.serverIpDisplayText,
+      showShareIcon = uiState.showShareIcon,
+      shareIconClick = {
+        activity.startActivity(
+          Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, uiState.serverIpAddress)
+          }
+        )
+      },
+      qrImageItem = uiState.qrVisible to uiState.qrIcon,
+      booksList = uiState.books,
+      startServerButtonItem = Triple(
+        stringResource(uiState.startServerButtonTextRes),
+        uiState.startServerButtonColor
+      ) { viewModel.startServerButtonClick() },
+      selectionMode = SelectionMode.MULTI,
+      onMultiSelect = { viewModel.onBookSelected(it) },
+      navigationIcon = {
+        NavigationIcon(onClick = {
+          activity.onBackPressedDispatcher.onBackPressed()
+        })
+      }
+    )
+    DialogHost(alertDialogShower)
+  }
 }
 
 @Composable
