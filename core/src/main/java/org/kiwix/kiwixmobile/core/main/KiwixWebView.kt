@@ -183,7 +183,6 @@ open class KiwixWebView constructor(
 
       val appContext = ContextCompat.getContextForLanguage(instance)
 
-      @Suppress("InjectDispatcher")
       CoroutineScope(ioDispatcher).launch {
         val result = FileUtils.downloadFileFromUrl(
           context = appContext,

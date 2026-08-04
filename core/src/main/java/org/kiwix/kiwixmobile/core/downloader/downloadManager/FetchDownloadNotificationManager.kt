@@ -58,15 +58,16 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.utils.ZERO
-import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import javax.inject.Inject
 
@@ -75,7 +76,8 @@ const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 
 class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
-  private val downloadRoomDao: DownloadRoomDao
+  private val downloadRoomDao: DownloadRoomDao,
+  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DefaultFetchNotificationManager(context) {
   private val notificationBuilderLock = Any()
 
@@ -306,7 +308,6 @@ class FetchDownloadNotificationManager @Inject constructor(
     downloadNotificationManager.notify(download.id, pauseNotification)
   }
 
-  @Suppress("InjectDispatcher")
   private fun getPauseNotification(
     fetch: Fetch,
     download: Download,
@@ -315,7 +316,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     synchronized(notificationBuilderLock) {
       val downloadTitle = getDownloadNotificationTitle(download)
       val notificationTitle =
-        runBlocking(Dispatchers.IO) {
+        runBlocking(ioDispatcher) {
           downloadRoomDao.getEntityForFileName(downloadTitle)?.title
             ?: downloadTitle
         }

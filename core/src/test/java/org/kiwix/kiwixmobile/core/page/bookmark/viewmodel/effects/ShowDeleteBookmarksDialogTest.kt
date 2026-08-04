@@ -22,11 +22,11 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -37,56 +37,72 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllBookmarks
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedBookmarks
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.util.UUID
 
 internal class ShowDeleteBookmarksDialogTest {
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.mainDispatcher
+
   val effects = mockk<MutableSharedFlow<SideEffect<*>>>(relaxed = true)
   private val libkiwixBookmark = mockk<LibkiwixBookmarks>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
-  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
-  fun `invoke with shows dialog that offers ConfirmDelete action`() {
+  fun `invoke with shows dialog that offers ConfirmDelete action`() = runTest {
+    val testScope = this
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
         bookmarkState(),
         libkiwixBookmark,
-        viewModelScope,
-        dialogShower
+        testScope,
+        dialogShower,
+        testDispatcher
       )
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.tryEmit(DeletePageItems(bookmarkState(), libkiwixBookmark, viewModelScope)) }
+    verify {
+      effects.tryEmit(
+        DeletePageItems(
+          bookmarkState(),
+          libkiwixBookmark,
+          testScope,
+          testDispatcher
+        )
+      )
+    }
   }
 
   @Test
-  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() =
-    runBlocking {
-      val zimReaderSource: ZimReaderSource = mockk()
-      every { zimReaderSource.toDatabase() } returns ""
-      val showDeleteBookmarksDialog =
-        ShowDeleteBookmarksDialog(
-          effects,
-          bookmarkState(
-            listOf(
-              libkiwixBookmarkItem(
-                isSelected = true,
-                databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
-                zimReaderSource = zimReaderSource
-              )
+  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() = runTest {
+    val zimReaderSource: ZimReaderSource = mockk()
+    every { zimReaderSource.toDatabase() } returns ""
+    val showDeleteBookmarksDialog =
+      ShowDeleteBookmarksDialog(
+        effects,
+        bookmarkState(
+          listOf(
+            libkiwixBookmarkItem(
+              isSelected = true,
+              databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
+              zimReaderSource = zimReaderSource
             )
-          ),
-          libkiwixBookmark,
-          viewModelScope,
-          dialogShower
-        )
-      showDeleteBookmarksDialog.invokeWith(activity)
-      verify { dialogShower.show(DeleteSelectedBookmarks, any()) }
-    }
+          )
+        ),
+        libkiwixBookmark,
+        this,
+        dialogShower,
+        testDispatcher
+      )
+    showDeleteBookmarksDialog.invokeWith(activity)
+    verify { dialogShower.show(DeleteSelectedBookmarks, any()) }
+  }
 
   @Test
   fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() =
@@ -105,8 +121,9 @@ internal class ShowDeleteBookmarksDialogTest {
             )
           ),
           libkiwixBookmark,
-          viewModelScope,
-          dialogShower
+          this,
+          dialogShower,
+          testDispatcher
         )
       showDeleteBookmarksDialog.invokeWith(activity)
       verify { dialogShower.show(DeleteAllBookmarks, any()) }

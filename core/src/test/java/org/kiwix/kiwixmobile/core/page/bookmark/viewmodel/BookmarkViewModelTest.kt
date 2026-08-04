@@ -52,11 +52,12 @@ internal class BookmarkViewModelTest {
   @JvmField
   @RegisterExtension
   val mainDispatcherRule = MainDispatcherRule()
+  private val testDispatcher = mainDispatcherRule.dispatcher
+  private val testScope = CoroutineScope(testDispatcher)
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val dialogShower: AlertDialogShower = mockk()
-  private val viewModelScope = CoroutineScope(mainDispatcherRule.dispatcher)
 
   private lateinit var viewModel: BookmarkViewModel
 
@@ -72,9 +73,14 @@ internal class BookmarkViewModelTest {
     every { libkiwixBookMarks.bookmarks() } returns itemsFromDb
     every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
     viewModel =
-      BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, kiwixDataStore).apply {
+      BookmarkViewModel(
+        libkiwixBookMarks,
+        zimReaderContainer,
+        kiwixDataStore,
+        testDispatcher
+      ).apply {
         setAlertDialogShower(dialogShower)
-        setLifeCycleScope(viewModelScope)
+        setLifeCycleScope(testScope)
       }
   }
 
@@ -118,7 +124,7 @@ internal class BookmarkViewModelTest {
         UpdateAllBookmarksPreference(
           kiwixDataStore,
           false,
-          viewModelScope
+          testScope
         )
       )
       cancelAndIgnoreRemainingEvents()
@@ -181,20 +187,20 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  internal fun `createDeletePageDialogEffect returns correct dialog`() =
-    runTest {
-      assertThat(
-        viewModel.createDeletePageDialogEffect(bookmarkState(), viewModelScope)
-      ).isEqualTo(
-        ShowDeleteBookmarksDialog(
-          viewModel.effects,
-          bookmarkState(),
-          libkiwixBookMarks,
-          viewModelScope,
-          dialogShower
-        )
+  internal fun `createDeletePageDialogEffect returns correct dialog`() = runTest {
+    assertThat(
+      viewModel.createDeletePageDialogEffect(bookmarkState(), testScope)
+    ).isEqualTo(
+      ShowDeleteBookmarksDialog(
+        viewModel.effects,
+        bookmarkState(),
+        libkiwixBookMarks,
+        testScope,
+        dialogShower,
+        testDispatcher
       )
-    }
+    )
+  }
 
   @Test
   internal fun `copyWithNewItems returns state with copied items`() {

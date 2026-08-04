@@ -330,7 +330,6 @@ class ZimFileReader(
   private fun extractQueryParam(url: String): String =
     "?" + url.substringAfterLast("?", "")
 
-  @Suppress("InjectDispatcher")
   private suspend fun loadAsset(
     uri: String
   ): InputStream? =
@@ -392,7 +391,6 @@ class ZimFileReader(
       null
     }
 
-  @Suppress("InjectDispatcher")
   private suspend fun generateZimContentBytes(item: Item?, uri: String): ByteArrayInputStream =
     withContext(ioDispatcher) {
       runCatching {

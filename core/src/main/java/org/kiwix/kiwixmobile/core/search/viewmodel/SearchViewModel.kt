@@ -240,7 +240,7 @@ class SearchViewModel @Inject constructor(
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
     _effects.tryEmit(
-      DeleteRecentSearch(it.searchListItem, recentSearchRoomDao, viewModelScope)
+      DeleteRecentSearch(it.searchListItem, recentSearchRoomDao, viewModelScope, ioDispatcher)
     )
     _effects.tryEmit(ShowToast(R.string.delete_specific_search_toast))
   }
@@ -261,7 +261,8 @@ class SearchViewModel @Inject constructor(
         recentSearchRoomDao,
         searchListItem,
         zimReaderContainer.id,
-        viewModelScope
+        viewModelScope,
+        ioDispatcher
       )
     )
     _effects.tryEmit(OpenSearchItem(searchListItem, openInNewTab))

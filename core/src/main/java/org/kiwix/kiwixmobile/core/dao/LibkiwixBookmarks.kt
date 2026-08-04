@@ -22,7 +22,6 @@ import android.os.Build
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -79,10 +78,9 @@ class LibkiwixBookmarks @Inject constructor(
   private val initMutex = Mutex()
   private var initialized: Boolean = false
 
-  @Suppress("InjectDispatcher")
   private val bookmarkListFlow: MutableStateFlow<List<LibkiwixBookmarkItem>> by lazy {
     MutableStateFlow<List<LibkiwixBookmarkItem>>(emptyList()).also { flow ->
-      CoroutineScope(Dispatchers.IO).launch {
+      CoroutineScope(ioDispatcher).launch {
         runCatching {
           val bookmarks = getBookmarksList()
           flow.emit(bookmarks)
@@ -109,9 +107,8 @@ class LibkiwixBookmarks @Inject constructor(
 
   /**
    * Ensure initialization runs once. This method performs all file I/O and manager setup
-   * on Dispatchers.IO so it won't block the main thread. It is safe to call multiple times.
    */
-  private suspend fun ensureInitialized(ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+  private suspend fun ensureInitialized() {
     if (initialized) return
 
     initMutex.withLock {
@@ -141,10 +138,9 @@ class LibkiwixBookmarks @Inject constructor(
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
 
-  @Suppress("InjectDispatcher")
   suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
     ensureInitialized()
-    return withContext(Dispatchers.IO) {
+    return withContext(ioDispatcher) {
       zimFileReader?.let { reader ->
         getBookmarksList()
           .filter { it.zimId == reader.id }
@@ -153,13 +149,12 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  @Suppress("InjectDispatcher")
   fun bookmarkUrlsForCurrentBook(zimId: String): Flow<List<String>> =
     bookmarkListFlow
       .map { bookmarksList ->
         bookmarksList.filter { it.zimId == zimId }
           .map(LibkiwixBookmarkItem::bookmarkUrl)
-      }.flowOn(Dispatchers.IO)
+      }.flowOn(ioDispatcher)
 
   /**
    * Saves bookmarks in libkiwix. The use of `shouldWriteBookmarkToFile` is primarily
@@ -278,15 +273,14 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   fun deleteBookmarks(
-    bookmarks: List<LibkiwixBookmarkItem>,
-    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    bookmarks: List<LibkiwixBookmarkItem>
   ) {
     CoroutineScope(ioDispatcher).launch {
       ensureInitialized()
       bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
       writeBookMarksAndSaveLibraryToFile()
       updateFlowBookmarkList()
-      removeBookFromLibraryIfNoRelatedBookmarksAreStored(ioDispatcher, bookmarks)
+      removeBookFromLibraryIfNoRelatedBookmarksAreStored(bookmarks)
     }
   }
 
@@ -300,11 +294,9 @@ class LibkiwixBookmarks @Inject constructor(
    * This function checks if any of the books associated with the given deleted bookmarks
    * are still referenced by other existing bookmarks. If not, those books are removed from the library.
    *
-   * @param ioDispatcher The coroutine dispatcher to run the operation on (typically Dispatchers.IO).
    * @param deletedBookmarks The list of bookmarks that were just deleted.
    */
   private suspend fun removeBookFromLibraryIfNoRelatedBookmarksAreStored(
-    ioDispatcher: CoroutineDispatcher,
     deletedBookmarks: List<LibkiwixBookmarkItem>
   ) {
     ensureInitialized()
@@ -469,10 +461,8 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  @Suppress("InjectDispatcher")
   private suspend fun exportedFile(
-    fileName: String,
-    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    fileName: String
   ): File {
     val rootFolder = File(EXPORT_BOOK_MARK_PATH)
     if (!rootFolder.isFileExist(ioDispatcher)) rootFolder.mkdir()

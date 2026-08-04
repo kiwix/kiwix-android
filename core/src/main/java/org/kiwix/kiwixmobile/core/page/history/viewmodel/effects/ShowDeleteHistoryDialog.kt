@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
  */
 
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -34,11 +35,12 @@ data class ShowDeleteHistoryDialog(
   private val state: HistoryState,
   private val pageDao: PageDao,
   private val viewModelScope: CoroutineScope,
-  var dialogShower: DialogShower
+  var dialogShower: DialogShower,
+  private val ioDispatcher: CoroutineDispatcher
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     dialogShower.show(if (state.isInSelectionState) DeleteSelectedHistory else DeleteAllHistory, {
-      effects.tryEmit(DeletePageItems(state, pageDao, viewModelScope))
+      effects.tryEmit(DeletePageItems(state, pageDao, viewModelScope, ioDispatcher))
     })
   }
 }

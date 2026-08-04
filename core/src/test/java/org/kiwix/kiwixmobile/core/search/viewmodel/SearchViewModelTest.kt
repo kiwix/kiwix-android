@@ -368,7 +368,8 @@ internal class SearchViewModelTest {
             recentSearchRoomDao,
             searchListItem,
             "id",
-            viewModel.viewModelScope
+            viewModel.viewModelScope,
+            mainDispatcherRule.dispatcher
           ),
           OpenSearchItem(searchListItem, false)
         )
@@ -384,7 +385,8 @@ internal class SearchViewModelTest {
             recentSearchRoomDao,
             searchListItem,
             "id",
-            viewModel.viewModelScope
+            viewModel.viewModelScope,
+            mainDispatcherRule.dispatcher
           ),
           OpenSearchItem(searchListItem, true)
         )
@@ -406,7 +408,12 @@ internal class SearchViewModelTest {
         val searchListItem = RecentSearchListItem("", "")
         actionResultsInEffects(
           ConfirmedDelete(searchListItem),
-          DeleteRecentSearch(searchListItem, recentSearchRoomDao, viewModel.viewModelScope),
+          DeleteRecentSearch(
+            searchListItem,
+            recentSearchRoomDao,
+            viewModel.viewModelScope,
+            mainDispatcherRule.dispatcher
+          ),
           ShowToast(R.string.delete_specific_search_toast)
         )
       }

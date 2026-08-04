@@ -72,7 +72,12 @@ internal class PageViewModelTest {
     every { zimReaderContainer.name } returns "zimName"
     coEvery { kiwixDataStore.showHistoryOfAllBooks } returns flowOf(true)
     every { pageDao.pages() } returns itemsFromDb
-    viewModel = TestablePageViewModel(zimReaderContainer, kiwixDataStore, pageDao)
+    viewModel = TestablePageViewModel(
+      zimReaderContainer,
+      kiwixDataStore,
+      pageDao,
+      mainDispatcherRule.dispatcher
+    )
   }
 
   @Test

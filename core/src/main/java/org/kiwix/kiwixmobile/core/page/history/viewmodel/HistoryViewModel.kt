@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
@@ -30,12 +31,19 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 
 class HistoryViewModel @Inject constructor(
   historyRoomDao: HistoryRoomDao,
   zimReaderContainer: ZimReaderContainer,
-  kiwixDataStore: KiwixDataStore
-) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, kiwixDataStore, zimReaderContainer) {
+  kiwixDataStore: KiwixDataStore,
+  @IoDispatcher ioDispatcher: CoroutineDispatcher
+) : PageViewModel<HistoryItem, HistoryState>(
+    historyRoomDao,
+    kiwixDataStore,
+    zimReaderContainer,
+    ioDispatcher
+  ) {
   override fun initialState(): HistoryState {
     val showAll = runBlocking { kiwixDataStore.showHistoryOfAllBooks.first() }
     return HistoryState(emptyList(), showAll, zimReaderContainer.id)
@@ -65,7 +73,14 @@ class HistoryViewModel @Inject constructor(
     state: HistoryState,
     viewModelScope: CoroutineScope
   ) =
-    ShowDeleteHistoryDialog(effects, state, pageDao, viewModelScope, requireAlertDialogShower())
+    ShowDeleteHistoryDialog(
+      effects,
+      state,
+      pageDao,
+      viewModelScope,
+      requireAlertDialogShower(),
+      ioDispatcher
+    )
 
   override fun deselectAllPages(state: HistoryState): HistoryState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
