@@ -877,6 +877,177 @@ internal class CoreReaderViewModelTest {
         readerWebViewManager.loadUrlWithCurrentWebview(navigationHistoryItem.pageUrl, mockWebView)
       }
     }
+
+    @Test
+    fun onAction_SelectTab_hidesTabSwitcherAndSelectsTab() = runTest {
+      val viewModel = spyk(viewModel)
+
+      coEvery { viewModel.selectTab(0) } just Runs
+      coEvery { viewModel.hideTabSwitcher() } just Runs
+
+      every { mockWebView.canGoBack() } returns true
+      every { mockWebView.canGoForward() } returns false
+
+      viewModel.onAction(ReaderAction.SelectTab(0))
+      advanceUntilIdle()
+
+      coVerify { viewModel.selectTab(0) }
+      coVerify { viewModel.hideTabSwitcher() }
+
+      // Update the bottomToolbar arrows
+      assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isTrue()
+      assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
+    }
+
+    @Test
+    fun onAction_OpenSearch_callsOpenSearch() = runTest {
+      val viewModel = spyk(viewModel)
+
+      every {
+        viewModel.openSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
+      } just Runs
+
+      viewModel.onAction(
+        ReaderAction.OpenSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
+      )
+
+      verify {
+        viewModel.openSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
+      }
+    }
+
+    @Nested
+    inner class CloseTab {
+      @BeforeEach
+      fun closeTabSetup() {
+        viewModel = spyk(viewModel)
+
+        every { readAloudManager.currentTtsIndex } returns -1
+        every { readerWebViewManager.closeTab(1) } returns mockWebView
+        every { context.getString(string.tab_closed) } returns "Tab Closed"
+        every { context.getString(string.undo) } returns "Undo"
+        every { viewModel.openHomeScreen() } just Runs
+      }
+
+      @Test
+      fun closeTab_emitsSnackbarAndOpensHomeScreen() = runTest {
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+          assertThat(effect.message).isEqualTo("Tab Closed")
+
+          verify { viewModel.openHomeScreen() }
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+      @Test
+      fun closeTab_stopsReadAloudIfSameIndex() = runTest {
+        every { readAloudManager.currentTtsIndex } returns 1
+        coEvery { readAloudManager.stopReadAloud() } just Runs
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+          advanceUntilIdle()
+
+          coVerify { readAloudManager.stopReadAloud() }
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+      @Test
+      fun closeTab_actionClick_restoresDeletedTab() = runTest {
+        every { context.getString(string.tab_restored) } returns "Tab Restored"
+        every { readerWebViewManager.restoreDeletedTab(mockWebView, 1) } just Runs
+        every { readerWebViewManager.webViewList() } returns emptyList()
+        every { readerMenuState.showBookSpecificMenuItems() } just Runs
+        coEvery { readerWebViewManager.setUpWithTextToSpeech(mockWebView, readAloudManager) }
+
+        // Assuming initially true
+        viewModel.getUiState().update { it.copy(showNoBookOpenInReader = true) }
+        viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+
+          effect.actionClick.invoke()
+          advanceUntilIdle()
+
+          // If webViewList is empty sets showNoBookOpenInReader to false and showBookSpecificMenuItems
+          assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse
+          verify { readerMenuState.showBookSpecificMenuItems() }
+
+          verify { readerWebViewManager.restoreDeletedTab(mockWebView, 1) }
+
+          val toastEffect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+          assertThat(toastEffect.message).isEqualTo("Tab Restored")
+
+          coVerify { readerWebViewManager.setUpWithTextToSpeech(mockWebView, readAloudManager) }
+
+          // Show Bottom Bar depends on tab switcher state
+          assertThat(viewModel.uiState.value.showBottomBar).isFalse()
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+      @Test
+      fun closeTab_snackBarResult_dismissed_savesSessionAndClosesZimBook() = runTest {
+        coEvery { readerSessionManager.saveReaderSession() } just Runs
+        every { readerWebViewManager.webViewList() } returns emptyList()
+        every { viewModel.closeZimBook() } just Runs
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+
+          effect.snackBarResult.invoke(SnackbarResult.Dismissed)
+          advanceUntilIdle()
+
+          // Only saves session after Snackbar is dismissed
+          coVerify { readerSessionManager.saveReaderSession() }
+
+          // Only close if webViewList is empty
+          verify { viewModel.closeZimBook() }
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+    }
+
+    @Test
+    fun onAction_FindInPageQueryChanged_callsSearch() = runTest {
+      viewModel.onAction(ReaderAction.FindInPageQueryChanged("test query"))
+
+      verify { findInPageManager.search("test query") }
+    }
+
+    @Test
+    fun onAction_FindInPageNextClicked_callsFindNext() = runTest {
+      viewModel.onAction(ReaderAction.FindInPageNextClicked)
+
+      verify { findInPageManager.findNext() }
+    }
+
+    @Test
+    fun onAction_FindInPagePreviousClicked_callsFindPrevious() = runTest {
+      viewModel.onAction(ReaderAction.FindInPagePreviousClicked)
+
+      verify { findInPageManager.findPrevious() }
+    }
+
+    @Test
+    fun onAction_FindInPageCloseClicked_callsStop() = runTest {
+      viewModel.onAction(ReaderAction.FindInPageCloseClicked)
+
+      verify { findInPageManager.stop() }
+    }
   }
 
   @Nested
@@ -976,6 +1147,14 @@ internal class CoreReaderViewModelTest {
 
     public override fun openKiwixSupportUrl() {
       super.openKiwixSupportUrl()
+    }
+
+    public override suspend fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
+      super.hideTabSwitcher(shouldCloseZimBook)
+    }
+
+    public override suspend fun selectTab(position: Int) {
+      super.selectTab(position)
     }
 
     override suspend fun restoreViewStateOnValidWebViewHistory(
