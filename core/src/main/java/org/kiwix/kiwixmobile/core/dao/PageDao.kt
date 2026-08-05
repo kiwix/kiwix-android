@@ -18,10 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 
 interface PageDao {
   fun pages(): Flow<List<Page>>
-  fun deletePages(pagesToDelete: List<Page>)
+  suspend fun deletePages(pagesToDelete: List<Page>, ioDispatcher: CoroutineDispatcher)
 }

@@ -36,9 +36,9 @@ data class DeletePageItems(
   override fun invokeWith(activity: AppCompatActivity) {
     viewModelScope.launch(ioDispatcher) {
       if (state.isInSelectionState) {
-        pageDao.deletePages(state.pageItems.filter(Page::isSelected))
+        pageDao.deletePages(state.pageItems.filter(Page::isSelected), ioDispatcher)
       } else {
-        pageDao.deletePages(state.pageItems)
+        pageDao.deletePages(state.pageItems, ioDispatcher)
       }
     }
   }

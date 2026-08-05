@@ -22,21 +22,23 @@ import android.content.Context
 import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getNoteListItem
-import org.kiwix.sharedFunctions.TestApplication
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -57,7 +59,6 @@ class NoteRoomDaoTest {
       .allowMainThreadQueries()
       .build()
     notesRoomDao = kiwixRoomDatabase.notesRoomDao()
-    notesRoomDao.ioDispatcher = mainDispatcherRule.dispatcher
   }
 
   @After
@@ -65,9 +66,10 @@ class NoteRoomDaoTest {
     kiwixRoomDatabase.close()
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun testNotesRoomDao() =
-    runBlocking {
+    runTest(mainDispatcherRule.dispatcher) {
       clearNotes()
       val noteItem =
         getNoteListItem(
@@ -100,13 +102,15 @@ class NoteRoomDaoTest {
 
       // delete with deletePages method
       notesRoomDao.saveNote(noteItem)
-      notesRoomDao.deletePages(listOf(noteItem))
+      notesRoomDao.deletePages(listOf(noteItem), mainDispatcherRule.dispatcher)
+      advanceUntilIdle()
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
       // delete with list of NoteListItem
       notesRoomDao.saveNote(noteItem)
-      notesRoomDao.deleteNotes(listOf(noteItem))
+      notesRoomDao.deleteNotes(listOf(noteItem), mainDispatcherRule.dispatcher)
+      advanceUntilIdle()
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
@@ -159,6 +163,9 @@ class NoteRoomDaoTest {
     }
 
   private suspend fun clearNotes() {
-    notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
+    notesRoomDao.deleteNotes(
+      notesRoomDao.notes().first() as List<NoteListItem>,
+      mainDispatcherRule.dispatcher
+    )
   }
 }

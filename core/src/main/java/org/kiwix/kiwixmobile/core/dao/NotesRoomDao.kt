@@ -23,26 +23,18 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import java.io.File
-import javax.inject.Inject
 
 @Dao
 abstract class NotesRoomDao : PageDao {
-  @Inject
-  @IoDispatcher
-  lateinit var ioDispatcher: CoroutineDispatcher
-
   @Query("SELECT * FROM NotesRoomEntity ORDER BY NotesRoomEntity.noteTitle")
   abstract fun notesAsEntity(): Flow<List<NotesRoomEntity>>
 
@@ -60,8 +52,8 @@ abstract class NotesRoomDao : PageDao {
     }
 
   override fun pages(): Flow<List<Page>> = notes()
-  override fun deletePages(pagesToDelete: List<Page>) =
-    deleteNotes(pagesToDelete as List<NoteListItem>)
+  override suspend fun deletePages(pagesToDelete: List<Page>, ioDispatcher: CoroutineDispatcher) =
+    deleteNotes(pagesToDelete as List<NoteListItem>, ioDispatcher)
 
   fun saveNote(noteItem: NoteListItem) {
     val notesEntity = NotesRoomEntity(noteItem)
@@ -81,11 +73,11 @@ abstract class NotesRoomDao : PageDao {
   @Query("DELETE FROM NotesRoomEntity WHERE noteTitle=:noteTitle")
   abstract fun deleteNote(noteTitle: String)
 
-  fun deleteNotes(notesList: List<NoteListItem>) {
+  suspend fun deleteNotes(notesList: List<NoteListItem>, ioDispatcher: CoroutineDispatcher) {
     notesList.forEachIndexed { _, note ->
       val notesRoomEntity = NotesRoomEntity(note)
       deleteNote(noteTitle = notesRoomEntity.noteTitle)
-      removeNoteFileFromStorage(notesRoomEntity.noteFilePath)
+      removeNoteFileFromStorage(notesRoomEntity.noteFilePath, ioDispatcher)
     }
   }
 
@@ -95,12 +87,13 @@ abstract class NotesRoomDao : PageDao {
    * the associated file should also be removed from storage,
    * as it is no longer needed.
    */
-  private fun removeNoteFileFromStorage(noteFilePath: String) {
-    CoroutineScope(ioDispatcher).launch {
-      val noteFile = File(noteFilePath)
-      if (noteFile.isFileExist(ioDispatcher)) {
-        noteFile.deleteFile(ioDispatcher)
-      }
+  private suspend fun removeNoteFileFromStorage(
+    noteFilePath: String,
+    ioDispatcher: CoroutineDispatcher
+  ) {
+    val noteFile = File(noteFilePath)
+    if (noteFile.isFileExist(ioDispatcher)) {
+      noteFile.deleteFile(ioDispatcher)
     }
   }
 }

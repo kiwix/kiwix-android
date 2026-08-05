@@ -24,6 +24,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
@@ -54,7 +55,7 @@ abstract class HistoryRoomDao : PageDao {
     }
 
   override fun pages() = history()
-  override fun deletePages(pagesToDelete: List<Page>) =
+  override suspend fun deletePages(pagesToDelete: List<Page>, ioDispatcher: CoroutineDispatcher) =
     deleteHistory(pagesToDelete as List<HistoryListItem.HistoryItem>)
 
   @Query(

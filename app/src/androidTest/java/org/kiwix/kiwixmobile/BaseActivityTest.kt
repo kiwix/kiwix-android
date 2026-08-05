@@ -52,8 +52,11 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
   protected lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
+  protected val ioDispatcher by lazy {
+    Dispatchers.IO
+  }
   protected val kiwixDataStore by lazy {
-    KiwixDataStore(context, Dispatchers.IO)
+    KiwixDataStore(context, ioDispatcher)
   }
 
   open fun permissions(): Array<String> =

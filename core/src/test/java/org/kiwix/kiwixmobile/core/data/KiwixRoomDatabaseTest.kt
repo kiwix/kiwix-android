@@ -24,6 +24,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
@@ -164,11 +165,13 @@ class KiwixRoomDatabaseTest {
 
   @Test
   fun testNoteRoomDao() =
-    runBlocking {
+    runTest(mainDispatcherRule.dispatcher) {
       notesRoomDao = db.notesRoomDao()
-      notesRoomDao.ioDispatcher = mainDispatcherRule.dispatcher
       // delete all the notes from database to properly run the test cases.
-      notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
+      notesRoomDao.deleteNotes(
+        notesRoomDao.notes().first() as List<NoteListItem>,
+        mainDispatcherRule.dispatcher
+      )
       val noteItem =
         getNoteListItem(
           zimUrl = "http://kiwix.app/MainPage",
@@ -189,7 +192,7 @@ class KiwixRoomDatabaseTest {
       assertEquals(notesList.size, 1)
 
       // test deleting the history
-      notesRoomDao.deleteNotes(listOf(noteItem))
+      notesRoomDao.deleteNotes(listOf(noteItem), mainDispatcherRule.dispatcher)
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
@@ -203,7 +206,7 @@ class KiwixRoomDatabaseTest {
       )
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 2)
-      notesRoomDao.deletePages(notesRoomDao.notes().first())
+      notesRoomDao.deletePages(notesRoomDao.notes().first(), mainDispatcherRule.dispatcher)
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
     }
