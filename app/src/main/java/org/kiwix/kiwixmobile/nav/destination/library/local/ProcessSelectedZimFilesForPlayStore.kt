@@ -228,7 +228,10 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       for (file in files) {
         if (file.isDirectory) {
           foundFile = findFileRecursively(file, fileName, fileSize)
-        } else if (file.isFile && file.name.equals(fileName, ignoreCase = true) && file.length() == fileSize) {
+        } else if (file.isFile &&
+          file.name.equals(fileName, ignoreCase = true) &&
+          file.length() == fileSize
+        ) {
           foundFile = file
         }
         if (foundFile != null) break
@@ -353,9 +356,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     } else {
       selectedZimFileCallback?.showFileCopyMoveErrorDialog(errorMessage) {
         // Continue with remaining files after error
-        requireLifecycleScope().launch {
-          processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
-        }
+        processSelectedFiles(selectedZimFileUriList.drop(ONE), true)
       }
     }
   }
@@ -375,9 +376,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
         if (isSplittedZimFile(file.path)) {
           showWarningDialogForSplittedZimFile()
         } else {
-          requireLifecycleScope().launch {
-            selectedZimFileCallback?.navigateToReaderScreen(file = file)
-          }
+          selectedZimFileCallback?.navigateToReaderScreen(file = file)
         }
         multipleFilesProcessAction = null
       }

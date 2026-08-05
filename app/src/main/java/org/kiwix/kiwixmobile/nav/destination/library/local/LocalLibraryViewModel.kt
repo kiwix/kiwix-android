@@ -316,32 +316,32 @@ class LocalLibraryViewModel @Inject constructor(
   @Suppress("TooGenericExceptionCaught")
   private fun registerFileObservers(): Job =
     viewModelScope.launch(ioDispatcher) {
-      try {
-        val distinctDirs = storageDeviceProvider.getAppSpecificDirs()
-        distinctDirs.forEach { dir ->
-          val dirsToWatch = mutableListOf<File>()
-          dirsToWatch.add(dir)
-          dir.listFiles()?.filter { it.isDirectory }?.let { dirsToWatch.addAll(it) }
-          dirsToWatch.distinctBy { it.absolutePath }.forEach { watchDir ->
-            if (watchDir.exists() && watchDir.isDirectory) {
-              val observer = createFileObserver(watchDir)
-              fileObservers.add(observer)
-              observer.startWatching()
-            }
-          }
+      val directoriesToWatch = storageDeviceProvider.getAppSpecificDirs()
+        .asSequence()
+        .flatMap { rootDir ->
+          rootDir.walkTopDown().filter(File::isDirectory)
         }
-      } catch (e: Exception) {
-        e.printStackTrace()
+        .distinctBy(File::getAbsolutePath)
+
+      directoriesToWatch.forEach { directory ->
+        runCatching {
+          val observer = createFileObserver(directory)
+          fileObservers.add(observer)
+          observer.startWatching()
+        }.onFailure {
+          it.printStackTrace()
+        }
       }
     }
 
   private fun createFileObserver(watchDir: File): FileObserver {
-    val mask = FileObserver.CREATE or FileObserver.MOVED_TO
+    val mask =
+      FileObserver.CREATE or FileObserver.MOVED_TO or FileObserver.DELETE or FileObserver.MOVED_FROM
     return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
       object : FileObserver(watchDir, mask) {
         override fun onEvent(event: Int, path: String?) {
           if (path != null) {
-            handleFileEvent(watchDir, path)
+            handleFileEvent(watchDir, path, event)
           }
         }
       }
@@ -350,7 +350,7 @@ class LocalLibraryViewModel @Inject constructor(
       object : FileObserver(watchDir.path, mask) {
         override fun onEvent(event: Int, path: String?) {
           if (path != null) {
-            handleFileEvent(watchDir, path)
+            handleFileEvent(watchDir, path, event)
           }
         }
       }
@@ -358,18 +358,36 @@ class LocalLibraryViewModel @Inject constructor(
   }
 
   @Suppress("TooGenericExceptionCaught")
-  private fun handleFileEvent(watchDir: File, path: String) {
-    if (FileUtils.isValidZimFile(path) || isSplittedZimFile(path)) {
-      val file = File(watchDir, path)
-      viewModelScope.launch(ioDispatcher) {
-        if (file.isFileExist(ioDispatcher) && file.isFile) {
-          try {
-            addBookToLibkiwixBookOnDisk(file)
-          } catch (e: Exception) {
-            e.printStackTrace()
+  private fun handleFileEvent(watchDir: File, path: String, event: Int) {
+    if (!FileUtils.isValidZimFile(path) && !isSplittedZimFile(path)) {
+      return
+    }
+    viewModelScope.launch(ioDispatcher) {
+      runCatching {
+        val file = File(watchDir, path)
+        when (event) {
+          FileObserver.CREATE, FileObserver.MOVED_TO -> {
+            viewModelScope.launch(ioDispatcher) {
+              if (file.isFileExist(ioDispatcher) && file.isFile) {
+                try {
+                  addBookToLibkiwixBookOnDisk(file)
+                } catch (e: Exception) {
+                  e.printStackTrace()
+                }
+              }
+            }
+          }
+
+          FileObserver.DELETE,
+          FileObserver.MOVED_FROM -> {
+            try {
+              libkiwixBookOnDisk.deleteByPath(file.canonicalPath)
+            } catch (e: Exception) {
+              e.printStackTrace()
+            }
           }
         }
-      }
+      }.onFailure { it.printStackTrace() }
     }
   }
 
