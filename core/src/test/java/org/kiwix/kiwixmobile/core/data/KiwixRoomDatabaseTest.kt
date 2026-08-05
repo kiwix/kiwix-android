@@ -30,6 +30,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
@@ -38,6 +39,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -52,6 +54,10 @@ class KiwixRoomDatabaseTest {
   private lateinit var notesRoomDao: NotesRoomDao
   private lateinit var context: Context
   private lateinit var databaseFile: File
+
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Before
   fun setUpDatabase() {
@@ -160,6 +166,7 @@ class KiwixRoomDatabaseTest {
   fun testNoteRoomDao() =
     runBlocking {
       notesRoomDao = db.notesRoomDao()
+      notesRoomDao.ioDispatcher = mainDispatcherRule.dispatcher
       // delete all the notes from database to properly run the test cases.
       notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
       val noteItem =

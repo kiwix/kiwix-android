@@ -22,7 +22,6 @@ import android.content.Context
 import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,11 +30,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.sharedFunctions.TestApplication
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -45,6 +46,10 @@ class NoteRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var notesRoomDao: NotesRoomDao
 
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
+
   @Before
   fun setUp() {
     val context = ApplicationProvider.getApplicationContext<Context>()
@@ -52,7 +57,7 @@ class NoteRoomDaoTest {
       .allowMainThreadQueries()
       .build()
     notesRoomDao = kiwixRoomDatabase.notesRoomDao()
-    notesRoomDao.ioDispatcher = Dispatchers.IO
+    notesRoomDao.ioDispatcher = mainDispatcherRule.dispatcher
   }
 
   @After
