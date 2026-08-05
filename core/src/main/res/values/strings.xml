@@ -161,6 +161,9 @@
   <string name="delete_zim_failed" tools:keep="@string/delete_zim_failed">Sorry we were unable to delete some files. You should try using a file manager instead.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>
+  <string name="tts_increase_speed">Increase Speed</string>
+  <string name="tts_decrease_speed">Decrease Speed</string>
+  <string name="tts_normal_speed">Normal</string>
   <string name="stop">stop</string>
   <string name="notification_pause_button_text">Pause</string>
   <string name="notification_resume_button_text">Resume</string>
