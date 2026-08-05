@@ -60,7 +60,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
-import org.kiwix.kiwixmobile.core.utils.COMPLETED_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -467,7 +466,7 @@ class DownloadMonitorService : Service() {
       .setContentTitle(notificationTitle)
       .setContentText(getString(string.complete))
       .setOngoing(false)
-      .setGroup(COMPLETED_DOWNLOAD_GROUP_KEY)
+      .setGroup(download.id.toString())
       .setGroupSummary(false)
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
