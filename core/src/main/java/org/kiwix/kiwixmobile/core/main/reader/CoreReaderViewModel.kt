@@ -975,7 +975,7 @@ abstract class CoreReaderViewModel(
       )
     }
 
-  protected suspend fun selectTab(position: Int) {
+  protected open suspend fun selectTab(position: Int) {
     readerWebViewManager.setCurrentWebViewIndex(position)
     updateBottomToolbarVisibility()
     updateUrlFlow()
