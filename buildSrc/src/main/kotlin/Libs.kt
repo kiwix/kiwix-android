@@ -166,12 +166,6 @@ object Libs {
   const val robolectric: String = "org.robolectric:robolectric:" + Versions.ROBOLECTRIC
 
   /**
-   * https://developer.android.com/topic/libraries/architecture/index.html
-   */
-  const val android_arch_lifecycle_extensions: String = "android.arch.lifecycle:extensions:" +
-    Versions.android_arch_lifecycle_extensions
-
-  /**
    * https://developer.android.com/studio
    */
   const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +

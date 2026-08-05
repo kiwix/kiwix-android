@@ -53,7 +53,6 @@ dependencies {
   // Leak canary
   debugImplementation(Libs.leakcanary_android)
 
-  implementation(Libs.android_arch_lifecycle_extensions)
   implementation(Libs.webkit)
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)

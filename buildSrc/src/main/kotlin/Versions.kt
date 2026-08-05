@@ -24,7 +24,7 @@ object Versions {
 
   const val com_squareup_okhttp3: String = "4.12.0"
 
-  const val org_jetbrains_kotlin: String = "2.0.0"
+  const val org_jetbrains_kotlin: String = "2.2.10"
 
   const val KOTLIN_KSP: String = "2.3.4"
 
@@ -39,8 +39,6 @@ object Versions {
   const val io_objectbox: String = "4.1.0"
 
   const val io_mockk: String = "1.13.13"
-
-  const val android_arch_lifecycle_extensions: String = "1.1.1"
 
   const val com_android_tools_build_gradle: String = "9.3.0"
 

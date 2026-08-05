@@ -38,7 +38,7 @@ class AllProjectConfigurer {
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.plugins.apply("com.google.devtools.ksp")
-    // target.plugins.apply("kotlin-parcelize")
+    target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
