@@ -698,7 +698,6 @@ class KiwixDataStore @Inject constructor(
     const val PREF_THEME = "pref_dark_mode"
     const val PREF_TTS_SPEED = "pref_tts_speed"
     const val DEFAULT_TTS_SPEED = 1.0f
-    val SUPPORTED_TTS_SPEEDS = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.5f)
     const val TEXT_ZOOM = "true_text_zoom"
     const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"

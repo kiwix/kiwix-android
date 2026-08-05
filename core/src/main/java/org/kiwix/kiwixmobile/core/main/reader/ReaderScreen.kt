@@ -184,10 +184,13 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FORTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import kotlin.math.abs
@@ -628,20 +631,21 @@ private fun NoBookOpenView(
 @Composable
 private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
   var showSpeedBottomSheet by remember { mutableStateOf(false) }
+  val ttsItem = state.ttsControlsItem
 
   // Dismiss bottom sheet when TTS controls become hidden
-  LaunchedEffect(state.showTtsControls) {
-    if (!state.showTtsControls) {
+  LaunchedEffect(ttsItem.isTtsPlaying) {
+    if (!ttsItem.isTtsPlaying) {
       showSpeedBottomSheet = false
     }
   }
 
-  if (state.showTtsControls) {
+  if (ttsItem.isTtsPlaying) {
     Surface(
       modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
-      shape = RoundedCornerShape(28.dp),
+      shape = RoundedCornerShape(TWENTY_EIGHT_DP),
       color = MaterialTheme.colorScheme.surfaceContainer,
       contentColor = MaterialTheme.colorScheme.onSurface,
       shadowElevation = EIGHT_DP
@@ -662,7 +666,7 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
           modifier = Modifier.semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
         ) {
           Text(
-            text = state.ttsSpeedText.lowercase(),
+            text = String.format(Locale.US, "%.2fx", ttsItem.ttsSpeed),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(horizontal = TWELVE_DP, vertical = EIGHT_DP)
@@ -670,34 +674,27 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
         }
 
         // Center: Play / Pause button
-        val isPausedFromState = state.pauseTtsButtonText.equals(
-          stringResource(R.string.tts_resume),
-          ignoreCase = true
-        )
-        var localPaused by remember { mutableStateOf(isPausedFromState) }
-        LaunchedEffect(isPausedFromState) {
-          localPaused = isPausedFromState
-        }
         Surface(
-          onClick = {
-            localPaused = !localPaused
-            onReaderAction(PauseTts)
-          },
+          onClick = { onReaderAction(PauseTts) },
           shape = CircleShape,
           color = MaterialTheme.colorScheme.primary,
           contentColor = MaterialTheme.colorScheme.onPrimary,
           modifier = Modifier
-            .size(48.dp)
+            .size(FORTY_EIGHT_DP)
             .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
         ) {
           Box(contentAlignment = Alignment.Center) {
             Icon(
               painter = painterResource(
-                id = if (localPaused) R.drawable.ic_baseline_play else R.drawable.ic_baseline_pause
+                id = if (ttsItem.isTtsPaused) {
+                  R.drawable.ic_baseline_play
+                } else {
+                  R.drawable.ic_baseline_pause
+                }
               ),
-              contentDescription = state.pauseTtsButtonText,
+              contentDescription = ttsItem.contentDescription,
               tint = MaterialTheme.colorScheme.onPrimary,
-              modifier = Modifier.size(28.dp)
+              modifier = Modifier.size(TWENTY_EIGHT_DP)
             )
           }
         }
@@ -714,7 +711,7 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
             painter = painterResource(id = R.drawable.ic_clear_white_24dp),
             contentDescription = stringResource(R.string.stop),
             tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(TWENTY_FOUR_DP)
           )
         }
       }
@@ -722,12 +719,8 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
   }
 
   if (showSpeedBottomSheet) {
-    val currentSpeedFloat = state.ttsSpeedText
-      .removeSuffix("X")
-      .removeSuffix("x")
-      .toFloatOrNull() ?: KiwixDataStore.DEFAULT_TTS_SPEED
     TtsSpeedBottomSheet(
-      currentSpeed = currentSpeedFloat,
+      currentSpeed = ttsItem.ttsSpeed,
       onSpeedChanged = { onReaderAction(ChangeTtsSpeed(it)) },
       onDismiss = { showSpeedBottomSheet = false }
     )
@@ -815,7 +808,7 @@ private fun TtsSpeedAdjusterRow(
       color = MaterialTheme.colorScheme.surfaceContainerHigh,
       contentColor = MaterialTheme.colorScheme.onSurface,
       modifier = Modifier
-        .size(48.dp)
+        .size(FORTY_EIGHT_DP)
         .semantics { testTag = TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG }
     ) {
       Box(contentAlignment = Alignment.Center) {
@@ -831,7 +824,8 @@ private fun TtsSpeedAdjusterRow(
     Slider(
       value = currentSpeed.coerceIn(TTS_MIN_SPEED, TTS_MAX_SPEED),
       onValueChange = { rawVal ->
-        val snappedSpeed = round(rawVal * TTS_SPEED_SLIDER_STEPS_FACTOR) / TTS_SPEED_SLIDER_STEPS_FACTOR
+        val snappedSpeed =
+          round(rawVal * TTS_SPEED_SLIDER_STEPS_FACTOR) / TTS_SPEED_SLIDER_STEPS_FACTOR
         onSpeedChanged(snappedSpeed)
       },
       valueRange = TTS_MIN_SPEED..TTS_MAX_SPEED,
@@ -857,13 +851,13 @@ private fun TtsSpeedAdjusterRow(
       color = MaterialTheme.colorScheme.surfaceContainerHigh,
       contentColor = MaterialTheme.colorScheme.onSurface,
       modifier = Modifier
-        .size(48.dp)
+        .size(FORTY_EIGHT_DP)
         .semantics { testTag = TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG }
     ) {
       Box(contentAlignment = Alignment.Center) {
         Icon(
           imageVector = Icons.Default.Add,
-          contentDescription = "Increase Speed",
+          contentDescription = stringResource(R.string.tts_increase_speed),
           tint = MaterialTheme.colorScheme.onSurface
         )
       }
@@ -899,14 +893,14 @@ private fun TtsSpeedPresetsRow(
       ) {
         Surface(
           onClick = { onSpeedChanged(presetSpeed) },
-          shape = RoundedCornerShape(20.dp),
+          shape = RoundedCornerShape(TWENTY_DP),
           color = if (isSelected) {
-            MaterialTheme.colorScheme.primaryContainer
+            MaterialTheme.colorScheme.primary
           } else {
             MaterialTheme.colorScheme.surfaceContainerHigh
           },
           contentColor = if (isSelected) {
-            MaterialTheme.colorScheme.onPrimaryContainer
+            MaterialTheme.colorScheme.onPrimary
           } else {
             MaterialTheme.colorScheme.onSurface
           },
@@ -921,7 +915,7 @@ private fun TtsSpeedPresetsRow(
         }
         if (presetSpeed == KiwixDataStore.DEFAULT_TTS_SPEED) {
           Text(
-            text = "Normal",
+            text = stringResource(R.string.tts_normal_speed),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = FOUR_DP)
