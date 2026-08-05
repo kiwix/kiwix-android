@@ -24,20 +24,25 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import java.io.File
+import javax.inject.Inject
 
 @Dao
 abstract class NotesRoomDao : PageDao {
+  @Inject
+  @IoDispatcher
+  lateinit var ioDispatcher: CoroutineDispatcher
+
   @Query("SELECT * FROM NotesRoomEntity ORDER BY NotesRoomEntity.noteTitle")
   abstract fun notesAsEntity(): Flow<List<NotesRoomEntity>>
 
@@ -90,10 +95,7 @@ abstract class NotesRoomDao : PageDao {
    * the associated file should also be removed from storage,
    * as it is no longer needed.
    */
-  private fun removeNoteFileFromStorage(
-    noteFilePath: String,
-    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-  ) {
+  private fun removeNoteFileFromStorage(noteFilePath: String) {
     CoroutineScope(ioDispatcher).launch {
       val noteFile = File(noteFilePath)
       if (noteFile.isFileExist(ioDispatcher)) {
