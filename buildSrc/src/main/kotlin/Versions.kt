@@ -26,7 +26,7 @@ object Versions {
 
   const val org_jetbrains_kotlin: String = "2.0.0"
 
-  const val kotlin_ksp: String = "2.0.0-1.0.24"
+  const val KOTLIN_KSP: String = "2.3.4"
 
   const val XMLUTIL_SERIALIZATION: String = "0.90.2"
 

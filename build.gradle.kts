@@ -8,7 +8,7 @@ buildscript {
   }
   dependencies {
     classpath(Libs.com_android_tools_build_gradle)
-    classpath(Libs.kotlin_ksp)
+    classpath(Libs.KOTLIN_KSP)
     classpath(Libs.keeper)
 
     // NOTE: Do not place your application dependencies here; they belong

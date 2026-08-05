@@ -108,7 +108,7 @@ fun ApplicationProductFlavor.createDownloadTask(
   }
 }
 
-fun ApplicationProductFlavor.fetchRequest(urlString: String): Request {
+fun fetchRequest(urlString: String): Request {
   val url = urlString.replace("\"", "")
   return if (url.isAuthenticationUrl) {
     Request.Builder()

@@ -30,6 +30,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 class AllProjectConfigurer {
@@ -37,7 +38,7 @@ class AllProjectConfigurer {
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.plugins.apply("com.google.devtools.ksp")
-    target.plugins.apply("kotlin-parcelize")
+    // target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
@@ -91,12 +92,11 @@ class AllProjectConfigurer {
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
       }
-      // target.tasks.withType(KotlinCompile::class.java) {
-      //   compilerOptions {
-      //     jvmTarget.set(JvmTarget.JVM_17)
-      //     freeCompilerArgs.add("-Xjvm-default=all-compatibility")
-      //   }
-      // }
+      target.extensions.configure<KotlinAndroidExtension> {
+        compilerOptions {
+          freeCompilerArgs.add("-Xjvm-default=all-compatibility")
+        }
+      }
       buildFeatures.apply {
         viewBinding = true
         /*
@@ -194,7 +194,7 @@ class AllProjectConfigurer {
 
   fun configurePlugins(target: Project) {
     target.run {
-      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.8" }
+      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.15" }
       configureExtension<KtlintExtension> { android.set(true) }
       configureExtension<DetektExtension> {
         buildUponDefaultConfig = true

@@ -44,6 +44,7 @@ class AppConfigurer {
       }
       buildTypes {
         getByName("release") {
+          isCrunchPngs = true
           isMinifyEnabled = true
           isShrinkResources = true
           signingConfig = signingConfigs.getByName("releaseSigningConfig")
@@ -63,6 +64,7 @@ class AppConfigurer {
           }
         }
         getByName("debug") {
+          isCrunchPngs = true
           if (target.hasProperty("testingMinimizedBuild")) {
             isMinifyEnabled = target.hasProperty("testingMinimizedBuild")
             isShrinkResources = target.hasProperty("testingMinimizedBuild")
@@ -124,14 +126,8 @@ class AppConfigurer {
           }
         }
       }
-
-      androidResources {
-        // cruncherEnabled = true
-      }
-      sourceSets {
-        getByName("androidTest") {
-          java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
-        }
+      sourceSets.getByName("androidTest") {
+        java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
       }
     }
     configureDependencies(target)
