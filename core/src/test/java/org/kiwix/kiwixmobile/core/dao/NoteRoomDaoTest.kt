@@ -22,6 +22,7 @@ import android.content.Context
 import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -51,6 +52,7 @@ class NoteRoomDaoTest {
       .allowMainThreadQueries()
       .build()
     notesRoomDao = kiwixRoomDatabase.notesRoomDao()
+    notesRoomDao.ioDispatcher = Dispatchers.IO
   }
 
   @After

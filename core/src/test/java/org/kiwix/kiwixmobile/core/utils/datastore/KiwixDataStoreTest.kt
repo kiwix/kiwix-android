@@ -63,7 +63,7 @@ class KiwixDataStoreTest {
   fun setUp() = runTest {
     context = ApplicationProvider.getApplicationContext()
     context.kiwixDataStore.edit { it.clear() }
-    kiwixDataStore = KiwixDataStore(context)
+    kiwixDataStore = KiwixDataStore(context, mainDispatcherRule.dispatcher)
   }
 
   private fun expectedDefaultPublicStorage(storageContext: Context): String {
@@ -86,7 +86,7 @@ class KiwixDataStoreTest {
       override fun getExternalFilesDirs(type: String?): Array<File> = arrayOf(externalFilesDir)
     }
     storageContext.kiwixDataStore.edit { it.clear() }
-    return storageContext to KiwixDataStore(storageContext)
+    return storageContext to KiwixDataStore(storageContext, mainDispatcherRule.dispatcher)
   }
 
   @Test
