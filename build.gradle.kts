@@ -8,7 +8,6 @@ buildscript {
   }
   dependencies {
     classpath(Libs.com_android_tools_build_gradle)
-    classpath(Libs.KOTLIN_KSP)
     classpath(Libs.keeper)
 
     // NOTE: Do not place your application dependencies here; they belong
@@ -17,8 +16,8 @@ buildscript {
 }
 plugins {
   buildSrcVersions
-  id("org.jetbrains.kotlin.plugin.compose") version Versions.org_jetbrains_kotlin apply false
-  id("org.jetbrains.kotlin.plugin.serialization") version Versions.org_jetbrains_kotlin apply false
+  id("org.jetbrains.kotlin.plugin.compose") version Versions.ORG_JETBRAINS_KOTLIN apply false
+  id("org.jetbrains.kotlin.plugin.serialization") version Versions.ORG_JETBRAINS_KOTLIN apply false
 }
 
 allprojects {
@@ -30,5 +29,6 @@ allprojects {
 }
 
 tasks.register<Delete>("clean") {
+  description = "Cleans the build directory of the root project."
   delete(rootProject.layout.buildDirectory)
 }

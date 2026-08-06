@@ -10,7 +10,7 @@ import javax.xml.transform.stream.StreamResult
 
 plugins {
   android
-  // id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
+  id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
 }
 if (hasProperty("testingMinimizedBuild")) {
   apply(plugin = "com.slack.keeper")
@@ -147,13 +147,13 @@ android {
   }
 }
 
-// play {
-//   enabled.set(true)
-//   serviceAccountCredentials.set(file("../playstore.json"))
-//   track.set("internal")
-//   releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
-//   resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
-// }
+play {
+  enabled.set(true)
+  serviceAccountCredentials.set(file("../playstore.json"))
+  track.set("internal")
+  releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
+  resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
+}
 
 androidComponents {
   beforeVariants { variantBuilder ->

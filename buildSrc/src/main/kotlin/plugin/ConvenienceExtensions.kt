@@ -28,6 +28,9 @@ internal inline fun <reified T : Any> Project.configureExtension(function: T.() 
 internal fun DependencyHandlerScope.androidTestUtil(dependency: String) =
   addDependency("androidTestUtil", dependency)
 
+internal fun DependencyHandlerScope.kaptAndroidTest(dependency: String) =
+  addDependency("kaptAndroidTest", dependency)
+
 internal fun DependencyHandlerScope.kspAndroidTest(dependency: String) =
   addDependency("kspAndroidTest", dependency)
 
@@ -44,6 +47,9 @@ internal fun DependencyHandlerScope.androidTestImplementation(
 
 internal fun DependencyHandlerScope.compileOnly(dependency: String) =
   addDependency("compileOnly", dependency)
+
+internal fun DependencyHandlerScope.kapt(dependency: String) =
+  addDependency("kapt", dependency)
 
 internal fun DependencyHandlerScope.ksp(dependency: String) =
   addDependency("ksp", dependency)

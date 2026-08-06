@@ -89,11 +89,8 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
-    Versions.org_jetbrains_kotlin
-
-  const val KOTLIN_KSP: String =
-    "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:" + Versions.KOTLIN_KSP
+  const val KOTLIN_STDLIB_JDK8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
+    Versions.ORG_JETBRAINS_KOTLIN
 
   /**
    * https://github.com/google/dagger

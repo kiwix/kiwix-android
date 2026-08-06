@@ -23,12 +23,18 @@ import Libs
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.api.variant.Variant
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
+import java.io.File
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
@@ -37,7 +43,9 @@ class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
-    target.plugins.apply("com.google.devtools.ksp")
+    // We should migrate to the ksp plugin. This is still in our project due to dagger_android_processor
+    // We should think to migrate to hilt/koin.
+    target.plugins.apply("com.android.legacy-kapt")
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")
@@ -148,6 +156,7 @@ class AllProjectConfigurer {
       }
       sourceSets.named("test") {
         java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
+        kotlin.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
         resources.directories.add("${target.rootDir}/core/src/test/resources")
       }
 
@@ -203,6 +212,55 @@ class AllProjectConfigurer {
         baseline = project.file("detekt_baseline.xml")
       }
     }
+    registerDetektVariantTasks(target)
+  }
+
+  /**
+   * Registers the per-variant detekt tasks (`detektDebug`, `detektCustomexampleDebug`, ...).
+   *
+   * detekt registers these itself, but only from inside `plugins.withId("kotlin-android")`.
+   * AGP 9 makes built-in Kotlin mandatory (`android.builtInKotlin`) and the standalone
+   * `kotlin-android` plugin can no longer be applied — it still casts the Android extension to
+   * the removed `BaseExtension`. So detekt's Android block never runs and only the plain
+   * `detekt` task survives. Until detekt ships AGP 9 support we register the variant tasks
+   * ourselves, keeping detekt's task names and source sets (main + build type + flavour, no
+   * test sources) so `./gradlew detektDebug detektCustomExampleDebug` keeps working in CI and
+   * in the pre-commit hook.
+   */
+  private fun registerDetektVariantTasks(target: Project) {
+    val detektExtension = target.extensions.getByType(DetektExtension::class.java)
+    target.extensions.findByType(ApplicationAndroidComponentsExtension::class.java)
+      ?.onVariants { registerDetektVariantTask(target, it, detektExtension) }
+    target.extensions.findByType(LibraryAndroidComponentsExtension::class.java)
+      ?.onVariants { registerDetektVariantTask(target, it, detektExtension) }
+  }
+
+  private fun registerDetektVariantTask(
+    target: Project,
+    variant: Variant,
+    detektExtension: DetektExtension
+  ) {
+    target.tasks.register(
+      "detekt${variant.name.replaceFirstChar(Char::titlecase)}",
+      Detekt::class.java
+    ) {
+      description = "Runs detekt on the ${variant.name} variant."
+      group = LifecycleBasePlugin.VERIFICATION_GROUP
+      setSource(
+        target.files(
+          listOfNotNull(variant.sources.kotlin?.all, variant.sources.java?.all)
+        )
+      )
+      include("**/*.kt", "**/*.kts")
+      config.setFrom(detektExtension.config)
+      detektExtension.baseline?.takeIf(File::exists)?.let(baseline::set)
+      buildUponDefaultConfig = detektExtension.buildUponDefaultConfig
+      allRules = detektExtension.allRules
+      parallel = detektExtension.parallel
+      ignoreFailures = detektExtension.isIgnoreFailures
+      detektClasspath.setFrom(target.configurations.getByName("detekt"))
+      pluginClasspath.setFrom(target.configurations.getByName("detektPlugins"))
+    }
   }
 
   fun applyScripts(target: Project) {
@@ -211,7 +269,7 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
-      implementation(Libs.kotlin_stdlib_jdk8)
+      implementation(Libs.KOTLIN_STDLIB_JDK8)
       implementation(Libs.appcompat)
       implementation(Libs.appcompat_resource)
       implementation(Libs.material)
@@ -227,15 +285,16 @@ class AllProjectConfigurer {
       compileOnly(Libs.javax_annotation_api)
       implementation(Libs.dagger)
       implementation(Libs.dagger_android)
-      ksp(Libs.dagger_compiler)
-      ksp(Libs.dagger_android_processor)
+      kapt(Libs.dagger_compiler)
+      // This processor does not support by ksp.
+      kapt(Libs.dagger_android_processor)
       implementation(Libs.core_ktx)
       implementation(Libs.collection_ktx)
       implementation(Libs.preference_ktx)
       implementation(Libs.roomKtx)
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
-      ksp(Libs.roomCompiler)
+      kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
       implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)

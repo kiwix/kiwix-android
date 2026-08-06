@@ -19,10 +19,11 @@
 package plugin
 
 import Libs
+import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.ApplicationVariant
 import com.android.build.api.variant.FilterConfiguration
-import com.android.build.api.variant.VariantOutputConfiguration
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
@@ -117,20 +118,41 @@ class AppConfigurer {
             ?.identifier
 
           val abiVersionCode = abiCodes[abi] ?: 7
-          output.versionCode.set(abiVersionCode * 1_000_000 * output.versionCode.get())
-          if (output.outputType == VariantOutputConfiguration.OutputType.UNIVERSAL &&
-            variant.name.contains("nightly", true)
-          ) {
-            // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
-            // variant.outputProviders.provideApkOutputToTask() = setNameForNightlyUniversalApk()
-          }
+          output.versionCode.set(abiVersionCode * 1_000_000 + output.versionCode.get())
+        }
+        if (variant.name.contains("nightly", true)) {
+          // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
+          renameNightlyUniversalApk(target, variant)
         }
       }
       sourceSets.getByName("androidTest") {
         java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
+        kotlin.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
       }
     }
     configureDependencies(target)
+  }
+
+  /**
+   * Registers a task that transforms the variant's APK directory, renaming the universal APK.
+   * See [RenameNightlyUniversalApkTask] for why this replaces the old `outputFileName` assignment.
+   */
+  private fun renameNightlyUniversalApk(target: Project, variant: ApplicationVariant) {
+    val renameTask = target.tasks.register(
+      "rename${variant.name.replaceFirstChar(Char::titlecase)}UniversalApk",
+      RenameNightlyUniversalApkTask::class.java
+    )
+    val request = variant.artifacts
+      .use(renameTask)
+      .wiredWithDirectories(
+        RenameNightlyUniversalApkTask::inputDir,
+        RenameNightlyUniversalApkTask::outputDir
+      )
+      .toTransformMany(SingleArtifact.APK)
+    renameTask.configure {
+      transformationRequest.set(request)
+      universalApkName.set(setNameForNightlyUniversalApk())
+    }
   }
 
   private fun setNameForNightlyUniversalApk(): String =
@@ -162,7 +184,7 @@ class AppConfigurer {
       }
       androidTestUtil(Libs.orchestrator)
       androidTestCompileOnly(Libs.javax_annotation_api)
-      kspAndroidTest(Libs.dagger_compiler)
+      kaptAndroidTest(Libs.dagger_compiler)
       androidTestImplementation(Libs.mockk_android)
       androidTestImplementation(Libs.uiautomator)
       androidTestImplementation(Libs.assertj_core)

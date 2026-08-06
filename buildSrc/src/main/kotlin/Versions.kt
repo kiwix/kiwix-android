@@ -24,13 +24,11 @@ object Versions {
 
   const val com_squareup_okhttp3: String = "4.12.0"
 
-  const val org_jetbrains_kotlin: String = "2.2.10"
-
-  const val KOTLIN_KSP: String = "2.3.4"
+  const val ORG_JETBRAINS_KOTLIN: String = "2.2.20"
 
   const val XMLUTIL_SERIALIZATION: String = "0.90.2"
 
-  const val com_google_dagger: String = "2.53.1"
+  const val com_google_dagger: String = "2.56.2"
 
   const val androidx_test: String = "1.7.0"
   const val androidx_test_core: String = "1.7.0"
@@ -44,7 +42,7 @@ object Versions {
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
-  const val com_github_triplet_play_gradle_plugin: String = "3.7.0"
+  const val com_github_triplet_play_gradle_plugin: String = "4.0.0"
 
   const val javax_annotation_api: String = "1.3.2"
 
