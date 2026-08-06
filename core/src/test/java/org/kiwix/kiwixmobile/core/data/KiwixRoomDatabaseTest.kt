@@ -24,12 +24,14 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
@@ -38,6 +40,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -52,6 +55,10 @@ class KiwixRoomDatabaseTest {
   private lateinit var notesRoomDao: NotesRoomDao
   private lateinit var context: Context
   private lateinit var databaseFile: File
+
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
 
   @Before
   fun setUpDatabase() {
@@ -158,10 +165,13 @@ class KiwixRoomDatabaseTest {
 
   @Test
   fun testNoteRoomDao() =
-    runBlocking {
+    runTest(mainDispatcherRule.dispatcher) {
       notesRoomDao = db.notesRoomDao()
       // delete all the notes from database to properly run the test cases.
-      notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
+      notesRoomDao.deleteNotes(
+        notesRoomDao.notes().first() as List<NoteListItem>,
+        mainDispatcherRule.dispatcher
+      )
       val noteItem =
         getNoteListItem(
           zimUrl = "http://kiwix.app/MainPage",
@@ -182,7 +192,7 @@ class KiwixRoomDatabaseTest {
       assertEquals(notesList.size, 1)
 
       // test deleting the history
-      notesRoomDao.deleteNotes(listOf(noteItem))
+      notesRoomDao.deleteNotes(listOf(noteItem), mainDispatcherRule.dispatcher)
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
@@ -196,7 +206,7 @@ class KiwixRoomDatabaseTest {
       )
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 2)
-      notesRoomDao.deletePages(notesRoomDao.notes().first())
+      notesRoomDao.deletePages(notesRoomDao.notes().first(), mainDispatcherRule.dispatcher)
       notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
     }

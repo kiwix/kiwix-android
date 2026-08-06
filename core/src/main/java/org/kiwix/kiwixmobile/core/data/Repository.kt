@@ -133,7 +133,7 @@ class Repository @Inject internal constructor(
   override suspend fun clearNotes() =
     withContext(ioDispatcher) {
       val notesList = notesRoomDao.notes().first().map { it as NoteListItem }
-      notesRoomDao.deleteNotes(notesList)
+      notesRoomDao.deleteNotes(notesList, ioDispatcher)
     }
 
   override suspend fun insertWebViewPageHistoryItems(

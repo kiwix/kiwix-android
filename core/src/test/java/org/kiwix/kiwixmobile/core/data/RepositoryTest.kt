@@ -339,24 +339,27 @@ class RepositoryTest {
       val note2: NoteListItem = mockk()
       // notes() returns Flow<List<Page>>, first() is used in the impl
       every { notesRoomDao.notes() } returns flowOf(listOf(note1, note2))
-      every { notesRoomDao.deleteNotes(any()) } just Runs
+      coEvery { notesRoomDao.deleteNotes(any(), any()) } just Runs
 
       repository.clearNotes()
 
       verify(exactly = 1) { notesRoomDao.notes() }
-      verify(exactly = 1) {
-        notesRoomDao.deleteNotes(match { it.size == 2 && it.containsAll(listOf(note1, note2)) })
+      coVerify(exactly = 1) {
+        notesRoomDao.deleteNotes(
+          match { it.size == 2 && it.containsAll(listOf(note1, note2)) },
+          any()
+        )
       }
     }
 
     @Test
     fun `clearNotes with empty notes list`() = runTest {
       every { notesRoomDao.notes() } returns flowOf(emptyList())
-      every { notesRoomDao.deleteNotes(any()) } just Runs
+      coEvery { notesRoomDao.deleteNotes(any(), any()) } just Runs
 
       repository.clearNotes()
 
-      verify(exactly = 1) { notesRoomDao.deleteNotes(emptyList()) }
+      coVerify(exactly = 1) { notesRoomDao.deleteNotes(emptyList(), any()) }
     }
   }
 

@@ -19,8 +19,9 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -30,7 +31,6 @@ import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.sharedFunctions.MainDispatcherRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class DeletePageItemsTest {
@@ -53,7 +53,7 @@ internal class DeletePageItemsTest {
       mainDispatcherRule.dispatcher
     ).invokeWith(activity)
     advanceUntilIdle()
-    verify { pageDao.deletePages(listOf(item1)) }
+    coVerify { pageDao.deletePages(listOf(item1), mainDispatcherRule.dispatcher) }
   }
 
   @Test
@@ -66,6 +66,6 @@ internal class DeletePageItemsTest {
       mainDispatcherRule.dispatcher
     ).invokeWith(activity)
     advanceUntilIdle()
-    verify { pageDao.deletePages(listOf(item1, item2)) }
+    coVerify { pageDao.deletePages(listOf(item1, item2), mainDispatcherRule.dispatcher) }
   }
 }

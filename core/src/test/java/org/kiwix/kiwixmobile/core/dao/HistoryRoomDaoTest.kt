@@ -23,17 +23,19 @@ import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getHistoryItem
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -41,6 +43,9 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class HistoryRoomDaoTest {
+  @RegisterExtension
+  @JvmField
+  val mainDispatcherRule = MainDispatcherRule()
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var historyRoomDao: HistoryRoomDao
 
@@ -60,7 +65,7 @@ class HistoryRoomDaoTest {
 
   @Test
   fun testHistoryRoomDao() =
-    runBlocking {
+    runTest(mainDispatcherRule.dispatcher) {
       // delete all the history from database to properly run the test cases.
       historyRoomDao.deleteAllHistory()
       val historyItem =
@@ -151,7 +156,7 @@ class HistoryRoomDaoTest {
 
       // Test deletePages function
       historyRoomDao.saveHistory(historyItem)
-      historyRoomDao.deletePages(listOf(historyItem, historyItem2))
+      historyRoomDao.deletePages(listOf(historyItem, historyItem2), mainDispatcherRule.dispatcher)
       historyList = historyRoomDao.historyRoomEntity().first()
       assertThat(historyList.size, equalTo(0))
     }

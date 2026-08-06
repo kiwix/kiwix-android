@@ -37,6 +37,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
@@ -51,8 +52,11 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
   protected lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
+  protected val ioDispatcher by lazy {
+    Dispatchers.IO
+  }
   protected val kiwixDataStore by lazy {
-    KiwixDataStore(context)
+    KiwixDataStore(context, ioDispatcher)
   }
 
   open fun permissions(): Array<String> =

@@ -135,7 +135,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   override fun pages(): Flow<List<Page>> = bookmarks()
 
-  override fun deletePages(pagesToDelete: List<Page>) =
+  override suspend fun deletePages(pagesToDelete: List<Page>, ioDispatcher: CoroutineDispatcher) =
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
 
   suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {

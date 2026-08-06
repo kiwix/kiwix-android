@@ -102,7 +102,7 @@ class DownloadServiceTestForBrandedApps {
         }
         waitForIdle()
       }
-    KiwixDataStore(context).apply {
+    KiwixDataStore(context, Dispatchers.IO).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()

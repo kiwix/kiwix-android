@@ -190,7 +190,10 @@ class ObjectBoxToRoomMigratorTest : BaseActivityTest() {
       recentSearchRoomDao().deleteSearchHistory()
       historyRoomDao().deleteAllHistory()
       notesRoomDao()
-        .deletePages(kiwixRoomDatabase.notesRoomDao().notes().first())
+        .deletePages(
+          kiwixRoomDatabase.notesRoomDao().notes().first(),
+          ioDispatcher = ioDispatcher
+        )
     }
     box.removeAll()
   }
