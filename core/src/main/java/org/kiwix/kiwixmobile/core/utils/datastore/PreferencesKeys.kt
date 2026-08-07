@@ -86,4 +86,5 @@ object PreferencesKeys {
   val RATE_APP_COUNT = intPreferencesKey("rate_app_count")
   val RATE_APP_DOWNLOAD_COMPLETED = booleanPreferencesKey("rate_app_download_completed")
   val RATE_APP_READING_COUNT = intPreferencesKey("rate_app_reading_count")
+  val RATE_APP_PROMPT_SHOWN = booleanPreferencesKey("rate_app_prompt_shown")
 }

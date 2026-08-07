@@ -651,13 +651,15 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
-  suspend fun resetRateAppTriggers() {
-    context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.RATE_APP_COUNT] = 0
-      prefs[PreferencesKeys.RATE_APP_READING_COUNT] = 0
-    }
+  val rateAppPromptShown: Flow<Boolean> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.RATE_APP_PROMPT_SHOWN] ?: false
   }
 
+  suspend fun setRateAppPromptShown(shown: Boolean = true) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.RATE_APP_PROMPT_SHOWN] = shown
+    }
+  }
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"

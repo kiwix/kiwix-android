@@ -836,21 +836,9 @@ class KiwixDataStoreTest {
   }
 
   @Test
-  fun `resetRateAppTriggers resets all triggers to default`() = runTest {
-    kiwixDataStore.incrementRateAppVisitCount()
-    kiwixDataStore.incrementRateAppReadingCount()
-    kiwixDataStore.setRateAppDownloadCompleted()
-
-    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(1)
-    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(1)
-    assertThat(kiwixDataStore.rateAppDownloadCompleted.first()).isTrue()
-
-    kiwixDataStore.resetRateAppTriggers()
-
-    assertThat(kiwixDataStore.rateAppCount.first()).isEqualTo(0)
-    assertThat(kiwixDataStore.rateAppReadingCount.first()).isEqualTo(0)
-    // Download completed state should be preserved since the user
-    // already downloaded a ZIM file. Only visit and reading counts reset.
-    assertThat(kiwixDataStore.rateAppDownloadCompleted.first()).isTrue()
+  fun `setRateAppPromptShown sets prompt shown flag to true`() = runTest {
+    assertThat(kiwixDataStore.rateAppPromptShown.first()).isFalse()
+    kiwixDataStore.setRateAppPromptShown()
+    assertThat(kiwixDataStore.rateAppPromptShown.first()).isTrue()
   }
 }
