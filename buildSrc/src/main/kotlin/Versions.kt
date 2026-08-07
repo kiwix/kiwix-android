@@ -22,7 +22,7 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.11.0"
 
-  const val com_squareup_okhttp3: String = "4.12.0"
+  const val com_squareup_okhttp3: String = "5.4.0"
 
   const val ORG_JETBRAINS_KOTLIN: String = "2.2.20"
 

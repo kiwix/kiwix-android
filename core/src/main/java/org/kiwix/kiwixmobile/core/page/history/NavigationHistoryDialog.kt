@@ -115,7 +115,7 @@ fun NavigationHistoryDialog(
         } else {
           NavigationHistoryList(navigationHistoryList) {
             onNavigationItemClick.invoke(it)
-            onDialogDismissRequest
+            onDialogDismissRequest.invoke()
           }
         }
       }
