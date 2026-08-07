@@ -61,6 +61,8 @@ import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
+import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -85,6 +87,9 @@ class FetchDownloadNotificationManager @Inject constructor(
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
   }
 
+  override fun getChannelId(notificationId: Int, context: Context): String =
+    DOWNLOAD_NOTIFICATION_CHANNEL_ID
+
   override fun getFetchInstanceForNamespace(namespace: String): Fetch = Fetch.getDefaultInstance()
 
   override fun registerBroadcastReceiver() {
@@ -108,13 +113,25 @@ class FetchDownloadNotificationManager @Inject constructor(
     notificationManager: NotificationManager
   ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val channelId =
-        context.getString(string.fetch_notification_default_channel_id)
-      if (notificationManager.getNotificationChannel(channelId) == null) {
-        notificationManager.createNotificationChannel(createChannel(channelId, context))
+      if (notificationManager.getNotificationChannel(DOWNLOAD_NOTIFICATION_CHANNEL_ID) == null) {
+        notificationManager.createNotificationChannel(
+          createChannel(DOWNLOAD_NOTIFICATION_CHANNEL_ID, context)
+        )
       }
     }
   }
+
+  /**
+   * Suppress Fetch's group summary notification. Each download already posts its
+   * own progress notification, so the summary only adds an extra icon to the
+   * status bar during downloads. See #5000.
+   */
+  override fun updateGroupSummaryNotification(
+    groupId: Int,
+    notificationBuilder: NotificationCompat.Builder,
+    downloadNotifications: List<DownloadNotification>,
+    context: Context
+  ): Boolean = false
 
   override fun getSubtitleText(
     context: Context,
@@ -185,8 +202,9 @@ class FetchDownloadNotificationManager @Inject constructor(
       .setContentTitle(notificationTitle)
       .setContentText(getSubtitleText(context, downloadNotification))
       .setOngoing(downloadNotification.isOnGoingNotification)
-      .setGroup(downloadNotification.groupId.toString())
+      .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(false)
+      .setOnlyAlertOnce(true)
     if (downloadNotification.isFailed || downloadNotification.isCompleted) {
       notificationBuilder.setProgress(ZERO, ZERO, false)
     } else {
@@ -334,8 +352,9 @@ class FetchDownloadNotificationManager @Inject constructor(
         // However, on Android 14 and above user can cancel the notification by swipe right so we
         // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications
         .setOngoing(true)
-        .setGroup(download.id.toString())
+        .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
         .setGroupSummary(false)
+        .setOnlyAlertOnce(true)
         .setProgress(HUNDERED, download.progress, false)
         .addAction(
           drawable.fetch_notification_cancel,
