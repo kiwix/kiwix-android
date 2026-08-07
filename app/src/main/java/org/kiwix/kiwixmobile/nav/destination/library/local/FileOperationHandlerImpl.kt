@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 class FileOperationHandlerImpl @Inject constructor(
   private val context: Context,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : FileOperationHandler {
   @Suppress("MagicNumber")
   override suspend fun copy(

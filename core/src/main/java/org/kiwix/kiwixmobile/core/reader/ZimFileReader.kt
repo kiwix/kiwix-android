@@ -68,7 +68,7 @@ class ZimFileReader(
     ): ZimFileReader?
 
     class Impl @Inject constructor(
-      @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+      @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
     ) : Factory {
       override suspend fun create(
         zimReaderSource: ZimReaderSource,

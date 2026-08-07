@@ -30,7 +30,7 @@ import javax.inject.Singleton
 @Singleton
 class ZimReaderContainer @Inject constructor(
   private val zimFileReaderFactory: Factory,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   var zimFileReader: ZimFileReader? = null
     set(value) {

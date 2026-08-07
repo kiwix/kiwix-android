@@ -61,12 +61,12 @@ import javax.inject.Singleton
 @Suppress("LongParameterList")
 @Singleton
 class LibkiwixBookmarks @Inject constructor(
-  @Named(BOOKMARK_LIBRARY) private val library: Library,
-  @Named(BOOKMARK_MANAGER) private val manager: Manager,
+  @param:Named(BOOKMARK_LIBRARY) private val library: Library,
+  @param:Named(BOOKMARK_MANAGER) private val manager: Manager,
   private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val zimReaderContainer: ZimReaderContainer?,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : PageDao {
   /**
    * Request new data from Libkiwix when changes occur inside it; otherwise,

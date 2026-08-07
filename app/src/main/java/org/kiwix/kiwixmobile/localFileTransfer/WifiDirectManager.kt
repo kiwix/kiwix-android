@@ -67,8 +67,8 @@ class WifiDirectManager @Inject constructor(
   private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
   private val manager: WifiP2pManager?,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 

@@ -45,7 +45,7 @@ class ObjectBoxToLibkiwixMigrator @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val migrationMutex = Mutex()
 

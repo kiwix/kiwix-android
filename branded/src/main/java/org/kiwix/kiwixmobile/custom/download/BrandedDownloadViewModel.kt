@@ -58,7 +58,7 @@ class BrandedDownloadViewModel @Inject constructor(
   private val navigateToBrandedReader: NavigateToBrandedReader,
   private val kiwixPermissionChecker: KiwixPermissionChecker,
   private val requestNotificationPermission: RequestNotificationPermission,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()

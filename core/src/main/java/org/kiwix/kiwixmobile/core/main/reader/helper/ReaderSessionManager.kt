@@ -48,8 +48,8 @@ class ReaderSessionManager @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val mainRepositoryActions: MainRepositoryActions,
   val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   sealed interface RestoreSessionResult {
     data class Valid(

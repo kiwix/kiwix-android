@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.ui.toUriParam
 data class ShareFiles(
   private val selectedBooks: List<BookOnDisk>,
   private val viewModelScope: CoroutineScope,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

@@ -42,7 +42,7 @@ class StorageObserver @Inject constructor(
   private val zimReaderFactory: ZimFileReader.Factory,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val libkiwixBookFactory: LibkiwixBookFactory,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener

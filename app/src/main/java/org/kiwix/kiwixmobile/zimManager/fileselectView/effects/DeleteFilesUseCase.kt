@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 data class DeleteFilesUseCase @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   suspend operator fun invoke(
     books: List<BooksOnDiskListItem.BookOnDisk>

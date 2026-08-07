@@ -79,7 +79,7 @@ class SearchViewModel @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator,
   private val searchMutex: Mutex = Mutex(),
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(SearchScreenUiState())
   val uiState = _uiState.asStateFlow()

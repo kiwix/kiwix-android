@@ -33,7 +33,7 @@ data class SaveSearchToRecents(
   private val searchListItem: SearchListItem,
   private val id: String?,
   private val viewModelScope: CoroutineScope,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     id?.let {

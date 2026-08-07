@@ -58,7 +58,7 @@ val Context.kiwixDataStore by preferencesDataStore(
 @Singleton
 class KiwixDataStore @Inject constructor(
   val context: Context,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   val textZoom: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
     prefs[PreferencesKeys.TEXT_ZOOM] ?: DEFAULT_ZOOM

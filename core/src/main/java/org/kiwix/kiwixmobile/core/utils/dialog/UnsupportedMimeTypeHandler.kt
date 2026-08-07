@@ -38,7 +38,7 @@ import javax.inject.Inject
 
 class UnsupportedMimeTypeHandler @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private var alertDialogShower: AlertDialogShower? = null
   private var activity: Activity? = null

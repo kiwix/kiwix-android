@@ -79,7 +79,7 @@ const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
   private val downloadRoomDao: DownloadRoomDao,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DefaultFetchNotificationManager(context) {
   private val notificationBuilderLock = Any()
 

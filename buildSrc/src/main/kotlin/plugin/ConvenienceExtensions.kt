@@ -48,6 +48,9 @@ internal fun DependencyHandlerScope.androidTestImplementation(
 internal fun DependencyHandlerScope.compileOnly(dependency: String) =
   addDependency("compileOnly", dependency)
 
+internal fun DependencyHandlerScope.testRuntimeOnly(dependency: String) =
+  addDependency("testRuntimeOnly", dependency)
+
 internal fun DependencyHandlerScope.kapt(dependency: String) =
   addDependency("kapt", dependency)
 

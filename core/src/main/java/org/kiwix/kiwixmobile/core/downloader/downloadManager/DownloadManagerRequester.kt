@@ -39,7 +39,7 @@ class DownloadManagerRequester @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val downloadRoomDao: DownloadRoomDao,
   private val downloadMonitorServiceManager: DownloadMonitorServiceManager,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DownloadRequester {
   override suspend fun enqueue(downloadRequest: DownloadRequest): Long {
     val request = downloadRequest.toFetchRequest(kiwixDataStore)

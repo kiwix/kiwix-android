@@ -33,7 +33,7 @@ import java.io.StringReader
 import javax.inject.Inject
 
 class OnlineLibraryManager @Inject constructor(
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   var totalResult = ZERO
   suspend fun parseOPDSStreamAndGetBooks(

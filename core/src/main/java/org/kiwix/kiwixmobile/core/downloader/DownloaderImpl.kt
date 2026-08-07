@@ -31,8 +31,8 @@ import javax.inject.Inject
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
   private val downloadRoomDao: DownloadRoomDao,
-  @OPDSKiwixService private val kiwixService: KiwixService,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:OPDSKiwixService private val kiwixService: KiwixService,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : Downloader {
   override fun download(book: LibkiwixBook) {
     CoroutineScope(ioDispatcher).launch {

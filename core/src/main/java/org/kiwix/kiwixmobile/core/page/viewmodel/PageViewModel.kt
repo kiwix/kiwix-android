@@ -56,7 +56,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   protected val pageDao: PageDao,
   val kiwixDataStore: KiwixDataStore,
   val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher protected val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher protected val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   abstract fun initialState(): S
 

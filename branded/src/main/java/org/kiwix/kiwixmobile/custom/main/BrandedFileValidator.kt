@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 class BrandedFileValidator @Inject constructor(
   private val context: Context,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   suspend fun validate(
     onFilesFound: suspend (ValidationState) -> Unit,

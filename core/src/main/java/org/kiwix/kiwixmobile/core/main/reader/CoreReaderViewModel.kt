@@ -160,7 +160,7 @@ abstract class CoreReaderViewModel(
   private val readAloudManager: ReadAloudManager,
   private val donationDialogHandler: DonationDialogHandler,
   private val findInPageManager: FindInPageManager,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : ViewModel(),
   WebViewCallback,
   ReaderMenuState.MenuClickListener,

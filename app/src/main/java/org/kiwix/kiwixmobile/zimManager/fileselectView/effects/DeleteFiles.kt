@@ -36,7 +36,7 @@ data class DeleteFiles(
   private val dialogShower: DialogShower,
   private val deleteFilesUseCase: DeleteFilesUseCase,
   private val viewModelScope: CoroutineScope,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     dialogShower.show(

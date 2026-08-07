@@ -61,9 +61,9 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  @OPDSKiwixService private val kiwixService: KiwixService,
+  @param:OPDSKiwixService private val kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  @IoDispatcher val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   sealed class Action {
     data class UpdateCategory(val categories: List<Category>) : Action()

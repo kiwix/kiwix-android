@@ -31,7 +31,7 @@ import javax.inject.Singleton
 @Singleton
 class StorageDeviceProvider @Inject constructor(
   private val context: Context,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val mutex = Mutex()
   private var writableStorage: List<StorageDevice>? = null

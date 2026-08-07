@@ -37,7 +37,7 @@ class ReaderWebViewManager @Inject constructor(
   private val tabsManager: TabsManager,
   private val readerSessionManager: ReaderSessionManager,
   private val webViewFactory: WebViewFactory,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   sealed interface WebViewNavigationHistoryResult {
     data class HistoryFound(

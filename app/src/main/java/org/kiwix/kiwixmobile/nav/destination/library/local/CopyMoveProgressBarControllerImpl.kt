@@ -52,7 +52,7 @@ import javax.inject.Inject
 
 class CopyMoveProgressBarControllerImpl @Inject constructor(
   private val context: Context,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : CopyMoveProgressBarController {
   /**
    * Holds the state for the copy/move progress bar.

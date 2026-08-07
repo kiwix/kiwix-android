@@ -72,11 +72,11 @@ class ZimHostViewModel @Inject constructor(
   private val generateQr: GenerateQR,
   private val connectivityReporter: ConnectivityReporter,
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
   private val kiwixPermissionChecker: KiwixPermissionChecker
 ) : ViewModel(), ZimHostCallbacks {
   data class UiState(
-    @StringRes val startServerButtonTextRes: Int = string.start_server_label,
+    @param:StringRes val startServerButtonTextRes: Int = string.start_server_label,
     val startServerButtonColor: Color = StartServerGreen,
     val serverIpDisplayText: String = "",
     val serverIpAddress: String = "",

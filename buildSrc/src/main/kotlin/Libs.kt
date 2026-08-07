@@ -202,6 +202,8 @@ object Libs {
    */
   const val junit_jupiter: String = "org.junit.jupiter:junit-jupiter:" + Versions.junit_jupiter
 
+  const val JUNIT_PLATFORM_LAUNCHER: String = "org.junit.platform:junit-platform-launcher"
+
   /**
    * https://junit.org/junit5/
    */
@@ -217,7 +219,6 @@ object Libs {
    * https://developer.android.com/topic/libraries/architecture/index.html
    */
   const val core_testing: String = "androidx.arch.core:core-testing:" + Versions.core_testing
-
 
   /**
    * https://github.com/jraska/livedata-testing

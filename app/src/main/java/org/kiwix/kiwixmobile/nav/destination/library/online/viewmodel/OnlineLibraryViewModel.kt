@@ -136,7 +136,7 @@ class OnlineLibraryViewModel @Inject constructor(
   private val refreshLibraryAction: ResolveRefreshLibraryAction,
   private val observeNetworkState: ObserveNetworkState,
   private val storageDeviceProvider: StorageDeviceProvider,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   data class OnlineLibraryRequest(
     val query: String? = null,
