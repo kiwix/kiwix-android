@@ -288,7 +288,7 @@ class KiwixDataStore @Inject constructor(
     }
 
     context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.CACHED_LANGUAGE_CODES] = jsonArray.toString()
+      prefs[PreferencesKeys.CACHED_LANGUAGE_CODES] = "$jsonArray"
     }
   }
 
@@ -590,7 +590,7 @@ class KiwixDataStore @Inject constructor(
       jsonArray.put(obj)
     }
     context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.CACHED_ONLINE_CATEGORIES] = jsonArray.toString()
+      prefs[PreferencesKeys.CACHED_ONLINE_CATEGORIES] = "$jsonArray"
     }
   }
 

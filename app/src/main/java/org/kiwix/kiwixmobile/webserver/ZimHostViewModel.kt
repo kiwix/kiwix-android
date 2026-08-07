@@ -229,6 +229,7 @@ class ZimHostViewModel @Inject constructor(
 
   private fun selectedBooksPath(books: List<BooksOnDiskListItem>): ArrayList<String> =
     books
+      .asSequence()
       .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
       .filter { it.isSelected }
       .map { it.zimReaderSource.toDatabase() }

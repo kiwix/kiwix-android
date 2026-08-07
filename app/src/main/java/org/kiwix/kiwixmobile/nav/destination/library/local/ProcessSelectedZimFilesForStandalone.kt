@@ -98,7 +98,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
           // Continue processing from the next file
           processSelectedFiles(uris.drop(index + ONE), true)
         }
-        return
+        return@processMultipleFiles
       }
 
       selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)

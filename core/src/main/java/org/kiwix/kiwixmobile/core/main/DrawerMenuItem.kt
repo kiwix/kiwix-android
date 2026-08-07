@@ -22,7 +22,7 @@ import androidx.annotation.DrawableRes
 
 data class DrawerMenuItem(
   val title: String,
-  @DrawableRes val iconRes: Int,
+  @param:DrawableRes val iconRes: Int,
   val visible: Boolean = true,
   val onClick: () -> Unit,
   val testingTag: String

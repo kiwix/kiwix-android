@@ -32,7 +32,7 @@ data class NotesRoomEntity(
   val zimId: String,
   // keep this to handle previously saved notes
   var zimFilePath: String?,
-  @TypeConverters(ZimSourceRoomConverter::class)
+  @param:TypeConverters(ZimSourceRoomConverter::class)
   var zimReaderSource: ZimReaderSource?,
   val zimUrl: String,
   var noteTitle: String,

@@ -194,7 +194,7 @@ class AddNoteViewModel @Inject constructor(
     }
   }
 
-  fun sendEffect(effect: AddNoteEffect) {
+  private fun sendEffect(effect: AddNoteEffect) {
     viewModelScope.launch { _effects.emit(effect) }
   }
 

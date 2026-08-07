@@ -276,9 +276,6 @@ abstract class CoreReaderViewModel(
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
-  @VisibleForTesting
-  fun getUiState() = _uiState
-
   private var documentSectionListener: SectionsListener? = object : SectionsListener {
     override fun sectionsLoaded(
       title: String,
@@ -508,8 +505,7 @@ abstract class CoreReaderViewModel(
   }
 
   private fun showBackwordForwardHistory(isForward: Boolean) {
-    val result = readerWebViewManager.getWebViewNavigationHistory(isForward)
-    when (result) {
+    when (val result = readerWebViewManager.getWebViewNavigationHistory(isForward)) {
       is HistoryFound -> emitEffect(ReaderEffect.ShowNavigationHistoryDialog(result))
       NoHistoryFound -> {
         // Do nothing when no history is found.
@@ -1092,7 +1088,7 @@ abstract class CoreReaderViewModel(
     if (isInvalidTitle(zimFileTitle)) {
       appName
     } else {
-      zimFileTitle.toString()
+      "$zimFileTitle"
     }
 
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
@@ -1267,7 +1263,7 @@ abstract class CoreReaderViewModel(
   private suspend fun newMainPageTab(): KiwixWebView =
     readerWebViewManager.newMainPageTab(newTabConfig(url = null))
 
-  suspend fun getCurrentWebView(): KiwixWebView =
+  private suspend fun getCurrentWebView(): KiwixWebView =
     readerWebViewManager.getCurrentWebView() ?: newMainPageTab()
 
   protected open fun openHomeScreen() {

@@ -37,7 +37,7 @@ import org.kiwix.kiwixmobile.core.utils.HUNDERED
 sealed class IconItem {
   data class Vector(val imageVector: ImageVector) : IconItem()
   data class Drawable(
-    @DrawableRes val drawableRes: Int
+    @param:DrawableRes val drawableRes: Int
   ) : IconItem()
 
   data class ImageBitmap(val bitmap: androidx.compose.ui.graphics.ImageBitmap) : IconItem()
