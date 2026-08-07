@@ -295,7 +295,8 @@ object Libs {
   /**
    * https://github.com/slackhq/keeper
    */
-  const val keeper = "com.slack.keeper:keeper:" + Versions.keeper
+  const val USEFULNESS_KEEPER =
+    "io.github.usefulness.keeper:io.github.usefulness.keeper.gradle.plugin:" + Versions.USEFULNESS_KEEPER
 
   /**
    * https://github.com/tonyofrancis/Fetch

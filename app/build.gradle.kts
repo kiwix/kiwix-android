@@ -13,7 +13,7 @@ plugins {
   id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
 }
 if (hasProperty("testingMinimizedBuild")) {
-  apply(plugin = "com.slack.keeper")
+  apply(plugin = "io.github.usefulness.keeper")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 

@@ -89,7 +89,7 @@ object Versions {
 
   const val zxing = "3.5.3"
 
-  const val keeper = "0.16.1"
+  const val USEFULNESS_KEEPER = "0.19.0"
 
   const val fetch: String = "3.4.1"
 
