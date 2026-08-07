@@ -25,6 +25,7 @@ import android.net.ConnectivityManager
 import android.os.Build
 import app.cash.turbine.test
 import io.mockk.Runs
+import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -33,6 +34,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
@@ -477,6 +479,9 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `loadInitialLibrary when no items are available`() = runTest {
       val spyVm = spyk(viewModel)
+      delay(600)
+      advanceUntilIdle()
+      clearMocks(spyVm, answers = false, recordedCalls = true)
       spyVm.setUiStateForTest(viewModel.uiState.value.copy(items = emptyList()))
 
       every { spyVm.updateOnlineLibraryFilters(any()) } just Runs
@@ -488,6 +493,9 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `loadInitialLibrary when items are available`() = runTest {
       val spyVm = spyk(viewModel)
+      delay(600)
+      advanceUntilIdle()
+      clearMocks(spyVm, answers = false, recordedCalls = true)
       spyVm.setUiStateForTest(viewModel.uiState.value.copy(items = listOf(mockk())))
 
       every { spyVm.updateOnlineLibraryFilters(any()) } just Runs
@@ -682,6 +690,26 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
+    fun `when success returns empty list then shows empty state`() = runTest {
+      val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
+        every { isLoadMoreItem } returns false
+      }
+
+      val state = Success(
+        books = emptyList(),
+        totalPages = 1,
+        request = request
+      )
+
+      viewModel.handleLibraryState(state)
+
+      val uiState = viewModel.uiState.value
+
+      assertTrue(uiState.items.isEmpty())
+      assertTrue(uiState.showNoContent)
+    }
+
+    @Test
     fun `when error and no existing books then emits empty list`() = runTest {
       viewModel.networkBooks.emit(emptyList())
       val error = OnlineLibraryViewModel.OnlineLibraryState.Error(
@@ -692,8 +720,10 @@ class OnlineLibraryViewModelTest {
       )
       viewModel.handleLibraryState(error)
 
-      val result = viewModel.networkBooks.first()
-      assertTrue(result.isEmpty())
+      with(viewModel.uiState.value) {
+        assertTrue(items.isEmpty())
+        assertTrue(showNoContent)
+      }
     }
   }
 
