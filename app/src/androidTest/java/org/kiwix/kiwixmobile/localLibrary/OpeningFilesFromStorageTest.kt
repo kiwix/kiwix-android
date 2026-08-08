@@ -257,14 +257,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       }
     }
     dirs.distinctBy { it.absolutePath }.forEach { dir ->
-      dir.listFiles()?.forEach { file ->
-        if (file.name.contains(fileName, ignoreCase = true)) {
-          file.delete()
+      if (dir.exists() && dir.isDirectory) {
+        dir.walkTopDown().forEach { file ->
+          if (file.isFile && file.name.contains(fileName, ignoreCase = true)) {
+            file.delete()
+          }
         }
-      }
-      val file = File(dir, fileName)
-      if (file.exists()) {
-        file.delete()
       }
     }
   }
