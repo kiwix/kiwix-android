@@ -44,6 +44,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -51,15 +52,17 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderEffect
 import org.kiwix.kiwixmobile.core.main.reader.helper.BookmarkManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.FindInPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.PendingSearchItemManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
@@ -81,6 +84,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreReaderViewModelTest {
@@ -196,13 +200,6 @@ internal class CoreReaderViewModelTest {
   @AfterEach
   fun tearDown() {
     unmockkAll()
-  }
-
-  // TODO remove after all tests completed
-  @Test
-  fun dummy() = runTest {
-    viewModel.initialize(coreMainActivity, alertDialogShower)
-    advanceUntilIdle()
   }
 
   @Nested
@@ -763,302 +760,518 @@ internal class CoreReaderViewModelTest {
         cancelAndIgnoreRemainingEvents()
       }
     }
-  }
 
-  @Test
-  fun onAction_OpenTocDrawer_setsShowTableOfContentDrawerToTrue() = runTest {
-    viewModel.onAction(ReaderAction.OpenTocDrawer)
+    @Test
+    fun onAction_OpenTocDrawer_setsShowTableOfContentDrawerToTrue() = runTest {
+      viewModel.onAction(ReaderAction.OpenTocDrawer)
 
-    assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
-  }
+      assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+    }
 
-  @Test
-  fun onAction_CloseTocDrawer_setsShowTableOfContentDrawerToFalse() = runTest {
-    // initial value is false so setting it to true
-    viewModel.onAction(ReaderAction.OpenTocDrawer)
-    assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+    @Test
+    fun onAction_CloseTocDrawer_setsShowTableOfContentDrawerToFalse() = runTest {
+      // initial value is false so setting it to true
+      viewModel.onAction(ReaderAction.OpenTocDrawer)
+      assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
 
-    viewModel.onAction(ReaderAction.CloseTocDrawer)
+      viewModel.onAction(ReaderAction.CloseTocDrawer)
 
-    assertThat(viewModel.uiState.value.showTableOfContentDrawer).isFalse()
-  }
+      assertThat(viewModel.uiState.value.showTableOfContentDrawer).isFalse()
+    }
 
-  @Test
-  fun onAction_BackToTopButtonClick_callsPageUpOnWebView() = runTest {
-    viewModel.onAction(ReaderAction.BackToTopButtonClick)
-    advanceUntilIdle()
-
-    verify { mockWebView.pageUp(true) }
-  }
-
-  @Test
-  fun onAction_PauseTts_callsPauseTts() = runTest {
-    every { readAloudManager.pauseTts() } just Runs
-
-    viewModel.onAction(ReaderAction.PauseTts)
-
-    verify { readAloudManager.pauseTts() }
-  }
-
-  @Test
-  fun onAction_StopTts_callsStopReadAloud() = runTest {
-    coEvery { readAloudManager.stopReadAloud() } just Runs
-
-    viewModel.onAction(ReaderAction.StopTts)
-    advanceUntilIdle()
-
-    coVerify { readAloudManager.stopReadAloud() }
-  }
-
-  @Test
-  fun onAction_DonateButtonClick_updatesDonationTimeAndOpensSupportUrl() = runTest {
-    val viewModel = spyk(viewModel)
-
-    coEvery { donationDialogHandler.updateLastDonationPopupShownTime() } just Runs
-    every { viewModel.openKiwixSupportUrl() } just Runs
-
-    viewModel.onAction(ReaderAction.DonateButtonClick)
-    advanceUntilIdle()
-
-    coVerify { donationDialogHandler.updateLastDonationPopupShownTime() }
-    verify { viewModel.openKiwixSupportUrl() }
-
-    assertThat(viewModel.uiState.value.showDonationPopup).isFalse()
-  }
-
-  @Test
-  fun onAction_DonateLaterButtonClick_updatesDonateLaterTime() = runTest {
-    val viewModel = spyk(viewModel)
-
-    coEvery { donationDialogHandler.donateLater(any()) } just Runs
-
-    viewModel.onAction(ReaderAction.DonateLaterButtonClick)
-    advanceUntilIdle()
-
-    coVerify { donationDialogHandler.donateLater(any()) }
-    assertThat(viewModel.uiState.value.showDonationPopup).isFalse()
-  }
-
-  @Test
-  fun onAction_ClearNavigationHistory_clearsNavigationHistory() = runTest {
-    // Assuming there's no history to go back/forward to
-    every { mockWebView.canGoBack() } returns false
-    every { mockWebView.canGoForward() } returns false
-
-    coEvery { readerSessionManager.clearWebViewHistory() } just Runs
-    every { context.getString(string.navigation_history_cleared) } returns "Navigation History Cleared"
-
-    viewModel.effects.test {
-      viewModel.onAction(ReaderAction.ClearNavigationHistory)
+    @Test
+    fun onAction_BackToTopButtonClick_callsPageUpOnWebView() = runTest {
+      viewModel.onAction(ReaderAction.BackToTopButtonClick)
       advanceUntilIdle()
 
-      coVerify { readerSessionManager.clearWebViewHistory() }
-
-      assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isFalse()
-      assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
-
-      val toastEffect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
-      assertThat(toastEffect.message).isEqualTo("Navigation History Cleared")
-
-      cancelAndIgnoreRemainingEvents()
-    }
-  }
-
-  @Test
-  fun onAction_NavigationHistoryItemClick_loadsUrlWithCurrentWebview() = runTest {
-    val navigationHistoryItem = NavigationHistoryListItem("Page 1", "url1")
-
-    viewModel.onAction(ReaderAction.NavigationHistoryItemClick(navigationHistoryItem))
-    advanceUntilIdle()
-
-    coVerify {
-      readerWebViewManager.loadUrlWithCurrentWebview(navigationHistoryItem.pageUrl, mockWebView)
-    }
-  }
-
-  @Test
-  fun onAction_SelectTab_hidesTabSwitcherAndSelectsTab() = runTest {
-    val viewModel = spyk(viewModel)
-
-    coEvery { viewModel.selectTab(0) } just Runs
-    coEvery { viewModel.hideTabSwitcher() } just Runs
-
-    every { mockWebView.canGoBack() } returns true
-    every { mockWebView.canGoForward() } returns false
-
-    viewModel.onAction(ReaderAction.SelectTab(0))
-    advanceUntilIdle()
-
-    coVerify { viewModel.selectTab(0) }
-    coVerify { viewModel.hideTabSwitcher() }
-
-    // Update the bottomToolbar arrows
-    assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isTrue()
-    assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
-  }
-
-  @Test
-  fun onAction_OpenSearch_callsOpenSearch() = runTest {
-    val viewModel = spyk(viewModel)
-
-    every {
-      viewModel.openSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
-    } just Runs
-
-    viewModel.onAction(
-      ReaderAction.OpenSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
-    )
-
-    verify {
-      viewModel.openSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
-    }
-  }
-
-  @Nested
-  inner class CloseTab {
-    @BeforeEach
-    fun closeTabSetup() {
-      viewModel = spyk(viewModel)
-
-      every { readAloudManager.currentTtsIndex } returns -1
-      every { readerWebViewManager.closeTab(1) } returns mockWebView
-      every { context.getString(string.tab_closed) } returns "Tab Closed"
-      every { context.getString(string.undo) } returns "Undo"
-      every { viewModel.openHomeScreen() } just Runs
+      verify { mockWebView.pageUp(true) }
     }
 
     @Test
-    fun closeTab_emitsSnackbarAndOpensHomeScreen() = runTest {
-      viewModel.effects.test {
-        viewModel.onAction(ReaderAction.CloseTab(1))
+    fun onAction_PauseTts_callsPauseTts() = runTest {
+      every { readAloudManager.pauseTts() } just Runs
 
-        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
-        assertThat(effect.message).isEqualTo("Tab Closed")
+      viewModel.onAction(ReaderAction.PauseTts)
 
-        verify { viewModel.openHomeScreen() }
-
-        cancelAndIgnoreRemainingEvents()
-      }
+      verify { readAloudManager.pauseTts() }
     }
 
     @Test
-    fun closeTab_stopsReadAloudIfSameIndex() = runTest {
-      every { readAloudManager.currentTtsIndex } returns 1
+    fun onAction_StopTts_callsStopReadAloud() = runTest {
       coEvery { readAloudManager.stopReadAloud() } just Runs
 
+      viewModel.onAction(ReaderAction.StopTts)
+      advanceUntilIdle()
+
+      coVerify { readAloudManager.stopReadAloud() }
+    }
+
+    @Test
+    fun onAction_DonateButtonClick_updatesDonationTimeAndOpensSupportUrl() = runTest {
+      val viewModel = spyk(viewModel)
+
+      coEvery { donationDialogHandler.updateLastDonationPopupShownTime() } just Runs
+      every { viewModel.openKiwixSupportUrl() } just Runs
+
+      viewModel.onAction(ReaderAction.DonateButtonClick)
+      advanceUntilIdle()
+
+      coVerify { donationDialogHandler.updateLastDonationPopupShownTime() }
+      verify { viewModel.openKiwixSupportUrl() }
+
+      assertThat(viewModel.uiState.value.showDonationPopup).isFalse()
+    }
+
+    @Test
+    fun onAction_DonateLaterButtonClick_updatesDonateLaterTime() = runTest {
+      val viewModel = spyk(viewModel)
+
+      coEvery { donationDialogHandler.donateLater(any()) } just Runs
+
+      viewModel.onAction(ReaderAction.DonateLaterButtonClick)
+      advanceUntilIdle()
+
+      coVerify { donationDialogHandler.donateLater(any()) }
+      assertThat(viewModel.uiState.value.showDonationPopup).isFalse()
+    }
+
+    @Test
+    fun onAction_ClearNavigationHistory_clearsNavigationHistory() = runTest {
+      // Assuming there's no history to go back/forward to
+      every { mockWebView.canGoBack() } returns false
+      every { mockWebView.canGoForward() } returns false
+
+      coEvery { readerSessionManager.clearWebViewHistory() } just Runs
+      every { context.getString(string.navigation_history_cleared) } returns "Navigation History Cleared"
+
       viewModel.effects.test {
-        viewModel.onAction(ReaderAction.CloseTab(1))
+        viewModel.onAction(ReaderAction.ClearNavigationHistory)
         advanceUntilIdle()
 
-        coVerify { readAloudManager.stopReadAloud() }
+        coVerify { readerSessionManager.clearWebViewHistory() }
+
+        assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isFalse()
+        assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
+
+        val toastEffect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(toastEffect.message).isEqualTo("Navigation History Cleared")
 
         cancelAndIgnoreRemainingEvents()
       }
     }
 
     @Test
-    fun closeTab_actionClick_restoresDeletedTab() = runTest {
-      every { context.getString(string.tab_restored) } returns "Tab Restored"
-      every { readerWebViewManager.restoreDeletedTab(mockWebView, 1) } just Runs
-      every { readerWebViewManager.webViewList() } returns emptyList()
-      every { readerMenuState.showBookSpecificMenuItems() } just Runs
-      coEvery {
-        readerWebViewManager.setUpWithTextToSpeech(
-          mockWebView,
-          readAloudManager
-        )
+    fun onAction_NavigationHistoryItemClick_loadsUrlWithCurrentWebview() = runTest {
+      val navigationHistoryItem = NavigationHistoryListItem("Page 1", "url1")
+
+      viewModel.onAction(ReaderAction.NavigationHistoryItemClick(navigationHistoryItem))
+      advanceUntilIdle()
+
+      coVerify {
+        readerWebViewManager.loadUrlWithCurrentWebview(navigationHistoryItem.pageUrl, mockWebView)
+      }
+    }
+
+    @Test
+    fun onAction_SelectTab_hidesTabSwitcherAndSelectsTab() = runTest {
+      val viewModel = spyk(viewModel)
+
+      coEvery { viewModel.selectTab(0) } just Runs
+      coEvery { viewModel.hideTabSwitcher() } just Runs
+
+      every { mockWebView.canGoBack() } returns true
+      every { mockWebView.canGoForward() } returns false
+
+      viewModel.onAction(ReaderAction.SelectTab(0))
+      advanceUntilIdle()
+
+      coVerify { viewModel.selectTab(0) }
+      coVerify { viewModel.hideTabSwitcher() }
+
+      // Update the bottomToolbar arrows
+      assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isTrue()
+      assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
+    }
+
+    @Test
+    fun onAction_OpenSearch_callsOpenSearch() = runTest {
+      val viewModel = spyk(viewModel)
+
+      every {
+        viewModel.openSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
       } just Runs
 
-      viewModel.readerMenuState = readerMenuState
+      viewModel.onAction(
+        ReaderAction.OpenSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
+      )
 
-      // Assuming initially true
-      viewModel.getUiState().update { it.copy(showNoBookOpenInReader = true) }
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      verify {
+        viewModel.openSearch(searchString = "kiwix", isOpenedFromTabView = true, isVoice = false)
+      }
+    }
+
+    @Nested
+    inner class CloseTab {
+      @BeforeEach
+      fun closeTabSetup() {
+        viewModel = spyk(viewModel)
+
+        every { readAloudManager.currentTtsIndex } returns -1
+        every { readerWebViewManager.closeTab(1) } returns mockWebView
+        every { context.getString(string.tab_closed) } returns "Tab Closed"
+        every { context.getString(string.undo) } returns "Undo"
+        every { viewModel.openHomeScreen() } just Runs
+      }
+
+      @Test
+      fun closeTab_emitsSnackbarAndOpensHomeScreen() = runTest {
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+          assertThat(effect.message).isEqualTo("Tab Closed")
+
+          verify { viewModel.openHomeScreen() }
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+      @Test
+      fun closeTab_stopsReadAloudIfSameIndex() = runTest {
+        every { readAloudManager.currentTtsIndex } returns 1
+        coEvery { readAloudManager.stopReadAloud() } just Runs
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+          advanceUntilIdle()
+
+          coVerify { readAloudManager.stopReadAloud() }
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+      @Test
+      fun closeTab_actionClick_restoresDeletedTab() = runTest {
+        every { context.getString(string.tab_restored) } returns "Tab Restored"
+        every { readerWebViewManager.restoreDeletedTab(mockWebView, 1) } just Runs
+        every { readerWebViewManager.webViewList() } returns emptyList()
+        every { readerMenuState.showBookSpecificMenuItems() } just Runs
+        coEvery {
+          readerWebViewManager.setUpWithTextToSpeech(
+            mockWebView,
+            readAloudManager
+          )
+        } just Runs
+
+        viewModel.readerMenuState = readerMenuState
+
+        // Assuming initially true
+        viewModel.getUiState().update { it.copy(showNoBookOpenInReader = true) }
+        viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+
+          effect.actionClick.invoke()
+          advanceUntilIdle()
+
+          // If webViewList is empty sets showNoBookOpenInReader to false and showBookSpecificMenuItems
+          assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse
+          verify { readerMenuState.showBookSpecificMenuItems() }
+
+          verify { readerWebViewManager.restoreDeletedTab(mockWebView, 1) }
+
+          val snackbar = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+          assertThat(snackbar.message).isEqualTo("Tab Restored")
+
+          coVerify { readerWebViewManager.setUpWithTextToSpeech(mockWebView, readAloudManager) }
+
+          // Show Bottom Bar depends on tab switcher state
+          assertThat(viewModel.uiState.value.showBottomBar).isFalse()
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+      @Test
+      fun closeTab_snackBarResult_dismissed_savesSessionAndClosesZimBook() = runTest {
+        coEvery { readerSessionManager.saveReaderSession() } just Runs
+        every { readerWebViewManager.webViewList() } returns emptyList()
+        every { viewModel.closeZimBook() } just Runs
+
+        viewModel.effects.test {
+          viewModel.onAction(ReaderAction.CloseTab(1))
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+
+          effect.snackBarResult.invoke(SnackbarResult.Dismissed)
+          advanceUntilIdle()
+
+          // Only saves session after Snackbar is dismissed
+          coVerify { readerSessionManager.saveReaderSession() }
+
+          // Only close if webViewList is empty
+          verify { viewModel.closeZimBook() }
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+    }
+
+    @Test
+    fun onAction_FindInPageQueryChanged_callsSearch() = runTest {
+      viewModel.onAction(ReaderAction.FindInPageQueryChanged("test query"))
+
+      verify { findInPageManager.search("test query") }
+    }
+
+    @Test
+    fun onAction_FindInPageNextClicked_callsFindNext() = runTest {
+      viewModel.onAction(ReaderAction.FindInPageNextClicked)
+
+      verify { findInPageManager.findNext() }
+    }
+
+    @Test
+    fun onAction_FindInPagePreviousClicked_callsFindPrevious() = runTest {
+      viewModel.onAction(ReaderAction.FindInPagePreviousClicked)
+
+      verify { findInPageManager.findPrevious() }
+    }
+
+    @Test
+    fun onAction_FindInPageCloseClicked_callsStop() = runTest {
+      viewModel.onAction(ReaderAction.FindInPageCloseClicked)
+
+      verify { findInPageManager.stop() }
+    }
+  }
+
+  @Test
+  fun showDonationDialog_emitsShowDonationDialogEffect() = runTest {
+    // Assuming initially false
+    viewModel.getUiState().update { it.copy(showDonationPopup = false) }
+    viewModel.showDonationDialog()
+
+    assertThat(viewModel.uiState.value.showDonationPopup).isTrue
+  }
+
+  @Nested
+  inner class OnReadAloudPauseOrResume {
+    @Test
+    fun onReadAloudPauseOrResume_whenStateDiffers_callsPauseTts() = runTest {
+      val mockTts = mockk<KiwixTextToSpeech>()
+      every { readAloudManager.tts } returns mockTts
+
+      val mockTask = mockk<KiwixTextToSpeech.TTSTask>()
+      every { mockTts.currentTTSTask } returns mockTask
+
+      every { mockTask.paused } returns false
+      every { readAloudManager.pauseTts() } just Runs
+
+      // Only call if state differs i.e- it.paused != isPauseTTS
+      viewModel.onReadAloudPauseOrResume(isPauseTTS = true)
+
+      verify { readAloudManager.pauseTts() }
+    }
+
+    @Test
+    fun onReadAloudPauseOrResume_whenTtsIsNull_doesNothing() = runTest {
+      every { readAloudManager.tts } returns null
+
+      viewModel.onReadAloudPauseOrResume(isPauseTTS = true)
+
+      verify(exactly = 0) { readAloudManager.pauseTts() }
+    }
+  }
+
+  @Nested
+  inner class ShareMenuClicked {
+    @Test
+    fun onShareMenuClicked_whenPdfSuccess_emitsSharePdfFileEffect() = runTest {
+      val file = mockk<File>()
+
+      coEvery { readerPageManager.createPdf(mockWebView) } returns Result.success(
+        ReaderPageManager.CreatePdfResult.Success(file)
+      )
 
       viewModel.effects.test {
-        viewModel.onAction(ReaderAction.CloseTab(1))
+        viewModel.onShareMenuClicked()
 
-        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
-
-        effect.actionClick.invoke()
-        advanceUntilIdle()
-
-        // If webViewList is empty sets showNoBookOpenInReader to false and showBookSpecificMenuItems
-        assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse
-        verify { readerMenuState.showBookSpecificMenuItems() }
-
-        verify { readerWebViewManager.restoreDeletedTab(mockWebView, 1) }
-
-        val snackbar = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
-        assertThat(snackbar.message).isEqualTo("Tab Restored")
-
-        coVerify { readerWebViewManager.setUpWithTextToSpeech(mockWebView, readAloudManager) }
-
-        // Show Bottom Bar depends on tab switcher state
-        assertThat(viewModel.uiState.value.showBottomBar).isFalse()
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.SharePdfFile
+        assertThat(effect.pdfFile).isEqualTo(file)
 
         cancelAndIgnoreRemainingEvents()
       }
     }
 
     @Test
-    fun closeTab_snackBarResult_dismissed_savesSessionAndClosesZimBook() = runTest {
-      coEvery { readerSessionManager.saveReaderSession() } just Runs
-      every { readerWebViewManager.webViewList() } returns emptyList()
-      every { viewModel.closeZimBook() } just Runs
+    fun onShareMenuClicked_whenPdfFailure_emitsShowToastEffect() = runTest {
+      every { context.getString(string.unable_to_share_article) } returns "Unable to share article"
+
+      coEvery { readerPageManager.createPdf(mockWebView) } returns Result.success(
+        ReaderPageManager.CreatePdfResult.Failure(Exception("Test Error"))
+      )
+      viewModel.effects.test {
+        viewModel.onShareMenuClicked()
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(effect.message).isEqualTo("Unable to share article")
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onShareMenuClicked_whenPageStillLoading_emitsShowToastEffect() = runTest {
+      every { context.getString(string.please_wait_for_page_to_load) } returns "Please wait for the page to fully load"
+
+      coEvery { readerPageManager.createPdf(mockWebView) } returns Result.success(
+        ReaderPageManager.CreatePdfResult.PageStillLoading
+      )
+      viewModel.effects.test {
+        viewModel.onShareMenuClicked()
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(effect.message).isEqualTo("Please wait for the page to fully load")
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onShareMenuClicked_whenCacheDirUnavailable_emitsShowToastEffect() = runTest {
+      every { context.getString(string.unable_to_share_article) } returns "Unable to share article"
+
+      coEvery { readerPageManager.createPdf(mockWebView) } returns Result.success(
+        ReaderPageManager.CreatePdfResult.CacheDirUnavailable
+      )
+      viewModel.effects.test {
+        viewModel.onShareMenuClicked()
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(effect.message).isEqualTo("Unable to share article")
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onShareMenuClicked_whenExceptionOccurs_emitsShowToastEffect() = runTest {
+      every { context.getString(string.unable_to_share_article) } returns "Unable to share article"
+
+      coEvery { readerPageManager.createPdf(mockWebView) } returns Result.failure(Exception())
 
       viewModel.effects.test {
-        viewModel.onAction(ReaderAction.CloseTab(1))
+        viewModel.onShareMenuClicked()
 
-        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
-
-        effect.snackBarResult.invoke(SnackbarResult.Dismissed)
-        advanceUntilIdle()
-
-        // Only saves session after Snackbar is dismissed
-        coVerify { readerSessionManager.saveReaderSession() }
-
-        // Only close if webViewList is empty
-        verify { viewModel.closeZimBook() }
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(effect.message).isEqualTo("Unable to share article")
 
         cancelAndIgnoreRemainingEvents()
       }
     }
   }
 
-  @Test
-  fun onAction_FindInPageQueryChanged_callsSearch() = runTest {
-    viewModel.onAction(ReaderAction.FindInPageQueryChanged("test query"))
+  @Nested
+  inner class RandomPageMenuClicked {
+    @Test
+    fun onRandomPageMenuClicked_whenSuccess_opensPageInWebView() = runTest {
+      val testUrl = "https://kiwix.org/home"
 
-    verify { findInPageManager.search("test query") }
-  }
+      coEvery { readerPageManager.getRandomPage() } returns ReaderPageManager.GetRandomPageResult.Success(
+        testUrl
+      )
 
-  @Test
-  fun onAction_FindInPageNextClicked_callsFindNext() = runTest {
-    viewModel.onAction(ReaderAction.FindInPageNextClicked)
+      coEvery { readerWebViewManager.openPage(testUrl, mockWebView) } just Runs
 
-    verify { findInPageManager.findNext() }
-  }
+      viewModel.onRandomPageMenuClicked()
+      advanceUntilIdle()
 
-  @Test
-  fun onAction_FindInPagePreviousClicked_callsFindPrevious() = runTest {
-    viewModel.onAction(ReaderAction.FindInPagePreviousClicked)
+      coVerify { readerWebViewManager.openPage(testUrl, mockWebView) }
+    }
 
-    verify { findInPageManager.findPrevious() }
-  }
+    @Test
+    fun onRandomPageMenuClicked_whenNoZimFileLoaded_emitsShowToastEffect() = runTest {
+      every {
+        context.getString(string.error_loading_random_page_zim_not_loaded)
+      } returns "Unable to load page. The ZIM file is not properly loaded."
 
-  @Test
-  fun onAction_FindInPageCloseClicked_callsStop() = runTest {
-    viewModel.onAction(ReaderAction.FindInPageCloseClicked)
+      coEvery { readerPageManager.getRandomPage() } returns ReaderPageManager.GetRandomPageResult.NoZimFileLoaded
 
-    verify { findInPageManager.stop() }
+      viewModel.effects.test {
+        viewModel.onRandomPageMenuClicked()
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(effect.message).isEqualTo("Unable to load page. The ZIM file is not properly loaded.")
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onRandomPageMenuClicked_whenFailedAfterRetries_emitsShowToastEffect() = runTest {
+      every { context.getString(string.could_not_find_random_page) } returns "Unable to find a random page. Please try again later."
+
+      coEvery { readerPageManager.getRandomPage() } returns ReaderPageManager.GetRandomPageResult.FailedAfterRetries
+
+      viewModel.effects.test {
+        viewModel.onRandomPageMenuClicked()
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+        assertThat(effect.message).isEqualTo("Unable to find a random page. Please try again later.")
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
   }
 
   @Nested
-  inner class Bookmark
+  inner class OnReadAloudMenuClicked {
+    @Test
+    fun onReadAloudMenuClicked_whenNoNotificationPermission_emitsRequestPermissionEffectAndStartReadAloudFlow() =
+      runTest {
+        coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns false
 
-  @Nested
-  inner class ReadAloud
+        viewModel.effects.test {
+          viewModel.onReadAloudMenuClicked()
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.RequestNotificationPermission
+
+          assertEquals(effect, ReaderEffect.RequestNotificationPermission)
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+    @Test
+    fun onReadAloudMenuClicked_whenTtsControlsShown_stopsReadAloud() = runTest {
+      coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns true
+
+      coEvery { readAloudManager.stopReadAloud() } just Runs
+
+      viewModel.getUiState().update { it.copy(showTtsControls = true) }
+      viewModel.onReadAloudMenuClicked()
+      advanceUntilIdle()
+      coVerify { readAloudManager.stopReadAloud() }
+    }
+
+    @Test
+    fun onReadAloudMenuClicked_whenTtsControlsHidden_startsReadAloudFlow() = runTest {
+      coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns true
+      every { context.getString(string.tts_pause) } returns "Pause"
+
+      every { readAloudManager.isTtsInitialed() } returns false
+      every { readAloudManager.initializeTTS(false) } just Runs
+
+      viewModel.getUiState().update { it.copy(showTtsControls = false) }
+      viewModel.onReadAloudMenuClicked()
+      advanceUntilIdle()
+
+      verify { readAloudManager.initializeTTS(false) }
+      assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
+    }
+  }
 
   @Nested
   inner class Tabs
