@@ -138,6 +138,8 @@
   <string name="download_notification_channel_description" tools:keep="@string/download_notification_channel_description">Downloading ZIM files…</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
   <string name="move_no_space">Insufficient space to move/copy.</string>
+  <string name="select_all">Select all</string>
+  <string name="deselect_all">Deselect all</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">No Pictures</string>
   <string name="zim_no_vid">No Videos</string>

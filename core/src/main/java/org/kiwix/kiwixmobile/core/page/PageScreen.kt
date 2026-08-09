@@ -98,6 +98,7 @@ const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"
 const val PAGE_LIST_TEST_TAG = "pageListTestingTag"
 const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
 const val DELETE_MENU_ICON_TESTING_TAG = "deleteMenuIconTestingTag"
+const val SELECT_ALL_MENU_BUTTON_TESTING_TAG = "selectAllMenuButtonTestingTag"
 const val DATE_ITEM_TEXT_TESTING_TAG = "dateItemTextTestingTag"
 
 @Suppress("LongMethod", "LongParameterList")
@@ -172,6 +173,8 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
         deleteIconTitle = deleteIconTitle,
         isSearchActive = isSearchActive,
         isInSelectionMode = isInSelectionMode,
+        isAnyItemSelected = selectedCount > 0,
+        areAllSelected = selectedCount == state.pageItems.size && state.pageItems.isNotEmpty(),
         onSearchClick = {
           isSearchActive = true
         },
@@ -180,6 +183,12 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
         },
         onSelectionDeleteClick = {
           viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
+        },
+        onSelectAllClick = {
+          viewModel.actions.tryEmit(Action.UserClickedSelectAll)
+        },
+        onDeselectAllClick = {
+          viewModel.actions.tryEmit(Action.UserClickedDeselectAll)
         }
       ),
       onClearSearch = {
@@ -403,19 +412,37 @@ private fun parseDateSafely(dateString: String): LocalDate? {
  * - If in selection mode, shows only the delete selected items icon.
  * - Otherwise, shows the search icon only when search is not active, and always includes the delete icon.
  */
+@Suppress("LongParameterList")
 private fun actionMenuList(
   isSearchActive: Boolean,
   isInSelectionMode: Boolean,
+  isAnyItemSelected: Boolean,
+  areAllSelected: Boolean,
   deleteIconTitle: Int,
   onSearchClick: () -> Unit,
   onDeleteClick: () -> Unit,
   onSelectionDeleteClick: () -> Unit,
+  onSelectAllClick: () -> Unit,
+  onDeselectAllClick: () -> Unit,
 ): List<ActionMenuItem> = when {
   isInSelectionMode -> listOf(
+    ActionMenuItem(
+      icon = IconItem.Drawable(
+        if (areAllSelected) {
+          R.drawable.select_all_checkbox
+        } else {
+          R.drawable.deselect_all_checkbox
+        }
+      ),
+      contentDescription = if (areAllSelected) R.string.deselect_all else R.string.select_all,
+      onClick = if (areAllSelected) onDeselectAllClick else onSelectAllClick,
+      testingTag = SELECT_ALL_MENU_BUTTON_TESTING_TAG
+    ),
     ActionMenuItem(
       icon = IconItem.Vector(Icons.Default.Delete),
       contentDescription = R.string.delete,
       onClick = onSelectionDeleteClick,
+      isEnabled = isAnyItemSelected,
       testingTag = DELETE_MENU_ICON_TESTING_TAG
     )
   )

@@ -82,8 +82,29 @@ class HistoryViewModel @Inject constructor(
       ioDispatcher
     )
 
+  override fun selectAllPages(state: HistoryState): HistoryState =
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = true) },
+      isInSelectionState = true
+    )
+
   override fun deselectAllPages(state: HistoryState): HistoryState =
-    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = false) },
+      isInSelectionState = true
+    )
+
+  override fun exitSelectionMode(state: HistoryState): HistoryState =
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = false) },
+      isInSelectionState = false
+    )
+
+  override fun setSelectionState(
+    state: HistoryState,
+    isInSelectionState: Boolean
+  ): HistoryState =
+    state.copy(isInSelectionState = isInSelectionState)
 
   override fun copyWithNewItems(state: HistoryState, newItems: List<HistoryItem>): HistoryState =
     state.copy(pageItems = newItems)
