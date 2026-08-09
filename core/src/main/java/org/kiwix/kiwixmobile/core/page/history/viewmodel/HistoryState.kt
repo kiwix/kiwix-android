@@ -28,7 +28,8 @@ data class HistoryState(
   override val pageItems: List<HistoryItem>,
   override val showAll: Boolean,
   override val currentZimId: String?,
-  override val searchTerm: String = ""
+  override val searchTerm: String = "",
+  override val isInSelectionState: Boolean = false
 ) : PageState<HistoryItem>() {
   override val visiblePageItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(filteredPageItems)
