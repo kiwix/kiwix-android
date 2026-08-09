@@ -61,8 +61,20 @@ class TestablePageViewModel(
   ): TestablePageState =
     state
 
+  override fun selectAllPages(state: TestablePageState): TestablePageState =
+    state.copy(searchTerm = "selectAllPagesCalled")
+
   override fun deselectAllPages(state: TestablePageState): TestablePageState =
     state.copy(searchTerm = "deselectAllPagesCalled")
+
+  override fun exitSelectionMode(state: TestablePageState): TestablePageState =
+    state.copy(searchTerm = "exitSelectionModeCalled")
+
+  override fun setSelectionState(
+    state: TestablePageState,
+    isInSelectionState: Boolean
+  ): TestablePageState =
+    state.copy(searchTerm = "setSelectionStateCalled")
 
   override fun createDeletePageDialogEffect(
     state: TestablePageState,
@@ -78,7 +90,8 @@ data class TestablePageState(
   override val visiblePageItems: List<PageRelated> = pageItems,
   override val showAll: Boolean = true,
   override val currentZimId: String? = "currentZimId",
-  override val searchTerm: String = ""
+  override val searchTerm: String = "",
+  override val isInSelectionState: Boolean = false
 ) : PageState<Page>() {
   override fun copyWithNewItems(newItems: List<Page>): PageState<Page> =
     TestablePageState(pageItems = pageItems)
