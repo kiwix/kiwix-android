@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 
 abstract class PageState<T : Page> {
   abstract val pageItems: List<T>
-  val isInSelectionState: Boolean by lazy { pageItems.any(Page::isSelected) }
+  abstract val isInSelectionState: Boolean
   protected val filteredPageItems: List<T> by lazy {
     pageItems.filter { showAll || it.zimId == currentZimId }
       .filter { it.title.contains(searchTerm, true) }
