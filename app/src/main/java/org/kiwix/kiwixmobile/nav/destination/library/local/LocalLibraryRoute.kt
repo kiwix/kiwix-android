@@ -44,6 +44,7 @@ import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.filterIsInstance
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R as CoreR
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
@@ -188,6 +189,7 @@ fun actionMenuItems(
     localLibraryViewModel.uiState.value.fileSelectListState.areAllBooksSelected,
     localLibraryViewModel.uiState.value.fileSelectListState.selectedBooks.isNotEmpty()
   )
+
   SelectionMode.NORMAL -> normalModeMenuItems(navController, filePickerButtonClick)
 }
 
@@ -199,12 +201,12 @@ private fun multiModeMenuItem(
   ActionMenuItem(
     IconItem.Drawable(
       if (areAllSelected) {
-        R.drawable.select_all_checkbox
+        CoreR.drawable.select_all_checkbox
       } else {
-        R.drawable.deselect_all_checkbox
+        CoreR.drawable.deselect_all_checkbox
       }
     ),
-    if (areAllSelected) R.string.deselect_all else R.string.select_all,
+    if (areAllSelected) CoreR.string.deselect_all else CoreR.string.select_all,
     { localLibraryViewModel.selectAllMenuIconClick() },
     isEnabled = true,
     testingTag = SELECT_ALL_MENU_BUTTON_TESTING_TAG
