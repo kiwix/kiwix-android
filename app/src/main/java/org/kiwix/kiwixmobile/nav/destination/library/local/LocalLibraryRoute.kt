@@ -185,14 +185,16 @@ fun actionMenuItems(
 ) = when (selectionMode) {
   SelectionMode.MULTI -> multiModeMenuItem(
     localLibraryViewModel,
-    localLibraryViewModel.uiState.value.fileSelectListState.areAllBooksSelected
+    localLibraryViewModel.uiState.value.fileSelectListState.areAllBooksSelected,
+    localLibraryViewModel.uiState.value.fileSelectListState.selectedBooks.isNotEmpty()
   )
   SelectionMode.NORMAL -> normalModeMenuItems(navController, filePickerButtonClick)
 }
 
 private fun multiModeMenuItem(
   localLibraryViewModel: LocalLibraryViewModel,
-  areAllSelected: Boolean
+  areAllSelected: Boolean,
+  isAnySelected: Boolean
 ) = listOf(
   ActionMenuItem(
     IconItem.Drawable(
@@ -211,21 +213,21 @@ private fun multiModeMenuItem(
     IconItem.Drawable(drawable.ic_delete_white_24dp),
     string.delete,
     { localLibraryViewModel.deleteMenuIconClick() },
-    isEnabled = true,
+    isEnabled = isAnySelected,
     testingTag = DELETE_MENU_ICON_TESTING_TAG
   ),
   ActionMenuItem(
     IconItem.Drawable(drawable.baseline_share_24),
     string.share,
     { localLibraryViewModel.shareMenuIconClick() },
-    isEnabled = true,
+    isEnabled = isAnySelected,
     testingTag = SHARE_MENU_BUTTON_TESTING_TAG
   ),
   ActionMenuItem(
     IconItem.Drawable(R.drawable.file_validate),
     string.validate_zim_files,
     { localLibraryViewModel.validateMenuIconClick() },
-    isEnabled = true,
+    isEnabled = isAnySelected,
     testingTag = VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG
   )
 )
