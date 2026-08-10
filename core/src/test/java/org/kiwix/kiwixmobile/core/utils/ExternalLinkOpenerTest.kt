@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.compose.material3.ExperimentalMaterial3Api
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -66,13 +66,13 @@ class ExternalLinkOpenerTest {
   val mainDispatcherRule = MainDispatcherRule()
   private lateinit var kiwixDataStore: KiwixDataStore
   private val alertDialogShower = AlertDialogShower()
-  private lateinit var activity: Activity
-  private lateinit var activityController: ActivityController<Activity>
+  private lateinit var activity: ComponentActivity
+  private lateinit var activityController: ActivityController<ComponentActivity>
 
   @Before
   fun setUp() {
     kiwixDataStore = mockk()
-    activityController = Robolectric.buildActivity(Activity::class.java)
+    activityController = Robolectric.buildActivity(ComponentActivity::class.java)
     activity = activityController.setup().get()
   }
 
@@ -97,7 +97,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(kiwixDataStore).apply {
       initialize(activity, alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+    externalLinkOpener.openExternalUrl(intent)
     val dialogData = alertDialogShower.dialogState.value
     assertNotNull(dialogData)
     val (dialog, listeners, _) = dialogData!!
@@ -127,7 +127,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(kiwixDataStore).apply {
       initialize(activity, alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+    externalLinkOpener.openExternalUrl(intent)
     val dialogData = alertDialogShower.dialogState.value
     assertNotNull(dialogData)
     val (dialog, listeners, _) = dialogData!!
@@ -154,7 +154,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(kiwixDataStore).apply {
       initialize(activity, alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+    externalLinkOpener.openExternalUrl(intent)
     val dialogData = alertDialogShower.dialogState.value
     assertNotNull(dialogData)
     val (dialog, listeners, _) = dialogData!!
@@ -182,18 +182,18 @@ class ExternalLinkOpenerTest {
       val externalLinkOpener = ExternalLinkOpener(kiwixDataStore).apply {
         initialize(activity, alertDialogShower)
       }
-      externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+      externalLinkOpener.openExternalUrl(intent)
       val dialogData = alertDialogShower.dialogState.value
       assertNotNull(dialogData)
       val (dialog, listeners, _) = dialogData!!
       assert(dialog == KiwixDialog.ExternalLinkPopup)
       listeners[2].invoke()
+      val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
+      assertNotNull(startedIntent)
       advanceUntilIdle()
       coVerify {
         kiwixDataStore.setExternalLinkPopup(false)
       }
-      val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
-      assertNotNull(startedIntent)
     }
 
   @Test
@@ -212,7 +212,7 @@ class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(kiwixDataStore).apply {
       initialize(activity, alertDialogShower)
     }
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+    externalLinkOpener.openExternalUrl(intent)
     val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
     assertNotNull(startedIntent)
     assert(startedIntent.dataString == "https://github.com/")
@@ -228,7 +228,7 @@ class ExternalLinkOpenerTest {
       initialize(activity, alertDialogShower)
     }
 
-    externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+    externalLinkOpener.openExternalUrl(intent)
     val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
     assertNull(startedIntent)
     assert(

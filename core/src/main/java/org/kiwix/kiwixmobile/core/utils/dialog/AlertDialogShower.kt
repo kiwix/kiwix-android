@@ -49,6 +49,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -382,7 +383,8 @@ private fun ShowUri(
   )
 }
 
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Suppress("LongMethod")
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun UriDisplayRow(
   uri: Uri,
@@ -394,6 +396,9 @@ private fun UriDisplayRow(
     MineShaftGray850
   } else {
     LightGrey
+  }
+  val displayUriText = remember(uri) {
+    Uri.decode("$uri")
   }
   Surface(
     modifier = Modifier
@@ -418,7 +423,7 @@ private fun UriDisplayRow(
         )
     ) {
       Text(
-        text = "$uri",
+        text = displayUriText,
         color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
         fontSize = DIALOG_URI_TEXT_SIZE,

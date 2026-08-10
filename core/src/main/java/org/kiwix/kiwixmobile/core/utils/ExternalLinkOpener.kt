@@ -21,7 +21,8 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import android.content.Intent
 import android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
-import kotlinx.coroutines.CoroutineScope
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
@@ -47,16 +48,15 @@ class ExternalLinkOpener @Inject constructor(
   }
 
   private fun requireActivity() = requireNotNull(activity) {
-    "Activity is not not. Call ExternalLinkOpener.initialize before calling it"
+    "Activity is not set. Call ExternalLinkOpener.initialize before calling it"
   }
 
   suspend fun openExternalUrl(
-    intent: Intent,
-    lifecycleScope: CoroutineScope
+    intent: Intent
   ) {
     if (intent.resolveActivity(requireActivity().packageManager) != null) {
       if (kiwixDataStore.externalLinkPopup.first()) {
-        requestOpenLink(intent, lifecycleScope)
+        requestOpenLink(intent)
       } else {
         openLink(intent)
       }
@@ -69,15 +69,15 @@ class ExternalLinkOpener @Inject constructor(
     requireActivity().startActivity(intent)
   }
 
-  private fun requestOpenLink(intent: Intent, lifecycleScope: CoroutineScope) {
+  private fun requestOpenLink(intent: Intent) {
     requireAlertDialogShower().show(
       KiwixDialog.ExternalLinkPopup,
       { openLink(intent) },
       { },
       {
-        lifecycleScope.launch {
+        openLink(intent)
+        (requireActivity() as ComponentActivity).lifecycleScope.launch {
           kiwixDataStore.setExternalLinkPopup(false)
-          openLink(intent)
         }
       },
       uri = intent.data
