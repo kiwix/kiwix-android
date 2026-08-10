@@ -29,15 +29,15 @@ import com.android.build.api.variant.Variant
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
-import java.io.File
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
+import java.io.File
 
 class AllProjectConfigurer {
 

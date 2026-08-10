@@ -14,7 +14,8 @@ android {
     testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
   }
 
-  compileOptions {
+  compileOptions.apply {
+    encoding = "UTF-8"
     sourceCompatibility = Config.javaVersion
     targetCompatibility = Config.javaVersion
   }

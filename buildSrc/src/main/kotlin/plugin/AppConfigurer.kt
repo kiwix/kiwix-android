@@ -66,6 +66,7 @@ class AppConfigurer {
         }
         getByName("debug") {
           isCrunchPngs = true
+          isDebuggable = true
           if (target.hasProperty("testingMinimizedBuild")) {
             isMinifyEnabled = target.hasProperty("testingMinimizedBuild")
             isShrinkResources = target.hasProperty("testingMinimizedBuild")
