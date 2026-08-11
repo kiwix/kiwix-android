@@ -69,7 +69,7 @@ class AppConfigurer {
           isDebuggable = true
           if (target.hasProperty("testingMinimizedBuild")) {
             isMinifyEnabled = target.hasProperty("testingMinimizedBuild")
-            isShrinkResources = target.hasProperty("testingMinimizedBuild")
+            isShrinkResources = false
             proguardFiles(
               getDefaultProguardFile("proguard-android-optimize.txt"),
               File("${target.rootDir}/app", "proguard-rules.pro")

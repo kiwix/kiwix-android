@@ -72,3 +72,13 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLParameters
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
+
+# Room database implementation
+-keep class org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase_Impl {
+    <init>();
+}
+
+# Fetch Room database implementation
+-keep class com.tonyodev.fetch2.database.DownloadDatabase_Impl {
+    <init>();
+}

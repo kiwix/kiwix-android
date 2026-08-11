@@ -217,11 +217,10 @@ abstract class CoreMainActivity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     val splashScreen = installSplashScreen()
+    super.onCreate(savedInstanceState)
     splashScreen.setKeepOnScreenCondition {
       !CoreApp.instance.themeConfig.isThemeLoaded.value
     }
-    setTheme(R.style.KiwixTheme)
-    super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
       // Save the existing uncaught exception handler (usually set by Android).
