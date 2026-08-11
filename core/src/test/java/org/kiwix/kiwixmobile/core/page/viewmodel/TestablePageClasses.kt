@@ -74,7 +74,7 @@ class TestablePageViewModel(
     state: TestablePageState,
     isInSelectionState: Boolean
   ): TestablePageState =
-    state.copy(searchTerm = "setSelectionStateCalled")
+    state.copy(isInSelectionState = isInSelectionState)
 
   override fun createDeletePageDialogEffect(
     state: TestablePageState,
