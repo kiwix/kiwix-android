@@ -130,7 +130,8 @@ internal class HistoryViewModelTest {
               isSelected = false,
               zimReaderSource = zimReaderSource
             )
-          )
+          ),
+          isInSelectionState = true
         )
       )
   }

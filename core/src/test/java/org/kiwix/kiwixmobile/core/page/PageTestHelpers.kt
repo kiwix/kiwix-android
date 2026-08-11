@@ -66,13 +66,15 @@ fun historyState(
   historyItems: List<HistoryListItem.HistoryItem> = listOf(),
   showAll: Boolean = true,
   zimId: String = "id",
-  searchTerm: String = ""
+  searchTerm: String = "",
+  isInSelectionState: Boolean = false
 ): HistoryState =
   HistoryState(
     historyItems,
     showAll,
     zimId,
-    searchTerm
+    searchTerm,
+    isInSelectionState
   )
 
 fun bookmark(
@@ -147,7 +149,8 @@ fun bookmarkState(
   bookmarks: List<LibkiwixBookmarkItem> = emptyList(),
   showAll: Boolean = true,
   zimId: String = "id",
-  searchTerm: String = ""
-): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm)
+  searchTerm: String = "",
+  isInSelectionState: Boolean = false
+): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm, isInSelectionState)
 
-fun pageState(): TestablePageState = TestablePageState()
+fun pageState(isInSelectionState: Boolean = false): TestablePageState = TestablePageState(isInSelectionState = isInSelectionState)
