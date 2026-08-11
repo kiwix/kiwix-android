@@ -99,12 +99,12 @@ internal class PageViewModelTest {
   }
 
   @Test
-  fun `ExitActionModeMenu calls deslectAllPages`() = runTest {
+  fun `ExitActionModeMenu calls exitSelectionMode`() = runTest {
     viewModel.state.test {
       viewModel.actions.tryEmit(ExitActionModeMenu)
       assertThat(awaitItem()).isEqualTo(TestablePageState(searchTerm = ""))
       assertThat(awaitItem())
-        .isEqualTo(TestablePageState(searchTerm = "deselectAllPagesCalled"))
+        .isEqualTo(TestablePageState(searchTerm = "exitSelectionModeCalled"))
     }
   }
 
@@ -137,14 +137,15 @@ internal class PageViewModelTest {
     val zimReaderSource: ZimReaderSource = mockk()
     viewModel.state.test {
       val page = PageImpl(isSelected = true, zimReaderSource = zimReaderSource)
-      viewModel.getMutableStateForTestCases().value = TestablePageState(listOf(page))
+      viewModel.getMutableStateForTestCases().value = TestablePageState(listOf(page), isInSelectionState = true)
       viewModel.actions.tryEmit(OnItemClick(page))
       advanceUntilIdle()
       assertThat(awaitItem()).isEqualTo(TestablePageState())
       assertThat(awaitItem())
         .isEqualTo(
           TestablePageState(
-            listOf(PageImpl(zimReaderSource = zimReaderSource))
+            listOf(PageImpl(zimReaderSource = zimReaderSource)),
+            isInSelectionState = true
           )
         )
     }
@@ -183,6 +184,7 @@ internal class PageViewModelTest {
       viewModel.actions.tryEmit(OnItemLongClick(page))
       advanceUntilIdle()
       assertThat(awaitItem()).isEqualTo(TestablePageState())
+      assertThat(awaitItem()).isEqualTo(TestablePageState(listOf(page)))
       assertThat(awaitItem()).isEqualTo(
         TestablePageState(
           listOf(
@@ -190,7 +192,8 @@ internal class PageViewModelTest {
               isSelected = true,
               zimReaderSource = zimReaderSource
             )
-          )
+          ),
+          isInSelectionState = true
         )
       )
     }
