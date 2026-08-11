@@ -197,6 +197,38 @@ class ExternalLinkOpenerTest {
     }
 
   @Test
+  fun neutralButtonClickPersistsPreferenceWhenActivityIsPaused() = runTest {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
+    Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
+      intent,
+      ResolveInfo().apply {
+        activityInfo = ActivityInfo().apply {
+          packageName = "com.example"
+          name = "ExampleActivity"
+        }
+      }
+    )
+    every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
+    coJustRun { kiwixDataStore.setExternalLinkPopup(any()) }
+    val externalLinkOpener = ExternalLinkOpener(kiwixDataStore).apply {
+      initialize(activity, alertDialogShower)
+    }
+    externalLinkOpener.openExternalUrl(intent)
+    val dialogData = alertDialogShower.dialogState.value
+    assertNotNull(dialogData)
+    val (_, listeners, _) = dialogData!!
+    listeners[2].invoke()
+    activityController.pause()
+    advanceUntilIdle()
+    coVerify {
+      kiwixDataStore.setExternalLinkPopup(false)
+    }
+    val startedIntent = Shadows.shadowOf(activity).nextStartedActivity
+    assertNotNull(startedIntent)
+    assert(startedIntent.dataString == "https://github.com/")
+  }
+
+  @Test
   fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() = runTest {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/"))
     Shadows.shadowOf(activity.packageManager).addResolveInfoForIntent(
