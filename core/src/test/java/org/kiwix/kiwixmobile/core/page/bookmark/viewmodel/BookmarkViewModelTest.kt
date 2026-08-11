@@ -181,7 +181,8 @@ internal class BookmarkViewModelTest {
             databaseId = databaseId,
             zimReaderSource = zimReaderSource
           )
-        )
+        ),
+        isInSelectionState = true
       )
     )
   }

@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 
 internal class PageStateTest {
   @Test
-  internal fun `isInSelectionMode is true when item is selected`() {
+  internal fun `isInSelectionMode is true when explicitly set`() {
     assertThat(
       TestablePageState(
         listOf(
@@ -34,14 +34,15 @@ internal class PageStateTest {
             isSelected = true,
             zimReaderSource = mockk()
           )
-        )
+        ),
+        isInSelectionState = true
       ).isInSelectionState
     )
       .isEqualTo(true)
   }
 
   @Test
-  internal fun `isInSelectionMode is false when no item is selected`() {
+  internal fun `isInSelectionMode is false when not explicitly set`() {
     assertThat(TestablePageState(listOf(PageImpl(zimReaderSource = mockk()))).isInSelectionState)
       .isEqualTo(false)
   }
