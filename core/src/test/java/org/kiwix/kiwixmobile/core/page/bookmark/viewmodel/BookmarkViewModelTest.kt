@@ -157,6 +157,22 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
+  fun `selectAllPages selects all bookmark items and enters selection state`() {
+    val zimReaderSource: ZimReaderSource = mockk()
+    every { zimReaderSource.toDatabase() } returns ""
+
+    val item = libkiwixBookmarkItem(isSelected = false, zimReaderSource = zimReaderSource)
+    val result = viewModel.selectAllPages(bookmarkState(listOf(item)))
+
+    assertThat(result).isEqualTo(
+      bookmarkState(
+        bookmarks = listOf(libkiwixBookmarkItem(isSelected = true, zimReaderSource = zimReaderSource)),
+        isInSelectionState = true
+      )
+    )
+  }
+
+  @Test
   internal fun `deselectAllPages deselects bookmarks items`() {
     val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
@@ -185,6 +201,31 @@ internal class BookmarkViewModelTest {
         isInSelectionState = true
       )
     )
+  }
+
+  @Test
+  fun `exitSelectionMode deselects all items and exits selection state`() {
+    val zimReaderSource: ZimReaderSource = mockk()
+    every { zimReaderSource.toDatabase() } returns ""
+    val item = libkiwixBookmarkItem(isSelected = true, zimReaderSource = zimReaderSource)
+    val result = viewModel.exitSelectionMode(bookmarkState(listOf(item), isInSelectionState = true))
+    assertThat(result).isEqualTo(
+      bookmarkState(
+        bookmarks = listOf(libkiwixBookmarkItem(isSelected = false, zimReaderSource = zimReaderSource)),
+        isInSelectionState = false
+      )
+    )
+  }
+
+  @Test
+  fun `setSelectionState updates isInSelectionState without touching items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
+    val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
+    val item = libkiwixBookmarkItem(databaseId = databaseId, zimReaderSource = zimReaderSource)
+    val state = bookmarkState(listOf(item))
+    assertThat(viewModel.setSelectionState(state, true)).isEqualTo(bookmarkState(listOf(item), isInSelectionState = true))
+    assertThat(viewModel.setSelectionState(state, false)).isEqualTo(bookmarkState(listOf(item), isInSelectionState = false))
   }
 
   @Test

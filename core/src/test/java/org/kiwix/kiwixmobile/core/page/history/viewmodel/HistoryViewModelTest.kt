@@ -152,6 +152,47 @@ internal class HistoryViewModelTest {
     }
 
   @Test
+  fun `selectAllPages selects all history items and enters selection state`() {
+    val item = historyItem(isSelected = false, zimReaderSource = zimReaderSource)
+
+    val result = viewModel.selectAllPages(historyState(listOf(item)))
+
+    assertThat(result).isEqualTo(
+      historyState(
+        historyItems = listOf(historyItem(isSelected = true, zimReaderSource = zimReaderSource)),
+        isInSelectionState = true
+      )
+    )
+  }
+
+  @Test
+  fun `deselectAllPages deselects all history items and maintains selection state`() {
+    val item = historyItem(isSelected = true, zimReaderSource = zimReaderSource)
+
+    val result = viewModel.deselectAllPages(historyState(listOf(item)))
+
+    assertThat(result).isEqualTo(
+      historyState(
+        historyItems = listOf(historyItem(isSelected = false, zimReaderSource = zimReaderSource)),
+        isInSelectionState = true
+      )
+    )
+  }
+
+  @Test
+  fun `setSelectionState updates isInSelectionState without touching items`() {
+    val item = historyItem(zimReaderSource = zimReaderSource)
+    val state = historyState(listOf(item))
+
+    // sets the selection mode provided
+    assertThat(viewModel.setSelectionState(state, true))
+      .isEqualTo(historyState(listOf(item), isInSelectionState = true))
+
+    assertThat(viewModel.setSelectionState(state, false))
+      .isEqualTo(historyState(listOf(item), isInSelectionState = false))
+  }
+
+  @Test
   fun `copyWithNewItems returns state with new items`() {
     assertThat(
       viewModel.copyWithNewItems(
