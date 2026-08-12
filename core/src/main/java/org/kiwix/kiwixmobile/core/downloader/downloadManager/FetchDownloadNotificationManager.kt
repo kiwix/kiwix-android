@@ -121,17 +121,23 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  /**
-   * Suppress Fetch's group summary notification. Each download already posts its
-   * own progress notification, so the summary only adds an extra icon to the
-   * status bar during downloads. See #5000.
-   */
   override fun updateGroupSummaryNotification(
     groupId: Int,
     notificationBuilder: NotificationCompat.Builder,
     downloadNotifications: List<DownloadNotification>,
     context: Context
-  ): Boolean = false
+  ): Boolean {
+    notificationBuilder
+      .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
+      .setOnlyAlertOnce(true)
+    downloadNotificationManager.notify(
+      DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID,
+      notificationBuilder.build()
+    )
+    return false
+  }
 
   override fun getSubtitleText(
     context: Context,
@@ -140,13 +146,12 @@ class FetchDownloadNotificationManager @Inject constructor(
     return when {
       downloadNotification.isCompleted -> context.getString(R.string.complete)
       downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
-      downloadNotification.isPaused -> buildSubtitle(
+      downloadNotification.isPaused || downloadNotification.isQueued -> buildSubtitle(
         context.getString(R.string.paused_state),
         downloadNotification.downloaded,
         downloadNotification.total
       )
 
-      downloadNotification.isQueued -> context.getString(R.string.resuming_state)
       downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
       else -> buildSubtitle(
         super.getSubtitleText(context, downloadNotification),
@@ -227,7 +232,7 @@ class FetchDownloadNotificationManager @Inject constructor(
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
           )
 
-      downloadNotification.isPaused ->
+      downloadNotification.isPaused || downloadNotification.isQueued ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
             drawable.fetch_notification_resume,
@@ -239,9 +244,6 @@ class FetchDownloadNotificationManager @Inject constructor(
             context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
-
-      downloadNotification.isQueued ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
 
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
