@@ -151,6 +151,8 @@ class LibraryRobot : BaseRobot() {
         bookItemList.performScrollToIndex(index)
         zimFileNodes[index].performClick()
       }
+      // Scroll to top so that it shows the delete icon in the top bar.
+      bookItemList.performScrollToIndex(ZERO)
       clickOnFileDeleteIcon(composeTestRule)
       clickOnDeleteZimFile(composeTestRule)
       composeTestRule.waitUntilTimeout()
