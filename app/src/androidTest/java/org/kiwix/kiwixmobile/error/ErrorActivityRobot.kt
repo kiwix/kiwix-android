@@ -20,15 +20,18 @@ package org.kiwix.kiwixmobile.error
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.error.ERROR_REPORT_DETAILS_LIST_TESTING_TAG
 import org.kiwix.kiwixmobile.core.help.SEND_DIAGNOSTIC_REPORT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.FIFTEEN_SECOND_DELAY
@@ -72,18 +75,21 @@ class ErrorActivityRobot : BaseRobot() {
   }
 
   fun assertDetailsIncludedInErrorReportDisplayed(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      onNodeWithText(context.getString(R.string.crash_checkbox_language))
-        .assertIsDisplayed()
-      onNodeWithText(context.getString(R.string.crash_checkbox_logs))
-        .assertIsDisplayed()
-      onNodeWithText(context.getString(R.string.crash_checkbox_zimfiles))
-        .assertIsDisplayed()
-      onNodeWithText(context.getString(R.string.crash_checkbox_device))
-        .assertIsDisplayed()
-      onNodeWithText(context.getString(R.string.crash_checkbox_file_system))
-        .assertIsDisplayed()
-      onNodeWithText(context.getString(R.string.validate_zim_files))
+    val detailsList = composeTestRule.onNodeWithTag(ERROR_REPORT_DETAILS_LIST_TESTING_TAG)
+    listOf(
+      R.string.crash_checkbox_language,
+      R.string.crash_checkbox_logs,
+      R.string.crash_checkbox_zimfiles,
+      R.string.crash_checkbox_device,
+      R.string.crash_checkbox_file_system,
+      R.string.validate_zim_files
+    ).forEach { stringId ->
+      val text = context.getString(stringId)
+
+      detailsList.performScrollToNode(hasText(text))
+
+      composeTestRule
+        .onNodeWithText(text)
         .assertIsDisplayed()
     }
   }

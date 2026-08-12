@@ -130,6 +130,7 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       // Click on back button showing in navigation bar to come back to previous screen.
       clickOnNavigationIcon(composeTestRule)
+      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
       assertTabsRestored(composeTestRule)
     }
   }
@@ -156,6 +157,7 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       // click reader bottomAppBar icon to come back to reader screen.
       clickOnReaderScreenInBottomAppBar(composeTestRule)
+      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
       assertTabsRestored(composeTestRule)
     }
   }
