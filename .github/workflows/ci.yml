@@ -72,7 +72,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           force-avd-creation: false
@@ -90,7 +90,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           cores: 4
@@ -194,7 +194,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           force-avd-creation: false
@@ -212,7 +212,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           cores: 4
@@ -275,7 +275,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           force-avd-creation: false
@@ -293,7 +293,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           cores: 4
@@ -356,7 +356,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
           ram-size: 4096M
           force-avd-creation: false
@@ -374,7 +374,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: default
-          arch: x86_64
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
           ram-size: 4096M
           cores: 4
