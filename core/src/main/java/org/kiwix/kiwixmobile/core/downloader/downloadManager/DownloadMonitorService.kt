@@ -47,6 +47,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -70,6 +71,7 @@ const val DOWNLOAD_SERVICE_NOTIFICATION_ID = 1
 const val DOWNLOAD_TIMEOUT_RESUME_INTENT = "downloadTimeoutResumeIntent"
 const val BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION = "backgroundDownloadLimitReachAction"
 const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
+const val DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID = 3
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 
@@ -120,9 +122,16 @@ class DownloadMonitorService : Service() {
    * are resumed automatically once the network is restored.
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
-    fetch.getDownloadsWithStatus(listOf(Status.QUEUED)) { queuedDownloads ->
-      queuedDownloads.forEach { queuedDownload ->
-        fetch.resume(queuedDownload.id)
+    scope?.launch {
+      delay(timeMillis = 3000)
+      fetch.getDownloadsWithStatus(listOf(Status.QUEUED, Status.FAILED)) { downloadsToResume ->
+        downloadsToResume.forEach { download ->
+          if (download.status == Status.FAILED) {
+            fetch.retry(download.id)
+          } else {
+            fetch.resume(download.id)
+          }
+        }
       }
     }
   }
@@ -308,7 +317,6 @@ class DownloadMonitorService : Service() {
       .setContentText(getString(string.download_notification_channel_description))
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
-      .setGroupSummary(true)
       .setOnlyAlertOnce(true)
       .setWhen(System.currentTimeMillis())
       .build()
@@ -366,6 +374,9 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
+      taskFlow.tryEmit {
+        fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+      }
       update(download, true)
     }
 
@@ -402,6 +413,9 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onWaitingNetwork(download: Download) {
+      taskFlow.tryEmit {
+        fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+      }
       update(download)
     }
 
@@ -420,9 +434,9 @@ class DownloadMonitorService : Service() {
             downloadRoomDao.downloads().first()
           }
         }
-        // If someone pause the Download then post a notification since fetch removes the
-        // notification for ongoing download when pause so we needs to show our custom notification.
-        if (download.isPaused()) {
+
+        // Pause notification when someone pauses it or when network error set the state to paused
+        if (download.isPaused() || download.status == Status.FAILED || download.status == Status.QUEUED) {
           fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
         }
         if (updateForeGroundService) {
@@ -442,7 +456,7 @@ class DownloadMonitorService : Service() {
   private fun stopForegroundServiceIfNoActiveDownloads(fetch: Fetch) {
     taskFlow.tryEmit {
       fetch.getDownloadsWithStatus(
-        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING)
+        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.FAILED)
       ) { activeDownloads ->
         if (activeDownloads.isEmpty()) {
           stopForegroundServiceForDownloads()
@@ -547,6 +561,7 @@ class DownloadMonitorService : Service() {
     scope = null
     unregisterNetworkCallback()
     fetch.removeListener(fetchListener)
+    notificationManager.cancel(DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID)
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     isDownloadMonitorServiceRunning = false
