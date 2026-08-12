@@ -62,13 +62,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
+import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
-import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
@@ -122,37 +122,44 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  /**
-   * Suppress Fetch's group summary notification. Each download already posts its
-   * own progress notification, so the summary only adds an extra icon to the
-   * status bar during downloads. See #5000.
-   */
   override fun updateGroupSummaryNotification(
     groupId: Int,
     notificationBuilder: NotificationCompat.Builder,
     downloadNotifications: List<DownloadNotification>,
     context: Context
-  ): Boolean = false
+  ): Boolean {
+    notificationBuilder
+      .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
+      .setOnlyAlertOnce(true)
+    downloadNotificationManager.notify(
+      DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID,
+      notificationBuilder.build()
+    )
+    return false
+  }
 
   override fun getSubtitleText(
     context: Context,
     downloadNotification: DownloadNotification
-  ): String = when {
-    downloadNotification.isCompleted -> context.getString(R.string.complete)
-    downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
-    downloadNotification.isPaused -> buildSubtitle(
-      context.getString(R.string.paused_state),
-      downloadNotification.downloaded,
-      downloadNotification.total
-    )
+  ): String {
+    return when {
+      downloadNotification.isCompleted -> context.getString(R.string.complete)
+      downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+      downloadNotification.isPaused || downloadNotification.isQueued -> buildSubtitle(
+        context.getString(R.string.paused_state),
+        downloadNotification.downloaded,
+        downloadNotification.total
+      )
 
-    downloadNotification.isQueued -> context.getString(R.string.resuming_state)
-    downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
-    else -> buildSubtitle(
-      super.getSubtitleText(context, downloadNotification),
-      downloadNotification.downloaded,
-      downloadNotification.total
-    )
+      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
+      else -> buildSubtitle(
+        super.getSubtitleText(context, downloadNotification),
+        downloadNotification.downloaded,
+        downloadNotification.total
+      )
+    }
   }
 
   private fun buildSubtitle(
@@ -226,7 +233,7 @@ class FetchDownloadNotificationManager @Inject constructor(
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
           )
 
-      downloadNotification.isPaused ->
+      downloadNotification.isPaused || downloadNotification.isQueued ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
             drawable.fetch_notification_resume,
@@ -238,9 +245,6 @@ class FetchDownloadNotificationManager @Inject constructor(
             context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
-
-      downloadNotification.isQueued ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
 
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
