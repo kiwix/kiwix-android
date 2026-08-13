@@ -376,7 +376,7 @@
   <string name="swipe_down_for_library">Kitaplık için Aşağı Kaydırın</string>
   <string name="reaching_remote_library">Uzak kütüphaneye bağlanılıyor</string>
   <string name="parsing_remote_library">Uzak kütüphanenin ayrıştırılması</string>
-  <string name="starting_downloading_remote_library">Çevrimiçi kütüphanenin indirilmesi başlatılıyor</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Çevrimiçi kütüphanenin indirilmesi başlatılıyor</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>

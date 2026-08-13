@@ -13,7 +13,7 @@
   <string name="menu_settings">Astellungen</string>
   <string name="menu_search_in_text">Op der Säit sichen</string>
   <string name="bookmarks">Lieszeechen</string>
-  <string name="menu_random_page">Zoufällegen Artikel</string>
+  <string name="menu_random_page">Zoufälleg Säit</string>
   <string name="menu_read_aloud">Virliesen</string>
   <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
   <string name="menu_support_kiwix">Kiwix ënnerstëtzen</string>
@@ -52,6 +52,8 @@
   <string name="zim_not_opened">De ZIM-Fichier konnt net opgemaach ginn</string>
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei. %s</string>
   <string name="error_article_url_not_found">Feeler: D’Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
+  <string name="error_loading_random_page_zim_not_loaded">D\'Säit konnt net geluede ginn. De ZIM-Fichier gouf net richteg gelueden.</string>
+  <string name="could_not_find_random_page">Et gouf keng zoufälleg Säit fonnt. Probéiert wgl. méi spéit nach eng Kéier.</string>
   <string name="pref_display_title">Weisen</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
@@ -97,6 +99,7 @@
   <string name="rate_dialog_positive">Bewäerten!</string>
   <string name="no_thanks">Nee, merci</string>
   <string name="rate_dialog_neutral">Méi spéit</string>
+  <string name="pref_rating_category_title">App-Bewäertung</string>
   <string name="open">Opmaachen</string>
   <string name="bookmark_removed">Lieszeechen ewechgeholl</string>
   <string name="pref_newtab_background_title">Een neien Tab am Hannergrond opmaachen</string>
@@ -185,6 +188,7 @@
   <string name="switch_tabs">Tabs wiesselen</string>
   <string name="close_all_tabs">All Tabs zoumaachen</string>
   <string name="close_tab">Tab zoumaachen</string>
+  <string name="could_not_restore_tabs">D\'Tabs konnten net restauréiert ginn.</string>
   <string name="running_state">Amgaang</string>
   <string name="complete">Komplettéieren</string>
   <string name="paused_state">Pauséiert</string>

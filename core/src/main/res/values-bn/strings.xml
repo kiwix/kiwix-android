@@ -165,7 +165,7 @@
   <string name="tab_restored">ট্যাব পুনরুদ্ধার করা হয়েছে</string>
   <string name="reaching_remote_library">দূরবর্তী গ্রন্থাগার লোড করা হচ্ছে</string>
   <string name="parsing_remote_library">দূরবর্তী গ্রন্থাগার পার্সিং করা হচ্ছে</string>
-  <string name="starting_downloading_remote_library">অনলাইন গ্রন্থাগারের ডাউনলোড শুরু করা হচ্ছে</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">অনলাইন গ্রন্থাগারের ডাউনলোড শুরু করা হচ্ছে</string>
   <string name="choose_your_action">আপনার কার্য চয়ন করুন</string>
   <string name="open_note">টীকা খুলুন</string>
   <string name="open_article">নিবন্ধ খুলুন</string>

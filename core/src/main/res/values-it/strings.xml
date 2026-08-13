@@ -76,8 +76,8 @@
   <string name="zim_not_opened">Impossibile aprire il file ZIM</string>
   <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido. %s</string>
   <string name="error_article_url_not_found">Errore: caricamento della voce (URL: %1$s) non riuscito.</string>
-  <string name="error_loading_random_page_zim_not_loaded">Impossibile caricare l\'articolo. Il file ZIM non è caricato correttamente.</string>
-  <string name="could_not_find_random_page">Impossibile trovare un articolo casuale. Per favore, riprova più tardi.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Impossibile caricare la pagina. Il file ZIM non è stato caricato correttamente.</string>
+  <string name="could_not_find_random_page">Impossibile trovare una pagina casuale. Riprova più tardi.</string>
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
@@ -372,7 +372,7 @@
   <string name="allow">Consenti</string>
   <string name="swipe_down_for_library">Scorri verso il basso per la libreria</string>
   <string name="parsing_remote_library">Analisi della libreria remota</string>
-  <string name="starting_downloading_remote_library">Avvio del download della biblioteca online</string>
+  <string name="starting_downloading_remote_library">Caricamento della libreria online</string>
   <string name="no_notes">Nessuna nota</string>
   <string name="notes_from_all_books">Visualizza le note di tutti i libri</string>
   <string name="search_notes">Cerca note</string>

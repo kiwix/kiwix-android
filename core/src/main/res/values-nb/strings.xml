@@ -22,10 +22,14 @@
   <string name="menu_support_kiwix">Støtt Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Støtt %s</string>
   <string name="menu_about_app">Om %s-appen</string>
+  <string name="external_redirect_message">Du vil nå omdirigeres til vår %s.</string>
+  <string name="support_donation_platform">donasjonsplattform</string>
+  <string name="about_app_page">om app-side</string>
   <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Lagre medier som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
-  <string name="save_media_saved" fuzzy="true">Lagret medier som %s i din bildemappe.</string>
+  <string name="invalid_media_source">Det valgte mediet ble ikke funnet.</string>
+  <string name="save_media_saved">Lagret media til %s</string>
   <string name="search_label">Søk</string>
   <string name="more_options">Flere alternativer</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>

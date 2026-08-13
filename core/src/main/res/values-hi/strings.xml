@@ -364,7 +364,7 @@
   <string name="swipe_down_for_library">पुस्तकालय के लिए नीचे स्वाइप करें</string>
   <string name="reaching_remote_library">दूरस्थ पुस्तकालय तक पहुँचना</string>
   <string name="parsing_remote_library">दूरस्थ पुस्तकालय का पार्सिंग</string>
-  <string name="starting_downloading_remote_library">ऑनलाइन पुस्तकालय डाउनलोड करना प्रारम्भ करें</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">ऑनलाइन पुस्तकालय डाउनलोड करना प्रारम्भ करें</string>
   <string name="no_notes">कोई टिपण्णी नहीं</string>
   <string name="notes_from_all_books">सभी पुस्तकों से टिप्पणियाँ देखें</string>
   <string name="search_notes">टिप्पणियां खोजें</string>

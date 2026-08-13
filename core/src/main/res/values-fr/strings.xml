@@ -393,7 +393,7 @@
   <string name="swipe_down_for_library">Faites glisser vers le bas pour la bibliothèque</string>
   <string name="reaching_remote_library">Accéder à la bibliothèque en ligne</string>
   <string name="parsing_remote_library">Analyse de la bibliothèque en ligne</string>
-  <string name="starting_downloading_remote_library">Démarrage du téléchargement de la bibliothèque en ligne</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Démarrage du téléchargement de la bibliothèque en ligne</string>
   <string name="no_notes">Aucune note</string>
   <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
   <string name="search_notes">Rechercher des notes</string>

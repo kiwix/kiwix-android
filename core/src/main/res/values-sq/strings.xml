@@ -325,7 +325,7 @@
   <string name="swipe_down_for_library">Për Bibliotekën, Fërkojeni Për Poshtë</string>
   <string name="reaching_remote_library">Po shkohet te bibliotekë e largët</string>
   <string name="parsing_remote_library">Po analizohet bilbiotekë e largët</string>
-  <string name="starting_downloading_remote_library">Po nis shkarkimi i bibliotekës internetore</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Po nis shkarkimi i bibliotekës internetore</string>
   <string name="no_notes">S’ka Shënime</string>
   <string name="notes_from_all_books">Shihni Shënime Prej Krejt Librave</string>
   <string name="search_notes">Kërko Te Shënimet</string>

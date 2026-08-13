@@ -390,7 +390,7 @@
   <string name="swipe_down_for_library">Проведите пальцем вниз, чтобы открыть библиотеку</string>
   <string name="reaching_remote_library">Как получить доступ к удалённой библиотеки</string>
   <string name="parsing_remote_library">Анализ удалённой библиотеки</string>
-  <string name="starting_downloading_remote_library">Начало загрузки онлайн-библиотеки</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Начало загрузки онлайн-библиотеки</string>
   <string name="no_notes">Нет заметок</string>
   <string name="notes_from_all_books">Просмотр заметок из всех книг</string>
   <string name="search_notes">Искать заметки</string>

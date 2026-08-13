@@ -123,6 +123,9 @@
   <string name="rate_dialog_positive">Ohodnotiť!</string>
   <string name="no_thanks">Nie, vďaka</string>
   <string name="rate_dialog_neutral">Neskôr</string>
+  <string name="pref_rate_app_title">Ohodnotiť %s</string>
+  <string name="pref_rate_app_summary">Ohodnotiť %s v Play Store</string>
+  <string name="pref_rating_category_title">Hodnotenie aplikácie</string>
   <string name="open">Otvoriť</string>
   <string name="bookmark_removed">Záložka odstránená</string>
   <string name="pref_newtab_background_title">Otvoriť novú kartu na pozadí</string>
@@ -364,7 +367,7 @@
   <string name="swipe_down_for_library">Potiahnutím nadol zobrazíte knižnicu</string>
   <string name="reaching_remote_library">Pripája sa k vzdialenej knižnici</string>
   <string name="parsing_remote_library">Spracúva sa vzdialená knižnica</string>
-  <string name="starting_downloading_remote_library">Spúšťa sa sťahovanie online knižnice</string>
+  <string name="starting_downloading_remote_library">Načítava sa online knižnica</string>
   <string name="no_notes">Žiadne poznámky</string>
   <string name="notes_from_all_books">Zobraziť poznámky zo všetkých kníh</string>
   <string name="search_notes">Hľadať v poznámkach</string>

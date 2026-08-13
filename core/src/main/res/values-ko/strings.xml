@@ -136,6 +136,9 @@
   <string name="rate_dialog_positive">평가해 주세요!</string>
   <string name="no_thanks">아니요, 괜찮습니다</string>
   <string name="rate_dialog_neutral">나중에</string>
+  <string name="pref_rate_app_title">%s 평가하기</string>
+  <string name="pref_rate_app_summary">플레이 스토어에서 %s을(를) 평가해 주세요</string>
+  <string name="pref_rating_category_title">앱 평점</string>
   <string name="open">열기</string>
   <string name="bookmark_removed">북마크가 제거됨</string>
   <string name="pref_newtab_background_title">새 탭을 백그라운드로 열기</string>
@@ -377,7 +380,7 @@
   <string name="swipe_down_for_library">라이브러리를 보려면 아래로 스와이프하세요</string>
   <string name="reaching_remote_library">원격라이브러리 찾는 중</string>
   <string name="parsing_remote_library">원격라이브러리를 구문분석 중</string>
-  <string name="starting_downloading_remote_library">온라인 라이브러리 다운로드 시작 중</string>
+  <string name="starting_downloading_remote_library">온라인 라이브러리 로딩 중</string>
   <string name="no_notes">노트 없음</string>
   <string name="notes_from_all_books">모든 책의 노트 보기</string>
   <string name="search_notes">노트 검색</string>

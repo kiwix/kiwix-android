@@ -34,6 +34,7 @@
 * Zjzengdongyang
 * 列维劳德
 * 沈澄心
+* 郭佳昌
 * 铁桶
 -->
 <resources>
@@ -151,6 +152,9 @@
   <string name="rate_dialog_positive">评价！</string>
   <string name="no_thanks">不用了，谢谢</string>
   <string name="rate_dialog_neutral">以后再说</string>
+  <string name="pref_rate_app_title">评价 %s</string>
+  <string name="pref_rate_app_summary">在Play Store中评价 %s</string>
+  <string name="pref_rating_category_title">应用评分</string>
   <string name="open">打开</string>
   <string name="bookmark_removed">书签已移除</string>
   <string name="pref_newtab_background_title">在后台打开新标签页</string>
@@ -392,7 +396,7 @@
   <string name="swipe_down_for_library">下滑查看文库</string>
   <string name="reaching_remote_library">获取远程文库</string>
   <string name="parsing_remote_library">解析远程文库</string>
-  <string name="starting_downloading_remote_library">开始下载在线文库</string>
+  <string name="starting_downloading_remote_library">正在加载在线文库</string>
   <string name="no_notes">没有注释</string>
   <string name="notes_from_all_books">查看来自所有书籍的注释</string>
   <string name="search_notes">搜索注释</string>
