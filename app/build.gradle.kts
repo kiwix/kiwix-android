@@ -176,6 +176,9 @@ dependencies {
   add("standaloneImplementation", project(":defaultmigration"))
   // inject migration module in playStore variant.
   add("playStoreImplementation", project(":objectboxmigration"))
+
+  // Document File
+  implementation(Libs.select_folder_document_file)
 }
 
 tasks.register("generateVersionCodeAndName") {

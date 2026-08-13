@@ -17,8 +17,10 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.webkit.MimeTypeMap
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -31,6 +33,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
 
+@SuppressLint("MissingOnRenderProcessGone")
 open class CoreWebViewClient(
   protected val callback: WebViewCallback,
   protected val zimReaderContainer: ZimReaderContainer
@@ -133,6 +136,11 @@ open class CoreWebViewClient(
         null
       )
     }
+  }
+
+  override fun onRenderProcessGone(view: WebView?, detail: RenderProcessGoneDetail?): Boolean {
+    Log.e(TAG_KIWIX, "There is an error in rendering the webView: ${detail.toString()}")
+    return super.onRenderProcessGone(view, detail)
   }
 
   companion object {

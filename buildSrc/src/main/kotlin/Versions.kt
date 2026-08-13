@@ -12,13 +12,13 @@ import org.gradle.plugin.use.PluginDependencySpec
  */
 object Versions {
 
-  const val document_file_version: String = "1.0.1"
+  const val document_file_version: String = "1.1.0"
 
-  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.10.1"
+  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.11.0"
 
   const val androidx_test_espresso: String = "3.7.0"
 
-  const val tracing: String = "1.2.0"
+  const val tracing: String = "1.3.0"
 
   const val com_squareup_retrofit2: String = "2.11.0"
 
@@ -36,7 +36,7 @@ object Versions {
 
   const val io_objectbox: String = "4.1.0"
 
-  const val io_mockk: String = "1.13.13"
+  const val io_mockk: String = "1.14.11"
 
   const val com_android_tools_build_gradle: String = "9.3.0"
 
@@ -48,16 +48,15 @@ object Versions {
 
   const val leakcanary_android: String = "3.0-alpha-8"
 
-  const val collection_ktx: String = "1.4.5"
+  const val collection_ktx: String = "1.6.0"
 
   const val preference_ktx: String = "1.2.1"
 
-  const val junit_jupiter: String = "5.11.0"
+  const val junit_jupiter: String = "6.1.3"
 
-  const val assertj_core: String = "3.26.3"
+  const val assertj_core: String = "3.27.7"
 
   const val core_testing: String = "2.2.0"
-
 
   const val testing_ktx: String = "1.3.0"
 
@@ -65,23 +64,23 @@ object Versions {
 
   const val uiautomator: String = "2.3.0"
 
-  const val annotation: String = "1.6.0"
+  const val annotation: String = "1.9.1"
 
   const val simple_xml: String = "2.7.1"
 
-  const val appcompat: String = "1.7.0"
+  const val appcompat: String = "1.7.1"
 
-  const val core_ktx: String = "1.15.0"
+  const val core_ktx: String = "1.18.0"
 
   const val androidx_activity: String = "1.9.3"
 
   const val libkiwix: String = "2.6.0"
 
-  const val material: String = "1.12.0"
+  const val material: String = "1.14.0"
 
   const val barista: String = "4.3.0"
 
-  const val webkit: String = "1.12.1"
+  const val webkit: String = "1.17.0"
 
   const val junit: String = "1.3.0"
 
@@ -101,7 +100,7 @@ object Versions {
 
   const val COMPOSE_MATERIAL3 = "1.3.1"
 
-  const val TURBINE_FLOW_TEST = "1.2.0"
+  const val TURBINE_FLOW_TEST = "1.2.1"
 
   const val COIL_COMPOSE = "3.2.0"
 
@@ -111,7 +110,7 @@ object Versions {
 
   const val LIFECYCLE_VERSION = "2.8.6"
 
-  const val ROBOLECTRIC = "4.14.1"
+  const val ROBOLECTRIC = "4.16.1"
   const val BENCHMARK_MACRO: String = "1.4.1"
 
   const val ACCOMPANIST = "0.34.0"

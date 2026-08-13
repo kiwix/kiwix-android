@@ -157,6 +157,7 @@ open class KiwixWebView constructor(
    * Must be called before [destroy] to prevent memory leaks via
    * InputMethodManager or DecorView retention of this WebView.
    */
+  @SuppressLint("MissingOnRenderProcessGone")
   fun dispose() {
     // Remove javascript interfaces to break reference chains from JavascriptInjector
     removeJavascriptInterface("tts")
