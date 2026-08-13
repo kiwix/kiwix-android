@@ -34,6 +34,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -144,7 +145,11 @@ fun ReaderScreenRoute(
       onUserBackPressed = { viewModel.onUserBackPressed(activity) },
       navHostController = navHostController,
       mainActivityBottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
-      navigationIcon = { NavigationItem(viewModel, activity) }
+      navigationIcon = {
+        key(uiState.showTabSwitcher) {
+          NavigationItem(viewModel, activity)
+        }
+      }
     )
     DialogHost(alertDialogShower)
   }

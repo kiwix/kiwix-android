@@ -576,7 +576,7 @@ abstract class CoreReaderViewModel(
   }
 
   override fun onHomeMenuClicked() {
-    launchInViewModelScope {
+    launchInMainScope {
       if (uiState.value.showTabSwitcher) {
         hideTabSwitcher()
       }
