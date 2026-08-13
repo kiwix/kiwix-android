@@ -101,7 +101,6 @@ jobs:
           heap-size: 1024M
           emulator-boot-timeout: 1200
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
@@ -128,7 +127,6 @@ jobs:
           force-avd-creation: false
           heap-size: 1024M
           script: |
-            bash contrib/ensure-emulator-ready.sh
             ./gradlew :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload coverage to Codecov
@@ -223,7 +221,6 @@ jobs:
           heap-size: 1024M
           emulator-boot-timeout: 1200
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
@@ -304,7 +301,6 @@ jobs:
           emulator-boot-timeout: 1200
           heap-size: 1024M
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
@@ -385,7 +381,6 @@ jobs:
           emulator-boot-timeout: 1200
           heap-size: 1024M
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
