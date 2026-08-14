@@ -30,6 +30,7 @@
   </issue>
   <issue id="Typos">
     <ignore path="**/values-tr/**.xml" />
+    <ignore path="**/values-nb/**.xml" />
   </issue>
   <issue id="InvalidPackage">
     <ignore path="**simple-xml-2.7.1.jar" />
