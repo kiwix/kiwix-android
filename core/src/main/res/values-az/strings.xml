@@ -4,6 +4,7 @@
 * Dağlı95
 * Macofe
 * MohitMali
+* Nemoralis
 * Verman1
 * Zeqid
 -->
@@ -51,8 +52,8 @@
   <string name="zim_not_opened">ZIM faylını açmaq mümkün olamdı</string>
   <string name="error_file_invalid">Xəta: Seçilmiş ZIM faylı yararlı deyil. %s</string>
   <string name="error_article_url_not_found">Xəta: Məqalənin (Url: %1$s) yüklənməsi alınmadı.</string>
-  <string name="error_loading_random_page_zim_not_loaded">Məqaləni yükləmək mümkün olmadı. ZIM faylı düzgün yüklənməyib.</string>
-  <string name="could_not_find_random_page">Təsadüfi məqalə tapmaq mümkün olmadı. Zəhmət olmasa, daha sonra yenidən cəhd edin.</string>
+  <string name="error_loading_random_page_zim_not_loaded">Səhifəni yükləmək mümkün olmadı. ZIM faylı düzgün yüklənməyib.</string>
+  <string name="could_not_find_random_page">Təsadüfi səhifə tapmaq mümkün olmadı. Zəhmət olmasa, daha sonra yenidən cəhd edin.</string>
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Məlumat</string>
   <string name="pref_info_version">Versiya</string>

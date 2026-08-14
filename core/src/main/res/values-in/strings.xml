@@ -358,7 +358,7 @@
   <string name="swipe_down_for_library">Geser ke Bawah untuk Perpustakaan</string>
   <string name="reaching_remote_library">Menjangkau perpustakaan jarak jauh</string>
   <string name="parsing_remote_library">Menguraikan perpustakaan jarak jauh</string>
-  <string name="starting_downloading_remote_library">Memulai pengunduhan perpustakaan online</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Memulai pengunduhan perpustakaan online</string>
   <string name="no_notes">Tidak Ada Catatan</string>
   <string name="notes_from_all_books">Lihat Markah Dari Semua Buku</string>
   <string name="search_notes">Cari Markah</string>

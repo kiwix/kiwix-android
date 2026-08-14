@@ -137,6 +137,9 @@
   <string name="rate_dialog_positive">قيّم!</string>
   <string name="no_thanks">لا، شكراً</string>
   <string name="rate_dialog_neutral">لاحقًا</string>
+  <string name="pref_rate_app_title">معدل %s</string>
+  <string name="pref_rate_app_summary">قيّم %s على متجر Play</string>
+  <string name="pref_rating_category_title">تقييم التطبيق</string>
   <string name="open">فتح</string>
   <string name="bookmark_removed">تم إزالة العلامة المرجعية</string>
   <string name="pref_newtab_background_title">فتح علامة تبويب جديدة في الخلفية</string>
@@ -378,7 +381,7 @@
   <string name="swipe_down_for_library">اسحب لأسفل للوصول إلى المكتبة</string>
   <string name="reaching_remote_library">الوصول إلى المكتبة البعيدة</string>
   <string name="parsing_remote_library">تحليل المكتبة البعيدة</string>
-  <string name="starting_downloading_remote_library">بدء تنزيل المكتبة الإلكترونية</string>
+  <string name="starting_downloading_remote_library">جارٍ تحميل المكتبة الإلكترونية</string>
   <string name="no_notes">لا توجد ملاحظات</string>
   <string name="notes_from_all_books">عرض الملاحظات من جميع الكتب</string>
   <string name="search_notes">ملاحظات البحث</string>

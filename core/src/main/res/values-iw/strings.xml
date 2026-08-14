@@ -357,7 +357,7 @@
   <string name="swipe_down_for_library">יש להחליק למטה עבור ספרייה</string>
   <string name="reaching_remote_library">ניסיון להתחבר לספרייה מרוחקת</string>
   <string name="parsing_remote_library">פענוח ספרייה מרוחקת</string>
-  <string name="starting_downloading_remote_library">תחילת ההורדה של הספרייה המקוונת</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">תחילת ההורדה של הספרייה המקוונת</string>
   <string name="no_notes">אין הערות</string>
   <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
   <string name="search_notes">חיפוש בהערות</string>

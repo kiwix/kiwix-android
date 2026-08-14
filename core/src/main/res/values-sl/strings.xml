@@ -366,7 +366,7 @@
   <string name="swipe_down_for_library">Podrsajte navzdol za knjižnico</string>
   <string name="reaching_remote_library">Dostopanje do oddaljene knjižnice</string>
   <string name="parsing_remote_library">Razčlenjevanje oddaljene knjižnice</string>
-  <string name="starting_downloading_remote_library">Začenjanje prenosa spletne knjižnice</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Začenjanje prenosa spletne knjižnice</string>
   <string name="no_notes">Ni beležk</string>
   <string name="notes_from_all_books">Ogled beležk iz vseh knjig</string>
   <string name="search_notes">Poiščite beležko</string>

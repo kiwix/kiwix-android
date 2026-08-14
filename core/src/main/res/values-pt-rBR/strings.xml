@@ -377,7 +377,7 @@
   <string name="swipe_down_for_library">Deslize para baixo para exibir a Biblioteca</string>
   <string name="reaching_remote_library">Conectando à biblioteca remota</string>
   <string name="parsing_remote_library">analisando a biblioteca remota</string>
-  <string name="starting_downloading_remote_library">Iniciando download da biblioteca online</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Iniciando download da biblioteca online</string>
   <string name="no_notes">Sem notas</string>
   <string name="notes_from_all_books">Ver histórico de todos os livros</string>
   <string name="search_notes">Pesquisar datas</string>

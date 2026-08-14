@@ -118,6 +118,9 @@
   <string name="rate_dialog_positive">Оцени!</string>
   <string name="no_thanks">Не, благодарам</string>
   <string name="rate_dialog_neutral">Подоцна</string>
+  <string name="pref_rate_app_title">Оценете го %s</string>
+  <string name="pref_rate_app_summary">Оценете го %s на Play Store</string>
+  <string name="pref_rating_category_title">Оценка за прилогот</string>
   <string name="open">Отвори</string>
   <string name="bookmark_removed">Обележаните се отстранети</string>
   <string name="pref_newtab_background_title">Отвори ново јазиче во позадината</string>
@@ -359,7 +362,7 @@
   <string name="swipe_down_for_library">Повлечете надолу за Библиотеката</string>
   <string name="reaching_remote_library">Ја добивам далечинската библиотека</string>
   <string name="parsing_remote_library">Ја расчленувам далечинската библиотека</string>
-  <string name="starting_downloading_remote_library">Започнувам со преземање на мрежната библиотека</string>
+  <string name="starting_downloading_remote_library">Ја вчитувам семрежната библиотека</string>
   <string name="no_notes">Нема белешки</string>
   <string name="notes_from_all_books">Погл. белешки од сите книги</string>
   <string name="search_notes">Пребарај белешки</string>

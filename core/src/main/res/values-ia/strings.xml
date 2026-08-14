@@ -361,7 +361,7 @@
   <string name="swipe_down_for_library">Glissa a basso pro le bibliotheca</string>
   <string name="reaching_remote_library">Accede al bibliotheca distante…</string>
   <string name="parsing_remote_library">Analysa le bibliotheca distante…</string>
-  <string name="starting_downloading_remote_library">Comencia a discargar le bibliotheca in linea…</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Comencia a discargar le bibliotheca in linea…</string>
   <string name="no_notes">Necun nota</string>
   <string name="notes_from_all_books">Vider notas de tote le libros</string>
   <string name="search_notes">Cercar notas</string>

@@ -7,6 +7,7 @@
 * Fatemi127
 * Jeeputer
 * McDutchie
+* Mohammad ebz
 * MohitMali
 * Reza1615
 * Sunfyre
@@ -21,11 +22,16 @@
   <string name="menu_read_aloud">با صدای بلند بخوان</string>
   <string name="menu_read_aloud_stop">خواندن با صدای بلند را متوقف کن</string>
   <string name="menu_support_kiwix">پشتیبانی از کیویکس</string>
+  <string name="menu_support_kiwix_for_custom_apps">حمایت از %s</string>
+  <string name="menu_about_app">دربارهٔ برنامه %s</string>
   <string name="menu_wifi_hotspot">کتاب‌های میزبان</string>
   <string name="save_media">ذخیرهٔ رسانه</string>
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
+  <string name="invalid_media_source">رسانه انتخاب‌شده یافت نشد.</string>
   <string name="save_media_saved" fuzzy="true">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>
   <string name="search_label">جستجو</string>
+  <string name="searched_list">فهرست جستجو شده</string>
+  <string name="more_options">گزینه‌های بیشتر</string>
   <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
   <string name="go_to_wifi_settings_label">برو به تنظیمات وای‌فای</string>
@@ -36,18 +42,29 @@
   <string name="pref_display_title">نمایش</string>
   <string name="pref_info_title">اطلاعات</string>
   <string name="pref_info_version">نسخه</string>
-  <string name="pref_back_to_top">بازگشت به بالای صفحه</string>
+  <string name="pref_theme">پوسته</string>
+  <string name="theme_system">سامانه</string>
+  <string name="theme_light">روشن</string>
+  <string name="theme_dark">تیره</string>
+  <string name="pref_back_to_top">بازگشت به بالا</string>
   <string name="pref_back_to_top_summary">نمایش دکمه در پایان صفحه برای انتقال به بالا</string>
   <string name="pref_language_title">زبان</string>
   <string name="pref_language_chooser">انتخاب زبان</string>
+  <string name="pref_credits">مشارکت‌کنندگان و مجوزها</string>
+  <string name="pref_credits_title">اعتبارات</string>
   <string name="clear_recent_and_tabs_history_dialog">آیا مطمئن هستید که می‌خواهید تمامی تاریخچه جستجو را پاک کنید و تمام زبانه‌های فعال را ریست کنید؟</string>
   <string name="delete_recent_search_item">این مورد حذف شود؟</string>
   <string name="pref_clear_all_history_title">پاک کردن تاریخچه</string>
+  <string name="pref_clear_all_history_summary">پاک کردن جستجوهای اخیر و تاریخچهٔ زبانه‌ها</string>
+  <string name="pref_notes">یادداشت‌ها</string>
   <string name="pref_permission">دسترسی‌ها</string>
   <string name="all_history_cleared">تمامی تاریخچه پاک شد</string>
   <string name="pref_clear_all_bookmarks_title">حذف نشانک‌ها</string>
   <string name="clear_all_history_dialog_title">همهٔ تاریخچه حذف شود؟</string>
   <string name="share">اشتراک‌گذاری</string>
+  <string name="share_article">اشتراک‌گذاری مقاله</string>
+  <string name="unable_to_share_article">ناتوان از اشتراک‌گذاری مقاله</string>
+  <string name="please_wait_for_page_to_load">لطفا تا بارگیری کامل صفحه صبر کنید</string>
   <string name="selected_file_cab_app_chooser_title">اشتراک‌گذاری پرونده‌های ZIM با:</string>
   <string name="delete">حذف</string>
   <string name="cancel">لغو</string>
@@ -57,6 +74,7 @@
   <string name="did_you_know">آیا می‌دانستید که؟</string>
   <string name="undo">واگردانی</string>
   <string name="tab_closed">زبانه بسته شد</string>
+  <string name="tabs_closed">زبانه‌ها بسته شدند</string>
   <string name="bookmark_added">نشانک افزوده شد</string>
   <string name="rate_dialog_title">لطفا به ما امتیاز بدهید</string>
   <string name="rate_dialog_positive">امتیاز دهید!</string>
@@ -64,6 +82,8 @@
   <string name="rate_dialog_neutral">بعداً</string>
   <string name="open">گشودن</string>
   <string name="bookmark_removed">نشانک حذف شد</string>
+  <string name="pref_newtab_background_title">گشودن زبانهٔ جدید در پس‌زمینه</string>
+  <string name="pref_newtab_background_summary">هنگام گشودن یک زبانهٔ جدید، آن در پس‌زمینه باز می‌شود</string>
   <string name="new_tab_snack_bar">مقاله در برگهٔ تازه باز شد</string>
   <string name="speech_prompt_text">صحبت کنید برای جستجوی %s</string>
   <string name="local_zims">دستگاه</string>
@@ -89,6 +109,8 @@
   <string name="tts_pause">مکث</string>
   <string name="tts_resume">ادامه</string>
   <string name="stop">توقف</string>
+  <string name="notification_pause_button_text">مکث</string>
+  <string name="notification_resume_button_text">ادامه</string>
   <string name="internal_storage">داخلی</string>
   <string name="external_storage">خارجی</string>
   <string name="yes">آری</string>
@@ -108,10 +130,11 @@
   <string name="do_not_ask_anymore">لطفاً دیگر درخواست نکنید</string>
   <string name="your_languages">زبان‌های انتخاب‌شده:</string>
   <string name="other_languages">زبان‌های دیگر:</string>
+  <string name="crash_checkbox_language">تنظیمات زبان شما</string>
   <string name="crash_checkbox_device">جزئیات دستگاه</string>
   <string name="crash_button_confirm">ارسال جزئیات</string>
   <string name="shortcut_disabled_message">میانبر موجود نیست</string>
-  <string name="new_tab_shortcut_label">برگهٔ جدید</string>
+  <string name="new_tab_shortcut_label">زبانهٔ جدید</string>
   <string name="get_content_shortcut_label">دریافت محتوا</string>
   <string name="articleCount">%s مقاله</string>
   <string name="get_started">شروع کنید</string>
@@ -123,18 +146,28 @@
   <string name="unable_to_add_to_bookmarks">ناتوان از افزودن به نشانک‌ها</string>
   <string name="go_to_previous_page">به صفحهٔ قبل برو</string>
   <string name="go_to_next_page">به صفحهٔ بعد برو</string>
+  <string name="table_of_contents">فهرست محتوا</string>
+  <string name="select_language">انتخاب زبان</string>
   <string name="save_languages">ذخیرهٔ زبان‌ها</string>
+  <string name="all_languages">همهٔ زبان‌ها</string>
+  <string name="no_language_available">هیچ زبانی موجود نیست</string>
   <string name="expand">گسترش</string>
   <string name="history">تاریخچه</string>
-  <string name="search_history" fuzzy="true">تاریخچهٔ جستجو</string>
+  <string name="search_history">جستجوی سابقه</string>
   <string name="selected_items">%1$d انتخاب شد</string>
   <string name="search_bookmarks">جستجوی نشانک‌ها</string>
+  <string name="switch_tabs">تعویض زبانه‌ها</string>
   <string name="close_all_tabs">بستن همهٔ زبانه‌ها</string>
+  <string name="close_tab">بستن زبانه</string>
   <string name="could_not_restore_tabs">ناتوان در بازیابی زبانه‌ها.</string>
+  <string name="pending_state">در انتظار</string>
+  <string name="running_state">در حال انجام</string>
   <string name="complete">کامل</string>
-  <string name="failed_state">با شکست مواجه شد: %s</string>
+  <string name="paused_state">متوقف</string>
+  <string name="failed_state">ناموفق: %s</string>
   <string name="save">ذخیره</string>
   <string name="note">یادداشت</string>
+  <string name="take_notes">یادداشت‌برداری</string>
   <string name="wiki_article_title">عنوان مقالهٔ ویکی</string>
   <string name="note_save_unsuccessful">ذخیرهٔ یادداشت با موفقیت انجام گرفت</string>
   <string name="note_delete_successful">حذف یادداشت با موفقیت انجام گرفت</string>
@@ -161,8 +194,18 @@
   <string name="delete_bookmarks" fuzzy="true">نشانک‌ها حذف شوند؟</string>
   <string name="send_report">ارسال گزارش تشخیصی</string>
   <string name="diagnostic_report">گزارش تشخیصی</string>
+  <string name="pref_text_zoom_title">بزرگنمایی متن</string>
+  <string name="search_open_in_new_tab">گشودن در زبانهٔ جدید</string>
+  <string name="open_library">گشودن کتابخانه</string>
+  <string name="tab_restored">زبانه بازیابی شد</string>
+  <string name="tabs_restored">زبانه‌ها بازیابی شدند</string>
+  <string name="action_copy">رونویسی</string>
+  <string name="move">انتقال</string>
+  <string name="how_to_update_content">چگونه محتوا را به‌روزرسانی کنیم؟</string>
+  <string name="update_content_description">برای به‌روزرسانی محتوا (یک فایل ZIM) باید آخرین نسخه کامل همین محتوا را بارگیری کنید. می‌توانید این کار را از طریق بخش دانلود انجام دهید.</string>
   <string name="allowed">مجاز</string>
   <string name="not_allowed">مجاز نیست</string>
+  <string name="swipe_down_for_library">برای کتابخانه، انگشت خود را به پایین بکشید</string>
   <string name="no_notes">یادداشتی موجود نیست</string>
   <string name="notes_from_all_books">مشاهدهٔ یادداشت‌ها از تمام کتاب‌ها</string>
   <string name="search_notes">جستجوی یادداشت‌ها</string>
@@ -171,10 +214,20 @@
   <string name="open_article">گشودن مقاله</string>
   <string name="delete_note_dialog_message">نکته: یادداشت‌ها از مخزن شما حذف نشده‌اند</string>
   <string name="delete_selected_notes">حذف یادداشت‌های منتخب؟</string>
+  <string name="download_tts_language_title">این زبان را برای قابلیت خواندن با صدای بلند دانلود کنید</string>
   <string name="go_to_settings_label">برو به تنظیمات</string>
   <string name="click_nearby_devices_message">برای جستجوی دستگاه‌های نزدیک اینجا کلیک کنید.</string>
   <string name="your_device_name_message">نام دستگاه شما در اینجا نمایش خواهد یافت.</string>
   <string name="resuming_state">در حال از سر گیری</string>
   <string name="downloading_state">در حال دریافت</string>
   <string name="download_failed_state">ناموفق</string>
+  <string name="searchview_description_clear">پاک کردن جستار</string>
+  <string name="do_you_mean">آیا منظورتان این بود:</string>
+  <string name="suggested_search_icon_description">برای استفاده از این پیشنهاد و تصحیح خودکار جستجوی خود، ضربه بزنید</string>
+  <string name="file_system_scan_dialog_title">فضای ذخیره‌سازی را برای کتاب‌ها اسکن کند؟</string>
+  <string name="file_system_scan_dialog_message">کیویکس حافظه دستگاه شما را اسکن می‌کند و کتاب‌های موجود را در اینجا فهرست می‌کند.</string>
+  <string name="added_to_homescreen">میانبر به صفحهٔ خانه اضافه شد</string>
+  <string name="add_shortcut_title">افزودن میانبر</string>
+  <string name="shortcut_name_label">نام میانبر</string>
+  <string name="open_xiaomi_settings">گشودن تنظیمات</string>
 </resources>

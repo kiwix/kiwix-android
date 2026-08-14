@@ -130,6 +130,9 @@
   <string name="rate_dialog_positive">評價！</string>
   <string name="no_thanks">不用了，謝謝</string>
   <string name="rate_dialog_neutral">以後再說</string>
+  <string name="pref_rate_app_title">評分 %s</string>
+  <string name="pref_rate_app_summary">在 Play Store 上評分 %s</string>
+  <string name="pref_rating_category_title">App 評分</string>
   <string name="open">開啟</string>
   <string name="bookmark_removed">書籤已移除</string>
   <string name="pref_newtab_background_title">以背景執行來開啟新的頁籤</string>
@@ -371,7 +374,7 @@
   <string name="swipe_down_for_library">向下滑動文庫</string>
   <string name="reaching_remote_library">取得遠距文庫</string>
   <string name="parsing_remote_library">解析遠端文庫</string>
-  <string name="starting_downloading_remote_library">開始下載線上文庫</string>
+  <string name="starting_downloading_remote_library">正在載入線上文庫</string>
   <string name="no_notes">沒有註釋</string>
   <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
   <string name="search_notes">搜尋註釋</string>

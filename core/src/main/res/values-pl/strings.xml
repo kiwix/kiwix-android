@@ -10,6 +10,7 @@
 * Macofe
 * McDutchie
 * MohitMali
+* PanWor
 * Rail
 * Rzuwig
 * Stojex
@@ -119,6 +120,9 @@
   <string name="rate_dialog_positive">Oceń!</string>
   <string name="no_thanks">Nie, dziękuję</string>
   <string name="rate_dialog_neutral">Później</string>
+  <string name="pref_rate_app_title">Oceń %s</string>
+  <string name="pref_rate_app_summary">Oceń %s w Sklepie Play</string>
+  <string name="pref_rating_category_title">Ocena aplikacji</string>
   <string name="open">Otwórz</string>
   <string name="bookmark_removed">Usunięto zakładkę</string>
   <string name="pref_newtab_background_title">Otwórz nowe okno w tle</string>
@@ -339,7 +343,7 @@
   <string name="swipe_down_for_library">Przesuń w dół, aby pobrać bibliotekę</string>
   <string name="reaching_remote_library">Łączenie ze zdalną biblioteką</string>
   <string name="parsing_remote_library">Analiza zdalnej biblioteki</string>
-  <string name="starting_downloading_remote_library">Rozpoczynanie pobierania biblioteki</string>
+  <string name="starting_downloading_remote_library" fuzzy="true">Rozpoczynanie pobierania biblioteki</string>
   <string name="no_notes">Brak notatek</string>
   <string name="search_notes">Szukaj notatek</string>
   <string name="choose_your_action">Wybierz co chcesz zrobić</string>
