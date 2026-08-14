@@ -986,7 +986,7 @@ abstract class CoreReaderViewModel(
 
   override fun openExternalUrl(intent: Intent) {
     launchInViewModelScope {
-      externalLinkOpener.openExternalUrl(intent, lifecycleScope = this)
+      externalLinkOpener.openExternalUrl(intent)
     }
   }
 
