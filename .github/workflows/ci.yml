@@ -24,6 +24,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -60,7 +61,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create unit test coverage
         if: ${{ matrix.api-level==30 }}
@@ -71,7 +72,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
@@ -89,7 +90,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
@@ -117,7 +118,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: 30
-          target: default
+          target: ${{ matrix.target }}
           arch: x86_64
           profile: pixel_2
           ram-size: 3072M
@@ -148,6 +149,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -184,14 +186,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
@@ -209,7 +211,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
@@ -228,6 +230,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -264,14 +267,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
@@ -289,7 +292,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
@@ -308,6 +311,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -344,14 +348,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
           ram-size: 4096M
@@ -369,7 +373,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
           ram-size: 4096M
