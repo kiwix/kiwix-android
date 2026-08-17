@@ -123,7 +123,7 @@ class DownloadMonitorService : Service() {
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
     scope?.launch {
-      delay(timeMillis = 3000)
+      delay(timeMillis = 1000)
       fetch.getDownloadsWithStatus(listOf(Status.QUEUED, Status.FAILED)) { downloadsToResume ->
         downloadsToResume.forEach { download ->
           if (download.status == Status.FAILED) {
@@ -375,9 +375,13 @@ class DownloadMonitorService : Service() {
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
       taskFlow.tryEmit {
-        fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+        fetchDownloadNotificationManager.showDownloadPauseNotification(
+          fetch,
+          download,
+          isOffline = true
+        )
       }
-      update(download, true)
+      update(download)
     }
 
     override fun onPaused(download: Download) {
@@ -414,7 +418,11 @@ class DownloadMonitorService : Service() {
 
     override fun onWaitingNetwork(download: Download) {
       taskFlow.tryEmit {
-        fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+        fetchDownloadNotificationManager.showDownloadPauseNotification(
+          fetch,
+          download,
+          isOffline = true
+        )
       }
       update(download)
     }
@@ -435,9 +443,23 @@ class DownloadMonitorService : Service() {
           }
         }
 
-        // Pause notification when someone pauses it or when network error set the state to paused
-        if (download.isPaused() || download.status == Status.FAILED || download.status == Status.QUEUED) {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+        // Show appropriate pause notification based on why the download stopped:
+        // - FAILED/QUEUED = network error → show "Paused (device is offline)"
+        // - PAUSED = user explicitly paused → show standard "Paused" with Resume button
+        when {
+          download.status == Status.FAILED || download.status == Status.QUEUED ->
+            fetchDownloadNotificationManager.showDownloadPauseNotification(
+              fetch,
+              download,
+              isOffline = true
+            )
+
+          download.isPaused() ->
+            fetchDownloadNotificationManager.showDownloadPauseNotification(
+              fetch,
+              download,
+              isOffline = false
+            )
         }
         if (updateForeGroundService) {
           stopForegroundServiceIfNoActiveDownloads(fetch)
