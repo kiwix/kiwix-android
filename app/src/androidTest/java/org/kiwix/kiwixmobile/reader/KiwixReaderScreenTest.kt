@@ -379,7 +379,10 @@ class KiwixReaderScreenTest : BaseActivityTest() {
   }
 
   private fun ReaderRobot.startReadAloudFeature(composeTestRule: ComposeContentTestRule) {
-    checkZimFileLoadedSuccessful(composeTestRule)
+    // Since this is a WebView, the reader screen (and its toolbar) can be visible before the
+    // article content has actually finished rendering. Assert the article itself loaded before
+    // interacting with the toolbar, instead of assuming the screen becoming visible is enough.
+    checkZimFileLoadedSuccessful(composeTestRule, "Ray Charles")
     clickOnReadAloudMenuItem(composeTestRule)
     try {
       assertTTSLanguageIsNotSupportedDialogDisplayed(composeTestRule)

@@ -30,6 +30,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
@@ -54,6 +55,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilDisplayedWithScrollNudge
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 
@@ -151,8 +153,7 @@ class LibraryRobot : BaseRobot() {
         bookItemList.performScrollToIndex(index)
         zimFileNodes[index].performClick()
       }
-      // Scroll to top so that it shows the delete icon in the top bar.
-      bookItemList.performScrollToIndex(ZERO)
+      bookItemList.performTouchInput { swipeDown() }
       clickOnFileDeleteIcon(composeTestRule)
       clickOnDeleteZimFile(composeTestRule)
       composeTestRule.waitUntilTimeout()
@@ -236,9 +237,7 @@ class LibraryRobot : BaseRobot() {
   fun clickOnReaderScreen(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-          onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).isDisplayed()
-        }
+        waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_READER_ITEM_TESTING_TAG)
         onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
       }
     })
@@ -247,9 +246,7 @@ class LibraryRobot : BaseRobot() {
   fun clickOnLocalLibraryScreen(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-          onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).isDisplayed()
-        }
+        waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG)
         onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
       }
     })

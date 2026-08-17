@@ -25,7 +25,9 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.printToLog
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
@@ -60,6 +62,10 @@ fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyP
 class ReaderRobot : BaseRobot() {
   private var retryCountForClickOnUndoButton = 5
 
+  companion object {
+    private const val TAG = "ReaderRobot"
+  }
+
   fun checkZimFileLoadedSuccessful(
     composeTestRule: ComposeContentTestRule,
     articlePageContent: String? = null
@@ -68,13 +74,16 @@ class ReaderRobot : BaseRobot() {
       waitUntil(FIFTEEN_SECOND_DELAY) {
         onNodeWithTag(READER_SCREEN_TESTING_TAG).isDisplayed()
       }
+      Log.d(TAG, "Reader screen is displayed.")
       // Wait for a few second to fully load the article in reader.
       waitUntilTimeout()
       articlePageContent?.let {
         assertArticleLoaded(it)
+        Log.d(TAG, "Article content '$it' loaded successfully in the WebView.")
       }
       // Wait for saving the tabs history.
-      waitUntilTimeout()
+      waitUntilTimeout(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST)
+      Log.d(TAG, "Finished waiting for the tabs/reader history to be saved.")
     }
   }
 
@@ -159,7 +168,7 @@ class ReaderRobot : BaseRobot() {
           .fetchSemanticsNodes().isNotEmpty()
       }
     } catch (e: ComposeTimeoutException) {
-      Log.e("ReaderRobot", "The tab icon is not visible due to scroll. Original exception: $e")
+      Log.e(TAG, "The tab icon is not visible due to scroll. Original exception: $e")
       // We will implement the scrolling logic from test cases to find the tab icon in the future.
       // For now, we will just return and not assert the tab count.
       return
@@ -203,8 +212,18 @@ class ReaderRobot : BaseRobot() {
 
   fun clickOnReadAloudMenuItem(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-        onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).isDisplayed()
+      try {
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).isDisplayed()
+        }
+      } catch (e: ComposeTimeoutException) {
+        // The overflow menu only renders once the reader's menu state considers the current
+        // page's URL valid (see ReaderMenuState/CoreReaderViewModel). Dump the full semantics
+        // tree so CI logs show exactly what was on screen (e.g. is the toolbar empty, did tab
+        // restoration leave the wrong page selected) instead of only the bare timeout.
+        Log.e(TAG, "Overflow menu button never appeared. Dumping current UI tree for debugging.")
+        onRoot().printToLog(TAG)
+        throw e
       }
       onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
       waitUntilTimeout()

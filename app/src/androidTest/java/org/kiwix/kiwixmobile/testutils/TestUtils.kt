@@ -25,8 +25,11 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
+import androidx.compose.ui.test.ComposeTimeoutException
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.core.content.ContextCompat
@@ -286,6 +289,37 @@ object TestUtils {
   fun ComposeContentTestRule.refresh() {
     onNodeWithTag(SWIPE_REFRESH_TESTING_TAG)
       .performTouchInput { swipeDown() }
+  }
+
+  /**
+   * Waits for [testTag] to be displayed, same as
+   * `waitUntil { onNodeWithTag(testTag).isDisplayed() }`.
+   *
+   * Screens with a collapsing TopAppBar/BottomAppBar (`BottomAppBarScrollBehavior`,
+   * `TopAppBarScrollBehavior`) can be left with the bar scrolled off-screen after a test performs
+   * a *programmatic* scroll (e.g. `performScrollToIndex`/`animateScrollToItem`), because those
+   * APIs move the list directly without dispatching nested-scroll deltas the way a real touch
+   * drag does - the app's own `LocalLibraryBackToTopButton` has to manually reset the scroll
+   * behaviour's offsets for the same reason. If the node isn't displayed in time, this performs a
+   * real swipeDown() gesture (which does dispatch nested scroll and so un-collapses the bars,
+   * exactly like a user's own swipe would) and retries once before giving up.
+   */
+  fun ComposeContentTestRule.waitUntilDisplayedWithScrollNudge(
+    testTag: String,
+    timeoutMillis: Long = TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+  ) {
+    try {
+      waitUntil(timeoutMillis) { onNodeWithTag(testTag).isDisplayed() }
+    } catch (_: ComposeTimeoutException) {
+      Log.w(
+        "TestUtils",
+        "'$testTag' was not displayed after ${timeoutMillis}ms. Nudging with a swipe " +
+          "gesture in case a collapsing app bar was left scrolled off-screen, then retrying."
+      )
+      onRoot().performTouchInput { swipeDown() }
+      waitForIdle()
+      waitUntil(timeoutMillis) { onNodeWithTag(testTag).isDisplayed() }
+    }
   }
 
   fun ComposeContentTestRule.waitUntilTimeout(timeoutMillis: Long = TEST_PAUSE_MS.toLong()) {

@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.FIVE_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilDisplayedWithScrollNudge
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun downloadRobot(func: DownloadRobot.() -> Unit) =
@@ -66,18 +67,14 @@ class DownloadRobot : BaseRobot() {
   private val searchZIMFileTitle = "D3 js docs"
   fun clickLibraryOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-        onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).isDisplayed()
-      }
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG)
       onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
     }
   }
 
   fun clickDownloadOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-        onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).isDisplayed()
-      }
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG)
       onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
     }
   }
@@ -95,7 +92,7 @@ class DownloadRobot : BaseRobot() {
             .fetchSemanticsNodes().isNotEmpty()
         }
         Log.d(KIWIX_DOWNLOAD_TEST, "Online library loaded")
-        return
+        return@waitForDataToLoad
       } catch (_: ComposeTimeoutException) {
         val nodeCount =
           composeTestRule
