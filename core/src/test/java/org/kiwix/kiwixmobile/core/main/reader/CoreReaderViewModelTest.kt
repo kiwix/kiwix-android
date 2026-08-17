@@ -93,7 +93,7 @@ internal class CoreReaderViewModelTest {
   private val externalLinkOpener = mockk<ExternalLinkOpener>()
   private val unsupportedMimeTypeHandler = mockk<UnsupportedMimeTypeHandler>()
   private val readerWebViewManager = mockk<ReaderWebViewManager>(relaxed = true)
-  private val zimReaderContainer = mockk<ZimReaderContainer>()
+  private val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
   private val zimFileManager = mockk<ZimFileManager>()
   private val kiwixPermissionChecker = mockk<KiwixPermissionChecker>()
   private val repositoryActions = mockk<MainRepositoryActions>()
@@ -1068,9 +1068,8 @@ internal class CoreReaderViewModelTest {
       every { readAloudManager.tts } returns mockTts
 
       val mockTask = mockk<KiwixTextToSpeech.TTSTask>()
-      every { mockTts.currentTTSTask } returns mockTask
-
-      every { mockTask.paused } returns false
+      mockTts.currentTTSTask = mockTask
+      mockTask.paused = false
       every { readAloudManager.pauseTts() } just Runs
 
       // Only call if state differs i.e- it.paused != isPauseTTS
@@ -1270,6 +1269,65 @@ internal class CoreReaderViewModelTest {
 
       verify { readAloudManager.initializeTTS(false) }
       assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
+    }
+  }
+
+  @Nested
+  inner class TabMenuClicked {
+    @Test
+    fun whenTabSwitcherShown_hidesTabSwitcherAndSelectsTab() = runTest {
+      val viewModel = spyk(viewModel)
+
+      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      coEvery { viewModel.hideTabSwitcher() } just Runs
+      coEvery { viewModel.selectTab(any()) } just Runs
+
+      viewModel.onTabMenuClicked()
+      advanceUntilIdle()
+
+      coVerify { viewModel.hideTabSwitcher() }
+      coVerify { viewModel.selectTab(any()) }
+    }
+
+    @Test
+    fun whenTabSwitcherHidden_showsTabSwitcher() = runTest {
+      viewModel.getUiState().update { it.copy(showTabSwitcher = false) }
+
+      viewModel.onTabMenuClicked()
+      advanceUntilIdle()
+
+      assertThat(viewModel.uiState.value.showTabSwitcher).isTrue
+    }
+  }
+
+  @Test
+  fun onHomeMenuClicked_whenTabSwitcherShown_hidesTabSwitcher() = runTest {
+    val viewModel = spyk(viewModel)
+
+    viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+    coEvery { viewModel.hideTabSwitcher() } just Runs
+
+    viewModel.onHomeMenuClicked()
+    advanceUntilIdle()
+
+    // Only show is tab switcher is shown
+    coVerify { viewModel.hideTabSwitcher() }
+
+    coVerify {
+      readerWebViewManager.newMainPageTab(
+        match { config -> config.url == null }
+      )
+    }
+  }
+
+  @Test
+  fun onAddNoteMenuClicked_emitsShowAddNoteDialogEffect() = runTest {
+    viewModel.effects.test {
+      viewModel.onAddNoteMenuClicked()
+      advanceUntilIdle()
+
+      val effect = awaitItem()
+      assertThat(effect).isEqualTo(CoreReaderViewModel.ReaderEffect.ShowAddNoteDialog(mockWebView))
     }
   }
 
