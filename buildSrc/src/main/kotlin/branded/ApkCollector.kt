@@ -20,12 +20,11 @@ package branded
 
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.BuiltArtifactsLoader
-import com.android.build.api.variant.BuiltArtifact
 import com.android.build.api.variant.Variant
-import org.gradle.api.provider.Provider
+import com.android.build.api.variant.VariantOutputConfiguration
 import org.gradle.api.file.Directory
+import org.gradle.api.provider.Provider
 import java.io.File
-import kotlin.text.get
 
 class ApkCollector {
   data class ApkInfo(
@@ -53,9 +52,7 @@ class ApkCollector {
       ?: error("No APK artifacts found for flavor '$flavor'")
 
     return artifacts.elements
-      .filterNot { artifact ->
-        artifact.filters.any { it.identifier == "universal" }
-      }
+      .filterNot { it.outputType == VariantOutputConfiguration.OutputType.UNIVERSAL }
       .sortedBy { it.versionCode }
       .map {
         ReleaseApk(
