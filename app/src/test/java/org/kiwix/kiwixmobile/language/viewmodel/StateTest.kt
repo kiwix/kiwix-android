@@ -34,9 +34,9 @@ class StateTest {
       val content = Content(listOf(language(), language(isActive = true)))
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MAX_VALUE),
+          HeaderItem(HeaderItem.SELECTED),
           LanguageItem(language(isActive = true)),
-          HeaderItem(Long.MIN_VALUE),
+          HeaderItem(HeaderItem.OTHER),
           LanguageItem(language())
         )
       )
@@ -50,8 +50,30 @@ class StateTest {
         ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
-          HeaderItem(Long.MIN_VALUE),
+          HeaderItem(HeaderItem.OTHER),
           LanguageItem(language(language = "matchesFilter"))
+        )
+      )
+    }
+
+    @Test
+    fun `select updates language items and moves them to selected section`() {
+      val lang1 = language(id = 1L, language = "German", isActive = false)
+      val lang2 = language(id = 2L, language = "Italian", isActive = false)
+      val content = Content(listOf(lang1, lang2))
+
+      val initialOrder = content.viewItems
+      assertThat(initialOrder).hasSize(3) // 1 header (OTHER) + 2 languages
+
+      val selectedLangItem = LanguageItem(lang1)
+      val updatedContent = content.select(selectedLangItem)
+
+      assertThat(updatedContent.viewItems).isEqualTo(
+        listOf(
+          HeaderItem(HeaderItem.SELECTED),
+          LanguageItem(lang1.copy(active = true)),
+          HeaderItem(HeaderItem.OTHER),
+          LanguageItem(lang2)
         )
       )
     }
