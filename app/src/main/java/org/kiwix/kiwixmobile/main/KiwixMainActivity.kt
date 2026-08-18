@@ -90,7 +90,6 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
-const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
 
 @AndroidEntryPoint
@@ -315,7 +314,6 @@ class KiwixMainActivity : CoreMainActivity() {
             return toast(R.string.cannot_open_file)
           }
           lifecycleScope.launch {
-            delay(OPENING_ZIM_FILE_DELAY)
             val book = libkiwixBookOnDisk.bookById(zimId)
               ?: return@launch toast(R.string.cannot_open_file)
             openPage("$CONTENT_PREFIX$page", book.zimReaderSource)
@@ -335,10 +333,7 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun handleShortcutIntent(intent: Intent?) {
     val zimFileUri = intent?.getStringExtra(ZIM_FILE_URI_KEY) ?: return
     val pageUrl = intent.getStringExtra(PAGE_URL_KEY)
-    lifecycleScope.launch {
-      delay(OPENING_ZIM_FILE_DELAY)
-      openZimFromFilePath(zimFileUri, pageUrl)
-    }
+    openZimFromFilePath(zimFileUri, pageUrl)
   }
 
   fun clearIntentDataAndAction() {
@@ -358,7 +353,6 @@ class KiwixMainActivity : CoreMainActivity() {
       notificationManager.cancel(notificationId)
     }
     lifecycleScope.launch {
-      delay(OPENING_ZIM_FILE_DELAY)
       libkiwixBookOnDisk.bookMatching(openFileTitle)?.let { bookOnDiskEntity ->
         openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
       }
