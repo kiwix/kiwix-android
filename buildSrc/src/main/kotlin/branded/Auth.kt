@@ -18,7 +18,6 @@
 
 package branded
 
-import com.android.build.gradle.api.ApkVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.FileContent
@@ -73,7 +72,7 @@ class Transaction(
 ) {
   fun uploadExpansionTo(
     file: File,
-    versionCode: Int
+    versionCode: Int?
   ): ExpansionFilesUploadResponse = publisher.edits().expansionfiles()
     .upload(
       packageName,
@@ -83,22 +82,20 @@ class Transaction(
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
 
-  @Suppress("DEPRECATION")
-  fun attachExpansionTo(expansionCode: Int, apkVariantOutput: ApkVariantOutput): ExpansionFile =
+  fun attachExpansionTo(expansionCode: Int?, apk: ReleaseApk): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
       editId,
-      apkVariantOutput.versionCodeOverride,
+      apk.versionCode,
       "main",
       ExpansionFile().apply { referencesVersion = expansionCode }
     ).execute().prettyPrint()
 
-  @Suppress("DEPRECATION")
-  fun uploadApk(apkVariantOutput: ApkVariantOutput) {
+  fun uploadApk(apk: ReleaseApk) {
     publisher.edits().apks().upload(
       packageName,
       editId,
-      FileContent("application/octet-stream", apkVariantOutput.outputFile)
+      FileContent("application/octet-stream", apk.apkFile)
     ).execute().prettyPrint()
   }
 
@@ -110,18 +107,16 @@ class Transaction(
     ).execute().prettyPrint()
   }
 
-  @Suppress("DEPRECATION")
-  fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
+  fun addToTrackInDraft(apks: List<ReleaseApk>): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
-        name = apkVariants[0].versionNameOverride
-        versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
+        name = apks.first().versionName
+        versionCodes = apks.map { it.versionCode?.toLong() }
       })
       track = "internal"
     }).execute().prettyPrint()
 
-  @Suppress("DEPRECATION")
   fun addBundleToTrackInDraft(versionCode: Int?, versionName: String?): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
@@ -145,3 +140,9 @@ fun AndroidPublisher.transactionWithCommit(packageName: String, func: Transactio
 }
 
 private fun <T : GenericJson> T.prettyPrint() = also { println(it.toPrettyString()) }
+
+data class ReleaseApk(
+  val apkFile: File,
+  val versionCode: Int?,
+  val versionName: String?
+)

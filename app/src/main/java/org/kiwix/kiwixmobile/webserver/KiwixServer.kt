@@ -45,7 +45,7 @@ class KiwixServer @Inject constructor(
   class Factory @Inject constructor(
     private val context: Context,
     private val zimReaderContainer: ZimReaderContainer,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
   ) {
     @Suppress("NestedBlockDepth")
     suspend fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer =

@@ -18,8 +18,6 @@
 
 package plugin
 
-import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.LibraryPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -30,26 +28,16 @@ class KiwixConfigurationPlugin : Plugin<Project> {
 
   override fun apply(target: Project) {
     allProjectConfigurer.applyPlugins(target)
-    target.plugins.all {
-      when (this) {
-        is LibraryPlugin -> {
-          doDefaultConfiguration(target, true)
-        }
-
-        is AppPlugin -> {
-          doDefaultConfiguration(target, false)
-          appConfigurer.configure(target)
-        }
-      }
+    target.pluginManager.withPlugin("com.android.library") {
+      allProjectConfigurer.configureLibraryExtension(target)
+    }
+    target.pluginManager.withPlugin("com.android.application") {
+      allProjectConfigurer.configureApplicationExtension(target)
+      appConfigurer.configure(target)
     }
     allProjectConfigurer.configurePlugins(target)
     allProjectConfigurer.applyScripts(target)
     allProjectConfigurer.configureDependencies(target)
     allProjectConfigurer.configureJacoco(target)
-  }
-
-  private fun doDefaultConfiguration(target: Project, isLibrary: Boolean) {
-    allProjectConfigurer.configureBaseExtension(target, isLibrary)
-    allProjectConfigurer.configureCommonExtension(target)
   }
 }

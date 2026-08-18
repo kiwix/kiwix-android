@@ -40,7 +40,7 @@ import javax.inject.Inject
 class ObserveOnlineLibraryItems @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val fat32Checker: Fat32Checker,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   operator fun invoke(
     localBooks: Flow<List<Book>>,

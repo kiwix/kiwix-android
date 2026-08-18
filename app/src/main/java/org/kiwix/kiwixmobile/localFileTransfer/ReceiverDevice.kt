@@ -42,8 +42,8 @@ import java.net.ServerSocket
  */
 internal class ReceiverDevice(
   private val wifiDirectManager: WifiDirectManager,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   suspend fun receive(): Boolean {
     return try {

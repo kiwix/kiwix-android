@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 class FileSearch @Inject constructor(
   private val context: Context,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val zimFileExtensions = arrayOf("zim", "zimaa")
 

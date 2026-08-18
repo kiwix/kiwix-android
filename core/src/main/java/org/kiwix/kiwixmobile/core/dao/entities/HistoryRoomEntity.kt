@@ -32,7 +32,7 @@ data class HistoryRoomEntity(
   val zimId: String,
   val zimName: String,
   val zimFilePath: String?,
-  @TypeConverters(ZimSourceRoomConverter::class)
+  @param:TypeConverters(ZimSourceRoomConverter::class)
   var zimReaderSource: ZimReaderSource?,
   val favicon: String?,
   var historyUrl: String,

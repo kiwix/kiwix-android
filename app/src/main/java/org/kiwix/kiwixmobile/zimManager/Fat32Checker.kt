@@ -44,7 +44,7 @@ import java.io.File
 class Fat32Checker constructor(
   kiwixDataStore: KiwixDataStore,
   private val fileSystemCheckers: List<FileSystemChecker>,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val _fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)

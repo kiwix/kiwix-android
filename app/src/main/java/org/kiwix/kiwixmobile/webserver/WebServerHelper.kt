@@ -54,8 +54,8 @@ const val FINDING_IP_ADDRESS_RETRY_TIME = 1_000L
 class WebServerHelper @Inject constructor(
   private val kiwixServerFactory: KiwixServer.Factory,
   private val ipAddressCallbacks: IpAddressCallbacks,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   private var kiwixServer: KiwixServer? = null
   private var isServerStarted = false

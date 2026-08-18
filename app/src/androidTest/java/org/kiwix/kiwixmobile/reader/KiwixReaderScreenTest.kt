@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -40,6 +42,7 @@ import okhttp3.Request
 import okhttp3.ResponseBody
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -63,6 +66,8 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class KiwixReaderScreenTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -125,6 +130,7 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       // Click on back button showing in navigation bar to come back to previous screen.
       clickOnNavigationIcon(composeTestRule)
+      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
       assertTabsRestored(composeTestRule)
     }
   }
@@ -151,6 +157,7 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       composeTestRule.waitForIdle()
       // click reader bottomAppBar icon to come back to reader screen.
       clickOnReaderScreenInBottomAppBar(composeTestRule)
+      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
       assertTabsRestored(composeTestRule)
     }
   }
@@ -261,39 +268,42 @@ class KiwixReaderScreenTest : BaseActivityTest() {
 
   @Test
   fun testReadAloudFeature() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-      activityScenario.onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(KiwixDestination.Library.route)
-      }
-      composeTestRule.waitForIdle()
-      var downloadingZimFile: File? = null
-      testFlakyView({
-        downloadingZimFile = getDownloadingZimFile()
-        getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
-          .use { response ->
-            if (response.isSuccessful) {
-              response.body?.let { responseBody ->
-                writeZimFileData(responseBody, downloadingZimFile)
-              }
-            } else {
-              throw RuntimeException(
-                "Download Failed. Error: ${response.message}\n" +
-                  " Status Code: ${response.code}"
-              )
+    Assume.assumeTrue("Text-to-speech is not available on this device", isTextToSpeechAvailable())
+    Assume.assumeTrue(
+      "The TTS feature is not works in API level 25, so skipping the test",
+      Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
+    )
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(KiwixDestination.Library.route)
+    }
+    composeTestRule.waitForIdle()
+    var downloadingZimFile: File? = null
+    testFlakyView({
+      downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
+        .use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, downloadingZimFile)
             }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
           }
-      })
-      openKiwixReaderScreenWithFile(downloadingZimFile!!)
-      composeTestRule.waitForIdle()
-      reader {
-        startReadAloudFeature(composeTestRule)
-        // Open history screen.
-        topLevel {
-          clickHistoryOnSideNav(kiwixMainActivity, composeTestRule) {
-            clickOnHistoryItem(composeTestRule)
-            startReadAloudFeature(composeTestRule)
-          }
+        }
+    })
+    openKiwixReaderScreenWithFile(downloadingZimFile!!)
+    composeTestRule.waitForIdle()
+    reader {
+      startReadAloudFeature(composeTestRule)
+      // Open history screen.
+      topLevel {
+        clickHistoryOnSideNav(kiwixMainActivity, composeTestRule) {
+          clickOnHistoryItem(composeTestRule)
+          startReadAloudFeature(composeTestRule)
         }
       }
     }
@@ -373,7 +383,10 @@ class KiwixReaderScreenTest : BaseActivityTest() {
   }
 
   private fun ReaderRobot.startReadAloudFeature(composeTestRule: ComposeContentTestRule) {
-    checkZimFileLoadedSuccessful(composeTestRule)
+    // Since this is a WebView, the reader screen (and its toolbar) can be visible before the
+    // article content has actually finished rendering. Assert the article itself loaded before
+    // interacting with the toolbar, instead of assuming the screen becoming visible is enough.
+    checkZimFileLoadedSuccessful(composeTestRule, "Ray Charles")
     clickOnReadAloudMenuItem(composeTestRule)
     try {
       assertTTSLanguageIsNotSupportedDialogDisplayed(composeTestRule)
@@ -381,6 +394,45 @@ class KiwixReaderScreenTest : BaseActivityTest() {
     } catch (_: ComposeTimeoutException) {
       assertTTSControlsVisible(composeTestRule)
       clickOnTTSStopButton(composeTestRule)
+    }
+  }
+
+  /**
+   * Check whether the device has a TextToSpeech service available. This is important because
+   * default APIs emulators does not have TTS installed, so running on those devices will fail the test.
+   */
+  private fun hasTextToSpeechService(): Boolean {
+    val intent = Intent(TextToSpeech.Engine.INTENT_ACTION_TTS_SERVICE)
+
+    return context.packageManager
+      .queryIntentServices(intent, 0)
+      .isNotEmpty()
+  }
+
+  /**
+   * Check whether the device has a TextToSpeech service available and can be initialized successfully.
+   * This is important because default APIs emulators does not have TTS installed, so running on those devices will fail the test.
+   * @return true if TTS service is available and can be initialized successfully, false otherwise.
+   */
+  private fun isTextToSpeechAvailable(): Boolean {
+    if (!hasTextToSpeechService()) {
+      return false
+    }
+    val latch = CountDownLatch(1)
+    var textToSpeech: TextToSpeech? = null
+    var initializationSuccessful = false
+
+    return try {
+      textToSpeech = TextToSpeech(context) { status ->
+        initializationSuccessful = status == TextToSpeech.SUCCESS
+        latch.countDown()
+      }
+
+      latch.await(5, TimeUnit.SECONDS) && initializationSuccessful
+    } catch (_: Exception) {
+      false
+    } finally {
+      textToSpeech?.shutdown()
     }
   }
 

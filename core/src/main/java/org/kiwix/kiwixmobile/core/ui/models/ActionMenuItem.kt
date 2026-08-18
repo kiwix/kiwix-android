@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 
 data class ActionMenuItem(
   val icon: IconItem? = null,
-  @StringRes val contentDescription: Int,
+  @param:StringRes val contentDescription: Int,
   val onClick: () -> Unit,
   val isEnabled: Boolean = true,
   val iconButtonText: String = "",

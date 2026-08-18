@@ -57,7 +57,7 @@ object ServerUtils {
   }
 
   private fun formatLocalAddress(inetAddress: InetAddress): String =
-    (inetAddress.hostAddress + "\n").takeIf { inetAddress.isSiteLocalAddress }.orEmpty()
+    (inetAddress.hostAddress.orEmpty() + "\n").takeIf { inetAddress.isSiteLocalAddress }.orEmpty()
 
   @Suppress("MagicNumber")
   fun formatIpForAndroidPie(ip: String): String {

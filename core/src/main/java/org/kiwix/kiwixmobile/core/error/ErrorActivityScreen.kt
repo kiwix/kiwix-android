@@ -43,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -68,6 +69,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTY_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+
+const val ERROR_REPORT_DETAILS_LIST_TESTING_TAG = "errorReportDetailsListTestingTag"
 
 @Composable
 fun ErrorActivityScreen(
@@ -169,8 +172,8 @@ private fun DetailsIncludedInErrorReport(
   modifier: Modifier,
   crashMessageAndCheckboxTextColor: Color
 ) {
-  LazyColumn(modifier = modifier) {
-    itemsIndexed(diagnosticDetailsItems) { index, item ->
+  LazyColumn(modifier = modifier.testTag(ERROR_REPORT_DETAILS_LIST_TESTING_TAG)) {
+    itemsIndexed(diagnosticDetailsItems) { _, item ->
       DetailsIncludedItem(item, crashMessageAndCheckboxTextColor)
     }
   }

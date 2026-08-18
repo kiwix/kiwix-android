@@ -18,18 +18,20 @@
 
 package branded
 
-import com.android.build.gradle.internal.dsl.ProductFlavor
+import com.android.build.api.dsl.ApplicationProductFlavor
 import org.gradle.api.NamedDomainObjectContainer
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import java.io.File
 
-typealias ProductFlavors = NamedDomainObjectContainer<out ProductFlavor>
+typealias ProductFlavors = NamedDomainObjectContainer<out ApplicationProductFlavor>
 
 object BrandedApps {
 
-  fun createDynamically(srcFolder: File, productFlavors: ProductFlavors) {
-    productFlavors.create(brandedApps(srcFolder))
+  fun createDynamically(srcFolder: File, productFlavors: ProductFlavors): Map<String, BrandedApp> {
+    val apps = brandedApps(srcFolder).associateBy { it.name }
+    productFlavors.create(apps.values.toList())
+    return apps
   }
 
   private fun brandedApps(srcFolder: File) = srcFolder.walk()
@@ -66,7 +68,7 @@ fun ProductFlavors.create(brandedApp: List<BrandedApp>) {
 fun <T> JSONObject.getAndCast(columnName: String): T =
   getOrDefault(columnName, null) as T
 
-fun ProductFlavor.configureStrings(appName: String) {
+fun ApplicationProductFlavor.configureStrings(appName: String) {
   resValue("string", "app_name", appName)
   resValue("string", "app_search_string", "Search $appName")
 }

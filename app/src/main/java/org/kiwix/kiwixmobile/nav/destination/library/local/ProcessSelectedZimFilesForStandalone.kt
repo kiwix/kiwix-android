@@ -41,7 +41,7 @@ import javax.inject.Inject
 class ProcessSelectedZimFilesForStandalone @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val context: Context,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private var selectedZimFileCallback: SelectedZimFileCallback? = null
 
@@ -98,7 +98,7 @@ class ProcessSelectedZimFilesForStandalone @Inject constructor(
           // Continue processing from the next file
           processSelectedFiles(uris.drop(index + ONE), true)
         }
-        return
+        return@processMultipleFiles
       }
 
       selectedZimFileCallback?.addBookToLibkiwixBookOnDisk(file)

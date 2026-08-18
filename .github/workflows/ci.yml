@@ -14,7 +14,8 @@ permissions:
   contents: read
 
 env:
-  JAVA_VERSION: 17
+  JAVA_VERSION: 21
+  ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 720
 
 jobs:
 
@@ -23,6 +24,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -35,11 +37,11 @@ jobs:
           swap-storage: false
 
       - name: Code checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -53,13 +55,13 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: AVD cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create unit test coverage
         if: ${{ matrix.api-level==30 }}
@@ -70,17 +72,16 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 3072M
+          ram-size: 4096M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          channel: canary
           script: echo "Generated AVD snapshot for caching."
 
       - name: Create instrumentation coverage
@@ -89,19 +90,18 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 3072M
+          ram-size: 4096M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           sdcard-path-or-size: 1024M
           disable-animations: true
           force-avd-creation: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-boot-timeout: 1200
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
@@ -118,7 +118,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: 30
-          target: default
+          target: ${{ matrix.target }}
           arch: x86_64
           profile: pixel_2
           ram-size: 3072M
@@ -126,9 +126,8 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           force-avd-creation: false
-          heap-size: 512M
+          heap-size: 1024M
           script: |
-            bash contrib/ensure-emulator-ready.sh
             ./gradlew :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload coverage to Codecov
@@ -150,8 +149,9 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -162,11 +162,11 @@ jobs:
           swap-storage: false
 
       - name: Code checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -180,21 +180,21 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: AVD cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           force-avd-creation: false
@@ -203,7 +203,6 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          channel: canary
           script: echo "Generated AVD snapshot for caching."
 
       - name: Create instrumentation coverage for PlayStore variant
@@ -212,8 +211,8 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
           ram-size: 4096M
           cores: 4
@@ -224,7 +223,6 @@ jobs:
           heap-size: 1024M
           emulator-boot-timeout: 1200
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
@@ -232,8 +230,9 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -244,11 +243,11 @@ jobs:
           swap-storage: false
 
       - name: Code checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -262,30 +261,29 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: AVD cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 2048M
+          ram-size: 4096M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          channel: canary
           script: echo "Generated AVD snapshot for caching."
 
       - name: Test branded app
@@ -294,19 +292,18 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 2048M
+          ram-size: 4096M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           emulator-boot-timeout: 1200
-          heap-size: 512M
+          heap-size: 1024M
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
@@ -314,8 +311,9 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
+        target: [ default ]
       fail-fast: true
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -326,11 +324,11 @@ jobs:
           swap-storage: false
 
       - name: Code checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -344,30 +342,29 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: AVD cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          ram-size: 2048M
+          ram-size: 4096M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 4
           disable-animations: false
-          heap-size: 512M
+          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          channel: canary
           script: echo "Generated AVD snapshot for caching."
 
       - name: File Opening test on Tablet
@@ -376,32 +373,31 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          ram-size: 2048M
+          ram-size: 4096M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
-          force-avd-creation: true
+          force-avd-creation: false
           sdcard-path-or-size: 1024M
           emulator-boot-timeout: 1200
-          heap-size: 512M
+          heap-size: 1024M
           script: |
-            bash contrib/ensure-emulator-ready.sh
             bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
     name: Code Formatting
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
@@ -420,15 +416,15 @@ jobs:
 
   detekt:
     name: Detekt
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
@@ -446,16 +442,16 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     continue-on-error: true
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
@@ -474,15 +470,15 @@ jobs:
 
   assemble:
     name: Assemble
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}

@@ -64,8 +64,8 @@ class CopyMoveFileHandler @Inject constructor(
   private val fat32Checker: Fat32Checker,
   private val fileOperationHandler: FileOperationHandler,
   private val copyMoveProgressBarController: CopyMoveProgressBarController,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null

@@ -35,7 +35,7 @@ private const val TAG = "MainPresenter"
 
 class MainRepositoryActions @Inject constructor(
   private val dataSource: DataSource,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   suspend fun saveHistory(history: HistoryItem) {
     runCatching {

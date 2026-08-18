@@ -36,9 +36,9 @@ data class DownloadRoomEntity(
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
-  @TypeConverters(StatusConverter::class)
+  @param:TypeConverters(StatusConverter::class)
   val status: Status = Status.NONE,
-  @TypeConverters(ErrorConverter::class)
+  @param:TypeConverters(ErrorConverter::class)
   val error: Error = Error.NONE,
   val progress: Int = -1,
   val bookId: String,
@@ -54,7 +54,7 @@ data class DownloadRoomEntity(
   val size: String,
   val name: String?,
   val favIcon: String,
-  @TypeConverters(PauseReasonConverter::class)
+  @param:TypeConverters(PauseReasonConverter::class)
   val pauseReason: PauseReason = PauseReason.NONE,
   val tags: String? = null
 ) {

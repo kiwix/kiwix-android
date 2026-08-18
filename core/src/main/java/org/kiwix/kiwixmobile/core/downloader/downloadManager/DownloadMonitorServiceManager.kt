@@ -34,7 +34,7 @@ import javax.inject.Singleton
 class DownloadMonitorServiceManager @Inject constructor(
   private val context: Context,
   private val downloadRoomDao: DownloadRoomDao,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   /**
    * Starts the [DownloadMonitorService] if there are any ongoing downloads.

@@ -33,7 +33,7 @@ import java.io.StringReader
 import javax.inject.Inject
 
 class OnlineLibraryManager @Inject constructor(
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   var totalResult = ZERO
   suspend fun parseOPDSStreamAndGetBooks(
@@ -41,7 +41,7 @@ class OnlineLibraryManager @Inject constructor(
     urlHost: String
   ): ArrayList<LibkiwixBook>? =
     runCatching {
-      if (content == null) return null
+      if (content == null) return@parseOPDSStreamAndGetBooks null
       totalResult = extractTotalResults(content)
       val onlineBooksList = arrayListOf<LibkiwixBook>()
       val tempLibrary = Library()
@@ -82,8 +82,8 @@ class OnlineLibraryManager @Inject constructor(
     val cleanBaseUrl = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
     val builder = "$cleanBaseUrl$OPDS_LIBRARY_ENDPOINT".toUri()
       .buildUpon()
-      .appendQueryParameter("start", start.toString())
-      .appendQueryParameter("count", count.toString())
+      .appendQueryParameter("start", "$start")
+      .appendQueryParameter("count", "$count")
 
     query?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("q", it) }
     lang?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("lang", it) }

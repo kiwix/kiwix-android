@@ -81,7 +81,7 @@ Kiwix requires the following permissions to fully work:
 ## Build instructions
 1. Clone [this repository](https://github.com/kiwix/kiwix-android).
 2. Import the project with [Android Studio](https://developer.android.com/studio).
-3. Set the Gradle JDK to Java 17.
+3. Set the Gradle JDK to Java 21.
 4. Run ./gradlew build from the root directory.
 
 Kiwix Android is a multi-module project, in 99% of scenarios you will want to build the `app` module in the `debug` configuration. If you are interested in our branded apps, they have their own repo [kiwix-android-branded](https://github.com/kiwix/kiwix-android-branded).

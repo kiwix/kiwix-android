@@ -41,8 +41,8 @@ import javax.inject.Inject
 
 class OnlineLibraryRepositoryImpl @Inject constructor(
   private val onlineLibraryManager: OnlineLibraryManager,
-  @OPDSKiwixService private val kiwixService: KiwixService,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:OPDSKiwixService private val kiwixService: KiwixService,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : OnlineLibraryRepository {
   override fun fetchOnlineLibrary(
     request: OnlineLibraryRequest

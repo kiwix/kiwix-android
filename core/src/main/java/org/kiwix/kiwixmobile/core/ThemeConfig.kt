@@ -32,7 +32,7 @@ import javax.inject.Inject
 class ThemeConfig @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   val context: Context,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   val isThemeLoaded: MutableStateFlow<Boolean> = MutableStateFlow(false)
 

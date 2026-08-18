@@ -79,7 +79,7 @@ const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
   private val downloadRoomDao: DownloadRoomDao,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DefaultFetchNotificationManager(context) {
   private val notificationBuilderLock = Any()
 
@@ -167,8 +167,8 @@ class FetchDownloadNotificationManager @Inject constructor(
 
   private fun getDownloadedSizeText(downloadedBytes: Long, totalBytes: Long): String {
     if (downloadedBytes <= 0 || totalBytes <= 0) return ""
-    val downloadedText = Byte(downloadedBytes.toString()).humanReadable
-    val totalText = Byte(totalBytes.toString()).humanReadable
+    val downloadedText = Byte("$downloadedBytes").humanReadable
+    val totalText = Byte("$totalBytes").humanReadable
     return "$downloadedText/$totalText"
   }
 
@@ -288,7 +288,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  fun getOpenActionPendingIntent(
+  private fun getOpenActionPendingIntent(
     context: Context,
     downloadNotification: DownloadNotification
   ): PendingIntent =
@@ -338,7 +338,7 @@ class FetchDownloadNotificationManager @Inject constructor(
           downloadRoomDao.getEntityForFileName(downloadTitle)?.title
             ?: downloadTitle
         }
-      return notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      return@getPauseNotification notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setSmallIcon(android.R.drawable.stat_sys_download_done)
         .setContentTitle(notificationTitle)
         .setContentText(

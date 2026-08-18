@@ -139,7 +139,7 @@ class LocalLibraryViewModel @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   private val zimReaderFactory: ZimFileReader.Factory,
   private val deleteFilesUseCase: DeleteFilesUseCase,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(), SelectedZimFileCallback {
   /**
    * Sealed class representing all file selection actions.

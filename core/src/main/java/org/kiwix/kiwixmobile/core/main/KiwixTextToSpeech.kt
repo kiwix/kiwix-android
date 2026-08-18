@@ -312,6 +312,7 @@ class KiwixTextToSpeech internal constructor(
             }
           }
 
+          @Deprecated("Deprecated in Java")
           override fun onError(s: String) {
             Log.e(TAG_KIWIX, "TextToSpeech Error: $s")
             context.toast(R.string.texttospeech_error, Toast.LENGTH_SHORT)

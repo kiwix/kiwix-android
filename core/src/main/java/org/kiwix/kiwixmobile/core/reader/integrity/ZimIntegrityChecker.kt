@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 class ZimIntegrityChecker @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   /**
    * Validates a ZIM file and returns its verification result.

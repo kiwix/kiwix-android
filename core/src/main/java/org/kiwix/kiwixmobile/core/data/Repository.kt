@@ -58,7 +58,7 @@ class Repository @Inject internal constructor(
   private val notesRoomDao: NotesRoomDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DataSource {
   override fun getLanguageCategorizedBooks() =
     booksOnDiskAsListItems()

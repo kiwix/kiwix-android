@@ -64,9 +64,9 @@ import javax.inject.Inject
 class LanguageViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
-  @OPDSKiwixService private val kiwixService: KiwixService,
+  @param:OPDSKiwixService private val kiwixService: KiwixService,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)

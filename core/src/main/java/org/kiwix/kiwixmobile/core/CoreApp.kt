@@ -18,11 +18,9 @@
 package org.kiwix.kiwixmobile.core
 
 import android.app.Application
-import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
-import androidx.multidex.MultiDex
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
@@ -51,13 +49,6 @@ abstract class CoreApp : Application() {
 
   @Inject
   lateinit var fileLogger: FileLogger
-
-  override fun attachBaseContext(base: Context) {
-    super.attachBaseContext(base)
-    if (BuildConfig.DEBUG) {
-      MultiDex.install(this)
-    }
-  }
 
   override fun onCreate() {
     super.onCreate()

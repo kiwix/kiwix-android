@@ -101,7 +101,7 @@ class BrandedReaderViewModel @Inject constructor(
   donationDialogHandler: DonationDialogHandler,
   findInPageManager: FindInPageManager,
   @MainDispatcher mainDispatcher: MainCoroutineDispatcher,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CoreReaderViewModel(
     context,
     kiwixDataStore,

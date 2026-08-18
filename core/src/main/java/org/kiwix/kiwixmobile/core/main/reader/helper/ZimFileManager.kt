@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 class ZimFileManager @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   suspend fun openZimFileInReader(
     source: ZimReaderSource,

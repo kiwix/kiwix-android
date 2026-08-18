@@ -30,7 +30,7 @@ object Config {
   // in the Android App Bundle (AAB).
   const val NDK_VERSION = "27.3.13750724"
 
-  val javaVersion = JavaVersion.VERSION_17
+  val javaVersion = JavaVersion.VERSION_21
 
   // Version Information
   const val versionMajor = 3 // Major version component of the app's version name and version code.

@@ -38,8 +38,8 @@ class WebViewFactory @Inject constructor(
   private val context: Context,
   private val zimReaderContainer: ZimReaderContainer,
   private val kiwixDataStore: KiwixDataStore,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   /**
    * Initializes a new instance of `KiwixWebView`.

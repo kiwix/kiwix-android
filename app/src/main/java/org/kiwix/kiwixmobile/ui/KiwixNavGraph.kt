@@ -96,7 +96,7 @@ fun KiwixNavGraph(
     startDestination = startDestination,
     modifier = modifier
   ) {
-    composable(route = KiwixDestination.Reader.route) { backStackEntry ->
+    composable(route = KiwixDestination.Reader.route) {
       val activity = LocalActivity.current as CoreMainActivity
       val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
       val kiwixReaderViewModel: KiwixReaderViewModel = viewModel(factory = viewModelFactory)
@@ -130,10 +130,8 @@ fun KiwixNavGraph(
 
     composable(KiwixDestination.Downloads.route) {
       val activity = LocalActivity.current as KiwixMainActivity
-      val onlineLibraryViewModel: OnlineLibraryViewModel =
-        viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
-      val categoryViewModel: CategoryViewModel =
-        viewModel(viewModelStoreOwner = activity, factory = viewModelFactory)
+      val onlineLibraryViewModel: OnlineLibraryViewModel = viewModel(factory = viewModelFactory)
+      val categoryViewModel: CategoryViewModel = viewModel(factory = viewModelFactory)
       OnlineLibraryRoute(
         onlineLibraryViewModel = onlineLibraryViewModel,
         categoryViewModel = categoryViewModel,

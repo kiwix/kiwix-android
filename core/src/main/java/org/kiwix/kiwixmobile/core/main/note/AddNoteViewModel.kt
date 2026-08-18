@@ -58,7 +58,7 @@ class AddNoteViewModel @Inject constructor(
   val zimReaderContainer: ZimReaderContainer,
   private val noteMetadataFactory: NoteMetadataFactory,
   private val kiwixPermissionChecker: KiwixPermissionChecker,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   data class AddNoteUiState(
     val articleTitle: String = "",
@@ -71,7 +71,7 @@ class AddNoteViewModel @Inject constructor(
 
   sealed interface AddNoteEffect {
     data class ShowToast(
-      @StringRes val messageRes: Int,
+      @param:StringRes val messageRes: Int,
       val duration: Int = Toast.LENGTH_SHORT
     ) : AddNoteEffect
 
@@ -194,7 +194,7 @@ class AddNoteViewModel @Inject constructor(
     }
   }
 
-  fun sendEffect(effect: AddNoteEffect) {
+  private fun sendEffect(effect: AddNoteEffect) {
     viewModelScope.launch { _effects.emit(effect) }
   }
 

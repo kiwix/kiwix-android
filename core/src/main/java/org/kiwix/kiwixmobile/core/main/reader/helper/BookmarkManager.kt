@@ -50,7 +50,7 @@ class BookmarkManager @Inject constructor(
 
     // Can be improved with failure sealed class with proper error if the logic grow.
     data class Failure(
-      @StringRes val messageId: Int
+      @param:StringRes val messageId: Int
     ) : BookmarkSaveResult
   }
 
@@ -84,7 +84,7 @@ class BookmarkManager @Inject constructor(
   ): BookmarkSaveResult {
     val zimFileReader = zimReaderContainer.zimFileReader
     return runCatching {
-      return when {
+      return@addBookmark when {
         pageTitle == null || articleUrl == null || zimFileReader == null -> {
           BookmarkSaveResult.Failure(string.unable_to_add_to_bookmarks)
         }
@@ -115,7 +115,7 @@ class BookmarkManager @Inject constructor(
    * the object will be created once to avoid creating it multiple times.
    */
   private fun getLibkiwixBook(zimFileReader: ZimFileReader): Book {
-    libkiwixBook?.let { return it }
+    libkiwixBook?.let { return@getLibkiwixBook it }
     val book = libkiwixBookFactory.create().apply {
       update(zimFileReader.jniKiwixReader)
     }

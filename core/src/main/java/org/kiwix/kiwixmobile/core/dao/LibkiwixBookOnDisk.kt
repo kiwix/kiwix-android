@@ -50,10 +50,10 @@ import javax.inject.Singleton
 
 @Singleton
 class LibkiwixBookOnDisk @Inject constructor(
-  @Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
-  @Named(LOCAL_BOOKS_MANAGER) private val manager: Manager,
+  @param:Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
+  @param:Named(LOCAL_BOOKS_MANAGER) private val manager: Manager,
   private val kiwixDataStore: KiwixDataStore,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val initMutex = Mutex()
   private var isManagerInitialized = false

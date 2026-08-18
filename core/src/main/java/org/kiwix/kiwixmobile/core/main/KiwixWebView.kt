@@ -62,8 +62,8 @@ open class KiwixWebView constructor(
   private val coreWebViewClient: CoreWebViewClient,
   val kiwixDataStore: KiwixDataStore,
   private val zimReaderContainer: ZimReaderContainer,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : VideoEnabledWebView(context, attrs) {
   private var kiwixWebChromeClient: KiwixWebChromeClient? = null
   private var textZoomJob: Job? = null
@@ -157,6 +157,7 @@ open class KiwixWebView constructor(
    * Must be called before [destroy] to prevent memory leaks via
    * InputMethodManager or DecorView retention of this WebView.
    */
+  @SuppressLint("MissingOnRenderProcessGone")
   fun dispose() {
     // Remove javascript interfaces to break reference chains from JavascriptInjector
     removeJavascriptInterface("tts")

@@ -89,17 +89,8 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
-    Versions.org_jetbrains_kotlin
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
-    Versions.org_jetbrains_kotlin
-
-  const val kotlin_ksp: String =
-    "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:" + Versions.kotlin_ksp
+  const val KOTLIN_STDLIB_JDK8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
+    Versions.ORG_JETBRAINS_KOTLIN
 
   /**
    * https://github.com/google/dagger
@@ -172,12 +163,6 @@ object Libs {
   const val robolectric: String = "org.robolectric:robolectric:" + Versions.ROBOLECTRIC
 
   /**
-   * https://developer.android.com/topic/libraries/architecture/index.html
-   */
-  const val android_arch_lifecycle_extensions: String = "android.arch.lifecycle:extensions:" +
-    Versions.android_arch_lifecycle_extensions
-
-  /**
    * https://developer.android.com/studio
    */
   const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +
@@ -217,6 +202,8 @@ object Libs {
    */
   const val junit_jupiter: String = "org.junit.jupiter:junit-jupiter:" + Versions.junit_jupiter
 
+  const val JUNIT_PLATFORM_LAUNCHER: String = "org.junit.platform:junit-platform-launcher"
+
   /**
    * https://junit.org/junit5/
    */
@@ -232,7 +219,6 @@ object Libs {
    * https://developer.android.com/topic/libraries/architecture/index.html
    */
   const val core_testing: String = "androidx.arch.core:core-testing:" + Versions.core_testing
-
 
   /**
    * https://github.com/jraska/livedata-testing
@@ -283,8 +269,6 @@ object Libs {
    */
   const val material: String = "com.google.android.material:material:" + Versions.material
 
-  const val multidex: String = "androidx.multidex:multidex:" + Versions.multidex
-
   const val barista: String = "com.adevinta.android:barista:" + Versions.barista
 
   /**
@@ -311,7 +295,8 @@ object Libs {
   /**
    * https://github.com/slackhq/keeper
    */
-  const val keeper = "com.slack.keeper:keeper:" + Versions.keeper
+  const val USEFULNESS_KEEPER =
+    "io.github.usefulness.keeper:io.github.usefulness.keeper.gradle.plugin:" + Versions.USEFULNESS_KEEPER
 
   /**
    * https://github.com/tonyofrancis/Fetch

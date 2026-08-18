@@ -52,7 +52,7 @@ import javax.inject.Inject
 
 class CopyMoveProgressBarControllerImpl @Inject constructor(
   private val context: Context,
-  @MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : CopyMoveProgressBarController {
   /**
    * Holds the state for the copy/move progress bar.
@@ -61,7 +61,7 @@ class CopyMoveProgressBarControllerImpl @Inject constructor(
    *  - [Pair.first] ([String]): The message displayed below the progress bar.
    *  - [Pair.second] ([Int]): The current progress value (0–100).
    */
-  private var progressBarState = mutableStateOf(Pair("", ZERO))
+  private var progressBarState = mutableStateOf("" to ZERO)
   private lateinit var alertDialogShower: AlertDialogShower
   override fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
     this.alertDialogShower = alertDialogShower

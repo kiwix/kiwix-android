@@ -20,25 +20,32 @@ package plugin
 
 import Config
 import Libs
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.api.variant.Variant
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
+import java.io.File
 
 class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
-    target.plugins.apply("kotlin-android")
-    target.plugins.apply("kotlin-kapt")
-    target.plugins.apply("com.google.devtools.ksp")
+    // We should migrate to the ksp plugin. This is still in our project due to dagger_android_processor
+    // We should think to migrate to hilt/koin.
+    target.plugins.apply("com.android.legacy-kapt")
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")
@@ -46,11 +53,17 @@ class AllProjectConfigurer {
     target.plugins.apply("io.gitlab.arturbosch.detekt")
   }
 
-  fun configureBaseExtension(target: Project, isLibrary: Boolean) {
-    target.configureExtension<BaseExtension> {
-      // Using the same NDK version as in `java-libkiwix`, because with the default Gradle NDK,
-      // the debug symbols are not included in the Android App Bundle (AAB).
-      ndkVersion = Config.NDK_VERSION
+  fun configureApplicationExtension(target: Project) {
+    target.extensions.configure<ApplicationExtension> {
+      defaultConfig {
+        targetSdk = Config.targetSdk
+      }
+      configureBaseExtensions(this, target)
+    }
+  }
+
+  fun configureLibraryExtension(target: Project) {
+    target.extensions.configure<LibraryExtension> {
       // The namespace cannot be directly set in `LibraryExtension`.
       // The core module is configured as a library for both Kiwix and branded apps.
       // Therefore, we set the namespace in `BaseExtension` for the core module,
@@ -58,32 +71,37 @@ class AllProjectConfigurer {
       // `KiwixConfigurationPlugin`. If the current plugin is `LibraryPlugin`,
       // indicating it is the core module, then this value will be true,
       // and we set the namespace accordingly.
-      if (isLibrary) {
-        namespace = "org.kiwix.kiwixmobile.core"
-      }
+      namespace = "org.kiwix.kiwixmobile.core"
+      configureBaseExtensions(this, target)
+    }
+  }
 
-      setCompileSdkVersion(Config.compileSdk)
-      defaultConfig {
+  private fun configureBaseExtensions(
+    extension: CommonExtension,
+    target: Project
+  ) {
+    with(extension) {
+      // Using the same NDK version as in `java-libkiwix`, because with the default Gradle NDK,
+      // the debug symbols are not included in the Android App Bundle (AAB).
+      ndkVersion = Config.NDK_VERSION
+      compileSdk = Config.compileSdk
+      defaultConfig.apply {
         minSdk = Config.minSdk
-        setTargetSdkVersion(Config.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
       }
 
-      buildTypes {
-        getByName("debug") {
-          isTestCoverageEnabled = true
-          multiDexEnabled = true
-        }
+      buildTypes.named("debug") {
+        enableUnitTestCoverage = true
+        enableAndroidTestCoverage = true
       }
 
-      compileOptions {
+      compileOptions.apply {
         encoding = "UTF-8"
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
       }
-      target.tasks.withType(KotlinCompile::class.java) {
+      target.extensions.configure<KotlinAndroidExtension> {
         compilerOptions {
-          jvmTarget.set(JvmTarget.JVM_17)
           freeCompilerArgs.add("-Xjvm-default=all-compatibility")
         }
       }
@@ -96,9 +114,10 @@ class AllProjectConfigurer {
          */
         buildConfig = true
         compose = true
+        resValues = true
       }
 
-      testOptions {
+      testOptions.apply {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
           isReturnDefaultValues = true
@@ -120,7 +139,7 @@ class AllProjectConfigurer {
           }
         }
       }
-      packagingOptions {
+      packaging.apply {
         resources.excludes.apply {
           add("META-INF/DEPENDENCIES")
           add("META-INF/LICENSE")
@@ -135,18 +154,13 @@ class AllProjectConfigurer {
         }
         jniLibs.useLegacyPackaging = false
       }
-      sourceSets {
-        getByName("test") {
-          java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
-          resources.srcDir("${target.rootDir}/core/src/test/resources")
-        }
+      sourceSets.named("test") {
+        java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
+        kotlin.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
+        resources.directories.add("${target.rootDir}/core/src/test/resources")
       }
-    }
-  }
 
-  fun configureCommonExtension(target: Project) {
-    target.configureExtension<CommonExtension<*, *, *, *, *, *>> {
-      lint {
+      lint.apply {
         abortOnError = true
         checkAllWarnings = true
         warningsAsErrors = true
@@ -189,7 +203,7 @@ class AllProjectConfigurer {
 
   fun configurePlugins(target: Project) {
     target.run {
-      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.8" }
+      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.15" }
       configureExtension<KtlintExtension> { android.set(true) }
       configureExtension<DetektExtension> {
         buildUponDefaultConfig = true
@@ -197,6 +211,55 @@ class AllProjectConfigurer {
         config.setFrom(target.files("${target.rootDir}/config/detekt/detekt.yml"))
         baseline = project.file("detekt_baseline.xml")
       }
+    }
+    registerDetektVariantTasks(target)
+  }
+
+  /**
+   * Registers the per-variant detekt tasks (`detektDebug`, `detektCustomexampleDebug`, ...).
+   *
+   * detekt registers these itself, but only from inside `plugins.withId("kotlin-android")`.
+   * AGP 9 makes built-in Kotlin mandatory (`android.builtInKotlin`) and the standalone
+   * `kotlin-android` plugin can no longer be applied — it still casts the Android extension to
+   * the removed `BaseExtension`. So detekt's Android block never runs and only the plain
+   * `detekt` task survives. Until detekt ships AGP 9 support we register the variant tasks
+   * ourselves, keeping detekt's task names and source sets (main + build type + flavour, no
+   * test sources) so `./gradlew detektDebug detektCustomExampleDebug` keeps working in CI and
+   * in the pre-commit hook.
+   */
+  private fun registerDetektVariantTasks(target: Project) {
+    val detektExtension = target.extensions.getByType(DetektExtension::class.java)
+    target.extensions.findByType(ApplicationAndroidComponentsExtension::class.java)
+      ?.onVariants { registerDetektVariantTask(target, it, detektExtension) }
+    target.extensions.findByType(LibraryAndroidComponentsExtension::class.java)
+      ?.onVariants { registerDetektVariantTask(target, it, detektExtension) }
+  }
+
+  private fun registerDetektVariantTask(
+    target: Project,
+    variant: Variant,
+    detektExtension: DetektExtension
+  ) {
+    target.tasks.register(
+      "detekt${variant.name.replaceFirstChar(Char::titlecase)}",
+      Detekt::class.java
+    ) {
+      description = "Runs detekt on the ${variant.name} variant."
+      group = LifecycleBasePlugin.VERIFICATION_GROUP
+      setSource(
+        target.files(
+          listOfNotNull(variant.sources.kotlin?.all, variant.sources.java?.all)
+        )
+      )
+      include("**/*.kt", "**/*.kts")
+      config.setFrom(detektExtension.config)
+      detektExtension.baseline?.takeIf(File::exists)?.let(baseline::set)
+      buildUponDefaultConfig = detektExtension.buildUponDefaultConfig
+      allRules = detektExtension.allRules
+      parallel = detektExtension.parallel
+      ignoreFailures = detektExtension.isIgnoreFailures
+      detektClasspath.setFrom(target.configurations.getByName("detekt"))
+      pluginClasspath.setFrom(target.configurations.getByName("detektPlugins"))
     }
   }
 
@@ -206,16 +269,16 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
-      implementation(Libs.kotlin_stdlib_jdk8)
+      implementation(Libs.KOTLIN_STDLIB_JDK8)
       implementation(Libs.appcompat)
       implementation(Libs.appcompat_resource)
       implementation(Libs.material)
-      implementation(Libs.multidex)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
       testImplementation(Libs.TURBINE_FLOW_TEST)
       testImplementation(Libs.kotlinx_coroutines_test)
       testImplementation(Libs.junit_jupiter)
+      testRuntimeOnly(Libs.JUNIT_PLATFORM_LAUNCHER)
       testImplementation(Libs.mockk)
       testImplementation(Libs.assertj_core)
       testImplementation(Libs.testing_ktx)
@@ -224,6 +287,7 @@ class AllProjectConfigurer {
       implementation(Libs.dagger)
       implementation(Libs.dagger_android)
       kapt(Libs.dagger_compiler)
+      // This processor does not support by ksp.
       kapt(Libs.dagger_android_processor)
       implementation(Libs.core_ktx)
       implementation(Libs.collection_ktx)

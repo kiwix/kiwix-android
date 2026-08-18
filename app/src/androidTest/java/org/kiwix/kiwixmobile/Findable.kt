@@ -28,7 +28,7 @@ sealed class Findable {
   abstract fun errorMessage(baseRobot: BaseRobot): String
 
   class ViewId(
-    @IdRes private val resId: Int
+    @param:IdRes private val resId: Int
   ) : Findable() {
     override fun errorMessage(baseRobot: BaseRobot) =
       "No view found with Id ${resourceName(baseRobot)}"
@@ -47,7 +47,7 @@ sealed class Findable {
   }
 
   sealed class StringId(
-    @StringRes private val resId: Int
+    @param:StringRes private val resId: Int
   ) : Findable() {
     fun text(baseRobot: BaseRobot): String = baseRobot.context.getString(resId)
 

@@ -1,6 +1,5 @@
 plugins {
   id("com.android.test")
-  id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -15,13 +14,10 @@ android {
     testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
   }
 
-  compileOptions {
+  compileOptions.apply {
+    encoding = "UTF-8"
     sourceCompatibility = Config.javaVersion
     targetCompatibility = Config.javaVersion
-  }
-
-  kotlinOptions {
-    jvmTarget = Config.javaVersion.toString()
   }
 
   buildTypes {

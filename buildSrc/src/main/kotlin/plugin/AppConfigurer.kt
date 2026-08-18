@@ -19,9 +19,11 @@
 package plugin
 
 import Libs
-import com.android.build.VariantOutput
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.api.ApkVariantOutput
+import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.ApplicationVariant
+import com.android.build.api.variant.FilterConfiguration
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
@@ -32,7 +34,7 @@ import java.util.Locale
 
 class AppConfigurer {
   fun configure(target: Project) {
-    target.configureExtension<AppExtension> {
+    target.configureExtension<ApplicationExtension> {
       signingConfigs {
         create("releaseSigningConfig") {
           storeFile = File(target.rootDir, "kiwix-android.keystore")
@@ -43,6 +45,7 @@ class AppConfigurer {
       }
       buildTypes {
         getByName("release") {
+          isCrunchPngs = true
           isMinifyEnabled = true
           isShrinkResources = true
           signingConfig = signingConfigs.getByName("releaseSigningConfig")
@@ -62,9 +65,11 @@ class AppConfigurer {
           }
         }
         getByName("debug") {
+          isCrunchPngs = true
+          isDebuggable = true
           if (target.hasProperty("testingMinimizedBuild")) {
             isMinifyEnabled = target.hasProperty("testingMinimizedBuild")
-            isShrinkResources = target.hasProperty("testingMinimizedBuild")
+            isShrinkResources = false
             proguardFiles(
               getDefaultProguardFile("proguard-android-optimize.txt"),
               File("${target.rootDir}/app", "proguard-rules.pro")
@@ -105,28 +110,50 @@ class AppConfigurer {
        * Store upgrade process that the version code is higher than
        * for APKs).
       */
-      applicationVariants.all {
-        @Suppress("DEPRECATION")
-        outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
-          val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
-          output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode
-          if (output.outputFileName.contains("universal-nightly")) {
-            // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
-            output.outputFileName = setNameForNightlyUniversalApk()
-          }
-        }
-      }
+      val androidComponents =
+        target.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
+      androidComponents.onVariants { variant ->
+        variant.outputs.forEach { output ->
+          val abi = output.filters
+            .find { it.filterType == FilterConfiguration.FilterType.ABI }
+            ?.identifier
 
-      aaptOptions {
-        cruncherEnabled = true
-      }
-      sourceSets {
-        getByName("androidTest") {
-          java.srcDirs("${target.rootDir}/core/src/sharedTestFunctions/java")
+          val abiVersionCode = abiCodes[abi] ?: 7
+          output.versionCode.set(abiVersionCode * 1_000_000 + output.versionCode.get())
         }
+        if (variant.name.contains("nightly", true)) {
+          // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
+          renameNightlyUniversalApk(target, variant)
+        }
+      }
+      sourceSets.getByName("androidTest") {
+        java.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
+        kotlin.directories.add("${target.rootDir}/core/src/sharedTestFunctions/java")
       }
     }
     configureDependencies(target)
+  }
+
+  /**
+   * Registers a task that transforms the variant's APK directory, renaming the universal APK.
+   * See [RenameNightlyUniversalApkTask] for why this replaces the old `outputFileName` assignment.
+   */
+  private fun renameNightlyUniversalApk(target: Project, variant: ApplicationVariant) {
+    val renameTask = target.tasks.register(
+      "rename${variant.name.replaceFirstChar(Char::titlecase)}UniversalApk",
+      RenameNightlyUniversalApkTask::class.java
+    )
+    val request = variant.artifacts
+      .use(renameTask)
+      .wiredWithDirectories(
+        RenameNightlyUniversalApkTask::inputDir,
+        RenameNightlyUniversalApkTask::outputDir
+      )
+      .toTransformMany(SingleArtifact.APK)
+    renameTask.configure {
+      transformationRequest.set(request)
+      universalApkName.set(setNameForNightlyUniversalApk())
+    }
   }
 
   private fun setNameForNightlyUniversalApk(): String =

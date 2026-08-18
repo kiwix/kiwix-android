@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 class StorageCalculator @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private suspend fun getStorageFile(file: File? = null) =
     file ?: File(kiwixDataStore.selectedStorage.first())

@@ -3,7 +3,6 @@ import plugin.KiwixConfigurationPlugin
 
 plugins {
   id("com.android.library")
-  id("org.jetbrains.kotlin.android")
 }
 
 buildscript {
@@ -25,7 +24,7 @@ android {
   namespace = "org.kiwix.kiwixmobile.migration"
 
   defaultConfig {
-    minSdk = 25
+    minSdk = Config.minSdk
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")

@@ -32,7 +32,7 @@ data class WebViewHistoryEntity(
   val zimId: String,
   val webViewIndex: Int,
   val webViewCurrentPosition: Int,
-  @TypeConverters(BundleRoomConverter::class)
+  @param:TypeConverters(BundleRoomConverter::class)
   val webViewBackForwardListBundle: Bundle?
 ) {
   constructor(webViewHistoryItem: WebViewHistoryItem) : this(

@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUT
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.FIVE_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilDisplayedWithScrollNudge
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
@@ -41,9 +42,7 @@ fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
 class InitialDownloadRobot : BaseRobot() {
   fun clickDownloadOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntil(FIVE_SECOND_DELAY) {
-        onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).isDisplayed()
-      }
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG, FIVE_SECOND_DELAY)
       onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
     }
   }
