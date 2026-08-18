@@ -28,6 +28,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
+import androidx.compose.ui.test.printToString
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
@@ -74,16 +75,16 @@ class ReaderRobot : BaseRobot() {
       waitUntil(FIFTEEN_SECOND_DELAY) {
         onNodeWithTag(READER_SCREEN_TESTING_TAG).isDisplayed()
       }
-      Log.d(TAG, "Reader screen is displayed.")
+      Log.e(TAG, "Reader screen is displayed.")
       // Wait for a few second to fully load the article in reader.
       waitUntilTimeout()
       articlePageContent?.let {
         assertArticleLoaded(it)
-        Log.d(TAG, "Article content '$it' loaded successfully in the WebView.")
+        Log.e(TAG, "Article content '$it' loaded successfully in the WebView.")
       }
       // Wait for saving the tabs history.
       waitUntilTimeout(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST)
-      Log.d(TAG, "Finished waiting for the tabs/reader history to be saved.")
+      Log.e(TAG, "Finished waiting for the tabs/reader history to be saved.")
     }
   }
 
@@ -221,8 +222,10 @@ class ReaderRobot : BaseRobot() {
         // page's URL valid (see ReaderMenuState/CoreReaderViewModel). Dump the full semantics
         // tree so CI logs show exactly what was on screen (e.g. is the toolbar empty, did tab
         // restoration leave the wrong page selected) instead of only the bare timeout.
-        Log.e(TAG, "Overflow menu button never appeared. Dumping current UI tree for debugging.")
-        onRoot().printToLog(TAG)
+        Log.e(
+          TAG, "Overflow menu button never appeared. Dumping current UI tree for debugging.\n" +
+            " ${onRoot().printToString()}"
+        )
         throw e
       }
       onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()

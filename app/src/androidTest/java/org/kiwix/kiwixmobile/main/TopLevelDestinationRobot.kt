@@ -21,7 +21,6 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_BOOKMARK_ITEM_TESTING_TAG
@@ -44,9 +43,8 @@ import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilDisplayedWithScrollNudge
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
@@ -59,10 +57,9 @@ class TopLevelDestinationRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     func: ReaderRobot.() -> Unit
   ) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     testFlakyView({
       composeTestRule.apply {
-        waitUntilTimeout()
+        waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_READER_ITEM_TESTING_TAG)
         onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).performClick()
       }
     })
@@ -74,7 +71,7 @@ class TopLevelDestinationRobot : BaseRobot() {
     func: LibraryRobot.() -> Unit
   ) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG)
       onNodeWithTag(BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG).performClick()
     }
     library(func)
@@ -86,7 +83,7 @@ class TopLevelDestinationRobot : BaseRobot() {
     func: OnlineLibraryRobot.() -> Unit
   ) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG)
       onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
     }
     onlineLibrary(func)

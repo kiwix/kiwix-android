@@ -68,7 +68,7 @@ fun BrandedNavGraph(
     startDestination = CustomDestination.Reader.route,
     modifier = modifier
   ) {
-    composable(route = CustomDestination.Reader.route) { backStackEntry ->
+    composable(route = CustomDestination.Reader.route) {
       val activity = LocalActivity.current as CoreMainActivity
       val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
       val brandedReaderViewModel: BrandedReaderViewModel = viewModel(factory = viewModelFactory)
