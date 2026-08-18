@@ -50,7 +50,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.main.OPENING_ZIM_FILE_DELAY
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -160,7 +159,7 @@ class DeepLinksTest : BaseActivityTest() {
       createDeepLinkIntent("zim://60094d1e-1c9a-a60b-2011-4fb02f8db6c3/A/Android_(operating_system).html".toUri())
     ).onActivity {}
     // for a bit to properly handle the deep link.
-    composeTestRule.mainClock.advanceTimeBy(OPENING_ZIM_FILE_DELAY + 500)
+    composeTestRule.mainClock.advanceTimeBy(500)
     composeTestRule.waitForIdle()
     deepLink {
       checkZimFileLoadedSuccessful(composeTestRule)
@@ -176,7 +175,7 @@ class DeepLinksTest : BaseActivityTest() {
       createDeepLinkIntent(ZIM_HOST_NAV_DEEP_LINK.toUri())
     ).onActivity {}
     // for a bit to properly handle the deep link.
-    composeTestRule.mainClock.advanceTimeBy(OPENING_ZIM_FILE_DELAY + 500)
+    composeTestRule.mainClock.advanceTimeBy(500)
     composeTestRule.waitForIdle()
     deepLink {
       checkZimHostScreenVisible(composeTestRule)
@@ -192,7 +191,7 @@ class DeepLinksTest : BaseActivityTest() {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
       }
       ActivityScenario.launch<KiwixMainActivity>(intent).onActivity {}
-      composeTestRule.mainClock.advanceTimeBy(OPENING_ZIM_FILE_DELAY + 500)
+      composeTestRule.mainClock.advanceTimeBy(500)
       composeTestRule.waitForIdle()
       deepLink {
         checkZimFileLoadedSuccessful(composeTestRule)
