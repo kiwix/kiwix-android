@@ -70,7 +70,7 @@ class RateDialogHandlerTest {
     coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(true)
     coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(10)
     coEvery { kiwixDataStore.rateAppPromptShown } returns flowOf(false)
-    coEvery { kiwixDataStore.setRateAppPromptShown(any()) } returns Unit
+    coEvery { kiwixDataStore.setRateAppPromptShown() } returns Unit
     libkiwixBookOnDisk = mockk(relaxed = true)
     connectivityManager = mockk(relaxed = true)
 
@@ -197,7 +197,7 @@ class RateDialogHandlerTest {
     rateDialogHandler.checkForRateDialog()
 
     verify(exactly = 0) { ReviewManagerFactory.create(any()) }
-    coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown(any()) }
+    coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
   }
 
   @Test
@@ -213,7 +213,7 @@ class RateDialogHandlerTest {
       rateDialogHandler.checkForRateDialog()
 
       verify(exactly = 0) { ReviewManagerFactory.create(any()) }
-      coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown(any()) }
+      coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
     }
 
   @Test

@@ -655,11 +655,12 @@ class KiwixDataStore @Inject constructor(
     prefs[PreferencesKeys.RATE_APP_PROMPT_SHOWN] ?: false
   }
 
-  suspend fun setRateAppPromptShown(shown: Boolean = true) {
+  suspend fun setRateAppPromptShown() {
     context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.RATE_APP_PROMPT_SHOWN] = shown
+      prefs[PreferencesKeys.RATE_APP_PROMPT_SHOWN] = true
     }
   }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
