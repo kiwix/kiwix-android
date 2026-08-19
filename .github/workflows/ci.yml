@@ -82,7 +82,9 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          script: echo "Generated AVD snapshot for caching."
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            echo "Generated AVD snapshot for caching."
 
       - name: Create instrumentation coverage
         uses: reactivecircus/android-emulator-runner@v2
@@ -128,6 +130,7 @@ jobs:
           force-avd-creation: false
           heap-size: 1024M
           script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
             ./gradlew :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload coverage to Codecov
@@ -203,7 +206,9 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          script: echo "Generated AVD snapshot for caching."
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            echo "Generated AVD snapshot for caching."
 
       - name: Create instrumentation coverage for PlayStore variant
         uses: reactivecircus/android-emulator-runner@v2
@@ -284,7 +289,9 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          script: echo "Generated AVD snapshot for caching."
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            echo "Generated AVD snapshot for caching."
 
       - name: Test branded app
         uses: reactivecircus/android-emulator-runner@v2
@@ -365,7 +372,9 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          script: echo "Generated AVD snapshot for caching."
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            echo "Generated AVD snapshot for caching."
 
       - name: File Opening test on Tablet
         uses: reactivecircus/android-emulator-runner@v2
