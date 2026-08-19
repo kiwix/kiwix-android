@@ -31,13 +31,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -82,7 +85,7 @@ fun OnlineLibraryRoute(
   activity: KiwixMainActivity
 ) {
   val alertDialogShower = remember { AlertDialogShower() }
-  val uiState by onlineLibraryViewModel.uiState.collectAsState()
+  val uiState by onlineLibraryViewModel.uiState.collectAsStateWithLifecycle()
   val notificationPermission = if (onlineLibraryViewModel.isAndroid13OrAbove) {
     rememberPermissionState(POST_NOTIFICATIONS) {
       onlineLibraryViewModel.onNotificationPermissionResult(it, activity)
@@ -177,69 +180,72 @@ private fun HandleUiEvents(
   notificationPermission: PermissionState?,
   writePermissionState: PermissionState
 ) {
-  LaunchedEffect(Unit) {
-    viewModel.uiEvents.collect { event ->
-      when (event) {
-        is OnlineLibraryViewModel.UiEvent.ShowSnackbar -> {
-          snackbarHostState.snack(
-            message = event.message,
-            actionLabel = event.actionLabel,
-            lifecycleScope = scope,
-            actionClick = {
-              event.actionIntent?.let { intent: Intent ->
-                activity.startActivity(intent)
+  val lifecycleOwner = LocalLifecycleOwner.current
+  LaunchedEffect(lifecycleOwner) {
+    lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+      viewModel.uiEvents.collect { event ->
+        when (event) {
+          is OnlineLibraryViewModel.UiEvent.ShowSnackbar -> {
+            snackbarHostState.snack(
+              message = event.message,
+              actionLabel = event.actionLabel,
+              lifecycleScope = scope,
+              actionClick = {
+                event.actionIntent?.let { intent: Intent ->
+                  activity.startActivity(intent)
+                }
+                event.onAction?.invoke()
               }
-              event.onAction?.invoke()
-            }
-          )
-        }
-
-        is OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar -> {
-          snackbarHostState.snack(
-            message = event.message,
-            actionLabel = event.actionLabel,
-            lifecycleScope = scope,
-            actionClick = { event.onAction() }
-          )
-        }
-
-        is OnlineLibraryViewModel.UiEvent.ShowDialog -> {
-          alertDialogShower.show(
-            event.dialog,
-            event.positiveAction,
-            event.negativeAction
-          )
-        }
-
-        is OnlineLibraryViewModel.UiEvent.SideEffects -> handleUISideEffects(
-          event.uISideEffects,
-          alertDialogShower = alertDialogShower,
-          kiwixMainActivity = activity
-        )
-
-        is OnlineLibraryViewModel.UiEvent.ShowToast -> {
-          activity.toast(event.message, Toast.LENGTH_SHORT)
-        }
-
-        is OnlineLibraryViewModel.UiEvent.RequestPermission -> {
-          handlePermissionEvents(notificationPermission, event.permission, writePermissionState)
-        }
-
-        is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.toast(
-              activity.getString(string.all_files_permission_needed),
-              Toast.LENGTH_SHORT
             )
-            activity.navigateToSettings()
           }
-        }
 
-        is OnlineLibraryViewModel.UiEvent.NavigateToAppSettings -> {
-          activity.navigateToAppSettings()
-        }
+          is OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar -> {
+            snackbarHostState.snack(
+              message = event.message,
+              actionLabel = event.actionLabel,
+              lifecycleScope = scope,
+              actionClick = { event.onAction() }
+            )
+          }
 
-        ScrollToTop -> lazyListState.scrollToItem(ZERO)
+          is OnlineLibraryViewModel.UiEvent.ShowDialog -> {
+            alertDialogShower.show(
+              event.dialog,
+              event.positiveAction,
+              event.negativeAction
+            )
+          }
+
+          is OnlineLibraryViewModel.UiEvent.SideEffects -> handleUISideEffects(
+            event.uISideEffects,
+            alertDialogShower = alertDialogShower,
+            kiwixMainActivity = activity
+          )
+
+          is OnlineLibraryViewModel.UiEvent.ShowToast -> {
+            activity.toast(event.message, Toast.LENGTH_SHORT)
+          }
+
+          is OnlineLibraryViewModel.UiEvent.RequestPermission -> {
+            handlePermissionEvents(notificationPermission, event.permission, writePermissionState)
+          }
+
+          is OnlineLibraryViewModel.UiEvent.NavigateToSettings -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+              activity.toast(
+                activity.getString(string.all_files_permission_needed),
+                Toast.LENGTH_SHORT
+              )
+              activity.navigateToSettings()
+            }
+          }
+
+          is OnlineLibraryViewModel.UiEvent.NavigateToAppSettings -> {
+            activity.navigateToAppSettings()
+          }
+
+          ScrollToTop -> lazyListState.scrollToItem(ZERO)
+        }
       }
     }
   }
