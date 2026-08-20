@@ -108,12 +108,4 @@ object ActivityExtensions {
       )
     }
   }
-
-  /**
-   * Checks if the package name of the current activity's application is not equal to
-   * 'org.kiwix.kiwixmobile' or 'org.kiwix.kiwixmobile.standalone',
-   * indicating that it is a branded application.
-   */
-  fun Activity.isBrandedApp(): Boolean =
-    packageName != "org.kiwix.kiwixmobile" && packageName != "org.kiwix.kiwixmobile.standalone"
 }
