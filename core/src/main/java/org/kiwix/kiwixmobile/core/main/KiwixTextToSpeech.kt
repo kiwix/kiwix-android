@@ -246,30 +246,28 @@ class KiwixTextToSpeech internal constructor(
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
-      val availability = locale?.let { tts.isLanguageAvailable(it) } ?: LANG_NOT_SUPPORTED
-      when {
-        availability == LANG_MISSING_DATA || getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED) -> {
+      if (locale == null || isMissingOrUnsupportedLanguage(tts.isLanguageAvailable(locale))) {
+        Log.d(
+          TAG_KIWIX,
+          "TextToSpeech: language not supported: ${zimReaderContainer.language}"
+        )
+        context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
+      } else {
+        tts.language = locale
+        if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
+          // Invoke show TTS language download dialog. Since this page language is not supported.
           showTtsLanguageDownloadDialog.invoke()
-        }
-
-        availability == LANG_NOT_SUPPORTED -> {
-          Log.d(
-            TAG_KIWIX,
-            "TextToSpeech: language not supported: ${zimReaderContainer.language}"
-          )
-          context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
-        }
-
-        else -> {
-          tts.language = locale
-          if (requestAudioFocus()) {
-            initWebView(webView)
-            loadURL(webView)
-          }
+        } else if (requestAudioFocus()) {
+          initWebView(webView)
+          loadURL(webView)
         }
       }
     }
   }
+
+  private fun isMissingOrUnsupportedLanguage(languageAvailabilityResult: Int): Boolean =
+    languageAvailabilityResult == LANG_MISSING_DATA ||
+      languageAvailabilityResult == LANG_NOT_SUPPORTED
 
   private fun getFeatures(tts: TextToSpeech?): Set<String> = tts?.voice?.features.orEmpty()
 

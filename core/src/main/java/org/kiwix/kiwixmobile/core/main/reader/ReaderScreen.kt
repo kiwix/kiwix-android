@@ -78,6 +78,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -87,9 +88,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -739,19 +743,22 @@ private fun TtsProgressSlider(
   onSeek: (Long) -> Unit,
   onDraggingChanged: (Boolean, Float) -> Unit
 ) {
+  var sliderValue by remember(displayProgress) { mutableFloatStateOf(displayProgress) }
+
   val sliderColors = SliderDefaults.colors(
     thumbColor = MaterialTheme.colorScheme.primary,
     activeTrackColor = MaterialTheme.colorScheme.primary,
     inactiveTrackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
   )
   Slider(
-    value = displayProgress,
+    value = sliderValue,
     onValueChange = { newProgress ->
+      sliderValue = newProgress
       onDraggingChanged(true, newProgress)
     },
     onValueChangeFinished = {
-      val targetMs = (displayProgress * totalDurationMs).toLong()
-      onDraggingChanged(false, displayProgress)
+      val targetMs = (sliderValue * totalDurationMs).toLong()
+      onDraggingChanged(false, sliderValue)
       onSeek(targetMs)
     },
     modifier = Modifier
@@ -798,6 +805,32 @@ private fun TtsTimeLabelsRow(displayPositionMs: Long, totalDurationMs: Long) {
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlayerTooltip(
+  tooltipText: String,
+  content: @Composable () -> Unit
+) {
+  TooltipBox(
+    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+    tooltip = {
+      PlainTooltip(
+        shape = RoundedCornerShape(EIGHT_DP),
+        containerColor = MaterialTheme.colorScheme.inverseSurface,
+        contentColor = MaterialTheme.colorScheme.inverseOnSurface
+      ) {
+        Text(
+          text = tooltipText,
+          style = MaterialTheme.typography.bodySmall
+        )
+      }
+    },
+    state = rememberTooltipState()
+  ) {
+    content()
+  }
+}
+
 @Suppress("LongMethod")
 @Composable
 private fun TtsControlButtonsRow(
@@ -810,111 +843,126 @@ private fun TtsControlButtonsRow(
     verticalAlignment = Alignment.CenterVertically
   ) {
     // 1. Speed button (cyclic)
-    Surface(
-      onClick = {
-        val currentIndex =
-          CYCLIC_TTS_SPEEDS.indexOfFirst { abs(it - ttsItem.ttsSpeed) < TTS_SPEED_TOLERANCE }
-        val nextSpeed = if (currentIndex != -1) {
-          CYCLIC_TTS_SPEEDS[(currentIndex + 1) % CYCLIC_TTS_SPEEDS.size]
+    PlayerTooltip(stringResource(R.string.tts_speech_speed)) {
+      Surface(
+        onClick = {
+          val currentIndex =
+            CYCLIC_TTS_SPEEDS.indexOfFirst { abs(it - ttsItem.ttsSpeed) < TTS_SPEED_TOLERANCE }
+          val nextSpeed = if (currentIndex != -1) {
+            CYCLIC_TTS_SPEEDS[(currentIndex + 1) % CYCLIC_TTS_SPEEDS.size]
+          } else {
+            1.0f
+          }
+          onReaderAction(ChangeTtsSpeed(nextSpeed))
+        },
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
+      ) {
+        val speedText = if (ttsItem.ttsSpeed % 1.0f == 0f) {
+          "${ttsItem.ttsSpeed.toInt()}x"
         } else {
-          1.0f
+          "${ttsItem.ttsSpeed}x"
         }
-        onReaderAction(ChangeTtsSpeed(nextSpeed))
-      },
-      shape = CircleShape,
-      color = MaterialTheme.colorScheme.surfaceContainerHigh,
-      contentColor = MaterialTheme.colorScheme.onSurface,
-      modifier = Modifier.semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
-    ) {
-      val speedText = if (ttsItem.ttsSpeed % 1.0f == 0f) {
-        "${ttsItem.ttsSpeed.toInt()}x"
-      } else {
-        "${ttsItem.ttsSpeed}x"
-      }
-      Text(
-        text = speedText,
-        fontWeight = FontWeight.Bold,
-        style = MaterialTheme.typography.labelMedium,
-        modifier = Modifier.padding(horizontal = TWELVE_DP, vertical = SIX_DP)
-      )
-    }
-
-    // 2. Rewind 10s button
-    IconButton(
-      onClick = { onReaderAction(RewindTts10s) },
-      modifier = Modifier.semantics { testTag = TTS_CONTROL_REWIND_10_BUTTON_TESTING_TAG }
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_replay_10),
-        contentDescription = "-10s",
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.size(TWENTY_FOUR_DP)
-      )
-    }
-
-    // 3. Center Play / Pause button
-    Surface(
-      onClick = { onReaderAction(PauseTts) },
-      shape = CircleShape,
-      color = MaterialTheme.colorScheme.primary,
-      contentColor = MaterialTheme.colorScheme.onPrimary,
-      modifier = Modifier
-        .size(FIFTY_SIX_DP)
-        .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
-    ) {
-      Box(contentAlignment = Alignment.Center) {
-        Icon(
-          painter = painterResource(
-            id = if (ttsItem.isTtsPaused) {
-              R.drawable.ic_baseline_play
-            } else {
-              R.drawable.ic_baseline_pause
-            }
-          ),
-          contentDescription = ttsItem.contentDescription,
-          tint = MaterialTheme.colorScheme.onPrimary,
-          modifier = Modifier.size(TWENTY_EIGHT_DP)
+        Text(
+          text = speedText,
+          fontWeight = FontWeight.Bold,
+          style = MaterialTheme.typography.labelMedium,
+          modifier = Modifier.padding(horizontal = TWELVE_DP, vertical = SIX_DP)
         )
       }
     }
 
+    // 2. Rewind 10s button
+    PlayerTooltip(stringResource(R.string.tts_rewind_10_seconds)) {
+      IconButton(
+        onClick = { onReaderAction(RewindTts10s) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_REWIND_10_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_replay_10),
+          contentDescription = "-10s",
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
+    }
+
+    // 3. Center Play / Pause button
+    val playPauseTooltip = stringResource(
+      if (ttsItem.isTtsPaused) R.string.tts_resume else R.string.tts_pause
+    )
+    PlayerTooltip(playPauseTooltip) {
+      Surface(
+        onClick = { onReaderAction(PauseTts) },
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier
+          .size(FIFTY_SIX_DP)
+          .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
+      ) {
+        Box(contentAlignment = Alignment.Center) {
+          Icon(
+            painter = painterResource(
+              id = if (ttsItem.isTtsPaused) {
+                R.drawable.ic_baseline_play
+              } else {
+                R.drawable.ic_baseline_pause
+              }
+            ),
+            contentDescription = ttsItem.contentDescription,
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(TWENTY_EIGHT_DP)
+          )
+        }
+      }
+    }
+
     // 4. Forward 10s button
-    IconButton(
-      onClick = { onReaderAction(ForwardTts10s) },
-      modifier = Modifier.semantics { testTag = TTS_CONTROL_FORWARD_10_BUTTON_TESTING_TAG }
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_forward_10),
-        contentDescription = "+10s",
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.size(TWENTY_FOUR_DP)
-      )
+    PlayerTooltip(stringResource(R.string.tts_forward_10_seconds)) {
+      IconButton(
+        onClick = { onReaderAction(ForwardTts10s) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_FORWARD_10_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_forward_10),
+          contentDescription = "+10s",
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
     }
 
     // 5. Voice button (Equalizer)
-    IconButton(
-      onClick = { onReaderAction(ShowVoiceSelectionDialog) },
-      modifier = Modifier.semantics { testTag = TTS_CONTROL_VOICE_BUTTON_TESTING_TAG }
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_graphic_eq),
-        contentDescription = stringResource(R.string.menu_read_aloud),
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.size(TWENTY_FOUR_DP)
-      )
+    PlayerTooltip(stringResource(R.string.tts_select_voice)) {
+      IconButton(
+        onClick = { onReaderAction(ShowVoiceSelectionDialog) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_VOICE_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_graphic_eq),
+          contentDescription = stringResource(R.string.menu_read_aloud),
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
     }
 
     // 6. Stop button
-    IconButton(
-      onClick = { onReaderAction(StopTts) },
-      modifier = Modifier.semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_stop_square_outline),
-        contentDescription = stringResource(R.string.stop),
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.size(TWENTY_TWO_DP)
-      )
+    PlayerTooltip(stringResource(R.string.stop)) {
+      IconButton(
+        onClick = { onReaderAction(StopTts) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_stop_square_outline),
+          contentDescription = stringResource(R.string.stop),
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_TWO_DP)
+        )
+      }
     }
   }
 }
@@ -930,26 +978,28 @@ private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
       .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
     contentAlignment = Alignment.BottomStart
   ) {
-    FloatingActionButton(
-      onClick = { onReaderAction(ShowTtsControlsOverlay) },
-      containerColor = MaterialTheme.colorScheme.primary,
-      contentColor = MaterialTheme.colorScheme.onPrimary,
-      modifier = Modifier
-        .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-        .pointerInput(Unit) {
-          detectDragGestures { change, dragAmount ->
-            change.consume()
-            offsetX += dragAmount.x
-            offsetY += dragAmount.y
+    PlayerTooltip(stringResource(R.string.tts_controls)) {
+      FloatingActionButton(
+        onClick = { onReaderAction(ShowTtsControlsOverlay) },
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier
+          .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+          .pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+              change.consume()
+              offsetX += dragAmount.x
+              offsetY += dragAmount.y
+            }
           }
-        }
-        .semantics { testTag = TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG }
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_volume_up),
-        contentDescription = stringResource(R.string.menu_read_aloud),
-        modifier = Modifier.size(TWENTY_FOUR_DP)
-      )
+          .semantics { testTag = TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_volume_up),
+          contentDescription = stringResource(R.string.menu_read_aloud),
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
     }
   }
 }
