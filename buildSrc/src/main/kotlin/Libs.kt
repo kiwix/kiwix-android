@@ -361,4 +361,7 @@ object Libs {
    */
   const val PLAYSTORE_REVIEW_KTX: String =
     "com.google.android.play:review-ktx:" + Versions.PLAYSTORE_REVIEW
+
+  const val MEDIA3_SESSION: String = "androidx.media3:media3-session:${Versions.ANDROIDX_MEDIA3}"
+  const val MEDIA3_COMMON: String = "androidx.media3:media3-common:${Versions.ANDROIDX_MEDIA3}"
 }

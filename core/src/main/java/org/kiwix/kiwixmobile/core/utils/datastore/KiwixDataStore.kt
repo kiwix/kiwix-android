@@ -70,6 +70,20 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  val selectedTtsVoice: Flow<String?> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.PREF_SELECTED_TTS_VOICE]
+  }
+
+  suspend fun setSelectedTtsVoice(value: String?) {
+    context.kiwixDataStore.edit { prefs ->
+      if (value != null) {
+        prefs[PreferencesKeys.PREF_SELECTED_TTS_VOICE] = value
+      } else {
+        prefs.remove(PreferencesKeys.PREF_SELECTED_TTS_VOICE)
+      }
+    }
+  }
+
   val textZoom: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
     prefs[PreferencesKeys.TEXT_ZOOM] ?: DEFAULT_ZOOM
   }
@@ -692,6 +706,7 @@ class KiwixDataStore @Inject constructor(
     const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_THEME = "pref_dark_mode"
     const val PREF_TTS_SPEED = "pref_tts_speed"
+    const val PREF_SELECTED_TTS_VOICE = "pref_selected_tts_voice"
     const val DEFAULT_TTS_SPEED = 1.0f
     const val TEXT_ZOOM = "true_text_zoom"
     const val DEFAULT_ZOOM = 100

@@ -116,6 +116,7 @@ object Versions {
   const val ACCOMPANIST = "0.34.0"
   const val CORE_SPLASHSCREEN: String = "1.2.0"
   const val PLAYSTORE_REVIEW: String = "2.0.2"
+  const val ANDROIDX_MEDIA3: String = "1.5.1"
 }
 
 /**

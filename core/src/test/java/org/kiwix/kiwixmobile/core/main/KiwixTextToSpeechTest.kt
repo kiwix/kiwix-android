@@ -45,6 +45,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -85,7 +87,8 @@ class KiwixTextToSpeechTest {
       speakingListener,
       focusListener,
       zimReaderContainer,
-      kiwixDataStore
+      kiwixDataStore,
+      CoroutineScope(Dispatchers.Unconfined)
     )
   }
 
