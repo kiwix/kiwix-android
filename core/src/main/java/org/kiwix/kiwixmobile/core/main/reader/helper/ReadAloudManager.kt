@@ -205,6 +205,34 @@ class ReadAloudManager @Inject constructor(
     setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, !wasPaused)
   }
 
+  fun seekTo(positionMs: Long) {
+    tts?.seekTo(positionMs)
+  }
+
+  fun rewind10s() {
+    tts?.rewind10s()
+  }
+
+  fun forward10s() {
+    tts?.forward10s()
+  }
+
+  fun getAvailableVoices(): List<android.speech.tts.Voice> =
+    tts?.getAvailableVoices().orEmpty()
+
+  fun setVoiceByName(voiceName: String) {
+    tts?.setVoiceByName(voiceName)
+  }
+
+  val currentPositionMs: Long
+    get() = tts?.currentPositionMs ?: 0L
+
+  val currentVoiceName: String?
+    get() = tts?.currentVoiceName
+
+  val totalDurationMs: Long
+    get() = tts?.totalDurationMs ?: 0L
+
   fun stopReadAloud() {
     val tts = requireTts()
     tts.currentTTSTask?.let {

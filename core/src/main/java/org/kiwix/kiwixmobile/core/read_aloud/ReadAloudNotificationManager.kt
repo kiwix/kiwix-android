@@ -24,17 +24,22 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaStyleNotificationHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.IS_TTS_PAUSE_OR_RESUME
 import org.kiwix.kiwixmobile.core.utils.READ_ALOUD_SERVICE_CHANNEL_ID
 import javax.inject.Inject
 
 class ReadAloudNotificationManager @Inject constructor(
   private val notificationManager: NotificationManager,
-  @param:ApplicationContext private val context: Context
+  @param:ApplicationContext private val context: Context,
+  private val zimReaderContainer: ZimReaderContainer
 ) {
   private fun readAloudNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -52,7 +57,12 @@ class ReadAloudNotificationManager @Inject constructor(
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
-  fun buildForegroundNotification(isPauseTTS: Boolean): Notification {
+  @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+  @Suppress("LongMethod", "MagicNumber")
+  fun buildForegroundNotification(
+    isPauseTTS: Boolean,
+    mediaSession: MediaSession? = null
+  ): Notification {
     readAloudNotificationChannel()
     val stopIntent = Intent(context, ReadAloudService::class.java).setAction(
       ReadAloudService.ACTION_STOP_TTS
@@ -68,26 +78,74 @@ class ReadAloudNotificationManager @Inject constructor(
     ).putExtra(IS_TTS_PAUSE_OR_RESUME, !isPauseTTS)
     val pauseOrResumeReadAloud = PendingIntent.getService(
       context,
-      0,
+      1,
       pauseOrResumeIntent,
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
-    return NotificationCompat.Builder(context, READ_ALOUD_SERVICE_CHANNEL_ID)
-      .setContentTitle(context.getString(R.string.menu_read_aloud))
+    val rewindIntent = Intent(context, ReadAloudService::class.java).setAction(
+      ReadAloudService.ACTION_REWIND_10
+    )
+    val rewindReadAloud = PendingIntent.getService(
+      context,
+      2,
+      rewindIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+    val forwardIntent = Intent(context, ReadAloudService::class.java).setAction(
+      ReadAloudService.ACTION_FORWARD_10
+    )
+    val forwardReadAloud = PendingIntent.getService(
+      context,
+      3,
+      forwardIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    val zimTitle = zimReaderContainer.zimFileTitle
+      ?: zimReaderContainer.name
+      ?: context.getString(R.string.menu_read_aloud)
+
+    val largeIcon = runCatching {
+      BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+    }.getOrNull()
+
+    val builder = NotificationCompat.Builder(context, READ_ALOUD_SERVICE_CHANNEL_ID)
+      .setContentTitle(zimTitle)
       .setContentText(context.getString(R.string.read_aloud_running))
       .setContentIntent(null)
       .setSmallIcon(R.mipmap.ic_launcher)
+      .apply {
+        if (largeIcon != null) {
+          setLargeIcon(largeIcon)
+        }
+      }
       .setWhen(System.currentTimeMillis())
       .addAction(
-        R.drawable.ic_baseline_stop,
-        context.getString(R.string.stop),
-        stopReadAloud
+        R.drawable.ic_replay_10,
+        "-10s",
+        rewindReadAloud
       ).addAction(
         getPauseOrResumeIcon(isPauseTTS),
         getPauseOrResumeTitle(isPauseTTS),
         pauseOrResumeReadAloud
+      ).addAction(
+        R.drawable.ic_forward_10,
+        "+10s",
+        forwardReadAloud
+      ).addAction(
+        R.drawable.ic_baseline_stop,
+        context.getString(R.string.stop),
+        stopReadAloud
       )
-      .build()
+
+    if (mediaSession != null) {
+      builder.setStyle(
+        MediaStyleNotificationHelper.MediaStyle(mediaSession)
+          .setShowActionsInCompactView(0, 1, 2)
+      )
+    }
+
+    return builder.build()
   }
 
   private fun getPauseOrResumeTitle(isPauseTTS: Boolean) = if (isPauseTTS) {
