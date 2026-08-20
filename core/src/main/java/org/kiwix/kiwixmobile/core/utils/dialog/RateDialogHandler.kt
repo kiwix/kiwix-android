@@ -51,7 +51,7 @@ class RateDialogHandler @Inject constructor(
       val newCount = kiwixDataStore.incrementRateAppVisitCount()
 
       if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {
-        kiwixDataStore.resetRateAppTriggers()
+        kiwixDataStore.setRateAppPromptShown()
         launchInAppReviewFlow()
       }
     }
@@ -80,12 +80,16 @@ class RateDialogHandler @Inject constructor(
   }
 
   internal suspend fun shouldShowRateDialog(newCount: Int): Boolean {
+    val isPromptShown = kiwixDataStore.rateAppPromptShown.first()
     val meetVisitCount = newCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
     val meetDownload = kiwixDataStore.rateAppDownloadCompleted.first()
     val meetReading = kiwixDataStore.rateAppReadingCount.first() >= READING_MILESTONE_THRESHOLD
 
-    return isPlayStoreVariant() &&
-      (meetVisitCount || meetDownload || meetReading) &&
+    return !isPromptShown &&
+      isPlayStoreVariant() &&
+      meetVisitCount &&
+      meetDownload &&
+      meetReading &&
       isTwoWeekPassed() &&
       isZimFilesAvailableInLibrary()
   }
