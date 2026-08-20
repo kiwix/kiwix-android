@@ -67,8 +67,10 @@ class RateDialogHandlerTest {
     kiwixDataStore = mockk(relaxed = true)
     coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(true)
     coEvery { kiwixDataStore.rateAppCount } returns flowOf(0)
-    coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(false)
-    coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(0)
+    coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(true)
+    coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(10)
+    coEvery { kiwixDataStore.rateAppPromptShown } returns flowOf(false)
+    coEvery { kiwixDataStore.setRateAppPromptShown() } returns Unit
     libkiwixBookOnDisk = mockk(relaxed = true)
     connectivityManager = mockk(relaxed = true)
 
@@ -112,8 +114,29 @@ class RateDialogHandlerTest {
   }
 
   @Test
+  fun `shouldShowRateDialog returns false when prompt was already shown`() = runTest {
+    coEvery { kiwixDataStore.rateAppPromptShown } returns flowOf(true)
+    val result = rateDialogHandler.shouldShowRateDialog(20)
+    assertFalse(result)
+  }
+
+  @Test
   fun `shouldShowRateDialog returns false when visit count is less than 20`() = runTest {
     val result = rateDialogHandler.shouldShowRateDialog(19)
+    assertFalse(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns false when downloadCompleted is false`() = runTest {
+    coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(false)
+    val result = rateDialogHandler.shouldShowRateDialog(20)
+    assertFalse(result)
+  }
+
+  @Test
+  fun `shouldShowRateDialog returns false when readingCount is less than threshold`() = runTest {
+    coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(9)
+    val result = rateDialogHandler.shouldShowRateDialog(20)
     assertFalse(result)
   }
 
@@ -147,7 +170,7 @@ class RateDialogHandlerTest {
   }
 
   @Test
-  fun `checkForRateDialog launches review flow when all conditions are met and network is available`() =
+  fun `checkForRateDialog launches review flow when all conditions met and network is available`() =
     runTest {
       coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
 
@@ -159,7 +182,7 @@ class RateDialogHandlerTest {
 
       verify { ReviewManagerFactory.create(activity) }
       verify { mockReviewManager.requestReviewFlow() }
-      coVerify { kiwixDataStore.resetRateAppTriggers() }
+      coVerify { kiwixDataStore.setRateAppPromptShown() }
     }
 
   @Test
@@ -174,13 +197,14 @@ class RateDialogHandlerTest {
     rateDialogHandler.checkForRateDialog()
 
     verify(exactly = 0) { ReviewManagerFactory.create(any()) }
-    coVerify(exactly = 0) { kiwixDataStore.resetRateAppTriggers() }
+    coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
   }
 
   @Test
   fun `checkForRateDialog does not launch review flow when shouldShowRateDialog is false`() =
     runTest {
       coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 6
+      coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(0)
 
       val mockReviewManager = mockk<ReviewManager>(relaxed = true)
       mockkStatic(ReviewManagerFactory::class)
@@ -189,7 +213,7 @@ class RateDialogHandlerTest {
       rateDialogHandler.checkForRateDialog()
 
       verify(exactly = 0) { ReviewManagerFactory.create(any()) }
-      coVerify(exactly = 0) { kiwixDataStore.resetRateAppTriggers() }
+      coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
     }
 
   @Test
@@ -254,21 +278,4 @@ class RateDialogHandlerTest {
     val result = rateDialogHandler.isTwoWeekPassed()
     assertFalse(result)
   }
-
-  @Test
-  fun `shouldShowRateDialog returns true when downloadCompletedState is true`() = runTest {
-    coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(true)
-
-    val result = rateDialogHandler.shouldShowRateDialog(5)
-    assertTrue(result)
-  }
-
-  @Test
-  fun `shouldShowRateDialog returns true when readingCount is greater than or equal to threshold`() =
-    runTest {
-      coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(10)
-
-      val result = rateDialogHandler.shouldShowRateDialog(5)
-      assertTrue(result)
-    }
 }
