@@ -33,7 +33,7 @@ tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
   reports {
     xml.required.set(true)
     html.required.set(true)
-    html.outputLocation.set(file("${rootProject.buildDir}/coverage-report"))
+    html.outputLocation.set(rootProject.layout.buildDirectory.dir("coverage-report"))
   }
   def javaClasses = []
   def kotlinClasses = []
@@ -45,16 +45,21 @@ tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
 
   rootProject.subprojects.each { proj ->
     if (proj.name != "defaultmigration") {
-      javaClasses << fileTree(dir: "$proj.buildDir/intermediates/javac/debug", excludes: fileFilter)
-      kotlinClasses << fileTree(dir: "$proj.buildDir/tmp/kotlin-classes/debug",
+      // "branded" builds the "customexample" flavor, so its variant is "customexampleDebug"
+      // rather than plain "debug" like every other module.
+      def variant = proj.name == "branded" ? "customexampleDebug" : "debug"
+      def variantCap = variant.capitalize()
+      def projBuildDir = proj.layout.buildDirectory.get().asFile
+      javaClasses << fileTree(dir: "$projBuildDir/intermediates/javac/$variant", excludes: fileFilter)
+      kotlinClasses << fileTree(dir: "$projBuildDir/intermediates/built_in_kotlinc/$variant/compile${variantCap}Kotlin/classes",
         excludes: fileFilter)
       javaSrc << "$proj.projectDir/src/main/java"
       kotlinSrc << "$proj.projectDir/src/main/kotlin"
-      execution << fileTree(dir: proj.buildDir,
-        includes: ['outputs/unit_test_code_coverage/**/*.exec',
-          'jacoco/testDebugUnitTest.exec',
-          'outputs/code-coverage/connected/*coverage.ec',
-          'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
+      execution << fileTree(dir: projBuildDir,
+        includes: ["outputs/unit_test_code_coverage/**/*.exec",
+          "jacoco/test${variantCap}UnitTest.exec",
+          "outputs/code-coverage/connected/*coverage.ec",
+          "outputs/code_coverage/${variant}AndroidTest/connected/**/*.ec"])
     }
   }
   sourceDirectories.from = files(javaSrc, kotlinSrc)
