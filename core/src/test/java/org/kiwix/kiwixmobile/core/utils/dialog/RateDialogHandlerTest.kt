@@ -63,8 +63,8 @@ class RateDialogHandlerTest {
     activity = mockk(relaxed = true)
     packageManager = mockk(relaxed = true)
     every { activity.packageManager } returns packageManager
-    every { activity.packageName } returns "org.kiwix.kiwixmobile"
     kiwixDataStore = mockk(relaxed = true)
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
     coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(true)
     coEvery { kiwixDataStore.rateAppCount } returns flowOf(0)
     coEvery { kiwixDataStore.rateAppDownloadCompleted } returns flowOf(true)
@@ -233,7 +233,7 @@ class RateDialogHandlerTest {
   @Test
   fun `isZimFilesAvailableInLibrary returns true when isBrandedApp is true`() =
     runTest {
-      every { activity.packageName } returns "org.kiwix.kiwixcustom"
+      coEvery { kiwixDataStore.isBrandedApp } returns flowOf(true)
       val result = rateDialogHandler.isZimFilesAvailableInLibrary()
       assertTrue(result)
     }
@@ -241,7 +241,7 @@ class RateDialogHandlerTest {
   @Test
   fun `isZimFilesAvailableInLibrary returns false when no books and isBrandedApp is false`() =
     runTest {
-      every { activity.packageName } returns "org.kiwix.kiwixmobile"
+      coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
       coEvery { libkiwixBookOnDisk.getBooks() } returns emptyList()
       val result = rateDialogHandler.isZimFilesAvailableInLibrary()
       assertFalse(result)
@@ -250,7 +250,7 @@ class RateDialogHandlerTest {
   @Test
   fun `isZimFilesAvailableInLibrary returns true when books available and isBrandedApp is false`() =
     runTest {
-      every { activity.packageName } returns "org.kiwix.kiwixmobile"
+      coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
       coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
       val result = rateDialogHandler.isZimFilesAvailableInLibrary()
       assertTrue(result)

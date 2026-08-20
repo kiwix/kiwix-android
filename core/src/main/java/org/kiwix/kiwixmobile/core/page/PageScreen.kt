@@ -64,7 +64,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.extensions.bottomShadow
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
@@ -114,6 +113,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
 ) {
   val alertDialogShower = remember { AlertDialogShower() }
   val state by viewModel.state.collectAsStateWithLifecycle()
+  val isBrandedApp by viewModel.kiwixDataStore.isBrandedApp.collectAsStateWithLifecycle(initialValue = false)
   val activity = LocalActivity.current as CoreMainActivity
 
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
@@ -166,7 +166,7 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
       isInSelectionMode = isInSelectionMode,
       selectedCount = selectedCount,
       switchIsCheckedFlow = switchIsCheckedFlow,
-      isBrandedApp = activity.isBrandedApp(),
+      isBrandedApp = isBrandedApp,
       navigationIcon = { NavigationIcon(onClick = { handleNavigationClick() }) },
       actionMenuItems = actionMenuList(
         deleteIconTitle = deleteIconTitle,
@@ -325,34 +325,33 @@ private fun PageSwitchRow(
   isBrandedApp: Boolean = false
 ) {
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
-  if (!isBrandedApp) {
-    val isChecked by switchIsCheckedFlow.collectAsState(true)
-    Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
-      Row(
+  if (isBrandedApp) return
+  val isChecked by switchIsCheckedFlow.collectAsState(true)
+  Surface(modifier = Modifier.bottomShadow(KIWIX_TOOLBAR_SHADOW_ELEVATION)) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .background(MaterialTheme.colorScheme.onPrimary)
+        .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
+      horizontalArrangement = Arrangement.Absolute.Right,
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(
+        text = switchString,
+        color = MaterialTheme.colorScheme.onBackground,
+        style = TextStyle(fontSize = FOURTEEN_SP),
+        modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
+      )
+      Switch(
+        checked = isChecked,
+        onCheckedChange = onSwitchCheckedChange,
+        enabled = switchIsEnabled,
         modifier = Modifier
-          .fillMaxWidth()
-          .background(MaterialTheme.colorScheme.onPrimary)
-          .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
-        horizontalArrangement = Arrangement.Absolute.Right,
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(
-          text = switchString,
-          color = MaterialTheme.colorScheme.onBackground,
-          style = TextStyle(fontSize = FOURTEEN_SP),
-          modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
+          .padding(horizontal = PAGE_SWITCH_LEFT_RIGHT_MARGIN),
+        colors = SwitchDefaults.colors(
+          uncheckedTrackColor = White
         )
-        Switch(
-          checked = isChecked,
-          onCheckedChange = onSwitchCheckedChange,
-          enabled = switchIsEnabled,
-          modifier = Modifier
-            .padding(horizontal = PAGE_SWITCH_LEFT_RIGHT_MARGIN),
-          colors = SwitchDefaults.colors(
-            uncheckedTrackColor = White
-          )
-        )
-      }
+      )
     }
   }
 }
