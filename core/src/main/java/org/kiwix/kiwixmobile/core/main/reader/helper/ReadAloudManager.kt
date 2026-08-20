@@ -41,11 +41,13 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_S
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class ReadAloudManager @Inject constructor(
   private val context: Context,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val kiwixDataStore: KiwixDataStore
 ) {
   sealed interface TtsState {
     data object StartReadSelection : TtsState
@@ -132,7 +134,8 @@ class ReadAloudManager @Inject constructor(
         initListener,
         speakingListener,
         audioFocusChangedListener,
-        zimReaderContainer
+        zimReaderContainer,
+        kiwixDataStore
       )
   }
 
@@ -200,6 +203,34 @@ class ReadAloudManager @Inject constructor(
     dispatchState(if (wasPaused) TtsResumed else TtsPaused)
     setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, !wasPaused)
   }
+
+  fun seekTo(positionMs: Long) {
+    tts?.seekTo(positionMs)
+  }
+
+  fun rewind10s() {
+    tts?.rewind10s()
+  }
+
+  fun forward10s() {
+    tts?.forward10s()
+  }
+
+  fun getAvailableVoices(): List<android.speech.tts.Voice> =
+    tts?.getAvailableVoices().orEmpty()
+
+  fun setVoiceByName(voiceName: String) {
+    tts?.setVoiceByName(voiceName)
+  }
+
+  val currentPositionMs: Long
+    get() = tts?.currentPositionMs ?: 0L
+
+  val currentVoiceName: String?
+    get() = tts?.currentVoiceName
+
+  val totalDurationMs: Long
+    get() = tts?.totalDurationMs ?: 0L
 
   fun stopReadAloud() {
     val tts = requireTts()

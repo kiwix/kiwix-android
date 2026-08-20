@@ -23,6 +23,7 @@ import android.app.Application
 import app.cash.turbine.test
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -71,6 +72,10 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreReaderViewModelTest {
+  companion object {
+    private const val TEST_TTS_SPEED = 1.25f
+  }
+
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
@@ -343,6 +348,13 @@ internal class CoreReaderViewModelTest {
     fun `onReadAloudStop should call readAloudManager stopReadAloud`() {
       viewModel.onReadAloudStop()
       assertThat(true).isTrue()
+    }
+
+    @Test
+    fun `ChangeTtsSpeed action should save speed to kiwixDataStore`() = runTest {
+      viewModel.onAction(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED))
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED) }
     }
   }
 
@@ -709,26 +721,26 @@ internal class CoreReaderViewModelTest {
     findInPageManager: FindInPageManager,
     mainDispatcher: MainCoroutineDispatcher
   ) : CoreReaderViewModel(
-      context,
-      kiwixDataStore,
-      externalLinkOpener,
-      unsupportedMimeTypeHandler,
-      readerWebViewManager,
-      zimReaderContainer,
-      zimFileManager,
-      kiwixPermissionChecker,
-      repositoryActions,
-      bookmarkManager,
-      readerHistoryManager,
-      readerSessionManager,
-      readerIntentManager,
-      pendingSearchItemManager,
-      readerPageManager,
-      readAloudManager,
-      donationDialogHandler,
-      findInPageManager,
-      mainDispatcher
-    ) {
+    context,
+    kiwixDataStore,
+    externalLinkOpener,
+    unsupportedMimeTypeHandler,
+    readerWebViewManager,
+    zimReaderContainer,
+    zimFileManager,
+    kiwixPermissionChecker,
+    repositoryActions,
+    bookmarkManager,
+    readerHistoryManager,
+    readerSessionManager,
+    readerIntentManager,
+    pendingSearchItemManager,
+    readerPageManager,
+    readAloudManager,
+    donationDialogHandler,
+    findInPageManager,
+    mainDispatcher
+  ) {
     var openBookmarkScreenCalled = false
     override fun openLocalLibrary() {}
 

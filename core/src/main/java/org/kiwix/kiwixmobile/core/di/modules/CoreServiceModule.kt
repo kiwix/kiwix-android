@@ -25,12 +25,15 @@ import dagger.Provides
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManager
 
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+
 @Module
 class CoreServiceModule {
   @Provides
   @CoreServiceScope
   fun providesReadAloudNotificationManager(
     notificationManager: NotificationManager,
-    context: Context
-  ): ReadAloudNotificationManager = ReadAloudNotificationManager(notificationManager, context)
+    context: Context,
+    zimReaderContainer: ZimReaderContainer
+  ): ReadAloudNotificationManager = ReadAloudNotificationManager(notificationManager, context, zimReaderContainer)
 }
