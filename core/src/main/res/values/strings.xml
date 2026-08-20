@@ -164,6 +164,11 @@
   <string name="tts_increase_speed">Increase Speed</string>
   <string name="tts_decrease_speed">Decrease Speed</string>
   <string name="tts_normal_speed">Normal</string>
+  <string name="tts_speech_speed">Speech speed</string>
+  <string name="tts_rewind_10_seconds">Rewind 10 seconds</string>
+  <string name="tts_forward_10_seconds">Forward 10 seconds</string>
+  <string name="tts_select_voice">Select voice</string>
+  <string name="tts_controls">TTS controls</string>
   <string name="stop">stop</string>
   <string name="notification_pause_button_text">Pause</string>
   <string name="notification_resume_button_text">Resume</string>
