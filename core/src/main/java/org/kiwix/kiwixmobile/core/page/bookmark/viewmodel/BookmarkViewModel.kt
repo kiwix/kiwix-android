@@ -75,8 +75,29 @@ class BookmarkViewModel @Inject constructor(
     return state.copy(showAll = action.isChecked)
   }
 
+  override fun selectAllPages(state: BookmarkState): BookmarkState =
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = true) },
+      isInSelectionState = true
+    )
+
   override fun deselectAllPages(state: BookmarkState): BookmarkState =
-    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = false) },
+      isInSelectionState = true
+    )
+
+  override fun exitSelectionMode(state: BookmarkState): BookmarkState =
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = false) },
+      isInSelectionState = false
+    )
+
+  override fun setSelectionState(
+    state: BookmarkState,
+    isInSelectionState: Boolean
+  ): BookmarkState =
+    state.copy(isInSelectionState = isInSelectionState)
 
   override fun createDeletePageDialogEffect(state: BookmarkState, viewModelScope: CoroutineScope) =
     ShowDeleteBookmarksDialog(

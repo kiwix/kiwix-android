@@ -107,7 +107,8 @@ class PageScreenTest {
     override val pageItems: List<TestPage> = emptyList(),
     override val showAll: Boolean = true,
     override val currentZimId: String? = "testZimId",
-    override val searchTerm: String = ""
+    override val searchTerm: String = "",
+    override val isInSelectionState: Boolean = false
   ) : PageState<TestPage>() {
     override val visiblePageItems: List<PageRelated> = filteredPageItems
     override fun copyWithNewItems(newItems: List<TestPage>): PageState<TestPage> =
@@ -123,7 +124,8 @@ class PageScreenTest {
     override val showAll: Boolean = true,
     override val currentZimId: String? = "testZimId",
     override val searchTerm: String = "",
-    val customVisibleItems: List<PageRelated> = emptyList()
+    val customVisibleItems: List<PageRelated> = emptyList(),
+    override val isInSelectionState: Boolean = false
   ) : PageState<TestPage>() {
     override val visiblePageItems: List<PageRelated> = customVisibleItems
     override fun copyWithNewItems(newItems: List<TestPage>): PageState<TestPage> =
