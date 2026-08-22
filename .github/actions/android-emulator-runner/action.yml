@@ -48,6 +48,13 @@ runs:
   steps:
 
     # ---------------------------------------------------------
+    # Reset marker file used to detect whether the test script started.
+    # ---------------------------------------------------------
+    - name: Reset emulator script marker
+      shell: bash
+      run: rm -f /tmp/emulator_script_started
+
+    # ---------------------------------------------------------
     # Attempt 1
     # ---------------------------------------------------------
     - name: Emulator test - attempt 1
