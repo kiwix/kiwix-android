@@ -31,7 +31,6 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInform
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isBrandedApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -51,7 +50,7 @@ class RateDialogHandler @Inject constructor(
       val newCount = kiwixDataStore.incrementRateAppVisitCount()
 
       if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {
-        kiwixDataStore.resetRateAppTriggers()
+        kiwixDataStore.setRateAppPromptShown()
         launchInAppReviewFlow()
       }
     }
@@ -80,12 +79,16 @@ class RateDialogHandler @Inject constructor(
   }
 
   internal suspend fun shouldShowRateDialog(newCount: Int): Boolean {
+    val isPromptShown = kiwixDataStore.rateAppPromptShown.first()
     val meetVisitCount = newCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
     val meetDownload = kiwixDataStore.rateAppDownloadCompleted.first()
     val meetReading = kiwixDataStore.rateAppReadingCount.first() >= READING_MILESTONE_THRESHOLD
 
-    return isPlayStoreVariant() &&
-      (meetVisitCount || meetDownload || meetReading) &&
+    return !isPromptShown &&
+      isPlayStoreVariant() &&
+      meetVisitCount &&
+      meetDownload &&
+      meetReading &&
       isTwoWeekPassed() &&
       isZimFilesAvailableInLibrary()
   }
@@ -95,7 +98,7 @@ class RateDialogHandler @Inject constructor(
 
   internal suspend fun isZimFilesAvailableInLibrary(): Boolean {
     // If it is a custom app, return true since custom apps always have the ZIM file.
-    if (activity.isBrandedApp()) return true
+    if (kiwixDataStore.isBrandedApp.first()) return true
     // For Kiwix app, check if there are ZIM files available in the library.
     return libkiwixBookOnDisk.getBooks().isNotEmpty()
   }
