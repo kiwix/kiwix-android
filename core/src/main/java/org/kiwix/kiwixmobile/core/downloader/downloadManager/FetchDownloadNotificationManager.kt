@@ -121,17 +121,23 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  /**
-   * Suppress Fetch's group summary notification. Each download already posts its
-   * own progress notification, so the summary only adds an extra icon to the
-   * status bar during downloads. See #5000.
-   */
   override fun updateGroupSummaryNotification(
     groupId: Int,
     notificationBuilder: NotificationCompat.Builder,
     downloadNotifications: List<DownloadNotification>,
     context: Context
-  ): Boolean = false
+  ): Boolean {
+    notificationBuilder
+      .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
+      .setOnlyAlertOnce(true)
+    downloadNotificationManager.notify(
+      DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID,
+      notificationBuilder.build()
+    )
+    return false
+  }
 
   override fun getSubtitleText(
     context: Context,
@@ -140,13 +146,18 @@ class FetchDownloadNotificationManager @Inject constructor(
     return when {
       downloadNotification.isCompleted -> context.getString(R.string.complete)
       downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+      downloadNotification.isQueued -> buildSubtitle(
+        context.getString(R.string.paused_offline_state),
+        downloadNotification.downloaded,
+        downloadNotification.total
+      )
+
       downloadNotification.isPaused -> buildSubtitle(
         context.getString(R.string.paused_state),
         downloadNotification.downloaded,
         downloadNotification.total
       )
 
-      downloadNotification.isQueued -> context.getString(R.string.resuming_state)
       downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
       else -> buildSubtitle(
         super.getSubtitleText(context, downloadNotification),
@@ -183,6 +194,7 @@ class FetchDownloadNotificationManager @Inject constructor(
       enableVibration(false)
     }
 
+  @Suppress("LongMethod")
   override fun updateNotification(
     notificationBuilder: NotificationCompat.Builder,
     downloadNotification: DownloadNotification,
@@ -228,7 +240,7 @@ class FetchDownloadNotificationManager @Inject constructor(
           )
 
       downloadNotification.isPaused ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
           .addAction(
             drawable.fetch_notification_resume,
             context.getString(R.string.notification_resume_button_text),
@@ -241,7 +253,17 @@ class FetchDownloadNotificationManager @Inject constructor(
           )
 
       downloadNotification.isQueued ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
+          .addAction(
+            drawable.fetch_notification_pause,
+            context.getString(R.string.notification_pause_button_text),
+            null
+          )
+          .addAction(
+            drawable.fetch_notification_cancel,
+            context.getString(R.string.cancel),
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+          )
 
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
@@ -288,7 +310,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  private fun getOpenActionPendingIntent(
+  fun getOpenActionPendingIntent(
     context: Context,
     downloadNotification: DownloadNotification
   ): PendingIntent =
@@ -319,17 +341,19 @@ class FetchDownloadNotificationManager @Inject constructor(
 
   fun showDownloadPauseNotification(
     fetch: Fetch,
-    download: Download
+    download: Download,
+    isOffline: Boolean = false
   ) {
     val notificationBuilder = getNotificationBuilder(download.id, download.id)
-    val pauseNotification = getPauseNotification(fetch, download, notificationBuilder)
+    val pauseNotification = getPauseNotification(fetch, download, notificationBuilder, isOffline)
     downloadNotificationManager.notify(download.id, pauseNotification)
   }
 
   private fun getPauseNotification(
     fetch: Fetch,
     download: Download,
-    notificationBuilder: Builder
+    notificationBuilder: Builder,
+    isOffline: Boolean = false
   ): Notification {
     synchronized(notificationBuilderLock) {
       val downloadTitle = getDownloadNotificationTitle(download)
@@ -338,16 +362,24 @@ class FetchDownloadNotificationManager @Inject constructor(
           downloadRoomDao.getEntityForFileName(downloadTitle)?.title
             ?: downloadTitle
         }
-      return@getPauseNotification notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      val subtitleText = if (isOffline) {
+        buildSubtitle(
+          context.getString(R.string.paused_offline_state),
+          download.downloaded,
+          download.total
+        )
+      } else {
+        buildSubtitle(
+          context.getString(R.string.paused_state),
+          download.downloaded,
+          download.total
+        )
+      }
+      val builder = notificationBuilder
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setSmallIcon(android.R.drawable.stat_sys_download_done)
         .setContentTitle(notificationTitle)
-        .setContentText(
-          buildSubtitle(
-            context.getString(R.string.paused_state),
-            download.downloaded,
-            download.total
-          )
-        )
+        .setContentText(subtitleText)
         // Set the ongoing true so that could not cancel the pause notification.
         // However, on Android 14 and above user can cancel the notification by swipe right so we
         // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications
@@ -356,17 +388,32 @@ class FetchDownloadNotificationManager @Inject constructor(
         .setGroupSummary(false)
         .setOnlyAlertOnce(true)
         .setProgress(HUNDERED, download.progress, false)
-        .addAction(
-          drawable.fetch_notification_cancel,
-          context.getString(R.string.cancel),
-          getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
-        )
-        .addAction(
-          drawable.fetch_notification_resume,
-          context.getString(R.string.notification_resume_button_text),
-          getActionPendingIntent(fetch, download, DownloadNotification.ActionType.RESUME)
-        )
-        .build()
+      if (isOffline) {
+        builder
+          .addAction(
+            drawable.fetch_notification_pause,
+            context.getString(R.string.notification_pause_button_text),
+            null
+          )
+          .addAction(
+            drawable.fetch_notification_cancel,
+            context.getString(R.string.cancel),
+            getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
+          )
+      } else {
+        builder
+          .addAction(
+            drawable.fetch_notification_cancel,
+            context.getString(R.string.cancel),
+            getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
+          )
+          .addAction(
+            drawable.fetch_notification_resume,
+            context.getString(R.string.notification_resume_button_text),
+            getActionPendingIntent(fetch, download, DownloadNotification.ActionType.RESUME)
+          )
+      }
+      return@getPauseNotification builder.build()
     }
   }
 
