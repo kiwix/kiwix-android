@@ -19,6 +19,11 @@
 package org.kiwix.kiwixmobile.core.main.reader
 
 import android.app.Application
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuInflater
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
 import app.cash.turbine.test
 import io.mockk.CapturingSlot
@@ -27,6 +32,7 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -80,6 +86,7 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
@@ -94,7 +101,7 @@ internal class CoreReaderViewModelTest {
   private val unsupportedMimeTypeHandler = mockk<UnsupportedMimeTypeHandler>()
   private val readerWebViewManager = mockk<ReaderWebViewManager>(relaxed = true)
   private val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
-  private val zimFileManager = mockk<ZimFileManager>()
+  private val zimFileManager = mockk<ZimFileManager>(relaxed = true)
   private val kiwixPermissionChecker = mockk<KiwixPermissionChecker>()
   private val repositoryActions = mockk<MainRepositoryActions>()
   private val bookmarkManager = mockk<BookmarkManager>()
@@ -1051,6 +1058,26 @@ internal class CoreReaderViewModelTest {
     }
   }
 
+  @Nested
+  inner class NavigationIcon {
+    @Test
+    fun navigationIcon_whenShowTabSwitcher_returnsAddIcon() {
+      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      val icon = viewModel.navigationIcon()
+
+      assertThat(icon).isEqualTo(IconItem.Drawable(R.drawable.ic_round_add_white_36dp))
+    }
+
+    @Test
+    fun navigationIcon_whenTabSwitcherIsHidden_returnsMenuVector() {
+      viewModel.getUiState().update { it.copy(showTabSwitcher = false) }
+
+      val icon = viewModel.navigationIcon()
+
+      assertThat(icon).isEqualTo(IconItem.Vector(Icons.Filled.Menu))
+    }
+  }
+
   @Test
   fun showDonationDialog_emitsShowDonationDialogEffect() = runTest {
     // Assuming initially false
@@ -1330,6 +1357,136 @@ internal class CoreReaderViewModelTest {
       assertThat(effect).isEqualTo(CoreReaderViewModel.ReaderEffect.ShowAddNoteDialog(mockWebView))
     }
   }
+
+  @Test
+  fun onSelectionActionModeStarted_whenActionModeIsNull_inflatesMenuAndConfiguresHandler() {
+    val mockActionMode = mockk<ActionMode>()
+    val mockMenu = mockk<Menu>(relaxed = true)
+    val mockInflater = mockk<MenuInflater>()
+
+    every { mockActionMode.menu } returns mockMenu
+    every { coreMainActivity.menuInflater } returns mockInflater
+
+    every { mockInflater.inflate(R.menu.menu_webview_action, mockMenu) } just Runs
+
+    viewModel.onSelectionActionModeStarted(mockActionMode, coreMainActivity)
+
+    // Only inflate and configure when null
+
+    verify { mockInflater.inflate(R.menu.menu_webview_action, mockMenu) }
+
+    // calls configureWebViewSelectionHandler()
+    verify { mockMenu.findItem(R.id.menu_speak_text) }
+  }
+
+  @Test
+  fun onSearchMenuClickedMenuClicked_savesSessionAndOpensSearch() = runTest {
+    val viewModel = spyk(viewModel)
+
+    // Capture the constructor param
+    coEvery { readerSessionManager.saveReaderSession(captureLambda()) } answers {
+      lambda<() -> Unit>().invoke()
+    }
+
+    every { viewModel.openSearch(isOpenedFromTabView = any()) } just Runs
+
+    viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+
+    viewModel.onSearchMenuClickedMenuClicked()
+    advanceUntilIdle()
+
+    coVerify { readerSessionManager.saveReaderSession(any()) }
+
+    verify { viewModel.openSearch(isOpenedFromTabView = true) }
+  }
+
+  @Test
+  fun onFindInPageMenuClicked_setsWebViewForSearching() = runTest {
+    every { findInPageManager.setWebView(mockWebView) } just Runs
+    viewModel.onFindInPageMenuClicked()
+    advanceUntilIdle()
+
+    verify { findInPageManager.setWebView(mockWebView) }
+  }
+
+  @Test
+  fun webViewUrlLoading_whenIsFirstRunAndNotAnDebugBuild_showsKiwixDialogAndEmitsOpenToDrawerAction() =
+    runTest {
+      // Conditions Requires to run
+      coEvery { kiwixDataStore.isFirstRun } returns flowOf(true)
+      coEvery { kiwixDataStore.isDebugBuild } returns flowOf(false)
+
+      viewModel.effects.test {
+        viewModel.webViewUrlLoading()
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
+        assertThat(effect.kiwixDialog).isEqualTo(KiwixDialog.ContentsDrawerHint)
+
+        // skips delay for TOC waiting time
+        advanceUntilIdle()
+
+        // emits action onAction(ReaderAction.OpenTocDrawer)
+        assertThat(viewModel.uiState.value.showTableOfContentDrawer).isTrue()
+
+        coVerify { kiwixDataStore.setIsFirstRun(false) }
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+  @Test
+  fun webViewUrlFinishedLoading_savesHistoryAndSession() = runTest {
+    val viewModel = spyk(viewModel)
+
+    every { mockWebView.url } returns "https://kiwix.org"
+    every { mockWebView.title } returns "Kiwix Title"
+
+    every { mockWebView.canGoBack() } returns true
+    every { mockWebView.canGoForward() } returns false
+
+    coEvery { kiwixDataStore.incrementRateAppReadingCount() } just Runs
+
+    val url = mockWebView.url
+    val title = mockWebView.title
+    val reader = zimFileManager.zimFileReader
+    coEvery {
+      readerHistoryManager.saveHistory(url, title, reader)
+    } just Runs
+
+    coEvery { readerSessionManager.saveReaderSession() } just Runs
+
+    viewModel.isWebViewHistoryRestoring = false
+
+    // Controls bottom Bar visibility
+    viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+
+    viewModel.webViewUrlFinishedLoading()
+    advanceUntilIdle()
+
+    // Verifies updateTableOfContents()
+    coVerify { readerWebViewManager.loadUrlWithCurrentWebview(any(), mockWebView) }
+
+    // Verifies updateBottomToolbarArrowsAlpha()
+    assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isTrue()
+    assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
+
+    coVerify {
+      readerHistoryManager.saveHistory(
+        url,
+        title,
+        zimFileManager.zimFileReader
+      )
+    }
+    coVerify { kiwixDataStore.incrementRateAppReadingCount() }
+
+    // Toggles bottom bar visibility based on tab Switcher
+    assertThat(viewModel.uiState.value.showBottomBar).isFalse
+
+    // Only show if WebViewHistoryRestoring is false
+    coVerify { readerSessionManager.saveReaderSession() }
+  }
+
+  @Nested
+  inner class AddToHomeScreen
 
   @Nested
   inner class Tabs
