@@ -1,0 +1,189 @@
+name: Android Emulator Test
+description: Run tests on an Android emulator with retry for emulator startup failures
+
+inputs:
+  api-level:
+    description: Android API level
+    required: true
+
+  target:
+    description: Android emulator target
+    required: true
+
+  arch:
+    description: Android emulator architecture
+    required: true
+
+  profile:
+    description: Android emulator profile
+    required: true
+
+  script:
+    description: Script to execute after the emulator starts
+    required: true
+
+  ram-size:
+    description: Emulator RAM size
+    required: false
+    default: 4096M
+
+  cores:
+    description: Number of emulator CPU cores
+    required: false
+    default: "4"
+
+  heap-size:
+    description: Emulator heap size
+    required: false
+    default: 1024M
+
+  gradle-opts:
+    description: Value for the GRADLE_OPTS environment variable during the emulator script
+    required: false
+    default: ""
+
+runs:
+  using: composite
+
+  steps:
+
+    # ---------------------------------------------------------
+    # Attempt 1
+    # ---------------------------------------------------------
+    - name: Emulator test - attempt 1
+      id: attempt-1
+      continue-on-error: true
+      uses: reactivecircus/android-emulator-runner@v2
+      env:
+        GRADLE_OPTS: ${{ inputs.gradle-opts }}
+      with:
+        api-level: ${{ inputs.api-level }}
+        target: ${{ inputs.target }}
+        arch: ${{ inputs.arch }}
+        profile: ${{ inputs.profile }}
+        ram-size: ${{ inputs.ram-size }}
+        cores: ${{ inputs.cores }}
+        heap-size: ${{ inputs.heap-size }}
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+        sdcard-path-or-size: 1024M
+        disable-animations: true
+        force-avd-creation: false
+        emulator-boot-timeout: 1200
+        script: |
+          bash -c '${{ inputs.script }}'
+
+    # ---------------------------------------------------------
+    # Check whether attempt 1 failed before the test script
+    # started.
+    # ---------------------------------------------------------
+    - name: Check attempt 1
+      id: check-attempt-1
+      if: steps.attempt-1.outcome == 'failure'
+      shell: bash
+      run: |
+        if [ -f /tmp/emulator_script_started ]; then
+          echo "script_started=true" >> "$GITHUB_OUTPUT"
+          echo "Instrumentation script started."
+        else
+          echo "script_started=false" >> "$GITHUB_OUTPUT"
+          echo "Emulator runner failed before instrumentation script started."
+        fi
+
+    # ---------------------------------------------------------
+    # Attempt 2
+    # Only retry when the emulator runner failed before the
+    # instrumentation script started.
+    # ---------------------------------------------------------
+    - name: Emulator test - attempt 2
+      id: attempt-2
+      if: |
+        steps.attempt-1.outcome == 'failure' &&
+        steps.check-attempt-1.outputs.script_started == 'false'
+      continue-on-error: true
+      uses: reactivecircus/android-emulator-runner@v2
+      env:
+        GRADLE_OPTS: ${{ inputs.gradle-opts }}
+      with:
+        api-level: ${{ inputs.api-level }}
+        target: ${{ inputs.target }}
+        arch: ${{ inputs.arch }}
+        profile: ${{ inputs.profile }}
+        ram-size: ${{ inputs.ram-size }}
+        cores: ${{ inputs.cores }}
+        heap-size: ${{ inputs.heap-size }}
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+        sdcard-path-or-size: 1024M
+        disable-animations: true
+        force-avd-creation: false
+        emulator-boot-timeout: 1200
+        script: |
+          bash -c '${{ inputs.script }}'
+
+    # ---------------------------------------------------------
+    # Check attempt 2
+    # ---------------------------------------------------------
+    - name: Check attempt 2
+      id: check-attempt-2
+      if: steps.attempt-2.outcome == 'failure'
+      shell: bash
+      run: |
+        if [ -f /tmp/emulator_script_started ]; then
+          echo "script_started=true" >> "$GITHUB_OUTPUT"
+          echo "Instrumentation script started."
+        else
+          echo "script_started=false" >> "$GITHUB_OUTPUT"
+          echo "Emulator runner failed before instrumentation script started."
+        fi
+
+    # ---------------------------------------------------------
+    # Attempt 3
+    # ---------------------------------------------------------
+    - name: Emulator test - attempt 3
+      id: attempt-3
+      if: |
+        steps.attempt-2.outcome == 'failure' &&
+        steps.check-attempt-2.outputs.script_started == 'false'
+      uses: reactivecircus/android-emulator-runner@v2
+      env:
+        GRADLE_OPTS: ${{ inputs.gradle-opts }}
+      with:
+        api-level: ${{ inputs.api-level }}
+        target: ${{ inputs.target }}
+        arch: ${{ inputs.arch }}
+        profile: ${{ inputs.profile }}
+        ram-size: ${{ inputs.ram-size }}
+        cores: ${{ inputs.cores }}
+        heap-size: ${{ inputs.heap-size }}
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+        sdcard-path-or-size: 1024M
+        disable-animations: true
+        force-avd-creation: false
+        emulator-boot-timeout: 1200
+        script: |
+          bash -c '${{ inputs.script }}'
+
+    # ---------------------------------------------------------
+    # Final result
+    #
+    # Important:
+    # If the script started and failed, this is a genuine test
+    # failure. If all emulator startup retries failed, fail too.
+    # ---------------------------------------------------------
+    - name: Fail if emulator/test failed
+      if: always()
+      shell: bash
+      run: |
+        if [ "${{ steps.attempt-1.outcome }}" = "success" ]; then
+          exit 0
+        fi
+
+        if [ "${{ steps.attempt-2.outcome }}" = "success" ]; then
+          exit 0
+        fi
+
+        if [ "${{ steps.attempt-3.outcome }}" = "success" ]; then
+          exit 0
+        fi
+
+        echo "Android emulator test failed."
+        exit 1

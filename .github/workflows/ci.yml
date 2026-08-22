@@ -87,9 +87,7 @@ jobs:
             echo "Generated AVD snapshot for caching."
 
       - name: Create instrumentation coverage
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        uses: ./.github/actions/android-emulator-runner
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
@@ -97,14 +95,8 @@ jobs:
           profile: pixel_2
           ram-size: 4096M
           cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          sdcard-path-or-size: 1024M
-          disable-animations: true
-          force-avd-creation: false
-          heap-size: 1024M
-          emulator-boot-timeout: 1200
-          script: |
-            bash contrib/instrumentation.sh
+          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+          script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
         uses: actions/upload-artifact@v6
@@ -211,9 +203,7 @@ jobs:
             echo "Generated AVD snapshot for caching."
 
       - name: Create instrumentation coverage for PlayStore variant
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        uses: ./.github/actions/android-emulator-runner
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
@@ -221,14 +211,8 @@ jobs:
           profile: pixel_2
           ram-size: 4096M
           cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          sdcard-path-or-size: 1024M
-          disable-animations: true
-          force-avd-creation: false
-          heap-size: 1024M
-          emulator-boot-timeout: 1200
-          script: |
-            bash contrib/instrumentation-release.sh
+          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+          script: bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
     name: Automated tests for Branded app
@@ -294,9 +278,7 @@ jobs:
             echo "Generated AVD snapshot for caching."
 
       - name: Test branded app
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        uses: ./.github/actions/android-emulator-runner
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
@@ -304,14 +286,8 @@ jobs:
           profile: pixel_2
           ram-size: 4096M
           cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          disable-animations: true
-          force-avd-creation: false
-          sdcard-path-or-size: 1024M
-          emulator-boot-timeout: 1200
-          heap-size: 1024M
-          script: |
-            bash contrib/instrumentation-brandedapps.sh
+          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+          script: bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
     name: Automated tests on Tablet
@@ -377,9 +353,7 @@ jobs:
             echo "Generated AVD snapshot for caching."
 
       - name: File Opening test on Tablet
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        uses: ./.github/actions/android-emulator-runner
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
@@ -387,14 +361,8 @@ jobs:
           profile: pixel_c
           ram-size: 4096M
           cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          disable-animations: true
-          force-avd-creation: false
-          sdcard-path-or-size: 1024M
-          emulator-boot-timeout: 1200
-          heap-size: 1024M
-          script: |
-            bash contrib/instrumentation-file-opening-on-tablet.sh
+          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+          script: bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
     name: Code Formatting

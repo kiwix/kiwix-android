@@ -18,6 +18,13 @@
 #
 #
 
+# Marks that this script actually started running, i.e. the emulator finished
+# booting and reactivecircus/android-emulator-runner handed control to us.
+# .github/actions/android-emulator-runner checks for this file to tell an
+# emulator boot-time crash (e.g. kiwix/kiwix-android#5047) apart from a
+# genuine test failure, and only retries the whole step for the former.
+touch /tmp/emulator_script_started
+
 # The emulator's crashpad_handler subprocess can survive `adb emu kill` and
 # hang the android-emulator-runner action's teardown
 # (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
