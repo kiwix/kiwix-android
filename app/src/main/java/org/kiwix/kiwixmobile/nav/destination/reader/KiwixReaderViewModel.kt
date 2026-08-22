@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
@@ -195,9 +195,15 @@ class KiwixReaderViewModel @Inject constructor(
     // Update the reader screen title to prevent showing the previously set title
     // when creating the new archive object.
     updateTitle()
+    val uri = zimFileUri.toUri()
     val filePath =
-      FileUtils.getLocalFilePathByUri(context.applicationContext, zimFileUri.toUri(), ioDispatcher)
-    if (filePath == null || !File(filePath).isFileExist(ioDispatcher)) {
+      FileUtils.getLocalFilePathByUri(context.applicationContext, uri, ioDispatcher)
+    val zimReaderSource = if (filePath != null && File(filePath).canReadFile(ioDispatcher)) {
+      ZimReaderSource(File(filePath))
+    } else if (uri.scheme == "content") {
+      val afdList = FileUtils.getAssetFileDescriptorFromUri(context, uri)
+      ZimReaderSource(uri = uri, assetFileDescriptorList = afdList)
+    } else {
       // Close the previously opened book in the reader. Since this file is not found,
       // it will not be set in the zimFileReader. The previously opened ZIM file
       // will be saved when we move between screens. If we return to the reader again,
@@ -207,7 +213,6 @@ class KiwixReaderViewModel @Inject constructor(
       emitEffect(ReaderEffect.ShowToast(context.getString(string.error_file_not_found, zimFileUri)))
       return
     }
-    val zimReaderSource = ZimReaderSource(File(filePath))
     openZimFile(zimReaderSource)
   }
 

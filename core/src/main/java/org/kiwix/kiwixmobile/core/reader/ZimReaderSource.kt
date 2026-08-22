@@ -74,8 +74,7 @@ class ZimReaderSource(
       when {
         file?.canReadFile(ioDispatcher) == true -> true
         assetFileDescriptorList?.isNotEmpty() == true &&
-          assetFileDescriptorList.first().parcelFileDescriptor?.fd
-            ?.let(::isFileDescriptorCanOpenWithLibkiwix) == true -> true
+          isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptorList.first()) -> true
 
         else -> false
       }

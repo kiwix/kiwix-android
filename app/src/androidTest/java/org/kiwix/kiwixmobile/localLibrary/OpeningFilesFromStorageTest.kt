@@ -98,12 +98,19 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
             .isDisplayed()
         }
         composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
-        copyMoveFileHandler {
-          assertCopyMoveDialogDisplayed(composeTestRule)
-          clickOnMove(composeTestRule)
-          assertStorageSelectionDialogDisplayed(composeTestRule)
-          clickOnInternalStorage(composeTestRule)
-          assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+        val isPlayStoreBuild = runBlocking { kiwixDataStore.isPlayStoreBuild.first() }
+        if (isPlayStoreBuild) {
+          copyMoveFileHandler {
+            assertCopyMoveDialogDisplayed(composeTestRule)
+            clickOnMove(composeTestRule)
+            assertStorageSelectionDialogDisplayed(composeTestRule)
+            clickOnInternalStorage(composeTestRule)
+            assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+          }
+        } else {
+          copyMoveFileHandler {
+            assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+          }
         }
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
@@ -128,12 +135,19 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
         ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(uri)).onActivity {}
         composeTestRule.waitForIdle()
-        copyMoveFileHandler {
-          assertCopyMoveDialogDisplayed(composeTestRule)
-          clickOnMove(composeTestRule)
-          assertStorageSelectionDialogDisplayed(composeTestRule)
-          clickOnInternalStorage(composeTestRule)
-          assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+        val isPlayStoreBuild = runBlocking { kiwixDataStore.isPlayStoreBuild.first() }
+        if (isPlayStoreBuild) {
+          copyMoveFileHandler {
+            assertCopyMoveDialogDisplayed(composeTestRule)
+            clickOnMove(composeTestRule)
+            assertStorageSelectionDialogDisplayed(composeTestRule)
+            clickOnInternalStorage(composeTestRule)
+            assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+          }
+        } else {
+          copyMoveFileHandler {
+            assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
+          }
         }
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
