@@ -277,6 +277,8 @@ abstract class CoreReaderViewModel(
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
+  @VisibleForTesting
+  fun getUiState() = _uiState
   private var documentSectionListener: SectionsListener? = object : SectionsListener {
     override fun sectionsLoaded(
       title: String,
