@@ -79,6 +79,8 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.UI_URI_STRING
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
@@ -253,20 +255,17 @@ internal class CoreReaderViewModelTest {
 
       @Test
       fun observeTabsState_emitsNewState_updatesReaderUiStateAndTabIcon() = runTest {
-        val tabsFlow = MutableStateFlow(TabsManager.TabsState())
+        val tabsFlow = MutableStateFlow(TabsManager.TabsState(webViews = listOf(mockWebView)))
         every { readerWebViewManager.tabsState } returns tabsFlow
-
-        viewModel.initialize(coreMainActivity, alertDialogShower)
-        advanceUntilIdle()
 
         viewModel.readerMenuState = readerMenuState
 
-        val newTabsState = TabsManager.TabsState(webViews = listOf(mockWebView))
-        tabsFlow.value = newTabsState
+        viewModel.initialize(coreMainActivity, alertDialogShower)
+
         advanceUntilIdle()
 
         verify { readerMenuState.updateTabIcon(1) }
-        assertThat(viewModel.uiState.value.tabsState).isEqualTo(newTabsState)
+        assertThat(viewModel.uiState.value.tabsState).isEqualTo(tabsFlow.value)
       }
 
       @Test
@@ -450,7 +449,7 @@ internal class CoreReaderViewModelTest {
     }
 
     @Test
-    fun donationDialogHandlerSetsUpDonation() = runTest {
+    fun initialize_setDonationDialogCallBack() = runTest {
       viewModel.initialize(coreMainActivity, alertDialogShower)
 
       verify { donationDialogHandler.setDonationDialogCallBack(any()) }
@@ -464,9 +463,10 @@ internal class CoreReaderViewModelTest {
     }
 
     @Test
-    fun initialize_initializesExternalLinkOpenerAndUnsupportedMimeTypeHandler() = runTest {
-      every { externalLinkOpener.initialize(any(), any()) } just Runs
-      every { unsupportedMimeTypeHandler.initialize(any(), any()) } just Runs
+    fun initialize_addAlertDialogCallback() = runTest {
+      every { externalLinkOpener.initialize(coreMainActivity, alertDialogShower) } just Runs
+      every { unsupportedMimeTypeHandler.initialize(coreMainActivity, alertDialogShower) } just Runs
+
       viewModel.initialize(coreMainActivity, alertDialogShower)
 
       verify { externalLinkOpener.initialize(coreMainActivity, alertDialogShower) }
@@ -1485,6 +1485,156 @@ internal class CoreReaderViewModelTest {
     coVerify { readerSessionManager.saveReaderSession() }
   }
 
+  @Test
+  fun webViewFailedLoading_updatedUrlFlow() = runTest {
+    viewModel.webViewFailedLoading("")
+    advanceUntilIdle()
+
+    coVerify { readerWebViewManager.getCurrentWebView() }
+    coVerify { mockWebView.url }
+  }
+
+  @Nested
+  inner class WebViewProgressChange {
+    @Test
+    fun whenProgressChanged_updatesUrlFlowAndTracksProgressBarProgress() = runTest {
+      viewModel.webViewProgressChanged(22, mockWebView)
+
+      advanceUntilIdle()
+
+      coVerify { readerWebViewManager.getCurrentWebView() }
+      verify { mockWebView.url }
+
+      assertThat(viewModel.uiState.value.loading).isTrue()
+      assertThat(viewModel.uiState.value.progress).isEqualTo(22)
+    }
+
+    @Test
+    fun whenProgressIsHundred_updatesUrlFlowAndHideProgressBar() = runTest {
+      viewModel.webViewProgressChanged(100, mockWebView)
+
+      advanceUntilIdle()
+
+      coVerify { readerWebViewManager.getCurrentWebView() }
+      verify { mockWebView.url }
+
+      assertThat(viewModel.uiState.value.loading).isFalse()
+      assertThat(viewModel.uiState.value.progress).isEqualTo(0)
+    }
+  }
+
+  @Test
+  fun webViewTitleUpdated_updatesTabIcon() {
+    every { readerWebViewManager.tabsSize() } returns 3
+
+    viewModel.readerMenuState = readerMenuState
+
+    every { readerMenuState.updateTabIcon(3) } just Runs
+
+    viewModel.webViewTitleUpdated("Kiwix Title")
+
+    verify { readerMenuState.updateTabIcon(3) }
+  }
+
+  @Nested
+  inner class WebViewPageChanged {
+    @Test
+    fun webViewPageChanged_whenBackToTopDisabled_doesNothing() = runTest {
+      every { kiwixDataStore.backToTop } returns flowOf(false)
+
+      viewModel.webViewPageChanged(1, 10)
+      advanceUntilIdle()
+
+      verify(exactly = 0) { mockWebView.scrollY }
+    }
+
+    @Test
+    fun webViewPageChanged_whenScrollYGreaterThan200AndShowTtsControlIsFalse_showsButtonAndRestartsTimer() =
+      runTest {
+        val viewModel = spyk(viewModel, recordPrivateCalls = true)
+
+        every { kiwixDataStore.backToTop } returns flowOf(true)
+        every { mockWebView.scrollY } returns 250
+        viewModel.getUiState()
+          .update { it.copy(showTtsControls = false, showBackToTopButton = false) }
+
+        viewModel.uiState.test {
+          awaitItem()
+
+          viewModel.webViewPageChanged(1, 10)
+
+          val visibleState = awaitItem()
+          assertThat(visibleState.showBackToTopButton).isTrue()
+
+          advanceUntilIdle()
+
+          // after BACK_TO_TOP_HIDE_DELAY_MS we hideBackToTopButton
+          val hiddenState = awaitItem()
+          assertThat(hiddenState.showBackToTopButton).isFalse()
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
+
+    @Test
+    fun webViewPageChanged_whenScrollYLessThan200_hidesButtonAndCancelsTimer() = runTest {
+      val viewModel = spyk(viewModel, recordPrivateCalls = true)
+
+      every { kiwixDataStore.backToTop } returns flowOf(true)
+      every { mockWebView.scrollY } returns 150
+
+      viewModel.getUiState().update { it.copy(showTtsControls = false, showBackToTopButton = true) }
+
+      viewModel.webViewPageChanged(1, 10)
+
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.showBackToTopButton).isFalse()
+    }
+  }
+
+  @Nested
+  inner class WebViewLongClick {
+    @Test
+    fun webViewLongClick_whenUrlStartsWithContentPrefix_showsOpenInNewTabDialog() {
+      val viewModel = spyk(viewModel)
+      val url = "${CONTENT_PREFIX}A/USA"
+      val redirectedUrl = "${CONTENT_PREFIX}A/United_States"
+
+      every { zimReaderContainer.getRedirect(url) } returns redirectedUrl
+      every { viewModel.showOpenInNewTabDialog(any()) } just Runs
+
+      viewModel.webViewLongClick(url)
+
+      verify { viewModel.showOpenInNewTabDialog(redirectedUrl) }
+    }
+
+    @Test
+    fun webViewLongClick_whenUrlStartsWithFile_showsOpenInNewTabDialog() {
+      val viewModel = spyk(viewModel)
+      val redirectedUrl = "file://android_asset/help.html"
+
+      every { zimReaderContainer.getRedirect(redirectedUrl) } returns redirectedUrl
+      every { viewModel.showOpenInNewTabDialog(any()) } just Runs
+
+      viewModel.webViewLongClick(redirectedUrl)
+
+      verify { viewModel.showOpenInNewTabDialog(redirectedUrl) }
+    }
+
+    @Test
+    fun webViewLongClick_whenUrlStartsWithUiUriString_showsOpenInNewTabDialog() {
+      val viewModel = spyk(viewModel)
+      val redirectedUrl = "${UI_URI_STRING}main_page"
+
+      every { zimReaderContainer.getRedirect(redirectedUrl) } returns redirectedUrl
+      every { viewModel.showOpenInNewTabDialog(any()) } just Runs
+
+      viewModel.webViewLongClick(redirectedUrl)
+
+      verify { viewModel.showOpenInNewTabDialog(redirectedUrl) }
+    }
+  }
+
   @Nested
   inner class AddToHomeScreen
 
@@ -1579,6 +1729,10 @@ internal class CoreReaderViewModelTest {
 
     public override fun openKiwixSupportUrl() {
       super.openKiwixSupportUrl()
+    }
+
+    public override fun showOpenInNewTabDialog(url: String) {
+      super.showOpenInNewTabDialog(url)
     }
 
     public override suspend fun hideTabSwitcher(shouldCloseZimBook: Boolean) {

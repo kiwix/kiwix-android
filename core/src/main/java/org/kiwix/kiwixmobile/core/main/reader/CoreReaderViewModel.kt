@@ -110,6 +110,7 @@ import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.UI_URI_STRING
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
@@ -855,10 +856,10 @@ abstract class CoreReaderViewModel(
   override fun webViewPageChanged(page: Int, maxPages: Int) {
     launchInMainScope {
       if (!isBackToTopEnabled()) return@launchInMainScope
-      restartHideBackToTopTimer()
       val scrollY = getCurrentWebView().scrollY
       if (scrollY > 200 && !uiState.value.showTtsControls) {
         showBackToTopButton()
+        restartHideBackToTopTimer()
       } else {
         hideBackToTopButton()
       }
@@ -883,23 +884,9 @@ abstract class CoreReaderViewModel(
   }
 
   override fun webViewLongClick(url: String) {
-    var handleEvent = false
-    when {
-      url.startsWith(CONTENT_PREFIX) -> {
-        // This is my web site, so do not override; let my WebView load the page
-        handleEvent = true
-      }
-
-      url.startsWith("file://") -> {
-        // To handle help page (loaded from resources)
-        handleEvent = true
-      }
-
-      url.startsWith(ZimFileReader.UI_URI_STRING) -> {
-        handleEvent = true
-      }
-    }
-    if (handleEvent) {
+    // CONTENT_PREFIX -> This is my web site, so do not override; let my WebView load the page
+    // "file://" -> To handle help page (loaded from resources)
+    if (url.startsWith(CONTENT_PREFIX) || url.startsWith("file://") || url.startsWith(UI_URI_STRING)) {
       showOpenInNewTabDialog(zimReaderContainer.getRedirect(url))
     }
   }
@@ -1579,7 +1566,7 @@ abstract class CoreReaderViewModel(
   protected open fun openKiwixSupportUrl() {
     externalLinkOpener.openExternalLinkWithDialog(
       KIWIX_SUPPORT_URL.toUri().browserIntent(),
-      context.getString(R.string.support_donation_platform)
+      context.getString(string.support_donation_platform)
     )
   }
 
