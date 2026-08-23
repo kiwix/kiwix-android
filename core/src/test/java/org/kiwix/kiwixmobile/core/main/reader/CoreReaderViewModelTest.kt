@@ -1388,7 +1388,7 @@ internal class CoreReaderViewModelTest {
       lambda<() -> Unit>().invoke()
     }
 
-    every { viewModel.openSearch(isOpenedFromTabView = any()) } just Runs
+    every { viewModel.openSearch(isOpenedFromTabView = false) } just Runs
 
     viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
 
@@ -1601,7 +1601,7 @@ internal class CoreReaderViewModelTest {
       val redirectedUrl = "${CONTENT_PREFIX}A/United_States"
 
       every { zimReaderContainer.getRedirect(url) } returns redirectedUrl
-      every { viewModel.showOpenInNewTabDialog(any()) } just Runs
+      every { viewModel.showOpenInNewTabDialog(redirectedUrl) } just Runs
 
       viewModel.webViewLongClick(url)
 
@@ -1614,7 +1614,7 @@ internal class CoreReaderViewModelTest {
       val redirectedUrl = "file://android_asset/help.html"
 
       every { zimReaderContainer.getRedirect(redirectedUrl) } returns redirectedUrl
-      every { viewModel.showOpenInNewTabDialog(any()) } just Runs
+      every { viewModel.showOpenInNewTabDialog(redirectedUrl) } just Runs
 
       viewModel.webViewLongClick(redirectedUrl)
 
@@ -1627,7 +1627,7 @@ internal class CoreReaderViewModelTest {
       val redirectedUrl = "${UI_URI_STRING}main_page"
 
       every { zimReaderContainer.getRedirect(redirectedUrl) } returns redirectedUrl
-      every { viewModel.showOpenInNewTabDialog(any()) } just Runs
+      every { viewModel.showOpenInNewTabDialog(redirectedUrl) } just Runs
 
       viewModel.webViewLongClick(redirectedUrl)
 
@@ -1686,26 +1686,26 @@ internal class CoreReaderViewModelTest {
     findInPageManager: FindInPageManager,
     mainDispatcher: MainCoroutineDispatcher
   ) : CoreReaderViewModel(
-      context,
-      kiwixDataStore,
-      externalLinkOpener,
-      unsupportedMimeTypeHandler,
-      readerWebViewManager,
-      zimReaderContainer,
-      zimFileManager,
-      kiwixPermissionChecker,
-      repositoryActions,
-      bookmarkManager,
-      readerHistoryManager,
-      readerSessionManager,
-      readerIntentManager,
-      pendingSearchItemManager,
-      readerPageManager,
-      readAloudManager,
-      donationDialogHandler,
-      findInPageManager,
-      mainDispatcher
-    ) {
+    context,
+    kiwixDataStore,
+    externalLinkOpener,
+    unsupportedMimeTypeHandler,
+    readerWebViewManager,
+    zimReaderContainer,
+    zimFileManager,
+    kiwixPermissionChecker,
+    repositoryActions,
+    bookmarkManager,
+    readerHistoryManager,
+    readerSessionManager,
+    readerIntentManager,
+    pendingSearchItemManager,
+    readerPageManager,
+    readAloudManager,
+    donationDialogHandler,
+    findInPageManager,
+    mainDispatcher
+  ) {
     override fun openSearch(
       searchString: String,
       isOpenedFromTabView: Boolean,
