@@ -163,6 +163,7 @@ abstract class CoreReaderViewModel(
   private val findInPageManager: FindInPageManager,
   @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : ViewModel(),
+  SectionsListener,
   WebViewCallback,
   ReaderMenuState.MenuClickListener,
   ShowDonationDialogCallback,
@@ -279,16 +280,18 @@ abstract class CoreReaderViewModel(
 
   @VisibleForTesting
   fun getUiState() = _uiState
-  private var documentSectionListener: SectionsListener? = object : SectionsListener {
-    override fun sectionsLoaded(
-      title: String,
-      sections: List<DocumentSection>
-    ) {
-      updateState { copy(tableOfContentTitle = title, documentSections = sections) }
-    }
 
-    override fun clearSections() {
-      updateState { copy(documentSections = emptyList()) }
+  override fun sectionsLoaded(title: String, sections: List<DocumentSection>) {
+    updateState { copy(tableOfContentTitle = title, documentSections = sections) }
+  }
+
+  override fun clearSections() {
+    updateState { copy(documentSections = emptyList()) }
+  }
+
+  private fun setupDocumentParser() {
+    documentParser = DocumentParser(this).apply {
+      loadDocumentParserJs(context)
     }
   }
 
@@ -300,12 +303,6 @@ abstract class CoreReaderViewModel(
       add(observeTabsState())
       add(observeReaderPendingIntent())
       add(observeBookmarkState())
-    }
-  }
-
-  private fun setupDocumentParser() {
-    documentParser = DocumentParser(requireNotNull(documentSectionListener)).apply {
-      loadDocumentParserJs(context)
     }
   }
 
@@ -1083,7 +1080,7 @@ abstract class CoreReaderViewModel(
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
     zimFileTitle == null || zimFileTitle.trim { it <= ' ' }.isEmpty()
 
-  protected suspend fun exitBook(shouldCloseZimBook: Boolean = true) {
+  protected open suspend fun exitBook(shouldCloseZimBook: Boolean = true) {
     showNoBookOpenViews()
     updateState {
       copy(
@@ -1778,7 +1775,6 @@ abstract class CoreReaderViewModel(
     bookmarkManager.stopObserving()
     pendingSearchItemManager.consume()
     readAloudManager.stopReadAloudSafely()
-    documentSectionListener = null
     documentParser = null
     zimReaderSource = null
     donationDialogHandler.setDonationDialogCallBack(null)
