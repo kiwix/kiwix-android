@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
+import android.speech.tts.Voice
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
@@ -109,21 +110,25 @@ class ReadAloudManager @Inject constructor(
   private val audioFocusChangedListener = OnAudioFocusChangeListener { focusChange: Int ->
     val tts = tts ?: return@OnAudioFocusChangeListener
     Log.d(TAG_KIWIX, "Focus change: $focusChange")
-    tts.currentTTSTask?.let {
-      tts.stop()
-      setActionAndStartTTSService(ACTION_STOP_TTS)
-      return@OnAudioFocusChangeListener
-    }
     when (focusChange) {
-      AudioManager.AUDIOFOCUS_LOSS -> {
-        if (tts.currentTTSTask?.paused == false) tts.pauseOrResume()
-        dispatchState(AudioFocusLoss)
-        setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
+      AudioManager.AUDIOFOCUS_LOSS,
+      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
+      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+        val task = tts.currentTTSTask
+        if (task != null && !task.paused) {
+          tts.pauseOrResume()
+          dispatchState(AudioFocusLoss)
+          setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
+        }
       }
 
       AudioManager.AUDIOFOCUS_GAIN -> {
-        dispatchState(AudioFocusGain)
-        setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
+        val task = tts.currentTTSTask
+        if (task != null && task.paused) {
+          tts.pauseOrResume()
+          dispatchState(AudioFocusGain)
+          setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
+        }
       }
     }
   }
@@ -138,6 +143,7 @@ class ReadAloudManager @Inject constructor(
         zimReaderContainer,
         kiwixDataStore
       )
+    initializeTTS(false)
   }
 
   fun initializeTTS(isReadSelection: Boolean) {
@@ -217,7 +223,7 @@ class ReadAloudManager @Inject constructor(
     tts?.forward10s()
   }
 
-  fun getAvailableVoices(): List<android.speech.tts.Voice> =
+  fun getAvailableVoices(): List<Voice> =
     tts?.getAvailableVoices().orEmpty()
 
   fun setVoiceByName(voiceName: String) {

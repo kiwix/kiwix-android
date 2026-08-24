@@ -338,12 +338,28 @@ abstract class CoreReaderViewModel(
         StartReadSelection -> startReadSelection()
         TtsPaused -> updateTtsIcon(isTtsPaused = true)
         TtsResumed -> updateTtsIcon(isTtsPaused = false)
-        ShowTTSLanguageDownloadDialog -> emitEffect(ReaderEffect.ShowTTSLanguageDialog)
+        ShowTTSLanguageDownloadDialog -> {
+          updateState {
+            copy(
+              ttsControlsItem = ttsControlsItem.copy(
+                isTtsPlaying = false,
+                isTtsPaused = false,
+                showTtsControlsOverlay = false
+              )
+            )
+          }
+          emitEffect(ReaderEffect.ShowTTSLanguageDialog)
+        }
       }
     }
   }
 
   private fun updateTtsIcon(isTtsPaused: Boolean) {
+    if (isTtsPaused) {
+      stopTtsTicker()
+    } else {
+      startTtsTicker()
+    }
     updateState {
       copy(
         ttsControlsItem = ttsControlsItem.copy(
@@ -426,7 +442,7 @@ abstract class CoreReaderViewModel(
       }
     }
 
-  private var ttsPositionJob: kotlinx.coroutines.Job? = null
+  private var ttsPositionJob: Job? = null
 
   private fun startTtsTicker() {
     ttsPositionJob?.cancel()

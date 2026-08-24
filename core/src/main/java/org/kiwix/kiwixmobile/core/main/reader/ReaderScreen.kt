@@ -40,6 +40,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.unit.DpSize
@@ -426,6 +427,11 @@ private fun ReaderContentLayout(
               modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent)
+                .pointerInput(Unit) {
+                  detectVerticalDragGestures { _, _ ->
+                    onReaderAction(DismissTtsControlsOverlay)
+                  }
+                }
                 .clickable { onReaderAction(DismissTtsControlsOverlay) }
                 .semantics { testTag = TTS_CONTROLS_OVERLAY_DISMISS_TESTING_TAG }
             )
