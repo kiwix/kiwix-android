@@ -99,7 +99,10 @@ runs:
     # ---------------------------------------------------------
     # Attempt 2
     # Only retry when the emulator runner failed before the
-    # instrumentation script started.
+    # instrumentation script started. force-avd-creation/-no-snapshot
+    # ensure this boots a genuinely fresh AVD instead of resuming the
+    # same (possibly poisoned) cached snapshot that attempt 1 just
+    # failed against, which would otherwise fail identically again.
     # ---------------------------------------------------------
     - name: Emulator test - attempt 2
       id: attempt-2
@@ -118,10 +121,10 @@ runs:
         ram-size: ${{ inputs.ram-size }}
         cores: ${{ inputs.cores }}
         heap-size: ${{ inputs.heap-size }}
-        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+        emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
         sdcard-path-or-size: 1024M
         disable-animations: true
-        force-avd-creation: false
+        force-avd-creation: true
         emulator-boot-timeout: 1200
         script: |
           bash -c '${{ inputs.script }}'
@@ -161,10 +164,10 @@ runs:
         ram-size: ${{ inputs.ram-size }}
         cores: ${{ inputs.cores }}
         heap-size: ${{ inputs.heap-size }}
-        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
+        emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
         sdcard-path-or-size: 1024M
         disable-animations: true
-        force-avd-creation: false
+        force-avd-creation: true
         emulator-boot-timeout: 1200
         script: |
           bash -c '${{ inputs.script }}'
