@@ -45,8 +45,10 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -79,6 +81,7 @@ class KiwixTextToSpeech internal constructor(
       if (isInitialized) {
         tts.setSpeechRate(value)
         currentTTSTask?.let { task ->
+          task.recalculateDurations()
           if (!task.paused) {
             task.pause()
             task.start()
@@ -113,9 +116,9 @@ class KiwixTextToSpeech internal constructor(
     if (!isInitialized || !::tts.isInitialized) return emptyList()
     val activeLocale = runCatching { tts.voice?.locale ?: tts.language }.getOrNull()
       ?: zimReaderContainer.language?.let {
-        iSO3ToLocale(it) ?: runCatching { java.util.Locale(it) }.getOrNull()
+        iSO3ToLocale(it) ?: runCatching { Locale(it) }.getOrNull()
       }
-      ?: java.util.Locale.getDefault()
+      ?: Locale.getDefault()
 
     val allVoices = runCatching { tts.voices }.getOrNull().orEmpty()
     val nonNetworkVoices = allVoices.filter { !it.isNetworkConnectionRequired }
@@ -131,7 +134,7 @@ class KiwixTextToSpeech internal constructor(
     val preferredCountry = if (activeLocale.country.isNotBlank()) {
       activeLocale.country
     } else {
-      val defaultLoc = java.util.Locale.getDefault()
+      val defaultLoc = Locale.getDefault()
       if (defaultLoc.language.equals(activeLocale.language, ignoreCase = true)) {
         defaultLoc.country
       } else {
@@ -156,12 +159,13 @@ class KiwixTextToSpeech internal constructor(
 
     return if (languageMatches.isNotEmpty()) {
       languageMatches.sortedBy { it.name }
-    } else {
+    } else if (uniqueVoices.isNotEmpty()) {
       uniqueVoices.sortedBy { it.name }
+    } else {
+      runCatching { tts.voice }.getOrNull()?.let { listOf(it) }.orEmpty()
     }
   }
 
-  @Suppress("InjectDispatcher")
   fun setVoiceByName(voiceName: String) {
     if (!isInitialized || !::tts.isInitialized) return
     val voice = getAvailableVoices().find { it.name == voiceName }
@@ -176,7 +180,6 @@ class KiwixTextToSpeech internal constructor(
   /**
    * Initializes the TextToSpeech object.
    */
-  @Suppress("InjectDispatcher")
   fun initializeTTS() {
     tts =
       TextToSpeech(
@@ -241,12 +244,20 @@ class KiwixTextToSpeech internal constructor(
       }
     } else {
       val locale = iSO3ToLocale(zimReaderContainer.language)
-      if ("mul" == zimReaderContainer.language) {
+        ?: runCatching { Locale(zimReaderContainer.language.orEmpty()) }.getOrNull()
+        ?: Locale.getDefault()
+      if (MULTILINGUAL_LANGUAGE_CODE == zimReaderContainer.language) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.language)
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
-      if (locale == null || isMissingOrUnsupportedLanguage(tts.isLanguageAvailable(locale))) {
+      val availability = tts.isLanguageAvailable(locale)
+      if (availability == LANG_MISSING_DATA ||
+        getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)
+      ) {
+        // Show download dialog so user can install the missing voice pack
+        showTtsLanguageDownloadDialog.invoke()
+      } else if (availability == LANG_NOT_SUPPORTED) {
         Log.d(
           TAG_KIWIX,
           "TextToSpeech: language not supported: ${zimReaderContainer.language}"
@@ -254,10 +265,7 @@ class KiwixTextToSpeech internal constructor(
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
       } else {
         tts.language = locale
-        if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
-          // Invoke show TTS language download dialog. Since this page language is not supported.
-          showTtsLanguageDownloadDialog.invoke()
-        } else if (requestAudioFocus()) {
+        if (requestAudioFocus()) {
           initWebView(webView)
           loadURL(webView)
         }
@@ -350,6 +358,7 @@ class KiwixTextToSpeech internal constructor(
    * {@link https://developer.android.com/guide/topics/media-apps/audio-focus#audio-focus-change }
    */
   fun shutdown() {
+    coroutineScope.cancel()
     if (::tts.isInitialized) {
       tts.shutdown()
     }
@@ -386,19 +395,27 @@ class KiwixTextToSpeech internal constructor(
   @Suppress("MagicNumber")
   inner class TTSTask(val pieces: List<String>) {
     private val currentPiece = AtomicInteger(0)
-    private val pieceDurationsMs: LongArray = LongArray(pieces.size) { i ->
-      val baseMs = (pieces[i].length * 65L).coerceIn(1500L, 8000L)
-      (baseMs / speechRate.coerceAtLeast(0.1f)).toLong()
+    private val basePieceDurationsMs: LongArray = LongArray(pieces.size) { i ->
+      (pieces[i].length * 65L).coerceIn(1500L, 8000L)
     }
+    private val pieceDurationsMs: LongArray = LongArray(pieces.size)
     private val pieceStartOffsetsMs: LongArray = LongArray(pieces.size)
 
-    val totalDurationMs: Long
+    var totalDurationMs: Long = 0L
+      private set
 
     init {
+      recalculateDurations()
+    }
+
+    fun recalculateDurations() {
+      val rate = speechRate.coerceAtLeast(0.1f)
       var acc = 0L
       for (i in pieces.indices) {
+        val duration = (basePieceDurationsMs[i] / rate).toLong()
+        pieceDurationsMs[i] = duration
         pieceStartOffsetsMs[i] = acc
-        acc += pieceDurationsMs[i]
+        acc += duration
       }
       totalDurationMs = acc
     }
@@ -571,5 +588,9 @@ class KiwixTextToSpeech internal constructor(
         task.start()
       }
     }
+  }
+
+  companion object {
+    private const val MULTILINGUAL_LANGUAGE_CODE = "mul"
   }
 }

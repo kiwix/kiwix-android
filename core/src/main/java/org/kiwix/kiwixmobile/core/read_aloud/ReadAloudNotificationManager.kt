@@ -26,7 +26,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
+import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaStyleNotificationHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -57,7 +59,7 @@ class ReadAloudNotificationManager @Inject constructor(
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
-  @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+  @OptIn(UnstableApi::class)
   @Suppress("LongMethod", "MagicNumber")
   fun buildForegroundNotification(
     isPauseTTS: Boolean,

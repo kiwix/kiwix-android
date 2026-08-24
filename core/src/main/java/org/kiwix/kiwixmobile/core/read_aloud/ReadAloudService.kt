@@ -18,17 +18,24 @@
 
 package org.kiwix.kiwixmobile.core.read_aloud
 
+import android.graphics.Bitmap.CompressFormat.PNG
+import android.graphics.BitmapFactory
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.os.Looper
 import androidx.annotation.OptIn
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.SimpleBasePlayer
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import dagger.hilt.android.AndroidEntryPoint
+import org.kiwix.kiwixmobile.core.R
+import java.io.ByteArrayOutputStream
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -51,7 +58,28 @@ class ReadAloudService : MediaSessionService() {
     runCatching {
       val player = TtsSimplePlayer()
       ttsPlayer = player
-      mediaSession = MediaSession.Builder(this, player).build()
+
+      val rewindButton = CommandButton.Builder(CommandButton.ICON_PREVIOUS)
+        .setPlayerCommand(Player.COMMAND_SEEK_BACK)
+        .setDisplayName("-10s")
+        .setIconResId(R.drawable.ic_replay_10)
+        .build()
+
+      val forwardButton = CommandButton.Builder(CommandButton.ICON_NEXT)
+        .setPlayerCommand(Player.COMMAND_SEEK_FORWARD)
+        .setDisplayName("+10s")
+        .setIconResId(R.drawable.ic_forward_10)
+        .build()
+
+      val stopButton = CommandButton.Builder(CommandButton.ICON_STOP)
+        .setPlayerCommand(Player.COMMAND_STOP)
+        .setDisplayName(getString(R.string.stop))
+        .setIconResId(R.drawable.ic_baseline_stop)
+        .build()
+
+      mediaSession = MediaSession.Builder(this, player)
+        .setCustomLayout(listOf(rewindButton, forwardButton, stopButton))
+        .build()
     }.onFailure { it.printStackTrace() }
   }
 
@@ -98,27 +126,27 @@ class ReadAloudService : MediaSessionService() {
     }.onFailure { it.printStackTrace() }
   }
 
-  @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+  @OptIn(UnstableApi::class)
   private inner class TtsSimplePlayer : SimpleBasePlayer(Looper.getMainLooper()) {
     private val iconBytes = runCatching {
       val bitmap =
-        android.graphics.BitmapFactory.decodeResource(
+        BitmapFactory.decodeResource(
           resources,
-          org.kiwix.kiwixmobile.core.R.mipmap.ic_launcher
+          R.mipmap.ic_launcher
         )
-      val stream = java.io.ByteArrayOutputStream()
-      bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
+      val stream = ByteArrayOutputStream()
+      bitmap.compress(PNG, 100, stream)
       stream.toByteArray()
     }.getOrNull()
 
     private val itemData = MediaItemData.Builder("kiwix_tts_track")
       .setMediaMetadata(
-        androidx.media3.common.MediaMetadata.Builder()
+        MediaMetadata.Builder()
           .apply {
             if (iconBytes != null) {
               setArtworkData(
                 iconBytes,
-                androidx.media3.common.MediaMetadata.PICTURE_TYPE_FRONT_COVER
+                MediaMetadata.PICTURE_TYPE_FRONT_COVER
               )
             }
           }
@@ -175,8 +203,10 @@ class ReadAloudService : MediaSessionService() {
     }
   }
 
-  override fun onBind(intent: Intent?): IBinder {
-    super.onBind(intent)
+  override fun onBind(intent: Intent?): IBinder? {
+    if (intent?.action == SERVICE_INTERFACE) {
+      return super.onBind(intent)
+    }
     return serviceBinder
   }
 
