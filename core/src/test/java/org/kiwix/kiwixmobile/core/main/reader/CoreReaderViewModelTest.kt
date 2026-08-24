@@ -19,12 +19,14 @@
 package org.kiwix.kiwixmobile.core.main.reader
 
 import android.app.Application
+import android.content.Intent
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
+import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import io.mockk.CapturingSlot
 import io.mockk.Runs
@@ -212,6 +214,32 @@ internal class CoreReaderViewModelTest {
   }
 
   @Nested
+  inner class DocumentSections {
+    @Test
+    fun sectionsLoaded_updatesTableOfContentTitleAndDocumentSections() {
+      val title = "Sample TOC Title"
+      val sections = listOf(DocumentSection("Section 1", "sec_1", 1))
+
+      viewModel.sectionsLoaded(title, sections)
+
+      val state = viewModel.uiState.value
+      assertThat(state.tableOfContentTitle).isEqualTo(title)
+      assertThat(state.documentSections).isEqualTo(sections)
+    }
+
+    @Test
+    fun clearSections_clearsDocumentSectionsInUiState() {
+      viewModel.getUiState().update {
+        it.copy(documentSections = listOf(DocumentSection("Section 1", "sec_1", 1)))
+      }
+
+      viewModel.clearSections()
+
+      assertThat(viewModel.uiState.value.documentSections).isEmpty()
+    }
+  }
+
+  @Nested
   inner class Initialization {
     @Nested
     inner class ObserveCoroutineFlows {
@@ -219,7 +247,7 @@ internal class CoreReaderViewModelTest {
       fun observeSettings_whenBackToTopIsFalse_hidesBackToTopButton() = runTest {
         every { kiwixDataStore.backToTop } returns flowOf(false)
 
-        // Assuming the button is shown
+
         viewModel.getUiState().update { it.copy(showBackToTopButton = true) }
 
         viewModel.initialize(coreMainActivity, alertDialogShower)
@@ -330,6 +358,8 @@ internal class CoreReaderViewModelTest {
         viewModel.initialize(coreMainActivity, alertDialogShower)
         advanceUntilIdle()
 
+        // Simulates
+        // DocumentParser(this).apply { loadDocumentParserJs(context) }
         verify { context.readFile("js/documentParser.js") }
       }
     }
@@ -1636,6 +1666,149 @@ internal class CoreReaderViewModelTest {
   }
 
   @Nested
+  inner class ShowOpenInNewTabDialog
+
+  @Test
+  fun openExternalUrl_invokesOpenExternalUrl() = runTest {
+
+    val intent = mockk<Intent>()
+
+    coEvery { externalLinkOpener.openExternalUrl(intent) } just Runs
+
+    viewModel.openExternalUrl(intent)
+
+    advanceUntilIdle()
+
+    coVerify { externalLinkOpener.openExternalUrl(intent) }
+  }
+
+  @Nested
+  inner class ShowSaveOrOpenUnsupportedFilesDialog {
+    @Test
+    fun showSaveOrOpenUnsupportedFilesDialog_delegatesToUnsupportedMimeTypeHandler() = runTest {
+      val url = "https://kiwix.app/content/document.pdf"
+      val documentType = "application/pdf"
+
+      every {
+        unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+          url,
+          documentType,
+          viewModel.viewModelScope
+        )
+      } just Runs
+
+      viewModel.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
+
+      verify {
+        unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+          url,
+          documentType,
+          viewModel.viewModelScope
+        )
+      }
+    }
+
+    @Test
+    fun showSaveOrOpenUnsupportedFilesDialog_withNullDocumentType_delegatesWithNull() {
+      val url = "https://kiwix.app/content/document.bin"
+      val documentType: String? = null
+
+      every {
+        unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+          url,
+          documentType,
+          viewModel.viewModelScope
+        )
+      } just Runs
+
+      viewModel.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
+
+      verify {
+        unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+          url,
+          null,
+          viewModel.viewModelScope
+        )
+      }
+    }
+  }
+
+  @Nested
+  inner class OnFullScreenVideoToggled {
+
+    @Test
+    fun whenIsFullScreen_hidesBottomBarAndEmitsDisableLeftSideBarEffect() = runTest {
+      viewModel.effects.test {
+
+        viewModel.onFullscreenVideoToggled(true)
+        advanceUntilIdle()
+
+        assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue
+        assertThat(viewModel.uiState.value.showBottomBar).isFalse
+
+        val effect = awaitItem()
+        assertThat(effect).isEqualTo(ReaderEffect.DisableLeftSideBar)
+      }
+    }
+
+    @Test
+    fun whenIsNotFullScreen_showsBottomBarAndEmitsEnableLeftSideBarEffect() = runTest {
+      viewModel.effects.test {
+
+        viewModel.onFullscreenVideoToggled(false)
+        advanceUntilIdle()
+
+        assertThat(viewModel.uiState.value.shouldShowFullScreen).isFalse
+        assertThat(viewModel.uiState.value.showBottomBar).isTrue
+
+        val effect = awaitItem()
+        assertThat(effect).isEqualTo(ReaderEffect.EnableLeftSideBar)
+      }
+    }
+  }
+
+  @Nested
+  inner class OpenZimfile
+
+  @Test
+  fun exitBook_updatesUiStateHidesProgressAndClosesZimBook() = runTest {
+    // default is null so assigning
+    viewModel.readerMenuState = readerMenuState
+
+    every { context.getString(string.reader) } returns "Reader"
+    every { readerMenuState.hideBookSpecificMenuItems() } just Runs
+    coEvery { zimFileManager.close() } just Runs
+
+    viewModel.getUiState().update {
+      it.copy(
+        showBottomBar = true,
+        title = "Active Book Title",
+        loading = true,
+        progress = 50,
+        showNoBookOpenInReader = false
+      )
+    }
+
+    viewModel.exitBook()
+    advanceUntilIdle()
+
+    val state = viewModel.uiState.value
+
+    assertThat(state.showNoBookOpenInReader).isTrue
+
+    assertThat(state.showBottomBar).isFalse()
+    assertThat(state.title).isEqualTo("Reader")
+
+    assertThat(state.loading).isFalse()
+    assertThat(state.progress).isEqualTo(0)
+
+    verify { readerMenuState.hideBookSpecificMenuItems() }
+
+    // only close if shouldCloseZimBook true
+    coVerify { zimFileManager.close() }
+  }
+
+  @Nested
   inner class AddToHomeScreen
 
   @Nested
@@ -1729,6 +1902,10 @@ internal class CoreReaderViewModelTest {
 
     public override fun openKiwixSupportUrl() {
       super.openKiwixSupportUrl()
+    }
+
+    public override suspend fun exitBook(shouldCloseZimBook: Boolean) {
+      super.exitBook(shouldCloseZimBook)
     }
 
     public override fun showOpenInNewTabDialog(url: String) {
