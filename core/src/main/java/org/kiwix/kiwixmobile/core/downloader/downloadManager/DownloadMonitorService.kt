@@ -93,7 +93,6 @@ class DownloadMonitorService : Service() {
     getSystemService(NOTIFICATION_SERVICE) as NotificationManager
   }
 
-
   @Inject
   lateinit var fetch: Fetch
 
@@ -319,7 +318,10 @@ class DownloadMonitorService : Service() {
   private fun startForegroundService() {
     runCatching {
       CoroutineScope(ioDispatcher).launch {
-        fetchDownloadNotificationManager.createNotificationChannels(this@DownloadMonitorService, notificationManager)
+        fetchDownloadNotificationManager.createNotificationChannels(
+          this@DownloadMonitorService,
+          notificationManager
+        )
         startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
         startPausedDownloadsDueToAndroidServiceLimitation()
       }
@@ -335,7 +337,6 @@ class DownloadMonitorService : Service() {
       .setOnlyAlertOnce(true)
       .setWhen(System.currentTimeMillis())
       .build()
-
 
   /**
    * Resumes all downloads that were previously paused by the service due to Android's
@@ -411,7 +412,7 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-      update(download)
+      update(download, waitingOnNetwork = waitingOnNetwork)
     }
 
     override fun onRemoved(download: Download) {
@@ -443,7 +444,8 @@ class DownloadMonitorService : Service() {
 
     private fun update(
       download: Download,
-      updateForeGroundService: Boolean = false
+      updateForeGroundService: Boolean = false,
+      waitingOnNetwork: Boolean = false
     ) {
       taskFlow.tryEmit {
         downloadRoomDao.update(download)
@@ -457,11 +459,9 @@ class DownloadMonitorService : Service() {
           }
         }
 
-        // Show a pause notification only when the user explicitly paused the download.
-        // Network-loss pausing is handled via onWaitingNetwork, onError (network errors only),
-        // and networkCallback.onLost — those paths call showDownloadPauseNotification(isOffline=true).
         when {
-          download.status == Status.FAILED || download.status == Status.QUEUED ->
+          // Shows notification for offline state and for Error status onEror() handles it already
+          download.status == Status.QUEUED && waitingOnNetwork ->
             fetchDownloadNotificationManager.showDownloadPauseNotification(
               fetch,
               download,
@@ -540,8 +540,6 @@ class DownloadMonitorService : Service() {
     notificationManager.cancel(download.id)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
-
-
 
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
