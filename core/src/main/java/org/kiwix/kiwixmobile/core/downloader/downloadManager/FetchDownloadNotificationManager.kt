@@ -148,7 +148,7 @@ class FetchDownloadNotificationManager @Inject constructor(
       downloadNotification.isCompleted -> context.getString(R.string.complete)
       downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
       downloadNotification.isQueued -> buildSubtitle(
-        context.getString(R.string.paused_offline_state),
+        context.getString(R.string.resuming_state),
         downloadNotification.downloaded,
         downloadNotification.total
       )
@@ -255,11 +255,6 @@ class FetchDownloadNotificationManager @Inject constructor(
 
       downloadNotification.isQueued ->
         notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-          .addAction(
-            drawable.fetch_notification_pause,
-            context.getString(R.string.notification_pause_button_text),
-            null
-          )
           .addAction(
             drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
