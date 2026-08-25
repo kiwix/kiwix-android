@@ -18,35 +18,18 @@
 
 package org.kiwix.kiwixmobile.custom.di
 
-import androidx.lifecycle.ViewModel
-import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoMap
-import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.custom.download.BrandedDownloadViewModel
-import org.kiwix.kiwixmobile.custom.main.BrandedReaderViewModel
-import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 
-// TODO(#5023): temporary - delete this module (and its @Binds/@IntoMap ViewModelKey plumbing)
-// once every ViewModel it binds is converted to @HiltViewModel + Hilt's own multibinding.
+// All of branded's own ViewModels (BrandedHelpViewModel, BrandedDownloadViewModel,
+// BrandedSettingsViewModel, BrandedReaderViewModel) are now @HiltViewModel and resolved via
+// hiltViewModel() (#5023). This module still includes CoreViewModelModule because branded's
+// nav graph also uses several core-shared ViewModels (HistoryViewModel, NotesViewModel,
+// BookmarkViewModel, AddNoteViewModel, SearchViewModel, ...) via the legacy
+// `viewModel(factory = viewModelFactory)` path - those can't move to @HiltViewModel yet without
+// also converting `:app`, which shares CoreViewModelModule and hasn't been touched yet.
 @InstallIn(SingletonComponent::class)
 @Module(includes = [CoreViewModelModule::class])
-abstract class BrandedViewModelModule {
-  @Binds
-  @IntoMap
-  @ViewModelKey(BrandedDownloadViewModel::class)
-  abstract fun bindBrandedDownloadViewModel(brandedDownloadViewModel: BrandedDownloadViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(BrandedSettingsViewModel::class)
-  abstract fun bindBrandedSettingsViewModel(brandedSettingsViewModel: BrandedSettingsViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(BrandedReaderViewModel::class)
-  abstract fun bindBrandedReaderViewModel(brandedReaderViewModel: BrandedReaderViewModel): ViewModel
-}
+abstract class BrandedViewModelModule

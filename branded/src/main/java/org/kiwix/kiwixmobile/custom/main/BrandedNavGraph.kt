@@ -72,7 +72,7 @@ fun BrandedNavGraph(
     composable(route = CustomDestination.Reader.route) {
       val activity = LocalActivity.current as CoreMainActivity
       val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
-      val brandedReaderViewModel: BrandedReaderViewModel = viewModel(factory = viewModelFactory)
+      val brandedReaderViewModel: BrandedReaderViewModel = hiltViewModel()
       ReaderScreenRoute(
         viewModel = brandedReaderViewModel,
         addNoteViewModel = addNoteViewModel,
@@ -109,14 +109,14 @@ fun BrandedNavGraph(
       )
     }
     composable(CustomDestination.Settings.route) {
-      val brandedSettingsViewModel: BrandedSettingsViewModel = viewModel(factory = viewModelFactory)
+      val brandedSettingsViewModel: BrandedSettingsViewModel = hiltViewModel()
       SettingsScreenRoute(
         brandedSettingsViewModel,
         navController::popBackStack
       )
     }
     composable(CustomDestination.Downloads.route) {
-      val brandedDownloadViewModel: BrandedDownloadViewModel = viewModel(factory = viewModelFactory)
+      val brandedDownloadViewModel: BrandedDownloadViewModel = hiltViewModel()
       BrandedDownloadRoute(brandedDownloadViewModel)
     }
     composable(
