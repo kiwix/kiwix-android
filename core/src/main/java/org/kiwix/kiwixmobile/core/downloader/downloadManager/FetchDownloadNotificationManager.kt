@@ -33,6 +33,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
+import androidx.core.content.ContextCompat
 import com.tonyodev.fetch2.ACTION_TYPE_CANCEL
 import com.tonyodev.fetch2.ACTION_TYPE_DELETE
 import com.tonyodev.fetch2.ACTION_TYPE_INVALID
@@ -93,19 +94,12 @@ class FetchDownloadNotificationManager @Inject constructor(
   override fun getFetchInstanceForNamespace(namespace: String): Fetch = Fetch.getDefaultInstance()
 
   override fun registerBroadcastReceiver() {
-    val context = CoreApp.instance.applicationContext
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      context.registerReceiver(
-        broadcastReceiver,
-        IntentFilter(notificationManagerAction),
-        Context.RECEIVER_EXPORTED
-      )
-    } else {
-      context.registerReceiver(
-        broadcastReceiver,
-        IntentFilter(notificationManagerAction)
-      )
-    }
+    ContextCompat.registerReceiver(
+      CoreApp.instance.applicationContext,
+      broadcastReceiver,
+      IntentFilter(notificationManagerAction),
+      ContextCompat.RECEIVER_EXPORTED
+    )
   }
 
   override fun createNotificationChannels(
@@ -262,7 +256,16 @@ class FetchDownloadNotificationManager @Inject constructor(
 
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
-    notificationCustomisation(downloadNotification, notificationBuilder, context)
+    if (downloadNotification.isCompleted) {
+      notificationBuilder.setContentIntent(
+        getOpenActionPendingIntent(context, downloadNotification)
+      )
+      notificationBuilder.addAction(
+        android.R.drawable.ic_menu_send,
+        context.getString(R.string.open),
+        getOpenActionPendingIntent(context, downloadNotification)
+      )
+    }
     // Remove the already shown notification if any, because fetch now pushes a
     // download complete notification.
     removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
@@ -284,24 +287,6 @@ class FetchDownloadNotificationManager @Inject constructor(
   ) {
     if (downloadNotification.isCompleted) {
       downloadNotificationManager.cancel(downloadNotification.groupId + THIRTY_TREE)
-    }
-  }
-
-  @SuppressLint("UnspecifiedImmutableFlag")
-  private fun notificationCustomisation(
-    downloadNotification: DownloadNotification,
-    notificationBuilder: NotificationCompat.Builder,
-    context: Context
-  ) {
-    if (downloadNotification.isCompleted) {
-      notificationBuilder.setContentIntent(
-        getOpenActionPendingIntent(context, downloadNotification)
-      )
-      notificationBuilder.addAction(
-        android.R.drawable.ic_menu_send,
-        context.getString(R.string.open),
-        getOpenActionPendingIntent(context, downloadNotification)
-      )
     }
   }
 
