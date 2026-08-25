@@ -43,9 +43,17 @@ class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
-    // We should migrate to the ksp plugin. This is still in our project due to dagger_android_processor
-    // We should think to migrate to hilt/koin.
-    target.plugins.apply("com.android.legacy-kapt")
+    // `:objectboxmigration` applies kapt itself (see its build.gradle.kts) for the ObjectBox
+    // annotation processor, which doesn't support ksp. Kotlin Gradle Plugin forces a task-graph
+    // dependency between kapt's stub generation and ksp whenever both are applied to the same
+    // module, which is circular here, so ksp is skipped for that module. Dagger/Hilt's compiler
+    // only needs ksp everywhere else, now that the unused dagger-android/dagger-android-processor
+    // (which forced kapt project-wide) has been removed - see issue #5023.
+    if (target.name != "objectboxmigration") {
+      target.plugins.apply("com.google.devtools.ksp")
+    } else {
+      target.plugins.apply("com.android.legacy-kapt")
+    }
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")
@@ -285,17 +293,39 @@ class AllProjectConfigurer {
       testImplementation(Libs.core_testing)
       compileOnly(Libs.javax_annotation_api)
       implementation(Libs.dagger)
-      implementation(Libs.dagger_android)
-      kapt(Libs.dagger_compiler)
-      // This processor does not support by ksp.
-      kapt(Libs.dagger_android_processor)
+      // `:objectboxmigration`'s `DatabaseModule.providesBoxStore()` has an `@Provides` method
+      // whose body references the ObjectBox-generated `MyObjectBox`, so Dagger's compiler still
+      // needs to run there to emit `DatabaseModule_ProvidesBoxStoreFactory` (consumed by the
+      // app's component). It has to run via kapt rather than ksp in this one module though: ksp
+      // and kapt would otherwise need to resolve each other's output first (Dagger needs
+      // `MyObjectBox` to exist, kapt's stub generation is forced to wait on ksp by Kotlin Gradle
+      // Plugin), which is circular. A single kaptDebugKotlin task can run both the ObjectBox and
+      // Dagger annotation processors without that conflict.
+      if (target.name != "objectboxmigration") {
+        ksp(Libs.dagger_compiler)
+      } else {
+        kapt(Libs.dagger_compiler)
+      }
+      // Hilt migration (#5023): the Hilt Gradle plugin (applied in `:app`/`:branded`) requires
+      // its compiler to be present wherever it's applied, and every module that ends up with
+      // Hilt modules/entry points needs both dependencies too, so both are added everywhere now
+      // even though no Hilt annotations exist yet - avoids per-module build-file churn as each
+      // module's DI is actually converted next.
+      implementation(Libs.hilt_android)
+      if (target.name != "objectboxmigration") {
+        ksp(Libs.hilt_android_compiler)
+      } else {
+        kapt(Libs.hilt_android_compiler)
+      }
       implementation(Libs.core_ktx)
       implementation(Libs.collection_ktx)
       implementation(Libs.preference_ktx)
       implementation(Libs.roomKtx)
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
-      kapt(Libs.roomCompiler)
+      if (target.name != "objectboxmigration") {
+        ksp(Libs.roomCompiler)
+      }
       implementation(Libs.tracing)
       implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)

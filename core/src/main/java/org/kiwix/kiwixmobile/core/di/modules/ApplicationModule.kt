@@ -24,10 +24,13 @@ import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import javax.inject.Singleton
 
+// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
+@DisableInstallInCheck
 @Module(
   includes = [
     DownloaderModule::class,

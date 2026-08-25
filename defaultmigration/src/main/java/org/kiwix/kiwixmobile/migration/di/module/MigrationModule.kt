@@ -20,9 +20,12 @@ package org.kiwix.kiwixmobile.migration.di.module
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.migration.DefaultMigrationHandler
 
+@InstallIn(SingletonComponent::class)
 @Module
 class MigrationModule {
   @Provides

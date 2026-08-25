@@ -22,10 +22,13 @@ import android.print.PdfPrint
 import android.print.PrintAttributes
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import javax.inject.Singleton
 
 const val PDF_RESOLUTION_DPI = 300
 
+// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
+@DisableInstallInCheck
 @Module
 class ReaderModule {
   @Singleton

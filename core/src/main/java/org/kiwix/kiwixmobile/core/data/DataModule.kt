@@ -19,8 +19,11 @@ package org.kiwix.kiwixmobile.core.data
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import javax.inject.Singleton
 
+// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
+@DisableInstallInCheck
 @Module
 class DataModule {
   @Singleton

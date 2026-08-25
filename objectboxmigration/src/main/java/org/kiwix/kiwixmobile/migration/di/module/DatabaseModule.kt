@@ -21,9 +21,12 @@ package org.kiwix.kiwixmobile.migration.di.module
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import io.objectbox.BoxStore
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 
+@InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
   companion object {

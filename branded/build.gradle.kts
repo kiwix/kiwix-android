@@ -73,6 +73,8 @@ androidComponents {
 dependencies {
   // Keep the migration for branded apps, since they are released on playStore.
   implementation(project(":objectboxmigration"))
+  // #5023: for hiltViewModel() in Compose destinations, as part of the Dagger -> Hilt migration.
+  implementation(Libs.HILT_NAVIGATION_COMPOSE)
 }
 
 fun ApplicationProductFlavor.createDownloadTask(

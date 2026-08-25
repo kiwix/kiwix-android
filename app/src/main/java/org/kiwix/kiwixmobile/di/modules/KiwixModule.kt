@@ -24,6 +24,8 @@ import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -37,6 +39,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
 
+@InstallIn(SingletonComponent::class)
 @Module
 object KiwixModule {
   @Provides

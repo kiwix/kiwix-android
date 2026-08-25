@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
@@ -38,7 +37,12 @@ import javax.inject.Inject
 const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 const val READING_MILESTONE_THRESHOLD = 10
 
-@ActivityScope
+// #5023: intentionally unscoped (was the app's custom @ActivityScope). A single binding can only
+// declare one @Scope, and this needs to resolve in both the legacy CoreActivityComponent (custom
+// @ActivityScope) and Hilt's ActivityComponent (@ActivityScoped) during the migration - no scope
+// annotation is the only one both accept. It's injected into exactly one field per Activity
+// (CoreMainActivity.rateDialogHandler), so losing the per-Activity instance cache here has no
+// observable effect.
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,

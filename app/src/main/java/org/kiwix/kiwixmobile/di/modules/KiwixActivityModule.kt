@@ -19,7 +19,10 @@
 package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 
+@InstallIn(ActivityComponent::class)
 @Module(includes = [ActivityModule::class])
 class KiwixActivityModule

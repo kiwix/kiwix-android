@@ -22,6 +22,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
@@ -32,6 +34,9 @@ import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 
+// TODO(#5023): temporary - delete this module (and its @Binds/@IntoMap ViewModelKey plumbing)
+// once every ViewModel it binds is converted to @HiltViewModel + Hilt's own multibinding.
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class CoreViewModelModule {
   @Binds

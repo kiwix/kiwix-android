@@ -19,10 +19,13 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 
+@InstallIn(ActivityComponent::class)
 @Module
 abstract class ActivityModule {
   @Binds

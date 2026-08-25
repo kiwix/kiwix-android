@@ -22,6 +22,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -101,7 +102,7 @@ fun BrandedNavGraph(
       )
     }
     composable(CustomDestination.Help.route) {
-      val brandedHelpViewModel: BrandedHelpViewModel = viewModel(factory = viewModelFactory)
+      val brandedHelpViewModel: BrandedHelpViewModel = hiltViewModel()
       HelpScreenRoute(
         navigateBack = navController::popBackStack,
         helpViewModel = brandedHelpViewModel

@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.custom.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
@@ -51,6 +52,7 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.brandedActivityComponent
 
+@AndroidEntryPoint
 class BrandedMainActivity : CoreMainActivity() {
   override val appName: String by lazy { getString(R.string.app_name) }
 

@@ -23,12 +23,15 @@ import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ServiceComponent
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 
+@InstallIn(ServiceComponent::class)
 @Module
 class ServiceModule {
   @Provides

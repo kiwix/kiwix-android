@@ -58,6 +58,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -92,6 +93,7 @@ interface CoreComponent {
   fun kiwixDataStore(): KiwixDataStore
   fun zimFileReaderFactory(): ZimFileReader.Factory
   fun libkiwixBookFactory(): LibkiwixBookFactory
+  fun jniKiwix(): JNIKiwix
   fun storageObserver(): StorageObserver
 
   @OPDSKiwixService

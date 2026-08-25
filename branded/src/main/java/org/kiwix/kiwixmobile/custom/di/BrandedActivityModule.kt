@@ -19,7 +19,10 @@
 package org.kiwix.kiwixmobile.custom.di
 
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 
+@InstallIn(ActivityComponent::class)
 @Module(includes = [ActivityModule::class])
 class BrandedActivityModule

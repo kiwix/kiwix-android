@@ -20,12 +20,15 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import javax.inject.Singleton
 
+// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
+@DisableInstallInCheck
 @Module
 open class DatabaseModule {
   @Singleton

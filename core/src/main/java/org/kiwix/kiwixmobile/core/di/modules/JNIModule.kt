@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.JNIKiwix
@@ -28,6 +29,8 @@ import org.kiwix.libkiwix.Manager
 import javax.inject.Named
 import javax.inject.Singleton
 
+// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
+@DisableInstallInCheck
 @Module
 class JNIModule {
   @Provides @Singleton

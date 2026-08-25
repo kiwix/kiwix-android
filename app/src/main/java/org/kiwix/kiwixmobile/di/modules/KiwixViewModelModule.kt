@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.di.modules
 import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
@@ -35,6 +37,9 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryVi
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderViewModel
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
+// TODO(#5023): temporary - delete this module (and its @Binds/@IntoMap ViewModelKey plumbing)
+// once every ViewModel it binds is converted to @HiltViewModel + Hilt's own multibinding.
+@InstallIn(SingletonComponent::class)
 @Module(includes = [CoreViewModelModule::class])
 abstract class KiwixViewModelModule {
   @Binds

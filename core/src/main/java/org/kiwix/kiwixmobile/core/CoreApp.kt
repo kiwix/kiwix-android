@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
@@ -50,12 +51,16 @@ abstract class CoreApp : Application() {
   @Inject
   lateinit var fileLogger: FileLogger
 
-  override fun onCreate() {
-    super.onCreate()
-    instance = this
+  override fun attachBaseContext(base: Context) {
+    super.attachBaseContext(base)
     coreComponent = DaggerCoreComponent.builder()
       .context(this)
       .build()
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+    instance = this
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
     themeConfig.init()
