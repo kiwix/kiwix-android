@@ -29,6 +29,8 @@ import android.app.Service
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -37,6 +39,7 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
+import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
@@ -47,7 +50,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -73,6 +75,12 @@ const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
 const val DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID = 3
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
+
+val NETWORK_RELATED_ERRORS = setOf(
+  Error.NO_NETWORK_CONNECTION,
+  Error.CONNECTION_TIMED_OUT,
+  Error.UNKNOWN_HOST
+)
 
 @AndroidEntryPoint
 class DownloadMonitorService : Service() {
@@ -110,7 +118,17 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onLost(network: Network) {
-      // do nothing
+      scope?.launch {
+        fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
+          activeDownloads.forEach { download ->
+            fetchDownloadNotificationManager.showDownloadPauseNotification(
+              fetch,
+              download,
+              isOffline = true
+            )
+          }
+        }
+      }
     }
   }
 
@@ -123,13 +141,14 @@ class DownloadMonitorService : Service() {
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
     scope?.launch {
-      delay(timeMillis = 1000)
       fetch.getDownloadsWithStatus(listOf(Status.QUEUED, Status.FAILED)) { downloadsToResume ->
         downloadsToResume.forEach { download ->
-          if (download.status == Status.FAILED) {
-            fetch.retry(download.id)
-          } else {
-            fetch.resume(download.id)
+          when (download.status) {
+            Status.FAILED if download.error in NETWORK_RELATED_ERRORS ->
+              fetch.retry(download.id)
+
+            Status.QUEUED -> fetch.resume(download.id)
+            else -> {}
           }
         }
       }
@@ -148,7 +167,11 @@ class DownloadMonitorService : Service() {
 
   private fun registerNetworkCallback() {
     runCatching {
-      connectivityManager.registerDefaultNetworkCallback(networkCallback)
+      val request = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        .build()
+      connectivityManager.registerNetworkCallback(request, networkCallback)
     }.onFailure { it.printStackTrace() }
   }
 
@@ -284,12 +307,12 @@ class DownloadMonitorService : Service() {
       .setOngoing(false)
       .setOnlyAlertOnce(true)
       .addAction(
-        com.tonyodev.fetch2.R.drawable.fetch_notification_resume,
+        drawable.fetch_notification_resume,
         getString(R.string.yes),
         yesPendingIntent
       )
       .addAction(
-        com.tonyodev.fetch2.R.drawable.fetch_notification_cancel,
+        drawable.fetch_notification_cancel,
         getString(R.string.no),
         noPendingIntent
       )
@@ -369,12 +392,14 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
-      taskFlow.tryEmit {
-        fetchDownloadNotificationManager.showDownloadPauseNotification(
-          fetch,
-          download,
-          isOffline = true
-        )
+      if (error in NETWORK_RELATED_ERRORS) {
+        taskFlow.tryEmit {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = true
+          )
+        }
       }
       update(download)
     }
