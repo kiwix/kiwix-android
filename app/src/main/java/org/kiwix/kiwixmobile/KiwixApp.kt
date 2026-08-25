@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile
 
+import dagger.hilt.android.HiltAndroidApp
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.di.components.DaggerKiwixComponent
 import org.kiwix.kiwixmobile.di.components.KiwixComponent
 
+@HiltAndroidApp
 class KiwixApp : CoreApp() {
   @Suppress("ConvertLambdaToReference") // we want the entire call to be lazy
   val kiwixComponent: KiwixComponent by lazy {

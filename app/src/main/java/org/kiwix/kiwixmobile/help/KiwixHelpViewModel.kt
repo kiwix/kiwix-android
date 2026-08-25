@@ -19,11 +19,13 @@
 package org.kiwix.kiwixmobile.help
 
 import android.content.Context
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.help.HelpViewModel
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
+@HiltViewModel
 class KiwixHelpViewModel @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) : HelpViewModel() {

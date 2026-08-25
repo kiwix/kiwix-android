@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -186,7 +187,7 @@ fun KiwixNavGraph(
       ZimHostRoute(viewModel, activity)
     }
     composable(KiwixDestination.Help.route) {
-      val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)
+      val kiwixHelpViewModel: KiwixHelpViewModel = hiltViewModel()
       HelpScreenRoute(
         navigateBack = navController::popBackStack,
         helpViewModel = kiwixHelpViewModel

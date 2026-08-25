@@ -26,7 +26,6 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.help.KiwixHelpViewModel
 import org.kiwix.kiwixmobile.intro.KiwixIntroViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
@@ -61,11 +60,6 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(LanguageViewModel::class)
   abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(KiwixHelpViewModel::class)
-  abstract fun bindKiwixHelpViewModel(kiwixHelpViewModel: KiwixHelpViewModel): ViewModel
 
   @Binds
   @IntoMap

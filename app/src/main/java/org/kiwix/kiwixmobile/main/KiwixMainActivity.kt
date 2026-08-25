@@ -39,6 +39,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.os.LocaleListCompat
+import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -92,6 +93,7 @@ const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
 
+@AndroidEntryPoint
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
   override val cachedComponent by lazy { kiwixActivityComponent }
