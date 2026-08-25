@@ -29,6 +29,8 @@ import android.app.Service
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -47,7 +49,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -74,6 +75,12 @@ const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
 const val DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID = 3
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
+
+val NETWORK_RELATED_ERRORS = setOf(
+  Error.NO_NETWORK_CONNECTION,
+  Error.CONNECTION_TIMED_OUT,
+  Error.UNKNOWN_HOST
+)
 
 class DownloadMonitorService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
@@ -103,14 +110,24 @@ class DownloadMonitorService : Service() {
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
-
+  
   private val networkCallback = object : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network) {
       resumeQueuedDownloadsOnNetworkAvailable()
     }
 
     override fun onLost(network: Network) {
-      // do nothing
+      scope?.launch {
+        fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
+          activeDownloads.forEach { download ->
+            fetchDownloadNotificationManager.showDownloadPauseNotification(
+              fetch,
+              download,
+              isOffline = true
+            )
+          }
+        }
+      }
     }
   }
 
@@ -123,13 +140,14 @@ class DownloadMonitorService : Service() {
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
     scope?.launch {
-      delay(timeMillis = 1000)
       fetch.getDownloadsWithStatus(listOf(Status.QUEUED, Status.FAILED)) { downloadsToResume ->
         downloadsToResume.forEach { download ->
-          if (download.status == Status.FAILED) {
-            fetch.retry(download.id)
-          } else {
-            fetch.resume(download.id)
+          when (download.status) {
+            Status.FAILED if download.error in NETWORK_RELATED_ERRORS ->
+              fetch.retry(download.id)
+
+            Status.QUEUED -> fetch.resume(download.id)
+            else -> {}
           }
         }
       }
@@ -153,7 +171,11 @@ class DownloadMonitorService : Service() {
 
   private fun registerNetworkCallback() {
     runCatching {
-      connectivityManager.registerDefaultNetworkCallback(networkCallback)
+      val request = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        .build()
+      connectivityManager.registerNetworkCallback(request, networkCallback)
     }.onFailure { it.printStackTrace() }
   }
 
@@ -374,12 +396,14 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
-      taskFlow.tryEmit {
-        fetchDownloadNotificationManager.showDownloadPauseNotification(
-          fetch,
-          download,
-          isOffline = true
-        )
+      if (error in NETWORK_RELATED_ERRORS) {
+        taskFlow.tryEmit {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = true
+          )
+        }
       }
       update(download)
     }
