@@ -46,7 +46,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.NavHostController
@@ -120,7 +119,6 @@ const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingT
 const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
 
 abstract class CoreMainActivity : BaseActivity() {
-  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   abstract val searchScreenRoute: String
 
   @Inject lateinit var alertDialogShower: AlertDialogShower

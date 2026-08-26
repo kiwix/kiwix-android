@@ -24,9 +24,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
@@ -88,7 +86,6 @@ fun KiwixNavGraph(
   navController: NavHostController,
   startDestination: String,
   modifier: Modifier = Modifier,
-  viewModelFactory: ViewModelProvider.Factory,
   snackBarHostState: SnackbarHostState
 ) {
   NavHost(
@@ -98,7 +95,7 @@ fun KiwixNavGraph(
   ) {
     composable(route = KiwixDestination.Reader.route) {
       val activity = LocalActivity.current as CoreMainActivity
-      val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
+      val addNoteViewModel: AddNoteViewModel = hiltViewModel()
       val kiwixReaderViewModel: KiwixReaderViewModel = hiltViewModel()
       ReaderScreenRoute(
         viewModel = kiwixReaderViewModel,
@@ -116,7 +113,7 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-      val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
+      val validateZimViewModel: ValidateZimViewModel = hiltViewModel()
       val localLibraryViewModel: LocalLibraryViewModel = hiltViewModel()
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
       LocalLibraryRoute(
@@ -140,14 +137,14 @@ fun KiwixNavGraph(
       )
     }
     composable(KiwixDestination.Bookmarks.route) {
-      val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
+      val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
       BookmarkScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = bookmarkViewModel
       )
     }
     composable(KiwixDestination.Notes.route) {
-      val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
+      val notesViewModel: NotesViewModel = hiltViewModel()
       NotesScreenRoute(
         navigateBack = navController::popBackStack,
         notesViewModel = notesViewModel
@@ -164,7 +161,7 @@ fun KiwixNavGraph(
       )
     }
     composable(KiwixDestination.History.route) {
-      val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
+      val historyViewModel: HistoryViewModel = hiltViewModel()
       HistoryScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = historyViewModel
@@ -218,7 +215,6 @@ fun KiwixNavGraph(
       val coreMainActivity = context as CoreMainActivity
 
       SearchScreenRoute(
-        viewModelFactory = viewModelFactory,
         arguments = backStackEntry.arguments,
         coreMainActivity = coreMainActivity
       )

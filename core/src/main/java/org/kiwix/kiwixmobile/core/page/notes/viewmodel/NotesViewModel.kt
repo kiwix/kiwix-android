@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
@@ -37,11 +37,11 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 
+@HiltViewModel
 class NotesViewModel @Inject constructor(
   notesRoomDao: NotesRoomDao,
   zimReaderContainer: ZimReaderContainer,
   kiwixDataStore: KiwixDataStore,
-  addNoteViewModel: AddNoteViewModel,
   @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : PageViewModel<NoteListItem, NotesState>(
     notesRoomDao,
@@ -52,7 +52,6 @@ class NotesViewModel @Inject constructor(
   PageViewModelClickListener {
   init {
     setOnItemClickListener(this)
-    setAddNoteViewModel(addNoteViewModel)
   }
 
   override fun initialState(): NotesState {

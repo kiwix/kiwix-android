@@ -21,13 +21,10 @@ package org.kiwix.kiwixmobile.di.modules
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 
-// All of :app's own ViewModels are now @HiltViewModel and resolved via hiltViewModel() (#5023).
-// This module still includes CoreViewModelModule because :app's nav graph also uses several
-// core-shared ViewModels (HistoryViewModel, NotesViewModel, BookmarkViewModel, AddNoteViewModel,
-// SearchViewModel, ValidateZimViewModel, ...) via the legacy `viewModel(factory = viewModelFactory)`
-// path - those can't move to @HiltViewModel until :core itself is converted.
+// All ViewModels this module used to bind (both :app's own and the core-shared ones it pulled in
+// via CoreViewModelModule) are now @HiltViewModel. Kept as an empty module only because it's
+// still listed in the legacy KiwixComponent's `modules = [...]` (#5023).
 @InstallIn(SingletonComponent::class)
-@Module(includes = [CoreViewModelModule::class])
+@Module
 abstract class KiwixViewModelModule

@@ -54,6 +54,7 @@ class AllProjectConfigurer {
     } else {
       target.plugins.apply("com.android.legacy-kapt")
     }
+    target.plugins.apply("dagger.hilt.android.plugin")
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("jacoco")

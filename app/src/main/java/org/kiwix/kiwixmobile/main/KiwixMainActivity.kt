@@ -162,7 +162,6 @@ class KiwixMainActivity : CoreMainActivity() {
         enableLeftDrawer = enableLeftDrawer.value,
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-        viewModelFactory = viewModelFactory,
         snackBarHostState = snackBarHostState
       )
       LaunchedEffect(Unit) {

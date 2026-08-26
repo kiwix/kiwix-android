@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 
+@HiltViewModel
 class HistoryViewModel @Inject constructor(
   historyRoomDao: HistoryRoomDao,
   zimReaderContainer: ZimReaderContainer,

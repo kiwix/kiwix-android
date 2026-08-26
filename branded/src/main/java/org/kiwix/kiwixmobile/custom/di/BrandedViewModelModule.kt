@@ -21,15 +21,10 @@ package org.kiwix.kiwixmobile.custom.di
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 
-// All of branded's own ViewModels (BrandedHelpViewModel, BrandedDownloadViewModel,
-// BrandedSettingsViewModel, BrandedReaderViewModel) are now @HiltViewModel and resolved via
-// hiltViewModel() (#5023). This module still includes CoreViewModelModule because branded's
-// nav graph also uses several core-shared ViewModels (HistoryViewModel, NotesViewModel,
-// BookmarkViewModel, AddNoteViewModel, SearchViewModel, ...) via the legacy
-// `viewModel(factory = viewModelFactory)` path - those can't move to @HiltViewModel yet without
-// also converting `:app`, which shares CoreViewModelModule and hasn't been touched yet.
+// All of branded's own ViewModels, and all core-shared ones it used (History/Notes/Bookmark/
+// AddNote/Search/ValidateZim), are now @HiltViewModel. Kept as an empty module only because it's
+// still listed in the legacy BrandedComponent's `modules = [...]` (#5023).
 @InstallIn(SingletonComponent::class)
-@Module(includes = [CoreViewModelModule::class])
+@Module
 abstract class BrandedViewModelModule

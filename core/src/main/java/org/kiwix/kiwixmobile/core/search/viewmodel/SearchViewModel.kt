@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -74,6 +75,7 @@ const val DEBOUNCE_DELAY = 150L
 const val MAX_SUGGEST_WORD_COUNT = 1
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
 class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,

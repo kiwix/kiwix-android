@@ -44,7 +44,6 @@ import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
-import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.KiwixPermissionModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
@@ -53,7 +52,6 @@ import org.kiwix.kiwixmobile.core.di.modules.ReaderModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServiceManager
-import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -73,7 +71,6 @@ import javax.inject.Singleton
     NetworkModule::class,
     JNIModule::class,
     DataModule::class,
-    CoreViewModelModule::class,
     SearchModule::class,
     MutexModule::class,
     KiwixPermissionModule::class,
@@ -117,7 +114,6 @@ interface CoreComponent {
   fun kiwixPermissionChecker(): KiwixPermissionChecker
   fun inject(application: CoreApp)
 
-  fun inject(errorActivity: ErrorActivity)
   fun coreServiceComponent(): CoreServiceComponent.Builder
 
   @IoDispatcher

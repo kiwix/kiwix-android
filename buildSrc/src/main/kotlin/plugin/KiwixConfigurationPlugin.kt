@@ -34,7 +34,6 @@ class KiwixConfigurationPlugin : Plugin<Project> {
     target.pluginManager.withPlugin("com.android.application") {
       allProjectConfigurer.configureApplicationExtension(target)
       appConfigurer.configure(target)
-      target.plugins.apply("dagger.hilt.android.plugin")
     }
     allProjectConfigurer.configurePlugins(target)
     allProjectConfigurer.applyScripts(target)

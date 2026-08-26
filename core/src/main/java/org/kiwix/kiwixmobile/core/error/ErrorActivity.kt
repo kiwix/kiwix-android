@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,9 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +44,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
@@ -52,7 +52,6 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActiv
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
@@ -77,6 +76,7 @@ import kotlin.system.exitProcess
 private const val STATUS = 10
 private const val ZERO = 0
 
+@AndroidEntryPoint
 open class ErrorActivity : BaseActivity() {
   @Inject
   lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
@@ -103,13 +103,9 @@ open class ErrorActivity : BaseActivity() {
   open val crashDescription: Int = R.string.crash_description
   private val showValidationDialog = MutableStateFlow(false)
 
-  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  private val validateZimViewModel by lazy {
-    viewModel<ValidateZimViewModel>(viewModelFactory)
-  }
+  private val validateZimViewModel: ValidateZimViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    coreComponent.inject(this)
     super.onCreate(savedInstanceState)
     val extras = intent.extras
     exception =

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,6 +54,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import javax.inject.Inject
 
+@HiltViewModel
 class AddNoteViewModel @Inject constructor(
   private val noteRepository: NoteRepository,
   val zimReaderContainer: ZimReaderContainer,

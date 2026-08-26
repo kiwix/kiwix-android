@@ -83,8 +83,7 @@ class BrandedMainActivity : CoreMainActivity() {
         leftDrawerState = leftDrawerState,
         enableLeftDrawer = enableLeftDrawer.value,
         uiCoroutineScope = uiCoroutineScope,
-        customBackHandler = customBackHandler,
-        viewModelFactory = viewModelFactory
+        customBackHandler = customBackHandler
       )
       DialogHost(alertDialogShower)
       LaunchedEffect(Unit) {
