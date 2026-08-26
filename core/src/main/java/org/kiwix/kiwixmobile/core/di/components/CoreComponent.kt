@@ -23,16 +23,11 @@ import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
-import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
-import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
-import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.KiwixPermissionModule
@@ -71,21 +66,7 @@ interface CoreComponent {
   fun zimReaderContainer(): ZimReaderContainer
   fun libkiwixBookmarks(): LibkiwixBookmarks
   fun libkiwixBooks(): LibkiwixBookOnDisk
-  fun context(): Context
 
-  // Kept because :app's KiwixComponent depends on CoreComponent via Dagger
-  // `dependencies = [CoreComponent::class]`, which only sees what's exposed here - and its own
-  // ObjectBoxToRoomMigrator (real, still-active migration path) and OnlineLibraryRepositoryImpl
-  // need these transitively.
-  fun recentSearchRoomDao(): RecentSearchRoomDao
-  fun historyRoomDao(): HistoryRoomDao
-  fun noteRoomDao(): NotesRoomDao
-
-  @OPDSKiwixService
-  fun provideOPDSKiwixService(): KiwixService
-
-  // Kept for KiwixReaderScreenTest (app/src/androidTest), which still resolves these off
-  // TestComponent (: CoreComponent) directly.
   @IoDispatcher
   fun provideIoDispatcher(): CoroutineDispatcher
 

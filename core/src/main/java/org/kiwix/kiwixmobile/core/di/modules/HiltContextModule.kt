@@ -27,7 +27,7 @@ import dagger.hilt.components.SingletonComponent
 
 // TODO(#5023): temporary bridge. Hilt only provides `Context` qualified as `@ApplicationContext`,
 // but this codebase's existing @Provides methods across many modules (ApplicationModule,
-// DatabaseModule, DownloaderModule, JNIModule, CoreServiceModule, KiwixModule, ...) inject plain
+// DatabaseModule, DownloaderModule, JNIModule, CoreServiceModule, ...) inject plain
 // unqualified `Context`, following the old manual `CoreComponent.Builder.context()` binding.
 // Remove this once those injection sites are swept to request `@ApplicationContext Context`
 // directly instead.

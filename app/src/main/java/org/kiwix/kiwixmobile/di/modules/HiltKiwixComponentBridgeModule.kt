@@ -18,67 +18,71 @@
 
 package org.kiwix.kiwixmobile.di.modules
 
-import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
+import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
+import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerImpl
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
+import javax.inject.Singleton
 
 // TODO(#5023): temporary bridge for the Dagger -> Hilt migration, mirroring
-// HiltCoreComponentBridgeModule in :core but for :app's own KiwixComponent. FileOperationHandler
-// and CopyMoveProgressBarController are bridged to the legacy `KiwixApp.kiwixComponent` (already
-// exposed as accessors there) since they track in-flight copy/move state that must stay a single
-// shared instance. The Android system services and Fat32Checker have no such state and no
-// existing KiwixComponent accessor, so they're just reconstructed here directly (matching
-// KiwixModule's original @Provides bodies) rather than adding new accessors for them.
+// HiltCoreComponentBridgeModule in :core but for :app's own KiwixComponent. The Android system
+// services and Fat32Checker have no shared state and no existing KiwixComponent accessor, so
+// they're just reconstructed here directly (matching KiwixModule's original @Provides bodies)
+// rather than adding new accessors for them.
 // Delete this module once every consumer is converted to Hilt and the manual graph is retired.
 @InstallIn(SingletonComponent::class)
 @Module
-object HiltKiwixComponentBridgeModule {
-  @Provides
-  fun provideFileOperationHandler(application: Application): FileOperationHandler =
-    (application as KiwixApp).kiwixComponent.provideFileOperationHandler()
+abstract class HiltKiwixComponentBridgeModule {
+  @Binds
+  @Singleton
+  abstract fun bindFileOperationHandler(impl: FileOperationHandlerImpl): FileOperationHandler
 
-  @Provides
-  fun provideCopyMoveProgressBarController(application: Application): CopyMoveProgressBarController =
-    (application as KiwixApp).kiwixComponent.provideCopyMoveProgressBarController()
+  @Binds
+  @Singleton
+  abstract fun bindCopyMoveProgressBarController(
+    impl: CopyMoveProgressBarControllerImpl
+  ): CopyMoveProgressBarController
 
-  @Provides
-  fun provideLocationManager(@ApplicationContext context: Context): LocationManager =
-    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+  companion object {
+    @Provides
+    fun provideLocationManager(@ApplicationContext context: Context): LocationManager =
+      context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-  @Provides
-  fun provideFat32Checker(
-    kiwixDataStore: KiwixDataStore,
-    mountPointProducer: MountPointProducer,
-    @IoDispatcher ioDispatcher: CoroutineDispatcher
-  ): Fat32Checker =
-    Fat32Checker(
-      kiwixDataStore,
-      listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker()),
-      ioDispatcher
-    )
+    @Provides
+    fun provideFat32Checker(
+      kiwixDataStore: KiwixDataStore,
+      mountPointProducer: MountPointProducer,
+      @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): Fat32Checker =
+      Fat32Checker(
+        kiwixDataStore,
+        listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker()),
+        ioDispatcher
+      )
 
-  @Provides
-  fun providesWiFiP2pManager(@ApplicationContext context: Context): WifiP2pManager? =
-    context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
+    @Provides
+    fun providesWiFiP2pManager(@ApplicationContext context: Context): WifiP2pManager? =
+      context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
 
-  @Provides
-  fun provideWifiManager(@ApplicationContext context: Context): WifiManager =
-    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    @Provides
+    fun provideWifiManager(@ApplicationContext context: Context): WifiManager =
+      context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+  }
 }
