@@ -72,7 +72,6 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
-  fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun kiwixDataStore(): KiwixDataStore
   fun storageObserver(): StorageObserver

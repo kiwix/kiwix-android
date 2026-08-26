@@ -85,7 +85,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
@@ -96,7 +95,6 @@ const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
 @AndroidEntryPoint
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
-  override val cachedComponent by lazy { kiwixActivityComponent }
   override val searchScreenRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk

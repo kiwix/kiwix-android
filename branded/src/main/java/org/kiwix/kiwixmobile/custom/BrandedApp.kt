@@ -20,13 +20,6 @@ package org.kiwix.kiwixmobile.custom
 
 import dagger.hilt.android.HiltAndroidApp
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.custom.di.BrandedComponent
-import org.kiwix.kiwixmobile.custom.di.DaggerBrandedComponent
 
 @HiltAndroidApp
-class BrandedApp : CoreApp() {
-  @Suppress("ConvertLambdaToReference") // we want the entire call to be lazy
-  val brandedComponent: BrandedComponent by lazy {
-    DaggerBrandedComponent.builder().coreComponent(coreComponent).build()
-  }
-}
+class BrandedApp : CoreApp()

@@ -50,7 +50,6 @@ import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.custom.brandedActivityComponent
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -66,7 +65,6 @@ class BrandedMainActivity : CoreMainActivity() {
   override val historyScreenRoute: String = CustomDestination.History.route
   override val notesScreenRoute: String = CustomDestination.Notes.route
   override val helpScreenRoute: String = CustomDestination.Help.route
-  override val cachedComponent by lazy { brandedActivityComponent }
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 
   override fun onCreate(savedInstanceState: Bundle?) {

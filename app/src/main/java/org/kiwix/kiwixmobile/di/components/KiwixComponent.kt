@@ -28,8 +28,6 @@ import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
 import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
-import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
-import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
 
 @KiwixScope
 @Component(
@@ -43,9 +41,6 @@ import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
   ]
 )
 interface KiwixComponent {
-  fun activityComponentBuilder(): KiwixActivityComponent.Builder
-  fun providesOnlineLibraryManager(): OnlineLibraryManager
   fun provideFileOperationHandler(): FileOperationHandler
   fun provideCopyMoveProgressBarController(): CopyMoveProgressBarController
-  fun provideOnlineLibraryRepository(): OnlineLibraryRepository
 }

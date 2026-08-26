@@ -62,7 +62,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServiceManager
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -199,7 +198,6 @@ abstract class CoreMainActivity : BaseActivity() {
   abstract val notesScreenRoute: String
   abstract val helpScreenRoute: String
   abstract val readerScreenRoute: String
-  abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinationsRoute: Set<String>
   abstract val appName: String
 

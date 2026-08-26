@@ -23,7 +23,6 @@ import android.content.Intent
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
-import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 object ActivityExtensions {
@@ -39,9 +38,6 @@ object ActivityExtensions {
     noinline intentFunc: (Intent.() -> Unit)? = null
   ) =
     Intent(this, T::class.java).apply { intentFunc?.invoke(this) }
-
-  val Activity.cachedComponent: CoreActivityComponent
-    get() = coreMainActivity.cachedComponent
 
   fun Activity.navigate(route: String, navOptions: NavOptions? = null) {
     coreMainActivity.navigate(route, navOptions)
