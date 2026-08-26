@@ -1137,7 +1137,7 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  protected fun observeBookmarks(zimFileReader: ZimFileReader) {
+  protected open fun observeBookmarks(zimFileReader: ZimFileReader) {
     runCatching {
       bookmarkManager.observeBookmarks(viewModelScope, zimFileReader.id, webUrlsFlow)
       updateUrlFlow()

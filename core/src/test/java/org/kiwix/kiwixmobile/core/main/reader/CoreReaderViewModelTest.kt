@@ -81,6 +81,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.UI_URI_STRING
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -179,6 +180,7 @@ internal class CoreReaderViewModelTest {
 
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
     every { kiwixDataStore.backToTop } returns flowOf(false)
+    every { kiwixDataStore.appName } returns flowOf("Kiwix")
     every { readerIntentManager.events } returns MutableSharedFlow()
     every { bookmarkManager.bookmarkState } returns MutableStateFlow(BookmarkManager.BookmarkState())
     every { findInPageManager.uiState } returns MutableStateFlow(FindInPageManager.FindInPageUiState())
@@ -1666,7 +1668,147 @@ internal class CoreReaderViewModelTest {
   }
 
   @Nested
-  inner class ShowOpenInNewTabDialog
+  inner class ShowOpenInNewTabDialog {
+
+    private val redirectedUrl = "${CONTENT_PREFIX}A/United_States"
+    private fun setupOpenInNewTabDialog(): CapturingSlot<TabsManager.NewTabConfig> {
+      val configSlot = slot<TabsManager.NewTabConfig>()
+      coEvery { readerWebViewManager.createNewTab(capture(configSlot)) } returns mockWebView
+      coEvery {
+        readerWebViewManager.addNewTabInTabsManager(
+          mockWebView,
+          any()
+        )
+      } just Runs
+
+      every { context.getString(string.new_tab_snack_bar) } returns "Article opened in new tab"
+      every { context.getString(string.open) } returns "Open"
+
+      return configSlot
+    }
+
+    @Test
+    fun onClickWhenOpenInBackgroundIsFalse_createsAndAddTabInTabsManagerAndEmitsShowKiwixDialog() =
+      runTest {
+        val viewModel = spyk(viewModel)
+
+        every { kiwixDataStore.openNewTabInBackground } returns flowOf(false)
+
+        val configSlot = setupOpenInNewTabDialog()
+
+        viewModel.effects.test {
+
+          viewModel.showOpenInNewTabDialog(redirectedUrl)
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
+          assertThat(effect.kiwixDialog).isEqualTo(KiwixDialog.YesNoDialog.OpenInNewTab)
+
+          effect.onClick.invoke()
+
+          advanceUntilIdle()
+
+          assertThat(configSlot.captured.url).isEqualTo(redirectedUrl)
+          assertThat(configSlot.captured.selectTab).isTrue()
+
+          coVerify { readerWebViewManager.createNewTab(configSlot.captured) }
+          coVerify { readerWebViewManager.addNewTabInTabsManager(mockWebView, any()) }
+
+          coVerify(exactly = 0) { viewModel.selectTab(any()) }
+
+          expectNoEvents()
+        }
+      }
+
+    @Test
+    fun onClickWhenOpenInBackgroundIsTrue_createsAndAddTabInTabsManagerAndShowsSnackBar() =
+      runTest {
+        val viewModel = spyk(viewModel)
+
+        every { kiwixDataStore.openNewTabInBackground } returns flowOf(true)
+        every { readerWebViewManager.tabsSize() } returns 1
+
+        val configSlot = setupOpenInNewTabDialog()
+
+        viewModel.effects.test {
+
+          viewModel.showOpenInNewTabDialog(redirectedUrl)
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
+          assertThat(effect.kiwixDialog).isEqualTo(KiwixDialog.YesNoDialog.OpenInNewTab)
+
+          effect.onClick.invoke()
+
+          advanceUntilIdle()
+
+          assertThat(configSlot.captured.url).isEqualTo(redirectedUrl)
+          assertThat(configSlot.captured.selectTab).isFalse()
+
+          coVerify { readerWebViewManager.createNewTab(configSlot.captured) }
+          coVerify { readerWebViewManager.addNewTabInTabsManager(mockWebView, any()) }
+
+          val snackBarEffect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+
+          assertThat(snackBarEffect.message).isEqualTo("Article opened in new tab")
+          assertThat(snackBarEffect.actionLabel).isEqualTo("Open")
+
+          snackBarEffect.actionClick.invoke()
+
+          advanceUntilIdle()
+
+          assertThat(readerWebViewManager.tabsSize()).isEqualTo(1)
+          coVerify(exactly = 0) { viewModel.selectTab(any()) }
+
+          expectNoEvents()
+
+        }
+
+      }
+
+    @Test
+    fun onClickWhenOpenInBackgroundIsTrueAndTabSizeMoreThanOne_createsAndAddTabInTabsManagerAndShowsSnackBar() =
+      runTest {
+        val viewModel = spyk(viewModel)
+
+        every { kiwixDataStore.openNewTabInBackground } returns flowOf(true)
+        every { readerWebViewManager.tabsSize() } returns 2
+
+        val configSlot = setupOpenInNewTabDialog()
+
+        viewModel.effects.test {
+
+          viewModel.showOpenInNewTabDialog(redirectedUrl)
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
+          assertThat(effect.kiwixDialog).isEqualTo(KiwixDialog.YesNoDialog.OpenInNewTab)
+
+          effect.onClick.invoke()
+
+          advanceUntilIdle()
+
+          assertThat(configSlot.captured.url).isEqualTo(redirectedUrl)
+          assertThat(configSlot.captured.selectTab).isFalse()
+
+          coVerify { readerWebViewManager.createNewTab(configSlot.captured) }
+          coVerify { readerWebViewManager.addNewTabInTabsManager(mockWebView, any()) }
+
+          val snackBarEffect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+
+          assertThat(snackBarEffect.message).isEqualTo("Article opened in new tab")
+          assertThat(snackBarEffect.actionLabel).isEqualTo("Open")
+
+          snackBarEffect.actionClick.invoke()
+
+          advanceUntilIdle()
+
+          assertThat(readerWebViewManager.tabsSize()).isEqualTo(2)
+          coVerify { viewModel.selectTab(2 - 1) }
+
+          expectNoEvents()
+
+        }
+
+      }
+  }
 
   @Test
   fun openExternalUrl_invokesOpenExternalUrl() = runTest {
@@ -1767,6 +1909,8 @@ internal class CoreReaderViewModelTest {
     }
   }
 
+
+  // TODO : Will be covered later
   @Nested
   inner class OpenZimfile
 
@@ -1806,6 +1950,34 @@ internal class CoreReaderViewModelTest {
 
     // only close if shouldCloseZimBook true
     coVerify { zimFileManager.close() }
+  }
+
+  @Test
+  fun invokesBookmarkManagerAndUpdatesUrlFlow() = runTest {
+    val zimFileReader = mockk<ZimFileReader>()
+    val zimId = "zim_id_123"
+    every { zimFileReader.id } returns zimId
+    every {
+      bookmarkManager.observeBookmarks(viewModel.viewModelScope, zimId, any())
+    } just Runs
+    every { mockWebView.url } returns "https://kiwix.app/page"
+
+    viewModel.observeBookmarks(zimFileReader)
+    advanceUntilIdle()
+
+    verify { bookmarkManager.observeBookmarks(viewModel.viewModelScope, zimId, any()) }
+
+    verify { readerWebViewManager.getCurrentWebView() }
+    verify { mockWebView.url }
+
+    /* For failure we catch in Log
+    .onFailure {
+      Log.e(
+        TAG_KIWIX,
+        "Could not set up the bookmark flow. Original exception $it"
+      )
+    }
+     */
   }
 
   @Nested
@@ -1906,6 +2078,10 @@ internal class CoreReaderViewModelTest {
 
     public override suspend fun exitBook(shouldCloseZimBook: Boolean) {
       super.exitBook(shouldCloseZimBook)
+    }
+
+    public override fun observeBookmarks(zimFileReader: ZimFileReader) {
+      super.observeBookmarks(zimFileReader)
     }
 
     public override fun showOpenInNewTabDialog(url: String) {
