@@ -23,7 +23,6 @@ import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
-import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -41,12 +40,7 @@ import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.ReaderModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServiceManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
-import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Singleton
 
 @Singleton
@@ -72,17 +66,17 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
+  // Kept for KiwixReaderScreenTest and ObjectBoxToLibkiwixMigratorTest (app/src/androidTest),
+  // which still resolve these off TestComponent (: CoreComponent) directly.
   fun zimReaderContainer(): ZimReaderContainer
-  fun kiwixDataStore(): KiwixDataStore
-  fun storageObserver(): StorageObserver
   fun libkiwixBookmarks(): LibkiwixBookmarks
   fun libkiwixBooks(): LibkiwixBookOnDisk
   fun context(): Context
 
-  // Kept because :app's/:branded's KiwixComponent/BrandedComponent depend on CoreComponent via
-  // Dagger `dependencies = [CoreComponent::class]`, which only sees what's exposed here - and
-  // their own ObjectBoxToRoomMigrator (real, still-active migration path) and
-  // OnlineLibraryRepositoryImpl need these transitively.
+  // Kept because :app's KiwixComponent depends on CoreComponent via Dagger
+  // `dependencies = [CoreComponent::class]`, which only sees what's exposed here - and its own
+  // ObjectBoxToRoomMigrator (real, still-active migration path) and OnlineLibraryRepositoryImpl
+  // need these transitively.
   fun recentSearchRoomDao(): RecentSearchRoomDao
   fun historyRoomDao(): HistoryRoomDao
   fun noteRoomDao(): NotesRoomDao
@@ -97,8 +91,4 @@ interface CoreComponent {
 
   @MainDispatcher
   fun provideMainDispatcher(): MainCoroutineDispatcher
-  fun provideTabsManager(): TabsManager
-  fun provideReaderIntentManager(): ReaderIntentManager
-  fun provideStorageDeviceProvider(): StorageDeviceProvider
-  fun provideDownloadMonitorServiceManager(): DownloadMonitorServiceManager
 }
