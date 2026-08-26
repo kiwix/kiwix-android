@@ -22,6 +22,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.print.PdfPrint
+import com.tonyodev.fetch2.Fetch
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
@@ -114,7 +115,7 @@ interface CoreComponent {
   fun kiwixPermissionChecker(): KiwixPermissionChecker
   fun inject(application: CoreApp)
 
-  fun coreServiceComponent(): CoreServiceComponent.Builder
+  fun fetch(): Fetch
 
   @IoDispatcher
   fun provideIoDispatcher(): CoroutineDispatcher

@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.app.NotificationManager
 import android.net.ConnectivityManager
 import android.print.PdfPrint
+import com.tonyodev.fetch2.Fetch
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -173,4 +174,7 @@ object HiltCoreComponentBridgeModule {
   @Provides
   fun provideDownloadMonitorServiceManager(): DownloadMonitorServiceManager =
     CoreApp.coreComponent.provideDownloadMonitorServiceManager()
+
+  @Provides
+  fun provideFetch(): Fetch = CoreApp.coreComponent.fetch()
 }
