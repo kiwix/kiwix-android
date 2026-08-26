@@ -25,8 +25,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
+import dagger.hilt.android.scopes.ServiceScoped
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
-import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
@@ -35,12 +35,12 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 @Module
 class ServiceModule {
   @Provides
-  @ServiceScope
+  @ServiceScoped
   fun providesIpAddressCallbacks(service: Service): IpAddressCallbacks =
     service as IpAddressCallbacks
 
   @Provides
-  @ServiceScope
+  @ServiceScoped
   fun providesHotspotNotificationManager(
     notificationManager: NotificationManager,
     context: Context,
@@ -49,12 +49,12 @@ class ServiceModule {
     HotspotNotificationManager(notificationManager, context, generateQR)
 
   @Provides
-  @ServiceScope
+  @ServiceScoped
   fun providesHotspotStateReceiver(callback: HotspotStateReceiver.Callback): HotspotStateReceiver =
     HotspotStateReceiver(callback)
 
   @Provides
-  @ServiceScope
+  @ServiceScoped
   fun providesHotspotStateReceiverCallback(service: Service): HotspotStateReceiver.Callback =
     service as HotspotStateReceiver.Callback
 }

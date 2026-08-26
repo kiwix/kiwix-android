@@ -23,8 +23,6 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
 
 @ActivityScope
 @Subcomponent(
@@ -33,9 +31,6 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ValidateZIMFiles
   ]
 )
 interface KiwixActivityComponent : CoreActivityComponent {
-  fun inject(validateZIMFiles: ValidateZIMFiles)
-  fun inject(kiwixMainActivity: KiwixMainActivity)
-
   @Subcomponent.Builder
   interface Builder {
     @BindsInstance fun activity(activity: Activity): Builder

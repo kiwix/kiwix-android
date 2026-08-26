@@ -135,7 +135,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
-    cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
