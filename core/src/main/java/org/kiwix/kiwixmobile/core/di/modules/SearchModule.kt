@@ -20,12 +20,12 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Binds
 import dagger.Module
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.search.viewmodel.ZimSearchResultGenerator
 
-// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class SearchModule {
   @Binds

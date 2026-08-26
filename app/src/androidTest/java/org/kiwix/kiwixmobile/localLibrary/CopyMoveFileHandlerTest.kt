@@ -233,8 +233,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     composeTestRule.runOnIdle {
       kiwixMainActivity = composeTestRule.activity
       val localLibraryViewModel = ViewModelProvider(
-        kiwixMainActivity.navController.getBackStackEntry(KiwixDestination.Library.route),
-        kiwixMainActivity.viewModelFactory
+        kiwixMainActivity.navController.getBackStackEntry(KiwixDestination.Library.route)
       )[LocalLibraryViewModel::class.java]
       kiwixMainActivity.lifecycleScope.launch {
         localLibraryViewModel.handleSelectedFileUri(urisList)

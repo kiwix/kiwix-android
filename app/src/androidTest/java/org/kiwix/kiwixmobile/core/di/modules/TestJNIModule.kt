@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import io.mockk.mockk
 import org.kiwix.libkiwix.JNIKiwix
 import javax.inject.Singleton
@@ -26,6 +27,9 @@ import javax.inject.Singleton
 /**
  * Created by mhutti1 on 13/04/17.
  */
+// Plain Dagger module for the legacy `TestComponent` used by instrumented tests; not installed
+// into Hilt's graph.
+@DisableInstallInCheck
 @Module
 class TestJNIModule {
   @Provides @Singleton fun providesJNIKiwix(): JNIKiwix = mockk()

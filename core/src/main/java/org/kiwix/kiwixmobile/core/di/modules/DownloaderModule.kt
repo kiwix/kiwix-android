@@ -25,7 +25,8 @@ import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
@@ -40,8 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class DownloaderModule {
   @Binds

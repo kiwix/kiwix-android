@@ -23,13 +23,10 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.custom.main.BrandedMainActivity
 
 @ActivityScope
 @Subcomponent(modules = [BrandedActivityModule::class])
 interface BrandedActivityComponent : CoreActivityComponent {
-  fun inject(brandedMainActivity: BrandedMainActivity)
-
   @Subcomponent.Builder
   interface Builder {
     @BindsInstance fun activity(activity: Activity): Builder

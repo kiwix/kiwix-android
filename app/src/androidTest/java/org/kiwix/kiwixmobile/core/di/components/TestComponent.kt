@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.di.components
 
+import android.app.Application
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
@@ -24,7 +25,6 @@ import org.kiwix.kiwixmobile.NetworkTest
 import org.kiwix.kiwixmobile.ZimTest
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
-import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.KiwixPermissionModule
 import org.kiwix.kiwixmobile.core.di.modules.MutexModule
@@ -45,7 +45,6 @@ import javax.inject.Singleton
     TestNetworkModule::class,
     JNIModule::class,
     DataModule::class,
-    CoreViewModelModule::class,
     SearchModule::class,
     MutexModule::class,
     MigrationModule::class,
@@ -57,6 +56,9 @@ interface TestComponent : CoreComponent {
   @Component.Builder
   interface Builder {
     @BindsInstance fun context(context: Context): Builder
+
+    @BindsInstance fun application(application: Application): Builder
+
     fun build(): TestComponent
   }
 

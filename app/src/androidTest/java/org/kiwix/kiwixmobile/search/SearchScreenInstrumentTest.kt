@@ -230,8 +230,7 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
       // wait for searchScreen to become visible on screen.
       delay(2000)
       val searchViewModel = ViewModelProvider(
-        kiwixMainActivity,
-        kiwixMainActivity.viewModelFactory
+        kiwixMainActivity.navController.getBackStackEntry(KiwixDestination.Search.route)
       )[SearchViewModel::class.java]
 
       for (i in 1..100) {

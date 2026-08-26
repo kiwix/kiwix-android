@@ -55,6 +55,7 @@ abstract class CoreApp : Application() {
     super.attachBaseContext(base)
     coreComponent = DaggerCoreComponent.builder()
       .context(this)
+      .application(this)
       .build()
   }
 
@@ -62,7 +63,6 @@ abstract class CoreApp : Application() {
     super.onCreate()
     instance = this
     AndroidThreeTen.init(this)
-    coreComponent.inject(this)
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()

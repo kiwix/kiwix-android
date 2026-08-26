@@ -20,13 +20,13 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.utils.AndroidPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import javax.inject.Singleton
 
-// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 @Module
 class KiwixPermissionModule {
   @Singleton

@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -29,6 +30,9 @@ import javax.inject.Singleton
 /**
  * Created by mhutti1 on 14/04/17.
  */
+// Plain Dagger module for the legacy `TestComponent` used by instrumented tests; not installed
+// into Hilt's graph.
+@DisableInstallInCheck
 @Module
 class TestNetworkModule {
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient = OkHttpClient()

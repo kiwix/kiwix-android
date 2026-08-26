@@ -23,6 +23,7 @@ import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Application
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
@@ -76,6 +77,7 @@ abstract class BaseActivityTest {
 
   protected fun testComponent(): TestComponent = DaggerTestComponent.builder()
     .context(context)
+    .application(context as Application)
     .build()
 
   /**

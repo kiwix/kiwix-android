@@ -18,28 +18,18 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
-import android.app.NotificationManager
 import android.content.Context
-import android.net.ConnectivityManager
-import android.print.PdfPrint
-import com.tonyodev.fetch2.Fetch
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
-import kotlinx.coroutines.sync.Mutex
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
-import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
-import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
@@ -51,16 +41,10 @@ import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.ReaderModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
-import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServiceManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.ReaderIntentManager
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.libkiwix.JNIKiwix
-import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
-import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Singleton
@@ -83,46 +67,37 @@ interface CoreComponent {
   interface Builder {
     @BindsInstance fun context(context: Context): Builder
 
+    @BindsInstance fun application(application: Application): Builder
+
     fun build(): CoreComponent
   }
 
   fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun kiwixDataStore(): KiwixDataStore
-  fun zimFileReaderFactory(): ZimFileReader.Factory
-  fun libkiwixBookFactory(): LibkiwixBookFactory
-  fun jniKiwix(): JNIKiwix
   fun storageObserver(): StorageObserver
+  fun libkiwixBookmarks(): LibkiwixBookmarks
+  fun libkiwixBooks(): LibkiwixBookOnDisk
+  fun context(): Context
+
+  // Kept because :app's/:branded's KiwixComponent/BrandedComponent depend on CoreComponent via
+  // Dagger `dependencies = [CoreComponent::class]`, which only sees what's exposed here - and
+  // their own ObjectBoxToRoomMigrator (real, still-active migration path) and
+  // OnlineLibraryRepositoryImpl need these transitively.
+  fun recentSearchRoomDao(): RecentSearchRoomDao
+  fun historyRoomDao(): HistoryRoomDao
+  fun noteRoomDao(): NotesRoomDao
 
   @OPDSKiwixService
   fun provideOPDSKiwixService(): KiwixService
-  fun application(): Application
-  fun bookUtils(): BookUtils
-  fun dataSource(): DataSource
-  fun downloadRoomDao(): DownloadRoomDao
-  fun connectivityManager(): ConnectivityManager
-  fun libkiwixBookmarks(): LibkiwixBookmarks
-  fun libkiwixBooks(): LibkiwixBookOnDisk
-  fun recentSearchRoomDao(): RecentSearchRoomDao
-  fun historyRoomDao(): HistoryRoomDao
-  fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
-  fun noteRoomDao(): NotesRoomDao
-  fun context(): Context
-  fun downloader(): Downloader
-  fun notificationManager(): NotificationManager
-  fun searchResultGenerator(): SearchResultGenerator
-  fun mutex(): Mutex
-  fun kiwixPermissionChecker(): KiwixPermissionChecker
-  fun inject(application: CoreApp)
 
-  fun fetch(): Fetch
-
+  // Kept for KiwixReaderScreenTest (app/src/androidTest), which still resolves these off
+  // TestComponent (: CoreComponent) directly.
   @IoDispatcher
   fun provideIoDispatcher(): CoroutineDispatcher
 
   @MainDispatcher
   fun provideMainDispatcher(): MainCoroutineDispatcher
-  fun providePdfPrinter(): PdfPrint
   fun provideTabsManager(): TabsManager
   fun provideReaderIntentManager(): ReaderIntentManager
   fun provideStorageDeviceProvider(): StorageDeviceProvider

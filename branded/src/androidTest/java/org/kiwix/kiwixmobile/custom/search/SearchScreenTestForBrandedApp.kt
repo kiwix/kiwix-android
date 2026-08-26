@@ -28,6 +28,7 @@ import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import org.kiwix.kiwixmobile.custom.main.CustomDestination
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -246,8 +247,7 @@ class SearchScreenTestForBrandedApp {
       // wait for searchFragment become visible on screen.
       delay(2000)
       val searchViewModel = ViewModelProvider(
-        brandedMainActivity,
-        brandedMainActivity.viewModelFactory
+        brandedMainActivity.navController.getBackStackEntry(CustomDestination.Search.route)
       )[SearchViewModel::class.java]
       for (i in 1..100) {
         // This will execute the render method 100 times frequently.

@@ -17,20 +17,19 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
-import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import javax.inject.Singleton
 
-// #5023: legacy singleton graph - see HiltCoreComponentBridgeModule for the Hilt-side bindings.
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 @Module(
   includes = [
     DownloaderModule::class,
@@ -39,11 +38,6 @@ import javax.inject.Singleton
   ]
 )
 class ApplicationModule {
-  @Provides
-  @Singleton
-  internal fun provideApplication(context: Context): Application =
-    context as Application
-
   @Provides
   @Singleton
   internal fun provideNotificationManager(context: Context): NotificationManager =

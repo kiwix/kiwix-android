@@ -67,7 +67,6 @@ class BrandedMainActivity : CoreMainActivity() {
   override val topLevelDestinationsRoute = setOf(CustomDestination.Reader.route)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    brandedActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContent {
       snackBarHostState = remember { SnackbarHostState() }
