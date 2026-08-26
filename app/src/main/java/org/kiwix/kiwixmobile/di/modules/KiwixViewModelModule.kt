@@ -18,71 +18,16 @@
 
 package org.kiwix.kiwixmobile.di.modules
 
-import androidx.lifecycle.ViewModel
-import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoMap
-import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.intro.KiwixIntroViewModel
-import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferViewModel
-import org.kiwix.kiwixmobile.settings.KiwixSettingsViewModel
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel
-import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderViewModel
-import org.kiwix.kiwixmobile.webserver.ZimHostViewModel
 
-// TODO(#5023): temporary - delete this module (and its @Binds/@IntoMap ViewModelKey plumbing)
-// once every ViewModel it binds is converted to @HiltViewModel + Hilt's own multibinding.
+// All of :app's own ViewModels are now @HiltViewModel and resolved via hiltViewModel() (#5023).
+// This module still includes CoreViewModelModule because :app's nav graph also uses several
+// core-shared ViewModels (HistoryViewModel, NotesViewModel, BookmarkViewModel, AddNoteViewModel,
+// SearchViewModel, ValidateZimViewModel, ...) via the legacy `viewModel(factory = viewModelFactory)`
+// path - those can't move to @HiltViewModel until :core itself is converted.
 @InstallIn(SingletonComponent::class)
 @Module(includes = [CoreViewModelModule::class])
-abstract class KiwixViewModelModule {
-  @Binds
-  @IntoMap
-  @ViewModelKey(ZimHostViewModel::class)
-  abstract fun bindZimHostViewModel(viewModel: ZimHostViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(OnlineLibraryViewModel::class)
-  abstract fun bindOnlineLibraryViewModel(onlineLibraryViewModel: OnlineLibraryViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(LocalLibraryViewModel::class)
-  abstract fun bindLocalLibraryViewModel(localLibraryViewModel: LocalLibraryViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(LanguageViewModel::class)
-  abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(KiwixIntroViewModel::class)
-  abstract fun bindIntroViewModel(introViewModel: KiwixIntroViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(KiwixSettingsViewModel::class)
-  abstract fun bindKiwixSettingsViewModel(kiwixSettingsViewModel: KiwixSettingsViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(CategoryViewModel::class)
-  abstract fun bindCategoryViewModel(categoryViewModel: CategoryViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(LocalFileTransferViewModel::class)
-  abstract fun bindLocalFileTransferViewModel(localFileTransferViewModel: LocalFileTransferViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(KiwixReaderViewModel::class)
-  abstract fun bindKiwixReaderViewModel(kiwixReaderViewModel: KiwixReaderViewModel): ViewModel
-}
+abstract class KiwixViewModelModule

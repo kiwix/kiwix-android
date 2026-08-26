@@ -48,9 +48,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
@@ -76,10 +75,9 @@ const val SAVE_ICON_TESTING_TAG = "saveLanguages"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LanguageScreenRoute(
-  viewModelFactory: ViewModelProvider.Factory,
   navigateBack: () -> Unit,
 ) {
-  val languageViewModel: LanguageViewModel = viewModel(factory = viewModelFactory)
+  val languageViewModel: LanguageViewModel = hiltViewModel()
   val state by languageViewModel.state.collectAsStateWithLifecycle()
 
   languageViewModel.effects.CollectSideEffectWithActivity { effect, activity ->

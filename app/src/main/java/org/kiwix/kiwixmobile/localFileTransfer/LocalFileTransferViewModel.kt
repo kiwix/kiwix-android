@@ -10,6 +10,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,6 +38,7 @@ data class LocalFileTransferUiState(
   val isWritePermissionRequired: Boolean = false
 )
 
+@HiltViewModel
 class LocalFileTransferViewModel @Inject constructor(
   val kiwixDataStore: KiwixDataStore,
   private val wifiDirectManager: WifiDirectManager,

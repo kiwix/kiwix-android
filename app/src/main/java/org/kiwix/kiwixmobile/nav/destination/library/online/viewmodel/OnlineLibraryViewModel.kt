@@ -28,6 +28,7 @@ import android.provider.Settings
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
@@ -119,6 +120,7 @@ import javax.inject.Provider
  * Holds dependencies and business logic, emitting UI events for the composable to handle.
  */
 @Suppress("LongParameterList")
+@HiltViewModel
 class OnlineLibraryViewModel @Inject constructor(
   private val downloaderProvider: Provider<Downloader>,
   val kiwixDataStore: KiwixDataStore,

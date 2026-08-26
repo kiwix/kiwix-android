@@ -20,10 +20,12 @@ package org.kiwix.kiwixmobile.intro
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
+@HiltViewModel
 class KiwixIntroViewModel @Inject constructor(
   private val kiwixDataStore: KiwixDataStore
 ) : ViewModel() {

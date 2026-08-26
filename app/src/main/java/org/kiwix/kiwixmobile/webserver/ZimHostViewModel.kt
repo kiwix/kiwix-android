@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +66,7 @@ import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StopServer
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class ZimHostViewModel @Inject constructor(
   private val context: Application,
   private val dataSource: DataSource,
