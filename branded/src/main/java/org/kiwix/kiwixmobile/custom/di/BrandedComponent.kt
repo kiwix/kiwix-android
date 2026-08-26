@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.custom.di
 
 import dagger.Component
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
 import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
@@ -31,5 +30,4 @@ import org.kiwix.kiwixmobile.migration.di.module.MigrationModule
 @BrandedScope
 interface BrandedComponent {
   fun activityComponentBuilder(): BrandedActivityComponent.Builder
-  fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
 }

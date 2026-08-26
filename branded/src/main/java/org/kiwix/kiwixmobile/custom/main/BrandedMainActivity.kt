@@ -38,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -47,13 +48,15 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
-import org.kiwix.kiwixmobile.custom.BrandedApp
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.brandedActivityComponent
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BrandedMainActivity : CoreMainActivity() {
+  @Inject lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
+
   override val appName: String by lazy { getString(R.string.app_name) }
 
   override val searchScreenRoute: String = CustomDestination.Search.route
@@ -92,9 +95,7 @@ class BrandedMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(ioDispatcher).launch {
-      (applicationContext as BrandedApp).brandedComponent
-        .provideObjectBoxDataMigrationHandler()
-        .migrate()
+      objectBoxDataMigrationHandler.migrate()
     }
   }
 

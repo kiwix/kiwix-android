@@ -58,12 +58,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.BuildConfig
-import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
@@ -104,6 +104,8 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
   @Inject lateinit var storageDeviceProvider: StorageDeviceProvider
+
+  @Inject lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
 
   @Inject
   @MainDispatcher
@@ -199,9 +201,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(ioDispatcher).launch {
-      (applicationContext as KiwixApp).kiwixComponent
-        .provideObjectBoxDataMigrationHandler()
-        .migrate()
+      objectBoxDataMigrationHandler.migrate()
     }
   }
 

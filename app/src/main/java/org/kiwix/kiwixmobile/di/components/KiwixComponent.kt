@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.di.components
 
 import dagger.Component
-import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.di.modules.DataModule
@@ -46,7 +45,6 @@ import org.kiwix.kiwixmobile.data.remote.OnlineLibraryManager
 interface KiwixComponent {
   fun activityComponentBuilder(): KiwixActivityComponent.Builder
   fun providesOnlineLibraryManager(): OnlineLibraryManager
-  fun provideObjectBoxDataMigrationHandler(): ObjectBoxDataMigrationHandler
   fun provideFileOperationHandler(): FileOperationHandler
   fun provideCopyMoveProgressBarController(): CopyMoveProgressBarController
   fun provideOnlineLibraryRepository(): OnlineLibraryRepository
