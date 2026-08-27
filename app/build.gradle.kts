@@ -76,7 +76,7 @@ android {
     versionCode = "".getVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "org.kiwix.kiwixmobile.testutils.HiltTestRunner"
   }
   lint {
     checkDependencies = true

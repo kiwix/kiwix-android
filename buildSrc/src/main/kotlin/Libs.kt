@@ -116,6 +116,12 @@ object Libs {
     Versions.com_google_dagger
 
   /**
+   * https://dagger.dev/hilt/testing
+   */
+  const val hilt_android_testing: String = "com.google.dagger:hilt-android-testing:" +
+    Versions.com_google_dagger
+
+  /**
    * https://developer.android.com/testing
    */
   const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core

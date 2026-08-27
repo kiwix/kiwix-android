@@ -18,13 +18,10 @@
 package org.kiwix.kiwixmobile.core
 
 import android.app.Application
-import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import com.jakewharton.threetenabp.AndroidThreeTen
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Inject
 
@@ -33,9 +30,6 @@ abstract class CoreApp : Application() {
   companion object {
     @JvmStatic
     lateinit var instance: CoreApp
-
-    @JvmStatic
-    lateinit var coreComponent: CoreComponent
   }
 
   @Inject
@@ -50,14 +44,6 @@ abstract class CoreApp : Application() {
 
   @Inject
   lateinit var fileLogger: FileLogger
-
-  override fun attachBaseContext(base: Context) {
-    super.attachBaseContext(base)
-    coreComponent = DaggerCoreComponent.builder()
-      .context(this)
-      .application(this)
-      .build()
-  }
 
   override fun onCreate() {
     super.onCreate()

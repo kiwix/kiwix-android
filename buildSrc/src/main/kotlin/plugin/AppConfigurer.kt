@@ -185,7 +185,8 @@ class AppConfigurer {
       }
       androidTestUtil(Libs.orchestrator)
       androidTestCompileOnly(Libs.javax_annotation_api)
-      kspAndroidTest(Libs.dagger_compiler)
+      androidTestImplementation(Libs.hilt_android_testing)
+      kspAndroidTest(Libs.hilt_android_compiler)
       androidTestImplementation(Libs.mockk_android)
       androidTestImplementation(Libs.uiautomator)
       androidTestImplementation(Libs.assertj_core)

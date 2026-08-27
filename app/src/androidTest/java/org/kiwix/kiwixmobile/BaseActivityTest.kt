@@ -23,7 +23,6 @@ import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.app.Application
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
@@ -44,8 +43,6 @@ import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Rule
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
-import org.kiwix.kiwixmobile.core.di.components.TestComponent
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -74,11 +71,6 @@ abstract class BaseActivityTest {
   val context: Context by lazy {
     getInstrumentation().targetContext.applicationContext
   }
-
-  protected fun testComponent(): TestComponent = DaggerTestComponent.builder()
-    .context(context)
-    .application(context as Application)
-    .build()
 
   /**
    * Contains common test setup logic that can be invoked from a subclass
