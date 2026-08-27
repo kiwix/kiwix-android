@@ -24,6 +24,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -36,7 +37,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 class FileOperationHandlerImpl @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : FileOperationHandler {
   @Suppress("MagicNumber")

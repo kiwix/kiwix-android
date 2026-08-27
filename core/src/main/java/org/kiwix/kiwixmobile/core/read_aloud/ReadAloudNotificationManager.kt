@@ -26,6 +26,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.IS_TTS_PAUSE_OR_RESUME
 import org.kiwix.kiwixmobile.core.utils.READ_ALOUD_SERVICE_CHANNEL_ID
@@ -33,7 +34,7 @@ import javax.inject.Inject
 
 class ReadAloudNotificationManager @Inject constructor(
   private val notificationManager: NotificationManager,
-  private val context: Context
+  @param:ApplicationContext private val context: Context
 ) {
   private fun readAloudNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

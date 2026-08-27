@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -40,7 +41,7 @@ import javax.inject.Inject
  */
 class ProcessSelectedZimFilesForStandalone @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private var selectedZimFileCallback: SelectedZimFileCallback? = null

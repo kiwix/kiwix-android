@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -43,7 +44,7 @@ class KiwixServer @Inject constructor(
   private val jniKiwixServer: Server
 ) {
   class Factory @Inject constructor(
-    private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val zimReaderContainer: ZimReaderContainer,
     @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
   ) {

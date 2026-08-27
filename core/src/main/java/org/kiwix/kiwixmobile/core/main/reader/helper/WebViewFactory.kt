@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import org.kiwix.kiwixmobile.core.R
@@ -35,7 +36,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class WebViewFactory @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val zimReaderContainer: ZimReaderContainer,
   private val kiwixDataStore: KiwixDataStore,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,

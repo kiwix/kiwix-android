@@ -21,6 +21,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -34,7 +35,7 @@ open class DatabaseModule {
   @Singleton
   @Provides
   fun provideYourDatabase(
-    context: Context
+    @ApplicationContext context: Context
   ) =
     KiwixRoomDatabase.getInstance(
       context = context

@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.compose.material3.SnackbarHostState
 import androidx.documentfile.provider.DocumentFile
+import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +62,7 @@ import javax.inject.Inject
  */
 class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val copyMoveFileHandler: CopyMoveFileHandler,
   private val storageCalculator: StorageCalculator,
   private val storageDeviceProvider: StorageDeviceProvider

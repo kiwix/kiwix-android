@@ -25,6 +25,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
@@ -43,7 +44,7 @@ class ServiceModule {
   @ServiceScoped
   fun providesHotspotNotificationManager(
     notificationManager: NotificationManager,
-    context: Context,
+    @ApplicationContext context: Context,
     generateQR: GenerateQR,
   ): HotspotNotificationManager =
     HotspotNotificationManager(notificationManager, context, generateQR)

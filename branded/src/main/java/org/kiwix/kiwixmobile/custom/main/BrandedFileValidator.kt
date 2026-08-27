@@ -23,6 +23,7 @@ import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -35,7 +36,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class BrandedFileValidator @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   suspend fun validate(

@@ -27,6 +27,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_NAV_DEEP_LINK
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
@@ -35,7 +36,7 @@ import javax.inject.Inject
 
 class HotspotNotificationManager @Inject constructor(
   private val notificationManager: NotificationManager,
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val generateQR: GenerateQR,
 ) {
   private fun hotspotNotificationChannel() {

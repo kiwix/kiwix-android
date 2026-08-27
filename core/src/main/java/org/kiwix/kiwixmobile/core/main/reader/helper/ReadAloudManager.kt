@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
@@ -44,7 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 class ReadAloudManager @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val zimReaderContainer: ZimReaderContainer
 ) {
   sealed interface TtsState {

@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -25,7 +26,10 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-internal class JNIInitialiser @Inject constructor(context: Context, jniKiwix: JNIKiwix) {
+internal class JNIInitialiser @Inject constructor(
+  @ApplicationContext context: Context,
+  jniKiwix: JNIKiwix
+) {
   init {
     loadICUData(context)?.let(jniKiwix::setDataDirectory)
   }
