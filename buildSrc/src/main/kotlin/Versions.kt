@@ -28,7 +28,7 @@ object Versions {
 
   const val XMLUTIL_SERIALIZATION: String = "0.90.2"
 
-  const val com_google_dagger: String = "2.60.1"
+  const val COM_GOOGLE_DAGGER_HILT: String = "2.60.1"
 
   const val androidx_test: String = "1.7.0"
   const val androidx_test_core: String = "1.7.0"

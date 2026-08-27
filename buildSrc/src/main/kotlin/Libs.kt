@@ -95,20 +95,20 @@ object Libs {
   /**
    * https://dagger.dev/hilt/
    */
-  const val hilt_android: String = "com.google.dagger:hilt-android:" +
-    Versions.com_google_dagger
+  const val HILT_ANDROID: String = "com.google.dagger:hilt-android:" +
+    Versions.COM_GOOGLE_DAGGER_HILT
 
   /**
    * https://dagger.dev/hilt/
    */
-  const val hilt_android_compiler: String = "com.google.dagger:hilt-android-compiler:" +
-    Versions.com_google_dagger
+  const val HILT_ANDROID_COMPILER: String = "com.google.dagger:hilt-android-compiler:" +
+    Versions.COM_GOOGLE_DAGGER_HILT
 
   /**
    * https://dagger.dev/hilt/testing
    */
-  const val hilt_android_testing: String = "com.google.dagger:hilt-android-testing:" +
-    Versions.com_google_dagger
+  const val HILT_ANDROID_TESTING: String = "com.google.dagger:hilt-android-testing:" +
+    Versions.COM_GOOGLE_DAGGER_HILT
 
   /**
    * https://developer.android.com/testing

@@ -293,12 +293,7 @@ class AllProjectConfigurer {
       testImplementation(Libs.testing_ktx)
       testImplementation(Libs.core_testing)
       compileOnly(Libs.javax_annotation_api)
-      // `hilt_android`/`hilt_android_compiler` pull in Dagger's own runtime/compiler
-      // transitively, and every DI module in the project is now a Hilt
-      // `@InstallIn(SingletonComponent::class)` module - the last plain-Dagger `@Component`
-      // (`CoreComponent`/`TestComponent`) was removed in #5023, so a separate `dagger`/
-      // `dagger_compiler` dependency is no longer needed anywhere.
-      implementation(Libs.hilt_android)
+      implementation(Libs.HILT_ANDROID)
       // `:objectboxmigration`'s `DatabaseModule.providesBoxStore()` has an `@Provides` method
       // whose body references the ObjectBox-generated `MyObjectBox`, so the annotation
       // processor still needs to run there to emit `DatabaseModule_ProvidesBoxStoreFactory`.
@@ -308,9 +303,9 @@ class AllProjectConfigurer {
       // is circular. A single kaptDebugKotlin task can run both the ObjectBox and Hilt
       // annotation processors without that conflict.
       if (target.name != "objectboxmigration") {
-        ksp(Libs.hilt_android_compiler)
+        ksp(Libs.HILT_ANDROID_COMPILER)
       } else {
-        kapt(Libs.hilt_android_compiler)
+        kapt(Libs.HILT_ANDROID_COMPILER)
       }
       implementation(Libs.core_ktx)
       implementation(Libs.collection_ktx)
