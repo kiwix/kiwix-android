@@ -416,7 +416,16 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-      update(download, waitingOnNetwork = waitingOnNetwork)
+      if (waitingOnNetwork) {
+        taskFlow.tryEmit {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = true
+          )
+        }
+      }
+      update(download)
     }
 
     override fun onRemoved(download: Download) {
@@ -448,8 +457,7 @@ class DownloadMonitorService : Service() {
 
     private fun update(
       download: Download,
-      updateForeGroundService: Boolean = false,
-      waitingOnNetwork: Boolean = false
+      updateForeGroundService: Boolean = false
     ) {
       taskFlow.tryEmit {
         downloadRoomDao.update(download)
@@ -463,22 +471,14 @@ class DownloadMonitorService : Service() {
           }
         }
 
-        when {
-          // Shows notification for offline state and for Error status onEror() handles it already
-          download.status == Status.QUEUED && waitingOnNetwork ->
-            fetchDownloadNotificationManager.showDownloadPauseNotification(
-              fetch,
-              download,
-              isOffline = true
-            )
-
-          download.isPaused() ->
-            fetchDownloadNotificationManager.showDownloadPauseNotification(
-              fetch,
-              download,
-              isOffline = false
-            )
+        if (download.isPaused()) {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = false
+          )
         }
+
         if (updateForeGroundService) {
           stopForegroundServiceIfNoActiveDownloads(fetch)
         }
@@ -496,7 +496,7 @@ class DownloadMonitorService : Service() {
   private fun stopForegroundServiceIfNoActiveDownloads(fetch: Fetch) {
     taskFlow.tryEmit {
       fetch.getDownloadsWithStatus(
-        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.FAILED)
+        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING)
       ) { activeDownloads ->
         if (activeDownloads.isEmpty()) {
           stopForegroundServiceForDownloads()
