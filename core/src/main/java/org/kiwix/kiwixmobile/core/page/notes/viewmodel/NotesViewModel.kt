@@ -79,8 +79,29 @@ class NotesViewModel @Inject constructor(
   override fun copyWithNewItems(state: NotesState, newItems: List<NoteListItem>): NotesState =
     state.copy(pageItems = newItems)
 
+  override fun selectAllPages(state: NotesState): NotesState =
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = true) },
+      isInSelectionState = true
+    )
+
   override fun deselectAllPages(state: NotesState): NotesState =
-    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = false) },
+      isInSelectionState = true
+    )
+
+  override fun exitSelectionMode(state: NotesState): NotesState =
+    state.copy(
+      pageItems = state.pageItems.map { it.copy(isSelected = false) },
+      isInSelectionState = false
+    )
+
+  override fun setSelectionState(
+    state: NotesState,
+    isInSelectionState: Boolean
+  ): NotesState =
+    state.copy(isInSelectionState = isInSelectionState)
 
   override fun createDeletePageDialogEffect(state: NotesState, viewModelScope: CoroutineScope) =
     ShowDeleteNotesDialog(

@@ -44,6 +44,8 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedSelectAll
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeselectAll
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
@@ -128,8 +130,10 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   private fun reduce(action: Action, state: S): S =
     when (action) {
       Exit -> exitScreen(state)
-      ExitActionModeMenu -> deselectAllPages(state)
+      ExitActionModeMenu -> exitSelectionMode(state)
       UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
+      UserClickedSelectAll -> selectAllPages(state)
+      UserClickedDeselectAll -> deselectAllPages(state)
       is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
       is OnItemClick -> handleItemClick(state, action)
       is OnItemLongClick -> handleItemLongClick(state, action)
@@ -152,7 +156,10 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   }
 
   private fun handleItemLongClick(state: S, action: OnItemLongClick): S =
-    copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
+    setSelectionState(
+      copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page)),
+      true
+    )
 
   abstract fun copyWithNewItems(state: S, newItems: List<T>): S
 
@@ -172,7 +179,10 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     pageViewModelClickListener = clickListener
   }
 
+  abstract fun selectAllPages(state: S): S
   abstract fun deselectAllPages(state: S): S
+  abstract fun exitSelectionMode(state: S): S
+  abstract fun setSelectionState(state: S, isInSelectionState: Boolean): S
 
   private fun exitScreen(state: S): S {
     effects.tryEmit(PopBackstack)

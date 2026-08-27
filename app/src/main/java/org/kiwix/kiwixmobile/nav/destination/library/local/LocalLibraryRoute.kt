@@ -44,6 +44,7 @@ import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.filterIsInstance
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R as CoreR
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
@@ -65,6 +66,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 const val VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG = "validateZimFilesMenuButtonTestingTag"
+const val SELECT_ALL_MENU_BUTTON_TESTING_TAG = "selectAllMenuButtonTestingTag"
 
 /**
  * Entry point for Local Library feature.
@@ -182,30 +184,52 @@ fun actionMenuItems(
   localLibraryViewModel: LocalLibraryViewModel,
   filePickerButtonClick: () -> Unit
 ) = when (selectionMode) {
-  SelectionMode.MULTI -> multiModeMenuItem(localLibraryViewModel)
+  SelectionMode.MULTI -> multiModeMenuItem(
+    localLibraryViewModel,
+    localLibraryViewModel.uiState.value.fileSelectListState.areAllBooksSelected,
+    localLibraryViewModel.uiState.value.fileSelectListState.selectedBooks.isNotEmpty()
+  )
+
   SelectionMode.NORMAL -> normalModeMenuItems(navController, filePickerButtonClick)
 }
 
-private fun multiModeMenuItem(localLibraryViewModel: LocalLibraryViewModel) = listOf(
+private fun multiModeMenuItem(
+  localLibraryViewModel: LocalLibraryViewModel,
+  areAllSelected: Boolean,
+  isAnySelected: Boolean
+) = listOf(
+  ActionMenuItem(
+    IconItem.Drawable(
+      if (areAllSelected) {
+        CoreR.drawable.select_all_checkbox
+      } else {
+        CoreR.drawable.deselect_all_checkbox
+      }
+    ),
+    if (areAllSelected) CoreR.string.deselect_all else CoreR.string.select_all,
+    { localLibraryViewModel.selectAllMenuIconClick() },
+    isEnabled = true,
+    testingTag = SELECT_ALL_MENU_BUTTON_TESTING_TAG
+  ),
   ActionMenuItem(
     IconItem.Drawable(drawable.ic_delete_white_24dp),
     string.delete,
     { localLibraryViewModel.deleteMenuIconClick() },
-    isEnabled = true,
+    isEnabled = isAnySelected,
     testingTag = DELETE_MENU_ICON_TESTING_TAG
   ),
   ActionMenuItem(
     IconItem.Drawable(drawable.baseline_share_24),
     string.share,
     { localLibraryViewModel.shareMenuIconClick() },
-    isEnabled = true,
+    isEnabled = isAnySelected,
     testingTag = SHARE_MENU_BUTTON_TESTING_TAG
   ),
   ActionMenuItem(
     IconItem.Drawable(R.drawable.file_validate),
     string.validate_zim_files,
     { localLibraryViewModel.validateMenuIconClick() },
-    isEnabled = true,
+    isEnabled = isAnySelected,
     testingTag = VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG
   )
 )

@@ -86,6 +86,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.MultiModeFinished
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.ReadPermissionDialog
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestSelectAllBooks
+import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDeselectAllBooks
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestDrawerToggle
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestMultiSelection
@@ -126,7 +128,7 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
  * - File selection and multi-selection
  * - Side effects for file operations (delete, share, validate, navigate)
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LargeClass")
 class LocalLibraryViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,
@@ -149,6 +151,9 @@ class LocalLibraryViewModel @Inject constructor(
     data class RequestSelect(val bookOnDisk: BookOnDisk) : LocalLibraryUiActions()
     data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : LocalLibraryUiActions()
     data object RequestValidateZimFiles : LocalLibraryUiActions()
+
+    data object RequestSelectAllBooks : LocalLibraryUiActions()
+    data object RequestDeselectAllBooks : LocalLibraryUiActions()
     data object RequestDeleteMultiSelection : LocalLibraryUiActions()
     data object RequestShareMultiSelection : LocalLibraryUiActions()
     data object MultiModeFinished : LocalLibraryUiActions()
@@ -322,6 +327,8 @@ class LocalLibraryViewModel @Inject constructor(
     when (action) {
       is RequestMultiSelection -> noSideEffectSelectBook(action.bookOnDisk)
       is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
+      RequestSelectAllBooks -> noSideEffectSelectAllBooks()
+      RequestDeselectAllBooks -> noSideEffectDeselectAllBooks()
       RequestDeleteMultiSelection ->
         DeleteFiles(
           selectionsFromState(),
@@ -399,12 +406,35 @@ class LocalLibraryViewModel @Inject constructor(
       it.copy(
         fileSelectListState = it.fileSelectListState.copy(
           bookOnDiskListItems = updatedList,
-          selectionMode =
-            if (updatedList.filterIsInstance<BookOnDisk>().none(BookOnDisk::isSelected)) {
-              NORMAL
-            } else {
-              MULTI
-            }
+          selectionMode = MULTI
+        )
+      )
+    }
+    return None
+  }
+
+  private fun noSideEffectSelectAllBooks(): SideEffect<Unit> {
+    updateState { state ->
+      state.copy(
+        fileSelectListState = state.fileSelectListState.copy(
+          bookOnDiskListItems = state.fileSelectListState.bookOnDiskListItems.map { item ->
+            if (item is BookOnDisk) item.copy(isSelected = true) else item
+          },
+          selectionMode = MULTI
+        )
+      )
+    }
+    return None
+  }
+
+  private fun noSideEffectDeselectAllBooks(): SideEffect<Unit> {
+    updateState { state ->
+      state.copy(
+        fileSelectListState = state.fileSelectListState.copy(
+          bookOnDiskListItems = state.fileSelectListState.bookOnDiskListItems.map { item ->
+            if (item is BookOnDisk) item.copy(isSelected = false) else item
+          },
+          selectionMode = MULTI
         )
       )
     }
@@ -658,6 +688,14 @@ class LocalLibraryViewModel @Inject constructor(
 
   fun onMultiSelect(bookOnDisk: BookOnDisk) {
     sendAction(RequestSelect(bookOnDisk))
+  }
+
+  fun selectAllMenuIconClick() {
+    if (uiState.value.fileSelectListState.areAllBooksSelected) {
+      sendAction(RequestDeselectAllBooks)
+    } else {
+      sendAction(RequestSelectAllBooks)
+    }
   }
 
   fun deleteMenuIconClick() {
