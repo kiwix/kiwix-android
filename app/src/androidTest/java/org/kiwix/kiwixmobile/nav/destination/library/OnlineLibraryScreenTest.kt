@@ -22,10 +22,13 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.download.downloadRobot
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -33,7 +36,12 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
+@HiltAndroidTest
 class OnlineLibraryScreenTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -46,6 +54,7 @@ class OnlineLibraryScreenTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.inject()
     super.waitForIdle()
     updateKiwixDataStore { setShowStorageOption(false) }
     launchMainActivity()

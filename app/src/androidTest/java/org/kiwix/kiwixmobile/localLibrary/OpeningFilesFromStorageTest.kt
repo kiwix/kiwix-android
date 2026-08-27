@@ -40,11 +40,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.SELECT_FILE_BUTTON_TESTING_TAG
@@ -56,7 +59,12 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
+@HiltAndroidTest
 class OpeningFilesFromStorageTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -68,6 +76,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.inject()
     Intents.init()
     super.waitForIdle()
     launchMainActivity()

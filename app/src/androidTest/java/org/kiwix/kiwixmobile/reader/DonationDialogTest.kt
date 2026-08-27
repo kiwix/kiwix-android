@@ -23,11 +23,14 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import org.junit.After
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.THREE_MONTHS_IN_MILLISECONDS
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
@@ -36,7 +39,12 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
+@HiltAndroidTest
 class DonationDialogTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -49,6 +57,7 @@ class DonationDialogTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.inject()
     super.waitForIdle()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())

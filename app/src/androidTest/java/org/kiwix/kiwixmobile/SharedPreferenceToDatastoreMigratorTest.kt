@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile
 import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.preference.PreferenceManager
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.json.JSONArray
@@ -33,6 +35,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_ACTIVE
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.KEY_LANGUAGE_CODE
@@ -42,13 +45,19 @@ import org.kiwix.kiwixmobile.core.utils.datastore.PreferencesKeys
 import org.kiwix.kiwixmobile.core.utils.datastore.SharedPreferenceToDatastoreMigrator
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
+@HiltAndroidTest
 class SharedPreferenceToDatastoreMigratorTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule
   @JvmField
   val tmpFolder = TemporaryFolder()
 
   @Before
   override fun waitForIdle() {
+    hiltRule.inject()
     super.waitForIdle()
     launchMainActivity {
       it.navigate(KiwixDestination.Library.route)

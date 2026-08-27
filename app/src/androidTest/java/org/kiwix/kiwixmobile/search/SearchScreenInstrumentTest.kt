@@ -30,6 +30,8 @@ import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Assume
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -37,6 +39,7 @@ import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -50,9 +53,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
 
+@HiltAndroidTest
 class SearchScreenInstrumentTest : BaseActivityTest() {
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
+
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
 
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
@@ -68,6 +76,7 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.inject()
     super.waitForIdle()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())

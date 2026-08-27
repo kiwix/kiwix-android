@@ -25,11 +25,14 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.main.ACTION_GET_CONTENT
@@ -39,7 +42,12 @@ import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
 import org.kiwix.kiwixmobile.testutils.RetryRule
 
 @LargeTest
+@HiltAndroidTest
 class GetContentShortcutTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -51,6 +59,7 @@ class GetContentShortcutTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.inject()
     super.waitForIdle()
     updateKiwixDataStore {
       setShowCaseViewForFileTransferShown()
