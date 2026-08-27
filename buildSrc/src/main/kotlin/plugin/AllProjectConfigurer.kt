@@ -293,26 +293,20 @@ class AllProjectConfigurer {
       testImplementation(Libs.testing_ktx)
       testImplementation(Libs.core_testing)
       compileOnly(Libs.javax_annotation_api)
-      implementation(Libs.dagger)
-      // `:objectboxmigration`'s `DatabaseModule.providesBoxStore()` has an `@Provides` method
-      // whose body references the ObjectBox-generated `MyObjectBox`, so Dagger's compiler still
-      // needs to run there to emit `DatabaseModule_ProvidesBoxStoreFactory` (consumed by the
-      // app's component). It has to run via kapt rather than ksp in this one module though: ksp
-      // and kapt would otherwise need to resolve each other's output first (Dagger needs
-      // `MyObjectBox` to exist, kapt's stub generation is forced to wait on ksp by Kotlin Gradle
-      // Plugin), which is circular. A single kaptDebugKotlin task can run both the ObjectBox and
-      // Dagger annotation processors without that conflict.
-      if (target.name != "objectboxmigration") {
-        ksp(Libs.dagger_compiler)
-      } else {
-        kapt(Libs.dagger_compiler)
-      }
-      // Hilt migration (#5023): the Hilt Gradle plugin (applied in `:app`/`:branded`) requires
-      // its compiler to be present wherever it's applied, and every module that ends up with
-      // Hilt modules/entry points needs both dependencies too, so both are added everywhere now
-      // even though no Hilt annotations exist yet - avoids per-module build-file churn as each
-      // module's DI is actually converted next.
+      // `hilt_android`/`hilt_android_compiler` pull in Dagger's own runtime/compiler
+      // transitively, and every DI module in the project is now a Hilt
+      // `@InstallIn(SingletonComponent::class)` module - the last plain-Dagger `@Component`
+      // (`CoreComponent`/`TestComponent`) was removed in #5023, so a separate `dagger`/
+      // `dagger_compiler` dependency is no longer needed anywhere.
       implementation(Libs.hilt_android)
+      // `:objectboxmigration`'s `DatabaseModule.providesBoxStore()` has an `@Provides` method
+      // whose body references the ObjectBox-generated `MyObjectBox`, so the annotation
+      // processor still needs to run there to emit `DatabaseModule_ProvidesBoxStoreFactory`.
+      // It has to run via kapt rather than ksp in this one module though: ksp and kapt would
+      // otherwise need to resolve each other's output first (Dagger needs `MyObjectBox` to
+      // exist, kapt's stub generation is forced to wait on ksp by Kotlin Gradle Plugin), which
+      // is circular. A single kaptDebugKotlin task can run both the ObjectBox and Hilt
+      // annotation processors without that conflict.
       if (target.name != "objectboxmigration") {
         ksp(Libs.hilt_android_compiler)
       } else {

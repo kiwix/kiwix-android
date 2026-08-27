@@ -41,15 +41,9 @@ import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
 import javax.inject.Singleton
 
-// TODO(#5023): temporary bridge for the Dagger -> Hilt migration, mirroring
-// HiltCoreComponentBridgeModule in :core but for :app's own KiwixComponent. The Android system
-// services and Fat32Checker have no shared state and no existing KiwixComponent accessor, so
-// they're just reconstructed here directly (matching KiwixModule's original @Provides bodies)
-// rather than adding new accessors for them.
-// Delete this module once every consumer is converted to Hilt and the manual graph is retired.
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class HiltKiwixComponentBridgeModule {
+abstract class KiwixModule {
   @Binds
   @Singleton
   abstract fun bindFileOperationHandler(impl: FileOperationHandlerImpl): FileOperationHandler

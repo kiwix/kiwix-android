@@ -93,17 +93,6 @@ object Libs {
     Versions.ORG_JETBRAINS_KOTLIN
 
   /**
-   * https://github.com/google/dagger
-   */
-  const val dagger: String = "com.google.dagger:dagger:" + Versions.com_google_dagger
-
-  /**
-   * https://github.com/google/dagger
-   */
-  const val dagger_compiler: String = "com.google.dagger:dagger-compiler:" +
-    Versions.com_google_dagger
-
-  /**
    * https://dagger.dev/hilt/
    */
   const val hilt_android: String = "com.google.dagger:hilt-android:" +

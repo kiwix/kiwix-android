@@ -99,7 +99,7 @@ This variable should only be set when building an APK. If you set this variable 
 ## Libraries Used
 
 - 📚 [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix library.
-- 🗡️ [Dagger 2](https://github.com/google/dagger) - Dependency injector for Android and Java.
+- 🗡️ [Dagger Hilt](https://dagger.dev/hilt/) - Dependency injector for Android and Java.
 - 🔄 [Retrofit](https://square.github.io/retrofit/) - Turns REST API into a Java interface.
 - 🌐 [OkHttp](https://github.com/square/okhttp) - HTTP client for Android and Java.
 - 🎭  [Mockito](https://github.com/mockito/mockito) - Mocking framework for unit tests.
