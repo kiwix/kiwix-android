@@ -26,7 +26,7 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-internal class JNIInitialiser @Inject constructor(
+class JNIInitialiser @Inject constructor(
   @ApplicationContext context: Context,
   jniKiwix: JNIKiwix
 ) {

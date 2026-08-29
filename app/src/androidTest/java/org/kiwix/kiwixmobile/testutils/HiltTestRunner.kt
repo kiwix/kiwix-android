@@ -21,17 +21,20 @@ package org.kiwix.kiwixmobile.testutils
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import dagger.hilt.android.testing.HiltTestApplication
 
 /**
- * Swaps in [HiltTestApplication] instead of [org.kiwix.kiwixmobile.KiwixApp] so instrumented
- * tests annotated with `@HiltAndroidTest` can obtain a test-specific Hilt component instead of
- * the real one. Wired up via `testInstrumentationRunner` in `app/build.gradle.kts`.
+ * Swaps in the generated [KiwixHiltTestApplication_Application] instead of
+ * [org.kiwix.kiwixmobile.KiwixApp] so instrumented tests annotated with `@HiltAndroidTest` can
+ * obtain a test-specific Hilt component instead of the real one. That generated application
+ * still extends [org.kiwix.kiwixmobile.core.CoreApp] (see [KiwixHiltTestApplication]), so
+ * `CoreApp.onCreate()` runs the same way it does in production. Wired up via
+ * `testInstrumentationRunner` in `app/build.gradle.kts`.
  */
 class HiltTestRunner : AndroidJUnitRunner() {
   override fun newApplication(
     cl: ClassLoader?,
     className: String?,
     context: Context?
-  ): Application = super.newApplication(cl, HiltTestApplication::class.java.name, context)
+  ): Application =
+    super.newApplication(cl, KiwixHiltTestApplication_Application::class.java.name, context)
 }

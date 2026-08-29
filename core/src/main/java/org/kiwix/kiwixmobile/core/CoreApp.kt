@@ -22,8 +22,9 @@ import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import com.jakewharton.threetenabp.AndroidThreeTen
+import dagger.hilt.android.EarlyEntryPoints
+import org.kiwix.kiwixmobile.core.di.CoreAppEntryPoint
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
-import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
 abstract class CoreApp : Application() {
@@ -32,22 +33,26 @@ abstract class CoreApp : Application() {
     lateinit var instance: CoreApp
   }
 
-  @Inject
   lateinit var themeConfig: ThemeConfig
+    private set
 
   /**
    * The init of this class does the work of initializing,
    * simply injecting it is all that there is to be done
    */
-  @Inject
   internal lateinit var jniInitialiser: JNIInitialiser
+    private set
 
-  @Inject
   lateinit var fileLogger: FileLogger
+    private set
 
   override fun onCreate() {
     super.onCreate()
     instance = this
+    val entryPoint = EarlyEntryPoints.get(this, CoreAppEntryPoint::class.java)
+    themeConfig = entryPoint.themeConfig()
+    jniInitialiser = entryPoint.jniInitialiser()
+    fileLogger = entryPoint.fileLogger()
     AndroidThreeTen.init(this)
     themeConfig.init()
     fileLogger.writeLogFile(this)
