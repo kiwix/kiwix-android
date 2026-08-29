@@ -68,7 +68,7 @@ fi
 
 retry=0
 while [ $retry -le 3 ]; do
-  if ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=org.kiwix.kiwixmobile.localLibrary.OpeningFilesFromStorageTest -Dfile.encoding=UTF-8; then
+  if ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=org.kiwix.kiwixmobile.localLibrary.OpeningFilesFromStorageTest -Dfile.encoding=UTF-8; then
     echo "connectedDebugAndroidTest for file opening in tablet succeeded" >&2
     break
   else
