@@ -18,9 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.utils.files
 
+import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import androidx.test.core.app.ApplicationProvider
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,5 +61,26 @@ class FileUtilsFileDescriptorTest {
     ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY).use { pfd ->
       assertTrue(FileUtils.isFileDescriptorCanOpenWithLibkiwix(pfd.fileDescriptor))
     }
+  }
+
+  /**
+   * getAssetFileDescriptorFromUri()'s success branch (it returns the descriptor list only
+   * once isFileDescriptorCanOpenWithLibkiwix() has confirmed the fd is readable) needs a
+   * real ContentResolver-backed AssetFileDescriptor, which is exactly what this class's
+   * Robolectric setup already provides for the fd check itself.
+   */
+  @Test
+  fun getAssetFileDescriptorFromUri_whenFileIsReadable_returnsDescriptorList() {
+    val context = ApplicationProvider.getApplicationContext<TestApplication>()
+    val result = FileUtils.getAssetFileDescriptorFromUri(context, Uri.fromFile(tempFile))
+    assertNotNull(result)
+    assertEquals(1, result?.size)
+  }
+
+  @Test
+  fun getAssetFileDescriptorFromUri_whenFileDoesNotExist_returnsNull() {
+    val context = ApplicationProvider.getApplicationContext<TestApplication>()
+    val missingFile = File(tempFile.parentFile, "does-not-exist.zim")
+    assertNull(FileUtils.getAssetFileDescriptorFromUri(context, Uri.fromFile(missingFile)))
   }
 }

@@ -1024,9 +1024,12 @@ object FileUtils {
       // Android content-provider fds reject that reopen with EACCES even though the fd
       // itself is perfectly readable. For more details, see
       // https://github.com/kiwix/kiwix-android/pull/3636.
-      ParcelFileDescriptor.dup(fileDescriptor)?.use { duped ->
+      // dup(FileDescriptor) never returns null -- it throws IOException on failure --
+      // so a plain try/catch around it is all the null-handling this needs.
+      ParcelFileDescriptor.dup(fileDescriptor).use { duped ->
         FileInputStream(duped.fileDescriptor).use { it.read(ByteArray(1)) }
-      } != null
+      }
+      true
     } catch (ignore: Exception) {
       ignore.printStackTrace()
       false
