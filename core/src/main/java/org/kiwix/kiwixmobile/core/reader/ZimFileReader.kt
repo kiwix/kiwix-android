@@ -280,8 +280,9 @@ class ZimFileReader(
           // Retrieve direct access information for the item
           val infoPair = getDirectAccessInfoOfItem(item, uri)
           val file = infoPair?.filename?.let(::File)
-          // If no file found or file does not exist, return input stream from item data
-          if (infoPair == null || file == null || !file.exists()) {
+          // If no file found, and there's no already-open descriptor for it either,
+          // return input stream from item data.
+          if (infoPair == null || file == null || (infoPair.fd < 0 && !file.exists())) {
             return@loadContent ByteArrayInputStream(item.data?.data)
           }
           // Return the input stream from the direct access information
@@ -343,7 +344,7 @@ class ZimFileReader(
         }
       val infoPair = getDirectAccessInfoOfItem(item, uri)
       val file = infoPair?.filename?.let(::File)
-      if (infoPair == null || file == null || !file.exists()) {
+      if (infoPair == null || file == null || (infoPair.fd < 0 && !file.exists())) {
         return@withContext loadAssetFromCache(uri)
       }
       return@withContext getInputStreamFromDirectAccessInfo(item, file, infoPair)
@@ -368,7 +369,7 @@ class ZimFileReader(
   ): InputStream? =
     item?.itemSize()?.let {
       AssetFileDescriptor(
-        parcelFileDescriptor(file),
+        parcelFileDescriptor(file, infoPair.fd),
         infoPair.offset,
         it
       ).createInputStream()
@@ -502,8 +503,20 @@ val String.truncateMimeType: String
 val String.replaceWithEncodedString: String
   get() = replace("?", "%3F")
 
-private fun parcelFileDescriptor(file: File): ParcelFileDescriptor? =
-  ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+/**
+ * Prefers an already-open descriptor handed to us via JNI over (re)opening [file] by
+ * path. libzim/java-libkiwix dup() that descriptor for us before crossing the JNI
+ * boundary, so we own [fd] independently and adoptFd() is safe. This matters because
+ * [file] may be a synthetic path (e.g. `/dev/fd/N`) that isn't guaranteed to be safely
+ * re-openable - some Android content-provider descriptors reject that reopen with
+ * EACCES. See openzim/libzim#852.
+ */
+private fun parcelFileDescriptor(file: File, fd: Int = -1): ParcelFileDescriptor? =
+  if (fd >= 0) {
+    ParcelFileDescriptor.adoptFd(fd)
+  } else {
+    ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+  }
 
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48
