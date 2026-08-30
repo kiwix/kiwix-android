@@ -266,9 +266,9 @@ class PendingIntentParserTest {
   }
 
   @Test
-  fun `wikipedia fr link with q query param returns OpenSearch with query`() {
+  fun `wikipedia fr subdomain link with q query param returns OpenSearch with query`() {
     val uri = mockk<Uri>()
-    every { uri.host } returns "fr.wikipedia.fr"
+    every { uri.host } returns "fr.wikipedia.org"
     every { uri.path } returns "/w/index.php"
     every { uri.getQueryParameter("search") } returns null
     every { uri.getQueryParameter("q") } returns "chat"
@@ -288,9 +288,9 @@ class PendingIntentParserTest {
   }
 
   @Test
-  fun `wikipedia de article link returns OpenSearch with decoded title`() {
+  fun `wikipedia de subdomain article link returns OpenSearch with decoded title`() {
     val uri = mockk<Uri>()
-    every { uri.host } returns "de.wikipedia.de"
+    every { uri.host } returns "de.wikipedia.org"
     every { uri.path } returns "/wiki/Berlin"
     every { uri.getQueryParameter("search") } returns null
     every { uri.getQueryParameter("q") } returns null
