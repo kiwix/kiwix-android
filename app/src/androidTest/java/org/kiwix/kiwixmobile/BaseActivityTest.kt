@@ -37,6 +37,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import dagger.hilt.android.testing.HiltAndroidRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
@@ -46,10 +47,12 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import java.util.concurrent.atomic.AtomicBoolean
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
   protected lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
+  private val hiltInjected = AtomicBoolean(false)
   protected val ioDispatcher by lazy {
     Dispatchers.IO
   }
@@ -79,6 +82,24 @@ abstract class BaseActivityTest {
   open fun waitForIdle() {
     prepareDevice()
     setupCommonDataStore()
+  }
+
+  /**
+   * Calls [HiltAndroidRule.inject], but only the first time it's invoked for this
+   * test instance.
+   *
+   * RetryRule wraps `@Before`/`@Test`/`@After` (rule order can't put it outside
+   * them - `@Before` methods are always inside every `@Rule`, regardless of
+   * order) and re-runs that whole chain on failure. Subclasses call
+   * `hiltRule.injectOnce()` from `@Before`, so a retry calls it again on the same
+   * Hilt test component, which throws "Called inject() multiple times". This
+   * makes retries safe without changing what gets injected or when, for the
+   * first (non-retried) run.
+   */
+  protected fun HiltAndroidRule.injectOnce() {
+    if (hiltInjected.compareAndSet(false, true)) {
+      inject()
+    }
   }
 
   private fun prepareDevice() {
