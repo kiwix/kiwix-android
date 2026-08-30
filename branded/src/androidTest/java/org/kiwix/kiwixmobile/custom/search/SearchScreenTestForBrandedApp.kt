@@ -208,6 +208,14 @@ class SearchScreenTestForBrandedApp {
   @Test
   fun testConcurrencyOfSearch() =
     runBlocking {
+      // Same crash this file's searchScreen() and SearchScreenInstrumentTest's
+      // searchScreenSimple() were already skipped for (60bf4326, "Search test
+      // was crashing on API level 36"): the System WebView build on the API 36
+      // emulator image aborts with a native
+      // "[FATAL:partition_alloc_support.cc] Detected dangling raw_ptr" SIGTRAP
+      // in Chrome_IOThread under this test's rapid-fire search actions. This
+      // test predates that fix and was missed.
+      Assume.assumeTrue(Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA)
       val searchTerms =
         listOf(
           "eilum",
