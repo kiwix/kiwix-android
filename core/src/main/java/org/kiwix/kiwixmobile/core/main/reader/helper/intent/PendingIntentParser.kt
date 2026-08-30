@@ -129,7 +129,10 @@ class PendingIntentParser @Inject constructor() {
   }
 
   companion object {
-    private val WIKIPEDIA_DOMAINS =
-      listOf("wikipedia.org", "wikipedia.com", "wikipedia.fr", "wikipedia.de")
+    // wikipedia.fr / wikipedia.de are Wikimedia chapter (fundraising/organizational)
+    // sites, not Wikipedia itself -- all language editions of Wikipedia are
+    // subdomains of wikipedia.org (e.g. de.wikipedia.org, fr.wikipedia.org),
+    // already covered by the ".wikipedia.org" suffix match below.
+    private val WIKIPEDIA_DOMAINS = listOf("wikipedia.org", "wikipedia.com")
   }
 }

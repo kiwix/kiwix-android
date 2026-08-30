@@ -555,7 +555,10 @@ private fun ExtrasCategory(
         title = stringResource(R.string.pref_supported_external_links_open_in_app_title),
         summary = stringResource(R.string.pref_supported_external_links_open_in_app_summary),
         checked = supportedExternalLinksOpenInApp,
-        onCheckedChange = { coreSettingsViewModel.setSupportedExternalLinksOpenInApp(it) }
+        onCheckedChange = { enabled ->
+          coreSettingsViewModel.setSupportedExternalLinksOpenInApp(enabled)
+          setWikipediaLinksComponentEnabled(context, enabled)
+        }
       )
     }
     if (settingsUiState.shouldShowWebSearchIntentPreference) {
@@ -580,10 +583,26 @@ private fun ExtrasCategory(
  * string) so this keeps working under applicationId suffixes (e.g. debug builds).
  */
 private fun setWebSearchComponentEnabled(context: Context, enabled: Boolean) {
-  val component = ComponentName(
-    context.packageName,
-    "${context.packageName}.main.KiwixMainActivityWebSearch"
+  setComponentEnabled(context, "${context.packageName}.main.KiwixMainActivityWebSearch", enabled)
+}
+
+/**
+ * Enables/disables the `.main.KiwixMainActivityWikipediaLinks` activity-alias, which is
+ * what actually makes Android route Wikipedia article/search links to Kiwix instead of
+ * a browser. This alias -- not a plain intent-filter -- is what backs the setting: an
+ * always-on manifest intent-filter can't be turned back off at runtime, since Android
+ * verifies/caches link resolution against the component that declares it.
+ */
+private fun setWikipediaLinksComponentEnabled(context: Context, enabled: Boolean) {
+  setComponentEnabled(
+    context,
+    "${context.packageName}.main.KiwixMainActivityWikipediaLinks",
+    enabled
   )
+}
+
+private fun setComponentEnabled(context: Context, componentClassName: String, enabled: Boolean) {
+  val component = ComponentName(context.packageName, componentClassName)
   runCatching {
     context.packageManager.setComponentEnabledSetting(
       component,
