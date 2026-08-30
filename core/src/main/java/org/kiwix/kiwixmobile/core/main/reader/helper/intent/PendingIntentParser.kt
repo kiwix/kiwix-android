@@ -121,11 +121,10 @@ class PendingIntentParser @Inject constructor() {
   private fun extractArticleTitleFromPath(path: String?): String? {
     val marker = "/wiki/"
     val markerIndex = path?.indexOf(marker) ?: -1
-    if (markerIndex == -1) return null
-    val rawTitle = path?.substring(markerIndex + marker.length)
-    if (rawTitle.isNullOrBlank()) return null
-    val decodedTitle = runCatching { URLDecoder.decode(rawTitle, "UTF-8") }.getOrDefault(rawTitle)
-    return decodedTitle.replace('_', ' ')
+    val rawTitle = if (markerIndex == -1) null else path?.substring(markerIndex + marker.length)
+    return rawTitle?.takeIf { it.isNotBlank() }
+      ?.let { runCatching { URLDecoder.decode(it, "UTF-8") }.getOrDefault(it) }
+      ?.replace('_', ' ')
   }
 
   companion object {
