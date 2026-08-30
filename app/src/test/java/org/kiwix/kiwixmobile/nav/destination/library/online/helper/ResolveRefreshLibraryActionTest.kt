@@ -18,18 +18,25 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import android.content.Context
 import android.net.ConnectivityManager
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.compat.CompatHelper
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.AirplaneModeBlocked
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
@@ -39,12 +46,28 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefres
 class ResolveRefreshLibraryActionTest {
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
+  private val context: Context = mockk()
 
   private lateinit var resolver: ResolveRefreshLibraryAction
 
   @BeforeEach
   fun setup() {
-    resolver = ResolveRefreshLibraryAction(kiwixDataStore, connectivityManager)
+    mockkObject(CompatHelper.Companion)
+    every { any<Context>().isAirplaneModeOn() } returns false
+    resolver = ResolveRefreshLibraryAction(kiwixDataStore, connectivityManager, context)
+  }
+
+  @AfterEach
+  fun tearDown() {
+    unmockkObject(CompatHelper.Companion)
+  }
+
+  @Test
+  fun `returns AirplaneModeBlocked when airplane mode is on`() = runTest {
+    every { any<Context>().isAirplaneModeOn() } returns true
+
+    val result = resolver(hasItems = true)
+    assertEquals(AirplaneModeBlocked, result)
   }
 
   @Test

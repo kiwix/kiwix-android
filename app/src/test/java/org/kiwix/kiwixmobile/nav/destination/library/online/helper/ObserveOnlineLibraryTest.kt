@@ -18,13 +18,18 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import android.content.Context
 import android.net.ConnectivityManager
+import org.kiwix.kiwixmobile.core.compat.CompatHelper
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,6 +42,7 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -46,6 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
@@ -57,16 +64,40 @@ class ObserveOnlineLibraryTest {
   private val repository: OnlineLibraryRepository = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
+  private val context: Context = mockk()
 
   private lateinit var observeOnlineLibrary: ObserveOnlineLibrary
 
   @BeforeEach
   fun setup() {
+    mockkObject(CompatHelper.Companion)
+    every { any<Context>().isAirplaneModeOn() } returns false
     observeOnlineLibrary = ObserveOnlineLibrary(
       repository,
       kiwixDataStore,
-      connectivityManager
+      connectivityManager,
+      context
     )
+  }
+
+  @AfterEach
+  fun tearDown() {
+    unmockkObject(CompatHelper.Companion)
+  }
+
+  @Test
+  fun `airplane mode emits AirplaneModeEnabled and skips repository`() = runTest {
+    every { any<Context>().isAirplaneModeOn() } returns true
+    val request = onlineLibraryRequest()
+    val result = observeOnlineLibrary(
+      flowOf(request)
+    ).first()
+
+    assertThat(AirplaneModeEnabled).isEqualTo(result)
+
+    coVerify(exactly = 0) {
+      repository.fetchOnlineLibrary(request)
+    }
   }
 
   private fun onlineLibraryRequest(

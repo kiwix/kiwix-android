@@ -50,6 +50,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -88,10 +89,12 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookCl
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.ShowWifiOnlyDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.StartDownload
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.AirplaneModeBlocked
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
@@ -164,6 +167,7 @@ class OnlineLibraryViewModel @Inject constructor(
 
     object WifiOnlyException : OnlineLibraryState()
     object NoInternetConnection : OnlineLibraryState()
+    object AirplaneModeEnabled : OnlineLibraryState()
     data class Parsing(val isLoadMore: Boolean) : OnlineLibraryState()
   }
 
@@ -304,10 +308,10 @@ class OnlineLibraryViewModel @Inject constructor(
 
   private fun noContentMessageWhenItemsComesFromOnlineSource(items: List<LibraryListItem>): String =
     when {
-      items.isEmpty() -> if (connectivityManager.isNetworkAvailable()) {
-        context.getString(R.string.no_items_msg)
-      } else {
-        context.getString(R.string.no_network_connection)
+      items.isEmpty() -> when {
+        context.isAirplaneModeOn() -> context.getString(R.string.airplane_mode_not_supported)
+        connectivityManager.isNetworkAvailable() -> context.getString(R.string.no_items_msg)
+        else -> context.getString(R.string.no_network_connection)
       }
 
       else -> ""
@@ -419,6 +423,15 @@ class OnlineLibraryViewModel @Inject constructor(
       }
 
       NoInternetConnection -> {
+        _uiState.update {
+          it.copy(
+            showScanningProgressBar = false,
+            isLoadingMore = false
+          )
+        }
+      }
+
+      AirplaneModeEnabled -> {
         _uiState.update {
           it.copy(
             showScanningProgressBar = false,
@@ -579,6 +592,8 @@ class OnlineLibraryViewModel @Inject constructor(
         ShowStorageSelection -> showStorageSelectDialog(false)
         is StartDownload -> downloadFile()
         NoInternet -> emitNoInternetSnackbar()
+        ResolveBookClickAction.LibraryActionResult.AirplaneModeEnabled ->
+          emitToast(context.getString(R.string.airplane_mode_not_supported))
         RequestStoragePermission -> sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
         RequestNotificationPermission -> if (isAndroid13OrAbove) {
           sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
@@ -702,6 +717,17 @@ class OnlineLibraryViewModel @Inject constructor(
                 scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
               )
             }
+          }
+        }
+
+        AirplaneModeBlocked -> {
+          _uiState.update {
+            it.copy(
+              noContentMessage = context.getString(R.string.airplane_mode_not_supported),
+              showNoContent = true,
+              isRefreshing = false,
+              showScanningProgressBar = false
+            )
           }
         }
 

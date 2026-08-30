@@ -129,7 +129,9 @@ class OnlineLibraryViewModelTest {
   fun setup() {
     every { connectivityReceiver.networkStates } returns MutableStateFlow(NetworkState.NOT_CONNECTED)
     every { observeItems.invoke(any(), any(), any(), any(), any()) } returns emptyFlow()
-    every { observeLibrary.invoke(any()) } returns flowOf(mockk(relaxed = true))
+    // Real state, not a relaxed mock - relaxed mock of a sealed class picks a random
+    // concrete subtype, breaking object-identity `when` branches.
+    every { observeLibrary.invoke(any()) } returns flowOf(NoInternetConnection)
     every { observeNetwork.invoke(any()) } returns emptyFlow()
     every { kiwixDataStore.selectedOnlineContentCategory } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("")
