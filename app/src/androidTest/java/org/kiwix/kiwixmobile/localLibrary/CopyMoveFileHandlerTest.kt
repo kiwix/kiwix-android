@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -76,6 +77,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   @Test
   fun testCopyingZimFileIntoPublicStorage() {
+    // Same native WebView crash searchScreen()/searchScreenSimple() are
+    // already skipped for elsewhere (60bf4326, "Search test was crashing on
+    // API level 36"). Filed upstream:
+    // https://issues.chromium.org/u/1/issues/554600555
+    Assume.assumeTrue(Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA)
     deleteAllFilesInDirectory(parentFile)
     // Test the scenario in playStore build on Android 11 and above.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.page.bookmarks
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -31,6 +32,7 @@ import androidx.navigation.NavOptions
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -127,6 +129,11 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
   @Test
   fun testBookmarks() {
+    // Same native WebView crash searchScreen()/searchScreenSimple() are
+    // already skipped for elsewhere (60bf4326, "Search test was crashing on
+    // API level 36"). Filed upstream:
+    // https://issues.chromium.org/u/1/issues/554600555
+    Assume.assumeTrue(Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA)
     // Open a ZIM file and ensure the reader screen is initialized.
     openZimFileInReader()
     bookmarks {

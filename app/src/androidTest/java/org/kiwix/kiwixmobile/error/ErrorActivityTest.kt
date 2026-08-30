@@ -18,11 +18,13 @@
 
 package org.kiwix.kiwixmobile.error
 
+import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.test.core.app.ActivityScenario
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,6 +55,11 @@ class ErrorActivityTest : BaseActivityTest() {
 
   @Test
   fun verifyErrorActivity() {
+    // Same native WebView crash searchScreen()/searchScreenSimple() are
+    // already skipped for elsewhere (60bf4326, "Search test was crashing on
+    // API level 36"). Filed upstream:
+    // https://issues.chromium.org/u/1/issues/554600555
+    Assume.assumeTrue(Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA)
     activityScenario.onActivity {
       it.navigate(KiwixDestination.Library.route)
     }
