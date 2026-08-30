@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper.intent
 
+import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -133,6 +134,7 @@ class PendingIntentParserTest {
     val intent = mockk<Intent>()
     every { intent.action } returns Intent.ACTION_VIEW
     every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.data } returns null
     every { intent.scheme } returns "file"
     every { intent.type } returns "text/plain"
 
@@ -147,6 +149,7 @@ class PendingIntentParserTest {
     val intent = mockk<Intent>()
     every { intent.action } returns Intent.ACTION_VIEW
     every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.data } returns null
     every { intent.scheme } returns "https"
     every { intent.type } returns "application/octet-stream"
 
@@ -169,6 +172,7 @@ class PendingIntentParserTest {
   @Test
   fun `ACTION_VIEW with search uri returns OpenSearch`() {
     val uri = mockk<Uri>()
+    every { uri.host } returns "example.com"
     every { uri.lastPathSegment } returns "Albert"
     val intent = mockk<Intent>()
     every { intent.action } returns Intent.ACTION_VIEW
@@ -182,6 +186,150 @@ class PendingIntentParserTest {
         "Albert",
         isVoice = false,
         false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `ACTION_WEB_SEARCH returns OpenSearch with the query extra`() {
+    val intent = Intent(Intent.ACTION_WEB_SEARCH).apply {
+      putExtra(SearchManager.QUERY, "hello world")
+    }
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "hello world",
+        isVoice = false,
+        isOpenedFromTabView = false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `ACTION_WEB_SEARCH with no query extra returns empty OpenSearch`() {
+    val intent = Intent(Intent.ACTION_WEB_SEARCH)
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "",
+        isVoice = false,
+        isOpenedFromTabView = false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `wikipedia org article link with wiki path returns OpenSearch with decoded title`() {
+    val uri = mockk<Uri>()
+    every { uri.host } returns "en.wikipedia.org"
+    every { uri.path } returns "/wiki/Albert_Einstein"
+    every { uri.getQueryParameter("search") } returns null
+    every { uri.getQueryParameter("q") } returns null
+    val intent = mockk<Intent>()
+    every { intent.action } returns Intent.ACTION_VIEW
+    every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.data } returns uri
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "Albert Einstein",
+        isVoice = false,
+        isOpenedFromTabView = false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `wikipedia com search link with search query param returns OpenSearch with query`() {
+    val uri = mockk<Uri>()
+    every { uri.host } returns "www.wikipedia.com"
+    every { uri.path } returns "/wiki/Special:Search"
+    every { uri.getQueryParameter("search") } returns "gravity"
+    every { uri.getQueryParameter("q") } returns null
+    val intent = mockk<Intent>()
+    every { intent.action } returns Intent.ACTION_VIEW
+    every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.data } returns uri
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "gravity",
+        isVoice = false,
+        isOpenedFromTabView = false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `wikipedia fr link with q query param returns OpenSearch with query`() {
+    val uri = mockk<Uri>()
+    every { uri.host } returns "fr.wikipedia.fr"
+    every { uri.path } returns "/w/index.php"
+    every { uri.getQueryParameter("search") } returns null
+    every { uri.getQueryParameter("q") } returns "chat"
+    val intent = mockk<Intent>()
+    every { intent.action } returns Intent.ACTION_VIEW
+    every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.data } returns uri
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "chat",
+        isVoice = false,
+        isOpenedFromTabView = false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `wikipedia de article link returns OpenSearch with decoded title`() {
+    val uri = mockk<Uri>()
+    every { uri.host } returns "de.wikipedia.de"
+    every { uri.path } returns "/wiki/Berlin"
+    every { uri.getQueryParameter("search") } returns null
+    every { uri.getQueryParameter("q") } returns null
+    val intent = mockk<Intent>()
+    every { intent.action } returns Intent.ACTION_VIEW
+    every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.data } returns uri
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "Berlin",
+        isVoice = false,
+        isOpenedFromTabView = false
+      ),
+      parser.parse(intent)
+    )
+  }
+
+  @Test
+  fun `wikipedia link is recognised even without a MIME type`() {
+    // Regression guard: links delivered from another app/browser typically carry
+    // no MIME type, which the generic ACTION_VIEW fallback treats as "unknown".
+    val uri = mockk<Uri>()
+    every { uri.host } returns "en.wikipedia.org"
+    every { uri.path } returns "/wiki/Kotlin_(programming_language)"
+    every { uri.getQueryParameter("search") } returns null
+    every { uri.getQueryParameter("q") } returns null
+    val intent = mockk<Intent>()
+    every { intent.action } returns Intent.ACTION_VIEW
+    every { intent.hasExtra(ZIM_FILE_URI_KEY) } returns false
+    every { intent.type } returns null
+    every { intent.scheme } returns "https"
+    every { intent.data } returns uri
+
+    assertEquals(
+      PendingIntentParser.ReaderIntentAction.OpenSearch(
+        "Kotlin (programming language)",
+        isVoice = false,
+        isOpenedFromTabView = false
       ),
       parser.parse(intent)
     )

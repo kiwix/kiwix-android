@@ -18,13 +18,16 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper.intent
 
+import android.app.SearchManager
 import android.content.Intent
+import android.net.Uri
 import org.kiwix.kiwixmobile.core.main.CoreSearchWidget
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.None
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenBookmarks
 import org.kiwix.kiwixmobile.core.main.reader.helper.intent.PendingIntentParser.ReaderIntentAction.OpenSearch
+import java.net.URLDecoder
 import javax.inject.Inject
 
 class PendingIntentParser @Inject constructor() {
@@ -55,6 +58,17 @@ class PendingIntentParser @Inject constructor() {
 
       CoreSearchWidget.STAR_CLICKED -> OpenBookmarks
 
+      // Android routes a system-wide "web search" request here (e.g. from the
+      // assistant or another app asking to search the web). We can't search the
+      // web offline, so we redirect the query into our own, currently-open-book
+      // search instead of doing nothing with it.
+      Intent.ACTION_WEB_SEARCH ->
+        OpenSearch(
+          query = intent.getStringExtra(SearchManager.QUERY).orEmpty(),
+          isVoice = false,
+          isOpenedFromTabView = false
+        )
+
       Intent.ACTION_VIEW -> parseActionViewIntent(intent)
 
       else -> None
@@ -64,6 +78,12 @@ class PendingIntentParser @Inject constructor() {
   @Suppress("ReturnCount")
   private fun parseActionViewIntent(intent: Intent): ReaderIntentAction {
     if (intent.hasExtra(ZIM_FILE_URI_KEY)) return None
+
+    // Wikipedia links are recognised ahead of the generic scheme/type checks below,
+    // because the OS typically delivers them with no MIME type at all (which the
+    // generic checks below treat as "not a link we understand").
+    intent.data?.takeIf { isWikipediaHost(it.host) }?.let { return parseWikipediaUri(it) }
+
     val hasValidScheme =
       intent.scheme in listOf("file", "content", "zim", ZIM_HOST_DEEP_LINK_SCHEME)
     // Added condition to handle ZIM files. When opening from storage, the intent may
@@ -75,5 +95,41 @@ class PendingIntentParser @Inject constructor() {
 
     val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
     return OpenSearch(searchString.orEmpty(), false, isOpenedFromTabView = false)
+  }
+
+  private fun isWikipediaHost(host: String?): Boolean {
+    if (host == null) return false
+    val lowerHost = host.lowercase()
+    return WIKIPEDIA_DOMAINS.any { domain -> lowerHost == domain || lowerHost.endsWith(".$domain") }
+  }
+
+  /**
+   * Converts a recognised Wikipedia URL into a search query against the currently
+   * open book, matching the (only) working scope confirmed for this app today --
+   * see kiwix-android#731. We deliberately do not attempt to resolve the link to an
+   * exact page in a specific, possibly-not-open ZIM: there is no known-good way to
+   * pick which locally available ZIM contains a given Wikipedia article, and
+   * treating this as a plain search re-uses the reader's existing, working
+   * `OpenSearch` path instead.
+   */
+  private fun parseWikipediaUri(uri: Uri): ReaderIntentAction {
+    val query = uri.getQueryParameter("search") ?: uri.getQueryParameter("q")
+    val searchQuery = query ?: extractArticleTitleFromPath(uri.path)
+    return OpenSearch(searchQuery.orEmpty(), isVoice = false, isOpenedFromTabView = false)
+  }
+
+  private fun extractArticleTitleFromPath(path: String?): String? {
+    val marker = "/wiki/"
+    val markerIndex = path?.indexOf(marker) ?: -1
+    if (markerIndex == -1) return null
+    val rawTitle = path?.substring(markerIndex + marker.length)
+    if (rawTitle.isNullOrBlank()) return null
+    val decodedTitle = runCatching { URLDecoder.decode(rawTitle, "UTF-8") }.getOrDefault(rawTitle)
+    return decodedTitle.replace('_', ' ')
+  }
+
+  companion object {
+    private val WIKIPEDIA_DOMAINS =
+      listOf("wikipedia.org", "wikipedia.com", "wikipedia.fr", "wikipedia.de")
   }
 }

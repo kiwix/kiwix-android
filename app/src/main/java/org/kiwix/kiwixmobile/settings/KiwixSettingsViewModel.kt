@@ -106,6 +106,14 @@ class KiwixSettingsViewModel @Inject constructor(
     settingsUiState.update { it.copy(shouldShowRatingCategory = kiwixDataStore.isPlayStoreBuild.first()) }
   }
 
+  override suspend fun showSupportedExternalLinksPreference() {
+    settingsUiState.update { it.copy(shouldShowSupportedExternalLinksPreference = true) }
+  }
+
+  override suspend fun showWebSearchIntentPreference() {
+    settingsUiState.update { it.copy(shouldShowWebSearchIntentPreference = true) }
+  }
+
   /**
    * Shows or hides the progress bar while the application is fetching
    * storage information in the background. The progress bar is displayed
