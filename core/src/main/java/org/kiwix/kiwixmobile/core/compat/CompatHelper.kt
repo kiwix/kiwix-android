@@ -18,12 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.compat
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.ConnectivityManager
 import android.os.Build
+import android.provider.Settings
 
 class CompatHelper private constructor() {
   // Note: Needs ": Compat" or the type system assumes `Compat21`
@@ -76,6 +78,16 @@ class CompatHelper private constructor() {
 
     fun ConnectivityManager.isWifi(): Boolean =
       compat.isWifi(this)
+
+    /**
+     * Airplane mode, read directly from Settings.Global. ConnectivityManager's network-capability
+     * checks can lag behind the actual airplane-mode toggle (or report internet available if the
+     * OEM keeps WiFi radio state ambiguous during the switch), so callers that need to
+     * distinguish "no internet" from "user explicitly enabled airplane mode" should check this
+     * first. See #5036.
+     */
+    fun Context.isAirplaneModeOn(): Boolean =
+      Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
 
     fun String.convertToLocal() = compat.convertToLocal(this)
   }

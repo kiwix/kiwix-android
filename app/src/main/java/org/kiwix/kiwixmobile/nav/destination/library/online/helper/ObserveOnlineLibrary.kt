@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import android.content.Context
 import android.net.ConnectivityManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,12 +26,14 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.WifiOnlyException
@@ -39,7 +42,8 @@ import javax.inject.Inject
 class ObserveOnlineLibrary @Inject constructor(
   private val repository: OnlineLibraryRepository,
   private val kiwixDataStore: KiwixDataStore,
-  private val connectivityManager: ConnectivityManager
+  private val connectivityManager: ConnectivityManager,
+  private val context: Context
 ) {
   @OptIn(ExperimentalCoroutinesApi::class)
   operator fun invoke(
@@ -48,6 +52,10 @@ class ObserveOnlineLibrary @Inject constructor(
     return requests
       .flatMapLatest { request ->
         flow {
+          if (context.isAirplaneModeOn()) {
+            emit(AirplaneModeEnabled)
+            return@flow
+          }
           if (!connectivityManager.isNetworkAvailable()) {
             emit(NoInternetConnection)
             return@flow

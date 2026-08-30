@@ -18,16 +18,19 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import android.content.Context
 import android.net.ConnectivityManager
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import kotlinx.coroutines.flow.first
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.CancelDownload
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.DisableStorageSelection
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.NoInternet
@@ -51,7 +54,8 @@ class ResolveBookClickAction @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val permissionChecker: KiwixPermissionChecker,
   private val availableSpaceCalculator: AvailableSpaceCalculator,
-  private val connectivityManager: ConnectivityManager
+  private val connectivityManager: ConnectivityManager,
+  private val context: Context
 ) {
   sealed class LibraryActionResult {
     object RequestNotificationPermission : LibraryActionResult()
@@ -62,6 +66,7 @@ class ResolveBookClickAction @Inject constructor(
     data class NotEnoughSpace(val availableSpace: String) : LibraryActionResult()
     data class StartDownload(val item: BookItem) : LibraryActionResult()
     object NoInternet : LibraryActionResult()
+    object AirplaneModeEnabled : LibraryActionResult()
     object DisableStorageSelection : LibraryActionResult()
     data class PauseResume(val downloadId: Long, val isPaused: Boolean) : LibraryActionResult()
     data class RetryDownload(val downloadId: Long) : LibraryActionResult()
@@ -74,6 +79,8 @@ class ResolveBookClickAction @Inject constructor(
   ): LibraryActionResult {
     return if (!permissionChecker.hasNotificationPermission()) {
       RequestNotificationPermission
+    } else if (context.isAirplaneModeOn()) {
+      AirplaneModeEnabled
     } else if (!connectivityManager.isNetworkAvailable()) {
       NoInternet
     } else if (kiwixDataStore.wifiOnly.first() && !connectivityManager.isWifi()) {
