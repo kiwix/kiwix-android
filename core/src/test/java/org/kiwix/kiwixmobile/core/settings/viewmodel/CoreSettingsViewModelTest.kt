@@ -191,6 +191,8 @@ internal class CoreSettingsViewModelTest {
     every { kiwixDataStore.textZoom } returns flowOf(DEFAULT_ZOOM)
     every { kiwixDataStore.openNewTabInBackground } returns flowOf(false)
     every { kiwixDataStore.wifiOnly } returns flowOf(true)
+    every { kiwixDataStore.supportedExternalLinksOpenInApp } returns flowOf(false)
+    every { kiwixDataStore.enableWebSearchIntent } returns flowOf(false)
 
     // Stub PackageManager so versionCode / versionName are computed at construction time
     val packageInfo = PackageInfo().apply {
@@ -400,6 +402,22 @@ internal class CoreSettingsViewModelTest {
       coVerify(exactly = 10) {
         kiwixDataStore.setWifiOnly(any())
       }
+    }
+
+    @Test
+    fun `setSupportedExternalLinksOpenInApp delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setSupportedExternalLinksOpenInApp(any()) } just Runs
+      viewModel.setSupportedExternalLinksOpenInApp(true)
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setSupportedExternalLinksOpenInApp(true) }
+    }
+
+    @Test
+    fun `setEnableWebSearchIntent delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setEnableWebSearchIntent(any()) } just Runs
+      viewModel.setEnableWebSearchIntent(true)
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setEnableWebSearchIntent(true) }
     }
 
     @Test
@@ -619,6 +637,54 @@ internal class CoreSettingsViewModelTest {
         // Assert initial item
         assertTrue(awaitItem())
         flow.emit(false)
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `supportedExternalLinksOpenInApp uses default when no emission`() = runTest {
+      every { kiwixDataStore.supportedExternalLinksOpenInApp } returns emptyFlow()
+
+      createViewModel()
+
+      assertFalse(viewModel.supportedExternalLinksOpenInApp.value)
+    }
+
+    @Test
+    fun `supportedExternalLinksOpenInApp emits values`() = runTest {
+      val flow = MutableStateFlow(false)
+      every { kiwixDataStore.supportedExternalLinksOpenInApp } returns flow
+
+      createViewModel()
+
+      viewModel.supportedExternalLinksOpenInApp.test {
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `enableWebSearchIntent uses default when no emission`() = runTest {
+      every { kiwixDataStore.enableWebSearchIntent } returns emptyFlow()
+
+      createViewModel()
+
+      assertFalse(viewModel.enableWebSearchIntent.value)
+    }
+
+    @Test
+    fun `enableWebSearchIntent emits values`() = runTest {
+      val flow = MutableStateFlow(false)
+      every { kiwixDataStore.enableWebSearchIntent } returns flow
+
+      createViewModel()
+
+      viewModel.enableWebSearchIntent.test {
         assertFalse(awaitItem())
         flow.emit(true)
         assertTrue(awaitItem())
