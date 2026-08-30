@@ -21,8 +21,10 @@ package org.kiwix.kiwixmobile.core.settings
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -520,6 +522,11 @@ private fun ExtrasCategory(
   val newTabInBackground by coreSettingsViewModel.newTabInBackground.collectAsStateWithLifecycle()
   val externalLinkPopup by coreSettingsViewModel.externalLinkPopup.collectAsStateWithLifecycle()
   val wifiOnly by coreSettingsViewModel.wifiOnly.collectAsStateWithLifecycle()
+  val supportedExternalLinksOpenInApp by
+    coreSettingsViewModel.supportedExternalLinksOpenInApp.collectAsStateWithLifecycle()
+  val enableWebSearchIntent by
+    coreSettingsViewModel.enableWebSearchIntent.collectAsStateWithLifecycle()
+  val context = LocalContext.current
   SettingsCategory(stringResource(R.string.pref_extras)) {
     SwitchPreference(
       title = stringResource(R.string.pref_newtab_background_title),
@@ -543,6 +550,50 @@ private fun ExtrasCategory(
         onCheckedChange = { coreSettingsViewModel.setWifiOnly(it) }
       )
     }
+    if (settingsUiState.shouldShowSupportedExternalLinksPreference) {
+      SwitchPreference(
+        title = stringResource(R.string.pref_supported_external_links_open_in_app_title),
+        summary = stringResource(R.string.pref_supported_external_links_open_in_app_summary),
+        checked = supportedExternalLinksOpenInApp,
+        onCheckedChange = { coreSettingsViewModel.setSupportedExternalLinksOpenInApp(it) }
+      )
+    }
+    if (settingsUiState.shouldShowWebSearchIntentPreference) {
+      SwitchPreference(
+        title = stringResource(R.string.pref_enable_web_search_intent_title),
+        summary = stringResource(R.string.pref_enable_web_search_intent_summary),
+        checked = enableWebSearchIntent,
+        onCheckedChange = { enabled ->
+          coreSettingsViewModel.setEnableWebSearchIntent(enabled)
+          setWebSearchComponentEnabled(context, enabled)
+        }
+      )
+    }
+  }
+}
+
+/**
+ * Enables/disables the `.main.KiwixMainActivityWebSearch` activity-alias declared in
+ * the app module's manifest, which is what actually makes Android offer Kiwix for
+ * android.intent.action.WEB_SEARCH requests. The component is resolved from the
+ * running app's own package name (rather than a hardcoded "org.kiwix.kiwixmobile"
+ * string) so this keeps working under applicationId suffixes (e.g. debug builds).
+ */
+private fun setWebSearchComponentEnabled(context: Context, enabled: Boolean) {
+  val component = ComponentName(
+    context.packageName,
+    "${context.packageName}.main.KiwixMainActivityWebSearch"
+  )
+  runCatching {
+    context.packageManager.setComponentEnabledSetting(
+      component,
+      if (enabled) {
+        PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+      } else {
+        PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+      },
+      PackageManager.DONT_KILL_APP
+    )
   }
 }
 

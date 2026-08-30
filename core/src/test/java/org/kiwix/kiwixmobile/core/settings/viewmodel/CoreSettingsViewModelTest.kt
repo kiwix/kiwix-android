@@ -139,6 +139,14 @@ private class TestCoreSettingsViewModel(
   override suspend fun showRatingCategory() {
     // Do nothing
   }
+
+  override suspend fun showSupportedExternalLinksPreference() {
+    // Do nothing
+  }
+
+  override suspend fun showWebSearchIntentPreference() {
+    // Do nothing
+  }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

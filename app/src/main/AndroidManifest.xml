@@ -161,7 +161,42 @@
 
         <data android:scheme="zim" />
       </intent-filter>
+      <!--
+       Recognizes Wikipedia article/search links so they can be routed into the
+       app as a search of the currently open book, instead of a browser.
+       See https://github.com/kiwix/kiwix-android/issues/731
+      -->
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="https" />
+        <data android:scheme="http" />
+        <data android:host="*.wikipedia.fr" />
+        <data android:host="*.wikipedia.org" />
+        <data android:host="*.wikipedia.com" />
+        <data android:host="*.wikipedia.de" />
+        <data android:pathPattern=".*" />
+      </intent-filter>
     </activity>
+    <!--
+     Lets Kiwix register as a system "web search" handler (android.intent.action.WEB_SEARCH).
+     Disabled by default; toggled at runtime via PackageManager#setComponentEnabledSetting
+     from the "Use as a web search application" setting.
+    -->
+    <activity-alias
+      android:name=".main.KiwixMainActivityWebSearch"
+      android:enabled="false"
+      android:exported="true"
+      android:targetActivity=".main.KiwixMainActivity">
+      <intent-filter android:enabled="true">
+        <action android:name="android.intent.action.WEB_SEARCH" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity-alias>
 
     <receiver
       android:name=".main.KiwixSearchWidget"
