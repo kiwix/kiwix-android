@@ -422,16 +422,7 @@ class OnlineLibraryViewModel @Inject constructor(
         showWifiOnlyDialog()
       }
 
-      NoInternetConnection -> {
-        _uiState.update {
-          it.copy(
-            showScanningProgressBar = false,
-            isLoadingMore = false
-          )
-        }
-      }
-
-      AirplaneModeEnabled -> {
+      NoInternetConnection, AirplaneModeEnabled -> {
         _uiState.update {
           it.copy(
             showScanningProgressBar = false,

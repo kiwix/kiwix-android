@@ -84,6 +84,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefres
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
@@ -595,6 +596,15 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `when state is NoInternetConnection then stops loading`() = runTest {
       viewModel.handleLibraryState(NoInternetConnection)
+
+      val state = viewModel.uiState.value
+      assertFalse(state.showScanningProgressBar)
+      assertFalse(state.isLoadingMore)
+    }
+
+    @Test
+    fun `when state is AirplaneModeEnabled then stops loading`() = runTest {
+      viewModel.handleLibraryState(AirplaneModeEnabled)
 
       val state = viewModel.uiState.value
       assertFalse(state.showScanningProgressBar)
