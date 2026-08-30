@@ -18,10 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.utils.files
 
+import android.content.ContentResolver
+import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import androidx.test.core.app.ApplicationProvider
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -82,5 +87,25 @@ class FileUtilsFileDescriptorTest {
     val context = ApplicationProvider.getApplicationContext<TestApplication>()
     val missingFile = File(tempFile.parentFile, "does-not-exist.zim")
     assertNull(FileUtils.getAssetFileDescriptorFromUri(context, Uri.fromFile(missingFile)))
+  }
+
+  /**
+   * Distinct from the "file does not exist" case above: here the ContentResolver
+   * successfully returns an AssetFileDescriptor (assetFileDescriptor is non-null), but its
+   * underlying fd is closed, so isFileDescriptorCanOpenWithLibkiwix() reports it unreadable
+   * and getAssetFileDescriptorFromUri() takes its `else -> null` branch instead of the
+   * FileNotFoundException catch block.
+   */
+  @Test
+  fun getAssetFileDescriptorFromUri_whenFileDescriptorIsClosed_returnsNull() {
+    val context = mockk<Context>()
+    val contentResolver = mockk<ContentResolver>()
+    every { context.contentResolver } returns contentResolver
+    val closedParcelFileDescriptor =
+      ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY).apply { close() }
+    val assetFileDescriptor =
+      AssetFileDescriptor(closedParcelFileDescriptor, 0, AssetFileDescriptor.UNKNOWN_LENGTH)
+    every { contentResolver.openAssetFileDescriptor(any(), "r") } returns assetFileDescriptor
+    assertNull(FileUtils.getAssetFileDescriptorFromUri(context, Uri.fromFile(tempFile)))
   }
 }
