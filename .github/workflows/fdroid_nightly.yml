@@ -1,13 +1,12 @@
 name: Publish fdroid nightly build
 
-# This workflow is triggered on a schedule or when specific tags are pushed.
-# It runs every Monday at 12:00 UTC and also when the 'fdroid_nightly' tag is pushed.
+# This workflow is triggered when the 'fdroid_nightly' tag is pushed, or
+# manually via the Actions tab.
 on:
   push:
     tags:
       - 'fdroid_nightly' # fdroid_nightly Tag
-  schedule:
-    - cron: '0 12 * * 1'  # Runs every Monday at 12:00
+  workflow_dispatch:
 
 jobs:
   nightly:
@@ -80,4 +79,11 @@ jobs:
 
       - name: release fdroid nightly to kiwix.download.org
         run: |
-          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no fdroid ci@master.download.kiwix.org:/data/download/fdroid/
+          # Sync the *contents* of fdroid/, not the directory itself. `scp -r
+          # fdroid ...:/data/download/fdroid/` would nest everything an extra
+          # level deep (.../fdroid/fdroid/repo/...) whenever the remote
+          # /data/download/fdroid/ directory already exists, silently
+          # breaking the repo_url declared in config-template.yml. rsync with
+          # a trailing slash on the source is unambiguous about this, and
+          # syncs incrementally rather than re-uploading everything each run.
+          rsync -avz -e "ssh -p 30022 -i ssh_key -o StrictHostKeyChecking=no" fdroid/ ci@master.download.kiwix.org:/data/download/fdroid/
