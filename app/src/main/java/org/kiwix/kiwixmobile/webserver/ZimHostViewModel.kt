@@ -186,6 +186,10 @@ class ZimHostViewModel @Inject constructor(
           return@launch
         }
 
+        // Bind HotspotService before dispatching the events that start it, so the
+        // callback channel is ready by the time it reports back that it started.
+        _uiState.update { it.copy(isHotspotServiceActive = true) }
+
         when {
           connectivityReporter.checkWifi() -> sendEvent(ShowWifiDialog)
           connectivityReporter.checkTethering() -> sendEvent(StartIpCheck)
@@ -309,6 +313,7 @@ class ZimHostViewModel @Inject constructor(
   }
 
   override fun onServerFailedToStart(errorMessage: Int?) {
+    onServerStopped()
     sendEvent(DismissDialog)
     errorMessage?.let { sendEvent(ShowErrorToast(it)) }
   }
