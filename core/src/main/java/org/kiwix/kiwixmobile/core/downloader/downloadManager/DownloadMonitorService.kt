@@ -18,9 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
-import android.annotation.SuppressLint
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
@@ -29,9 +27,10 @@ import android.app.Service
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
@@ -70,8 +69,15 @@ const val DOWNLOAD_SERVICE_NOTIFICATION_ID = 1
 const val DOWNLOAD_TIMEOUT_RESUME_INTENT = "downloadTimeoutResumeIntent"
 const val BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION = "backgroundDownloadLimitReachAction"
 const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
+const val DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID = 3
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
+
+private val NETWORK_RELATED_ERRORS = setOf(
+  Error.NO_NETWORK_CONNECTION,
+  Error.CONNECTION_TIMED_OUT,
+  Error.UNKNOWN_HOST
+)
 
 class DownloadMonitorService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
@@ -85,7 +91,6 @@ class DownloadMonitorService : Service() {
   private val notificationManager: NotificationManager by lazy {
     getSystemService(NOTIFICATION_SERVICE) as NotificationManager
   }
-  private val downloadNotificationsBuilderMap = mutableMapOf<Int, NotificationCompat.Builder>()
 
   @Inject
   lateinit var fetch: Fetch
@@ -108,7 +113,17 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onLost(network: Network) {
-      // do nothing
+      fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
+        activeDownloads.forEach { download ->
+          taskFlow.tryEmit {
+            fetchDownloadNotificationManager.showDownloadPauseNotification(
+              fetch,
+              download,
+              isOffline = true
+            )
+          }
+        }
+      }
     }
   }
 
@@ -120,9 +135,17 @@ class DownloadMonitorService : Service() {
    * are resumed automatically once the network is restored.
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
-    fetch.getDownloadsWithStatus(listOf(Status.QUEUED)) { queuedDownloads ->
-      queuedDownloads.forEach { queuedDownload ->
-        fetch.resume(queuedDownload.id)
+    scope?.launch {
+      fetch.getDownloadsWithStatus(listOf(Status.QUEUED, Status.FAILED)) { downloadsToResume ->
+        downloadsToResume.forEach { download ->
+          when (download.status) {
+            Status.FAILED if download.error in NETWORK_RELATED_ERRORS ->
+              fetch.retry(download.id)
+
+            Status.QUEUED -> fetch.resume(download.id)
+            else -> {}
+          }
+        }
       }
     }
   }
@@ -144,7 +167,11 @@ class DownloadMonitorService : Service() {
 
   private fun registerNetworkCallback() {
     runCatching {
-      connectivityManager.registerDefaultNetworkCallback(networkCallback)
+      val request = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        .build()
+      connectivityManager.registerNetworkCallback(request, networkCallback)
     }.onFailure { it.printStackTrace() }
   }
 
@@ -294,8 +321,11 @@ class DownloadMonitorService : Service() {
 
   private fun startForegroundService() {
     runCatching {
-      CoroutineScope(ioDispatcher).launch {
-        downloadNotificationChannel()
+      scope?.launch {
+        fetchDownloadNotificationManager.createNotificationChannels(
+          this@DownloadMonitorService,
+          notificationManager
+        )
         startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
         startPausedDownloadsDueToAndroidServiceLimitation()
       }
@@ -308,14 +338,9 @@ class DownloadMonitorService : Service() {
       .setContentText(getString(string.download_notification_channel_description))
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
-      .setGroupSummary(true)
       .setOnlyAlertOnce(true)
       .setWhen(System.currentTimeMillis())
       .build()
-
-  private fun cancelNotificationForId(downloadId: Int) {
-    notificationManager.cancel(downloadId)
-  }
 
   /**
    * Resumes all downloads that were previously paused by the service due to Android's
@@ -366,7 +391,16 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
-      update(download, true)
+      if (error in NETWORK_RELATED_ERRORS) {
+        taskFlow.tryEmit {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = true
+          )
+        }
+      }
+      update(download)
     }
 
     override fun onPaused(download: Download) {
@@ -382,6 +416,15 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
+      if (waitingOnNetwork) {
+        taskFlow.tryEmit {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = true
+          )
+        }
+      }
       update(download)
     }
 
@@ -402,6 +445,13 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onWaitingNetwork(download: Download) {
+      taskFlow.tryEmit {
+        fetchDownloadNotificationManager.showDownloadPauseNotification(
+          fetch,
+          download,
+          isOffline = true
+        )
+      }
       update(download)
     }
 
@@ -420,11 +470,15 @@ class DownloadMonitorService : Service() {
             downloadRoomDao.downloads().first()
           }
         }
-        // If someone pause the Download then post a notification since fetch removes the
-        // notification for ongoing download when pause so we needs to show our custom notification.
+
         if (download.isPaused()) {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+          fetchDownloadNotificationManager.showDownloadPauseNotification(
+            fetch,
+            download,
+            isOffline = false
+          )
         }
+
         if (updateForeGroundService) {
           stopForegroundServiceIfNoActiveDownloads(fetch)
         }
@@ -452,15 +506,16 @@ class DownloadMonitorService : Service() {
   }
 
   private fun showDownloadCompletedNotification(download: Download) {
-    val notificationBuilder = getNotificationBuilder(download.id)
+    val downloadTitle = fetchDownloadNotificationManager.getDownloadNotificationTitle(download)
     val notificationTitle =
-      downloadRoomDao.getEntityForFileName(getDownloadNotificationTitle(download))?.title
+      downloadRoomDao.getEntityForFileName(downloadTitle)?.title
         ?: download.file
     val openActionPendingIntent = fetchDownloadNotificationManager.getOpenActionPendingIntent(
       this,
-      getDownloadNotificationTitle(download),
+      downloadTitle,
       download.id + THIRTY_TREE
     )
+    val notificationBuilder = NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
@@ -484,62 +539,12 @@ class DownloadMonitorService : Service() {
     val downloadCompleteNotificationId = download.id + THIRTY_TREE
     // Cancel the complete download notification if already shown due to the application's
     // lifecycle fetch. See #4237 for more details.
-    cancelNotificationForId(download.id - THIRTY_TREE)
+    notificationManager.cancel(download.id - THIRTY_TREE)
     // Cancel the fetch related any notification if present.
-    cancelNotificationForId(download.id)
+    notificationManager.cancel(download.id)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
 
-  private fun downloadNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      if (notificationManager.getNotificationChannel(DOWNLOAD_NOTIFICATION_CHANNEL_ID) == null) {
-        notificationManager.createNotificationChannel(createChannel())
-      }
-    }
-  }
-
-  @RequiresApi(Build.VERSION_CODES.O)
-  private fun createChannel() =
-    NotificationChannel(
-      DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-      getString(string.download_notification_channel_name),
-      NotificationManager.IMPORTANCE_DEFAULT
-    ).apply {
-      description = getString(string.download_notification_channel_description)
-      setSound(null, null)
-      enableVibration(false)
-    }
-
-  @SuppressLint("RestrictedApi")
-  private fun getNotificationBuilder(notificationId: Int): NotificationCompat.Builder {
-    synchronized(downloadNotificationsBuilderMap) {
-      val notificationBuilder =
-        downloadNotificationsBuilderMap[notificationId]
-          ?: NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
-      downloadNotificationsBuilderMap[notificationId] = notificationBuilder
-      notificationBuilder
-        .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
-        .setStyle(null)
-        .setProgress(ZERO, ZERO, false)
-        .setContentTitle(null)
-        .setContentText(null)
-        .setContentIntent(null)
-        .setGroupSummary(false)
-        .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-        .setOngoing(false)
-        .setOnlyAlertOnce(true)
-        .setSmallIcon(android.R.drawable.stat_sys_download_done)
-        .mActions.clear()
-      return@getNotificationBuilder notificationBuilder
-    }
-  }
-
-  private fun getDownloadNotificationTitle(download: Download): String =
-    fetchDownloadNotificationManager.getDownloadNotificationTitle(download)
-
-  /**
-   * Stops the foreground service, disposes of resources, and removes the Fetch listener.
-   */
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun stopForegroundServiceForDownloads() {
     updaterJob?.cancel()
@@ -547,6 +552,7 @@ class DownloadMonitorService : Service() {
     scope = null
     unregisterNetworkCallback()
     fetch.removeListener(fetchListener)
+    notificationManager.cancel(DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID)
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     isDownloadMonitorServiceRunning = false

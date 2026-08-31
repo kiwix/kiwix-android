@@ -252,6 +252,7 @@
   <string name="running_state">In Progress</string>
   <string name="complete">Complete</string>
   <string name="paused_state">Paused</string>
+  <string name="paused_offline_state">Paused (device is offline)</string>
   <string name="failed_state">Failed: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">The ZIM file could not be downloaded. Please try reinstalling the application from the Play store.</string>
   <string name="save">Save</string>
