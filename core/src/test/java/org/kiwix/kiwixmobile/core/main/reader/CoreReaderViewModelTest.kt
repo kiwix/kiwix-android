@@ -72,6 +72,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.HistoryFound
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebViewNavigationHistoryResult.NoHistoryFound
@@ -85,6 +86,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.UI_URI_STRING
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -95,6 +97,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
@@ -1909,7 +1912,6 @@ internal class CoreReaderViewModelTest {
     }
   }
 
-
   // TODO : Will be covered later
   @Nested
   inner class OpenZimfile
@@ -1978,6 +1980,372 @@ internal class CoreReaderViewModelTest {
       )
     }
      */
+  }
+
+  @Nested
+  inner class ManageExternalLaunchAndRestoringViewState {
+
+    @Test
+    fun whenInvalidState_handleValidSessionRestore() = runTest {
+
+      val viewModel = spyk(viewModel)
+      coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Invalid
+      every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+
+      viewModel.manageExternalLaunchAndRestoringViewState()
+      advanceUntilIdle()
+
+      coVerify { viewModel.restoreViewStateOnInvalidWebViewHistory() }
+      verify { readerIntentManager.consumePendingAction() }
+      assertThat(viewModel.isWebViewHistoryRestoring).isFalse()
+    }
+
+    @Test
+    fun whenEmptyState_handleInvalidSessionRestore() = runTest {
+
+      val viewModel = spyk(viewModel)
+      coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Empty
+      every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+
+      viewModel.manageExternalLaunchAndRestoringViewState()
+      advanceUntilIdle()
+
+      coVerify { viewModel.restoreViewStateOnInvalidWebViewHistory() }
+      verify { readerIntentManager.consumePendingAction() }
+      assertThat(viewModel.isWebViewHistoryRestoring).isFalse()
+    }
+
+    @Test
+    fun whenValidState_callsRestoreViewStateWithCorrectParametersAndCompletesSession() = runTest {
+      val viewModel = spyk(viewModel)
+
+      val historyItems = listOf(mockk<WebViewHistoryItem>())
+      val validSession = RestoreSessionResult.Valid(
+        webViewHistoryList = historyItems,
+        currentTab = 2,
+        currentZimFile = "kiwix.zim"
+      )
+      coEvery { readerSessionManager.restoreReaderSession() } returns validSession
+
+      val onCompleteSlot = slot<suspend () -> Unit>()
+      coEvery {
+        viewModel.restoreViewStateOnValidWebViewHistory(
+          any(),
+          any(),
+          any(),
+          any(),
+          capture(onCompleteSlot)
+        )
+      } just Runs
+
+      val zimFileReader = mockk<ZimFileReader>()
+      every { zimReaderContainer.zimFileReader } returns zimFileReader
+      every { viewModel.observeBookmarks(any()) } just Runs
+      every { pendingSearchItemManager.consume() } returns null
+      every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+      coEvery { readerSessionManager.saveReaderSession() } just Runs
+
+      viewModel.manageExternalLaunchAndRestoringViewState()
+      advanceUntilIdle()
+
+      onCompleteSlot.captured.invoke()
+      advanceUntilIdle()
+
+      coVerify {
+        viewModel.restoreViewStateOnValidWebViewHistory(
+          historyItems,
+          2,
+          "kiwix.zim",
+          RestoreOrigin.FromExternalLaunch,
+          any()
+        )
+      }
+
+      // Verifies  onSessionRestoreCompleted() called when onComplete() of restoreViewStateOnValidWebViewHistory()
+      verify { viewModel.observeBookmarks(zimFileReader) }
+      assertThat(viewModel.isWebViewHistoryRestoring).isFalse()
+      verify { pendingSearchItemManager.consume() }
+      verify { readerIntentManager.consumePendingAction() }
+      coVerify { readerSessionManager.saveReaderSession() }
+    }
+
+    @Nested
+    inner class HandlePendingIntent {
+
+      @Test
+      fun whenActionIsOpenBookmarks_opensBookmarkScreenAndClearsAction() = runTest {
+        val viewModel = spyk(viewModel)
+
+        coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Invalid
+
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.OpenBookmarks
+        every { viewModel.openBookmarkScreen() } just Runs
+
+        viewModel.effects.test {
+          viewModel.manageExternalLaunchAndRestoringViewState()
+          advanceUntilIdle()
+
+          verify { viewModel.openBookmarkScreen() }
+
+          val effect = awaitItem()
+          assertThat(effect).isEqualTo(CoreReaderViewModel.ReaderEffect.ClearActivityIntentAction)
+          expectNoEvents()
+        }
+      }
+
+      @Test
+      fun whenActionIsOpenSearch_opensSearchAndClearsAction() = runTest {
+        val viewModel = spyk(viewModel)
+        coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Invalid
+
+        val searchAction = PendingIntentParser.ReaderIntentAction.OpenSearch(
+          query = "test query",
+          isOpenedFromTabView = true,
+          isVoice = false
+        )
+        every { readerIntentManager.consumePendingAction() } returns searchAction
+        every { viewModel.openSearch(any(), any(), any()) } just Runs
+
+        viewModel.effects.test {
+          viewModel.manageExternalLaunchAndRestoringViewState()
+          advanceUntilIdle()
+
+          verify {
+            viewModel.openSearch(
+              searchString = "test query",
+              isOpenedFromTabView = true,
+              isVoice = false
+            )
+          }
+
+          val effect = awaitItem()
+          assertThat(effect).isEqualTo(CoreReaderViewModel.ReaderEffect.ClearActivityIntentAction)
+
+          expectNoEvents()
+        }
+      }
+
+      @Test
+      fun whenActionIsOpenZim_opensZimFileWithArguments() = runTest {
+        val viewModel = spyk(viewModel)
+        coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Invalid
+
+        val openZimAction = PendingIntentParser.ReaderIntentAction.OpenZim(
+          zimFileUri = "content://zim",
+          pageUrl = "A/article.html"
+        )
+        every { readerIntentManager.consumePendingAction() } returns openZimAction
+
+        coEvery { viewModel.openZimFileWithArguments(any(), any(), any()) } just Runs
+
+        viewModel.manageExternalLaunchAndRestoringViewState()
+        advanceUntilIdle()
+
+        coVerify {
+          viewModel.openZimFileWithArguments(
+            zimFileUri = "content://zim",
+            pageUrl = "A/article.html",
+            searchItemTitle = ""
+          )
+        }
+
+      }
+    }
+
+    @Nested
+    inner class OpenSearchItem {
+
+      @Test
+      fun whenShouldOpenInNewTabIsTrue_createsNewTab() = runTest {
+        val viewModel = spyk(viewModel)
+
+        val historyItems = listOf(mockk<WebViewHistoryItem>())
+        val validSession = RestoreSessionResult.Valid(
+          webViewHistoryList = historyItems,
+          currentTab = 2,
+          currentZimFile = "kiwix.zim"
+        )
+
+        coEvery { readerSessionManager.restoreReaderSession() } returns validSession
+
+        val onCompleteSlot = slot<suspend () -> Unit>()
+        coEvery {
+          viewModel.restoreViewStateOnValidWebViewHistory(
+            any(),
+            any(),
+            any(),
+            any(),
+            capture(onCompleteSlot)
+          )
+        } just Runs
+
+        val item = SearchItemToOpen(
+          shouldOpenInNewTab = true,
+          pageUrl = "${ZimFileReader.CONTENT_PREFIX}page.html",
+          pageTitle = "title"
+        )
+        every { pendingSearchItemManager.consume() } returns item
+        coEvery { viewModel.loadUrlWithCurrentWebview(any()) } just Runs
+
+        every { zimReaderContainer.zimFileReader } returns null
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+        coEvery { readerSessionManager.saveReaderSession() } just Runs
+
+        viewModel.manageExternalLaunchAndRestoringViewState()
+        advanceUntilIdle()
+
+        onCompleteSlot.captured.invoke()
+        advanceUntilIdle()
+
+        coVerify {
+          readerWebViewManager.newMainPageTab(
+            match { config -> config.url == null }
+          )
+        }
+      }
+
+      @Test
+      fun whenPageUrlIsNotNull_loadsUrlDirectly() = runTest {
+        val viewModel = spyk(viewModel)
+
+        val historyItems = listOf(mockk<WebViewHistoryItem>())
+        val validSession = RestoreSessionResult.Valid(
+          webViewHistoryList = historyItems,
+          currentTab = 2,
+          currentZimFile = "kiwix.zim"
+        )
+
+        coEvery { readerSessionManager.restoreReaderSession() } returns validSession
+
+        val onCompleteSlot = slot<suspend () -> Unit>()
+        coEvery {
+          viewModel.restoreViewStateOnValidWebViewHistory(
+            any(),
+            any(),
+            any(),
+            any(),
+            capture(onCompleteSlot)
+          )
+        } just Runs
+
+        val item = SearchItemToOpen(
+          shouldOpenInNewTab = false,
+          pageUrl = "${ZimFileReader.CONTENT_PREFIX}direct_url.html",
+          pageTitle = "title"
+        )
+        every { pendingSearchItemManager.consume() } returns item
+        coEvery { viewModel.loadUrlWithCurrentWebview(any()) } just Runs
+
+        every { zimReaderContainer.zimFileReader } returns null
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+        coEvery { readerSessionManager.saveReaderSession() } just Runs
+
+        viewModel.manageExternalLaunchAndRestoringViewState()
+        advanceUntilIdle()
+
+        onCompleteSlot.captured.invoke()
+        advanceUntilIdle()
+
+        coVerify { viewModel.loadUrlWithCurrentWebview("${ZimFileReader.CONTENT_PREFIX}direct_url.html") }
+      }
+
+      @Test
+      fun whenPageUrlIsNullAndTitleResolves_loadsConvertedUrl() = runTest {
+        val viewModel = spyk(viewModel)
+
+        val historyItems = listOf(mockk<WebViewHistoryItem>())
+        val validSession = RestoreSessionResult.Valid(
+          webViewHistoryList = historyItems,
+          currentTab = 2,
+          currentZimFile = "kiwix.zim"
+        )
+
+        coEvery { readerSessionManager.restoreReaderSession() } returns validSession
+
+        val onCompleteSlot = slot<suspend () -> Unit>()
+        coEvery {
+          viewModel.restoreViewStateOnValidWebViewHistory(
+            any(),
+            any(),
+            any(),
+            any(),
+            capture(onCompleteSlot)
+          )
+        } just Runs
+
+        val item = SearchItemToOpen(
+          shouldOpenInNewTab = false,
+          pageUrl = null,
+          pageTitle = "Kiwix"
+        )
+        every { pendingSearchItemManager.consume() } returns item
+
+        every { zimReaderContainer.titleToUrl("Kiwix") } returns "A/kiwix.html"
+
+        every { zimReaderContainer.isRedirect(any()) } returns false
+
+        coEvery { viewModel.loadUrlWithCurrentWebview(any()) } just Runs
+        every { zimReaderContainer.zimFileReader } returns null
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+        coEvery { readerSessionManager.saveReaderSession() } just Runs
+
+        viewModel.manageExternalLaunchAndRestoringViewState()
+        advanceUntilIdle()
+
+        onCompleteSlot.captured.invoke()
+        advanceUntilIdle()
+
+        coVerify { viewModel.loadUrlWithCurrentWebview("${ZimFileReader.CONTENT_PREFIX}A/kiwix.html") }
+
+      }
+
+      @Test
+      fun whenPageUrlIsNullAndTitleDoesNotResolve_doesNothing() = runTest {
+        val viewModel = spyk(viewModel)
+
+        val historyItems = listOf(mockk<WebViewHistoryItem>())
+        val validSession = RestoreSessionResult.Valid(
+          webViewHistoryList = historyItems,
+          currentTab = 2,
+          currentZimFile = "kiwix.zim"
+        )
+
+        coEvery { readerSessionManager.restoreReaderSession() } returns validSession
+
+        val onCompleteSlot = slot<suspend () -> Unit>()
+        coEvery {
+          viewModel.restoreViewStateOnValidWebViewHistory(
+            any(),
+            any(),
+            any(),
+            any(),
+            capture(onCompleteSlot)
+          )
+        } just Runs
+
+        val item = SearchItemToOpen(
+          shouldOpenInNewTab = false,
+          pageUrl = null,
+          pageTitle = "Unknown Title"
+        )
+        every { pendingSearchItemManager.consume() } returns item
+
+        every { zimReaderContainer.titleToUrl("Unknown Title") } returns null
+
+        coEvery { viewModel.loadUrlWithCurrentWebview(any()) } just Runs
+        every { zimReaderContainer.zimFileReader } returns null
+        every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
+        coEvery { readerSessionManager.saveReaderSession() } just Runs
+
+        viewModel.manageExternalLaunchAndRestoringViewState()
+        advanceUntilIdle()
+
+        onCompleteSlot.captured.invoke()
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { viewModel.loadUrlWithCurrentWebview(any()) }
+      }
+    }
   }
 
   @Nested
@@ -2096,13 +2464,21 @@ internal class CoreReaderViewModelTest {
       super.selectTab(position)
     }
 
-    override suspend fun restoreViewStateOnValidWebViewHistory(
+    public override suspend fun restoreViewStateOnValidWebViewHistory(
       webViewHistoryItemList: List<WebViewHistoryItem>,
       currentTab: Int,
       currentZimFile: String?,
       restoreOrigin: RestoreOrigin,
       onComplete: suspend () -> Unit
     ) {
+    }
+
+    public override suspend fun manageExternalLaunchAndRestoringViewState(restoreOrigin: RestoreOrigin) {
+      super.manageExternalLaunchAndRestoringViewState(restoreOrigin)
+    }
+
+    public override suspend fun loadUrlWithCurrentWebview(url: String?) {
+      super.loadUrlWithCurrentWebview(url)
     }
 
     override suspend fun restoreViewStateOnInvalidWebViewHistory() {
