@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.search
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import kotlinx.coroutines.delay
@@ -238,8 +239,11 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchScreen to become visible on screen.
       delay(2000)
-      val searchViewModel = ViewModelProvider(
+      val searchBackStackEntry =
         kiwixMainActivity.navController.getBackStackEntry(KiwixDestination.Search.route)
+      val searchViewModel = ViewModelProvider(
+        searchBackStackEntry,
+        HiltViewModelFactory(kiwixMainActivity, searchBackStackEntry)
       )[SearchViewModel::class.java]
 
       for (i in 1..100) {

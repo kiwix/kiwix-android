@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.os.LocaleListCompat
+import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -241,8 +242,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   private fun showMoveFileToPublicDirectoryDialog(urisList: List<Uri>) {
     composeTestRule.runOnIdle {
       kiwixMainActivity = composeTestRule.activity
-      val localLibraryViewModel = ViewModelProvider(
+      val libraryBackStackEntry =
         kiwixMainActivity.navController.getBackStackEntry(KiwixDestination.Library.route)
+      val localLibraryViewModel = ViewModelProvider(
+        libraryBackStackEntry,
+        HiltViewModelFactory(kiwixMainActivity, libraryBackStackEntry)
       )[LocalLibraryViewModel::class.java]
       kiwixMainActivity.lifecycleScope.launch {
         localLibraryViewModel.handleSelectedFileUri(urisList)
