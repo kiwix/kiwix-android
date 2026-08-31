@@ -85,7 +85,8 @@ class ZimHostViewModel @Inject constructor(
     val showShareIcon: Boolean = false,
     val qrVisible: Boolean = false,
     val qrIcon: IconItem = IconItem.Drawable(R.drawable.ic_storage),
-    val books: List<BooksOnDiskListItem> = emptyList()
+    val books: List<BooksOnDiskListItem> = emptyList(),
+    val isHotspotServiceActive: Boolean = false
   )
 
   sealed class Event {
@@ -273,7 +274,8 @@ class ZimHostViewModel @Inject constructor(
         qrVisible = true,
         qrIcon = getQrIcon(ip),
         serverIpDisplayText = context.getString(string.server_started_message, ip),
-        startServerButtonColor = StopServerRed
+        startServerButtonColor = StopServerRed,
+        isHotspotServiceActive = true
       )
     }
     sendEvent(DismissDialog)
@@ -288,7 +290,8 @@ class ZimHostViewModel @Inject constructor(
         qrVisible = false,
         qrIcon = getQrIcon(null),
         serverIpDisplayText = context.getString(string.server_textview_default_message),
-        startServerButtonColor = StartServerGreen
+        startServerButtonColor = StartServerGreen,
+        isHotspotServiceActive = false
       )
     }
   }
