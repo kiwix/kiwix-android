@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.SELECT_FILE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
-import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileNotFoundException
@@ -72,7 +71,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Rule(order = COMPOSE_TEST_RULE_ORDER)
   @JvmField
   val composeTestRule = createComposeRule()
-  private val fileName = "testzim.zim"
+  private val resourceFileName = "testzim.zim"
 
   @Before
   override fun waitForIdle() {
@@ -91,7 +90,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         it.navigate(KiwixDestination.Library.route)
       }
       composeTestRule.waitForIdle()
-      val uri = copyFileToDownloadsFolder(context, fileName)
+      val pickerFileName = "testzim_picker.zim"
+      val uri = copyFileToDownloadsFolder(context, pickerFileName)
       try {
         updateKiwixDataStore {
           setShowStorageSelectionDialogOnCopyMove(true)
@@ -101,7 +101,9 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
           .respondWith(
             Instrumentation.ActivityResult(
               Activity.RESULT_OK,
-              Intent().setData(uri)
+              Intent().setData(uri).apply {
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+              }
             )
           )
         // open file picker to select a file to test the real scenario.
@@ -134,7 +136,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         it.navigate(KiwixDestination.Library.route)
       }
       composeTestRule.waitForIdle()
-      val uri = copyFileToDownloadsFolder(context, fileName)
+      val managerFileName = "testzim_manager.zim"
+      val uri = copyFileToDownloadsFolder(context, managerFileName)
       try {
         updateKiwixDataStore {
           setShowStorageSelectionDialogOnCopyMove(true)
@@ -220,7 +223,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   private fun copyFileToDownloadsFolder(
     context: Context,
     fileName: String,
-    content: ByteArray = getZimFileFromResourceFolder(context, fileName).readBytes()
+    content: ByteArray = requireNotNull(
+      OpeningFilesFromStorageTest::class.java.classLoader
+        ?.getResourceAsStream(resourceFileName)
+    ) {
+      "Unable to load $resourceFileName from test resources"
+    }.use { it.readBytes() }
   ): Uri {
     val contentValues =
       ContentValues().apply {
@@ -259,7 +267,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     dirs.distinctBy { it.absolutePath }.forEach { dir ->
       if (dir.exists() && dir.isDirectory) {
         dir.walkTopDown().forEach { file ->
-          if (file.isFile && file.name.contains(fileName, ignoreCase = true)) {
+          if (file.isFile && file.name.contains("testzim", ignoreCase = true)) {
             file.delete()
           }
         }
