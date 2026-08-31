@@ -1115,7 +1115,7 @@ abstract class CoreReaderViewModel(
     readerWebViewManager.openPage(pageUrl, getCurrentWebView())
   }
 
-  protected suspend fun loadUrlWithCurrentWebview(url: String?) {
+  protected open suspend fun loadUrlWithCurrentWebview(url: String?) {
     readerWebViewManager.loadUrlWithCurrentWebview(url, getCurrentWebView())
   }
 
@@ -1149,7 +1149,7 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  protected suspend fun manageExternalLaunchAndRestoringViewState(
+  protected open suspend fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {
     when (val readerSession = readerSessionManager.restoreReaderSession()) {
@@ -1634,7 +1634,7 @@ abstract class CoreReaderViewModel(
    * KiwixReaderViewModel.restoreViewStateOnValidWebViewHistory) to ensure consistent behavior
    * when handling valid webViewHistory scenarios.
    */
-  protected abstract suspend fun restoreViewStateOnValidWebViewHistory(
+  protected open abstract suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     currentZimFile: String?,
