@@ -54,7 +54,7 @@ class OnlineCategoryTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    hiltRule.inject()
+    hiltRule.injectOnce()
     super.waitForIdle()
     updateKiwixDataStore { setIntroShown(false) }
     launchMainActivity { kiwixMainActivity = it }

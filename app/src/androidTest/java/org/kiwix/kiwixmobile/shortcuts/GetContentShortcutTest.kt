@@ -59,7 +59,7 @@ class GetContentShortcutTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    hiltRule.inject()
+    hiltRule.injectOnce()
     super.waitForIdle()
     updateKiwixDataStore {
       setShowCaseViewForFileTransferShown()

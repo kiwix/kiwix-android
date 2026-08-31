@@ -37,6 +37,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import dagger.hilt.android.testing.HiltAndroidRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.anyOf
@@ -49,6 +50,25 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
+  /**
+   * Whether [injectOnce] has already run for this test method's instance. [RetryRule] re-runs
+   * `@Before` (and therefore this call) on every retry without creating a new test instance, but
+   * `HiltAndroidRule.inject()` throws `IllegalStateException: Called inject() multiple times` if
+   * invoked more than once against the same component - so a repeat call must be a no-op.
+   */
+  private var hiltInjected = false
+
+  /**
+   * Calls [HiltAndroidRule.inject] the first time only; subsequent calls on the same test
+   * instance (e.g. from a [org.kiwix.kiwixmobile.testutils.RetryRule] retry) are ignored.
+   */
+  protected fun HiltAndroidRule.injectOnce() {
+    if (!hiltInjected) {
+      inject()
+      hiltInjected = true
+    }
+  }
+
   protected lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
   protected val ioDispatcher by lazy {
     Dispatchers.IO

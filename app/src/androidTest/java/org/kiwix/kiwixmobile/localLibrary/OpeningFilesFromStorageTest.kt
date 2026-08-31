@@ -76,7 +76,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    hiltRule.inject()
+    hiltRule.injectOnce()
     Intents.init()
     super.waitForIdle()
     launchMainActivity()

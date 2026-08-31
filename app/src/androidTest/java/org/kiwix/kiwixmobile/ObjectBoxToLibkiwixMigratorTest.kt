@@ -124,7 +124,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    hiltRule.inject()
+    hiltRule.injectOnce()
     super.waitForIdle()
     launchMainActivity {
       it.navigate(KiwixDestination.Library.route)

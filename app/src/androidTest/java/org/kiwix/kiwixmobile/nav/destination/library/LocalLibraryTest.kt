@@ -55,7 +55,7 @@ class LocalLibraryTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    hiltRule.inject()
+    hiltRule.injectOnce()
     super.waitForIdle()
     updateKiwixDataStore {
       // set `setShowManageExternalFilesPermissionDialog` false for hiding
