@@ -113,9 +113,9 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onLost(network: Network) {
-      scope?.launch {
-        fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
-          activeDownloads.forEach { download ->
+      fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
+        activeDownloads.forEach { download ->
+          taskFlow.tryEmit {
             fetchDownloadNotificationManager.showDownloadPauseNotification(
               fetch,
               download,
@@ -321,7 +321,7 @@ class DownloadMonitorService : Service() {
 
   private fun startForegroundService() {
     runCatching {
-      CoroutineScope(ioDispatcher).launch {
+      scope?.launch {
         fetchDownloadNotificationManager.createNotificationChannels(
           this@DownloadMonitorService,
           notificationManager

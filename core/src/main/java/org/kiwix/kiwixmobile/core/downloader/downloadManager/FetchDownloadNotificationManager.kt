@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -60,15 +59,15 @@ import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
-import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
+import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
@@ -319,13 +318,19 @@ class FetchDownloadNotificationManager @Inject constructor(
     )
   }
 
-  fun showDownloadPauseNotification(
+  suspend fun showDownloadPauseNotification(
     fetch: Fetch,
     download: Download,
     isOffline: Boolean = false
   ) {
+    val downloadTitle = getDownloadNotificationTitle(download)
+    val notificationTitle = withContext(ioDispatcher) {
+      downloadRoomDao.getEntityForFileName(downloadTitle)?.title ?: downloadTitle
+    }
+
     val notificationBuilder = getNotificationBuilder(download.id, download.id)
-    val pauseNotification = getPauseNotification(fetch, download, notificationBuilder, isOffline)
+    val pauseNotification =
+      getPauseNotification(fetch, download, notificationBuilder, notificationTitle, isOffline)
     downloadNotificationManager.notify(download.id, pauseNotification)
   }
 
@@ -333,15 +338,10 @@ class FetchDownloadNotificationManager @Inject constructor(
     fetch: Fetch,
     download: Download,
     notificationBuilder: Builder,
+    notificationTitle: String,
     isOffline: Boolean = false
   ): Notification {
     synchronized(notificationBuilderLock) {
-      val downloadTitle = getDownloadNotificationTitle(download)
-      val notificationTitle =
-        runBlocking(ioDispatcher) {
-          downloadRoomDao.getEntityForFileName(downloadTitle)?.title
-            ?: downloadTitle
-        }
       val subtitleText = if (isOffline) {
         buildSubtitle(
           context.getString(R.string.paused_offline_state),
