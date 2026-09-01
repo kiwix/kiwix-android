@@ -289,10 +289,6 @@ class KiwixReaderScreenTest : BaseActivityTest() {
   @Test
   fun testReadAloudFeature() {
     Assume.assumeTrue("Text-to-speech is not available on this device", isTextToSpeechAvailable())
-    Assume.assumeTrue(
-      "The TTS feature is not works in API level 25, so skipping the test",
-      Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1
-    )
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)

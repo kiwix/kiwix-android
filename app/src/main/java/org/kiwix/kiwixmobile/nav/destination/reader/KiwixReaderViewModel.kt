@@ -165,6 +165,11 @@ class KiwixReaderViewModel @Inject constructor(
         // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
         // See https://github.com/kiwix/kiwix-android/issues/3541
         zimReaderContainer.zimFileReader?.let(::observeBookmarks)
+        // Also update the reader menu state for the same reason as above: it is normally
+        // updated when a ZIM file is opened, so it needs to be set explicitly here since
+        // we're only loading a URL into the already-open ZIM file's WebView.
+        // See https://github.com/kiwix/kiwix-android/issues/5040
+        readerMenuState?.onFileOpened(urlIsValid())
       }
     } else {
       if (zimFileUri.isNotEmpty()) {
