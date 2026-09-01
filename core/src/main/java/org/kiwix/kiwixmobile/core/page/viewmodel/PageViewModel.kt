@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedSelectAll
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -129,6 +130,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     when (action) {
       Exit -> exitScreen(state)
       ExitActionModeMenu -> deselectAllPages(state)
+      UserClickedSelectAll -> copyWithNewItems(state, state.getItemsAfterSelectingAll())
       UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
       is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
       is OnItemClick -> handleItemClick(state, action)

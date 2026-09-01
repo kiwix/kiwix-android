@@ -97,6 +97,7 @@ const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"
 const val PAGE_LIST_TEST_TAG = "pageListTestingTag"
 const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
 const val DELETE_MENU_ICON_TESTING_TAG = "deleteMenuIconTestingTag"
+const val SELECT_ALL_MENU_ICON_TESTING_TAG = "selectAllMenuIconTestingTag"
 const val DATE_ITEM_TEXT_TESTING_TAG = "dateItemTextTestingTag"
 
 @Suppress("LongMethod", "LongParameterList")
@@ -180,6 +181,9 @@ fun <T : Page, S : PageState<T>> PageScreenRoute(
         },
         onSelectionDeleteClick = {
           viewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
+        },
+        onSelectAllClick = {
+          viewModel.actions.tryEmit(Action.UserClickedSelectAll)
         }
       ),
       onClearSearch = {
@@ -397,11 +401,13 @@ private fun parseDateSafely(dateString: String): LocalDate? {
  * @param onSearchClick Callback to invoke when the search icon is clicked.
  * @param onDeleteClick Callback to invoke when the delete icon is clicked.
  * @param onSelectionDeleteClick Callback to invoke when the delete selected items icon is clicked.
+ * @param onSelectAllClick Callback to invoke when the select-all icon is clicked in selection mode.
  * @return A list of [ActionMenuItem]s to be displayed in the app bar.
  *
- * - If in selection mode, shows only the delete selected items icon.
+ * - If in selection mode, shows a select-all icon followed by the delete selected items icon.
  * - Otherwise, shows the search icon only when search is not active, and always includes the delete icon.
  */
+@Suppress("LongParameterList")
 private fun actionMenuList(
   isSearchActive: Boolean,
   isInSelectionMode: Boolean,
@@ -409,8 +415,15 @@ private fun actionMenuList(
   onSearchClick: () -> Unit,
   onDeleteClick: () -> Unit,
   onSelectionDeleteClick: () -> Unit,
+  onSelectAllClick: () -> Unit,
 ): List<ActionMenuItem> = when {
   isInSelectionMode -> listOf(
+    ActionMenuItem(
+      icon = IconItem.Drawable(R.drawable.ic_select_all_24dp),
+      contentDescription = R.string.select_all,
+      onClick = onSelectAllClick,
+      testingTag = SELECT_ALL_MENU_ICON_TESTING_TAG
+    ),
     ActionMenuItem(
       icon = IconItem.Vector(Icons.Default.Delete),
       contentDescription = R.string.delete,

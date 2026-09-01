@@ -7,6 +7,7 @@ sealed class Action {
   object ExitActionModeMenu : Action()
   object UserClickedDeleteButton : Action()
   object UserClickedDeleteSelectedPages : Action()
+  object UserClickedSelectAll : Action()
 
   data class OnItemClick(val page: Page) : Action()
   data class OnItemLongClick(val page: Page) : Action()

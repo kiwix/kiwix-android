@@ -58,6 +58,16 @@ abstract class PageState<T : Page> {
     }
   }
 
+  fun getItemsAfterSelectingAll(): List<T> =
+    pageItems.map {
+      when (it) {
+        is LibkiwixBookmarkItem -> it.copy(isSelected = true) as T
+        is HistoryItem -> it.copy(isSelected = true) as T
+        is NoteListItem -> it.copy(isSelected = true) as T
+        else -> it.apply { isSelected = true }
+      }
+    }
+
   fun numberOfSelectedItems(): Int = pageItems.filter(Page::isSelected).size
 
   abstract fun copyWithNewItems(newItems: List<T>): PageState<T>
