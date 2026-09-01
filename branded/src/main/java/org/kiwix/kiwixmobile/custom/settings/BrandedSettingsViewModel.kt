@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.custom.settings
 
 import android.app.Application
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -88,6 +89,6 @@ class BrandedSettingsViewModel @Inject constructor(
   }
 
   override suspend fun showRatingCategory() {
-    settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
+    settingsUiState.update { it.copy(shouldShowRatingCategory = kiwixDataStore.isPlayStoreBuild.first()) }
   }
 }

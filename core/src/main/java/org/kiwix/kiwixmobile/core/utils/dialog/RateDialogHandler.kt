@@ -51,6 +51,7 @@ class RateDialogHandler @Inject constructor(
 ) {
   fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
+      if (!isPlayStoreVariant()) return@launch
       val newCount = kiwixDataStore.incrementRateAppVisitCount()
 
       if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {

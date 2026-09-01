@@ -217,6 +217,22 @@ class RateDialogHandlerTest {
     }
 
   @Test
+  fun `checkForRateDialog does not launch review flow for non-playStore variant`() =
+    runTest {
+      coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+
+      val mockReviewManager = mockk<ReviewManager>(relaxed = true)
+      mockkStatic(ReviewManagerFactory::class)
+      every { ReviewManagerFactory.create(any()) } returns mockReviewManager
+
+      rateDialogHandler.checkForRateDialog()
+
+      coVerify(exactly = 0) { kiwixDataStore.incrementRateAppVisitCount() }
+      verify(exactly = 0) { ReviewManagerFactory.create(any()) }
+      coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
+    }
+
+  @Test
   fun `isPlayStoreVariant returns true for playStore build`() = runTest {
     coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(true)
     val result = rateDialogHandler.isPlayStoreVariant()
