@@ -90,4 +90,18 @@ class BrandedSettingsViewModel @Inject constructor(
   override suspend fun showRatingCategory() {
     settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
   }
+
+  /**
+   * The Wikipedia-link/web-search-intent manifest entries (AndroidManifest.xml
+   * autoVerify intent-filter and the `.main.KiwixMainActivityWebSearch`
+   * activity-alias) only exist in the main `app` module, not in custom/branded
+   * apps, so these preferences must stay hidden here.
+   */
+  override suspend fun showSupportedExternalLinksPreference() {
+    settingsUiState.update { it.copy(shouldShowSupportedExternalLinksPreference = false) }
+  }
+
+  override suspend fun showWebSearchIntentPreference() {
+    settingsUiState.update { it.copy(shouldShowWebSearchIntentPreference = false) }
+  }
 }

@@ -87,7 +87,9 @@ class SettingsScreenTest {
     textZoom: Int = DEFAULT_ZOOM,
     newTabInBackground: Boolean = false,
     externalLinkPopup: Boolean = true,
-    wifiOnly: Boolean = true
+    wifiOnly: Boolean = true,
+    supportedExternalLinksOpenInApp: Boolean = true,
+    enableWebSearchIntent: Boolean = true
   ): CoreSettingsViewModel {
     val viewModel = mockk<CoreSettingsViewModel>(relaxed = true)
     every { viewModel.uiState } returns MutableStateFlow(uiState)
@@ -97,6 +99,9 @@ class SettingsScreenTest {
     every { viewModel.newTabInBackground } returns MutableStateFlow(newTabInBackground)
     every { viewModel.externalLinkPopup } returns MutableStateFlow(externalLinkPopup)
     every { viewModel.wifiOnly } returns MutableStateFlow(wifiOnly)
+    every { viewModel.supportedExternalLinksOpenInApp } returns
+      MutableStateFlow(supportedExternalLinksOpenInApp)
+    every { viewModel.enableWebSearchIntent } returns MutableStateFlow(enableWebSearchIntent)
     return viewModel
   }
 
@@ -357,6 +362,142 @@ class SettingsScreenTest {
     composeTestRule
       .onNodeWithContentDescription(context.getString(R.string.pref_wifi_only))
       .assertDoesNotExist()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_supportedExternalLinksPreference_visibleWhenEnabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowSupportedExternalLinksPreference = true)
+      )
+    )
+    scrollToContentDescription(
+      context.getString(R.string.pref_supported_external_links_open_in_app_title)
+    )
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_supported_external_links_open_in_app_title))
+      .assertIsDisplayed()
+      .assertIsOn()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_supportedExternalLinksPreference_reflectsStateChange() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowSupportedExternalLinksPreference = true),
+        supportedExternalLinksOpenInApp = false
+      )
+    )
+    scrollToContentDescription(
+      context.getString(R.string.pref_supported_external_links_open_in_app_title)
+    )
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_supported_external_links_open_in_app_title))
+      .assertIsDisplayed()
+      .assertIsOff()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_supportedExternalLinksPreference_hiddenWhenDisabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowSupportedExternalLinksPreference = false)
+      )
+    )
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_supported_external_links_open_in_app_title))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_webSearchIntentPreference_visibleWhenEnabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowWebSearchIntentPreference = true)
+      )
+    )
+    scrollToContentDescription(context.getString(R.string.pref_enable_web_search_intent_title))
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_enable_web_search_intent_title))
+      .assertIsDisplayed()
+      .assertIsOn()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_webSearchIntentPreference_reflectsStateChange() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowWebSearchIntentPreference = true),
+        enableWebSearchIntent = false
+      )
+    )
+    scrollToContentDescription(context.getString(R.string.pref_enable_web_search_intent_title))
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_enable_web_search_intent_title))
+      .assertIsDisplayed()
+      .assertIsOff()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_webSearchIntentPreference_hiddenWhenDisabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowWebSearchIntentPreference = false)
+      )
+    )
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_enable_web_search_intent_title))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_supportedExternalLinksToggle_triggersCallback() {
+    val viewModel = createMockViewModel(
+      uiState = SettingsUiState(shouldShowSupportedExternalLinksPreference = true),
+      supportedExternalLinksOpenInApp = true
+    )
+    renderSettingsScreen(viewModel)
+    scrollToText(context.getString(R.string.pref_supported_external_links_open_in_app_summary))
+    composeTestRule
+      .onNodeWithText(
+        context.getString(R.string.pref_supported_external_links_open_in_app_summary)
+      )
+      .performClick()
+    // Also exercises setWikipediaLinksComponentEnabled(), which wraps the real
+    // PackageManager call in runCatching - Robolectric's PackageManager rejects an
+    // activity-alias that doesn't exist in this bare test manifest, so this is what
+    // actually covers that catch branch, not just the happy path.
+    verify { viewModel.setSupportedExternalLinksOpenInApp(false) }
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_webSearchIntentToggle_triggersCallback() {
+    val viewModel = createMockViewModel(
+      uiState = SettingsUiState(shouldShowWebSearchIntentPreference = true),
+      enableWebSearchIntent = true
+    )
+    renderSettingsScreen(viewModel)
+    scrollToText(context.getString(R.string.pref_enable_web_search_intent_summary))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_enable_web_search_intent_summary))
+      .performClick()
+    verify { viewModel.setEnableWebSearchIntent(false) }
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_webSearchIntentToggle_offToOn_triggersCallback() {
+    // The off->on direction, so setComponentEnabled()'s
+    // COMPONENT_ENABLED_STATE_ENABLED branch (not just _DISABLED) gets exercised too.
+    val viewModel = createMockViewModel(
+      uiState = SettingsUiState(shouldShowWebSearchIntentPreference = true),
+      enableWebSearchIntent = false
+    )
+    renderSettingsScreen(viewModel)
+    scrollToText(context.getString(R.string.pref_enable_web_search_intent_summary))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_enable_web_search_intent_summary))
+      .performClick()
+    verify { viewModel.setEnableWebSearchIntent(true) }
   }
 
   @Test

@@ -126,6 +126,29 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  val supportedExternalLinksOpenInApp: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SUPPORTED_EXTERNAL_LINKS_OPEN_IN_APP] ?: false
+    }
+
+  suspend fun setSupportedExternalLinksOpenInApp(supportedExternalLinksOpenInApp: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SUPPORTED_EXTERNAL_LINKS_OPEN_IN_APP] =
+        supportedExternalLinksOpenInApp
+    }
+  }
+
+  val enableWebSearchIntent: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_ENABLE_WEB_SEARCH_INTENT] ?: false
+    }
+
+  suspend fun setEnableWebSearchIntent(enableWebSearchIntent: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_ENABLE_WEB_SEARCH_INTENT] = enableWebSearchIntent
+    }
+  }
+
   val wifiOnly: Flow<Boolean> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_WIFI_ONLY] ?: true
@@ -675,6 +698,9 @@ class KiwixDataStore @Inject constructor(
     const val PREF_BACK_TO_TOP = "pref_backtotop"
     const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    const val PREF_SUPPORTED_EXTERNAL_LINKS_OPEN_IN_APP =
+      "pref_supported_external_links_open_in_app"
+    const val PREF_ENABLE_WEB_SEARCH_INTENT = "pref_enable_web_search_intent"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     const val PREF_IS_FIRST_RUN = "isFirstRun"
     const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
