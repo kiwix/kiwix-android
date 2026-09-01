@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main.reader
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Application
 import android.content.Intent
 import android.view.ActionMode
@@ -59,6 +60,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -86,6 +88,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.UI_URI_STRING
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
@@ -100,6 +103,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
+import kotlin.math.exp
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreReaderViewModelTest {
@@ -1912,9 +1916,243 @@ internal class CoreReaderViewModelTest {
     }
   }
 
-  // TODO : Will be covered later
   @Nested
-  inner class OpenZimfile
+  inner class OpenZimFile {
+
+    @Nested
+    inner class IsBrandedAppOrHasExternalStoragePermission {
+
+      @Test
+      fun whenSuccess_showsZimContent() = runTest {
+        val viewModel = spyk(viewModel)
+
+        val zimReaderSource = mockk<ZimReaderSource>()
+        val zimFileReader = mockk<ZimFileReader>()
+
+        coEvery {
+          zimFileManager.openZimFileInReader(
+            zimReaderSource,
+            viewModel.shouldShowSpellCheckedSuggestions()
+          )
+        } returns ZimFileManager.OpenZimResult.Success(zimFileReader)
+        every { viewModel.isBrandedApp() } returns false
+        coEvery { readerWebViewManager.destroyAllTabs() } just Runs
+        every { viewModel.shouldShowSpellCheckedSuggestions() } returns false
+        coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns true
+        coEvery { viewModel.updateTitle() } just Runs
+        coEvery { viewModel.observeBookmarks(zimFileReader) } just Runs
+        every { readerMenuState.onFileOpened(true) } just Runs
+
+        viewModel.readerMenuState = readerMenuState
+
+        viewModel.openZimFile(zimReaderSource)
+        advanceUntilIdle()
+
+        coVerify { readerWebViewManager.destroyAllTabs() }
+        assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse
+        coVerify { readerWebViewManager.openPage(zimReaderContainer.mainPage, mockWebView) }
+        verify { readerMenuState.onFileOpened(any()) }
+        assertThat(viewModel.uiState.value.showTabSwitcher).isFalse
+        verify { viewModel.observeBookmarks(zimFileReader) }
+        coVerify { viewModel.updateTitle() }
+
+      }
+
+      @Test
+      fun whenInvalidFile_exitsBookAndShowsToast() = runTest {
+        val viewModel = spyk(viewModel)
+
+        every { viewModel.isBrandedApp() } returns false
+        coEvery { readerWebViewManager.destroyAllTabs() } just Runs
+        every { viewModel.shouldShowSpellCheckedSuggestions() } returns false
+        coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns true
+
+        val zimReaderSource = mockk<ZimReaderSource>()
+
+        coEvery {
+          zimFileManager.openZimFileInReader(
+            zimReaderSource,
+            viewModel.shouldShowSpellCheckedSuggestions()
+          )
+        } returns ZimFileManager.OpenZimResult.InvalidFile
+        coEvery { viewModel.exitBook(any()) } just Runs
+
+        val dbPath = "/storage/emulated/0/Kiwix/wikipedia.zim"
+        every { zimReaderSource.toDatabase() } returns dbPath
+        every {
+          context.getString(string.error_file_invalid, dbPath)
+        } returns "Error: The selected file is not a valid ZIM file. $dbPath"
+
+        val invalidZimLambdaSlot = slot<() -> Unit>()
+        every { viewModel.invalidZimFileFound(capture(invalidZimLambdaSlot)) } just Runs
+
+        viewModel.effects.test {
+          viewModel.openZimFile(zimReaderSource)
+          advanceUntilIdle()
+
+          coVerify { readerWebViewManager.destroyAllTabs() }
+          coVerify { viewModel.exitBook() }
+
+          invalidZimLambdaSlot.captured.invoke()
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+          assertThat(effect.message).isEqualTo("Error: The selected file is not a valid ZIM file. $dbPath")
+        }
+      }
+    }
+
+    @Test
+    fun whenNotAnBrandedAppAndNoReadExternalStoragePermission() = runTest {
+
+      coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns false
+      val zimReaderSource = mockk<ZimReaderSource>()
+
+      viewModel.effects.test {
+
+        viewModel.openZimFile(zimReaderSource)
+
+        advanceUntilIdle()
+
+        val effect = awaitItem()
+
+        assertThat(effect).isEqualTo(ReaderEffect.RequestReadStoragePermission)
+
+      }
+
+    }
+  }
+
+  @Nested
+  inner class OnReadStoragePermissionResult {
+
+    @Test
+    fun whenPermissionIsGrantedAndZimReaderSourceIsNotNull_opensZimFile() = runTest {
+      val viewModel = spyk(viewModel)
+
+      val zimReaderSource = mockk<ZimReaderSource>()
+      viewModel.zimReaderSource = zimReaderSource
+
+      coEvery { viewModel.openZimFile(zimReaderSource) } just Runs
+
+      viewModel.effects.test {
+        viewModel.onReadStoragePermissionResult(isGranted = true)
+        advanceUntilIdle()
+
+        coVerify { viewModel.openZimFile(zimReaderSource) }
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenPermissionIsGrantedAndZimReaderSourceIsNull_doesNothing() = runTest {
+      val viewModel = spyk(viewModel)
+      viewModel.zimReaderSource = null
+
+      viewModel.effects.test {
+        viewModel.onReadStoragePermissionResult(isGranted = true)
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { viewModel.openZimFile(any()) }
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenPermissionIsDenied_emitsSnackbarEffectAndNavigatesToSettingsOnClick() = runTest {
+      val viewModel = spyk(viewModel)
+
+      mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
+      every { context.navigateToAppSettings() } just Runs
+
+      every { context.getString(org.kiwix.kiwixmobile.core.R.string.request_storage) } returns "To access offline content we need access to your storage"
+      every { context.getString(org.kiwix.kiwixmobile.core.R.string.menu_settings) } returns "Settings"
+
+      viewModel.effects.test {
+        viewModel.onReadStoragePermissionResult(isGranted = false)
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
+        assertThat(effect.message).isEqualTo("To access offline content we need access to your storage")
+        assertThat(effect.actionLabel).isEqualTo("Settings")
+        assertThat(effect.snackbarDuration.name).isEqualTo("Long")
+
+        effect.actionClick.invoke()
+
+        verify { context.navigateToAppSettings() }
+      }
+    }
+  }
+
+  @Nested
+  inner class OnNotificationPermissionResult {
+
+    @Test
+    fun whenPermissionIsGranted_callsOnReadAloudMenuClicked() = runTest {
+      val viewModel = spyk(viewModel)
+
+      every { viewModel.onReadAloudMenuClicked() } just Runs
+
+      viewModel.effects.test {
+        viewModel.onNotificationPermissionResult(isGranted = true, coreMainActivity)
+
+        verify { viewModel.onReadAloudMenuClicked() }
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenPermissionIsDeniedAndShouldNotShowRationale_emitsRequestNotificationPermissionEffect() =
+      runTest {
+        val viewModel = spyk(viewModel)
+
+        every {
+          kiwixPermissionChecker.shouldShowRationale(
+            coreMainActivity,
+            POST_NOTIFICATIONS
+          )
+        } returns false
+
+        viewModel.effects.test {
+          viewModel.onNotificationPermissionResult(isGranted = false, coreMainActivity)
+
+          val effect = awaitItem()
+          assertThat(effect).isEqualTo(ReaderEffect.RequestNotificationPermission)
+
+          expectNoEvents()
+        }
+      }
+
+    @Test
+    fun whenPermissionIsDeniedAndShouldShowRationale_emitsDialogEffectAndNavigatesToSettingsOnClick() =
+      runTest {
+        val viewModel = spyk(viewModel)
+
+        every {
+          kiwixPermissionChecker.shouldShowRationale(
+            coreMainActivity,
+            POST_NOTIFICATIONS
+          )
+        } returns true
+
+        mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
+        every { coreMainActivity.navigateToAppSettings() } just Runs
+
+        viewModel.effects.test {
+          viewModel.onNotificationPermissionResult(isGranted = false, coreMainActivity)
+
+          val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
+          assertThat(effect.kiwixDialog).isEqualTo(KiwixDialog.NotificationPermissionDialog)
+
+          effect.onClick.invoke()
+
+          verify { coreMainActivity.navigateToAppSettings() }
+
+          expectNoEvents()
+        }
+      }
+  }
 
   @Test
   fun exitBook_updatesUiStateHidesProgressAndClosesZimBook() = runTest {

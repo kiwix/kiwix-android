@@ -532,7 +532,7 @@ abstract class CoreReaderViewModel(
   }
 
   @Volatile var isWebViewHistoryRestoring = false
-  private var zimReaderSource: ZimReaderSource? = null
+  var zimReaderSource: ZimReaderSource? = null
 
   /**
    * Returns true if user enables the backToTop setting from setting screen.
