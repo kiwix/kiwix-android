@@ -158,10 +158,13 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       return
     }
 
-    // If the file is already in the app's public directory,
-    // open it directly without copying/moving.
+    // If a file with the same name and size already exists in the app's
+    // public directory, open it directly without copying/moving.
+    // We exclude the source file itself (for file:// URIs) to avoid
+    // skipping the dialog when the user selects a file that happens
+    // to be inside an app-specific directory already.
     val existingFile = getExistingFileInAppDirectory(documentFile)
-    if (existingFile != null) {
+    if (existingFile != null && !isSameAsSourceFile(uri, existingFile)) {
       validateAndOpenZimInReader(existingFile)
       return
     }
@@ -220,6 +223,22 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     fileName?.let {
       FileUtils.isValidZimFile(it) || isSplittedZimFile(it)
     } ?: false
+
+  /**
+   * Checks whether the found [existingFile] is the same physical file as
+   * the one referenced by [sourceUri]. For `file://` URIs we compare
+   * canonical paths; for `content://` URIs the source always comes from
+   * outside the app directory, so they can never be the same.
+   */
+  private fun isSameAsSourceFile(sourceUri: Uri, existingFile: File): Boolean {
+    if (sourceUri.scheme != "file") return false
+    return try {
+      val sourcePath = sourceUri.path?.let { File(it).canonicalPath }
+      sourcePath == existingFile.canonicalPath
+    } catch (_: Exception) {
+      false
+    }
+  }
 
   private fun findFileRecursively(dir: File, fileName: String, fileSize: Long): File? {
     var foundFile: File? = null
