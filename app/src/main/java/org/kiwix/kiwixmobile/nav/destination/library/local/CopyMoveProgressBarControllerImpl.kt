@@ -34,6 +34,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
@@ -51,7 +52,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.COPY_MOVE_DIALOG_TITLE_TEST
 import javax.inject.Inject
 
 class CopyMoveProgressBarControllerImpl @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : CopyMoveProgressBarController {
   /**

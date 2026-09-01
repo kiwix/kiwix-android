@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile
 
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.flow.first
@@ -31,11 +33,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.migration.entities.HistoryEntity
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
@@ -44,7 +48,12 @@ import org.kiwix.kiwixmobile.migration.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 
+@HiltAndroidTest
 class ObjectBoxToRoomMigratorTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var boxStore: BoxStore
   private lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
@@ -52,6 +61,7 @@ class ObjectBoxToRoomMigratorTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.injectOnce()
     super.waitForIdle()
     launchMainActivity {
       it.navigate(KiwixDestination.Library.route)

@@ -22,24 +22,16 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import org.kiwix.kiwixmobile.core.CoreApp
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReadAloudService : Service() {
   @set:Inject
   var readAloudNotificationManager: ReadAloudNotificationManager? = null
   private val serviceBinder: IBinder = ReadAloudBinder(this)
   private var readAloudCallbacks: ReadAloudCallbacks? = null
-
-  override fun onCreate() {
-    super.onCreate()
-    CoreApp.coreComponent
-      .coreServiceComponent()
-      .service(this)
-      .build()
-      .inject(this)
-  }
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     when (intent.action) {

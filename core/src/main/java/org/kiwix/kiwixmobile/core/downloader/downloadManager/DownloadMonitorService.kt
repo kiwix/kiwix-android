@@ -41,6 +41,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,7 +52,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -73,6 +73,7 @@ const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 
+@AndroidEntryPoint
 class DownloadMonitorService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
 
@@ -128,11 +129,6 @@ class DownloadMonitorService : Service() {
   }
 
   override fun onCreate() {
-    CoreApp.coreComponent
-      .coreServiceComponent()
-      .service(this)
-      .build()
-      .inject(this)
     super.onCreate()
     scope = CoroutineScope(SupervisorJob() + ioDispatcher)
     fetch.addListener(fetchListener, true)

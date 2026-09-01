@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -28,7 +29,7 @@ import java.util.Date
 import javax.inject.Inject
 
 class ReaderHistoryManager @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val mainRepositoryActions: MainRepositoryActions
 ) {
   suspend fun saveHistory(

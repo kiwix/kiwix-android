@@ -38,6 +38,7 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper.getMainLooper
 import android.widget.Toast
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -64,7 +65,7 @@ import javax.inject.Inject
  */
 @SuppressWarnings("MissingPermission", "ProtectedMemberInFinalClass")
 class WifiDirectManager @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
   private val manager: WifiP2pManager?,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,

@@ -30,6 +30,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -127,6 +128,7 @@ private const val SHOW_SCAN_DIALOG_DELAY = 2000L
  * - Side effects for file operations (delete, share, validate, navigate)
  */
 @Suppress("LongParameterList")
+@HiltViewModel
 class LocalLibraryViewModel @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val storageObserver: StorageObserver,

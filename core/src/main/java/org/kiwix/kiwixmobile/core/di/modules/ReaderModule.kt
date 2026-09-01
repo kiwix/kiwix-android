@@ -22,10 +22,13 @@ import android.print.PdfPrint
 import android.print.PrintAttributes
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 const val PDF_RESOLUTION_DPI = 300
 
+@InstallIn(SingletonComponent::class)
 @Module
 class ReaderModule {
   @Singleton

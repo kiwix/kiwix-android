@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.settings
 
 import android.app.Application
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -32,6 +33,7 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class BrandedSettingsViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,

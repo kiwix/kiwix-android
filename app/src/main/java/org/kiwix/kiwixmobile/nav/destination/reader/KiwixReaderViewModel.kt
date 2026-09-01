@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 import android.app.Application
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -69,6 +70,7 @@ import java.io.File
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class KiwixReaderViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,

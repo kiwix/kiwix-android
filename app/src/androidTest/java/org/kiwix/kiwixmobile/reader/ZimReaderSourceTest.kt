@@ -25,6 +25,8 @@ import androidx.core.content.FileProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -35,15 +37,22 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import java.io.File
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ZimReaderSourceTest {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   private lateinit var testZimFile: File
 
   private val zimFileName = "testzim.zim"
@@ -55,6 +64,7 @@ class ZimReaderSourceTest {
 
   @Before
   fun setup() {
+    hiltRule.inject()
     testZimFile = getZimFileFromResourceFolder(targetContext, zimFileName, targetContext.cacheDir)
   }
 

@@ -28,6 +28,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
@@ -37,6 +39,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.page.history.navigationHistory
@@ -48,7 +51,12 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
+@HiltAndroidTest
 class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -61,6 +69,7 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.injectOnce()
     super.waitForIdle()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())

@@ -25,6 +25,9 @@ import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
@@ -39,6 +42,7 @@ import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class DownloaderModule {
   @Binds
@@ -62,7 +66,7 @@ abstract class DownloaderModule {
     @Provides
     @Singleton
     fun provideFetchConfiguration(
-      context: Context,
+      @ApplicationContext context: Context,
       okHttpDownloader: OkHttpDownloader,
       fetchNotificationManager: FetchNotificationManager
     ): FetchConfiguration =

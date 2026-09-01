@@ -20,12 +20,15 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainCoroutineDispatcher
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 
+@InstallIn(SingletonComponent::class)
 @Module
 class CoroutineModule {
   @Provides

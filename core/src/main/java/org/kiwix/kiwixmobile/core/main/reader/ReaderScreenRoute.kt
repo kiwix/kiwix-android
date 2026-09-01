@@ -123,7 +123,7 @@ fun ReaderScreenRoute(
     viewModel.updateTitle()
     LanguageUtils(activity).changeFont(activity, viewModel.kiwixDataStore)
   }
-  BindReadAloudService(activity, viewModel)
+  BindReadAloudService(activity, viewModel, uiState.showTtsControls)
   RegisterWebViewSelectionListener(activity, viewModel)
   CollectEffect(
     viewModel,
@@ -216,7 +216,8 @@ private fun CollectFileSearched(
 @Composable
 private fun BindReadAloudService(
   activity: CoreMainActivity,
-  viewModel: CoreReaderViewModel
+  viewModel: CoreReaderViewModel,
+  isReadAloudActive: Boolean
 ) {
   var boundService by remember { mutableStateOf<ReadAloudService?>(null) }
 
@@ -234,15 +235,22 @@ private fun BindReadAloudService(
     }
   }
 
-  DisposableEffect(Unit) {
-    activity.bindService(
-      Intent(activity, ReadAloudService::class.java),
-      connection,
-      Context.BIND_AUTO_CREATE
-    )
+  // Bind only while Read Aloud is actually active, not on every reader-screen
+  // composition, so opening a page never creates the service as a side effect.
+  DisposableEffect(isReadAloudActive) {
+    if (isReadAloudActive) {
+      activity.bindService(
+        Intent(activity, ReadAloudService::class.java),
+        connection,
+        Context.BIND_AUTO_CREATE
+      )
+    }
     onDispose {
-      boundService?.registerCallBack(null)
-      runCatching { activity.unbindService(connection) }
+      if (isReadAloudActive) {
+        boundService?.registerCallBack(null)
+        runCatching { activity.unbindService(connection) }
+        boundService = null
+      }
     }
   }
 }

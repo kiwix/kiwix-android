@@ -19,7 +19,10 @@
 package org.kiwix.kiwixmobile.migration.di.module
 
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
+@InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
   // Do nothing it just for compiling the project, because we are passing the database module

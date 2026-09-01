@@ -19,12 +19,15 @@
 package org.kiwix.kiwixmobile.core.main.note.helper
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.StorageUtils.getNotesDirectory
 import javax.inject.Inject
 
-class NoteMetadataFactory @Inject constructor(private val context: Context) {
+class NoteMetadataFactory @Inject constructor(
+  @param:ApplicationContext private val context: Context
+) {
   fun create(config: AddNoteDialogConfig, zimReaderContainer: ZimReaderContainer): NoteMetadata {
     val noteListItem = config.noteListItem
 

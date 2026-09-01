@@ -17,17 +17,20 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
-import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module(
   includes = [
     DownloaderModule::class,
@@ -38,12 +41,7 @@ import javax.inject.Singleton
 class ApplicationModule {
   @Provides
   @Singleton
-  internal fun provideApplication(context: Context): Application =
-    context as Application
-
-  @Provides
-  @Singleton
-  internal fun provideNotificationManager(context: Context): NotificationManager =
+  internal fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager =
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
   @Provides
@@ -52,7 +50,7 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun provideStorageManager(context: Context): StorageManager =
+  internal fun provideStorageManager(@ApplicationContext context: Context): StorageManager =
     context.getSystemService(Context.STORAGE_SERVICE) as StorageManager
 
   @Provides
@@ -62,6 +60,6 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  fun provideConnectivityManager(context: Context): ConnectivityManager =
+  fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }

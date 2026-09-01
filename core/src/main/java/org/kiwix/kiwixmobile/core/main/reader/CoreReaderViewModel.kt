@@ -1623,7 +1623,9 @@ abstract class CoreReaderViewModel(
     observeCoroutineFlows()
     setupDocumentParser()
     setTtsCallback()
-    readAloudManager.setUpTTS()
+    if (readAloudManager.tts == null) {
+      readAloudManager.setUpTTS()
+    }
     setDonationDialogCallBack()
     readerMenuState = createMainMenu()
     addAlertDialogToDialogHost(coreMainActivity, alertDialogShower)

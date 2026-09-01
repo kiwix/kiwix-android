@@ -19,6 +19,8 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -42,6 +44,7 @@ const val CALL_TIMEOUT = 300L
 const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
 const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/"
 
+@InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient {

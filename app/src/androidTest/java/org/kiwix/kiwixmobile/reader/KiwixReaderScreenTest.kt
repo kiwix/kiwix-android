@@ -37,6 +37,9 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Dup
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.MainCoroutineDispatcher
 import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -48,9 +51,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
@@ -68,8 +74,14 @@ import java.io.FileOutputStream
 import java.net.URI
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@HiltAndroidTest
 class KiwixReaderScreenTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
@@ -81,8 +93,16 @@ class KiwixReaderScreenTest : BaseActivityTest() {
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
+  @Inject
+  lateinit var zimReaderContainer: ZimReaderContainer
+
+  @Inject
+  @MainDispatcher
+  lateinit var mainDispatcher: MainCoroutineDispatcher
+
   @Before
   override fun waitForIdle() {
+    hiltRule.injectOnce()
     super.waitForIdle()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
@@ -332,11 +352,10 @@ class KiwixReaderScreenTest : BaseActivityTest() {
         putString("url", null)
       }
     }
-    val testComponent = testComponent()
     val saveHandler = KiwixWebView.SaveHandler(
-      testComponent.zimReaderContainer(),
-      testComponent.provideMainDispatcher(),
-      testComponent.provideIoDispatcher()
+      zimReaderContainer,
+      mainDispatcher,
+      ioDispatcher
     )
 
     // Must run on main thread because Handler uses MainLooper

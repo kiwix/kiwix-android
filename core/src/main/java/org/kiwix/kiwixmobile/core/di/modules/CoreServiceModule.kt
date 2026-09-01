@@ -22,15 +22,19 @@ import android.app.NotificationManager
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.di.CoreServiceScope
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ServiceComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ServiceScoped
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManager
 
+@InstallIn(ServiceComponent::class)
 @Module
 class CoreServiceModule {
   @Provides
-  @CoreServiceScope
+  @ServiceScoped
   fun providesReadAloudNotificationManager(
     notificationManager: NotificationManager,
-    context: Context
+    @ApplicationContext context: Context
   ): ReadAloudNotificationManager = ReadAloudNotificationManager(notificationManager, context)
 }

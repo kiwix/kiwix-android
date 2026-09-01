@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +42,7 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.page.bookmark.models.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
@@ -54,11 +57,21 @@ import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@HiltAndroidTest
 class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
+
   private lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
-  private lateinit var libkiwixBookmarks: LibkiwixBookmarks
-  private lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
+
+  @Inject
+  lateinit var libkiwixBookmarks: LibkiwixBookmarks
+
+  @Inject
+  lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
 
   // take the existing boxStore object
   private var boxStore: BoxStore? = null
@@ -111,13 +124,11 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.injectOnce()
     super.waitForIdle()
     launchMainActivity {
       it.navigate(KiwixDestination.Library.route)
     }
-    val testComponent = testComponent()
-    libkiwixBookmarks = testComponent.libkiwixBookmarks()
-    libkiwixBookOnDisk = testComponent.libkiwixBooks()
 
     val testDir = File(
       InstrumentationRegistry.getInstrumentation().targetContext.filesDir,

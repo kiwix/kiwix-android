@@ -19,9 +19,11 @@
 package org.kiwix.kiwixmobile.custom.help
 
 import android.content.Context
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.kiwix.kiwixmobile.core.help.HelpViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class BrandedHelpViewModel @Inject constructor() : HelpViewModel() {
   override suspend fun rawTitleDescriptionMap(context: Context): List<Pair<Int, Any>> = emptyList()
 }

@@ -23,11 +23,13 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import org.kiwix.kiwixmobile.custom.main.CustomDestination
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -245,9 +247,11 @@ class SearchScreenTestForBrandedApp {
       openSearchWithQuery(searchTerms[0])
       // wait for searchFragment become visible on screen.
       delay(2000)
+      val searchBackStackEntry =
+        brandedMainActivity.navController.getBackStackEntry(CustomDestination.Search.route)
       val searchViewModel = ViewModelProvider(
-        brandedMainActivity,
-        brandedMainActivity.viewModelFactory
+        searchBackStackEntry,
+        HiltViewModelFactory(brandedMainActivity, searchBackStackEntry)
       )[SearchViewModel::class.java]
       for (i in 1..100) {
         // This will execute the render method 100 times frequently.

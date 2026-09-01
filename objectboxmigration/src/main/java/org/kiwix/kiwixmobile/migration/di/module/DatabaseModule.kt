@@ -21,9 +21,13 @@ package org.kiwix.kiwixmobile.migration.di.module
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import io.objectbox.BoxStore
 import org.kiwix.kiwixmobile.migration.entities.MyObjectBox
 
+@InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
   companion object {
@@ -32,7 +36,7 @@ class DatabaseModule {
 
   @Suppress("UnsafeCallOnNullableType")
   // NOT RECOMMENDED TODO use custom runner to load TestApplication
-  @Provides fun providesBoxStore(context: Context): BoxStore {
+  @Provides fun providesBoxStore(@ApplicationContext context: Context): BoxStore {
     if (boxStore == null) {
       boxStore = MyObjectBox.builder().androidContext(context).build()
     }

@@ -93,27 +93,22 @@ object Libs {
     Versions.ORG_JETBRAINS_KOTLIN
 
   /**
-   * https://github.com/google/dagger
+   * https://dagger.dev/hilt/
    */
-  const val dagger: String = "com.google.dagger:dagger:" + Versions.com_google_dagger
+  const val HILT_ANDROID: String = "com.google.dagger:hilt-android:" +
+    Versions.COM_GOOGLE_DAGGER_HILT
 
   /**
-   * https://github.com/google/dagger
+   * https://dagger.dev/hilt/
    */
-  const val dagger_android: String = "com.google.dagger:dagger-android:" +
-    Versions.com_google_dagger
+  const val HILT_ANDROID_COMPILER: String = "com.google.dagger:hilt-android-compiler:" +
+    Versions.COM_GOOGLE_DAGGER_HILT
 
   /**
-   * https://github.com/google/dagger
+   * https://dagger.dev/hilt/testing
    */
-  const val dagger_android_processor: String = "com.google.dagger:dagger-android-processor:" +
-    Versions.com_google_dagger
-
-  /**
-   * https://github.com/google/dagger
-   */
-  const val dagger_compiler: String = "com.google.dagger:dagger-compiler:" +
-    Versions.com_google_dagger
+  const val HILT_ANDROID_TESTING: String = "com.google.dagger:hilt-android-testing:" +
+    Versions.COM_GOOGLE_DAGGER_HILT
 
   /**
    * https://developer.android.com/testing
@@ -335,6 +330,12 @@ object Libs {
   const val COMPOSE_NAVIGATION =
     "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
 
+  /**
+   * https://dagger.dev/hilt/
+   */
+  const val HILT_NAVIGATION_COMPOSE =
+    "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION_COMPOSE}"
+
   const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
 
   /**
@@ -361,4 +362,7 @@ object Libs {
    */
   const val PLAYSTORE_REVIEW_KTX: String =
     "com.google.android.play:review-ktx:" + Versions.PLAYSTORE_REVIEW
+
+  const val KOTLIN_KSP: String =
+    "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:" + Versions.KOTLIN_KSP
 }

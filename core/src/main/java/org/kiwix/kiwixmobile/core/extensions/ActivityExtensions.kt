@@ -20,13 +20,9 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.app.Activity
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
-import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 object ActivityExtensions {
@@ -42,14 +38,6 @@ object ActivityExtensions {
     noinline intentFunc: (Intent.() -> Unit)? = null
   ) =
     Intent(this, T::class.java).apply { intentFunc?.invoke(this) }
-
-  inline fun <reified T : ViewModel> ComponentActivity.viewModel(
-    viewModelFactory: ViewModelProvider.Factory
-  ) =
-    ViewModelProvider(this, viewModelFactory)[T::class.java]
-
-  val Activity.cachedComponent: CoreActivityComponent
-    get() = coreMainActivity.cachedComponent
 
   fun Activity.navigate(route: String, navOptions: NavOptions? = null) {
     coreMainActivity.navigate(route, navOptions)

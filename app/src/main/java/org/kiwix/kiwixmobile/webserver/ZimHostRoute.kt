@@ -94,7 +94,7 @@ fun ZimHostRoute(viewModel: ZimHostViewModel, activity: CoreMainActivity) {
   }
   val readWritePermission =
     rememberMultiplePermissionsState(listOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE))
-  BindHotspotService(activity, viewModel)
+  BindHotspotService(activity, viewModel, uiState.isHotspotServiceActive)
   LaunchedEffect(lifecycleOwner) {
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
       viewModel.loadBooks()
@@ -147,7 +147,8 @@ fun ZimHostRoute(viewModel: ZimHostViewModel, activity: CoreMainActivity) {
 @Composable
 private fun BindHotspotService(
   activity: CoreMainActivity,
-  viewModel: ZimHostViewModel
+  viewModel: ZimHostViewModel,
+  isHotspotServiceActive: Boolean
 ) {
   var boundService by remember { mutableStateOf<HotspotService?>(null) }
 
@@ -165,15 +166,23 @@ private fun BindHotspotService(
     }
   }
 
-  DisposableEffect(Unit) {
-    activity.bindService(
-      Intent(activity, HotspotService::class.java),
-      connection,
-      Context.BIND_AUTO_CREATE
-    )
+  // Bind only while the hotspot feature is actually in use (starting or already
+  // running), not on every visit to this screen, so opening it never creates the
+  // service as a side effect.
+  DisposableEffect(isHotspotServiceActive) {
+    if (isHotspotServiceActive) {
+      activity.bindService(
+        Intent(activity, HotspotService::class.java),
+        connection,
+        Context.BIND_AUTO_CREATE
+      )
+    }
     onDispose {
-      boundService?.registerCallBack(null)
-      runCatching { activity.unbindService(connection) }
+      if (isHotspotServiceActive) {
+        boundService?.registerCallBack(null)
+        runCatching { activity.unbindService(connection) }
+        boundService = null
+      }
     }
   }
 }

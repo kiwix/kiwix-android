@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
 import android.print.PdfPrint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -36,7 +37,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import kotlin.coroutines.resume
 
 class ReaderPageManager @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val pdfPrinter: PdfPrint,
   private val zimReaderContainer: ZimReaderContainer
 ) {

@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,7 +31,7 @@ import javax.inject.Singleton
 
 @Singleton
 class StorageDeviceProvider @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val mutex = Mutex()

@@ -19,11 +19,13 @@
 package org.kiwix.kiwixmobile.core.reader.integrity
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
+@HiltViewModel
 class ValidateZimViewModel @Inject constructor(
   private val zimIntegrityChecker: ZimIntegrityChecker
 ) : ViewModel() {

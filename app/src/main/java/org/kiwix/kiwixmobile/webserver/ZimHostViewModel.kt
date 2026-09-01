@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +66,7 @@ import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StopServer
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class ZimHostViewModel @Inject constructor(
   private val context: Application,
   private val dataSource: DataSource,
@@ -83,7 +85,8 @@ class ZimHostViewModel @Inject constructor(
     val showShareIcon: Boolean = false,
     val qrVisible: Boolean = false,
     val qrIcon: IconItem = IconItem.Drawable(R.drawable.ic_storage),
-    val books: List<BooksOnDiskListItem> = emptyList()
+    val books: List<BooksOnDiskListItem> = emptyList(),
+    val isHotspotServiceActive: Boolean = false
   )
 
   sealed class Event {
@@ -183,6 +186,10 @@ class ZimHostViewModel @Inject constructor(
           return@launch
         }
 
+        // Bind HotspotService before dispatching the events that start it, so the
+        // callback channel is ready by the time it reports back that it started.
+        _uiState.update { it.copy(isHotspotServiceActive = true) }
+
         when {
           connectivityReporter.checkWifi() -> sendEvent(ShowWifiDialog)
           connectivityReporter.checkTethering() -> sendEvent(StartIpCheck)
@@ -271,7 +278,8 @@ class ZimHostViewModel @Inject constructor(
         qrVisible = true,
         qrIcon = getQrIcon(ip),
         serverIpDisplayText = context.getString(string.server_started_message, ip),
-        startServerButtonColor = StopServerRed
+        startServerButtonColor = StopServerRed,
+        isHotspotServiceActive = true
       )
     }
     sendEvent(DismissDialog)
@@ -286,7 +294,8 @@ class ZimHostViewModel @Inject constructor(
         qrVisible = false,
         qrIcon = getQrIcon(null),
         serverIpDisplayText = context.getString(string.server_textview_default_message),
-        startServerButtonColor = StartServerGreen
+        startServerButtonColor = StartServerGreen,
+        isHotspotServiceActive = false
       )
     }
   }
@@ -304,6 +313,7 @@ class ZimHostViewModel @Inject constructor(
   }
 
   override fun onServerFailedToStart(errorMessage: Int?) {
+    onServerStopped()
     sendEvent(DismissDialog)
     errorMessage?.let { sendEvent(ShowErrorToast(it)) }
   }

@@ -39,6 +39,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.os.LocaleListCompat
+import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -57,12 +58,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.BuildConfig
-import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.data.ObjectBoxDataMigrationHandler
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
@@ -84,7 +85,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
@@ -92,9 +92,9 @@ const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
 
+@AndroidEntryPoint
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
-  override val cachedComponent by lazy { kiwixActivityComponent }
   override val searchScreenRoute: String = KiwixDestination.Search.route
 
   @Inject lateinit var libkiwixBookOnDisk: LibkiwixBookOnDisk
@@ -102,6 +102,8 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
   @Inject lateinit var storageDeviceProvider: StorageDeviceProvider
+
+  @Inject lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
 
   @Inject
   @MainDispatcher
@@ -133,7 +135,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
-    cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
@@ -161,7 +162,6 @@ class KiwixMainActivity : CoreMainActivity() {
         enableLeftDrawer = enableLeftDrawer.value,
         shouldShowBottomAppBar = shouldShowBottomAppBar.value,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour,
-        viewModelFactory = viewModelFactory,
         snackBarHostState = snackBarHostState
       )
       LaunchedEffect(Unit) {
@@ -199,9 +199,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(ioDispatcher).launch {
-      (applicationContext as KiwixApp).kiwixComponent
-        .provideObjectBoxDataMigrationHandler()
-        .migrate()
+      objectBoxDataMigrationHandler.migrate()
     }
   }
 

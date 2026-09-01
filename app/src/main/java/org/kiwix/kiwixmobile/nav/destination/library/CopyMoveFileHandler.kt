@@ -22,6 +22,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
+import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +59,7 @@ const val COPY_MOVE_DIALOG_TITLE_TESTING_TAG = "copyMoveDialogTitleTestingTag"
 
 @Suppress("LongParameterList")
 class CopyMoveFileHandler @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker,

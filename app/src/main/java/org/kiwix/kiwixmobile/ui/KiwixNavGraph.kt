@@ -24,8 +24,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
@@ -33,7 +32,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.help.HelpScreenRoute
 import org.kiwix.kiwixmobile.core.main.BOOKMARK_SCREEN
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -88,7 +86,6 @@ fun KiwixNavGraph(
   navController: NavHostController,
   startDestination: String,
   modifier: Modifier = Modifier,
-  viewModelFactory: ViewModelProvider.Factory,
   snackBarHostState: SnackbarHostState
 ) {
   NavHost(
@@ -98,8 +95,8 @@ fun KiwixNavGraph(
   ) {
     composable(route = KiwixDestination.Reader.route) {
       val activity = LocalActivity.current as CoreMainActivity
-      val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
-      val kiwixReaderViewModel: KiwixReaderViewModel = viewModel(factory = viewModelFactory)
+      val addNoteViewModel: AddNoteViewModel = hiltViewModel()
+      val kiwixReaderViewModel: KiwixReaderViewModel = hiltViewModel()
       ReaderScreenRoute(
         viewModel = kiwixReaderViewModel,
         addNoteViewModel = addNoteViewModel,
@@ -116,8 +113,8 @@ fun KiwixNavGraph(
         }
       )
     ) { backStackEntry ->
-      val validateZimViewModel: ValidateZimViewModel = viewModel(factory = viewModelFactory)
-      val localLibraryViewModel: LocalLibraryViewModel = viewModel(factory = viewModelFactory)
+      val validateZimViewModel: ValidateZimViewModel = hiltViewModel()
+      val localLibraryViewModel: LocalLibraryViewModel = hiltViewModel()
       val zimFileUri = backStackEntry.arguments?.getString(ZIM_FILE_URI_KEY).orEmpty()
       LocalLibraryRoute(
         localLibraryViewModel = localLibraryViewModel,
@@ -130,8 +127,8 @@ fun KiwixNavGraph(
 
     composable(KiwixDestination.Downloads.route) {
       val activity = LocalActivity.current as KiwixMainActivity
-      val onlineLibraryViewModel: OnlineLibraryViewModel = viewModel(factory = viewModelFactory)
-      val categoryViewModel: CategoryViewModel = viewModel(factory = viewModelFactory)
+      val onlineLibraryViewModel: OnlineLibraryViewModel = hiltViewModel()
+      val categoryViewModel: CategoryViewModel = hiltViewModel()
       OnlineLibraryRoute(
         onlineLibraryViewModel = onlineLibraryViewModel,
         categoryViewModel = categoryViewModel,
@@ -140,14 +137,14 @@ fun KiwixNavGraph(
       )
     }
     composable(KiwixDestination.Bookmarks.route) {
-      val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
+      val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
       BookmarkScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = bookmarkViewModel
       )
     }
     composable(KiwixDestination.Notes.route) {
-      val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
+      val notesViewModel: NotesViewModel = hiltViewModel()
       NotesScreenRoute(
         navigateBack = navController::popBackStack,
         notesViewModel = notesViewModel
@@ -155,7 +152,6 @@ fun KiwixNavGraph(
     }
     composable(KiwixDestination.Intro.route) {
       IntroScreenRoute(
-        viewModelFactory = viewModelFactory as ViewModelFactory,
         navigateToLibrary = {
           val navOptions = NavOptions.Builder()
             .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
@@ -165,7 +161,7 @@ fun KiwixNavGraph(
       )
     }
     composable(KiwixDestination.History.route) {
-      val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
+      val historyViewModel: HistoryViewModel = hiltViewModel()
       HistoryScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = historyViewModel
@@ -173,7 +169,6 @@ fun KiwixNavGraph(
     }
     composable(KiwixDestination.Language.route) {
       LanguageScreenRoute(
-        viewModelFactory = viewModelFactory,
         navigateBack = navController::popBackStack
       )
     }
@@ -182,18 +177,18 @@ fun KiwixNavGraph(
       deepLinks = listOf(navDeepLink { uriPattern = ZIM_HOST_NAV_DEEP_LINK })
     ) {
       val activity = LocalActivity.current as KiwixMainActivity
-      val viewModel: ZimHostViewModel = viewModel(factory = viewModelFactory)
+      val viewModel: ZimHostViewModel = hiltViewModel()
       ZimHostRoute(viewModel, activity)
     }
     composable(KiwixDestination.Help.route) {
-      val kiwixHelpViewModel: KiwixHelpViewModel = viewModel(factory = viewModelFactory)
+      val kiwixHelpViewModel: KiwixHelpViewModel = hiltViewModel()
       HelpScreenRoute(
         navigateBack = navController::popBackStack,
         helpViewModel = kiwixHelpViewModel
       )
     }
     composable(KiwixDestination.Settings.route) {
-      val kiwixSettingsViewModel: KiwixSettingsViewModel = viewModel(factory = viewModelFactory)
+      val kiwixSettingsViewModel: KiwixSettingsViewModel = hiltViewModel()
       SettingsScreenRoute(
         kiwixSettingsViewModel,
         navController::popBackStack
@@ -220,7 +215,6 @@ fun KiwixNavGraph(
       val coreMainActivity = context as CoreMainActivity
 
       SearchScreenRoute(
-        viewModelFactory = viewModelFactory,
         arguments = backStackEntry.arguments,
         coreMainActivity = coreMainActivity
       )
@@ -243,7 +237,7 @@ fun KiwixNavGraph(
         ?.map { Uri.decode(it).toUri() }
         .orEmpty()
 
-      val viewModel: LocalFileTransferViewModel = viewModel(factory = viewModelFactory)
+      val viewModel: LocalFileTransferViewModel = hiltViewModel()
       LocalFileTransferScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = viewModel,

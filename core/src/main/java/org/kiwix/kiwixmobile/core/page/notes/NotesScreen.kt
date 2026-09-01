@@ -19,8 +19,11 @@
 package org.kiwix.kiwixmobile.core.page.notes
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.PageScreenRoute
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 
@@ -29,6 +32,10 @@ fun NotesScreenRoute(
   navigateBack: () -> Unit,
   notesViewModel: NotesViewModel
 ) {
+  val addNoteViewModel: AddNoteViewModel = hiltViewModel()
+  LaunchedEffect(Unit) {
+    notesViewModel.setAddNoteViewModel(addNoteViewModel)
+  }
   PageScreenRoute(
     navigateBack = navigateBack,
     viewModel = notesViewModel,

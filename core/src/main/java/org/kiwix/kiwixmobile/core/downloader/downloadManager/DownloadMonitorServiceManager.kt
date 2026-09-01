@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.content.Context
 import android.content.Intent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ import javax.inject.Singleton
 
 @Singleton
 class DownloadMonitorServiceManager @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val downloadRoomDao: DownloadRoomDao,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {

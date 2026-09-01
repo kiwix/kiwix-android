@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -80,6 +81,7 @@ import javax.inject.Inject
 const val OPENING_DOWNLOAD_SCREEN_DELAY = 300L
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class BrandedReaderViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,

@@ -20,9 +20,12 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.search.viewmodel.ZimSearchResultGenerator
 
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class SearchModule {
   @Binds

@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.core.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.JNIKiwix
@@ -28,10 +31,11 @@ import org.kiwix.libkiwix.Manager
 import javax.inject.Named
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 class JNIModule {
   @Provides @Singleton
-  fun providesJNIKiwix(context: Context): JNIKiwix = JNIKiwix(context)
+  fun providesJNIKiwix(@ApplicationContext context: Context): JNIKiwix = JNIKiwix(context)
 
   @Provides
   @Singleton

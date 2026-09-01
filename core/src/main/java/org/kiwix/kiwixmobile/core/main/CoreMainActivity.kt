@@ -46,7 +46,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.NavHostController
@@ -63,7 +62,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
-import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorServiceManager
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -120,7 +118,6 @@ const val LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG = "leftDrawerZimHostItemTestingT
 const val LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG = "leftDrawerAboutAppItemTestingTag"
 
 abstract class CoreMainActivity : BaseActivity() {
-  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   abstract val searchScreenRoute: String
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
@@ -201,7 +198,6 @@ abstract class CoreMainActivity : BaseActivity() {
   abstract val notesScreenRoute: String
   abstract val helpScreenRoute: String
   abstract val readerScreenRoute: String
-  abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinationsRoute: Set<String>
   abstract val appName: String
 

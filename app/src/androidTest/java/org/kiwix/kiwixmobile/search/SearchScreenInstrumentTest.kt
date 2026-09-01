@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.search
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import kotlinx.coroutines.delay
@@ -30,6 +31,8 @@ import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Assume
 import org.junit.Before
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -37,6 +40,7 @@ import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -50,9 +54,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
 
+@HiltAndroidTest
 class SearchScreenInstrumentTest : BaseActivityTest() {
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
+
+  @Rule(order = HILT_RULE_ORDER)
+  @JvmField
+  val hiltRule = HiltAndroidRule(this)
 
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
@@ -68,6 +77,7 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
+    hiltRule.injectOnce()
     super.waitForIdle()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
@@ -229,9 +239,11 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
       openSearchWithQuery(searchTerms[0], downloadingZimFile)
       // wait for searchScreen to become visible on screen.
       delay(2000)
+      val searchBackStackEntry =
+        kiwixMainActivity.navController.getBackStackEntry(KiwixDestination.Search.route)
       val searchViewModel = ViewModelProvider(
-        kiwixMainActivity,
-        kiwixMainActivity.viewModelFactory
+        searchBackStackEntry,
+        HiltViewModelFactory(kiwixMainActivity, searchBackStackEntry)
       )[SearchViewModel::class.java]
 
       for (i in 1..100) {

@@ -22,6 +22,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -29,7 +30,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
@@ -46,6 +46,7 @@ import javax.inject.Inject
  * HotspotService is used to add a foreground service for the wifi hotspot.
  * Created by Adeel Zafar on 07/01/2019.
  */
+@AndroidEntryPoint
 class HotspotService :
   Service(),
   IpAddressCallbacks,
@@ -73,11 +74,6 @@ class HotspotService :
   private val serviceBinder: IBinder = HotspotBinder(this)
 
   override fun onCreate() {
-    (this.application as KiwixApp).kiwixComponent
-      .serviceComponent()
-      .service(this)
-      .build()
-      .inject(this)
     super.onCreate()
     serviceScope = CoroutineScope(SupervisorJob() + mainDispatcher)
     hotspotStateReceiver?.let(::registerReceiver)

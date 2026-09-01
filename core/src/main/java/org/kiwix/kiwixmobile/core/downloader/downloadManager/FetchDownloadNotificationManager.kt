@@ -58,6 +58,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -77,7 +78,7 @@ const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
 
 class FetchDownloadNotificationManager @Inject constructor(
-  val context: Context,
+  @param:ApplicationContext val context: Context,
   private val downloadRoomDao: DownloadRoomDao,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DefaultFetchNotificationManager(context) {

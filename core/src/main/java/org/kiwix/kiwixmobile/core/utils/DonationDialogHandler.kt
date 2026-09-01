@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -28,7 +29,7 @@ import javax.inject.Inject
 const val THREE_MONTHS_IN_MILLISECONDS = 90 * 24 * 60 * 60 * 1000L
 
 class DonationDialogHandler @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val kiwixDataStore: KiwixDataStore,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk
 ) {

@@ -44,7 +44,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -77,7 +76,6 @@ fun KiwixMainActivityScreen(
   enableLeftDrawer: Boolean,
   shouldShowBottomAppBar: Boolean,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  viewModelFactory: ViewModelProvider.Factory,
   snackBarHostState: SnackbarHostState
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -119,7 +117,6 @@ fun KiwixMainActivityScreen(
             navController = navController,
             startDestination = startDestination,
             modifier = Modifier.fillMaxSize(),
-            viewModelFactory = viewModelFactory,
             snackBarHostState = snackBarHostState
           )
         }

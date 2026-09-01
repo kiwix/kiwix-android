@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils.files
 import android.content.Context
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.MediaColumns
+import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,7 +36,7 @@ import java.io.File
 import javax.inject.Inject
 
 class FileSearch @Inject constructor(
-  private val context: Context,
+  @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val zimFileExtensions = arrayOf("zim", "zimaa")

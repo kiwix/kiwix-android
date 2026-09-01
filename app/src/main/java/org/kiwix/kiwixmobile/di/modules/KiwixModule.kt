@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2026 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,13 +22,16 @@ import android.content.Context
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
-import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarControllerImpl
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
@@ -36,48 +39,44 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandlerI
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
+import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
-object KiwixModule {
-  @Provides
-  @KiwixScope
-  internal fun provideLocationManager(context: Context): LocationManager =
-    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+abstract class KiwixModule {
+  @Binds
+  @Singleton
+  abstract fun bindFileOperationHandler(impl: FileOperationHandlerImpl): FileOperationHandler
 
-  @Provides
-  @KiwixScope
-  internal fun provideFat32Checker(
-    kiwixDataStore: KiwixDataStore,
-    mountPointProducer: MountPointProducer,
-    @IoDispatcher ioDispatcher: CoroutineDispatcher
-  ): Fat32Checker =
-    Fat32Checker(
-      kiwixDataStore,
-      listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker()),
-      ioDispatcher
-    )
+  @Binds
+  @Singleton
+  abstract fun bindCopyMoveProgressBarController(
+    impl: CopyMoveProgressBarControllerImpl
+  ): CopyMoveProgressBarController
 
-  @Provides
-  @KiwixScope
-  internal fun provideFileOperationHandler(fileOperationHandlerImpl: FileOperationHandlerImpl): FileOperationHandler =
-    fileOperationHandlerImpl
+  companion object {
+    @Provides
+    fun provideLocationManager(@ApplicationContext context: Context): LocationManager =
+      context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-  @Provides
-  @KiwixScope
-  internal fun provideCopyMoveProgressBarController(
-    copyMoveProgressBarControllerImpl: CopyMoveProgressBarControllerImpl
-  ): CopyMoveProgressBarController = copyMoveProgressBarControllerImpl
+    @Provides
+    fun provideFat32Checker(
+      kiwixDataStore: KiwixDataStore,
+      mountPointProducer: MountPointProducer,
+      @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): Fat32Checker =
+      Fat32Checker(
+        kiwixDataStore,
+        listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker()),
+        ioDispatcher
+      )
 
-  // We are forced to use the nullable type because of a
-  // crash on our nightly builds running on an emulator API 27
-  // See: https://github.com/kiwix/kiwix-android/issues/2488
-  @Provides
-  @KiwixScope
-  fun providesWiFiP2pManager(context: Context): WifiP2pManager? =
-    context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
+    @Provides
+    fun providesWiFiP2pManager(@ApplicationContext context: Context): WifiP2pManager? =
+      context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
 
-  @Provides
-  @KiwixScope
-  fun provideWifiManager(context: Context): WifiManager =
-    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    @Provides
+    fun provideWifiManager(@ApplicationContext context: Context): WifiManager =
+      context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+  }
 }

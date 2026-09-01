@@ -26,6 +26,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -57,7 +58,7 @@ val Context.kiwixDataStore by preferencesDataStore(
 
 @Singleton
 class KiwixDataStore @Inject constructor(
-  val context: Context,
+  @param:ApplicationContext val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   val textZoom: Flow<Int> = context.kiwixDataStore.data.map { prefs ->

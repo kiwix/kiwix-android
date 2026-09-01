@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.settings
 import android.app.Application
 import android.os.Build
 import android.os.Environment
+import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class KiwixSettingsViewModel @Inject constructor(
   context: Application,
   kiwixDataStore: KiwixDataStore,

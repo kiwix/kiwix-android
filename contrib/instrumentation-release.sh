@@ -72,7 +72,7 @@ fi
 
 retry=0
 while [ $retry -le 3 ]; do
-  if ./gradlew connectedDebugAndroidTest -PtestingMinimizedBuild -Pandroid.testInstrumentationRunnerArguments.class="$TEST_CLASSES" -Dfile.encoding=UTF-8; then
+  if ./gradlew :app:connectedDebugAndroidTest -PtestingMinimizedBuild -Pandroid.testInstrumentationRunnerArguments.class="$TEST_CLASSES" -Dfile.encoding=UTF-8; then
     echo "connectedDebugAndroidTest for release variant succeeded" >&2
     break
   else

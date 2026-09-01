@@ -20,9 +20,12 @@ package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepositoryImpl
 
+@InstallIn(SingletonComponent::class)
 @Module
 class DataModule {
   @Provides

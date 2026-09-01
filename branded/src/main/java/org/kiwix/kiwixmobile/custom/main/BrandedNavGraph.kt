@@ -21,8 +21,7 @@ package org.kiwix.kiwixmobile.custom.main
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -60,8 +59,7 @@ import org.kiwix.kiwixmobile.custom.settings.BrandedSettingsViewModel
 @Composable
 fun BrandedNavGraph(
   navController: NavHostController,
-  modifier: Modifier = Modifier,
-  viewModelFactory: ViewModelProvider.Factory
+  modifier: Modifier = Modifier
 ) {
   NavHost(
     navController = navController,
@@ -70,8 +68,8 @@ fun BrandedNavGraph(
   ) {
     composable(route = CustomDestination.Reader.route) {
       val activity = LocalActivity.current as CoreMainActivity
-      val addNoteViewModel: AddNoteViewModel = viewModel(factory = viewModelFactory)
-      val brandedReaderViewModel: BrandedReaderViewModel = viewModel(factory = viewModelFactory)
+      val addNoteViewModel: AddNoteViewModel = hiltViewModel()
+      val brandedReaderViewModel: BrandedReaderViewModel = hiltViewModel()
       ReaderScreenRoute(
         viewModel = brandedReaderViewModel,
         addNoteViewModel = addNoteViewModel,
@@ -80,42 +78,42 @@ fun BrandedNavGraph(
       )
     }
     composable(CustomDestination.History.route) {
-      val historyViewModel: HistoryViewModel = viewModel(factory = viewModelFactory)
+      val historyViewModel: HistoryViewModel = hiltViewModel()
       HistoryScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = historyViewModel
       )
     }
     composable(CustomDestination.Notes.route) {
-      val notesViewModel: NotesViewModel = viewModel(factory = viewModelFactory)
+      val notesViewModel: NotesViewModel = hiltViewModel()
       NotesScreenRoute(
         navigateBack = navController::popBackStack,
         notesViewModel = notesViewModel
       )
     }
     composable(CustomDestination.Bookmarks.route) {
-      val bookmarkViewModel: BookmarkViewModel = viewModel(factory = viewModelFactory)
+      val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
       BookmarkScreenRoute(
         navigateBack = navController::popBackStack,
         viewModel = bookmarkViewModel
       )
     }
     composable(CustomDestination.Help.route) {
-      val brandedHelpViewModel: BrandedHelpViewModel = viewModel(factory = viewModelFactory)
+      val brandedHelpViewModel: BrandedHelpViewModel = hiltViewModel()
       HelpScreenRoute(
         navigateBack = navController::popBackStack,
         helpViewModel = brandedHelpViewModel
       )
     }
     composable(CustomDestination.Settings.route) {
-      val brandedSettingsViewModel: BrandedSettingsViewModel = viewModel(factory = viewModelFactory)
+      val brandedSettingsViewModel: BrandedSettingsViewModel = hiltViewModel()
       SettingsScreenRoute(
         brandedSettingsViewModel,
         navController::popBackStack
       )
     }
     composable(CustomDestination.Downloads.route) {
-      val brandedDownloadViewModel: BrandedDownloadViewModel = viewModel(factory = viewModelFactory)
+      val brandedDownloadViewModel: BrandedDownloadViewModel = hiltViewModel()
       BrandedDownloadRoute(brandedDownloadViewModel)
     }
     composable(
@@ -140,7 +138,6 @@ fun BrandedNavGraph(
       val coreMainActivity = context as CoreMainActivity
 
       SearchScreenRoute(
-        viewModelFactory = viewModelFactory,
         arguments = backStackEntry.arguments,
         coreMainActivity = coreMainActivity
       )

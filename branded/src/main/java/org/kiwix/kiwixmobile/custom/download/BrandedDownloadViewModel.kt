@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.custom.download
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -51,6 +52,7 @@ import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMost
 import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@HiltViewModel
 class BrandedDownloadViewModel @Inject constructor(
   downloadRoomDao: DownloadRoomDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,

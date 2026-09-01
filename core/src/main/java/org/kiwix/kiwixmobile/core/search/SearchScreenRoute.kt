@@ -24,9 +24,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -43,12 +42,11 @@ const val NAV_ARG_SEARCH_STRING = "searchString"
 
 @Composable
 fun SearchScreenRoute(
-  viewModelFactory: ViewModelProvider.Factory,
   arguments: Bundle?,
   coreMainActivity: CoreMainActivity
 ) {
   val alertDialogShower = remember { AlertDialogShower() }
-  val viewModel: SearchViewModel = viewModel(factory = viewModelFactory)
+  val viewModel: SearchViewModel = hiltViewModel()
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
   // Voice Intent.
