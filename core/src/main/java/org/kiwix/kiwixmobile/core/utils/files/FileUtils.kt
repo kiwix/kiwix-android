@@ -860,14 +860,23 @@ object FileUtils {
     source: String,
     zimReaderContainer: ZimReaderContainer
   ): ByteArray? {
+    // WebResourceResponse.data is a platform (Java) type - Kotlin doesn't force a
+    // null check on it, but it genuinely can be null (e.g. no ZIM currently open),
+    // and readBytes() on a null stream NPEs. use{} also ensures the underlying
+    // stream/fd is closed either way, instead of leaking it on every call.
     val bytes = zimReaderContainer
       .load(source, emptyMap())
       .data
-      .readBytes()
+      ?.use { it.readBytes() }
+
+    if (bytes == null) {
+      Log.w("MEDIA_SAVE", "No data available for source=$source")
+      return null
+    }
 
     return if (bytes.isEmpty()) {
       Log.w("MEDIA_SAVE", "Loaded image bytes are empty for source=$source")
-      return null
+      null
     } else {
       bytes
     }

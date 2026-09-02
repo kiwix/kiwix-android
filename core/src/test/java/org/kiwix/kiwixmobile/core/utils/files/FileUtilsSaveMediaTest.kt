@@ -195,6 +195,23 @@ class FileUtilsSaveMediaTest {
   }
 
   @Test
+  fun downloadFileFromUrl_whenZimReaderLoadReturnsNullDataForImage_returnsInvalidSource() {
+    runTest {
+      val nullDataResponse = mockk<WebResourceResponse>(relaxed = true)
+      every { nullDataResponse.data } returns null
+      every { mockZimReaderContainer.load(any(), any()) } returns nullDataResponse
+
+      val result = FileUtils.downloadFileFromUrl(
+        context = mockContext,
+        url = "https://kiwix.org/images/test.png",
+        src = null,
+        zimReaderContainer = mockZimReaderContainer
+      )
+      assertThat(result).isInstanceOf(SaveResult.InvalidSource::class.java)
+    }
+  }
+
+  @Test
   fun downloadFileFromUrl_whenSavedFileIsEmpty_returnsInvalidSource() {
     runTest {
       val response = mockk<WebResourceResponse>(relaxed = true)
