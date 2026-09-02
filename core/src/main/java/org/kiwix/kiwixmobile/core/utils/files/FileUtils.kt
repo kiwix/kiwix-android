@@ -41,8 +41,6 @@ import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -104,21 +102,26 @@ object FileUtils {
   }
 
   @JvmStatic
-  @Synchronized
-  fun deleteCachedFiles(
+  suspend fun deleteCachedFiles(
     context: Context,
     ioDispatcher: CoroutineDispatcher
   ) {
-    CoroutineScope(ioDispatcher).launch {
-      runCatching {
-        val cacheDir = getFileCacheDir(context) ?: return@launch
-        when {
-          !cacheDir.exists() -> Unit
-          cacheDir.isDirectory -> cacheDir.deleteRecursively()
-          else -> cacheDir.delete()
+    // @Synchronized was previously used here, but it only guarded the launch{} call
+    // itself, not the delete it kicked off - two callers could still race on the same
+    // directory. fileOperationMutex (already used by deleteZimFile for the same reason)
+    // gives real mutual exclusion instead.
+    withContext(ioDispatcher) {
+      fileOperationMutex.withLock {
+        runCatching {
+          val cacheDir = getFileCacheDir(context) ?: return@withLock
+          when {
+            !cacheDir.exists() -> Unit
+            cacheDir.isDirectory -> cacheDir.deleteRecursively()
+            else -> cacheDir.delete()
+          }
+        }.onFailure {
+          Log.w("DeleteCache", "Failed to delete cached files", it)
         }
-      }.onFailure {
-        Log.w("DeleteCache", "Failed to delete cached files", it)
       }
     }
   }
@@ -127,10 +130,9 @@ object FileUtils {
   suspend fun deleteZimFile(path: String, ioDispatcher: CoroutineDispatcher) {
     withContext(ioDispatcher) {
       fileOperationMutex.withLock {
-        var filePath = path
-        if (filePath.substring(filePath.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
-          filePath = filePath.substring(0, filePath.length - ChunkUtils.PART.length)
-        }
+        // was filePath.substring(filePath.length - ChunkUtils.PART.length) == ChunkUtils.PART,
+        // which throws StringIndexOutOfBoundsException for any path shorter than ".part".
+        val filePath = path.removeSuffix(ChunkUtils.PART)
         val file = File(filePath)
         if (file.path.substring(file.path.length - 3) != "zim") {
           var alphabetFirst = 'a'
@@ -433,7 +435,10 @@ object FileUtils {
       // Returns the path of the folder containing the file with the specified fileName,
       // from which the user selects the file.
       return pathSegments.drop(1)
-        .filterNot { it.startsWith("0") } // remove the prefix of primary storage device
+        // Only drop the primary storage device's own volume-id segment ("0"), not any
+        // segment that merely starts with "0" - that also mangled real folder names
+        // like "01_wiki".
+        .filterNot { it == "0" }
         .joinToString(separator = "/")
     }
     return null
