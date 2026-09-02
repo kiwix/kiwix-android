@@ -376,11 +376,19 @@ class ZimFileReader(
 
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream {
-    return File(
+    // Key the cache file on a hash of the full uri, not just its last path segment -
+    // two assets in different ZIM directories can share a basename (e.g. "video.mp4")
+    // and would otherwise silently serve each other's cached bytes.
+    val cacheFile = File(
       FileUtils.getFileCacheDir(CoreApp.instance),
-      uri.substringAfterLast("/")
-    ).apply { getContent(uri)?.let(::writeBytes) }
-      .inputStream()
+      "${uri.hashCode()}_${uri.substringAfterLast("/")}"
+    )
+    // Only materialize the content once per cache file - previously this re-read and
+    // re-wrote the whole item on every single playback request for the same asset.
+    if (!cacheFile.exists()) {
+      getContent(uri)?.let(cacheFile::writeBytes)
+    }
+    return cacheFile.inputStream()
   }
 
   private fun getContent(url: String) =

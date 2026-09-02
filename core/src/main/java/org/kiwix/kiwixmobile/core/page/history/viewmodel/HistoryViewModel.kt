@@ -18,10 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
@@ -46,10 +47,18 @@ class HistoryViewModel @Inject constructor(
     zimReaderContainer,
     ioDispatcher
   ) {
-  override fun initialState(): HistoryState {
-    val showAll = runBlocking { kiwixDataStore.showHistoryOfAllBooks.first() }
-    return HistoryState(emptyList(), showAll, zimReaderContainer.id)
+  init {
+    // Seed initialState() with a synchronous default (no runBlocking on the caller's
+    // thread, which is main during ViewModel construction) and apply the real,
+    // DataStore-backed value once it's loaded.
+    viewModelScope.launch {
+      val showAll = kiwixDataStore.showHistoryOfAllBooks.first()
+      updateState { it.copy(showAll = showAll) }
+    }
   }
+
+  override fun initialState(): HistoryState =
+    HistoryState(emptyList(), showAll = false, zimReaderContainer.id)
 
   override fun updatePagesBasedOnFilter(
     state: HistoryState,

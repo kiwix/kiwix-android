@@ -265,6 +265,9 @@ class KiwixTextToSpeech internal constructor(
 
     @JvmField var paused = true
     fun pause() {
+      // Idempotent: a second pause() call (e.g. two quick taps) must not decrement
+      // currentPiece again, which would drive it negative and crash on the next speak.
+      if (paused) return
       paused = true
       currentPiece.decrementAndGet()
       tts.setOnUtteranceProgressListener(null)
@@ -300,16 +303,21 @@ class KiwixTextToSpeech internal constructor(
 
           override fun onDone(s: String) {
             val line: Int = currentPiece.toInt()
-            if (line >= pieces.size && !paused) {
-              stop()
-            } else {
-              tts.speak(
-                pieces[currentPiece.getAndIncrement()],
-                TextToSpeech.QUEUE_ADD,
-                bundle,
-                bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
-              )
+            // Bounds check first: there's nothing left to speak once line >= pieces.size,
+            // whether or not we're paused. Previously the paused case fell through to the
+            // speak() branch below and indexed past the end of pieces.
+            if (line >= pieces.size) {
+              if (!paused) {
+                stop()
+              }
+              return
             }
+            tts.speak(
+              pieces[currentPiece.getAndIncrement()],
+              TextToSpeech.QUEUE_ADD,
+              bundle,
+              bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
+            )
           }
 
           @Deprecated("Deprecated in Java")
