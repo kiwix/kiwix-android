@@ -85,8 +85,16 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  fun `Initial state returns initial state`() {
-    assertThat(viewModel.initialState()).isEqualTo(bookmarkState())
+  fun `Initial state returns a synchronous default before the DataStore value loads`() {
+    // initialState() itself must stay synchronous (no runBlocking) - the real,
+    // DataStore-backed showAll value is applied asynchronously afterward. See #5070.
+    assertThat(viewModel.initialState()).isEqualTo(bookmarkState(showAll = false))
+  }
+
+  @Test
+  fun `state reflects the DataStore value once it loads`() = runTest(testDispatcher) {
+    testDispatcher.scheduler.advanceUntilIdle()
+    assertThat(viewModel.state.value).isEqualTo(bookmarkState(showAll = true))
   }
 
   @Test

@@ -154,6 +154,14 @@ class NetworkUtilsTest {
   }
 
   @Test
+  fun `getFileNameFromUrl does not crash when a slash follows the question mark`() {
+    // Previously threw StringIndexOutOfBoundsException: see #5070.
+    val result = NetworkUtils.getFileNameFromUrl("https://host/a?b/file.zim")
+
+    assertEquals("file.zim", result)
+  }
+
+  @Test
   fun `parseURL returns empty when beginIndex greater than endIndex`() {
     every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
     every { context.getString(R.string.zim_no_vid) } returns "No Videos"

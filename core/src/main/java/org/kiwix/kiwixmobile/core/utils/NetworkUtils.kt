@@ -27,11 +27,15 @@ object NetworkUtils {
     var filename = ""
     url?.let { url1 ->
       val index = url1.lastIndexOf('?')
+      val slashIndex = url1.lastIndexOf('/')
       filename =
-        if (index > 1) {
-          url1.substring(url1.lastIndexOf('/') + 1, index)
+        // Only take the "between last '/' and '?'" branch when that range is actually
+        // valid - a URL like ".../a?b/file.zim" has a '/' *after* the '?', which made
+        // the start offset exceed the end offset and throw StringIndexOutOfBounds.
+        if (index > 1 && slashIndex + 1 <= index) {
+          url1.substring(slashIndex + 1, index)
         } else {
-          url1.substring(url.lastIndexOf('/') + 1)
+          url1.substring(slashIndex + 1)
         }
       if ("" == filename.trim { it <= ' ' }) {
         filename = UUID.randomUUID().toString()
