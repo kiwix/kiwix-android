@@ -82,8 +82,10 @@ open class KiwixWebView constructor(
       builtInZoomControls = true
       displayZoomControls = false
       isHorizontalScrollBarEnabled = true
-      @Suppress("DEPRECATION")
-      allowUniversalAccessFromFileURLs = true
+      // ZIM content is served over the ZimFileReader.CONTENT_PREFIX
+      // ("https://kiwix.app/") origin, never file://, so universal access from
+      // file URLs is not needed and would let untrusted ZIM script read
+      // arbitrary cross-origin file:// content.
     }
     clearCache(true)
     webViewClient = coreWebViewClient
