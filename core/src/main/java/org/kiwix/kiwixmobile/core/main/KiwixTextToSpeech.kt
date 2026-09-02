@@ -265,6 +265,10 @@ class KiwixTextToSpeech internal constructor(
 
     @JvmField var paused = true
     fun pause() {
+      // Idempotent: a second pause() call (e.g. two quick taps) before the
+      // matching start() must not decrement currentPiece again, or it drifts
+      // negative and the next start()/onDone() indexes out of bounds.
+      if (paused) return
       paused = true
       currentPiece.decrementAndGet()
       tts.setOnUtteranceProgressListener(null)
@@ -299,8 +303,15 @@ class KiwixTextToSpeech internal constructor(
           }
 
           override fun onDone(s: String) {
+            // pause() can run concurrently with this callback (it's not called on
+            // the UI thread, see the interface doc above); check paused first, and
+            // separately bound-check before indexing, so this can never index
+            // pieces[] out of bounds regardless of how the two interleave.
+            if (paused) {
+              return
+            }
             val line: Int = currentPiece.toInt()
-            if (line >= pieces.size && !paused) {
+            if (line >= pieces.size) {
               stop()
             } else {
               tts.speak(

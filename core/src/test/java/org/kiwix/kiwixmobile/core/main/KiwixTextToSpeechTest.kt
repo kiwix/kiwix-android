@@ -418,6 +418,49 @@ class KiwixTextToSpeechTest {
   }
 
   @Test
+  fun `pause is idempotent - a second call before start() does not corrupt currentPiece`() {
+    injectMockTts()
+    val pieces = listOf("Hello", "World")
+    val task = kiwixTts.TTSTask(pieces)
+    task.start()
+    task.pause()
+    // A second call before any resume must be a no-op, not another
+    // decrement. Without the idempotency guard this drives currentPiece to
+    // -1, and the next start() throws indexing pieces[-1].
+    task.pause()
+    task.start()
+    verify(exactly = 2) {
+      tts.speak(eq("Hello"), any(), any(), any())
+    }
+  }
+
+  @Test
+  fun `onDone does not index out of bounds when paused right as the last piece finishes`() {
+    injectMockTts()
+    val pieces = listOf("OnlyOne")
+    val task = kiwixTts.TTSTask(pieces)
+    task.start()
+
+    val listenerSlot = slot<UtteranceProgressListener>()
+    verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
+
+    // Simulates the exact race the finding describes: paused becomes true
+    // (e.g. a concurrent pause() call from another thread) right as the
+    // last piece's onDone fires, with currentPiece still at pieces.size
+    // (not yet decremented - pause() hasn't gotten that far). Before the
+    // fix, `line >= pieces.size && !paused` read false here (since !paused
+    // is false), so this fell into the "else" branch and indexed
+    // pieces[currentPiece.getAndIncrement()] out of bounds.
+    task.paused = true
+
+    listenerSlot.captured.onDone("id")
+
+    // Exactly 1: the one call from start() above. onDone() while paused
+    // must not trigger a second (out-of-bounds) speak() call.
+    verify(exactly = 1) { tts.speak(any(), any(), any(), any()) }
+  }
+
+  @Test
   fun `javascript interface splits content and starts speaking`() {
     injectMockTts()
 
