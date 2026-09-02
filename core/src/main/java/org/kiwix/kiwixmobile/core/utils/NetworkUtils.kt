@@ -27,11 +27,18 @@ object NetworkUtils {
     var filename = ""
     url?.let { url1 ->
       val index = url1.lastIndexOf('?')
+      val start = url1.lastIndexOf('/') + 1
       filename =
-        if (index > 1) {
-          url1.substring(url1.lastIndexOf('/') + 1, index)
+        if (index > 1 && start <= index) {
+          url1.substring(start, index)
+        } else if (index <= 1) {
+          url1.substring(url1.lastIndexOf('/') + 1)
         } else {
-          url1.substring(url.lastIndexOf('/') + 1)
+          // The last '/' occurs after the last '?' (e.g. ".../a?b/file.zim"),
+          // so "everything between the last '/' and the last '?'" doesn't
+          // apply here - substring(start, index) would have start > index,
+          // which throws. Fall through to the UUID fallback below instead.
+          ""
         }
       if ("" == filename.trim { it <= ' ' }) {
         filename = UUID.randomUUID().toString()

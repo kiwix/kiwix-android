@@ -240,6 +240,22 @@ class NetworkUtilsTest {
   }
 
   @Test
+  fun `getFileNameFromUrl does not throw when the last slash is after the last question mark`() {
+    val defaultUUIDRegex =
+      Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+
+    // lastIndexOf('/') here is *after* lastIndexOf('?'), so the naive
+    // substring(lastSlash + 1, lastQuestionMark) would previously throw
+    // StringIndexOutOfBoundsException (start > end).
+    val result = NetworkUtils.getFileNameFromUrl("https://host/a?b/file.zim")
+
+    assertTrue(
+      "Expected a UUID fallback, got: $result",
+      result.matches(defaultUUIDRegex)
+    )
+  }
+
+  @Test
   fun `parseURL returns empty string when url is null`() {
     val result = NetworkUtils.parseURL(context, null)
     assertEquals("", result)
