@@ -25,6 +25,8 @@ import androidx.core.net.toUri
 import eu.mhutti1.utils.storage.KB
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -85,8 +87,9 @@ class ZimFileReader(
               Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
               if (showSearchSuggestionsSpellChecked) {
                 // Prepare the SpellingsDB asynchronously(when it configure to create) so that creating the
-                // ZIM reader doesn’t block the user experience.
-                CoroutineScope(ioDispatcher).launch {
+                // ZIM reader doesn’t block the user experience. Launched on the reader's own
+                // scope (not an ad-hoc untracked one) so dispose() can cancel it.
+                zimFileReader.readerScope.launch {
                   zimFileReader.prepareSpellingsDB(archive)
                 }
               }
@@ -121,6 +124,15 @@ class ZimFileReader(
 
   private var spellingsDB: SpellingsDB? = null
 
+  // Per-instance so initializing the spellings DB for one open ZIM archive doesn't
+  // serialize against every other open archive's spellings DB init (it used to be a
+  // companion-object, i.e. process-global, mutex).
+  private val spellingsDBCreationMutex = Mutex()
+
+  // Owns the fire-and-forget prepareSpellingsDB() launch below, so dispose() can
+  // actually cancel it instead of leaving it running against a disposed reader.
+  private val readerScope = CoroutineScope(SupervisorJob() + ioDispatcher)
+
   /**
    * Note that the value returned is NOT unique for each zim file. Versions of the same wiki
    * (complete, nopic, novid, etc) may return the same title.
@@ -141,7 +153,7 @@ class ZimFileReader(
      libzim returns file size in kib so we need to convert it into bytes.
      More information here https://github.com/kiwix/java-libkiwix/issues/41
    */
-  val fileSize: Long get() = jniKiwixReader.filesize / 1024
+  val fileSize: Long get() = jniKiwixReader.filesize * 1024
   val creator: String get() = getSafeMetaData("Creator", "")
   val publisher: String get() = getSafeMetaData("Publisher", "")
   val name: String get() = getSafeMetaData("Name", id)
@@ -300,11 +312,14 @@ class ZimFileReader(
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
-  fun isRedirect(url: String) =
-    when {
-      getRedirect(url).isEmpty() -> false
-      else -> url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
+  fun isRedirect(url: String): Boolean {
+    // getRedirect() does a JNI lookup; call it once instead of twice per check.
+    val redirect = getRedirect(url)
+    return when {
+      redirect.isEmpty() -> false
+      else -> url.startsWith(CONTENT_PREFIX) && url != redirect
     }
+  }
 
   private fun toRedirect(url: String) =
     "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
@@ -442,6 +457,7 @@ class ZimFileReader(
     }
 
   fun dispose() {
+    readerScope.cancel()
     jniKiwixReader.dispose()
     searcher.dispose()
     spellingsDB?.dispose()
@@ -456,8 +472,6 @@ class ZimFileReader(
     }
 
   companion object {
-    private val spellingsDBCreationMutex = Mutex()
-
     /*
      * these uris aren't actually nullable but unit tests fail to compile as
      * Uri.parse returns null without android dependencies loaded
