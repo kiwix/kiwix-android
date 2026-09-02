@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -68,9 +69,11 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
+private const val TAG = "SearchViewModel"
 const val DEBOUNCE_DELAY = 150L
 const val MAX_SUGGEST_WORD_COUNT = 1
 
@@ -95,10 +98,31 @@ class SearchViewModel @Inject constructor(
   private lateinit var alertDialogShower: AlertDialogShower
   private val debouncedSearchQuery = MutableStateFlow("")
 
+  // The native SuggestionSearch handed out by the most recent searchResults() emission.
+  // Guarded by searchMutex, the same lock getVisibleResults() takes while reading it,
+  // so it's never disposed while a read is in flight.
+  private var previousSuggestionSearch: SuggestionSearch? = null
+
   init {
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
     viewModelScope.launch { debouncedSearchQuery() }
+  }
+
+  override fun onCleared() {
+    super.onCleared()
+    disposeSuggestionSearch(previousSuggestionSearch)
+  }
+
+  @Suppress("TooGenericExceptionCaught")
+  private fun disposeSuggestionSearch(suggestionSearch: SuggestionSearch?) {
+    try {
+      suggestionSearch?.dispose()
+    } catch (throwable: Throwable) {
+      // dispose() is a native call; guard it the same way the rest of this codebase
+      // guards JNI calls, so a failure here can't take down the whole search flow.
+      Log.e(TAG, "Unable to dispose SuggestionSearch. $throwable")
+    }
   }
 
   private suspend fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
@@ -193,11 +217,15 @@ class SearchViewModel @Inject constructor(
   private fun searchResults() =
     filter.asStateFlow()
       .mapLatest {
-        SearchResultsWithTerm(
-          it,
-          searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader),
-          searchMutex
-        )
+        val suggestionSearch =
+          searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader)
+        // Dispose the SuggestionSearch this replaces - each one is a native object that
+        // otherwise leaks for the process's lifetime (nothing else ever disposes it).
+        searchMutex.withLock {
+          disposeSuggestionSearch(previousSuggestionSearch)
+          previousSuggestionSearch = suggestionSearch
+        }
+        SearchResultsWithTerm(it, suggestionSearch, searchMutex)
       }
 
   @Suppress("CyclomaticComplexMethod")
