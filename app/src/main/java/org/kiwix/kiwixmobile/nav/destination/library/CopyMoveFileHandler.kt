@@ -78,7 +78,6 @@ class CopyMoveFileHandler @Inject constructor(
   private var isSingleFileSelected = true
   private var unitTestStorage: File? = null
   private var storageDeviceList: List<StorageDevice> = emptyList()
-  private var showStorageSelectionDialog = false
 
   @VisibleForTesting
   fun setStorageFileForUnitTest(unitTestStorage: File) {
@@ -193,10 +192,13 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   private suspend fun performCopyMoveOperation() {
+    // The storage location has already been resolved by this point (either the user picked
+    // one from the storage-selection dialog, or only a single storage was available), so
+    // commit the operation directly instead of re-showing the storage-selection dialog.
     if (isMoveOperation) {
-      performMoveOperation(showStorageSelectionDialog, skipValidation = true)
+      performMoveOperation(showStorageSelectionDialog = false, skipValidation = true)
     } else {
-      performCopyOperation(showStorageSelectionDialog, skipValidation = true)
+      performCopyOperation(showStorageSelectionDialog = false, skipValidation = true)
     }
   }
 
@@ -309,7 +311,6 @@ class CopyMoveFileHandler @Inject constructor(
     skipValidation: Boolean = true
   ) {
     isMoveOperation = false
-    this.showStorageSelectionDialog = showStorageSelectionDialog
     fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Copy)
     if (skipValidation || validateZimFileCanCopyOrMove()) {
       if (showStorageSelectionDialog) {
@@ -325,7 +326,6 @@ class CopyMoveFileHandler @Inject constructor(
     skipValidation: Boolean = true
   ) {
     isMoveOperation = true
-    this.showStorageSelectionDialog = showStorageSelectionDialog
     fileCopyMoveCallback?.onMultipleFilesProcessSelection(MultipleFilesProcessAction.Move)
     if (skipValidation || validateZimFileCanCopyOrMove()) {
       if (showStorageSelectionDialog) {
